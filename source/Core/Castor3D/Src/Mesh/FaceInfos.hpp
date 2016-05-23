@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -26,9 +26,9 @@ namespace Castor3D
 	\author 	Sylvain DOREMUS
 	\date 		20/07/2012
 	\~english
-	\brief		Holds face informations
+	\brief		Holds face informations.
 	\~french
-	\brief		Contient des informations sur une face
+	\brief		Contient des informations sur une face.
 	*/
 	struct stFACE_INFOS
 	{
@@ -36,33 +36,32 @@ namespace Castor3D
 		\author 	Sylvain DOREMUS
 		\date 		20/07/2012
 		\~english
-		\brief		Holds vertex informations
+		\brief		Holds vertex informations.
 		\~french
-		\brief		Contient les informations d'un vertex
+		\brief		Contient les informations d'un sommet.
 		\remark
 		*/
 		struct stVERTEX
 		{
-			stVERTEX()
-				:	m_iIndex( -1 )
-				,	m_bHasNormal( false )
-				,	m_bHasTexCoords( false )
-			{
-			}
-
-			//!\~english Vertex index	\~french Indice du vertex
-			int m_iIndex;
-			//!\~english Vertex normal	\~french Normale du vertex
-			real m_fNormal[3];
-			//!\~english Vertex UV	\~french UV du vertex
-			real m_fTexCoords[2];
-			//!\~english Tells the vertex has a normal	\~french Dit que le vertex a une normale
-			bool m_bHasNormal;
-			//!\~english Tells the vertex has UV	\~french Dit que le vertex a un UV
-			bool m_bHasTexCoords;
+			//!\~english	Vertex index.
+			//!\~french		Indice du sommet.
+			int m_iIndex{ -1 };
+			//!\~english	Vertex normal.
+			//!\~french		Normale du sommet.
+			std::array< real, 3 > m_fNormal{ 0.0_r, 0.0_r, 0.0_r };
+			//!\~english	Vertex UV.
+			//!\~french		UV du sommet.
+			std::array< real, 2 > m_fTexCoords{ 0.0_r, 0.0_r };
+			//!\~english	Tells the vertex has a normal.
+			//!\~french		Dit que le sommet a une normale.
+			bool m_bHasNormal{ false };
+			//!\~english	Tells the vertex has UV.
+			//!\~french		Dit que le sommet a un UV.
+			bool m_bHasTexCoords{ false };
 		};
-		//!\~english The 3 vertex informations	\~french Les informations des 3 vertex
-		stVERTEX m_vertex[3];
+		//!\~english	The 3 vertex informations.
+		//!\~french		Les informations des 3 sommets.
+		std::array< stVERTEX, 3 > m_vertex;
 	};
 }
 

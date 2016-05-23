@@ -120,28 +120,6 @@ namespace Castor3D
 		 *\return		Le mesh créé
 		 */
 		C3D_API MeshSPtr Create( Castor::String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
-		/**
-		 *\~english
-		 *\brief		Saves in a file all currently loaded meshes
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Enregistre tous les meshes chargés dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Save( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		Loads all meshes contained in the given file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Charge tous les meshes contenus dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Load( Castor::BinaryFile & p_file );
 
 	private:
 		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator

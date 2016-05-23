@@ -22,53 +22,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-	{
-	}
-
-	bool Submesh::TextLoader::operator()( Submesh const & p_submesh, TextFile & p_file )
-	{
-		bool l_return = p_file.WriteText( cuT( "\t\t\tsubmesh\n\t\t\t{\n" ) ) > 0;
-		Point3r l_pos;
-		Point3r l_tan;
-		Point3r l_nml;
-		Point3r l_tex;
-
-		for ( uint32_t i = 0; i < p_submesh.GetPointsCount() && l_return; i++ )
-		{
-			Vertex::GetPosition( p_submesh[i]->const_ptr(), l_pos );
-			Vertex::GetNormal( p_submesh[i]->const_ptr(), l_nml );
-			Vertex::GetTangent( p_submesh[i]->const_ptr(), l_tan );
-			Vertex::GetTexCoord( p_submesh[i]->const_ptr(), l_tex );
-			StringStream l_streamPos, l_streamNml, l_streamTan, l_streamTex;
-			l_streamPos << l_pos[0] << cuT( " " ) << l_pos[1] << cuT( " " ) << l_pos[2];
-			l_streamNml << l_nml[0] << cuT( " " ) << l_nml[1] << cuT( " " ) << l_nml[2];
-			l_streamTan << l_tan[0] << cuT( " " ) << l_tan[1] << cuT( " " ) << l_tan[2];
-			l_streamTex << l_tex[0] << cuT( " " ) << l_tex[1] << cuT( " " ) << l_tex[2];
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tvertex %s\n" ), l_streamPos.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tnormal %s\n" ), l_streamNml.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\ttangent %s\n" ), l_streamTan.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tuvw %s\n" ), l_streamTex.str().c_str() ) > 0;
-		}
-
-		uint32_t l_uiNbFaces = p_submesh.GetFaceCount();
-
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
-		{
-			l_return = Face::TextLoader()( p_submesh.GetFace( j ), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\t\t}\n" ) ) > 0;
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
 	Submesh::BinaryParser::BinaryParser( Path const & p_path )
 		: Castor3D::BinaryParser< Submesh >( p_path )
 	{
@@ -78,20 +31,20 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SUBMESH );
-		double l_buffer[15];
+		std::array< double, 15 > l_buffer;
 		Point3r l_pos;
 		Point3r l_tan;
 		Point3r l_bit;
 		Point3r l_nml;
 		Point3r l_tex;
 
-		for ( uint32_t i = 0; i < p_obj.GetPointsCount() && l_return; i++ )
+		for ( auto const & l_point : p_obj.m_points )
 		{
-			Vertex::GetPosition( p_obj[i]->const_ptr(), l_pos );
-			Vertex::GetNormal( p_obj[i]->const_ptr(), l_tan );
-			Vertex::GetTangent( p_obj[i]->const_ptr(), l_bit );
-			Vertex::GetBitangent( p_obj[i]->const_ptr(), l_nml );
-			Vertex::GetTexCoord( p_obj[i]->const_ptr(), l_tex );
+			Vertex::GetPosition( l_point, l_pos );
+			Vertex::GetNormal( l_point, l_tan );
+			Vertex::GetTangent( l_point, l_bit );
+			Vertex::GetBitangent( l_point, l_nml );
+			Vertex::GetTexCoord( l_point, l_tex );
 			l_buffer[ 0] = double( l_pos[0] );
 			l_buffer[ 1] = double( l_pos[1] );
 			l_buffer[ 2] = double( l_pos[2] );
@@ -107,14 +60,23 @@ namespace Castor3D
 			l_buffer[12] = double( l_tex[0] );
 			l_buffer[13] = double( l_tex[1] );
 			l_buffer[14] = double( l_tex[2] );
-			l_return = DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
+			l_return &= DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
 		}
 
-		uint32_t l_uiNbFaces = p_obj.GetFaceCount();
-
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
+		if ( l_return )
 		{
-			l_return = Face::BinaryParser( m_path ).Fill( p_obj.GetFace( j ), l_chunk );
+			for ( auto const & l_boned : p_obj.m_bones )
+			{
+				l_return &= DoFillChunk( BonedVertex::GetBones( l_boned ), eCHUNK_TYPE_SUBMESH_BONE, l_chunk );
+			}
+		}
+
+		if ( l_return )
+		{
+			for ( auto const & l_face : p_obj.m_faces )
+			{
+				l_return &= Face::BinaryParser( m_path ).Fill( l_face, l_chunk );
+			}
 		}
 
 		if ( l_return )
@@ -130,13 +92,15 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		String l_name;
+		stVERTEX_BONE_DATA l_bone;
 		std::vector< real > l_pos;
 		std::vector< real > l_tan;
 		std::vector< real > l_bit;
 		std::vector< real > l_nml;
 		std::vector< real > l_tex;
 		std::vector< stFACE_INDICES > l_faces;
-		double l_buffer[12];
+		std::vector< stVERTEX_BONE_DATA > l_bones;
+		std::array< double, 12 > l_buffer;
 		Face l_face( 0, 0, 0 );
 		l_pos.reserve( p_chunk.GetRemaining() / 6 );
 		l_tan.reserve( p_chunk.GetRemaining() / 6 );
@@ -144,6 +108,7 @@ namespace Castor3D
 		l_nml.reserve( p_chunk.GetRemaining() / 6 );
 		l_tex.reserve( p_chunk.GetRemaining() / 6 );
 		l_faces.reserve( p_chunk.GetRemaining() / 6 );
+		l_bones.reserve( p_chunk.GetRemaining() / 6 );
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
@@ -178,8 +143,18 @@ namespace Castor3D
 
 					break;
 
+				case eCHUNK_TYPE_SUBMESH_BONE:
+					l_return = DoParseChunk( l_bone, l_chunk );
+
+					if ( l_return )
+					{
+						l_bones.push_back( l_bone );
+					}
+
+					break;
+
 				case eCHUNK_TYPE_SUBMESH_FACE:
-					l_return = Face::BinaryParser( m_path ).Parse( l_face, l_chunk );
+					l_return = Face::BinaryParser{ m_path }.Parse( l_face, l_chunk );
 
 					if ( l_return )
 					{

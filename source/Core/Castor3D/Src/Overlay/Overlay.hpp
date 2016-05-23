@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OVERLAY_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 #include "OverlayCategory.hpp"
 
 #include <OwnedBy.hpp>
@@ -76,63 +75,10 @@ namespace Castor3D
 			 */
 			C3D_API virtual bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file );
 		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		Overlay loader
-		\~english
-		\brief		Loader de Overlay
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Overlay >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path		The current folder path
-			 *\param[in]	p_engine	The engine
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path		Le chemin d'accès au dossier courant
-			 *\param[in]	p_engine	Le moteur
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path, Engine * p_engine );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Overlay & p_obj, BinaryChunk & p_chunk )const;
-
-			//!\~english The engine	\~french Le moteur
-			Engine * m_engine;
-		};
 
 	public:
-		typedef OverlayPtrArray::iterator iterator;
-		typedef OverlayPtrArray::const_iterator const_iterator;
+		using iterator = OverlayPtrArray::iterator;
+		using const_iterator = OverlayPtrArray::const_iterator;
 
 	public:
 		/**

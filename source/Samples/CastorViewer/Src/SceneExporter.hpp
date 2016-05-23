@@ -37,15 +37,6 @@ namespace CastorViewer
 
 		virtual void ExportScene( Castor3D::Engine * p_castor3d, Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
 	};
-
-	class CbsnSceneExporter
-	{
-	public:
-		CbsnSceneExporter();
-		~CbsnSceneExporter();
-
-		virtual void ExportScene( Castor3D::Engine * p_castor3d, Castor3D::Scene const & p_scene, Castor::Path const & p_fileName );
-	};
 }
 
 #endif

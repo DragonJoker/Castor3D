@@ -13,41 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Mesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Mesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-	{
-	}
-
-	bool Mesh::TextLoader::operator()( Mesh const & p_mesh, TextFile & p_file )
-	{
-		Logger::LogInfo( cuT( "Writing Mesh " ) + p_mesh.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\t\tmesh \"" ) + p_mesh.GetName() + cuT( "\"\n\t\t{\n" ) ) > 0;
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\t\ttype custom\n" ) ) > 0;
-		}
-
-		if ( l_return )
-		{
-			for ( auto && l_submesh : p_mesh )
-			{
-				Submesh::TextLoader()( *l_submesh, p_file );
-			}
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
 	Mesh::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Mesh >( p_path )
+		: Castor3D::BinaryParser< Mesh >{ p_path }
 	{
 	}
 

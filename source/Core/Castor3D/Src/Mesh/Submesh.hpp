@@ -52,39 +52,6 @@ namespace Castor3D
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Submesh text loader
-		\~french
-		\brief		Loader texte de Submesh
-		*/
-		class TextLoader
-			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
-			/**
-			 *\~english
-			 *\brief		Function operator
-			 *\param[in]	p_submesh	The submesh to write in the file
-			 *\param[in]	p_file		The file in which submesh is written
-			 *\return		\p true if OK
-			 *\~french
-			 *\brief		Opérateur fonction
-			 *\param[in]	p_submesh	Le sous-maillage à écrire dans le fichier
-			 *\param[in]	p_file		Le fichier dans lequel le sous-maillage est écrit
-			 *\return		\p true si tout s'est bien passé
-			 */
-			C3D_API virtual bool operator()( Submesh const & p_submesh, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
 		\brief		MovableObject loader
 		\~english
 		\brief		Loader de MovableObject

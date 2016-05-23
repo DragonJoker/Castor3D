@@ -1577,7 +1577,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 		{
 			BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
-			//Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file );
+			Mesh::BinaryParser{ l_pathFile }.Parse( *l_parsingContext->pMesh, l_file );
 		}
 		else
 		{

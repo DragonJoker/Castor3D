@@ -34,23 +34,6 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	PanelOverlay::BinaryParser::BinaryParser( Path const & p_path )
-		:	OverlayCategory::BinaryParser( p_path )
-	{
-	}
-
-	bool PanelOverlay::BinaryParser::Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		return true;
-	}
-
-	bool PanelOverlay::BinaryParser::Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		return true;
-	}
-
-	//*************************************************************************************************
-
 	PanelOverlay::PanelOverlay()
 		:	OverlayCategory( eOVERLAY_TYPE_PANEL )
 	{

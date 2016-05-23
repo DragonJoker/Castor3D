@@ -3,7 +3,7 @@
 /setup
 /doc/x86
 /doc/x64
-/source/Core/Castor3D/Src/Data/Core
+/source/Core/Castor3D/Data/Core
 /source/Samples/CastorViewerSharp/Src/obj
 /source/CMake
 /data/Scene/Tests

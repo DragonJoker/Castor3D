@@ -67,55 +67,6 @@ namespace Castor3D
 			C3D_API virtual bool operator()( BillboardList const & p_obj, Castor::TextFile & p_file );
 		};
 
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		BillboardList loader
-		\~english
-		\brief		Loader de BillboardList
-		*/
-		class BinaryParser
-			: public MovableObject::BinaryParser
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'acces au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisee afin de remplir le chunk de donnees specifiques
-			 *\param[in]	p_obj	L'objet a ecrire
-			 *\param[out]	p_chunk	Le chunk a remplir
-			 *\return		\p false si une erreur quelconque est arrivee
-			 */
-			C3D_API virtual bool Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisee afin de recuperer des donnees specifiques a partir d'un chunk
-			 *\param[out]	p_obj	L'objet a lire
-			 *\param[in]	p_chunk	Le chunk contenant les donnees
-			 *\return		\p false si une erreur quelconque est arrivee
-			 */
-			C3D_API virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
-		};
-
 	public:
 		/**
 		 *\~english

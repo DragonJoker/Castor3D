@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -141,7 +141,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoParseChunk( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_pValues, p_count, p_chunk );
+			return ChunkParser< T >::Parse( p_pValues, p_count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -158,7 +158,7 @@ namespace Castor3D
 		template< typename T, uint32_t Count >
 		inline bool DoParseChunk( T( & p_value )[Count], BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_value, Count, p_chunk );
+			return ChunkParser< T >::Parse( p_value, Count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -175,7 +175,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoParseChunk( T & p_value, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_value, p_chunk );
+			return ChunkParser< T >::Parse( p_value, p_chunk );
 		}
 		/**
 		 *\~english
@@ -194,9 +194,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoFillChunk( T const * p_values, uint32_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const * p_values, size_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_values, p_count, p_chunkType, p_chunk );
+			return DoFillChunk( p_values, p_values + p_count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
@@ -212,10 +212,69 @@ namespace Castor3D
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		template< typename T, uint32_t Count >
+		template< typename T, size_t Count >
 		inline bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_value, Count, p_chunkType, p_chunk );
+			return DoFillChunk( p_value, Count, p_chunkType, p_chunk );
+		}
+		/**
+		 *\~english
+		 *\brief		Writes a subchunk value into a chunk
+		 *\param[in]	p_value		The values
+		 *\param[in]	p_chunkType	The subchunk type
+		 *\param[in]	p_chunk			The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
+		 *\param[in]	p_value		Les valeurs
+		 *\param[in]	p_chunkType	Le type du subchunk
+		 *\param[in]	p_chunk			Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		template< typename T, size_t Count >
+		inline bool DoFillChunk( std::array< T, Count > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		{
+			return DoFillChunk( p_value.data(), Count, p_chunkType, p_chunk );
+		}
+		/**
+		 *\~english
+		 *\brief		Writes a subchunk value into a chunk
+		 *\param[in]	p_value		The values
+		 *\param[in]	p_chunkType	The subchunk type
+		 *\param[in]	p_chunk			The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
+		 *\param[in]	p_value		Les valeurs
+		 *\param[in]	p_chunkType	Le type du subchunk
+		 *\param[in]	p_chunk			Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		template< typename T >
+		inline bool DoFillChunk( std::vector< T > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		{
+			return DoFillChunk( p_value.data(), p_value.size(), p_chunkType, p_chunk );
+		}
+		/**
+		 *\~english
+		 *\brief		Writes a subchunk value into a chunk
+		 *\param[in]	p_values	The values
+		 *\param[in]	p_count		The values count
+		 *\param[in]	p_chunkType	The subchunk type
+		 *\param[in]	p_chunk		The chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
+		 *\param[in]	p_values	Les valeurs
+		 *\param[in]	p_count		Le nombre de valeurs
+		 *\param[in]	p_chunkType	Le type du subchunk
+		 *\param[in]	p_chunk		Le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		template< typename T >
+		inline bool DoFillChunk( T const * p_begin, T const * p_end, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		{
+			return ChunkFiller< T >::Fill( p_begin, p_end, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
@@ -234,7 +293,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_value, p_chunkType, p_chunk );
+			return ChunkFiller< T >::Fill( p_value, p_chunkType, p_chunk );
 		}
 
 		//!\~english The current folder path	\~french Le chemin d'accès au dossiercourant

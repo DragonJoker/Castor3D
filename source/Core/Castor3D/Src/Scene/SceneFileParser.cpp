@@ -302,7 +302,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 			{
 				auto && l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
-					return p_path.GetExtension() == cuT( "cscn" ) || p_path.GetExtension() == cuT( "cbsn" );
+					return p_path.GetExtension() == cuT( "cscn" );
 				} );
 
 				if ( l_it != l_files.end() )

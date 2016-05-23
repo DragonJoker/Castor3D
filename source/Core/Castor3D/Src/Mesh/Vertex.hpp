@@ -36,8 +36,8 @@ namespace Castor3D
 	\brief		Representation of a vertex
 	\remark		Wraps BufferElementGroup to easily retrieve vertex's position, normal, tangent and texture coordinates, an index
 	\~fench
-	\brief		Représentation d'un vertex
-	\remark		Encadre un BufferElementGroup pour récupérer facilement la position d'un vertex, sa normale, sa tangente, ses coordonnées de texture, un indice
+	\brief		Représentation d'un sommet
+	\remark		Encadre un BufferElementGroup pour récupérer facilement la position d'un sommet, sa normale, sa tangente, ses coordonnées de texture, un indice
 	*/
 	class Vertex
 	{
@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
-		 *\brief		Définit la position du vertice
+		 *\brief		Définit la position du sommet
 		 *\param[in]	val	La nouvelle valeur
 		 */
 		inline void SetPosition( Castor::Coords3r const & val )
@@ -144,7 +144,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex position
 		 *\param[in]	val	The new value
 		 *\~french
-		 *\brief		Définit la position du vertice
+		 *\brief		Définit la position du sommet
 		 *\param[in]	val	La nouvelle valeur
 		 */
 		inline void SetPosition( Castor::Point3r const & val )
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex position
 		 *\param[in]	x, y, z	The new value
 		 *\~french
-		 *\brief		Définit la position du vertice
+		 *\brief		Définit la position du sommet
 		 *\param[in]	x, y, z	La nouvelle valeur
 		 */
 		inline void SetPosition( real x, real y, real z )
@@ -168,7 +168,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex position
 		 *\param[in]	p_coords	The new value
 		 *\~french
-		 *\brief		Définit la position du vertice
+		 *\brief		Définit la position du sommet
 		 *\param[in]	p_coords	La nouvelle valeur
 		 */
 		inline void SetPosition( real const * p_coords )
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la normale du vertex
+		 *\brief		Définit la normale du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetNormal( Castor::Coords3r const & val )
@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex normal
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la normale du vertex
+		 *\brief		Définit la normale du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetNormal( Castor::Point3r const & val )
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex normal
 		 *\param[in]	x, y, z	The values
 		 *\~french
-		 *\brief		Définit la normale du vertex
+		 *\brief		Définit la normale du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
 		inline void SetNormal( real x, real y, real z )
@@ -216,8 +216,8 @@ namespace Castor3D
 		 *\brief		Sets the vertex normal
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
-		 *\brief		Définit la normale du vertex
-		 *\param[in]	p_coords	Le buffer de données
+		 *\brief		Définit la normale du sommet
+		 *\param[in]	p_coords	Le tampon de données
 		 */
 		inline void SetNormal( real const * p_coords )
 		{
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la tangente du vertex
+		 *\brief		Définit la tangente du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetTangent( Castor::Coords3r const & val )
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex tangent
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la tangente du vertex
+		 *\brief		Définit la tangente du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetTangent( Castor::Point3r const & val )
@@ -252,7 +252,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex tangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
-		 *\brief		Définit la tangente du vertex
+		 *\brief		Définit la tangente du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
 		inline void SetTangent( real x, real y, real z )
@@ -264,8 +264,8 @@ namespace Castor3D
 		 *\brief		Sets the vertex tangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
-		 *\brief		Définit la tangente du vertex
-		 *\param[in]	p_coords	Le buffer de données
+		 *\brief		Définit la tangente du sommet
+		 *\param[in]	p_coords	Le tampon de données
 		 */
 		inline void SetTangent( real const * p_coords )
 		{
@@ -276,7 +276,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex
+		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetBitangent( Castor::Coords3r const & val )
@@ -288,7 +288,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex bitangent
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex
+		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetBitangent( Castor::Point3r const & val )
@@ -300,7 +300,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex bitangent
 		 *\param[in]	x, y, z	The values
 		 *\~french
-		 *\brief		Définit la bitangente du vertex
+		 *\brief		Définit la bitangente du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
 		inline void SetBitangent( real x, real y, real z )
@@ -312,8 +312,8 @@ namespace Castor3D
 		 *\brief		Sets the vertex bitangent
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
-		 *\brief		Définit la bitangente du vertex
-		 *\param[in]	p_coords	Le buffer de données
+		 *\brief		Définit la bitangente du sommet
+		 *\param[in]	p_coords	Le tampon de données
 		 */
 		inline void SetBitangent( real const * p_coords )
 		{
@@ -324,7 +324,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex
+		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetTexCoord( Castor::Coords3r const & val )
@@ -336,7 +336,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	val	The value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex
+		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	val	La valeur
 		 */
 		inline void SetTexCoord( Castor::Point3r const & val )
@@ -348,7 +348,7 @@ namespace Castor3D
 		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	x, y, z	The values
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex
+		 *\brief		Définit les coordonnées de texture du sommet
 		 *\param[in]	x, y, z	Les valeurs
 		 */
 		inline void SetTexCoord( real x, real y, real z = 0 )
@@ -360,8 +360,8 @@ namespace Castor3D
 		 *\brief		Sets the vertex texture coordinates
 		 *\param[in]	p_coords	The data buffer
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex
-		 *\param[in]	p_coords	Le buffer de données
+		 *\brief		Définit les coordonnées de texture du sommet
+		 *\param[in]	p_coords	Le tampon de données
 		 */
 		inline void SetTexCoord( real const * p_coords )
 		{
@@ -372,7 +372,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex position
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position du vertice
+		 *\brief		Récupère la position du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Coords3r & GetPosition( Castor::Coords3r & p_ptPos )
@@ -384,7 +384,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex position
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position du vertice
+		 *\brief		Récupère la position du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Point3r & GetPosition( Castor::Point3r & p_ptPos )const
@@ -396,7 +396,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex normal
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale du vertice
+		 *\brief		Récupère la normale du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Coords3r & GetNormal( Castor::Coords3r & p_ptNml )
@@ -408,7 +408,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex normal
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale du vertice
+		 *\brief		Récupère la normale du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Point3r & GetNormal( Castor::Point3r & p_ptNml )const
@@ -420,7 +420,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex tangent
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangent du vertice
+		 *\brief		Récupère la tangent du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Coords3r & GetTangent( Castor::Coords3r & p_ptTan )
@@ -432,7 +432,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex tangent
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangent du vertice
+		 *\brief		Récupère la tangent du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Point3r & GetTangent( Castor::Point3r & p_ptTan )const
@@ -444,7 +444,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex bitangent
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente du vertice
+		 *\brief		Récupère la bitangente du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Coords3r & GetBitangent( Castor::Coords3r & p_ptBitan )
@@ -456,7 +456,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex bitangent
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente du vertice
+		 *\brief		Récupère la bitangente du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Point3r & GetBitangent( Castor::Point3r & p_ptBitan )const
@@ -468,7 +468,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex texture coordinates
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture du vertice
+		 *\brief		Récupère les coordonnées de texture du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Coords3r & GetTexCoord( Castor::Coords3r & p_ptTex )
@@ -480,7 +480,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertex texture coordinates
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture du vertice
+		 *\brief		Récupère les coordonnées de texture du sommet
 		 *\return		La valeur
 		 */
 		inline Castor::Point3r & GetTexCoord( Castor::Point3r & p_ptTex )const
@@ -552,7 +552,7 @@ namespace Castor3D
 		 *\brief		Retrieves position's buffer offset
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer de la position
+		 *\brief		Récupère l'offset de la position dans le tampon
 		 *\return		La valeur
 		 */
 		static inline const uint32_t GetOffsetPos()
@@ -564,7 +564,7 @@ namespace Castor3D
 		 *\brief		Retrieves normal's buffer offset
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer de la normale
+		 *\brief		Récupère l'offset de la normale dans le tampon
 		 *\return		La valeur
 		 */
 		static inline const uint32_t GetOffsetNml()
@@ -576,7 +576,7 @@ namespace Castor3D
 		 *\brief		Retrieves tangent's buffer offset
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer de la tangent
+		 *\brief		Récupère l'offset de la tangente dans le tampon
 		 *\return		La valeur
 		 */
 		static inline const uint32_t GetOffsetTan()
@@ -588,7 +588,7 @@ namespace Castor3D
 		 *\brief		Retrieves bitangent's buffer offset
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer de la bitangente
+		 *\brief		Récupère l'offset de la bitangente dans le tampon
 		 *\return		La valeur
 		 */
 		static inline const uint32_t GetOffsetBin()
@@ -600,7 +600,7 @@ namespace Castor3D
 		 *\brief		Retrieves texture coordinates' buffer offset
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer des coordonnées de texture
+		 *\brief		Récupère l'offset des coordonnées de texture dans le tampon
 		 *\return		La valeur
 		 */
 		static inline const uint32_t GetOffsetTex()
@@ -673,8 +673,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la position d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Coords3r GetPosition( void * p_buffer );
@@ -684,8 +684,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la position d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Point3r GetPosition( void const * p_buffer );
@@ -696,8 +696,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la position d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -712,8 +712,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la position d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -727,8 +727,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la normale d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Coords3r GetNormal( void * p_buffer );
@@ -738,8 +738,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la normale d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Point3r GetNormal( void const * p_buffer );
@@ -750,8 +750,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la normale d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -766,8 +766,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la normale d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -781,8 +781,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la tangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Coords3r GetTangent( void * p_buffer );
@@ -792,8 +792,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la tangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Point3r GetTangent( void const * p_buffer );
@@ -804,8 +804,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la tangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -820,8 +820,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la tangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -835,8 +835,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Coords3r GetBitangent( void * p_buffer );
@@ -846,8 +846,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Point3r GetBitangent( void const * p_buffer );
@@ -858,8 +858,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -874,8 +874,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -889,8 +889,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère les coordonnées de texture d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Coords3r GetTexCoord( void * p_buffer );
@@ -900,8 +900,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère les coordonnées de texture d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\return		La valeur
 		 */
 		C3D_API static Castor::Point3r GetTexCoord( void const * p_buffer );
@@ -912,8 +912,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère les coordonnées de texture d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -928,8 +928,8 @@ namespace Castor3D
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Récupère les coordonnées de texture d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
@@ -943,8 +943,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la position du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetPosition( void * p_buffer, Castor::Coords3r const & p_coord )
@@ -957,8 +957,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la position du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetPosition( void * p_buffer, Castor::Point3r const & p_coord )
@@ -971,8 +971,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la position du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		C3D_API static void SetPosition( void * p_buffer, real const * p_coord );
@@ -982,8 +982,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
-		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la position du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
 		C3D_API static void SetPosition( void * p_buffer, real x, real y, real z );
@@ -993,8 +993,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la normale du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetNormal( void * p_buffer, Castor::Coords3r const & p_coord )
@@ -1007,8 +1007,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la normale du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetNormal( void * p_buffer, Castor::Point3r const & p_coord )
@@ -1021,8 +1021,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la normale du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		C3D_API static void SetNormal( void * p_buffer, real const * p_coord );
@@ -1032,8 +1032,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
-		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la normale du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
 		C3D_API static void SetNormal( void * p_buffer, real x, real y, real z );
@@ -1043,8 +1043,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la tangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetTangent( void * p_buffer, Castor::Coords3r const & p_coord )
@@ -1057,8 +1057,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la tangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetTangent( void * p_buffer, Castor::Point3r const & p_coord )
@@ -1071,8 +1071,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la tangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		C3D_API static void SetTangent( void * p_buffer, real const * p_coord );
@@ -1082,8 +1082,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
-		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la tangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
 		C3D_API static void SetTangent( void * p_buffer, real x, real y, real z );
@@ -1093,8 +1093,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la bitangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetBitangent( void * p_buffer, Castor::Coords3r const & p_coord )
@@ -1107,8 +1107,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la bitangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetBitangent( void * p_buffer, Castor::Point3r const & p_coord )
@@ -1121,8 +1121,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la bitangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		C3D_API static void SetBitangent( void * p_buffer, real const * p_coord );
@@ -1132,8 +1132,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
-		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit la bitangente du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
 		C3D_API static void SetBitangent( void * p_buffer, real x, real y, real z );
@@ -1143,8 +1143,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit les coordonnées de texture du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetTexCoord( void * p_buffer, Castor::Coords3r const & p_coord )
@@ -1157,8 +1157,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit les coordonnées de texture du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		static inline void SetTexCoord( void * p_buffer, Castor::Point3r const & p_coord )
@@ -1171,8 +1171,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit les coordonnées de texture du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
 		C3D_API static void SetTexCoord( void * p_buffer, real const * p_coord );
@@ -1182,8 +1182,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
-		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit les coordonnées de texture du sommet dans un tampon
+		 *\param[in]	p_buffer	Le tampon
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
 		C3D_API static void SetTexCoord( void * p_buffer, real x, real y, real z = 0 );
@@ -2069,38 +2069,55 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english Vertex position elements count	\~french Compte des élément de la position du vertex
+		//!\~english	Vertex position elements count.
+		//!\~french		Compte des élément de la position du sommet.
 		static const uint32_t sm_uiCountPos = 3;
-		//!\~english Vertex normal elements count	\~french Compte des élément de la normale du vertex
+		//!\~english	Vertex normal elements count.
+		//!\~french		Compte des élément de la normale du sommet.
 		static const uint32_t sm_uiCountNml = 3;
-		//!\~english Vertex tangent elements count	\~french Compte des élément de la tangente du vertex
+		//!\~english	Vertex tangent elements count.
+		//!\~french		Compte des élément de la tangente du sommet.
 		static const uint32_t sm_uiCountTan = 3;
-		//!\~english Vertex bitangent elements count	\~french Compte des élément de la bitangente du vertex
+		//!\~english	Vertex bitangent elements count.
+		//!\~french		Compte des élément de la bitangente du sommet.
 		static const uint32_t sm_uiCountBin = 3;
-		//!\~english Vertex texture coordinates elements count	\~french Compte des élément des coordonnées de texture du vertex
+		//!\~english	Vertex texture coordinates elements count.
+		//!\~french		Compte des élément des coordonnées de texture du sommet.
 		static const uint32_t sm_uiCountTex = 3;
-		//!\~english Vertex position binary size	\~french Taille en octets de la position du vertex
+		//!\~english	Vertex position binary size.
+		//!\~french		Taille en octets de la position du sommet.
 		static const uint32_t sm_uiSizePos = uint32_t( sm_uiCountPos * sizeof( real ) );
-		//!\~english Vertex normal binary size	\~french Taille en octets de la normale du vertex
+		//!\~english	Vertex normal binary size.
+		//!\~french		Taille en octets de la normale du sommet.
 		static const uint32_t sm_uiSizeNml = uint32_t( sm_uiCountNml * sizeof( real ) );
-		//!\~english Vertex tangent binary size	\~french Taille en octets de la tangente du vertex
+		//!\~english	Vertex tangent binary size.
+		//!\~french		Taille en octets de la tangente du sommet.
 		static const uint32_t sm_uiSizeTan = uint32_t( sm_uiCountTan * sizeof( real ) );
-		//!\~english Vertex bitangent binary size	\~french Taille en octets de la bitangente du vertex
+		//!\~english	Vertex bitangent binary size.
+		//!\~french		Taille en octets de la bitangente du sommet.
 		static const uint32_t sm_uiSizeBin = uint32_t( sm_uiCountBin * sizeof( real ) );
-		//!\~english Vertex texture coordinates binary size	\~french Taille en octets des coordonnées de texture du vertex
+		//!\~english	Vertex texture coordinates binary size.
+		//!\~french		Taille en octets des coordonnées de texture du sommet.
 		static const uint32_t sm_uiSizeTex = uint32_t( sm_uiCountTex * sizeof( real ) );
-		//!\~english Vertex position's buffer offset	\~french Offset dans le buffer de la position du vertex
+		//!\~english	Vertex position's buffer offset.
+		//!\~french		Offset dans le tampon de la position du sommet.
 		static const uint32_t sm_uiOffsetPos = 0;
-		//!\~english Vertex normal's buffer offset	\~french Offset dans le buffer de la normale du vertex
+		//!\~english	Vertex normal's buffer offset.
+		//!\~french		Offset dans le tampon de la normale du sommet.
 		static const uint32_t sm_uiOffsetNml = sm_uiOffsetPos + sm_uiSizePos;
-		//!\~english Vertex tangent's buffer offset	\~french Offset dans le buffer de la tangente du vertex
+		//!\~english	Vertex tangent's buffer offset.
+		//!\~french		Offset dans le tampon de la tangente du sommet.
 		static const uint32_t sm_uiOffsetTan = sm_uiOffsetNml + sm_uiSizeNml;
-		//!\~english Vertex bitangent's buffer offset	\~french Offset dans le buffer de la bitangente du vertex
+		//!\~english	Vertex bitangent's buffer offset.
+		//!\~french		Offset dans le tampon de la bitangente du sommet.
 		static const uint32_t sm_uiOffsetBin = sm_uiOffsetTan + sm_uiSizeTan;
-		//!\~english Vertex texture coordinates' buffer offset	\~french Offset dans le buffer des coordonnées de texture du vertex
+		//!\~english	Vertex texture coordinates' buffer offset.
+		//!\~french		Offset dans le tampon des coordonnées de texture du sommet.
 		static const uint32_t sm_uiOffsetTex = sm_uiOffsetBin + sm_uiSizeBin;
 
-		//!\~english The wrapped group	\~french Le groupe encadré
+	private:
+		//!\~english	The wrapped group.
+		//!\~french		Le groupe encadré.
 		BufferElementGroup & m_group;
 	};
 }

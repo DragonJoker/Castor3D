@@ -40,69 +40,6 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::BinaryParser::BinaryParser( Path const & p_path )
-		:	MovableObject::BinaryParser( p_path )
-	{
-	}
-
-	bool Camera::BinaryParser::Fill( Camera const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_CAMERA );
-
-		if ( l_return )
-		{
-			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = Viewport::BinaryParser( m_path ).Fill( p_obj.GetViewport(), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Camera::BinaryParser::Parse( Camera & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_VIEWPORT:
-					l_return = Viewport::BinaryParser( m_path ).Parse( p_obj.GetViewport(), l_chunk );
-					break;
-
-				default:
-					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
-	}
-	//*************************************************************************************************
-
 	namespace
 	{
 		Point3r GetVertexP( Point3r const & p_min, Point3r const & p_max, Point3r const & p_normal )

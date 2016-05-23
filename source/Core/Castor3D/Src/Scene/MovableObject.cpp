@@ -22,65 +22,6 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovableObject::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< MovableObject >( p_path )
-	{
-	}
-
-	bool MovableObject::BinaryParser::Fill( MovableObject const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetParent()->GetName(), eCHUNK_TYPE_MOVABLE_NODE, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool MovableObject::BinaryParser::Parse( MovableObject & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_MOVABLE_NODE:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				SceneNodeSPtr l_pParent = p_obj.GetScene()->GetSceneNodeManager().Find( l_name );
-
-				if ( l_pParent )
-				{
-					p_obj.AttachTo( l_pParent );
-				}
-				else
-				{
-					l_return = false;
-				}
-			}
-
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
 	MovableObject::MovableObject( String const & p_name, Scene & p_scene, eMOVABLE_TYPE p_type, SceneNodeSPtr p_sn )
 		: OwnedBy< Scene >( p_scene )
 		, m_name( p_name )

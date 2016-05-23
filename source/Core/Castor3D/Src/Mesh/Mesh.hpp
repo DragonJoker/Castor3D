@@ -48,38 +48,6 @@ namespace Castor3D
 	public:
 		/*!
 		\author		Sylvain DOREMUS
-		\version	0.7.0
-		\date		21/03/2014
-		\~english
-		\brief		Mesh loader
-		\~french
-		\brief		Loader de Mesh
-		*/
-		class TextLoader
-			:	public Castor::Loader< Mesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
-			/**
-			 *\~english
-			 *\brief		Writes a mesh into a text file
-			 *\param[in]	p_file	The file to save the meshes in
-			 *\param[in]	p_mesh	The mesh to save
-			 *\~french
-			 *\brief		Ecrit un maillage dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_mesh	Le maillage
-			 */
-			C3D_API virtual bool operator()( Mesh const & p_mesh, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
 		\brief		MovableObject loader
@@ -87,7 +55,7 @@ namespace Castor3D
 		\brief		Loader de MovableObject
 		*/
 		class BinaryParser
-			:	public Castor3D::BinaryParser< Mesh >
+			: public Castor3D::BinaryParser< Mesh >
 		{
 		public:
 			/**

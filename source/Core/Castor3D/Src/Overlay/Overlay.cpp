@@ -1,4 +1,4 @@
-﻿#include "Overlay.hpp"
+#include "Overlay.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
@@ -23,100 +23,6 @@ namespace Castor3D
 	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
 		return OverlayCategory::TextLoader()( *p_overlay.m_category, p_file );
-	}
-
-	//*************************************************************************************************
-
-	Overlay::BinaryParser::BinaryParser( Path const & p_path, Engine * p_engine )
-		:	Castor3D::BinaryParser< Overlay >( p_path )
-		,	m_engine( p_engine )
-	{
-	}
-
-	bool Overlay::BinaryParser::Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_OVERLAY );
-
-		if ( l_return )
-		{
-			l_return = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_category, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
-		}
-
-		for ( auto && l_it = p_obj.begin(); l_it != p_obj.end() && l_return; ++l_it )
-		{
-			OverlaySPtr l_overlay = *l_it;
-			l_return = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_overlay, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Overlay::BinaryParser::Parse( Overlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		eOVERLAY_TYPE l_type;
-		String l_name;
-		OverlaySPtr l_overlay;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( p_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_OVERLAY:
-					l_overlay.reset();
-					break;
-
-				case eCHUNK_TYPE_OVERLAY_TYPE:
-					l_return = DoParseChunk( l_type, l_chunk );
-
-					if ( l_return )
-					{
-						l_overlay = m_engine->GetOverlayManager().Create( cuT( "" ), l_type, p_obj.shared_from_this(), p_obj.GetScene() );
-						l_return = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetName( l_name );
-					}
-
-					break;
-
-				default:
-					l_return = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_category, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
 	}
 
 	//*************************************************************************************************

@@ -1,4 +1,4 @@
-﻿#include "Animable.hpp"
+#include "Animable.hpp"
 
 #include "Animation.hpp"
 
@@ -20,7 +20,7 @@ namespace Castor3D
 
 		for ( auto && l_it : p_obj.m_animations )
 		{
-			l_return &= Animation::BinaryParser( m_path ).Fill( *l_it.second, l_chunk );
+			l_return &= Animation::BinaryParser{ m_path }.Fill( *l_it.second, l_chunk );
 		}
 
 		if ( l_return )
@@ -49,11 +49,11 @@ namespace Castor3D
 				{
 				case eCHUNK_TYPE_ANIMATION:
 					l_animation = std::make_shared< Animation >( cuEmptyString );
-					l_return = Animation::BinaryParser( m_path ).Parse( *l_animation, l_chunk );
+					l_return = Animation::BinaryParser{ m_path }.Parse( *l_animation, l_chunk );
 
 					if ( l_return )
 					{
-						p_obj.m_animations.insert( std::make_pair( l_animation->GetName(), l_animation ) );
+						p_obj.m_animations.insert( { l_animation->GetName(), l_animation } );
 					}
 
 					break;
@@ -87,7 +87,7 @@ namespace Castor3D
 		if ( l_it == m_animations.end() )
 		{
 			l_return = std::make_shared< Animation >( p_name );
-			m_animations.insert( std::make_pair( p_name, l_return ) );
+			m_animations.insert( { p_name, l_return } );
 		}
 		else
 		{

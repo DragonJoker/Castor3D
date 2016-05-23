@@ -54,21 +54,6 @@ namespace CastorViewer
 			return l_result;
 		}
 
-		bool ParseManager( Engine * p_engine, SamplerManager & p_manager, BinaryChunk & p_chunk, typename Sampler::BinaryParser p_parser )
-		{
-			bool l_result = true;
-			auto l_lock = make_unique_lock( p_manager );
-			auto l_it = p_manager.begin();
-
-			while ( l_result && l_it != p_manager.end() )
-			{
-				l_result = p_parser.Fill( *l_it->second, p_chunk );
-				++l_it;
-			}
-
-			return l_result;
-		}
-
 		Path GetTextureNewPath( Path const & p_pathSrcFile, Path const & p_pathFolder )
 		{
 			Path l_pathReturn( cuT( "Texture" ) );
@@ -285,8 +270,8 @@ namespace CastorViewer
 		}
 
 		Path l_filePath = l_folder / p_fileName.GetFileName();
-		TextFile l_mtlFile( l_filePath + cuT( ".cmtl" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-		TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
+		TextFile l_mtlFile( l_filePath + cuT( ".cmtl" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_UTF8 );
+		TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_UTF8 );
 		l_result = p_castor3d->GetMaterialManager().Write( l_mtlFile );
 
 		if ( l_result )
@@ -306,61 +291,16 @@ namespace CastorViewer
 
 		p_castor3d->GetWindowManager().unlock();
 
-		if ( l_result )
+		p_castor3d->GetMeshManager().lock();
+
+		for ( auto l_it : p_castor3d->GetMeshManager() )
 		{
-			wxMessageBox( _( "Export successful" ) );
-		}
-		else
-		{
-			wxMessageBox( _( "Export failed" ) );
-		}
-	}
-
-	//************************************************************************************************
-
-	CbsnSceneExporter::CbsnSceneExporter()
-	{
-	}
-
-	CbsnSceneExporter::~CbsnSceneExporter()
-	{
-	}
-
-	void CbsnSceneExporter::ExportScene( Engine * p_castor3d, Scene const & p_scene, Path const & p_fileName )
-	{
-		Path l_folder = p_fileName.GetPath() / p_fileName.GetFileName();
-
-		if ( !File::DirectoryExists( l_folder ) )
-		{
-			File::DirectoryCreate( l_folder );
+			auto l_path = l_folder / l_it.first + cuT( ".cmsh" );
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE};
+			l_result &= Mesh::BinaryParser{ l_path }.Fill( *l_it.second, l_file );
 		}
 
-		Path l_filePath = l_folder / p_fileName.GetFileName();
-		bool l_result = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_CBSN_FILE );
-		ParseManager( p_castor3d, p_castor3d->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_folder ) );
-		ParseManager( p_castor3d, p_castor3d->GetMaterialManager(), l_chunk, Material::BinaryParser( l_folder, p_castor3d ) );
-		ParseManager( p_castor3d, p_castor3d->GetMeshManager(), l_chunk, Mesh::BinaryParser( l_folder ) );
-
-		if ( l_result )
-		{
-			l_result = Scene::BinaryParser( l_folder ).Fill( const_cast< Scene const & >( p_scene ), l_chunk );
-		}
-
-		p_castor3d->GetWindowManager().lock();
-
-		for ( auto l_it : p_castor3d->GetWindowManager() )
-		{
-			l_result &= RenderWindow::BinaryParser( l_folder ).Fill( *l_it.second, l_chunk );
-		}
-
-		p_castor3d->GetWindowManager().unlock();
-
-		if ( l_result )
-		{
-			BinaryFile l_file( l_filePath + cuT( ".cbsn" ), File::eOPEN_MODE_WRITE );
-			l_chunk.Write( l_file );
-		}
+		p_castor3d->GetMeshManager().unlock();
 
 		if ( l_result )
 		{

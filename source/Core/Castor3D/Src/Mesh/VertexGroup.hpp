@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -28,21 +28,27 @@ namespace Castor3D
 	\~english
 	\brief		Holds the all components of a vertex array
 	\~french
-	\brief		Contient toutes les composantes d'un tableau de vertex
+	\brief		Contient toutes les composantes d'un tableau de sommets
 	*/
 	struct stVERTEX_GROUP
 	{
-		//!\~english The vertices count	\~french Le nombre de vertices
+		//!\~english	The vertices count.
+		//!\~french		Le nombre de sommets.
 		uint32_t m_uiCount;
-		//!\~english The vertices coordinates	\~french Les coordonnées des vertices
+		//!\~english	The vertices coordinates.
+		//!\~french		Les coordonnées des sommets.
 		real * m_pVtx;
-		//!\~english The vertices normals	\~french Les normales des vertices
+		//!\~english	The vertices normals.
+		//!\~french		Les normales des sommets.
 		real * m_pNml;
-		//!\~english The vertices tangents	\~french Les tangentes des vertices
+		//!\~english	The vertices tangents.
+		//!\~french		Les tangentes des sommets.
 		real * m_pTan;
-		//!\~english The vertices bitangents	\~french Les bitangentes des vertices
+		//!\~english	The vertices bitangents.
+		//!\~french		Les bitangentes des sommets.
 		real * m_pBin;
-		//!\~english The vertices texture coordinates	\~french Les coordonnées de texture des vertices
+		//!\~english	The vertices texture coordinates.
+		//!\~french		Les coordonnées de texture des sommets.
 		real * m_pTex;
 	};
 }

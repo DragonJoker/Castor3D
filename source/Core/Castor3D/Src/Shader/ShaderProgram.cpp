@@ -31,47 +31,6 @@ namespace Castor3D
 		}
 	}
 
-	ShaderProgram::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< ShaderProgram >( p_path )
-	{
-	}
-
-	bool ShaderProgram::BinaryParser::Fill( ShaderProgram const & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
-
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; ++i )
-		{
-			ShaderObjectSPtr l_obj = p_object.m_pShaders[i];
-
-			if ( l_obj )
-			{
-				BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_OBJECT );
-				l_return = DoFillChunk( eSHADER_TYPE( i ), eCHUNK_TYPE_SHADER_OBJECT_TYPE, l_chunk );
-
-				if ( l_return )
-				{
-					l_return = ShaderObject::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
-				}
-
-				if ( l_return )
-				{
-					l_chunk.Finalise();
-					p_chunk.AddSubChunk( l_chunk );
-				}
-			}
-		}
-
-		return l_return;
-	}
-
-	bool ShaderProgram::BinaryParser::Parse( ShaderProgram & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		return l_return;
-	}
-
 	//*************************************************************************************************
 
 	ShaderProgram::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )

@@ -53,64 +53,6 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BorderPanelOverlay::BinaryParser::BinaryParser( Path const & p_path )
-		:	OverlayCategory::BinaryParser( p_path )
-	{
-	}
-
-	bool BorderPanelOverlay::BinaryParser::Fill( BorderPanelOverlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetBorderSize().const_ptr(), 2, eCHUNK_TYPE_OVERLAY_BORDER_SIZE, p_chunk );
-		}
-
-		if ( l_return && p_obj.GetBorderMaterial() )
-		{
-			l_return = DoFillChunk( p_obj.GetBorderMaterial()->GetName(), eCHUNK_TYPE_OVERLAY_BORDER_MATERIAL, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool BorderPanelOverlay::BinaryParser::Parse( BorderPanelOverlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_OVERLAY_BORDER_SIZE:
-			l_return = DoParseChunk( p_obj.GetBorderSize().ptr(), 2, p_chunk );
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_BORDER_MATERIAL:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetBorderMaterial( p_obj.m_pOverlay->GetEngine()->GetMaterialManager().Find( l_name ) );
-			}
-
-			break;
-
-		default:
-			l_return = false;
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
 	BorderPanelOverlay::BorderPanelOverlay()
 		: OverlayCategory( eOVERLAY_TYPE_BORDER_PANEL )
 		, m_borderOuterUv( 0, 0, 1, 1 )

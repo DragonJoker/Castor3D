@@ -1,4 +1,4 @@
-﻿#include "LightCategory.hpp"
+#include "LightCategory.hpp"
 #include "Light.hpp"
 
 #include <Logger.hpp>
@@ -49,80 +49,6 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( cuT( "\t\tintensity " ) ) > 0 && Point3f::TextLoader()( p_light.GetIntensity(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	LightCategory::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< LightCategory >( p_path )
-	{
-	}
-
-	bool LightCategory::BinaryParser::Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = MovableObject::BinaryParser( m_path ).Fill( *p_obj.GetLight(), p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetLightType(), eCHUNK_TYPE_LIGHT_TYPE, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetColour(), eCHUNK_TYPE_LIGHT_COLOUR, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetIntensity(), eCHUNK_TYPE_LIGHT_INTENSITY, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool LightCategory::BinaryParser::Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		Point3f l_vec3;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_MOVABLE_NODE:
-			l_return = MovableObject::BinaryParser( m_path ).Parse( *p_obj.GetLight(), p_chunk );
-			break;
-
-		case eCHUNK_TYPE_LIGHT_COLOUR:
-			l_return = DoParseChunk( l_vec3, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetColour( l_vec3 );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_LIGHT_INTENSITY:
-			l_return = DoParseChunk( l_vec3, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetIntensity( l_vec3 );
-			}
-
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
 		}
 
 		return l_return;
