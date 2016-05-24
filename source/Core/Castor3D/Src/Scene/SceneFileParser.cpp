@@ -97,73 +97,73 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	: OwnedBy< Engine >( p_engine )
 	, FileParser( eSECTION_ROOT )
 {
-	m_mapBlendFactors[cuT( "zero" )] = eBLEND_ZERO;
-	m_mapBlendFactors[cuT( "one" )] = eBLEND_ONE;
-	m_mapBlendFactors[cuT( "src_colour" )] = eBLEND_SRC_COLOUR;
-	m_mapBlendFactors[cuT( "inv_src_colour" )] = eBLEND_INV_SRC_COLOUR;
-	m_mapBlendFactors[cuT( "dst_colour" )] = eBLEND_DST_COLOUR;
-	m_mapBlendFactors[cuT( "inv_dst_colour" )] = eBLEND_INV_DST_COLOUR;
-	m_mapBlendFactors[cuT( "src_alpha" )] = eBLEND_SRC_ALPHA;
-	m_mapBlendFactors[cuT( "inv_src_alpha" )] = eBLEND_INV_SRC_ALPHA;
-	m_mapBlendFactors[cuT( "dst_alpha" )] = eBLEND_DST_ALPHA;
-	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = eBLEND_INV_DST_ALPHA;
-	m_mapBlendFactors[cuT( "constant" )] = eBLEND_CONSTANT;
-	m_mapBlendFactors[cuT( "inv_constant" )] = eBLEND_INV_CONSTANT;
-	m_mapBlendFactors[cuT( "src_alpha_sat" )] = eBLEND_SRC_ALPHA_SATURATE;
-	m_mapBlendFactors[cuT( "src1_colour" )] = eBLEND_SRC1_COLOUR;
-	m_mapBlendFactors[cuT( "inv_src1_colour" )] = eBLEND_INV_SRC1_COLOUR;
-	m_mapBlendFactors[cuT( "src1_alpha" )] = eBLEND_SRC1_ALPHA;
-	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = eBLEND_INV_SRC1_ALPHA;
+	m_mapBlendFactors[cuT( "zero" )] = uint32_t( BlendOperand::Zero );
+	m_mapBlendFactors[cuT( "one" )] = uint32_t( BlendOperand::One );
+	m_mapBlendFactors[cuT( "src_colour" )] = uint32_t( BlendOperand::SrcColour );
+	m_mapBlendFactors[cuT( "inv_src_colour" )] = uint32_t( BlendOperand::InvSrcColour );
+	m_mapBlendFactors[cuT( "dst_colour" )] = uint32_t( BlendOperand::DstColour );
+	m_mapBlendFactors[cuT( "inv_dst_colour" )] = uint32_t( BlendOperand::InvDstColour );
+	m_mapBlendFactors[cuT( "src_alpha" )] = uint32_t( BlendOperand::SrcAlpha );
+	m_mapBlendFactors[cuT( "inv_src_alpha" )] = uint32_t( BlendOperand::InvSrcAlpha );
+	m_mapBlendFactors[cuT( "dst_alpha" )] = uint32_t( BlendOperand::DstAlpha );
+	m_mapBlendFactors[cuT( "inv_dst_alpha" )] = uint32_t( BlendOperand::InvDstAlpha );
+	m_mapBlendFactors[cuT( "constant" )] = uint32_t( BlendOperand::Constant );
+	m_mapBlendFactors[cuT( "inv_constant" )] = uint32_t( BlendOperand::InvConstant );
+	m_mapBlendFactors[cuT( "src_alpha_sat" )] = uint32_t( BlendOperand::SrcAlphaSaturate );
+	m_mapBlendFactors[cuT( "src1_colour" )] = uint32_t( BlendOperand::Src1Colour );
+	m_mapBlendFactors[cuT( "inv_src1_colour" )] = uint32_t( BlendOperand::InvSrc1Colour );
+	m_mapBlendFactors[cuT( "src1_alpha" )] = uint32_t( BlendOperand::Src1Alpha );
+	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = uint32_t( BlendOperand::InvSrc1Alpha );
 
-	m_mapTypes[cuT( "1d" )] = eTEXTURE_TYPE_1D;
-	m_mapTypes[cuT( "2d" )] = eTEXTURE_TYPE_2D;
-	m_mapTypes[cuT( "3d" )] = eTEXTURE_TYPE_3D;
+	m_mapTypes[cuT( "1d" )] = uint32_t( TextureType::OneDimension );
+	m_mapTypes[cuT( "2d" )] = uint32_t( TextureType::TwoDimensions );
+	m_mapTypes[cuT( "3d" )] = uint32_t( TextureType::ThreeDimensions );
 
-	m_mapAlphaFuncs[cuT( "always" )] = eALPHA_FUNC_ALWAYS;
-	m_mapAlphaFuncs[cuT( "less" )] = eALPHA_FUNC_LESS;
-	m_mapAlphaFuncs[cuT( "less_or_equal" )] = eALPHA_FUNC_LESS_OR_EQUAL;
-	m_mapAlphaFuncs[cuT( "equal" )] = eALPHA_FUNC_EQUAL;
-	m_mapAlphaFuncs[cuT( "not_equal" )] = eALPHA_FUNC_NOT_EQUAL;
-	m_mapAlphaFuncs[cuT( "greater_or_equal" )] = eALPHA_FUNC_GREATER_OR_EQUAL;
-	m_mapAlphaFuncs[cuT( "greater" )] = eALPHA_FUNC_GREATER;
-	m_mapAlphaFuncs[cuT( "never" )] = eALPHA_FUNC_NEVER;
+	m_mapAlphaFuncs[cuT( "always" )] = uint32_t( AlphaFunc::Always );
+	m_mapAlphaFuncs[cuT( "less" )] = uint32_t( AlphaFunc::Less );
+	m_mapAlphaFuncs[cuT( "less_or_equal" )] = uint32_t( AlphaFunc::LEqual );
+	m_mapAlphaFuncs[cuT( "equal" )] = uint32_t( AlphaFunc::Equal );
+	m_mapAlphaFuncs[cuT( "not_equal" )] = uint32_t( AlphaFunc::NEqual );
+	m_mapAlphaFuncs[cuT( "greater_or_equal" )] = uint32_t( AlphaFunc::GEqual );
+	m_mapAlphaFuncs[cuT( "greater" )] = uint32_t( AlphaFunc::Greater );
+	m_mapAlphaFuncs[cuT( "never" )] = uint32_t( AlphaFunc::Never );
 
-	m_mapTextureArguments[cuT( "texture" )] = eBLEND_SOURCE_TEXTURE;
-	m_mapTextureArguments[cuT( "texture0" )] = eBLEND_SOURCE_TEXTURE0;
-	m_mapTextureArguments[cuT( "texture1" )] = eBLEND_SOURCE_TEXTURE1;
-	m_mapTextureArguments[cuT( "texture2" )] = eBLEND_SOURCE_TEXTURE2;
-	m_mapTextureArguments[cuT( "texture3" )] = eBLEND_SOURCE_TEXTURE3;
-	m_mapTextureArguments[cuT( "constant" )] = eBLEND_SOURCE_CONSTANT;
-	m_mapTextureArguments[cuT( "diffuse" )] = eBLEND_SOURCE_DIFFUSE;
-	m_mapTextureArguments[cuT( "previous" )] = eBLEND_SOURCE_PREVIOUS;
+	m_mapTextureArguments[cuT( "texture" )] = uint32_t( BlendSource::Texture );
+	m_mapTextureArguments[cuT( "texture0" )] = uint32_t( BlendSource::Texture0 );
+	m_mapTextureArguments[cuT( "texture1" )] = uint32_t( BlendSource::Texture1 );
+	m_mapTextureArguments[cuT( "texture2" )] = uint32_t( BlendSource::Texture2 );
+	m_mapTextureArguments[cuT( "texture3" )] = uint32_t( BlendSource::Texture3 );
+	m_mapTextureArguments[cuT( "constant" )] = uint32_t( BlendSource::Constant );
+	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::Diffuse );
+	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::Previous );
 
-	m_mapTextureRgbFunctions[cuT( "none" )] = eRGB_BLEND_FUNC_NONE;
-	m_mapTextureRgbFunctions[cuT( "first_arg" )] = eRGB_BLEND_FUNC_FIRST_ARG;
-	m_mapTextureRgbFunctions[cuT( "add" )] = eRGB_BLEND_FUNC_ADD;
-	m_mapTextureRgbFunctions[cuT( "add_signed" )] = eRGB_BLEND_FUNC_ADD_SIGNED;
-	m_mapTextureRgbFunctions[cuT( "modulate" )] = eRGB_BLEND_FUNC_MODULATE;
-	m_mapTextureRgbFunctions[cuT( "interpolate" )] = eRGB_BLEND_FUNC_INTERPOLATE;
-	m_mapTextureRgbFunctions[cuT( "subtract" )] = eRGB_BLEND_FUNC_SUBTRACT;
-	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = eRGB_BLEND_FUNC_DOT3_RGB;
-	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = eRGB_BLEND_FUNC_DOT3_RGBA;
+	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( RGBBlendFunc::None );
+	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( RGBBlendFunc::FirstArg );
+	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( RGBBlendFunc::Add );
+	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( RGBBlendFunc::AddSigned );
+	m_mapTextureRgbFunctions[cuT( "modulate" )] = uint32_t( RGBBlendFunc::Modulate );
+	m_mapTextureRgbFunctions[cuT( "interpolate" )] = uint32_t( RGBBlendFunc::Interpolate );
+	m_mapTextureRgbFunctions[cuT( "subtract" )] = uint32_t( RGBBlendFunc::Subtract );
+	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( RGBBlendFunc::Dot3RGB );
+	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( RGBBlendFunc::Dot3RGBA );
 
-	m_mapTextureAlphaFunctions[cuT( "none" )] = eALPHA_BLEND_FUNC_NONE;
-	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = eALPHA_BLEND_FUNC_FIRST_ARG;
-	m_mapTextureAlphaFunctions[cuT( "add" )] = eALPHA_BLEND_FUNC_ADD;
-	m_mapTextureAlphaFunctions[cuT( "add_signed" )] = eALPHA_BLEND_FUNC_ADD_SIGNED;
-	m_mapTextureAlphaFunctions[cuT( "modulate" )] = eALPHA_BLEND_FUNC_MODULATE;
-	m_mapTextureAlphaFunctions[cuT( "interpolate" )] = eALPHA_BLEND_FUNC_INTERPOLATE;
-	m_mapTextureAlphaFunctions[cuT( "substract" )] = eALPHA_BLEND_FUNC_SUBSTRACT;
+	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::None );
+	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = uint32_t( AlphaBlendFunc::FirstArg );
+	m_mapTextureAlphaFunctions[cuT( "add" )] = uint32_t( AlphaBlendFunc::Add );
+	m_mapTextureAlphaFunctions[cuT( "add_signed" )] = uint32_t( AlphaBlendFunc::AddSigned );
+	m_mapTextureAlphaFunctions[cuT( "modulate" )] = uint32_t( AlphaBlendFunc::Modulate );
+	m_mapTextureAlphaFunctions[cuT( "interpolate" )] = uint32_t( AlphaBlendFunc::Interpolate );
+	m_mapTextureAlphaFunctions[cuT( "substract" )] = uint32_t( AlphaBlendFunc::Subtract );
 
-	m_mapTextureChannels[cuT( "colour" )] = eTEXTURE_CHANNEL_COLOUR;
-	m_mapTextureChannels[cuT( "ambient" )] = eTEXTURE_CHANNEL_AMBIENT;
-	m_mapTextureChannels[cuT( "diffuse" )] = eTEXTURE_CHANNEL_DIFFUSE;
-	m_mapTextureChannels[cuT( "normal" )] = eTEXTURE_CHANNEL_NORMAL;
-	m_mapTextureChannels[cuT( "specular" )] = eTEXTURE_CHANNEL_SPECULAR;
-	m_mapTextureChannels[cuT( "height" )] = eTEXTURE_CHANNEL_HEIGHT;
-	m_mapTextureChannels[cuT( "opacity" )] = eTEXTURE_CHANNEL_OPACITY;
-	m_mapTextureChannels[cuT( "gloss" )] = eTEXTURE_CHANNEL_GLOSS;
-	m_mapTextureChannels[cuT( "emissive" )] = eTEXTURE_CHANNEL_EMISSIVE;
+	m_mapTextureChannels[cuT( "colour" )] = uint32_t( TextureChannel::Colour );
+	m_mapTextureChannels[cuT( "ambient" )] = uint32_t( TextureChannel::Ambient );
+	m_mapTextureChannels[cuT( "diffuse" )] = uint32_t( TextureChannel::Diffuse );
+	m_mapTextureChannels[cuT( "normal" )] = uint32_t( TextureChannel::Normal );
+	m_mapTextureChannels[cuT( "specular" )] = uint32_t( TextureChannel::Specular );
+	m_mapTextureChannels[cuT( "height" )] = uint32_t( TextureChannel::Height );
+	m_mapTextureChannels[cuT( "opacity" )] = uint32_t( TextureChannel::Opacity );
+	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::Gloss );
+	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::Emissive );
 
 	m_mapNormalModes[cuT( "smooth" )] = eNORMAL_SMOOTH;
 	m_mapNormalModes[cuT( "flat" )] = eNORMAL_FLAT;
@@ -198,13 +198,13 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapViewportModes[cuT( "perspective" )] = eVIEWPORT_TYPE_PERSPECTIVE;
 	m_mapViewportModes[cuT( "frustum" )] = eVIEWPORT_TYPE_FRUSTUM;
 
-	m_mapInterpolationModes[cuT( "nearest" )] = eINTERPOLATION_MODE_NEAREST;
-	m_mapInterpolationModes[cuT( "linear" )] = eINTERPOLATION_MODE_LINEAR;
+	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( InterpolationMode::Nearest );
+	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( InterpolationMode::Linear );
 
-	m_mapWrappingModes[cuT( "repeat" )] = eWRAP_MODE_REPEAT;
-	m_mapWrappingModes[cuT( "mirrored_repeat" )] = eWRAP_MODE_MIRRORED_REPEAT;
-	m_mapWrappingModes[cuT( "clamp_to_border" )] = eWRAP_MODE_CLAMP_TO_BORDER;
-	m_mapWrappingModes[cuT( "clamp_to_edge" )] = eWRAP_MODE_CLAMP_TO_EDGE;
+	m_mapWrappingModes[cuT( "repeat" )] = uint32_t( WrapMode::Repeat );
+	m_mapWrappingModes[cuT( "mirrored_repeat" )] = uint32_t( WrapMode::MirroredRepeat );
+	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( WrapMode::ClampToBorder );
+	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( WrapMode::ClampToEdge );
 
 	m_mapShaderTypes[cuT( "vertex" )] = MASK_SHADER_TYPE_VERTEX;
 	m_mapShaderTypes[cuT( "hull" )] = MASK_SHADER_TYPE_HULL;
@@ -238,9 +238,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBorderPositions[cuT( "middle" )] = eBORDER_POSITION_MIDDLE;
 	m_mapBorderPositions[cuT( "external" )] = eBORDER_POSITION_EXTERNAL;
 
-	m_mapBlendModes[cuT( "none" )] = eBLEND_MODE_NONE;
-	m_mapBlendModes[cuT( "additive" )] = eBLEND_MODE_ADDITIVE;
-	m_mapBlendModes[cuT( "multiplicative" )] = eBLEND_MODE_MULTIPLICATIVE;
+	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::None );
+	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::Additive );
+	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::Multiplicative );
 
 	m_mapVerticalAligns[cuT( "top" )] = eVALIGN_TOP;
 	m_mapVerticalAligns[cuT( "center" )] = eVALIGN_CENTER;
@@ -348,6 +348,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "mag_filter" ), Parser_SamplerMagFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "mip_filter" ), Parser_SamplerMipFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "min_lod" ), Parser_SamplerMinLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_lod" ), Parser_SamplerMaxLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "lod_bias" ), Parser_SamplerLodBias, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );

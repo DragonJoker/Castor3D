@@ -636,70 +636,70 @@ namespace GlRender
 
 	inline eGL_PRIMITIVE OpenGl::Get( Castor3D::eTOPOLOGY p_index )const
 	{
-		return PrimitiveTypes[p_index];
+		return PrimitiveTypes[uint32_t( p_index )];
 	}
 
-	inline eGL_TEXDIM OpenGl::Get( Castor3D::eTEXTURE_TYPE p_index )const
+	inline eGL_TEXDIM OpenGl::Get( Castor3D::TextureType p_index )const
 	{
-		if ( p_index == Castor3D::eTEXTURE_TYPE_BUFFER )
+		if ( p_index == Castor3D::TextureType::Buffer )
 		{
 			if ( !HasTbo() )
 			{
-				p_index = Castor3D::eTEXTURE_TYPE_1D;
+				p_index = Castor3D::TextureType::OneDimension;
 			}
 		}
 
-		return TextureDimensions[p_index];
+		return TextureDimensions[uint32_t( p_index )];
 	}
 
-	inline eGL_FUNC OpenGl::Get( Castor3D::eALPHA_FUNC p_eAlphaFunc )const
+	inline eGL_FUNC OpenGl::Get( Castor3D::AlphaFunc p_eAlphaFunc )const
 	{
-		return AlphaFuncs[p_eAlphaFunc];
+		return AlphaFuncs[uint32_t( p_eAlphaFunc )];
 	}
 
-	inline eGL_WRAP_MODE OpenGl::Get( Castor3D::eWRAP_MODE p_eWrapMode )const
+	inline eGL_WRAP_MODE OpenGl::Get( Castor3D::WrapMode p_eWrapMode )const
 	{
-		return TextureWrapMode[p_eWrapMode];
+		return TextureWrapMode[uint32_t( p_eWrapMode )];
 	}
 
-	inline eGL_INTERPOLATION_MODE OpenGl::Get( Castor3D::eINTERPOLATION_MODE p_interpolation )const
+	inline eGL_INTERPOLATION_MODE OpenGl::Get( Castor3D::InterpolationMode p_interpolation )const
 	{
-		return TextureInterpolation[p_interpolation];
+		return TextureInterpolation[uint32_t( p_interpolation )];
 	}
 
-	inline int OpenGl::Get( Castor3D::eBLEND_SOURCE p_eArgument )const
+	inline int OpenGl::Get( Castor3D::BlendSource p_eArgument )const
 	{
-		return TextureArguments[p_eArgument];
+		return TextureArguments[uint32_t( p_eArgument )];
 	}
 
-	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::eRGB_BLEND_FUNC p_mode )const
+	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::RGBBlendFunc p_mode )const
 	{
-		return RgbBlendFuncs[p_mode];
+		return RgbBlendFuncs[uint32_t( p_mode )];
 	}
 
-	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::eALPHA_BLEND_FUNC p_mode )const
+	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::AlphaBlendFunc p_mode )const
 	{
-		return AlphaBlendFuncs[p_mode];
+		return AlphaBlendFuncs[uint32_t( p_mode )];
 	}
 
-	inline eGL_BLEND_FACTOR OpenGl::Get( Castor3D::eBLEND p_eBlendFactor )const
+	inline eGL_BLEND_FACTOR OpenGl::Get( Castor3D::BlendOperand p_eBlendFactor )const
 	{
-		return BlendFactors[p_eBlendFactor];
+		return BlendFactors[uint32_t( p_eBlendFactor )];
 	}
 
 	inline OpenGl::PixelFmt const & OpenGl::Get( Castor::ePIXEL_FORMAT p_pixelFormat )const
 	{
-		return PixelFormats[p_pixelFormat];
+		return PixelFormats[uint32_t( p_pixelFormat )];
 	}
 
 	inline eGL_SHADER_TYPE OpenGl::Get( Castor3D::eSHADER_TYPE p_type )const
 	{
-		return ShaderTypes[p_type];
+		return ShaderTypes[uint32_t( p_type )];
 	}
 
 	inline eGL_INTERNAL_FORMAT OpenGl::GetInternal( Castor::ePIXEL_FORMAT p_format )const
 	{
-		return Internals[p_format];
+		return Internals[uint32_t( p_format )];
 	}
 
 	inline uint32_t OpenGl::GetComponents( uint32_t p_components )const
@@ -709,27 +709,27 @@ namespace GlRender
 
 	inline eGL_TEXTURE_ATTACHMENT OpenGl::Get( Castor3D::eATTACHMENT_POINT p_eAttachment )const
 	{
-		return Attachments[p_eAttachment];
+		return Attachments[uint32_t( p_eAttachment )];
 	}
 
 	inline eGL_FRAMEBUFFER_MODE OpenGl::Get( Castor3D::eFRAMEBUFFER_TARGET p_target )const
 	{
-		return FramebufferModes[p_target];
+		return FramebufferModes[uint32_t( p_target )];
 	}
 
 	inline eGL_RENDERBUFFER_ATTACHMENT OpenGl::GetRboAttachment( Castor3D::eATTACHMENT_POINT p_eAttachment )const
 	{
-		return RboAttachments[p_eAttachment];
+		return RboAttachments[uint32_t( p_eAttachment )];
 	}
 
 	inline eGL_RENDERBUFFER_STORAGE OpenGl::GetRboStorage( Castor::ePIXEL_FORMAT p_pixelFormat )const
 	{
-		return RboStorages[p_pixelFormat];
+		return RboStorages[uint32_t( p_pixelFormat )];
 	}
 
 	inline eGL_BUFFER OpenGl::Get( Castor3D::eBUFFER p_buffer )const
 	{
-		return Buffers[p_buffer];
+		return Buffers[uint32_t( p_buffer )];
 	}
 
 	inline eGL_BUFFER OpenGl::Get( eGL_TEXTURE_ATTACHMENT p_buffer )const
@@ -744,42 +744,42 @@ namespace GlRender
 
 	inline eGL_FACE OpenGl::Get( Castor3D::eFACE p_eFace )const
 	{
-		return Faces[p_eFace];
+		return Faces[uint32_t( p_eFace )];
 	}
 
 	inline eGL_FILL_MODE OpenGl::Get( Castor3D::eFILL_MODE p_mode )const
 	{
-		return FillModes[p_mode];
+		return FillModes[uint32_t( p_mode )];
 	}
 
 	inline eGL_FUNC OpenGl::Get( Castor3D::eSTENCIL_FUNC p_func )const
 	{
-		return StencilFuncs[p_func];
+		return StencilFuncs[uint32_t( p_func )];
 	}
 
 	inline eGL_STENCIL_OP OpenGl::Get( Castor3D::eSTENCIL_OP p_eOp )const
 	{
-		return StencilOps[p_eOp];
+		return StencilOps[uint32_t( p_eOp )];
 	}
 
-	inline eGL_BLEND_OP OpenGl::Get( Castor3D::eBLEND_OP p_eOp )const
+	inline eGL_BLEND_OP OpenGl::Get( Castor3D::BlendOperation p_eOp )const
 	{
-		return BlendOps[p_eOp];
+		return BlendOps[uint32_t( p_eOp )];
 	}
 
 	inline eGL_FUNC OpenGl::Get( Castor3D::eDEPTH_FUNC p_func )const
 	{
-		return DepthFuncs[p_func];
+		return DepthFuncs[uint32_t( p_func )];
 	}
 
 	inline eGL_QUERY OpenGl::Get( Castor3D::eQUERY_TYPE p_value )const
 	{
-		return Queries[p_value];
+		return Queries[uint32_t( p_value )];
 	}
 
 	inline eGL_QUERY_INFO OpenGl::Get( Castor3D::eQUERY_INFO p_value )const
 	{
-		return QueryInfos[p_value];
+		return QueryInfos[uint32_t( p_value )];
 	}
 
 	inline eGL_TEXTURE_STORAGE OpenGl::Get( Castor3D::TextureStorageType p_value )const
@@ -789,7 +789,7 @@ namespace GlRender
 
 	inline bool OpenGl::Get( Castor3D::eWRITING_MASK p_eMask )const
 	{
-		return WriteMasks[p_eMask];
+		return WriteMasks[uint32_t( p_eMask )];
 	}
 
 	inline bool OpenGl::HasDebugOutput()const

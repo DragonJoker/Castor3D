@@ -27,7 +27,7 @@ namespace Castor3D
 {
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_CUBE, 0, eACCESS_TYPE_READ ) }
+		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, 0, eACCESS_TYPE_READ ) }
 		, m_declaration
 		{
 			{
@@ -44,11 +44,11 @@ namespace Castor3D
 		else
 		{
 			auto l_sampler = GetEngine()->GetSamplerManager().Create( l_skybox );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_EDGE );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
 			m_sampler = l_sampler;
 		}
 
@@ -200,7 +200,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).XYWW;
+				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 
@@ -221,7 +221,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.X, -vtx_texture.Y, vtx_texture.Z ) );
+				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.SWIZZLE_X, -vtx_texture.SWIZZLE_Y, vtx_texture.SWIZZLE_Z ) );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

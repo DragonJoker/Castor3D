@@ -54,6 +54,7 @@ namespace Castor3D
 	// Sampler parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMinFilter )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMagFilter )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMipFilter )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMinLod )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMaxLod )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerLodBias )

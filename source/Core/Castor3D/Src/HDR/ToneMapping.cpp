@@ -60,7 +60,7 @@ namespace Castor3D
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+					gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_X, position.SWIZZLE_Y, 0.0, 1.0 );
 				} );
 
 				l_vtx = l_writer.Finalise();

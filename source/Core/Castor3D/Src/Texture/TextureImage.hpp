@@ -252,7 +252,7 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API bool Initialise( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Cleanup function

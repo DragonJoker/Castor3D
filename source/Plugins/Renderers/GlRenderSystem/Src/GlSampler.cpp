@@ -33,16 +33,16 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				eGL_INTERPOLATION_MODE l_minMode = GetOpenGl().Get( GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) );
-				eGL_INTERPOLATION_MODE l_mipMode = GetOpenGl().Get( GetInterpolationMode( eINTERPOLATION_FILTER_MIP ) );
+				eGL_INTERPOLATION_MODE l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Min ) );
+				eGL_INTERPOLATION_MODE l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mip ) );
 				DoAdjustMinMipModes( l_minMode, l_mipMode );
 
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_LODBIAS, float( GetLodBias() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_UWRAP, GetOpenGl().Get( GetWrappingMode( eTEXTURE_UVW_U ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_VWRAP, GetOpenGl().Get( GetWrappingMode( eTEXTURE_UVW_V ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_WWRAP, GetOpenGl().Get( GetWrappingMode( eTEXTURE_UVW_W ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_UWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::U ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_VWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::V ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_WWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::W ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MINFILTER, l_minMode );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAGFILTER, GetOpenGl().Get( GetInterpolationMode( eINTERPOLATION_FILTER_MAG ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAGFILTER, GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAXANISOTROPY, float( GetMaxAnisotropy() ) );
 			}

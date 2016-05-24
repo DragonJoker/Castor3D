@@ -115,7 +115,7 @@ namespace Castor3D
 			auto l_program = DoGetPanelProgram( 0 );
 			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
-			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
+			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
 			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
 		}
@@ -140,7 +140,7 @@ namespace Castor3D
 			auto l_program = DoGetPanelProgram( 0 );
 			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
-			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
+			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
 			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
 		}
@@ -150,10 +150,10 @@ namespace Castor3D
 
 		auto l_blendState = m_wpBlendState.lock();
 		l_blendState->EnableAlphaToCoverage( false );
-		l_blendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-		l_blendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-		l_blendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-		l_blendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_blendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_blendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		l_blendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+		l_blendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 		l_blendState->EnableBlend( true );
 		l_blendState->Initialise();
 
@@ -295,7 +295,7 @@ namespace Castor3D
 
 				for ( auto l_pass : *l_material )
 				{
-					if ( ( l_pass->GetTextureFlags() & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+					if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::Colour ) )
 					{
 						for ( auto l_geoBuffers : l_geometryBuffers )
 						{
@@ -403,13 +403,13 @@ namespace Castor3D
 	ShaderProgramSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_flags )
 	{
 		// Remove unwanted flags
-		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
+		RemFlag( p_flags, TextureChannel::Ambient );
+		RemFlag( p_flags, TextureChannel::Diffuse );
+		RemFlag( p_flags, TextureChannel::Normal );
+		RemFlag( p_flags, TextureChannel::Specular );
+		RemFlag( p_flags, TextureChannel::Gloss );
+		RemFlag( p_flags, TextureChannel::Height );
+		RemFlag( p_flags, TextureChannel::Emissive );
 
 		// Get shader
 		return DoGetProgram( p_flags );
@@ -418,14 +418,14 @@ namespace Castor3D
 	ShaderProgramSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_flags )
 	{
 		// Remove unwanted flags
-		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
-		p_flags |= eTEXTURE_CHANNEL_TEXT;
+		RemFlag( p_flags, TextureChannel::Ambient );
+		RemFlag( p_flags, TextureChannel::Diffuse );
+		RemFlag( p_flags, TextureChannel::Normal );
+		RemFlag( p_flags, TextureChannel::Specular );
+		RemFlag( p_flags, TextureChannel::Gloss );
+		RemFlag( p_flags, TextureChannel::Height );
+		RemFlag( p_flags, TextureChannel::Emissive );
+		AddFlag( p_flags, TextureChannel::Text );
 
 		// Get shader
 		return DoGetProgram( p_flags );
@@ -465,7 +465,7 @@ namespace Castor3D
 		auto l_program = DoGetTextProgram( 0 );
 		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 		l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
-		l_program = DoGetTextProgram( eTEXTURE_CHANNEL_COLOUR );
+		l_program = DoGetTextProgram( uint32_t( TextureChannel::Colour ) );
 		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 		l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
 
@@ -515,7 +515,7 @@ namespace Castor3D
 	{
 		for ( auto && l_pass : p_material )
 		{
-			if ( ( l_pass->GetTextureFlags() & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::Colour ) )
 			{
 				DoDrawItem( *l_pass, *p_geometryBuffers.m_textured, p_count );
 			}
@@ -554,8 +554,6 @@ namespace Castor3D
 
 	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( uint32_t p_flags )
 	{
-#define CHECK_FLAG( flag ) ( ( p_flags & ( flag ) ) == ( flag ) )
-
 		using namespace GLSL;
 
 		// Shader program
@@ -573,27 +571,27 @@ namespace Castor3D
 
 			// Shader inputs
 			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
-			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( p_flags, TextureChannel::Text ) );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_flags, TextureChannel::Colour ) );
 
 			// Shader outputs
-			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_flags, TextureChannel::Text ) );
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_flags, TextureChannel::Colour ) );
 			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+				if ( CheckFlag( p_flags, TextureChannel::Text ) )
 				{
 					vtx_text = text;
 				}
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 				{
 					vtx_texture = texture;
 				}
 
-				gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_X, position.SWIZZLE_Y, 0.0, 1.0 );
 			} );
 
 			l_strVs = l_writer.Finalise();
@@ -607,11 +605,11 @@ namespace Castor3D
 			UBO_PASS( l_writer );
 
 			// Shader inputs
-			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
-			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
-			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
+			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_flags, TextureChannel::Text ) );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_flags, TextureChannel::Colour ) );
+			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_flags, TextureChannel::Text ) );
+			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_flags, TextureChannel::Colour ) );
+			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_flags, TextureChannel::Opacity ) );
 
 			// Shader outputs
 			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
@@ -621,38 +619,38 @@ namespace Castor3D
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
 				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+				if ( CheckFlag( p_flags, TextureChannel::Text ) )
 				{
-					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_text.X, vtx_text.Y ) ).R;
+					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_text.SWIZZLE_X, vtx_text.SWIZZLE_Y ) ).SWIZZLE_R;
 				}
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 				{
-					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.X, vtx_texture.Y ) );
+					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) );
 				}
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+				if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
 				{
-					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
+					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_R;
 				}
 
-				pxl_v4FragColor = vec4( l_v4Ambient.XYZ, l_fAlpha );
+				pxl_v4FragColor = vec4( l_v4Ambient.SWIZZLE_XYZ, l_fAlpha );
 			} );
 
 			l_strPs = l_writer.Finalise();
 		}
 
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+		if ( CheckFlag( p_flags, TextureChannel::Text ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+		if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+		if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
@@ -662,7 +660,5 @@ namespace Castor3D
 		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
 
 		return l_program;
-
-#undef CHECK_FLAG
 	}
 }

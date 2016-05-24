@@ -157,44 +157,44 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
-		 *\param[in]	p_pass	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_pass	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée.
-		 *\param[in]	p_pass	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API RenderNode & DoGetTextProgram( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief			Retrieves a program compiled using given flags.
-		 *\param[in]		p_flags		Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]		p_flags		Bitwise ORed TextureChannel.
 		 *\return			The program
 		 *\~french
 		 *\brief			Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]		p_flags		Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]		p_flags		Combinaison de TextureChannel.
 		 *\return			Le programme
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags );

@@ -80,13 +80,13 @@ namespace Castor3D
 		 *\brief		Looks for an automatically generated program corresponding to given flags
 		 *\remarks		If none exists it is created
 		 *\param[in]	p_technique		The technique from witch the program code is retrieved
-		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel
 		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
 		 *\return		The found or created program
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés
 		 *\param[in]	p_technique		La technique a pqrtir de laquelle est recuperee le code du programme
-		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
@@ -94,12 +94,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
 		 *\return		The found program.
 		 *\~french
 		 *\brief		Cherche un programme de billboards correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
 		 *\return		Le programme trouvé.
 		 */
@@ -108,13 +108,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds a billboards shader program corresponding to given flags.
 		 *\param[in]	p_program		The program to add.
-		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
 		 *\return		The found program.
 		 *\~french
 		 *\brief		Ajoute un programme de billboards correspondant aux flags donnés.
 		 *\param[in]	p_program		Le programme à ajouter.
-		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
 		 *\return		Le programme trouvé.
 		 */
@@ -161,11 +161,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables
-		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\param[in]	p_uiTextureFlags	Bitwise ORed TextureChannel
 		 *\param[in]	p_program			The program to which the buffer is bound
 		 *\~french
 		 *\brief		Crée les frame variables relatives aux textures
-		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_uiTextureFlags	Une combinaison de TextureChannel
 		 *\param[in]	p_program			Le programme auquel le buffer est lié
 		 */
 		C3D_API void CreateTextureVariables( ShaderProgram & p_program, uint32_t p_uiTextureFlags );

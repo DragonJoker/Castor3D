@@ -149,12 +149,12 @@ namespace Castor3D
 
 			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
 			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mip, InterpolationMode::Linear );
 			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
 
 			DoLoadCoreData();
 		}

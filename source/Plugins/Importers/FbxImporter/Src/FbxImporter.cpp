@@ -690,11 +690,11 @@ namespace C3dFbx
 			FbxDouble3 l_emissive = l_lambert->Emissive;
 			p_pass.SetEmissive( Colour::from_rgb( { float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor );
 
-			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, eTEXTURE_CHANNEL_AMBIENT );
-			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, eTEXTURE_CHANNEL_DIFFUSE );
-			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, eTEXTURE_CHANNEL_EMISSIVE );
-			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, eTEXTURE_CHANNEL_NORMAL );
-			DoLoadTexture( p_scene, l_lambert->TransparentColor, p_pass, eTEXTURE_CHANNEL_OPACITY );
+			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, TextureChannel::Ambient );
+			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, TextureChannel::Diffuse );
+			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, TextureChannel::Emissive );
+			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, TextureChannel::Normal );
+			DoLoadTexture( p_scene, l_lambert->TransparentColor, p_pass, TextureChannel::Opacity );
 		};
 
 		for ( int i = 0; i < l_mats.Size(); ++i )
@@ -720,8 +720,8 @@ namespace C3dFbx
 					l_pass->SetShininess( float( l_phong->Shininess ) );
 					FbxDouble3 l_specular = l_phong->Specular;
 					l_pass->SetSpecular( Colour::from_rgb( { float( l_specular[0] ), float( l_specular[1] ), float( l_specular[2] ) } ) * l_phong->SpecularFactor );
-					DoLoadTexture( p_scene, l_phong->Specular, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-					DoLoadTexture( p_scene, l_phong->Shininess, *l_pass, eTEXTURE_CHANNEL_GLOSS );
+					DoLoadTexture( p_scene, l_phong->Specular, *l_pass, TextureChannel::Specular );
+					DoLoadTexture( p_scene, l_phong->Shininess, *l_pass, TextureChannel::Gloss );
 				}
 			}
 		}
@@ -813,35 +813,35 @@ namespace C3dFbx
 		return l_submesh;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return LoadTexture( Path( string::string_cast< xchar >( p_texture->GetRelativeFileName() ) ).GetFileName( true ), p_pass, p_channel );
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME =
+	std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
 	{
-		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
-		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },
-		{ eTEXTURE_CHANNEL_NORMAL, cuT( "Normal" ) },
-		{ eTEXTURE_CHANNEL_OPACITY, cuT( "Opacity" ) },
-		{ eTEXTURE_CHANNEL_SPECULAR, cuT( "Specular" ) },
-		{ eTEXTURE_CHANNEL_HEIGHT, cuT( "Height" ) },
-		{ eTEXTURE_CHANNEL_AMBIENT, cuT( "Ambient" ) },
-		{ eTEXTURE_CHANNEL_GLOSS, cuT( "Gloss" ) },
-		{ eTEXTURE_CHANNEL_EMISSIVE, cuT( "Emissive" ) },
+		{ TextureChannel::Colour, cuT( "Colour" ) },
+		{ TextureChannel::Diffuse, cuT( "Diffuse" ) },
+		{ TextureChannel::Normal, cuT( "Normal" ) },
+		{ TextureChannel::Opacity, cuT( "Opacity" ) },
+		{ TextureChannel::Specular, cuT( "Specular" ) },
+		{ TextureChannel::Height, cuT( "Height" ) },
+		{ TextureChannel::Ambient, cuT( "Ambient" ) },
+		{ TextureChannel::Gloss, cuT( "Gloss" ) },
+		{ TextureChannel::Emissive, cuT( "Emissive" ) },
 	};
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_texture = nullptr;
 		FbxTexture * l_fbxtex = nullptr;
@@ -875,10 +875,10 @@ namespace C3dFbx
 			l_texture->SetChannel( p_channel );
 			l_texture->SetAlphaValue( float( l_fbxtex->Alpha ) );
 
-			static const eWRAP_MODE l_mode[2] =
+			static const WrapMode l_mode[2] =
 			{
-				eWRAP_MODE_REPEAT,
-				eWRAP_MODE_CLAMP_TO_BORDER,
+				WrapMode::Repeat,
+				WrapMode::ClampToBorder,
 			};
 
 			SamplerSPtr l_sampler;
@@ -886,8 +886,8 @@ namespace C3dFbx
 			if ( !p_scene.GetSamplerView().Has( l_fbxtex->GetName() ) )
 			{
 				l_sampler = p_scene.GetSamplerView().Create( l_fbxtex->GetName() );
-				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeU] );
-				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeV] );
+				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeU] );
+				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeV] );
 			}
 			else
 			{

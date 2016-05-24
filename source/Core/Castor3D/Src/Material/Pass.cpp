@@ -41,7 +41,7 @@ namespace Castor3D
 
 	bool Pass::TextLoader::operator()( Pass const & p_pass, TextFile & p_file )
 	{
-		static const String StrBlendFactors[eBLEND_COUNT] =
+		static const String StrBlendFactors[uint32_t( BlendOperand::Count )] =
 		{
 			cuT( "zero" ),
 			cuT( "one" ),
@@ -107,9 +107,9 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != eBLEND_ONE || p_pass.GetBlendState()->GetAlphaDstBlend() != eBLEND_ZERO ) )
+		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != BlendOperand::One || p_pass.GetBlendState()->GetAlphaDstBlend() != BlendOperand::Zero ) )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tblend_func " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaSrcBlend()] + cuT( " " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaDstBlend()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tblend_func " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaSrcBlend() )] + cuT( " " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaDstBlend() )] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
@@ -134,17 +134,17 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME =
+	std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
 	{
-		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
-		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },
-		{ eTEXTURE_CHANNEL_NORMAL, cuT( "Normal" ) },
-		{ eTEXTURE_CHANNEL_OPACITY, cuT( "Opacity" ) },
-		{ eTEXTURE_CHANNEL_SPECULAR, cuT( "Specular" ) },
-		{ eTEXTURE_CHANNEL_HEIGHT, cuT( "Height" ) },
-		{ eTEXTURE_CHANNEL_AMBIENT, cuT( "Ambient" ) },
-		{ eTEXTURE_CHANNEL_GLOSS, cuT( "Gloss" ) },
-		{ eTEXTURE_CHANNEL_EMISSIVE, cuT( "Emissive" ) },
+		{ TextureChannel::Colour, cuT( "Colour" ) },
+		{ TextureChannel::Diffuse, cuT( "Diffuse" ) },
+		{ TextureChannel::Normal, cuT( "Normal" ) },
+		{ TextureChannel::Opacity, cuT( "Opacity" ) },
+		{ TextureChannel::Specular, cuT( "Specular" ) },
+		{ TextureChannel::Height, cuT( "Height" ) },
+		{ TextureChannel::Ambient, cuT( "Ambient" ) },
+		{ TextureChannel::Gloss, cuT( "Gloss" ) },
+		{ TextureChannel::Emissive, cuT( "Emissive" ) },
 	};
 
 	//*********************************************************************************************
@@ -162,8 +162,8 @@ namespace Castor3D
 		, m_pBlendState{ p_engine.GetRenderSystem()->CreateBlendState() }
 		, m_textureFlags{ 0 }
 		, m_bAutomaticShader{ true }
-		, m_alphaBlendMode{ eBLEND_MODE_INTERPOLATIVE }
-		, m_colourBlendMode{ eBLEND_MODE_INTERPOLATIVE }
+		, m_alphaBlendMode{ BlendMode::Interpolative }
+		, m_colourBlendMode{ BlendMode::Interpolative }
 		, m_texturesReduced{ false }
 	{
 	}
@@ -176,7 +176,7 @@ namespace Castor3D
 	void Pass::Initialise()
 	{
 		PrepareTextures();
-		bool l_bHasAlpha = m_fAlpha < 1 || GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
+		bool l_bHasAlpha = m_fAlpha < 1 || GetTextureUnit( TextureChannel::Opacity );
 
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
@@ -190,48 +190,48 @@ namespace Castor3D
 			if ( GetEngine()->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
 			{
 				m_pBlendState->EnableAlphaToCoverage( true );
-				m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-				m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-				m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-				m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+				m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+				m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+				m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+				m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 			}
 			else
 			{
 				switch ( m_alphaBlendMode )
 				{
-				case eBLEND_MODE_NONE:
-					m_pBlendState->SetAlphaSrcBlend( eBLEND_ONE );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_ZERO );
-					m_pBlendState->SetRgbSrcBlend( eBLEND_ONE );
-					m_pBlendState->SetRgbDstBlend( eBLEND_ZERO );
+				case BlendMode::None:
+					m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
+					m_pBlendState->SetAlphaDstBlend( BlendOperand::Zero );
+					m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
+					m_pBlendState->SetRgbDstBlend( BlendOperand::Zero );
 					break;
 
-				case eBLEND_MODE_ADDITIVE:
-					m_pBlendState->SetAlphaSrcBlend( eBLEND_ONE );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_ONE );
-					m_pBlendState->SetRgbSrcBlend( eBLEND_ONE );
-					m_pBlendState->SetRgbDstBlend( eBLEND_ONE );
+				case BlendMode::Additive:
+					m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
+					m_pBlendState->SetAlphaDstBlend( BlendOperand::One );
+					m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
+					m_pBlendState->SetRgbDstBlend( BlendOperand::One );
 					break;
 
-				case eBLEND_MODE_MULTIPLICATIVE:
-					m_pBlendState->SetAlphaSrcBlend( eBLEND_ZERO );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-					m_pBlendState->SetRgbSrcBlend( eBLEND_ZERO );
-					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+				case BlendMode::Multiplicative:
+					m_pBlendState->SetAlphaSrcBlend( BlendOperand::Zero );
+					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+					m_pBlendState->SetRgbSrcBlend( BlendOperand::Zero );
+					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 					break;
 
-				case eBLEND_MODE_INTERPOLATIVE:
-					m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-					m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+				case BlendMode::Interpolative:
+					m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+					m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 					break;
 
 				default:
-					m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-					m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+					m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+					m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 					break;
 				}
 			}
@@ -283,11 +283,11 @@ namespace Castor3D
 	void Pass::AddTextureUnit( TextureUnitSPtr p_unit )
 	{
 		m_arrayTextureUnits.push_back( p_unit );
-		m_textureFlags |= p_unit->GetChannel();
+		AddFlag( m_textureFlags, p_unit->GetChannel() );
 		m_texturesReduced = false;
 	}
 
-	TextureUnitSPtr Pass::GetTextureUnit( eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_return;
 		auto && l_it = m_arrayTextureUnits.begin();
@@ -340,7 +340,7 @@ namespace Castor3D
 	bool Pass::HasAlphaBlending()const
 	{
 		return m_pBlendState->IsBlendEnabled()
-			   || ( ( m_textureFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			   || CheckFlag( m_textureFlags, TextureChannel::Opacity )
 			   || m_fAlpha < 1.0f;
 	}
 
@@ -386,25 +386,25 @@ namespace Castor3D
 			uint32_t l_index = 1;
 			TextureUnitSPtr l_pOpaSrc;
 			PxBufferBaseSPtr l_pImageOpa;
-			TextureUnitSPtr l_pAmbientMap = GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
-			TextureUnitSPtr l_pColourMap = GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
-			TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
-			TextureUnitSPtr l_pNormalMap = GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
-			TextureUnitSPtr l_pSpecularMap = GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
-			TextureUnitSPtr l_pEmissiveMap = GetTextureUnit( eTEXTURE_CHANNEL_EMISSIVE );
-			TextureUnitSPtr l_pOpacityMap = GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
-			TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
-			TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
+			TextureUnitSPtr l_pAmbientMap = GetTextureUnit( TextureChannel::Ambient );
+			TextureUnitSPtr l_pColourMap = GetTextureUnit( TextureChannel::Colour );
+			TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( TextureChannel::Diffuse );
+			TextureUnitSPtr l_pNormalMap = GetTextureUnit( TextureChannel::Normal );
+			TextureUnitSPtr l_pSpecularMap = GetTextureUnit( TextureChannel::Specular );
+			TextureUnitSPtr l_pEmissiveMap = GetTextureUnit( TextureChannel::Emissive );
+			TextureUnitSPtr l_pOpacityMap = GetTextureUnit( TextureChannel::Opacity );
+			TextureUnitSPtr l_pGlossMap = GetTextureUnit( TextureChannel::Gloss );
+			TextureUnitSPtr l_pHeightMap = GetTextureUnit( TextureChannel::Height );
 
-			DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_index, l_pOpaSrc, l_pImageOpa );
-			DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_index, l_pOpaSrc, l_pImageOpa );
-			DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_index, l_pOpaSrc, l_pImageOpa );
+			DoPrepareTexture( TextureChannel::Ambient, l_pAmbientMap, l_index, l_pOpaSrc, l_pImageOpa );
+			DoPrepareTexture( TextureChannel::Colour, l_pColourMap, l_index, l_pOpaSrc, l_pImageOpa );
+			DoPrepareTexture( TextureChannel::Diffuse, l_pDiffuseMap, l_index, l_pOpaSrc, l_pImageOpa );
 
-			DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_index );
-			DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_index );
-			DoPrepareTexture( eTEXTURE_CHANNEL_EMISSIVE, l_pEmissiveMap, l_index );
-			DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
-			DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
+			DoPrepareTexture( TextureChannel::Normal, l_pNormalMap, l_index );
+			DoPrepareTexture( TextureChannel::Specular, l_pSpecularMap, l_index );
+			DoPrepareTexture( TextureChannel::Emissive, l_pEmissiveMap, l_index );
+			DoPrepareTexture( TextureChannel::Gloss, l_pGlossMap, l_index );
+			DoPrepareTexture( TextureChannel::Height, l_pHeightMap, l_index );
 
 			if ( l_pOpacityMap && l_pOpacityMap->GetTexture()->GetImage().GetBuffer() )
 			{
@@ -415,11 +415,11 @@ namespace Castor3D
 			}
 			else if ( l_pImageOpa )
 			{
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
 				l_texture->GetImage().SetSource( l_pImageOpa );
 				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
 				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
-				l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
+				l_pOpacityMap->SetChannel( TextureChannel::Opacity );
 				l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
 				l_pOpacityMap->SetTexture( l_texture );
 				AddTextureUnit( l_pOpacityMap );
@@ -435,11 +435,11 @@ namespace Castor3D
 			{
 				l_pOpacityMap->SetIndex( l_index++ );
 				Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
-				m_textureFlags |= eTEXTURE_CHANNEL_OPACITY;
+				AddFlag( m_textureFlags, TextureChannel::Opacity );
 			}
 			else
 			{
-				m_textureFlags &= ~eTEXTURE_CHANNEL_OPACITY;
+				RemFlag( m_textureFlags, TextureChannel::Opacity );
 			}
 
 			for ( auto l_unit : m_arrayTextureUnits )
@@ -454,7 +454,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::DoGetTexture( eTEXTURE_CHANNEL p_channel, String const & p_name, RenderNode & p_node )
+	void Pass::DoGetTexture( TextureChannel p_channel, String const & p_name, RenderNode & p_node )
 	{
 		TextureUnitSPtr l_unit = GetTextureUnit( p_channel );
 
@@ -472,15 +472,15 @@ namespace Castor3D
 	void Pass::DoGetTextures( RenderNode & p_node )
 	{
 		m_mapUnits.clear();
-		DoGetTexture( eTEXTURE_CHANNEL_AMBIENT, ShaderProgram::MapAmbient, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_COLOUR, ShaderProgram::MapColour, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_DIFFUSE, ShaderProgram::MapDiffuse, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_NORMAL, ShaderProgram::MapNormal, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_SPECULAR, ShaderProgram::MapSpecular, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_EMISSIVE, ShaderProgram::MapEmissive, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_OPACITY, ShaderProgram::MapOpacity, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_GLOSS, ShaderProgram::MapGloss, p_node );
-		DoGetTexture( eTEXTURE_CHANNEL_HEIGHT, ShaderProgram::MapHeight, p_node );
+		DoGetTexture( TextureChannel::Ambient, ShaderProgram::MapAmbient, p_node );
+		DoGetTexture( TextureChannel::Colour, ShaderProgram::MapColour, p_node );
+		DoGetTexture( TextureChannel::Diffuse, ShaderProgram::MapDiffuse, p_node );
+		DoGetTexture( TextureChannel::Normal, ShaderProgram::MapNormal, p_node );
+		DoGetTexture( TextureChannel::Specular, ShaderProgram::MapSpecular, p_node );
+		DoGetTexture( TextureChannel::Emissive, ShaderProgram::MapEmissive, p_node );
+		DoGetTexture( TextureChannel::Opacity, ShaderProgram::MapOpacity, p_node );
+		DoGetTexture( TextureChannel::Gloss, ShaderProgram::MapGloss, p_node );
+		DoGetTexture( TextureChannel::Height, ShaderProgram::MapHeight, p_node );
 	}
 
 	void Pass::DoGetBuffers( RenderNode & p_node )
@@ -498,7 +498,7 @@ namespace Castor3D
 		RetrieveVariable( &p_node.m_cameraPos, ShaderProgram::CameraPos, p_node.m_sceneUbo );
 	}
 
-	bool Pass::DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
+	bool Pass::DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
 	{
 		PxBufferBaseSPtr l_opacity = DoPrepareTexture( p_channel, p_unit, p_index );
 		bool l_return = l_opacity != nullptr;
@@ -512,7 +512,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PxBufferBaseSPtr Pass::DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index )
+	PxBufferBaseSPtr Pass::DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index )
 	{
 		PxBufferBaseSPtr l_return;
 
@@ -556,9 +556,9 @@ namespace Castor3D
 
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
-			if ( l_unit->GetChannel() != eTEXTURE_CHANNEL( 0 ) )
+			if ( l_unit->GetChannel() != TextureChannel( 0 ) )
 			{
-				m_textureFlags |= l_unit->GetChannel();
+				AddFlag( m_textureFlags, l_unit->GetChannel() );
 			}
 		}
 	}

@@ -91,7 +91,7 @@ namespace GlRender
 							m_currentState->SetAlphaDstBlend( GetAlphaDstBlend( i ), i );
 						}
 
-						if ( GetRgbBlendOp( i ) != !m_currentState->GetRgbBlendOp( i ) )
+						if ( GetRgbBlendOp( i ) != m_currentState->GetRgbBlendOp( i ) )
 						{
 							l_return &= GetOpenGl().BlendEquation( i, GetOpenGl().Get( GetRgbBlendOp( i ) ) );
 							m_currentState->SetRgbBlendOp( GetRgbBlendOp( i ), i );
@@ -139,7 +139,7 @@ namespace GlRender
 						m_currentState->SetAlphaDstBlend( GetAlphaDstBlend() );
 					}
 
-					if ( GetRgbBlendOp() != !m_currentState->GetRgbBlendOp() )
+					if ( GetRgbBlendOp() != m_currentState->GetRgbBlendOp() )
 					{
 						l_return &= GetOpenGl().BlendEquation( GetOpenGl().Get( GetRgbBlendOp() ) );
 						m_currentState->SetRgbBlendOp( GetRgbBlendOp() );

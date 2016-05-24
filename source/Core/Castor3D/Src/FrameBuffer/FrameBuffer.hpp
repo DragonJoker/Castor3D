@@ -133,7 +133,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
-		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::Nearest.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation );
+		C3D_API bool StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation );
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
@@ -184,7 +184,7 @@ namespace Castor3D
 		 *\param[in]	p_index		The attachment index
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
@@ -192,27 +192,27 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
 		 *\param[in]	p_point		The attachment point
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
@@ -436,7 +436,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
-		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::Nearest.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -445,7 +445,7 @@ namespace Castor3D
 		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné.
-		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::Nearest.
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
 		 *\param[in]	p_rectSrc		Le rectangle source.
 		 *\param[in]	p_rectDst		Le rectangle destination.
@@ -453,7 +453,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation ) = 0;
+		C3D_API virtual bool DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation ) = 0;
 
 	private:
 		C3D_API bool DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );

@@ -165,47 +165,47 @@ namespace Castor3D
 	{
 		p_shader.CreateFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_AMBIENT )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Ambient ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapAmbient, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_COLOUR )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Colour ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_DIFFUSE )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Diffuse ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_NORMAL )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Normal ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapNormal, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_SPECULAR )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Specular ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapSpecular, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_EMISSIVE )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Emissive ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapEmissive, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_OPACITY )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Opacity ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_GLOSS )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Gloss ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapGloss, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_HEIGHT )
+		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Height ) )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapHeight, eSHADER_TYPE_PIXEL );
 		}

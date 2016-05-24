@@ -73,7 +73,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		virtual Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		virtual Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */

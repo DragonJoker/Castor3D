@@ -14,7 +14,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -43,7 +43,7 @@ namespace GlRender
 
 	void GlTexture::GenerateMipmaps()const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_type != eTEXTURE_TYPE_2DMS && m_type != eTEXTURE_TYPE_BUFFER )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_type != TextureType::TwoDimensionsMS && m_type != TextureType::Buffer )
 		{
 			GetOpenGl().GenerateMipmap( m_glDimension );
 		}

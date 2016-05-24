@@ -44,12 +44,16 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0 && Point3f::TextLoader( m_tabs )( p_light.GetColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
+				&& Point3f::TextLoader( String() )( p_light.GetColour(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0 && Point3f::TextLoader( m_tabs )( p_light.GetIntensity(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
+				&& Point3f::TextLoader( String() )( p_light.GetIntensity(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		return l_return;

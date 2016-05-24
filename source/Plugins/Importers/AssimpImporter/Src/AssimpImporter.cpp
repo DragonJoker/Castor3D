@@ -528,7 +528,7 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, TextureChannel p_channel )
 	{
 		if ( p_name.length > 0 )
 		{
@@ -621,32 +621,32 @@ namespace C3dAssimp
 				String l_strNorm = l_strGlob;
 				String l_strSpec = l_strGlob;
 				String l_strOpac = l_strGlob;
-				LoadTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				LoadTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), *l_pass, eTEXTURE_CHANNEL_NORMAL );
-				LoadTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				LoadTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), *l_pass, eTEXTURE_CHANNEL_OPACITY );
+				LoadTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), *l_pass, TextureChannel::Diffuse );
+				LoadTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), *l_pass, TextureChannel::Normal );
+				LoadTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), *l_pass, TextureChannel::Specular );
+				LoadTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), *l_pass, TextureChannel::Opacity );
 			}
 			else
 			{
-				DoLoadTexture( l_ambTexName, *l_pass, eTEXTURE_CHANNEL_AMBIENT );
-				DoLoadTexture( l_difTexName, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				DoLoadTexture( l_spcTexName, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				DoLoadTexture( l_emiTexName, *l_pass, eTEXTURE_CHANNEL_EMISSIVE );
-				DoLoadTexture( l_opaTexName, *l_pass, eTEXTURE_CHANNEL_OPACITY );
-				DoLoadTexture( l_shnTexName, *l_pass, eTEXTURE_CHANNEL_GLOSS );
+				DoLoadTexture( l_ambTexName, *l_pass, TextureChannel::Ambient );
+				DoLoadTexture( l_difTexName, *l_pass, TextureChannel::Diffuse );
+				DoLoadTexture( l_spcTexName, *l_pass, TextureChannel::Specular );
+				DoLoadTexture( l_emiTexName, *l_pass, TextureChannel::Emissive );
+				DoLoadTexture( l_opaTexName, *l_pass, TextureChannel::Opacity );
+				DoLoadTexture( l_shnTexName, *l_pass, TextureChannel::Gloss );
 
 				if ( l_nmlTexName.length > 0 )
 				{
-					DoLoadTexture( l_nmlTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_nmlTexName, *l_pass, TextureChannel::Normal );
 
 					//if ( l_hgtTexName.length > 0 )
 					//{
-					//	DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_HEIGHT );
+					//	DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Height );
 					//}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{
-					DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Normal );
 				}
 			}
 		}

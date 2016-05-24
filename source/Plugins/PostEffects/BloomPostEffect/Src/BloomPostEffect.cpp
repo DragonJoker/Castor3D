@@ -63,7 +63,7 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_XY, 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -82,11 +82,11 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
+				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
 
-				plx_v4FragColor.X = TERNARY( l_writer, Float, plx_v4FragColor.X > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.Y = TERNARY( l_writer, Float, plx_v4FragColor.Y > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.Z = TERNARY( l_writer, Float, plx_v4FragColor.Z > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_X = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_X > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_Y = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Y > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_Z = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Z > 1.0, Float( 1 ), Float( 0 ) );
 			} );
 			return l_writer.Finalise();
 		}
@@ -166,7 +166,7 @@ namespace Bloom
 		m_colourTexture->SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture->SetSampler( p_sampler );
 		//l_colourTexture->GetImage().SetSource( p_renderTarget );
@@ -529,17 +529,17 @@ namespace Bloom
 	SamplerSPtr BloomPostEffect::DoCreateSampler( bool p_linear )
 	{
 		String l_name = cuT( "BloomSampler_" );
-		eINTERPOLATION_MODE l_mode;
+		InterpolationMode l_mode;
 
 		if ( p_linear )
 		{
 			l_name += cuT( "Linear" );
-			l_mode = eINTERPOLATION_MODE_LINEAR;
+			l_mode = InterpolationMode::Linear;
 		}
 		else
 		{
 			l_name += cuT( "Nearest" );
-			l_mode = eINTERPOLATION_MODE_NEAREST;
+			l_mode = InterpolationMode::Nearest;
 		}
 
 		SamplerSPtr l_sampler;
@@ -547,11 +547,11 @@ namespace Bloom
 		if ( !m_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
 		{
 			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Min, l_mode );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, l_mode );
+			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
+			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToBorder );
+			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToBorder );
 		}
 		else
 		{

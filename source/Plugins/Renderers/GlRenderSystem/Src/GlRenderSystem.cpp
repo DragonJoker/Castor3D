@@ -378,7 +378,7 @@ namespace GlRender
 		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
-	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}

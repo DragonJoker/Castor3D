@@ -195,38 +195,38 @@ namespace Castor3D
 
 		//*********************************************************************************************
 
-		TextureStorageType GetStorageType( eTEXTURE_TYPE p_type, uint32_t p_index )
+		TextureStorageType GetStorageType( TextureType p_type, uint32_t p_index )
 		{
 			TextureStorageType l_return = TextureStorageType::Count;
 
 			switch ( p_type )
 			{
-			case eTEXTURE_TYPE_BUFFER:
+			case TextureType::Buffer:
 				l_return = TextureStorageType::Buffer;
 				break;
 
-			case eTEXTURE_TYPE_1D:
+			case TextureType::OneDimension:
 				l_return = TextureStorageType::OneDimension;
 				break;
 
-			case eTEXTURE_TYPE_1DARRAY:
-			case eTEXTURE_TYPE_2D:
+			case TextureType::OneDimensionArray:
+			case TextureType::TwoDimensions:
 				l_return = TextureStorageType::TwoDimensions;
 				break;
 
-			case eTEXTURE_TYPE_2DARRAY:
+			case TextureType::TwoDimensionsArray:
 				l_return = TextureStorageType::ThreeDimensions;
 				break;
 
-			case eTEXTURE_TYPE_2DMS:
+			case TextureType::TwoDimensionsMS:
 				l_return = TextureStorageType::TwoDimensionsMS;
 				break;
 
-			case eTEXTURE_TYPE_3D:
+			case TextureType::ThreeDimensions:
 				l_return = TextureStorageType::ThreeDimensions;
 				break;
 
-			case eTEXTURE_TYPE_CUBE:
+			case TextureType::Cube:
 				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapPositiveX ) + p_index );
 				break;
 
@@ -306,7 +306,7 @@ namespace Castor3D
 		}
 	}
 
-	bool TextureImage::Initialise( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	bool TextureImage::Initialise( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
 		return DoCreateStorage( GetStorageType( p_type, m_index ), p_cpuAccess, p_gpuAccess );
 	}

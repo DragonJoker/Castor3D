@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\param[in]	p_channel	Le canal
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_channel );
+		C3D_API TextureUnitSPtr GetTextureUnit( TextureChannel p_channel );
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
@@ -358,7 +358,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de mélange alpha
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
+		inline void SetAlphaBlendMode( BlendMode p_value )
 		{
 			m_alphaBlendMode = p_value;
 		}
@@ -370,7 +370,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de mélange couleur
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetColourBlendMode( eBLEND_MODE p_value )
+		inline void SetColourBlendMode( BlendMode p_value )
 		{
 			m_colourBlendMode = p_value;
 		}
@@ -453,7 +453,7 @@ namespace Castor3D
 		 *\brief		Récupère le mode de mélange alpha
 		 *\return		La valeur
 		 */
-		inline eBLEND_MODE GetAlphaBlendMode()const
+		inline BlendMode GetAlphaBlendMode()const
 		{
 			return m_alphaBlendMode;
 		}
@@ -465,7 +465,7 @@ namespace Castor3D
 		 *\brief		Récupère le mode de mélange couleur
 		 *\return		La valeur
 		 */
-		inline eBLEND_MODE GetColourBlendMode()const
+		inline BlendMode GetColourBlendMode()const
 		{
 			return m_colourBlendMode;
 		}
@@ -629,7 +629,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, RenderNode & p_node );
+		C3D_API void DoGetTexture( TextureChannel p_channel, Castor::String const & p_name, RenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
@@ -671,7 +671,7 @@ namespace Castor3D
 		 *\param[in,out]p_opacity		Reçoit le canal alpha de la texture
 		 *\return		\p true Si la texture possédait un canal alpha
 		 */
-		C3D_API bool DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
+		C3D_API bool DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -688,7 +688,7 @@ namespace Castor3D
 		 *\param[in,out]p_index			L'index de la texture
 		 *\return		Le canal alpha de la texture originale.
 		 */
-		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
+		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -713,7 +713,7 @@ namespace Castor3D
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneIntFrameVariableWPtr > UnitVariablePair;
-		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
+		DECLARE_MAP( TextureChannel, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
@@ -737,14 +737,14 @@ namespace Castor3D
 		UnitVariableChannelMap m_mapUnits;
 		//!\~english Blend states	\~french Etats de blend
 		BlendStateSPtr m_pBlendState;
-		//!\~english Bitwise ORed eTEXTURE_CHANNEL	\~french Combinaison des eTEXTURE_CHANNEL affectés à une texture pour cette passe
+		//!\~english Bitwise ORed TextureChannel	\~french Combinaison des TextureChannel affectés à une texture pour cette passe
 		uint32_t m_textureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
 		//!\~english The alpha blend mode \~french Le mode de mélange alpha
-		eBLEND_MODE m_alphaBlendMode;
+		BlendMode m_alphaBlendMode;
 		//!\~english The colour blend mode \~french Le mode de mélange couleur
-		eBLEND_MODE m_colourBlendMode;
+		BlendMode m_colourBlendMode;
 		//!\~english Tells if the pass' textures are reduced. \~french Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced;
 	};

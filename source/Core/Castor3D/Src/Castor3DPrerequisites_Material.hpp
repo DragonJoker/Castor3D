@@ -30,35 +30,35 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des fonctions alpha
 	*/
-	typedef enum eALPHA_FUNC
+	enum class AlphaFunc
 		: uint8_t
 	{
 		//!\~english Always take texture colour
 		//!\~french Prend toujours la couleur de la texture
-		eALPHA_FUNC_ALWAYS,
+		Always,
 		//!\~english Takes texture colour if alpha is less than given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
-		eALPHA_FUNC_LESS,
+		Less,
 		//!\~english Takes texture colour if alpha is less than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
-		eALPHA_FUNC_LESS_OR_EQUAL,
+		LEqual,
 		//!\~english Takes texture colour if alpha is equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
-		eALPHA_FUNC_EQUAL,
+		Equal,
 		//!\~english Takes texture colour if alpha is different of given value
 		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
-		eALPHA_FUNC_NOT_EQUAL,
+		NEqual,
 		//!\~english Takes texture colour if alpha is grater than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
-		eALPHA_FUNC_GREATER_OR_EQUAL,
+		GEqual,
 		//!\~english Takes texture colour if alpha is greater than given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
-		eALPHA_FUNC_GREATER,
+		Greater,
 		//!\~english Never take texture colour
 		//!\~french Ne prend jamais la couleur de la texture
-		eALPHA_FUNC_NEVER,
-		CASTOR_ENUM_BOUNDS( eALPHA_FUNC, eALPHA_FUNC_ALWAYS )
-	}	eALPHA_FUNC;
+		Never,
+		CASTOR_ENUM_CLASS_BOUNDS( Always )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -66,14 +66,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des UVW
 	*/
-	typedef enum eTEXTURE_UVW
+	enum class TextureUVW
 		: uint8_t
 	{
-		eTEXTURE_UVW_U,
-		eTEXTURE_UVW_V,
-		eTEXTURE_UVW_W,
-		CASTOR_ENUM_BOUNDS( eTEXTURE_UVW, eTEXTURE_UVW_U )
-	}	eTEXTURE_UVW;
+		U,
+		V,
+		W,
+		CASTOR_ENUM_CLASS_BOUNDS( U )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -81,15 +81,15 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des modes de wrapping de texture
 	*/
-	typedef enum eWRAP_MODE
+	enum class WrapMode
 		: uint8_t
 	{
-		eWRAP_MODE_REPEAT,
-		eWRAP_MODE_MIRRORED_REPEAT,
-		eWRAP_MODE_CLAMP_TO_BORDER,
-		eWRAP_MODE_CLAMP_TO_EDGE,
-		CASTOR_ENUM_BOUNDS( eWRAP_MODE, eWRAP_MODE_REPEAT )
-	}	eWRAP_MODE;
+		Repeat,
+		MirroredRepeat,
+		ClampToBorder,
+		ClampToEdge,
+		CASTOR_ENUM_CLASS_BOUNDS( Repeat )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -97,14 +97,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des filtres d'interpolation
 	*/
-	typedef enum eINTERPOLATION_FILTER
+	enum class InterpolationFilter
 		: uint8_t
 	{
-		eINTERPOLATION_FILTER_MIN,
-		eINTERPOLATION_FILTER_MAG,
-		eINTERPOLATION_FILTER_MIP,
-		eINTERPOLATION_FILTER_COUNT
-	}	eINTERPOLATION_FILTER;
+		Min,
+		Mag,
+		Mip,
+		Count
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -112,14 +112,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des modes d'interpolation
 	*/
-	typedef enum eINTERPOLATION_MODE
+	enum class InterpolationMode
 		: uint8_t
 	{
-		eINTERPOLATION_MODE_UNDEFINED,
-		eINTERPOLATION_MODE_NEAREST,
-		eINTERPOLATION_MODE_LINEAR,
-		CASTOR_ENUM_BOUNDS( eINTERPOLATION_MODE, eINTERPOLATION_MODE_UNDEFINED )
-	}	eINTERPOLATION_MODE;
+		Undefined,
+		Nearest,
+		Linear,
+		CASTOR_ENUM_CLASS_BOUNDS( Undefined )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -127,14 +127,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des indices de source de blending
 	*/
-	typedef enum eBLEND_SRC_INDEX
+	enum class BlendSrcIndex
 		: uint8_t
 	{
-		eBLEND_SRC_INDEX_0,
-		eBLEND_SRC_INDEX_1,
-		eBLEND_SRC_INDEX_2,
-		CASTOR_ENUM_BOUNDS( eBLEND_SRC_INDEX, eBLEND_SRC_INDEX_0 )
-	}	eBLEND_SRC_INDEX;
+		Index0,
+		Index1,
+		Index2,
+		CASTOR_ENUM_CLASS_BOUNDS( Index0 )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -142,19 +142,19 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des sources de blending
 	*/
-	typedef enum eBLEND_SOURCE
+	enum class BlendSource
 		: uint8_t
 	{
-		eBLEND_SOURCE_TEXTURE,
-		eBLEND_SOURCE_TEXTURE0,
-		eBLEND_SOURCE_TEXTURE1,
-		eBLEND_SOURCE_TEXTURE2,
-		eBLEND_SOURCE_TEXTURE3,
-		eBLEND_SOURCE_CONSTANT,
-		eBLEND_SOURCE_DIFFUSE,
-		eBLEND_SOURCE_PREVIOUS,
-		CASTOR_ENUM_BOUNDS( eBLEND_SOURCE, eBLEND_SOURCE_TEXTURE )
-	}	eBLEND_SOURCE;
+		Texture,
+		Texture0,
+		Texture1,
+		Texture2,
+		Texture3,
+		Constant,
+		Diffuse,
+		Previous,
+		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -162,38 +162,38 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de fonctions de mélange RGB
 	*/
-	typedef enum eRGB_BLEND_FUNC
+	enum class RGBBlendFunc
 		: uint8_t
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		eRGB_BLEND_FUNC_NONE,
+		None,
 		//!\~english Arg0
 		//!\~french Arg0
-		eRGB_BLEND_FUNC_FIRST_ARG,
+		FirstArg,
 		//!\~english Arg0 + Arg1
 		//!\~french Arg0 + Arg1
-		eRGB_BLEND_FUNC_ADD,
+		Add,
 		//!\~english Arg0 + Arg1 - 0.5
 		//!\~french Arg0 + Arg1 - 0.5
-		eRGB_BLEND_FUNC_ADD_SIGNED,
+		AddSigned,
 		//!\~english Arg0 x Arg1
 		//!\~french Arg0 x Arg1
-		eRGB_BLEND_FUNC_MODULATE,
+		Modulate,
 		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
 		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		eRGB_BLEND_FUNC_INTERPOLATE,
+		Interpolate,
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
-		eRGB_BLEND_FUNC_SUBTRACT,
+		Subtract,
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		eRGB_BLEND_FUNC_DOT3_RGB,
+		Dot3RGB,
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		eRGB_BLEND_FUNC_DOT3_RGBA,
-		CASTOR_ENUM_BOUNDS( eRGB_BLEND_FUNC, eRGB_BLEND_FUNC_NONE )
-	}	eRGB_BLEND_FUNC;
+		Dot3RGBA,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -201,32 +201,32 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de fonctions de mélange alpha
 	*/
-	typedef enum eALPHA_BLEND_FUNC
+	enum class AlphaBlendFunc
 		: uint8_t
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		eALPHA_BLEND_FUNC_NONE,
+		None,
 		//!\~english Arg0
 		//!\~french Arg0
-		eALPHA_BLEND_FUNC_FIRST_ARG,
+		FirstArg,
 		//!\~english Arg0 + Arg1
 		//!\~french Arg0 + Arg1
-		eALPHA_BLEND_FUNC_ADD,
+		Add,
 		//!\~english Arg0 + Arg1 - 0.5
 		//!\~french Arg0 + Arg1 - 0.5
-		eALPHA_BLEND_FUNC_ADD_SIGNED,
+		AddSigned,
 		//!\~english Arg0 x Arg1
 		//!\~french Arg0 x Arg1
-		eALPHA_BLEND_FUNC_MODULATE,
+		Modulate,
 		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
 		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		eALPHA_BLEND_FUNC_INTERPOLATE,
+		Interpolate,
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
-		eALPHA_BLEND_FUNC_SUBSTRACT,
-		CASTOR_ENUM_BOUNDS( eALPHA_BLEND_FUNC, eALPHA_BLEND_FUNC_NONE )
-	}	eALPHA_BLEND_FUNC;
+		Subtract,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -234,26 +234,55 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de opérations de mélange
 	*/
-	typedef enum eBLEND_OP
+	enum class BlendOperation
 		: uint8_t
 	{
 		//!\~english Src2 + Src1.
 		//!\~french Src2 + Src1.
-		eBLEND_OP_ADD,
+		Add,
 		//!\~english Src2 - Src1.
 		//!\~french Src2 - Src1.
-		eBLEND_OP_SUBSTRACT,
+		Subtract,
 		//!\~english Src1 - Src2.
 		//!\~french Src1 - Src2.
-		eBLEND_OP_REV_SUBSTRACT,
+		RevSubtract,
 		//!\~english min( Src1, Src2 ).
 		//!\~french min( Src1, Src2 ).
-		eBLEND_OP_MIN,
+		Min,
 		//!\~english max( Src1, Src2 ).
 		//!\~french max( Src1, Src2 ).
-		eBLEND_OP_MAX,
-		eBLEND_OP_COUNT
-	}	eBLEND_OP;
+		Max,
+		Count
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\~english
+	\brief		Blend operands enumeration
+	\~french
+	\brief		Enumération des opérandes de mélange
+	*/
+	enum class BlendOperand
+		: uint8_t
+	{
+		Zero,
+		One,
+		SrcColour,
+		InvSrcColour,
+		DstColour,
+		InvDstColour,
+		SrcAlpha,
+		InvSrcAlpha,
+		DstAlpha,
+		InvDstAlpha,
+		Constant,
+		InvConstant,
+		SrcAlphaSaturate,
+		Src1Colour,
+		InvSrc1Colour,
+		Src1Alpha,
+		InvSrc1Alpha,
+		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -261,29 +290,29 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des modes de mélange
 	*/
-	typedef enum eBLEND_MODE
+	enum class BlendMode
 		: uint8_t
 	{
 		//!\~english Order dependent blending.
 		//!\~french Mélange dépendant de l'ordre.
-		eBLEND_MODE_NONE,
+		None,
 		//!\~english Order independent, add the components.
 		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
-		eBLEND_MODE_ADDITIVE,
+		Additive,
 		//!\~english Order independent, multiply the components.
 		//!\~french Indépendant de l'ordre, multipliant les composantes.
-		eBLEND_MODE_MULTIPLICATIVE,
+		Multiplicative,
 		//!\~english Order dependent, interpolate the components.
 		//!\~french Indépendant de l'ordre, interpolant les composantes.
-		eBLEND_MODE_INTERPOLATIVE,
+		Interpolative,
 		//!\~english Order independent, using A-buffer, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
-		eBLEND_MODE_A_BUFFER,
+		ABuffer,
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
-		eBLEND_MODE_DEPTH_PEELING,
-		CASTOR_ENUM_BOUNDS( eBLEND_MODE, eBLEND_MODE_NONE )
-	}	eBLEND_MODE;
+		DepthPeeling,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -291,41 +320,41 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des dimensions de texture
 	*/
-	typedef enum eTEXTURE_TYPE
+	enum class TextureType
 		: uint8_t
 	{
 		//!\~english 1 dimension texture buffer, used to store data.
 		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
-		eTEXTURE_TYPE_BUFFER,
+		Buffer,
 		//!\~english 1 dimension textures => one coordinate => U mapping
 		//!\~french Textures à 1 dimension => une coordonnée => U mapping
-		eTEXTURE_TYPE_1D,
+		OneDimension,
 		//!\~english 1 dimension textures array => one coordinate => U mapping
 		//!\~french Tableau de textures à 1 dimension => une coordonnée => U mapping
-		eTEXTURE_TYPE_1DARRAY,
+		OneDimensionArray,
 		//!\~english 2 dimensions textures => two coordinates => UV mapping
 		//!\~french Textures à 2 dimensions => deux coordonnées => UV mapping
-		eTEXTURE_TYPE_2D,
+		TwoDimensions,
 		//!\~english 2 dimensions textures array => two coordinates => UV mapping
 		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		eTEXTURE_TYPE_2DARRAY,
+		TwoDimensionsArray,
 		//!\~english 2 dimensions textures with multisample support => two coordinates => UV mapping
 		//!\~french Textures à 2 dimensions avec support du multisampling => deux coordonnées => UV mapping
-		eTEXTURE_TYPE_2DMS,
+		TwoDimensionsMS,
 		//!\~english 2 dimensions textures array with multisample support => two coordinates => UV mapping
 		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		eTEXTURE_TYPE_2DMSARRAY,
+		TwoDimensionsMSArray,
 		//!\~english 3 dimensions textures => three coordinates => UVW mapping
 		//!\~french Textures à 3 dimensions => trois coordonnées => UVW mapping
-		eTEXTURE_TYPE_3D,
+		ThreeDimensions,
 		//!\~english Cube texture.
 		//!\~french Textures cube.
-		eTEXTURE_TYPE_CUBE,
+		Cube,
 		//!\~english Cube textures array.
 		//!\~french Tableaux de textures cube.
-		eTEXTURE_TYPE_CUBEARRAY,
-		CASTOR_ENUM_BOUNDS( eTEXTURE_TYPE, eTEXTURE_TYPE_BUFFER )
-	}	eTEXTURE_TYPE;
+		CubeArray,
+		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -404,76 +433,50 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Blend operators enumeration
-	\~french
-	\brief		Enumération des opérateurs de mélange
-	*/
-	typedef enum eBLEND
-		: uint8_t
-	{
-		eBLEND_ZERO,
-		eBLEND_ONE,
-		eBLEND_SRC_COLOUR,
-		eBLEND_INV_SRC_COLOUR,
-		eBLEND_DST_COLOUR,
-		eBLEND_INV_DST_COLOUR,
-		eBLEND_SRC_ALPHA,
-		eBLEND_INV_SRC_ALPHA,
-		eBLEND_DST_ALPHA,
-		eBLEND_INV_DST_ALPHA,
-		eBLEND_CONSTANT,
-		eBLEND_INV_CONSTANT,
-		eBLEND_SRC_ALPHA_SATURATE,
-		eBLEND_SRC1_COLOUR,
-		eBLEND_INV_SRC1_COLOUR,
-		eBLEND_SRC1_ALPHA,
-		eBLEND_INV_SRC1_ALPHA,
-		CASTOR_ENUM_BOUNDS( eBLEND, eBLEND_ZERO )
-	}	eBLEND;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
 	\brief		Texture channels enumeration
 	\~french
 	\brief		Enumération des canaux de texture
 	*/
-	typedef enum eTEXTURE_CHANNEL
+	enum class TextureChannel
 		: uint32_t
 	{
+		//!\~english Undefined channel.
+		//!\~french Canal indéfini.
+		Undefined = 0x00000000,
 		//!\~english Colour map
 		//!\~french Map de couleurs
-		eTEXTURE_CHANNEL_COLOUR = 0x00000001,
+		Colour = 0x00000001,
 		//!\~english Diffuse map
 		//!\~french Map de diffuse
-		eTEXTURE_CHANNEL_DIFFUSE = 0x00000002,
+		Diffuse = 0x00000002,
 		//!\~english Normal map
 		//!\~french Map de normales
-		eTEXTURE_CHANNEL_NORMAL = 0x00000004,
+		Normal = 0x00000004,
 		//!\~english Opacity map
 		//!\~french Map d'opacité
-		eTEXTURE_CHANNEL_OPACITY = 0x00000008,
+		Opacity = 0x00000008,
 		//!\~english Specular map
 		//!\~french Map de spéculaire
-		eTEXTURE_CHANNEL_SPECULAR = 0x00000010,
+		Specular = 0x00000010,
 		//!\~english Height map
 		//!\~french Map de hauteur
-		eTEXTURE_CHANNEL_HEIGHT = 0x00000020,
+		Height = 0x00000020,
 		//!\~english Ambient map
 		//!\~french Map d'ambiante
-		eTEXTURE_CHANNEL_AMBIENT = 0x00000040,
+		Ambient = 0x00000040,
 		//!\~english Gloss map
 		//!\~french Map de gloss
-		eTEXTURE_CHANNEL_GLOSS = 0x00000080,
+		Gloss = 0x00000080,
 		//!\~english Emissive map
 		//!\~french Map d'émissive
-		eTEXTURE_CHANNEL_EMISSIVE = 0x00000100,
+		Emissive = 0x00000100,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
-		eTEXTURE_CHANNEL_ALL = 0x0000FFFF,
-		//!\~english Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
-		//!\~french Pas vraiment un canal de texture (hors de eTEXTURE_CHANNEL_ALL), utilisé pour dire que nous voulons un shader d'incrustation texte
-		eTEXTURE_CHANNEL_TEXT = 0x00010000,
-	}	eTEXTURE_CHANNEL;
+		All = 0x0000FFFF,
+		//!\~english Not really a texture channel (it is out of TextureChannel::All), used to tell we want text overlay shader source
+		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::All), utilisé pour dire que nous voulons un shader d'incrustation texte
+		Text = 0x00010000,
+	};
 
 	class TextureImage;
 	class TextureLayout;
@@ -507,6 +510,27 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
+
+	template< typename T, typename U >
+	inline bool CheckFlag( T const & p_value, U const & p_flag )
+	{
+		static_assert( sizeof( T ) == sizeof( U ), "Can't check flags for different size parameters" );
+		return U( p_value & T( p_flag ) ) == p_flag;
+	}
+
+	template< typename T, typename U >
+	inline void AddFlag( T & p_value, U const & p_flag )
+	{
+		static_assert( sizeof( T ) == sizeof( U ), "Can't add flags for different size parameters" );
+		p_value |= T( p_flag );
+	}
+
+	template< typename T, typename U >
+	inline void RemFlag( T & p_value, U const & p_flag )
+	{
+		static_assert( sizeof( T ) == sizeof( U ), "Can't remove flags for different size parameters" );
+		p_value &= ~T( p_flag );
+	}
 
 	//@}
 }

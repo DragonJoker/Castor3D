@@ -31,51 +31,69 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SUBMESH );
-		std::array< double, 15 > l_buffer;
-		Point3r l_pos;
-		Point3r l_tan;
-		Point3r l_bit;
-		Point3r l_nml;
-		Point3r l_tex;
 
-		for ( auto const & l_point : p_obj.m_points )
 		{
-			Vertex::GetPosition( l_point, l_pos );
-			Vertex::GetNormal( l_point, l_tan );
-			Vertex::GetTangent( l_point, l_bit );
-			Vertex::GetBitangent( l_point, l_nml );
-			Vertex::GetTexCoord( l_point, l_tex );
-			l_buffer[ 0] = double( l_pos[0] );
-			l_buffer[ 1] = double( l_pos[1] );
-			l_buffer[ 2] = double( l_pos[2] );
-			l_buffer[ 3] = double( l_tan[0] );
-			l_buffer[ 4] = double( l_tan[1] );
-			l_buffer[ 5] = double( l_tan[2] );
-			l_buffer[ 6] = double( l_bit[0] );
-			l_buffer[ 7] = double( l_bit[1] );
-			l_buffer[ 8] = double( l_bit[2] );
-			l_buffer[ 9] = double( l_nml[0] );
-			l_buffer[10] = double( l_nml[1] );
-			l_buffer[11] = double( l_nml[2] );
-			l_buffer[12] = double( l_tex[0] );
-			l_buffer[13] = double( l_tex[1] );
-			l_buffer[14] = double( l_tex[2] );
-			l_return &= DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
+			std::array< double, 15 > l_buffer;
+			Point3r l_pos;
+			Point3r l_tan;
+			Point3r l_bit;
+			Point3r l_nml;
+			Point3r l_tex;
+			VertexBuffer const & l_vtxBuffer = p_obj.GetVertexBuffer();
+			uint32_t l_stride = l_vtxBuffer.GetDeclaration().GetStride();
+			uint32_t l_pointsCount = l_vtxBuffer.GetSize() / l_stride;
+			uint8_t const * l_vtx = l_vtxBuffer.data();
+
+			for ( uint32_t j = 0; j < l_pointsCount; j++ )
+			{
+				Vertex::GetPosition( l_vtx, l_pos );
+				Vertex::GetNormal( l_vtx, l_tan );
+				Vertex::GetTangent( l_vtx, l_bit );
+				Vertex::GetBitangent( l_vtx, l_nml );
+				Vertex::GetTexCoord( l_vtx, l_tex );
+				l_buffer[ 0] = double( l_pos[0] );
+				l_buffer[ 1] = double( l_pos[1] );
+				l_buffer[ 2] = double( l_pos[2] );
+				l_buffer[ 3] = double( l_tan[0] );
+				l_buffer[ 4] = double( l_tan[1] );
+				l_buffer[ 5] = double( l_tan[2] );
+				l_buffer[ 6] = double( l_bit[0] );
+				l_buffer[ 7] = double( l_bit[1] );
+				l_buffer[ 8] = double( l_bit[2] );
+				l_buffer[ 9] = double( l_nml[0] );
+				l_buffer[10] = double( l_nml[1] );
+				l_buffer[11] = double( l_nml[2] );
+				l_buffer[12] = double( l_tex[0] );
+				l_buffer[13] = double( l_tex[1] );
+				l_buffer[14] = double( l_tex[2] );
+				l_return &= DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
+				l_vtx += l_stride;
+			}
 		}
 
-		if ( l_return )
+		if ( l_return && p_obj.HasBonesBuffer() )
 		{
-			for ( auto const & l_boned : p_obj.m_bones )
+			VertexBuffer const & l_bneBuffer = p_obj.GetBonesBuffer();
+			uint32_t l_stride = l_bneBuffer.GetDeclaration().GetStride();
+			uint32_t l_bonesCount = l_bneBuffer.GetSize() / l_stride;
+			uint8_t const * l_bne = l_bneBuffer.data();
+
+			for ( uint32_t j = 0; j < l_bonesCount; j++ )
 			{
-				l_return &= DoFillChunk( BonedVertex::GetBones( l_boned ), eCHUNK_TYPE_SUBMESH_BONE, l_chunk );
+				l_return &= DoFillChunk( BonedVertex::GetBones( l_bne ), eCHUNK_TYPE_SUBMESH_BONE, l_chunk );
 			}
 		}
 
 		if ( l_return )
 		{
-			for ( auto const & l_face : p_obj.m_faces )
+			IndexBuffer const & l_idxBuffer = p_obj.GetIndexBuffer();
+			uint32_t l_facesCount = l_idxBuffer.GetSize() / 3;
+			uint32_t const * l_idx = l_idxBuffer.data();
+
+			for ( uint32_t j = 0; j < l_facesCount; j++ )
 			{
-				l_return &= Face::BinaryParser( m_path ).Fill( l_face, l_chunk );
+				l_return &= DoFillChunk( l_idx, l_idx + 3u, eCHUNK_TYPE_SUBMESH_FACE, l_chunk );
+				l_idx += 3u;
 			}
 		}
 
@@ -100,7 +118,7 @@ namespace Castor3D
 		std::vector< real > l_tex;
 		std::vector< stFACE_INDICES > l_faces;
 		std::vector< stVERTEX_BONE_DATA > l_bones;
-		std::array< double, 12 > l_buffer;
+		std::array< double, 15 > l_buffer;
 		Face l_face( 0, 0, 0 );
 		l_pos.reserve( p_chunk.GetRemaining() / 6 );
 		l_tan.reserve( p_chunk.GetRemaining() / 6 );
@@ -124,21 +142,22 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_pos.push_back( real( l_buffer[ 0] ) );
-						l_pos.push_back( real( l_buffer[ 1] ) );
-						l_pos.push_back( real( l_buffer[ 2] ) );
-						l_tan.push_back( real( l_buffer[ 2] ) );
-						l_tan.push_back( real( l_buffer[ 3] ) );
-						l_tan.push_back( real( l_buffer[ 4] ) );
-						l_bit.push_back( real( l_buffer[ 5] ) );
-						l_bit.push_back( real( l_buffer[ 6] ) );
-						l_bit.push_back( real( l_buffer[ 7] ) );
-						l_nml.push_back( real( l_buffer[ 8] ) );
-						l_nml.push_back( real( l_buffer[ 9] ) );
-						l_nml.push_back( real( l_buffer[10] ) );
-						l_tex.push_back( real( l_buffer[11] ) );
-						l_tex.push_back( real( l_buffer[12] ) );
-						l_tex.push_back( real( l_buffer[13] ) );
+						uint32_t l_index{ 0u };
+						l_pos.push_back( real( l_buffer[l_index++] ) );
+						l_pos.push_back( real( l_buffer[l_index++] ) );
+						l_pos.push_back( real( l_buffer[l_index++] ) );
+						l_tan.push_back( real( l_buffer[l_index++] ) );
+						l_tan.push_back( real( l_buffer[l_index++] ) );
+						l_tan.push_back( real( l_buffer[l_index++] ) );
+						l_bit.push_back( real( l_buffer[l_index++] ) );
+						l_bit.push_back( real( l_buffer[l_index++] ) );
+						l_bit.push_back( real( l_buffer[l_index++] ) );
+						l_nml.push_back( real( l_buffer[l_index++] ) );
+						l_nml.push_back( real( l_buffer[l_index++] ) );
+						l_nml.push_back( real( l_buffer[l_index++] ) );
+						l_tex.push_back( real( l_buffer[l_index++] ) );
+						l_tex.push_back( real( l_buffer[l_index++] ) );
+						l_tex.push_back( real( l_buffer[l_index++] ) );
 					}
 
 					break;
@@ -177,9 +196,14 @@ namespace Castor3D
 
 		if ( l_return && !l_pos.empty() )
 		{
-			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), nullptr, l_tex.data() };
+			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), l_bit.data(), l_tex.data() };
 			p_obj.AddPoints( l_group );
 			p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+		}
+
+		if ( l_return && !l_bones.empty() )
+		{
+			p_obj.AddBoneDatas( l_bones );
 		}
 
 		return l_return;
@@ -536,6 +560,7 @@ namespace Castor3D
 
 	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
+		ENSURE( m_initialised );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -548,6 +573,7 @@ namespace Castor3D
 
 	void Submesh::DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
+		ENSURE( m_initialised );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -826,6 +852,7 @@ namespace Castor3D
 
 	void Submesh::SortFaces( Point3r const & p_ptCameraPosition )
 	{
+		ENSURE( m_initialised );
 		try
 		{
 			if ( m_cameraPosition != p_ptCameraPosition )
@@ -967,6 +994,7 @@ namespace Castor3D
 
 	GeometryBuffers & Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
+		ENSURE( m_initialised );
 		GeometryBuffersSPtr l_buffers;
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
 		{

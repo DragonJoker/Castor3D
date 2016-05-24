@@ -24,6 +24,7 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Manager/ManagerView.hpp"
 #include "Material/Pass.hpp"
+#include "Mesh/CmshImporter.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Subdivider.hpp"
@@ -491,7 +492,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMinFilter )
 	{
 		uint32_t l_uiMode;
 		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE( l_uiMode ) );
+		l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode( l_uiMode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -508,7 +509,24 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMagFilter )
 	{
 		uint32_t l_uiMode;
 		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE( l_uiMode ) );
+		l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode( l_uiMode ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMipFilter )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( !l_parsingContext->pSampler )
+	{
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
+	}
+	else if ( !p_params.empty() )
+	{
+		uint32_t l_uiMode;
+		p_params[0]->Get( l_uiMode );
+		l_parsingContext->pSampler->SetInterpolationMode( InterpolationFilter::Mip, InterpolationMode( l_uiMode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -600,7 +618,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerUWrapMode )
 	{
 		uint32_t l_uiMode;
 		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE( l_uiMode ) );
+		l_parsingContext->pSampler->SetWrappingMode( TextureUVW::U, WrapMode( l_uiMode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -617,7 +635,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerVWrapMode )
 	{
 		uint32_t l_uiMode;
 		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE( l_uiMode ) );
+		l_parsingContext->pSampler->SetWrappingMode( TextureUVW::V, WrapMode( l_uiMode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -634,7 +652,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerWWrapMode )
 	{
 		uint32_t l_uiMode;
 		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pSampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE( l_uiMode ) );
+		l_parsingContext->pSampler->SetWrappingMode( TextureUVW::W, WrapMode( l_uiMode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1592,45 +1610,43 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		}
 
 		Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
+		ImporterSPtr l_importer;
 
 		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 		{
-			BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
-			l_parsingContext->pMesh = l_pEngine->GetMeshManager().Create( l_parsingContext->strName2, eMESH_TYPE_CUSTOM );
-			Mesh::BinaryParser{ l_pathFile }.Parse( *l_parsingContext->pMesh, l_file );
+			l_importer = std::make_shared< CmshImporter >( *l_pEngine );
 		}
 		else
 		{
 			ImporterPluginSPtr l_pPlugin;
-			ImporterSPtr l_pImporter;
 			ImporterPlugin::ExtensionArray l_arrayExtensions;
 
 			for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 			{
 				l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
-				if ( !l_pImporter && l_pPlugin )
+				if ( !l_importer && l_pPlugin )
 				{
 					l_arrayExtensions = l_pPlugin->GetExtensions();
 
 					for ( auto l_itExt : l_arrayExtensions )
 					{
-						if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
+						if ( !l_importer && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
 						{
-							l_pImporter = l_pPlugin->GetImporter();
+							l_importer = l_pPlugin->GetImporter();
 						}
 					}
 				}
 			}
+		}
 
-			if ( l_pImporter )
-			{
-				l_parsingContext->pMesh = l_parsingContext->pScene->ImportMesh( l_pathFile, *l_pImporter, l_parameters );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
-			}
+		if ( l_importer )
+		{
+			l_parsingContext->pMesh = l_parsingContext->pScene->ImportMesh( l_pathFile, *l_importer, l_parameters );
+		}
+		else
+		{
+			PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
 		}
 	}
 }
@@ -2246,8 +2262,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassBlendFunc )
 		uint32_t l_uiDstBlend;
 		p_params[0]->Get( l_uiSrcBlend );
 		p_params[1]->Get( l_uiDstBlend );
-		l_pPass->GetBlendState()->SetAlphaSrcBlend( eBLEND( l_uiSrcBlend ) );
-		l_pPass->GetBlendState()->SetAlphaDstBlend( eBLEND( l_uiDstBlend ) );
+		l_pPass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
+		l_pPass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2304,7 +2320,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
 	{
 		uint32_t l_mode = 0;
 		p_params[0]->Get( l_mode );
-		l_parsingContext->pPass->SetAlphaBlendMode( eBLEND_MODE( l_mode ) );
+		l_parsingContext->pPass->SetAlphaBlendMode( BlendMode( l_mode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2321,7 +2337,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassColourBlendMode )
 	{
 		uint32_t l_mode = 0;
 		p_params[0]->Get( l_mode );
-		l_parsingContext->pPass->SetColourBlendMode( eBLEND_MODE( l_mode ) );
+		l_parsingContext->pPass->SetColourBlendMode( BlendMode( l_mode ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2386,7 +2402,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitAlphaFunc )
 		float l_fFloat;
 		p_params[0]->Get( l_uiFunc );
 		p_params[1]->Get( l_fFloat );
-		l_parsingContext->pTextureUnit->SetAlphaFunc( eALPHA_FUNC( l_uiFunc ) );
+		l_parsingContext->pTextureUnit->SetAlphaFunc( AlphaFunc( l_uiFunc ) );
 		l_parsingContext->pTextureUnit->SetAlphaValue( l_fFloat );
 	}
 }
@@ -2408,9 +2424,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRgbBlend )
 		p_params[0]->Get( l_uiMode );
 		p_params[1]->Get( l_uiArg1 );
 		p_params[2]->Get( l_uiArg2 );
-		l_parsingContext->pTextureUnit->SetRgbFunction( eRGB_BLEND_FUNC( l_uiMode ) );
-		l_parsingContext->pTextureUnit->SetRgbArgument( eBLEND_SRC_INDEX_0, eBLEND_SOURCE( l_uiArg1 ) );
-		l_parsingContext->pTextureUnit->SetRgbArgument( eBLEND_SRC_INDEX_1, eBLEND_SOURCE( l_uiArg2 ) );
+		l_parsingContext->pTextureUnit->SetRgbFunction( RGBBlendFunc( l_uiMode ) );
+		l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::Index0, BlendSource( l_uiArg1 ) );
+		l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::Index1, BlendSource( l_uiArg2 ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2431,9 +2447,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitAlphaBlend )
 		p_params[0]->Get( l_uiMode );
 		p_params[1]->Get( l_uiArg1 );
 		p_params[2]->Get( l_uiArg2 );
-		l_parsingContext->pTextureUnit->SetAlpFunction( eALPHA_BLEND_FUNC( l_uiMode ) );
-		l_parsingContext->pTextureUnit->SetAlpArgument( eBLEND_SRC_INDEX_0, eBLEND_SOURCE( l_uiArg1 ) );
-		l_parsingContext->pTextureUnit->SetAlpArgument( eBLEND_SRC_INDEX_1, eBLEND_SOURCE( l_uiArg2 ) );
+		l_parsingContext->pTextureUnit->SetAlpFunction( AlphaBlendFunc( l_uiMode ) );
+		l_parsingContext->pTextureUnit->SetAlpArgument( BlendSrcIndex::Index0, BlendSource( l_uiArg1 ) );
+		l_parsingContext->pTextureUnit->SetAlpArgument( BlendSrcIndex::Index1, BlendSource( l_uiArg2 ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2450,7 +2466,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitChannel )
 	{
 		uint32_t l_uiChannel;
 		p_params[0]->Get( l_uiChannel );
-		l_parsingContext->pTextureUnit->SetChannel( eTEXTURE_CHANNEL( l_uiChannel ) );
+		l_parsingContext->pTextureUnit->SetChannel( TextureChannel( l_uiChannel ) );
 	}
 }
 END_ATTRIBUTE()

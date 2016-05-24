@@ -77,7 +77,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnChannelChange( Castor3D::eTEXTURE_CHANNEL p_value );
+		void OnChannelChange( Castor3D::TextureChannel p_value );
 		void OnImageChange( Castor::String const & p_value );
 
 	private:

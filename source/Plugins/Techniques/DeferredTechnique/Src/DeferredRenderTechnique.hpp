@@ -155,10 +155,10 @@ namespace Deferred
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	A combination of TextureChannel
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	Une combinaison de TextureChannel
 		 */
 		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
 

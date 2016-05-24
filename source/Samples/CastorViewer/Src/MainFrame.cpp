@@ -2,7 +2,6 @@
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
-#include "SceneExporter.hpp"
 #include "PropertiesHolder.hpp"
 
 #include <wx/display.h>
@@ -39,6 +38,7 @@
 #include <AuiDockArt.hpp>
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
+#include <SceneExporter.hpp>
 
 #include <xpms/castor.xpm>
 #include <xpms/print_screen.xpm>
@@ -787,12 +787,12 @@ namespace CastorViewer
 				if ( l_pathFile.GetExtension() == cuT( "obj" ) )
 				{
 					ObjSceneExporter l_exporter;
-					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( *m_pMainScene.lock(), l_pathFile );
 				}
 				else if ( l_pathFile.GetExtension() == cuT( "cscn" ) )
 				{
 					CscnSceneExporter l_exporter;
-					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( *m_pMainScene.lock(), l_pathFile );
 				}
 			}
 		}

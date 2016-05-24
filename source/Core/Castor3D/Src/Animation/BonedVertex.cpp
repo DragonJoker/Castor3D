@@ -1,4 +1,4 @@
-﻿#include "BonedVertex.hpp"
+#include "BonedVertex.hpp"
 
 #include "VertexBoneData.hpp"
 
@@ -46,9 +46,24 @@ namespace Castor3D
 		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( p_group->const_ptr() );
 	}
 
-	stVERTEX_BONE_DATA BonedVertex::GetBones( BufferElementGroup const & p_group )
+	stVERTEX_BONE_DATA const & BonedVertex::GetBones( BufferElementGroup const & p_group )
 	{
 		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( p_group.const_ptr() );
+	}
+
+	stVERTEX_BONE_DATA & BonedVertex::GetBones( BufferElementGroup & p_group )
+	{
+		return *reinterpret_cast< stVERTEX_BONE_DATA * >( p_group.ptr() );
+	}
+
+	stVERTEX_BONE_DATA const & BonedVertex::GetBones( void const * p_data )
+	{
+		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( p_data );
+	}
+
+	stVERTEX_BONE_DATA & BonedVertex::GetBones( void * p_data )
+	{
+		return *reinterpret_cast< stVERTEX_BONE_DATA * >( p_data );
 	}
 
 	void BonedVertex::SetBones( BufferElementGroupSPtr p_group, stVERTEX_BONE_DATA * p_data )

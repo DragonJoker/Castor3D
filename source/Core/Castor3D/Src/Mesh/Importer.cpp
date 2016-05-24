@@ -50,7 +50,7 @@ namespace Castor3D
 		return l_mesh;
 	}
 
-	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_unit;
 		Path l_path;

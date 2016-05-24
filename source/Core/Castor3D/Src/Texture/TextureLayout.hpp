@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureLayout( RenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -135,7 +135,7 @@ namespace Castor3D
 		 *\brief		Récupère la dimension de la texture
 		 *\return		La dimension de la texture
 		 */
-		inline eTEXTURE_TYPE GetType()const
+		inline TextureType GetType()const
 		{
 			return m_type;
 		}
@@ -190,7 +190,7 @@ namespace Castor3D
 		bool m_initialised{ false };
 		//!\~english	Texture type.
 		//!\~french		Type de texture.
-		eTEXTURE_TYPE m_type;
+		TextureType m_type;
 		//!\~english	The texture images.
 		//!\~french		Les images de la texture.
 		std::vector< TextureImageUPtr > m_images;
