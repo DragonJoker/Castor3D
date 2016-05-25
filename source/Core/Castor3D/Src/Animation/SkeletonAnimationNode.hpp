@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -46,6 +46,44 @@ namespace Castor3D
 		\~english
 		\brief		Loader binaire de MovingBone.
 		*/
+		class BinaryWriter
+			: public Castor3D::BinaryWriter< SkeletonAnimationNode >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryWriter( Castor::Path const & p_path );
+
+		private:
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API bool DoWrite( SkeletonAnimationNode const & p_obj, BinaryChunk & p_chunk )const override;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		MovingBone binary loader.
+		\~english
+		\brief		Loader binaire de MovingBone.
+		*/
 		class BinaryParser
 			: public Castor3D::BinaryParser< SkeletonAnimationNode >
 		{
@@ -59,19 +97,8 @@ namespace Castor3D
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
 			 */
 			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data.
-			 *\param[in]	p_obj	The object to write.
-			 *\param[out]	p_chunk	The chunk to fill.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-			 *\param[in]	p_obj	L'objet à écrire.
-			 *\param[out]	p_chunk	Le chunk à remplir.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API virtual bool Fill( SkeletonAnimationNode const & p_obj, BinaryChunk & p_chunk )const;
+
+		private:
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk.
@@ -84,7 +111,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Parse( SkeletonAnimationNode & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool DoParse( SkeletonAnimationNode & p_obj, BinaryChunk & p_chunk )const override;
 		};
 
 	public:

@@ -21,23 +21,36 @@ namespace Castor3D
 			cuT( "Object_" ),
 			cuT( "Bone_" ),
 		};
+
+		void RecursiveAddChildren( Animation & p_animation, AnimationObjectSPtr p_moving, AnimationObjectSPtr p_parent )
+		{
+			if ( !p_animation.HasObject( p_moving->GetType(), p_moving->GetName() ) )
+			{
+				p_animation.AddObject( p_moving, p_parent );
+
+				for ( auto l_moving : p_moving->GetChildren() )
+				{
+					RecursiveAddChildren( p_animation, l_moving, p_moving );
+				}
+			}
+		}
 	}
 
 	//*************************************************************************************************
 
-	Animation::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Animation >( p_path )
+	Animation::BinaryWriter::BinaryWriter( Path const & p_path )
+		: Castor3D::BinaryWriter< Animation >( p_path )
 	{
 	}
 
-	bool Animation::BinaryParser::Fill( Animation const & p_obj, BinaryChunk & p_chunk )const
+	bool Animation::BinaryWriter::DoWrite( Animation const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_ANIMATION );
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
 		for ( auto && l_moving : p_obj.m_arrayMoving )
@@ -45,15 +58,15 @@ namespace Castor3D
 			switch ( l_moving->GetType() )
 			{
 			case eANIMATION_OBJECT_TYPE_NODE:
-				l_return &= SkeletonAnimationNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationNode::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), l_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_OBJECT:
-				l_return &= SkeletonAnimationObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationObject::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), l_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_BONE:
-				l_return &= SkeletonAnimationBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationBone::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), l_chunk );
 				break;
 			}
 		}
@@ -67,20 +80,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RecursiveAddChildren( Animation & p_animation, AnimationObjectSPtr p_moving, AnimationObjectSPtr p_parent )
-	{
-		if ( !p_animation.HasObject( p_moving->GetType(), p_moving->GetName() ) )
-		{
-			p_animation.AddObject( p_moving, p_parent );
+	//*************************************************************************************************
 
-			for ( auto l_moving : p_moving->GetChildren() )
-			{
-				RecursiveAddChildren( p_animation, l_moving, p_moving );
-			}
-		}
+	Animation::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Animation >( p_path )
+	{
 	}
 
-	bool Animation::BinaryParser::Parse( Animation & p_obj, BinaryChunk & p_chunk )const
+	bool Animation::BinaryParser::DoParse( Animation & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		SkeletonAnimationNodeSPtr l_node;

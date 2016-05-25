@@ -849,27 +849,27 @@ namespace Lwo
 			switch ( p_channel )
 			{
 			case eTEX_CHANNEL_COLR:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
+				p_pTexture->SetChannel( TextureChannel::Diffuse );
 				break;
 
 			case eTEX_CHANNEL_DIFF:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
+				p_pTexture->SetChannel( TextureChannel::Diffuse );
 				break;
 
 			case eTEX_CHANNEL_SPEC:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_SPECULAR );
+				p_pTexture->SetChannel( TextureChannel::Specular );
 				break;
 
 			case eTEX_CHANNEL_GLOS:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_GLOSS );
+				p_pTexture->SetChannel( TextureChannel::Gloss );
 				break;
 
 			case eTEX_CHANNEL_TRAN:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_OPACITY );
+				p_pTexture->SetChannel( TextureChannel::Opacity );
 				break;
 
 			case eTEX_CHANNEL_BUMP:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_NORMAL );
+				p_pTexture->SetChannel( TextureChannel::Normal );
 				break;
 			}
 		}
@@ -921,7 +921,7 @@ namespace Lwo
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_unit = std::make_shared< TextureUnit >( *p_pPass->GetEngine() );
-						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
+						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
 						l_texture->GetImage().SetSource( l_it->second->GetPixels() );
 						l_unit->SetTexture( l_texture );
 						DoSetChannel( l_unit, l_eChannel );

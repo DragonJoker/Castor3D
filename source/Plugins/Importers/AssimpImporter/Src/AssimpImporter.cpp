@@ -405,93 +405,68 @@ namespace C3dAssimp
 		{
 			p_submesh->SetDefaultMaterial( l_material );
 			p_submesh->Ref( l_material );
-			stVERTEX_GROUP l_vertices = { 0 };
-			l_vertices.m_uiCount = p_aiMesh->mNumVertices;
-#if CASTOR_USE_DOUBLE
-			std::vector< real > vtx;
-			std::vector< real > nml;
-			std::vector< real > tan;
-			std::vector< real > bin;
-			std::vector< real > tex;
-			vtx.reserve( p_aiMesh->mNumVertices * 3 );
+			std::vector< stINTERLEAVED_VERTEX > l_vertices{ p_aiMesh->mNumVertices };
+			uint32_t l_index{ 0u };
 
-			for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+			for ( auto & l_vertex : l_vertices )
 			{
-				vtx.push_back( p_aiMesh->mVertices[i].x );
-				vtx.push_back( p_aiMesh->mVertices[i].y );
-				vtx.push_back( p_aiMesh->mVertices[i].z );
+				l_vertex.m_pos[0] = real( p_aiMesh->mVertices[l_index].x );
+				l_vertex.m_pos[1] = real( p_aiMesh->mVertices[l_index].y );
+				l_vertex.m_pos[2] = real( p_aiMesh->mVertices[l_index].z );
+				++l_index;
 			}
-
-			l_vertices.m_pVtx = vtx.data();
 
 			if ( p_aiMesh->mNormals )
 			{
-				nml.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					nml.push_back( p_aiMesh->mNormals[i].x );
-					nml.push_back( p_aiMesh->mNormals[i].y );
-					nml.push_back( p_aiMesh->mNormals[i].z );
+					l_vertex.m_nml[0] = real( p_aiMesh->mNormals[l_index].x );
+					l_vertex.m_nml[1] = real( p_aiMesh->mNormals[l_index].y );
+					l_vertex.m_nml[2] = real( p_aiMesh->mNormals[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pNml = nml.data();
 			}
 
 			if ( p_aiMesh->mTangents )
 			{
-				tan.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					tan.push_back( p_aiMesh->mTangents[i].x );
-					tan.push_back( p_aiMesh->mTangents[i].y );
-					tan.push_back( p_aiMesh->mTangents[i].z );
+					l_vertex.m_tan[0] = real( p_aiMesh->mTangents[l_index].x );
+					l_vertex.m_tan[1] = real( p_aiMesh->mTangents[l_index].y );
+					l_vertex.m_tan[2] = real( p_aiMesh->mTangents[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pTan = tan.data();
 			}
 
 			if ( p_aiMesh->mBitangents )
 			{
-				bin.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					bin.push_back( p_aiMesh->mBitangents[i].x );
-					bin.push_back( p_aiMesh->mBitangents[i].y );
-					bin.push_back( p_aiMesh->mBitangents[i].z );
+					l_vertex.m_bin[0] = real( p_aiMesh->mBitangents[l_index].x );
+					l_vertex.m_bin[1] = real( p_aiMesh->mBitangents[l_index].y );
+					l_vertex.m_bin[2] = real( p_aiMesh->mBitangents[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pBin = bin.data();
 			}
 
 			if ( p_aiMesh->HasTextureCoords( 0 ) )
 			{
-				tex.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].x );
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].y );
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].z );
+					l_vertex.m_tex[0] = real( p_aiMesh->mTextureCoords[0][l_index].x );
+					l_vertex.m_tex[1] = real( p_aiMesh->mTextureCoords[0][l_index].y );
+					l_vertex.m_tex[2] = real( p_aiMesh->mTextureCoords[0][l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pTex = tex.data();
 			}
-
-#else
-			l_vertices.m_pVtx = ( real * )p_aiMesh->mVertices;
-			l_vertices.m_pNml = ( real * )p_aiMesh->mNormals;
-			l_vertices.m_pTan = ( real * )p_aiMesh->mTangents;
-			l_vertices.m_pBin = ( real * )p_aiMesh->mBitangents;
-
-			if ( p_aiMesh->HasTextureCoords( 0 ) )
-			{
-				l_vertices.m_pTex = ( real * )p_aiMesh->mTextureCoords[0];
-			}
-
-#endif
 
 			p_submesh->AddPoints( l_vertices );
 
@@ -513,11 +488,11 @@ namespace C3dAssimp
 				}
 			}
 
-			if ( !l_vertices.m_pNml )
+			if ( !p_aiMesh->mNormals )
 			{
 				p_submesh->ComputeNormals( true );
 			}
-			else if ( !l_vertices.m_pTan )
+			else if ( !p_aiMesh->mTangents )
 			{
 				p_submesh->ComputeTangentsFromNormals();
 			}

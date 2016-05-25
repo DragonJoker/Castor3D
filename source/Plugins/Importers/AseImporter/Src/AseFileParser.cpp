@@ -593,7 +593,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Path l_path;
 	p_params[0]->Get( l_path );
-	l_pContext->m_importer.LoadTexture( l_path, *l_pContext->pPass, eTEXTURE_CHANNEL_DIFFUSE );
+	l_pContext->m_importer.LoadTexture( l_path, *l_pContext->pPass, TextureChannel::Diffuse );
 }
 END_ATTRIBUTE()
 

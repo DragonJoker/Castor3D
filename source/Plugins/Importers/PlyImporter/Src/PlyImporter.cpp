@@ -68,7 +68,7 @@ namespace C3dPly
 		VertexSPtr l_pVertex;
 		Coords3r l_ptNml;
 		Coords2r l_ptTex;
-		SubmeshSPtr l_pSubmesh = l_mesh->CreateSubmesh();
+		SubmeshSPtr l_submesh = l_mesh->CreateSubmesh();
 		MaterialSPtr l_pMaterial = p_scene.GetMaterialView().Find( l_materialName );
 
 		if ( !l_pMaterial )
@@ -78,7 +78,7 @@ namespace C3dPly
 		}
 
 		l_pMaterial->GetPass( 0 )->SetTwoSided( true );
-		l_pSubmesh->SetDefaultMaterial( l_pMaterial );
+		l_submesh->SetDefaultMaterial( l_pMaterial );
 		// Parsing the ply identification line
 		std::getline( l_isFile, l_strLine );
 
@@ -162,71 +162,46 @@ namespace C3dPly
 					}
 				}
 
-				stVERTEX_GROUP l_stVertices = { 0 };
-				std::vector< real > l_pVtx( l_iNbVertex * 3 );
-				std::vector< real > l_pNml;
-				std::vector< real > l_pTex;
-				real * l_pBufVtx = &l_pVtx[0];
-				l_stVertices.m_uiCount = l_iNbVertex;
-				l_stVertices.m_pVtx = &l_pVtx[0];
+				std::vector< stINTERLEAVED_VERTEX > l_vertices{ size_t( l_iNbVertex ) };
 
 				if ( l_iNbProperties >= 8 )
 				{
-					l_pNml.resize( l_iNbVertex * 3 );
-					l_pTex.resize( l_iNbVertex * 3 );
-					real * l_pBufNml = &l_pNml[0];
-					real * l_pBufTex = &l_pTex[0];
-
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position + normal + texture
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_ssToken >> l_pBufNml[0] >> l_pBufNml[1] >> l_pBufNml[2];
-						l_ssToken >> l_pBufTex[0] >> l_pBufTex[1];
-						l_pBufVtx += 3;
-						l_pBufNml += 3;
-						l_pBufTex += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
+						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
+						l_ssToken >> l_vertex.m_tex[0] >> l_vertex.m_tex[1];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
-
-					l_stVertices.m_pNml = &l_pNml[0];
-					l_stVertices.m_pTex = &l_pTex[0];
 				}
 				else if ( l_iNbProperties >= 6 )
 				{
-					l_pNml.resize( l_iNbVertex * 3 );
-					real * l_pBufNml = &l_pNml[0];
-
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position + normal
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_ssToken >> l_pBufNml[0] >> l_pBufNml[1] >> l_pBufNml[2];
-						l_pBufVtx += 3;
-						l_pBufNml += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
+						l_ssToken >> l_vertex.m_nml[0] >> l_vertex.m_nml[1] >> l_vertex.m_nml[2];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
-
-					l_stVertices.m_pNml = &l_pNml[0];
 				}
 				else
 				{
-					// Parsing vertices
-					for ( int i = 0; i < l_iNbVertex; i++ )
+					// Parsing vertices : position
+					for ( auto & l_vertex : l_vertices )
 					{
 						std::getline( l_isFile, l_strLine );
 						l_ssToken.str( l_strLine );
-						l_ssToken >> l_pBufVtx[0] >> l_pBufVtx[1] >> l_pBufVtx[2];
-						l_pBufVtx += 3;
+						l_ssToken >> l_vertex.m_pos[0] >> l_vertex.m_pos[1] >> l_vertex.m_pos[2];
 						l_ssToken.clear( std::istringstream::goodbit );
 					}
 				}
 
-				l_pSubmesh->AddPoints( l_stVertices );
+				l_submesh->AddPoints( l_vertices );
 				// Parsing triangles
 				FaceSPtr l_pFace;
 				std::vector< stFACE_INDICES > l_faces( l_iNbFaces );
@@ -247,15 +222,19 @@ namespace C3dPly
 					l_ssToken.clear( std::istringstream::goodbit );
 				}
 
-				l_pSubmesh->AddFaceGroup( &l_faces[0], l_iNbFaces );
+				l_submesh->AddFaceGroup( l_faces );
 			}
 		}
 
-		l_pSubmesh->ComputeContainers();
+		l_submesh->ComputeContainers();
 
 		if ( l_iNbProperties < 6 )
 		{
-			l_mesh->ComputeNormals( false );
+			l_submesh->ComputeNormals( false );
+		}
+		else
+		{
+			l_submesh->ComputeTangentsFromNormals();
 		}
 
 		l_isFile.close();

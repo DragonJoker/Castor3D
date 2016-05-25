@@ -170,7 +170,7 @@ void Md3Importer::DoReadMD3Data( Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_p
 
 			if ( p_pPass && !l_strValue.empty() )
 			{
-				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, TextureChannel::Diffuse );
 
 				if ( l_pTexture )
 				{
@@ -307,7 +307,7 @@ bool Md3Importer::DoLoadSkin( Scene & p_scene, String const & p_strSkin )
 
 				if ( !l_strImage.empty() )
 				{
-					LoadTexture( l_strImage, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+					LoadTexture( l_strImage, *l_pass, TextureChannel::Diffuse );
 				}
 
 				m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
@@ -353,7 +353,7 @@ bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, String const 
 
 			if ( !l_strLine.empty() )
 			{
-				LoadTexture( l_strLine, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+				LoadTexture( l_strLine, *l_pass, TextureChannel::Diffuse );
 			}
 
 			p_pMesh->GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );

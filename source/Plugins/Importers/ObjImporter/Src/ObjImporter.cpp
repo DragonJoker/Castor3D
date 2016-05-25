@@ -91,7 +91,7 @@ namespace Obj
 		return l_return;
 	}
 
-	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, eTEXTURE_CHANNEL p_channel )
+	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, TextureChannel p_channel )
 	{
 		Point3f l_offset( 0, 0, 0 );
 		Point3f l_scale( 1, 1, 1 );
@@ -427,8 +427,17 @@ namespace Obj
 							UvwArray m_arrayUvw;
 							FaceArray m_arrayFaces;
 						};
-						stTHREAD_CONTEXT l_context = { l_strName, p_pMesh->CreateSubmesh(), p_pGroup->m_pMaterial, p_pGroup->m_arraySubVtx, p_pGroup->m_arraySubNml, p_pGroup->m_arraySubTex, p_pGroup->m_arrayFaces };
-						m_pThread = std::make_shared< std::thread >( [&]( stTHREAD_CONTEXT p_context )
+						stTHREAD_CONTEXT l_context
+						{
+							l_strName,
+							p_pMesh->CreateSubmesh(),
+							p_pGroup->m_pMaterial,
+							std::move( p_pGroup->m_arraySubVtx ),
+							std::move( p_pGroup->m_arraySubNml ),
+							std::move( p_pGroup->m_arraySubTex ),
+							std::move( p_pGroup->m_arrayFaces )
+						};
+						m_pThread = std::make_shared< std::thread >( [this]( stTHREAD_CONTEXT p_context )
 						{
 							Point3f l_ptOffset;
 							Point3f l_ptScale;
@@ -446,33 +455,38 @@ namespace Obj
 							Logger::LogDebug( cuT( "-	Material :    " ) + p_context.m_pMaterial->GetName() );
 							// Valid because for each pass of each material we have an entry in those 3 maps
 							p_context.m_pSubmesh->SetDefaultMaterial( p_context.m_pMaterial );
-							l_ptOffset	= m_mapOffsets[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptScale	= m_mapScales[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptTurb	= m_mapTurbulences[p_context.m_pMaterial->GetPass( 0 )];
-							Castor3D::stVERTEX_GROUP l_submesh = { uint32_t( p_context.m_arrayVtx.size() ), p_context.m_arrayVtx[0].m_val, NULL, NULL, NULL, NULL };
+							l_ptOffset = m_mapOffsets[p_context.m_pMaterial->GetPass( 0 )];
+							l_ptScale = m_mapScales[p_context.m_pMaterial->GetPass( 0 )];
+							l_ptTurb = m_mapTurbulences[p_context.m_pMaterial->GetPass( 0 )];
+							std::vector< Castor3D::stINTERLEAVED_VERTEX > l_submesh{ p_context.m_arrayVtx.size() };
 
-							if ( p_context.m_arrayUvw.size() == p_context.m_arrayVtx.size() )
+							for ( auto & l_vertex : l_submesh )
 							{
-								// if texture coordinates are available, we apply modifiers
-								for ( UvwArray::iterator l_it = p_context.m_arrayUvw.begin() ; l_it != p_context.m_arrayUvw.end() ; ++l_it )
+								std::memcpy( l_vertex.m_pos, p_context.m_arrayVtx[0].m_val, sizeof( l_vertex.m_pos ) );
+
+								if ( p_context.m_arrayUvw.size() == p_context.m_arrayVtx.size() )
 								{
-									l_it->m_val[0] = ( l_it->m_val[0] + l_ptOffset[0] ) * l_ptScale[0];
-									l_it->m_val[1] = ( l_it->m_val[1] + l_ptOffset[1] ) * l_ptScale[1];
-									l_it->m_val[2] = ( l_it->m_val[2] + l_ptOffset[2] ) * l_ptScale[2];
+									// if texture coordinates are available, we apply modifiers
+									for ( UvwArray::iterator l_it = p_context.m_arrayUvw.begin() ; l_it != p_context.m_arrayUvw.end() ; ++l_it )
+									{
+										l_it->m_val[0] = ( l_it->m_val[0] + l_ptOffset[0] ) * l_ptScale[0];
+										l_it->m_val[1] = ( l_it->m_val[1] + l_ptOffset[1] ) * l_ptScale[1];
+										l_it->m_val[2] = ( l_it->m_val[2] + l_ptOffset[2] ) * l_ptScale[2];
+									}
+
+									std::memcpy( l_vertex.m_tex, p_context.m_arrayUvw[0].m_val, sizeof( l_vertex.m_tex ) );
 								}
 
-								l_submesh.m_pTex = p_context.m_arrayUvw[0].m_val;
-							}
-
-							if ( p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
-							{
-								l_submesh.m_pNml = p_context.m_arrayNml[0].m_val;
+								if ( p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
+								{
+									std::memcpy( l_vertex.m_nml, p_context.m_arrayNml[0].m_val, sizeof( l_vertex.m_nml ) );
+								}
 							}
 
 							p_context.m_pSubmesh->AddPoints( l_submesh );
-							p_context.m_pSubmesh->AddFaceGroup( &p_context.m_arrayFaces[0], uint32_t( p_context.m_arrayFaces.size() ) );
+							p_context.m_pSubmesh->AddFaceGroup( p_context.m_arrayFaces );
 
-							if ( l_submesh.m_pNml )
+							if ( !p_context.m_arrayNml.empty() && p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
 							{
 								p_context.m_pSubmesh->ComputeTangentsFromNormals();
 							}
@@ -734,17 +748,17 @@ namespace Obj
 					else if ( l_strSection == cuT( "map_kd" ) )
 					{
 						// Diffuse map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Diffuse );
 					}
 					else if ( l_strSection == cuT( "bump" ) || l_strSection == cuT( "map_bump" ) )
 					{
 						// Normal map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_NORMAL );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Normal );
 					}
 					else if ( l_strSection == cuT( "map_d" ) || l_strSection == cuT( "map_opacity" ) )
 					{
 						// Opacity map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_OPACITY );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Opacity );
 					}
 					else if ( l_strSection == cuT( "refl" ) )
 					{
@@ -753,17 +767,17 @@ namespace Obj
 					else if ( l_strSection == cuT( "map_ks" ) )
 					{
 						// Specular map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_SPECULAR );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Specular );
 					}
 					else if ( l_strSection == cuT( "map_ka" ) )
 					{
 						// Ambient map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_AMBIENT );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Ambient );
 					}
 					else if ( l_strSection == cuT( "map_ns" ) )
 					{
 						// Gloss/Shininess map
-						DoAddTexture( l_strValue, l_pPass, eTEXTURE_CHANNEL_GLOSS );
+						DoAddTexture( l_strValue, l_pPass, TextureChannel::Gloss );
 					}
 				}
 			}

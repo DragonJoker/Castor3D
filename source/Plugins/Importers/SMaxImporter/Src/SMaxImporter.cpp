@@ -229,7 +229,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 	Colour l_crAmbient( Colour::from_rgb( 0 ) );
 	Colour l_crSpecular( Colour::from_rgb( 0 ) );
 	String l_strMatName;
-	String l_strTextures[eTEXTURE_CHANNEL_ALL];
+	std::map< TextureChannel, String > l_strTextures;
 	bool l_bContinue = true;
 	bool l_bTwoSided = false;
 
@@ -270,29 +270,29 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 				break;
 
 			case eSMAX_CHUNK_MAT_TEXMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
-				Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Diffuse] );
+				Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[TextureChannel::Diffuse] );
 				break;
 
 			case eSMAX_CHUNK_MAT_SPECMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
-				Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Specular] );
+				Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[TextureChannel::Specular] );
 				break;
 
 			case eSMAX_CHUNK_MAT_OPACMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
-				Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Opacity] );
+				Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[TextureChannel::Opacity] );
 				break;
 
 			case eSMAX_CHUNK_MAT_BUMPMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
-				Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Normal] );
+				Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[TextureChannel::Normal] );
 				break;
 
 			case eSMAX_CHUNK_MAT_MAPNAME:
-				l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[TextureChannel::Diffuse] );
 				l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
-				Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[TextureChannel::Diffuse] );
 				break;
 
 			default:
@@ -327,13 +327,13 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 		l_pPass->SetTwoSided( l_bTwoSided );
 		String l_strTexture;
 
-		for ( int i = 0 ; i < eTEXTURE_CHANNEL_ALL ; i++ )
+		for ( auto l_it : l_strTextures )
 		{
-			l_strTexture = l_strTextures[i];
+			l_strTexture = l_it.second;
 
 			if ( !l_strTexture.empty() )
 			{
-				LoadTexture( l_strTexture, *l_pPass, eTEXTURE_CHANNEL( i ) );
+				LoadTexture( l_strTexture, *l_pPass, l_it.first );
 			}
 		}
 

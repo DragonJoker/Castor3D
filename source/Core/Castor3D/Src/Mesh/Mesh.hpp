@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Animation/Animable.hpp"
 #include "Binary/BinaryParser.hpp"
+#include "Binary/BinaryWriter.hpp"
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>
@@ -54,6 +55,43 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
+		class BinaryWriter
+			: public Castor3D::BinaryWriter< Mesh >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\param[in]	p_path	The current folder path
+			 *\~french
+			 *\brief		Constructeur
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 */
+			C3D_API BinaryWriter( Castor::Path const & p_path );
+
+		private:
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data
+			 *\param[in]	p_obj	The object to write
+			 *\param[out]	p_chunk	The chunk to fill
+			 *\return		\p false if any error occured
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
+			 *\param[in]	p_obj	L'objet à écrire
+			 *\param[out]	p_chunk	Le chunk à remplir
+			 *\return		\p false si une erreur quelconque est arrivée
+			 */
+			C3D_API bool DoWrite( Mesh const & p_obj, BinaryChunk & p_chunk )const override;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		MovableObject loader
+		\~english
+		\brief		Loader de MovableObject
+		*/
 		class BinaryParser
 			: public Castor3D::BinaryParser< Mesh >
 		{
@@ -67,19 +105,8 @@ namespace Castor3D
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
 			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Mesh const & p_obj, BinaryChunk & p_chunk )const;
+
+		private:
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -92,10 +119,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Parse( Mesh & p_obj, BinaryChunk & p_chunk )const;
-
-			using Castor3D::BinaryParser< Mesh >::Fill;
-			using Castor3D::BinaryParser< Mesh >::Parse;
+			C3D_API bool DoParse( Mesh & p_obj, BinaryChunk & p_chunk )const override;
 		};
 
 	public:

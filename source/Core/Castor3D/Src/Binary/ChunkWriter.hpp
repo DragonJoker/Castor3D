@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_CHUNK_FILLER_H___
-#define ___C3D_CHUNK_FILLER_H___
+#ifndef ___C3D_CHUNK_WRITER_H___
+#define ___C3D_CHUNK_WRITER_H___
 
 #include "BinaryChunk.hpp"
 #include "ChunkData.hpp"
@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Remplisseur de chunk
 	*/
-	class ChunkFillerBase
+	class ChunkWriterBase
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Fill( uint8_t const * p_begin, uint8_t const * p_end, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
+		static inline bool Write( uint8_t const * p_begin, uint8_t const * p_end, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -79,8 +79,8 @@ namespace Castor3D
 	\brief		Remplisseur de chunk
 	*/
 	template< typename T >
-	class ChunkFiller
-		: public ChunkFillerBase
+	class ChunkWriter
+		: public ChunkWriterBase
 	{
 	public:
 		/**
@@ -99,9 +99,9 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Fill( T const * p_begin, T const * p_end, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
+		static inline bool Write( T const * p_begin, T const * p_end, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
-			return ChunkFillerBase::Fill( reinterpret_cast< uint8_t const * >( p_begin ), reinterpret_cast< uint8_t const * >( p_end ), p_type, p_chunk );
+			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( p_begin ), reinterpret_cast< uint8_t const * >( p_end ), p_type, p_chunk );
 		}
 		/**
 		 *\~english
@@ -117,11 +117,11 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Fill( T const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
+		static inline bool Write( T const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
 			auto l_begin = ChunkData< T >::GetBuffer( p_value );
-			auto l_end = l_begin + ChunkData< T >::data_size;
-			return ChunkFillerBase::Fill( l_begin, l_end, p_type, p_chunk );
+			auto l_end = l_begin + ChunkData< T >::GetDataSize( p_value );
+			return ChunkWriterBase::Write( l_begin, l_end, p_type, p_chunk );
 		}
 	};
 	/*!
@@ -134,8 +134,8 @@ namespace Castor3D
 	\brief		Spécialisation de ChunkFiller pour Castor::String.
 	*/
 	template<>
-	class ChunkFiller< Castor::String >
-		: public ChunkFillerBase
+	class ChunkWriter< Castor::String >
+		: public ChunkWriterBase
 	{
 	public:
 		/**
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Fill( Castor::String const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
+		static inline bool Write( Castor::String const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -160,7 +160,7 @@ namespace Castor3D
 			{
 				auto l_value = Castor::string::string_cast< char >( p_value );
 				auto l_buffer = reinterpret_cast< uint8_t const * >( l_value.data() );
-				ChunkFillerBase::Fill( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
+				ChunkWriterBase::Write( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{
@@ -180,8 +180,8 @@ namespace Castor3D
 	\brief		Spécialisation de ChunkFiller pour Castor::Path.
 	*/
 	template<>
-	class ChunkFiller< Castor::Path >
-		: public ChunkFillerBase
+	class ChunkWriter< Castor::Path >
+		: public ChunkWriterBase
 	{
 	public:
 		/**
@@ -198,7 +198,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Fill( Castor::Path const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
+		static inline bool Write( Castor::Path const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -206,7 +206,7 @@ namespace Castor3D
 			{
 				auto l_value = Castor::string::string_cast< char >( p_value );
 				auto l_buffer = reinterpret_cast< uint8_t const * >( l_value.data() );
-				ChunkFillerBase::Fill( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
+				ChunkWriterBase::Write( l_buffer, l_buffer + l_value.size(), p_type, p_chunk );
 			}
 			catch ( ... )
 			{

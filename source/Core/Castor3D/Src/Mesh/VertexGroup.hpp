@@ -26,34 +26,31 @@ namespace Castor3D
 	\author 	Sylvain DOREMUS
 	\date 		23/07/2012
 	\~english
-	\brief		Holds the all components of a vertex array
+	\brief		Holds the all components of a vertex.
 	\~french
-	\brief		Contient toutes les composantes d'un tableau de sommets
+	\brief		Contient toutes les composantes d'un sommet.
 	*/
 	template< typename T >
-	struct stVERTEX_GROUPT
+	struct stINTERLEAVED_VERTEXT
 	{
-		//!\~english	The vertices count.
-		//!\~french		Le nombre de sommets.
-		uint32_t m_uiCount;
-		//!\~english	The vertices coordinates.
-		//!\~french		Les coordonnées des sommets.
-		T * m_pVtx;
-		//!\~english	The vertices normals.
-		//!\~french		Les normales des sommets.
-		T * m_pNml;
-		//!\~english	The vertices tangents.
-		//!\~french		Les tangentes des sommets.
-		T * m_pTan;
-		//!\~english	The vertices bitangents.
-		//!\~french		Les bitangentes des sommets.
-		T * m_pBin;
-		//!\~english	The vertices texture coordinates.
-		//!\~french		Les coordonnées de texture des sommets.
-		T * m_pTex;
+		//!\~english	The vertex coordinates.
+		//!\~french		La position du sommet.
+		T m_pos[3];
+		//!\~english	The vertex normal.
+		//!\~french		La normale du sommet.
+		T m_nml[3];
+		//!\~english	The vertex tangent.
+		//!\~french		La tangente du sommet.
+		T m_tan[3];
+		//!\~english	The vertex bitangent.
+		//!\~french		La bitangente du sommet.
+		T m_bin[3];
+		//!\~english	The vertex texture coordinates.
+		//!\~french		La coordonnées de texture du sommet.
+		T m_tex[3];
 	};
 
-	using stVERTEX_GROUP = stVERTEX_GROUPT< real >;
+	using stINTERLEAVED_VERTEX = stINTERLEAVED_VERTEXT< real >;
 }
 
 #endif

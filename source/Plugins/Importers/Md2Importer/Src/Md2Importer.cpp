@@ -135,7 +135,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 
 			if ( p_pPass && !l_strValue.empty() )
 			{
-				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, TextureChannel::Diffuse );
 
 				if ( l_pTexture )
 				{

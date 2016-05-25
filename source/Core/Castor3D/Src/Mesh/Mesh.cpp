@@ -13,29 +13,36 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Mesh::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Mesh >{ p_path }
+	Mesh::BinaryWriter::BinaryWriter( Path const & p_path )
+		: Castor3D::BinaryWriter< Mesh >{ p_path }
 	{
 	}
 
-	bool Mesh::BinaryParser::Fill( Mesh const & p_obj, BinaryChunk & p_chunk )const
+	bool Mesh::BinaryWriter::DoWrite( Mesh const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
 		}
 
 		for ( auto && l_submesh : p_obj )
 		{
-			Submesh::BinaryParser( m_path ).Fill( *l_submesh, p_chunk );
+			Submesh::BinaryWriter( m_path ).Write( *l_submesh, p_chunk );
 		}
 
 		return l_return;
 	}
 
-	bool Mesh::BinaryParser::Parse( Mesh & p_obj, BinaryChunk & p_chunk )const
+	//*************************************************************************************************
+
+	Mesh::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Mesh >{ p_path }
+	{
+	}
+
+	bool Mesh::BinaryParser::DoParse( Mesh & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		SubmeshSPtr l_submesh;

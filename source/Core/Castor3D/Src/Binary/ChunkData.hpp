@@ -42,9 +42,6 @@ namespace Castor3D
 	struct ChunkData
 	{
 		using data_type = T;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = sizeof( T );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -55,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon (&p_value pour les types basiques).
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( &p_value );
 		}
@@ -69,9 +66,135 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon (&p_value pour les types basiques).
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( &p_value );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return sizeof( p_value );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		23/05/2016
+	\~english
+	\brief		Chunk filler helper structure.
+	\~french
+	\brief		Structure d4'aide pour les remplisseurs de chunk.
+	*/
+	template< typename T >
+	struct ChunkData< std::vector< T > >
+	{
+		using data_type = std::vector< T >;
+		/**
+		 *\~english
+		 *\brief		Retrieves the beginning of the buffer for given value.
+		 *\param[in]	p_value	The value.
+		 *\return		The buffer (&p_value for basic types).
+		 *\~french
+		 *\brief		Récupère le début du tampon représentant la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		Le tampon (&p_value pour les types basiques).
+		 */
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
+		{
+			return reinterpret_cast< uint8_t const * >( p_value.data() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the beginning of the buffer for given value.
+		 *\param[in]	p_value	The value.
+		 *\return		The buffer (&p_value for basic types).
+		 *\~french
+		 *\brief		Récupère le début du tampon représentant la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		Le tampon (&p_value pour les types basiques).
+		 */
+		static inline uint8_t * GetBuffer( data_type & p_value )
+		{
+			return reinterpret_cast< uint8_t * >( p_value.data() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return p_value.size() * sizeof( T );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		23/05/2016
+	\~english
+	\brief		Chunk filler helper structure.
+	\~french
+	\brief		Structure d4'aide pour les remplisseurs de chunk.
+	*/
+	template< typename T, size_t Count >
+	struct ChunkData< std::array< T, Count > >
+	{
+		using data_type = std::array< T, Count >;
+		/**
+		 *\~english
+		 *\brief		Retrieves the beginning of the buffer for given value.
+		 *\param[in]	p_value	The value.
+		 *\return		The buffer (&p_value for basic types).
+		 *\~french
+		 *\brief		Récupère le début du tampon représentant la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		Le tampon (&p_value pour les types basiques).
+		 */
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
+		{
+			return reinterpret_cast< uint8_t const * >( p_value.data() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the beginning of the buffer for given value.
+		 *\param[in]	p_value	The value.
+		 *\return		The buffer (&p_value for basic types).
+		 *\~french
+		 *\brief		Récupère le début du tampon représentant la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		Le tampon (&p_value pour les types basiques).
+		 */
+		static inline uint8_t * GetBuffer( data_type & p_value )
+		{
+			return reinterpret_cast< uint8_t * >( p_value.data() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Count * sizeof( T );
 		}
 	};
 	/*!
@@ -89,9 +212,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Point< T, Count > >
 	{
 		using data_type = Castor::Point< T, Count >;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = Count * sizeof( T );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -102,7 +222,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -116,9 +236,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Count * sizeof( T );
 		}
 	};
 	/*!
@@ -136,9 +270,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Coords< T, Count > >
 	{
 		using data_type = Castor::Coords< T, Count >;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = Count * sizeof( T );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -149,7 +280,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -163,9 +294,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Count * sizeof( T );
 		}
 	};
 	/*!
@@ -183,9 +328,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Matrix< T, Columns, Rows > >
 	{
 		using data_type = Castor::Matrix< T, Columns, Rows >;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = Columns * Rows * sizeof( T );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -196,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -210,9 +352,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Columns * Rows * sizeof( T );
 		}
 	};
 	/*!
@@ -230,9 +386,6 @@ namespace Castor3D
 	struct ChunkData< Castor::SquareMatrix< T, Count > >
 	{
 		using data_type = Castor::SquareMatrix< T, Count >;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = Count * Count * sizeof( T );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -243,7 +396,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -257,9 +410,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Count * Count * sizeof( T );
 		}
 	};
 	/*!
@@ -277,9 +444,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Colour >
 	{
 		using data_type = Castor::Colour;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = Castor::Colour::eCOMPONENT_COUNT * sizeof( float );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -290,7 +454,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -304,9 +468,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return Castor::Colour::eCOMPONENT_COUNT * sizeof( float );
 		}
 	};
 	/*!
@@ -324,9 +502,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Size >
 	{
 		using data_type = Castor::Size;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = 2 * sizeof( uint32_t );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -337,7 +512,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -351,9 +526,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return 2 * sizeof( uint32_t );
 		}
 	};
 	/*!
@@ -371,9 +560,6 @@ namespace Castor3D
 	struct ChunkData< Castor::Position >
 	{
 		using data_type = Castor::Position;
-		//!\~english	The binary size for data_type.
-		//!\~french		La taille en octets pour data_type.
-		static size_t const data_size = 2 * sizeof( int32_t );
 		/**
 		 *\~english
 		 *\brief		Retrieves the beginning of the buffer for given value.
@@ -384,7 +570,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -398,9 +584,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return 2 * sizeof( int32_t );
 		}
 	};
 	/*!
@@ -431,7 +631,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t const * GetBuffer( data_type const & p_value )
+		static inline uint8_t const * GetBuffer( data_type const & p_value )
 		{
 			return reinterpret_cast< uint8_t const * >( p_value.const_ptr() );
 		}
@@ -445,9 +645,23 @@ namespace Castor3D
 		 *\param[in]	p_value	La valeur.
 		 *\return		Le tampon.
 		 */
-		static uint8_t * GetBuffer( data_type & p_value )
+		static inline uint8_t * GetBuffer( data_type & p_value )
 		{
 			return reinterpret_cast< uint8_t * >( p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the value binary size.
+		 *\param[in]	p_value	The value.
+		 *\return		The size (sizeof( p_value ) for basic types).
+		 *\~french
+		 *\brief		Récupère la taille en octets de la valeur.
+		 *\param[in]	p_value	La valeur.
+		 *\return		La taille (sizeof( p_value ) pour les types basiques).
+		 */
+		static inline size_t GetDataSize( data_type const & p_value )
+		{
+			return 4 * sizeof( T );
 		}
 	};
 }

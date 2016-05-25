@@ -745,19 +745,16 @@ namespace C3dFbx
 		std::vector< real > l_tan( l_pointsCount * 3 );
 		std::vector< real > l_bit( l_pointsCount * 3 );
 		std::vector< real > l_tex( l_pointsCount * 3 );
-		real * l_vtxBuffer = l_vtx.data();
-		real * l_nmlBuffer = nullptr;
-		real * l_tanBuffer = nullptr;
-		real * l_bitBuffer = nullptr;
-		real * l_texBuffer = nullptr;
+		std::vector< stINTERLEAVED_VERTEX > l_vertices{ l_pointsCount };
+		uint32_t l_index{ 0u };
 
 		// Positions
-		for ( auto l_point = 0u; l_point < l_pointsCount; ++l_point )
+		for ( auto & l_vertex : l_vertices )
 		{
-			FbxVector4 l_fbxVertex = p_mesh->GetControlPointAt( l_point );
-			*l_vtxBuffer++ = real( l_fbxVertex[0] );
-			*l_vtxBuffer++ = real( l_fbxVertex[1] );
-			*l_vtxBuffer++ = real( l_fbxVertex[2] );
+			FbxVector4 l_fbxVertex = p_mesh->GetControlPointAt( l_index++ );
+			l_vertex.m_pos[0] = real( l_fbxVertex[0] );
+			l_vertex.m_pos[1] = real( l_fbxVertex[1] );
+			l_vertex.m_pos[2] = real( l_fbxVertex[2] );
 		}
 
 		// Normals
@@ -765,7 +762,14 @@ namespace C3dFbx
 
 		if ( DoRetrieveMeshValues( cuT( "Normals" ), p_mesh, l_normals, l_nml ) )
 		{
-			l_nmlBuffer = l_nml.data();
+			l_index = 0u;
+			real * l_buffer{ l_nml.data() };
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				std::memcpy( l_vertex.m_nml, l_buffer, sizeof( l_vertex.m_nml ) );
+				l_buffer += 3;
+			}
 		}
 
 		// Texture UVs
@@ -773,7 +777,14 @@ namespace C3dFbx
 
 		if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_mesh, l_uvs, l_tex ) )
 		{
-			l_texBuffer = l_tex.data();
+			l_index = 0u;
+			real * l_buffer{ l_tex.data() };
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				std::memcpy( l_vertex.m_tex, l_buffer, sizeof( l_vertex.m_tex ) );
+				l_buffer += 3;
+			}
 		}
 
 		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
@@ -785,7 +796,14 @@ namespace C3dFbx
 
 			if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_mesh, l_tangents, l_tan ) )
 			{
-				l_tanBuffer = l_tan.data();
+				l_index = 0u;
+				real * l_buffer{ l_tan.data() };
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					std::memcpy( l_vertex.m_tan, l_buffer, sizeof( l_vertex.m_tan ) );
+					l_buffer += 3;
+				}
 			}
 
 			// Bitangents
@@ -793,7 +811,14 @@ namespace C3dFbx
 
 			if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_mesh, l_bitangents, l_bit ) )
 			{
-				l_bitBuffer = l_bit.data();
+				l_index = 0u;
+				real * l_buffer{ l_bit.data() };
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					std::memcpy( l_vertex.m_bin, l_buffer, sizeof( l_vertex.m_bin ) );
+					l_buffer += 3;
+				}
 			}
 		}
 
@@ -807,8 +832,8 @@ namespace C3dFbx
 			l_faces.push_back( DoGetFace( p_mesh, l_poly, 0, 1, 2 ) );
 		}
 
-		l_submesh->AddPoints( { l_pointsCount, l_vtx.data(), l_nmlBuffer, l_tanBuffer, l_bitBuffer, l_texBuffer } );
-		l_submesh->AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+		l_submesh->AddPoints( l_vertices );
+		l_submesh->AddFaceGroup( l_faces );
 
 		return l_submesh;
 	}

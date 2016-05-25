@@ -257,7 +257,7 @@ namespace GuiCommon
 				auto l_mesh = p_scene.GetMeshView().Find( l_name );
 				auto l_path = l_folder / l_name + cuT( ".cmsh" );
 				BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-				l_result &= Mesh::BinaryParser{ l_path }.Fill( *l_mesh, l_file );
+				l_result &= Mesh::BinaryWriter{ l_path }.Write( *l_mesh, l_file );
 			}
 		}
 

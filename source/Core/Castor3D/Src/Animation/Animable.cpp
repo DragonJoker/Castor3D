@@ -8,19 +8,19 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Animable::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Animable >( p_path )
+	Animable::BinaryWriter::BinaryWriter( Path const & p_path )
+		: Castor3D::BinaryWriter< Animable >( p_path )
 	{
 	}
 
-	bool Animable::BinaryParser::Fill( Animable const & p_obj, BinaryChunk & p_chunk )const
+	bool Animable::BinaryWriter::DoWrite( Animable const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_ANIMABLE );
 
 		for ( auto && l_it : p_obj.m_animations )
 		{
-			l_return &= Animation::BinaryParser{ m_path }.Fill( *l_it.second, l_chunk );
+			l_return &= Animation::BinaryWriter{ m_path }.Write( *l_it.second, l_chunk );
 		}
 
 		if ( l_return )
@@ -32,7 +32,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool Animable::BinaryParser::Parse( Animable & p_obj, BinaryChunk & p_chunk )const
+	//*************************************************************************************************
+
+	Animable::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Animable >( p_path )
+	{
+	}
+
+	bool Animable::BinaryParser::DoParse( Animable & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		AnimationSPtr l_animation;

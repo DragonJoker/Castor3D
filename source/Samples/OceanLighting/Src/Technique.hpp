@@ -304,46 +304,54 @@ namespace OceanLighting
 		}
 
 	protected:
-		/** \copydoc Castor3D::RenderTechnique::DoCreate
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
 		virtual bool DoCreate();
-
-		/** \copydoc Castor3D::RenderTechnique::DoDestroy
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
 		 */
 		virtual void DoDestroy();
-
-		/** \copydoc Castor3D::RenderTechnique::DoInitialise
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		virtual bool DoInitialise( uint32_t & p_index );
-
-		/** \copydoc Castor3D::RenderTechnique::DoCleanup
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoCleanup
 		 */
 		virtual void DoCleanup();
-
-		/** \copydoc Castor3D::RenderTechnique::DoBeginRender
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
 		virtual bool DoBeginRender( Castor3D::Scene & p_scene );
-
-		/** \copydoc Castor3D::RenderTechnique::DoRender
-		*/
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoRender
+		 */
 		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
-
-		/** \copydoc Castor3D::RenderTechnique::DoEndRender
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
 		virtual void DoEndRender( Castor3D::Scene & p_scene );
-
-		/** \copydoc Castor3D::RenderTechnique::DoGetVertexShaderSource
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetVertexShaderSource
 		 */
 		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 		{
 			return Castor::String();
 		}
-
-		/** \copydoc Castor3D::RenderTechnique::DoGetPixelShaderSource
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
 		 */
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const
 		{
 			return Castor::String();
+		}
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
+		 */
+		virtual bool DoWriteInto( Castor::TextFile & p_file )
+		{
+			return true;
 		}
 
 	private:

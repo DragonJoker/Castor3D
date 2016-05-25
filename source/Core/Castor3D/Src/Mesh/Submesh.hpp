@@ -56,6 +56,43 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
+		class BinaryWriter
+			: public Castor3D::BinaryWriter< Submesh >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\param[in]	p_path	The current folder path
+			 *\~french
+			 *\brief		Constructeur
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 */
+			C3D_API BinaryWriter( Castor::Path const & p_path );
+
+		private:
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data
+			 *\param[in]	p_obj	The object to write
+			 *\param[out]	p_chunk	The chunk to fill
+			 *\return		\p false if any error occured
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
+			 *\param[in]	p_obj	L'objet à écrire
+			 *\param[out]	p_chunk	Le chunk à remplir
+			 *\return		\p false si une erreur quelconque est arrivée
+			 */
+			C3D_API bool DoWrite( Submesh const & p_obj, BinaryChunk & p_chunk )const override;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		MovableObject loader
+		\~english
+		\brief		Loader de MovableObject
+		*/
 		class BinaryParser
 			: public Castor3D::BinaryParser< Submesh >
 		{
@@ -69,19 +106,8 @@ namespace Castor3D
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
 			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const;
+
+		private:
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -94,7 +120,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Parse( Submesh & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool DoParse( Submesh & p_obj, BinaryChunk & p_chunk )const override;
 		};
 
 	private:
@@ -208,13 +234,26 @@ namespace Castor3D
 		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
+		 *\brief		Creates and adds a vertex to my list.
+		 *\param[in]	p_v	The vertex.
+		 *\return		The created vertex.
 		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
+		 *\brief		Crée un Vertex et l'ajoute à la liste.
+		 *\param[in]	p_v	Le sommet.
+		 *\return		Le vertex créé.
 		 */
-		C3D_API void AddPoints( stVERTEX_GROUP const & p_vertices );
+		C3D_API BufferElementGroupSPtr AddPoint( stINTERLEAVED_VERTEX const & p_v );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list.
+		 *\param[in]	p_vertices	The vertices.
+		 *\param[in]	p_vertices	The vertices count.
+		 *\~french
+		 *\brief		Ajoute des points à la liste.
+		 *\param[in]	p_vertices	Les vertices.
+		 *\param[in]	p_vertices	Le nombre de vertices.
+		 */
+		C3D_API void AddPoints( stINTERLEAVED_VERTEX const * p_vertices, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Adds bone datas.
@@ -226,45 +265,6 @@ namespace Castor3D
 		 *\param[in]	p_boneDataEnd	La fin des données de bones.
 		 */
 		C3D_API void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd );
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\param[in]	p_count		The data count.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 *\param[in]	p_count		Les compte des données.
-		 */
-		inline void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneData, uint32_t p_count )
-		{
-			AddBoneDatas( p_boneData, p_boneData + p_count );
-		}
-		/**
-		*\~english
-		*\brief		Adds bone datas.
-		*\param[in]	p_boneData	The bone datas.
-		*\~french
-		*\brief		Ajoute des données de bones.
-		*\param[in]	p_boneData	Les données de bones.
-		*/
-		inline void AddBoneDatas( std::vector< stVERTEX_BONE_DATA > const & p_boneData )
-		{
-			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 */
-		template< uint32_t Count >
-		inline void AddBoneDatas( stVERTEX_BONE_DATA const( & p_boneData )[Count] )
-		{
-			AddBoneDatas( p_boneData, p_boneData + Count );
-		}
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
@@ -297,7 +297,7 @@ namespace Castor3D
 		 *\param[in]	p_faces	Les faces
 		 *\param[in]	p_count	Le nombre de faces
 		 */
-		C3D_API void AddFaceGroup( stFACE_INDICES * p_faces, uint32_t p_count );
+		C3D_API void AddFaceGroup( stFACE_INDICES const * p_faces, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
@@ -479,6 +479,95 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme.
 		 */
 		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list
+		 *\param[in]	p_vertices	The vertices
+		 *\~french
+		 *\brief		Ajoute des points à la liste
+		 *\param[in]	p_vertices	Les vertices
+		 */
+		inline void AddPoints( std::vector< stINTERLEAVED_VERTEX > const & p_vertices )
+		{
+			AddPoints( p_vertices.data(), uint32_t( p_vertices.size() ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list
+		 *\param[in]	p_vertices	The vertices
+		 *\~french
+		 *\brief		Ajoute des points à la liste
+		 *\param[in]	p_vertices	Les vertices
+		 */
+		template< uint32_t Count >
+		inline void AddPoints( std::array< stINTERLEAVED_VERTEX, Count > const & p_vertices )
+		{
+			AddPoints( p_vertices.data(), uint32_t( Count ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	p_count		The data count.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	p_count		Les compte des données.
+		 */
+		inline void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneData, uint32_t p_count )
+		{
+			AddBoneDatas( p_boneData, p_boneData + p_count );
+		}
+		/**
+		*\~english
+		*\brief		Adds bone datas.
+		*\param[in]	p_boneData	The bone datas.
+		*\~french
+		*\brief		Ajoute des données de bones.
+		*\param[in]	p_boneData	Les données de bones.
+		*/
+		inline void AddBoneDatas( std::vector< stVERTEX_BONE_DATA > const & p_boneData )
+		{
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 */
+		template< uint32_t Count >
+		inline void AddBoneDatas( stVERTEX_BONE_DATA const( & p_boneData )[Count] )
+		{
+			AddBoneDatas( p_boneData, p_boneData + Count );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_faces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	p_faces	Les faces
+		 */
+		inline void AddFaceGroup( std::vector< stFACE_INDICES > const & p_faces )
+		{
+			AddFaceGroup( p_faces.data(), uint32_t( p_faces.size() ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_faces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	p_faces	Les faces
+		 */
+		template< size_t Count >
+		inline void AddFaceGroup( std::array< stFACE_INDICES, Count > const & p_faces )
+		{
+			AddFaceGroup( p_faces.data(), uint32_t( Count ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton

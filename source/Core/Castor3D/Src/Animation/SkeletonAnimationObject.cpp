@@ -11,24 +11,24 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	SkeletonAnimationObject::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< SkeletonAnimationObject >( p_path )
+	SkeletonAnimationObject::BinaryWriter::BinaryWriter( Path const & p_path )
+		: Castor3D::BinaryWriter< SkeletonAnimationObject >( p_path )
 	{
 	}
 
-	bool SkeletonAnimationObject::BinaryParser::Fill( SkeletonAnimationObject const & p_obj, BinaryChunk & p_chunk )const
+	bool SkeletonAnimationObject::BinaryWriter::DoWrite( SkeletonAnimationObject const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_BONE );
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = AnimationObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = AnimationObject::BinaryWriter( m_path ).Write( p_obj, l_chunk );
 		}
 
 		if ( l_return )
@@ -40,7 +40,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool SkeletonAnimationObject::BinaryParser::Parse( SkeletonAnimationObject & p_obj, BinaryChunk & p_chunk )const
+	//*************************************************************************************************
+
+	SkeletonAnimationObject::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< SkeletonAnimationObject >( p_path )
+	{
+	}
+
+	bool SkeletonAnimationObject::BinaryParser::DoParse( SkeletonAnimationObject & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		String l_name;

@@ -54,7 +54,7 @@ namespace Obj
 		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
 		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
 		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_uiIndex );
-		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::eTEXTURE_CHANNEL p_channel );
+		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::TextureChannel p_channel );
 		void DoReadMaterials( Castor3D::Scene & p_scene, Castor::Path const & p_pathMatFile );
 
 	private:

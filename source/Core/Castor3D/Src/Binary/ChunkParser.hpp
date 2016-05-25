@@ -124,7 +124,7 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::Parse( ChunkData< T >::GetBuffer( p_value ), ChunkData< T >::data_size, p_chunk );
+			return ChunkParserBase::Parse( ChunkData< T >::GetBuffer( p_value ), uint32_t( ChunkData< T >::GetDataSize( p_value ) ), p_chunk );
 		}
 	};
 	/*!
