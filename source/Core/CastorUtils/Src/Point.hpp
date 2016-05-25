@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_POINT_H___
 #define ___CASTOR_POINT_H___
 
-#include "File.hpp"
+#include "TextLoader.hpp"
 #include "Aligned.hpp"
 
 #include <cmath>

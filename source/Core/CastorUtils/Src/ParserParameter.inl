@@ -62,7 +62,7 @@ namespace Castor
 					{
 						String l_params;
 
-						for ( size_t i = p_count; i < l_it->size(); ++i )
+						for ( size_t i = p_count + 1; i < l_it->size(); ++i )
 						{
 							if ( ( *l_it )[i].matched )
 							{

@@ -115,11 +115,13 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_animation	The parent animation.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_animation	L'animation parente.
 		 */
-		C3D_API SkeletonAnimationObject();
+		C3D_API SkeletonAnimationObject( Animation & p_animation );
 		/**
 		 *\~english
 		 *\brief		Destructor

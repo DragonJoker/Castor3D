@@ -40,7 +40,7 @@ namespace Castor3D
 		switch ( p_chunk.GetChunkType() )
 		{
 		case eCHUNK_TYPE_ANIMATION:
-			l_animation = std::make_shared< Animation >( cuEmptyString );
+			l_animation = std::make_shared< Animation >( p_obj );
 			l_return = Animation::BinaryParser{ m_path }.Parse( *l_animation, p_chunk );
 
 			if ( l_return )
@@ -71,7 +71,7 @@ namespace Castor3D
 
 		if ( l_it == m_animations.end() )
 		{
-			l_return = std::make_shared< Animation >( p_name );
+			l_return = std::make_shared< Animation >( *this, p_name );
 			m_animations.insert( { p_name, l_return } );
 		}
 		else

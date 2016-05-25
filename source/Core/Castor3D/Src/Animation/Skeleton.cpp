@@ -26,7 +26,11 @@ namespace Castor3D
 
 		for ( auto && l_bone : p_obj.m_bones )
 		{
-			l_return &= Bone::BinaryWriter{ m_path }.Write( *l_bone, l_chunk );
+			// Write only root bones, since bones write their children.
+			if ( !l_bone->GetParent() )
+			{
+				l_return &= Bone::BinaryWriter{ m_path }.Write( *l_bone, l_chunk );
+			}
 		}
 
 		if ( l_return )
@@ -111,14 +115,31 @@ namespace Castor3D
 		m_bones.push_back( p_bone );
 	}
 
+	BoneSPtr Skeleton::FindBone( Castor::String const & p_name )const
+	{
+		auto l_it = std::find_if( begin(), end(), [&p_name]( BoneSPtr p_bone )
+		{
+			return p_bone->GetName() == p_name;
+		} );
+
+		BoneSPtr l_bone;
+
+		if ( l_it != end() )
+		{
+			l_bone = *l_it;
+		}
+
+		return l_bone;
+	}
+
 	void Skeleton::SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent )
 	{
-		if ( std::find( m_bones.begin(), m_bones.end(), p_bone ) == m_bones.end() )
+		if ( std::find( begin(), end(), p_bone ) == end() )
 		{
 			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
 
-		if ( std::find( m_bones.begin(), m_bones.end(), p_parent ) == m_bones.end() )
+		if ( std::find( begin(), end(), p_parent ) == end() )
 		{
 			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Parent bone is not in the Skeleton's nodes" );
 		}

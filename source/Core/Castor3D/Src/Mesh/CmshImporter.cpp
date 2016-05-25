@@ -25,11 +25,23 @@ namespace Castor3D
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 		BinaryFile l_file( m_fileName, File::eOPEN_MODE_READ );
-		auto l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		MeshSPtr l_mesh;
 
-		if ( !Mesh::BinaryParser{ m_fileName }.Parse( *l_mesh, l_file ) )
+		if ( GetEngine()->GetMeshManager().Has( l_meshName ) )
 		{
-			GetEngine()->GetMeshManager().Remove( l_meshName );
+			l_mesh = GetEngine()->GetMeshManager().Find( l_meshName );
+		}
+		else
+		{
+			l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		}
+
+		if ( !l_mesh->GetSubmeshCount() )
+		{
+			if ( !Mesh::BinaryParser{ m_fileName }.Parse( *l_mesh, l_file ) )
+			{
+				GetEngine()->GetMeshManager().Remove( l_meshName );
+			}
 		}
 
 		return l_mesh;

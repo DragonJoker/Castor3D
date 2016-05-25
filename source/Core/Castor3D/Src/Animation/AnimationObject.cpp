@@ -116,7 +116,7 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_MOVING_BONE:
-			l_bone = std::make_shared< SkeletonAnimationBone >();
+			l_bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
 			l_return = SkeletonAnimationBone::BinaryParser( m_path ).Parse( *l_bone, p_chunk );
 
 			if ( l_return )
@@ -127,7 +127,7 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_MOVING_NODE:
-			l_node = std::make_shared< SkeletonAnimationNode >();
+			l_node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
 			l_return = SkeletonAnimationNode::BinaryParser( m_path ).Parse( *l_node, p_chunk );
 
 			if ( l_return )
@@ -138,7 +138,7 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_MOVING_OBJECT:
-			l_object = std::make_shared< SkeletonAnimationObject >();
+			l_object = std::make_shared< SkeletonAnimationObject >( *p_obj.GetOwner() );
 			l_return = SkeletonAnimationObject::BinaryParser( m_path ).Parse( *l_object, p_chunk );
 
 			if ( l_return )
@@ -154,16 +154,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObject::AnimationObject( eANIMATION_OBJECT_TYPE p_type )
-		: m_length( 0 )
-		, m_type( p_type )
-		, m_mode( eINTERPOLATOR_MODE_COUNT )
+	AnimationObject::AnimationObject( Animation & p_animation, eANIMATION_OBJECT_TYPE p_type )
+		: OwnedBy< Animation >{ p_animation }
+		, m_type{ p_type }
 	{
 		SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
-	}
-
-	AnimationObject::AnimationObject( AnimationObject const & p_rhs )
-	{
 	}
 
 	AnimationObject::~AnimationObject()

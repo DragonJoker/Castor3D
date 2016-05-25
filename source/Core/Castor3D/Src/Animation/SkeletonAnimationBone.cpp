@@ -1,6 +1,8 @@
 #include "SkeletonAnimationBone.hpp"
 
 #include "Animation.hpp"
+#include "Animable.hpp"
+#include "Skeleton.hpp"
 #include "Bone.hpp"
 
 using namespace Castor;
@@ -60,8 +62,22 @@ namespace Castor3D
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, p_chunk );
-					// TODO Find bone somewhere.
+					l_return = DoParseChunk( l_name, l_chunk );
+
+					if ( l_return )
+					{
+						auto l_bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( l_name );
+
+						if ( l_bone )
+						{
+							p_obj.SetBone( l_bone );
+						}
+						else
+						{
+							Logger::LogError( cuT( "Couldn't find bone " ) + l_name + cuT( " in skeleton" ) );
+						}
+					}
+
 					break;
 
 				default:
@@ -81,8 +97,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationBone::SkeletonAnimationBone()
-		: AnimationObject( eANIMATION_OBJECT_TYPE_BONE )
+	SkeletonAnimationBone::SkeletonAnimationBone( Animation & p_animation )
+		: AnimationObject{ p_animation, eANIMATION_OBJECT_TYPE_BONE }
 	{
 	}
 
@@ -107,7 +123,7 @@ namespace Castor3D
 
 	AnimationObjectSPtr SkeletonAnimationBone::DoClone( Animation & p_animation )
 	{
-		auto l_return = std::make_shared< SkeletonAnimationBone >();
+		auto l_return = std::make_shared< SkeletonAnimationBone >( p_animation );
 		l_return->m_bone = m_bone;
 		p_animation.AddObject( l_return, l_return );
 		return l_return;

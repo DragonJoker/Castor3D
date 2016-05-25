@@ -2,7 +2,7 @@ project( Castor3D )
 
 set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 configure_file(

@@ -32,10 +32,10 @@ namespace Castor3D
 			l_return &= Submesh::BinaryWriter{ m_path }.Write( *l_submesh, p_chunk );
 		}
 
-		if ( l_return && p_obj.m_skeleton )
-		{
-			l_return = Skeleton::BinaryWriter{ m_path }.Write( *p_obj.m_skeleton, p_chunk );
-		}
+		//if ( l_return && p_obj.m_skeleton )
+		//{
+		//	l_return = Skeleton::BinaryWriter{ m_path }.Write( *p_obj.m_skeleton, p_chunk );
+		//}
 
 		return l_return;
 	}
@@ -78,16 +78,16 @@ namespace Castor3D
 					l_return = Submesh::BinaryParser( m_path ).Parse( *l_submesh, l_chunk );
 					break;
 
-				case eCHUNK_TYPE_SKELETON:
-					l_skeleton = std::make_shared< Skeleton >();
-					l_return = Skeleton::BinaryParser( m_path ).Parse( *l_skeleton, l_chunk );
+				//case eCHUNK_TYPE_SKELETON:
+				//	l_skeleton = std::make_shared< Skeleton >();
+				//	l_return = Skeleton::BinaryParser( m_path ).Parse( *l_skeleton, l_chunk );
 
-					if ( l_return )
-					{
-						p_obj.SetSkeleton( l_skeleton );
-					}
+				//	if ( l_return )
+				//	{
+				//		p_obj.SetSkeleton( l_skeleton );
+				//	}
 
-					break;
+				//	break;
 				}
 			}
 

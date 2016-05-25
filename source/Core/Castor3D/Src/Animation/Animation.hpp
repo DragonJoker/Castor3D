@@ -38,6 +38,7 @@ namespace Castor3D
 	*/
 	class Animation
 		: public Castor::Named
+		, public Castor::OwnedBy< Animable >
 	{
 	public:
 		/*!
@@ -121,12 +122,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name	The name of the animation.
+		 *\param[in]	p_animable	The parent animable object.
+		 *\param[in]	p_name		The name of the animation.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name	Le nom de l'animation.
+		 *\param[in]	p_animable	L'objet animable parent.
+		 *\param[in]	p_name		Le nom de l'animation.
 		 */
-		C3D_API Animation( Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Animation( Animable & p_animable, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -247,12 +250,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Clones this animation.
+		 *\param[in]	p_animable	The clone's owner.
 		 *\return		The clone.
 		 *\~french
 		 *\brief		Clone cette animation.
+		 *\param[in]	p_animable	Le responsable du clone.
 		 *\return		Le clone.
 		 */
-		C3D_API AnimationSPtr Clone()const;
+		C3D_API AnimationSPtr Clone( Animable & p_animable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the animation state
@@ -328,15 +333,15 @@ namespace Castor3D
 
 	protected:
 		//!\~english The current playing time	\~french L'index de temps courant
-		real m_currentTime;
+		real m_currentTime{ 0.0_r };
 		//!\~english The current state of the animation	\~french L'état actuel de l'animation
-		eANIMATION_STATE m_state;
+		eANIMATION_STATE m_state{ eANIMATION_STATE_STOPPED };
 		//!\~english The animation time scale	\~french Le multiplicateur de temps
-		real m_scale;
+		real m_scale{ 1.0_r };
 		//!\~english The animation length	\~french La durée de l'animation
-		real m_length;
+		real m_length{ 0.0_r };
 		//!\~english Tells whether or not the animation is looped	\~french Dit si oui ou non l'animation est bouclée
-		bool m_looped;
+		bool m_looped{ false };
 		//! The parent moving objects
 		AnimationObjectPtrArray m_arrayMoving;
 		//! The moving objects

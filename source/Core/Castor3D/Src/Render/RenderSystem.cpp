@@ -119,8 +119,6 @@ namespace Castor3D
 
 	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
 	{
-#define CHECK_FLAG( flag ) ( ( p_programFlags & ( flag ) ) == ( flag ) )
-
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
 		// Vertex inputs
@@ -129,11 +127,11 @@ namespace Castor3D
 		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ePROGRAM_FLAG_INSTANCIATION ) );
 
 		UBO_MATRIX( l_writer );
 
@@ -204,8 +202,6 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
-
-#undef CHECK_FLAG
 	}
 
 	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )

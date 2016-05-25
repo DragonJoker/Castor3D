@@ -118,12 +118,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_name	The node name.
+		 *\param[in]	p_animation	The parent animation.
+		 *\param[in]	p_name		The node name.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_name	Le nom du noeud.
+		 *\param[in]	p_animation	L'animation parente.
+		 *\param[in]	p_name		Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationNode( Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimationNode( Animation & p_animation, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor

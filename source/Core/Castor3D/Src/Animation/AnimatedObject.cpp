@@ -215,7 +215,7 @@ namespace Castor3D
 
 			if ( l_it == m_animations.end() )
 			{
-				m_animations.insert( std::make_pair( l_animation->GetName(), l_animation->Clone() ) );
+				m_animations.insert( { l_animation->GetName(), l_animation->Clone( *p_object ) } );
 			}
 		}
 	}

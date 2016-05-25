@@ -39,6 +39,7 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class AnimationObject
+		: public Castor::OwnedBy< Animation >
 	{
 	public:
 		/*!
@@ -122,19 +123,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type	The moving thing type.
+		 *\param[in]	p_animation	The parent animation.
+		 *\param[in]	p_type		The moving thing type.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type	Le type du machin mouvant.
+		 *\param[in]	p_animation	L'animation parente.
+		 *\param[in]	p_type		Le type du machin mouvant.
 		 */
-		C3D_API AnimationObject( eANIMATION_OBJECT_TYPE p_type );
+		C3D_API AnimationObject( Animation & p_animation, eANIMATION_OBJECT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API AnimationObject( AnimationObject const & p_rhs );
+		C3D_API AnimationObject( AnimationObject const & p_rhs ) = delete;
 
 	public:
 		/**
@@ -349,10 +352,12 @@ namespace Castor3D
 		C3D_API virtual AnimationObjectSPtr DoClone( Animation & p_animation ) = 0;
 
 	protected:
+		//!\~english The interpolation mode.	\~french Le mode d'interpolation.
+		eINTERPOLATOR_MODE m_mode{ eINTERPOLATOR_MODE_COUNT };
+		//!\~english The animation length.	\~french La durée de l'animation.
+		real m_length{ 0.0_r };
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.
 		eANIMATION_OBJECT_TYPE m_type;
-		//!\~english The interpolation mode.	\~french Le mode d'interpolation.
-		eINTERPOLATOR_MODE m_mode = eINTERPOLATOR_MODE_NONE;
 		//!\~english The point interpolator.	\~french L'interpolateur de points.
 		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;
 		//!\~english The quaternion interpolator.	\~french L'interpolateur de quaternions.
@@ -365,8 +370,6 @@ namespace Castor3D
 		KeyFrameArray::const_iterator m_curr;
 		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
-		//!\~english The animation length.	\~french La durée de l'animation.
-		real m_length;
 		//!\~english The objects depending on this one.	\~french Les objets dépendant de celui-ci.
 		AnimationObjectPtrArray m_children;
 		//!\~english The cumulative animation transformations.	\~french Les transformations cumulées de l'animation.

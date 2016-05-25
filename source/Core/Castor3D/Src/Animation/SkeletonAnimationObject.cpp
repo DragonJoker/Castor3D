@@ -19,7 +19,7 @@ namespace Castor3D
 	bool SkeletonAnimationObject::BinaryWriter::DoWrite( SkeletonAnimationObject const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_BONE );
+		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_OBJECT );
 
 		if ( l_return )
 		{
@@ -83,8 +83,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationObject::SkeletonAnimationObject()
-		: AnimationObject( eANIMATION_OBJECT_TYPE_OBJECT )
+	SkeletonAnimationObject::SkeletonAnimationObject( Animation & p_animation )
+		: AnimationObject{ p_animation, eANIMATION_OBJECT_TYPE_OBJECT }
 	{
 	}
 
@@ -104,7 +104,7 @@ namespace Castor3D
 
 	AnimationObjectSPtr SkeletonAnimationObject::DoClone( Animation & p_animation )
 	{
-		auto l_return = std::make_shared< SkeletonAnimationObject >();
+		auto l_return = std::make_shared< SkeletonAnimationObject >( p_animation );
 		l_return->m_object = m_object;
 		p_animation.AddObject( l_return, l_return );
 		return l_return;

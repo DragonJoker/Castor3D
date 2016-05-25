@@ -38,6 +38,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
+			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 

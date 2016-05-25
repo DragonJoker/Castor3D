@@ -20,6 +20,11 @@ namespace Castor3D
 
 		if ( l_return )
 		{
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+		}
+
+		if ( l_return )
+		{
 			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), eCHUNK_TYPE_BONE_OFFSET_MATRIX, l_chunk );
 		}
 

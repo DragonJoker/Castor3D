@@ -140,6 +140,15 @@ namespace Castor3D
 		C3D_API void AddBone( BoneSPtr p_bone );
 		/**
 		 *\~english
+		 *\brief		Finds a bone from a name.
+		 *\param[in]	p_name	The bone name.
+		 *\~french
+		 *\brief		Trouve un os à partir de son nom.
+		 *\param[in]	p_name	Le nom de l'os.
+		 */
+		C3D_API BoneSPtr FindBone( Castor::String const & p_name )const;
+		/**
+		 *\~english
 		 *\brief		Adds a bone to another bone's children
 		 *\param[in]	p_bone		The bone.
 		 *\param[in]	p_parent	The parent bone.

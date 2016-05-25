@@ -107,7 +107,7 @@ namespace Castor3D
 								ShaderProgramSPtr l_program;
 								uint32_t l_programFlags = l_submesh->GetProgramFlags();
 
-								if ( !l_primitive.second->GetAnimatedObject() )
+								if ( !l_primitive.second->GetAnimatedObject() || !l_submesh->GetParent()->GetSkeleton() )
 								{
 									l_programFlags &= ~ePROGRAM_FLAG_SKINNING;
 

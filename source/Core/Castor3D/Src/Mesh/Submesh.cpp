@@ -970,7 +970,7 @@ namespace Castor3D
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_layout );
 		m_indexBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
 
-		if ( ( GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+		if ( CheckFlag( GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) && m_parentMesh->GetSkeleton() )
 		{
 			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
 			{

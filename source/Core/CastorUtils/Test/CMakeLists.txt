@@ -34,7 +34,7 @@ include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 add_target(

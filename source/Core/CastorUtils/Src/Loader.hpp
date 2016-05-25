@@ -35,7 +35,7 @@ namespace Castor
 	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
 	*/
 	template< eFILE_TYPE FT >
-	struct LoaderFileTyper;;
+	struct LoaderFileTyper;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0

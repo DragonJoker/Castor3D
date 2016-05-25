@@ -15,12 +15,17 @@ namespace Castor3D
 
 	namespace
 	{
-		static String MovingName[] =
+		Castor::String const & GetMovingTypeName( eANIMATION_OBJECT_TYPE p_type )
 		{
-			cuT( "Node_" ),
-			cuT( "Object_" ),
-			cuT( "Bone_" ),
-		};
+			static std::array< String, eANIMATION_OBJECT_TYPE_COUNT > const Names
+			{
+				cuT( "Node_" ),
+				cuT( "Object_" ),
+				cuT( "Bone_" ),
+			};
+
+			return Names[p_type];
+		}
 
 		void RecursiveAddChildren( Animation & p_animation, AnimationObjectSPtr p_moving, AnimationObjectSPtr p_parent )
 		{
@@ -124,7 +129,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_NODE:
-					l_node = std::make_shared< SkeletonAnimationNode >();
+					l_node = std::make_shared< SkeletonAnimationNode >( p_obj );
 					l_return = SkeletonAnimationNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 
 					if ( l_return )
@@ -135,7 +140,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_OBJECT:
-					l_object = std::make_shared< SkeletonAnimationObject >();
+					l_object = std::make_shared< SkeletonAnimationObject >( p_obj );
 					l_return = SkeletonAnimationObject::BinaryParser( m_path ).Parse( *l_object, l_chunk );
 
 					if ( l_return )
@@ -146,7 +151,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_BONE:
-					l_bone = std::make_shared< SkeletonAnimationBone >();
+					l_bone = std::make_shared< SkeletonAnimationBone >( p_obj );
 					l_return = SkeletonAnimationBone::BinaryParser( m_path ).Parse( *l_bone, l_chunk );
 
 					if ( l_return )
@@ -169,13 +174,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Animation::Animation( String const & p_name )
-		: Named( p_name )
-		, m_currentTime( 0.0 )
-		, m_state( eANIMATION_STATE_STOPPED )
-		, m_scale( 1.0 )
-		, m_looped( false )
-		, m_length( 0.0 )
+	Animation::Animation( Animable & p_animable, String const & p_name )
+		: Named{ p_name }
+		, OwnedBy< Animable >{ p_animable }
 	{
 	}
 
@@ -264,8 +265,8 @@ namespace Castor3D
 
 	AnimationObjectSPtr Animation::AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent )
 	{
-		std::shared_ptr< SkeletonAnimationNode > l_return = std::make_shared< SkeletonAnimationNode >( p_name );
-		String l_name = MovingName[eANIMATION_OBJECT_TYPE_NODE] + p_name;
+		std::shared_ptr< SkeletonAnimationNode > l_return = std::make_shared< SkeletonAnimationNode >( *this, p_name );
+		String l_name = GetMovingTypeName( eANIMATION_OBJECT_TYPE_NODE ) + p_name;
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
@@ -288,12 +289,12 @@ namespace Castor3D
 	AnimationObjectSPtr Animation::AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent )
 	{
 		AnimationObjectSPtr l_return;
-		String l_name = MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName();
+		String l_name = GetMovingTypeName( eANIMATION_OBJECT_TYPE_OBJECT ) + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< SkeletonAnimationObject > l_moving = std::make_shared< SkeletonAnimationObject >();
+			std::shared_ptr< SkeletonAnimationObject > l_moving = std::make_shared< SkeletonAnimationObject >( *this );
 			l_moving->SetObject( p_object );
 			l_return = l_moving;
 			m_toMove.insert( std::make_pair( l_name, l_return ) );
@@ -314,12 +315,12 @@ namespace Castor3D
 	AnimationObjectSPtr Animation::AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent )
 	{
 		AnimationObjectSPtr l_return;
-		String l_name = MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName();
+		String l_name = GetMovingTypeName( eANIMATION_OBJECT_TYPE_BONE ) + p_bone->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< SkeletonAnimationBone > l_moving = std::make_shared< SkeletonAnimationBone >();
+			std::shared_ptr< SkeletonAnimationBone > l_moving = std::make_shared< SkeletonAnimationBone >( *this );
 			l_moving->SetBone( p_bone );
 
 			if ( p_parent && p_parent->GetType() == eANIMATION_OBJECT_TYPE_BONE )
@@ -345,7 +346,7 @@ namespace Castor3D
 
 	void Animation::AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent )
 	{
-		String l_name = MovingName[p_object->GetType()] + p_object->GetName();
+		String l_name = GetMovingTypeName( p_object->GetType() ) + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
@@ -365,13 +366,13 @@ namespace Castor3D
 
 	bool Animation::HasObject( eANIMATION_OBJECT_TYPE p_type, Castor::String const & p_name )const
 	{
-		return m_toMove.find( MovingName[p_type] + p_name ) != m_toMove.end();
+		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
 	AnimationObjectSPtr Animation::GetObject( MovableObjectSPtr p_object )const
 	{
 		AnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName() );
+		auto l_it = m_toMove.find( GetMovingTypeName( eANIMATION_OBJECT_TYPE_OBJECT ) + p_object->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -384,7 +385,7 @@ namespace Castor3D
 	AnimationObjectSPtr Animation::GetObject( BoneSPtr p_bone )const
 	{
 		AnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName() );
+		auto l_it = m_toMove.find( GetMovingTypeName( eANIMATION_OBJECT_TYPE_BONE ) + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -402,9 +403,9 @@ namespace Castor3D
 		}
 	}
 
-	AnimationSPtr Animation::Clone()const
+	AnimationSPtr Animation::Clone( Animable & p_animable )const
 	{
-		auto l_clone = std::make_shared< Animation >( GetName() );
+		auto l_clone = std::make_shared< Animation >( p_animable, GetName() );
 		AnimationObjectPtrStrMap l_toMove;
 
 		for ( auto l_moving : m_arrayMoving )
@@ -415,7 +416,7 @@ namespace Castor3D
 			if ( l_mcln )
 			{
 				l_clone->m_arrayMoving.push_back( l_mcln );
-				l_clone->m_toMove.insert( std::make_pair( MovingName[l_mcln->GetType()] + l_mcln->GetName(), l_mcln ) );
+				l_clone->m_toMove.insert( std::make_pair( GetMovingTypeName( l_mcln->GetType() ) + l_mcln->GetName(), l_mcln ) );
 			}
 		}
 
