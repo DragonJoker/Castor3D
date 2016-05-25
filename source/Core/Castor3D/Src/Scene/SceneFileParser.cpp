@@ -253,12 +253,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapInterpolatorModes[cuT( "none" )] = eINTERPOLATOR_MODE_NONE;
 	m_mapInterpolatorModes[cuT( "linear" )] = eINTERPOLATOR_MODE_LINEAR;
 
-	m_mapToneMappings[cuT( "linear" )] = eTONE_MAPPING_TYPE_LINEAR;
-	m_mapToneMappings[cuT( "reinhard" )] = eTONE_MAPPING_TYPE_REINHARD;
-	m_mapToneMappings[cuT( "haarm" )] = eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER;
-	m_mapToneMappings[cuT( "hejl" )] = eTONE_MAPPING_TYPE_HEJL_BURGESS_DAWSON;
-	m_mapToneMappings[cuT( "hable" )] = eTONE_MAPPING_TYPE_HABLE;
-
 	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
 	m_mapTextTexturingModes[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;
 
@@ -343,7 +337,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_RENDER_TARGET, cuT( "technique" ), Parser_RenderTargetTechnique, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapToneMappings ) } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "tone_mapping" ), Parser_RenderTargetToneMapping, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "}" ), Parser_RenderTargetEnd );
 
 	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );

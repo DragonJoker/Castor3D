@@ -151,40 +151,28 @@ namespace GuiCommon
 			l_strReturn << cuT( "	Ns " ) << l_pass->GetShininess() << cuT( "\n" );
 			l_strReturn << cuT( "	d " ) << l_pass->GetAlpha() << cuT( "\n" );
 
-			auto l_mapAmbient = l_pass->GetTextureUnit( TextureChannel::Ambient );
-			if ( l_mapAmbient && !l_mapAmbient->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Ka " ) + GetTextureNewPath( l_mapAmbient->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::Ambient ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::Diffuse ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::Normal ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::Opacity ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ks" ), l_pass->GetTextureUnit( TextureChannel::Specular ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ns" ), l_pass->GetTextureUnit( TextureChannel::Gloss ) );
+		}
 
-			auto l_mapDiffuse = l_pass->GetTextureUnit( TextureChannel::Diffuse );
-			if ( l_mapDiffuse && !l_mapDiffuse->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Kd " ) + GetTextureNewPath( l_mapDiffuse->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
+		return l_strReturn.str();
+	}
 
-			auto l_mapNormal = l_pass->GetTextureUnit( TextureChannel::Normal );
-			if ( l_mapNormal && !l_mapNormal->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Bump " ) + GetTextureNewPath( l_mapNormal->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
+	Castor::String ObjSceneExporter::DoExportTexture( Castor::Path const & p_pathMtlFolder, Castor::String p_section, TextureUnitSPtr p_unit )const
+	{
+		StringStream l_strReturn;
 
-			auto l_mapOpacity = l_pass->GetTextureUnit( TextureChannel::Opacity );
-			if ( l_mapOpacity && !l_mapOpacity->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_d " ) + GetTextureNewPath( l_mapOpacity->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
+		if ( p_unit )
+		{
+			Path l_path = p_unit->GetTexture()->GetImage().ToString();
 
-			auto l_mapSpecular = l_pass->GetTextureUnit( TextureChannel::Specular );
-			if ( l_mapSpecular && !l_mapSpecular->GetTexturePath().empty() )
+			if ( !l_path.empty() )
 			{
-				l_strReturn << cuT( "	map_Ks " ) + GetTextureNewPath( l_mapSpecular->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
-
-			auto l_mapGloss = l_pass->GetTextureUnit( TextureChannel::Gloss );
-			if ( l_mapGloss && !l_mapGloss->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Ns " ) + GetTextureNewPath( l_mapGloss->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
+				l_strReturn << cuT( "	" ) << p_section << cuT( " " ) + GetTextureNewPath( l_path, p_pathMtlFolder ) << cuT( "\n" );
 			}
 		}
 

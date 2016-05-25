@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, BorderPanelOverlay const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -71,7 +71,14 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API virtual bool operator()( Castor3D::BorderPanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( BorderPanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			/**
+			 *\copydoc		Castor::OverlayCategory::WriteInto
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )override;
+
+		private:
+			BorderPanelOverlay const * m_category;
 		};
 
 	public:
@@ -98,6 +105,13 @@ namespace Castor3D
 		 *\return		Un overlay
 		 */
 		C3D_API static OverlayCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::OverlayCategory::CreateTextLoader
+		 */
+		C3D_API virtual std::unique_ptr < OverlayCategory::TextLoader > CreateTextLoader( Castor::String const & p_tabs )
+		{
+			return std::make_unique< TextLoader >( p_tabs, this );
+		}
 		/**
 		 *\~english
 		 *\brief		Sets the border material

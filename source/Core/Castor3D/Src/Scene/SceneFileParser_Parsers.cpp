@@ -440,8 +440,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetToneMapping )
 		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
 		PostFxPluginSPtr l_plugin;
 		PostEffectSPtr l_effect;
-		uint32_t l_type;
-		p_params[0]->Get( l_type );
+		String l_name;
+		p_params[0]->Get( l_name );
 		Parameters l_parameters;
 
 		if ( p_params.size() > 1 )
@@ -460,7 +460,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetToneMapping )
 			}
 		}
 
-		l_parsingContext->pRenderTarget->SetToneMappingType( eTONE_MAPPING_TYPE( l_type ), l_parameters );
+		l_parsingContext->pRenderTarget->SetToneMappingType( l_name, l_parameters );
 	}
 }
 END_ATTRIBUTE()
@@ -719,16 +719,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkImage )
 	else if ( !p_params.empty() )
 	{
 		Path l_path;
-		Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-
-		if ( File::FileExists( l_pathFile ) )
-		{
-			l_parsingContext->pScene->SetBackground( l_pathFile );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "File [" ) + l_pathFile + cuT( "] does not exist" ) );
-		}
+		l_parsingContext->pScene->SetBackground( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1312,11 +1303,28 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectParent )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		SceneNodeSPtr l_pParent = l_parsingContext->pScene->GetSceneNodeManager().Find( l_name );
+		SceneNodeSPtr l_parent;
 
-		if ( l_pParent )
+		if ( l_name == Scene::ObjectRootNode )
 		{
-			l_pParent->AttachObject( l_parsingContext->pGeometry );
+			l_parent = l_parsingContext->pScene->GetObjectRootNode();
+		}
+		else if ( l_name == Scene::CameraRootNode )
+		{
+			l_parent = l_parsingContext->pScene->GetCameraRootNode();
+		}
+		else if ( l_name == Scene::RootNode )
+		{
+			l_parent = l_parsingContext->pScene->GetRootNode();
+		}
+		else
+		{
+			l_parent = l_parsingContext->pScene->GetSceneNodeManager().Find( l_name );
+		}
+
+		if ( l_parent )
+		{
+			l_parent->AttachObject( l_parsingContext->pGeometry );
 		}
 		else
 		{
@@ -2352,22 +2360,26 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 	}
 	else if ( !p_params.empty() )
 	{
-		Path l_path;
-		p_params[0]->Get( l_path );
+		Path l_folder;
+		Path l_relative;
+		p_params[0]->Get( l_relative );
 
-		if ( File::FileExists( p_context->m_file->GetFilePath() / l_path ) )
+		if ( File::FileExists( p_context->m_file->GetFilePath() / l_relative ) )
+		{
+			l_folder = p_context->m_file->GetFilePath();
+		}
+		else if ( !File::FileExists( l_relative ) )
+		{
+			PARSING_ERROR( cuT( "File [" ) + l_relative + cuT( "] not found, check the relativeness of the path" ) );
+			l_relative.clear();
+		}
+
+		if ( !l_relative.empty() )
 		{
 			l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
-			l_parsingContext->pTextureUnit->LoadTexture( p_context->m_file->GetFilePath() / l_path );
-		}
-		else if ( File::FileExists( l_path ) )
-		{
-			l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
-			l_parsingContext->pTextureUnit->LoadTexture( l_path );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "File [" ) + l_path + cuT( "] not found, check the relativeness of the path" ) );
+			auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+			l_texture->GetImage().SetSource( l_folder, l_relative );
+			l_parsingContext->pTextureUnit->SetTexture( l_texture );
 		}
 	}
 }
@@ -3782,8 +3794,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxLeft )
 	if ( l_parsingContext->pSkybox )
 	{
 		Path l_path;
-		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeX ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeX ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{
@@ -3800,7 +3811,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxRight )
 	{
 		Path l_path;
 		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveX ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveX ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{
@@ -3817,7 +3828,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxTop )
 	{
 		Path l_path;
 		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeY ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeY ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{
@@ -3834,7 +3845,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxBottom )
 	{
 		Path l_path;
 		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveY ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveY ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{
@@ -3851,7 +3862,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxFront )
 	{
 		Path l_path;
 		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeZ ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeZ ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{
@@ -3868,7 +3879,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxBack )
 	{
 		Path l_path;
 		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveZ ) ).SetSource( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveZ ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 	}
 	else
 	{

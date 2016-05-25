@@ -19,9 +19,9 @@ namespace Castor3D
 	String const ToneMapping::HdrConfig = cuT( "HdrConfig" );
 	String const ToneMapping::Exposure = cuT( "c3d_exposure" );
 
-	ToneMapping::ToneMapping( eTONE_MAPPING_TYPE p_type, Engine & p_engine, Parameters const & p_parameters )
+	ToneMapping::ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters )
 		: OwnedBy< Engine >{ p_engine }
-		, m_type{ p_type }
+		, Named{ p_name }
 		, m_exposure{ 1.0f }
 	{
 		String l_param;
@@ -98,5 +98,11 @@ namespace Castor3D
 		m_exposureVar->SetValue( m_exposure );
 		DoUpdate();
 		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, m_program );
+	}
+
+	bool ToneMapping::WriteInto( Castor::TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -Exposure " ) + string::to_string( m_exposure ) ) > 0
+			&& DoWriteInto( p_file );
 	}
 }

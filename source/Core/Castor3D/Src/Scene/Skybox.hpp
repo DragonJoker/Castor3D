@@ -35,6 +35,39 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		Scene loader
+		\~english
+		\brief		Loader de scène
+		*/
+		class TextLoader
+			: public Castor::TextLoader< Skybox >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API TextLoader( Castor::String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief		Writes a Skybox into a text file
+			 *\param[in]	p_obj	the Skybox to save
+			 *\param[in]	p_file	the file to write the Skybox in
+			 *\~french
+			 *\brief		Ecrit une Skybox dans un fichier texte
+			 *\param[in]	p_obj	La Skybox
+			 *\param[in]	p_file	Le fichier
+			 */
+			C3D_API virtual bool operator()( Skybox const & p_obj, Castor::TextFile & p_file );
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.

@@ -102,7 +102,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -114,6 +114,21 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 */
 			C3D_API virtual bool operator()( Scene const & p_scene, Castor::TextFile & p_file );
+			/**
+			 *\~english
+			 *\brief		Copies the file with given path to output folder.
+			 *\param[in]	p_path		The path of the file to copy.
+			 *\param[in]	p_folder	The output folder.
+			 *\param[in]	p_subfolder	The output subfolder.
+			 *\return		The copied file path, relative to output folder.
+			 *\~french
+			 *\brief		Copie le fichier dont le chemin est donné dans le dossier de sortie.
+			 *\param[in]	p_path		Le chemin du fichier à copier.
+			 *\param[in]	p_file		Le dossier de sortie.
+			 *\param[in]	p_subfolder	Le sous-dossier de sortie.
+			 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
+			 */
+			C3D_API static Castor::Path CopyFile( Castor::Path const & p_path, Castor::Path const & p_folder, Castor::Path const & p_subfolder );
 		};
 
 	public:
@@ -181,12 +196,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
-		 *\param[in]	p_pathFile	The image file path
+		 *\param[in]	p_folder	The folder containing the image.
+		 *\param[in]	p_relative	The image file path, relative to p_folder.
 		 *\~french
 		 *\brief		Définit l'image de fond pour la scène
-		 *\param[in]	p_pathFile	Le chemin d'accès à l'image
+		 *\param[in]	p_folder	Le dossier contenant l'image.
+		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API bool SetBackground( Castor::Path const & p_pathFile );
+		C3D_API bool SetBackground( Castor::Path const & p_folder, Castor::Path const & p_relative );
 		/**
 		 *\~english
 		 *\brief		Sets the skybox for the scene.
@@ -376,6 +393,16 @@ namespace Castor3D
 		inline void SetAmbientLight( Castor::Colour const & p_value )
 		{
 			m_ambientLight = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The skybox.
+		 *\~french
+		 *\return		La skybox.
+		 */
+		inline SkyboxSPtr GetSkybox()const
+		{
+			return m_skybox;
 		}
 
 		//@}

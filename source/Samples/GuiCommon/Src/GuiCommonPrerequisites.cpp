@@ -211,26 +211,31 @@ namespace GuiCommon
 		{
 			CreateBitmapFromBuffer( p_pUnit->GetTexture()->GetImage().GetBuffer(), p_flip, p_bitmap );
 		}
-		else if ( !p_pUnit->GetTexturePath().empty() )
+		else
 		{
-			wxImageHandler * l_pHandler = wxImage::FindHandler( p_pUnit->GetTexturePath().GetExtension(), wxBITMAP_TYPE_ANY );
+			Path l_path = p_pUnit->GetTexture()->GetImage().ToString();
 
-			if ( l_pHandler )
+			if ( !l_path.empty() )
 			{
-				wxImage l_image;
+				wxImageHandler * l_pHandler = wxImage::FindHandler( l_path.GetExtension(), wxBITMAP_TYPE_ANY );
 
-				if ( l_image.LoadFile( p_pUnit->GetTexturePath(), l_pHandler->GetType() ) && l_image.IsOk() )
+				if ( l_pHandler )
 				{
-					p_bitmap = wxBitmap( l_image );
+					wxImage l_image;
+
+					if ( l_image.LoadFile( l_path, l_pHandler->GetType() ) && l_image.IsOk() )
+					{
+						p_bitmap = wxBitmap( l_image );
+					}
+					else
+					{
+						Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + l_path + cuT( "]" ) );
+					}
 				}
 				else
 				{
-					Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "]" ) );
+					Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + l_path + cuT( "] : Unsupported format" ) );
 				}
-			}
-			else
-			{
-				Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "] : Unsupported format" ) );
 			}
 		}
 	}

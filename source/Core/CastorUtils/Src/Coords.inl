@@ -5,8 +5,8 @@
 namespace Castor
 {
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Coords< T, Count > >( p_tabs, p_encodingMode )
+	Coords< T, Count >::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Coords< T, Count > >( p_tabs )
 	{
 	}
 

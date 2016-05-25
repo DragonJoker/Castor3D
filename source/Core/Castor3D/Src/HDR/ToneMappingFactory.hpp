@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		Fabrique de mappage de tons.
 	*/
 	class ToneMappingFactory
-		: public Castor::Factory< ToneMapping, eTONE_MAPPING_TYPE, ToneMappingSPtr, std::function< ToneMappingSPtr( Engine &, Parameters const & ) > >
+		: public Castor::Factory< ToneMapping, Castor::String, ToneMappingSPtr, std::function< ToneMappingSPtr( Engine &, Parameters const & ) > >
 	{
 	public:
 		/**

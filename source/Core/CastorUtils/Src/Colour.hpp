@@ -59,7 +59,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
+			CU_API TextLoader( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Reads a colour from a text file

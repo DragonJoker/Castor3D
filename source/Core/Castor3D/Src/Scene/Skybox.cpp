@@ -15,8 +15,10 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Texture/TextureLayout.hpp"
+#include "Texture/TextureImage.hpp"
 
 #include <GlslSource.hpp>
 
@@ -25,6 +27,62 @@ using namespace GLSL;
 
 namespace Castor3D
 {
+	Skybox::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Skybox >{ p_tabs }
+	{
+	}
+
+	bool Skybox::TextLoader::operator()( Skybox const & p_obj, TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( m_tabs + cuT( "skybox\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveX ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeX ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeY ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveY ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveZ ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeZ ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return l_return;
+	}
+
+	//************************************************************************************************
+
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, 0, eACCESS_TYPE_READ ) }

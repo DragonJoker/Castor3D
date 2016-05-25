@@ -17,10 +17,15 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	static const String Gamma = cuT( "c3d_gamma" );
+	namespace
+	{
+		String const Gamma = cuT( "c3d_gamma" );
+	}
+
+	String HaarmPeterDuikerToneMapping::Name = cuT( "haarm" );
 
 	HaarmPeterDuikerToneMapping::HaarmPeterDuikerToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: ToneMapping{ eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER, p_engine, p_parameters }
+		: ToneMapping{ Name, p_engine, p_parameters }
 		, m_gamma{ 1.0f }
 	{
 		String l_param;
@@ -95,5 +100,10 @@ namespace Castor3D
 	void HaarmPeterDuikerToneMapping::DoUpdate()
 	{
 		m_gammaVar->SetValue( m_gamma );
+	}
+
+	bool HaarmPeterDuikerToneMapping::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -Gamma " ) + string::to_string( m_gamma ) ) > 0;
 	}
 }

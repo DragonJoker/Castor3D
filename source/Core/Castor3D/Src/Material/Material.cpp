@@ -11,8 +11,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Material::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Material >( p_tabs, p_encodingMode )
+	Material::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Material >{ p_tabs }
 	{
 	}
 

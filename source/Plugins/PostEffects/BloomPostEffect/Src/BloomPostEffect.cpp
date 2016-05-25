@@ -206,8 +206,11 @@ namespace Bloom
 
 	//*********************************************************************************************
 
+	String BloomPostEffect::Type = cuT( "bloom" );
+	String BloomPostEffect::Name = cuT( "Bloom PostEffect" );
+
 	BloomPostEffect::BloomPostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
-		: PostEffect( p_renderSystem, p_renderTarget, p_param )
+		: PostEffect( p_renderSystem, p_renderTarget, BloomPostEffect::Type, p_param )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
@@ -412,6 +415,11 @@ namespace Bloom
 		}
 
 		return true;
+	}
+
+	bool BloomPostEffect::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -OffsetX " ) + string::to_string( m_offsetX ) + cuT( " -OffsetY " ) + string::to_string( m_offsetY ) ) > 0;
 	}
 
 	bool BloomPostEffect::DoHiPassFilter()

@@ -221,6 +221,15 @@ namespace Castor3D
 		C3D_API Castor::String GetPixelShaderSource( uint32_t p_flags )const;
 		/**
 		 *\~english
+		 *\brief		Writes the technique into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit la technique dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		/**
+		 *\~english
 		 *\return		The technique name.
 		 *\~french
 		 *\return		Le nom de la technique.
@@ -529,6 +538,17 @@ namespace Castor3D
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime );
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Writes the technique into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit la technique dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique

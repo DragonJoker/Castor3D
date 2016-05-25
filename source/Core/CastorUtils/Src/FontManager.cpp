@@ -17,7 +17,6 @@ namespace Castor
 	}
 
 	FontManager::BinaryLoader::BinaryLoader()
-		: Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 

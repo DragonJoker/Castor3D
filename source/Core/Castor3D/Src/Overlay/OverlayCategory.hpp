@@ -65,11 +65,22 @@ namespace Castor3D
 		public:
 			/**
 			 *\~english
+			 *\brief		Writes a OverlayCategory into a text file.
+			 *\param[in]	p_file	The file.
+			 *\~french
+			 *\brief		Ecrit une OverlayCategory dans un fichier texte.
+			 *\param[in]	p_file	Le fichier.
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file ) = 0;
+
+		protected:
+			/**
+			 *\~english
 			 *\brief		Constructor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -102,6 +113,19 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~OverlayCategory();
+		/**
+		 *\~english
+		 *\brief		Creates an OverlayCategory specific TextLoader.
+		 *\param[in]	p_tabs			The current indentation level.
+		 *\param[in]	p_encodingMode	The file encoding mode.
+		 *\return		The TextLoader.
+		 *\~french
+		 *\brief		Crée un OverlayCategory spécifique à la LightCategory.
+		 *\param[in]	p_tabs			Le niveau d'intentation actuel.
+		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
+		 *\return		Le TextLoader.
+		 */
+		C3D_API virtual std::unique_ptr< TextLoader > CreateTextLoader( Castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...

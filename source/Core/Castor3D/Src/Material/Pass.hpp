@@ -59,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -193,17 +193,6 @@ namespace Castor3D
 		 *\return		La TextureUnit récupérée, nullptr si p_index était hors bornes
 		 */
 		C3D_API TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the image path of the TextureUnit at the given index
-		 *\param[in]	p_index	The index of the TextureUnit we want the image path
-		 *\return		The path, void if none
-		 *\~french
-		 *\brief		Récupère le chemin de l'image de la TextureUnit à l'index donné
-		 *\param[in]	p_index	L'index voulu
-		 *\return		Le chemin, vide si aucun
-		 */
-		C3D_API Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending

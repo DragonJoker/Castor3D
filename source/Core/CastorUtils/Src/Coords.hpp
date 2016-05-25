@@ -61,7 +61,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
+			TextLoader( String const & p_tabs = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file

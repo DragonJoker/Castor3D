@@ -10,8 +10,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BorderPanelOverlay::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: OverlayCategory::TextLoader( p_tabs, p_encodingMode )
+	BorderPanelOverlay::TextLoader::TextLoader( String const & p_tabs, BorderPanelOverlay const * p_category )
+		: OverlayCategory::TextLoader{ p_tabs }
+		, m_category{ p_category }
 	{
 	}
 
@@ -45,6 +46,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	bool BorderPanelOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	{
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

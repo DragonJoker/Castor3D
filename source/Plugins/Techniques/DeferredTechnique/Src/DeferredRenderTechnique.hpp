@@ -144,6 +144,10 @@ namespace Deferred
 		 */
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
 		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
+		 */
+		virtual bool DoWriteInto( Castor::TextFile & p_file );
+		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
 		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG

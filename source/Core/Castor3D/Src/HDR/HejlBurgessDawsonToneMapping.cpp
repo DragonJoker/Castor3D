@@ -17,8 +17,10 @@ using namespace GLSL;
 
 namespace Castor3D
 {
+	String HejlBurgessDawsonToneMapping::Name = cuT( "hejl" );
+
 	HejlBurgessDawsonToneMapping::HejlBurgessDawsonToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: ToneMapping{ eTONE_MAPPING_TYPE_HEJL_BURGESS_DAWSON, p_engine, p_parameters }
+		: ToneMapping{ Name, p_engine, p_parameters }
 	{
 	}
 
@@ -67,5 +69,10 @@ namespace Castor3D
 
 	void HejlBurgessDawsonToneMapping::DoUpdate()
 	{
+	}
+
+	bool HejlBurgessDawsonToneMapping::DoWriteInto( TextFile & p_file )
+	{
+		return true;
 	}
 }

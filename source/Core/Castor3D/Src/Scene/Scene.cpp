@@ -54,8 +54,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Scene::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Scene >( p_tabs, p_encodingMode )
+	Scene::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Scene >{ p_tabs }
 	{
 	}
 
@@ -70,8 +70,8 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetSamplerView() )
 			{
 				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
-				l_return &= Sampler::TextLoader( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
-				p_file.WriteText( cuT( "\n" ) );
+				l_return &= Sampler::TextLoader( m_tabs + cuT( "\t" ) )( *l_sampler, p_file )
+					&& p_file.WriteText( cuT( "\n" ) );
 			}
 		}
 
@@ -81,8 +81,8 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetMaterialView() )
 			{
 				auto l_material = p_scene.GetMaterialView().Find( l_name );
-				l_return &= Material::TextLoader( m_tabs + cuT( "\t" ) )( *l_material, p_file );
-				p_file.WriteText( cuT( "\n" ) );
+				l_return &= Material::TextLoader( m_tabs + cuT( "\t" ) )( *l_material, p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 		}
 
@@ -94,27 +94,56 @@ namespace Castor3D
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
+		if ( l_return && p_scene.GetBackgroundImage() )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Background image" ) );
+			Path l_relative = Scene::TextLoader::CopyFile( p_scene.GetBackgroundImage()->GetImage().ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
 			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
 				&& Colour::TextLoader( String() )( p_scene.GetAmbientLight(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
-			p_file.WriteText( cuT( "\n" ) );
 		}
 
-		Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
-		for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
+		if ( l_return )
 		{
-			l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
-			p_file.WriteText( cuT( "\n" ) );
+			l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
-		for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+		if ( l_return && p_scene.GetSkybox() )
 		{
-			l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
-			p_file.WriteText( cuT( "\n" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
+			l_return = Skybox::TextLoader( m_tabs + cuT( "\t" ) )( *p_scene.GetSkybox(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
+			for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
+			{
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				{
+					l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file )
+						&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				}
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
+			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+			{
+				l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			}
 		}
 
 		if ( l_return )
@@ -124,8 +153,13 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetCameraManager() )
 			{
-				l_return &= Camera::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
-				p_file.WriteText( cuT( "\n" ) );
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				{
+					l_return &= Camera::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
+						&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				}
 			}
 		}
 
@@ -136,28 +170,8 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetLightManager() )
 			{
-				auto l_light = l_it.second;
-
-				switch ( l_light->GetLightType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return &= DirectionalLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetDirectionalLight(), p_file );
-					break;
-
-				case eLIGHT_TYPE_POINT:
-					l_return &= PointLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetPointLight(), p_file );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					l_return &= SpotLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetSpotLight(), p_file );
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
-
-				p_file.WriteText( cuT( "\n" ) );
+				l_return &= Light::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 		}
 
@@ -168,8 +182,8 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetGeometryManager() )
 			{
-				l_return &= Geometry::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
-				p_file.WriteText( cuT( "\n" ) );
+				l_return &= Geometry::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 		}
 
@@ -179,13 +193,27 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetRenderWindowView() )
 			{
 				auto l_window = p_scene.GetRenderWindowView().Find( l_name );
-				l_return &= RenderWindow::TextLoader( m_tabs + cuT( "\t" ) )( *l_window, p_file );
-				p_file.WriteText( cuT( "\n" ) );
+				l_return &= RenderWindow::TextLoader( m_tabs + cuT( "\t" ) )( *l_window, p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 		}
 
-		p_file.WriteText( cuT( "}\n\n" ) );
+		p_file.WriteText( cuT( "}\n" ) );
 		return l_return;
+	}
+
+	Path Scene::TextLoader::CopyFile( Path const & p_path, Path const & p_folder, Path const & p_subfolder )
+	{
+		Path l_path = p_path;
+		Path l_relative = p_subfolder / l_path.GetFileName( true );
+
+		if ( !File::DirectoryExists( p_folder / p_subfolder ) )
+		{
+			File::DirectoryCreate( p_folder / p_subfolder );
+		}
+
+		File::CopyFile( l_path, p_folder / p_subfolder );
+		return l_relative;
 	}
 
 	//*************************************************************************************************
@@ -326,14 +354,14 @@ namespace Castor3D
 		m_changed = false;
 	}
 
-	bool Scene::SetBackground( Path const & p_pathFile )
+	bool Scene::SetBackground( Path const & p_folder, Path const & p_relative )
 	{
 		bool l_return = false;
 
 		try
 		{
 			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
-			l_texture->GetImage().SetSource( p_pathFile );
+			l_texture->GetImage().SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{

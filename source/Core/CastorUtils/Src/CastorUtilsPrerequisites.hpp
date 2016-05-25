@@ -199,7 +199,7 @@ namespace Castor
 	class Line2D;
 	template< typename T >
 	class Line3D;
-	template< class T, eFILE_TYPE FT, class TFile >
+	template< class T, eFILE_TYPE FT >
 	class Loader;
 	class ILoggerImpl;
 	class Logger;

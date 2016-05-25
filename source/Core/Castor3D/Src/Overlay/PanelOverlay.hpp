@@ -54,7 +54,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, PanelOverlay const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -68,6 +68,13 @@ namespace Castor3D
 			 *\return		\p true si tout s'est bien passé
 			 */
 			C3D_API virtual bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			/**
+			 *\copydoc		Castor::OverlayCategory::WriteInto
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )override;
+
+		private:
+			PanelOverlay const * m_category;
 		};
 
 	public:
@@ -94,6 +101,13 @@ namespace Castor3D
 		 *\return		Un overlay
 		 */
 		C3D_API static OverlayCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::OverlayCategory::CreateTextLoader
+		 */
+		C3D_API virtual std::unique_ptr < OverlayCategory::TextLoader > CreateTextLoader( Castor::String const & p_tabs )
+		{
+			return std::make_unique< TextLoader >( p_tabs, this );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel vertex buffer

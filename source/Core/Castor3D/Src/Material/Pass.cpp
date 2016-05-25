@@ -34,8 +34,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Pass::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Pass >( p_tabs, p_encodingMode )
+	Pass::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Pass >{ p_tabs }
 	{
 	}
 
@@ -331,12 +331,6 @@ namespace Castor3D
 		return m_arrayTextureUnits[p_index];
 	}
 
-	String Pass::GetTexturePath( uint32_t p_index )
-	{
-		REQUIRE( p_index < m_arrayTextureUnits.size() );
-		return m_arrayTextureUnits[p_index]->GetTexturePath();
-	}
-
 	bool Pass::HasAlphaBlending()const
 	{
 		return m_pBlendState->IsBlendEnabled()
@@ -410,7 +404,7 @@ namespace Castor3D
 			{
 				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetTexture()->GetImage().GetBuffer();
 				PF::ReduceToAlpha( l_pReduced );
-				l_pOpacityMap->GetTexture()->GetImage().SetSource( l_pReduced );
+				l_pOpacityMap->GetTexture()->GetImage().SetBuffer( l_pReduced );
 				l_pImageOpa.reset();
 			}
 			else if ( l_pImageOpa )
@@ -524,7 +518,7 @@ namespace Castor3D
 			{
 				PxBufferBaseSPtr l_extracted = l_texture->GetImage().GetBuffer();
 				l_return = PF::ExtractAlpha( l_extracted );
-				l_texture->GetImage().SetSource( l_extracted );
+				l_texture->GetImage().SetBuffer( l_extracted );
 			}
 
 			p_unit->SetIndex( p_index++ );

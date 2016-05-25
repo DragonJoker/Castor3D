@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file
@@ -71,7 +71,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier où écrire le AnimatedObjectGroup
 			 *\param[in]	p_group	Le AnimatedObjectGroup à écrire
 			 */
-			C3D_API virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file )override;
 		};
 
 	public:

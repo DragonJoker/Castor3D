@@ -6,6 +6,9 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Texture/TextureImage.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
 using namespace Castor;
@@ -53,11 +56,12 @@ namespace Castor3D
 	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_unit;
-		Path l_path;
+		Path l_relative;
+		Path l_folder;
 
 		if ( File::FileExists( p_path ) )
 		{
-			l_path = p_path;
+			l_relative = p_path;
 		}
 		else
 		{
@@ -69,28 +73,30 @@ namespace Castor3D
 				return p_file.GetFileName( true ) == l_fileName;
 			} );
 
+			l_folder = m_filePath;
+
 			if ( l_it != l_files.end() )
 			{
-				l_path = *l_it;
+				l_relative = *l_it;
+				l_relative = l_relative.substr( l_folder.size() + 1 );
 			}
 			else
 			{
-				l_path = m_filePath / l_fileName;
+				l_relative = l_fileName;
 			}
 		}
 
-		if ( File::FileExists( l_path ) )
+		if ( File::FileExists( l_folder / l_relative ) )
 		{
 			try
 			{
 				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetEngine() );
 				l_unit->SetAutoMipmaps( true );
-
-				if ( l_unit->LoadTexture( l_path ) )
-				{
-					l_unit->SetChannel( p_channel );
-					p_pass.AddTextureUnit( l_unit );
-				}
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				l_texture->GetImage().SetSource( l_folder, l_relative );
+				l_unit->SetTexture( l_texture );
+				l_unit->SetChannel( p_channel );
+				p_pass.AddTextureUnit( l_unit );
 			}
 			catch ( std::exception & p_exc )
 			{

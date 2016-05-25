@@ -30,27 +30,30 @@ namespace Castor3D
 	\~french
 	\brief		Contient toutes les composantes d'un tableau de sommets
 	*/
-	struct stVERTEX_GROUP
+	template< typename T >
+	struct stVERTEX_GROUPT
 	{
 		//!\~english	The vertices count.
 		//!\~french		Le nombre de sommets.
 		uint32_t m_uiCount;
 		//!\~english	The vertices coordinates.
 		//!\~french		Les coordonnées des sommets.
-		real * m_pVtx;
+		T * m_pVtx;
 		//!\~english	The vertices normals.
 		//!\~french		Les normales des sommets.
-		real * m_pNml;
+		T * m_pNml;
 		//!\~english	The vertices tangents.
 		//!\~french		Les tangentes des sommets.
-		real * m_pTan;
+		T * m_pTan;
 		//!\~english	The vertices bitangents.
 		//!\~french		Les bitangentes des sommets.
-		real * m_pBin;
+		T * m_pBin;
 		//!\~english	The vertices texture coordinates.
 		//!\~french		Les coordonnées de texture des sommets.
-		real * m_pTex;
+		T * m_pTex;
 	};
+
+	using stVERTEX_GROUP = stVERTEX_GROUPT< real >;
 }
 
 #endif

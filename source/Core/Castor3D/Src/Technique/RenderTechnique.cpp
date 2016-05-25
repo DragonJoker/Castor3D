@@ -445,6 +445,11 @@ namespace Castor3D
 	{
 		return DoGetPixelShaderSource( p_flags );
 	}
+	
+	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
+	{
+		return DoWriteInto( p_file );
+	}
 
 	void RenderTechnique::DoSortRenderNodes( stSCENE_RENDER_NODES & p_nodes )
 	{

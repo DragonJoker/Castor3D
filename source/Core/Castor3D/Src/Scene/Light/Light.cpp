@@ -18,16 +18,30 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	Light::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Light >{ p_tabs }
+	{
+	}
+
+	bool Light::TextLoader::operator()( Light const & p_object, TextFile & p_file )
+	{
+		return p_object.m_category->CreateTextLoader( m_tabs )->WriteInto( p_file );
+	}
+
+	//*************************************************************************************************
+
 	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType )
 		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_LIGHT, p_node )
 		, m_enabled( false )
 	{
-		m_pCategory = p_factory.Create( p_lightType );
-		m_pCategory->SetLight( this );
+		m_category = p_factory.Create( p_lightType );
+		m_category->SetLight( this );
 
 		if ( p_node )
 		{
-			m_pCategory->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
+			m_category->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
 		}
 	}
 
@@ -39,7 +53,7 @@ namespace Castor3D
 	{
 		SceneNodeSPtr l_node = GetParent();
 
-		switch ( m_pCategory->GetLightType() )
+		switch ( m_category->GetLightType() )
 		{
 		case eLIGHT_TYPE_DIRECTIONAL:
 			GetDirectionalLight()->Bind( p_texture, p_index );
@@ -78,7 +92,7 @@ namespace Castor3D
 			l_ptPosType[0] = 0;
 			l_ptPosType[1] = 0;
 			l_ptPosType[2] = 0;
-			m_pCategory->SetPositionType( l_ptPosType );
+			m_category->SetPositionType( l_ptPosType );
 		}
 	}
 
@@ -86,9 +100,9 @@ namespace Castor3D
 	{
 		DirectionalLightSPtr l_return;
 
-		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		if ( m_category->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
 		{
-			l_return = std::static_pointer_cast< DirectionalLight >( m_pCategory );
+			l_return = std::static_pointer_cast< DirectionalLight >( m_category );
 		}
 
 		return l_return;
@@ -98,9 +112,9 @@ namespace Castor3D
 	{
 		PointLightSPtr l_return;
 
-		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_POINT )
+		if ( m_category->GetLightType() == eLIGHT_TYPE_POINT )
 		{
-			l_return = std::static_pointer_cast< PointLight >( m_pCategory );
+			l_return = std::static_pointer_cast< PointLight >( m_category );
 		}
 
 		return l_return;
@@ -110,9 +124,9 @@ namespace Castor3D
 	{
 		SpotLightSPtr l_return;
 
-		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_SPOT )
+		if ( m_category->GetLightType() == eLIGHT_TYPE_SPOT )
 		{
-			l_return = std::static_pointer_cast< SpotLight >( m_pCategory );
+			l_return = std::static_pointer_cast< SpotLight >( m_category );
 		}
 
 		return l_return;
@@ -125,6 +139,6 @@ namespace Castor3D
 		l_ptPosType[0] = float( l_node->GetDerivedPosition()[0] );
 		l_ptPosType[1] = float( l_node->GetDerivedPosition()[1] );
 		l_ptPosType[2] = float( l_node->GetDerivedPosition()[2] );
-		m_pCategory->SetPositionType( l_ptPosType );
+		m_category->SetPositionType( l_ptPosType );
 	}
 }

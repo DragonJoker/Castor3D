@@ -10,6 +10,7 @@
 
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
 #include "Technique/RenderTechnique.hpp"
 
 #include <Image.hpp>
@@ -18,8 +19,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureUnit::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< TextureUnit >( p_tabs, p_encodingMode )
+	TextureUnit::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< TextureUnit >{ p_tabs }
 	{
 	}
 
@@ -161,16 +162,7 @@ namespace Castor3D
 				}
 				else
 				{
-					Path l_path = p_unit.GetTexturePath();
-					Path l_relative = Path( cuT( "Textures" ) ) / l_path.GetFileName() + cuT( "." ) + l_path.GetExtension();
-					Path l_newPath = p_file.GetFilePath() / l_relative;
-
-					if ( !File::DirectoryExists( l_newPath.GetPath() ) )
-					{
-						File::DirectoryCreate( l_newPath.GetPath() );
-					}
-
-					File::CopyFile( l_path, p_file.GetFilePath() / cuT( "Textures" ) );
+					Path l_relative = Scene::TextLoader::CopyFile( p_unit.GetTexture()->GetImage().ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
 					l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 				}
 
@@ -288,27 +280,6 @@ namespace Castor3D
 		{
 			m_pTexture->Unbind( m_index );
 		}
-	}
-
-	bool TextureUnit::LoadTexture( Path const & p_pathFile )
-	{
-		bool l_return = false;
-
-		try
-		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-			l_texture->GetImage().SetSource( p_pathFile );
-			SetTexture( l_texture );
-			m_pathTexture = p_pathFile;
-			m_changed = true;
-			l_return = true;
-		}
-		catch ( Castor::Exception & p_exc )
-		{
-			Logger::LogError( p_exc.what() );
-		}
-
-		return l_return;
 	}
 
 	bool TextureUnit::IsTextureInitialised()const

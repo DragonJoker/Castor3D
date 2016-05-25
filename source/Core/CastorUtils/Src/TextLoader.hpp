@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_TEXT_LOADER_H___
 
 #include "Loader.hpp"
+#include "TextFile.hpp"
 
 namespace Castor
 {
@@ -33,8 +34,11 @@ namespace Castor
 	*/
 	template< class T >
 	class TextLoader
-		: public Loader< T, eFILE_TYPE_TEXT, TextFile >
+		: public Loader< T, eFILE_TYPE_TEXT >
 	{
+	protected:
+		using FileType = typename Loader< T, eFILE_TYPE_TEXT >::FileType;
+
 	public:
 		/**
 		 *\~english
@@ -42,9 +46,8 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
-			: Loader< T, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-			, m_tabs( p_tabs )
+		TextLoader( String const & p_tabs )
+			: m_tabs{ p_tabs }
 		{
 		}
 		/**
@@ -53,9 +56,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextLoader()
-		{
-		}
+		virtual ~TextLoader() = default;
 
 	protected:
 		//!\~english	The current indentation.

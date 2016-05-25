@@ -5,8 +5,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	DirectionalLight::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: LightCategory::TextLoader( p_tabs, p_encodingMode )
+	DirectionalLight::TextLoader::TextLoader( String const & p_tabs, DirectionalLight const * p_category )
+		: LightCategory::TextLoader{ p_tabs }
+		, m_category{ p_category }
 	{
 	}
 
@@ -20,6 +21,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	bool DirectionalLight::TextLoader::WriteInto( Castor::TextFile & p_file )
+	{
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

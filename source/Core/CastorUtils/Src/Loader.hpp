@@ -20,12 +20,54 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Exception.hpp"
 #include "Resource.hpp"
-#include "TextFile.hpp"
-#include "BinaryFile.hpp"
+#include "File.hpp"
 #include "LoaderException.hpp"
 
 namespace Castor
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		24/05/2016
+	\~english
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\~french
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	*/
+	template< eFILE_TYPE FT >
+	struct LoaderFileTyper;;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		24/05/2016
+	\~english
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\remarks	Specialisation for eFILE_TYPE_TEXT.
+	\~french
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	\remarks	Spécialisation pour eFILE_TYPE_TEXT.
+	*/
+	template<>
+	struct LoaderFileTyper< eFILE_TYPE_TEXT >
+	{
+		using FileType = TextFile;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		24/05/2016
+	\~english
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\remarks	Specialisation for eFILE_TYPE_BINARY.
+	\~french
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	\remarks	Spécialisation pour eFILE_TYPE_BINARY.
+	*/
+	template<>
+	struct LoaderFileTyper< eFILE_TYPE_BINARY >
+	{
+		using FileType = BinaryFile;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -37,50 +79,28 @@ namespace Castor
 	\brief		Classe de base pour les loaders de ressource.
 	\remarks	Contient les 2 fonctions nécessaire a un loader : Load et Save.
 	*/
-	template< class T, eFILE_TYPE FT, class TFile >
+	template< class T, eFILE_TYPE FT >
 	class Loader
 		: public Castor::NonCopyable
 	{
+	protected:
+		using FileType = typename LoaderFileTyper< FT >::FileType;
+
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_mode			The file open mode.
-		 *\param[in]	p_encodingMode	The file encoding mode.
+		 *\brief		Constructor
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_mode			Le mode d'ouverture du fichier.
-		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
+		 *\brief		Constructeur
 		 */
-		Loader( File::eOPEN_MODE p_mode, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
-			: m_openMode{ p_mode }
-			, m_encodingMode{ p_encodingMode }
-		{
-		}
+		Loader() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~Loader()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief			Reads a resource from a file.
-		 *\param[in,out]	p_object	The object to read.
-		 *\param[in]		p_pathFile	The path of file where to read the object.
-		 *\~french
-		 *\brief			Lit une ressource à partir d'un fichier.
-		 *\param[in,out]	p_object	L'objet à lire.
-		 *\param[in]		p_pathFile	Le chemin du fichier où lire l'objet.
-		 */
-		virtual bool operator()( T & p_object, Path const & p_pathFile )
-		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_READ | m_openMode, m_encodingMode );
-			return operator()( p_object, l_file );
-		}
+		virtual ~Loader() = default;
 		/**
 		 *\~english
 		 *\brief			Reads a resource from a file.
@@ -91,24 +111,9 @@ namespace Castor
 		 *\param[in,out]	p_object	L'objet à lire.
 		 *\param[in,out]	p_file		Le fichier où lire l'objet.
 		 */
-		virtual bool operator()( T & p_object, TFile & p_file )
+		virtual bool operator()( T & p_object, FileType & p_file )
 		{
 			LOADER_ERROR( "Import not supported by the loader registered for this type" );
-		}
-		/**
-		 *\~english
-		 *\brief		Writes a resource to a file.
-		 *\param[in]	p_object	The object to write.
-		 *\param[in]	p_pathFile	The path of file where to write the object.
-		 *\~french
-		 *\brief		Ecrit une ressource dans un fichier.
-		 *\param[in]	p_object	L'objet à écrire.
-		 *\param[in]	p_pathFile	Le chemin du fichier où écrire l'objet.
-		 */
-		virtual bool operator()( T const & p_object, Path const & p_pathFile )
-		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_WRITE | m_openMode, m_encodingMode );
-			return operator()( p_object, l_file );
 		}
 		/**
 		 *\~english
@@ -120,18 +125,10 @@ namespace Castor
 		 *\param[in]		p_object	L'objet à écrire.
 		 *\param[in,out]	p_file		Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( T const & p_object, TFile & p_file )
+		virtual bool operator()( T const & p_object, FileType & p_file )
 		{
 			LOADER_ERROR( "Export not supported by the loader registered for this type" );
 		}
-
-	protected:
-		//!\~english	The file open mode.
-		//!\~french		Le mode d'ouverture du fichier.
-		File::eOPEN_MODE m_openMode;
-		//!\~english	The file encoding mode.
-		//!\~french		Le mode d'encodage du fichier.
-		File::eENCODING_MODE m_encodingMode;
 	};
 }
 

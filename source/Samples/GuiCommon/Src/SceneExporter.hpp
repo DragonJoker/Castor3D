@@ -66,6 +66,7 @@ namespace GuiCommon
 		void DoExportMaterials( Castor3D::Scene const & p_scene, Castor::Path const & p_path )const;
 		void DoExportMeshes( Castor3D::Scene const & p_scene, Castor::Path const & p_mtlpath, Castor::Path const & p_path )const;
 		Castor::String DoExportMaterial( Castor::Path const & p_pathMtlFolder, Castor3D::Material const & p_material )const;
+		Castor::String DoExportTexture( Castor::Path const & p_pathMtlFolder, Castor::String p_section, Castor3D::TextureUnitSPtr p_unit )const;
 		Castor::String DoExportMesh( Castor3D::Mesh const & p_mesh, uint32_t & p_offset, uint32_t & p_count )const;
 	};
 	/*!

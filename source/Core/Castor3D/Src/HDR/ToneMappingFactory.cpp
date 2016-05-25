@@ -11,9 +11,9 @@ namespace Castor3D
 {
 	void ToneMappingFactory::Initialise()
 	{
-		Register( eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER, &HaarmPeterDuikerToneMapping::Create );
-		Register( eTONE_MAPPING_TYPE_HEJL_BURGESS_DAWSON, &HejlBurgessDawsonToneMapping::Create );
-		Register( eTONE_MAPPING_TYPE_LINEAR, &LinearToneMapping::Create );
-		Register( eTONE_MAPPING_TYPE_REINHARD, &ReinhardToneMapping::Create );
+		Register( HaarmPeterDuikerToneMapping::Name, &HaarmPeterDuikerToneMapping::Create );
+		Register( HejlBurgessDawsonToneMapping::Name, &HejlBurgessDawsonToneMapping::Create );
+		Register( LinearToneMapping::Name, &LinearToneMapping::Create );
+		Register( ReinhardToneMapping::Name, &ReinhardToneMapping::Create );
 	}
 }

@@ -113,7 +113,8 @@ namespace GuiCommon
 
 			if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
 			{
-				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_unit->GetTexturePath() );
+				Path l_path = l_unit->GetTexture()->GetImage().ToString();
+				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
 			}
 		}
 	}
@@ -199,7 +200,9 @@ namespace GuiCommon
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				l_unit->LoadTexture( p_value );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				l_texture->GetImage().SetSource( Path{}, p_value );
+				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();
 			}
 		} );

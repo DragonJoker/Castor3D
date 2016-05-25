@@ -17,7 +17,6 @@ namespace Castor
 	}
 
 	ImageManager::BinaryLoader::BinaryLoader()
-		: Loader< ImageManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 

@@ -38,11 +38,9 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture image dimensions
-		 *\return		The image dimensions
+		 *\return		The image dimensions.
 		 *\~french
-		 *\brief		Récupère les dimensions de l'image de la texture
-		 *\return		Les dimensions de l'image
+		 *\return		Les dimensions de l'image.
 		 */
 		inline Castor::Size GetDimensions()const
 		{
@@ -50,11 +48,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture pixel format
-		 *\return		The pixel format
+		 *\return		The pixel format.
 		 *\~french
-		 *\brief		Récupère le format des pixels de la texture
-		 *\return		Le format des pixels
+		 *\return		Le format des pixels.
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
@@ -62,11 +58,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture buffer
-		 *\return		The buffer
+		 *\return		The texture buffer.
 		 *\~french
-		 *\brief		Récupère le buffer de la texture
-		 *\return		Le buffer
+		 *\return		Le tampon de la texture.
 		 */
 		inline Castor::PxBufferBaseSPtr GetBuffer()const
 		{
@@ -74,11 +68,21 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture depth
-		 *\return		The depth, 1 if not 3D
+		 *\brief		Sets the texture buffer.
+		 *\param[in]	p_buffer	The texture buffer.
 		 *\~french
-		 *\brief		Récupère la profondeur de la texture
-		 *\return		La profondeur, 1 si pas 3D
+		 *\brief		Définit le tampon de la texture.
+		 *\param[in]	p_buffer	Le tampon de la texture.
+		 */
+		inline void SetBuffer( Castor::PxBufferBaseSPtr p_buffer )
+		{
+			m_buffer = p_buffer;
+		}
+		/**
+		 *\~english
+		 *\return		The texture depth, 1 if not 3D.
+		 *\~french
+		 *\return		La profondeur de la texture, 1 si pas 3D.
 		 */
 		C3D_API virtual uint32_t GetDepth()const = 0;
 
@@ -102,6 +106,14 @@ namespace Castor3D
 		 *\return		\p true si la source a été redimensionnée.
 		 */
 		C3D_API virtual bool Resize( Castor::Size const & p_size, uint32_t p_depth ) = 0;
+
+		/**
+		 *\~english
+		 *\return		The source as string.
+		 *\~french
+		 *\return		La source en chaîne de caractères.
+		 */
+		C3D_API virtual Castor::String ToString()const = 0;
 
 	protected:
 		/**
@@ -138,6 +150,39 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\date		24/05/2016
+		\~english
+		\brief		TextureImage loader
+		\~french
+		\brief		Loader de TextureImage
+		*/
+		class TextLoader
+			: public Castor::TextLoader< TextureImage >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API TextLoader( Castor::String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief		Writes a TextureImage into a text file
+			 *\param[in]	p_file	The file
+			 *\param[in]	p_obj	The TextureImage
+			 *\~french
+			 *\brief		Ecrit une TextureImage dans un fichier texte
+			 *\param[in]	p_file	Le fichier
+			 *\param[in]	p_obj	La TextureImage
+			 */
+			C3D_API virtual bool operator()( TextureImage const & p_obj, Castor::TextFile & p_file );
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -152,12 +197,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer from an image file.
-		 *\param[in]	p_path	The image file path.
+		 *\param[in]	p_folder	The folder containing the image.
+		 *\param[in]	p_relative	The image file path, relative to p_folder.
 		 *\~french
 		 *\brief		Définit le tampon de la texture depuis un fichier image.
-		 *\param[in]	p_path	Le chemin d'accès à l'image.
+		 *\param[in]	p_folder	Le dossier contenant l'image.
+		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API void SetSource( Castor::Path const & p_path );
+		C3D_API void SetSource( Castor::Path const & p_folder, Castor::Path const & p_relative );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer.
@@ -358,6 +405,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the texture buffer.
+		 *\param[in]	p_buffer	The texture buffer.
+		 *\~french
+		 *\brief		Définit le tampon de la texture.
+		 *\param[in]	p_buffer	Le tampon de la texture.
+		 */
+		inline void SetBuffer( Castor::PxBufferBaseSPtr p_buffer )
+		{
+			m_source->SetBuffer( p_buffer );
+		}
+		/**
+		 *\~english
 		 *\return		The static source status.
 		 *\~french
 		 *\return		Le statut de source statique.
@@ -365,6 +424,16 @@ namespace Castor3D
 		inline bool IsStaticSource()const
 		{
 			return m_source->IsStatic();
+		}
+		/**
+		 *\~english
+		 *\return		The static source status.
+		 *\~french
+		 *\return		Le statut de source statique.
+		 */
+		inline Castor::String ToString()const
+		{
+			return m_source->ToString();
 		}
 		/**
 		 *\~english

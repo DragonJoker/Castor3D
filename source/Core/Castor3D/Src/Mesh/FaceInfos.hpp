@@ -45,7 +45,7 @@ namespace Castor3D
 		{
 			//!\~english	Vertex index.
 			//!\~french		Indice du sommet.
-			int m_iIndex{ -1 };
+			int m_index{ -1 };
 			//!\~english	Vertex normal.
 			//!\~french		Normale du sommet.
 			std::array< real, 3 > m_fNormal{ 0.0_r, 0.0_r, 0.0_r };

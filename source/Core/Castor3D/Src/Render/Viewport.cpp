@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Viewport::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Viewport >( p_tabs, p_encodingMode )
+	Viewport::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Viewport >{ p_tabs }
 	{
 	}
 
@@ -39,6 +39,7 @@ namespace Castor3D
 			else
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
 					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 					&& p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}

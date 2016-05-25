@@ -6,8 +6,8 @@
 
 namespace Castor
 {
-	Colour::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Colour >( p_tabs, p_encodingMode )
+	Colour::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Colour >{ p_tabs }
 	{
 	}
 

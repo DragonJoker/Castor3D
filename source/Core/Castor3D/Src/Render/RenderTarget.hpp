@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
 			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -218,14 +218,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
-		 *\param[in]	p_type			The type.
+		 *\param[in]	p_name			The type.
 		 *\param[in]	p_parameters	The parameters.
 		 *\~french
 		 *\brief		Définit le type d'implémentation de mappage de tons.
-		 *\param[in]	p_type			Le type.
+		 *\param[in]	p_name			Le type.
 		 *\param[in]	p_parameters	Les paramètres.
 		 */
-		C3D_API void SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters );
+		C3D_API void SetToneMappingType( Castor::String const & p_name, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status

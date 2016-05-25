@@ -35,8 +35,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderObject::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< ShaderObject >( p_tabs, p_encodingMode )
+	ShaderObject::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< ShaderObject >{ p_tabs }
 	{
 	}
 

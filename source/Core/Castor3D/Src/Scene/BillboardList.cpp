@@ -20,8 +20,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BillboardList::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: MovableObject::TextLoader( p_tabs, p_encodingMode )
+	BillboardList::TextLoader::TextLoader( String const & p_tabs )
+		: MovableObject::TextLoader{ p_tabs }
 	{
 	}
 

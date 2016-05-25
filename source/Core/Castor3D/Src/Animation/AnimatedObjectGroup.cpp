@@ -15,8 +15,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	AnimatedObjectGroup::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< AnimatedObjectGroup >( p_tabs, p_encodingMode )
+	AnimatedObjectGroup::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< AnimatedObjectGroup >{ p_tabs }
 	{
 	}
 

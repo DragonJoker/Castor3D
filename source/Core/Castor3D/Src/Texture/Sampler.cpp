@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Sampler::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Sampler >( p_tabs, p_encodingMode )
+	Sampler::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Sampler >{ p_tabs }
 	{
 	}
 

@@ -13,8 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayCategory::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< OverlayCategory >( p_tabs, p_encodingMode )
+	OverlayCategory::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< OverlayCategory >{ p_tabs }
 	{
 	}
 

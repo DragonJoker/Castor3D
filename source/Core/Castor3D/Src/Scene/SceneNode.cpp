@@ -20,8 +20,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneNode::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< SceneNode >( p_tabs, p_encodingMode )
+	SceneNode::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< SceneNode >{ p_tabs }
 	{
 	}
 
@@ -71,16 +71,20 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Writing Children" ) );
-			l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
 
-			for ( auto && l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_return; ++l_it )
+			for ( auto const & l_it : p_node.m_childs )
 			{
-				SceneNodeSPtr l_node = l_it->second.lock();
-
-				if ( l_node )
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_return = SceneNode::TextLoader( m_tabs )( *l_node, p_file );
-					l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
+					SceneNodeSPtr l_node = l_it.second.lock();
+
+					if ( l_node )
+					{
+						l_return = p_file.WriteText( cuT( "\n" ) ) > 0
+							&& SceneNode::TextLoader( m_tabs )( *l_node, p_file );
+					}
 				}
 			}
 		}

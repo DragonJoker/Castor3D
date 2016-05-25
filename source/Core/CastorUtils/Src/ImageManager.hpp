@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_IMAGE_MANAGER_H___
 
 #include "Collection.hpp"
-#include "Loader.hpp"
+#include "BinaryLoader.hpp"
 
 namespace Castor
 {
@@ -48,7 +48,7 @@ namespace Castor
 		\brief		Loader de ImageManager.
 		*/
 		class BinaryLoader
-			: public Loader< ImageManager, eFILE_TYPE_BINARY, BinaryFile >
+			: public Castor::BinaryLoader< ImageManager >
 		{
 		public:
 			/**

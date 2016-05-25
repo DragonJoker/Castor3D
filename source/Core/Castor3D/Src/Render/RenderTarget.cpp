@@ -35,8 +35,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< RenderTarget >( p_tabs, p_encodingMode )
+	RenderTarget::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< RenderTarget >{ p_tabs }
 	{
 	}
 
@@ -83,6 +83,30 @@ namespace Castor3D
 		if ( l_return && p_target.IsUsingStereo() )
 		{
 			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
+				&& p_target.m_toneMapping->WriteInto( p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return && p_target.m_renderTechnique )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
+				&& p_target.m_renderTechnique->WriteInto( p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			for ( auto const & l_effect : p_target.m_postEffects )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
+					&& l_effect->WriteInto( p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			}
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
@@ -168,7 +192,7 @@ namespace Castor3D
 		, m_fbRightEye{ *this }
 	{
 		m_toneMappingFactory.Initialise();
-		m_toneMapping = m_toneMappingFactory.Create( eTONE_MAPPING_TYPE_LINEAR, *GetEngine(), Parameters{} );
+		m_toneMapping = m_toneMappingFactory.Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
@@ -376,18 +400,20 @@ namespace Castor3D
 		m_rIntraOcularDistance = p_rIod;
 	}
 
-	void RenderTarget::SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters )
+	void RenderTarget::SetToneMappingType( String const & p_name, Parameters const & p_parameters )
 	{
 		if ( m_toneMapping )
 		{
-			auto l_toneMapping = m_toneMapping;
+			ToneMappingSPtr l_toneMapping;
+			std::swap( m_toneMapping, l_toneMapping );
+			// Give ownership of the tone mapping to the event (capture by value in the lambda).
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_toneMapping]()
 			{
 				l_toneMapping->Cleanup();
 			} ) );
 		}
 
-		m_toneMapping = m_toneMappingFactory.Create( p_type, *GetEngine(), p_parameters );
+		m_toneMapping = m_toneMappingFactory.Create( p_name, *GetEngine(), p_parameters );
 	}
 
 	void RenderTarget::SetSize( Size const & p_size )

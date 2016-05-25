@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_IMAGE_H___
 
 #include "Resource.hpp"
-#include "Loader.hpp"
+#include "BinaryLoader.hpp"
 #include "Colour.hpp"
 #include "PixelBuffer.hpp"
 
@@ -46,7 +46,7 @@ namespace Castor
 		\brief		Image resource loader
 		*/
 		class BinaryLoader
-			: public Loader< Image, eFILE_TYPE_BINARY, BinaryFile >
+			: public Castor::BinaryLoader< Image >
 		{
 		public:
 			/**

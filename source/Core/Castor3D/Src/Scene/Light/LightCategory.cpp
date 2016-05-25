@@ -8,13 +8,20 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	LightCategory::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< LightCategory >( p_tabs, p_encodingMode )
+	LightCategory::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< LightCategory >{ p_tabs }
 	{
 	}
 
 	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
+		String const l_type[]
+		{
+			cuT( "directional" ),
+			cuT( "point_light" ),
+			cuT( "spot_light" ),
+		};
+
 		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
 		bool l_return = p_file.WriteText( m_tabs + cuT( "light \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
@@ -26,20 +33,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			switch ( p_light.GetLightType() )
-			{
-			case eLIGHT_TYPE_DIRECTIONAL:
-				l_return = p_file.WriteText( m_tabs + cuT( "\ttype directional\n" ) ) > 0;
-				break;
-
-			case eLIGHT_TYPE_POINT:
-				l_return = p_file.WriteText( m_tabs + cuT( "\ttype point_light\n" ) ) > 0;
-				break;
-
-			case eLIGHT_TYPE_SPOT:
-				l_return = p_file.WriteText( m_tabs + cuT( "\ttype spot_light\n" ) ) > 0;
-				break;
-			}
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + l_type[p_light.GetLightType()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )

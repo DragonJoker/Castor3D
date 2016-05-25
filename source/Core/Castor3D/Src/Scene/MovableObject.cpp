@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovableObject::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< MovableObject >( p_tabs, p_encodingMode )
+	MovableObject::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< MovableObject >{ p_tabs }
 	{
 	}
 

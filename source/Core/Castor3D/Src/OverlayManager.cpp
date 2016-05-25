@@ -237,7 +237,7 @@ namespace Castor3D
 
 		while ( l_return && l_it != m_overlays.end() )
 		{
-			Overlay & l_overlay = ( *l_it )->GetOverlay();
+			Overlay const & l_overlay = ( *l_it )->GetOverlay();
 
 			if ( l_first )
 			{
@@ -248,24 +248,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			switch ( l_overlay.GetType() )
-			{
-			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader( String() )( *l_overlay.GetPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader( String() )( *l_overlay.GetBorderPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader( String() )( *l_overlay.GetTextOverlay(), p_file );
-				break;
-
-			default:
-				l_return = false;
-			}
-
+			l_return = Overlay::TextLoader( String{} )( l_overlay, p_file );
 			++l_it;
 		}
 

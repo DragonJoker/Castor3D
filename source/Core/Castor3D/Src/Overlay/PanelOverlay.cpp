@@ -6,8 +6,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	PanelOverlay::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: OverlayCategory::TextLoader( p_tabs, p_encodingMode )
+	PanelOverlay::TextLoader::TextLoader( String const & p_tabs, PanelOverlay const * p_category )
+		: OverlayCategory::TextLoader{ p_tabs }
+		, m_category{ p_category }
 	{
 	}
 
@@ -26,6 +27,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	bool PanelOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	{
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

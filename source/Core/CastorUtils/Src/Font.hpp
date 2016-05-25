@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_FONT_H___
 
 #include "Resource.hpp"
-#include "Loader.hpp"
+#include "BinaryLoader.hpp"
 #include "Collection.hpp"
 #include "Point.hpp"
 #include "Glyph.hpp"
@@ -55,7 +55,7 @@ namespace Castor
 		\remark		Utilise FreeType pour charger la police
 		*/
 		class BinaryLoader
-			: public Loader< Font, eFILE_TYPE_BINARY, BinaryFile >
+			: public Castor::BinaryLoader< Font >
 		{
 		public:
 			/**

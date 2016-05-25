@@ -6,8 +6,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	PointLight::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: LightCategory::TextLoader( p_tabs, p_encodingMode )
+	PointLight::TextLoader::TextLoader( String const & p_tabs, PointLight const * p_category )
+		: LightCategory::TextLoader{ p_tabs }
+		, m_category{ p_category }
 	{
 	}
 
@@ -28,6 +29,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	bool PointLight::TextLoader::WriteInto( Castor::TextFile & p_file )
+	{
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

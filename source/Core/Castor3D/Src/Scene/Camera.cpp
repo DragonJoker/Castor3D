@@ -16,8 +16,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Camera::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: MovableObject::TextLoader( p_tabs, p_encodingMode )
+	Camera::TextLoader::TextLoader( String const & p_tabs )
+		: MovableObject::TextLoader{ p_tabs }
 	{
 	}
 

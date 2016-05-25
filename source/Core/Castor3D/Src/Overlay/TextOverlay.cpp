@@ -23,8 +23,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextOverlay::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: OverlayCategory::TextLoader( p_tabs, p_encodingMode )
+	TextOverlay::TextLoader::TextLoader( String const & p_tabs, TextOverlay const * p_category )
+		: OverlayCategory::TextLoader{ p_tabs }
+		, m_category{ p_category }
 	{
 	}
 
@@ -53,6 +54,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	bool TextOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	{
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

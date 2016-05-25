@@ -502,6 +502,11 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
+	{
+		return true;
+	}
+
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		if ( !m_renderSystem )

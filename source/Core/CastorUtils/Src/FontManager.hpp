@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_FONT_MANAGER_H___
 
 #include "Collection.hpp"
-#include "Loader.hpp"
+#include "BinaryLoader.hpp"
 
 #if defined( CreateFont )
 #	undef CreateFont
@@ -52,7 +52,7 @@ namespace Castor
 		\brief		Loader de FontManager.
 		*/
 		class BinaryLoader
-			: public Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >
+			: public Castor::BinaryLoader< FontManager >
 		{
 		public:
 			/**

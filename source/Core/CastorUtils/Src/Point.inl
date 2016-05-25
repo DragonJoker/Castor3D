@@ -38,8 +38,8 @@ namespace Castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Point< T, Count >::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< Point< T, Count > >( p_tabs, p_encodingMode )
+	Point< T, Count >::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< Point< T, Count > >( p_tabs )
 	{
 	}
 

@@ -55,7 +55,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, DirectionalLight const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -66,7 +66,14 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			C3D_API virtual bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
+			C3D_API bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
+			/**
+			 *\copydoc		Castor::LightCategory::WriteInto
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )override;
+
+		private:
+			DirectionalLight const * m_category;
 		};
 
 	private:
@@ -98,6 +105,13 @@ namespace Castor3D
 		 *\return		La lumière
 		 */
 		C3D_API static LightCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::LightCategory::CreateTextLoader
+		 */
+		C3D_API virtual std::unique_ptr < LightCategory::TextLoader > CreateTextLoader( Castor::String const & p_tabs )
+		{
+			return std::make_unique< TextLoader >( p_tabs, this );
+		}
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.

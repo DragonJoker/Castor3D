@@ -91,8 +91,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Castor::TextLoader< FrameVariable >( p_tabs, p_encodingMode )
+	FrameVariable::TextLoader::TextLoader( String const & p_tabs )
+		: Castor::TextLoader< FrameVariable >{ p_tabs }
 	{
 	}
 

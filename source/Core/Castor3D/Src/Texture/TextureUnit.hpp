@@ -57,7 +57,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file
@@ -127,17 +127,6 @@ namespace Castor3D
 		C3D_API void Unbind()const;
 		/**
 		 *\~english
-		 *\brief		Loads the texture image from the given path
-		 *\param[in]	p_pathFile	The image file path
-		 *\return		\p false if any problem occured
-		 *\~french
-		 *\brief		Charge l'image de la texture à partir du chemin donné
-		 *\param[in]	p_pathFile	Le chemin du fichier image
-		 *\return		\p false si un problème quelconque est arrivé
-		 */
-		C3D_API bool LoadTexture( Castor::Path const & p_pathFile );
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture dimension
 		 *\return		The texture dimension
 		 *\~french
@@ -154,18 +143,6 @@ namespace Castor3D
 		 *\return		\p false si la texture est nulle ou non initialisée
 		 */
 		C3D_API bool IsTextureInitialised()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture file path
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le chemin du fichier de la texture
-		 *\return		La valeur
-		 */
-		inline const Castor::Path & GetTexturePath()const
-		{
-			return m_pathTexture;
-		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture
@@ -489,39 +466,54 @@ namespace Castor3D
 
 	private:
 		friend class TextureRenderer;
-		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
+		//!\~english	The unit index inside it's pass.
+		//!\~french		L'index de l'unité dans sa passe.
 		uint32_t m_index;
-		//!\see TextureChannel	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe
+		//!\see TextureChannel
+		//\~english		The unit channel inside it's pass.
+		//!\~french		Le canal de l'unité dans sa passe.
 		TextureChannel m_eChannel;
-		//!\~english The reference alpha value for alpha comparison	\~french La valeur d'alpha de référence pour la comparaison d'alpha
+		//!\~english	The reference alpha value for alpha comparison.
+		//!\~french		La valeur d'alpha de référence pour la comparaison d'alpha.
 		float m_fAlphaValue;
-		//!\~english The alpha function for alpha comparison	\~french La fonction d'alpha utilisée lors de la comparaison d'alpha
+		//!\~english	The alpha function for alpha comparison.
+		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
 		AlphaFunc m_eAlphaFunc;
-		//!\~english The RGB blending parameters	\~french Les paramètres de mélange RGB
+		//!\~english	The RGB blending parameters.
+		//!\~french		Les paramètres de mélange RGB.
 		BlendSource m_eRgbArguments[uint32_t( BlendSrcIndex::Count )];
-		//!\~english The Alpha blending parameters	\~french Les paramètres de mélange Alpha
+		//!\~english	The Alpha blending parameters.
+		//!\~french		Les paramètres de mélange Alpha.
 		BlendSource m_eAlpArguments[uint32_t( BlendSrcIndex::Count )];
-		//!\~english The RGB blending function	\~french La fonction de mélange RGB
+		//!\~english	The RGB blending function.
+		//!\~french		La fonction de mélange RGB.
 		RGBBlendFunc m_eRgbFunction;
-		//!\~english The Alpha blending function	\~french La fonction de mélange Alpha
+		//!\~english	The Alpha blending function.
+		//!\~french		La fonction de mélange Alpha.
 		AlphaBlendFunc m_eAlpFunction;
-		//!\~english The unit transformations	\~french Les transformations de l'unité
+		//!\~english	The unit transformations.
+		//!\~french		Les transformations de l'unité.
 		Castor::Matrix4x4r m_mtxTransformations;
-		//!\~english The unit texture	\~french La texture de l'unité
+		//!\~english	The unit texture.
+		//!\~french		La texture de l'unité.
 		TextureLayoutSPtr m_pTexture;
-		//!\~english The unit texture's path	\~french Le chemin de la texture de l'unité
-		Castor::Path m_pathTexture;
-		//!\~english The render target used to compute the texture, if this unit is a render target	\~french La render target utilisée pour générer la texture si cette unité est une render target
+		//!\~english	The render target used to compute the texture, if this unit is a render target.
+		//!\~french		La render target utilisée pour générer la texture si cette unité est une render target.
 		RenderTargetWPtr m_renderTarget;
-		//!\~english The sampler state assigned to this unit	\~french Le sampler state affecté à cette unité
+		//!\~english	The sampler state assigned to this unit.
+		//!\~french		Le sampler state affecté à cette unité.
 		SamplerWPtr m_pSampler;
-		//!\~english The blend colour when it is enabled	\~french Couleur de mélange lorsque celui-ci est actif
+		//!\~english	The blend colour when it is enabled.
+		//!\~french		Couleur de mélange lorsque celui-ci est actif.
 		Castor::Colour m_clrBlend;
-		//!\~english The matrix mode in use berfore this unit's transformations are applied	\~french Le mode de matrice en cours avant l'application des transformations de cette unité
+		//!\~english	The matrix mode in use berfore this unit's transformations are applied.
+		//!\~french		Le mode de matrice en cours avant l'application des transformations de cette unité.
 		eMTXMODE m_ePrevMtxMode;
-		//!\~english Tells mipmaps must be regenerated after each texture data change	\~french Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture
+		//!\~english	Tells mipmaps must be regenerated after each texture data change.
+		//!\~french		Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture.
 		bool m_bAutoMipmaps;
-		//!\~english Tells the texture data has changed	\~french Dit que les données de la texture ont changé
+		//!\~english	Tells the texture data has changed.
+		//!\~french		Dit que les données de la texture ont changé.
 		mutable bool m_changed;
 	};
 	/**
