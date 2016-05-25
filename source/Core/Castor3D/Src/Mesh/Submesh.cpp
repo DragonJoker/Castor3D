@@ -22,6 +22,34 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		template< typename T, typename U >
+		void DoCopySubmesh( uint32_t p_count, stINTERLEAVED_VERTEXT< T > const * p_src, stINTERLEAVED_VERTEXT< U > * p_dst )
+		{
+			for ( uint32_t i{ 0u }; i < p_count; ++i )
+			{
+				p_dst->m_pos[0] = U( p_src->m_pos[0] );
+				p_dst->m_pos[1] = U( p_src->m_pos[1] );
+				p_dst->m_pos[2] = U( p_src->m_pos[2] );
+				p_dst->m_nml[0] = U( p_src->m_nml[0] );
+				p_dst->m_nml[1] = U( p_src->m_nml[1] );
+				p_dst->m_nml[2] = U( p_src->m_nml[2] );
+				p_dst->m_tan[0] = U( p_src->m_tan[0] );
+				p_dst->m_tan[1] = U( p_src->m_tan[1] );
+				p_dst->m_tan[2] = U( p_src->m_tan[2] );
+				p_dst->m_bin[0] = U( p_src->m_bin[0] );
+				p_dst->m_bin[1] = U( p_src->m_bin[1] );
+				p_dst->m_bin[2] = U( p_src->m_bin[2] );
+				p_dst->m_tex[0] = U( p_src->m_tex[0] );
+				p_dst->m_tex[1] = U( p_src->m_tex[1] );
+				p_dst->m_tex[2] = U( p_src->m_tex[2] );
+				p_dst++;
+				p_src++;
+			}
+		}
+	}
+
 	//*************************************************************************************************
 
 	Submesh::BinaryWriter::BinaryWriter( Path const & p_path )
@@ -45,30 +73,7 @@ namespace Castor3D
 			{
 				stINTERLEAVED_VERTEX const * l_srcbuf = reinterpret_cast< stINTERLEAVED_VERTEX const * >( l_vtxBuffer.data() );
 				std::vector< stINTERLEAVED_VERTEXT< double > > l_dstbuf( l_pointsCount );
-				stINTERLEAVED_VERTEX const * l_src = l_srcbuf;
-				stINTERLEAVED_VERTEXT< double > * l_dst = l_dstbuf.data();
-
-				for ( uint32_t i{ 0u }; i < l_pointsCount; ++i )
-				{
-					l_dst->m_pos[0] = double( l_src->m_pos[0] );
-					l_dst->m_pos[1] = double( l_src->m_pos[1] );
-					l_dst->m_pos[2] = double( l_src->m_pos[2] );
-					l_dst->m_nml[0] = double( l_src->m_nml[0] );
-					l_dst->m_nml[1] = double( l_src->m_nml[1] );
-					l_dst->m_nml[2] = double( l_src->m_nml[2] );
-					l_dst->m_tan[0] = double( l_src->m_tan[0] );
-					l_dst->m_tan[1] = double( l_src->m_tan[1] );
-					l_dst->m_tan[2] = double( l_src->m_tan[2] );
-					l_dst->m_bin[0] = double( l_src->m_bin[0] );
-					l_dst->m_bin[1] = double( l_src->m_bin[1] );
-					l_dst->m_bin[2] = double( l_src->m_bin[2] );
-					l_dst->m_tex[0] = double( l_src->m_tex[0] );
-					l_dst->m_tex[1] = double( l_src->m_tex[1] );
-					l_dst->m_tex[2] = double( l_src->m_tex[2] );
-					l_dst++;
-					l_src++;
-				}
-
+				DoCopySubmesh( l_pointsCount, l_srcbuf, l_dstbuf.data() );
 				l_return = DoWriteChunk( l_dstbuf, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
 			}
 		}
@@ -151,30 +156,7 @@ namespace Castor3D
 					if ( l_return && !l_srcbuf.empty() )
 					{
 						std::vector< stINTERLEAVED_VERTEX > l_dstbuf( l_srcbuf.size() );
-						stINTERLEAVED_VERTEXT< double > const * l_src = l_srcbuf.data();
-						stINTERLEAVED_VERTEX * l_dst = l_dstbuf.data();
-
-						for ( uint32_t i{ 0u }; i < l_srcbuf.size(); ++i )
-						{
-							l_dst->m_pos[0] = real( l_src->m_pos[0] );
-							l_dst->m_pos[1] = real( l_src->m_pos[1] );
-							l_dst->m_pos[2] = real( l_src->m_pos[2] );
-							l_dst->m_nml[0] = real( l_src->m_nml[0] );
-							l_dst->m_nml[1] = real( l_src->m_nml[1] );
-							l_dst->m_nml[2] = real( l_src->m_nml[2] );
-							l_dst->m_tan[0] = real( l_src->m_tan[0] );
-							l_dst->m_tan[1] = real( l_src->m_tan[1] );
-							l_dst->m_tan[2] = real( l_src->m_tan[2] );
-							l_dst->m_bin[0] = real( l_src->m_bin[0] );
-							l_dst->m_bin[1] = real( l_src->m_bin[1] );
-							l_dst->m_bin[2] = real( l_src->m_bin[2] );
-							l_dst->m_tex[0] = real( l_src->m_tex[0] );
-							l_dst->m_tex[1] = real( l_src->m_tex[1] );
-							l_dst->m_tex[2] = real( l_src->m_tex[2] );
-							l_dst++;
-							l_src++;
-						}
-
+						DoCopySubmesh( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
 						p_obj.AddPoints( l_dstbuf );
 					}
 

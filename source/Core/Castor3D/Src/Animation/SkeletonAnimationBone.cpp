@@ -26,7 +26,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = AnimationObject::BinaryWriter( m_path ).Write( p_obj, l_chunk );
+			l_return = AnimationObject::BinaryWriter{ m_path }.Write( p_obj, l_chunk );
 		}
 
 		if ( l_return )

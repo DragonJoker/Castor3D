@@ -37,6 +37,84 @@ namespace Castor3D
 		: public Animable
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		Animable binary loader.
+		\~english
+		\brief		Loader binaire d'Animable.
+		*/
+		class BinaryWriter
+			: public Castor3D::BinaryWriter< Skeleton >
+		{
+		public:
+			/**
+			*\~english
+			*\brief		Constructor.
+			*\param[in]	p_path	The current folder path.
+			*\~french
+			*\brief		Constructeur.
+			*\param[in]	p_path	Le chemin d'accès au dossier courant.
+			*/
+			C3D_API BinaryWriter( Castor::Path const & p_path );
+
+		private:
+			/**
+			*\~english
+			*\brief		Function used to fill the chunk from specific data.
+			*\param[in]	p_obj	The object to write.
+			*\param[out]	p_chunk	The chunk to fill.
+			*\return		\p false if any error occured.
+			*\~french
+			*\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			*\param[in]	p_obj	L'objet à écrire.
+			*\param[out]	p_chunk	Le chunk à remplir.
+			*\return		\p false si une erreur quelconque est arrivée.
+			*/
+			C3D_API bool DoWrite( Skeleton const & p_obj, BinaryChunk & p_chunk )const override;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		Animable binary loader.
+		\~english
+		\brief		Loader binaire d'Animable.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< Skeleton >
+		{
+		public:
+			/**
+			*\~english
+			*\brief		Constructor.
+			*\param[in]	p_path	The current folder path.
+			*\~french
+			*\brief		Constructeur.
+			*\param[in]	p_path	Le chemin d'accès au dossier courant.
+			*/
+			C3D_API BinaryParser( Castor::Path const & p_path );
+
+		private:
+			/**
+			*\~english
+			*\brief		Function used to retrieve specific data from the chunk.
+			*\param[out]	p_obj	The object to read.
+			*\param[in]	p_chunk	The chunk containing data.
+			*\return		\p false if any error occured.
+			*\~french
+			*\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			*\param[out]	p_obj	L'objet à lire.
+			*\param[in]	p_chunk	Le chunk contenant les données.
+			*\return		\p false si une erreur quelconque est arrivée.
+			*/
+			C3D_API bool DoParse( Skeleton & p_obj, BinaryChunk & p_chunk )const override;
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor

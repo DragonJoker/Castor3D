@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~Animable();
+		virtual ~Animable();
 
 	public:
 		/**

@@ -7,6 +7,95 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	Skeleton::BinaryWriter::BinaryWriter( Path const & p_path )
+		: Castor3D::BinaryWriter< Skeleton >( p_path )
+	{
+	}
+
+	bool Skeleton::BinaryWriter::DoWrite( Skeleton const & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		BinaryChunk l_chunk( eCHUNK_TYPE_SKELETON );
+
+		if ( l_return )
+		{
+			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE, l_chunk );
+		}
+
+		for ( auto && l_bone : p_obj.m_bones )
+		{
+			l_return &= Bone::BinaryWriter{ m_path }.Write( *l_bone, l_chunk );
+		}
+
+		if ( l_return )
+		{
+			l_return = Animable::BinaryWriter{ m_path }.Write( p_obj, l_chunk );
+		}
+
+		if ( l_return )
+		{
+			l_chunk.Finalise();
+			p_chunk.AddSubChunk( l_chunk );
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
+	Skeleton::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Skeleton >( p_path )
+	{
+	}
+
+	bool Skeleton::BinaryParser::DoParse( Skeleton & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		BoneSPtr l_bone;
+
+		while ( p_chunk.CheckAvailable( 1 ) )
+		{
+			BinaryChunk l_chunk;
+			l_return = p_chunk.GetSubChunk( l_chunk );
+
+			if ( l_return )
+			{
+				switch ( l_chunk.GetChunkType() )
+				{
+				case eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE:
+					l_return = DoParseChunk( p_obj.m_globalInverse, l_chunk );
+					break;
+
+				case eCHUNK_TYPE_SKELETON_BONE:
+					l_bone = std::make_shared< Bone >( p_obj );
+					l_return = Bone::BinaryParser{ m_path }.Parse( *l_bone, l_chunk );
+
+					if ( l_return )
+					{
+						p_obj.m_bones.push_back( l_bone );
+					}
+
+					break;
+
+				default:
+					l_return = Animable::BinaryParser{ m_path }.Parse( p_obj, l_chunk );
+					break;
+				}
+			}
+
+			if ( !l_return )
+			{
+				p_chunk.EndParse();
+			}
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
 	Skeleton::Skeleton()
 		: m_globalInverse( 1 )
 	{

@@ -33,6 +33,7 @@
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/Ray.hpp"
 #include "Render/Pipeline.hpp"
+#include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
@@ -62,7 +63,18 @@ namespace Castor3D
 	bool Scene::TextLoader::operator()( Scene const & p_scene, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
-		bool l_return = p_file.WriteText( m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
+
+		bool l_return = true;
+
+		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		}
 
 		if ( l_return )
 		{

@@ -64,7 +64,7 @@ namespace Castor3D
 
 		for ( auto const & l_kf : p_obj.m_keyframes )
 		{
-			l_return &= KeyFrame::BinaryWriter( m_path ).Write( l_kf, p_chunk );
+			l_return &= KeyFrame::BinaryWriter{ m_path }.Write( l_kf, p_chunk );
 		}
 
 		for ( auto const & l_moving : p_obj.m_children )
@@ -72,15 +72,15 @@ namespace Castor3D
 			switch ( l_moving->GetType() )
 			{
 			case eANIMATION_OBJECT_TYPE_NODE:
-				l_return &= SkeletonAnimationNode::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_chunk );
+				l_return &= SkeletonAnimationNode::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_OBJECT:
-				l_return &= SkeletonAnimationObject::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), p_chunk );
+				l_return &= SkeletonAnimationObject::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), p_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_BONE:
-				l_return &= SkeletonAnimationBone::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_chunk );
+				l_return &= SkeletonAnimationBone::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_chunk );
 				break;
 			}
 		}

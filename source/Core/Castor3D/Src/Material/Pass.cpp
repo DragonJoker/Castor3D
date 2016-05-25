@@ -400,7 +400,7 @@ namespace Castor3D
 			DoPrepareTexture( TextureChannel::Gloss, l_pGlossMap, l_index );
 			DoPrepareTexture( TextureChannel::Height, l_pHeightMap, l_index );
 
-			if ( l_pOpacityMap && l_pOpacityMap->GetTexture()->GetImage().GetBuffer() )
+			if ( l_pOpacityMap && l_pOpacityMap->GetTexture() && l_pOpacityMap->GetTexture()->GetImage().GetBuffer() )
 			{
 				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetTexture()->GetImage().GetBuffer();
 				PF::ReduceToAlpha( l_pReduced );

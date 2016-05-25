@@ -53,20 +53,25 @@ namespace Castor3D
 			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
+		if ( l_return )
+		{
+			l_return = DoWriteChunk( p_obj.GetScale(), eCHUNK_TYPE_ANIM_SCALE, l_chunk );
+		}
+
 		for ( auto && l_moving : p_obj.m_arrayMoving )
 		{
 			switch ( l_moving->GetType() )
 			{
 			case eANIMATION_OBJECT_TYPE_NODE:
-				l_return &= SkeletonAnimationNode::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationNode::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), l_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_OBJECT:
-				l_return &= SkeletonAnimationObject::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationObject::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), l_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_BONE:
-				l_return &= SkeletonAnimationBone::BinaryWriter( m_path ).Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), l_chunk );
+				l_return &= SkeletonAnimationBone::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), l_chunk );
 				break;
 			}
 		}

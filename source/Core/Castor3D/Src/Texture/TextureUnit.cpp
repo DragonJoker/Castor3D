@@ -75,100 +75,104 @@ namespace Castor3D
 		if ( p_unit.IsTextured() && p_unit.GetTexture() )
 		{
 			auto l_texture = p_unit.GetTexture();
+			auto l_image = l_texture->GetImage().ToString();
 
-			if ( l_return )
+			if ( !l_image.empty() || !l_texture->GetImage().IsStaticSource() )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "texture_unit\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
-					&& Colour::TextLoader( String() )( p_unit.GetBlendColour(), p_file )
-					&& p_file.Print( 256, cuT( "\n" ) ) > 0;
-			}
-
-			if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
-			}
-
-			if ( l_return && p_unit.GetChannel() != TextureChannel::Undefined )
-			{
-				switch ( p_unit.GetChannel() )
+				if ( l_return )
 				{
-				case TextureChannel::Colour:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Diffuse:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Normal:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Opacity:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Specular:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Emissive:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Height:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Ambient:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
-					break;
-
-				case TextureChannel::Gloss:
-					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
-					break;
-
-				default:
-					break;
-				}
-
-				if ( l_return && p_unit.GetAlphaFunc() != AlphaFunc::Always )
-				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
-				}
-
-				if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::None )
-				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
-				}
-
-				if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::None )
-				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
-				}
-
-				if ( !l_texture->GetImage().IsStaticSource() )
-				{
-					if ( l_return && p_unit.GetRenderTarget() )
-					{
-						l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
-					}
-				}
-				else
-				{
-					Path l_relative = Scene::TextLoader::CopyFile( p_unit.GetTexture()->GetImage().ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
-					l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "texture_unit\n" ) ) > 0
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
 				if ( l_return )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+					l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
+						&& Colour::TextLoader( String() )( p_unit.GetBlendColour(), p_file )
+						&& p_file.Print( 256, cuT( "\n" ) ) > 0;
+				}
+
+				if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
+				{
+					l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+				}
+
+				if ( l_return && p_unit.GetChannel() != TextureChannel::Undefined )
+				{
+					switch ( p_unit.GetChannel() )
+					{
+					case TextureChannel::Colour:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Diffuse:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Normal:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Opacity:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Specular:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Emissive:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Height:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Ambient:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
+						break;
+
+					case TextureChannel::Gloss:
+						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
+						break;
+
+					default:
+						break;
+					}
+
+					if ( l_return && p_unit.GetAlphaFunc() != AlphaFunc::Always )
+					{
+						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+					}
+
+					if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::None )
+					{
+						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+					}
+
+					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::None )
+					{
+						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+					}
+
+					if ( !l_texture->GetImage().IsStaticSource() )
+					{
+						if ( l_return && p_unit.GetRenderTarget() )
+						{
+							l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
+						}
+					}
+					else
+					{
+						Path l_relative = Scene::TextLoader::CopyFile( l_image, p_file.GetFilePath(), cuT( "Textures" ) );
+						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+					}
+
+					if ( l_return )
+					{
+						l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+					}
 				}
 			}
 		}
