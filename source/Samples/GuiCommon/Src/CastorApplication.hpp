@@ -177,6 +177,7 @@ namespace GuiCommon
 		bool DoInitialiseCastor( SplashScreen & p_splashScreen );
 		void DoLoadPlugins( SplashScreen & p_splashScreen );
 		void DoLoadImages( SplashScreen & p_splashScreen );
+		void DoCleanup();
 		void DoCleanupCastor();
 
 	protected:

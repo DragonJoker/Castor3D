@@ -335,7 +335,6 @@ namespace CastorViewer
 		try
 		{
 			wxGetApp().GetCastor()->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-
 			Logger::LogInfo( cuT( "Castor3D Initialised" ) );
 
 			if ( !CASTOR3D_THREADED && !m_timer )

@@ -425,19 +425,17 @@ namespace Castor
 
 	protected:
 		//!\~english The opening mode	\~french Le mode d'ouverture
-		int m_iMode;
+		int m_iMode{ 0 };
 		//!\~english The encoding mode	\~french Le mode d'encodage
-		eENCODING_MODE m_eEncoding;
+		eENCODING_MODE m_eEncoding{ eENCODING_MODE_ASCII };
 		//!\~english The full file path	\~french Le chemin d'accès au fichier
 		Path m_strFileFullPath;
 		//!\~english The file	\~french Le fichier
-		FILE * m_pFile;
-		//!\~english Tells the FILE is owned by this instance	\~french Dit si le fichier est géré par cette instance
-		bool m_bOwnFile;
+		FILE * m_pFile{ nullptr };
 		//!\~english The current cursor position in file	\~french La position actuelle du curseur dans le fichier
-		unsigned long long m_ullCursor;
+		unsigned long long m_ullCursor{ 0 };
 		//!\~english The total file length	\~french La taille totale du fichier
-		unsigned long long m_ullLength;
+		unsigned long long m_ullLength{ 0 };
 	};
 }
 

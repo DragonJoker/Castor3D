@@ -21,6 +21,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #undef CASTOR_HAS_ALIGNAS
 
 #if defined( _MSC_VER)
+
+#	if !defined( VLD_AVAILABLE )
+#		define _CRTDBG_MAP_ALLOC
+#		include <stdlib.h>
+#		include <crtdbg.h>
+#	endif
+
 #	if _MSC_VER < 1900
 #		error "Your compiler is too old, consider an upgrade."
 #	endif

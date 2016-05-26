@@ -9,6 +9,7 @@ namespace TestRender
 {
 	TestDepthStencilState::TestDepthStencilState( TestRenderSystem * p_renderSystem )
 		: DepthStencilState( *p_renderSystem->GetEngine() )
+		, m_renderSystem( p_renderSystem )
 	{
 		CreateCurrent();
 	}

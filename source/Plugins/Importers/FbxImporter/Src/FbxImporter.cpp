@@ -1,5 +1,9 @@
 #include "FbxImporter.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <GeometryManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>

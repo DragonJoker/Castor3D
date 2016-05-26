@@ -266,15 +266,11 @@ namespace Castor
 #endif
 
 	File::File( Path const & p_strFileName, int p_mode, eENCODING_MODE p_eEncoding )
-		:	m_iMode( p_mode	)
-		,	m_eEncoding( p_eEncoding	)
-		,	m_strFileFullPath( p_strFileName	)
-		,	m_ullCursor( 0	)
-		,	m_ullLength( 0	)
-		,	m_pFile( nullptr	)
-		,	m_bOwnFile( true	)
+		: m_iMode{ p_mode }
+		, m_eEncoding{ p_eEncoding }
+		, m_strFileFullPath{ p_strFileName }
 	{
-		REQUIRE( ! p_strFileName.empty() );
+		REQUIRE( !p_strFileName.empty() );
 		String l_strMode;
 
 		switch ( p_mode )
@@ -353,7 +349,7 @@ namespace Castor
 
 	File::~File()
 	{
-		if ( m_pFile != nullptr && m_bOwnFile )
+		if ( m_pFile != nullptr )
 		{
 			fclose( m_pFile );
 		}

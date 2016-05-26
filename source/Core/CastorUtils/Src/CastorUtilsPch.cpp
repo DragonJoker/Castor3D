@@ -1,5 +1,9 @@
 ﻿#include "CastorUtilsPch.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include "SmartPtr.hpp"
 #include "Point.hpp"
 #include "SquareMatrix.hpp"

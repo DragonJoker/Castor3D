@@ -143,17 +143,18 @@ namespace GuiCommon
 		l_splashScreen.Close();
 		m_splashScreen = nullptr;
 
+		if ( !l_return )
+		{
+			DoCleanup();
+		}
+
 		return l_return;
 	}
 
 	int CastorApplication::OnExit()
 	{
-		DoCleanupCastor();
-		m_locale.reset();
-		ImagesLoader::Cleanup();
 		Logger::LogInfo( m_internalName + cuT( " - Exit" ) );
-		Logger::Cleanup();
-		wxImage::CleanUpHandlers();
+		DoCleanup();
 		return wxApp::OnExit();
 	}
 
@@ -298,12 +299,6 @@ namespace GuiCommon
 		return l_return;
 	}
 
-	void CastorApplication::DoCleanupCastor()
-	{
-		delete m_castor;
-		m_castor = nullptr;
-	}
-
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )
 	{
 		p_splashScreen.Step( _( "Loading plug-ins" ), 1 );
@@ -362,5 +357,20 @@ namespace GuiCommon
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
 		DoLoadAppImages();
 		ImagesLoader::WaitAsyncLoads();
+	}
+
+	void CastorApplication::DoCleanup()
+	{
+		DoCleanupCastor();
+		m_locale.reset();
+		ImagesLoader::Cleanup();
+		Logger::Cleanup();
+		wxImage::CleanUpHandlers();
+	}
+
+	void CastorApplication::DoCleanupCastor()
+	{
+		delete m_castor;
+		m_castor = nullptr;
 	}
 }
