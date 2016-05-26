@@ -119,7 +119,6 @@ namespace Castor3D
 		SceneNodeSPtr m_pGeneralParentMaterial;
 		ScenePtrStrMap mapScenes;
 		SceneFileParser * m_pParser;
-		eRENDERER_TYPE eRendererType;
 		RealArray vertexPos;
 		RealArray vertexNml;
 		RealArray vertexTan;

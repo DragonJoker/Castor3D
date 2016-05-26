@@ -582,7 +582,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		endif ()
 	endif ()
 
-	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core/CastorUtils" )
+	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
 	add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )

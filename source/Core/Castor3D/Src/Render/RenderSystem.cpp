@@ -23,9 +23,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
+	RenderSystem::RenderSystem( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >{ p_engine }
-		, m_rendererType{ p_eRendererType }
+		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_currentContext{ nullptr }
 		, m_pCurrentCamera{ nullptr }
@@ -93,13 +93,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	ShaderProgramSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_langage )
-	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
-
-		return CreateShaderProgram();
 	}
 
 	Camera * RenderSystem::GetCurrentCamera()const

@@ -41,7 +41,7 @@ namespace GuiCommon
 		RendererSelector( Castor3D::Engine * p_engine, wxWindow * p_parent, wxString const & p_strTitle );
 		virtual ~RendererSelector();
 
-		Castor3D::eRENDERER_TYPE GetSelectedRenderer()const;
+		Castor::String GetSelectedRenderer()const;
 
 	private:
 		void DoDraw( wxDC * p_pDC );

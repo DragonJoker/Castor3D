@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -40,7 +40,7 @@ namespace Castor3D
 
 		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_engine );
 		typedef void DestroyRenderSystemFunction( RenderSystem * p_renderSystem );
-		typedef eRENDERER_TYPE GetRendererTypeFunction();
+		typedef Castor::String GetRendererTypeFunction();
 
 		typedef CreateRenderSystemFunction * PCreateRenderSystemFunction;
 		typedef DestroyRenderSystemFunction * PDestroyRenderSystemFunction;
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de renderer
 		 *\return		Le type
 		 */
-		C3D_API eRENDERER_TYPE GetRendererType();
+		C3D_API Castor::String GetRendererType();
 
 	private:
 		PCreateRenderSystemFunction m_pfnCreateRenderSystem;

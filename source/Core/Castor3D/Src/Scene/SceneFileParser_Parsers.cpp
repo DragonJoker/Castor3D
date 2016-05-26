@@ -2298,7 +2298,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassTextureUnit )
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXTURE_UNIT )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassShader )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_parsingContext->pShaderProgram.reset();
@@ -2306,14 +2306,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
 
 	if ( l_parsingContext->pPass )
 	{
-		if ( l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
-		}
-		else
-		{
-			p_parser->Ignore();
-		}
+		l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderManager().GetNewProgram();
 	}
 	else
 	{

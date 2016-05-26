@@ -43,7 +43,7 @@ namespace Castor3D
 
 		for ( auto & l_it : m_renderers )
 		{
-			l_it.reset();
+			l_it.second.reset();
 		}
 
 		for ( auto & l_it : m_loadedPlugins )
@@ -130,7 +130,7 @@ namespace Castor3D
 		return m_loadedPlugins[p_type];
 	}
 
-	RenderSystem * PluginManager::LoadRenderer( eRENDERER_TYPE p_type )
+	RenderSystem * PluginManager::LoadRenderer( String const & p_type )
 	{
 		bool l_return = false;
 		m_mutexRenderers.lock();
@@ -173,22 +173,21 @@ namespace Castor3D
 
 	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_library )
 	{
-		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_library, GetEngine() );
-		PluginBaseSPtr l_return = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
-		eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
+		RendererPluginSPtr l_renderer = std::make_shared< RendererPlugin >( p_library, GetEngine() );
+		String l_rendererType = l_renderer->GetRendererType();
 
-		if ( l_eRendererType == eRENDERER_TYPE_UNDEFINED )
+		if ( l_rendererType == RENDERER_TYPE_UNDEFINED )
 		{
-			l_return.reset();
+			l_renderer.reset();
 		}
 		else
 		{
 			m_mutexRenderers.lock();
-			m_renderers[l_eRendererType] = l_pRenderer;
+			m_renderers[l_rendererType] = l_renderer;
 			m_mutexRenderers.unlock();
 		}
 
-		return l_return;
+		return l_renderer;
 	}
 
 	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_library )

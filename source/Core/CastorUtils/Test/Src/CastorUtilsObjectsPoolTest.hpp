@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_CastorUtilsObjectsPoolTest___
 #define ___CUT_CastorUtilsObjectsPoolTest___
 
-#include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {

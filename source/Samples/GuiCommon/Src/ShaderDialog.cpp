@@ -193,7 +193,7 @@ namespace GuiCommon
 		{
 			if ( m_shaderProgram.expired() )
 			{
-				m_shaderProgram = m_engine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+				m_shaderProgram = m_engine->GetShaderManager().GetNewProgram();
 			}
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )

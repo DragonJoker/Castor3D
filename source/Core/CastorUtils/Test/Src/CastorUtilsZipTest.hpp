@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_ZIP_TEST___
 #define ___CUT_ZIP_TEST___
 
-#include "UnitTest.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {

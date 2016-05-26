@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_UNIQUE_TEST_H___
 #define ___CUT_UNIQUE_TEST_H___
 
-#include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {

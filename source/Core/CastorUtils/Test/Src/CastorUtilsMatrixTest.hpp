@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_CastorUtilsMatrixTest___
 #define ___CUT_CastorUtilsMatrixTest___
 
-#include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 #include <SquareMatrix.hpp>
 #if defined( CASTOR_USE_GLM )

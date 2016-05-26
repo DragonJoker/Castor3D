@@ -59,17 +59,7 @@ namespace Castor3D
 		if ( l_hasFile )
 		{
 			ShaderObjectSPtr l_object;
-
-			switch ( p_shaderProgram.GetLanguage() )
-			{
-			case eSHADER_LANGUAGE_GLSL:
-				l_return = p_file.WriteText( m_tabs + cuT( "gl_shader_program\n" ) ) > 0;
-				break;
-
-			default:
-				l_return = false;
-				break;
-			}
+			l_return = p_file.WriteText( m_tabs + cuT( "shader_program\n" ) ) > 0;
 
 			if ( l_return )
 			{
@@ -151,10 +141,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_langage )
+	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_status( ePROGRAM_STATUS_NOTLINKED )
-		, m_eLanguage( p_langage )
 	{
 	}
 

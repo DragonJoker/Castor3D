@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool LoadRenderer( eRENDERER_TYPE p_type );
+		C3D_API bool LoadRenderer( Castor::String const & p_type );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener

@@ -110,11 +110,12 @@ namespace Castor3D
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
 		{
-			RendererPluginSPtr l_plugin = m_pluginManager->GetRenderersList()[m_renderSystem->GetRendererType()];
+			auto const & l_renderers = m_pluginManager->GetRenderersList();
+			auto l_it = l_renderers.find( m_renderSystem->GetRendererType() );
 
-			if ( l_plugin )
+			if ( l_it != l_renderers.end() )
 			{
-				l_plugin->DestroyRenderSystem( m_renderSystem );
+				l_it->second->DestroyRenderSystem( m_renderSystem );
 				m_renderSystem = nullptr;
 			}
 			else
@@ -251,7 +252,7 @@ namespace Castor3D
 		}
 	}
 
-	bool Engine::LoadRenderer( eRENDERER_TYPE p_type )
+	bool Engine::LoadRenderer( String const & p_type )
 	{
 		bool l_return = false;
 		m_renderSystem = m_pluginManager->LoadRenderer( p_type );

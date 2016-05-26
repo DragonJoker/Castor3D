@@ -48,21 +48,6 @@ namespace Castor3D
 	}	eSHADER_MODEL;
 	/*!
 	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Enumeration of existing shader lnaguages
-	\~french
-	\brief		Enumération des langages de shader existants
-	\remark
-	*/
-	typedef enum eSHADER_LANGUAGE
-		: uint8_t
-	{
-		eSHADER_LANGUAGE_GLSL,
-		eSHADER_LANGUAGE_AUTO,
-		CASTOR_ENUM_BOUNDS( eSHADER_LANGUAGE, eSHADER_LANGUAGE_GLSL )
-	}	eSHADER_LANGUAGE;
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		22/08/2012
 	\version	0.7.0.0
 	\~english

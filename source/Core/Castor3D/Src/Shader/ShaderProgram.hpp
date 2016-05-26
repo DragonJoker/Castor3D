@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	L'instance du RenderSystem
 		 *\param[in]	p_langage		Le langage du programme
 		 */
-		C3D_API ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_langage );
+		C3D_API ShaderProgram( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -536,18 +536,6 @@ namespace Castor3D
 		{
 			return m_status;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the shader language
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le language du shader
-		 *\return		La valeur
-		 */
-		inline eSHADER_LANGUAGE GetLanguage()const
-		{
-			return m_eLanguage;
-		}
 
 	protected:
 		/**
@@ -613,8 +601,6 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status	\~french Le statut du programme
 		ePROGRAM_STATUS m_status;
-		//!<\~english The program language	\~french Le langage du programme
-		eSHADER_LANGUAGE m_eLanguage;
 		//!\~english The shaders array	\~french Le tableau de shaders
 		std::array< ShaderObjectSPtr, eSHADER_TYPE_COUNT > m_pShaders;
 		//!\~english The active shaders array	\~french Le tableau de shaders actifs

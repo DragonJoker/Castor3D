@@ -74,7 +74,7 @@ namespace Castor3D
 		 *\param[in]	p_langage	Le langage de shader souhaité
 		 *\return		Le programme créé
 		 */
-		C3D_API ShaderProgramSPtr GetNewProgram( eSHADER_LANGUAGE p_langage = eSHADER_LANGUAGE_AUTO );
+		C3D_API ShaderProgramSPtr GetNewProgram();
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags

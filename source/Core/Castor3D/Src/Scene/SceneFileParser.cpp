@@ -51,7 +51,6 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, m_pGeneralParentMaterial( nullptr )
 	, mapScenes()
 	, m_pParser( p_pParser )
-	, eRendererType( eRENDERER_TYPE_UNDEFINED )
 {
 }
 
@@ -72,7 +71,6 @@ void SceneFileContext::Initialise()
 	bBool2 = false;
 	m_pGeneralParentMaterial = nullptr;
 	pViewport = nullptr;
-	eRendererType = eRENDERER_TYPE_UNDEFINED;
 	eShaderObject = eSHADER_TYPE_COUNT;
 	pWindow.reset();
 	pSceneNode.reset();
@@ -424,7 +422,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_PASS, cuT( "blend_func" ), Parser_PassBlendFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendFactors ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendFactors ) } );
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
-	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
+	AddParser( eSECTION_PASS, cuT( "shader_program" ), Parser_PassShader );
 	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendModes ) } );
 	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendModes ) } );
 
@@ -564,11 +562,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_params ) );
 			}
 		}
-	}
-
-	if ( GetEngine()->GetRenderSystem() )
-	{
-		l_pContext->eRendererType = GetEngine()->GetRenderSystem()->GetRendererType();
 	}
 }
 

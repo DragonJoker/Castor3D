@@ -84,7 +84,7 @@ namespace GuiCommon
 		: m_internalName( p_internalName )
 		, m_displayName( p_displayName )
 		, m_castor( nullptr )
-		, m_rendererType( eRENDERER_TYPE_UNDEFINED )
+		, m_rendererType( RENDERER_TYPE_UNDEFINED )
 		, m_steps( p_steps + 4 )
 		, m_splashScreen( nullptr )
 	{
@@ -164,7 +164,6 @@ namespace GuiCommon
 		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
 		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
-		l_parser.AddSwitch( wxT( "directx" ), wxEmptyString, _( "Defines the renderer to Direct3D (11)" ) );
 		bool l_return = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -187,7 +186,7 @@ namespace GuiCommon
 
 			if ( l_parser.Found( wxT( "opengl" ) ) )
 			{
-				m_rendererType = eRENDERER_TYPE_OPENGL;
+				m_rendererType = cuT( "opengl" );
 			}
 
 			wxString l_strFileName;
@@ -272,7 +271,7 @@ namespace GuiCommon
 			m_rendererType = std::static_pointer_cast< RendererPlugin >( l_renderers.begin()->second )->GetRendererType();
 		}
 
-		if ( m_rendererType == eRENDERER_TYPE_UNDEFINED )
+		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
 		{
 			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
 			int l_iReturn = m_dialog.ShowModal();

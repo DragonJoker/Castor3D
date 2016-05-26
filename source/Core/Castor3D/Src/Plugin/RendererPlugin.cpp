@@ -15,7 +15,7 @@ using namespace Castor;
 namespace Castor3D
 {
 #if defined( _MSC_VER)
-	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AW4eRENDERER_TYPE@Castor3D@@XZ" );
+	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #	if defined( _WIN64 )
 	static const String CreateRenderSystemFunctionABIName = cuT( "?CreateRenderSystem@@YAPEAVRenderSystem@Castor3D@@PEAVEngine@2@@Z" );
 	static const String DestroyRenderSystemFunctionABIName = cuT( "?DestroyRenderSystem@@YAXPEAVRenderSystem@Castor3D@@@Z" );
@@ -89,15 +89,15 @@ namespace Castor3D
 		}
 	}
 
-	eRENDERER_TYPE RendererPlugin::GetRendererType()
+	Castor::String RendererPlugin::GetRendererType()
 	{
-		eRENDERER_TYPE l_eReturn = eRENDERER_TYPE_UNDEFINED;
+		Castor::String l_return = RENDERER_TYPE_UNDEFINED;
 
 		if ( m_pfnGetRendererType )
 		{
-			l_eReturn = m_pfnGetRendererType();
+			l_return = m_pfnGetRendererType();
 		}
 
-		return l_eReturn;
+		return l_return;
 	}
 }

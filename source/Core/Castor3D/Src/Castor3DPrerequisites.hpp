@@ -62,6 +62,11 @@ namespace Castor3D
 
 namespace Castor3D
 {
+	namespace
+	{
+		Castor::String const RENDERER_TYPE_UNDEFINED = cuT( "Undefined" );
+	}
+
 	/**@name Importer */
 	//@{
 
@@ -136,24 +141,6 @@ namespace Castor3D
 		ePLUGIN_TYPE_GENERIC,
 		CASTOR_ENUM_BOUNDS( ePLUGIN_TYPE, ePLUGIN_TYPE_RENDERER )
 	}	ePLUGIN_TYPE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		01/04/2011
-	\~english
-	\brief		Supported renderers enumeration
-	\~french
-	\brief		Enumération des renderers supportés
-	*/
-	typedef enum eRENDERER_TYPE
-		: int8_t
-	{
-		//!\~english No Renderer selected	\~french Pas de renderer sélectionné
-		eRENDERER_TYPE_UNDEFINED = -1,
-		//!\~english OpenGl Renderer	\~french Renderer OpenGL
-		eRENDERER_TYPE_OPENGL = 0,
-		CASTOR_ENUM_BOUNDS( eRENDERER_TYPE, eRENDERER_TYPE_UNDEFINED )
-	}	eRENDERER_TYPE;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -533,7 +520,7 @@ namespace Castor3D
 	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
-	DECLARE_ARRAY( RendererPluginSPtr, eRENDERER_TYPE_COUNT, RendererPtr );
+	DECLARE_MAP( Castor::String, RendererPluginSPtr, RendererPtr );
 	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );
 	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
 	DECLARE_ARRAY( DynamicLibraryPtrPathMap, ePLUGIN_TYPE_COUNT, DynamicLibraryPtrPathMap );

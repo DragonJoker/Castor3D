@@ -43,11 +43,11 @@ namespace GuiCommon
 		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, l_strCancel );
 		l_pTitle->SetFont( l_font );
 
-		for ( auto l_renderer : m_engine->GetPluginManager().GetRenderersList() )
+		for ( auto l_it : m_engine->GetPluginManager().GetRenderersList() )
 		{
-			if ( l_renderer )
+			if ( l_it.second )
 			{
-				m_pListRenderers->Insert( l_renderer->GetName(), l_iCount++, l_renderer.get() );
+				m_pListRenderers->Insert( l_it.second->GetName(), l_iCount++, l_it.second.get() );
 			}
 		}
 
@@ -82,17 +82,17 @@ namespace GuiCommon
 	{
 	}
 
-	eRENDERER_TYPE RendererSelector::GetSelectedRenderer()const
+	Castor::String RendererSelector::GetSelectedRenderer()const
 	{
-		eRENDERER_TYPE l_eReturn = eRENDERER_TYPE_UNDEFINED;
-		uint32_t l_uiReturn = m_pListRenderers->GetSelection();
+		Castor::String l_return = RENDERER_TYPE_UNDEFINED;
+		uint32_t l_selected = m_pListRenderers->GetSelection();
 
-		if ( l_uiReturn >= 0 && l_uiReturn < m_pListRenderers->GetCount() )
+		if ( l_selected >= 0 && l_selected < m_pListRenderers->GetCount() )
 		{
-			l_eReturn = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( l_uiReturn ) )->GetRendererType();
+			l_return = static_cast< RendererPlugin * >( m_pListRenderers->GetClientData( l_selected ) )->GetRendererType();
 		}
 
-		return l_eReturn;
+		return l_return;
 	}
 
 	void RendererSelector::DoDraw( wxDC * p_pDC )

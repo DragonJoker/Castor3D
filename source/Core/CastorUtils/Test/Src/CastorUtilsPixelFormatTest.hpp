@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_PIXEL_FORMAT_TEST_H___
 #define ___CUT_PIXEL_FORMAT_TEST_H___
 
-#include "UnitTest.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {

@@ -39,18 +39,9 @@ namespace Castor3D
 		m_arrayPrograms.clear();
 	}
 
-	ShaderProgramSPtr ShaderManager::GetNewProgram( eSHADER_LANGUAGE p_langage )
+	ShaderProgramSPtr ShaderManager::GetNewProgram()
 	{
-		ShaderProgramSPtr l_return;
-
-		if ( p_langage != eSHADER_LANGUAGE_AUTO )
-		{
-			l_return = m_renderSystem->CreateShaderProgram( p_langage );
-		}
-		else
-		{
-			l_return = m_renderSystem->CreateShaderProgram();
-		}
+		ShaderProgramSPtr l_return = m_renderSystem->CreateShaderProgram();
 
 		if ( l_return )
 		{

@@ -44,16 +44,16 @@ namespace GuiCommon
 				<li>directx" )	Defines the renderer to Direct3D 11 (the renderer selection dialog will not be displayed)
 				</ul>
 	\~french
-	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les paramètres en ligne de commande.
-	\args		T	Doit être un descendant de wxApp.
-	\remarks	Les options en ligne de commande peuvent être passées ainsi : -abr, /abr, --long.
-				<br />Les options supportées sont les suivantes :
+	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les paramï¿½tres en ligne de commande.
+	\args		T	Doit ï¿½tre un descendant de wxApp.
+	\remarks	Les options en ligne de commande peuvent ï¿½tre passï¿½es ainsi : -abr, /abr, --long.
+				<br />Les options supportï¿½es sont les suivantes :
 				<ul>
 				<li>h (--help)	Affiche l'aide.
-				<li>l (--log)	Définit le niveau de log.
-				<li>f (--file)	Définit un fichier de scène à charger au lancement.
-				<li>opengl"		Définit l'API de rendu à OpenGl (la fenêtre de choix du renderer ne sera pas affichée).
-				<li>directx		Définit l'API de rendu à Direct3D 11 (la fenêtre de choix du renderer ne sera pas affichée).
+				<li>l (--log)	Dï¿½finit le niveau de log.
+				<li>f (--file)	Dï¿½finit un fichier de scï¿½ne ï¿½ charger au lancement.
+				<li>opengl"		Dï¿½finit l'API de rendu ï¿½ OpenGl (la fenï¿½tre de choix du renderer ne sera pas affichï¿½e).
+				<li>directx		Dï¿½finit l'API de rendu ï¿½ Direct3D 11 (la fenï¿½tre de choix du renderer ne sera pas affichï¿½e).
 				</ul>
 	*/
 	class CastorApplication
@@ -68,9 +68,9 @@ namespace GuiCommon
 		 *\param[in]	p_steps			The initialisation steps count, used for splash screen.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_internalName	Le nom de l'application, utilisé pour rechercher les fichiers de langages, et écrit dans les logs.
-		 *\param[in]	p_displayName	Le nom de l'application, affiché dans les fenêtres.
-		 *\param[in]	p_steps			Le nombre d'étapes de l'initialisation, sert pour l'affichage du splash screen.
+		 *\param[in]	p_internalName	Le nom de l'application, utilisï¿½ pour rechercher les fichiers de langages, et ï¿½crit dans les logs.
+		 *\param[in]	p_displayName	Le nom de l'application, affichï¿½ dans les fenï¿½tres.
+		 *\param[in]	p_steps			Le nombre d'ï¿½tapes de l'initialisation, sert pour l'affichage du splash screen.
 		 */
 		CastorApplication( Castor::String const & p_internalName, Castor::String const & p_displayName, uint32_t p_steps );
 		/**
@@ -87,7 +87,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The application displayed name.
 		 *\~french
-		 *\return		Le nom de l'application, tel qu'affiché dans les fenêtres.
+		 *\return		Le nom de l'application, tel qu'affichï¿½ dans les fenï¿½tres.
 		 */
 		inline Castor::String const & GetDisplayName()const
 		{
@@ -97,7 +97,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The file name given in command line with -f option
 		 *\~french
-		 *\return		Le nom du fichier donné en ligne de commande via l'option -f
+		 *\return		Le nom du fichier donnï¿½ en ligne de commande via l'option -f
 		 */
 		inline Castor::String const & GetFileName()const
 		{
@@ -105,11 +105,11 @@ namespace GuiCommon
 		}
 		/**
 		 *\~english
-		 *\return		The renderer type given in command line, Castor3D::eRENDERER_TYPE_UNDEFINED if none was given
+		 *\return		The renderer type given in command line, Castor3D::RENDERER_TYPE_UNDEFINED if none was given
 		 *\~french
-		 *\return		Le type d'API de rendu donné en ligne de commande, Castor3D::eRENDERER_TYPE_UNDEFINED si aucun n'a été donné
+		 *\return		Le type d'API de rendu donnï¿½ en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a ï¿½tï¿½ donnï¿½
 		 */
-		inline Castor3D::eRENDERER_TYPE GetRendererType()const
+		inline Castor::String const & GetRendererType()const
 		{
 			return m_rendererType;
 		}
@@ -143,7 +143,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Initialise l'application.
 		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plug-ins.
-		 *\return		Si false, l'application s'arrêtera.
+		 *\return		Si false, l'application s'arrï¿½tera.
 		 */
 		virtual bool OnInit();
 		/**
@@ -157,7 +157,7 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Used to add application specific images to ImagesLoader
 		 *\~french
-		 *\brief		Utilisé afin d'ajouter à ImagesLoader des images spécifiques à l'application
+		 *\brief		Utilisï¿½ afin d'ajouter ï¿½ ImagesLoader des images spï¿½cifiques ï¿½ l'application
 		 */
 		virtual void DoLoadAppImages() = 0;
 		/**
@@ -166,9 +166,9 @@ namespace GuiCommon
 		 *\param[in]	p_splashScreen	The splash screen.
 		 *\return		The main frame. If nullptr, the application will stop.
 		 *\~french
-		 *\brief		Devrait contenir le code d'initialisation de la fenêtre principale de l'application.
+		 *\brief		Devrait contenir le code d'initialisation de la fenï¿½tre principale de l'application.
 		 *\param[in]	p_splashScreen	Le splash screen.
-		 *\return		La fenêtre principale. Si nullptr, l'application s'arrêtera.
+		 *\return		La fenï¿½tre principale. Si nullptr, l'application s'arrï¿½tera.
 		 */
 		virtual wxWindow * DoInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
 
@@ -186,7 +186,7 @@ namespace GuiCommon
 
 	private:
 		Castor::String m_fileName;
-		Castor3D::eRENDERER_TYPE m_rendererType;
+		Castor::String m_rendererType;
 		std::unique_ptr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;

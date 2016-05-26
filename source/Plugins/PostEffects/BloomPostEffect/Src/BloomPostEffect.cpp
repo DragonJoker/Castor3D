@@ -46,7 +46,7 @@ namespace Bloom
 		static const String CombineMapPass3 = cuT( "c3d_mapPass3" );
 		static const String CombineMapScene = cuT( "c3d_mapScene" );
 
-		Castor::String GetGlslVertexProgram( RenderSystem * p_renderSystem )
+		Castor::String GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -68,7 +68,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslHiPassProgram( RenderSystem * p_renderSystem )
+		Castor::String GetHiPassProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -91,7 +91,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslBlurProgram( RenderSystem * p_renderSystem )
+		Castor::String GetBlurProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -124,7 +124,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslCombineProgram( RenderSystem * p_renderSystem )
+		Castor::String GetCombineProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -277,17 +277,10 @@ namespace Bloom
 		String l_blur;
 		String l_combine;
 
-		if ( GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			l_vertex = GetGlslVertexProgram( GetRenderSystem() );
-			l_hipass = GetGlslHiPassProgram( GetRenderSystem() );
-			l_blur = GetGlslBlurProgram( GetRenderSystem() );
-			l_combine = GetGlslCombineProgram( GetRenderSystem() );
-		}
-		else
-		{
-			CASTOR_EXCEPTION( "Unsupported renderer type" );
-		}
+		l_vertex = GetVertexProgram( GetRenderSystem() );
+		l_hipass = GetHiPassProgram( GetRenderSystem() );
+		l_blur = GetBlurProgram( GetRenderSystem() );
+		l_combine = GetCombineProgram( GetRenderSystem() );
 
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
