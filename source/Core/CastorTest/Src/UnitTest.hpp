@@ -77,19 +77,39 @@ namespace Testing
 	class TestCase
 	{
 	public:
+		using TestFunction = std::function< void() >;
+
+	public:
 		TestCase( std::string const & p_name );
 		virtual ~TestCase();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount ) = 0;
+		void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 		inline std::string const & GetName()const
 		{
 			return m_name;
 		}
 
 	protected:
-		void DoExecuteTest( std::function< void( uint32_t &, uint32_t & ) > p_test, uint32_t & p_errCount, uint32_t & p_testCount, std::string const & p_name );
+		void DoRegisterTest( std::string const & p_name, TestFunction p_test );
 
 	private:
-		std::string	m_name;
+		virtual void DoRegisterTests() = 0;
+
+	protected:
+		void DoReportFailure()
+		{
+			( *m_errorCount )++;
+		}
+
+		void DoAddTest()
+		{
+			( *m_testCount )++;
+		}
+
+	private:
+		uint32_t * m_errorCount{ nullptr };
+		uint32_t * m_testCount{ nullptr };
+		std::string m_name;
+		std::map< std::string, TestFunction > m_tests;
 	};
 
 	DECLARE_SMART_PTR( TestCase );
@@ -110,19 +130,19 @@ namespace Testing
 	};
 
 #	define TEST_CHECK( x )\
-	p_testCount++;\
+	DoAddTest();\
 	if( !(x) )\
 	{\
-		p_errCount++;\
+		DoReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}
 
 #	define TEST_CHECK_THROW( x )\
-	p_testCount++;\
+	DoAddTest();\
 	try\
 	{\
 		( x ); \
-		p_errCount++;\
+		DoReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}\
 	catch ( ... )\
@@ -130,35 +150,31 @@ namespace Testing
 	}
 
 #	define TEST_CHECK_NOTHROW( x )\
-	p_testCount++;\
+	DoAddTest();\
 	try\
 	{\
 		( x ); \
 	}\
 	catch ( ... )\
 	{\
-		p_errCount++;\
+		DoReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}
 
 #	define TEST_EQUAL( x, y )\
-	p_testCount++;\
+	DoAddTest();\
 	if( !compare( x, y ) )\
 	{\
-		p_errCount++;\
+		DoReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Testing::to_string( x ) << " != " << Testing::to_string( y ) << ")" );\
 	}
 
 #	define TEST_REQUIRE( x )\
-	p_testCount++;\
+	DoAddTest();\
 	if( !(x) )\
 	{\
-		p_errCount++;\
 		throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ );\
 	}
-
-#	define EXECUTE_TEST( class_name, test_func, errors, tests )\
-	DoExecuteTest( std::bind( &class_name::test_func, this, std::placeholders::_1, std::placeholders::_2 ), errors, tests, #test_func );
 }
 
 #endif

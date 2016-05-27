@@ -21,11 +21,27 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <UnitTest.hpp>
 #include <Benchmark.hpp>
 
-namespace Testing
+#include "Castor3DTestUtils.hpp"
+
+namespace Castor3D
 {
-	namespace
+	namespace Testing
 	{
-		Castor::String RENDERER_TYPE_TEST = cuT( "Test" );
+		static Castor::String RENDERER_TYPE_TEST = cuT( "test" );
+
+		class TestCase
+			: public ::Testing::TestCase
+		{
+		public:
+			inline TestCase( std::string const & p_name, Engine & p_engine )
+				: ::Testing::TestCase{ p_name }
+				, m_engine{ p_engine }
+			{
+			}
+
+		protected:
+			Engine & m_engine;
+		};
 	}
 }
 

@@ -19,12 +19,12 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsZipTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsZipTest, ZipFile, p_errCount, p_testCount );
+		DoRegisterTest( "ZipFile", std::bind( &CastorUtilsZipTest::ZipFile, this ) );
 	}
 
-	void CastorUtilsZipTest::ZipFile( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::ZipFile()
 	{
 		Path l_folder1 = cuT( "test1" );
 		Path l_folder2 = l_folder1 / cuT( "test2" );

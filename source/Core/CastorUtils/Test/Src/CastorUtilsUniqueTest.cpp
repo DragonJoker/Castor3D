@@ -94,20 +94,20 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsUniqueTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsUniqueTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsUniqueTest, NoInstanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsUniqueTest, OneInstanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsUniqueTest, MultipleInstanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsUniqueTest, MemoryTest, p_errCount, p_testCount );
+		DoRegisterTest( "NoInstanceTest", std::bind( &CastorUtilsUniqueTest::NoInstanceTest, this ) );
+		DoRegisterTest( "OneInstanceTest", std::bind( &CastorUtilsUniqueTest::OneInstanceTest, this ) );
+		DoRegisterTest( "MultipleInstanceTest", std::bind( &CastorUtilsUniqueTest::MultipleInstanceTest, this ) );
+		DoRegisterTest( "MemoryTest", std::bind( &CastorUtilsUniqueTest::MemoryTest, this ) );
 	}
 
-	void CastorUtilsUniqueTest::NoInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsUniqueTest::NoInstanceTest()
 	{
 		TEST_CHECK_THROW( TestUnique::GetInstance() );
 	}
 
-	void CastorUtilsUniqueTest::OneInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsUniqueTest::OneInstanceTest()
 	{
 		{
 			TestUnique l_tmp;
@@ -116,13 +116,13 @@ namespace Testing
 		TEST_CHECK_THROW( TestUnique::GetInstance() );
 	}
 
-	void CastorUtilsUniqueTest::MultipleInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsUniqueTest::MultipleInstanceTest()
 	{
 		TestUnique l_tmp1;
 		TEST_CHECK_THROW( std::make_unique< TestUnique >() );
 	}
 
-	void CastorUtilsUniqueTest::MemoryTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsUniqueTest::MemoryTest()
 	{
 		{
 			TestUniqueFirst l_src;

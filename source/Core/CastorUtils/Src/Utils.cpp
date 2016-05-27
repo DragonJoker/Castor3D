@@ -167,10 +167,24 @@ namespace Castor
 
 		uint8_t GetCPUCount()
 		{
-			char res[128];
-			FILE * fp = popen( "/bin/cat /proc/cpuinfo |grep -c '^processor'", "r" );
-			ENSURE( fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res ) );
-			pclose( fp );
+			struct ProcessFile
+			{
+				~ProcessFile()
+				{
+					pclose( m_file );
+				}
+				operator FILE *()const
+				{
+					return m_file;
+				}
+				FILE * m_file;
+			};
+
+			char l_res[128];
+			{
+				ProcessFile l_file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
+				ENSURE( fread( l_res, 1, sizeof( l_res ) - 1, l_file ) < sizeof( l_res ) );
+			}
 			return res[0];
 		}
 	}

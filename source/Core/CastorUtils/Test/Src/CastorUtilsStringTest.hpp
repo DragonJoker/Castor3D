@@ -28,10 +28,12 @@ namespace Testing
 	public:
 		CastorUtilsStringTest();
 		virtual ~CastorUtilsStringTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void StringConversions( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void StringConversions();
 	};
 
 	class CastorUtilsStringBench

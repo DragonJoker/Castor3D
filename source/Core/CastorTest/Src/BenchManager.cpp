@@ -90,25 +90,7 @@ namespace Testing
 
 			for ( auto && l_testCase : m_arrayTests )
 			{
-				try
-				{
-					l_testCase->Execute( l_errCount, l_testCount );
-				}
-				catch ( TestFailed & exc )
-				{
-					Logger::LogWarning( "*	Test " + l_testCase->GetName() + " execution failed (" + exc.what() + ") " );
-				}
-				catch ( std::exception & exc )
-				{
-					l_errCount++;
-					Logger::LogInfo( std::stringstream() << "*	Test " << l_testCase->GetName().c_str() << " execution failed (" << exc.what() << ")" );
-				}
-				catch ( ... )
-				{
-					l_errCount++;
-					Logger::LogInfo( "*	Test " + l_testCase->GetName() + " execution failed (Unknown reason)" );
-				}
-
+				l_testCase->Execute( l_errCount, l_testCount );
 				Logger::LogInfo( l_testSep );
 			}
 

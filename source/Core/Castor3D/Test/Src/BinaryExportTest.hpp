@@ -15,32 +15,29 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CUT_CastorUtilsObjectsPoolTest___
-#define ___CUT_CastorUtilsObjectsPoolTest___
+#ifndef ___C3DT_BINARY_EXPORT_TEST_H___
+#define ___C3DT_BINARY_EXPORT_TEST_H___
 
-#include "CastorUtilsTestPrerequisites.hpp"
+#include "Castor3DTestPrerequisites.hpp"
 
-namespace Testing
+namespace Castor3D
 {
-	class CastorUtilsObjectsPoolTest
-		: public TestCase
+	namespace Testing
 	{
-	public:
-		CastorUtilsObjectsPoolTest();
-		virtual ~CastorUtilsObjectsPoolTest();
+		class BinaryExportTest
+			: public TestCase
+		{
+		public:
+			BinaryExportTest( Engine & p_engine );
+			virtual ~BinaryExportTest();
 
-	private:
-		void DoRegisterTests() override;
+		private:
+			void DoRegisterTests() override;
 
-	private:
-		void ObjectPoolTest();
-		void AlignedObjectPoolTest();
-		void FixedSizePerformanceTest();
-		void AllDeallPerformanceTest();
-		void ScatteredMemoryPerformanceTest();
-		void VariableSizePerformanceTest();
-		void UniquePoolTest();
-	};
+		private:
+			void SimpleMesh( );
+		};
+	}
 }
 
 #endif

@@ -33,21 +33,23 @@ namespace Testing
 	public:
 		CastorUtilsMatrixTest();
 		virtual ~CastorUtilsMatrixTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void MatrixInversion();
 
 #if defined( CASTOR_USE_GLM )
 
-		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
-		void MatrixMultiplicationComparison( uint32_t & p_errCount, uint32_t & p_testCount );
-		void TransformationMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
-		void ProjectionMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void MatrixInversionComparison();
+		void MatrixMultiplicationComparison();
+		void TransformationMatrixComparison();
+		void ProjectionMatrixComparison();
 
 #if GLM_VERSION >= 95
 
-		void QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void QuaternionComparison();
 
 #endif
 

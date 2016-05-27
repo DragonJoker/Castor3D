@@ -68,12 +68,12 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsStringTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsStringTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsStringTest, StringConversions, p_errCount, p_testCount );
+		DoRegisterTest( "StringConversions", std::bind( &CastorUtilsStringTest::StringConversions, this ) );
 	}
 
-	void CastorUtilsStringTest::StringConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsStringTest::StringConversions()
 	{
 		String l_tstrOut;
 		String l_tstrIn( cuT( "STR : Bonjoir éêèàÉÊÈÀ" ) );

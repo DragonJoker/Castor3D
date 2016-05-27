@@ -1,5 +1,5 @@
 if ( MSVC )
-    project( ComCastor3DTest )
+	project( ComCastor3DTest )
 
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR	9 )
@@ -25,7 +25,7 @@ if ( MSVC )
 		VERBATIM
 	)
 
-	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Interop/ComCastor3D" )
+	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Test" )
 	add_target_astyle( ComCastor3DTest ".hpp;.inl;.cpp" )
 	set( Build "yes (version ${CMCT_VERSION_MAJOR}.${CMCT_VERSION_MINOR}.${CMCT_VERSION_BUILD})" PARENT_SCOPE )
 endif ()

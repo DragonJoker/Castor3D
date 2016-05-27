@@ -103,17 +103,17 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsObjectsPoolTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, ObjectPoolTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, AlignedObjectPoolTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, FixedSizePerformanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, ScatteredMemoryPerformanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, VariableSizePerformanceTest, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsObjectsPoolTest, UniquePoolTest, p_errCount, p_testCount );
+		DoRegisterTest( "ObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::ObjectPoolTest, this ) );
+		DoRegisterTest( "AlignedObjectPoolTest", std::bind( &CastorUtilsObjectsPoolTest::AlignedObjectPoolTest, this ) );
+		DoRegisterTest( "FixedSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::FixedSizePerformanceTest, this ) );
+		DoRegisterTest( "ScatteredMemoryPerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest, this ) );
+		DoRegisterTest( "VariableSizePerformanceTest", std::bind( &CastorUtilsObjectsPoolTest::VariableSizePerformanceTest, this ) );
+		DoRegisterTest( "UniquePoolTest", std::bind( &CastorUtilsObjectsPoolTest::UniquePoolTest, this ) );
 	}
 
-	void CastorUtilsObjectsPoolTest::ObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::ObjectPoolTest()
 	{
 		Memory::Checks< Castor::eMEMDATA_TYPE_FIXED >();
 		Memory::Checks< Castor::eMEMDATA_TYPE_FIXED_MARKED >();
@@ -121,13 +121,13 @@ namespace Testing
 		Memory::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING_MARKED >();
 	}
 
-	void CastorUtilsObjectsPoolTest::AlignedObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::AlignedObjectPoolTest()
 	{
 		Memory::AlignedChecks< Castor::eMEMDATA_TYPE_FIXED >();
 		Memory::AlignedChecks< Castor::eMEMDATA_TYPE_FIXED_GROWING >();
 	}
 
-	void CastorUtilsObjectsPoolTest::FixedSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::FixedSizePerformanceTest()
 	{
 		FixedSizePerformance::Checks< PlacementNew::SFixedChecks< AllocPolicies::SPlacementNewPolicy > >();
 		FixedSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED >();
@@ -138,7 +138,7 @@ namespace Testing
 		FixedSizePerformance::Checks< Traditional::SFixedChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
 
-	void CastorUtilsObjectsPoolTest::AllDeallPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::AllDeallPerformanceTest()
 	{
 		AllDeallPerformance::Checks< PlacementNew::SAllDeallChecks< AllocPolicies::SPlacementNewPolicy > >();
 		AllDeallPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED >();
@@ -149,7 +149,7 @@ namespace Testing
 		AllDeallPerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
 
-	void CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest()
 	{
 		ScatteredMemoryPerformance::Index index;
 		ScatteredMemoryPerformance::Checks< PlacementNew::SScatteredChecks< AllocPolicies::SPlacementNewPolicy > >( index );
@@ -161,7 +161,7 @@ namespace Testing
 		ScatteredMemoryPerformance::Checks< Traditional::SScatteredChecks< AllocPolicies::SMallocFreePolicy > >( index );
 	}
 
-	void CastorUtilsObjectsPoolTest::VariableSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::VariableSizePerformanceTest()
 	{
 		VariableSizePerformance::Checks< PlacementNew::SVariableChecks< AllocPolicies::SPlacementNewPolicy > >();
 		VariableSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING >();
@@ -170,7 +170,7 @@ namespace Testing
 		VariableSizePerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
 
-	void CastorUtilsObjectsPoolTest::UniquePoolTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsObjectsPoolTest::UniquePoolTest()
 	{
 		UniqueObjectPool::Checks< Traditional::SFixedChecks< AllocPolicies::SNewDeletePolicy > >();
 		UniqueObjectPool::Checks< Traditional::SFixedChecks< AllocPolicies::SMallocFreePolicy > >();

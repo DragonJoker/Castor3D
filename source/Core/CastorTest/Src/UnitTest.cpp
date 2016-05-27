@@ -20,6 +20,63 @@ namespace Testing
 
 	//*************************************************************************************************
 
+	TestCase::TestCase( std::string const & p_name )
+		: m_name( p_name )
+	{
+	}
+
+	TestCase::~TestCase()
+	{
+	}
+
+	void TestCase::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	{
+		m_errorCount = &p_errCount;
+		m_testCount = &p_testCount;
+
+		for ( auto l_test : m_tests )
+		{
+			std::stringstream l_begin;
+			l_begin << "**** ";
+			l_begin.width( TEST_TITLE_WIDTH - 10 );
+			l_begin << std::left << ( "Begin test case " + l_test.first ) << " ****";
+			Logger::LogInfo( l_begin );
+
+			try
+			{
+				l_test.second();
+			}
+			catch ( TestFailed & exc )
+			{
+				p_errCount++;
+				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " failed (" << exc.what() << ")" );
+			}
+			catch ( std::exception & exc )
+			{
+				p_errCount++;
+				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " execution failed (" << exc.what() << ")" );
+			}
+			catch ( ... )
+			{
+				p_errCount++;
+				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " execution failed (Unknown reason)" );
+			}
+
+			std::stringstream l_end;
+			l_end << "**** ";
+			l_end.width( TEST_TITLE_WIDTH - 10 );
+			l_end << std::left << ( "End test case " + l_test.first ) << " ****";
+			Logger::LogInfo( l_end );
+		}
+	}
+
+	void TestCase::DoRegisterTest( std::string const & p_name, TestFunction p_test )
+	{
+		m_tests.insert( { p_name, p_test } );
+	}
+
+	//*************************************************************************************************
+
 	TestFailed::TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line )
 		: m_what( p_file + " - " + p_function + ", line " + std::to_string( p_line ) + " : " + p_what )
 	{
@@ -30,28 +87,4 @@ namespace Testing
 	}
 
 	//*************************************************************************************************
-
-	TestCase::TestCase( std::string const & p_name )
-		: m_name( p_name )
-	{
-	}
-
-	TestCase::~TestCase()
-	{
-	}
-
-	void TestCase::DoExecuteTest( std::function< void( uint32_t &, uint32_t & ) > p_test, uint32_t & p_errCount, uint32_t & p_testCount, std::string const & p_name )
-	{
-		std::stringstream l_begin;
-		l_begin << "**** ";
-		l_begin.width( TEST_TITLE_WIDTH - 10 );
-		l_begin << std::left << ( "Begin test case " + p_name ) << " ****";
-		Logger::LogInfo( l_begin );
-		p_test( p_errCount, p_testCount );
-		std::stringstream l_end;
-		l_end << "**** ";
-		l_end.width( TEST_TITLE_WIDTH - 10 );
-		l_end << std::left << ( "End test case " + p_name ) << " ****";
-		Logger::LogInfo( l_end );
-	}
 }

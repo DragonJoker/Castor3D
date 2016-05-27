@@ -28,11 +28,13 @@ namespace Testing
 	public:
 		CastorUtilsPixelFormatTest();
 		virtual ~CastorUtilsPixelFormatTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount );
-		void TestBufferConversions( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void TestPixelConversions();
+		void TestBufferConversions();
 	};
 }
 

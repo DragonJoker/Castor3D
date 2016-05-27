@@ -58,6 +58,7 @@ namespace TestRender
 
 	void TestBackBuffers::DoResize( Castor::Size const & p_size )
 	{
+		FAILURE( "BackBuffers can't be resized." );
 	}
 
 	bool TestBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )

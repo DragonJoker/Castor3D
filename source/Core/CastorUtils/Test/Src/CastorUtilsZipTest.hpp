@@ -28,10 +28,12 @@ namespace Testing
 	public:
 		CastorUtilsZipTest();
 		virtual ~CastorUtilsZipTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void ZipFile( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void ZipFile();
 	};
 }
 

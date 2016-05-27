@@ -42,14 +42,14 @@ namespace Testing
 	bool Register( TestCaseSPtr p_pCode );
 
 #define BENCHLOOP( p_iMax, p_return )\
-		p_return = Testing::BenchManager::ExecuteTests();\
+		p_return = ::Testing::BenchManager::ExecuteTests();\
 		for( int i = 0; i < p_iMax; ++i )\
 		{\
-			Testing::BenchManager::ExecuteBenchs();\
+			::Testing::BenchManager::ExecuteBenchs();\
 		}\
 		if( p_iMax > 1 )\
 		{\
-			Testing::BenchManager::BenchsSummary();\
+			::Testing::BenchManager::BenchsSummary();\
 		}
 }
 
