@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Engine.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/KeyFrame.hpp>
+#include <Animation/Skeleton/KeyFrame.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>

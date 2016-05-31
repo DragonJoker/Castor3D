@@ -47,6 +47,7 @@ namespace Testing
 		bool compare( Castor3D::Skeleton const & p_a, Castor3D::Skeleton const & p_b );
 		bool compare( Castor3D::Bone const & p_a, Castor3D::Bone const & p_b );
 		bool compare( Castor3D::Animation const & p_a, Castor3D::Animation const & p_b );
+		bool compare( Castor3D::SkeletonAnimation const & p_a, Castor3D::SkeletonAnimation const & p_b );
 		bool compare( Castor3D::AnimationObject const & p_a, Castor3D::AnimationObject const & p_b );
 		bool compare( Castor3D::KeyFrame const & p_a, Castor3D::KeyFrame const & p_b );
 	};

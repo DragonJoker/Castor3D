@@ -2,7 +2,6 @@
 
 #include "Animable.hpp"
 #include "Animation.hpp"
-#include "AnimationObject.hpp"
 
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
@@ -63,39 +62,7 @@ namespace Castor3D
 
 	void AnimatedObject::FillShader( Matrix4x4rFrameVariable & p_variable )
 	{
-		SkeletonSPtr l_skeleton = GetSkeleton();
-
-		if ( l_skeleton )
-		{
-			uint32_t i{ 0u };
-
-			if ( m_playingAnimations.empty() )
-			{
-				for ( auto l_bone : *l_skeleton )
-				{
-					p_variable.SetValue( l_skeleton->GetGlobalInverseTransform(), i++ );
-				}
-			}
-			else
-			{
-				for ( auto l_bone : *l_skeleton )
-				{
-					Matrix4x4r l_final{ 1.0_r };
-
-					for ( auto l_animation : m_playingAnimations )
-					{
-						auto l_moving = l_animation->GetObject( l_bone );
-
-						if ( l_moving )
-						{
-							l_final *= l_moving->GetFinalTransform();
-						}
-					}
-
-					p_variable.SetValue( l_final, i++ );
-				}
-			}
-		}
+		DoFillShader( p_variable );
 	}
 
 	void AnimatedObject::StartAnimation( String const & p_name )
@@ -107,8 +74,8 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != eANIMATION_STATE_PLAYING
-					&& l_animation->GetState() != eANIMATION_STATE_PAUSED )
+			if ( l_animation->GetState() != AnimationState::Playing
+					&& l_animation->GetState() != AnimationState::Paused )
 			{
 				l_animation->Play();
 				m_playingAnimations.push_back( l_animation );
@@ -125,7 +92,7 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != eANIMATION_STATE_STOPPED )
+			if ( l_animation->GetState() != AnimationState::Stopped )
 			{
 				l_animation->Stop();
 				m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), l_animation ) );
@@ -184,68 +151,5 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	void AnimatedObject::SetGeometry( GeometrySPtr p_object )
-	{
-		m_animations.clear();
-		DoSetGeometry( p_object );
-	}
-
-	void AnimatedObject::SetMesh( MeshSPtr p_mesh )
-	{
-		m_animations.clear();
-		DoSetMesh( p_mesh );
-	}
-
-	void AnimatedObject::SetSkeleton( SkeletonSPtr p_pSkeleton )
-	{
-		m_animations.clear();
-		DoSetSkeleton( p_pSkeleton );
-	}
-
-	void AnimatedObject::DoSetGeometry( GeometrySPtr p_object )
-	{
-		if ( p_object )
-		{
-			DoSetMesh( p_object->GetMesh() );
-		}
-
-		m_geometry = p_object;
-	}
-
-	void AnimatedObject::DoSetMesh( MeshSPtr p_mesh )
-	{
-		if ( p_mesh )
-		{
-			DoCopyAnimations( p_mesh );
-			DoSetSkeleton( p_mesh->GetSkeleton() );
-		}
-
-		m_mesh = p_mesh;
-	}
-
-	void AnimatedObject::DoSetSkeleton( SkeletonSPtr p_skeleton )
-	{
-		if ( p_skeleton )
-		{
-			DoCopyAnimations( p_skeleton );
-		}
-
-		m_skeleton = p_skeleton;
-	}
-
-	void AnimatedObject::DoCopyAnimations( AnimableSPtr p_object )
-	{
-		for ( auto l_itAnim : p_object->GetAnimations() )
-		{
-			AnimationSPtr l_animation = l_itAnim.second;
-			auto l_it = m_animations.find( l_animation->GetName() );
-
-			if ( l_it == m_animations.end() )
-			{
-				m_animations.insert( { l_animation->GetName(), l_animation->Clone( *p_object ) } );
-			}
-		}
 	}
 }

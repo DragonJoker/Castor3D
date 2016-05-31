@@ -21,7 +21,7 @@ namespace GuiCommon
 		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
 	}
 
-	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, eANIMATION_STATE p_state )
+	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, AnimationState p_state )
 		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_name( p_name )
 		, m_group( p_group )
@@ -32,9 +32,9 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		PROPERTY_ANIMATION_SPEED = _( "Speed" );
 		PROPERTY_ANIMATION_LOOPED = _( "Looped" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_PLAYING] = _( "Pause" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_STOPPED] = _( "Play" );
-		PROPERTY_ANIMATION_STATE[eANIMATION_STATE_PAUSED] = _( "Stop" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Playing )] = _( "Pause" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Stopped )] = _( "Play" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Paused )] = _( "Stop" );
 
 		CreateTreeItemMenu();
 	}
@@ -52,7 +52,7 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
 			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_scale ), _( "The animation time scale." ) ) );
 			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_looped ), _( "Sets the animation looped or not" ) ) );
-			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[m_state], PROPERTY_ANIMATION_STATE[m_state], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
+			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[uint32_t( m_state )], PROPERTY_ANIMATION_STATE[uint32_t( m_state )], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
 		}
 	}
 
@@ -105,23 +105,23 @@ namespace GuiCommon
 
 			switch ( m_state )
 			{
-			case eANIMATION_STATE_PLAYING:
+			case AnimationState::Playing:
 				l_group->PauseAnimation( m_name );
-				m_state = eANIMATION_STATE_PAUSED;
+				m_state = AnimationState::Paused;
 				break;
 
-			case eANIMATION_STATE_STOPPED:
+			case AnimationState::Stopped:
 				l_group->StartAnimation( m_name );
-				m_state = eANIMATION_STATE_PLAYING;
+				m_state = AnimationState::Playing;
 				break;
 
-			case eANIMATION_STATE_PAUSED:
+			case AnimationState::Paused:
 				l_group->StopAnimation( m_name );
-				m_state = eANIMATION_STATE_STOPPED;
+				m_state = AnimationState::Stopped;
 				break;
 			}
 
-			p_property->SetLabel( PROPERTY_ANIMATION_STATE[m_state] );
+			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_state )] );
 		} );
 
 		return false;

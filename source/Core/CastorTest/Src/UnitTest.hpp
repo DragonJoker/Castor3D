@@ -139,7 +139,7 @@ namespace Testing
 		uint32_t * m_errorCount{ nullptr };
 		uint32_t * m_testCount{ nullptr };
 		std::string m_name;
-		std::map< std::string, TestFunction > m_tests;
+		std::vector< std::pair< std::string, TestFunction > > m_tests;
 	};
 
 	DECLARE_SMART_PTR( TestCase );

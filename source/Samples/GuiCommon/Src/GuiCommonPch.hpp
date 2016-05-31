@@ -93,7 +93,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Engine.hpp>
 #	include <ShaderManager.hpp>
 #	include <Animation/Animation.hpp>
-#	include <Animation/KeyFrame.hpp>
+#	include <Animation/Skeleton/KeyFrame.hpp>
 #	include <Animation/AnimatedObjectGroup.hpp>
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>

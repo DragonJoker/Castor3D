@@ -11,8 +11,8 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 
-#include <Animation/AnimationObject.hpp>
-#include <Animation/SkeletonAnimationBone.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Manager/ManagerView.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
@@ -664,7 +664,8 @@ namespace C3dAssimp
 		}
 	}
 
-	AnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
+	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation
+    ( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
 		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
@@ -673,13 +674,13 @@ namespace C3dAssimp
 			l_name = p_name;
 		}
 
-		AnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
+		SkeletonAnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
 		real l_ticksPerSecond = real( p_aiAnimation->mTicksPerSecond ? p_aiAnimation->mTicksPerSecond : 25.0_r );
 		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_node, p_aiAnimation, nullptr );
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
@@ -694,7 +695,7 @@ namespace C3dAssimp
 				auto l_bone = m_arrayBones[l_itBone->second];
 				l_object = p_animation->AddObject( l_bone, p_object );
 
-				if ( p_object->GetType() == eANIMATION_OBJECT_TYPE_BONE )
+				if ( p_object->GetType() == AnimationObjectType::Bone )
 				{
 					p_skeleton->SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
 				}
@@ -734,8 +735,8 @@ namespace C3dAssimp
 
 			// We process translations
 			KeyFrameRealMap l_keyframes;
-			InterpolatorT< Point3r, eINTERPOLATOR_MODE_LINEAR > l_pointInterpolator;
-			InterpolatorT< Quaternion, eINTERPOLATOR_MODE_LINEAR > l_quatInterpolator;
+			InterpolatorT< Point3r, InterpolatorType::Linear > l_pointInterpolator;
+			InterpolatorT< Quaternion, InterpolatorType::Linear > l_quatInterpolator;
 
 			for ( auto l_time : l_times )
 			{

@@ -1,7 +1,6 @@
 #include "SkeletonAnimationBone.hpp"
 
-#include "Animation.hpp"
-#include "Animable.hpp"
+#include "SkeletonAnimation.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 
@@ -70,8 +69,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationBone::SkeletonAnimationBone( Animation & p_animation )
-		: AnimationObject{ p_animation, eANIMATION_OBJECT_TYPE_BONE }
+	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & p_animation )
+		: AnimationObject{ p_animation, AnimationObjectType::Bone }
 	{
 	}
 
@@ -94,7 +93,7 @@ namespace Castor3D
 		}
 	}
 
-	AnimationObjectSPtr SkeletonAnimationBone::DoClone( Animation & p_animation )
+	AnimationObjectSPtr SkeletonAnimationBone::DoClone( SkeletonAnimation & p_animation )
 	{
 		auto l_return = std::make_shared< SkeletonAnimationBone >( p_animation );
 		l_return->m_bone = m_bone;

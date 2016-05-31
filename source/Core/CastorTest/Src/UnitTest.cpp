@@ -77,7 +77,7 @@ namespace Testing
 
 	void TestCase::DoRegisterTest( std::string const & p_name, TestFunction p_test )
 	{
-		m_tests.insert( { p_name, p_test } );
+		m_tests.push_back( { p_name, p_test } );
 	}
 
 	//*************************************************************************************************

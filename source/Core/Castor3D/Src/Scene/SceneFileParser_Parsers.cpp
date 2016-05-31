@@ -21,6 +21,7 @@
 
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Animation.hpp"
+#include "Animation/Skeleton/AnimatedSkeleton.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Manager/ManagerView.hpp"
 #include "Material/Pass.hpp"
@@ -3621,7 +3622,18 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 
 		if ( l_geometry )
 		{
-			l_parsingContext->pAnimObject = l_parsingContext->pAnimGroup->AddObject( l_geometry );
+			l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( l_geometry );
+
+			if ( l_geometry->GetMesh() )
+			{
+				auto l_mesh{ l_geometry->GetMesh() };
+				l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
+
+				if ( l_mesh->GetSkeleton() )
+				{
+					l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
+				}
+			}
 		}
 		else
 		{
@@ -3689,14 +3701,28 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectAnimation )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
 	p_params[0]->Get( l_name );
+	AnimatedObjectSPtr l_object;
 
-	if ( l_parsingContext->pAnimObject )
+	if ( l_parsingContext->pAnimMovable )
 	{
-		l_parsingContext->pAnimation = l_parsingContext->pAnimObject->GetAnimation( l_name );
+		l_object = l_parsingContext->pAnimMovable;
+	}
+	else if ( l_parsingContext->pAnimMesh )
+	{
+		l_object = l_parsingContext->pAnimMesh;
+	}
+	else if ( l_parsingContext->pAnimSkeleton )
+	{
+		l_object = l_parsingContext->pAnimSkeleton;
+	}
+
+	if ( l_object )
+	{
+		l_parsingContext->pAnimation = l_object->GetAnimation( l_name );
 
 		if ( !l_parsingContext->pAnimation )
 		{
-			PARSING_ERROR( cuT( "No animation named [" ) + l_name + cuT( "] in object [" ) + l_parsingContext->pAnimObject->GetName() + cuT( "]" ) );
+			PARSING_ERROR( cuT( "No animation named [" ) + l_name + cuT( "] in object [" ) + l_object->GetName() + cuT( "]" ) );
 		}
 	}
 	else
@@ -3709,15 +3735,9 @@ END_ATTRIBUTE_PUSH( eSECTION_ANIMATION )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectEnd )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_parsingContext->pAnimObject )
-	{
-		l_parsingContext->pAnimObject.reset();
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animated object initialised" ) );
-	}
+	l_parsingContext->pAnimMovable.reset();
+	l_parsingContext->pAnimMesh.reset();
+	l_parsingContext->pAnimSkeleton.reset();
 }
 END_ATTRIBUTE_POP()
 
@@ -3763,7 +3783,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationInterpolation )
 
 	if ( l_parsingContext->pAnimation )
 	{
-		l_parsingContext->pAnimation->SetInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
+		l_parsingContext->pAnimation->SetInterpolationMode( InterpolatorType( l_value ) );
 	}
 	else
 	{
@@ -3775,12 +3795,26 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationStart )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	AnimatedObjectSPtr l_object;
 
-	if ( l_parsingContext->pAnimObject )
+	if ( l_parsingContext->pAnimMovable )
+	{
+		l_object = l_parsingContext->pAnimMovable;
+	}
+	else if ( l_parsingContext->pAnimMesh )
+	{
+		l_object = l_parsingContext->pAnimMesh;
+	}
+	else if ( l_parsingContext->pAnimSkeleton )
+	{
+		l_object = l_parsingContext->pAnimSkeleton;
+	}
+
+	if ( l_object )
 	{
 		if ( l_parsingContext->pAnimation )
 		{
-			l_parsingContext->pAnimObject->StartAnimation( l_parsingContext->pAnimation->GetName() );
+			l_object->StartAnimation( l_parsingContext->pAnimation->GetName() );
 		}
 		else
 		{

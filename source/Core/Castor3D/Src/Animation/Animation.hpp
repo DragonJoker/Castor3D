@@ -64,6 +64,15 @@ namespace Castor3D
 		C3D_API ~Animation();
 		/**
 		 *\~english
+		 *\brief		Initialises the animation (length and GPU stuff if needed).
+		 *\return		\p false if there is a problem (The animation is then unsuitable for use).
+		 *\~french
+		 *\brief		Initialise l'animation (longueur et bidules GPU si nécessaire).
+		 *\return		\p false s'il y a un problème (l'animation n'est alors pas utilisable).
+		 */
+		C3D_API bool Initialise();
+		/**
+		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.
 		 *\param[in]	p_tslf	The time since the last frame.
 		 *\~french
@@ -101,11 +110,19 @@ namespace Castor3D
 		C3D_API virtual void SetInterpolationMode( InterpolatorType p_mode ) = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the animation state
-		 *\return		The animation state
+		 *\return		The animation type.
 		 *\~french
-		 *\brief		Récupère l'état de l'animation
-		 *\return		L'état de l'animation
+		 *\return		Le type de l'animation.
+		 */
+		inline AnimationType GetType()const
+		{
+			return m_type;
+		}
+		/**
+		 *\~english
+		 *\return		The animation state.
+		 *\~french
+		 *\return		L'état de l'animation.
 		 */
 		inline AnimationState GetState()const
 		{
@@ -113,27 +130,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the animation time scale
-		 *\return		The animation time scale
+		 *\return		The animation time scale.
 		 *\~french
-		 *\brief		Récupère le multiplicateur de temps de l'animation
-		 *\return		Le multiplicateur de temps de l'animation
+		 *\return		Le multiplicateur de temps de l'animation.
 		 */
 		inline real GetScale()const
 		{
 			return m_scale;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animation loop status
-		 *\return		The animation loop status
-		 *\~french
-		 *\brief		Récupère l'état de boucle de l'animation
-		 *\return		L'état de boucle de l'animation
-		 */
-		inline bool IsLooped()const
-		{
-			return m_looped;
 		}
 		/**
 		 *\~english
@@ -146,6 +149,16 @@ namespace Castor3D
 		inline void	SetScale( real p_scale )
 		{
 			m_scale = p_scale;
+		}
+		/**
+		 *\~english
+		 *\return		The animation loop status.
+		 *\~french
+		 *\return		L'état de boucle de l'animation.
+		 */
+		inline bool IsLooped()const
+		{
+			return m_looped;
 		}
 		/**
 		 *\~english
@@ -163,13 +176,22 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
+		 *\brief		Initialises the animation (length and GPU stuff if needed).
+		 *\return		\p false if there is a problem (The animation is then unsuitable for use).
+		 *\~french
+		 *\brief		Initialise l'animation (longueur et bidules GPU si nécessaire).
+		 *\return		\p false s'il y a un problème (l'animation n'est alors pas utilisable).
+		 */
+		virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.
 		 *\param[in]	p_tslf	The time since the last frame.
 		 *\~french
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
 		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		C3D_API virtual void DoUpdate( real p_tslf ) = 0;
+		virtual void DoUpdate( real p_tslf ) = 0;
 
 	protected:
 		//!\~english The current playing time	\~french L'index de temps courant

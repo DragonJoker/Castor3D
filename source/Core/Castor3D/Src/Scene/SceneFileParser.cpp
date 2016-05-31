@@ -248,8 +248,8 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
 	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
 
-	m_mapInterpolatorModes[cuT( "none" )] = eINTERPOLATOR_MODE_NONE;
-	m_mapInterpolatorModes[cuT( "linear" )] = eINTERPOLATOR_MODE_LINEAR;
+	m_mapInterpolatorModes[cuT( "none" )] = uint32_t( InterpolatorType::None );
+	m_mapInterpolatorModes[cuT( "linear" )] = uint32_t( InterpolatorType::Linear );
 
 	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
 	m_mapTextTexturingModes[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;

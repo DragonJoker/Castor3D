@@ -6,10 +6,11 @@
 #include <SceneManager.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/KeyFrame.hpp>
-#include <Animation/SkeletonAnimationBone.hpp>
-#include <Animation/SkeletonAnimationNode.hpp>
-#include <Animation/SkeletonAnimationObject.hpp>
+#include <Animation/Skeleton/KeyFrame.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
+#include <Animation/Skeleton/SkeletonAnimationNode.hpp>
+#include <Animation/Skeleton/SkeletonAnimationObject.hpp>
 #include <Manager/ManagerView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
@@ -60,6 +61,12 @@ namespace Testing
 	}
 
 	template<>
+	inline String to_string< SkeletonAnimation >( SkeletonAnimation const & p_value )
+	{
+		return p_value.GetName();
+	}
+
+	template<>
 	inline String to_string< AnimationObject >( AnimationObject const & p_value )
 	{
 		return p_value.GetName();
@@ -69,6 +76,41 @@ namespace Testing
 	inline String to_string< KeyFrame >( KeyFrame const & p_value )
 	{
 		return String{};
+	}
+
+	template<>
+	inline String to_string< InterpolatorType >( InterpolatorType const & p_value )
+	{
+		static std::map< InterpolatorType, Castor::String > Names
+		{
+			{ InterpolatorType::None, cuT( "None" ) },
+			{ InterpolatorType::Linear, cuT( "Linear" ) },
+		};
+		return Names[p_value];
+	}
+
+	template<>
+	inline String to_string< AnimationType >( AnimationType const & p_value )
+	{
+		static std::map< AnimationType, Castor::String > Names
+		{
+			{ AnimationType::Movable, cuT( "Movable" ) },
+			{ AnimationType::Mesh, cuT( "Mesh" ) },
+			{ AnimationType::Skeleton, cuT( "Skeleton" ) },
+		};
+		return Names[p_value];
+	}
+
+	template<>
+	inline String to_string< AnimationObjectType >( AnimationObjectType const & p_value )
+	{
+		static std::map< AnimationObjectType, Castor::String > Names
+		{
+			{ AnimationObjectType::Bone, cuT( "Bone" ) },
+			{ AnimationObjectType::Node, cuT( "Node" ) },
+			{ AnimationObjectType::Object, cuT( "Object" ) },
+		};
+		return Names[p_value];
 	}
 
 	//*********************************************************************************************
@@ -90,18 +132,20 @@ namespace Testing
 
 	void BinaryExportTest::SimpleMesh()
 	{
-		String l_name = cuT( "TestMesh" );
-		auto l_src = m_engine.GetMeshManager().Create( l_name, eMESH_TYPE_ICOSAHEDRON, { 20 }, { 20.0_r } );
+		String l_name = cuT( "SimpleTestMesh" );
+		Path l_path{ l_name + cuT( ".cmsh" ) };
+
+		auto l_src = m_engine.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, BinaryFile{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ } ) );
 
 		for ( auto l_submesh : *l_src )
 		{
 			l_submesh->Initialise();
 		}
 
-		Path l_path{ cuT( "TestMesh.cmsh" ) };
 		CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
 
-		auto l_dst = m_engine.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = m_engine.GetMeshManager().Create( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
 		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
 
 		for ( auto l_submesh : *l_dst )
@@ -114,7 +158,7 @@ namespace Testing
 		l_src.reset();
 		l_dst.reset();
 		m_engine.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
-		m_engine.GetMeshManager().Remove( l_name );
+		m_engine.GetMeshManager().Remove( l_name + cuT( "_exp" ) );
 	}
 
 	void BinaryExportTest::AnimatedMesh()
@@ -290,7 +334,19 @@ namespace Testing
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
 		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
-		l_return &= CT_EQUAL( p_a.GetObjects().size(), p_b.GetObjects().size() );
+		CT_REQUIRE( p_a.GetType() == p_b.GetType() );
+
+		if ( p_a.GetType() == AnimationType::Skeleton )
+		{
+			l_return = CT_EQUAL( static_cast< SkeletonAnimation const & >( p_a ), static_cast< SkeletonAnimation const & >( p_b ) );
+		}
+
+		return l_return;
+	}
+
+	bool BinaryExportTest::compare( SkeletonAnimation const & p_a, SkeletonAnimation const & p_b )
+	{
+		bool l_return = CT_EQUAL( p_a.GetObjects().size(), p_b.GetObjects().size() );
 		auto l_itA = p_a.GetObjects().begin();
 		auto const l_endItA = p_a.GetObjects().end();
 		auto l_itB = p_b.GetObjects().begin();

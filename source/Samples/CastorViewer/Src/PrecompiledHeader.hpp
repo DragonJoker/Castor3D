@@ -68,7 +68,7 @@
 
 #	include <Animation/AnimatedObjectGroup.hpp>
 #	include <Animation/Animation.hpp>
-#	include <Animation/KeyFrame.hpp>
+#	include <Animation/Skeleton/KeyFrame.hpp>
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>

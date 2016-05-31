@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
-#include "Interpolator.hpp"
+#include "Animation/Interpolator.hpp"
 
 #include <SquareMatrix.hpp>
 #include <Quaternion.hpp>
@@ -39,7 +39,7 @@ namespace Castor3D
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class AnimationObject
-		: public Castor::OwnedBy< Animation >
+		: public Castor::OwnedBy< SkeletonAnimation >
 		, public std::enable_shared_from_this< AnimationObject >
 	{
 	protected:
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_animation	L'animation parente.
 		 *\param[in]	p_type		Le type du machin mouvant.
 		 */
-		C3D_API AnimationObject( Animation & p_animation, eANIMATION_OBJECT_TYPE p_type );
+		C3D_API AnimationObject( SkeletonAnimation & p_animation, AnimationObjectType p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -133,7 +133,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		C3D_API void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
+		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
 		/**
 		 *\~english
 		 *\brief		Clones this moving thing.
@@ -144,14 +144,14 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API AnimationObjectSPtr Clone( Animation & p_animation );
+		C3D_API AnimationObjectSPtr Clone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		inline eINTERPOLATOR_MODE GetInterpolationMode()const
+		inline InterpolatorType GetInterpolationMode()const
 		{
 			return m_mode;
 		}
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline eANIMATION_OBJECT_TYPE GetType()const
+		inline AnimationObjectType GetType()const
 		{
 			return m_type;
 		}
@@ -282,18 +282,18 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API virtual AnimationObjectSPtr DoClone( Animation & p_animation ) = 0;
+		C3D_API virtual AnimationObjectSPtr DoClone( SkeletonAnimation & p_animation ) = 0;
 
 	protected:
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
-		eINTERPOLATOR_MODE m_mode{ eINTERPOLATOR_MODE_COUNT };
+		InterpolatorType m_mode{ InterpolatorType::Count };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
-		eANIMATION_OBJECT_TYPE m_type;
+		AnimationObjectType m_type;
 		//!\~english	The point interpolator.
 		//!\~french		L'interpolateur de points.
 		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;

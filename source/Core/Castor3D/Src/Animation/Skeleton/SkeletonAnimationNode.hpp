@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\param[in]	p_animation	L'animation parente.
 		 *\param[in]	p_name		Le nom du noeud.
 		 */
-		C3D_API SkeletonAnimationNode( Animation & p_animation, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimationNode( SkeletonAnimation & p_animation, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -69,8 +69,14 @@ namespace Castor3D
 		}
 
 	private:
-		virtual void DoApply();
-		virtual AnimationObjectSPtr DoClone( Animation & p_animation );
+		/**
+		 *\~copydoc		Castor3D::AnimationObject::DoApply
+		 */
+		void DoApply()override;
+		/**
+		 *\~copydoc		Castor3D::AnimationObject::DoClone
+		 */
+		AnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
 
 	private:
 		Castor::String m_name;

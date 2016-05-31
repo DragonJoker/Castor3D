@@ -1,6 +1,6 @@
 #include "SkeletonAnimationObject.hpp"
 
-#include "Animation.hpp"
+#include "SkeletonAnimation.hpp"
 
 #include "Scene/MovableObject.hpp"
 #include "Scene/SceneNode.hpp"
@@ -56,8 +56,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationObject::SkeletonAnimationObject( Animation & p_animation )
-		: AnimationObject{ p_animation, eANIMATION_OBJECT_TYPE_OBJECT }
+	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & p_animation )
+		: AnimationObject{ p_animation, AnimationObjectType::Object }
 	{
 	}
 
@@ -75,7 +75,7 @@ namespace Castor3D
 		m_finalTransform = m_cumulativeTransform;
 	}
 
-	AnimationObjectSPtr SkeletonAnimationObject::DoClone( Animation & p_animation )
+	AnimationObjectSPtr SkeletonAnimationObject::DoClone( SkeletonAnimation & p_animation )
 	{
 		auto l_return = std::make_shared< SkeletonAnimationObject >( p_animation );
 		l_return->m_object = m_object;

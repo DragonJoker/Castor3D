@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_animation	L'animation parente.
 		 */
-		C3D_API SkeletonAnimationBone( Animation & p_animation );
+		C3D_API SkeletonAnimationBone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -86,8 +86,14 @@ namespace Castor3D
 		}
 
 	private:
-		virtual void DoApply();
-		virtual AnimationObjectSPtr DoClone( Animation & p_animation );
+		/**
+		 *\~copydoc		Castor3D::AnimationObject::DoApply
+		 */
+		void DoApply()override;
+		/**
+		 *\~copydoc		Castor3D::AnimationObject::DoClone
+		 */
+		AnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
 
 	private:
 		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations

@@ -29,7 +29,7 @@ namespace GuiCommon
 	\~english
 	\brief		Animation helper class to communicate between Scene objects or Materials lists and PropertiesHolder.
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les Animation.
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scï¿½ne, ou la liste de matï¿½riaux, et PropertiesHolder, pour les Animation.
 	*/
 	class AnimationTreeItemProperty
 		: public TreeItemProperty
@@ -47,12 +47,12 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
+		 *\param[in]	p_editable	Dit si les propriï¿½tï¿½s sont modifiables.
 		 *\param[in]	p_group		L'AnimatedObjectGroup cible.
 		 *\param[in]	p_name		Le nom de l'animation cible.
-		 *\param[in]	p_state		L'état de l'animation cible.
+		 *\param[in]	p_state		L'ï¿½tat de l'animation cible.
 		 */
-		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::eANIMATION_STATE p_state );
+		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::AnimationState p_state );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -65,7 +65,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the AnimatedObjectGroup.
 		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère l'AnimatedObjectGroup.
+		 *\brief		Rï¿½cupï¿½re l'AnimatedObjectGroup.
 		 *\return		La valeur.
 		 */
 		inline Castor3D::AnimatedObjectGroupSPtr GetGroup()
@@ -77,7 +77,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the animation name.
 		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère le nom de l'animation.
+		 *\brief		Rï¿½cupï¿½re le nom de l'animation.
 		 *\return		La valeur.
 		 */
 		inline Castor::String const & GetName()
@@ -89,10 +89,10 @@ namespace GuiCommon
 		 *\brief		Retrieves the animation state.
 		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère l'état de l'animation.
+		 *\brief		Rï¿½cupï¿½re l'ï¿½tat de l'animation.
 		 *\return		La valeur.
 		 */
-		inline Castor3D::eANIMATION_STATE GetState()
+		inline Castor3D::AnimationState GetState()
 		{
 			return m_state;
 		}
@@ -117,7 +117,7 @@ namespace GuiCommon
 		Castor::String m_name;
 		double m_scale = 1.0;
 		bool m_looped = false;
-		Castor3D::eANIMATION_STATE m_state = Castor3D::eANIMATION_STATE_STOPPED;
+		Castor3D::AnimationState m_state = Castor3D::AnimationState::Stopped;
 	};
 }
 

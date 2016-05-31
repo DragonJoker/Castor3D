@@ -163,21 +163,13 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Updates the animation length.
-		 *\~french
-		 *\brief		Met la longueur de l'animation à jour.
+		 *\~copydoc		Casto3D::Animation::DoInitialise
 		 */
-		C3D_API void DoUpdateLength()override;
+		bool DoInitialise()override;
 		/**
-		 *\~english
-		 *\brief		Updates the animation, updates the key frame at the good time index.
-		 *\param[in]	p_tslf	The time since the last frame.
-		 *\~french
-		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
-		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
+		 *\~copydoc		Casto3D::Animation::DoUpdate
 		 */
-		C3D_API void DoUpdate( real p_tslf )override;
+		void DoUpdate( real p_tslf )override;
 
 	protected:
 		//! The parent moving objects

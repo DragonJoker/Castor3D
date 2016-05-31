@@ -1,8 +1,9 @@
 #include "AnimationObject.hpp"
 
-#include "Animation.hpp"
+#include "SkeletonAnimation.hpp"
 #include "KeyFrame.hpp"
-#include "Interpolator.hpp"
+
+#include "Animation/Interpolator.hpp"
 #include "SkeletonAnimationBone.hpp"
 #include "SkeletonAnimationNode.hpp"
 #include "SkeletonAnimationObject.hpp"
@@ -76,15 +77,15 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case eANIMATION_OBJECT_TYPE_NODE:
+			case AnimationObjectType::Node:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
-			case eANIMATION_OBJECT_TYPE_OBJECT:
+			case AnimationObjectType::Object:
 				l_return &= BinaryWriter< SkeletonAnimationObject >{}.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), m_chunk );
 				break;
 
-			case eANIMATION_OBJECT_TYPE_BONE:
+			case AnimationObjectType::Bone:
 				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}
@@ -103,7 +104,7 @@ namespace Castor3D
 		SkeletonAnimationNodeSPtr l_node;
 		SkeletonAnimationObjectSPtr l_object;
 		SkeletonAnimationBoneSPtr l_bone;
-		eINTERPOLATOR_MODE l_mode;
+		InterpolatorType l_mode;
 		BinaryChunk l_chunk;
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
@@ -176,11 +177,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObject::AnimationObject( Animation & p_animation, eANIMATION_OBJECT_TYPE p_type )
-		: OwnedBy< Animation >{ p_animation }
+	AnimationObject::AnimationObject( SkeletonAnimation & p_animation, AnimationObjectType p_type )
+		: OwnedBy< SkeletonAnimation >{ p_animation }
 		, m_type{ p_type }
 	{
-		SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
+		SetInterpolationMode( InterpolatorType::Linear );
 	}
 
 	AnimationObject::~AnimationObject()
@@ -270,7 +271,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimationObject::SetInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	void AnimationObject::SetInterpolationMode( InterpolatorType p_mode )
 	{
 		if ( p_mode != m_mode )
 		{
@@ -278,14 +279,14 @@ namespace Castor3D
 
 			switch ( m_mode )
 			{
-			case eINTERPOLATOR_MODE_NONE:
-				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r,  eINTERPOLATOR_MODE_NONE > >();
-				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, eINTERPOLATOR_MODE_NONE > >();
+			case InterpolatorType::None:
+				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r,  InterpolatorType::None > >();
+				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, InterpolatorType::None > >();
 				break;
 
-			case eINTERPOLATOR_MODE_LINEAR:
-				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r, eINTERPOLATOR_MODE_LINEAR > >();
-				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, eINTERPOLATOR_MODE_LINEAR > >();
+			case InterpolatorType::Linear:
+				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r, InterpolatorType::Linear > >();
+				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, InterpolatorType::Linear > >();
 				break;
 
 			default:
@@ -295,7 +296,7 @@ namespace Castor3D
 		}
 	}
 
-	AnimationObjectSPtr AnimationObject::Clone( Animation & p_animation )
+	AnimationObjectSPtr AnimationObject::Clone( SkeletonAnimation & p_animation )
 	{
 		AnimationObjectSPtr l_return;
 

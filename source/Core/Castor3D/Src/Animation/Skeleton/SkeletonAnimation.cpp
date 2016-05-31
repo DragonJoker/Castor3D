@@ -279,54 +279,18 @@ namespace Castor3D
 		return l_clone;
 	}
 
+	bool SkeletonAnimation::DoInitialise()
+	{
+		for ( auto l_it : m_toMove )
+		{
+			m_length = std::max( m_length, l_it.second->GetLength() );
+		}
+
+		return true;
+	}
+
 	void SkeletonAnimation::DoUpdate( real p_tslf )
 	{
-		if ( m_length == 0 )
-		{
-			for ( auto l_it : m_toMove )
-			{
-				m_length = std::max( m_length, l_it.second->GetLength() );
-			}
-		}
-
-		if ( m_state == AnimationState::Playing )
-		{
-			m_currentTime += ( p_tslf * m_scale );
-
-			if ( m_currentTime >= m_length )
-			{
-				if ( !m_looped )
-				{
-					m_state = AnimationState::Paused;
-					m_currentTime = m_length;
-				}
-				else
-				{
-					do
-					{
-						m_currentTime -= m_length;
-					}
-					while ( m_currentTime >= m_length );
-				}
-			}
-			else if ( m_currentTime < 0.0_r )
-			{
-				if ( !m_looped )
-				{
-					m_state = AnimationState::Paused;
-					m_currentTime = 0.0_r;
-				}
-				else
-				{
-					do
-					{
-						m_currentTime += m_length;
-					}
-					while ( m_currentTime < 0.0_r );
-				}
-			}
-		}
-
 		for ( auto l_moving : m_arrayMoving )
 		{
 			l_moving->Update( m_currentTime, Matrix4x4r{ 1 } );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -165,69 +165,6 @@ namespace Castor3D
 		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Defines the geometry
-		 *\param[in]	p_geometry	The geometry
-		 *\~french
-		 *\brief		Définit la géométrie
-		 *\param[in]	p_geometry	La géométrie
-		 */
-		C3D_API void SetGeometry( GeometrySPtr p_geometry );
-		/**
-		 *\~english
-		 *\brief		Defines the mesh
-		 *\param[in]	p_mesh	The mesh
-		 *\~french
-		 *\brief		Définit le maillage
-		 *\param[in]	p_mesh	Le maillage
-		 */
-		C3D_API void SetMesh( MeshSPtr p_mesh );
-		/**
-		 *\~english
-		 *\brief		Defines the skeleton
-		 *\param[in]	p_skeleton	The skeleton
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_skeleton	Le squelette
-		 */
-		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometry
-		 *\return		The geometry
-		 *\~french
-		 *\brief		Récupère le géométrie
-		 *\return		La géométrie
-		 */
-		inline GeometrySPtr GetGeometry()const
-		{
-			return m_geometry.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh
-		 *\return		The mesh
-		 *\~french
-		 *\brief		Récupère le maillage
-		 *\return		Le maillage
-		 */
-		inline MeshSPtr GetMesh()const
-		{
-			return m_mesh.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The skeleton
-		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		Le squelette
-		 */
-		inline SkeletonSPtr GetSkeleton()const
-		{
-			return m_skeleton.lock();
-		}
-		/**
-		 *\~english
 		 *\return		\p true if the object is playing an animation.
 		 *\~french
 		 *\return		\p true si l'objet joue une animation.
@@ -258,22 +195,30 @@ namespace Castor3D
 		}
 
 	private:
-		void DoSetGeometry( GeometrySPtr p_geometry );
-		void DoSetMesh( MeshSPtr p_mesh );
-		void DoSetSkeleton( SkeletonSPtr p_skeleton );
-		void DoCopyAnimations( AnimableSPtr p_object );
+		/**
+		 *\~english
+		 *\brief		Fills a shader variable with this object's transforms.
+		 *\param[out]	p_variable	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit une variable de shader avec les transformations de cet objet.
+		 *\param[out]	p_variable	Reçoit les transformations.
+		 */
+		virtual void DoFillShader( Matrix4x4rFrameVariable & p_variable ) = 0;
+		/**
+		 *\~english
+		 *\brief		Copies the given object's animations.
+		 *\param[out]	p_object	The source object.
+		 *\~french
+		 *\brief		Copie les animation de l'objet source.
+		 *\param[out]	p_object	L'objet source.
+		 */
+		virtual void DoCopyAnimations( AnimableSPtr p_object ) = 0;
 
 	protected:
 		//!\~english All animations.	\~french Toutes les animations.
 		AnimationPtrStrMap m_animations;
 		//!\~english Currently playing animations.	\~french Les animations en cours de lecture.
 		AnimationPtrArray m_playingAnimations;
-		//! The geometry affected by the animations.	\~french La géométrie affectée par les animations.
-		GeometryWPtr m_geometry;
-		//! The mesh affected by the animations.	\~french Le maillage affecté par les animations.
-		MeshWPtr m_mesh;
-		//! The skeleton affected by the animations.	\~french Le squelette affecté par les animations.
-		SkeletonWPtr m_skeleton;
 	};
 }
 

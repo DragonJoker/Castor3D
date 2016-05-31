@@ -125,7 +125,9 @@ namespace Castor3D
 		RealArray vertexTex;
 		UIntArray faces;
 		AnimatedObjectGroupSPtr pAnimGroup;
-		AnimatedObjectSPtr pAnimObject;
+		AnimatedObjectSPtr pAnimSkeleton;
+		AnimatedObjectSPtr pAnimMesh;
+		AnimatedObjectSPtr pAnimMovable;
 		AnimationSPtr pAnimation;
 		SkyboxSPtr pSkybox;
 

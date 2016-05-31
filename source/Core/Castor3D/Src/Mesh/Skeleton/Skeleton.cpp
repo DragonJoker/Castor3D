@@ -1,6 +1,6 @@
 #include "Skeleton.hpp"
 
-#include "Animation/Animation.hpp"
+#include "Animation/Skeleton/SkeletonAnimation.hpp"
 #include "Bone.hpp"
 
 using namespace Castor;
@@ -27,9 +27,9 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_return )
+		for ( auto l_it : p_obj.m_animations )
 		{
-			l_return = BinaryWriter< Animable >{}.Write( p_obj, m_chunk );
+			l_return = BinaryWriter< Animation >{}.Write( *l_it.second, m_chunk );
 		}
 
 		return l_return;
@@ -42,6 +42,7 @@ namespace Castor3D
 		bool l_return = true;
 		BoneSPtr l_bone;
 		BinaryChunk l_chunk;
+		SkeletonAnimationSPtr l_animation;
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
@@ -62,8 +63,15 @@ namespace Castor3D
 
 				break;
 
-			default:
-				l_return = BinaryParser< Animable >{}.Parse( p_obj, l_chunk );
+			case eCHUNK_TYPE_ANIMATION:
+				l_animation = std::make_shared< SkeletonAnimation >( p_obj );
+				l_return = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.m_animations.insert( { l_animation->GetName(), l_animation } );
+				}
+
 				break;
 			}
 		}
@@ -74,7 +82,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Skeleton::Skeleton()
-		: m_globalInverse( 1 )
+		: m_globalInverse{ 1 }
 	{
 	}
 
@@ -119,5 +127,23 @@ namespace Castor3D
 
 		p_parent->AddChild( p_bone );
 		p_bone->SetParent( p_parent );
+	}
+
+	SkeletonAnimationSPtr Skeleton::CreateAnimation( Castor::String const & p_name )
+	{
+		SkeletonAnimationSPtr l_return;
+		auto l_anim = GetAnimation( p_name );
+
+		if ( !l_anim )
+		{
+			l_return = std::make_shared< SkeletonAnimation >( *this, p_name );
+			DoAddAnimation( l_return );
+		}
+		else
+		{
+			l_return = std::static_pointer_cast< SkeletonAnimation >( l_anim );
+		}
+
+		return l_return;
 	}
 }

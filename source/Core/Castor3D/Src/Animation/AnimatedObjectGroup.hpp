@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -95,15 +95,35 @@ namespace Castor3D
 		C3D_API ~AnimatedObjectGroup();
 		/**
 		 *\~english
-		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
-		 *\param[in]	p_object	The Geometry from which AnimatedObject is created
-		 *\return		The created AnimatedObject
+		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list.
+		 *\param[in]	p_object	The MovableObject from which AnimatedObject is created.
 		 *\~french
-		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste
-		 *\param[in]	p_object	La Geometry à partir duquel l'AnimatedObject est créé
-		 *\return		L'AnimatedObject créé
+		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste.
+		 *\param[in]	p_object	Le MovableObject à partir duquel l'AnimatedObject est créé.
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( GeometrySPtr p_object );
+		C3D_API AnimatedObjectSPtr AddObject( MovableObjectSPtr p_object );
+		/**
+		 *\~english
+		 *\brief		Creates an AnimatedObject from the Mesh given as a parameter, adds it to the list.
+		 *\param[in]	p_object	The Mesh from which AnimatedObject is created.
+		 *\param[in]	p_name		The Mesh instance name.
+		 *\~french
+		 *\brief		Crée un AnimatedObject à partir du Mesh donné, l'ajoute à la liste.
+		 *\param[in]	p_object	Le Mesh à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	p_name		Le nom de l'instance du maillage.
+		 */
+		C3D_API AnimatedObjectSPtr AddObject( MeshSPtr p_object, Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Creates an AnimatedObject from the Skeleton given as a parameter, adds it to the list.
+		 *\param[in]	p_object	The Skeleton from which AnimatedObject is created.
+		 *\param[in]	p_name		The Skeleton instance name.
+		 *\~french
+		 *\brief		Crée un AnimatedObject à partir du Skeleton donné, l'ajoute à la liste.
+		 *\param[in]	p_object	Le Skeleton à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	p_name		Le nom de l'instance du Skeleton.
+		 */
+		C3D_API AnimatedObjectSPtr AddObject( SkeletonSPtr p_object, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.

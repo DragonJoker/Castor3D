@@ -1,6 +1,6 @@
 #include "SkeletonAnimationNode.hpp"
 
-#include "Animation.hpp"
+#include "SkeletonAnimation.hpp"
 
 using namespace Castor;
 
@@ -52,8 +52,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationNode::SkeletonAnimationNode( Animation & p_animation, String const & p_name )
-		: AnimationObject{ p_animation, eANIMATION_OBJECT_TYPE_NODE }
+	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & p_animation, String const & p_name )
+		: AnimationObject{ p_animation, AnimationObjectType::Node }
 		, m_name{ p_name }
 	{
 	}
@@ -67,7 +67,7 @@ namespace Castor3D
 		m_finalTransform = m_nodeTransform;
 	}
 
-	AnimationObjectSPtr SkeletonAnimationNode::DoClone( Animation & p_animation )
+	AnimationObjectSPtr SkeletonAnimationNode::DoClone( SkeletonAnimation & p_animation )
 	{
 		auto l_return = std::make_shared< SkeletonAnimationNode >( p_animation, m_name );
 		p_animation.AddObject( l_return, l_return );

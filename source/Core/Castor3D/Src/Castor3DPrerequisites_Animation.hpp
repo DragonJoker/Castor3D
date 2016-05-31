@@ -37,14 +37,14 @@ namespace Castor3D
 	{
 		//!\~english	Scene node animation.
 		//!\~french		Animation de noeud de scène.
-		SceneNode,
+		Movable,
 		//!\~english	Skeleton animation.
 		//!\~french		Animation de squelette.
 		Skeleton,
 		//!\~english	Mesh animation (morphing).
 		//!\~french		Animation de maillage (morphing).
 		Mesh,
-		CASTOR_ENUM_CLASS_BOUNDS( SceneNode )
+		CASTOR_ENUM_CLASS_BOUNDS( Movable )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -109,11 +109,12 @@ namespace Castor3D
 	};
 
 	class Animable;
+	class Animation;
+	class SkeletonAnimation;
 	class AnimationObject;
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
-	class Animation;
 	class AnimatedObject;
 	class AnimatedObjectGroup;
 	class Bone;
@@ -131,11 +132,12 @@ namespace Castor3D
 	using KeyFrameArray = std::vector< KeyFrame >;
 
 	DECLARE_SMART_PTR( AnimatedObject );
+	DECLARE_SMART_PTR( Animation );
+	DECLARE_SMART_PTR( SkeletonAnimation );
 	DECLARE_SMART_PTR( AnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
-	DECLARE_SMART_PTR( Animation );
 	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( Bone );
 	DECLARE_SMART_PTR( Skeleton );

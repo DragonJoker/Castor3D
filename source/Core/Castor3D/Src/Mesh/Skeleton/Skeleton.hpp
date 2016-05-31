@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -80,6 +80,17 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'os parent.
 		 */
 		C3D_API void SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
+		/**
+		 *\~english
+		 *\brief		Creates an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+		 *\brief		Crée une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		l'animation
+		 */
+		C3D_API SkeletonAnimationSPtr CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Traverses bone hierarchy and applies given function to each bone.
