@@ -25,6 +25,29 @@ namespace Castor3D
 
 	/*!
 	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Animation types enumeration.
+	\~french
+	\brief		Enumération des types d'animation.
+	*/
+	enum class AnimationType
+		: uint8_t
+	{
+		//!\~english	Scene node animation.
+		//!\~french		Animation de noeud de scène.
+		SceneNode,
+		//!\~english	Skeleton animation.
+		//!\~french		Animation de squelette.
+		Skeleton,
+		//!\~english	Mesh animation (morphing).
+		//!\~french		Animation de maillage (morphing).
+		Mesh,
+		CASTOR_ENUM_CLASS_BOUNDS( SceneNode )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english
@@ -32,14 +55,17 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des modes d'înterpolation.
 	*/
-	typedef enum eINTERPOLATOR_MODE
+	enum class InterpolatorType
+		: uint8_t
 	{
-		//!\~english No interpolation.	\~french Pas d'interpolation.
-		eINTERPOLATOR_MODE_NONE,
-		//!\~english Linear mode.	\~french Mode linéaire.
-		eINTERPOLATOR_MODE_LINEAR,
-		CASTOR_ENUM_BOUNDS( eINTERPOLATOR_MODE, eINTERPOLATOR_MODE_NONE )
-	}	eINTERPOLATOR_MODE;
+		//!\~english	No interpolation.
+		//!\~french		Pas d'interpolation.
+		None,
+		//!\~english	Linear mode.
+		//!\~french		Mode linéaire.
+		Linear,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -48,17 +74,20 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des états d'une animation.
 	*/
-	typedef enum eANIMATION_STATE
+	enum class AnimationState
 		: uint8_t
 	{
-		//!\~english Playing animation state.	\~french Animation en cours de lecture.
-		eANIMATION_STATE_PLAYING,
-		//!\~english Stopped animation state.	\~french Animation stoppée.
-		eANIMATION_STATE_STOPPED,
-		//!\~english Paused animation state.	\~french Animation en pause.
-		eANIMATION_STATE_PAUSED,
-		CASTOR_ENUM_BOUNDS( eANIMATION_STATE, eANIMATION_STATE_PLAYING )
-	}	eANIMATION_STATE;
+		//!\~english	Playing animation state.
+		//!\~french		Animation en cours de lecture.
+		Playing,
+		//!\~english	Stopped animation state.
+		//!\~french		Animation stoppée.
+		Stopped,
+		//!\~english	Paused animation state.
+		//!\~french		Animation en pause.
+		Paused,
+		CASTOR_ENUM_CLASS_BOUNDS( Playing )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -70,14 +99,14 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	typedef enum eANIMATION_OBJECT_TYPE
+	enum class AnimationObjectType
 		: uint8_t
 	{
-		eANIMATION_OBJECT_TYPE_NODE,
-		eANIMATION_OBJECT_TYPE_OBJECT,
-		eANIMATION_OBJECT_TYPE_BONE,
-		CASTOR_ENUM_BOUNDS( eANIMATION_OBJECT_TYPE, eANIMATION_OBJECT_TYPE_NODE )
-	}	eANIMATION_OBJECT_TYPE;
+		Node,
+		Object,
+		Bone,
+		CASTOR_ENUM_CLASS_BOUNDS( Node )
+	};
 
 	class Animable;
 	class AnimationObject;
@@ -93,9 +122,9 @@ namespace Castor3D
 	struct stVERTEX_BONE_DATA;
 	class KeyFrame;
 	template< typename T > class Interpolator;
-	template< typename T, eINTERPOLATOR_MODE > class InterpolatorT;
+	template< typename T, InterpolatorType > class InterpolatorT;
 
-	using AnimationStateMap = std::map< Castor::String, eANIMATION_STATE >;
+	using AnimationStateMap = std::map< Castor::String, AnimationState >;
 	using Point3rInterpolator = Interpolator< Castor::Point3r >;
 	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
 	using KeyFrameRealMap = std::map< real, KeyFrame >;
