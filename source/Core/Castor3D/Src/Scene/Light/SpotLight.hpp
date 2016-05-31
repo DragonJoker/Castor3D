@@ -45,8 +45,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de SpotLight
 		*/
-		class TextLoader
-			: public LightCategory::TextLoader
+		class TextWriter
+			: public LightCategory::TextWriter
 		{
 		public:
 			/**
@@ -55,7 +55,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, SpotLight const * p_category = nullptr );
+			C3D_API TextWriter( Castor::String const & p_tabs, SpotLight const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -70,7 +70,7 @@ namespace Castor3D
 			/**
 			 *\copydoc		Castor::LightCategory::WriteInto
 			 */
-			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )override;
+			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
 
 		private:
 			SpotLight const * m_category;
@@ -108,9 +108,9 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */
-		C3D_API virtual std::unique_ptr < LightCategory::TextLoader > CreateTextLoader( Castor::String const & p_tabs )
+		C3D_API std::unique_ptr < LightCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
 		{
-			return std::make_unique< TextLoader >( p_tabs, this );
+			return std::make_unique< TextWriter >( p_tabs, this );
 		}
 		/**
 		 *\~english

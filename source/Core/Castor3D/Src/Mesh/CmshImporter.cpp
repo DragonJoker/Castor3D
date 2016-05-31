@@ -24,7 +24,6 @@ namespace Castor3D
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		BinaryFile l_file( m_fileName, File::eOPEN_MODE_READ );
 		MeshSPtr l_mesh;
 
 		if ( GetEngine()->GetMeshManager().Has( l_meshName ) )
@@ -38,7 +37,7 @@ namespace Castor3D
 
 		if ( !l_mesh->GetSubmeshCount() )
 		{
-			if ( !Mesh::BinaryParser{ m_fileName }.Parse( *l_mesh, l_file ) )
+			if ( !BinaryParser< Mesh >{}.Parse( *l_mesh, BinaryFile{ m_fileName, File::eOPEN_MODE_READ } ) )
 			{
 				GetEngine()->GetMeshManager().Remove( l_meshName );
 			}

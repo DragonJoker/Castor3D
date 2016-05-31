@@ -50,6 +50,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 	private:\
 		std::unique_ptr< ManagerView< className, className##Manager, eventType > > m_##memberName##ManagerView
 
+#define DECLARE_MANAGER_VIEW_MEMBER_CU( memberName, className, eventType )\
+	public:\
+		inline ManagerView< Castor::className, Castor::className##Manager, eventType > & Get##className##View()\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+		inline ManagerView< Castor::className, Castor::className##Manager, eventType > const & Get##className##View()const\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+	private:\
+		std::unique_ptr< ManagerView< Castor::className, Castor::className##Manager, eventType > > m_##memberName##ManagerView
+
 #define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
 		inline ManagerView< className, mgrName##Manager, eventType > & Get##className##View()\
@@ -92,8 +105,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de scène
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Scene >
+		class TextWriter
+			: public Castor::TextWriter< Scene >
 		{
 		public:
 			/**
@@ -102,7 +115,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -113,22 +126,7 @@ namespace Castor3D
 			 *\param[in]	p_scene	La scène
 			 *\param[in]	p_file	Le fichier
 			 */
-			C3D_API virtual bool operator()( Scene const & p_scene, Castor::TextFile & p_file );
-			/**
-			 *\~english
-			 *\brief		Copies the file with given path to output folder.
-			 *\param[in]	p_path		The path of the file to copy.
-			 *\param[in]	p_folder	The output folder.
-			 *\param[in]	p_subfolder	The output subfolder.
-			 *\return		The copied file path, relative to output folder.
-			 *\~french
-			 *\brief		Copie le fichier dont le chemin est donné dans le dossier de sortie.
-			 *\param[in]	p_path		Le chemin du fichier à copier.
-			 *\param[in]	p_file		Le dossier de sortie.
-			 *\param[in]	p_subfolder	Le sous-dossier de sortie.
-			 *\return		Le chemin du fichier copié, relatif au dossier de sortie.
-			 */
-			C3D_API static Castor::Path CopyFile( Castor::Path const & p_path, Castor::Path const & p_folder, Castor::Path const & p_subfolder );
+			C3D_API bool operator()( Scene const & p_scene, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -225,7 +223,7 @@ namespace Castor3D
 		 *\param[in]	p_importer	L'importeur chargé de la récupération des données
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
-		C3D_API bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
+		C3D_API bool ImportExternal( Castor::Path const & p_fileName, Importer & p_importer );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -250,16 +248,6 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène à intégrer
 		 */
 		C3D_API void Merge( SceneSPtr p_scene );
-		/**
-		 *\~english
-		 *\brief		Adds an overlay to the list
-		 *\param[in]	p_overlay	The overlay to add
-		 *\~french
-		 *\brief		Ajoute un overlay à ceux déjà présents
-		 *\param[in]	p_overlay	L'overlay
-		 *\return
-		 */
-		C3D_API void AddOverlay( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count
@@ -435,6 +423,9 @@ namespace Castor3D
 		//!\~english	The animated objects groups manager.
 		//!\~french		Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
+		//!\~english	The overlays view.
+		//!\~french		La vue sur le incrustations de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene meshes view.
 		//!\~french		La vue sur les maillages de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh, eEVENT_TYPE_PRE_RENDER );
@@ -447,6 +438,9 @@ namespace Castor3D
 		//!\~english	The scene render windows view.
 		//!\~french		La vue sur les fenêtres de rendu de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow, eEVENT_TYPE_POST_RENDER );
+		//!\~english	The scene fonts view.
+		//!\~french		La vue sur les polices de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;

@@ -78,11 +78,11 @@ namespace Castor3D
 			if ( l_it != l_files.end() )
 			{
 				l_relative = *l_it;
-				l_relative = l_relative.substr( l_folder.size() + 1 );
+				l_relative = Path{ l_relative.substr( l_folder.size() + 1 ) };
 			}
 			else
 			{
-				l_relative = l_fileName;
+				l_relative = Path{ l_fileName };
 			}
 		}
 

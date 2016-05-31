@@ -9,12 +9,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovableObject::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< MovableObject >{ p_tabs }
+	MovableObject::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< MovableObject >{ p_tabs }
 	{
 	}
 
-	bool MovableObject::TextLoader::operator()( MovableObject const & p_object, TextFile & p_file )
+	bool MovableObject::TextWriter::operator()( MovableObject const & p_object, TextFile & p_file )
 	{
 		return p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 	}

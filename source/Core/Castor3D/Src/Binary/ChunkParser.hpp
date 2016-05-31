@@ -210,7 +210,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
+					p_value = Castor::Path{ Castor::string::string_cast< xchar >( l_pChar.data() ) };
 				}
 			}
 

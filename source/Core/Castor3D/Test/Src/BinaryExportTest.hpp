@@ -20,24 +20,36 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DTestPrerequisites.hpp"
 
-namespace Castor3D
+#include <cstring>
+
+namespace Testing
 {
-	namespace Testing
+	class BinaryExportTest
+		: public C3DTestCase
 	{
-		class BinaryExportTest
-			: public TestCase
+	public:
+		BinaryExportTest( Castor3D::Engine & p_engine );
+		virtual ~BinaryExportTest();
+
+	private:
+		void DoRegisterTests() override;
+
+	private:
+		void SimpleMesh();
+		void AnimatedMesh();
+		template< typename T >
+		inline bool compare( T const & p_a, T const & p_b )
 		{
-		public:
-			BinaryExportTest( Engine & p_engine );
-			virtual ~BinaryExportTest();
-
-		private:
-			void DoRegisterTests() override;
-
-		private:
-			void SimpleMesh( );
-		};
-	}
+			return Testing::compare( p_a, p_b );
+		}
+		bool compare( Castor3D::Mesh const & p_a, Castor3D::Mesh const & p_b );
+		bool compare( Castor3D::Submesh const & p_a, Castor3D::Submesh const & p_b );
+		bool compare( Castor3D::Skeleton const & p_a, Castor3D::Skeleton const & p_b );
+		bool compare( Castor3D::Bone const & p_a, Castor3D::Bone const & p_b );
+		bool compare( Castor3D::Animation const & p_a, Castor3D::Animation const & p_b );
+		bool compare( Castor3D::AnimationObject const & p_a, Castor3D::AnimationObject const & p_b );
+		bool compare( Castor3D::KeyFrame const & p_a, Castor3D::KeyFrame const & p_b );
+	};
 }
 
 #endif

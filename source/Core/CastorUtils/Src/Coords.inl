@@ -5,8 +5,8 @@
 namespace Castor
 {
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Coords< T, Count > >( p_tabs )
+	Coords< T, Count >::TextLoader::TextLoader()
+		: Castor::TextLoader< Coords< T, Count > >()
 	{
 	}
 
@@ -30,8 +30,16 @@ namespace Castor
 		return true;
 	}
 
+	//*************************************************************************************************
+
 	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::TextLoader::operator()( Coords< T, Count > const & p_object, TextFile & p_file )
+	Coords< T, Count >::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Coords< T, Count > >( p_tabs )
+	{
+	}
+
+	template< typename T, uint32_t Count >
+	bool Coords< T, Count >::TextWriter::operator()( Coords< T, Count > const & p_object, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 		l_streamWord.setf( std::ios::boolalpha );

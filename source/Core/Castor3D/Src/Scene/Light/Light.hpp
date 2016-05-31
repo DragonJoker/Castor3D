@@ -48,8 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Light loader
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Light >
+		class TextWriter
+			: public Castor::TextWriter< Light >
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves a Light into a text file
@@ -71,7 +71,7 @@ namespace Castor3D
 			 *\param[in]	p_object	La Light à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API virtual bool operator()( Light const & p_object, Castor::TextFile & p_file );
+			C3D_API bool operator()( Light const & p_object, Castor::TextFile & p_file )override;
 		};
 
 	public:

@@ -20,12 +20,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneNode::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< SceneNode >{ p_tabs }
+	SceneNode::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< SceneNode >{ p_tabs }
 	{
 	}
 
-	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
+	bool SceneNode::TextWriter::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_return = false;
 
@@ -47,21 +47,21 @@ namespace Castor3D
 				Angle l_angle;
 				p_node.GetOrientation().to_axis_angle( l_axis, l_angle );
 				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
-					&& Quaternion::TextLoader( String() )( p_node.GetOrientation(), p_file )
+					&& Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
-					&& Point3r::TextLoader( String() )( p_node.GetPosition(), p_file )
+					&& Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
-					&& Point3r::TextLoader( String() )( p_node.GetScale(), p_file )
+					&& Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
@@ -86,7 +86,7 @@ namespace Castor3D
 					if ( l_node )
 					{
 						l_return = p_file.WriteText( cuT( "\n" ) ) > 0
-							&& SceneNode::TextLoader( m_tabs )( *l_node, p_file );
+							&& SceneNode::TextWriter{ m_tabs }( *l_node, p_file );
 					}
 				}
 			}

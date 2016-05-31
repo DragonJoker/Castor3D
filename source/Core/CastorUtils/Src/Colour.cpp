@@ -6,8 +6,8 @@
 
 namespace Castor
 {
-	Colour::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Colour >{ p_tabs }
+	Colour::TextLoader::TextLoader()
+		: Castor::TextLoader< Colour >{}
 	{
 	}
 
@@ -40,7 +40,14 @@ namespace Castor
 		return l_return;
 	}
 
-	bool Colour::TextLoader::operator()( Colour const & p_colour, TextFile & p_file )
+	//*************************************************************************************************
+
+	Colour::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Colour >{ p_tabs }
+	{
+	}
+
+	bool Colour::TextWriter::operator()( Colour const & p_colour, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 		l_streamWord.setf( std::ios::boolalpha );

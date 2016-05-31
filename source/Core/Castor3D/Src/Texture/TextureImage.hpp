@@ -158,8 +158,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureImage
 		*/
-		class TextLoader
-			: public Castor::TextLoader< TextureImage >
+		class TextWriter
+			: public Castor::TextWriter< TextureImage >
 		{
 		public:
 			/**
@@ -168,7 +168,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureImage into a text file
@@ -179,7 +179,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_obj	La TextureImage
 			 */
-			C3D_API virtual bool operator()( TextureImage const & p_obj, Castor::TextFile & p_file );
+			C3D_API bool operator()( TextureImage const & p_obj, Castor::TextFile & p_file )override;
 		};
 
 	public:

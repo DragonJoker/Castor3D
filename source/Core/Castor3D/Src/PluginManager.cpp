@@ -62,7 +62,7 @@ namespace Castor3D
 
 	PluginBaseSPtr PluginManager::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
-		Path l_strFilePath = CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT;
+		Path l_strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
 		PluginBaseSPtr l_return;
 
 		try

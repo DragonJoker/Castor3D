@@ -109,7 +109,7 @@ namespace Obj
 
 		if ( !l_strValue.empty() )
 		{
-			auto l_texture = LoadTexture( l_strValue, *p_pPass, p_channel );
+			auto l_texture = LoadTexture( Path{ l_strValue }, *p_pPass, p_channel );
 
 			if ( l_texture )
 			{

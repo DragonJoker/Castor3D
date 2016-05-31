@@ -165,7 +165,7 @@ namespace CastorViewer
 		{
 			if ( !p_strFileName.empty() )
 			{
-				m_strFilePath = ( wxChar const * )p_strFileName.c_str();
+				m_strFilePath = Path{ ( wxChar const * )p_strFileName.c_str() };
 			}
 
 			if ( !m_strFilePath.empty() )

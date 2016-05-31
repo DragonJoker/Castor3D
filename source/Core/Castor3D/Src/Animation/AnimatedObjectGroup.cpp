@@ -15,31 +15,65 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	AnimatedObjectGroup::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< AnimatedObjectGroup >{ p_tabs }
+	AnimatedObjectGroup::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< AnimatedObjectGroup >{ p_tabs }
 	{
 	}
 
-	bool AnimatedObjectGroup::TextLoader::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
+	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		std::set< String > l_animations;
 
 		for ( auto l_it : p_group.GetAnimations() )
 		{
-			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation " ) + l_it.first + cuT( "\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
+			l_animations.insert( l_it.first );
 		}
+
+		StringArray l_playing;
 
 		for ( auto l_it : p_group.GetObjects() )
 		{
 			if ( l_it.second->GetGeometry() )
 			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object " ) + l_it.second->GetName() + cuT( "\n" ) ) > 0;
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+
+				for ( auto l_it : l_it.second->GetAnimations() )
+				{
+					if ( l_animations.end() != l_animations.find( l_it.first ) )
+					{
+						l_return &= p_file.WriteText( m_tabs + cuT( "\t\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t{\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_it.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_it.second->GetScale() ) + cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
+					}
+				}
+
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				}
+
+				for ( auto l_anim : l_it.second->GetPlayingAnimations() )
+				{
+					l_playing.push_back( l_anim->GetName() );
+				}
 			}
+		}
+
+		for ( auto l_it : l_playing )
+		{
+			l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "}\n\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

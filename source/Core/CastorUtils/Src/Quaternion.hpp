@@ -45,9 +45,9 @@ namespace Castor
 		\version 0.6.1.0
 		\date 03/01/2011
 		\~english
-		\brief Coords< T, Count > loader
+		\brief QuaternionT< T > loader
 		\~french
-		\brief Loader de Coords< T, Count >
+		\brief Loader de QuaternionT< T >
 		*/
 		class TextLoader
 			: public Castor::TextLoader< QuaternionT< T > >
@@ -59,7 +59,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( String const & p_tabs = File::eENCODING_MODE_ASCII );
+			TextLoader();
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file
@@ -73,6 +73,27 @@ namespace Castor
 			 *\return		\p true si ok
 			 */
 			virtual bool operator()( QuaternionT< T > & p_object, TextFile & p_file );
+		};
+		/*!
+		\author Sylvain DOREMUS
+		\version 0.6.1.0
+		\date 03/01/2011
+		\~english
+		\brief QuaternionT< T > Writer
+		\~french
+		\brief Writer de QuaternionT< T >
+		*/
+		class TextWriter
+			: public Castor::TextWriter< QuaternionT< T > >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file

@@ -35,84 +35,6 @@ namespace Castor3D
 		: public AnimationObject
 	{
 	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		MovingBone binary loader.
-		\~english
-		\brief		Loader binaire de MovingBone.
-		*/
-		class BinaryWriter
-			: public Castor3D::BinaryWriter< SkeletonAnimationBone >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryWriter( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data.
-			 *\param[in]	p_obj	The object to write.
-			 *\param[out]	p_chunk	The chunk to fill.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-			 *\param[in]	p_obj	L'objet à écrire.
-			 *\param[out]	p_chunk	Le chunk à remplir.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API bool DoWrite( SkeletonAnimationBone const & p_obj, BinaryChunk & p_chunk )const override;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		MovingBone binary loader.
-		\~english
-		\brief		Loader binaire de MovingBone.
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< SkeletonAnimationBone >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk.
-			 *\param[out]	p_obj	The object to read.
-			 *\param[in]	p_chunk	The chunk containing data.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-			 *\param[out]	p_obj	L'objet à lire.
-			 *\param[in]	p_chunk	Le chunk contenant les données.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API bool DoParse( SkeletonAnimationBone & p_obj, BinaryChunk & p_chunk )const override;
-		};
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -170,6 +92,79 @@ namespace Castor3D
 	private:
 		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations
 		BoneWPtr m_bone;
+
+		friend class BinaryWriter< SkeletonAnimationBone >;
+		friend class BinaryParser< SkeletonAnimationBone >;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\remarks	Specialisation for SkeletonAnimationBone.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\remarks	Spécialisation pour SkeletonAnimationBone.
+	*/
+	template<>
+	struct ChunkTyper< SkeletonAnimationBone >
+	{
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SKELETON_ANIMATION_BONE;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		26/01/2016
+	\~english
+	\brief		MovingBone binary loader.
+	\~english
+	\brief		Loader binaire de MovingBone.
+	*/
+	template<>
+	class BinaryWriter< SkeletonAnimationBone >
+		: public BinaryWriterBase< SkeletonAnimationBone >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to fill the chunk from specific data.
+		 *\param[in]	p_obj	The object to write.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+		 *\param[in]	p_obj	L'objet à écrire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoWrite( SkeletonAnimationBone const & p_obj )override;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		26/01/2016
+	\~english
+	\brief		MovingBone binary loader.
+	\~english
+	\brief		Loader binaire de MovingBone.
+	*/
+	template<>
+	class BinaryParser< SkeletonAnimationBone >
+		: public BinaryParserBase< SkeletonAnimationBone >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk.
+		 *\param[out]	p_obj	The object to read.
+		 *\param[in]	p_chunk	The chunk containing data.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+		 *\param[out]	p_obj	L'objet à lire.
+		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoParse( SkeletonAnimationBone & p_obj )override;
 	};
 }
 

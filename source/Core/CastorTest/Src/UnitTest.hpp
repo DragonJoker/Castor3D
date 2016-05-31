@@ -40,10 +40,37 @@ namespace Testing
 		return l_stream.str();
 	}
 
+	template< typename T >
+	inline std::string to_string( std::pair< T const *, uint32_t > const & p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << p_value.second << ": ";
+
+		std::for_each( p_value.first, p_value.first + p_value.second, [&l_stream]( T const & p_val )
+		{
+			l_stream << " " << p_val;
+		} );
+
+		return l_stream.str();
+	}
+
 	template< typename T, typename U >
 	inline bool compare( T const & p_a, U const & p_b )
 	{
 		return p_a == p_b;
+	}
+
+	template< typename T >
+	inline bool compare( std::pair< T const *, uint32_t > const & p_a, std::pair< T const *, uint32_t > p_b )
+	{
+		bool l_return = p_a.second == p_b.second;
+
+		if ( l_return )
+		{
+			std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) );
+		}
+
+		return l_return;
 	}
 
 	template<>
@@ -82,10 +109,22 @@ namespace Testing
 	public:
 		TestCase( std::string const & p_name );
 		virtual ~TestCase();
+		void RegisterTests();
 		void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
+
 		inline std::string const & GetName()const
 		{
 			return m_name;
+		}
+
+		inline void ReportFailure()
+		{
+			( *m_errorCount )++;
+		}
+
+		inline void AddTest()
+		{
+			( *m_testCount )++;
 		}
 
 	protected:
@@ -95,15 +134,6 @@ namespace Testing
 		virtual void DoRegisterTests() = 0;
 
 	protected:
-		void DoReportFailure()
-		{
-			( *m_errorCount )++;
-		}
-
-		void DoAddTest()
-		{
-			( *m_testCount )++;
-		}
 
 	private:
 		uint32_t * m_errorCount{ nullptr };
@@ -129,48 +159,58 @@ namespace Testing
 		std::string m_what;
 	};
 
-#	define TEST_CHECK( x )\
-	DoAddTest();\
-	if( !(x) )\
+#	define CT_CHECK( x )\
+	[&]()\
 	{\
-		DoReportFailure();\
-		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
-	}
+		AddTest();\
+		bool l_check{ x };\
+		if( !l_check )\
+		{\
+			ReportFailure();\
+			Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
+		}\
+		return l_check;\
+	}()
 
-#	define TEST_CHECK_THROW( x )\
-	DoAddTest();\
+#	define CT_EQUAL( x, y )\
+	[&]()\
+	{\
+		AddTest();\
+		bool l_check{ compare( x, y ) };\
+		if( !l_check )\
+		{\
+			ReportFailure();\
+			Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << ::Testing::to_string( x ) << " != " << ::Testing::to_string( y ) << ")" );\
+		}\
+		return l_check;\
+	}()
+
+#	define CT_CHECK_THROW( x )\
+	AddTest();\
 	try\
 	{\
 		( x ); \
-		DoReportFailure();\
+		ReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}\
 	catch ( ... )\
 	{\
 	}
 
-#	define TEST_CHECK_NOTHROW( x )\
-	DoAddTest();\
+#	define CT_CHECK_NOTHROW( x )\
+	AddTest();\
 	try\
 	{\
 		( x ); \
 	}\
 	catch ( ... )\
 	{\
-		DoReportFailure();\
+		ReportFailure();\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}
 
-#	define TEST_EQUAL( x, y )\
-	DoAddTest();\
-	if( !compare( x, y ) )\
-	{\
-		DoReportFailure();\
-		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Testing::to_string( x ) << " != " << Testing::to_string( y ) << ")" );\
-	}
-
-#	define TEST_REQUIRE( x )\
-	DoAddTest();\
+#	define CT_REQUIRE( x )\
+	AddTest();\
 	if( !(x) )\
 	{\
 		throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ );\

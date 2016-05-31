@@ -138,8 +138,8 @@ namespace Castor3D
 		virtual MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
 		void DoReadMD3Data( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_pPass );
 		void DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshHeader );
-		bool DoLoadSkin( Castor3D::Scene & p_scene, Castor::String const & p_strSkin );
-		bool DoLoadShader( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, Castor::String const & p_strShader );
+		bool DoLoadSkin( Castor3D::Scene & p_scene, Castor::Path const & p_strSkin );
+		bool DoLoadShader( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, Castor::Path const & p_strShader );
 		void DoCleanUp();
 	};
 }

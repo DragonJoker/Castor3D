@@ -533,7 +533,7 @@ namespace Castor
 
 		if ( dwResult != 0 )
 		{
-			l_pathReturn = l_pPath;
+			l_pathReturn = Path{ l_pPath };
 		}
 
 #elif defined( __linux__ )
@@ -568,7 +568,7 @@ namespace Castor
 
 		if ( SUCCEEDED( l_hr ) )
 		{
-			l_pathReturn = l_path;
+			l_pathReturn = Path{ l_path };
 		}
 
 #elif defined( __linux__ )
@@ -731,7 +731,7 @@ namespace Castor
 	bool File::CopyFile( Path const & p_file, Path const & p_folder )
 	{
 		bool l_return = false;
-		Path l_file = p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension();
+		Path l_file{ p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension() };
 		std::ifstream l_src( string::string_cast< char >( p_file ), std::ios::binary );
 
 		if ( l_src.is_open() )

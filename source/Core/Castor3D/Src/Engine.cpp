@@ -56,7 +56,7 @@ namespace Castor3D
 		, m_threaded( false )
 	{
 		std::locale::global( std::locale() );
-		Image::BinaryLoader::InitialiseImageLib();
+		Image::InitialiseImageLib();
 
 		// m_listenerManager *MUST* be the first created.
 		m_listenerManager = std::make_unique< ListenerManager >( *this );
@@ -99,7 +99,7 @@ namespace Castor3D
 		m_blendStateManager->Clear();
 		m_meshManager->Clear();
 		m_overlayManager->Clear();
-		m_fontManager.clear();
+		m_fontManager.Clear();
 		m_imageManager.clear();
 		m_sceneManager->Clear();
 		m_materialManager->Clear();
@@ -125,7 +125,7 @@ namespace Castor3D
 		}
 
 		m_pluginManager->Clear();
-		Image::BinaryLoader::CleanupImageLib();
+		Image::CleanupImageLib();
 	}
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
@@ -241,7 +241,7 @@ namespace Castor3D
 			m_materialManager->Clear();
 			m_sceneManager->Clear();
 			m_blendStateManager->Clear();
-			m_fontManager.clear();
+			m_fontManager.Clear();
 			m_imageManager.clear();
 			m_shaderManager->Clear();
 			m_depthStencilStateManager->Clear();

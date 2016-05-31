@@ -724,6 +724,23 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkImage )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneFont )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( !l_parsingContext->pScene )
+	{
+		PARSING_ERROR( cuT( "No scene initialised." ) );
+	}
+	else if ( !p_params.empty() )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		l_parsingContext->path.clear();
+		p_params[0]->Get( l_parsingContext->strName );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_FONT )
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneMaterial )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -977,7 +994,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	else if ( !p_params.empty() )
 	{
 		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayManager().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_PANEL, l_parsingContext->pOverlay, l_parsingContext->pScene );
+		l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_PANEL, l_parsingContext->pOverlay, l_parsingContext->pScene );
 		l_parsingContext->pOverlay->SetVisible( false );
 	}
 }
@@ -994,7 +1011,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	else if ( !p_params.empty() )
 	{
 		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayManager().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_BORDER_PANEL, l_parsingContext->pOverlay, l_parsingContext->pScene );
+		l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_BORDER_PANEL, l_parsingContext->pOverlay, l_parsingContext->pScene );
 		l_parsingContext->pOverlay->SetVisible( false );
 	}
 }
@@ -1011,7 +1028,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	else if ( !p_params.empty() )
 	{
 		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayManager().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_TEXT, l_parsingContext->pOverlay, l_parsingContext->pScene );
+		l_parsingContext->pOverlay = l_parsingContext->pScene->GetOverlayView().Create( p_params[0]->Get( l_name ), eOVERLAY_TYPE_TEXT, l_parsingContext->pOverlay, l_parsingContext->pScene );
 		l_parsingContext->pOverlay->SetVisible( false );
 	}
 }
@@ -2929,8 +2946,14 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_FontEnd )
 
 	if ( !l_parsingContext->strName.empty() && !l_parsingContext->path.empty() )
 	{
-		FontManager & l_fontCollection = l_parsingContext->m_pParser->GetEngine()->GetFontManager();
-		l_fontCollection.create( p_context->m_file->GetFilePath() / l_parsingContext->path, l_parsingContext->strName, l_parsingContext->iInt16 );
+		if ( l_parsingContext->pScene )
+		{
+			l_parsingContext->pScene->GetFontView().Create( l_parsingContext->strName, l_parsingContext->iInt16, p_context->m_file->GetFilePath() / l_parsingContext->path );
+		}
+		else
+		{
+			l_parsingContext->m_pParser->GetEngine()->GetFontManager().Create( l_parsingContext->strName, l_parsingContext->iInt16, p_context->m_file->GetFilePath() / l_parsingContext->path );
+		}
 	}
 }
 END_ATTRIBUTE_POP()
@@ -3231,7 +3254,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayFont )
 		String l_name;
 		p_params[0]->Get( l_name );
 
-		if ( l_fontManager.get( l_name ) )
+		if ( l_fontManager.Find( l_name ) )
 		{
 			l_overlay->GetTextOverlay()->SetFont( l_name );
 		}

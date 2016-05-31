@@ -32,12 +32,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderWindow::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< RenderWindow >{ p_tabs }
+	RenderWindow::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< RenderWindow >{ p_tabs }
 	{
 	}
 
-	bool RenderWindow::TextLoader::operator()( RenderWindow const & p_window, TextFile & p_file )
+	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
 		bool l_return = p_file.WriteText( m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
@@ -55,7 +55,7 @@ namespace Castor3D
 
 		if ( l_return && p_window.GetRenderTarget() )
 		{
-			l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
@@ -137,19 +137,22 @@ namespace Castor3D
 
 	void RenderWindow::Cleanup()
 	{
-		m_context->SetCurrent();
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
+		if ( m_context )
 		{
-			l_target->Cleanup();
-		}
+			m_context->SetCurrent();
+			RenderTargetSPtr l_target = GetRenderTarget();
 
-		m_context->EndCurrent();
+			if ( l_target )
+			{
+				l_target->Cleanup();
+			}
 
-		if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
-		{
-			m_context->Cleanup();
+			m_context->EndCurrent();
+
+			if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
+			{
+				m_context->Cleanup();
+			}
 		}
 	}
 

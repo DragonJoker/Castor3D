@@ -8,18 +8,13 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Animable::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< Animable >( p_path )
-	{
-	}
-
-	bool Animable::BinaryWriter::DoWrite( Animable const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< Animable >::DoWrite( Animable const & p_obj )
 	{
 		bool l_return = true;
 
 		for ( auto && l_it : p_obj.m_animations )
 		{
-			l_return &= Animation::BinaryWriter{ m_path }.Write( *l_it.second, p_chunk );
+			l_return &= BinaryWriter< Animation >{}.Write( *l_it.second, m_chunk );
 		}
 
 		return l_return;
@@ -27,28 +22,27 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Animable::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Animable >( p_path )
-	{
-	}
-
-	bool Animable::BinaryParser::DoParse( Animable & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< Animable >::DoParse( Animable & p_obj )
 	{
 		bool l_return = true;
 		AnimationSPtr l_animation;
+		BinaryChunk l_chunk;
 
-		switch ( p_chunk.GetChunkType() )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-		case eCHUNK_TYPE_ANIMATION:
-			l_animation = std::make_shared< Animation >( p_obj );
-			l_return = Animation::BinaryParser{ m_path }.Parse( *l_animation, p_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				p_obj.m_animations.insert( { l_animation->GetName(), l_animation } );
-			}
+			case eCHUNK_TYPE_ANIMATION:
+				l_animation = std::make_shared< Animation >( p_obj );
+				l_return = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
 
-			break;
+				if ( l_return )
+				{
+					p_obj.m_animations.insert( { l_animation->GetName(), l_animation } );
+				}
+
+				break;
+			}
 		}
 
 		return l_return;

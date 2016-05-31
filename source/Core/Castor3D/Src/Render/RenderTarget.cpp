@@ -35,12 +35,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< RenderTarget >{ p_tabs }
+	RenderTarget::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< RenderTarget >{ p_tabs }
 	{
 	}
 
-	bool RenderTarget::TextLoader::operator()( RenderTarget const & p_target, TextFile & p_file )
+	bool RenderTarget::TextWriter::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
 		bool l_return = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;

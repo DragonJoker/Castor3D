@@ -10,34 +10,32 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BorderPanelOverlay::TextLoader::TextLoader( String const & p_tabs, BorderPanelOverlay const * p_category )
-		: OverlayCategory::TextLoader{ p_tabs }
+	BorderPanelOverlay::TextWriter::TextWriter( String const & p_tabs, BorderPanelOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
 	{
 	}
 
-	bool BorderPanelOverlay::TextLoader::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
+	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "border_panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 1024, cuT( "%S\tborder_size " ), m_tabs.c_str() ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Point4d::TextLoader( m_tabs )( p_overlay.GetBorderSize(), p_file );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_size " ) ) > 0
+				&& Point4d::TextWriter{ String{} }( p_overlay.GetBorderSize(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && p_overlay.GetBorderMaterial() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_material " ) + p_overlay.GetBorderMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.GetBorderMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader( m_tabs )( p_overlay.GetOverlay(), p_file );
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
 		if ( l_return )
@@ -48,7 +46,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool BorderPanelOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	bool BorderPanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}

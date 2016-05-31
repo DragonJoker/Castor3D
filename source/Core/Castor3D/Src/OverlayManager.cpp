@@ -130,12 +130,6 @@ namespace Castor3D
 		{
 			l_return = std::make_shared< Overlay >( *GetEngine(), p_type, p_scene, p_parent );
 			l_return->SetName( p_name );
-
-			if ( p_scene )
-			{
-				p_scene->AddOverlay( l_return );
-			}
-
 			DoAddOverlay( p_name, l_return, p_parent );
 			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
@@ -248,7 +242,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Overlay::TextLoader( String{} )( l_overlay, p_file );
+			l_return = Overlay::TextWriter( String{} )( l_overlay, p_file );
 			++l_it;
 		}
 

@@ -6,40 +6,28 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	KeyFrame::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< KeyFrame >( p_path )
-	{
-	}
-
-	bool KeyFrame::BinaryWriter::DoWrite( KeyFrame const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< KeyFrame >::DoWrite( KeyFrame const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_KEYFRAME );
 
 		if ( l_return )
 		{
-			l_return &= DoWriteChunk( p_obj.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, l_chunk );
+			l_return &= DoWriteChunk( p_obj.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return &= DoWriteChunk( p_obj.GetScale(), eCHUNK_TYPE_KEYFRAME_SCALE, l_chunk );
+			l_return &= DoWriteChunk( p_obj.GetScale(), eCHUNK_TYPE_KEYFRAME_SCALE, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return &= DoWriteChunk( p_obj.GetTranslate(), eCHUNK_TYPE_KEYFRAME_TRANSLATE, l_chunk );
+			l_return &= DoWriteChunk( p_obj.GetTranslate(), eCHUNK_TYPE_KEYFRAME_TRANSLATE, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return &= DoWriteChunk( p_obj.GetRotate(), eCHUNK_TYPE_KEYFRAME_ROTATE, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
+			l_return &= DoWriteChunk( p_obj.GetRotate(), eCHUNK_TYPE_KEYFRAME_ROTATE, m_chunk );
 		}
 
 		return l_return;
@@ -47,57 +35,38 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	KeyFrame::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< KeyFrame >( p_path )
-	{
-	}
-
-	bool KeyFrame::BinaryParser::DoParse( KeyFrame & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< KeyFrame >::DoParse( KeyFrame & p_obj )
 	{
 		bool l_return = true;
 		Matrix4x4r l_transform;
 		Point3r l_point;
 		Quaternion l_quat;
 		real l_time;
+		BinaryChunk l_chunk;
 
-		while ( p_chunk.CheckAvailable( 1 ) )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				switch ( p_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_KEYFRAME_TIME:
-					l_return = DoParseChunk( l_time, p_chunk );
-					p_obj.SetTimeIndex( l_time );
-					break;
+			case eCHUNK_TYPE_KEYFRAME_TIME:
+				l_return = DoParseChunk( l_time, l_chunk );
+				p_obj.SetTimeIndex( l_time );
+				break;
 
-				case eCHUNK_TYPE_KEYFRAME_SCALE:
-					l_return = DoParseChunk( l_point, p_chunk );
-					p_obj.SetScale( l_point );
-					break;
+			case eCHUNK_TYPE_KEYFRAME_SCALE:
+				l_return = DoParseChunk( l_point, l_chunk );
+				p_obj.SetScale( l_point );
+				break;
 
-				case eCHUNK_TYPE_KEYFRAME_TRANSLATE:
-					l_return = DoParseChunk( l_point, p_chunk );
-					p_obj.SetTranslate( l_point );
-					break;
+			case eCHUNK_TYPE_KEYFRAME_TRANSLATE:
+				l_return = DoParseChunk( l_point, l_chunk );
+				p_obj.SetTranslate( l_point );
+				break;
 
-				case eCHUNK_TYPE_KEYFRAME_ROTATE:
-					l_return = DoParseChunk( l_quat, p_chunk );
-					p_obj.SetRotate( l_quat );
-					break;
-
-				default:
-					l_return = KeyFrame::BinaryParser( m_path ).Parse( p_obj, p_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+			case eCHUNK_TYPE_KEYFRAME_ROTATE:
+				l_return = DoParseChunk( l_quat, l_chunk );
+				p_obj.SetRotate( l_quat );
+				break;
 			}
 		}
 

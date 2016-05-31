@@ -40,85 +40,8 @@ namespace Castor3D
 	*/
 	class AnimationObject
 		: public Castor::OwnedBy< Animation >
+		, public std::enable_shared_from_this< AnimationObject >
 	{
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		MovingObjectBase binary loader.
-		\~english
-		\brief		Loader binaire de MovingObjectBase.
-		*/
-		class BinaryWriter
-			: public Castor3D::BinaryWriter< AnimationObject >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryWriter( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data.
-			 *\param[in]	p_obj	The object to write.
-			 *\param[out]	p_chunk	The chunk to fill.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-			 *\param[in]	p_obj	L'objet à écrire.
-			 *\param[out]	p_chunk	Le chunk à remplir.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API bool DoWrite( AnimationObject const & p_obj, BinaryChunk & p_chunk )const override;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		MovingObjectBase binary loader.
-		\~english
-		\brief		Loader binaire de MovingObjectBase.
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< AnimationObject >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk.
-			 *\param[out]	p_obj	The object to read.
-			 *\param[in]	p_chunk	The chunk containing data.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-			 *\param[out]	p_obj	L'objet à lire.
-			 *\param[in]	p_chunk	Le chunk contenant les données.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API bool DoParse( AnimationObject & p_obj, BinaryChunk & p_chunk )const override;
-		};
-
 	protected:
 		/**
 		 *\~english
@@ -330,6 +253,16 @@ namespace Castor3D
 		{
 			return m_children;
 		}
+		/**
+		 *\~english
+		 *\return		The parent object.
+		 *\~french
+		 *\return		L'objet parent.
+		 */
+		inline AnimationObjectSPtr GetParent()const
+		{
+			return m_parent.lock();
+		}
 
 	protected:
 		/**
@@ -352,30 +285,118 @@ namespace Castor3D
 		C3D_API virtual AnimationObjectSPtr DoClone( Animation & p_animation ) = 0;
 
 	protected:
-		//!\~english The interpolation mode.	\~french Le mode d'interpolation.
+		//!\~english	The interpolation mode.
+		//!\~french		Le mode d'interpolation.
 		eINTERPOLATOR_MODE m_mode{ eINTERPOLATOR_MODE_COUNT };
-		//!\~english The animation length.	\~french La durée de l'animation.
+		//!\~english	The animation length.
+		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };
-		//!\~english The moving thing type.	\~french Le type du machin mouvant.
+		//!\~english	The moving thing type.
+		//!\~french		Le type du machin mouvant.
 		eANIMATION_OBJECT_TYPE m_type;
-		//!\~english The point interpolator.	\~french L'interpolateur de points.
+		//!\~english	The point interpolator.
+		//!\~french		L'interpolateur de points.
 		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;
-		//!\~english The quaternion interpolator.	\~french L'interpolateur de quaternions.
+		//!\~english	The quaternion interpolator.
+		//!\~french		L'interpolateur de quaternions.
 		std::unique_ptr< QuaternionInterpolator > m_quaternionInterpolator;
-		//!\~english The key frames.	\~french Les keyframes.
+		//!\~english	The key frames.
+		//!\~french		Les keyframes.
 		KeyFrameArray m_keyframes;
-		//!\~english Iterator to the previous keyframe (when playing the animation).	\~french Itérateur sur la key frame précédente (quand l'animation est jouée).
+		//!\~english	Iterator to the previous keyframe (when playing the animation).
+		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
 		KeyFrameArray::const_iterator m_prev;
-		//!\~english Iterator to the current keyframe (when playing the animation).	\~french Itérateur sur la key frame courante (quand l'animation est jouée).
+		//!\~english	Iterator to the current keyframe (when playing the animation).
+		//!\~french		Itérateur sur la key frame courante (quand l'animation est jouée).
 		KeyFrameArray::const_iterator m_curr;
-		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
+		//!\~english	Animation node transformations.
+		//!\~french		Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
-		//!\~english The objects depending on this one.	\~french Les objets dépendant de celui-ci.
+		//!\~english	The objects depending on this one.
+		//!\~french		Les objets dépendant de celui-ci.
 		AnimationObjectPtrArray m_children;
-		//!\~english The cumulative animation transformations.	\~french Les transformations cumulées de l'animation.
+		//!\~english	The parent object.
+		//!\~french		L'objet parent.
+		AnimationObjectWPtr m_parent;
+		//!\~english	The cumulative animation transformations.
+		//!\~french		Les transformations cumulées de l'animation.
 		Castor::Matrix4x4r m_cumulativeTransform;
-		//!\~english The matrix holding transformation at current time.	\~french La matrice de transformation complète au temps courant de l'animation.
+		//!\~english	The matrix holding transformation at current time.
+		//!\~french		La matrice de transformation complète au temps courant de l'animation.
 		Castor::Matrix4x4r m_finalTransform;
+
+		friend class BinaryWriter< AnimationObject >;
+		friend class BinaryParser< AnimationObject >;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\remarks	Specialisation for AnimationObject.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\remarks	Spécialisation pour AnimationObject.
+	*/
+	template<>
+	struct ChunkTyper< AnimationObject >
+	{
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_ANIMATION_OBJECT;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		26/01/2016
+	\~english
+	\brief		MovingObjectBase binary loader.
+	\~english
+	\brief		Loader binaire de MovingObjectBase.
+	*/
+	template<>
+	class BinaryWriter< AnimationObject >
+		: public BinaryWriterBase< AnimationObject >
+	{
+	protected:
+		/**
+		 *\~english
+		 *\brief		Function used to fill the chunk from specific data.
+		 *\param[in]	p_obj	The object to write.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+		 *\param[in]	p_obj	L'objet à écrire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoWrite( AnimationObject const & p_obj )override;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		26/01/2016
+	\~english
+	\brief		MovingObjectBase binary loader.
+	\~english
+	\brief		Loader binaire de MovingObjectBase.
+	*/
+	template<>
+	class BinaryParser< AnimationObject >
+		: public BinaryParserBase< AnimationObject >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk.
+		 *\param[out]	p_obj	The object to read.
+		 *\param[in]	p_chunk	The chunk containing data.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+		 *\param[out]	p_obj	L'objet à lire.
+		 *\param[in]	p_chunk	Le chunk contenant les données.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoParse( AnimationObject & p_obj )override;
 	};
 }
 

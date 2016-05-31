@@ -48,8 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Sampler
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Sampler >
+		class TextWriter
+			: public Castor::TextWriter< Sampler >
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\param[in]		p_sampler	L'échantillonneur
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file );
+			C3D_API bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file )override;
 		};
 
 	public:

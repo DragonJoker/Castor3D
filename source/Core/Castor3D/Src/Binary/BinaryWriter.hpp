@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_BINARY_WRITER_H___
 
 #include "ChunkWriter.hpp"
+#include "Miscellaneous/Version.hpp"
 
 namespace Castor3D
 {
@@ -27,42 +28,35 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date 		15/04/2013
 	\~english
-	\brief		Binary data chunk writer/reader base class
+	\brief		Binary data chunk writer/reader base class.
 	\~french
-	\brief		Classe de base de lecture/écriture d'un chunk de données binaires
+	\brief		Classe de base de lecture/écriture d'un chunk de données binaires.
 	*/
 	template< class TWritten >
-	class BinaryWriter
+	class BinaryWriterBase
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_path	The current folder path
+		 *\brief			Writes an object to a file.
+		 *\param[in]		p_obj	The object to write.
+		 *\param[in,out]	p_file	The file.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_path	Le chemin d'accès au dossier courant
+		 *\brief			Fonction d'écriture dans un fichier.
+		 *\param[in]		p_obj	L'objet à écrire.
+		 *\param[in,out]	p_file	Le fichier.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		inline BinaryWriter( Castor::Path const & p_path )
-			: m_path{ p_path }
+		inline bool Write( TWritten const & p_obj, Castor::BinaryFile & p_file )
 		{
-		}
-		/**
-		 *\~english
-		 *\brief		To chunk writer function
-		 *\param[in]	p_obj	The object to write
-		 *\param[in]	p_file	The file
-		 *\return		\p false if any error occured
-		 *\~french
-		 *\brief		Fonction d'écriture dans un fichier
-		 *\param[in]	p_obj	L'objet à écrire
-		 *\param[in]	p_file	Le fichier
-		 *\return		\p false si une erreur quelconque est arrivée
-		 */
-		inline bool Write( TWritten const & p_obj, Castor::BinaryFile & p_file )const
-		{
-			BinaryChunk l_chunk;
-			bool l_return = DoWrite( p_obj, l_chunk );
+			BinaryChunk l_chunk{ eCHUNK_TYPE_CMSH_FILE };
+			bool l_return = DoWriteHeader( l_chunk );
+
+			if ( l_return )
+			{
+				l_return = Write( p_obj, l_chunk );
+			}
 
 			if ( l_return )
 			{
@@ -73,37 +67,75 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		To chunk writer function
-		 *\param[in]	p_obj	The object to write
-		 *\param[in]	p_chunk	The chunk
-		 *\return		\p false if any error occured
+		 *\brief			To chunk writer function.
+		 *\param[in]		p_obj	The object to write.
+		 *\param[in,out]	p_chunk	The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Fonction d'écriture dans un chunk
-		 *\param[in]	p_obj	L'objet à écrire
-		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Fonction d'écriture dans un chunk.
+		 *\param[in]		p_obj	L'objet à écrire.
+		 *\param[in,out]	p_chunk	Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		inline bool Write( TWritten const & p_obj, BinaryChunk & p_chunk )const
+		inline bool Write( TWritten const & p_obj, BinaryChunk & p_chunk )
 		{
-			return DoWrite( p_obj, p_chunk );
+			bool l_return{ DoWrite( p_obj ) };
+			
+			if ( l_return )
+			{
+				m_chunk.Finalise();
+				p_chunk.AddSubChunk( m_chunk );
+			}
+
+			return l_return;
 		}
 
 	protected:
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_values	The values
-		 *\param[in]	p_count		The values count
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk		The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes the header chunk.
+		 *\param[in,out]	p_chunk	The parent chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_values	Les valeurs
-		 *\param[in]	p_count		Le nombre de valeurs
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk		Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit une le chunk d'en-tête.
+		 *\param[in,out]	p_chunk	Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
+		 */
+		inline bool DoWriteHeader( BinaryChunk & p_chunk )const
+		{
+			BinaryChunk l_chunk{ eCHUNK_TYPE_CMSH_HEADER };
+			bool l_return = DoWriteChunk( CMSH_VERSION, eCHUNK_TYPE_CMSH_VERSION, l_chunk );
+
+			if ( l_return )
+			{
+				Castor::StringStream l_stream;
+				l_stream << cuT( "Castor 3D - Version " ) << Castor3D::Version{};
+				l_return = DoWriteChunk( l_stream.str(), eCHUNK_TYPE_NAME, l_chunk );
+			}
+
+			if ( l_return )
+			{
+				l_chunk.Finalise();
+				l_return = p_chunk.AddSubChunk( l_chunk );
+			}
+
+			return l_return;
+		}
+		/**
+		 *\~english
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_values	The values.
+		 *\param[in]		p_count		The values count.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
+		 *\~french
+		 *\brief			Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]		p_values	Les valeurs.
+		 *\param[in]		p_count		Le nombre de valeurs.
+		 *\param[in]		p_chunkType	Le type du subchunk.
+		 *\param[in,out]	p_chunk		Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
 		inline bool DoWriteChunk( T const * p_values, size_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -112,17 +144,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value		The values
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_value		The values.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]		p_value		Les valeurs.
+		 *\param[in]		p_chunkType	Le type du subchunk.
+		 *\param[in,out]	p_chunk		Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
 		inline bool DoWriteChunk( T const( & p_value )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -131,17 +163,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value		The values
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_value		The values.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]		p_value		Les valeurs.
+		 *\param[in]		p_chunkType	Le type du subchunk.
+		 *\param[in,out]	p_chunk		Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
 		inline bool DoWriteChunk( std::array< T, Count > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -150,17 +182,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value		The values
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_value		The values.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief		Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]	p_value		Les valeurs.
+		 *\param[in]	p_chunkType	Le type du subchunk.
+		 *\param[in]	p_chunk		Le chunk.
+		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
 		inline bool DoWriteChunk( std::vector< T > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -169,19 +201,19 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_values	The values
-		 *\param[in]	p_count		The values count
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk		The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_values	The values.
+		 *\param[in]		p_count		The values count.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_values	Les valeurs
-		 *\param[in]	p_count		Le nombre de valeurs
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk		Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]		p_values	Les valeurs.
+		 *\param[in]		p_count		Le nombre de valeurs.
+		 *\param[in]		p_chunkType	Le type du subchunk.
+		 *\param[in,out]	p_chunk		Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
 		inline bool DoWriteChunk( T const * p_begin, T const * p_end, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -190,17 +222,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value		The value
-		 *\param[in]	p_chunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes a subchunk value into a chunk.
+		 *\param[in]		p_value		The value.
+		 *\param[in]		p_chunkType	The subchunk type.
+		 *\param[in,out]	p_chunk		The chunk.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value		La valeur
-		 *\param[in]	p_chunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit une valeur d'un subchunk dans un chunk.
+		 *\param[in]		p_value		La valeur.
+		 *\param[in]		p_chunkType	Le type du subchunk.
+		 *\param[in,out]	p_chunk		Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
 		inline bool DoWriteChunk( T const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
@@ -211,23 +243,23 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		To chunk writer function
-		 *\param[in]	p_obj	The object to write
-		 *\param[in]	p_chunk	The chunk
-		 *\return		\p false if any error occured
+		 *\brief			Writes the object to the writer's chunk.
+		 *\param[in]		p_obj	The object to write.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		Fonction d'écriture dans un chunk
-		 *\param[in]	p_obj	L'objet à écrire
-		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\brief			Ecrit l'objet dans le chunk du writer.
+		 *\param[in]		p_obj	L'objet à écrire.
+		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
-		C3D_API virtual bool DoWrite( TWritten const & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool DoWrite( TWritten const & p_obj ) = 0;
 
 	protected:
-		//!\~english	The current folder path.
-		//!\~french		Le chemin d'accès au dossier courant.
-		Castor::Path m_path;
+		//!\~english	The writer's chunk.
+		//!\~french		Le chunk du writer.
+		BinaryChunk m_chunk{ typename ChunkTyper< TWritten >::Value };
 	};
+	template< class TWritten >
+	class BinaryWriter;
 }
 
 #endif

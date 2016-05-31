@@ -6,12 +6,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Sampler::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Sampler >{ p_tabs }
+	Sampler::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Sampler >{ p_tabs }
 	{
 	}
 
-	bool Sampler::TextLoader::operator()( Sampler const & p_sampler, TextFile & p_file )
+	bool Sampler::TextWriter::operator()( Sampler const & p_sampler, TextFile & p_file )
 	{
 		bool l_return = true;
 
@@ -81,7 +81,7 @@ namespace Castor3D
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
-					&& Colour::TextLoader( String() )( p_sampler.GetBorderColour(), p_file )
+					&& Colour::TextWriter( String() )( p_sampler.GetBorderColour(), p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 

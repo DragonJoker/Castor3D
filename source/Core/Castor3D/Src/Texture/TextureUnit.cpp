@@ -19,12 +19,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureUnit::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< TextureUnit >{ p_tabs }
+	TextureUnit::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< TextureUnit >{ p_tabs }
 	{
 	}
 
-	bool TextureUnit::TextLoader::operator()( TextureUnit const & p_unit, TextFile & p_file )
+	bool TextureUnit::TextWriter::operator()( TextureUnit const & p_unit, TextFile & p_file )
 	{
 		static std::map< BlendSource, String > l_strTextureArguments
 		{
@@ -88,7 +88,7 @@ namespace Castor3D
 				if ( l_return )
 				{
 					l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
-						&& Colour::TextLoader( String() )( p_unit.GetBlendColour(), p_file )
+						&& Colour::TextWriter( String() )( p_unit.GetBlendColour(), p_file )
 						&& p_file.Print( 256, cuT( "\n" ) ) > 0;
 				}
 
@@ -160,12 +160,12 @@ namespace Castor3D
 					{
 						if ( l_return && p_unit.GetRenderTarget() )
 						{
-							l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
+							l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
 						}
 					}
 					else
 					{
-						Path l_relative = Scene::TextLoader::CopyFile( l_image, p_file.GetFilePath(), cuT( "Textures" ) );
+						Path l_relative{ Scene::TextWriter::CopyFile( Path{ l_image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
 						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 					}
 

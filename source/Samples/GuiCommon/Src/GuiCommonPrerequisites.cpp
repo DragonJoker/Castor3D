@@ -213,7 +213,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			Path l_path = p_pUnit->GetTexture()->GetImage().ToString();
+			Path l_path{ p_pUnit->GetTexture()->GetImage().ToString() };
 
 			if ( !l_path.empty() )
 			{
@@ -380,7 +380,7 @@ namespace GuiCommon
 	{
 		String l_name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
 		FontManager & l_manager = p_engine->GetFontManager();
-		FontSPtr l_font = l_manager.get( l_name );
+		FontSPtr l_font = l_manager.Find( l_name );
 
 		if ( !l_font )
 		{
@@ -399,6 +399,11 @@ namespace GuiCommon
 	Castor::String make_String( wxString const & p_value )
 	{
 		return Castor::String( p_value.mb_str( wxConvUTF8 ).data() );
+	}
+
+	Castor::Path make_Path( wxString const & p_value )
+	{
+		return Castor::Path( p_value.mb_str( wxConvUTF8 ).data() );
 	}
 
 	wxString make_wxString( Castor::String const & p_value )

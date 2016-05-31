@@ -1,10 +1,11 @@
 #include "Mesh.hpp"
 
 #include "Engine.hpp"
+
+#include "Animation/Animation.hpp"
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/Submesh.hpp"
-#include "Animation/Skeleton.hpp"
-#include "Animation/Animation.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 
 #include <Factory.hpp>
 #include <Logger.hpp>
@@ -13,87 +14,73 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Mesh::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< Mesh >{ p_path }
-	{
-	}
-
-	bool Mesh::BinaryWriter::DoWrite( Mesh const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< Mesh >::DoWrite( Mesh const & p_obj )
 	{
 		bool l_return = true;
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
 		}
 
 		for ( auto && l_submesh : p_obj )
 		{
-			l_return &= Submesh::BinaryWriter{ m_path }.Write( *l_submesh, p_chunk );
+			l_return &= BinaryWriter< Submesh >{}.Write( *l_submesh, m_chunk );
 		}
 
-		//if ( l_return && p_obj.m_skeleton )
-		//{
-		//	l_return = Skeleton::BinaryWriter{ m_path }.Write( *p_obj.m_skeleton, p_chunk );
-		//}
+		if ( l_return && p_obj.m_skeleton )
+		{
+			l_return = BinaryWriter< Skeleton >{}.Write( *p_obj.m_skeleton, m_chunk );
+		}
 
 		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	Mesh::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Mesh >{ p_path }
-	{
-	}
-
-	bool Mesh::BinaryParser::DoParse( Mesh & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< Mesh >::DoParse( Mesh & p_obj )
 	{
 		bool l_return = true;
 		SubmeshSPtr l_submesh;
 		SkeletonSPtr l_skeleton;
 		String l_name;
+		BinaryChunk l_chunk;
 
-		while ( p_chunk.CheckAvailable( 1 ) )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				switch ( l_chunk.GetChunkType() )
+			case eCHUNK_TYPE_NAME:
+				l_return = DoParseChunk( l_name, l_chunk );
+
+				if ( l_return )
 				{
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.m_name = l_name;
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH:
-					l_submesh = p_obj.CreateSubmesh();
-					l_return = Submesh::BinaryParser( m_path ).Parse( *l_submesh, l_chunk );
-					break;
-
-				//case eCHUNK_TYPE_SKELETON:
-				//	l_skeleton = std::make_shared< Skeleton >();
-				//	l_return = Skeleton::BinaryParser( m_path ).Parse( *l_skeleton, l_chunk );
-
-				//	if ( l_return )
-				//	{
-				//		p_obj.SetSkeleton( l_skeleton );
-				//	}
-
-				//	break;
+					p_obj.m_name = l_name;
 				}
-			}
 
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+				break;
+
+			case eCHUNK_TYPE_SUBMESH:
+				l_submesh = std::make_shared< Submesh >( *p_obj.GetEngine(), &p_obj, p_obj.GetSubmeshCount() );
+				l_return = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.m_submeshes.push_back( l_submesh );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SKELETON:
+				l_skeleton = std::make_shared< Skeleton >();
+				l_return = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.SetSkeleton( l_skeleton );
+				}
+
+				break;
 			}
 		}
 

@@ -24,7 +24,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	//!\~english A define to ease the declaration of a chunk id	\~french Un define pour faciliter la déclaration d'un id de chunk
+	//!\~english	Macro to make a version number.
+	//!\~french		Macro pour créer un numéro de version.
+#	define	MAKE_CMSH_VERSION( major, minor, revision )\
+	((uint32_t( major ) << 24)\
+	| (uint32_t( minor ) << 16)\
+	| (uint32_t( revision ) << 0))
+	//!\~english	The current format version number.
+	//!\~french		La version actuelle du format.
+	uint32_t const CMSH_VERSION = MAKE_CMSH_VERSION( 0x01, 0x00, 0x0000 );
+	//!\~english	A define to ease the declaration of a chunk id.
+	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
 #	define MAKE_CHUNK_ID( a, b, c, d, e, f, g, h )\
 	((uint64_t( a ) << 56)\
 	| (uint64_t( b ) << 48)\
@@ -47,27 +57,35 @@ namespace Castor3D
 		: uint64_t
 	{
 		eCHUNK_TYPE_UNKNOWN = MAKE_CHUNK_ID( ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' ),
+		eCHUNK_TYPE_CMSH_FILE = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'F', 'I', 'L', 'E' ),
+		eCHUNK_TYPE_CMSH_HEADER = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'H', 'D', 'E', 'R' ),
+		eCHUNK_TYPE_CMSH_VERSION = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ),
 		eCHUNK_TYPE_NAME = MAKE_CHUNK_ID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ),
-		eCHUNK_TYPE_CBSN_FILE = MAKE_CHUNK_ID( 'C', 'B', 'S', 'N', ' ', ' ', ' ', ' ' ),
 		eCHUNK_TYPE_MESH = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ),
 		eCHUNK_TYPE_SKELETON = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
 		eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
 		eCHUNK_TYPE_SKELETON_BONE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
 		eCHUNK_TYPE_BONE_OFFSET_MATRIX = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ),
+		eCHUNK_TYPE_BONE_FINAL_TRANSFORM = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'F', 'L', 'T', 'X' ),
 		eCHUNK_TYPE_SUBMESH = MAKE_CHUNK_ID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ),
 		eCHUNK_TYPE_SUBMESH_TOPOLOGY = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'T', 'O', 'P', 'O' ),
 		eCHUNK_TYPE_SUBMESH_VERTEX_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'X', 'C', 'T' ),
 		eCHUNK_TYPE_SUBMESH_VERTEX = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
 		eCHUNK_TYPE_SUBMESH_BONE_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'N', 'C', 'T' ),
 		eCHUNK_TYPE_SUBMESH_BONES = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'O', 'N', 'E' ),
+		eCHUNK_TYPE_SUBMESH_MATRIX_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'X', 'C', 'T' ),
+		eCHUNK_TYPE_SUBMESH_MATRIX = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'T', 'R', 'X' ),
 		eCHUNK_TYPE_SUBMESH_FACE_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
 		eCHUNK_TYPE_SUBMESH_FACES = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
 		eCHUNK_TYPE_ANIMABLE = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ),
 		eCHUNK_TYPE_ANIMATION = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
 		eCHUNK_TYPE_ANIM_SCALE = MAKE_CHUNK_ID( 'A', 'N', 'M', 'S', 'C', 'A', 'L', 'E' ),
-		eCHUNK_TYPE_MOVING_NODE = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'N', 'O', 'D', 'E' ),
-		eCHUNK_TYPE_MOVING_OBJECT = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'O', 'B', 'J', 'T' ),
-		eCHUNK_TYPE_MOVING_BONE = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'B', 'O', 'N', 'E' ),
+		eCHUNK_TYPE_ANIM_LENGTH = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
+		eCHUNK_TYPE_ANIM_INTERPOLATOR = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
+		eCHUNK_TYPE_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'O', 'B', 'J', 'T' ),
+		eCHUNK_TYPE_SKELETON_ANIMATION_NODE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
+		eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ),
+		eCHUNK_TYPE_SKELETON_ANIMATION_BONE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
 		eCHUNK_TYPE_MOVING_TRANSFORM = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eCHUNK_TYPE_KEYFRAME = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'A', 'M', 'E' ),
 		eCHUNK_TYPE_KEYFRAME_TIME = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'T', 'I', 'M', 'E' ),
@@ -75,7 +93,17 @@ namespace Castor3D
 		eCHUNK_TYPE_KEYFRAME_TRANSLATE = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'T', 'S', 'T', 'E' ),
 		eCHUNK_TYPE_KEYFRAME_ROTATE = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'R', 'T', 'T', 'E' ),
 	}	eCHUNK_TYPE;
-
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	*/
+	template< class TWritten >
+	struct ChunkTyper;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0

@@ -206,7 +206,7 @@ namespace Castor
 		 *\param[in]	p_strFileName	Le nom du fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		CU_API bool ParseFile( String const & p_strFileName );
+		CU_API bool ParseFile( Path const & p_strFileName );
 		/**
 		 *\~english
 		 *\brief		Parsing function

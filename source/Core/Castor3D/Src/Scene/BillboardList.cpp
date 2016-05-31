@@ -20,18 +20,18 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BillboardList::TextLoader::TextLoader( String const & p_tabs )
-		: MovableObject::TextLoader{ p_tabs }
+	BillboardList::TextWriter::TextWriter( String const & p_tabs )
+		: MovableObject::TextWriter{ p_tabs }
 	{
 	}
 
-	bool BillboardList::TextLoader::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
+	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader( m_tabs )( p_obj, p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( p_obj, p_file );
 		}
 
 		if ( l_return )

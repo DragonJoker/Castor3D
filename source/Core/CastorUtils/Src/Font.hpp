@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Resource.hpp"
 #include "BinaryLoader.hpp"
+#include "TextWriter.hpp"
 #include "Collection.hpp"
 #include "Point.hpp"
 #include "Glyph.hpp"
@@ -43,6 +44,37 @@ namespace Castor
 		: public Resource< Font >
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		Font text loader
+		\~french
+		\brief		Loader de Font à partir d'un texte
+		*/
+		class TextWriter
+			: public Castor::TextWriter< Font >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			CU_API TextWriter( String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief			Writes a Font into a text file
+			 *\param[in]		p_object	The Font to write
+			 *\param[in,out]	p_file		The file into which Font is written
+			 *\~french
+			 *\brief			Ecrit une Font dans un fichier texte
+			 *\param[in]		p_object	La Font à écrire
+			 *\param[in,out]	p_file		Le fichier dans lequel on écrit la Font
+			 */
+			CU_API bool operator()( Font const & p_object, TextFile & p_file )override;
+		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
@@ -80,13 +112,12 @@ namespace Castor
 			CU_API bool operator()( Font & p_font, Path const & p_path, uint32_t p_height );
 
 		private:
-			CU_API virtual bool operator()( Font & p_font, Path const & p_path );
+			CU_API bool operator()( Font & p_font, Path const & p_path );
 
 		private:
 			//!\~english Font wanted height	\~french Hauteur voulue pour la police
 			uint32_t m_height;
 		};
-
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
@@ -153,7 +184,7 @@ namespace Castor
 		 *\param[in]	p_name		Le nom de la police
 		 *\param[in]	p_height	La hauteur des caractères de la police
 		 */
-		CU_API Font( Path const & p_path, String const & p_name, uint32_t p_height );
+		CU_API Font( String const & p_name, uint32_t p_height, Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -440,6 +471,18 @@ namespace Castor
 		inline String const & GetFaceName()const
 		{
 			return m_faceName;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves The font file path.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère le chemin du fichier de la police.
+		 *\return		La valeur.
+		 */
+		inline Path const & GetFilePath()const
+		{
+			return m_pathFile;
 		}
 
 	private:

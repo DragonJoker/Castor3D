@@ -28,6 +28,7 @@ namespace Testing
 
 	void BenchManager::Register( TestCaseSPtr p_pCode )
 	{
+		p_pCode->RegisterTests();
 		m_arrayTests.push_back( p_pCode );
 	}
 

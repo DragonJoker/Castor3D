@@ -38,8 +38,8 @@ namespace Castor
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Point< T, Count >::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Point< T, Count > >( p_tabs )
+	Point< T, Count >::TextLoader::TextLoader()
+		: Castor::TextLoader< Point< T, Count > >()
 	{
 	}
 
@@ -63,8 +63,16 @@ namespace Castor
 		return true;
 	}
 
+	//*************************************************************************************************
+
 	template< typename T, uint32_t Count >
-	bool Point< T, Count >::TextLoader::operator()( Point< T, Count > const & p_object, TextFile & p_file )
+	Point< T, Count >::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Point< T, Count > >( p_tabs )
+	{
+	}
+
+	template< typename T, uint32_t Count >
+	bool Point< T, Count >::TextWriter::operator()( Point< T, Count > const & p_object, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 

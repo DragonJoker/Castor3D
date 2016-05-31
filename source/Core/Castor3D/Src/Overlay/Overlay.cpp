@@ -15,14 +15,14 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Overlay::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Overlay >{ p_tabs }
+	Overlay::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Overlay >{ p_tabs }
 	{
 	}
 
-	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
+	bool Overlay::TextWriter::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
-		return p_overlay.m_category->CreateTextLoader( m_tabs )->WriteInto( p_file );
+		return p_overlay.m_category->CreateTextWriter( m_tabs )->WriteInto( p_file );
 	}
 
 	//*************************************************************************************************

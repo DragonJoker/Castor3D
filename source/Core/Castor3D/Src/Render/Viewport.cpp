@@ -10,12 +10,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Viewport::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Viewport >{ p_tabs }
+	Viewport::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Viewport >{ p_tabs }
 	{
 	}
 
-	bool Viewport::TextLoader::operator()( Viewport const & p_viewport, TextFile & p_file )
+	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "viewport\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;

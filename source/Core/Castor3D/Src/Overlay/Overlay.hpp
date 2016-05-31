@@ -50,8 +50,8 @@ namespace Castor3D
 		\brief		Overlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Overlay >
+		class TextWriter
+			: public Castor::TextWriter< Overlay >
 		{
 		public:
 			/**
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -73,7 +73,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API virtual bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file )override;
 		};
 
 	public:

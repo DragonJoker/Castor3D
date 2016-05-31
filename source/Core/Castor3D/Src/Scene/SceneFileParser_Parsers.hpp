@@ -67,6 +67,7 @@ namespace Castor3D
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkImage )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSamplerState )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCamera )

@@ -69,7 +69,7 @@ namespace Castor3D
 
 		for ( auto l_it : GetEngine()->GetSamplerManager() )
 		{
-			Sampler::TextLoader( String{} )( *l_it.second, p_file );
+			Sampler::TextWriter( String{} )( *l_it.second, p_file );
 		}
 
 		GetEngine()->GetSamplerManager().unlock();
@@ -89,7 +89,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Material::TextLoader( String() )( * l_it->second, p_file );
+			l_return = Material::TextWriter( String() )( * l_it->second, p_file );
 			++l_it;
 		}
 

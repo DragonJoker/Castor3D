@@ -8,30 +8,18 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	SkeletonAnimationNode::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< SkeletonAnimationNode >( p_path )
-	{
-	}
-
-	bool SkeletonAnimationNode::BinaryWriter::DoWrite( SkeletonAnimationNode const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< SkeletonAnimationNode >::DoWrite( SkeletonAnimationNode const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_NODE );
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = AnimationObject::BinaryWriter{ m_path }.Write( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
+			l_return = BinaryWriter< AnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
 		return l_return;
@@ -39,38 +27,23 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationNode::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< SkeletonAnimationNode >( p_path )
-	{
-	}
-
-	bool SkeletonAnimationNode::BinaryParser::DoParse( SkeletonAnimationNode & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< SkeletonAnimationNode >::DoParse( SkeletonAnimationNode & p_obj )
 	{
 		bool l_return = true;
 		String l_name;
+		BinaryChunk l_chunk;
 
-		while ( p_chunk.CheckAvailable( 1 ) )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( p_obj.m_name, p_chunk );
-					break;
+			case eCHUNK_TYPE_NAME:
+				l_return = DoParseChunk( p_obj.m_name, l_chunk );
+				break;
 
-				default:
-					l_return = AnimationObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+			case eCHUNK_TYPE_ANIMATION_OBJECT:
+				l_return = BinaryParser< AnimationObject >{}.Parse( p_obj, l_chunk );
+				break;
 			}
 		}
 

@@ -40,7 +40,7 @@ namespace Castor3D
 		: public Castor::OwnedBy< RenderSystem >
 		, public std::enable_shared_from_this< ShaderProgram >
 	{
-		friend class Castor::TextLoader< Castor3D::ShaderProgram >;
+		friend class Castor::TextWriter< Castor3D::ShaderProgram >;
 
 	public:
 		/*!
@@ -52,8 +52,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de ShaderProgram
 		*/
-		class TextLoader
-			: public Castor::TextLoader< ShaderProgram >
+		class TextWriter
+			: public Castor::TextWriter< ShaderProgram >
 		{
 		public:
 			/**
@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderProgram into a text file
@@ -73,7 +73,7 @@ namespace Castor3D
 			 *\param[in]		p_program	Le ShaderProgram
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file );
+			C3D_API bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file )override;
 		};
 
 		/**@name Attributes */

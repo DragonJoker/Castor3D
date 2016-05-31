@@ -6,20 +6,20 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	PointLight::TextLoader::TextLoader( String const & p_tabs, PointLight const * p_category )
-		: LightCategory::TextLoader{ p_tabs }
+	PointLight::TextWriter::TextWriter( String const & p_tabs, PointLight const * p_category )
+		: LightCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
 	{
 	}
 
-	bool PointLight::TextLoader::operator()( PointLight const & p_light, TextFile & p_file )
+	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextLoader::operator()( p_light, p_file );
+		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
-				&& Point3f::TextLoader( String() )( p_light.GetAttenuation(), p_file )
+				&& Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
@@ -31,7 +31,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool PointLight::TextLoader::WriteInto( Castor::TextFile & p_file )
+	bool PointLight::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}

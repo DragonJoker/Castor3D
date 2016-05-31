@@ -86,36 +86,36 @@ namespace Testing
 		Logger::LogInfo(	"		Entry  : " + l_strIn );
 		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
 		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_tstrOut, l_tstrIn );
+		CT_EQUAL( l_tstrOut, l_tstrIn );
 		l_tstrOut = string::string_cast< xchar >( l_wstrIn );
 		Logger::LogInfo(	"	Conversion from std::wstring to String" );
 		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
 		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
 		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_tstrOut, l_tstrIn );
+		CT_EQUAL( l_tstrOut, l_tstrIn );
 		l_strOut = string::string_cast< char >( l_tstrIn );
 		Logger::LogInfo(	"	Conversion from String to std::string" );
 		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
 		Logger::LogInfo(	"		Result : " + l_strOut );
 		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_strOut, l_strIn );
+		CT_EQUAL( l_strOut, l_strIn );
 		l_wstrOut = string::string_cast< wchar_t >( l_tstrIn );
 		Logger::LogInfo(	"	Conversion from String to std::wstring" );
 		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
 		Logger::LogInfo( L"		Result : " + l_wstrOut );
 		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_wstrOut, l_wstrIn );
+		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_strIn, l_wstrOut );
 		Logger::LogInfo(	"	Conversion from std::string to std::wstring" );
 		Logger::LogInfo(	"		Entry  : " + l_strIn );
 		Logger::LogInfo( L"		Result : " + l_wstrOut );
 		Logger::LogInfo(	"" );
-		TEST_EQUAL( l_wstrOut, l_wstrIn );
+		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_wstrIn, l_strOut );
 		Logger::LogInfo(	"	Conversion from std::wstring to std::string" );
 		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
 		Logger::LogInfo(	"		Result : " + l_strOut );
-		TEST_EQUAL( l_strOut, l_strIn );
+		CT_EQUAL( l_strOut, l_strIn );
 	}
 
 	//*********************************************************************************************

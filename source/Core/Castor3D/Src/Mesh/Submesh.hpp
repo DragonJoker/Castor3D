@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Face.hpp"
 #include "VertexGroup.hpp"
 
-#include "Animation/VertexBoneData.hpp"
+#include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
 #include <OwnedBy.hpp>
@@ -46,82 +46,8 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 		friend class GeometryBuffers;
-
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryWriter
-			: public Castor3D::BinaryWriter< Submesh >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryWriter( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API bool DoWrite( Submesh const & p_obj, BinaryChunk & p_chunk )const override;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Submesh >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API bool DoParse( Submesh & p_obj, BinaryChunk & p_chunk )const override;
-		};
+		friend class BinaryWriter< Submesh >;
+		friend class BinaryParser< Submesh >;
 
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
@@ -969,6 +895,74 @@ namespace Castor3D
 		bool m_dirty;
 		//!\~english The GeometryBuffers with which this submesh is compatible.	\~french Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\remarks	Specialisation for Submesh.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\remarks	Spécialisation pour Submesh.
+	*/
+	template<>
+	struct ChunkTyper< Submesh >
+	{
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SUBMESH;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryWriter< Submesh >
+		: public BinaryWriterBase< Submesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to fill the chunk from specific data.
+		 *\param[in]	p_obj	The object to write.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+		 *\param[in]	p_obj	L'objet à écrire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoWrite( Submesh const & p_obj )override;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryParser< Submesh >
+		: public BinaryParserBase< Submesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk containing data
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk contenant les données
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API bool DoParse( Submesh & p_obj )override;
 	};
 }
 

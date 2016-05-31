@@ -15,7 +15,7 @@ using namespace Castor3D;
 
 namespace
 {
-	void DoLoadPlugins( Castor3D::Engine & p_engine )
+	void DoLoadPlugins( Engine & p_engine )
 	{
 		PathArray l_arrayFiles;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
@@ -103,7 +103,7 @@ namespace
 			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 
-		if ( l_return->LoadRenderer( Castor3D::Testing::RENDERER_TYPE_TEST ) )
+		if ( l_return->LoadRenderer( TestRender::TestRenderSystem::Name ) )
 		{
 			l_return->Initialise( 1, false );
 		}
@@ -128,21 +128,21 @@ int main( int argc, char const * argv[] )
 #if defined( NDEBUG )
 	Castor::Logger::Initialise( Castor::ELogType_INFO );
 #else
-	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+	Logger::Initialise( Castor::ELogType_DEBUG );
 #endif
 
-	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );
+	Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );
 	{
 		std::unique_ptr< Engine > l_engine = DoInitialiseCastor();
 
 		// Test cases.
-		::Testing::Register( std::make_shared< Castor3D::Testing::BinaryExportTest >( *l_engine ) );
+		Testing::Register( std::make_shared< Testing::BinaryExportTest >( *l_engine ) );
 
 		// Tests loop.
 		BENCHLOOP( l_count, l_return );
 
 		l_engine->Cleanup();
 	}
-	Castor::Logger::Cleanup();
+	Logger::Cleanup();
 	return l_return;
 }

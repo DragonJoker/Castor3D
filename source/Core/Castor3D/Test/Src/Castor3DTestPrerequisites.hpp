@@ -21,28 +21,35 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <UnitTest.hpp>
 #include <Benchmark.hpp>
 
+#include <Render/TestRenderSystem.hpp>
+
 #include "Castor3DTestUtils.hpp"
 
-namespace Castor3D
+namespace Testing
 {
-	namespace Testing
+#if !defined( NDEBUG )
+
+	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_DEBUG };
+
+#else
+
+	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_RELEASE };
+
+#endif
+
+	class C3DTestCase
+		: public TestCase
 	{
-		static Castor::String RENDERER_TYPE_TEST = cuT( "test" );
-
-		class TestCase
-			: public ::Testing::TestCase
+	public:
+		inline C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
+			: TestCase{ p_name }
+			, m_engine{ p_engine }
 		{
-		public:
-			inline TestCase( std::string const & p_name, Engine & p_engine )
-				: ::Testing::TestCase{ p_name }
-				, m_engine{ p_engine }
-			{
-			}
+		}
 
-		protected:
-			Engine & m_engine;
-		};
-	}
+	protected:
+		Castor3D::Engine & m_engine;
+	};
 }
 
 #endif

@@ -13,38 +13,27 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayCategory::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< OverlayCategory >{ p_tabs }
+	OverlayCategory::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< OverlayCategory >{ p_tabs }
 	{
 	}
 
-	bool OverlayCategory::TextLoader::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
+	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
 	{
-		bool l_return = p_file.Print( 1024, cuT( "%S\tposition " ), m_tabs.c_str() ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "\tposition " ) ) > 0
+			&& Point2d::TextWriter{ String{} }( p_overlay.GetPosition(), p_file )
+			&& p_file.WriteText( cuT( "\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = Point2d::TextLoader( m_tabs )( p_overlay.GetPosition(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.Print( 1024, cuT( "\n%S\tsize " ), m_tabs.c_str() ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Point2d::TextLoader( m_tabs )( p_overlay.GetSize(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tsize " ) ) > 0
+				&& Point2d::TextWriter{ String{} }( p_overlay.GetSize(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && p_overlay.GetMaterial() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		for ( auto && l_overlay : p_overlay.GetOverlay() )
@@ -52,15 +41,15 @@ namespace Castor3D
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader( m_tabs )( *l_overlay->GetPanelOverlay(), p_file );
+				l_return &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader( m_tabs )( *l_overlay->GetBorderPanelOverlay(), p_file );
+				l_return &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader( m_tabs )( *l_overlay->GetTextOverlay(), p_file );
+				l_return &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:

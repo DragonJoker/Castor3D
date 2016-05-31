@@ -389,7 +389,7 @@ namespace Castor
 		 *\brief		Récupère le chemin, nom et extension du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path const & GetFileFullPath()const
+		inline	Path const & GetFileFullPath()const
 		{
 			return m_strFileFullPath;
 		}
@@ -401,7 +401,7 @@ namespace Castor
 		 *\brief		Récupère le chemin du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path GetFilePath()const
+		inline Path GetFilePath()const
 		{
 			return m_strFileFullPath.GetPath();
 		}
@@ -413,9 +413,9 @@ namespace Castor
 		 *\brief		Récupère le nom et l'extension du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path GetFileName()const
+		inline Path GetFileName()const
 		{
-			return m_strFileFullPath.GetFullFileName();
+			return Path{ m_strFileFullPath.GetFullFileName() };
 		}
 
 	protected:

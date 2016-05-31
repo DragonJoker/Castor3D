@@ -35,12 +35,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderObject::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< ShaderObject >{ p_tabs }
+	ShaderObject::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< ShaderObject >{ p_tabs }
 	{
 	}
 
-	bool ShaderObject::TextLoader::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
+	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() ) > 0;
 		static std::array< String, eSHADER_MODEL_COUNT > const l_arrayModels
@@ -70,7 +70,7 @@ namespace Castor3D
 				if ( !l_file.empty() )
 				{
 					File::CopyFile( l_file, l_pathFile );
-					l_file = Path( cuT( "Shaders" ) ) / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
+					l_file = Path{ Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension() };
 					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_file + cuT( "\"\n" ) ) > 0;
 				}
 			}
@@ -80,7 +80,7 @@ namespace Castor3D
 		{
 			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_return = FrameVariable::TextLoader( m_tabs + cuT( "\t" ) )( *l_it, p_file );
+				l_return = FrameVariable::TextWriter( m_tabs + cuT( "\t" ) )( *l_it, p_file );
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace Castor3D
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename.c_str(), File::eOPEN_MODE_READ );
+			TextFile l_file( p_filename, File::eOPEN_MODE_READ );
 
 			if ( l_file.IsOk() )
 			{

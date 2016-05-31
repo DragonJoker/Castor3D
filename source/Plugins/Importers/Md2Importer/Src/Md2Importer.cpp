@@ -131,7 +131,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 
 		for ( int i = 0; i < m_header.m_numSkins && !l_pTexture; i++ )
 		{
-			String l_strValue = string::string_cast< xchar >( m_skins[i] );
+			Path l_strValue{ string::string_cast< xchar >( m_skins[i] ) };
 
 			if ( p_pPass && !l_strValue.empty() )
 			{

@@ -34,12 +34,12 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Pass::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Pass >{ p_tabs }
+	Pass::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Pass >{ p_tabs }
 	{
 	}
 
-	bool Pass::TextLoader::operator()( Pass const & p_pass, TextFile & p_file )
+	bool Pass::TextWriter::operator()( Pass const & p_pass, TextFile & p_file )
 	{
 		static const String StrBlendFactors[uint32_t( BlendOperand::Count )] =
 		{
@@ -67,28 +67,28 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tambient " ), m_tabs.c_str() ) > 0
-				&& Colour::TextLoader( String() )( p_pass.GetAmbient(), p_file )
+				&& Colour::TextWriter( String() )( p_pass.GetAmbient(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
-				&& Colour::TextLoader( String() )( p_pass.GetDiffuse(), p_file )
+				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
-				&& Colour::TextLoader( String() )( p_pass.GetEmissive(), p_file )
+				&& Colour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
-				&& Colour::TextLoader( String() )( p_pass.GetSpecular(), p_file )
+				&& Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
@@ -120,7 +120,7 @@ namespace Castor3D
 			for ( uint32_t i = 0; i < l_uiNbTextureUnits && l_return; i++ )
 			{
 				p_file.WriteText( cuT( "\n" ) );
-				l_return = TextureUnit::TextLoader( m_tabs + cuT( "\t" ) )( *p_pass.GetTextureUnit( i ), p_file );
+				l_return = TextureUnit::TextWriter( m_tabs + cuT( "\t" ) )( *p_pass.GetTextureUnit( i ), p_file );
 			}
 		}
 

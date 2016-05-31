@@ -104,22 +104,22 @@ namespace Testing
 
 	void CastorUtilsUniqueTest::NoInstanceTest()
 	{
-		TEST_CHECK_THROW( TestUnique::GetInstance() );
+		CT_CHECK_THROW( TestUnique::GetInstance() );
 	}
 
 	void CastorUtilsUniqueTest::OneInstanceTest()
 	{
 		{
 			TestUnique l_tmp;
-			TEST_CHECK_NOTHROW( TestUnique::GetInstance() );
+			CT_CHECK_NOTHROW( TestUnique::GetInstance() );
 		}
-		TEST_CHECK_THROW( TestUnique::GetInstance() );
+		CT_CHECK_THROW( TestUnique::GetInstance() );
 	}
 
 	void CastorUtilsUniqueTest::MultipleInstanceTest()
 	{
 		TestUnique l_tmp1;
-		TEST_CHECK_THROW( std::make_unique< TestUnique >() );
+		CT_CHECK_THROW( std::make_unique< TestUnique >() );
 	}
 
 	void CastorUtilsUniqueTest::MemoryTest()
@@ -129,27 +129,27 @@ namespace Testing
 			l_src.m_int = 0xFFCCBBAA;
 			l_src.m_ptr = &l_src;
 			auto & l_ref = TestUniqueFirst::GetInstance();
-			TEST_CHECK( l_src.m_int == l_ref.m_int );
-			TEST_CHECK( l_src.m_ptr == l_ref.m_ptr );
-			TEST_CHECK( l_src.m_ptr == &l_ref );
+			CT_CHECK( l_src.m_int == l_ref.m_int );
+			CT_CHECK( l_src.m_ptr == l_ref.m_ptr );
+			CT_CHECK( l_src.m_ptr == &l_ref );
 		}
 		{
 			TestUniqueMiddle l_src;
 			l_src.m_int = 0x99887766;
 			l_src.m_ptr = &l_src;
 			auto & l_ref = TestUniqueMiddle::GetInstance();
-			TEST_CHECK( l_src.m_int == l_ref.m_int );
-			TEST_CHECK( l_src.m_ptr == l_ref.m_ptr );
-			TEST_CHECK( l_src.m_ptr == &l_ref );
+			CT_CHECK( l_src.m_int == l_ref.m_int );
+			CT_CHECK( l_src.m_ptr == l_ref.m_ptr );
+			CT_CHECK( l_src.m_ptr == &l_ref );
 		}
 		{
 			TestUniqueLast l_src;
 			l_src.m_int = 0x55443322;
 			l_src.m_ptr = &l_src;
 			auto & l_ref = TestUniqueLast::GetInstance();
-			TEST_CHECK( l_src.m_int == l_ref.m_int );
-			TEST_CHECK( l_src.m_ptr == l_ref.m_ptr );
-			TEST_CHECK( l_src.m_ptr == &l_ref );
+			CT_CHECK( l_src.m_int == l_ref.m_int );
+			CT_CHECK( l_src.m_ptr == l_ref.m_ptr );
+			CT_CHECK( l_src.m_ptr == &l_ref );
 		}
 	}
 

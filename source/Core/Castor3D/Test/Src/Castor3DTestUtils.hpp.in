@@ -20,12 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3DPrerequisites.hpp>
 
-namespace Castor3D
+namespace Testing
 {
-	namespace Testing
-	{
-		static Castor::Path DATA_FOLDER = cuT( "${C3DTEST_DATA_FOLDER}" );
-	}
+	static xchar const DATA_FOLDER_DEBUG[] = cuT( "${C3DTEST_DATA_FOLDER_DEBUG}" );
+	static xchar const DATA_FOLDER_RELEASE[] = cuT( "${C3DTEST_DATA_FOLDER_RELEASE}" );
 }
 
 #endif

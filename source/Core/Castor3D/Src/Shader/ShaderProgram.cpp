@@ -33,12 +33,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< ShaderProgram >{ p_tabs }
+	ShaderProgram::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< ShaderProgram >{ p_tabs }
 	{
 	}
 
-	bool ShaderProgram::TextLoader::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
+	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
 	{
 		bool l_return = false;
 		bool l_hasFile = false;
@@ -72,7 +72,7 @@ namespace Castor3D
 
 				if ( l_object )
 				{
-					l_return = ShaderObject::TextLoader( m_tabs + cuT( "\t" ) )( *l_object, p_file );
+					l_return = ShaderObject::TextWriter( m_tabs + cuT( "\t" ) )( *l_object, p_file );
 				}
 			}
 

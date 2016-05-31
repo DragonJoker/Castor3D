@@ -229,7 +229,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 	Colour l_crAmbient( Colour::from_rgb( 0 ) );
 	Colour l_crSpecular( Colour::from_rgb( 0 ) );
 	String l_strMatName;
-	std::map< TextureChannel, String > l_strTextures;
+	std::map< TextureChannel, Path > l_strTextures;
 	bool l_bContinue = true;
 	bool l_bTwoSided = false;
 
@@ -329,7 +329,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 
 		for ( auto l_it : l_strTextures )
 		{
-			l_strTexture = l_it.second;
+			auto l_strTexture = l_it.second;
 
 			if ( !l_strTexture.empty() )
 			{

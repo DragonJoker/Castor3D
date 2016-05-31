@@ -5,15 +5,15 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	DirectionalLight::TextLoader::TextLoader( String const & p_tabs, DirectionalLight const * p_category )
-		: LightCategory::TextLoader{ p_tabs }
+	DirectionalLight::TextWriter::TextWriter( String const & p_tabs, DirectionalLight const * p_category )
+		: LightCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
 	{
 	}
 
-	bool DirectionalLight::TextLoader::operator()( DirectionalLight const & p_light, TextFile & p_file )
+	bool DirectionalLight::TextWriter::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextLoader::operator()( p_light, p_file );
+		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
 
 		if ( l_return )
 		{
@@ -23,7 +23,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool DirectionalLight::TextLoader::WriteInto( Castor::TextFile & p_file )
+	bool DirectionalLight::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}

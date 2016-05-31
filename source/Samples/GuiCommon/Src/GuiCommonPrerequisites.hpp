@@ -285,6 +285,17 @@ namespace GuiCommon
 	Castor::String make_String( wxString const & p_value );
 	/**
 	 *\~english
+	 *\brief		Creates a Castor::Path from a wxString
+	 *\param[in]	p_value	The wxString
+	 *\return		The Castor::Path
+	 *\~french
+	 *\brief		Cree un Castor::Path a partir d'un wxString
+	 *\param[in]	p_value	Le wxString
+	 *\return		Le Castor::Path
+	 */
+	Castor::Path make_Path( wxString const & p_value );
+	/**
+	 *\~english
 	 *\brief		Creates a wxString from a Castor::String
 	 *\param[in]	p_value	The Castor::String
 	 *\return		The wxString

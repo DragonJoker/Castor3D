@@ -16,23 +16,23 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Camera::TextLoader::TextLoader( String const & p_tabs )
-		: MovableObject::TextLoader{ p_tabs }
+	Camera::TextWriter::TextWriter( String const & p_tabs )
+		: MovableObject::TextWriter{ p_tabs }
 	{
 	}
 
-	bool Camera::TextLoader::operator()( Camera const & p_camera, TextFile & p_file )
+	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader( m_tabs )( p_camera, p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( p_camera, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = Viewport::TextLoader( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
+			l_return = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
 		}
 
 		if ( l_return )

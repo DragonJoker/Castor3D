@@ -51,8 +51,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class TextLoader
-			: public Castor::TextLoader< RenderTarget >
+		class TextWriter
+			: public Castor::TextWriter< RenderTarget >
 		{
 		public:
 			/**
@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
 			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -76,7 +76,7 @@ namespace Castor3D
 			 *\param[in]	p_target	La cible de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
+			C3D_API bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file )override;
 		};
 
 	private:

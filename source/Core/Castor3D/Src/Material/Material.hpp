@@ -51,8 +51,8 @@ namespace Castor3D
 		\~french
 		\brief Loader de Material
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Material >
+		class TextWriter
+			: public Castor::TextWriter< Material >
 		{
 		public:
 			/**
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a material into a text file
@@ -72,7 +72,7 @@ namespace Castor3D
 			 *\param[in]		p_material	Le matériau
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( Material const & p_material, Castor::TextFile & p_file );
+			C3D_API bool operator()( Material const & p_material, Castor::TextFile & p_file )override;
 		};
 
 	public:

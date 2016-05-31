@@ -1,7 +1,6 @@
 ﻿#include "Image.hpp"
 #include "Path.hpp"
 #include "Rectangle.hpp"
-#include "BinaryFile.hpp"
 #include "Logger.hpp"
 
 extern "C"
@@ -11,6 +10,8 @@ extern "C"
 
 namespace Castor
 {
+	//************************************************************************************************
+
 	namespace
 	{
 		uint32_t Next2Pow( uint32_t p_uiDim )
@@ -58,16 +59,7 @@ namespace Castor
 		}
 	}
 
-	void Image::BinaryLoader::InitialiseImageLib()
-	{
-		FreeImage_Initialise();
-		FreeImage_SetOutputMessage( FreeImageErrorHandler );
-	}
-
-	void Image::BinaryLoader::CleanupImageLib()
-	{
-		FreeImage_DeInitialise();
-	}
+	//************************************************************************************************
 
 	Image::BinaryLoader::BinaryLoader()
 	{
@@ -186,7 +178,13 @@ namespace Castor
 		return p_image.m_pBuffer != nullptr;
 	}
 
-	bool Image::BinaryLoader::operator()( Image const & p_image, Path const & p_path )
+	//************************************************************************************************
+
+	Image::BinaryWriter::BinaryWriter()
+	{
+	}
+
+	bool Image::BinaryWriter::operator()( Image const & p_image, Path const & p_path )
 	{
 		bool l_return = false;
 		FIBITMAP * l_fiImage = nullptr;
@@ -249,6 +247,8 @@ namespace Castor
 
 		return l_return;
 	}
+
+	//************************************************************************************************
 
 	Image::Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
@@ -551,4 +551,17 @@ namespace Castor
 		CHECK_INVARIANTS();
 		return * this;
 	}
+
+	void Image::InitialiseImageLib()
+	{
+		FreeImage_Initialise();
+		FreeImage_SetOutputMessage( FreeImageErrorHandler );
+	}
+
+	void Image::CleanupImageLib()
+	{
+		FreeImage_DeInitialise();
+	}
+
+	//************************************************************************************************
 }

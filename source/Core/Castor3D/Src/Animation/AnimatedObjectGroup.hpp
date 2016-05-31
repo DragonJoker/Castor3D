@@ -50,8 +50,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class TextLoader
-			: public Castor::TextLoader< AnimatedObjectGroup >
+		class TextWriter
+			: public Castor::TextWriter< AnimatedObjectGroup >
 		{
 		public:
 			/**
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file

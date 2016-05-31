@@ -59,41 +59,44 @@ namespace Castor3D
 		\brief		OverlayCategory loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class TextLoader
-			: public Castor::TextLoader< OverlayCategory >
+		class TextWriter
+			: public Castor::TextWriter< OverlayCategory >
 		{
 		public:
-			/**
-			 *\~english
-			 *\brief		Writes a OverlayCategory into a text file.
-			 *\param[in]	p_file	The file.
-			 *\~french
-			 *\brief		Ecrit une OverlayCategory dans un fichier texte.
-			 *\param[in]	p_file	Le fichier.
-			 */
-			C3D_API virtual bool WriteInto( Castor::TextFile & p_file ) = 0;
-
-		protected:
 			/**
 			 *\~english
 			 *\brief		Constructor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
-			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
-			 *\return		\p true if everything is OK
+			 *\brief		Saves an overlay into a text file.
+			 *\param[in]	p_file		the file to save the overlay in.
+			 *\param[in]	p_overlay	the overlay to save.
+			 *\return		\p true if everything is OK.
 			 *\~french
-			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
-			 *\return		\p true si tout s'est bien passé
+			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte.
+			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation.
+			 *\param[in]	p_overlay	L'incrustation à enregistrer.
+			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API virtual bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file );
+			C3D_API bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file )override;
+			/**
+			 *\~english
+			 *\brief		Writes a OverlayCategory into a text file.
+			 *\param[in]	p_file	The file.
+			 *\return		\p true if everything is OK.
+			 *\~french
+			 *\brief		Ecrit une OverlayCategory dans un fichier texte.
+			 *\param[in]	p_file	Le fichier.
+			 *\return		\p true si tout s'est bien passé.
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )
+			{
+				return false;
+			}
 		};
 
 	public:
@@ -125,7 +128,7 @@ namespace Castor3D
 		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
 		 *\return		Le TextLoader.
 		 */
-		C3D_API virtual std::unique_ptr< TextLoader > CreateTextLoader( Castor::String const & p_tabs ) = 0;
+		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...

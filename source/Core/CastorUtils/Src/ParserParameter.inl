@@ -302,14 +302,14 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			p_value = p_params;
+			p_value = Path{ p_params };
 			p_params.clear();
 
 			if ( !p_value.empty() )
 			{
 				if ( p_value[0] == cuT( '\"' ) )
 				{
-					p_value = p_value.substr( 1 );
+					p_value = Path{ p_value.substr( 1 ) };
 
 					if ( !p_value.empty() )
 					{
@@ -323,7 +323,7 @@ namespace Castor
 								string::trim( p_params );
 							}
 
-							p_value = p_value.substr( 0, l_index );
+							p_value = Path{ p_value.substr( 0, l_index ) };
 						}
 					}
 				}

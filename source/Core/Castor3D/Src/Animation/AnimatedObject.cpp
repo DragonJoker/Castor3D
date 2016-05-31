@@ -3,10 +3,10 @@
 #include "Animable.hpp"
 #include "Animation.hpp"
 #include "AnimationObject.hpp"
-#include "Bone.hpp"
-#include "Skeleton.hpp"
 
 #include "Mesh/Mesh.hpp"
+#include "Mesh/Skeleton/Bone.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/MovableObject.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
@@ -15,6 +15,35 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	AnimatedObject::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< AnimatedObject >{ p_tabs }
+	{
+	}
+
+	bool AnimatedObject::TextWriter::operator()( AnimatedObject const & p_object, TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( m_tabs + cuT( "animated_object \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		for ( auto l_it : p_object.GetAnimations() )
+		{
+			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second->GetScale() ) +cuT( "\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
 	AnimatedObject::AnimatedObject( String const & p_name )
 		: Named( p_name )
 	{

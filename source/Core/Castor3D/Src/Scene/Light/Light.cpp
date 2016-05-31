@@ -20,14 +20,14 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Light::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Light >{ p_tabs }
+	Light::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Light >{ p_tabs }
 	{
 	}
 
-	bool Light::TextLoader::operator()( Light const & p_object, TextFile & p_file )
+	bool Light::TextWriter::operator()( Light const & p_object, TextFile & p_file )
 	{
-		return p_object.m_category->CreateTextLoader( m_tabs )->WriteInto( p_file );
+		return p_object.m_category->CreateTextWriter( m_tabs )->WriteInto( p_file );
 	}
 
 	//*************************************************************************************************

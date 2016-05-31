@@ -2,8 +2,8 @@
 
 #include "Animation.hpp"
 #include "Animable.hpp"
-#include "Skeleton.hpp"
-#include "Bone.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
+#include "Mesh/Skeleton/Bone.hpp"
 
 using namespace Castor;
 
@@ -11,30 +11,18 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	SkeletonAnimationBone::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< SkeletonAnimationBone >( p_path )
-	{
-	}
-
-	bool SkeletonAnimationBone::BinaryWriter::DoWrite( SkeletonAnimationBone const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< SkeletonAnimationBone >::DoWrite( SkeletonAnimationBone const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_BONE );
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = AnimationObject::BinaryWriter{ m_path }.Write( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
+			l_return = BinaryWriter< AnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
 		return l_return;
@@ -42,53 +30,38 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationBone::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< SkeletonAnimationBone >( p_path )
-	{
-	}
-
-	bool SkeletonAnimationBone::BinaryParser::DoParse( SkeletonAnimationBone & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< SkeletonAnimationBone >::DoParse( SkeletonAnimationBone & p_obj )
 	{
 		bool l_return = true;
 		String l_name;
+		BinaryChunk l_chunk;
 
-		while ( p_chunk.CheckAvailable( 1 ) )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				switch ( l_chunk.GetChunkType() )
+			case eCHUNK_TYPE_NAME:
+				l_return = DoParseChunk( l_name, l_chunk );
+
+				if ( l_return )
 				{
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, l_chunk );
+					auto l_bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( l_name );
 
-					if ( l_return )
+					if ( l_bone )
 					{
-						auto l_bone = static_cast< Skeleton * >( p_obj.GetOwner()->GetOwner() )->FindBone( l_name );
-
-						if ( l_bone )
-						{
-							p_obj.SetBone( l_bone );
-						}
-						else
-						{
-							Logger::LogError( cuT( "Couldn't find bone " ) + l_name + cuT( " in skeleton" ) );
-						}
+						p_obj.SetBone( l_bone );
 					}
-
-					break;
-
-				default:
-					l_return = AnimationObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
+					else
+					{
+						Logger::LogError( cuT( "Couldn't find bone " ) + l_name + cuT( " in skeleton" ) );
+					}
 				}
-			}
 
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+				break;
+
+			case eCHUNK_TYPE_ANIMATION_OBJECT:
+				l_return = BinaryParser< AnimationObject >{}.Parse( p_obj, l_chunk );
+				break;
 			}
 		}
 

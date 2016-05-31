@@ -49,8 +49,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class TextLoader
-			: public Castor::TextLoader< MovableObject >
+		class TextWriter
+			: public Castor::TextWriter< MovableObject >
 		{
 		public:
 			/**
@@ -59,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
@@ -70,7 +70,7 @@ namespace Castor3D
 			 *\param[in]	p_object	Le MovableObject
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( MovableObject const & p_object, Castor::TextFile & p_file );
+			C3D_API bool operator()( MovableObject const & p_object, Castor::TextFile & p_file )override;
 		};
 
 	public:

@@ -297,12 +297,12 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureImage::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< TextureImage >{ p_tabs }
+	TextureImage::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< TextureImage >{ p_tabs }
 	{
 	}
 
-	bool TextureImage::TextLoader::operator()( TextureImage const & p_obj, TextFile & p_file )
+	bool TextureImage::TextWriter::operator()( TextureImage const & p_obj, TextFile & p_file )
 	{
 		return p_file.WriteText( p_obj.m_source->ToString() ) > 0;
 	}

@@ -23,29 +23,89 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextOverlay::TextLoader::TextLoader( String const & p_tabs, TextOverlay const * p_category )
-		: OverlayCategory::TextLoader{ p_tabs }
+	TextOverlay::TextWriter::TextWriter( String const & p_tabs, TextOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
 	{
 	}
 
-	bool TextOverlay::TextLoader::operator()( TextOverlay const & p_overlay, TextFile & p_file )
+	bool TextOverlay::TextWriter::operator()( TextOverlay const & p_overlay, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		static String const TexturingModes[]
+		{
+			cuT( "letter" ),
+			cuT( "text" ),
+		};
+
+		static String const LineSpacingModes[]
+		{
+			cuT( "own_height" ),
+			cuT( "max_lines_height" ),
+			cuT( "max_font_height" ),
+		};
+
+		static String const TextWrappingModes[]
+		{
+			cuT( "none" ),
+			cuT( "break" ),
+			cuT( "break_words" ),
+		};
+
+		static String const VerticalAligns[]
+		{
+			cuT( "top" ),
+			cuT( "center" ),
+			cuT( "bottom" ),
+		};
+
+		static String const HorizontalAligns[]
+		{
+			cuT( "left" ),
+			cuT( "center" ),
+			cuT( "right" ),
+		};
+
+		bool l_return = p_file.WriteText( m_tabs + cuT( "text_overlay \"" ) + p_overlay.GetOverlayName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfont " ) + p_overlay.GetFontTexture()->GetFontName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfont \"" ) + p_overlay.GetFontTexture()->GetFontName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttext \"" ) + p_overlay.GetCaption() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader( m_tabs )( p_overlay.GetOverlay(), p_file );
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[p_overlay.GetTextWrappingMode()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[p_overlay.GetVAlign()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[p_overlay.GetHAlign()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[p_overlay.GetTexturingMode()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[p_overlay.GetLineSpacingMode()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
 		if ( l_return )
@@ -56,7 +116,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool TextOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	bool TextOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}
@@ -82,7 +142,7 @@ namespace Castor3D
 		// Récupération / Création de la police
 		Engine * l_engine = m_pOverlay->GetEngine();
 		FontManager & l_fontManager = l_engine->GetFontManager();
-		FontSPtr l_pFont = l_fontManager.get( p_strFont );
+		FontSPtr l_pFont = l_fontManager.Find( p_strFont );
 
 		if ( l_pFont )
 		{

@@ -43,7 +43,7 @@ namespace Castor
 	{
 	}
 
-	bool FileParser::ParseFile( String const & p_strFileName )
+	bool FileParser::ParseFile( Path const & p_strFileName )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;

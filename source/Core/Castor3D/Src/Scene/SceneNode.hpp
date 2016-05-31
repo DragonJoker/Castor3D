@@ -57,8 +57,8 @@ namespace Castor3D
 		\brief SceneNode loader
 		\remark Charge/écrit des Castor3D::SceneNode à partir de/dans un fichier
 		*/
-		class TextLoader
-			: public Castor::TextLoader< SceneNode >
+		class TextWriter
+			: public Castor::TextWriter< SceneNode >
 		{
 		public:
 			/**
@@ -67,7 +67,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 * Writes a Castor3D::SceneNode into a text file
@@ -80,7 +80,7 @@ namespace Castor3D
 			 *\param[in]	p_node	Le Castor3D::SceneNode à écrire
 			 *\return \p true si tout s'est bien passé, \p false sinon
 			 */
-			C3D_API virtual bool operator()( SceneNode const & p_node, Castor::TextFile & p_file );
+			C3D_API bool operator()( SceneNode const & p_node, Castor::TextFile & p_file )override;
 		};
 
 	protected:

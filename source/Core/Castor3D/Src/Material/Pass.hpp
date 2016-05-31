@@ -49,8 +49,8 @@ namespace Castor3D
 		\~french
 		\brief Loader de Pass
 		*/
-		class TextLoader
-			: public Castor::TextLoader< Pass >
+		class TextWriter
+			: public Castor::TextWriter< Pass >
 		{
 		public:
 			/**
@@ -59,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -70,7 +70,7 @@ namespace Castor3D
 			 *\param[in]		p_pass	La passe à écrire
 			 *\param[in,out]	p_file	Le file où écrire la passe
 			 */
-			C3D_API virtual bool operator()( Pass const & p_pass, Castor::TextFile & p_file );
+			C3D_API bool operator()( Pass const & p_pass, Castor::TextFile & p_file )override;
 		};
 
 	public:

@@ -2,6 +2,8 @@
 
 namespace Castor
 {
+	//*************************************************************************************************
+
 	namespace
 	{
 		template< typename T >
@@ -14,7 +16,7 @@ namespace Castor
 	//*************************************************************************************************
 
 	template< typename T >
-	QuaternionT< T >::TextLoader::TextLoader( String const & p_tabs )
+	QuaternionT< T >::TextLoader::TextLoader()
 		: Castor::TextLoader< QuaternionT< T > >( p_tabs )
 	{
 	}
@@ -50,8 +52,17 @@ namespace Castor
 		return true;
 	}
 
+	//*************************************************************************************************
+
 	template< typename T >
-	bool QuaternionT< T >::TextLoader::operator()( QuaternionT< T > const & p_object, TextFile & p_file )
+	QuaternionT< T >::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< QuaternionT< T > >( p_tabs )
+	{
+	}
+
+
+	template< typename T >
+	bool QuaternionT< T >::TextWriter::operator()( QuaternionT< T > const & p_object, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 		Point3< T > l_axis;

@@ -42,27 +42,27 @@ namespace Castor
 	{
 	}
 
-	Path & Path::operator =( Path const & p_data )
+	Path & Path::operator=( Path const & p_data )
 	{
 		Path l_path( p_data );
 		std::swap( *this, l_path );
 		return *this;
 	}
 
-	Path & Path::operator =( Path && p_data )
+	Path & Path::operator=( Path && p_data )
 	{
-		String::operator =( std::move( p_data )	);
+		String::operator=( std::move( p_data )	);
 		return *this;
 	}
 
-	Path & Path::operator /=( Path const & p_path )
+	Path & Path::operator/=( Path const & p_path )
 	{
 		push_back( Separator );
 		append( p_path );
 		return *this;
 	}
 
-	Path & Path::operator /=( String const & p_string )
+	Path & Path::operator/=( String const & p_string )
 	{
 		push_back( Separator );
 		append( p_string );
@@ -70,7 +70,7 @@ namespace Castor
 		return *this;
 	}
 
-	Path & Path::operator /=( char const * p_buffer )
+	Path & Path::operator/=( char const * p_buffer )
 	{
 		push_back( Separator );
 		String::operator+=( string::string_cast< xchar >( p_buffer ) );
@@ -78,9 +78,36 @@ namespace Castor
 		return *this;
 	}
 
-	Path & Path::operator /=( wchar_t const * p_buffer )
+	Path & Path::operator/=( wchar_t const * p_buffer )
 	{
 		push_back( Separator );
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
+		DoNormalise();
+		return *this;
+	}
+
+	Path & Path::operator+=( Path const & p_path )
+	{
+		String::operator+=( p_path );
+		return *this;
+	}
+
+	Path & Path::operator+=( String const & p_string )
+	{
+		String::operator+=( p_string );
+		DoNormalise();
+		return *this;
+	}
+
+	Path & Path::operator+=( char const * p_buffer )
+	{
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
+		DoNormalise();
+		return *this;
+	}
+
+	Path & Path::operator+=( wchar_t const * p_buffer )
+	{
 		String::operator+=( string::string_cast< xchar >( p_buffer ) );
 		DoNormalise();
 		return *this;
@@ -93,20 +120,20 @@ namespace Castor
 
 		if ( l_index != String::npos )
 		{
-			l_return = substr( 0, l_index );
+			l_return = Path{ substr( 0, l_index ) };
 		}
 
 		return l_return;
 	}
 
-	String Path::GetFileName( bool p_withExtension )const
+	Path Path::GetFileName( bool p_withExtension )const
 	{
-		String l_return = ( * this );
+		Path l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_return = substr( l_index + 1, String::npos );
+			l_return = Path{ substr( l_index + 1, String::npos ) };
 		}
 
 		if ( !p_withExtension )
@@ -115,21 +142,21 @@ namespace Castor
 
 			if ( l_index != String::npos )
 			{
-				l_return = l_return.substr( 0, l_index );
+				l_return = Path{ l_return.substr( 0, l_index ) };
 			}
 		}
 
 		return l_return;
 	}
 
-	String Path::GetFullFileName()const
+	Path Path::GetFullFileName()const
 	{
-		String l_return = ( * this );
+		Path l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_return = substr( l_index + 1, String::npos );
+			l_return = Path{ substr( l_index + 1, String::npos ) };
 		}
 
 		return l_return;
@@ -220,52 +247,52 @@ namespace Castor
 		}
 	}
 
-	Path operator /( Path const & p_pathA, Path const & p_pathB )
+	Path operator/( Path const & p_lhs, Path const & p_rhs )
 	{
-		Path l_path( p_pathA );
-		l_path /= p_pathB;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, String const & p_string )
+	Path operator/( Path const & p_lhs, String const & p_rhs )
 	{
-		Path l_path( p_path );
-		l_path /= p_string;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, char const * p_buffer )
+	Path operator/( Path const & p_lhs, char const * p_rhs )
 	{
-		Path l_path( p_path );
-		l_path /= p_buffer;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, wchar_t const * p_buffer )
+	Path operator/( Path const & p_lhs, wchar_t const * p_rhs )
 	{
-		Path l_path( p_path );
-		l_path /= p_buffer;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( String const & p_string, Path const & p_path )
+	Path operator/( String const & p_lhs, Path const & p_rhs )
 	{
-		Path l_path( p_string );
-		l_path /= p_path;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( char const * p_buffer, Path const & p_path )
+	Path operator/( char const * p_lhs, Path const & p_rhs )
 	{
-		Path l_path( p_buffer );
-		l_path /= p_path;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 
-	Path operator /( wchar_t const * p_buffer, Path const & p_path )
+	Path operator/( wchar_t const * p_lhs, Path const & p_rhs )
 	{
-		Path l_path( p_buffer );
-		l_path /= p_path;
+		Path l_path{ p_lhs };
+		l_path /= p_rhs;
 		return l_path;
 	}
 }

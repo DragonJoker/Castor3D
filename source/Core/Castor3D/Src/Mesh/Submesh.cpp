@@ -6,14 +6,14 @@
 
 #include "Face.hpp"
 
-#include "Animation/BonedVertex.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Material/Pass.hpp"
+#include "Mesh/Skeleton/BonedVertex.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Animation/Skeleton.hpp"
 #include "Vertex.hpp"
 
 #include <BlockTracker.hpp>
@@ -52,62 +52,50 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< Submesh >( p_path )
-	{
-	}
-
-	bool Submesh::BinaryWriter::DoWrite( Submesh const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< Submesh >::DoWrite( Submesh const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SUBMESH );
 
 		{
-			VertexBuffer const & l_vtxBuffer = p_obj.GetVertexBuffer();
-			size_t l_size = l_vtxBuffer.GetSize();
-			uint32_t l_stride = l_vtxBuffer.GetDeclaration().GetStride();
-			uint32_t l_pointsCount = uint32_t( l_size / l_stride );
-			l_return = DoWriteChunk( l_pointsCount, eCHUNK_TYPE_SUBMESH_VERTEX_COUNT, l_chunk );
+			VertexBuffer const & l_buffer = p_obj.GetVertexBuffer();
+			size_t l_size = l_buffer.GetSize();
+			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_count = uint32_t( l_size / l_stride );
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_VERTEX_COUNT, m_chunk );
 
 			if ( l_return )
 			{
-				stINTERLEAVED_VERTEX const * l_srcbuf = reinterpret_cast< stINTERLEAVED_VERTEX const * >( l_vtxBuffer.data() );
-				std::vector< stINTERLEAVED_VERTEXT< double > > l_dstbuf( l_pointsCount );
-				DoCopySubmesh( l_pointsCount, l_srcbuf, l_dstbuf.data() );
-				l_return = DoWriteChunk( l_dstbuf, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
+				stINTERLEAVED_VERTEX const * l_srcbuf = reinterpret_cast< stINTERLEAVED_VERTEX const * >( l_buffer.data() );
+				std::vector< stINTERLEAVED_VERTEXT< double > > l_dstbuf( l_count );
+				DoCopySubmesh( l_count, l_srcbuf, l_dstbuf.data() );
+				l_return = DoWriteChunk( l_dstbuf, eCHUNK_TYPE_SUBMESH_VERTEX, m_chunk );
+			}
+		}
+
+		if ( l_return && p_obj.HasIndexBuffer() )
+		{
+			IndexBuffer const & l_buffer = p_obj.GetIndexBuffer();
+			uint32_t l_count = l_buffer.GetSize() / 3;
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_FACE_COUNT, m_chunk );
+
+			if ( l_return )
+			{
+				l_return = DoWriteChunk( l_buffer.data(), l_buffer.GetSize(), eCHUNK_TYPE_SUBMESH_FACES, m_chunk );
 			}
 		}
 
 		if ( l_return && p_obj.HasBonesBuffer() )
 		{
-			VertexBuffer const & l_bneBuffer = p_obj.GetBonesBuffer();
-			uint32_t l_stride = l_bneBuffer.GetDeclaration().GetStride();
-			uint32_t l_bonesCount = l_bneBuffer.GetSize() / l_stride;
-			l_return = DoWriteChunk( l_bonesCount, eCHUNK_TYPE_SUBMESH_BONE_COUNT, l_chunk );
+			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
+			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_count = l_buffer.GetSize() / l_stride;
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_BONE_COUNT, m_chunk );
 
 			if ( l_return )
 			{
-				stVERTEX_BONE_DATA const * l_bne = reinterpret_cast< stVERTEX_BONE_DATA const * >( l_bneBuffer.data() );
-				l_return = DoWriteChunk( l_bne, l_bonesCount, eCHUNK_TYPE_SUBMESH_BONES, l_chunk );
+				stVERTEX_BONE_DATA const * l_bne = reinterpret_cast< stVERTEX_BONE_DATA const * >( l_buffer.data() );
+				l_return = DoWriteChunk( l_bne, l_count, eCHUNK_TYPE_SUBMESH_BONES, m_chunk );
 			}
-		}
-
-		if ( l_return )
-		{
-			IndexBuffer const & l_idxBuffer = p_obj.GetIndexBuffer();
-			uint32_t l_facesCount = l_idxBuffer.GetSize() / 3;
-			l_return = DoWriteChunk( l_facesCount, eCHUNK_TYPE_SUBMESH_FACE_COUNT, l_chunk );
-
-			if ( l_return )
-			{
-				l_return = DoWriteChunk( l_idxBuffer.data(), l_idxBuffer.GetSize(), eCHUNK_TYPE_SUBMESH_FACES, l_chunk );
-			}
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
 		}
 
 		return l_return;
@@ -115,106 +103,93 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Submesh >( p_path )
-	{
-	}
-
-	bool Submesh::BinaryParser::DoParse( Submesh & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< Submesh >::DoParse( Submesh & p_obj )
 	{
 		bool l_return = true;
 		String l_name;
 		std::vector< stFACE_INDICES > l_faces;
 		std::vector< stVERTEX_BONE_DATA > l_bones;
 		std::vector< stINTERLEAVED_VERTEXT< double > > l_srcbuf;
+		std::vector< uint8_t > l_matrices;
 		uint32_t l_count{ 0u };
 		uint32_t l_faceCount{ 0u };
 		uint32_t l_boneCount{ 0u };
+		uint32_t l_mtxCount{ 0u };
+		BinaryChunk l_chunk;
 
-		while ( p_chunk.CheckAvailable( 1 ) )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				switch ( l_chunk.GetChunkType() )
+			case eCHUNK_TYPE_SUBMESH_VERTEX_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
 				{
-				case eCHUNK_TYPE_SUBMESH_VERTEX_COUNT:
-					l_return = DoParseChunk( l_count, l_chunk );
-
-					if ( l_return )
-					{
-						l_srcbuf.resize( l_count );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_VERTEX:
-					l_return = DoParseChunk( l_srcbuf, l_chunk );
-
-					if ( l_return && !l_srcbuf.empty() )
-					{
-						std::vector< stINTERLEAVED_VERTEX > l_dstbuf( l_srcbuf.size() );
-						DoCopySubmesh( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
-						p_obj.AddPoints( l_dstbuf );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_BONE_COUNT:
-					l_return = DoParseChunk( l_count, l_chunk );
-
-					if ( l_return )
-					{
-						l_boneCount = l_count;
-						l_bones.resize( l_count );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_BONES:
-					l_return = DoParseChunk( l_bones, l_chunk );
-
-					if ( l_return && l_boneCount > 0 )
-					{
-						p_obj.AddBoneDatas( l_bones );
-					}
-
-					l_boneCount = 0u;
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_FACE_COUNT:
-					l_return = DoParseChunk( l_count, l_chunk );
-
-					if ( l_return )
-					{
-						l_faceCount = l_count;
-						l_faces.resize( l_count );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_FACES:
-					l_return = DoParseChunk( l_faces, l_chunk );
-
-					if ( l_return && l_faceCount > 0 )
-					{
-						p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
-					}
-
-					l_faceCount = 0u;
-					break;
-
-				default:
-					l_return = false;
-					break;
+					l_srcbuf.resize( l_count );
 				}
-			}
 
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_VERTEX:
+				l_return = DoParseChunk( l_srcbuf, l_chunk );
+
+				if ( l_return && !l_srcbuf.empty() )
+				{
+					std::vector< stINTERLEAVED_VERTEX > l_dstbuf( l_srcbuf.size() );
+					DoCopySubmesh( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
+					p_obj.AddPoints( l_dstbuf );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_BONE_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_boneCount = l_count;
+					l_bones.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_BONES:
+				l_return = DoParseChunk( l_bones, l_chunk );
+
+				if ( l_return && l_boneCount > 0 )
+				{
+					p_obj.AddBoneDatas( l_bones );
+				}
+
+				l_boneCount = 0u;
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_FACE_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_faceCount = l_count;
+					l_faces.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_FACES:
+				l_return = DoParseChunk( l_faces, l_chunk );
+
+				if ( l_return && l_faceCount > 0 )
+				{
+					p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+				}
+
+				l_faceCount = 0u;
+				break;
+
+			default:
+				l_return = false;
+				break;
 			}
 		}
 

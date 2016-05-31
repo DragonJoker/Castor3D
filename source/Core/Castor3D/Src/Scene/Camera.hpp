@@ -50,8 +50,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class TextLoader
-			: public MovableObject::TextLoader
+		class TextWriter
+			: public MovableObject::TextWriter
 		{
 		public:
 			/**
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a camera into a text file
@@ -71,7 +71,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			C3D_API virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
+			C3D_API bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
 		};
 
 	public:

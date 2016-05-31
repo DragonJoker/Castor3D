@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_IMAGE_MANAGER_H___
 
 #include "Collection.hpp"
-#include "BinaryLoader.hpp"
 
 namespace Castor
 {
@@ -37,42 +36,6 @@ namespace Castor
 	class ImageManager
 		: private Collection< Image, String >
 	{
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		29/09/2015
-		\~english
-		\brief		ImageManager loader.
-		\~french
-		\brief		Loader de ImageManager.
-		*/
-		class BinaryLoader
-			: public Castor::BinaryLoader< ImageManager >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			CU_API BinaryLoader();
-			/**
-			 *\~english
-			 *\brief			Loads the image manager.
-			 *\param[in,out]	p_manager	The manager to load.
-			 *\param[in]		p_file		The source file.
-			 *\~french
-			 *\brief			Charge le gestionnaire d'images.
-			 *\param[in,out]	p_manager	Le gestionnaire à charger.
-			 *\param[in]		p_file		Le fichier source.
-			 */
-			CU_API virtual bool operator()( ImageManager & p_manager, BinaryFile & p_file );
-
-		private:
-		};
-
 	public:
 		/**
 		 *\~english

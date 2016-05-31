@@ -27,49 +27,6 @@ namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		24/05/2016
-	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
-	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
-	*/
-	template< eFILE_TYPE FT >
-	struct LoaderFileTyper;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		24/05/2016
-	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
-	\remarks	Specialisation for eFILE_TYPE_TEXT.
-	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
-	\remarks	Spécialisation pour eFILE_TYPE_TEXT.
-	*/
-	template<>
-	struct LoaderFileTyper< eFILE_TYPE_TEXT >
-	{
-		using FileType = TextFile;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		24/05/2016
-	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
-	\remarks	Specialisation for eFILE_TYPE_BINARY.
-	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
-	\remarks	Spécialisation pour eFILE_TYPE_BINARY.
-	*/
-	template<>
-	struct LoaderFileTyper< eFILE_TYPE_BINARY >
-	{
-		using FileType = BinaryFile;
-	};
-	/*!
-	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
 	\~english
@@ -84,7 +41,7 @@ namespace Castor
 		: public Castor::NonCopyable
 	{
 	protected:
-		using FileType = typename LoaderFileTyper< FT >::FileType;
+		using FileType = typename FileTyper< FT >::FileType;
 
 	public:
 		/**
@@ -114,20 +71,6 @@ namespace Castor
 		virtual bool operator()( T & p_object, FileType & p_file )
 		{
 			LOADER_ERROR( "Import not supported by the loader registered for this type" );
-		}
-		/**
-		 *\~english
-		 *\brief			Writes a resource to a file.
-		 *\param[in]		p_object	The object to write.
-		 *\param[in,out]	p_file		The file where to write the object.
-		 *\~french
-		 *\brief			Ecrit une ressource dans un fichier.
-		 *\param[in]		p_object	L'objet à écrire.
-		 *\param[in,out]	p_file		Le fichier où écrire l'objet.
-		 */
-		virtual bool operator()( T const & p_object, FileType & p_file )
-		{
-			LOADER_ERROR( "Export not supported by the loader registered for this type" );
 		}
 	};
 }

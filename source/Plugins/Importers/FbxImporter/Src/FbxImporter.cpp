@@ -13,11 +13,11 @@
 #include <SceneNodeManager.hpp>
 
 #include <Animation/AnimationObject.hpp>
-#include <Animation/Bone.hpp>
 #include <Animation/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Plugin/ImporterPlugin.hpp>
 #include <Manager/ManagerView.hpp>
+#include <Mesh/Skeleton/Bone.hpp>
+#include <Plugin/ImporterPlugin.hpp>
 
 #include <Logger.hpp>
 
@@ -844,7 +844,7 @@ namespace C3dFbx
 
 	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
-		return LoadTexture( Path( string::string_cast< xchar >( p_texture->GetRelativeFileName() ) ).GetFileName( true ), p_pass, p_channel );
+		return LoadTexture( Path{ string::string_cast< xchar >( p_texture->GetRelativeFileName() ) }.GetFileName( true ), p_pass, p_channel );
 	}
 
 	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, TextureChannel p_channel )

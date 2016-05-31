@@ -113,7 +113,7 @@ namespace GuiCommon
 
 			if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
 			{
-				Path l_path = l_unit->GetTexture()->GetImage().ToString();
+				Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
 				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
 			}
 		}
@@ -196,12 +196,12 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_unit]()
 		{
-			if ( File::FileExists( p_value ) )
+			if ( File::FileExists( Path{ p_value }  ) )
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
 				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-				l_texture->GetImage().SetSource( Path{}, p_value );
+				l_texture->GetImage().SetSource( Path{}, Path{ p_value } );
 				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();
 			}

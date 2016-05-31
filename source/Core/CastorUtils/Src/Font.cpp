@@ -194,6 +194,40 @@ namespace Castor
 		};
 	}
 
+	//************************************************************************************************
+
+	Font::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Font >{ p_tabs }
+	{
+	}
+
+
+	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		if ( l_return )
+		{
+			Path l_relative = CopyFile( p_object.GetFilePath(), p_file.GetFilePath(), Path{} );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return l_return;
+	}
+
+	//************************************************************************************************
+
 	Font::BinaryLoader::BinaryLoader()
 	{
 	}
@@ -260,7 +294,7 @@ namespace Castor
 	{
 	}
 
-	Font::Font( Path const & p_path, String const & p_name, uint32_t p_height )
+	Font::Font( String const & p_name, uint32_t p_height, Path const & p_path )
 		: Resource< Font >( p_name )
 		, m_height( p_height )
 		, m_maxHeight( 0 )

@@ -12,11 +12,11 @@
 #include <SceneNodeManager.hpp>
 
 #include <Animation/AnimationObject.hpp>
-#include <Animation/Bone.hpp>
 #include <Animation/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Plugin/ImporterPlugin.hpp>
 #include <Manager/ManagerView.hpp>
+#include <Mesh/Skeleton/Bone.hpp>
+#include <Plugin/ImporterPlugin.hpp>
 
 #include <Logger.hpp>
 
@@ -511,7 +511,7 @@ namespace C3dAssimp
 	{
 		if ( p_name.length > 0 )
 		{
-			LoadTexture( string::string_cast< xchar >( p_name.C_Str() ), p_pass, p_channel );
+			LoadTexture( Path{ string::string_cast< xchar >( p_name.C_Str() ) }, p_pass, p_channel );
 		}
 	}
 
@@ -600,10 +600,10 @@ namespace C3dAssimp
 				String l_strNorm = l_strGlob;
 				String l_strSpec = l_strGlob;
 				String l_strOpac = l_strGlob;
-				LoadTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), *l_pass, TextureChannel::Diffuse );
-				LoadTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), *l_pass, TextureChannel::Normal );
-				LoadTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), *l_pass, TextureChannel::Specular );
-				LoadTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), *l_pass, TextureChannel::Opacity );
+				LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, *l_pass, TextureChannel::Diffuse );
+				LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, *l_pass, TextureChannel::Normal );
+				LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, *l_pass, TextureChannel::Specular );
+				LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, *l_pass, TextureChannel::Opacity );
 			}
 			else
 			{

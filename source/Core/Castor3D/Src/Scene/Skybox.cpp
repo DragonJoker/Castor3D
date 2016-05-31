@@ -27,49 +27,51 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	Skybox::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Skybox >{ p_tabs }
+	Skybox::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Skybox >{ p_tabs }
 	{
 	}
 
-	bool Skybox::TextLoader::operator()( Skybox const & p_obj, TextFile & p_file )
+	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "skybox\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
+		Path l_subfolder{ cuT( "Textures" ) };
+
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveX ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeX ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeY ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveY ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveZ ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextLoader::CopyFile( p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeZ ) ).ToString(), p_file.GetFilePath(), cuT( "Textures" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 		}
 

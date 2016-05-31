@@ -61,7 +61,8 @@ namespace Castor3D
 	bool BinaryChunk::GetSubChunk( BinaryChunk & p_chunkDst )
 	{
 		// First we retrieve the chunk type
-		bool l_return = DoRead( &p_chunkDst.m_type, 1 );
+		BinaryChunk l_subchunk;
+		bool l_return = DoRead( &l_subchunk.m_type, 1 );
 		uint32_t l_size = 0;
 
 		if ( l_return )
@@ -78,9 +79,10 @@ namespace Castor3D
 		if ( l_return )
 		{
 			// Eventually we retrieve the chunk data
-			p_chunkDst.m_data.insert( p_chunkDst.m_data.end(), m_data.begin() + m_index, m_data.begin() + m_index + l_size );
-			p_chunkDst.m_index = 0;
+			l_subchunk.m_data.insert( l_subchunk.m_data.end(), m_data.begin() + m_index, m_data.begin() + m_index + l_size );
+			l_subchunk.m_index = 0;
 			m_index += l_size;
+			p_chunkDst = l_subchunk;
 		}
 
 		return l_return;

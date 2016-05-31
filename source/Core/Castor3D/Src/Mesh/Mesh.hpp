@@ -47,82 +47,6 @@ namespace Castor3D
 		, public Animable
 	{
 	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryWriter
-			: public Castor3D::BinaryWriter< Mesh >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryWriter( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API bool DoWrite( Mesh const & p_obj, BinaryChunk & p_chunk )const override;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Mesh >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-
-		private:
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API bool DoParse( Mesh & p_obj, BinaryChunk & p_chunk )const override;
-		};
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -361,6 +285,77 @@ namespace Castor3D
 		SubmeshPtrArray m_submeshes;
 		//!\~english The skeleton	\~french Le squelette
 		SkeletonSPtr m_skeleton;
+
+		friend class BinaryWriter< Mesh >;
+		friend class BinaryParser< Mesh >;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\remarks	Specialisation for Mesh.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\remarks	Spécialisation pour Mesh.
+	*/
+	template<>
+	struct ChunkTyper< Mesh >
+	{
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_MESH;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryWriter< Mesh >
+		: public BinaryWriterBase< Mesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to fill the chunk from specific data.
+		 *\param[in]	p_obj	The object to write.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+		 *\param[in]	p_obj	L'objet à écrire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoWrite( Mesh const & p_obj )override;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryParser< Mesh >
+		: public BinaryParserBase< Mesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk containing data
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk contenant les données
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API bool DoParse( Mesh & p_obj )override;
 	};
 }
 

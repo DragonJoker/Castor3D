@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_POINT_H___
 
 #include "TextLoader.hpp"
+#include "TextWriter.hpp"
 #include "Aligned.hpp"
 
 #include <cmath>
@@ -138,7 +139,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( String const & p_tabs = File::eENCODING_MODE_ASCII );
+			inline TextLoader();
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file
@@ -151,7 +152,28 @@ namespace Castor
 			 *\param[in]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Point< T, Count > & p_object, TextFile & p_file );
+			inline bool operator()( Point< T, Count > & p_object, TextFile & p_file )override;
+		};
+		/*!
+		\author Sylvain DOREMUS
+		\version 0.6.1.0
+		\date 03/01/2011
+		\~english
+		\brief Coords< T, Count > Writer
+		\~french
+		\brief Writer de Coords< T, Count >
+		*/
+		class TextWriter
+			: public Castor::TextWriter< Point< T, Count > >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			inline TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Point2f object into a text file
@@ -164,7 +186,7 @@ namespace Castor
 			 *\param[out]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Point< T, Count > const & p_object, TextFile & p_file );
+			inline bool operator()( Point< T, Count > const & p_object, TextFile & p_file )override;
 		};
 
 	private:

@@ -168,7 +168,7 @@ namespace GuiCommon
 
 		if ( p_unit )
 		{
-			Path l_path = p_unit->GetTexture()->GetImage().ToString();
+			Path l_path{ p_unit->GetTexture()->GetImage().ToString() };
 
 			if ( !l_path.empty() )
 			{
@@ -246,18 +246,24 @@ namespace GuiCommon
 
 		if ( l_result )
 		{
-			TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-			l_result = Scene::TextLoader( String() )( p_scene, l_scnFile );
+			TextFile l_scnFile( Path{ l_filePath + cuT( ".cscn" ) }, File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
+			l_result = Scene::TextWriter( String() )( p_scene, l_scnFile );
 		}
+
+		Path l_subfolder{ cuT( "Meshes" ) };
 
 		if ( l_result )
 		{
+			if ( !File::DirectoryExists( l_folder / l_subfolder ) )
+			{
+				File::DirectoryCreate( l_folder / l_subfolder );
+			}
+
 			for ( auto const & l_name : p_scene.GetMeshView() )
 			{
 				auto l_mesh = p_scene.GetMeshView().Find( l_name );
-				auto l_path = l_folder / l_name + cuT( ".cmsh" );
-				BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-				l_result &= Mesh::BinaryWriter{ l_path }.Write( *l_mesh, l_file );
+				Path l_path{ l_folder / l_subfolder / l_name + cuT( ".cmsh" ) };
+				l_result &= BinaryWriter< Mesh >{}.Write( *l_mesh, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } );
 			}
 		}
 

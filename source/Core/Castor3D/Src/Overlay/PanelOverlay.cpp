@@ -6,19 +6,20 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	PanelOverlay::TextLoader::TextLoader( String const & p_tabs, PanelOverlay const * p_category )
-		: OverlayCategory::TextLoader{ p_tabs }
+	PanelOverlay::TextWriter::TextWriter( String const & p_tabs, PanelOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
 		, m_category{ p_category }
 	{
 	}
 
-	bool PanelOverlay::TextLoader::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
+	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader( m_tabs )( p_overlay.GetOverlay(), p_file );
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
 		if ( l_return )
@@ -29,7 +30,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool PanelOverlay::TextLoader::WriteInto( Castor::TextFile & p_file )
+	bool PanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
 		return ( *this )( *m_category, p_file );
 	}

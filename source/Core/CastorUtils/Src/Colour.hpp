@@ -19,7 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_COLOUR_H___
 
 #include "Point.hpp"
-#include "Loader.hpp"
+#include "TextLoader.hpp"
+#include "TextWriter.hpp"
 #include "ColourComponent.hpp"
 
 #undef RGB
@@ -59,7 +60,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextLoader( String const & p_tabs );
+			CU_API TextLoader();
 			/**
 			 *\~english
 			 *\brief			Reads a colour from a text file
@@ -71,6 +72,26 @@ namespace Castor
 			 *\param[in,out]	p_colour	La couleur à lire
 			 */
 			CU_API virtual bool operator()( Colour & p_colour, TextFile & p_file );
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		Colour text Writer
+		\~french
+		\brief		Writer de Colour à partir d'un texte
+		*/
+		class TextWriter
+			: public Castor::TextWriter< Colour >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			CU_API TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a colour into a text file

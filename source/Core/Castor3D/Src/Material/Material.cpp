@@ -11,12 +11,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Material::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< Material >{ p_tabs }
+	Material::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Material >{ p_tabs }
 	{
 	}
 
-	bool Material::TextLoader::operator()( Material const & p_material, TextFile & p_file )
+	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
 
@@ -38,7 +38,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Pass::TextLoader( m_tabs + cuT( "\t" ) )( *l_pass, p_file );
+			l_return = Pass::TextWriter( m_tabs + cuT( "\t" ) )( *l_pass, p_file );
 		}
 
 		if ( l_return )

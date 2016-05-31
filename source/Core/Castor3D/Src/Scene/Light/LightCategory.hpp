@@ -43,8 +43,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de LightCategory
 		*/
-		class TextLoader
-			: public Castor::TextLoader< LightCategory >
+		class TextWriter
+			: public Castor::TextWriter< LightCategory >
 		{
 		public:
 			/**
@@ -64,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a LightCategory into a text file.
@@ -75,7 +75,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier.
 			 *\param[in]	p_light	La LightCategory.
 			 */
-			C3D_API virtual bool operator()( LightCategory const & p_light, Castor::TextFile & p_file )override;
+			C3D_API bool operator()( LightCategory const & p_light, Castor::TextFile & p_file )override;
 		};
 
 	private:
@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
 		 *\return		Le TextLoader.
 		 */
-		C3D_API virtual std::unique_ptr< TextLoader > CreateTextLoader( Castor::String const & p_tabs ) = 0;
+		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.

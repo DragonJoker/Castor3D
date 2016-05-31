@@ -1144,7 +1144,7 @@ namespace Lwo
 					DoRead( l_strName );
 					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
 					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
-					l_pathImage = string::string_cast< xchar >( l_strName );
+					l_pathImage = Path{ string::string_cast< xchar >( l_strName ) };
 
 					if ( !File::FileExists( l_pathImage ) )
 					{

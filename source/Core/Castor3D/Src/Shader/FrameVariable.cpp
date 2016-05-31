@@ -91,12 +91,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< FrameVariable >{ p_tabs }
+	FrameVariable::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< FrameVariable >{ p_tabs }
 	{
 	}
 
-	bool FrameVariable::TextLoader::operator()( FrameVariable const & p_variable, TextFile & p_file )
+	bool FrameVariable::TextWriter::operator()( FrameVariable const & p_variable, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( m_tabs + cuT( "variable\n" ) ) > 0;
 

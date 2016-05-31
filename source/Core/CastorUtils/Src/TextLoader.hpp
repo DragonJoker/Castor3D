@@ -46,10 +46,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextLoader( String const & p_tabs )
-			: m_tabs{ p_tabs }
-		{
-		}
+		TextLoader() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -57,11 +54,6 @@ namespace Castor
 		 *\brief		Destructeur
 		 */
 		virtual ~TextLoader() = default;
-
-	protected:
-		//!\~english	The current indentation.
-		//!\~french		L'indentation courante.
-		String m_tabs;
 	};
 }
 

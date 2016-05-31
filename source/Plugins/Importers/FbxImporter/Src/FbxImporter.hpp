@@ -26,7 +26,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>
-#include <Animation/Skeleton.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
@@ -35,6 +34,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>

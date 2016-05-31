@@ -48,23 +48,28 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObject::BinaryWriter::BinaryWriter( Path const & p_path )
-		: Castor3D::BinaryWriter< AnimationObject >( p_path )
-	{
-	}
-
-	bool AnimationObject::BinaryWriter::DoWrite( AnimationObject const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< AnimationObject >::DoWrite( AnimationObject const & p_obj )
 	{
 		bool l_return = true;
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_nodeTransform, eCHUNK_TYPE_MOVING_TRANSFORM, p_chunk );
+			l_return = DoWriteChunk( p_obj.m_nodeTransform, eCHUNK_TYPE_MOVING_TRANSFORM, m_chunk );
+		}
+
+		if ( l_return )
+		{
+			l_return = DoWriteChunk( p_obj.m_length, eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
+		}
+
+		if ( l_return )
+		{
+			l_return = DoWriteChunk( p_obj.GetInterpolationMode(), eCHUNK_TYPE_ANIM_INTERPOLATOR, m_chunk );
 		}
 
 		for ( auto const & l_kf : p_obj.m_keyframes )
 		{
-			l_return &= KeyFrame::BinaryWriter{ m_path }.Write( l_kf, p_chunk );
+			l_return &= BinaryWriter< KeyFrame >{}.Write( l_kf, m_chunk );
 		}
 
 		for ( auto const & l_moving : p_obj.m_children )
@@ -72,15 +77,15 @@ namespace Castor3D
 			switch ( l_moving->GetType() )
 			{
 			case eANIMATION_OBJECT_TYPE_NODE:
-				l_return &= SkeletonAnimationNode::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_chunk );
+				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_OBJECT:
-				l_return &= SkeletonAnimationObject::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), p_chunk );
+				l_return &= BinaryWriter< SkeletonAnimationObject >{}.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), m_chunk );
 				break;
 
 			case eANIMATION_OBJECT_TYPE_BONE:
-				l_return &= SkeletonAnimationBone::BinaryWriter{ m_path }.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_chunk );
+				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}
 		}
@@ -90,12 +95,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObject::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< AnimationObject >( p_path )
-	{
-	}
-
-	bool AnimationObject::BinaryParser::DoParse( AnimationObject & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryParser< AnimationObject >::DoParse( AnimationObject & p_obj )
 	{
 		bool l_return = true;
 		Matrix4x4r l_transform;
@@ -103,50 +103,72 @@ namespace Castor3D
 		SkeletonAnimationNodeSPtr l_node;
 		SkeletonAnimationObjectSPtr l_object;
 		SkeletonAnimationBoneSPtr l_bone;
+		eINTERPOLATOR_MODE l_mode;
+		BinaryChunk l_chunk;
 
-		switch ( p_chunk.GetChunkType() )
+		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
-		case eCHUNK_TYPE_MOVING_TRANSFORM:
-			l_return = DoParseChunk( p_obj.m_nodeTransform, p_chunk );
-			break;
-
-		case eCHUNK_TYPE_KEYFRAME:
-			l_return = KeyFrame::BinaryParser( m_path ).Parse( l_keyframe, p_chunk );
-			p_obj.m_keyframes.push_back( l_keyframe );
-			break;
-
-		case eCHUNK_TYPE_MOVING_BONE:
-			l_bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
-			l_return = SkeletonAnimationBone::BinaryParser( m_path ).Parse( *l_bone, p_chunk );
-
-			if ( l_return )
+			switch ( l_chunk.GetChunkType() )
 			{
-				p_obj.m_children.push_back( l_bone );
+			case eCHUNK_TYPE_MOVING_TRANSFORM:
+				l_return = DoParseChunk( p_obj.m_nodeTransform, l_chunk );
+				break;
+
+			case eCHUNK_TYPE_KEYFRAME:
+				l_return = BinaryParser< KeyFrame >{}.Parse( l_keyframe, l_chunk );
+				p_obj.m_keyframes.push_back( l_keyframe );
+				break;
+
+			case eCHUNK_TYPE_ANIM_LENGTH:
+				l_return = DoParseChunk( p_obj.m_length, l_chunk );
+				break;
+
+			case eCHUNK_TYPE_ANIM_INTERPOLATOR:
+				l_return = DoParseChunk( l_mode, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.SetInterpolationMode( l_mode );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SKELETON_ANIMATION_BONE:
+				l_bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
+				l_return = BinaryParser< SkeletonAnimationBone >{}.Parse( *l_bone, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.AddChild( l_bone );
+					p_obj.GetOwner()->AddObject( l_bone, p_obj.shared_from_this() );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SKELETON_ANIMATION_NODE:
+				l_node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
+				l_return = BinaryParser< SkeletonAnimationNode >{}.Parse( *l_node, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.AddChild( l_node );
+					p_obj.GetOwner()->AddObject( l_node, p_obj.shared_from_this() );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT:
+				l_object = std::make_shared< SkeletonAnimationObject >( *p_obj.GetOwner() );
+				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( *l_object, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.AddChild( l_object );
+					p_obj.GetOwner()->AddObject( l_object, p_obj.shared_from_this() );
+				}
+
+				break;
 			}
-
-			break;
-
-		case eCHUNK_TYPE_MOVING_NODE:
-			l_node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
-			l_return = SkeletonAnimationNode::BinaryParser( m_path ).Parse( *l_node, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.m_children.push_back( l_node );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_MOVING_OBJECT:
-			l_object = std::make_shared< SkeletonAnimationObject >( *p_obj.GetOwner() );
-			l_return = SkeletonAnimationObject::BinaryParser( m_path ).Parse( *l_object, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.m_children.push_back( l_object );
-			}
-
-			break;
 		}
 
 		return l_return;
@@ -167,6 +189,7 @@ namespace Castor3D
 
 	void AnimationObject::AddChild( AnimationObjectSPtr p_object )
 	{
+		p_object->m_parent = shared_from_this();
 		m_children.push_back( p_object );
 	}
 

@@ -32,21 +32,9 @@ namespace Castor3D
 	\brief		Classe de base de lecture/écriture d'un chunk de données binaires
 	*/
 	template< class TParsed >
-	class BinaryParser
+	class BinaryParserBase
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_path	The current folder path
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_path	Le chemin d'accès au dossier courant
-		 */
-		inline BinaryParser( Castor::Path const & p_path )
-			: m_path{ p_path }
-		{
-		}
 		/**
 		 *\~english
 		 *\brief		From file reader function
@@ -59,14 +47,37 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
+		inline bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )
 		{
-			BinaryChunk l_chunk;
-			bool l_return = l_chunk.Read( p_file );
+			BinaryChunk l_header;
+			bool l_return = l_header.Read( p_file );
+			
+			if ( l_header.GetChunkType() != eCHUNK_TYPE_CMSH_FILE )
+			{
+				Logger::LogError( cuT( "Not a valid CMSH file." ) );
+				l_return = false;
+			}
 
 			if ( l_return )
 			{
-				l_return = DoParse( p_obj, l_chunk );
+				l_return = DoParseHeader( l_header );
+			}
+
+			if ( l_return )
+			{
+				l_return = l_header.CheckAvailable( 1 );
+			}
+
+			BinaryChunk l_chunk;
+
+			if ( l_return )
+			{
+				l_return = l_header.GetSubChunk( l_chunk );
+			}
+
+			if ( l_return )
+			{
+				l_return = Parse( p_obj, l_chunk );
 			}
 
 			return l_return;
@@ -83,12 +94,82 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const
+		inline bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )
 		{
-			return DoParse( p_obj, p_chunk );
+			bool l_return = true;
+
+			if ( p_chunk.GetChunkType() == typename ChunkTyper< TParsed >::Value )
+			{
+				m_chunk = &p_chunk;
+			}
+			else
+			{
+				Logger::LogError( cuT( "Not a valid chunk for parsed type." ) );
+				l_return = false;
+			}
+
+			if ( l_return )
+			{
+				l_return = DoParse( p_obj );
+
+				if ( !l_return )
+				{
+					m_chunk->EndParse();
+				}
+			}
+
+			return l_return;
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief			Parses the header chunk.
+		 *\param[in,out]	p_chunk	The parent chunk.
+		 *\return			\p false if any error occured.
+		 *\~french
+		 *\brief			Lit le chunk d'en-tête.
+		 *\param[in,out]	p_chunk	Le chunk.
+		 *\return			\p false si une erreur quelconque est arrivée.
+		 */
+		inline bool DoParseHeader( BinaryChunk & p_chunk )const
+		{
+			BinaryChunk l_chunk;
+			bool l_return = p_chunk.GetSubChunk( l_chunk );
+
+			if ( l_chunk.GetChunkType() != eCHUNK_TYPE_CMSH_HEADER )
+			{
+				Logger::LogError( cuT( "Missing header chunk." ) );
+				l_return = false;
+			}
+
+			String l_name;
+			uint32_t l_version{ 0 };
+
+			while ( l_return && l_chunk.CheckAvailable( 1 ) )
+			{
+				BinaryChunk l_subchunk;
+				l_return = l_chunk.GetSubChunk( l_subchunk );
+
+				switch ( l_subchunk.GetChunkType() )
+				{
+				case eCHUNK_TYPE_NAME:
+					l_return = DoParseChunk( l_name, l_subchunk );
+					break;
+
+				case eCHUNK_TYPE_CMSH_VERSION:
+					l_return = DoParseChunk( l_version, l_subchunk );
+					break;
+				}
+			}
+
+			if ( !l_return )
+			{
+				p_chunk.EndParse();
+			}
+
+			return l_return;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
@@ -142,6 +223,28 @@ namespace Castor3D
 		{
 			return ChunkParser< T >::Parse( p_value, p_chunk );
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a subchunk.
+		 *\param[out]	p_chunk	Receives the subchunk.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Récupère un sous-chunk.
+		 *\param[out]	p_chunk	Reçoit le sous-chunk.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		inline bool DoGetSubChunk( BinaryChunk & p_chunk )
+		{
+			REQUIRE( m_chunk );
+			bool l_return = m_chunk->CheckAvailable( 1 );
+
+			if ( l_return )
+			{
+				l_return = m_chunk->GetSubChunk( p_chunk );
+			}
+
+			return l_return;
+		}
 
 	private:
 		/**
@@ -156,12 +259,15 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		C3D_API virtual bool DoParse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool DoParse( TParsed & p_obj ) = 0;
 
 	protected:
-		//!\~english The current folder path	\~french Le chemin d'accès au dossiercourant
-		Castor::Path m_path;
+		//!\~english	The writer's chunk.
+		//!\~french		Le chunk du writer.
+		BinaryChunk * m_chunk{ nullptr };
 	};
+	template< class TParsed >
+	class BinaryParser;
 }
 
 #endif

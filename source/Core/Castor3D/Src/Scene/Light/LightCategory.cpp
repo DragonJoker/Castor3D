@@ -8,12 +8,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	LightCategory::TextLoader::TextLoader( String const & p_tabs )
-		: Castor::TextLoader< LightCategory >{ p_tabs }
+	LightCategory::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< LightCategory >{ p_tabs }
 	{
 	}
 
-	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
+	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
 		String const l_type[]
 		{
@@ -28,7 +28,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader( m_tabs )( *p_light.GetLight(), p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( *p_light.GetLight(), p_file );
 		}
 
 		if ( l_return )
@@ -39,14 +39,14 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
-				&& Point3f::TextLoader( String() )( p_light.GetColour(), p_file )
+				&& Point3f::TextWriter( String() )( p_light.GetColour(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
-				&& Point3f::TextLoader( String() )( p_light.GetIntensity(), p_file )
+				&& Point3f::TextWriter( String() )( p_light.GetIntensity(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 

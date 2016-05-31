@@ -47,8 +47,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureUnit
 		*/
-		class TextLoader
-			: public Castor::TextLoader< TextureUnit >
+		class TextWriter
+			: public Castor::TextWriter< TextureUnit >
 		{
 		public:
 			/**
@@ -57,7 +57,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file
@@ -68,7 +68,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_unit	La TextureUnit
 			 */
-			C3D_API virtual bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file );
+			C3D_API bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file )override;
 		};
 
 	public:

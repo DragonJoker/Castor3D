@@ -29,6 +29,11 @@ namespace Testing
 	{
 	}
 
+	void TestCase::RegisterTests()
+	{
+		DoRegisterTests();
+	}
+
 	void TestCase::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		m_errorCount = &p_errCount;
