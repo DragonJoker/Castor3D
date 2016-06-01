@@ -43,7 +43,6 @@ namespace Castor3D
 	*/
 	class Mesh
 		: public Castor::Resource< Mesh >
-		, public Castor::OwnedBy< Engine >
 		, public Animable
 	{
 	public:

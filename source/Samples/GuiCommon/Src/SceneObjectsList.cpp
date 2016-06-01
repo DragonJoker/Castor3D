@@ -34,8 +34,8 @@
 #include <SceneManager.hpp>
 #include <WindowManager.hpp>
 
-#include <Animation/AnimatedObject.hpp>
 #include <Animation/Animation.hpp>
+#include <Scene/Animation/AnimatedObject.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

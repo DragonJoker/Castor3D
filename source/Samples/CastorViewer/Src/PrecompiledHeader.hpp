@@ -66,9 +66,8 @@
 #	include <Engine.hpp>
 #	include <ShaderManager.hpp>
 
-#	include <Animation/AnimatedObjectGroup.hpp>
 #	include <Animation/Animation.hpp>
-#	include <Animation/Skeleton/KeyFrame.hpp>
+#	include <Animation/KeyFrame.hpp>
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>
@@ -87,6 +86,7 @@
 #	include <Scene/Scene.hpp>
 #	include <Scene/SceneFileParser.hpp>
 #	include <Scene/SceneNode.hpp>
+#	include <Scene/Animation/AnimatedObjectGroup.hpp>
 #	include <Scene/Light/DirectionalLight.hpp>
 #	include <Scene/Light/Light.hpp>
 #	include <Scene/Light/PointLight.hpp>

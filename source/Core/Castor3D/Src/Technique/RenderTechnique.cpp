@@ -11,7 +11,6 @@
 #include "SamplerManager.hpp"
 #include "ShaderManager.hpp"
 
-#include "Animation/AnimatedObject.hpp"
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"
@@ -19,15 +18,18 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
+#include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Miscellaneous/PostEffect.hpp"
 #include "Render/Context.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Animation/AnimatedObject.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -106,8 +108,9 @@ namespace Castor3D
 							{
 								ShaderProgramSPtr l_program;
 								uint32_t l_programFlags = l_submesh->GetProgramFlags();
+								auto l_skeleton = l_submesh->GetParent()->GetSkeleton();
 
-								if ( !l_primitive.second->GetAnimatedObject() || !l_submesh->GetParent()->GetSkeleton() )
+								if ( !l_skeleton || !l_skeleton->GetAnimatedObject() )
 								{
 									l_programFlags &= ~ePROGRAM_FLAG_SKINNING;
 
@@ -466,16 +469,21 @@ namespace Castor3D
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
-		auto l_animated = p_node.m_geometry.GetAnimatedObject();
+		auto l_skeleton = p_node.m_submesh.GetParent()->GetSkeleton();
 
-		if ( l_animated )
+		if ( l_skeleton )
 		{
-			Matrix4x4rFrameVariableSPtr l_variable;
-			p_node.m_scene.m_node.m_matrixUbo.GetVariable( Pipeline::MtxBones, l_variable );
+			auto l_animated = l_skeleton->GetAnimatedObject();
 
-			if ( l_variable )
+			if ( l_animated )
 			{
-				l_animated->FillShader( *l_variable );
+				Matrix4x4rFrameVariableSPtr l_variable;
+				p_node.m_scene.m_node.m_matrixUbo.GetVariable( Pipeline::MtxBones, l_variable );
+
+				if ( l_variable )
+				{
+					l_animated->FillShader( *l_variable );
+				}
 			}
 		}
 
@@ -546,7 +554,7 @@ namespace Castor3D
 			auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
 
 			if ( l_count > 1 && p_submesh.HasMatrixBuffer()
-				 && ( p_submesh.GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
+				 && !CheckFlag( p_submesh.GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) )
 			{
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );

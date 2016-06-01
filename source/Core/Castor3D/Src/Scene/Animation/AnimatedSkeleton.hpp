@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ANIMATED_SKELETON_H___
 #define ___C3D_ANIMATED_SKELETON_H___
 
-#include "Animation/AnimatedObject.hpp"
+#include "AnimatedObject.hpp"
 
 namespace Castor3D
 {
@@ -34,39 +34,6 @@ namespace Castor3D
 	class AnimatedSkeleton
 		: public AnimatedObject
 	{
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\date		28/05/2016
-		\~english
-		\brief		AnimatedObject loader.
-		\~english
-		\brief		Loader de AnimatedObject.
-		*/
-		class TextWriter
-			: public Castor::TextWriter< AnimatedSkeleton >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
-			/**
-			 *\~english
-			 *\brief		Writes a AnimatedObject into a text file.
-			 *\param[in]	p_object	the write to save.
-			 *\param[in]	p_file		the file to write the AnimatedObject in.
-			 *\~french
-			 *\brief		Ecrit un AnimatedObject dans un fichier texte.
-			 *\param[in]	p_object	L'AnimatedObject.
-			 *\param[in]	p_file		Le fichier.
-			 */
-			C3D_API virtual bool operator()( AnimatedSkeleton const & p_object, Castor::TextFile & p_file );
-		};
-
 	public:
 		/**
 		 *\~english

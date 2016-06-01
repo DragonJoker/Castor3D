@@ -307,7 +307,7 @@ namespace C3dAssimp
 
 			if ( l_aiScene )
 			{
-				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
+				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *GetEngine() );
 				l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
 
 				if ( l_aiScene->HasMeshes() )
@@ -337,7 +337,7 @@ namespace C3dAssimp
 					{
 						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 						{
-							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
+							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] )->Initialise();
 						}
 
 						l_importer.FreeScene();
@@ -359,7 +359,7 @@ namespace C3dAssimp
 
 										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
 										{
-											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] );
+											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] )->Initialise();
 										}
 
 										l_importer.FreeScene();
@@ -664,8 +664,7 @@ namespace C3dAssimp
 		}
 	}
 
-	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation
-    ( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
+	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
 		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
@@ -680,11 +679,11 @@ namespace C3dAssimp
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
-		AnimationObjectSPtr l_object;
+		SkeletonAnimationObjectSPtr l_object;
 
 		if ( l_aiNodeAnim )
 		{

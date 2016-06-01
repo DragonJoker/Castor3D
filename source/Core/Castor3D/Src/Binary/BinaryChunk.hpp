@@ -85,7 +85,6 @@ namespace Castor3D
 		eCHUNK_TYPE_ANIM_INTERPOLATOR = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
 		eCHUNK_TYPE_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'O', 'B', 'J', 'T' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION_NODE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
-		eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION_BONE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
 		eCHUNK_TYPE_MOVING_TRANSFORM = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eCHUNK_TYPE_KEYFRAME = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'A', 'M', 'E' ),

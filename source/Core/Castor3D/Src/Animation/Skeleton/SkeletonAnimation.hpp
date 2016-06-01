@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "Animation/Animation.hpp"
-#include "AnimationObject.hpp"
+#include "SkeletonAnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -67,18 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API AnimationObjectSPtr AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent );
-		/**
-		 *\~english
-		 *\brief		Creates and adds a moving object.
-		 *\param[in]	p_object	The moving object to add.
-		 *\param[in]	p_parent	The moving object's parent.
-		 *\~french
-		 *\brief		Crée et ajoute un objet mouvant.
-		 *\param[in]	p_object	L'objet déplaçable.
-		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
-		 */
-		C3D_API AnimationObjectSPtr AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr AddObject( Castor::String const & p_name, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -89,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	p_bone		L'os.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API AnimationObjectSPtr AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr AddObject( BoneSPtr p_bone, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object.
@@ -100,7 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet animé.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API void AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent );
+		C3D_API void AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -114,22 +103,13 @@ namespace Castor3D
 		C3D_API bool HasObject( AnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves an animated object.
-		 *\param[in]	p_object	The movable object to add.
-		 *\~french
-		 *\brief		Récupère un objet animé.
-		 *\param[in]	p_object	L'objet déplaçable.
-		 */
-		C3D_API AnimationObjectSPtr GetObject( MovableObjectSPtr p_object )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves an animated bone.
 		 *\param[in]	p_bone	The bone.
 		 *\~french
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API AnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
+		C3D_API SkeletonAnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
 		 *\return		The key frames interpolation mode.
@@ -156,7 +136,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Le nombre
 		 */
-		inline AnimationObjectPtrStrMap const & GetObjects()const
+		inline SkeletonAnimationObjectPtrStrMap const & GetObjects()const
 		{
 			return m_toMove;
 		}
@@ -172,10 +152,12 @@ namespace Castor3D
 		void DoUpdate( real p_tslf )override;
 
 	protected:
-		//! The parent moving objects
-		AnimationObjectPtrArray m_arrayMoving;
-		//! The moving objects
-		AnimationObjectPtrStrMap m_toMove;
+		//!\~english	The root moving objects.
+		//!\~french		Les objets mouvants racine.
+		SkeletonAnimationObjectPtrArray m_arrayMoving;
+		//!\~english	The moving objects.
+		//!\~french		Les objets mouvants.
+		SkeletonAnimationObjectPtrStrMap m_toMove;
 
 		friend class BinaryWriter< SkeletonAnimation >;
 		friend class BinaryParser< SkeletonAnimation >;

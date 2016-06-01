@@ -1,9 +1,9 @@
 #include "AnimationTreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <Animation/AnimatedObjectGroup.hpp>
 #include <Animation/Animation.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

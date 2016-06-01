@@ -103,7 +103,6 @@ namespace Castor3D
 		: uint8_t
 	{
 		Node,
-		Object,
 		Bone,
 		CASTOR_ENUM_CLASS_BOUNDS( Node )
 	};
@@ -111,7 +110,6 @@ namespace Castor3D
 	class Animable;
 	class Animation;
 	class SkeletonAnimation;
-	class AnimationObject;
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
@@ -134,7 +132,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( Animation );
 	DECLARE_SMART_PTR( SkeletonAnimation );
-	DECLARE_SMART_PTR( AnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
@@ -151,13 +148,13 @@ namespace Castor3D
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, AnimationObjectSPtr, AnimationObjectPtrStr );
+	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! Animation pointer array
 	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! AnimationObject pointer array
-	DECLARE_VECTOR( AnimationObjectSPtr, AnimationObjectPtr );
+	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 

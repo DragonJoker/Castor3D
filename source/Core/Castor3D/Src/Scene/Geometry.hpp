@@ -206,30 +206,6 @@ namespace Castor3D
 		{
 			m_visible = p_visible;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animated skeleton instance
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'instance animée du squelette
-		 *\return		La valeur
-		 */
-		inline AnimatedObjectSPtr const & GetAnimatedObject()const
-		{
-			return m_animatedObject;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animated skeleton instance
-		 *\param[in]	p_object	The new value
-		 *\~french
-		 *\brief		Définit l'instance animée du squelette
-		 *\param[in]	p_object	La nouvelle valeur
-		 */
-		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
-		{
-			m_animatedObject = p_object;
-		}
 
 	protected:
 		//!\~english The mesh	\~french Le maillage
@@ -242,8 +218,6 @@ namespace Castor3D
 		bool m_listCreated;
 		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
 		bool m_visible;
-		//!\~english The animated object instance, if any	\~french L'instance d'objet animé, s'il y en a un
-		AnimatedObjectSPtr m_animatedObject;
 		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
 		std::map< SubmeshSPtr, MaterialSPtr > m_submeshesMaterials;
 	};

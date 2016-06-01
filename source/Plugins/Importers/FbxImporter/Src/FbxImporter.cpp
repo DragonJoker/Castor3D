@@ -505,7 +505,7 @@ namespace C3dFbx
 
 	void FbxSdkImporter::DoLoadSkeleton( FbxNode * p_node )
 	{
-		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
+		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *GetEngine() );
 
 		for ( int i = 0; i < p_node->GetChildCount(); ++i )
 		{
@@ -565,7 +565,7 @@ namespace C3dFbx
 				uint64_t l_start = l_takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_finish = l_takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_animationLength = l_finish - l_start + 1;
-				AnimationObjectSPtr l_object;
+				SkeletonAnimationObjectSPtr l_object;
 
 				if ( l_bone->GetParent() )
 				{

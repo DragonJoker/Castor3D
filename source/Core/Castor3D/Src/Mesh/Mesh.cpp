@@ -72,7 +72,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_SKELETON:
-				l_skeleton = std::make_shared< Skeleton >();
+				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetEngine() );
 				l_return = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
 
 				if ( l_return )
@@ -90,9 +90,9 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Mesh::Mesh( String const & p_name, Engine & p_engine )
-		: Resource< Mesh >( p_name )
-		, OwnedBy< Engine >( p_engine )
-		, m_modified( false )
+		: Resource< Mesh >{ p_name }
+		, Animable{ p_engine }
+		, m_modified{ false }
 	{
 	}
 

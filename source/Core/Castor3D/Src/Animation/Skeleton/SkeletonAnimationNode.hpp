@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SKELETON_ANIMATION_NODE___
 #define ___C3D_SKELETON_ANIMATION_NODE___
 
-#include "AnimationObject.hpp"
+#include "SkeletonAnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -27,14 +27,14 @@ namespace Castor3D
 	\version	0.7.0
 	\date		09/12/2013
 	\~english
-	\brief		Implementation of MovingObjectBase for abstract nodes
+	\brief		Implementation of SkeletonAnimationNode for abstract nodes
 	\remark		Used to decompose the model and place intermediate animations
 	\~french
-	\brief		Implémentation de MovingObjectBase pour des noeuds abstraits.
-	\remark		Utilisé afin de décomposer le modèle et ajouter des animatiobns intermédiaires
+	\brief		Implémentation de SkeletonAnimationNode pour des noeuds abstraits.
+	\remark		Utilisé afin de décomposer le modèle et ajouter des animations intermédiaires
 	*/
 	class SkeletonAnimationNode
-		: public AnimationObject
+		: public SkeletonAnimationObject
 	{
 	public:
 		/**
@@ -70,13 +70,13 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Castor3D::AnimationObject::DoApply
+		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoApply
 		 */
 		void DoApply()override;
 		/**
-		 *\~copydoc		Castor3D::AnimationObject::DoClone
+		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoClone
 		 */
-		AnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
+		SkeletonAnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
 
 	private:
 		Castor::String m_name;

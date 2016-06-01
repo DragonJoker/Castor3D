@@ -1,9 +1,11 @@
 #include "SkeletonAnimation.hpp"
 
+#include "Engine.hpp"
+
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Skeleton/Bone.hpp"
 #include "SkeletonAnimationBone.hpp"
 #include "SkeletonAnimationNode.hpp"
-#include "SkeletonAnimationObject.hpp"
 
 #include "Scene/Geometry.hpp"
 
@@ -20,7 +22,6 @@ namespace Castor3D
 			static std::map< AnimationObjectType, String > Names
 			{
 				{ AnimationObjectType::Node, cuT( "Node_" ) },
-				{ AnimationObjectType::Object, cuT( "Object_" ) },
 				{ AnimationObjectType::Bone, cuT( "Bone_" ) },
 			};
 
@@ -40,10 +41,6 @@ namespace Castor3D
 			{
 			case AnimationObjectType::Node:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
-				break;
-
-			case AnimationObjectType::Object:
-				l_return &= BinaryWriter< SkeletonAnimationObject >{}.Write( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), m_chunk );
 				break;
 
 			case AnimationObjectType::Bone:
@@ -81,17 +78,6 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT:
-				l_object = std::make_shared< SkeletonAnimationObject >( p_obj );
-				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( *l_object, l_chunk );
-
-				if ( l_return )
-				{
-					p_obj.AddObject( l_object, nullptr );
-				}
-
-				break;
-
 			case eCHUNK_TYPE_SKELETON_ANIMATION_BONE:
 				l_bone = std::make_shared< SkeletonAnimationBone >( p_obj );
 				l_return = BinaryParser< SkeletonAnimationBone >{}.Parse( *l_bone, l_chunk );
@@ -119,7 +105,7 @@ namespace Castor3D
 	{
 	}
 
-	AnimationObjectSPtr SkeletonAnimation::AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent )
+	SkeletonAnimationObjectSPtr SkeletonAnimation::AddObject( Castor::String const & p_name, SkeletonAnimationObjectSPtr p_parent )
 	{
 		std::shared_ptr< SkeletonAnimationNode > l_return = std::make_shared< SkeletonAnimationNode >( *this, p_name );
 		String l_name = GetMovingTypeName( AnimationObjectType::Node ) + p_name;
@@ -142,35 +128,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimationObjectSPtr SkeletonAnimation::AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent )
+	SkeletonAnimationObjectSPtr SkeletonAnimation::AddObject( BoneSPtr p_bone, SkeletonAnimationObjectSPtr p_parent )
 	{
-		AnimationObjectSPtr l_return;
-		String l_name = GetMovingTypeName( AnimationObjectType::Object ) + p_object->GetName();
-		auto l_it = m_toMove.find( l_name );
-
-		if ( l_it == m_toMove.end() )
-		{
-			std::shared_ptr< SkeletonAnimationObject > l_moving = std::make_shared< SkeletonAnimationObject >( *this );
-			l_moving->SetObject( p_object );
-			l_return = l_moving;
-			m_toMove.insert( std::make_pair( l_name, l_return ) );
-
-			if ( !p_parent )
-			{
-				m_arrayMoving.push_back( l_return );
-			}
-		}
-		else
-		{
-			CASTOR_EXCEPTION( "Can't add this movable : already added" );
-		}
-
-		return l_return;
-	}
-
-	AnimationObjectSPtr SkeletonAnimation::AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent )
-	{
-		AnimationObjectSPtr l_return;
+		SkeletonAnimationObjectSPtr l_return;
 		String l_name = GetMovingTypeName( AnimationObjectType::Bone ) + p_bone->GetName();
 		auto l_it = m_toMove.find( l_name );
 
@@ -200,7 +160,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void SkeletonAnimation::AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent )
+	void SkeletonAnimation::AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent )
 	{
 		String l_name = GetMovingTypeName( p_object->GetType() ) + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
@@ -225,22 +185,9 @@ namespace Castor3D
 		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
-	AnimationObjectSPtr SkeletonAnimation::GetObject( MovableObjectSPtr p_object )const
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( BoneSPtr p_bone )const
 	{
-		AnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( GetMovingTypeName( AnimationObjectType::Object ) + p_object->GetName() );
-
-		if ( l_it != m_toMove.end() )
-		{
-			l_return = l_it->second;
-		}
-
-		return l_return;
-	}
-
-	AnimationObjectSPtr SkeletonAnimation::GetObject( BoneSPtr p_bone )const
-	{
-		AnimationObjectSPtr l_return;
+		SkeletonAnimationObjectSPtr l_return;
 		auto l_it = m_toMove.find( GetMovingTypeName( AnimationObjectType::Bone ) + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )
@@ -262,7 +209,7 @@ namespace Castor3D
 	AnimationSPtr SkeletonAnimation::Clone( Animable & p_animable )const
 	{
 		auto l_clone = std::make_shared< SkeletonAnimation >( p_animable, GetName() );
-		AnimationObjectPtrStrMap l_toMove;
+		SkeletonAnimationObjectPtrStrMap l_toMove;
 
 		for ( auto l_moving : m_arrayMoving )
 		{
@@ -276,6 +223,7 @@ namespace Castor3D
 			}
 		}
 
+		l_clone->m_length = m_length;
 		return l_clone;
 	}
 

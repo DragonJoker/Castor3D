@@ -21,7 +21,6 @@
 
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Animation.hpp"
-#include "Animation/Skeleton/AnimatedSkeleton.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Manager/ManagerView.hpp"
 #include "Material/Pass.hpp"
@@ -44,6 +43,7 @@
 #include "Render/RenderWindow.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Skybox.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"

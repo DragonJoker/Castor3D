@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -33,15 +35,18 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		Animable();
+		Animable( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -79,6 +84,30 @@ namespace Castor3D
 		{
 			return m_animations;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the animated skeleton instance
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'instance animée du squelette
+		 *\return		La valeur
+		 */
+		inline AnimatedObjectSPtr const & GetAnimatedObject()const
+		{
+			return m_animatedObject;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animated skeleton instance
+		 *\param[in]	p_object	The new value
+		 *\~french
+		 *\brief		Définit l'instance animée du squelette
+		 *\param[in]	p_object	La nouvelle valeur
+		 */
+		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
+		{
+			m_animatedObject = p_object;
+		}
 
 	protected:
 		/**
@@ -92,8 +121,12 @@ namespace Castor3D
 		void DoAddAnimation( AnimationSPtr p_animation );
 
 	protected:
-		//!\~english All animations	\~french Toutes les animations
+		//!\~english	All animations.
+		//!\~french		Toutes les animations.
 		AnimationPtrStrMap m_animations;
+		//!\~english	The animated object instance, if any.
+		//!\~french		L'instance d'objet animé, s'il y en a un.
+		AnimatedObjectSPtr m_animatedObject;
 	};
 }
 

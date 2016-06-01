@@ -6,11 +6,10 @@
 #include <SceneManager.hpp>
 
 #include <Animation/Animation.hpp>
-#include <Animation/Skeleton/KeyFrame.hpp>
+#include <Animation/KeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>
-#include <Animation/Skeleton/SkeletonAnimationObject.hpp>
 #include <Manager/ManagerView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
@@ -67,7 +66,7 @@ namespace Testing
 	}
 
 	template<>
-	inline String to_string< AnimationObject >( AnimationObject const & p_value )
+	inline String to_string< SkeletonAnimationObject >( SkeletonAnimationObject const & p_value )
 	{
 		return p_value.GetName();
 	}
@@ -108,7 +107,6 @@ namespace Testing
 		{
 			{ AnimationObjectType::Bone, cuT( "Bone" ) },
 			{ AnimationObjectType::Node, cuT( "Node" ) },
-			{ AnimationObjectType::Object, cuT( "Object" ) },
 		};
 		return Names[p_value];
 	}
@@ -363,7 +361,7 @@ namespace Testing
 		return l_return;
 	}
 
-	bool BinaryExportTest::compare( AnimationObject const & p_a, AnimationObject const & p_b )
+	bool BinaryExportTest::compare( SkeletonAnimationObject const & p_a, SkeletonAnimationObject const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
 		l_return &= CT_EQUAL( p_a.GetInterpolationMode(), p_b.GetInterpolationMode() );

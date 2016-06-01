@@ -19,7 +19,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = BinaryWriter< AnimationObject >{}.Write( p_obj, m_chunk );
+			l_return = BinaryWriter< SkeletonAnimationObject >{}.Write( p_obj, m_chunk );
 		}
 
 		return l_return;
@@ -42,7 +42,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_ANIMATION_OBJECT:
-				l_return = BinaryParser< AnimationObject >{}.Parse( p_obj, l_chunk );
+				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
 				break;
 			}
 		}
@@ -53,7 +53,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & p_animation, String const & p_name )
-		: AnimationObject{ p_animation, AnimationObjectType::Node }
+		: SkeletonAnimationObject{ p_animation, AnimationObjectType::Node }
 		, m_name{ p_name }
 	{
 	}
@@ -67,7 +67,7 @@ namespace Castor3D
 		m_finalTransform = m_nodeTransform;
 	}
 
-	AnimationObjectSPtr SkeletonAnimationNode::DoClone( SkeletonAnimation & p_animation )
+	SkeletonAnimationObjectSPtr SkeletonAnimationNode::DoClone( SkeletonAnimation & p_animation )
 	{
 		auto l_return = std::make_shared< SkeletonAnimationNode >( p_animation, m_name );
 		p_animation.AddObject( l_return, l_return );

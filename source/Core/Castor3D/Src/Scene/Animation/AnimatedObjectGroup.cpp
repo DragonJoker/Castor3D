@@ -1,9 +1,9 @@
 #include "AnimatedObjectGroup.hpp"
 
 #include "AnimatedObject.hpp"
-#include "Animation.hpp"
+#include "AnimatedSkeleton.hpp"
 
-#include "Animation/Skeleton/AnimatedSkeleton.hpp"
+#include "Animation/Animation.hpp"
 #include "Scene/Geometry.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh//Skeleton/Skeleton.hpp"
@@ -108,6 +108,7 @@ namespace Castor3D
 	{
 		auto l_object = std::make_shared< AnimatedSkeleton >( p_name );
 		l_object->SetSkeleton( p_object );
+		p_object->SetAnimatedObject( l_object );
 
 		if ( !AddObject( l_object ) )
 		{
