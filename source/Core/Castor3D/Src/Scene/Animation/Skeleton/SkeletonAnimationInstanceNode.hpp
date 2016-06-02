@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_SKELETON_ANIMATED_NODE___
-#define ___C3D_SKELETON_ANIMATED_NODE___
+#ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
+#define ___C3D_SKELETON_ANIMATION_INSTANCE_NODE___
 
-#include "SkeletonAnimatedObject.hpp"
+#include "SkeletonAnimationInstanceObject.hpp"
 
 namespace Castor3D
 {
@@ -33,32 +33,32 @@ namespace Castor3D
 	\brief		Implémentation de SkeletonAnimationNode pour des noeuds abstraits.
 	\remark		Utilisé afin de décomposer le modèle et ajouter des animations intermédiaires
 	*/
-	class SkeletonAnimatedNode
-		: public SkeletonAnimatedObject
+	class SkeletonAnimationInstanceNode
+		: public SkeletonAnimationInstanceObject
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animatedSkeleton	The parent animated skeleton.
+		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
 		 *\param[in]	p_animationObject	The animation object.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animatedSkeleton	Le squelette animé parent.
+		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
 		 *\param[in]	p_animationObject	L'animation d'objet.
 		 */
-		C3D_API SkeletonAnimatedNode( AnimatedSkeleton & p_animatedSkeleton, SkeletonAnimationNodeSPtr p_animationObject, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimationInstanceNode( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationNode & p_animationObject );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~SkeletonAnimatedNode();
+		C3D_API ~SkeletonAnimationInstanceNode();
 
 	private:
 		/**
-		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoApply
+		 *\~copydoc		Castor3D::SkeletonAnimatedObject::DoApply
 		 */
 		void DoApply()override;
 	};

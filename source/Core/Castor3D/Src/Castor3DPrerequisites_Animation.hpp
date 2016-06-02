@@ -113,10 +113,6 @@ namespace Castor3D
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
-	class Bone;
-	class Skeleton;
-	class BonedVertex;
-	struct stVERTEX_BONE_DATA;
 	class KeyFrame;
 	template< typename T > class Interpolator;
 	template< typename T, InterpolatorType > class InterpolatorT;
@@ -132,23 +128,16 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
-	DECLARE_SMART_PTR( Bone );
-	DECLARE_SMART_PTR( Skeleton );
 	DECLARE_SMART_PTR( Animable );
-	DECLARE_SMART_PTR( BonedVertex );
 
 	//! Animation pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
-	//! MovingObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! Animation pointer array
 	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
-	//! Bone pointer array
-	DECLARE_VECTOR( BoneSPtr, BonePtr );
+	//! MovingObject pointer map, sorted by name
+	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! AnimationObject pointer array
 	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
-	//! BonedVertex pointer array
-	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 
 	//@}
 }

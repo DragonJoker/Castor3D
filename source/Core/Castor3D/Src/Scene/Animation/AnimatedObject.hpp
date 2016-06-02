@@ -73,6 +73,15 @@ namespace Castor3D
 		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
 		/**
 		 *\~english
+		 *\brief		Adds the animation to the list
+		 *\param[in]	p_name	The animation to add
+		 *\~english
+		 *\brief		Ajoute une animation à la liste
+		 *\param[in]	p_name	L'animation à ajouter
+		 */
+		C3D_API void AddAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
 		 *\brief		Starts the animation identified by the given name
 		 *\param[in]	p_name	The name of the animation
 		 *\~french
@@ -129,7 +138,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationInstanceSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.
@@ -146,7 +155,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les animations de cet objet.
 		 */
-		inline AnimationPtrStrMap const & GetAnimations()const
+		inline AnimationInstancePtrStrMap const & GetAnimations()const
 		{
 			return m_animations;
 		}
@@ -156,12 +165,21 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les animations en cours de lecture sur cet objet.
 		 */
-		inline AnimationPtrArray const & GetPlayingAnimations()const
+		inline AnimationInstancePtrArray const & GetPlayingAnimations()const
 		{
 			return m_playingAnimations;
 		}
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Adds the animation to the list
+		 *\param[in]	p_name	The animation to add
+		 *\~english
+		 *\brief		Ajoute une animation à la liste
+		 *\param[in]	p_name	L'animation à ajouter
+		 */
+		virtual AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Fills a shader variable with this object's transforms.
@@ -171,21 +189,12 @@ namespace Castor3D
 		 *\param[out]	p_variable	Reçoit les transformations.
 		 */
 		virtual void DoFillShader( Matrix4x4rFrameVariable & p_variable ) = 0;
-		/**
-		 *\~english
-		 *\brief		Copies the given object's animations.
-		 *\param[out]	p_object	The source object.
-		 *\~french
-		 *\brief		Copie les animation de l'objet source.
-		 *\param[out]	p_object	L'objet source.
-		 */
-		virtual void DoCopyAnimations( AnimableSPtr p_object ) = 0;
 
 	protected:
 		//!\~english All animations.	\~french Toutes les animations.
-		AnimationPtrStrMap m_animations;
+		AnimationInstancePtrStrMap m_animations;
 		//!\~english Currently playing animations.	\~french Les animations en cours de lecture.
-		AnimationPtrArray m_playingAnimations;
+		AnimationInstancePtrArray m_playingAnimations;
 	};
 }
 

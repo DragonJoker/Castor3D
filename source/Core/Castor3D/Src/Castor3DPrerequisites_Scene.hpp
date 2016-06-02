@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,9 +32,11 @@ namespace Castor3D
 	class AnimatedObject;
 	class AnimatedObjectGroup;
 	class AnimatedSkeleton;
-	class SkeletonAnimatedObject;
-	class SkeletonAnimatedNode;
-	class SkeletonAnimatedBone;
+	class AnimationInstance;
+	class SkeletonAnimationInstance;
+	class SkeletonAnimationInstanceObject;
+	class SkeletonAnimationInstanceNode;
+	class SkeletonAnimationInstanceBone;
 
 	DECLARE_SMART_PTR( SceneNode );
 	DECLARE_SMART_PTR( Scene );
@@ -44,9 +46,11 @@ namespace Castor3D
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( AnimatedSkeleton );
-	DECLARE_SMART_PTR( SkeletonAnimatedObject );
-	DECLARE_SMART_PTR( SkeletonAnimatedNode );
-	DECLARE_SMART_PTR( SkeletonAnimatedBone );
+	DECLARE_SMART_PTR( AnimationInstance );
+	DECLARE_SMART_PTR( SkeletonAnimationInstance );
+	DECLARE_SMART_PTR( SkeletonAnimationInstanceObject );
+	DECLARE_SMART_PTR( SkeletonAnimationInstanceNode );
+	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
 
 	//! SceneNode pointer array
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
@@ -59,9 +63,13 @@ namespace Castor3D
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, SkeletonAnimatedObjectSPtr, SkeletonAnimatedObjectPtrStr );
+	DECLARE_MAP( Castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! AnimationObject pointer array
-	DECLARE_VECTOR( SkeletonAnimatedObjectSPtr, SkeletonAnimatedObjectPtr );
+	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
+	//! Animation pointer map, sorted by name
+	DECLARE_MAP( Castor::String, AnimationInstanceSPtr, AnimationInstancePtrStr );
+	//! Animation pointer array
+	DECLARE_VECTOR( AnimationInstanceSPtr, AnimationInstancePtr );
 
 	//@}
 }

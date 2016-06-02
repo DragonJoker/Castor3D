@@ -73,36 +73,6 @@ namespace Castor3D
 		C3D_API bool Initialise();
 		/**
 		 *\~english
-		 *\brief		Updates the animation, updates the key frame at the good time index.
-		 *\param[in]	p_tslf	The time since the last frame.
-		 *\~french
-		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
-		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
-		 */
-		C3D_API void Update( real p_tslf );
-		/**
-		 *\~english
-		 *\brief		Plays the animation.
-		 *\~french
-		 *\brief		Démarre l'animation.
-		 */
-		C3D_API void Play();
-		/**
-		 *\~english
-		 *\brief		Pauses the animation.
-		 *\~french
-		 *\brief		Met l'animation en pause.
-		 */
-		C3D_API void Pause();
-		/**
-		 *\~english
-		 *\brief		Stops the animation.
-		 *\~french
-		 *\brief		Stoppe l'animation.
-		 */
-		C3D_API void Stop();
-		/**
-		 *\~english
 		 *\return		The key frames interpolation mode.
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames.
@@ -120,13 +90,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The animation state.
+		 *\return		The animation length.
 		 *\~french
-		 *\return		L'état de l'animation.
+		 *\return		La longueur de l'animation.
 		 */
-		inline AnimationState GetState()const
+		inline real GetLength()const
 		{
-			return m_state;
+			return m_length;
 		}
 		/**
 		 *\~english
@@ -183,23 +153,10 @@ namespace Castor3D
 		 *\return		\p false s'il y a un problème (l'animation n'est alors pas utilisable).
 		 */
 		virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Updates the animation, updates the key frame at the good time index.
-		 *\param[in]	p_tslf	The time since the last frame.
-		 *\~french
-		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
-		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
-		 */
-		virtual void DoUpdate( real p_tslf ) = 0;
 
 	protected:
 		//!\~english The current playing time	\~french L'index de temps courant
 		AnimationType m_type{ AnimationType::Count };
-		//!\~english The current playing time	\~french L'index de temps courant
-		real m_currentTime{ 0.0_r };
-		//!\~english The current state of the animation	\~french L'état actuel de l'animation
-		AnimationState m_state{ AnimationState::Stopped };
 		//!\~english The animation time scale	\~french Le multiplicateur de temps
 		real m_scale{ 1.0_r };
 		//!\~english The animation length	\~french La durée de l'animation

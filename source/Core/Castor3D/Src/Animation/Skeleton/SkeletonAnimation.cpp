@@ -198,35 +198,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void SkeletonAnimation::SetInterpolationMode( InterpolatorType p_mode )
-	{
-		for ( auto l_moving : m_arrayMoving )
-		{
-			l_moving->SetInterpolationMode( p_mode );
-		}
-	}
-
-	AnimationSPtr SkeletonAnimation::Clone( Animable & p_animable )const
-	{
-		auto l_clone = std::make_shared< SkeletonAnimation >( p_animable, GetName() );
-		SkeletonAnimationObjectPtrStrMap l_toMove;
-
-		for ( auto l_moving : m_arrayMoving )
-		{
-			auto l_mcln = l_moving->Clone( *l_clone );
-			ENSURE( l_mcln );
-
-			if ( l_mcln )
-			{
-				l_clone->m_arrayMoving.push_back( l_mcln );
-				l_clone->m_toMove.insert( std::make_pair( GetMovingTypeName( l_mcln->GetType() ) + l_mcln->GetName(), l_mcln ) );
-			}
-		}
-
-		l_clone->m_length = m_length;
-		return l_clone;
-	}
-
 	bool SkeletonAnimation::DoInitialise()
 	{
 		for ( auto l_it : m_toMove )
@@ -235,14 +206,6 @@ namespace Castor3D
 		}
 
 		return true;
-	}
-
-	void SkeletonAnimation::DoUpdate( real p_tslf )
-	{
-		for ( auto l_moving : m_arrayMoving )
-		{
-			l_moving->Update( m_currentTime, Matrix4x4r{ 1 } );
-		}
 	}
 
 	//*************************************************************************************************

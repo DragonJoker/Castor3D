@@ -38,12 +38,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name	The object name
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_skeleton	The skeleton.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom de l'objet
+		 *\param[in]	p_name		Le nom de l'objet.
+		 *\param[in]	p_skeleton	Le squelette.
 		 */
-		C3D_API AnimatedSkeleton( Castor::String const & p_name );
+		C3D_API AnimatedSkeleton( Castor::String const & p_name, Skeleton & p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -53,39 +55,31 @@ namespace Castor3D
 		C3D_API ~AnimatedSkeleton();
 		/**
 		 *\~english
-		 *\brief		Defines the skeleton
-		 *\param[in]	p_skeleton	The skeleton
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_skeleton	Le squelette
-		 */
-		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
-		/**
-		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The skeleton
 		 *\~french
 		 *\brief		Récupère le squelette
 		 *\return		Le squelette
 		 */
-		inline SkeletonSPtr GetSkeleton()const
+		inline Skeleton const & GetSkeleton()const
 		{
-			return m_skeleton.lock();
+			return m_skeleton;
 		}
 
 	private:
 		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name )override;
+		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoFillShader
 		 */
 		void DoFillShader( Matrix4x4rFrameVariable & p_variable )override;
-		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoCopyAnimations
-		 */
-		void DoCopyAnimations( AnimableSPtr p_object )override;
 
 	protected:
-		//! The skeleton affected by the animations.	\~french Le squelette affecté par les animations.
-		SkeletonWPtr m_skeleton;
+		//!\~english	The skeleton affected by the animations.
+		//!\~french		Le squelette affecté par les animations.
+		Skeleton & m_skeleton;
 	};
 }
 

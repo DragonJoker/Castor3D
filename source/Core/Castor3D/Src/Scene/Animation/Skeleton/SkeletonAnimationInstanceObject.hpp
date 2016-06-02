@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_SKELETON_ANIMATED_OBJECT_H___
-#define ___C3D_SKELETON_ANIMATED_OBJECT_H___
+#ifndef ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
+#define ___C3D_SKELETON_ANIMATION_INSTANCE_OBJECT_H___
 
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
@@ -38,28 +38,28 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	class SkeletonAnimatedObject
-		: public Castor::OwnedBy< AnimatedSkeleton >
+	class SkeletonAnimationInstanceObject
+		: public Castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animatedSkeleton	The parent animated skeleton.
+		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
 		 *\param[in]	p_animationObject	The animation object.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animatedSkeleton	Le squelette animé parent.
+		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
 		 *\param[in]	p_animationObject	L'animation d'objet.
 		 */
-		C3D_API SkeletonAnimatedObject( AnimatedSkeleton & p_animatedSkeleton, SkeletonAnimationObjectSPtr p_animationObject );
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API SkeletonAnimatedObject( SkeletonAnimatedObject const & p_rhs ) = delete;
+		C3D_API SkeletonAnimationInstanceObject( SkeletonAnimationInstanceObject const & p_rhs ) = delete;
 
 	public:
 		/**
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SkeletonAnimatedObject();
+		C3D_API virtual ~SkeletonAnimationInstanceObject();
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object.
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( SkeletonAnimatedObjectSPtr p_object );
+		C3D_API void AddChild( SkeletonAnimationInstanceObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
@@ -98,17 +98,6 @@ namespace Castor3D
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
 		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
-		/**
-		 *\~english
-		 *\brief		Clones this moving thing.
-		 *\param[out]	p_animation	The clone is added to this animation.
-		 *\return		The clone.
-		 *\~french
-		 *\brief		Clône cet objet animable.
-		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
-		 *\return		Le clône.
-		 */
-		C3D_API SkeletonAnimationObjectSPtr Clone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -131,23 +120,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells whether or not the object has keyframes.
-		 *\return		\p false if no keyframes.
-		 *\~french
-		 *\brief		Dit si l'objet a des keyframes.
-		 *\return		\p false si pas de keyframes.
-		 */
-		inline bool HasKeyFrames()const
-		{
-			return m_begin != m_end;
-		}
-		/**
-		 *\~english
 		 *\return		The children array.
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline SkeletonAnimatedObjectPtrArray const & GetChildren()const
+		inline SkeletonAnimationInstanceObjectPtrArray const & GetChildren()const
 		{
 			return m_children;
 		}
@@ -164,7 +141,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
-		SkeletonAnimationObjectSPtr m_animationObject;
+		SkeletonAnimationObject & m_animationObject;
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
 		InterpolatorType m_mode{ InterpolatorType::Count };
@@ -182,7 +159,7 @@ namespace Castor3D
 		KeyFrameArray::const_iterator m_curr;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
-		SkeletonAnimatedObjectPtrArray m_children;
+		SkeletonAnimationInstanceObjectPtrArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
 		Castor::Matrix4x4r m_cumulativeTransform;

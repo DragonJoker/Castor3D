@@ -1,4 +1,4 @@
-#include "SkeletonAnimatedObject.hpp"
+#include "SkeletonAnimationInstanceObject.hpp"
 
 #include "Animation/Interpolator.hpp"
 #include "Animation/KeyFrame.hpp"
@@ -45,31 +45,31 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimatedObject::SkeletonAnimatedObject( AnimatedSkeleton & p_animatedSkeleton, SkeletonAnimationObjectSPtr p_animationObject )
-		: OwnedBy< AnimatedSkeleton >{ p_animatedSkeleton }
+	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject )
+		: OwnedBy< SkeletonAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
 	{
 		SetInterpolationMode( InterpolatorType::Linear );
 	}
 
-	SkeletonAnimatedObject::~SkeletonAnimatedObject()
+	SkeletonAnimationInstanceObject::~SkeletonAnimationInstanceObject()
 	{
 	}
 
-	void SkeletonAnimatedObject::AddChild( SkeletonAnimatedObjectSPtr p_object )
+	void SkeletonAnimationInstanceObject::AddChild( SkeletonAnimationInstanceObjectSPtr p_object )
 	{
 		m_children.push_back( p_object );
 	}
 
-	void SkeletonAnimatedObject::Update( real p_time, Matrix4x4r const & p_transformations )
+	void SkeletonAnimationInstanceObject::Update( real p_time, Matrix4x4r const & p_transformations )
 	{
-		if ( HasKeyFrames() )
+		if ( m_animationObject.HasKeyFrames() )
 		{
 			Point3r l_translate{};
 			Quaternion l_rotate{};
 			Point3r l_scale{ 1.0_r, 1.0_r , 1.0_r };
 
-			if ( m_animationObject->GetKeyFrames().size() == 1 )
+			if ( m_animationObject.GetKeyFrames().size() == 1 )
 			{
 				l_translate = m_prev->GetTranslate();
 				l_rotate = m_prev->GetRotate();
@@ -77,7 +77,7 @@ namespace Castor3D
 			}
 			else
 			{
-				DoFind( p_time, m_animationObject->GetKeyFrames().begin(), m_animationObject->GetKeyFrames().end() - 1, m_prev, m_curr );
+				DoFind( p_time, m_animationObject.GetKeyFrames().begin(), m_animationObject.GetKeyFrames().end() - 1, m_prev, m_curr );
 				real l_dt = m_curr->GetTimeIndex() - m_prev->GetTimeIndex();
 				real l_factor = ( p_time - m_prev->GetTimeIndex() ) / l_dt;
 				l_translate = m_pointInterpolator->Interpolate( m_prev->GetTranslate(), m_curr->GetTranslate(), l_factor );
@@ -89,7 +89,7 @@ namespace Castor3D
 		}
 		else
 		{
-			m_cumulativeTransform = p_transformations * m_animationObject->GetNodeTransform();
+			m_cumulativeTransform = p_transformations * m_animationObject.GetNodeTransform();
 		}
 
 		DoApply();
@@ -100,7 +100,7 @@ namespace Castor3D
 		}
 	}
 
-	void SkeletonAnimatedObject::SetInterpolationMode( InterpolatorType p_mode )
+	void SkeletonAnimationInstanceObject::SetInterpolationMode( InterpolatorType p_mode )
 	{
 		if ( p_mode != m_mode )
 		{

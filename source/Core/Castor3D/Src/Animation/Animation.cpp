@@ -24,7 +24,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_length, eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetLength(), eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
 		}
 
 		if ( l_return )
@@ -98,74 +98,6 @@ namespace Castor3D
 	bool Animation::Initialise()
 	{
 		return DoInitialise();
-	}
-
-	void Animation::Update( real p_tslf )
-	{
-		if ( m_state != AnimationState::Stopped && m_length > 0 )
-		{
-			if ( m_state == AnimationState::Playing )
-			{
-				m_currentTime += ( p_tslf * m_scale );
-
-				if ( m_currentTime >= m_length )
-				{
-					if ( !m_looped )
-					{
-						m_state = AnimationState::Paused;
-						m_currentTime = m_length;
-					}
-					else
-					{
-						do
-						{
-							m_currentTime -= m_length;
-						}
-						while ( m_currentTime >= m_length );
-					}
-				}
-				else if ( m_currentTime < 0.0_r )
-				{
-					if ( !m_looped )
-					{
-						m_state = AnimationState::Paused;
-						m_currentTime = 0.0_r;
-					}
-					else
-					{
-						do
-						{
-							m_currentTime += m_length;
-						}
-						while ( m_currentTime < 0.0_r );
-					}
-				}
-			}
-
-			DoUpdate( p_tslf );
-		}
-	}
-
-	void Animation::Play()
-	{
-		m_state = AnimationState::Playing;
-	}
-
-	void Animation::Pause()
-	{
-		if ( m_state == AnimationState::Playing )
-		{
-			m_state = AnimationState::Paused;
-		}
-	}
-
-	void Animation::Stop()
-	{
-		if ( m_state != AnimationState::Stopped )
-		{
-			m_state = AnimationState::Stopped;
-			m_currentTime = 0.0;
-		}
 	}
 
 	//*************************************************************************************************

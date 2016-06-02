@@ -8,6 +8,7 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/MovableObject.hpp"
+#include "Scene/Animation/AnimationInstance.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 
 using namespace Castor;
@@ -15,7 +16,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	AnimatedObject::AnimatedObject( String const & p_name )
-		: Named( p_name )
+		: Named{ p_name }
 	{
 	}
 
@@ -36,10 +37,19 @@ namespace Castor3D
 		DoFillShader( p_variable );
 	}
 
+	void AnimatedObject::AddAnimation( String const & p_name )
+	{
+		auto l_animation{ DoAddAnimation( p_name ) };
+
+		if ( l_animation )
+		{
+			m_animations.insert( { p_name, l_animation } );
+		}
+	}
+
 	void AnimatedObject::StartAnimation( String const & p_name )
 	{
-		AnimationSPtr l_animation;
-		auto l_it = m_animations.find( p_name );
+		auto l_it{ m_animations.find( p_name ) };
 
 		if ( l_it != m_animations.end() )
 		{
@@ -56,8 +66,7 @@ namespace Castor3D
 
 	void AnimatedObject::StopAnimation( String const & p_name )
 	{
-		AnimationSPtr l_animation;
-		auto l_it = m_animations.find( p_name );
+		auto l_it{ m_animations.find( p_name ) };
 
 		if ( l_it != m_animations.end() )
 		{
@@ -73,8 +82,7 @@ namespace Castor3D
 
 	void AnimatedObject::PauseAnimation( String const & p_name )
 	{
-		AnimationSPtr l_animation;
-		auto l_it = m_animations.find( p_name );
+		auto l_it{ m_animations.find( p_name ) };
 
 		if ( l_it != m_animations.end() )
 		{
@@ -111,10 +119,10 @@ namespace Castor3D
 		}
 	}
 
-	AnimationSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
+	AnimationInstanceSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
-		AnimationSPtr l_return;
-		auto l_it = m_animations.find( p_name );
+		AnimationInstanceSPtr l_return;
+		auto l_it{ m_animations.find( p_name ) };
 
 		if ( l_it != m_animations.end() )
 		{

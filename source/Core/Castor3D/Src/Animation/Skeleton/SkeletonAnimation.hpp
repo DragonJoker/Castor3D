@@ -119,17 +119,6 @@ namespace Castor3D
 		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
 		/**
 		 *\~english
-		 *\brief		Clones this animation.
-		 *\param[in]	p_animable	The clone's owner.
-		 *\return		The clone.
-		 *\~french
-		 *\brief		Clone cette animation.
-		 *\param[in]	p_animable	Le responsable du clone.
-		 *\return		Le clone.
-		 */
-		C3D_API AnimationSPtr Clone( Animable & p_animable )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the moving objects count
 		 *\return		The count
 		 *\~french
@@ -146,10 +135,6 @@ namespace Castor3D
 		 *\~copydoc		Casto3D::Animation::DoInitialise
 		 */
 		bool DoInitialise()override;
-		/**
-		 *\~copydoc		Casto3D::Animation::DoUpdate
-		 */
-		void DoUpdate( real p_tslf )override;
 
 	protected:
 		//!\~english	The root moving objects.

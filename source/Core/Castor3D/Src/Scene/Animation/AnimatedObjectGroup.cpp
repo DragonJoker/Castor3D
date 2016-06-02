@@ -135,16 +135,11 @@ namespace Castor3D
 		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
 			m_animations.insert( std::make_pair( p_name, AnimationState::Stopped ) );
-		}
-	}
 
-	void AnimatedObjectGroup::Update()
-	{
-		real l_tslf = real( m_timer.TimeS() );
-
-		for ( auto l_it : m_objects )
-		{
-			l_it.second->Update( l_tslf );
+			for ( auto l_it : m_objects )
+			{
+				l_it.second->AddAnimation( p_name );
+			}
 		}
 	}
 
@@ -177,6 +172,16 @@ namespace Castor3D
 					l_animation->SetScale( p_scale );
 				}
 			}
+		}
+	}
+
+	void AnimatedObjectGroup::Update()
+	{
+		real l_tslf = real( m_timer.TimeS() );
+
+		for ( auto l_it : m_objects )
+		{
+			l_it.second->Update( l_tslf );
 		}
 	}
 

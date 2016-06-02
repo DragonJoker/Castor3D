@@ -59,7 +59,6 @@ namespace Castor3D
 		SkeletonAnimationNodeSPtr l_node;
 		SkeletonAnimationObjectSPtr l_object;
 		SkeletonAnimationBoneSPtr l_bone;
-		InterpolatorType l_mode;
 		BinaryChunk l_chunk;
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
