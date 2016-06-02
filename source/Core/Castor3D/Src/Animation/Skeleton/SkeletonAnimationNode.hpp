@@ -69,16 +69,6 @@ namespace Castor3D
 		}
 
 	private:
-		/**
-		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoApply
-		 */
-		void DoApply()override;
-		/**
-		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoClone
-		 */
-		SkeletonAnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
-
-	private:
 		Castor::String m_name;
 
 		friend class BinaryWriter< SkeletonAnimationNode >;

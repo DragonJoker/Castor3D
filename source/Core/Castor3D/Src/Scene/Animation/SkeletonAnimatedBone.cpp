@@ -83,5 +83,23 @@ namespace Castor3D
 		return GetBone()->GetName();
 	}
 
+	void SkeletonAnimationBone::DoApply()
+	{
+		BoneSPtr l_bone = GetBone();
+
+		if ( l_bone )
+		{
+			m_finalTransform = m_cumulativeTransform * l_bone->GetOffsetMatrix();
+		}
+	}
+
+	SkeletonAnimationObjectSPtr SkeletonAnimationBone::DoClone( SkeletonAnimation & p_animation )
+	{
+		auto l_return = std::make_shared< SkeletonAnimationBone >( p_animation );
+		l_return->m_bone = m_bone;
+		p_animation.AddObject( l_return, l_return );
+		return l_return;
+	}
+
 	//*************************************************************************************************
 }

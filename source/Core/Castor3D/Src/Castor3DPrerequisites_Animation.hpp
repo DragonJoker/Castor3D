@@ -113,8 +113,6 @@ namespace Castor3D
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
-	class AnimatedObject;
-	class AnimatedObjectGroup;
 	class Bone;
 	class Skeleton;
 	class BonedVertex;
@@ -129,24 +127,18 @@ namespace Castor3D
 	using KeyFrameRealMap = std::map< real, KeyFrame >;
 	using KeyFrameArray = std::vector< KeyFrame >;
 
-	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( Animation );
 	DECLARE_SMART_PTR( SkeletonAnimation );
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
-	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( Bone );
 	DECLARE_SMART_PTR( Skeleton );
 	DECLARE_SMART_PTR( Animable );
 	DECLARE_SMART_PTR( BonedVertex );
 
-	//! AnimatedObjectGroup pointer map, sorted by name
-	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! Animation pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
-	//! AnimatedObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! Animation pointer array

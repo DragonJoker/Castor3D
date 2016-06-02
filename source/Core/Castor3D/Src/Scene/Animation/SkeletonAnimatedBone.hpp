@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_SKELETON_ANIMATION_BONE___
-#define ___C3D_SKELETON_ANIMATION_BONE___
+#ifndef ___C3D_SKELETON_ANIMATED_BONE___
+#define ___C3D_SKELETON_ANIMATED_BONE___
 
-#include "SkeletonAnimationObject.hpp"
+#include "SkeletonAnimatedObject.hpp"
 
 namespace Castor3D
 {
@@ -31,17 +31,19 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation de SkeletonAnimationObject pour les Bones.
 	*/
-	class SkeletonAnimationBone
+	class SkeletonAnimatedBone
 		: public SkeletonAnimationObject
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_animation	The parent animation.
+		 *\param[in]	p_animatedSkeleton	The parent animated skeleton.
+		 *\param[in]	p_animationObject	The animation object.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_animation	L'animation parente.
+		 *\param[in]	p_animatedSkeleton	Le squelette animé parent.
+		 *\param[in]	p_animationObject	L'animation d'objet.
 		 */
 		C3D_API SkeletonAnimationBone( SkeletonAnimation & p_animation );
 		/**
@@ -84,6 +86,16 @@ namespace Castor3D
 		{
 			return m_bone.lock();
 		}
+
+	private:
+		/**
+		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoApply
+		 */
+		void DoApply()override;
+		/**
+		 *\~copydoc		Castor3D::SkeletonAnimationObject::DoClone
+		 */
+		SkeletonAnimationObjectSPtr DoClone( SkeletonAnimation & p_animation )override;
 
 	private:
 		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations

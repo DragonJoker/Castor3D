@@ -29,12 +29,24 @@ namespace Castor3D
 	class SceneFileContext;
 	class SceneFileParser;
 	class Skybox;
+	class AnimatedObject;
+	class AnimatedObjectGroup;
+	class AnimatedSkeleton;
+	class SkeletonAnimatedObject;
+	class SkeletonAnimatedNode;
+	class SkeletonAnimatedBone;
 
 	DECLARE_SMART_PTR( SceneNode );
 	DECLARE_SMART_PTR( Scene );
 	DECLARE_SMART_PTR( SceneFileContext );
 	DECLARE_SMART_PTR( SceneFileParser );
 	DECLARE_SMART_PTR( Skybox );
+	DECLARE_SMART_PTR( AnimatedObject );
+	DECLARE_SMART_PTR( AnimatedObjectGroup );
+	DECLARE_SMART_PTR( AnimatedSkeleton );
+	DECLARE_SMART_PTR( SkeletonAnimatedObject );
+	DECLARE_SMART_PTR( SkeletonAnimatedNode );
+	DECLARE_SMART_PTR( SkeletonAnimatedBone );
 
 	//! SceneNode pointer array
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
@@ -42,6 +54,14 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name
 	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
+	//! AnimatedObjectGroup pointer map, sorted by name
+	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
+	//! AnimatedObject pointer map, sorted by name
+	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
+	//! MovingObject pointer map, sorted by name
+	DECLARE_MAP( Castor::String, SkeletonAnimatedObjectSPtr, SkeletonAnimatedObjectPtrStr );
+	//! AnimationObject pointer array
+	DECLARE_VECTOR( SkeletonAnimatedObjectSPtr, SkeletonAnimatedObjectPtr );
 
 	//@}
 }

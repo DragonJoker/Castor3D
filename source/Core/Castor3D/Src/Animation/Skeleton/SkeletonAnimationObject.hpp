@@ -83,17 +83,6 @@ namespace Castor3D
 		C3D_API void AddChild( SkeletonAnimationObjectSPtr p_object );
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time.
-		 *\param[in]	p_time				Current time index.
-		 *\param[in]	p_transformations	The current transformation matrix.
-		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
-		 *\param[in]	p_time				Index de temps courant.
-		 *\param[in]	p_transformations	La matrice de transformation courante.
-		 */
-		C3D_API void Update( real p_time, Castor::Matrix4x4r const & p_transformations );
-		/**
-		 *\~english
 		 *\brief		Retrieves the object name.
 		 *\return		The name.
 		 *\~french
@@ -127,24 +116,6 @@ namespace Castor3D
 		 *\param[in]	p_time	L'index de temps.
 		 */
 		C3D_API void RemoveKeyFrame( real p_time );
-		/**
-		 *\~english
-		 *\return		The scaling key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
-		 */
-		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
-		/**
-		 *\~english
-		 *\brief		Clones this moving thing.
-		 *\param[out]	p_animation	The clone is added to this animation.
-		 *\return		The clone.
-		 *\~french
-		 *\brief		Clône cet objet animable.
-		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
-		 *\return		Le clône.
-		 */
-		C3D_API SkeletonAnimationObjectSPtr Clone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -196,16 +167,6 @@ namespace Castor3D
 		inline void	SetLength( real p_length )
 		{
 			m_length = p_length;
-		}
-		/**
-		 *\~english
-		 *\brief		The final object's animations transformation.
-		 *\~french
-		 *\brief		La transfomation finale des animations du de cet objet.
-		 */
-		inline Castor::Matrix4x4r const & GetFinalTransform()const
-		{
-			return m_finalTransform;
 		}
 		/**
 		 *\~english
@@ -265,26 +226,6 @@ namespace Castor3D
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Updates the object, applies the transformations matrix.
-		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet.
-		 */
-		C3D_API virtual void DoApply() = 0;
-		/**
-		 *\~english
-		 *\brief		Clones this moving thing.
-		 *\param[out]	p_animation	The clone is added to this animation.
-		 *\return		The clone.
-		 *\~french
-		 *\brief		Clône cet objet animable.
-		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
-		 *\return		Le clône.
-		 */
-		C3D_API virtual SkeletonAnimationObjectSPtr DoClone( SkeletonAnimation & p_animation ) = 0;
-
-	protected:
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
 		InterpolatorType m_mode{ InterpolatorType::Count };
@@ -294,21 +235,9 @@ namespace Castor3D
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
 		AnimationObjectType m_type;
-		//!\~english	The point interpolator.
-		//!\~french		L'interpolateur de points.
-		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;
-		//!\~english	The quaternion interpolator.
-		//!\~french		L'interpolateur de quaternions.
-		std::unique_ptr< QuaternionInterpolator > m_quaternionInterpolator;
 		//!\~english	The key frames.
 		//!\~french		Les keyframes.
 		KeyFrameArray m_keyframes;
-		//!\~english	Iterator to the previous keyframe (when playing the animation).
-		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_prev;
-		//!\~english	Iterator to the current keyframe (when playing the animation).
-		//!\~french		Itérateur sur la key frame courante (quand l'animation est jouée).
-		KeyFrameArray::const_iterator m_curr;
 		//!\~english	Animation node transformations.
 		//!\~french		Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
@@ -318,12 +247,6 @@ namespace Castor3D
 		//!\~english	The parent object.
 		//!\~french		L'objet parent.
 		SkeletonAnimationObjectWPtr m_parent;
-		//!\~english	The cumulative animation transformations.
-		//!\~french		Les transformations cumulées de l'animation.
-		Castor::Matrix4x4r m_cumulativeTransform;
-		//!\~english	The matrix holding transformation at current time.
-		//!\~french		La matrice de transformation complète au temps courant de l'animation.
-		Castor::Matrix4x4r m_finalTransform;
 
 		friend class BinaryWriter< SkeletonAnimationObject >;
 		friend class BinaryParser< SkeletonAnimationObject >;

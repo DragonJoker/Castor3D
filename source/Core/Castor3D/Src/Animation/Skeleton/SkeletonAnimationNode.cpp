@@ -62,17 +62,5 @@ namespace Castor3D
 	{
 	}
 
-	void SkeletonAnimationNode::DoApply()
-	{
-		m_finalTransform = m_nodeTransform;
-	}
-
-	SkeletonAnimationObjectSPtr SkeletonAnimationNode::DoClone( SkeletonAnimation & p_animation )
-	{
-		auto l_return = std::make_shared< SkeletonAnimationNode >( p_animation, m_name );
-		p_animation.AddObject( l_return, l_return );
-		return l_return;
-	}
-
 	//*************************************************************************************************
 }
