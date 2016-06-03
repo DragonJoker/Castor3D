@@ -86,12 +86,13 @@ namespace Castor3D
 
 		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 		}
 
 		if ( l_return )
@@ -100,8 +101,7 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetFontView() )
 			{
 				auto l_font = p_scene.GetFontView().Find( l_name );
-				l_return &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *l_font, p_file )
-					&& p_file.WriteText( cuT( "\n" ) );
+				l_return &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *l_font, p_file );
 			}
 		}
 
@@ -111,8 +111,7 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetSamplerView() )
 			{
 				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
-				l_return &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *l_sampler, p_file )
-					&& p_file.WriteText( cuT( "\n" ) );
+				l_return &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
 			}
 		}
 
@@ -122,8 +121,7 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetMaterialView() )
 			{
 				auto l_material = p_scene.GetMaterialView().Find( l_name );
-				l_return &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *l_material, p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *l_material, p_file );
 			}
 		}
 
@@ -136,8 +134,7 @@ namespace Castor3D
 
 				if ( !l_overlay->GetParent() )
 				{
-					l_return &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay, p_file )
-						&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					l_return &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay, p_file );
 				}
 			}
 		}
@@ -145,7 +142,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
-			l_return = p_file.Print( 256, cuT( "%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+			l_return = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
@@ -165,16 +162,10 @@ namespace Castor3D
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
-		}
-
 		if ( l_return && p_scene.GetSkybox() )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
-			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( *p_scene.GetSkybox(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( *p_scene.GetSkybox(), p_file );
 		}
 
 		if ( l_return )
@@ -186,8 +177,7 @@ namespace Castor3D
 					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
 					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file )
-						&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					l_return = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
 				}
 			}
 		}
@@ -197,8 +187,7 @@ namespace Castor3D
 			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
 			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
 			{
-				l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
 			}
 		}
 
@@ -213,8 +202,7 @@ namespace Castor3D
 					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
 					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_return &= Camera::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
-						&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					l_return = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 				}
 			}
 		}
@@ -226,8 +214,7 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetLightManager() )
 			{
-				l_return &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
@@ -238,8 +225,7 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetGeometryManager() )
 			{
-				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
@@ -250,8 +236,7 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupManager() )
 			{
-				l_return &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
@@ -261,8 +246,7 @@ namespace Castor3D
 			for ( auto const & l_name : p_scene.GetRenderWindowView() )
 			{
 				auto l_window = p_scene.GetRenderWindowView().Find( l_name );
-				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_window, p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_window, p_file );
 			}
 		}
 

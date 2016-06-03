@@ -1,4 +1,4 @@
-﻿#include "Font.hpp"
+#include "Font.hpp"
 #include "Image.hpp"
 
 #include <ft2build.h>
@@ -204,7 +204,8 @@ namespace Castor
 
 	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )

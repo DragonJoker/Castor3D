@@ -47,7 +47,7 @@ namespace Castor3D
 		\brief		Loader de Geometry
 		*/
 		class TextWriter
-			: public MovableObject::TextWriter
+			: public Castor::TextWriter< Geometry >
 		{
 		public:
 			/**
@@ -67,7 +67,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_geometry	La géométrie
 			 */
-			C3D_API bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file );
+			C3D_API bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file )override;
 		};
 
 	public:

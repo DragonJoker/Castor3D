@@ -27,7 +27,8 @@ namespace Castor3D
 
 	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
@@ -41,19 +42,20 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
 		}
 
 		if ( l_return && p_obj.GetCount() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tpositions\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
 
 			for ( auto const & l_point : p_obj )
 			{
-				l_return = p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
+				l_return &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
 			}
 
-			l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( l_return )

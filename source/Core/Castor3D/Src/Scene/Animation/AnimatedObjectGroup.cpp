@@ -26,50 +26,81 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::TextWriter::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::LogInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + p_group.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 
 		std::set< String > l_animations;
 
-		for ( auto l_it : p_group.GetAnimations() )
+		if ( !p_group.GetAnimations().empty() )
 		{
-			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
-			l_animations.insert( l_it.first );
+			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+
+			for ( auto l_it : p_group.GetAnimations() )
+			{
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
+				l_animations.insert( l_it.first );
+			}
 		}
 
 		StringArray l_playing;
 
 		for ( auto l_it : p_group.GetObjects() )
 		{
-			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			auto l_name{ l_it.first };
+			bool l_write{ true };
+			size_t l_skel = l_name.find( cuT( "_Skeleton" ) );
+			size_t l_mesh = l_name.find( cuT( "_Mesh" ) );
 
-			for ( auto l_itAnim : l_it.second->GetAnimations() )
+			// Only add objects, and not skeletons or meshes
+			if ( l_skel != String::npos )
 			{
-				if ( l_animations.end() != l_animations.find( l_itAnim.first ) )
+				l_name = l_name.substr( 0, l_skel );
+				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end();
+			}
+			else if ( l_mesh != String::npos )
+			{
+				l_name = l_name.substr( 0, l_mesh );
+				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end();
+			}
+
+			if ( l_write )
+			{
+				l_return &= p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+
+				for ( auto l_itAnim : l_it.second->GetAnimations() )
 				{
-					l_return &= p_file.WriteText( m_tabs + cuT( "\t\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_itAnim.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_itAnim.second->GetScale() ) + cuT( "\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
+					if ( l_animations.end() != l_animations.find( l_itAnim.first ) )
+					{
+						l_return &= p_file.WriteText( m_tabs + cuT( "\t\tanimation \"" ) + l_itAnim.first + cuT( "\"\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t{\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_itAnim.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_itAnim.second->GetScale() ) + cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
+					}
 				}
-			}
 
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-			}
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				}
 
-			for ( auto l_anim : l_it.second->GetPlayingAnimations() )
-			{
-				l_playing.push_back( l_anim->GetAnimation().GetName() );
+				for ( auto l_anim : l_it.second->GetPlayingAnimations() )
+				{
+					l_playing.push_back( l_anim->GetAnimation().GetName() );
+				}
 			}
 		}
 
-		for ( auto l_it : l_playing )
+		if ( !l_playing.empty() )
 		{
-			l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it + cuT( "\"\n" ) ) > 0;
+			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+
+			for ( auto l_it : l_playing )
+			{
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it + cuT( "\"\n" ) ) > 0;
+			}
 		}
 
 		if ( l_return )

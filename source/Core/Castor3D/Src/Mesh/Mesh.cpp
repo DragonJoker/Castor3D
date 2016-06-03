@@ -187,7 +187,7 @@ namespace Castor3D
 
 		for ( auto && l_submesh : m_submeshes )
 		{
-			l_nbFaces += l_submesh->GetPointsCount();
+			l_nbFaces += l_submesh->GetVertexCount();
 		}
 
 		return l_nbFaces;

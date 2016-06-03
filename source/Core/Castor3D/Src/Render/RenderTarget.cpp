@@ -42,8 +42,8 @@ namespace Castor3D
 
 	bool RenderTarget::TextWriter::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
-		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
-		bool l_return = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::LogInfo( m_tabs + cuT( "Writing RenderTarget" ) );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return && p_target.GetScene() )
 		{

@@ -34,7 +34,7 @@ namespace Castor3D
 
 	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "skybox\n" ) ) > 0
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		Path l_subfolder{ cuT( "Textures" ) };

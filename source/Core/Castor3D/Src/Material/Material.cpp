@@ -18,26 +18,14 @@ namespace Castor3D
 
 	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		}
+		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 
 		bool l_first = true;
 
 		for ( auto && l_pass : p_material )
 		{
-			if ( l_first )
-			{
-				l_first = false;
-			}
-			else
-			{
-				p_file.WriteText( cuT( "\n" ) );
-			}
-
 			l_return = Pass::TextWriter( m_tabs + cuT( "\t" ) )( *l_pass, p_file );
 		}
 

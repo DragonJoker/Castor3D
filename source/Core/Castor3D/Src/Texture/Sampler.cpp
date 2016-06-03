@@ -15,14 +15,15 @@ namespace Castor3D
 	{
 		bool l_return = true;
 
+		Logger::LogInfo( m_tabs + cuT( "Writing Sampler " ) + p_sampler.GetName() );
 		if ( p_sampler.GetName() != cuT( "LightsSampler" ) && p_sampler.GetName() != RenderTarget::DefaultSamplerName )
 		{
-			std::map< InterpolationMode, String > l_mapInterpolationModes
+			static std::map< InterpolationMode, String > MapInterpolationModes
 			{
 				{ InterpolationMode::Nearest, cuT( "nearest" ) },
 				{ InterpolationMode::Linear, cuT( "linear" ) },
 			};
-			std::map< WrapMode, String > l_mapWrappingModes
+			static std::map< WrapMode, String > MapWrappingModes
 			{
 				{ WrapMode::Repeat, cuT( "repeat" ) },
 				{ WrapMode::MirroredRepeat, cuT( "mirrored_repeat" ) },
@@ -30,37 +31,37 @@ namespace Castor3D
 				{ WrapMode::ClampToEdge, cuT( "clamp_to_edge" ) },
 			};
 
-			l_return = p_file.WriteText( m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Min ) != InterpolationMode::Undefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Min )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Min )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Mag ) != InterpolationMode::Undefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mag )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mag )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Mip ) != InterpolationMode::Undefined )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mip )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mip )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::U ) != WrapMode::Count )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::U )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::U )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::V ) != WrapMode::Count )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::V )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::V )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::W ) != WrapMode::Count )
 			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::W )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::W )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )

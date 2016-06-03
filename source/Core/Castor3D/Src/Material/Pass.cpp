@@ -61,7 +61,9 @@ namespace Castor3D
 			cuT( "src1_alpha" ),
 			cuT( "inv_src1_alpha" ),
 		};
-		bool l_return = p_file.WriteText( m_tabs + cuT( "pass\n" ) ) > 0
+
+		Logger::LogInfo( m_tabs + cuT( "Writing Pass " ) );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
@@ -114,13 +116,9 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			uint32_t l_uiNbTextureUnits = p_pass.GetTextureUnitsCount();
-			bool l_first = true;
-
-			for ( uint32_t i = 0; i < l_uiNbTextureUnits && l_return; i++ )
+			for ( auto l_unit : p_pass )
 			{
-				p_file.WriteText( cuT( "\n" ) );
-				l_return = TextureUnit::TextWriter( m_tabs + cuT( "\t" ) )( *p_pass.GetTextureUnit( i ), p_file );
+				l_return = TextureUnit::TextWriter( m_tabs + cuT( "\t" ) )( *l_unit, p_file );
 			}
 		}
 

@@ -17,13 +17,15 @@ using namespace Castor;
 namespace Castor3D
 {
 	Camera::TextWriter::TextWriter( String const & p_tabs )
-		: MovableObject::TextWriter{ p_tabs }
+		: Castor::TextWriter< Camera >{ p_tabs }
 	{
 	}
 
 	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{

@@ -138,7 +138,7 @@ namespace Castor3D
 				{
 					std::vector< stINTERLEAVED_VERTEX > l_dstbuf( l_srcbuf.size() );
 					DoCopySubmesh( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
-					p_obj.AddPoints( l_dstbuf );
+					p_obj.SetVerticesData( l_dstbuf );
 				}
 
 				break;
@@ -159,7 +159,7 @@ namespace Castor3D
 
 				if ( l_return && l_boneCount > 0 )
 				{
-					p_obj.AddBoneDatas( l_bones );
+					p_obj.SetBonesData( l_bones );
 				}
 
 				l_boneCount = 0u;
@@ -181,7 +181,7 @@ namespace Castor3D
 
 				if ( l_return && l_faceCount > 0 )
 				{
-					p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+					p_obj.SetFacesData( l_faces );
 				}
 
 				l_faceCount = 0u;
@@ -260,27 +260,23 @@ namespace Castor3D
 	{
 		m_initialised = false;
 		DoDestroyBuffers();
-		m_faces.clear();
-		m_points.clear();
-		m_pointsData.clear();
-		m_bones.clear();
-		m_bonesData.clear();
 	}
 
 	void Submesh::ComputeContainers()
 	{
-		if ( m_pointsData.size() > 0 )
+		auto l_nbVertex{ GetVertexCount() };
+
+		if ( l_nbVertex > 0 )
 		{
-			Point3r l_min;
-			Point3r l_max;
-			Point3r l_cur;
-			Vertex::GetPosition( m_points[0], l_min );
-			Vertex::GetPosition( m_points[0], l_max );
-			uint32_t l_nbVertex = GetPointsCount();
+			Point3r l_min{ std::numeric_limits< real >::max() };
+			Point3r l_max{ std::numeric_limits< real >::lowest() };
+			Coords3r l_cur;
+			auto l_data{ m_vertexBuffer->data() };
+			auto l_stride{ m_vertexBuffer->GetDeclaration().GetStride() };
 
 			for ( uint32_t i = 1; i < l_nbVertex; i++ )
 			{
-				Vertex::GetPosition( m_points[i], l_cur );
+				Vertex::GetPosition( l_data, l_cur );
 
 				if ( l_cur[0] > l_max[0] )
 				{
@@ -315,130 +311,34 @@ namespace Castor3D
 
 			m_box.Load( l_min, l_max );
 			m_sphere.Load( m_box );
+			l_data += l_stride;
 		}
 	}
 
 	uint32_t Submesh::GetFaceCount()const
 	{
-		return std::max( uint32_t( m_faces.size() ), m_indexBuffer ? m_indexBuffer->GetSize() / 3 : 0u );
+		return m_indexBuffer ? m_indexBuffer->GetSize() / 3 : 0u;
 	}
 
-	uint32_t Submesh::GetPointsCount()const
+	uint32_t Submesh::GetVertexCount()const
 	{
-		return std::max< uint32_t >( uint32_t( m_points.size() ), m_vertexBuffer ? m_vertexBuffer->GetSize() / m_layout.GetStride() : 0u );
+		return m_vertexBuffer ? m_vertexBuffer->GetSize() / m_layout.GetStride() : 0u;
 	}
 
-	int Submesh::IsInMyPoints( Point3r const & p_vertex, double p_precision )
+	void Submesh::SetVerticesData( stINTERLEAVED_VERTEX const * const p_begin, stINTERLEAVED_VERTEX const * const p_end )
 	{
-		int l_iReturn = -1;
-		int l_iIndex = 0;
-		Point3r l_ptPos;
-
-		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end() && l_iReturn == -1; ++l_it )
-		{
-			if ( point::distance_squared( p_vertex - Vertex::GetPosition( ( *l_it ), l_ptPos ) ) < p_precision )
-			{
-				l_iReturn = int( l_iIndex );
-			}
-
-			l_iIndex++;
-		}
-
-		return l_iReturn;
+		m_vertices = std::vector< stINTERLEAVED_VERTEX >{ p_begin, p_end };
 	}
 
-	BufferElementGroupSPtr Submesh::AddPoint( real x, real y, real z )
+	void Submesh::SetBonesData( stVERTEX_BONE_DATA const * const p_begin, stVERTEX_BONE_DATA const * const p_end )
 	{
-		BufferElementGroupSPtr l_return;
-		uint32_t l_stride = 3 * sizeof( real ) * 5;
-		m_pointsData.push_back( ByteArray( l_stride ) );
-		uint8_t * l_data = m_pointsData.back().data();
-		l_return = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-		Vertex::SetPosition( l_return, x, y, z );
-		m_points.push_back( l_return );
-		return l_return;
-	}
-
-	BufferElementGroupSPtr Submesh::AddPoint( Point3r const & p_v )
-	{
-		return AddPoint( p_v[0], p_v[1], p_v[2] );
-	}
-
-	BufferElementGroupSPtr Submesh::AddPoint( real * p_v )
-	{
-		return AddPoint( p_v[0], p_v[1], p_v[2] );
-	}
-
-	void Submesh::AddPoints( stINTERLEAVED_VERTEX const * p_vertices, uint32_t p_size )
-	{
-		uint32_t l_stride = m_layout.GetStride();
-		m_pointsData.push_back( ByteArray( p_size * l_stride ) );
-		uint8_t * l_data = m_pointsData.back().data();
-
-		for ( uint32_t i{ 0u }; i < p_size; ++i )
-		{
-			auto const & l_interleaved = p_vertices[i];
-			BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-			Vertex::SetPosition( l_vertex, l_interleaved.m_pos );
-			Vertex::SetNormal( l_vertex, l_interleaved.m_nml );
-			Vertex::SetTangent( l_vertex, l_interleaved.m_tan );
-			Vertex::SetBitangent( l_vertex, l_interleaved.m_bin );
-			Vertex::SetTexCoord( l_vertex, l_interleaved.m_tex );
-			m_points.push_back( l_vertex );
-			l_data += l_stride;
-		}
-	}
-
-	void Submesh::AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd )
-	{
-		uint32_t l_stride = BonedVertex::Stride;
-		m_bonesData.push_back( ByteArray( std::distance( p_boneDataBegin, p_boneDataEnd ) * l_stride ) );
-		auto l_data = &( *m_bonesData.rbegin() )[0];
-
-		std::for_each( p_boneDataBegin, p_boneDataEnd, [this, &l_data, &l_stride]( stVERTEX_BONE_DATA const & p_data )
-		{
-			BufferElementGroupSPtr l_bonesData = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_bones.size() ) );
-			BonedVertex::SetBones( l_bonesData, p_data );
-			m_bones.push_back( l_bonesData );
-			l_data += l_stride;
-		} );
-
+		m_bones = std::vector< stVERTEX_BONE_DATA >{ p_begin, p_end };
 		m_programFlags |= ePROGRAM_FLAG_SKINNING;
 	}
 
-	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
+	void Submesh::SetFacesData( stFACE_INDICES const * const p_begin, stFACE_INDICES const * const p_end )
 	{
-		Face l_return{ a, b, c };
-
-		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
-		{
-			m_faces.push_back( l_return );
-			m_hasNormals = false;
-		}
-		else
-		{
-			throw std::range_error( "Submesh::AddFace - One or more index out of bound" );
-		}
-
-		return l_return;
-	}
-
-	void Submesh::AddFaceGroup( stFACE_INDICES const * p_faces, uint32_t p_count )
-	{
-		for ( uint32_t i = 0; i < p_count; i++ )
-		{
-			AddFace( p_faces[i].m_uiVertexIndex[0], p_faces[i].m_uiVertexIndex[1], p_faces[i].m_uiVertexIndex[2] );
-		}
-	}
-
-	void Submesh::AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Point3r const & p_minUV, Point3r const & p_maxUV )
-	{
-		AddFace( a, b, c );
-		AddFace( a, c, d );
-		Vertex::SetTexCoord( m_points[a], p_minUV[0], p_minUV[1] );
-		Vertex::SetTexCoord( m_points[b], p_maxUV[0], p_minUV[1] );
-		Vertex::SetTexCoord( m_points[c], p_maxUV[0], p_maxUV[1] );
-		Vertex::SetTexCoord( m_points[d], p_minUV[0], p_maxUV[1] );
+		m_faces = std::vector< stFACE_INDICES >{ p_begin, p_end };
 	}
 
 	void Submesh::ClearFaces()

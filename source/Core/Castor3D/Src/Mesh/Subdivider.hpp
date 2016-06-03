@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -126,26 +126,13 @@ namespace Castor3D
 		C3D_API virtual Face AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
-		 *\brief		Tests if the given Point3r is in mine
-		 *\param[in]	p_vertex	The vertex to test
-		 *\param[in]	p_precision	The comparison precision
-		 *\return		The index of the vertex equal to parameter, -1 if not found
-		 *\~french
-		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
-		 *\param[in]	p_vertex	Le point à tester
-		 *\param[in]	p_precision	La précision de comparaison
-		 *\return		L'index du point s'il a été trouvé, -1 sinon
-		 */
-		C3D_API virtual int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
-		/**
-		 *\~english
 		 *\brief		Retrieves the points count
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le nombre de points
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t GetPointsCount()const;
+		C3D_API uint32_t GetVertexCount()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted point

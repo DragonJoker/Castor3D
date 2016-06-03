@@ -51,7 +51,7 @@ namespace Castor3D
 		\brief		Loader de Camera
 		*/
 		class TextWriter
-			: public MovableObject::TextWriter
+			: public Castor::TextWriter< Camera >
 		{
 		public:
 			/**
@@ -71,7 +71,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			C3D_API bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
+			C3D_API bool operator()( Camera const & p_camera, Castor::TextFile & p_file )override;
 		};
 
 	public:

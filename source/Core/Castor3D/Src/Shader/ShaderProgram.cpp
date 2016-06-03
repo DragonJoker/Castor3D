@@ -59,12 +59,8 @@ namespace Castor3D
 		if ( l_hasFile )
 		{
 			ShaderObjectSPtr l_object;
-			l_return = p_file.WriteText( m_tabs + cuT( "shader_program\n" ) ) > 0;
-
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-			}
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
 			{

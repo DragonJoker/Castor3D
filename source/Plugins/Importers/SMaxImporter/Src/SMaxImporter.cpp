@@ -203,7 +203,7 @@ void SMaxImporter::DoProcessNextObjectChunk( Scene & p_scene, SMaxChunk * p_pChu
 		p_pChunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
 	}
 
-	if ( l_pSubmesh->GetPointsCount() && l_pSubmesh->GetFaceCount() )
+	if ( l_pSubmesh->GetVertexCount() && l_pSubmesh->GetFaceCount() )
 	{
 		if ( !m_bIndicesFound )
 		{

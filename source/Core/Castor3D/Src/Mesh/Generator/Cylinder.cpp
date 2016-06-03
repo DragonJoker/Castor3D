@@ -122,18 +122,18 @@ namespace Castor3D
 			//Vertex::GetNormal( l_submeshSide[1], l_ptNormal0Base );
 			//Vertex::GetTangent( l_submeshSide[0], l_ptTangent0Top );
 			//Vertex::GetTangent( l_submeshSide[1], l_ptTangent0Base );
-			//l_ptNormal0Top += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal1Top );
-			//l_ptNormal0Base += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal1Base );
-			//l_ptTangent0Top += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent1Top );
-			//l_ptTangent0Base += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent1Base );
+			//l_ptNormal0Top += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetVertexCount() - 2], l_ptNormal1Top );
+			//l_ptNormal0Base += Vertex::GetNormal( l_submeshSide[l_submeshSide.GetVertexCount() - 1], l_ptNormal1Base );
+			//l_ptTangent0Top += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetVertexCount() - 2], l_ptTangent1Top );
+			//l_ptTangent0Base += Vertex::GetTangent( l_submeshSide[l_submeshSide.GetVertexCount() - 1], l_ptTangent1Base );
 			//point::normalise( l_ptNormal0Top );
 			//point::normalise( l_ptNormal0Base );
 			//point::normalise( l_ptTangent0Top );
 			//point::normalise( l_ptTangent0Base );
-			//Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptNormal0Top );
-			//Vertex::GetNormal( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptNormal0Base );
-			//Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 2], l_ptTangent0Top );
-			//Vertex::GetTangent( l_submeshSide[l_submeshSide.GetPointsCount() - 1], l_ptTangent0Base );
+			//Vertex::GetNormal( l_submeshSide[l_submeshSide.GetVertexCount() - 2], l_ptNormal0Top );
+			//Vertex::GetNormal( l_submeshSide[l_submeshSide.GetVertexCount() - 1], l_ptNormal0Base );
+			//Vertex::GetTangent( l_submeshSide[l_submeshSide.GetVertexCount() - 2], l_ptTangent0Top );
+			//Vertex::GetTangent( l_submeshSide[l_submeshSide.GetVertexCount() - 1], l_ptTangent0Base );
 		}
 
 		p_mesh.ComputeContainers();

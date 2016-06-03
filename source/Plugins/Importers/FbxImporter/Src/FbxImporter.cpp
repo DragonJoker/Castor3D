@@ -496,7 +496,7 @@ namespace C3dFbx
 			if ( m_mesh->GetSkeleton() )
 			{
 				FbxMesh * l_mesh = p_node->GetMesh();
-				std::vector< stVERTEX_BONE_DATA > l_boneData{ l_submesh->GetPointsCount() };
+				std::vector< stVERTEX_BONE_DATA > l_boneData{ l_submesh->GetVertexCount() };
 				DoProcessBonesWeights( p_node, *m_mesh->GetSkeleton(), l_boneData );
 				l_submesh->AddBoneDatas( l_boneData );
 			}

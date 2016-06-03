@@ -428,7 +428,7 @@ namespace Castor3D
 		 */
 		inline SceneNodePtrStrMap const & GetChilds()const
 		{
-			return m_childs;
+			return m_children;
 		}
 		/**
 		 *\~english
@@ -440,7 +440,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsBegin()
 		{
-			return m_childs.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -452,7 +452,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsBegin()const
 		{
-			return m_childs.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -464,7 +464,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsEnd()
 		{
-			return m_childs.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -476,7 +476,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsEnd()const
 		{
-			return m_childs.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -550,7 +550,7 @@ namespace Castor3D
 		 */
 		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
 		{
-			return ( m_childs.find( p_name ) != m_childs.end() ? m_childs.find( p_name )->second.lock() : nullptr );
+			return ( m_children.find( p_name ) != m_children.end() ? m_children.find( p_name )->second.lock() : nullptr );
 		}
 		/**
 		 *\~english
@@ -635,7 +635,7 @@ namespace Castor3D
 		//!\~english  This node's parent	\~french Le noeud parent
 		SceneNodeWPtr m_parent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
-		SceneNodePtrStrMap m_childs;
+		SceneNodePtrStrMap m_children;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
 		MovableObjectPtrArray m_objects;
 		//!\~english  Signal used to notify attached objects that the node has changed.	\~french Signal utilisé pour notifier aux objets attachés que le noeud a changé.

@@ -1,4 +1,4 @@
-﻿#include "File.hpp"
+#include "File.hpp"
 #include "Math.hpp"
 #include "Utils.hpp"
 #include "Logger.hpp"
@@ -529,7 +529,7 @@ namespace Castor
 #if defined( _WIN32 )
 
 		xchar l_path[FILENAME_MAX];
-		DWORD l_result = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
+		DWORD l_result = GetModuleFileName( nullptr, l_path, _countof( l_path ) );
 
 		if ( l_result != 0 )
 		{

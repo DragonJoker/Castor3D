@@ -42,7 +42,6 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() ) > 0;
 		static std::array< String, eSHADER_MODEL_COUNT > const l_arrayModels
 		{
 			cuT( "sm_1" ),
@@ -52,9 +51,11 @@ namespace Castor3D
 			cuT( "sm_5" ),
 		};
 
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + p_shaderObject.GetStrType()+ cuT( "\n" ) ) > 0;
+
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\n{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		}
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );

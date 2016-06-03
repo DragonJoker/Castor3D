@@ -82,7 +82,7 @@ namespace Testing
 	{
 		static std::map< InterpolatorType, Castor::String > Names
 		{
-			{ InterpolatorType::None, cuT( "None" ) },
+			{ InterpolatorType::Nearest, cuT( "Nearest" ) },
 			{ InterpolatorType::Linear, cuT( "Linear" ) },
 		};
 		return Names[p_value];
@@ -230,7 +230,7 @@ namespace Testing
 
 	bool BinaryExportTest::compare( Submesh const & p_a, Submesh const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetPointsCount(), p_b.GetPointsCount() ) };
+		bool l_return{ CT_EQUAL( p_a.GetVertexCount(), p_b.GetVertexCount() ) };
 		l_return &= CT_EQUAL( std::make_pair( p_a.GetVertexBuffer().data(), p_a.GetVertexBuffer().GetSize() )
 							  , std::make_pair( p_b.GetVertexBuffer().data(), p_b.GetVertexBuffer().GetSize() ) );
 		l_return &= CT_EQUAL( p_a.HasIndexBuffer(), p_b.HasIndexBuffer() );

@@ -81,7 +81,7 @@ namespace Castor3D
 			{
 				if ( l_return )
 				{
-					l_return = p_file.WriteText( m_tabs + cuT( "texture_unit\n" ) ) > 0
+					l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 

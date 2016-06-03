@@ -22,8 +22,8 @@ namespace Castor3D
 			cuT( "spot_light" ),
 		};
 
-		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
-		bool l_return = p_file.WriteText( m_tabs + cuT( "light \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n" ) ) > 0
+		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
@@ -39,14 +39,14 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
-				&& Point3f::TextWriter( String() )( p_light.GetColour(), p_file )
+				&& Point3f::TextWriter( String{} )( p_light.GetColour(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
-				&& Point3f::TextWriter( String() )( p_light.GetIntensity(), p_file )
+				&& Point3f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 

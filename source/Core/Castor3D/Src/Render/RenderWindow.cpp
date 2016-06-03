@@ -39,18 +39,18 @@ namespace Castor3D
 
 	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
-		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
-		bool l_return = p_file.WriteText( m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
+		Logger::LogInfo( m_tabs + cuT( "Writing Window " ) + p_window.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return && p_window.GetVSync() )
+		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvsync true\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 		}
 
-		if ( l_return && p_window.IsFullscreen() )
+		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tfullscreen true\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 		}
 
 		if ( l_return && p_window.GetRenderTarget() )

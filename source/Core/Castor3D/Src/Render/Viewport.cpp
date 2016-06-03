@@ -17,7 +17,7 @@ namespace Castor3D
 
 	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( m_tabs + cuT( "viewport\n" ) ) > 0
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
