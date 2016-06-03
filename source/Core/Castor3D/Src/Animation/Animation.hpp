@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ANIMATION_H___
 #define ___C3D_ANIMATION_H___
 
-#include "Castor3DPrerequisites.hpp"
-
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
@@ -29,13 +27,12 @@ namespace Castor3D
 	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
-	\todo		Write and Read functions.
 	\~english
-	\brief		Animation class
-	\remark		The class which handles an Animation, its length, key frames ...
+	\brief		Animation base class.
+	\remarks	An animation is played using an AnimationInstance.
 	\~french
-	\brief		Classe d'animation
-	\remark		Classe gérant une Animation, sa durée, les key frames ...
+	\brief		Classe de base des animations.
+	\remarks	Une animation est jouée au travers d'une AnimationInstance.
 	*/
 	class Animation
 		: public Castor::Named
@@ -73,13 +70,6 @@ namespace Castor3D
 		C3D_API bool Initialise();
 		/**
 		 *\~english
-		 *\return		The key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames.
-		 */
-		C3D_API virtual void SetInterpolationMode( InterpolatorType p_mode ) = 0;
-		/**
-		 *\~english
 		 *\return		The animation type.
 		 *\~french
 		 *\return		Le type de l'animation.
@@ -98,50 +88,6 @@ namespace Castor3D
 		{
 			return m_length;
 		}
-		/**
-		 *\~english
-		 *\return		The animation time scale.
-		 *\~french
-		 *\return		Le multiplicateur de temps de l'animation.
-		 */
-		inline real GetScale()const
-		{
-			return m_scale;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation time scale
-		 *\param[in]	p_scale	The new value
-		 *\~french
-		 *\brief		Définit le multiplicateur de temps de l'animation
-		 *\param[in]	p_scale	La nouvelle valeur
-		 */
-		inline void	SetScale( real p_scale )
-		{
-			m_scale = p_scale;
-		}
-		/**
-		 *\~english
-		 *\return		The animation loop status.
-		 *\~french
-		 *\return		L'état de boucle de l'animation.
-		 */
-		inline bool IsLooped()const
-		{
-			return m_looped;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animation loop status
-		 *\param[in]	p_looped	The new value
-		 *\~french
-		 *\brief		Définit l'état de boucle de l'animation
-		 *\param[in]	p_looped	La nouvelle valeur
-		 */
-		inline void SetLooped( bool p_looped )
-		{
-			m_looped = p_looped;
-		}
 
 	private:
 		/**
@@ -155,17 +101,16 @@ namespace Castor3D
 		virtual bool DoInitialise() = 0;
 
 	protected:
-		//!\~english The current playing time	\~french L'index de temps courant
+		//!\~english	The animation type.
+		//!\~french		Le type d'animation.
 		AnimationType m_type{ AnimationType::Count };
-		//!\~english The animation time scale	\~french Le multiplicateur de temps
-		real m_scale{ 1.0_r };
-		//!\~english The animation length	\~french La durée de l'animation
+		//!\~english	The animation length.
+		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };
-		//!\~english Tells whether or not the animation is looped	\~french Dit si oui ou non l'animation est bouclée
-		bool m_looped{ false };
 
 		friend class BinaryWriter< Animation >;
 		friend class BinaryParser< Animation >;
+		friend class AnimationInstance;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

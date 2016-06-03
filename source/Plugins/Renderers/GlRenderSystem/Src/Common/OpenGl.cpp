@@ -10,6 +10,10 @@
 
 #include <iomanip>
 
+#ifdef Always
+#	undef Always
+#endif
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -205,14 +209,14 @@ namespace GlRender
 		TextureDimensions[uint32_t( TextureType::Cube )] = eGL_TEXDIM_CUBE;
 		TextureDimensions[uint32_t( TextureType::CubeArray )] = eGL_TEXDIM_CUBE_ARRAY;
 
-		AlphaFuncs[uint32_t( AlphaFunc::Always )] = eGL_FUNC_ALWAYS;
-		AlphaFuncs[uint32_t( AlphaFunc::Less )] = eGL_FUNC_LESS;
-		AlphaFuncs[uint32_t( AlphaFunc::LEqual )] = eGL_FUNC_LEQUAL;
-		AlphaFuncs[uint32_t( AlphaFunc::Equal )] = eGL_FUNC_EQUAL;
-		AlphaFuncs[uint32_t( AlphaFunc::NEqual )] = eGL_FUNC_NOTEQUAL;
-		AlphaFuncs[uint32_t( AlphaFunc::GEqual )] = eGL_FUNC_GEQUAL;
-		AlphaFuncs[uint32_t( AlphaFunc::Greater )] = eGL_FUNC_GREATER;
-		AlphaFuncs[uint32_t( AlphaFunc::Never )] = eGL_FUNC_NEVER;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Always )] = eGL_FUNC_ALWAYS;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Less )] = eGL_FUNC_LESS;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::LEqual )] = eGL_FUNC_LEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Equal )] = eGL_FUNC_EQUAL;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::NEqual )] = eGL_FUNC_NOTEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::GEqual )] = eGL_FUNC_GEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Greater )] = eGL_FUNC_GREATER;
+		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Never )] = eGL_FUNC_NEVER;
 
 		TextureWrapMode[uint32_t( WrapMode::Repeat )] = eGL_WRAP_MODE_REPEAT;
 		TextureWrapMode[uint32_t( WrapMode::MirroredRepeat )] = eGL_WRAP_MODE_MIRRORED_REPEAT;
@@ -250,7 +254,7 @@ namespace GlRender
 		TextureArguments[uint32_t( BlendSource::Diffuse )] = eGL_BLEND_SOURCE_PRIMARY_COLOR;
 		TextureArguments[uint32_t( BlendSource::Previous )] = eGL_BLEND_SOURCE_PREVIOUS;
 
-		RgbBlendFuncs[uint32_t( RGBBlendFunc::None )] = eGL_BLEND_FUNC_MODULATE;
+		RgbBlendFuncs[uint32_t( RGBBlendFunc::NoBlend )] = eGL_BLEND_FUNC_MODULATE;
 		RgbBlendFuncs[uint32_t( RGBBlendFunc::FirstArg )] = eGL_BLEND_FUNC_REPLACE;
 		RgbBlendFuncs[uint32_t( RGBBlendFunc::Add )] = eGL_BLEND_FUNC_ADD;
 		RgbBlendFuncs[uint32_t( RGBBlendFunc::AddSigned )] = eGL_BLEND_FUNC_ADD_SIGNED;
@@ -260,7 +264,7 @@ namespace GlRender
 		RgbBlendFuncs[uint32_t( RGBBlendFunc::Dot3RGB )] = eGL_BLEND_FUNC_DOT3_RGB;
 		RgbBlendFuncs[uint32_t( RGBBlendFunc::Dot3RGBA )] = eGL_BLEND_FUNC_DOT3_RGBA;
 
-		AlphaBlendFuncs[uint32_t( AlphaBlendFunc::None )] = eGL_BLEND_FUNC_MODULATE;
+		AlphaBlendFuncs[uint32_t( AlphaBlendFunc::NoBlend )] = eGL_BLEND_FUNC_MODULATE;
 		AlphaBlendFuncs[uint32_t( AlphaBlendFunc::FirstArg )] = eGL_BLEND_FUNC_REPLACE;
 		AlphaBlendFuncs[uint32_t( AlphaBlendFunc::Add )] = eGL_BLEND_FUNC_ADD;
 		AlphaBlendFuncs[uint32_t( AlphaBlendFunc::AddSigned )] = eGL_BLEND_FUNC_ADD_SIGNED;

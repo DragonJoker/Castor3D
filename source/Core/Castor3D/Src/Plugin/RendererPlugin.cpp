@@ -24,7 +24,7 @@ namespace Castor3D
 	static const String DestroyRenderSystemFunctionABIName = cuT( "?DestroyRenderSystem@@YAXPAVRenderSystem@Castor3D@@@Z" );
 #	endif
 #elif defined( __GNUG__)
-	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypev" );
+	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypeB5cxx11v" );
 	static const String CreateRenderSystemFunctionABIName = cuT( "_Z18CreateRenderSystemPN8Castor3D6EngineE" );
 	static const String DestroyRenderSystemFunctionABIName = cuT( "_Z19DestroyRenderSystemPN8Castor3D12RenderSystemE" );
 #else

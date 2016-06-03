@@ -63,7 +63,7 @@ namespace Castor
 			l_streamWord << l_component.value();
 		}
 
-		return p_file.Print( 1024, cuT( "%s%s" ), m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		return p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
 	}
 
 	//*************************************************************************************************

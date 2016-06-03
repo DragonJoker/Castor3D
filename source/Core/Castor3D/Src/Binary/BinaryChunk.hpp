@@ -79,7 +79,6 @@ namespace Castor3D
 		eCHUNK_TYPE_SUBMESH_FACES = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
 		eCHUNK_TYPE_ANIMABLE = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ),
 		eCHUNK_TYPE_ANIMATION = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
-		eCHUNK_TYPE_ANIM_SCALE = MAKE_CHUNK_ID( 'A', 'N', 'M', 'S', 'C', 'A', 'L', 'E' ),
 		eCHUNK_TYPE_ANIM_LENGTH = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ),
 		eCHUNK_TYPE_ANIM_INTERPOLATOR = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
@@ -102,7 +101,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
 	*/
-	template< class TWritten >
+	template< class Type >
 	struct ChunkTyper;
 	/*!
 	\author 	Sylvain DOREMUS

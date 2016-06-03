@@ -31,14 +31,13 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT | eGL_CREATECONTEXT_ATTRIB_DEBUG_BIT;
-		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_CORE_BIT;
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT | eGL_CREATECONTEXT_ATTRIB_DEBUG_BIT;
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_CORE_BIT;
 
 #else
 
-		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT;
-		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_COMPATIBILITY_BIT;
-
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT;
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_COMPATIBILITY_BIT;
 #endif
 	}
 
@@ -47,7 +46,7 @@ namespace GlRender
 		, m_display( nullptr )
 		, m_glxVersion( 10 )
 		, m_glxContext( nullptr )
-		, m_drawable( None )
+		, m_drawable( 0 )
 		, m_fbConfig( nullptr )
 		, m_context( p_context )
 		, m_initialised( false )
@@ -66,7 +65,7 @@ namespace GlRender
 			gl_api::GetFunction( cuT( "glXGetVisualFromFBConfig" ), glXGetVisualFromFBConfig );
 		}
 
-		if ( m_drawable == None )
+		if ( m_drawable == 0 )
 		{
 			m_drawable = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDrawable();
 			m_display = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDisplay();
@@ -106,7 +105,7 @@ namespace GlRender
 				l_attribList.push_back( 1 );
 			}
 
-			l_attribList.push_back( None );
+			l_attribList.push_back( 0 );
 
 			if ( glXChooseFBConfig )
 			{
@@ -134,7 +133,7 @@ namespace GlRender
 					{
 						glXMakeCurrent( m_display, m_drawable, m_glxContext );
 						GetOpenGl().PreInitialise( String() );
-						glXMakeCurrent( m_display, None, nullptr );
+						glXMakeCurrent( m_display, 0, nullptr );
 					}
 
 					if ( GetOpenGl().GetVersion() >= 30 )
@@ -183,7 +182,7 @@ namespace GlRender
 
 	void GlContextImpl::EndCurrent()
 	{
-		GetOpenGl().MakeCurrent( m_display, None, nullptr );
+		GetOpenGl().MakeCurrent( m_display, 0, nullptr );
 	}
 
 	void GlContextImpl::SwapBuffers()
@@ -232,7 +231,7 @@ namespace GlRender
 					GLX_RED_SIZE, 1,
 					GLX_GREEN_SIZE, 1,
 					GLX_BLUE_SIZE, 1,
-					None
+					0
 				};
 				m_fbConfig = glXChooseFBConfig( m_display, p_screen, l_attribList.data(), &l_result );
 
@@ -337,7 +336,7 @@ namespace GlRender
 				eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION, l_minor,
 				eGL_CREATECONTEXT_ATTRIB_FLAGS, C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
 				eGL_PROFILE_ATTRIB_MASK, C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
-				None
+				0
 			};
 			GetOpenGl().DeleteContext( m_display, m_glxContext );
 

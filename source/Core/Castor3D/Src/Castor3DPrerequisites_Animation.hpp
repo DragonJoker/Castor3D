@@ -60,11 +60,11 @@ namespace Castor3D
 	{
 		//!\~english	No interpolation.
 		//!\~french		Pas d'interpolation.
-		None,
+		Nearest,
 		//!\~english	Linear mode.
 		//!\~french		Mode linéaire.
 		Linear,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_ENUM_CLASS_BOUNDS( Nearest )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -102,7 +102,11 @@ namespace Castor3D
 	enum class AnimationObjectType
 		: uint8_t
 	{
+		//!\~english	Node objects.
+		//!\~french		Objets noeud.
 		Node,
+		//!\~english	Bone objects.
+		//!\~french		Objets os.
 		Bone,
 		CASTOR_ENUM_CLASS_BOUNDS( Node )
 	};

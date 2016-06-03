@@ -331,7 +331,6 @@ namespace Testing
 	bool BinaryExportTest::compare( Animation const & p_a, Animation const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
 		CT_REQUIRE( p_a.GetType() == p_b.GetType() );
 
 		if ( p_a.GetType() == AnimationType::Skeleton )

@@ -44,6 +44,7 @@
 #include "Render/Viewport.hpp"
 #include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/AnimationInstance.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
@@ -3622,16 +3623,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 
 		if ( l_geometry )
 		{
-			l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( l_geometry );
+			l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( *l_geometry );
 
 			if ( l_geometry->GetMesh() )
 			{
 				auto l_mesh{ l_geometry->GetMesh() };
-				l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
+				l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
 
 				if ( l_mesh->GetSkeleton() )
 				{
-					l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
+					l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
 				}
 			}
 		}
@@ -3814,7 +3815,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationStart )
 	{
 		if ( l_parsingContext->pAnimation )
 		{
-			l_object->StartAnimation( l_parsingContext->pAnimation->GetName() );
+			l_object->StartAnimation( l_parsingContext->pAnimation->GetAnimation().GetName() );
 		}
 		else
 		{

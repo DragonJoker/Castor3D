@@ -60,13 +60,17 @@ namespace Castor3D
 		template< typename MapT, typename NodeT >
 		struct stRENDER_NODES
 		{
-			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
+			//!\~english	The render nodes, sorted by shader program.
+			//!\~french		Les noeuds de rendu, triés par programme shader.
 			MapT m_renderNodes;
-			//!\~english The geometries without alpha blending, sorted by shader program.	\~french Les géométries sans alpha blending, triées par programme shader.
+			//!\~english	The geometries without alpha blending, sorted by shader program.
+			//!\~french		Les géométries sans alpha blending, triées par programme shader.
 			MapT m_opaqueRenderNodes;
-			//!\~english The geometries with alpha blending, sorted by shader program.	\~french Les géométries avec de l'alpha blend, triées par programme shader.
+			//!\~english	The geometries with alpha blending, sorted by shader program.
+			//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
 			MapT m_transparentRenderNodes;
-			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
+			//!\~english	The geometries with alpha blending, sorted by distance to the camera.
+			//!\~french		Les géométries avec de l'alpha blend, triées par distance à la caméra.
 			std::multimap< double, NodeT > m_distanceSortedRenderNodes;
 		};
 
@@ -82,11 +86,19 @@ namespace Castor3D
 		*/
 		struct stSCENE_RENDER_NODES
 		{
-			//!\~english The scene.	\~french La scène.
+			//!\~english	The scene.	\~french La scène.
 			Scene & m_scene;
-			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
-			stRENDER_NODES< SubmeshRenderNodesByProgramMap, GeometryRenderNode > m_geometries;
-			//!\~english The billboards render nodes, sorted by shader program.	\~french Les noeuds de rendu de billboards, triés par programme shader.
+			//!\~english	The static render nodes, sorted by shader program.
+			//!\~french		Les noeuds de rendu statiques, triés par programme shader.
+			stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > m_staticGeometries;
+			//!\~english	The instanced render nodes, sorted by shader program.
+			//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
+			stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > m_instancedGeometries;
+			//!\~english	The animated render nodes, sorted by shader program.
+			//!\~french		Les noeuds de rendu animés, triés par programme shader.
+			stRENDER_NODES< SubmeshAnimatedRenderNodesByProgramMap, AnimatedGeometryRenderNode > m_animatedGeometries;
+			//!\~english	The billboards render nodes, sorted by shader program.
+			//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 			stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > m_billboards;
 		};
 		/*!
@@ -94,9 +106,9 @@ namespace Castor3D
 		\version	0.7.0.0
 		\date		19/12/2012
 		\~english
-		\brief		Internal struct holding a complete frame buffer
+		\brief		Internal struct holding a complete frame buffer.
 		\~french
-		\brief		Structure interne contenant un tampon d'image complet
+		\brief		Structure interne contenant un tampon d'image complet.
 		*/
 		struct stFRAME_BUFFER
 		{
@@ -105,15 +117,20 @@ namespace Castor3D
 			bool Initialise( Castor::Size p_size );
 			void Cleanup();
 
-			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
+			//!\~english	The texture receiving the color render.
+			//!\~french		La texture recevant le rendu couleur.
 			TextureLayoutSPtr m_colourTexture;
-			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
+			//!\~english	The buffer receiving the depth render.
+			//!\~french		Le tampon recevant le rendu profondeur.
 			DepthStencilRenderBufferSPtr m_depthBuffer;
-			//!\~english The frame buffer	\~french Le tampon d'image
+			//!\~english	The frame buffer.
+			//!\~french		Le tampon d'image.
 			FrameBufferSPtr m_frameBuffer;
-			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
+			//!\~english	The attach between texture and main frame buffer.
+			//!\~french		L'attache entre la texture et le tampon principal.
 			TextureAttachmentSPtr m_colourAttach;
-			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
+			//!\~english	The attach between depth buffer and main frame buffer.
+			//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 			RenderBufferAttachmentSPtr m_depthAttach;
 
 		private:
@@ -367,7 +384,7 @@ namespace Castor3D
 		 *\param[in]	p_node				Le noeud de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, GeometryRenderNode & p_node, uint64_t p_excludedMtxFlags );
+		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, StaticGeometryRenderNode & p_node, uint64_t p_excludedMtxFlags );
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
@@ -378,7 +395,33 @@ namespace Castor3D
 		 *\param[in]	p_scene			La scène.
 		 *\param[in]	p_renderNode	Le noeud de rendu.
 		 */
-		C3D_API void DoUnbindPass( Scene & p_scene, GeometryRenderNode & p_renderNode );
+		C3D_API void DoUnbindPass( Scene & p_scene, StaticGeometryRenderNode & p_renderNode );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_node				The render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_node				Le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, AnimatedGeometryRenderNode & p_node, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\param[in]	p_renderNode	The render node.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 *\param[in]	p_renderNode	Le noeud de rendu.
+		 */
+		C3D_API void DoUnbindPass( Scene & p_scene, AnimatedGeometryRenderNode & p_renderNode );
 		/**
 		 *\~english
 		 *\brief		Binds the given pass.
@@ -419,7 +462,22 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshAnimatedRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -434,7 +492,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders distance sorted submeshes.
@@ -449,22 +507,22 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, GeometryRenderNodeByDistanceMMap & p_nodes );
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, StaticGeometryRenderNodeByDistanceMMap & p_nodes );
 		/**
 		 *\~english
-		 *\brief		Renders submeshes.
+		 *\brief		Renders distance sorted submeshes.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
-		 *\brief		Dessine des sous maillages.
+		 *\brief		Dessine des sous maillages triés par distance.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, AnimatedGeometryRenderNodeByDistanceMMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -507,7 +565,20 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra.
 		 *\param[out]	p_output	Les noeuds de rendu triés.
 		 */
-		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, GeometryRenderNodeByDistanceMMap & p_output );
+		C3D_API void DoResortAlpha( SubmeshStaticRenderNodesByProgramMap p_input, Camera const & p_camera, StaticGeometryRenderNodeByDistanceMMap & p_output );
+		/**
+		 *\~english
+		 *\brief		Sorts the given render nodes by distance to the camera.
+		 *\param[in]	p_input		The unsorted render nodes.
+		 *\param[in]	p_camera	The camera.
+		 *\param[out]	p_output	The sorted render nodes.
+		 *\~french
+		 *\brief		Trie les noeuds de rendu donnés par distance à la caméra.
+		 *\param[in]	p_input		Les noeuds de rendu non triés.
+		 *\param[in]	p_camera	La caméra.
+		 *\param[out]	p_output	Les noeuds de rendu triés.
+		 */
+		C3D_API void DoResortAlpha( SubmeshAnimatedRenderNodesByProgramMap p_input, Camera const & p_camera, AnimatedGeometryRenderNodeByDistanceMMap & p_output );
 		/**
 		 *\~english
 		 *\brief		Sorts the given render nodes by distance to the camera.
@@ -551,25 +622,35 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english The technique name	\~french Le nom de la technique
+		//!\~english	The technique name.
+		//!\~french		Le nom de la technique.
 		Castor::String m_name;
-		//!\~english The technique intialisation status.	\~french Le statut d'initialisation de la technique.
+		//!\~english	The technique intialisation status.
+		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
-		//!\~english The parent render target	\~french La render target parente
+		//!\~english	The parent render target.
+		//!\~french		La render target parente.
 		RenderTarget * m_renderTarget;
-		//!\~english The render system	\~french Le render system
+		//!\~english	The render system.
+		//!\~french		Le render system.
 		RenderSystem * m_renderSystem;
-		//!\~english The render area dimension.	\~french Les dimensions de l'aire de rendu.
+		//!\~english	The render area dimension.
+		//!\~french		Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
-		//!\~english The scenes rendered through this technique.	\~french Les scènes dessinées via cette technique.
+		//!\~english	The scenes rendered through this technique.
+		//!\~french		Les scènes dessinées via cette technique.
 		std::map< Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
-		//!\~english The newly added scenes.	\~french Les scènes récemment ajoutées.
+		//!\~english	The newly added scenes.
+		//!\~french		Les scènes récemment ajoutées.
 		std::vector< SceneRPtr > m_newScenes;
-		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
+		//!\~english	The HDR frame buffer.
+		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english The rasteriser state to cull front faces.	\~french L'état de rastérisation pour masquer les faces avant.
+		//!\~english	The rasteriser state to cull front faces.
+		//!\~french		L'état de rastérisation pour masquer les faces avant.
 		RasteriserStateWPtr m_wpFrontRasteriserState;
-		//!\~english The rasteriser state to cull back faces.	\~french L'état de rastérisation pour masquer les faces arrière.
+		//!\~english	The rasteriser state to cull back faces.
+		//!\~french		L'état de rastérisation pour masquer les faces arrière.
 		RasteriserStateWPtr m_wpBackRasteriserState;
 	};
 }

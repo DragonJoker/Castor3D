@@ -29,7 +29,7 @@ namespace Castor3D
 
 		if ( l_it == m_animations.end() )
 		{
-			auto l_animation = m_skeleton.GetAnimation( p_name );
+			auto l_animation{ std::static_pointer_cast< SkeletonAnimation >( m_skeleton.GetAnimation( p_name ) ) };
 
 			if ( l_animation )
 			{
@@ -62,7 +62,7 @@ namespace Castor3D
 
 				for ( auto l_animation : m_playingAnimations )
 				{
-					auto l_object = std::static_pointer_cast< SkeletonAnimationInstance >( l_animation )->GetObject( l_bone );
+					auto l_object = std::static_pointer_cast< SkeletonAnimationInstance >( l_animation )->GetObject( *l_bone );
 
 					if ( l_object )
 					{

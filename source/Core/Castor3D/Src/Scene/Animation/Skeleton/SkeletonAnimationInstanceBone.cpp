@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject )
-		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject }
+	SkeletonAnimationInstanceBone::SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
+		: SkeletonAnimationInstanceObject{ p_animationInstance, p_animationObject, p_allObjects }
 		, m_animationBone{ p_animationObject }
 	{
 	}

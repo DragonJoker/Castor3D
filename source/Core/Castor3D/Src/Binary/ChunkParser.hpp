@@ -30,7 +30,7 @@ namespace Castor3D
 	\~english
 	\brief		Chunk parser
 	\~french
-	\brief		Videur de chunk
+	\brief		Analyseur de chunk
 	*/
 	class ChunkParserBase
 	{
@@ -68,7 +68,7 @@ namespace Castor3D
 	\~english
 	\brief		Chunk parser
 	\~french
-	\brief		Videur de chunk
+	\brief		Analyseur de chunk
 	*/
 	template< typename T >
 	class ChunkParser

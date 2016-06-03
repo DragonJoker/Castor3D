@@ -495,7 +495,8 @@ namespace Castor3D
 	class ToneMappingFactory;
 	struct RenderNode;
 	struct SceneRenderNode;
-	struct GeometryRenderNode;
+	struct StaticGeometryRenderNode;
+	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
 
 	struct BufferElementDeclaration;
@@ -522,7 +523,8 @@ namespace Castor3D
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	//!\~english Multimap of RenderNodes sorted by distance.	\~french Multimap de RenderNodes triés par distance.
-	DECLARE_MULTIMAP( double, GeometryRenderNode, GeometryRenderNodeByDistance );
+	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
+	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 
 	//@}

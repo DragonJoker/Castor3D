@@ -28,9 +28,9 @@ namespace Castor3D
 	\date		31/05/2016
 	\todo		Write and Read functions.
 	\~english
-	\brief		Skeleton animation class.
+	\brief		Skeleton animation instance.
 	\~french
-	\brief		Classe d'animation de squelette.
+	\brief		Instance d'animation de squelette.
 	*/
 	class SkeletonAnimationInstance
 		: public AnimationInstance
@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'AnimatedSkeleton parent.
 		 *\param[in]	p_animation	L'animation.
 		 */
-		C3D_API SkeletonAnimationInstance( AnimatedSkeleton & p_object, Animation const & p_animation );
+		C3D_API SkeletonAnimationInstance( AnimatedSkeleton & p_object, SkeletonAnimation const & p_animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -62,7 +62,27 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( BoneSPtr p_bone )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Bone const & p_bone )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated node.
+		 *\param[in]	p_name	The node name.
+		 *\~french
+		 *\brief		Récupère un noeud animé.
+		 *\param[in]	p_name	Le nom du noeud.
+		 */
+		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated object.
+		 *\param[in]	p_type	The object type.
+		 *\param[in]	p_name	The object name.
+		 *\~french
+		 *\brief		Récupère un objet animé.
+		 *\param[in]	p_type	Le type de l'objet.
+		 *\param[in]	p_name	Le nom de l'objet.
+		 */
+		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( AnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The key frames interpolation mode.

@@ -19,11 +19,6 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetScale(), eCHUNK_TYPE_ANIM_SCALE, m_chunk );
-		}
-
-		if ( l_return )
-		{
 			l_return = DoWriteChunk( p_obj.GetLength(), eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
 		}
 
@@ -63,10 +58,6 @@ namespace Castor3D
 					p_obj.m_name = l_name;
 				}
 
-				break;
-
-			case eCHUNK_TYPE_ANIM_SCALE:
-				l_return = DoParseChunk( p_obj.m_scale, l_chunk );
 				break;
 
 			case eCHUNK_TYPE_ANIM_LENGTH:

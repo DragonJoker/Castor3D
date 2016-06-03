@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste.
 		 *\param[in]	p_object	Le MovableObject à partir duquel l'AnimatedObject est créé.
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( MovableObjectSPtr p_object );
+		C3D_API AnimatedObjectSPtr AddObject( MovableObject & p_object );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the Mesh given as a parameter, adds it to the list.
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\param[in]	p_object	Le Mesh à partir duquel l'AnimatedObject est créé.
 		 *\param[in]	p_name		Le nom de l'instance du maillage.
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( MeshSPtr p_object, Castor::String const & p_name );
+		C3D_API AnimatedObjectSPtr AddObject( Mesh & p_object, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the Skeleton given as a parameter, adds it to the list.
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_object	Le Skeleton à partir duquel l'AnimatedObject est créé.
 		 *\param[in]	p_name		Le nom de l'instance du Skeleton.
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( SkeletonSPtr p_object, Castor::String const & p_name );
+		C3D_API AnimatedObjectSPtr AddObject( Skeleton & p_object, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
@@ -243,11 +243,14 @@ namespace Castor3D
 		}
 
 	private:
-		//!<\~english The list of animations	\~french La liste des animations
+		//!<\~english	The list of animations.
+		//!\~french		La liste des animations.
 		AnimationStateMap m_animations;
-		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
+		//!<\~english	The list of AnimatedObjects.
+		//!\~french		La liste des AnimatedObject.
 		AnimatedObjectPtrStrMap m_objects;
-		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations
+		//!<\~english	A timer, usefull for animation handling.
+		//!\~french		Un timer, pour mettre à jour précisément les animations.
 		Castor::PreciseTimer m_timer;
 	};
 }

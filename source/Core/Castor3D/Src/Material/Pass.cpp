@@ -199,7 +199,7 @@ namespace Castor3D
 			{
 				switch ( m_alphaBlendMode )
 				{
-				case BlendMode::None:
+				case BlendMode::NoBlend:
 					m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
 					m_pBlendState->SetAlphaDstBlend( BlendOperand::Zero );
 					m_pBlendState->SetRgbSrcBlend( BlendOperand::One );

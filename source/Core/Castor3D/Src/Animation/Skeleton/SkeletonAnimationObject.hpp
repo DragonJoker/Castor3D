@@ -32,11 +32,11 @@ namespace Castor3D
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Class which represents the moving things.
-	\remark		Manages translation, scaling, rotation of the thing.
+	\brief		Class which represents the skeleton animation objects.
+	\remark		Manages translation, scaling, rotation of the object.
 	\~french
-	\brief		Classe de représentation de choses mouvantes.
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
+	\brief		Classe de représentation d'objets d'animations de squelette.
+	\remark		Gère les translations, mises à l'échelle, rotations de l'objet.
 	*/
 	class SkeletonAnimationObject
 		: public Castor::OwnedBy< SkeletonAnimation >
@@ -47,11 +47,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_animation	The parent animation.
-		 *\param[in]	p_type		The moving thing type.
+		 *\param[in]	p_type		The skeleton animation object type.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_animation	L'animation parente.
-		 *\param[in]	p_type		Le type du machin mouvant.
+		 *\param[in]	p_type		Le type d'objet d'animation de squelette.
 		 */
 		C3D_API SkeletonAnimationObject( SkeletonAnimation & p_animation, AnimationObjectType p_type );
 		/**
@@ -250,6 +250,7 @@ namespace Castor3D
 
 		friend class BinaryWriter< SkeletonAnimationObject >;
 		friend class BinaryParser< SkeletonAnimationObject >;
+		friend class SkeletonAnimationInstanceObject;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

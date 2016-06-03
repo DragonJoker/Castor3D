@@ -39,7 +39,7 @@ namespace Castor3D
 		};
 		static std::map< AlphaBlendFunc, String > l_strTextureAlphaFunctions
 		{
-			{ AlphaBlendFunc::None, cuT( "none" ) },
+			{ AlphaBlendFunc::NoBlend, cuT( "none" ) },
 			{ AlphaBlendFunc::FirstArg, cuT( "first_arg" ) },
 			{ AlphaBlendFunc::Add, cuT( "add" ) },
 			{ AlphaBlendFunc::AddSigned, cuT( "add_signed" ) },
@@ -60,7 +60,7 @@ namespace Castor3D
 		};
 		static std::map< RGBBlendFunc, String > l_strTextureRgbFunctions
 		{
-			{ RGBBlendFunc::None, cuT( "none" ) },
+			{ RGBBlendFunc::NoBlend, cuT( "none" ) },
 			{ RGBBlendFunc::FirstArg, cuT( "first_arg" ) },
 			{ RGBBlendFunc::Add, cuT( "add" ) },
 			{ RGBBlendFunc::AddSigned, cuT( "add_signed" ) },
@@ -146,12 +146,12 @@ namespace Castor3D
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 					}
 
-					if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::None )
+					if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::NoBlend )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
 					}
 
-					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::None )
+					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::NoBlend )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
 					}
@@ -189,8 +189,8 @@ namespace Castor3D
 		, m_eChannel( TextureChannel::Diffuse )
 		, m_eAlphaFunc( AlphaFunc::Always )
 		, m_fAlphaValue( 0 )
-		, m_eRgbFunction( RGBBlendFunc::None )
-		, m_eAlpFunction( AlphaBlendFunc::None )
+		, m_eRgbFunction( RGBBlendFunc::NoBlend )
+		, m_eAlpFunction( AlphaBlendFunc::NoBlend )
 		, m_bAutoMipmaps( false )
 		, m_changed( false )
 		, m_pSampler( p_engine.GetDefaultSampler() )

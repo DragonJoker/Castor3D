@@ -40,12 +40,14 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_animationInstance	The parent skeleton animation instance.
 		 *\param[in]	p_animationObject	The animation object.
+		 *\param[out]	p_allObjects		Receives this object's children.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_animationInstance	L'instance d'animation de squelette parent.
 		 *\param[in]	p_animationObject	L'animation d'objet.
+		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
 		 */
-		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject );
+		C3D_API SkeletonAnimationInstanceBone( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationBone & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -1,8 +1,12 @@
 #include "SkeletonAnimationInstanceObject.hpp"
 
+#include "SkeletonAnimationInstanceBone.hpp"
+#include "SkeletonAnimationInstanceNode.hpp"
+
 #include "Animation/Interpolator.hpp"
 #include "Animation/KeyFrame.hpp"
-#include "Animation/Skeleton/SkeletonAnimationObject.hpp"
+#include "Animation/Skeleton/SkeletonAnimationBone.hpp"
+#include "Animation/Skeleton/SkeletonAnimationNode.hpp"
 
 using namespace Castor;
 
@@ -12,44 +16,66 @@ namespace Castor3D
 
 	namespace
 	{
-		void DoFind( real p_time,
+		inline void DoFind( real p_time,
 					 typename KeyFrameArray::const_iterator const & p_beg,
 					 typename KeyFrameArray::const_iterator const & p_end,
 					 typename KeyFrameArray::const_iterator & p_prv,
 					 typename KeyFrameArray::const_iterator & p_cur )
 		{
-			if ( p_beg == p_end )
+			while ( p_prv != p_beg && p_prv->GetTimeIndex() >= p_time )
 			{
-				p_prv = p_cur = p_beg;
+				// Time has gone too fast backward.
+				--p_prv;
+				--p_cur;
 			}
-			else
+
+			while ( p_cur != p_end && p_cur->GetTimeIndex() < p_time )
 			{
-				while ( p_prv != p_beg && p_prv->GetTimeIndex() >= p_time )
-				{
-					// Time has gone too fast backward.
-					--p_prv;
-					--p_cur;
-				}
-
-				while ( p_cur != p_end && p_cur->GetTimeIndex() < p_time )
-				{
-					// Time has gone too fast forward.
-					++p_prv;
-					++p_cur;
-				}
-
-				ENSURE( p_prv != p_cur );
+				// Time has gone too fast forward.
+				++p_prv;
+				++p_cur;
 			}
+
+			ENSURE( p_prv != p_cur );
+		}
+
+		String const & GetObjectTypeName( AnimationObjectType p_type )
+		{
+			static std::map< AnimationObjectType, String > Names
+			{
+				{ AnimationObjectType::Node, cuT( "Node_" ) },
+				{ AnimationObjectType::Bone, cuT( "Bone_" ) },
+			};
+
+			return Names[p_type];
 		}
 	}
 
 	//*************************************************************************************************
 
-	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject )
+	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & p_animationInstance, SkeletonAnimationObject & p_animationObject, SkeletonAnimationInstanceObjectPtrStrMap & p_allObjects )
 		: OwnedBy< SkeletonAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
+		, m_prev{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() }
+		, m_curr{ p_animationObject.GetKeyFrames().empty() ? p_animationObject.GetKeyFrames().end() : p_animationObject.GetKeyFrames().begin() + 1 }
 	{
 		SetInterpolationMode( InterpolatorType::Linear );
+
+		for ( auto l_moving : p_animationObject.m_children )
+		{
+			switch ( l_moving->GetType() )
+			{
+			case AnimationObjectType::Node:
+				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_allObjects ) );
+				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
+				break;
+
+			case AnimationObjectType::Bone:
+				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_allObjects ) );
+				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
+				break;
+			}
+		}
 	}
 
 	SkeletonAnimationInstanceObject::~SkeletonAnimationInstanceObject()
@@ -108,9 +134,9 @@ namespace Castor3D
 
 			switch ( m_mode )
 			{
-			case InterpolatorType::None:
-				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r,  InterpolatorType::None > >();
-				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, InterpolatorType::None > >();
+			case InterpolatorType::Nearest:
+				m_pointInterpolator = std::make_unique < InterpolatorT< Point3r,  InterpolatorType::Nearest > >();
+				m_quaternionInterpolator = std::make_unique < InterpolatorT< Quaternion, InterpolatorType::Nearest > >();
 				break;
 
 			case InterpolatorType::Linear:

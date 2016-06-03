@@ -37,7 +37,9 @@ namespace Castor3D
 
 		if ( !l_mesh->GetSubmeshCount() )
 		{
-			if ( !BinaryParser< Mesh >{}.Parse( *l_mesh, BinaryFile{ m_fileName, File::eOPEN_MODE_READ } ) )
+			BinaryFile l_file{ m_fileName, File::eOPEN_MODE_READ };
+
+			if ( !BinaryParser< Mesh >{}.Parse( *l_mesh, l_file ) )
 			{
 				GetEngine()->GetMeshManager().Remove( l_meshName );
 			}

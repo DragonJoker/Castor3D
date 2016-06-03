@@ -86,7 +86,8 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations
+		//!\~english	The bone affected by the animations.
+		//!\~french		L'os affecté par les animations.
 		BoneWPtr m_bone;
 
 		friend class BinaryWriter< SkeletonAnimationBone >;

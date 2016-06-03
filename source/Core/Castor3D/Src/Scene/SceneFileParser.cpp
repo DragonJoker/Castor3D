@@ -135,7 +135,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::Diffuse );
 	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::Previous );
 
-	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( RGBBlendFunc::None );
+	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( RGBBlendFunc::NoBlend );
 	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( RGBBlendFunc::FirstArg );
 	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( RGBBlendFunc::Add );
 	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( RGBBlendFunc::AddSigned );
@@ -145,7 +145,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( RGBBlendFunc::Dot3RGB );
 	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( RGBBlendFunc::Dot3RGBA );
 
-	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::None );
+	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::NoBlend );
 	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = uint32_t( AlphaBlendFunc::FirstArg );
 	m_mapTextureAlphaFunctions[cuT( "add" )] = uint32_t( AlphaBlendFunc::Add );
 	m_mapTextureAlphaFunctions[cuT( "add_signed" )] = uint32_t( AlphaBlendFunc::AddSigned );
@@ -236,7 +236,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBorderPositions[cuT( "middle" )] = eBORDER_POSITION_MIDDLE;
 	m_mapBorderPositions[cuT( "external" )] = eBORDER_POSITION_EXTERNAL;
 
-	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::None );
+	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::NoBlend );
 	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::Additive );
 	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::Multiplicative );
 
@@ -248,7 +248,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
 	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
 
-	m_mapInterpolatorModes[cuT( "none" )] = uint32_t( InterpolatorType::None );
+	m_mapInterpolatorModes[cuT( "none" )] = uint32_t( InterpolatorType::Nearest );
 	m_mapInterpolatorModes[cuT( "linear" )] = uint32_t( InterpolatorType::Linear );
 
 	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;

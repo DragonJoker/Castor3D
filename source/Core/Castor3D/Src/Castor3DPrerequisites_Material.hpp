@@ -167,7 +167,7 @@ namespace Castor3D
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		None,
+		NoBlend,
 		//!\~english Arg0
 		//!\~french Arg0
 		FirstArg,
@@ -192,7 +192,7 @@ namespace Castor3D
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		Dot3RGBA,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -206,7 +206,7 @@ namespace Castor3D
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		None,
+		NoBlend,
 		//!\~english Arg0
 		//!\~french Arg0
 		FirstArg,
@@ -225,7 +225,7 @@ namespace Castor3D
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
 		Subtract,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -295,7 +295,7 @@ namespace Castor3D
 	{
 		//!\~english Order dependent blending.
 		//!\~french Mélange dépendant de l'ordre.
-		None,
+		NoBlend,
 		//!\~english Order independent, add the components.
 		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
 		Additive,
@@ -311,7 +311,7 @@ namespace Castor3D
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
 		DepthPeeling,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

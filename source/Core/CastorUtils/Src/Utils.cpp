@@ -185,7 +185,7 @@ namespace Castor
 				ProcessFile l_file{ popen( "/bin/cat /proc/cpuinfo | grep -c '^processor'", "r" ) };
 				ENSURE( fread( l_res, 1, sizeof( l_res ) - 1, l_file ) < sizeof( l_res ) );
 			}
-			return res[0];
+			return l_res[0];
 		}
 	}
 

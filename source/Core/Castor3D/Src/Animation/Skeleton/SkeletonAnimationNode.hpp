@@ -27,11 +27,11 @@ namespace Castor3D
 	\version	0.7.0
 	\date		09/12/2013
 	\~english
-	\brief		Implementation of SkeletonAnimationNode for abstract nodes
-	\remark		Used to decompose the model and place intermediate animations
+	\brief		Implementation of SkeletonAnimationObject for abstract nodes
+	\remark		Used to decompose the model and place intermediate animation nodes.
 	\~french
-	\brief		Implémentation de SkeletonAnimationNode pour des noeuds abstraits.
-	\remark		Utilisé afin de décomposer le modèle et ajouter des animations intermédiaires
+	\brief		Implémentation de SkeletonAnimationObject pour des noeuds abstraits.
+	\remark		Utilisé afin de décomposer le modèle et ajouter des noeuds d'animation intermédiaires.
 	*/
 	class SkeletonAnimationNode
 		: public SkeletonAnimationObject
@@ -69,6 +69,8 @@ namespace Castor3D
 		}
 
 	private:
+		//!\~english	The node name.
+		//!\~french		Le nom du noeud.
 		Castor::String m_name;
 
 		friend class BinaryWriter< SkeletonAnimationNode >;

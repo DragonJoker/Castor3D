@@ -87,7 +87,7 @@ namespace Castor3D
 	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
 	*/
 	template< class Type >
-	class InterpolatorT< Type, InterpolatorType::None >
+	class InterpolatorT< Type, InterpolatorType::Nearest >
 		: public Interpolator< Type >
 	{
 	public:

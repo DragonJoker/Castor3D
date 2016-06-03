@@ -6,7 +6,8 @@
 #include "Animation/Animation.hpp"
 #include "Scene/Geometry.hpp"
 #include "Mesh/Mesh.hpp"
-#include "Mesh//Skeleton/Skeleton.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
+#include "Scene/Animation/AnimationInstance.hpp"
 
 #include <Logger.hpp>
 
@@ -43,14 +44,14 @@ namespace Castor3D
 			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
 
-			for ( auto l_it : l_it.second->GetAnimations() )
+			for ( auto l_itAnim : l_it.second->GetAnimations() )
 			{
-				if ( l_animations.end() != l_animations.find( l_it.first ) )
+				if ( l_animations.end() != l_animations.find( l_itAnim.first ) )
 				{
 					l_return &= p_file.WriteText( m_tabs + cuT( "\t\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_it.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_it.second->GetScale() ) + cuT( "\n" ) ) > 0
+						&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_itAnim.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+						&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_itAnim.second->GetScale() ) + cuT( "\n" ) ) > 0
 						&& p_file.WriteText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
 				}
 			}
@@ -62,7 +63,7 @@ namespace Castor3D
 
 			for ( auto l_anim : l_it.second->GetPlayingAnimations() )
 			{
-				l_playing.push_back( l_anim->GetName() );
+				l_playing.push_back( l_anim->GetAnimation().GetName() );
 			}
 		}
 
@@ -94,21 +95,19 @@ namespace Castor3D
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObjectSPtr p_object )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object )
 	{
 		return nullptr;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MeshSPtr p_object, String const & p_name )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Mesh & p_object, String const & p_name )
 	{
 		return nullptr;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( SkeletonSPtr p_object, String const & p_name )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Skeleton & p_object, String const & p_name )
 	{
-		auto l_object = std::make_shared< AnimatedSkeleton >( p_name );
-		l_object->SetSkeleton( p_object );
-		p_object->SetAnimatedObject( l_object );
+		auto l_object = std::make_shared< AnimatedSkeleton >( p_name, p_object );
 
 		if ( !AddObject( l_object ) )
 		{
@@ -124,7 +123,12 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			m_objects.insert( std::make_pair( p_object->GetName(), p_object ) );
+			m_objects.insert( { p_object->GetName(), p_object } );
+		}
+
+		for ( auto l_it : m_animations )
+		{
+			p_object->AddAnimation( l_it.first );
 		}
 
 		return l_return;
@@ -134,7 +138,7 @@ namespace Castor3D
 	{
 		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
-			m_animations.insert( std::make_pair( p_name, AnimationState::Stopped ) );
+			m_animations.insert( { p_name, AnimationState::Stopped } );
 
 			for ( auto l_it : m_objects )
 			{
@@ -149,7 +153,7 @@ namespace Castor3D
 		{
 			for ( auto l_it : m_objects )
 			{
-				AnimationSPtr l_animation = l_it.second->GetAnimation( p_name );
+				auto l_animation = l_it.second->GetAnimation( p_name );
 
 				if ( l_animation )
 				{
@@ -165,7 +169,7 @@ namespace Castor3D
 		{
 			for ( auto l_it : m_objects )
 			{
-				AnimationSPtr l_animation = l_it.second->GetAnimation( p_name );
+				auto l_animation = l_it.second->GetAnimation( p_name );
 
 				if ( l_animation )
 				{

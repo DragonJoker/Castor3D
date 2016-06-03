@@ -256,7 +256,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The writer's chunk.
 		//!\~french		Le chunk du writer.
-		BinaryChunk m_chunk{ typename ChunkTyper< TWritten >::Value };
+		BinaryChunk m_chunk{ ChunkTyper< TWritten >::Value };
 	};
 	template< class TWritten >
 	class BinaryWriter;

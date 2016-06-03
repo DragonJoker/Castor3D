@@ -112,13 +112,6 @@ namespace Castor3D
 		C3D_API SkeletonAnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
-		 *\return		The key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames.
-		 */
-		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
-		/**
-		 *\~english
 		 *\brief		Retrieves the moving objects count
 		 *\return		The count
 		 *\~french
@@ -146,6 +139,7 @@ namespace Castor3D
 
 		friend class BinaryWriter< SkeletonAnimation >;
 		friend class BinaryParser< SkeletonAnimation >;
+		friend class SkeletonAnimationInstance;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

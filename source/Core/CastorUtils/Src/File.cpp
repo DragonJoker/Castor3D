@@ -528,25 +528,25 @@ namespace Castor
 
 #if defined( _WIN32 )
 
-		xchar l_pPath[FILENAME_MAX];
-		DWORD dwResult = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
+		xchar l_path[FILENAME_MAX];
+		DWORD l_result = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
 
-		if ( dwResult != 0 )
+		if ( l_result != 0 )
 		{
-			l_pathReturn = Path{ l_pPath };
+			l_pathReturn = Path{ l_path };
 		}
 
 #elif defined( __linux__ )
 
-		char l_pPath[FILENAME_MAX];
-		char l_szTmp[32];
-		sprintf( l_szTmp, "/proc/%d/exe", getpid() );
-		int l_iBytes = std::min< std::size_t >( readlink( l_szTmp, l_pPath, sizeof( l_pPath ) ), sizeof( l_pPath ) - 1 );
+		char l_path[FILENAME_MAX];
+		char l_buffer[32];
+		sprintf( l_buffer, "/proc/%d/exe", getpid() );
+		int l_bytes = std::min< std::size_t >( readlink( l_buffer, l_path, sizeof( l_path ) ), sizeof( l_path ) - 1 );
 
-		if ( l_iBytes > 0 )
+		if ( l_bytes > 0 )
 		{
-			l_pPath[l_iBytes] = '\0';
-			l_pathReturn = l_pPath;
+			l_path[l_bytes] = '\0';
+			l_pathReturn = Path{ string::string_cast< xchar >( l_path ) };
 		}
 
 #else
@@ -575,7 +575,7 @@ namespace Castor
 
 		struct passwd * l_pw = getpwuid( getuid() );
 		const char * l_homedir = l_pw->pw_dir;
-		l_pathReturn = string::string_cast< xchar >( l_homedir );
+		l_pathReturn = Path{ string::string_cast< xchar >( l_homedir ) };
 
 #else
 #	error "Unsupported platform"

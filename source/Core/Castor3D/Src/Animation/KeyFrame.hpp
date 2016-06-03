@@ -159,13 +159,17 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The start time index.	\~french L'index de temps de début.
+		//!\~english	The start time index.
+		//!\~french		L'index de temps de début.
 		real m_timeIndex;
-		//!\~english The translation at start time.	\~french La translation à l'index de temps de début.
+		//!\~english	The translation at start time.
+		//!\~french		La translation à l'index de temps de début.
 		Castor::Point3r m_translate;
-		//!\~english The rotation at start time.	\~french La rotation à l'index de temps de début.
+		//!\~english	The rotation at start time.
+		//!\~french		La rotation à l'index de temps de début.
 		Castor::Quaternion m_rotate;
-		//!\~english The scaling at start time.	\~french L'échelle à l'index de temps de début.
+		//!\~english	The scaling at start time.
+		//!\~french		L'échelle à l'index de temps de début.
 		Castor::Point3r m_scale;
 
 		friend class BinaryWriter< KeyFrame >;

@@ -24,15 +24,15 @@ namespace Castor3D
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
+	\date		02/06/2016
 	\todo		Write and Read functions.
 	\~english
-	\brief		Animation class
-	\remark		The class which handles an Animation, its length, key frames ...
+	\brief		Animation instance class.
+	\remark		Used to play an Animation on a specific object.
 	\~french
-	\brief		Classe d'animation
-	\remark		Classe gérant une Animation, sa durée, les key frames ...
+	\brief		Classe d'instance d'animation
+	\remark		Utilisée pour jouer une animation sur un objet particulier.
 	*/
 	class AnimationInstance
 		: public Castor::OwnedBy< AnimatedObject >
@@ -103,6 +103,60 @@ namespace Castor3D
 		{
 			return m_state;
 		}
+		/**
+		 *\~english
+		 *\return		The animation time scale.
+		 *\~french
+		 *\return		Le multiplicateur de temps de l'animation.
+		 */
+		inline real GetScale()const
+		{
+			return m_scale;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation time scale
+		 *\param[in]	p_scale	The new value
+		 *\~french
+		 *\brief		Définit le multiplicateur de temps de l'animation
+		 *\param[in]	p_scale	La nouvelle valeur
+		 */
+		inline void	SetScale( real p_scale )
+		{
+			m_scale = p_scale;
+		}
+		/**
+		 *\~english
+		 *\return		The animation loop status.
+		 *\~french
+		 *\return		L'état de boucle de l'animation.
+		 */
+		inline bool IsLooped()const
+		{
+			return m_looped;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation loop status
+		 *\param[in]	p_looped	The new value
+		 *\~french
+		 *\brief		Définit l'état de boucle de l'animation
+		 *\param[in]	p_looped	La nouvelle valeur
+		 */
+		inline void SetLooped( bool p_looped )
+		{
+			m_looped = p_looped;
+		}
+		/**
+		 *\~english
+		 *\return		The animation.
+		 *\~french
+		 *\return		L'animation.
+		 */
+		inline Animation const & GetAnimation()const
+		{
+			return m_animation;
+		}
 
 	private:
 		/**
@@ -119,6 +173,12 @@ namespace Castor3D
 		//!\~english	The animation.
 		//!\~french		L'animation.
 		Animation const & m_animation;
+		//!\~english	The animation time scale.
+		//!\~french		Le multiplicateur de temps.
+		real m_scale{ 1.0_r };
+		//!\~english	Tells whether or not the animation is looped.
+		//!\~french		Dit si oui ou non l'animation est bouclée.
+		bool m_looped{ false };
 		//!\~english	The current playing time.
 		//!\~french		L'index de temps courant.
 		real m_currentTime{ 0.0_r };

@@ -191,9 +191,11 @@ namespace Castor3D
 		virtual void DoFillShader( Matrix4x4rFrameVariable & p_variable ) = 0;
 
 	protected:
-		//!\~english All animations.	\~french Toutes les animations.
+		//!\~english	All animations.
+		//!\~french		Toutes les animations.
 		AnimationInstancePtrStrMap m_animations;
-		//!\~english Currently playing animations.	\~french Les animations en cours de lecture.
+		//!\~english	Currently playing animations.
+		//!\~french		Les animations en cours de lecture.
 		AnimationInstancePtrArray m_playingAnimations;
 	};
 }

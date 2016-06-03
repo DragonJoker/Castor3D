@@ -17,7 +17,7 @@ namespace Castor
 
 	template< typename T >
 	QuaternionT< T >::TextLoader::TextLoader()
-		: Castor::TextLoader< QuaternionT< T > >( p_tabs )
+		: Castor::TextLoader< QuaternionT< T > >()
 	{
 	}
 
@@ -80,7 +80,7 @@ namespace Castor
 		}
 
 		l_streamWord << cuT( " " ) << l_angle.degrees();
-		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
 		return l_return;
 	}
 
