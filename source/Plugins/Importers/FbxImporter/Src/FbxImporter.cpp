@@ -225,7 +225,7 @@ namespace C3dFbx
 			return l_return;
 		}
 
-		inline stFACE_INDICES DoGetFace( FbxMesh * p_fbxMesh, uint32_t p_poly, uint32_t a, uint32_t b, uint32_t c )
+		inline FaceIndices DoGetFace( FbxMesh * p_fbxMesh, uint32_t p_poly, uint32_t a, uint32_t b, uint32_t c )
 		{
 			auto l_a = DoGetIndex( p_fbxMesh, p_poly, a );
 			auto l_b = DoGetIndex( p_fbxMesh, p_poly, b );
@@ -496,7 +496,7 @@ namespace C3dFbx
 			if ( m_mesh->GetSkeleton() )
 			{
 				FbxMesh * l_mesh = p_node->GetMesh();
-				std::vector< stVERTEX_BONE_DATA > l_boneData{ l_submesh->GetVertexCount() };
+				std::vector< VertexBoneData > l_boneData{ l_submesh->GetPointsCount() };
 				DoProcessBonesWeights( p_node, *m_mesh->GetSkeleton(), l_boneData );
 				l_submesh->AddBoneDatas( l_boneData );
 			}
@@ -636,7 +636,7 @@ namespace C3dFbx
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_node, Skeleton const & p_skeleton, std::vector< stVERTEX_BONE_DATA > & p_boneData )
+	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_node, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
 	{
 		FbxMesh * l_mesh = p_node->GetMesh();
 		uint32_t l_deformersCount = l_mesh->GetDeformerCount();
@@ -749,7 +749,7 @@ namespace C3dFbx
 		std::vector< real > l_tan( l_pointsCount * 3 );
 		std::vector< real > l_bit( l_pointsCount * 3 );
 		std::vector< real > l_tex( l_pointsCount * 3 );
-		std::vector< stINTERLEAVED_VERTEX > l_vertices{ l_pointsCount };
+		std::vector< InterleavedVertex > l_vertices{ l_pointsCount };
 		uint32_t l_index{ 0u };
 
 		// Positions
@@ -771,7 +771,7 @@ namespace C3dFbx
 
 			for ( auto & l_vertex : l_vertices )
 			{
-				std::memcpy( l_vertex.m_nml, l_buffer, sizeof( l_vertex.m_nml ) );
+				std::memcpy( l_vertex.m_nml.data(), l_buffer, sizeof( l_vertex.m_nml ) );
 				l_buffer += 3;
 			}
 		}
@@ -786,7 +786,7 @@ namespace C3dFbx
 
 			for ( auto & l_vertex : l_vertices )
 			{
-				std::memcpy( l_vertex.m_tex, l_buffer, sizeof( l_vertex.m_tex ) );
+				std::memcpy( l_vertex.m_tex.data(), l_buffer, sizeof( l_vertex.m_tex ) );
 				l_buffer += 3;
 			}
 		}
@@ -805,7 +805,7 @@ namespace C3dFbx
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					std::memcpy( l_vertex.m_tan, l_buffer, sizeof( l_vertex.m_tan ) );
+					std::memcpy( l_vertex.m_tan.data(), l_buffer, sizeof( l_vertex.m_tan ) );
 					l_buffer += 3;
 				}
 			}
@@ -820,7 +820,7 @@ namespace C3dFbx
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					std::memcpy( l_vertex.m_bin, l_buffer, sizeof( l_vertex.m_bin ) );
+					std::memcpy( l_vertex.m_bin.data(), l_buffer, sizeof( l_vertex.m_bin ) );
 					l_buffer += 3;
 				}
 			}
@@ -828,7 +828,7 @@ namespace C3dFbx
 
 		// Faces
 		uint32_t l_polyCount = p_mesh->GetPolygonCount();
-		std::vector< stFACE_INDICES > l_faces;
+		std::vector< FaceIndices > l_faces;
 		l_faces.reserve( l_polyCount );
 
 		for ( auto l_poly = 0u; l_poly < l_polyCount; ++l_poly )

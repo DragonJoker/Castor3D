@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Contient les données de bones pour un vertice
 	*/
-	struct stVERTEX_BONE_DATA
+	struct VertexBoneData
 	{
 		/**
 		 *\~english
@@ -40,7 +40,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API stVERTEX_BONE_DATA();
+		C3D_API VertexBoneData();
 		/**
 		 *\~english
 		 *\brief		Adds bone informations to the vertex
@@ -54,9 +54,9 @@ namespace Castor3D
 		C3D_API void AddBoneData( uint32_t p_boneId, real p_weight );
 
 		//!\~english The bones ID	\~french L'ID des bones
-		uint32_t m_ids[C3D_MAX_BONES_PER_VERTEX];
+		std::array< uint32_t, C3D_MAX_BONES_PER_VERTEX > m_ids;
 		//!\~english The bones weights	\~french Les poids des bones
-		real m_weights[C3D_MAX_BONES_PER_VERTEX];
+		std::array< real, C3D_MAX_BONES_PER_VERTEX > m_weights;
 	};
 }
 

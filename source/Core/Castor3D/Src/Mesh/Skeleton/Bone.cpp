@@ -11,7 +11,6 @@ namespace Castor3D
 	bool BinaryWriter< Bone >::DoWrite( Bone const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SKELETON_BONE );
 
 		if ( l_return )
 		{
@@ -23,14 +22,9 @@ namespace Castor3D
 			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), eCHUNK_TYPE_BONE_OFFSET_MATRIX, m_chunk );
 		}
 
-		if ( l_return )
+		if ( p_obj.GetParent() )
 		{
-			l_return = DoWriteChunk( p_obj.GetFinalTransformation(), eCHUNK_TYPE_BONE_FINAL_TRANSFORM, m_chunk );
-		}
-
-		for ( auto && l_bone : p_obj.m_children )
-		{
-			l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetParent()->GetName(), eCHUNK_TYPE_BONE_PARENT_NAME, m_chunk );
 		}
 
 		return l_return;
@@ -44,6 +38,7 @@ namespace Castor3D
 		BoneSPtr l_bone;
 		String l_name;
 		BinaryChunk l_chunk;
+		auto & l_skeleton{ p_obj.m_skeleton };
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
@@ -63,19 +58,22 @@ namespace Castor3D
 				l_return = DoParseChunk( p_obj.m_offset, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_BONE_FINAL_TRANSFORM:
-				l_return = DoParseChunk( p_obj.m_finalTransformation, l_chunk );
-				break;
-
-			case eCHUNK_TYPE_SKELETON_BONE:
-				l_bone = std::make_shared< Bone >( p_obj.m_skeleton );
-				l_return = BinaryParser< Bone >{}.Parse( *l_bone, l_chunk );
+			case eCHUNK_TYPE_BONE_PARENT_NAME:
+				l_return = DoParseChunk( l_name, l_chunk );
 
 				if ( l_return )
 				{
-					p_obj.m_children.push_back( l_bone );
-					l_bone->SetParent( p_obj.shared_from_this() );
-					p_obj.m_skeleton.AddBone( l_bone );
+					auto l_parent{ l_skeleton.FindBone( l_name ) };
+
+					if ( l_parent )
+					{
+						l_parent->AddChild( p_obj.shared_from_this() );
+						p_obj.SetParent( l_parent );
+					}
+					else
+					{
+						l_return = false;
+					}
 				}
 
 				break;
@@ -90,7 +88,6 @@ namespace Castor3D
 	Bone::Bone( Skeleton & p_skeleton )
 		: m_skeleton( p_skeleton )
 	{
-		m_finalTransformation.set_identity();
 	}
 
 	Bone::~Bone()
@@ -99,9 +96,9 @@ namespace Castor3D
 
 	void Bone::AddChild( BoneSPtr p_bone )
 	{
-		if ( m_children.end() == std::find( m_children.begin(), m_children.end(), p_bone ) )
+		if ( m_children.end() == m_children.find( p_bone->GetName() ) )
 		{
-			m_children.push_back( p_bone );
+			m_children.insert( { p_bone->GetName(), p_bone } );
 		}
 	}
 }

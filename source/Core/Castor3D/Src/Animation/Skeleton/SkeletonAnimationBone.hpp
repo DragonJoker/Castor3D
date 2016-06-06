@@ -46,27 +46,25 @@ namespace Castor3D
 		C3D_API SkeletonAnimationBone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~SkeletonAnimationBone();
 		/**
 		 *\~english
-		 *\brief		Retrieves the object name
-		 *\return		The name
+		 *\return		The object name.
 		 *\~french
-		 *\brief		Récupère le nom de l'objet
-		 *\return		Le nom
+		 *\return		Le nom de l'objet.
 		 */
 		virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
-		 *\brief		Defines the movable object
-		 *\param[in]	p_bone	The object
+		 *\brief		Sets the moving object.
+		 *\param[in]	p_bone		The bone.
 		 *\~french
-		 *\brief		Définit l'objet mouvant
-		 *\param[in]	p_bone	L'objet
+		 *\brief		Définit l'objet mouvant.
+		 *\param[in]	p_bone		L'os.
 		 */
 		inline void SetBone( BoneSPtr p_bone )
 		{
@@ -74,11 +72,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the moving object
-		 *\return		The moving object
+		 *\return		The moving object.
 		 *\~french
-		 *\brief		Récupère l'objet mouvant
-		 *\return		L'objet mouvant
+		 *\return		L'objet mouvant.
 		 */
 		inline BoneSPtr GetBone()const
 		{

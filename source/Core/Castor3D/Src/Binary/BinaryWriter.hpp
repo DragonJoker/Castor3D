@@ -140,7 +140,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoWriteChunk( T const * p_values, size_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return DoWriteChunk( p_values, p_values + p_count, p_chunkType, p_chunk );
+			return ChunkWriter< T >::Write( p_values, p_values + p_count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
@@ -157,9 +157,9 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool DoWriteChunk( T const( & p_value )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( T const( &p_values )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return DoWriteChunk( p_value, Count, p_chunkType, p_chunk );
+			return ChunkWriter< T >::Write( p_values, p_values + Count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
@@ -176,9 +176,9 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool DoWriteChunk( std::array< T, Count > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( std::array< T, Count > const & p_values, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return DoWriteChunk( p_value.data(), Count, p_chunkType, p_chunk );
+			return ChunkWriter< T >::Write( p_values.data(), p_values.data() + Count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
@@ -195,9 +195,9 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool DoWriteChunk( std::vector< T > const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( std::vector< T > const & p_values, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return DoWriteChunk( p_value.data(), p_value.size(), p_chunkType, p_chunk );
+			return ChunkWriter< T >::Write( p_values.data(), p_values.data() + p_values.size(), p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_FACE_H___
 #define ___C3D_FACE_H___
 
-#include "Binary/BinaryParser.hpp"
+#include "FaceIndices.hpp"
 
 namespace Castor3D
 {
@@ -58,12 +58,12 @@ namespace Castor3D
 		inline uint32_t operator[]( uint32_t p_index )const
 		{
 			REQUIRE( p_index < 3 );
-			return m_index[p_index];
+			return m_face.m_index[p_index];
 		}
 
 	private:
 		//!\~english The face vertex indices	\~french Les indices des sommets de la face
-		uint32_t m_index[3];
+		FaceIndices m_face;
 	};
 }
 

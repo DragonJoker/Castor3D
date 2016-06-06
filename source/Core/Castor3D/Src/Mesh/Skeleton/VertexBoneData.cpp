@@ -4,13 +4,13 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	stVERTEX_BONE_DATA::stVERTEX_BONE_DATA()
-		: m_ids {}
-		, m_weights {}
+	VertexBoneData::VertexBoneData()
+		: m_ids{}
+		, m_weights{}
 	{
 	}
 
-	void stVERTEX_BONE_DATA::AddBoneData( uint32_t p_boneId, real p_weight )
+	void VertexBoneData::AddBoneData( uint32_t p_boneId, real p_weight )
 	{
 		bool l_done = false;
 

@@ -756,7 +756,7 @@ namespace Castor3D
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
-					if ( p_camera.IsVisible( l_renderNode.m_submesh.GetParent()->GetCollisionBox(), l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() ) )
+					if ( p_camera.IsVisible( l_renderNode.m_submesh.GetParent().GetCollisionBox(), l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() ) )
 					{
 						Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
 						Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
@@ -780,7 +780,7 @@ namespace Castor3D
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
-					if ( p_camera.IsVisible( l_renderNode.m_submesh.GetParent()->GetCollisionBox(), l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() ) )
+					if ( p_camera.IsVisible( l_renderNode.m_submesh.GetParent().GetCollisionBox(), l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() ) )
 					{
 						Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
 						Point3r l_position = p_camera.GetParent()->GetDerivedPosition();

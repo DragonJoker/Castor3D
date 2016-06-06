@@ -103,7 +103,7 @@ namespace Castor3D
 	class Bone;
 	class Skeleton;
 	class BonedVertex;
-	struct stVERTEX_BONE_DATA;
+	struct VertexBoneData;
 
 	DECLARE_SMART_PTR( VertexPattern );
 	DECLARE_SMART_PTR( Point3rPattern );
@@ -160,6 +160,8 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, int, IntStr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
+	//! Bone pointer map sorted by name
+	DECLARE_MAP( Castor::String, BoneSPtr, BonePtrStr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 

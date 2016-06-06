@@ -2082,26 +2082,26 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshEnd )
 
 	if ( !l_parsingContext->vertexPos.empty() )
 	{
-		std::vector< stINTERLEAVED_VERTEX > l_vertices{ l_parsingContext->vertexPos.size() / 3 };
+		std::vector< InterleavedVertex > l_vertices{ l_parsingContext->vertexPos.size() / 3 };
 		uint32_t l_index{ 0u };
 
 		for ( auto & l_vertex : l_vertices )
 		{
-			std::memcpy( l_vertex.m_pos, &l_parsingContext->vertexPos[l_index], sizeof( l_vertex.m_pos ) );
+			std::memcpy( l_vertex.m_pos.data(), &l_parsingContext->vertexPos[l_index], sizeof( l_vertex.m_pos ) );
 
 			if ( !l_parsingContext->vertexNml.empty() )
 			{
-				std::memcpy( l_vertex.m_nml, &l_parsingContext->vertexNml[l_index], sizeof( l_vertex.m_nml ) );
+				std::memcpy( l_vertex.m_nml.data(), &l_parsingContext->vertexNml[l_index], sizeof( l_vertex.m_nml ) );
 			}
 
 			if ( !l_parsingContext->vertexTan.empty() )
 			{
-				std::memcpy( l_vertex.m_tan, &l_parsingContext->vertexTan[l_index], sizeof( l_vertex.m_tan ) );
+				std::memcpy( l_vertex.m_tan.data(), &l_parsingContext->vertexTan[l_index], sizeof( l_vertex.m_tan ) );
 			}
 
 			if ( !l_parsingContext->vertexTex.empty() )
 			{
-				std::memcpy( l_vertex.m_tex, &l_parsingContext->vertexTex[l_index], sizeof( l_vertex.m_tex ) );
+				std::memcpy( l_vertex.m_tex.data(), &l_parsingContext->vertexTex[l_index], sizeof( l_vertex.m_tex ) );
 			}
 
 			l_index += 3;
@@ -2111,7 +2111,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshEnd )
 
 		if ( l_parsingContext->faces.size() )
 		{
-			l_parsingContext->pSubmesh->AddFaceGroup( reinterpret_cast< stFACE_INDICES * >( &l_parsingContext->faces[0] ), uint32_t( l_parsingContext->faces.size() / 3 ) );
+			auto l_indices{ reinterpret_cast< FaceIndices * >( &l_parsingContext->faces[0] ) };
+			l_parsingContext->pSubmesh->AddFaceGroup( l_indices, l_indices + ( l_parsingContext->faces.size() / 3 ) );
 
 			if ( !l_parsingContext->vertexNml.empty() )
 			{

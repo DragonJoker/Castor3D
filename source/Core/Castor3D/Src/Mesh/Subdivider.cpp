@@ -15,10 +15,10 @@ using namespace Castor;
 namespace Castor3D
 {
 	Subdivider::Subdivider()
-		: m_submesh( )
-		, m_bGenerateBuffers( true )
-		, m_pfnSubdivisionEnd( nullptr )
-		, m_bThreaded( false )
+		:	m_submesh( )
+		,	m_bGenerateBuffers( true )
+		,	m_pfnSubdivisionEnd( nullptr )
+		,	m_bThreaded( false )
 	{
 	}
 
@@ -67,15 +67,20 @@ namespace Castor3D
 
 	Face Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		REQUIRE( a < GetVertexCount() && b < GetVertexCount() && c < GetVertexCount() );
+		REQUIRE( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
 		Face l_return{ a, b, c };
 		m_arrayFaces.push_back( l_return );
 		return l_return;
 	}
 
-	uint32_t Subdivider::GetVertexCount()const
+	int Subdivider::IsInMyPoints( Point3r const & p_vertex, double p_precision )
 	{
-		return m_submesh->GetVertexCount();
+		return m_submesh->IsInMyPoints( p_vertex, p_precision );
+	}
+
+	uint32_t Subdivider::GetPointsCount()const
+	{
+		return m_submesh->GetPointsCount();
 	}
 
 	BufferElementGroupSPtr Subdivider::GetPoint( uint32_t i )const

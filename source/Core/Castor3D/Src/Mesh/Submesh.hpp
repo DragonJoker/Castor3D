@@ -45,10 +45,6 @@ namespace Castor3D
 	class Submesh
 		: public Castor::OwnedBy< Engine >
 	{
-		friend class GeometryBuffers;
-		friend class BinaryWriter< Submesh >;
-		friend class BinaryParser< Submesh >;
-
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
 
@@ -65,7 +61,7 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_id		L'ID du sous-maillage
 		 */
-		C3D_API Submesh( Engine & p_engine, MeshRPtr p_mesh, uint32_t p_id = 1 );
+		C3D_API Submesh( Engine & p_engine, Mesh & p_mesh, uint32_t p_id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -107,40 +103,90 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre de vertices de ce sous-maillage
 		 */
-		C3D_API uint32_t GetVertexCount()const;
+		C3D_API uint32_t GetPointsCount()const;
 		/**
 		 *\~english
-		 *\brief		Sets the submesh's vertex data.
+		 *\brief		Tests if the given Point3r is in mine
+		 *\param[in]	p_vertex	The vertex to test
+		 *\param[in]	p_precision	The comparison precision
+		 *\return		The index of the vertex equal to parameter, -1 if not found
+		 *\~french
+		 *\brief		Teste si le point donné fait partie de ceux de ce sous-maillage
+		 *\param[in]	p_vertex	Le point à tester
+		 *\param[in]	p_precision	La précision de comparaison
+		 *\return		L'index du point s'il a été trouvé, -1 sinon
+		 */
+		C3D_API int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
+		/**
+		 *\~english
+		 *\brief		Creates and adds a vertex to my list
+		 *\param[in]	x	The vertex X coordinate
+		 *\param[in]	y	The vertex Y coordinate
+		 *\param[in]	z	The vertex Z coordinate
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Crée un Vertex à partir des coordonnées données et l'ajoute à la liste
+		 *\param[in]	x	Coordonnée X
+		 *\param[in]	y	Coordonnée Y
+		 *\param[in]	z	Coordonnée Y
+		 *\return		Le vertex créé
+		 */
+		C3D_API BufferElementGroupSPtr AddPoint( real x, real y, real z );
+		/**
+		 *\~english
+		 *\brief		Adds a vertex to my list
+		 *\param[in]	p_v	The vertex to add
+		 *\return		The vertex
+		 *\~french
+		 *\brief		Crée un Vertex à partir du point donné et l'ajoute à la liste
+		 *\param[in]	p_v	Le point
+		 *\return		Le vertex créé
+		 */
+		C3D_API BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
+		/**
+		 *\~english
+		 *\brief		Creates and adds a vertex to my list
+		 *\param[in]	p_v	The vertex coordinates
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Crée un Vertex à partir des coordonnées données et l'ajoute à la liste
+		 *\param[in]	p_v	Les coordonnées du point
+		 *\return		Le vertex créé
+		 */
+		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
+		/**
+		 *\~english
+		 *\brief		Creates and adds a vertex to my list.
+		 *\param[in]	p_v	The vertex.
+		 *\return		The created vertex.
+		 *\~french
+		 *\brief		Crée un Vertex et l'ajoute à la liste.
+		 *\param[in]	p_v	Le sommet.
+		 *\return		Le vertex créé.
+		 */
+		C3D_API BufferElementGroupSPtr AddPoint( InterleavedVertex const & p_v );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list.
 		 *\param[in]	p_begin	The vertices data begin.
 		 *\param[in]	p_end	The vertices data end.
 		 *\~french
-		 *\brief		Définit les données des sommets du sous-maillage.
+		 *\brief		Ajoute des points à la liste.
 		 *\param[in]	p_begin	Le début des données de sommets.
 		 *\param[in]	p_end	La fin des données de sommets.
 		 */
-		C3D_API void SetVerticesData( stINTERLEAVED_VERTEX const * const p_begin, stINTERLEAVED_VERTEX const * const p_end );
+		C3D_API void AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
 		/**
 		 *\~english
-		 *\brief		Sets the submesh's bone datas.
-		 *\param[in]	p_begin	The bone datas begin.
-		 *\param[in]	p_end	The bone datas end.
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_begin	The bones data begin.
+		 *\param[in]	p_end	The bones data end.
 		 *\~french
-		 *\brief		Définit des données de bones du sous-maillage.
+		 *\brief		Ajoute des données de bones.
 		 *\param[in]	p_begin	Le début des données de bones.
 		 *\param[in]	p_end	La fin des données de bones.
 		 */
-		C3D_API void SetBonesData( stVERTEX_BONE_DATA const * const p_begin, stVERTEX_BONE_DATA const * const p_end );
-		/**
-		 *\~english
-		 *\brief		Sets the submesh's faces data.
-		 *\param[in]	p_begin	The faces data begin.
-		 *\param[in]	p_end	The faces data end.
-		 *\~french
-		 *\brief		Définit les données des faces du sous-maillage.
-		 *\param[in]	p_faces	Le début des données de faces.
-		 *\param[in]	p_end	La fin des données de faces.
-		 */
-		C3D_API void SetFacesData( stFACE_INDICES const * const p_begin, stFACE_INDICES const * const p_end );
+		C3D_API void AddBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
@@ -148,6 +194,53 @@ namespace Castor3D
 		 *\brief		Vide le tableau de faces
 		 */
 		C3D_API void ClearFaces();
+		/**
+		 *\~english
+		 *\brief		Creates and adds a face to the submesh
+		 *\param[in]	a			The first face's vertex index
+		 *\param[in]	b			The second face's vertex index
+		 *\param[in]	c			The third face's vertex index
+		 *\return		The created face
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	a			L'index du premier vertex
+		 *\param[in]	b			L'index du second vertex
+		 *\param[in]	c			L'index du troisième vertex
+		 *\return		La face créée
+		 */
+		C3D_API Face AddFace( uint32_t a, uint32_t b, uint32_t c );
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_begin	The faces data begin.
+		 *\param[in]	p_end	The faces data end.
+		 *\~french
+		 *\brief		Crée et ajoute des faces au sous-maillage
+		 *\param[in]	p_begin	Le début des données de faces.
+		 *\param[in]	p_end	La fin des données de faces.
+		 */
+		C3D_API void AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end );
+		/**
+		 *\~english
+		 *\brief		Creates and adds a quad face to the submesh
+		 *\param[in]	a		The first face's vertex index
+		 *\param[in]	b		The second face's vertex index
+		 *\param[in]	c		The third face's vertex index
+		 *\param[in]	d		The fourth face's vertex index
+		 *\param[in]	p_minUV	The UV of the bottom left corner
+		 *\param[in]	p_maxUV	The UV of the top right corner
+		 *\return		The created face
+		 *\~french
+		 *\brief		Crée et ajoute une face à 4 côtés au sous-maillage
+		 *\param[in]	a		L'index du premier vertex
+		 *\param[in]	b		L'index du second vertex
+		 *\param[in]	c		L'index du troisième vertex
+		 *\param[in]	d		L'index du quatrième vertex
+		 *\param[in]	p_minUV	L'UV du coin bas gauche
+		 *\param[in]	p_maxUV	L'UV du coin haut droit
+		 *\return		La face créée
+		 */
+		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Clones the submesh and returns the clone
@@ -316,21 +409,9 @@ namespace Castor3D
 		 *\brief		Ajoute des points à la liste
 		 *\param[in]	p_vertices	Les vertices
 		 */
-		inline void SetVerticesData( stINTERLEAVED_VERTEX const * const p_vertices, size_t p_count )
+		inline void AddPoints( std::vector< InterleavedVertex > const & p_vertices )
 		{
-			SetVerticesData( p_vertices, p_vertices + p_count );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
-		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
-		 */
-		inline void SetVerticesData( std::vector< stINTERLEAVED_VERTEX > const & p_vertices )
-		{
-			SetVerticesData( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
 		}
 		/**
 		 *\~english
@@ -341,36 +422,9 @@ namespace Castor3D
 		 *\param[in]	p_vertices	Les vertices
 		 */
 		template< size_t Count >
-		inline void SetVerticesData( stINTERLEAVED_VERTEX const ( & p_vertices )[Count] )
+		inline void AddPoints( std::array< InterleavedVertex, Count > const & p_vertices )
 		{
-			SetVerticesData( p_vertices, p_vertices + Count );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
-		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
-		 */
-		template< size_t Count >
-		inline void SetVerticesData( std::array< stINTERLEAVED_VERTEX, Count > const & p_vertices )
-		{
-			SetVerticesData( p_vertices.data(), p_vertices.data() + Count );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\param[in]	p_count		The data count.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 *\param[in]	p_count		Les compte des données.
-		 */
-		inline void SetBonesData( stVERTEX_BONE_DATA const * const p_boneData, size_t p_count )
-		{
-			SetBonesData( p_boneData, p_boneData + p_count );
+			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
 		}
 		/**
 		*\~english
@@ -380,9 +434,9 @@ namespace Castor3D
 		*\brief		Ajoute des données de bones.
 		*\param[in]	p_boneData	Les données de bones.
 		*/
-		inline void SetBonesData( std::vector< stVERTEX_BONE_DATA > const & p_boneData )
+		inline void AddBoneDatas( std::vector< VertexBoneData > const & p_boneData )
 		{
-			SetBonesData( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
 		}
 		/**
 		 *\~english
@@ -393,22 +447,9 @@ namespace Castor3D
 		 *\param[in]	p_boneData	Les données de bones.
 		 */
 		template< size_t Count >
-		inline void SetBonesData( stVERTEX_BONE_DATA const( & p_boneData )[Count] )
+		inline void AddBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
 		{
-			SetBonesData( p_boneData, p_boneData + Count );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 */
-		template< size_t Count >
-		inline void SetBonesData( std::array< stVERTEX_BONE_DATA, Count > const & p_boneData )
-		{
-			SetBonesData( p_boneData, p_boneData + Count );
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
 		}
 		/**
 		 *\~english
@@ -418,21 +459,9 @@ namespace Castor3D
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		inline void SetFacesData( stFACE_INDICES const * const p_faces, size_t p_count )
+		inline void AddFaceGroup( std::vector< FaceIndices > const & p_faces )
 		{
-			SetFacesData( p_faces, p_faces + p_count );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
-		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
-		 */
-		inline void SetFacesData( std::vector< stFACE_INDICES > const & p_faces )
-		{
-			SetFacesData( p_faces.data(), p_faces.data() + p_faces.size() );
+			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
 		}
 		/**
 		 *\~english
@@ -443,22 +472,9 @@ namespace Castor3D
 		 *\param[in]	p_faces	Les faces
 		 */
 		template< size_t Count >
-		inline void SetFacesData( stFACE_INDICES const ( & p_faces )[Count] )
+		inline void AddFaceGroup( std::array< FaceIndices, Count > const & p_faces )
 		{
-			SetFacesData( p_faces, p_faces + Count );
-		}
-		/**
-		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
-		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
-		 */
-		template< size_t Count >
-		inline void SetFacesData( std::array< stFACE_INDICES, Count > const & p_faces )
-		{
-			SetFacesData( p_faces.data(), p_faces.data() + Count );
+			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
 		}
 		/**
 		 *\~english
@@ -470,7 +486,7 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return GetParent()->GetSkeleton();
+			return GetParent().GetSkeleton();
 		}
 		/**
 		 *\~english
@@ -483,6 +499,36 @@ namespace Castor3D
 		inline void SetDefaultMaterial( MaterialSPtr p_mat )
 		{
 			m_defaultMaterial = p_mat;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the point at given index
+		 *\param[in]	p_index	The index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le point à l'index donné
+		 *\param[in]	p_index	L'index
+		 *\return		La valeur
+		 */
+		inline BufferElementGroupSPtr operator[]( uint32_t p_index )const
+		{
+			REQUIRE( p_index < m_points.size() );
+			return m_points[p_index];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the point at given index
+		 *\param[in]	p_index	The index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le point à l'index donné
+		 *\param[in]	p_index	L'index
+		 *\return		La valeur
+		 */
+		inline BufferElementGroupSPtr GetPoint( uint32_t p_index )const
+		{
+			REQUIRE( p_index < m_points.size() );
+			return m_points[p_index];
 		}
 		/**
 		 *\~english
@@ -543,6 +589,69 @@ namespace Castor3D
 		inline Castor::SphereBox & GetSphere()
 		{
 			return m_sphere;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the points array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le tableau de points
+		 *\return		La valeur
+		 */
+		inline VertexPtrArray const & GetPoints()const
+		{
+			return m_points;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the points array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le tableau de points
+		 *\return		La valeur
+		 */
+		inline VertexPtrArray & GetPoints()
+		{
+			return m_points;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the face at given index
+		 *\param[in]	p_index	The index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère récupère la face à l'index donné
+		 *\param[in]	p_index	L'index
+		 *\return		La valeur
+		 */
+		inline Face const & GetFace( uint32_t p_index )const
+		{
+			REQUIRE( p_index < m_faces.size() );
+			return m_faces[p_index];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the faces array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le tableau de faces
+		 *\return		La valeur
+		 */
+		inline FaceArray const & GetFaces()const
+		{
+			return m_faces;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the faces array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le tableau de faces
+		 *\return		La valeur
+		 */
+		inline FaceArray & GetFaces()
+		{
+			return m_faces;
 		}
 		/**
 		 *\~english
@@ -684,7 +793,7 @@ namespace Castor3D
 		 *\brief		Récupère le mesh parent
 		 *\return		La valeur
 		 */
-		inline MeshRPtr GetParent()const
+		inline Mesh const & GetParent()const
 		{
 			return m_parentMesh;
 		}
@@ -700,8 +809,21 @@ namespace Castor3D
 		{
 			return m_programFlags;
 		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_faces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	p_faces	Les faces
+		 */
+		template< uint32_t Count > void AddFaceGroup( FaceIndices( & p_faces )[Count] )
+		{
+			AddFaceGroup( p_faces, Count );
+		}
 
 	private:
+		Face & DoAddFace( const Face & p_face );
 		void DoCreateBuffers();
 		void DoDestroyBuffers();
 		void DoGenerateBuffers();
@@ -713,7 +835,19 @@ namespace Castor3D
 	private:
 		//!\~english	The submesh ID.
 		//!\~french		L'id du sbmesh.
-		uint32_t m_id;
+		uint32_t m_id{ 0 };
+		//!\~english	Tells if normals exist or need to be computed.
+		//!\~french		Dit si les normales existent ou doivent être calculées.
+		bool m_hasNormals{ false };
+		//!\~english	The shader program flags.
+		//!\~french		Les indicateurs pour le shader.
+		uint32_t m_programFlags{ 0 };
+		//!\~english	Tells the VBOs has been initialised.
+		//!\~french		Dit que les VBOs ont été initialisés.
+		bool m_initialised{ false };
+		//!\~english	Tells the VAO needs reininitialisation.
+		//!\~french		Dit que le VAO a besoin d'être réinitialisé.
+		bool m_dirty{ true };
 		//!\~english	The submesh instances count.
 		//!\~french		Le nombre d'instances du sous-maillage.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
@@ -732,18 +866,9 @@ namespace Castor3D
 		//!\~english	The matrix buffer (instantiation).
 		//!\~french		Le tampon de matrices (instanciation).
 		VertexBufferSPtr m_matrixBuffer;
-		//!\~english	Tells if normals exist or need to be computed.
-		//!\~french		Dit si les normales existent ou doivent être calculées.
-		bool m_hasNormals;
-		//!\~english	The vertices data.
-		//!\~french		Les données des sommets.
-		std::vector< stINTERLEAVED_VERTEX > m_vertices;
-		//!\~english	The bones data.
-		//!\~french		Les données des sommets.
-		std::vector< stVERTEX_BONE_DATA > m_bones;
-		//!\~english	The faces data
-		//!\~french		Les données des faces.
-		std::vector< stFACE_INDICES > m_faces;
+		//!\~english	The faces in the submesh.
+		//!\~french		Le tableau de faces.
+		FaceArray m_faces;
 		//!\~english	The Material assigned at creation.
 		//!\~french		Le Materiau affecté à la création.
 		MaterialWPtr m_defaultMaterial;
@@ -753,24 +878,31 @@ namespace Castor3D
 		//!\~english	The spheric container.
 		//!\~french		Le conteneur sphère.
 		Castor::SphereBox m_sphere;
+		//!\~english	The vertex data array.
+		//!\~french		Le tableau de données des sommets.
+		BytePtrList m_pointsData;
+		//!\~english	The vertex pointer array.
+		//!\~french		Le tableau de sommets.
+		VertexPtrArray m_points;
+		//!\~english	The bones data array.
+		//!\~french		Le tableau de données des bones.
+		BytePtrList m_bonesData;
+		//!\~english	The bones pointer array.
+		//!\~french		Le tableau de bones.
+		VertexPtrArray m_bones;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
 		Castor::Point3r m_cameraPosition;
 		//!\~english	The parent mesh.
-		//!\~french		Le mesh parent.
-		MeshRPtr m_parentMesh;
-		//!\~english	The shader program flags.
-		//!\~french		Les indicateurs pour le shader.
-		uint32_t m_programFlags;
-		//!\~english	Tells the renderer has been initialised.
-		//!\~french		Dit que le renderer a été initialisé.
-		bool m_initialised;
-		//!\~english	Tells the VAO needs reininitialisation.
-		//!\~french		Dit que le VAO a besoin d'être réinitialisé.
-		bool m_dirty;
+		//!\~french		Le maillage parent.
+		Mesh & m_parentMesh;
 		//!\~english	The GeometryBuffers with which this submesh is compatible.
 		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+
+		friend class GeometryBuffers;
+		friend class BinaryWriter< Submesh >;
+		friend class BinaryParser< Submesh >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

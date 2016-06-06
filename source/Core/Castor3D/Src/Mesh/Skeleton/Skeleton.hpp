@@ -93,26 +93,6 @@ namespace Castor3D
 		C3D_API SkeletonAnimationSPtr CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Traverses bone hierarchy and applies given function to each bone.
-		 *\param[in]	p_function	The function to apply.
-		 *\~french
-		 *\brief		Traverse la hiérachie du skelette et applique la fonction à chaque os.
-		 *\param[in]	p_function	La fonction à appliquer.
-		 */
-		template< typename FuncT >
-		inline void TraverseHierarchy( FuncT p_function )
-		{
-			for ( auto l_bone : m_bones )
-			{
-				if ( !l_bone->GetParent() )
-				{
-					p_function( l_bone );
-					l_bone->TraverseHierarchy( p_function );
-				}
-			}
-		}
-		/**
-		 *\~english
 		 *\return		The global inverse transform.
 		 *\~french
 		 *\return		La transformation globale inversée.

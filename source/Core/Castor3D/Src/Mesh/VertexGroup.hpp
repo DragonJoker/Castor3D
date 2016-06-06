@@ -31,26 +31,26 @@ namespace Castor3D
 	\brief		Contient toutes les composantes d'un sommet.
 	*/
 	template< typename T >
-	struct stINTERLEAVED_VERTEXT
+	struct InterleavedVertexT
 	{
 		//!\~english	The vertex coordinates.
 		//!\~french		La position du sommet.
-		T m_pos[3];
+		std::array< T, 3 > m_pos;
 		//!\~english	The vertex normal.
 		//!\~french		La normale du sommet.
-		T m_nml[3];
+		std::array< T, 3 > m_nml;
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		T m_tan[3];
+		std::array< T, 3 > m_tan;
 		//!\~english	The vertex bitangent.
 		//!\~french		La bitangente du sommet.
-		T m_bin[3];
+		std::array< T, 3 > m_bin;
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
-		T m_tex[3];
+		std::array< T, 3 > m_tex;
 	};
 
-	using stINTERLEAVED_VERTEX = stINTERLEAVED_VERTEXT< real >;
+	using InterleavedVertex = InterleavedVertexT< real >;
 }
 
 #endif

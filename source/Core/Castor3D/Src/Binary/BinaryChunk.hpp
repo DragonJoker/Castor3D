@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Endianness.hpp>
+
 #include <cstring>
 
 namespace Castor3D
@@ -65,8 +67,8 @@ namespace Castor3D
 		eCHUNK_TYPE_SKELETON = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
 		eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
 		eCHUNK_TYPE_SKELETON_BONE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
+		eCHUNK_TYPE_BONE_PARENT_NAME = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),
 		eCHUNK_TYPE_BONE_OFFSET_MATRIX = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ),
-		eCHUNK_TYPE_BONE_FINAL_TRANSFORM = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'F', 'L', 'T', 'X' ),
 		eCHUNK_TYPE_SUBMESH = MAKE_CHUNK_ID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ),
 		eCHUNK_TYPE_SUBMESH_TOPOLOGY = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'T', 'O', 'P', 'O' ),
 		eCHUNK_TYPE_SUBMESH_VERTEX_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'X', 'C', 'T' ),
@@ -86,11 +88,8 @@ namespace Castor3D
 		eCHUNK_TYPE_SKELETON_ANIMATION_NODE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION_BONE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
 		eCHUNK_TYPE_MOVING_TRANSFORM = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
-		eCHUNK_TYPE_KEYFRAME = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'A', 'M', 'E' ),
-		eCHUNK_TYPE_KEYFRAME_TIME = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'T', 'I', 'M', 'E' ),
-		eCHUNK_TYPE_KEYFRAME_SCALE = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'S', 'C', 'L', 'E' ),
-		eCHUNK_TYPE_KEYFRAME_TRANSLATE = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'T', 'S', 'T', 'E' ),
-		eCHUNK_TYPE_KEYFRAME_ROTATE = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'R', 'T', 'T', 'E' ),
+		eCHUNK_TYPE_KEYFRAME_COUNT = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
+		eCHUNK_TYPE_KEYFRAMES = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
 	}	eCHUNK_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -299,12 +298,21 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
-			uint32_t l_size = p_count * uint32_t( sizeof( T ) );
-			bool l_return = m_index + l_size < m_data.size();
+			auto l_size{ p_count * uint32_t( sizeof( T ) ) };
+			bool l_return{ m_index + l_size < m_data.size() };
 
 			if ( l_return )
 			{
-				std::memcpy( p_values, &m_data[m_index], l_size );
+				auto l_begin{ reinterpret_cast< T * >( &m_data[m_index] ) };
+				auto l_end{ l_begin + p_count };
+				auto l_value{ p_values };
+
+				for ( auto l_it{ l_begin }; l_it != l_end; ++l_it )
+				{
+					BigEndianToSystemEndian( ( *l_value ) = *l_it );
+					++l_value;
+				}
+
 				m_index += l_size;
 			}
 

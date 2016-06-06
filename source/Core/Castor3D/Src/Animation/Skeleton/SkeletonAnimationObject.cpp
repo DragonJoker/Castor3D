@@ -27,9 +27,17 @@ namespace Castor3D
 			l_return = DoWriteChunk( p_obj.m_length, eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
 		}
 
-		for ( auto const & l_kf : p_obj.m_keyframes )
+		if ( !p_obj.m_keyframes.empty() )
 		{
-			l_return &= BinaryWriter< KeyFrame >{}.Write( l_kf, m_chunk );
+			if ( l_return )
+			{
+				l_return = DoWriteChunk( uint32_t( p_obj.m_keyframes.size() ), eCHUNK_TYPE_KEYFRAME_COUNT, m_chunk );
+			}
+
+			if ( l_return )
+			{
+				l_return = DoWriteChunk( p_obj.m_keyframes, eCHUNK_TYPE_KEYFRAMES, m_chunk );
+			}
 		}
 
 		for ( auto const & l_moving : p_obj.m_children )
@@ -55,11 +63,12 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		Matrix4x4r l_transform;
-		KeyFrame l_keyframe;
+		KeyFrameArray l_keyframes;
 		SkeletonAnimationNodeSPtr l_node;
 		SkeletonAnimationObjectSPtr l_object;
 		SkeletonAnimationBoneSPtr l_bone;
 		BinaryChunk l_chunk;
+		uint32_t l_count{ 0 };
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
@@ -69,9 +78,24 @@ namespace Castor3D
 				l_return = DoParseChunk( p_obj.m_nodeTransform, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_KEYFRAME:
-				l_return = BinaryParser< KeyFrame >{}.Parse( l_keyframe, l_chunk );
-				p_obj.m_keyframes.push_back( l_keyframe );
+			case eCHUNK_TYPE_KEYFRAME_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_keyframes.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_KEYFRAMES:
+				l_return = DoParseChunk( l_keyframes, l_chunk );
+
+				if ( l_return )
+				{
+					p_obj.m_keyframes.insert( p_obj.m_keyframes.end(), l_keyframes.begin(), l_keyframes.end() );
+				}
+
 				break;
 
 			case eCHUNK_TYPE_ANIM_LENGTH:

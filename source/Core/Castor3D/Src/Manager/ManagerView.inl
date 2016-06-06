@@ -69,6 +69,12 @@ namespace Castor3D
 	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
 	inline void ManagerView< ResourceType, ManagerType, EventType >::Remove( Castor::String const & p_name )
 	{
-		return m_manager.Remove( p_name );
+		auto l_it = m_createdElements.find( p_name );
+
+		if ( l_it != m_createdElements.end() )
+		{
+			m_manager.Remove( p_name );
+			m_createdElements.erase( l_it );
+		}
 	}
 }

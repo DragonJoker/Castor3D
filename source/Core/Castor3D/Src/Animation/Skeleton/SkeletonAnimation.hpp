@@ -89,7 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet animé.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API void AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
+		C3D_API SkeletonAnimationObjectSPtr AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -112,15 +112,24 @@ namespace Castor3D
 		C3D_API SkeletonAnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the moving objects count
-		 *\return		The count
+		 *\return		The moving objects.
 		 *\~french
-		 *\brief		Récupère le nombre d'objets mouvants
-		 *\return		Le nombre
+		 *\return		Les objets mouvants.
 		 */
 		inline SkeletonAnimationObjectPtrStrMap const & GetObjects()const
 		{
 			return m_toMove;
+		}
+		/**
+		 *\~english
+		 *\return		The root moving objects.
+		 *\~french
+		 *\brief		Récupère le nombre d'objets mouvants
+		 *\return		Les objets mouvants racines.
+		 */
+		inline SkeletonAnimationObjectPtrArray const & GetRootObjects()const
+		{
+			return m_arrayMoving;
 		}
 
 	private:

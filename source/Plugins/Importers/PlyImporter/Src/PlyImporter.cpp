@@ -162,7 +162,7 @@ namespace C3dPly
 					}
 				}
 
-				std::vector< stINTERLEAVED_VERTEX > l_vertices{ size_t( l_iNbVertex ) };
+				std::vector< InterleavedVertex > l_vertices{ size_t( l_iNbVertex ) };
 
 				if ( l_iNbProperties >= 8 )
 				{
@@ -204,8 +204,8 @@ namespace C3dPly
 				l_submesh->AddPoints( l_vertices );
 				// Parsing triangles
 				FaceSPtr l_pFace;
-				std::vector< stFACE_INDICES > l_faces( l_iNbFaces );
-				stFACE_INDICES * l_pFaces = &l_faces[0];
+				std::vector< FaceIndices > l_faces( l_iNbFaces );
+				FaceIndices * l_pFaces = &l_faces[0];
 
 				for ( int i = 0; i < l_iNbFaces; i++ )
 				{
@@ -215,7 +215,7 @@ namespace C3dPly
 
 					if ( l_iNbVertex >= 3 )
 					{
-						l_ssToken >> l_pFaces->m_uiVertexIndex[0] >> l_pFaces->m_uiVertexIndex[1] >> l_pFaces->m_uiVertexIndex[2];
+						l_ssToken >> l_pFaces->m_index[0] >> l_pFaces->m_index[1] >> l_pFaces->m_index[2];
 						l_pFaces++;
 					}
 

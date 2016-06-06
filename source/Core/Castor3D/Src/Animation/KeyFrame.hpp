@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_KEY_FRAME_H___
 #define ___C3D_KEY_FRAME_H___
 
-#include "Binary/BinaryParser.hpp"
-#include "Binary/BinaryWriter.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
@@ -34,7 +33,7 @@ namespace Castor3D
 	\brief		Classe qui gère une key frame
 	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
 	*/
-	class KeyFrame
+	class KeyFrame sealed
 	{
 	public:
 		/**
@@ -171,79 +170,6 @@ namespace Castor3D
 		//!\~english	The scaling at start time.
 		//!\~french		L'échelle à l'index de temps de début.
 		Castor::Point3r m_scale;
-
-		friend class BinaryWriter< KeyFrame >;
-		friend class BinaryParser< KeyFrame >;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		28/05/2016
-	\~english
-	\brief		Helper structure to find eCHUNK_TYPE from a type.
-	\remarks	Specialisation for KeyFrame.
-	\~french
-	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
-	\remarks	Spécialisation pour KeyFrame.
-	*/
-	template<>
-	struct ChunkTyper< KeyFrame >
-	{
-		static eCHUNK_TYPE const Value = eCHUNK_TYPE_KEYFRAME;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
-	\~english
-	\brief		MovingObjectBase binary loader.
-	\~english
-	\brief		Loader binaire de MovingObjectBase.
-	*/
-	template<>
-	class BinaryWriter< KeyFrame >
-		: public BinaryWriterBase< KeyFrame >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to fill the chunk from specific data.
-		 *\param[in]	p_obj	The object to write.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-		 *\param[in]	p_obj	L'objet à écrire.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool DoWrite( KeyFrame const & p_obj )override;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		26/01/2016
-	\~english
-	\brief		MovingObjectBase binary loader.
-	\~english
-	\brief		Loader binaire de MovingObjectBase.
-	*/
-	template<>
-	class BinaryParser< KeyFrame >
-		: public BinaryParserBase< KeyFrame >
-	{
-	private:
-		/**
-		 *\~english
-		 *\brief		Function used to retrieve specific data from the chunk.
-		 *\param[out]	p_obj	The object to read.
-		 *\param[in]	p_chunk	The chunk containing data.
-		 *\return		\p false if any error occured.
-		 *\~french
-		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-		 *\param[out]	p_obj	L'objet à lire.
-		 *\param[in]	p_chunk	Le chunk contenant les données.
-		 *\return		\p false si une erreur quelconque est arrivée.
-		 */
-		C3D_API bool DoParse( KeyFrame & p_obj )override;
 	};
 }
 

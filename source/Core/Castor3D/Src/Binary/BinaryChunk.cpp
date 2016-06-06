@@ -94,9 +94,11 @@ namespace Castor3D
 		ByteArray l_buffer;
 		l_buffer.reserve( sizeof( uint32_t ) + sizeof( eCHUNK_TYPE ) + l_size );
 		// Write subchunk type
-		auto l_data = reinterpret_cast< uint8_t const * >( &p_subchunk.m_type );
+		auto l_type{ SystemEndianToBigEndian( p_subchunk.m_type ) };
+		auto l_data = reinterpret_cast< uint8_t const * >( &l_type );
 		l_buffer.insert( l_buffer.end(), l_data, l_data + sizeof( eCHUNK_TYPE ) );
 		// The its size
+		SystemEndianToBigEndian( l_size );
 		l_data = reinterpret_cast< uint8_t * >( &l_size );
 		l_buffer.insert( l_buffer.end(), l_data, l_data + sizeof( uint32_t ) );
 		// And eventually its data
@@ -112,13 +114,15 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Write( m_type ) == sizeof( eCHUNK_TYPE );
+			auto l_type{ SystemEndianToBigEndian( GetChunkType() ) };
+			l_return = p_file.Write( l_type ) == sizeof( eCHUNK_TYPE );
 		}
 
 		if ( l_return )
 		{
 			Finalise();
-			l_return = p_file.Write( GetDataSize() ) == sizeof( uint32_t );
+			auto l_size{ SystemEndianToBigEndian( GetDataSize() ) };
+			l_return = p_file.Write( l_size ) == sizeof( uint32_t );
 		}
 
 		if ( l_return )
@@ -131,17 +135,19 @@ namespace Castor3D
 
 	bool BinaryChunk::Read( Castor::BinaryFile & p_file )
 	{
-		uint32_t l_uiDataSize = 0;
+		uint32_t l_size = 0;
 		bool l_return = p_file.Read( m_type ) == sizeof( eCHUNK_TYPE );
+		BigEndianToSystemEndian( m_type );
 
 		if ( l_return )
 		{
-			l_return = p_file.Read( l_uiDataSize ) == sizeof( uint32_t );
+			l_return = p_file.Read( l_size ) == sizeof( uint32_t );
+			BigEndianToSystemEndian( l_size );
 		}
 
 		if ( l_return )
 		{
-			m_data.resize( l_uiDataSize );
+			m_data.resize( l_size );
 			l_return = p_file.ReadArray( m_data.data(), m_data.size() ) == m_data.size();
 		}
 

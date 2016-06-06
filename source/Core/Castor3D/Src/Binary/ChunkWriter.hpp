@@ -25,10 +25,10 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
+	\version	0.9.0
+	\date 		30/05/2016
 	\~english
-	\brief		Chunk filler
+	\brief		Chunk writer
 	\~french
 	\brief		Remplisseur de chunk
 	*/
@@ -71,10 +71,10 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
+	\version	0.9.0
+	\date 		30/05/2016
 	\~english
-	\brief		Chunk filler
+	\brief		Chunk data writer
 	\~french
 	\brief		Remplisseur de chunk
 	*/
@@ -101,7 +101,14 @@ namespace Castor3D
 		 */
 		static inline bool Write( T const * p_begin, T const * p_end, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
-			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( p_begin ), reinterpret_cast< uint8_t const * >( p_end ), p_type, p_chunk );
+			std::vector< T > l_values{ p_begin, p_end };
+
+			for ( auto & l_value : l_values )
+			{
+				ChunkDataPreparator< T >::Prepare( l_value );
+			}
+
+			return ChunkWriterBase::Write( reinterpret_cast< uint8_t const * >( l_values.data() ), reinterpret_cast< uint8_t const * >( l_values.data() + l_values.size() ), p_type, p_chunk );
 		}
 		/**
 		 *\~english
@@ -119,19 +126,21 @@ namespace Castor3D
 		 */
 		static inline bool Write( T const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
-			auto l_begin = ChunkData< T >::GetBuffer( p_value );
-			auto l_end = l_begin + ChunkData< T >::GetDataSize( p_value );
+			auto l_value{ p_value };
+			ChunkDataPreparator< T >::Prepare( l_value );
+			auto l_begin = ChunkData< T >::GetBuffer( l_value );
+			auto l_end = l_begin + ChunkData< T >::GetDataSize( l_value );
 			return ChunkWriterBase::Write( l_begin, l_end, p_type, p_chunk );
 		}
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
+	\version	0.9.0
+	\date 		30/05/2016
 	\~english
-	\brief		ChunkFiller specialisation for Castor::String.
+	\brief		ChunkWriter specialisation for Castor::String.
 	\~french
-	\brief		Spécialisation de ChunkFiller pour Castor::String.
+	\brief		Spécialisation de ChunkWriter pour Castor::String.
 	*/
 	template<>
 	class ChunkWriter< Castor::String >
@@ -172,12 +181,12 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date 		08/04/2014
+	\version	0.9.0
+	\date 		30/05/2016
 	\~english
-	\brief		ChunkFiller specialisation for Castor::Path.
+	\brief		ChunkWriter specialisation for Castor::Path.
 	\~french
-	\brief		Spécialisation de ChunkFiller pour Castor::Path.
+	\brief		Spécialisation de ChunkWriter pour Castor::Path.
 	*/
 	template<>
 	class ChunkWriter< Castor::Path >

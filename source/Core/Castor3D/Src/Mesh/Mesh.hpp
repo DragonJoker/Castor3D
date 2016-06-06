@@ -274,15 +274,20 @@ namespace Castor3D
 	protected:
 		friend class MeshGenerator;
 		DECLARE_VECTOR( AnimationPtrStrMap, AnimationMap );
-		//!\~english Tells whether or not the mesh is modified	\~french Dit si le maillage est modifié
+		//!\~english	Tells whether or not the mesh is modified.
+		//!\~french		Dit si le maillage est modifié.
 		bool m_modified;
-		//!\~english The collision box	\~french La boîte de collision
+		//!\~english	The collision box.
+		//!\~french		La boîte de collision.
 		Castor::CubeBox m_box;
-		//!\~english The collision sphere	\~french La sphere de collision
+		//!\~english	The collision sphere.
+		//!\~french		La sphere de collision.
 		Castor::SphereBox m_sphere;
-		//!\~english The submeshes array	\~french Le tableau de sous maillages
+		//!\~english	The submeshes array.
+		//!\~french		Le tableau de sous maillages.
 		SubmeshPtrArray m_submeshes;
-		//!\~english The skeleton	\~french Le squelette
+		//!\~english	The skeleton.
+		//!\~french		Le squelette.
 		SkeletonSPtr m_skeleton;
 
 		friend class BinaryWriter< Mesh >;

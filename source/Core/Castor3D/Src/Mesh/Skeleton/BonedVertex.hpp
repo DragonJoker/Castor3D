@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\brief		Récupère les données de bones du groupe
 		 *\return		La valeur
 		 */
-		C3D_API stVERTEX_BONE_DATA GetBones()const;
+		C3D_API VertexBoneData GetBones()const;
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Définit les données de bones du groupe
 		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		C3D_API void SetBones( stVERTEX_BONE_DATA * p_data );
+		C3D_API void SetBones( VertexBoneData * p_data );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Définit les données de bones du groupe
 		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		C3D_API void SetBones( stVERTEX_BONE_DATA const & p_data );
+		C3D_API void SetBones( VertexBoneData const & p_data );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\param[in]	p_group	Le groupe
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA GetBones( BufferElementGroupSPtr p_group );
+		C3D_API static VertexBoneData GetBones( BufferElementGroupSPtr p_group );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\param[in]	p_group	Le groupe
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA const & GetBones( BufferElementGroup const & p_group );
+		C3D_API static VertexBoneData const & GetBones( BufferElementGroup const & p_group );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\param[in]	p_group	Le groupe
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA & GetBones( BufferElementGroup & p_group );
+		C3D_API static VertexBoneData & GetBones( BufferElementGroup & p_group );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Les données
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA const & GetBones( void const * p_data );
+		C3D_API static VertexBoneData const & GetBones( void const * p_data );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -159,7 +159,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Les données
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA & GetBones( void * p_data );
+		C3D_API static VertexBoneData & GetBones( void * p_data );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\param[out]	p_group	Le groupe
 		 *\param[in]	p_pData	La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroupSPtr p_group, stVERTEX_BONE_DATA * p_pData );
+		C3D_API static void SetBones( BufferElementGroupSPtr p_group, VertexBoneData * p_pData );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\param[out]	p_group	Le groupe
 		 *\param[in]	p_data	La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroupSPtr p_group, stVERTEX_BONE_DATA const & p_data );
+		C3D_API static void SetBones( BufferElementGroupSPtr p_group, VertexBoneData const & p_data );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\param[out]	p_group	Le groupe
 		 *\param[in]	p_data	La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroup & p_group, stVERTEX_BONE_DATA * p_data );
+		C3D_API static void SetBones( BufferElementGroup & p_group, VertexBoneData * p_data );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -203,7 +203,7 @@ namespace Castor3D
 		 *\param[out]	p_group	Le groupe
 		 *\param[in]	p_data	La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroup & p_group, stVERTEX_BONE_DATA const & p_data );
+		C3D_API static void SetBones( BufferElementGroup & p_group, VertexBoneData const & p_data );
 		/**
 		 *\~english
 		 *\brief		Retrieves bones informations' buffer offset

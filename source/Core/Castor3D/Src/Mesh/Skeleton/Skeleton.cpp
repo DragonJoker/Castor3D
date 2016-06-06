@@ -23,11 +23,7 @@ namespace Castor3D
 
 		for ( auto && l_bone : p_obj.m_bones )
 		{
-			// Write only root bones, since bones write their children.
-			if ( !l_bone->GetParent() )
-			{
-				l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
-			}
+			l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
 		}
 
 		for ( auto l_it : p_obj.m_animations )

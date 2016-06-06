@@ -173,38 +173,72 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_count	The values count
+		 *\param[out]	p_values	Receives the parsed values
+		 *\param[out]	p_count		The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
-		 *\param[out]	p_count	Le compte des valeurs
+		 *\param[out]	p_values	Reçoit les valeurs
+		 *\param[out]	p_count		Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoParseChunk( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T * p_values, size_t p_count, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_pValues, p_count, p_chunk );
+			return ChunkParser< T >::Parse( p_values, p_count, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_value	Receives the parsed values
+		 *\param[out]	p_values	Receives the parsed values
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_value	Reçoit les valeurs
+		 *\param[out]	p_values	Reçoit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		template< typename T, uint32_t Count >
-		inline bool DoParseChunk( T( & p_value )[Count], BinaryChunk & p_chunk )const
+		template< typename T, size_t Count >
+		inline bool DoParseChunk( T( &p_values )[Count], BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >::Parse( p_value, Count, p_chunk );
+			return ChunkParser< T >::Parse( p_values, Count, p_chunk );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a value array from a chunk
+		 *\param[out]	p_values	Receives the parsed values
+		 *\param[in]	p_chunk		The chunk containing the values
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
+		 *\param[out]	p_values	Reçoit les valeurs
+		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		template< typename T, size_t Count >
+		inline bool DoParseChunk( std::array< T, Count > & p_values, BinaryChunk & p_chunk )const
+		{
+			return ChunkParser< T >::Parse( p_values.data(), Count, p_chunk );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a value array from a chunk
+		 *\param[out]	p_values	Receives the parsed values
+		 *\param[in]	p_chunk		The chunk containing the values
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
+		 *\param[out]	p_values	Reçoit les valeurs
+		 *\param[in]	p_chunk		Le chunk contenant les valeurs
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		template< typename T >
+		inline bool DoParseChunk( std::vector< T > & p_values, BinaryChunk & p_chunk )const
+		{
+			return ChunkParser< T >::Parse( p_values.data(), p_values.size(), p_chunk );
 		}
 		/**
 		 *\~english

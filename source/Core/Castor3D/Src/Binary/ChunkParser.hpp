@@ -49,13 +49,13 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( uint8_t * p_values, uint32_t p_size, BinaryChunk & p_chunk )
+		static inline bool Parse( uint8_t * p_values, size_t p_size, BinaryChunk & p_chunk )
 		{
-			bool l_return = p_chunk.CheckAvailable( p_size );
+			bool l_return = p_chunk.CheckAvailable( uint32_t( p_size ) );
 
 			if ( l_return )
 			{
-				p_chunk.Get( p_values, p_size );
+				p_chunk.Get( p_values, uint32_t( p_size ) );
 			}
 
 			return l_return;
@@ -89,26 +89,16 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		static inline bool Parse( T * p_values, uint32_t p_count, BinaryChunk & p_chunk )
+		static inline bool Parse( T * p_values, size_t p_count, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_values	Receives the parsed values
-		 *\param[in]	p_chunk		The chunk containing the values
-		 *\return		\p false if any error occured
-		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_values	Reçoit les valeurs
-		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
-		 */
-		template< uint32_t Count >
-		static inline bool Parse( T( & p_values )[Count], BinaryChunk & p_chunk )
-		{
-			return ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values ), Count * sizeof( T ), p_chunk );
+			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk ) };
+
+			for (uint32_t i = 0; i < p_count; ++i )
+			{
+				ChunkDataPreparator< T >::Prepare( *p_values++ );
+			}
+
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -124,7 +114,9 @@ namespace Castor3D
 		 */
 		static inline bool Parse( T & p_value, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::Parse( ChunkData< T >::GetBuffer( p_value ), uint32_t( ChunkData< T >::GetDataSize( p_value ) ), p_chunk );
+			bool l_return{ ChunkParserBase::Parse( ChunkData< T >::GetBuffer( p_value ), uint32_t( ChunkData< T >::GetDataSize( p_value ) ), p_chunk ) };
+			ChunkDataPreparator< T >::Prepare( p_value );
+			return l_return;
 		}
 	};
 	/*!

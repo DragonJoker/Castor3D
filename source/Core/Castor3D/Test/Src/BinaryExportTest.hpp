@@ -36,20 +36,8 @@ namespace Testing
 
 	private:
 		void SimpleMesh();
+		void ImportExport();
 		void AnimatedMesh();
-		template< typename T >
-		inline bool compare( T const & p_a, T const & p_b )
-		{
-			return Testing::compare( p_a, p_b );
-		}
-		bool compare( Castor3D::Mesh const & p_a, Castor3D::Mesh const & p_b );
-		bool compare( Castor3D::Submesh const & p_a, Castor3D::Submesh const & p_b );
-		bool compare( Castor3D::Skeleton const & p_a, Castor3D::Skeleton const & p_b );
-		bool compare( Castor3D::Bone const & p_a, Castor3D::Bone const & p_b );
-		bool compare( Castor3D::Animation const & p_a, Castor3D::Animation const & p_b );
-		bool compare( Castor3D::SkeletonAnimation const & p_a, Castor3D::SkeletonAnimation const & p_b );
-		bool compare( Castor3D::SkeletonAnimationObject const & p_a, Castor3D::SkeletonAnimationObject const & p_b );
-		bool compare( Castor3D::KeyFrame const & p_a, Castor3D::KeyFrame const & p_b );
 	};
 }
 

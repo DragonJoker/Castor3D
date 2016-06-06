@@ -61,7 +61,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_SUBMESH:
-				l_submesh = std::make_shared< Submesh >( *p_obj.GetEngine(), &p_obj, p_obj.GetSubmeshCount() );
+				l_submesh = std::make_shared< Submesh >( *p_obj.GetEngine(), p_obj, p_obj.GetSubmeshCount() );
 				l_return = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
 
 				if ( l_return )
@@ -82,6 +82,11 @@ namespace Castor3D
 
 				break;
 			}
+		}
+
+		if ( l_return )
+		{
+			p_obj.ComputeContainers();
 		}
 
 		return l_return;
@@ -187,7 +192,7 @@ namespace Castor3D
 
 		for ( auto && l_submesh : m_submeshes )
 		{
-			l_nbFaces += l_submesh->GetVertexCount();
+			l_nbFaces += l_submesh->GetPointsCount();
 		}
 
 		return l_nbFaces;
@@ -207,7 +212,7 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetEngine(), this, GetSubmeshCount() );
+		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetEngine(), *this, GetSubmeshCount() );
 		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
@@ -264,17 +269,5 @@ namespace Castor3D
 	void Mesh::SetSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;
-
-		m_skeleton->TraverseHierarchy( []( BoneSPtr p_bone )
-		{
-			if ( p_bone->GetParent() )
-			{
-				p_bone->SetFinalTransformation( p_bone->GetParent()->GetFinalTransformation() * p_bone->GetOffsetMatrix() );
-			}
-			else
-			{
-				p_bone->SetFinalTransformation( p_bone->GetOffsetMatrix() );
-			}
-		} );
 	}
 }

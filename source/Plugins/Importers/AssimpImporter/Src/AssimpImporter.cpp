@@ -409,7 +409,7 @@ namespace C3dAssimp
 		{
 			p_submesh->SetDefaultMaterial( l_material );
 			p_submesh->Ref( l_material );
-			std::vector< stINTERLEAVED_VERTEX > l_vertices{ p_aiMesh->mNumVertices };
+			std::vector< InterleavedVertex > l_vertices{ p_aiMesh->mNumVertices };
 			uint32_t l_index{ 0u };
 
 			for ( auto & l_vertex : l_vertices )
@@ -474,7 +474,7 @@ namespace C3dAssimp
 
 			p_submesh->AddPoints( l_vertices );
 
-			std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_aiMesh->mNumVertices );
+			std::vector< VertexBoneData > l_arrayBones( p_aiMesh->mNumVertices );
 
 			if ( p_aiMesh->HasBones() && p_skeleton )
 			{
@@ -633,7 +633,7 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
+	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
 	{
 		for ( uint32_t i = 0; i < p_count; ++i )
 		{

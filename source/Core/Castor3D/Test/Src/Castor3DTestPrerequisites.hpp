@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Render/TestRenderSystem.hpp>
 
 #include "Castor3DTestUtils.hpp"
+#include "Castor3DTestCommon.hpp"
 
 namespace Testing
 {
@@ -36,20 +37,6 @@ namespace Testing
 	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_RELEASE };
 
 #endif
-
-	class C3DTestCase
-		: public TestCase
-	{
-	public:
-		inline C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
-			: TestCase{ p_name }
-			, m_engine{ p_engine }
-		{
-		}
-
-	protected:
-		Castor3D::Engine & m_engine;
-	};
 }
 
 #endif

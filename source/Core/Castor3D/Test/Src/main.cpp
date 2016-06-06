@@ -9,6 +9,7 @@
 #include <BenchManager.hpp>
 
 #include "BinaryExportTest.hpp"
+#include "SceneExportTest.hpp"
 
 using namespace Castor;
 using namespace Castor3D;

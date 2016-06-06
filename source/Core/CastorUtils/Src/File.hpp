@@ -35,27 +35,6 @@ namespace Castor
 {
 	/**
 	 *\~english
-	 *\brief Convert from little or big endian to the other.
-	 *\param[in,out]	p_value	Data to be converted.
-	 *\~french
-	 *\brief Change le boutisme du paramètre
-	 *\param[in,out]	p_value	La valeur dont on veut changer le boutisme.
-	 */
-	template< class T > inline void SwitchEndianness( T & p_value )
-	{
-		T l_tTmp;
-		uint8_t * l_pToConvert = reinterpret_cast< uint8_t * >( & p_value );
-		uint8_t * l_pConverted = reinterpret_cast< uint8_t * >( & l_tTmp );
-
-		for ( std::size_t i = 0; i < sizeof( T ); ++i )
-		{
-			l_pConverted[i] = l_pToConvert[sizeof( T ) - i - 1];
-		}
-
-		p_value = l_tTmp;
-	}
-	/**
-	 *\~english
 	 *\brief		Opens a file
 	 *\param[out]	p_pFile		Receives the file descriptor
 	 *\param[in]	p_pszPath	The file path

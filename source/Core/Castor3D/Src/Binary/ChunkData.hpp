@@ -27,6 +27,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Size.hpp>
 #include <SquareMatrix.hpp>
 
+#include "Mesh/VertexGroup.hpp"
+#include "Mesh/FaceIndices.hpp"
+#include "Mesh/Skeleton/VertexBoneData.hpp"
+#include "Animation/KeyFrame.hpp"
+
 namespace Castor3D
 {
 	/*!
@@ -662,6 +667,295 @@ namespace Castor3D
 		static inline size_t GetDataSize( data_type const & p_value )
 		{
 			return 4 * sizeof( T );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	*/
+	template< typename T >
+	struct ChunkDataPreparator
+	{
+		static inline void Prepare( T & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				Castor::SwitchEndianness( p_value );
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template< typename T, size_t Count >
+	struct ChunkDataPreparator< Castor::SquareMatrix< T, Count > >
+	{
+		static inline void Prepare( Castor::SquareMatrix< T, Count > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto i{ 0u }; i < Count * Count; ++i )
+				{
+					Castor::SwitchEndianness( p_value.ptr() );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template< typename T, size_t Count >
+	struct ChunkDataPreparator< Castor::Point< T, Count > >
+	{
+		static inline void Prepare( Castor::Point< T, Count > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template< typename T, size_t Count >
+	struct ChunkDataPreparator< Castor::Coords< T, Count > >
+	{
+		static inline void Prepare( Castor::Coords< T, Count > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template< typename T >
+	struct ChunkDataPreparator< Castor::QuaternionT< T > >
+	{
+		static inline void Prepare( Castor::QuaternionT< T > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template<>
+	struct ChunkDataPreparator< Castor::ColourComponent >
+	{
+		static inline void Prepare( Castor::ColourComponent & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				Castor::SwitchEndianness( p_value.value() );
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template<>
+	struct ChunkDataPreparator< Castor::Colour >
+	{
+		static inline void Prepare( Castor::Colour & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for InterleavedVertex.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour InterleavedVertex.
+	*/
+	template< typename T >
+	struct ChunkDataPreparator< InterleavedVertexT< T > >
+	{
+		static inline void Prepare( InterleavedVertexT< T > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				Castor::SwitchEndianness( p_value.m_pos[0] );
+				Castor::SwitchEndianness( p_value.m_pos[1] );
+				Castor::SwitchEndianness( p_value.m_pos[2] );
+				Castor::SwitchEndianness( p_value.m_nml[0] );
+				Castor::SwitchEndianness( p_value.m_nml[1] );
+				Castor::SwitchEndianness( p_value.m_nml[2] );
+				Castor::SwitchEndianness( p_value.m_tan[0] );
+				Castor::SwitchEndianness( p_value.m_tan[1] );
+				Castor::SwitchEndianness( p_value.m_tan[2] );
+				Castor::SwitchEndianness( p_value.m_bin[0] );
+				Castor::SwitchEndianness( p_value.m_bin[1] );
+				Castor::SwitchEndianness( p_value.m_bin[2] );
+				Castor::SwitchEndianness( p_value.m_tex[0] );
+				Castor::SwitchEndianness( p_value.m_tex[1] );
+				Castor::SwitchEndianness( p_value.m_tex[2] );
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template<>
+	struct ChunkDataPreparator< FaceIndices >
+	{
+		static inline void Prepare( FaceIndices & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				Castor::SwitchEndianness( p_value.m_index[0] );
+				Castor::SwitchEndianness( p_value.m_index[1] );
+				Castor::SwitchEndianness( p_value.m_index[2] );
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template<>
+	struct ChunkDataPreparator< VertexBoneData >
+	{
+		static inline void Prepare( VertexBoneData & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				Castor::SwitchEndianness( p_value.m_ids[0] );
+				Castor::SwitchEndianness( p_value.m_ids[1] );
+				Castor::SwitchEndianness( p_value.m_ids[2] );
+				Castor::SwitchEndianness( p_value.m_ids[3] );
+				Castor::SwitchEndianness( p_value.m_ids[4] );
+				Castor::SwitchEndianness( p_value.m_ids[5] );
+				Castor::SwitchEndianness( p_value.m_ids[6] );
+				Castor::SwitchEndianness( p_value.m_ids[7] );
+				Castor::SwitchEndianness( p_value.m_weights[0] );
+				Castor::SwitchEndianness( p_value.m_weights[1] );
+				Castor::SwitchEndianness( p_value.m_weights[2] );
+				Castor::SwitchEndianness( p_value.m_weights[3] );
+				Castor::SwitchEndianness( p_value.m_weights[4] );
+				Castor::SwitchEndianness( p_value.m_weights[5] );
+				Castor::SwitchEndianness( p_value.m_weights[6] );
+				Castor::SwitchEndianness( p_value.m_weights[7] );
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\remarks	Specialisation for FaceIndices.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	\remarks	Spécialisation pour FaceIndices.
+	*/
+	template<>
+	struct ChunkDataPreparator< KeyFrame >
+	{
+		static inline void Prepare( KeyFrame & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				p_value.SetTimeIndex( Castor::SwitchEndianness( p_value.GetTimeIndex() ) );
+				p_value.SetRotate( Castor::SwitchEndianness( p_value.GetRotate() ) );
+				p_value.SetScale( Castor::SwitchEndianness( p_value.GetScale() ) );
+				p_value.SetTranslate( Castor::SwitchEndianness( p_value.GetTranslate() ) );
+			}
 		}
 	};
 }
