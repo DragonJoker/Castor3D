@@ -105,12 +105,8 @@ namespace Castor3D
 	};
 
 	ShaderObject::ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type )
-		: m_status( eSHADER_STATUS_NOTCOMPILED )
-		, m_type( p_type )
+		: m_type( p_type )
 		, m_parent( p_parent )
-		, m_eInputType( eTOPOLOGY_TRIANGLES )
-		, m_eOutputType( eTOPOLOGY_TRIANGLES )
-		, m_eShaderModel( eSHADER_MODEL_1 )
 	{
 	}
 

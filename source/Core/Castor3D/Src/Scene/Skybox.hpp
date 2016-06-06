@@ -53,7 +53,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Skybox into a text file
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API Skybox( Engine & p_engine );
+		C3D_API explicit Skybox( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

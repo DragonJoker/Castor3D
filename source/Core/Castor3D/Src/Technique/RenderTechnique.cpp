@@ -692,8 +692,6 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, StaticGeometryRenderNodeByDistanceMMap & p_nodes )
 	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
 		for ( auto l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
@@ -705,8 +703,6 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, AnimatedGeometryRenderNodeByDistanceMMap & p_nodes )
 	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
 		for ( auto l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
@@ -718,8 +714,6 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes )
 	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
 		for ( auto l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );

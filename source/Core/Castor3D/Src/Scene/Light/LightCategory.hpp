@@ -64,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a LightCategory into a text file.
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\brief		Le constructeur utilisé par la fonction de clonage
 		 *\param[in]	p_lightType	Le type de catégorie de lumière
 		 */
-		C3D_API LightCategory( eLIGHT_TYPE p_lightType );
+		C3D_API explicit LightCategory( eLIGHT_TYPE p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -348,7 +348,7 @@ namespace Castor3D
 		//!\~english The light type	\~french Le type de lumière
 		eLIGHT_TYPE m_eLightType;
 		//!\~english The parent light	\~french La lumière parente
-		Light * m_pLight;
+		Light * m_pLight{ nullptr };
 		//!\~english The colour.	\~french La couleur.
 		Castor::Point3f m_colour;
 		//!\~english The intensity values.	\~french Les valeurs d'intensité.

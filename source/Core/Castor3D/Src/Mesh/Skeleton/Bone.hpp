@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_skeleton	Le squelette parent
 		 */
-		C3D_API Bone( Skeleton & p_skeleton );
+		C3D_API explicit Bone( Skeleton & p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Destructor

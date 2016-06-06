@@ -37,6 +37,12 @@ namespace Testing
 	//*********************************************************************************************
 
 	template<>
+	inline std::string to_string< Castor::Angle >( Castor::Angle const & p_value )
+	{
+		return Castor::string::to_string( p_value.degrees() );
+	}
+
+	template<>
 	inline std::string to_string< Castor3D::Scene >( Castor3D::Scene const & p_value )
 	{
 		return Castor::string::string_cast< char >( p_value.GetName() );

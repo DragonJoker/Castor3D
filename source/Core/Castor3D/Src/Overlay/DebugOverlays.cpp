@@ -32,11 +32,6 @@ namespace Castor3D
 
 	DebugOverlays::DebugOverlays( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_valid( false )
-		, m_visible( false )
-		, m_frameIndex( 0 )
-		, m_gpuTime( 0 )
-		, m_cpuTime( 0 )
 	{
 	}
 

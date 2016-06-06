@@ -113,11 +113,9 @@ namespace Castor3D
 		std::vector< FaceIndices > l_faces;
 		std::vector< VertexBoneData > l_bones;
 		std::vector< InterleavedVertexT< double > > l_srcbuf;
-		std::vector< uint8_t > l_matrices;
 		uint32_t l_count{ 0u };
 		uint32_t l_faceCount{ 0u };
 		uint32_t l_boneCount{ 0u };
-		uint32_t l_mtxCount{ 0u };
 		BinaryChunk l_chunk;
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
@@ -1041,7 +1039,7 @@ namespace Castor3D
 	{
 		if ( m_vertexBuffer )
 		{
-			uint8_t * l_buffer = nullptr;
+			uint8_t * l_buffer{ nullptr };
 			VertexBuffer & l_vertexBuffer = *m_vertexBuffer;
 			uint32_t l_stride = m_layout.GetStride();
 			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
@@ -1081,7 +1079,6 @@ namespace Castor3D
 		if ( m_indexBuffer )
 		{
 			FaceSPtr l_pFace;
-			uint32_t l_index = 0;
 			IndexBuffer & l_indexBuffer = *m_indexBuffer;
 			uint32_t l_uiSize = uint32_t( m_faces.size() * 3 );
 
@@ -1091,6 +1088,8 @@ namespace Castor3D
 				{
 					l_indexBuffer.Resize( l_uiSize );
 				}
+
+				uint32_t l_index = 0;
 
 				for ( auto const & l_face : m_faces )
 				{
@@ -1108,7 +1107,6 @@ namespace Castor3D
 	{
 		if ( m_bonesBuffer )
 		{
-			uint8_t * l_buffer = nullptr;
 			VertexBuffer & l_bonesBuffer = *m_bonesBuffer;
 			uint32_t l_stride = BonedVertex::Stride;
 			uint32_t l_size = uint32_t( m_bones.size() ) * l_stride;
@@ -1121,7 +1119,7 @@ namespace Castor3D
 					l_bonesBuffer.Resize( l_size );
 				}
 
-				l_buffer = l_bonesBuffer.data();
+				auto l_buffer{ l_bonesBuffer.data() };
 
 				for ( auto l_it : m_bonesData )
 				{

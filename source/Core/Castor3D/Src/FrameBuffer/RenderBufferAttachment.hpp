@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 */
-		C3D_API RenderBufferAttachment( RenderBufferSPtr p_renderBuffer );
+		C3D_API explicit RenderBufferAttachment( RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor

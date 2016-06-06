@@ -108,7 +108,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API Viewport( Engine & p_engine );
+		C3D_API explicit Viewport( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

@@ -19,8 +19,6 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
-		// Récupération / Création de la police
-		FontManager & l_fontManager = GetEngine()->GetFontManager();
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( p_font->GetName() );
 		l_pSampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_pSampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );

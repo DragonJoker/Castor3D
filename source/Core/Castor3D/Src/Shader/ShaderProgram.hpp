@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderProgram into a text file
@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	L'instance du RenderSystem
 		 *\param[in]	p_langage		Le langage du programme
 		 */
-		C3D_API ShaderProgram( RenderSystem & p_renderSystem );
+		C3D_API explicit ShaderProgram( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -133,7 +133,7 @@ namespace Castor3D
 		 *\param[in]	p_overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool AddChild( OverlaySPtr p_overlay );
+		C3D_API void AddChild( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level
@@ -144,7 +144,7 @@ namespace Castor3D
 		 *\param[in]	p_level	Le niveau voulu
 		 *\return		Le compte
 		 */
-		C3D_API int GetChildsCount( int p_level )const;
+		C3D_API uint32_t GetChildrenCount( int p_level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel overlay.
@@ -453,7 +453,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'enfants
 		 *\return		La valeur
 		 */
-		inline uint32_t GetChildsCount()const
+		inline uint32_t GetChildrenCount()const
 		{
 			return uint32_t( m_overlays.size() );
 		}
@@ -635,7 +635,7 @@ namespace Castor3D
 		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
 		OverlayWPtr m_parent;
-		//!\~english The childs	\~french Les enfants
+		//!\~english The children	\~french Les enfants
 		OverlayPtrArray m_overlays;
 		//!\~english The overlay category	\~french La catégorie de l'incrustation
 		OverlayCategorySPtr m_category;

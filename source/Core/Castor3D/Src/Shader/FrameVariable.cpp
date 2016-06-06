@@ -142,52 +142,6 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariable::FrameVariable( FrameVariable const & p_object )
-		: m_name( p_object.m_name )
-		, m_occurences( p_object.m_occurences )
-		, m_strValue( p_object.m_strValue )
-		, m_program( p_object.m_program )
-	{
-	}
-
-	FrameVariable::FrameVariable( FrameVariable && p_object )
-		: m_name( std::move( p_object.m_name ) )
-		, m_occurences( std::move( p_object.m_occurences ) )
-		, m_strValue( std::move( p_object.m_strValue ) )
-		, m_program( std::move( p_object.m_program ) )
-	{
-		p_object.m_name.clear();
-		p_object.m_occurences = 0;
-		p_object.m_strValue.clear();
-		p_object.m_program = nullptr;
-	}
-
-	FrameVariable & FrameVariable::operator =( FrameVariable const & p_object )
-	{
-		m_name = p_object.m_name;
-		m_occurences = p_object.m_occurences;
-		m_strValue = p_object.m_strValue;
-		m_program = p_object.m_program;
-		return *this;
-	}
-
-	FrameVariable & FrameVariable::operator =( FrameVariable && p_object )
-	{
-		if ( this != &p_object )
-		{
-			m_name = std::move( p_object.m_name );
-			m_occurences = std::move( p_object.m_occurences );
-			m_strValue = std::move( p_object.m_strValue );
-			m_program = std::move( p_object.m_program );
-			p_object.m_name.clear();
-			p_object.m_occurences = 0;
-			p_object.m_strValue.clear();
-			p_object.m_program = nullptr;
-		}
-
-		return *this;
-	}
-
 	FrameVariable::~FrameVariable()
 	{
 	}

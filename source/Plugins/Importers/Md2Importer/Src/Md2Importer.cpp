@@ -190,7 +190,7 @@ void Md2Importer::DoConvertDataStructures( MeshSPtr p_pMesh )
 {
 	SubmeshSPtr l_pSubmesh = p_pMesh->CreateSubmesh();
 	std::vector< float > l_arrayNml( m_header.m_numTriangles * 9 );
-	std::vector< stFACE_INDICES > l_arrayFaces( m_header.m_numTriangles );
+	std::vector< FaceIndices > l_arrayFaces( m_header.m_numTriangles );
 	BufferElementGroupSPtr l_pVertex;
 
 	if ( m_header.m_numFrames > 0 )

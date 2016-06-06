@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_animation	L'animation parente.
 		 */
-		C3D_API SkeletonAnimationBone( SkeletonAnimation & p_animation );
+		C3D_API explicit SkeletonAnimationBone( SkeletonAnimation & p_animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.

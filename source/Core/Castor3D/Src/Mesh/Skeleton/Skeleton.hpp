@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Skeleton( Engine & p_engine );
+		C3D_API explicit Skeleton( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

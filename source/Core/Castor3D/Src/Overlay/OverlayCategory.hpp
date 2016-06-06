@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file.
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API OverlayCategory( eOVERLAY_TYPE p_type );
+		C3D_API explicit OverlayCategory( eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -571,7 +571,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The overlay	\~french L'incrustation
-		Overlay * m_pOverlay;
+		Overlay * m_pOverlay{ nullptr };
 		//!\~english The relative position (to parent or screen)	\~french La position relative (au parent ou à l'écran)
 		Castor::Point2d m_position;
 		//!\~english The relative size (to parent or screen)	\~french La taille relative (à l'écran ou au parent)
@@ -581,23 +581,23 @@ namespace Castor3D
 		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
 		Castor::Size m_size;
 		//!\~english The visibility	\~french La visibilité
-		bool m_visible;
+		bool m_visible{ true };
 		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
 		MaterialWPtr m_pMaterial;
 		//!\~english The overlay index	\~french L'index de l'overlay
-		int m_index;
+		int m_index{ 0 };
 		//!\~english The overlay level	\~french Le niveau de l'overlay
-		int m_level;
+		int m_level{ 0 };
 		//!\~english The material name	\~french Le nom du matériau
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
 		eOVERLAY_TYPE m_type;
 		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
-		bool m_sizeChanged;
+		bool m_sizeChanged{ true };
 		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.
-		bool m_positionChanged;
+		bool m_positionChanged{ true };
 		//!\~english The UV for the panel	\~french Les UV du panneau
-		Castor::Point4d m_uv;
+		Castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 	};
 }
 

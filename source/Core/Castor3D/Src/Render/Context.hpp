@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
-		C3D_API Context( RenderSystem & p_renderSystem );
+		C3D_API explicit Context( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor

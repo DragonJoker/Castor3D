@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API CmshImporter( Engine & p_engine );
+		C3D_API explicit CmshImporter( Engine & p_engine );
 
 	protected:
 		/**

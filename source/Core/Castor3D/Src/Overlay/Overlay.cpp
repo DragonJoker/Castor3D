@@ -66,9 +66,8 @@ namespace Castor3D
 		}
 	}
 
-	bool Overlay::AddChild( OverlaySPtr p_overlay )
+	void Overlay::AddChild( OverlaySPtr p_overlay )
 	{
-		bool l_return = false;
 		int l_index = 1;
 
 		if ( !m_overlays.empty() )
@@ -78,12 +77,11 @@ namespace Castor3D
 
 		p_overlay->SetOrder( l_index, GetLevel() + 1 );
 		m_overlays.push_back( p_overlay );
-		return true;
 	}
 
-	int Overlay::GetChildsCount( int p_level )const
+	uint32_t Overlay::GetChildrenCount( int p_level )const
 	{
-		int l_return = 0;
+		uint32_t l_return{ 0 };
 
 		if ( p_level == GetLevel() + 1 )
 		{
@@ -93,7 +91,7 @@ namespace Castor3D
 		{
 			for ( auto && l_overlay : m_overlays )
 			{
-				l_return += l_overlay->GetChildsCount( p_level );
+				l_return += l_overlay->GetChildrenCount( p_level );
 			}
 		}
 

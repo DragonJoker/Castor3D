@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API TextureAttachment( TextureLayoutSPtr p_texture );
+		C3D_API explicit TextureAttachment( TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor

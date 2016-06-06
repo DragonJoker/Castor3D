@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_group		Le groupe encadré
 		 */
-		C3D_API BonedVertex( BufferElementGroup & p_group );
+		C3D_API explicit BonedVertex( BufferElementGroup & p_group );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

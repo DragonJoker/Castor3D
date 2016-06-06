@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Benchmark.hpp>
 
 #include <Render/TestRenderSystem.hpp>
+#include <Miscellaneous/WindowHandle.hpp>
 
 #include "Castor3DTestUtils.hpp"
 #include "Castor3DTestCommon.hpp"
@@ -37,6 +38,24 @@ namespace Testing
 	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_RELEASE };
 
 #endif
+
+	class TestWindowHandle
+		: public Castor3D::IWindowHandle
+	{
+	public:
+		TestWindowHandle()
+		{
+		}
+
+		virtual ~TestWindowHandle()
+		{
+		}
+
+		virtual operator bool()
+		{
+			return true;
+		}
+	};
 }
 
 #endif

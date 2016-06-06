@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_context	Le contexte parent.
 		 */
-		C3D_API Pipeline( Context & p_context );
+		C3D_API explicit Pipeline( Context & p_context );
 		/**
 		 *\~english
 		 *\brief		Denstructor.

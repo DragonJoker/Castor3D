@@ -77,7 +77,6 @@ namespace Testing
 	uint32_t BenchManager::ExecuteTests()
 	{
 		uint32_t l_errCount = 0;
-		uint32_t l_testCount = 0;
 		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
 		StringStream l_testSep;
 		l_testSep.width( BENCH_TITLE_WIDTH );
@@ -88,6 +87,7 @@ namespace Testing
 		{
 			Logger::LogInfo( cuT( "\nTests - Begin\n" ) );
 			Logger::LogInfo( l_testSep );
+			uint32_t l_testCount = 0;
 
 			for ( auto && l_testCase : m_arrayTests )
 			{

@@ -45,7 +45,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de l'objet
 		 */
-		C3D_API AnimatedObject( Castor::String const & p_name );
+		C3D_API explicit AnimatedObject( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor

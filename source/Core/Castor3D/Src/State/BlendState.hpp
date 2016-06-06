@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API BlendState( Engine & p_engine );
+		C3D_API explicit BlendState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -511,15 +511,15 @@ namespace Castor3D
 
 	protected:
 		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
-		bool m_changed;
+		bool m_changed{ true };
 		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
-		bool m_bEnableAlphaToCoverage;
+		bool m_bEnableAlphaToCoverage{ false };
 		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés
-		bool m_bIndependantBlend;
+		bool m_bIndependantBlend{ false };
 		//!\~english Le blend colour	\~french La couleur de mélange
 		Castor::Colour m_blendFactors;
 		//!\~english The sample mask	\~french Le masque d'échantillonage
-		uint32_t m_uiSampleMask;
+		uint32_t m_uiSampleMask{ 0xFFFFFFFF };
 		//!\~english the blend states	\~french Les états de mélange
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs

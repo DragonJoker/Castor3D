@@ -67,7 +67,7 @@ namespace Testing
 
 		if ( l_return )
 		{
-			std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) );
+			l_return = std::memcmp( p_a.first, p_b.first, p_a.second * sizeof( T ) ) == 0;
 		}
 
 		return l_return;
@@ -107,7 +107,7 @@ namespace Testing
 		using TestFunction = std::function< void() >;
 
 	public:
-		TestCase( std::string const & p_name );
+		explicit TestCase( std::string const & p_name );
 		virtual ~TestCase();
 		void RegisterTests();
 		void Execute( uint32_t & p_errCount, uint32_t & p_testCount );

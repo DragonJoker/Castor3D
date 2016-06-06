@@ -144,7 +144,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( LightCategory const & p_a, LightCategory const & p_b )
 	{
-		CT_REQUIRE( p_a.GetLightType(), p_b.GetLightType() );
+		CT_REQUIRE( p_a.GetLightType() == p_b.GetLightType() );
 		bool l_return{ CT_EQUAL( p_a.GetIntensity(), p_b.GetIntensity() ) };
 		l_return &= CT_EQUAL( p_a.GetColour(), p_b.GetColour() );
 

@@ -248,7 +248,7 @@ void Md3Importer::DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshH
 	////	l_texVerts.push_back( Point2r( m_texCoords[i].m_textureCoord[0], 1-m_texCoords[i].m_textureCoord[1] ) );
 	////}
 
-	////std::vector< stFACE_INDICES > l_arrayFaces( p_meshHeader.m_numTriangles );
+	////std::vector< FaceIndices > l_arrayFaces( p_meshHeader.m_numTriangles );
 	////std::vector< float > l_arrayTex;
 
 	////for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)

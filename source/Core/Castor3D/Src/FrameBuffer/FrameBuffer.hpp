@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API FrameBuffer( Engine & p_engine );
+		C3D_API explicit FrameBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

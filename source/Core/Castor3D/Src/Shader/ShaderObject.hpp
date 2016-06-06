@@ -55,7 +55,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderObject into a text file
@@ -465,10 +465,20 @@ namespace Castor3D
 		virtual Castor::String DoRetrieveCompilerLog() = 0;
 
 	protected:
-		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgram * m_parent;
 		//!<\~english The shader type	\~french Le type de shader
 		eSHADER_TYPE m_type;
+		//!\~english The parent shader program	\~french Le programme parent
+		ShaderProgram * m_parent{ nullptr };
+		//!<\~english The shader compile status	\~french Le statut de compilation du shader
+		eSHADER_STATUS m_status{ eSHADER_STATUS_NOTCOMPILED };
+		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
+		eTOPOLOGY m_eInputType{ eTOPOLOGY_TRIANGLES };
+		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
+		eTOPOLOGY m_eOutputType{ eTOPOLOGY_TRIANGLES };
+		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
+		uint8_t m_uiOutputVtxCount{ 3 };
+		//!\~english The current shader model	\~french Le modèle de shader actuel
+		eSHADER_MODEL m_eShaderModel{ eSHADER_MODEL_1 };
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
@@ -477,20 +487,10 @@ namespace Castor3D
 		Castor::String m_loadedSource;
 		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader
 		Castor::Path m_pathLoadedFile;
-		//!<\~english The shader compile status	\~french Le statut de compilation du shader
-		eSHADER_STATUS m_status;
 		//!\~english The frame variables map, ordered by name	\~french La liste des variables de frame
 		FrameVariablePtrStrMap m_mapFrameVariables;
 		//!\~english The frame variables map	\~french La liste des variables de frame
 		FrameVariablePtrList m_listFrameVariables;
-		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
-		eTOPOLOGY m_eInputType;
-		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
-		eTOPOLOGY m_eOutputType;
-		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
-		uint8_t m_uiOutputVtxCount;
-		//!\~english The current shader model	\~french Le modèle de shader actuel
-		eSHADER_MODEL m_eShaderModel;
 	};
 }
 

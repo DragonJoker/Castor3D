@@ -113,7 +113,7 @@ namespace Castor3D
 		struct stFRAME_BUFFER
 		{
 		public:
-			stFRAME_BUFFER( RenderTechnique & p_technique );
+			explicit stFRAME_BUFFER( RenderTechnique & p_technique );
 			bool Initialise( Castor::Size p_size );
 			void Cleanup();
 

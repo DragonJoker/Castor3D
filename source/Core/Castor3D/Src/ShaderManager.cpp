@@ -16,7 +16,6 @@ namespace Castor3D
 {
 	ShaderManager::ShaderManager( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_nbVerticesOut( 0 )
 	{
 	}
 

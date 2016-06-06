@@ -28,7 +28,7 @@ namespace Testing
 		: public C3DTestCase
 	{
 	public:
-		BinaryExportTest( Castor3D::Engine & p_engine );
+		explicit BinaryExportTest( Castor3D::Engine & p_engine );
 		virtual ~BinaryExportTest();
 
 	private:

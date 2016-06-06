@@ -136,7 +136,7 @@ namespace Obj
 		NormalArray l_arrayAllNml;
 		VertexArray l_arrayAllVtx;
 		FaceArrayGrpMap::iterator l_itGroup;
-		stFACE_INDICES l_face;
+		FaceIndices l_face;
 		stVERTEX l_vertex;
 		stUV l_uv;
 		stNORMAL l_normal;
@@ -274,7 +274,7 @@ namespace Obj
 								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[1], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								stFACE_INDICES l_indices = { l_uiV1, l_uiV2, l_uiV3 };
+								FaceIndices l_indices = { l_uiV1, l_uiV2, l_uiV3 };
 								l_pGroup->m_arrayFaces.push_back( l_indices );
 								l_pArrayIndex->push_back( l_face );
 							}
@@ -284,13 +284,13 @@ namespace Obj
 								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[1], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								stFACE_INDICES l_indices1 = { l_uiV1, l_uiV2, l_uiV3 };
+								FaceIndices l_indices1 = { l_uiV1, l_uiV2, l_uiV3 };
 								l_pGroup->m_arrayFaces.push_back( l_indices1 );
 								l_pArrayIndex->push_back( l_face );
 								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[3], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
 								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								stFACE_INDICES l_indices2 = { l_uiV1, l_uiV2, l_uiV3 };
+								FaceIndices l_indices2 = { l_uiV1, l_uiV2, l_uiV3 };
 								l_pGroup->m_arrayFaces.push_back( l_indices2 );
 								l_pArrayIndex->push_back( l_face );
 							}
@@ -332,7 +332,7 @@ namespace Obj
 		return l_uiReturn;
 	}
 
-	uint32_t ObjImporter::DoTreatFace( stFACE_INDICES & p_face, uint32_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
+	uint32_t ObjImporter::DoTreatFace( FaceIndices & p_face, uint32_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
 	{
 		//	VertexSPtr l_return;
 		String l_strFace( p_strFace );
@@ -356,7 +356,7 @@ namespace Obj
 				l_it = p_pGroup->m_mapVtxIndex.find( l_uiIndex );
 			}
 
-			p_face.m_uiVertexIndex[p_uiIndex] = l_it->second;
+			p_face.m_index[p_uiIndex] = l_it->second;
 			p_pGroup->m_arraySubVtx.push_back( p_arrayVtx[l_uiIndex] );
 			//l_return = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
 
@@ -458,11 +458,11 @@ namespace Obj
 							l_ptOffset = m_mapOffsets[p_context.m_pMaterial->GetPass( 0 )];
 							l_ptScale = m_mapScales[p_context.m_pMaterial->GetPass( 0 )];
 							l_ptTurb = m_mapTurbulences[p_context.m_pMaterial->GetPass( 0 )];
-							std::vector< Castor3D::stINTERLEAVED_VERTEX > l_submesh{ p_context.m_arrayVtx.size() };
+							std::vector< Castor3D::InterleavedVertex > l_submesh{ p_context.m_arrayVtx.size() };
 
 							for ( auto & l_vertex : l_submesh )
 							{
-								std::memcpy( l_vertex.m_pos, p_context.m_arrayVtx[0].m_val, sizeof( l_vertex.m_pos ) );
+								std::memcpy( l_vertex.m_pos.data(), p_context.m_arrayVtx[0].m_val, sizeof( l_vertex.m_pos ) );
 
 								if ( p_context.m_arrayUvw.size() == p_context.m_arrayVtx.size() )
 								{
@@ -474,12 +474,12 @@ namespace Obj
 										l_it->m_val[2] = ( l_it->m_val[2] + l_ptOffset[2] ) * l_ptScale[2];
 									}
 
-									std::memcpy( l_vertex.m_tex, p_context.m_arrayUvw[0].m_val, sizeof( l_vertex.m_tex ) );
+									std::memcpy( l_vertex.m_tex.data(), p_context.m_arrayUvw[0].m_val, sizeof( l_vertex.m_tex ) );
 								}
 
 								if ( p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
 								{
-									std::memcpy( l_vertex.m_nml, p_context.m_arrayNml[0].m_val, sizeof( l_vertex.m_nml ) );
+									std::memcpy( l_vertex.m_nml.data(), p_context.m_arrayNml[0].m_val, sizeof( l_vertex.m_nml ) );
 								}
 							}
 

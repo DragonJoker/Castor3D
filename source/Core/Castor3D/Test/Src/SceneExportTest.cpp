@@ -4,6 +4,7 @@
 #include <MeshManager.hpp>
 #include <PluginManager.hpp>
 #include <SceneManager.hpp>
+#include <WindowManager.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>
@@ -20,6 +21,7 @@
 #include <Miscellaneous/Parameter.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
 #include <Scene/SceneFileParser.hpp>
 
 using namespace Castor;
@@ -32,7 +34,16 @@ namespace Testing
 		bool ExportScene( Scene const & p_scene, Path const & p_fileName )
 		{
 			bool l_result = true;
-			Path l_folder = p_fileName.GetPath() / p_fileName.GetFileName();
+			Path l_folder = p_fileName.GetPath();
+
+			if ( l_folder.empty() )
+			{
+				l_folder = Path{ p_fileName.GetFileName() };
+			}
+			else
+			{
+				l_folder /= p_fileName.GetFileName();
+			}
 
 			if ( !File::DirectoryExists( l_folder ) )
 			{
@@ -92,7 +103,12 @@ namespace Testing
 		CT_REQUIRE( l_srcParser.ParseFile( TEST_DATA_FOLDER / p_name ) );
 		CT_REQUIRE( l_srcParser.ScenesBegin() != l_srcParser.ScenesEnd() );
 		auto l_src{ l_srcParser.ScenesBegin()->second };
+		CT_REQUIRE( l_src->GetRenderWindowView().begin() != l_src->GetRenderWindowView().end() );
+		auto l_window{ m_engine.GetWindowManager().Find( *l_src->GetRenderWindowView().begin() ) };
+		l_window->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
 		l_src->Initialise();
+
+		m_engine.GetRenderLoop().RenderSyncFrame();
 
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
@@ -102,6 +118,8 @@ namespace Testing
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		auto l_dst{ l_dstParser.ScenesBegin()->second };
 		l_dst->Initialise();
+
+		m_engine.GetRenderLoop().RenderSyncFrame();
 
 		CT_EQUAL( *l_src, *l_dst );
 		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );

@@ -17,10 +17,7 @@ Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, i
 	, m_iTop( iTop )
 	, m_iHeight( iTotalHeight )
 	, m_pxColour( p_pxColour )
-	, m_bEnded( true )
-	, m_bLaunched( false )
-	, m_bStopped( false )
-	, m_pThread( )
+	, m_pThread()
 {
 }
 
@@ -72,9 +69,6 @@ int Generator::Thread::Entry()
 Generator::Generator( Engine * p_engine, int p_width, int p_height )
 	: m_iWidth( p_width )
 	, m_iHeight( p_height )
-	, m_ullStep( 0 )
-	, m_initialised( false )
-	, m_bEnded( true )
 	, m_frontBuffer( Size( p_width, p_height ) )
 	, m_backBuffer( Size( p_width, p_height ) )
 	, m_engine( p_engine )

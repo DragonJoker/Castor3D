@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type du chunk
 		 */
-		C3D_API BinaryChunk( eCHUNK_TYPE p_type );
+		C3D_API explicit BinaryChunk( eCHUNK_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call

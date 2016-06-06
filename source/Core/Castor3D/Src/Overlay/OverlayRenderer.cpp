@@ -57,8 +57,6 @@ namespace Castor3D
 
 	OverlayRenderer::OverlayRenderer( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_previousPanelZIndex( 0 )
-		, m_previousBorderZIndex( 0 )
 		, m_declaration{ 
 		{
 			{

@@ -11,9 +11,6 @@ namespace Castor3D
 
 	BlendState::BlendState( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_changed( true )
-		, m_bEnableAlphaToCoverage( false )
-		, m_bIndependantBlend( false )
 	{
 		m_eColourMask[0] = eWRITING_MASK_ALL;
 		m_eColourMask[1] = eWRITING_MASK_ALL;

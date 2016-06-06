@@ -44,7 +44,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_type	Le type d'attache
 		 */
-		C3D_API FrameBufferAttachment( eATTACHMENT_TYPE p_type );
+		C3D_API explicit FrameBufferAttachment( eATTACHMENT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor

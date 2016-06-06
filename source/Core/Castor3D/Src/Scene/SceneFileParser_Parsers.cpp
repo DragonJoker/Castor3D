@@ -439,9 +439,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetToneMapping )
 	}
 	else if ( !p_params.empty() )
 	{
-		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-		PostFxPluginSPtr l_plugin;
-		PostEffectSPtr l_effect;
 		String l_name;
 		p_params[0]->Get( l_name );
 		Parameters l_parameters;

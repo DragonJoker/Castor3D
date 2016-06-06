@@ -64,12 +64,6 @@ namespace Castor3D
 
 	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_type )
 		: m_type( p_type )
-		, m_visible( true )
-		, m_sizeChanged( true )
-		, m_positionChanged( true )
-		, m_uv( 0, 0, 1, 1 )
-		, m_index( 0 )
-		, m_level( 0 )
 	{
 	}
 

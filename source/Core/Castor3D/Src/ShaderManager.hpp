@@ -42,7 +42,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API ShaderManager( Engine & p_engine );
+		C3D_API explicit ShaderManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -260,9 +260,9 @@ namespace Castor3D
 		//!\~english Billboards shader programs, sorted by texture flags.	\~french Programmes shader pour billboards, triés par flags de texture.
 		ShaderProgramWPtrUInt64Map m_mapBillboards;
 		//!\~english The maximal number of vertices the geometry shader can output	\~french Nombre maximale de vertex qu'un shader géométrique peut sortir
-		int m_nbVerticesOut;
+		int m_nbVerticesOut{ 0 };
 		//!\~english The RenderSystem used to create programs	\~french Le RenderSystem utilisé pour la création des programmes
-		RenderSystem * m_renderSystem;
+		RenderSystem * m_renderSystem{ nullptr };
 	};
 }
 

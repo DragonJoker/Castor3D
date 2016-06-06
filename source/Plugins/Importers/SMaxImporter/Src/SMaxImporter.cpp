@@ -203,7 +203,7 @@ void SMaxImporter::DoProcessNextObjectChunk( Scene & p_scene, SMaxChunk * p_pChu
 		p_pChunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
 	}
 
-	if ( l_pSubmesh->GetVertexCount() && l_pSubmesh->GetFaceCount() )
+	if ( l_pSubmesh->GetPointsCount() && l_pSubmesh->GetFaceCount() )
 	{
 		if ( !m_bIndicesFound )
 		{
@@ -454,12 +454,12 @@ void SMaxImporter::DoReadColorChunk( SMaxChunk * p_pChunk, Colour & p_colour )
 void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
 {
 	std::vector< uint32_t > l_arrayGroups;
-	std::vector< stFACE_INDICES > l_arrayFaces;
+	std::vector< FaceIndices > l_arrayFaces;
 	BufferElementGroupSPtr l_pV1;
 	BufferElementGroupSPtr l_pV2;
 	BufferElementGroupSPtr l_pV3;
 	uint16_t l_usIndices[4];
-	stFACE_INDICES l_face = { 0 };
+	FaceIndices l_face = { 0 };
 	FaceSPtr l_pFace;
 	SMaxChunk l_currentChunk;
 	String l_strMatName;
@@ -474,9 +474,9 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 		for ( uint16_t i = 0 ; i < l_usNumOfFaces && m_pFile->IsOk() && p_pChunk->m_ulBytesRead < p_pChunk->m_ulLength ; i++ )
 		{
 			p_pChunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_usIndices ) );
-			l_arrayFaces[i].m_uiVertexIndex[0] = l_usIndices[0];
-			l_arrayFaces[i].m_uiVertexIndex[1] = l_usIndices[2];
-			l_arrayFaces[i].m_uiVertexIndex[2] = l_usIndices[1];
+			l_arrayFaces[i].m_index[0] = l_usIndices[0];
+			l_arrayFaces[i].m_index[1] = l_usIndices[2];
+			l_arrayFaces[i].m_index[2] = l_usIndices[1];
 		}
 
 		m_bIndicesFound = true;
@@ -522,9 +522,9 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 				if ( l_bFace )
 				{
 					// The chunk describes a triangle
-					l_face.m_uiVertexIndex[0] = l_currentChunk.m_eChunkId;
-					l_face.m_uiVertexIndex[1] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0x0000FFFF ) >>  0 );
-					l_face.m_uiVertexIndex[2] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
+					l_face.m_index[0] = l_currentChunk.m_eChunkId;
+					l_face.m_index[1] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0x0000FFFF ) >>  0 );
+					l_face.m_index[2] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
 
 					if ( p_pChunk->m_ulBytesRead + 8 >= p_pChunk->m_ulLength )
 					{
@@ -533,7 +533,7 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 						DoDiscardChunk( p_pChunk );
 						l_bFace = false;
 					}
-					else if ( l_face.m_uiVertexIndex[0] < m_uiNbVertex && l_face.m_uiVertexIndex[1] < m_uiNbVertex && l_face.m_uiVertexIndex[2] < m_uiNbVertex )
+					else if ( l_face.m_index[0] < m_uiNbVertex && l_face.m_index[1] < m_uiNbVertex && l_face.m_index[2] < m_uiNbVertex )
 					{
 						// Vertex indices are correct, so we consider we really are processing a face
 						l_arrayFaces.push_back( l_face );
@@ -623,12 +623,12 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 			}
 		}
 
-		for ( std::vector< stFACE_INDICES >::const_iterator l_it = l_arrayFaces.begin() ; l_it != l_arrayFaces.end() ; ++l_it )
+		for ( std::vector< FaceIndices >::const_iterator l_it = l_arrayFaces.begin() ; l_it != l_arrayFaces.end() ; ++l_it )
 		{
 			// It seems faces are inverted in 3DS so I invert the indices to fall back in a good order
-			uint32_t l_uiV1 = l_it->m_uiVertexIndex[0];
-			uint32_t l_uiV2 = l_it->m_uiVertexIndex[1];
-			uint32_t l_uiV3 = l_it->m_uiVertexIndex[2];
+			uint32_t l_uiV1 = l_it->m_index[0];
+			uint32_t l_uiV2 = l_it->m_index[1];
+			uint32_t l_uiV3 = l_it->m_index[2];
 			l_pV1 = p_pSubmesh->GetPoint( l_uiV1 );
 			l_pV2 = p_pSubmesh->GetPoint( l_uiV2 );
 			l_pV3 = p_pSubmesh->GetPoint( l_uiV3 );

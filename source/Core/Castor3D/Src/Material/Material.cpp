@@ -22,7 +22,7 @@ namespace Castor3D
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 
-		bool l_first = true;
+		bool l_first{ true };
 
 		for ( auto && l_pass : p_material )
 		{

@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		Animable( Engine & p_engine );
+		explicit Animable( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

@@ -151,7 +151,7 @@ namespace Castor3D
 		{
 			m_elements.erase( p_name );
 
-			if ( l_overlay->GetChildsCount() )
+			if ( l_overlay->GetChildrenCount() )
 			{
 				Size l_size = m_pRenderer->GetSize();
 

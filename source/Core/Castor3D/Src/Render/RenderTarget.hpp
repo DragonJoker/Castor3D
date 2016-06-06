@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
 			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
-			C3D_API TextWriter( Castor::String const & p_tabs );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -92,7 +92,7 @@ namespace Castor3D
 		struct stFRAME_BUFFER
 		{
 		public:
-			stFRAME_BUFFER( RenderTarget & p_renderTarget );
+			explicit stFRAME_BUFFER( RenderTarget & p_renderTarget );
 			bool Create();
 			void Destroy();
 			bool Initialise( uint32_t p_index, Castor::Size const & p_size );

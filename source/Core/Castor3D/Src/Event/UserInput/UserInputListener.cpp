@@ -72,7 +72,6 @@ namespace Castor3D
 	{
 		bool l_return = false;
 		m_mouse.m_position = p_position;
-		bool l_unset = false;
 		auto l_current = DoGetMouseTargetableHandler( p_position );
 		auto l_last = m_lastMouseTarget.lock();
 
@@ -84,7 +83,6 @@ namespace Castor3D
 				l_last->PushEvent( MouseEvent( eMOUSE_EVENT_LEAVE, p_position ) );
 				l_last.reset();
 				m_lastMouseTarget.reset();
-				l_unset = true;
 			}
 		}
 

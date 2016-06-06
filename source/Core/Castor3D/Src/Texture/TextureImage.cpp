@@ -37,7 +37,7 @@ namespace Castor3D
 			: public StaticTextureSource
 		{
 		public:
-			Static2DTextureSource( PxBufferBaseSPtr p_buffer )
+			explicit Static2DTextureSource( PxBufferBaseSPtr p_buffer )
 			{
 				Size l_size{ p_buffer->dimensions() };
 				uint32_t l_depth{ 1u };

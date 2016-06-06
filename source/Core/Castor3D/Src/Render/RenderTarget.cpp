@@ -65,19 +65,17 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "MSAA" ) )
+		if ( p_target.GetTechnique() )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
-		}
+			if ( l_return && p_target.GetTechnique()->GetName() == cuT( "msaa" ) )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
+			}
 
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "SSAA" ) )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tssaa true\n" ) ) > 0;
-		}
-
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
+			if ( l_return && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
+			}
 		}
 
 		if ( l_return && p_target.IsUsingStereo() )
