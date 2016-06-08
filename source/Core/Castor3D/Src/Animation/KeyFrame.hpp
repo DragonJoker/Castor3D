@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Classe qui gère une key frame
 	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
 	*/
-	class KeyFrame sealed
+	class KeyFrame
 	{
 	public:
 		/**
