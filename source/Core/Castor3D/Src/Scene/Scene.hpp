@@ -417,27 +417,27 @@ namespace Castor3D
 		//!\~english	The geometies manager.
 		//!\~french		Le gestionnaire de géométries.
 		DECLARE_MANAGER_MEMBER( geometry, Geometry );
+		//!\~english	The meshes manager.
+		//!\~french		Le gestionnaire de maillages.
+		DECLARE_MANAGER_MEMBER( mesh, Mesh );
 		//!\~english	The billboards manager.
 		//!\~french		Le gestionnaire de billboards.
 		DECLARE_MANAGER_MEMBER( billboard, Billboard );
 		//!\~english	The animated objects groups manager.
 		//!\~french		Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
+		//!\~english	The render windows manager.
+		//!\~french		Le gestionnaire de fenêtres de rendu.
+		DECLARE_MANAGER_MEMBER( window, Window );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
-		//!\~english	The scene meshes view.
-		//!\~french		La vue sur les maillages de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene materials view.
 		//!\~french		La vue sur les matériaux de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene samplers view.
 		//!\~french		La vue sur les échantillonneurs de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
-		//!\~english	The scene render windows view.
-		//!\~french		La vue sur les fenêtres de rendu de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow, eEVENT_TYPE_POST_RENDER );
 		//!\~english	The scene fonts view.
 		//!\~french		La vue sur les polices de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );

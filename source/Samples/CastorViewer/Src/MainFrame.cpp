@@ -217,8 +217,13 @@ namespace CastorViewer
 						wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
 					}
 
-					m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), m_pMainScene.lock() );
-					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+					auto l_scene{  m_pMainScene.lock() };
+
+					if ( l_scene )
+					{
+						m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_scene );
+						m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_scene );
+					}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 

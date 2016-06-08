@@ -25,6 +25,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Material/Material.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
+#include <Scene/Animation/AnimatedObject.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Animation/AnimationInstance.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/MovableObject.hpp>
@@ -52,6 +55,12 @@ namespace Testing
 	inline std::string to_string< Castor3D::SceneNode >( Castor3D::SceneNode const & p_value )
 	{
 		return Castor::string::string_cast< char >( p_value.GetName() );
+	}
+
+	template<>
+	inline std::string to_string< Castor3D::Animable >( Castor3D::Animable const & p_value )
+	{
+		return std::string{};
 	}
 
 	template<>
@@ -169,6 +178,36 @@ namespace Testing
 	}
 
 	template<>
+	inline std::string to_string< Castor3D::AnimatedObjectGroup >( Castor3D::AnimatedObjectGroup const & p_value )
+	{
+		return Castor::string::string_cast< char >( p_value.GetName() );
+	}
+
+	template<>
+	inline std::string to_string< Castor3D::AnimatedObject >( Castor3D::AnimatedObject const & p_value )
+	{
+		return Castor::string::string_cast< char >( p_value.GetName() );
+	}
+
+	template<>
+	inline std::string to_string< Castor3D::AnimationInstance >( Castor3D::AnimationInstance const & p_value )
+	{
+		return Castor::string::string_cast< char >( p_value.GetAnimation().GetName() );
+	}
+
+	template<>
+	inline std::string to_string< Castor3D::SkeletonAnimationInstance >( Castor3D::SkeletonAnimationInstance const & p_value )
+	{
+		return std::string{};
+	}
+
+	template<>
+	inline std::string to_string< Castor3D::SkeletonAnimationInstanceObject >( Castor3D::SkeletonAnimationInstanceObject const & p_value )
+	{
+		return std::string{};
+	}
+
+	template<>
 	inline std::string to_string< Castor3D::InterpolatorType >( Castor3D::InterpolatorType const & p_value )
 	{
 		static std::map< Castor3D::InterpolatorType, std::string > Names
@@ -202,6 +241,18 @@ namespace Testing
 		return Names[p_value];
 	}
 
+	template<>
+	inline std::string to_string< Castor3D::AnimationState >( Castor3D::AnimationState const & p_value )
+	{
+		static std::map< Castor3D::AnimationState, std::string > Names
+		{
+			{ Castor3D::AnimationState::Playing, "Playing" },
+			{ Castor3D::AnimationState::Stopped, "Stopped" },
+			{ Castor3D::AnimationState::Paused, "Paused" },
+		};
+		return Names[p_value];
+	}
+
 	//*********************************************************************************************
 
 	class C3DTestCase
@@ -222,6 +273,7 @@ namespace Testing
 		}
 		bool compare( Castor3D::Scene const & p_a, Castor3D::Scene const & p_b );
 		bool compare( Castor3D::SceneNode const & p_a, Castor3D::SceneNode const & p_b );
+		bool compare( Castor3D::Animable const & p_a, Castor3D::Animable const & p_b );
 		bool compare( Castor3D::MovableObject const & p_a, Castor3D::MovableObject const & p_b );
 		bool compare( Castor3D::Camera const & p_a, Castor3D::Camera const & p_b );
 		bool compare( Castor3D::Light const & p_a, Castor3D::Light const & p_b );
@@ -239,6 +291,11 @@ namespace Testing
 		bool compare( Castor3D::SkeletonAnimation const & p_a, Castor3D::SkeletonAnimation const & p_b );
 		bool compare( Castor3D::SkeletonAnimationObject const & p_a, Castor3D::SkeletonAnimationObject const & p_b );
 		bool compare( Castor3D::KeyFrame const & p_a, Castor3D::KeyFrame const & p_b );
+		bool compare( Castor3D::AnimatedObjectGroup const & p_a, Castor3D::AnimatedObjectGroup const & p_b );
+		bool compare( Castor3D::AnimatedObject const & p_a, Castor3D::AnimatedObject const & p_b );
+		bool compare( Castor3D::AnimationInstance const & p_a, Castor3D::AnimationInstance const & p_b );
+		bool compare( Castor3D::SkeletonAnimationInstance const & p_a, Castor3D::SkeletonAnimationInstance const & p_b );
+		bool compare( Castor3D::SkeletonAnimationInstanceObject const & p_a, Castor3D::SkeletonAnimationInstanceObject const & p_b );
 
 	protected:
 		Castor3D::Engine & m_engine;

@@ -61,7 +61,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_SUBMESH:
-				l_submesh = std::make_shared< Submesh >( *p_obj.GetEngine(), p_obj, p_obj.GetSubmeshCount() );
+				l_submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
 				l_return = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
 
 				if ( l_return )
@@ -72,7 +72,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_SKELETON:
-				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetEngine() );
+				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
 				l_return = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
 
 				if ( l_return )
@@ -94,9 +94,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Mesh::Mesh( String const & p_name, Engine & p_engine )
+	Mesh::Mesh( String const & p_name, Scene & p_scene )
 		: Resource< Mesh >{ p_name }
-		, Animable{ p_engine }
+		, Animable{ p_scene }
 		, m_modified{ false }
 	{
 	}
@@ -212,7 +212,7 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetEngine(), *this, GetSubmeshCount() );
+		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetScene(), *this, GetSubmeshCount() );
 		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
@@ -239,7 +239,7 @@ namespace Castor3D
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( p_name, *GetEngine() );
+		MeshSPtr l_clone = std::make_shared< Mesh >( p_name, *GetScene() );
 
 		for ( auto && l_submesh : m_submeshes )
 		{

@@ -80,8 +80,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Skeleton::Skeleton( Engine & p_engine )
-		: Animable{ p_engine }
+	Skeleton::Skeleton( Scene & p_scene )
+		: Animable{ p_scene }
 		, m_globalInverse{ 1 }
 	{
 	}

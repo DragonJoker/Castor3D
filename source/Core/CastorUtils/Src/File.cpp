@@ -157,7 +157,7 @@ namespace Castor
 		{
 #if defined( _MSC_VER )
 
-			bool l_return = _trmdir( p_path.c_str() ) == TRUE;
+			bool l_return = _trmdir( p_path.c_str() ) == 0;
 
 #else
 
@@ -167,22 +167,24 @@ namespace Castor
 
 			if ( !l_return )
 			{
-				switch ( errno )
+				auto l_error{ errno };
+
+				switch ( l_error )
 				{
 				case ENOTEMPTY:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], it is not empty." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
 					break;
 
 				case ENOENT:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], the path is invalid." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
 					break;
 
 				case EACCES:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], a program has an open handle to this directory." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
 					break;
 
 				default:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], unknown error." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << l_error << cuT( ")." ) );
 					break;
 				}
 			}

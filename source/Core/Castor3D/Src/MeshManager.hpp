@@ -50,18 +50,18 @@ namespace Castor3D
 	\brief		Gestionnaire de maillages.
 	*/
 	class MeshManager
-		: public ResourceManager< Castor::String, Mesh >
+		: public ResourceManager< Castor::String, Mesh, Scene >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		C3D_API MeshManager( Engine & p_engine );
+		C3D_API MeshManager( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor

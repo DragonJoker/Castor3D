@@ -243,10 +243,11 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
-			for ( auto const & l_name : p_scene.GetRenderWindowView() )
+			auto l_lock = make_unique_lock( p_scene.GetWindowManager() );
+
+			for ( auto const & l_it : p_scene.GetWindowManager() )
 			{
-				auto l_window = p_scene.GetRenderWindowView().Find( l_name );
-				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_window, p_file );
+				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
@@ -277,15 +278,18 @@ namespace Castor3D
 		m_billboardManager = std::make_unique< BillboardManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_cameraManager = std::make_unique< CameraManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_geometryManager = std::make_unique< GeometryManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+		m_meshManager = std::make_unique< MeshManager >( *this );
 		m_lightManager = std::make_unique< LightManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_sceneNodeManager = std::make_unique< SceneNodeManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+		m_windowManager = std::make_unique< WindowManager >( *this );
 
-		m_meshManagerView = make_manager_view< Mesh, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMeshManager() );
 		m_materialManagerView = make_manager_view< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialManager() );
 		m_samplerManagerView = make_manager_view< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerManager() );
-		m_windowManagerView = make_manager_view< RenderWindow, eEVENT_TYPE_POST_RENDER >( GetName(), GetEngine()->GetWindowManager() );
 		m_overlayManagerView = make_manager_view< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayManager() );
 		m_fontManagerView = make_manager_view< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontManager() );
+
+		m_meshManager->SetRenderSystem( p_engine.GetRenderSystem() );
+		m_windowManager->SetRenderSystem( p_engine.GetRenderSystem() );
 
 		auto l_notify = [this]()
 		{
@@ -297,6 +301,9 @@ namespace Castor3D
 
 	Scene::~Scene()
 	{
+		m_meshManager->Clear();
+		m_windowManager->Clear();
+
 		m_skybox.reset();
 		m_animatedObjectGroupManager.reset();
 		m_billboardManager.reset();
@@ -305,10 +312,10 @@ namespace Castor3D
 		m_lightManager.reset();
 		m_sceneNodeManager.reset();
 
-		m_meshManagerView.reset();
+		m_meshManager.reset();
 		m_materialManagerView.reset();
 		m_samplerManagerView.reset();
-		m_windowManagerView.reset();
+		m_windowManager.reset();
 		m_overlayManagerView.reset();
 		m_fontManagerView.reset();
 
@@ -346,12 +353,15 @@ namespace Castor3D
 		m_geometryManager->Cleanup();
 		m_lightManager->Cleanup();
 		m_sceneNodeManager->Cleanup();
-		m_meshManagerView->Clear();
+
 		m_materialManagerView->Clear();
 		m_samplerManagerView->Clear();
-		m_windowManagerView->Clear();
 		m_overlayManagerView->Clear();
 		m_fontManagerView->Clear();
+
+		// Those two ones, being ResourceManager, need to be cleared in destructor only
+		m_meshManager->Cleanup();
+		m_windowManager->Cleanup();
 
 		if ( m_backgroundImage )
 		{
@@ -475,7 +485,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			m_meshManagerView->Insert( l_return->GetName(), l_return );
+			m_meshManager->Insert( l_return->GetName(), l_return );
 		}
 
 		return l_return;

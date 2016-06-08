@@ -37,8 +37,8 @@ namespace Castor3D
 	*/
 	class MovableObject
 		: public std::enable_shared_from_this< MovableObject >
-		, public Castor::OwnedBy< Scene >
 		, public Animable
+		, public Castor::Named
 	{
 	public:
 		/*!
@@ -112,18 +112,6 @@ namespace Castor3D
 		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
-		 *\brief		Retrieves the object name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom de l'objet
-		 *\return		La valeur
-		 */
-		inline Castor::String const & GetName()const
-		{
-			return m_name;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the parent node
 		 *\return		The value
 		 *\~french
@@ -146,24 +134,10 @@ namespace Castor3D
 		{
 			return m_type;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the object name
-		 *\param[in]	p_name	The new value
-		 *\~french
-		 *\brief		Définit le nom de l'objet
-		 *\param[in]	p_name	La nouvelle valeur
-		 */
-		inline void SetName( Castor::String const & p_name )
-		{
-			m_name = p_name;
-		}
 
 	protected:
 		//!\~english Movable object type	\~french Le type d'objet déplaçable
 		eMOVABLE_TYPE m_type;
-		//!\~english The object name	\~french Le nom de l'objet
-		Castor::String m_name;
 		//!\~english The parent node name	\~french Le nom du noeud parent
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent

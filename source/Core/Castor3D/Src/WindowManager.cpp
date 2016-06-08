@@ -6,8 +6,8 @@ namespace Castor3D
 {
 	const String ManagedObjectNamer< RenderWindow >::Name = cuT( "RenderWindow" );
 
-	WindowManager::WindowManager( Engine & p_engine )
-		: ResourceManager< String, RenderWindow >( p_engine )
+	WindowManager::WindowManager( Scene & p_scene )
+		: ResourceManager< String, RenderWindow, Scene >( p_scene )
 	{
 	}
 

@@ -29,7 +29,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootSamplerState )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RootWindow )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )

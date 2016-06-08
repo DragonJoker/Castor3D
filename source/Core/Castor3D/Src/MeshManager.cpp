@@ -6,8 +6,8 @@ namespace Castor3D
 {
 	const String ManagedObjectNamer< Mesh >::Name = cuT( "Mesh" );
 
-	MeshManager::MeshManager( Engine & p_engine )
-		: ResourceManager< Castor::String, Mesh >( p_engine )
+	MeshManager::MeshManager( Scene & p_scene )
+		: ResourceManager< Castor::String, Mesh, Scene >( p_scene )
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace Castor3D
 
 		if ( !m_elements.has( p_name ) )
 		{
-			l_return = std::make_shared< Mesh >( p_name, *GetEngine() );
+			l_return = std::make_shared< Mesh >( p_name, *GetScene() );
 			m_factory.Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
 			m_elements.insert( p_name, l_return );
 			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );

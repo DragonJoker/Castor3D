@@ -47,8 +47,9 @@ namespace Testing
 	{
 		String l_name = cuT( "SimpleTestMesh" );
 		Path l_path{ l_name + cuT( ".cmsh" ) };
+		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = m_engine.GetMeshManager().Create( l_name, eMESH_TYPE_CUBE, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
+		auto l_src = l_scene.GetMeshManager().Create( l_name, eMESH_TYPE_CUBE, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 
 		for ( auto l_submesh : *l_src )
 		{
@@ -57,7 +58,7 @@ namespace Testing
 
 		CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
 
-		auto l_dst = m_engine.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
 
 		for ( auto l_submesh : *l_dst )
@@ -69,16 +70,17 @@ namespace Testing
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
-		m_engine.GetMeshManager().Remove( l_name );
-		m_engine.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
+		l_scene.GetMeshManager().Remove( l_name );
+		l_scene.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
 	}
 
 	void BinaryExportTest::ImportExport()
 	{
 		String l_name = cuT( "SimpleTestMesh" );
 		Path l_path{ l_name + cuT( ".cmsh" ) };
+		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = m_engine.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_src = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, BinaryFile{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ } ) );
 
 		for ( auto l_submesh : *l_src )
@@ -88,7 +90,7 @@ namespace Testing
 
 		CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
 
-		auto l_dst = m_engine.GetMeshManager().Create( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
 		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
 
 		for ( auto l_submesh : *l_dst )
@@ -100,8 +102,8 @@ namespace Testing
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
-		m_engine.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
-		m_engine.GetMeshManager().Remove( l_name + cuT( "_exp" ) );
+		l_scene.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
+		l_scene.GetMeshManager().Remove( l_name + cuT( "_exp" ) );
 	}
 
 	void BinaryExportTest::AnimatedMesh()
@@ -111,9 +113,9 @@ namespace Testing
 		CT_REQUIRE( l_parser.ParseFile( TEST_DATA_FOLDER / cuT( "Anim.zip" ) ) );
 		CT_REQUIRE( l_parser.ScenesBegin() != l_parser.ScenesEnd() );
 		l_scene = l_parser.ScenesBegin()->second;
-		CT_REQUIRE( l_scene->GetMeshView().begin() != l_scene->GetMeshView().end() );
-		String l_name = *l_scene->GetMeshView().begin();
-		auto l_src = l_scene->GetMeshView().Find( l_name );
+		CT_REQUIRE( l_scene->GetMeshManager().begin() != l_scene->GetMeshManager().end() );
+		auto l_src = l_scene->GetMeshManager().begin()->second;
+		auto l_name{ l_src->GetName() };
 
 		for ( auto l_submesh : *l_src )
 		{
@@ -125,7 +127,8 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
 		}
 
-		auto l_dst = m_engine.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
+		auto l_dst = l_sceneDst.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		{
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
 		}
@@ -138,9 +141,9 @@ namespace Testing
 		CT_EQUAL( *l_src, *l_dst );
 		File::DeleteFile( l_path );
 		l_dst.reset();
-		m_engine.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
+		l_sceneDst.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
 		l_src.reset();
-		l_scene->GetMeshView().Remove( l_name );
+		l_scene->GetMeshManager().Remove( l_name );
 		m_engine.GetRenderLoop().Cleanup();
 		m_engine.GetSceneManager().Remove( l_scene->GetName() );
 		l_scene->Cleanup();

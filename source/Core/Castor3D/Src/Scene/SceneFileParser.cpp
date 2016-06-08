@@ -317,7 +317,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "material" ), Parser_RootMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_ROOT, cuT( "window" ), Parser_RootWindow, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "panel_overlay" ), Parser_RootPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "border_panel_overlay" ), Parser_RootBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "text_overlay" ), Parser_RootTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
@@ -711,7 +710,6 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		break;
 
 	default:
-	{
 		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
 		{
 			if ( l_return.empty() )
@@ -729,8 +727,8 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		{
 			FAILURE( "Section not found" );
 		}
-	}
-	break;
+
+		break;
 	}
 
 	return l_return;

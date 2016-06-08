@@ -90,6 +90,66 @@ namespace Castor3D
 		 *\return		Le mode d'interpolation des key frames.
 		 */
 		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
+		/**
+		 *\~english
+		 *\return		The objects count.
+		 *\~french
+		 *\return		Le nombre d'objets.
+		 */
+		inline auto GetObjectsCount()const
+		{
+			return m_toMove.size();
+		}
+		/**
+		 *\~english
+		 *\return		The root objects count.
+		 *\~french
+		 *\return		Le nombre d'objets racines.
+		 */
+		inline auto GetRootObjectsCount()const
+		{
+			return m_arrayMoving.size();
+		}
+		/**
+		 *\~english
+		 *\return		The root objects beginning iterator.
+		 *\~french
+		 *\return		L'itérateur sur le début des objets racines.
+		 */
+		inline auto begin()
+		{
+			return m_arrayMoving.begin();
+		}
+		/**
+		 *\~english
+		 *\return		The root objects beginning iterator.
+		 *\~french
+		 *\return		L'itérateur sur le début des objets racines.
+		 */
+		inline auto begin()const
+		{
+			return m_arrayMoving.begin();
+		}
+		/**
+		 *\~english
+		 *\return		The root objects end iterator.
+		 *\~french
+		 *\return		L'itérateur sur la fin des objets racines.
+		 */
+		inline auto end()
+		{
+			return m_arrayMoving.end();
+		}
+		/**
+		 *\~english
+		 *\return		The root objects end iterator.
+		 *\~french
+		 *\return		L'itérateur sur la fin des objets racines.
+		 */
+		inline auto end()const
+		{
+			return m_arrayMoving.end();
+		}
 
 	private:
 		/**

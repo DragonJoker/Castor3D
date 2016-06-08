@@ -31,6 +31,7 @@ namespace TestRender
 	TestRenderSystem::TestRenderSystem( Engine & p_engine )
 		: RenderSystem{ p_engine, Name }
 	{
+		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::NonPowerOfTwoTextures );
 	}
 
 	TestRenderSystem::~TestRenderSystem()

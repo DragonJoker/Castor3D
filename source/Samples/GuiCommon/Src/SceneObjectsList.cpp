@@ -126,14 +126,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetEngine()->GetWindowManager().lock();
+			p_scene->GetWindowManager().lock();
 
-			for ( auto l_it : p_scene->GetEngine()->GetWindowManager() )
+			for ( auto l_it : p_scene->GetWindowManager() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetEngine()->GetWindowManager().unlock();
+			p_scene->GetWindowManager().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )

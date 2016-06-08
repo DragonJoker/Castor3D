@@ -80,9 +80,10 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Castor3D::Engine * p_engine )
+	void MaterialsList::LoadMaterials( Engine * p_engine, Scene & p_scene )
 	{
 		m_engine = p_engine;
+		m_scene = &p_scene;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
 		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialManager() );
 
@@ -110,7 +111,7 @@ namespace GuiCommon
 
 	void MaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass, *m_scene ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_pass : *p_pass )

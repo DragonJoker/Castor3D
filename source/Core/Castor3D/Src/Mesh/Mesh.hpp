@@ -48,15 +48,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name		This mesh name
-		 *\param[in]	p_engine	The parent engine
+		 *\brief		Constructor.
+		 *\param[in]	p_name	This mesh name.
+		 *\param[in]	p_scene	The parent scene.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom du maillage
-		 *\param[in]	p_engine	Le moteur parent
+		 *\brief		Constructeur.
+		 *\param[in]	p_name	Le nom du maillage.
+		 *\param[in]	p_scene	La scèene parente.
 		 */
-		C3D_API Mesh( Castor::String const & p_name, Engine & p_engine );
+		C3D_API Mesh( Castor::String const & p_name, Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor

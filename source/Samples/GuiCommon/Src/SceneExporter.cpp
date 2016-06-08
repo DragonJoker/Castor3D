@@ -123,10 +123,11 @@ namespace GuiCommon
 
 		uint32_t l_offset = 1;
 		uint32_t l_count = 0;
-		auto const & l_mshManager = p_scene.GetMeshView();
-		for ( auto const & l_name : l_mshManager )
+		auto const & l_mshManager = p_scene.GetMeshManager();
+
+		for ( auto const & l_it : l_mshManager )
 		{
-			auto l_mesh = l_mshManager.Find( l_name );
+			auto l_mesh = l_it.second;
 			l_obj << DoExportMesh( *l_mesh, l_offset, l_count ) << cuT( "\n" );
 		}
 
@@ -259,10 +260,12 @@ namespace GuiCommon
 				File::DirectoryCreate( l_folder / l_subfolder );
 			}
 
-			for ( auto const & l_name : p_scene.GetMeshView() )
+			auto l_lock{ make_unique_lock( p_scene.GetMeshManager() ) };
+
+			for ( auto const & l_it : p_scene.GetMeshManager() )
 			{
-				auto l_mesh = p_scene.GetMeshView().Find( l_name );
-				Path l_path{ l_folder / l_subfolder / l_name + cuT( ".cmsh" ) };
+				auto l_mesh = l_it.second;
+				Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
 				BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
 				l_result &= BinaryWriter< Mesh >{}.Write( *l_mesh, l_file );
 			}

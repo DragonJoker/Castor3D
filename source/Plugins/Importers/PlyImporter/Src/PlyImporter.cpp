@@ -58,7 +58,7 @@ namespace C3dPly
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 		String l_materialName = l_meshName;
-		MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		MeshSPtr l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		std::ifstream l_isFile;
 		l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
 		std::string l_strLine;

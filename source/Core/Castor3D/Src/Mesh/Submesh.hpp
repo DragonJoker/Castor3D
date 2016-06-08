@@ -43,7 +43,7 @@ namespace Castor3D
 	\remark		Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh
-		: public Castor::OwnedBy< Engine >
+		: public Castor::OwnedBy< Scene >
 	{
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
@@ -51,17 +51,17 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_mesh		The parent mesh
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_id		The submesh ID
+		 *\brief		Constructor.
+		 *\param[in]	p_mesh	The parent mesh.
+		 *\param[in]	p_scene	The scene.
+		 *\param[in]	p_id	The submesh ID.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_mesh		Le mesh parent
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_id		L'ID du sous-maillage
+		 *\brief		Constructeur.
+		 *\param[in]	p_mesh	Le mesh parent.
+		 *\param[in]	p_scene	La scène.
+		 *\param[in]	p_id	L'ID du sous-maillage.
 		 */
-		C3D_API Submesh( Engine & p_engine, Mesh & p_mesh, uint32_t p_id = 1 );
+		C3D_API Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor

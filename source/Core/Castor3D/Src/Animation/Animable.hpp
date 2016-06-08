@@ -35,18 +35,18 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
-		: public Castor::OwnedBy< Engine >
+		: public Castor::OwnedBy< Scene >
 	{
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		explicit Animable( Engine & p_engine );
+		explicit Animable( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.

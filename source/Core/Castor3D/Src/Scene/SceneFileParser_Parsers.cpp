@@ -110,23 +110,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMaterial )
 }
 END_ATTRIBUTE_PUSH( eSECTION_MATERIAL )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootWindow )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_parsingContext->pWindow )
-	{
-		PARSING_ERROR( cuT( "Can't create more than one render window" ) );
-	}
-	else if ( !p_params.empty() )
-	{
-		String l_name;
-		p_params[0]->Get( l_name );
-		l_parsingContext->pWindow = l_parsingContext->m_pParser->GetEngine()->GetWindowManager().Create( l_name );
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_WINDOW )
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootPanelOverlay )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -959,7 +942,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneWindow )
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			l_parsingContext->pWindow = l_parsingContext->pScene->GetRenderWindowView().Create( l_name );
+			l_parsingContext->pWindow = l_parsingContext->pScene->GetWindowManager().Create( l_name );
 		}
 	}
 }
@@ -1359,15 +1342,23 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_parsingContext->bBool1 = false;
 	p_params[0]->Get( l_parsingContext->strName2 );
-	auto const & l_manager = l_parsingContext->m_pParser->GetEngine()->GetMeshManager();
 
-	if ( l_manager.Has( l_parsingContext->strName2 ) )
+	if ( l_parsingContext->pScene )
 	{
-		l_parsingContext->pMesh = l_manager.Find( l_parsingContext->strName2 );
+		auto const & l_manager = l_parsingContext->pScene->GetMeshManager();
+
+		if ( l_manager.Has( l_parsingContext->strName2 ) )
+		{
+			l_parsingContext->pMesh = l_manager.Find( l_parsingContext->strName2 );
+		}
+		else
+		{
+			l_parsingContext->pMesh.reset();
+		}
 	}
 	else
 	{
-		l_parsingContext->pMesh.reset();
+		PARSING_ERROR( cuT( "No scene initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
@@ -1539,11 +1530,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 
 		if ( l_parsingContext->pScene )
 		{
-			l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshView().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+			l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
 		}
 		else
 		{
-			l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+			PARSING_ERROR( cuT( "No scene initialised" ) );
 		}
 	}
 	else

@@ -31,7 +31,7 @@ namespace GuiCommon
 		MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( Castor3D::Engine * p_engine );
+		void LoadMaterials( Castor3D::Engine * p_engine, Castor3D::Scene & p_scene );
 		void UnloadMaterials();
 
 	private:
@@ -46,6 +46,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::Engine * m_engine;
+		Castor3D::Scene * m_scene;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

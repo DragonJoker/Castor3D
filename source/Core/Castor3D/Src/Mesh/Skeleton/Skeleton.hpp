@@ -39,11 +39,13 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		C3D_API explicit Skeleton( Engine & p_engine );
+		C3D_API explicit Skeleton( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor

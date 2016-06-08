@@ -423,13 +423,13 @@ namespace C3dFbx
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( p_scene.GetMeshView().Has( l_meshName ) )
+		if ( p_scene.GetMeshManager().Has( l_meshName ) )
 		{
-			m_mesh = p_scene.GetMeshView().Find( l_meshName );
+			m_mesh = p_scene.GetMeshManager().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -463,7 +463,7 @@ namespace C3dFbx
 			else
 			{
 				// The import failed.
-				p_scene.GetMeshView().Remove( l_meshName );
+				p_scene.GetMeshManager().Remove( l_meshName );
 				m_mesh.reset();
 			}
 
@@ -472,7 +472,7 @@ namespace C3dFbx
 		else
 		{
 			// The import failed.
-			p_scene.GetMeshView().Remove( l_meshName );
+			p_scene.GetMeshManager().Remove( l_meshName );
 			m_mesh.reset();
 		}
 
@@ -505,7 +505,7 @@ namespace C3dFbx
 
 	void FbxSdkImporter::DoLoadSkeleton( FbxNode * p_node )
 	{
-		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *GetEngine() );
+		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *m_mesh->GetScene() );
 
 		for ( int i = 0; i < p_node->GetChildCount(); ++i )
 		{

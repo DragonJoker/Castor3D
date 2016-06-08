@@ -67,8 +67,6 @@ namespace Castor3D
 		m_rasteriserStateManager = std::make_unique< RasteriserStateManager >( *this );
 		m_blendStateManager = std::make_unique< BlendStateManager >( *this );
 		m_materialManager = std::make_unique< MaterialManager >( *this );
-		m_windowManager = std::make_unique< WindowManager >( *this );
-		m_meshManager = std::make_unique < MeshManager >( *this );
 		m_pluginManager = std::make_unique< PluginManager >( *this );
 		m_overlayManager = std::make_unique< OverlayManager >( *this );
 		m_sceneManager = std::make_unique< SceneManager >( *this );
@@ -97,13 +95,11 @@ namespace Castor3D
 		m_depthStencilStateManager->Clear();
 		m_rasteriserStateManager->Clear();
 		m_blendStateManager->Clear();
-		m_meshManager->Clear();
 		m_overlayManager->Clear();
 		m_fontManager.Clear();
 		m_imageManager.clear();
 		m_sceneManager->Clear();
 		m_materialManager->Clear();
-		m_windowManager->Clear();
 		m_listenerManager->Clear();
 		m_techniqueManager->Clear();
 
@@ -145,7 +141,6 @@ namespace Castor3D
 			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
 			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
 			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_windowManager->SetRenderSystem( m_renderSystem );
 			m_techniqueManager->SetRenderSystem( m_renderSystem );
 
 			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
@@ -209,7 +204,6 @@ namespace Castor3D
 			m_rasteriserStateManager->Cleanup();
 			m_blendStateManager->Cleanup();
 			m_samplerManager->Cleanup();
-			m_meshManager->Cleanup();
 			m_overlayManager->Cleanup();
 			m_materialManager->Cleanup();
 			m_shaderManager->Cleanup();
@@ -229,13 +223,11 @@ namespace Castor3D
 				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
-			m_windowManager->Cleanup();
 			m_techniqueManager->Cleanup();
 			m_renderLoop.reset();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();
-			m_meshManager->Clear();
 			m_shaderManager->Clear();
 			m_overlayManager->Clear();
 			m_materialManager->Clear();
@@ -247,7 +239,6 @@ namespace Castor3D
 			m_depthStencilStateManager->Clear();
 			m_rasteriserStateManager->Clear();
 			m_blendStateManager->Clear();
-			m_windowManager->Clear();
 			m_techniqueManager->Clear();
 		}
 	}

@@ -67,10 +67,12 @@ namespace Testing
 					File::DirectoryCreate( l_folder / l_subfolder );
 				}
 
-				for ( auto const & l_name : p_scene.GetMeshView() )
+				auto l_lock{ make_unique_lock( p_scene.GetMeshManager() ) };
+
+				for ( auto const & l_it : p_scene.GetMeshManager() )
 				{
-					auto l_mesh = p_scene.GetMeshView().Find( l_name );
-					Path l_path{ l_folder / l_subfolder / l_name + cuT( ".cmsh" ) };
+					auto l_mesh = l_it.second;
+					Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
 					BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
 					l_result &= BinaryWriter< Mesh >{}.Write( *l_mesh, l_file );
 				}
@@ -103,28 +105,36 @@ namespace Testing
 		CT_REQUIRE( l_srcParser.ParseFile( TEST_DATA_FOLDER / p_name ) );
 		CT_REQUIRE( l_srcParser.ScenesBegin() != l_srcParser.ScenesEnd() );
 		auto l_src{ l_srcParser.ScenesBegin()->second };
-		CT_REQUIRE( l_src->GetRenderWindowView().begin() != l_src->GetRenderWindowView().end() );
-		auto l_window{ m_engine.GetWindowManager().Find( *l_src->GetRenderWindowView().begin() ) };
-		l_window->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
-		l_src->Initialise();
-
+		l_src->GetWindowManager().lock();
+		CT_REQUIRE( l_src->GetWindowManager().begin() != l_src->GetWindowManager().end() );
+		auto l_windowSrc{ l_src->GetWindowManager().begin()->second };
+		l_src->GetWindowManager().unlock();
+		l_windowSrc->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
 		m_engine.GetRenderLoop().RenderSyncFrame();
 
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
+		auto l_name{ l_src->GetName() };
+		m_engine.GetSceneManager().Remove( l_name );
+		m_engine.GetSceneManager().Insert( l_name + cuT( "_exp" ), l_src );
 
 		SceneFileParser l_dstParser{ m_engine };
 		CT_REQUIRE( l_dstParser.ParseFile( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) );
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		auto l_dst{ l_dstParser.ScenesBegin()->second };
-		l_dst->Initialise();
-
+		l_dst->GetWindowManager().lock();
+		CT_REQUIRE( l_dst->GetWindowManager().begin() != l_dst->GetWindowManager().end() );
+		auto l_windowDst{ l_dst->GetWindowManager().begin()->second };
+		l_dst->GetWindowManager().unlock();
+		l_windowDst->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
 		m_engine.GetRenderLoop().RenderSyncFrame();
 
 		CT_EQUAL( *l_src, *l_dst );
 		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
 		l_src->Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_dst->Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_src.reset();
 		l_dst.reset();
 	}

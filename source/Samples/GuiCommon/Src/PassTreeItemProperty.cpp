@@ -29,9 +29,10 @@ namespace GuiCommon
 		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
-	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
+	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, PassSPtr p_pass, Scene & p_scene )
 		: TreeItemProperty( p_pass->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
+		, m_scene( p_scene )
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
 		PROPERTY_PASS_AMBIENT = _( "Ambient" );
@@ -186,7 +187,7 @@ namespace GuiCommon
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
 		PassSPtr l_pass = GetPass();
-		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), nullptr, l_pass );
+		ShaderDialog * l_editor = new ShaderDialog( m_scene, IsEditable(), nullptr, l_pass );
 		l_editor->Show();
 		return false;
 	}

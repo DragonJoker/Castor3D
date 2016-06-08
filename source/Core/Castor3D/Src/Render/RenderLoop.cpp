@@ -138,7 +138,14 @@ namespace Castor3D
 		}
 
 		m_renderSystem->GetMainContext()->EndCurrent();
-		GetEngine()->GetWindowManager().Render( true );
+		{
+			auto l_lock = make_unique_lock( GetEngine()->GetSceneManager() );
+
+			for ( auto l_it : GetEngine()->GetSceneManager() )
+			{
+				l_it.second->GetWindowManager().Render( true );
+			}
+		}
 		m_debugOverlays->EndGpuTask();
 	}
 

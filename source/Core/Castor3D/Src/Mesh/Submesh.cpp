@@ -14,6 +14,7 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
 #include "Vertex.hpp"
 
 #include <BlockTracker.hpp>
@@ -199,9 +200,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( Engine & p_engine, Mesh & p_mesh, uint32_t p_id )
-		: OwnedBy< Engine >( p_engine )
-		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
+	Submesh::Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id )
+		: OwnedBy< Scene >( p_scene )
+		, m_defaultMaterial( p_scene.GetEngine()->GetMaterialManager().GetDefaultMaterial() )
 		, m_id( p_id )
 		, m_parentMesh( p_mesh )
 		, m_layout( {
@@ -450,7 +451,7 @@ namespace Castor3D
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetEngine(), m_parentMesh, m_id );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetScene(), m_parentMesh, m_id );
 		uint32_t l_stride = m_layout.GetStride();
 
 		//On effectue une copie des vertex
@@ -922,8 +923,8 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
 			{
 				l_buffers->Initialise( m_vertexBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
 			} ) );
@@ -939,12 +940,12 @@ namespace Castor3D
 
 	void Submesh::DoCreateBuffers()
 	{
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_layout );
-		m_indexBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_layout );
+		m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
 
 		if ( CheckFlag( GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) && m_parentMesh.GetSkeleton() )
 		{
-			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
+			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 			{
 				{
 					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
@@ -955,7 +956,7 @@ namespace Castor3D
 			} );
 			ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
 		}
-		else if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
+		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
 			uint32_t l_count = 0;
 			l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
@@ -966,7 +967,7 @@ namespace Castor3D
 			if ( l_count > 1 )
 			{
 				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
-				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
+				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
 						BufferElementDeclaration{ ShaderProgram::Transform, eELEMENT_USAGE_TRANSFORM, eELEMENT_TYPE_4x4FLOATS, 0 },

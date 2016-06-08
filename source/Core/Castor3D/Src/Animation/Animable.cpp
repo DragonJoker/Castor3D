@@ -8,8 +8,8 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Animable::Animable( Engine & p_engine )
-		: OwnedBy< Engine >{ p_engine }
+	Animable::Animable( Scene & p_scene )
+		: OwnedBy< Scene >{ p_scene }
 	{
 	}
 

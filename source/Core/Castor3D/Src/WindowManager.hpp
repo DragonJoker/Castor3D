@@ -47,18 +47,18 @@ namespace Castor3D
 	\brief		Gestionnaire de fenêtres de rendu.
 	*/
 	class WindowManager
-		: private ResourceManager< Castor::String, RenderWindow >
+		: private ResourceManager< Castor::String, RenderWindow, Scene >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		C3D_API WindowManager( Engine & p_engine );
+		C3D_API WindowManager( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -88,18 +88,18 @@ namespace Castor3D
 		C3D_API void Render( bool p_force );
 
 	public:
-		using ResourceManager< Castor::String, RenderWindow >::lock;
-		using ResourceManager< Castor::String, RenderWindow >::unlock;
-		using ResourceManager< Castor::String, RenderWindow >::begin;
-		using ResourceManager< Castor::String, RenderWindow >::end;
-		using ResourceManager< Castor::String, RenderWindow >::Has;
-		using ResourceManager< Castor::String, RenderWindow >::Find;
-		using ResourceManager< Castor::String, RenderWindow >::Insert;
-		using ResourceManager< Castor::String, RenderWindow >::Remove;
-		using ResourceManager< Castor::String, RenderWindow >::Cleanup;
-		using ResourceManager< Castor::String, RenderWindow >::Clear;
-		using ResourceManager< Castor::String, RenderWindow >::GetEngine;
-		using ResourceManager< Castor::String, RenderWindow >::SetRenderSystem;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::lock;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::unlock;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::begin;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::end;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Has;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Find;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Insert;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Remove;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Cleanup;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::Clear;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::GetEngine;
+		using ResourceManager< Castor::String, RenderWindow, Scene >::SetRenderSystem;
 	};
 }
 
