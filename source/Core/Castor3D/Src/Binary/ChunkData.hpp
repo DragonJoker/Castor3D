@@ -675,26 +675,6 @@ namespace Castor3D
 	\date 		30/05/2016
 	\~english
 	\brief		Chunk data preparator, setting it to big endian.
-	\~french
-	\brief		Préparateur de données de chunk, les mettant en big endian.
-	*/
-	template< typename T >
-	struct ChunkDataPreparator
-	{
-		static inline void Prepare( T & p_value )
-		{
-			if ( !Castor::IsBigEndian() )
-			{
-				Castor::SwitchEndianness( p_value );
-			}
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.9.0
-	\date 		30/05/2016
-	\~english
-	\brief		Chunk data preparator, setting it to big endian.
 	\remarks	Specialisation for FaceIndices.
 	\~french
 	\brief		Préparateur de données de chunk, les mettant en big endian.

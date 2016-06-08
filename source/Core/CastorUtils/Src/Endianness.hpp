@@ -36,7 +36,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Détecte si le système courant est big endian.
 	 */
-	constexpr inline bool IsBigEndian()noexcept
+	inline bool IsBigEndian()noexcept
 	{
 		return BigInt.c[0] == 1;
 	}
