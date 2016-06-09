@@ -114,6 +114,52 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	*/
+	template< typename T, size_t N >
+	struct ChunkDataPreparator< std::array< T, N > >
+	{
+		static inline void Prepare( std::array< T, N > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		30/05/2016
+	\~english
+	\brief		Chunk data preparator, setting it to big endian.
+	\~french
+	\brief		Préparateur de données de chunk, les mettant en big endian.
+	*/
+	template< typename T >
+	struct ChunkDataPreparator< std::vector< T > >
+	{
+		static inline void Prepare( std::vector< T > & p_value )
+		{
+			if ( !Castor::IsBigEndian() )
+			{
+				for ( auto & l_value : p_value )
+				{
+					Castor::SwitchEndianness( l_value );
+				}
+			}
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
 	\date 		28/05/2016
 	\~english
 	\brief		Helper structure to find eCHUNK_TYPE from a type.

@@ -11,6 +11,53 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		using KeyFramed = std::array< double, 11 >;
+
+		void DoConvert( std::vector< KeyFrame > const & p_in, std::vector< KeyFramed > & p_out )
+		{
+			p_out.resize( p_in.size() );
+			auto l_it = p_out.begin();
+
+			for ( auto & l_in : p_in )
+			{
+				auto & l_out = *l_it;
+				size_t l_index{ 0u };
+				l_out[l_index++] = l_in.GetRotate()[0];
+				l_out[l_index++] = l_in.GetRotate()[1];
+				l_out[l_index++] = l_in.GetRotate()[2];
+				l_out[l_index++] = l_in.GetRotate()[3];
+				l_out[l_index++] = l_in.GetTranslate()[0];
+				l_out[l_index++] = l_in.GetTranslate()[1];
+				l_out[l_index++] = l_in.GetTranslate()[2];
+				l_out[l_index++] = l_in.GetScale()[0];
+				l_out[l_index++] = l_in.GetScale()[1];
+				l_out[l_index++] = l_in.GetScale()[2];
+				l_out[l_index++] = l_in.GetTimeIndex();
+				++l_it;
+			}
+		}
+
+		void DoConvert( std::vector< KeyFramed > const & p_in, std::vector< KeyFrame > & p_out )
+		{
+			p_out.resize( p_in.size() );
+			auto l_it = p_out.begin();
+
+			for ( auto & l_in : p_in )
+			{
+				size_t l_index{ 0u };
+				Quaternion l_rotate{ &l_in[l_index] };
+				l_index += 4;
+				Point3r l_translate{ l_in[l_index++], l_in[l_index++], l_in[l_index++] };
+				Point3r l_scale{ l_in[l_index++], l_in[l_index++], l_in[l_index++] };
+				real l_timeIndex{ real( l_in[l_index++] ) };
+				( *l_it ) = KeyFrame{ l_timeIndex, l_translate, l_rotate, l_scale };
+				++l_it;
+			}
+		}
+	}
+
 	//*************************************************************************************************
 
 	bool BinaryWriter< SkeletonAnimationObject >::DoWrite( SkeletonAnimationObject const & p_obj )
@@ -36,7 +83,9 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = DoWriteChunk( p_obj.m_keyframes, eCHUNK_TYPE_KEYFRAMES, m_chunk );
+				std::vector< KeyFramed > l_keyFrames;
+				DoConvert( p_obj.m_keyframes, l_keyFrames );
+				l_return = DoWriteChunk( l_keyFrames, eCHUNK_TYPE_KEYFRAMES, m_chunk );
 			}
 		}
 
@@ -63,7 +112,7 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		Matrix4x4r l_transform;
-		KeyFrameArray l_keyframes;
+		std::vector< KeyFramed > l_keyframes;
 		SkeletonAnimationNodeSPtr l_node;
 		SkeletonAnimationObjectSPtr l_object;
 		SkeletonAnimationBoneSPtr l_bone;
@@ -93,7 +142,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_obj.m_keyframes.insert( p_obj.m_keyframes.end(), l_keyframes.begin(), l_keyframes.end() );
+					DoConvert( l_keyframes, p_obj.m_keyframes );
 				}
 
 				break;

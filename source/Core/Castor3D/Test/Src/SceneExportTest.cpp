@@ -164,5 +164,6 @@ namespace Testing
 		m_engine.GetSceneManager().Remove( l_name );
 		l_src.reset();
 		l_dst.reset();
-		}
+		m_engine.GetRenderLoop().Cleanup();
+	}
 }

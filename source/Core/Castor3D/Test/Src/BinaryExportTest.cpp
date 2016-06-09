@@ -104,6 +104,7 @@ namespace Testing
 		l_dst.reset();
 		l_scene.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
 		l_scene.GetMeshManager().Remove( l_name + cuT( "_exp" ) );
+		m_engine.GetRenderLoop().Cleanup();
 	}
 
 	void BinaryExportTest::AnimatedMesh()
@@ -113,8 +114,10 @@ namespace Testing
 		CT_REQUIRE( l_parser.ParseFile( TEST_DATA_FOLDER / cuT( "Anim.zip" ) ) );
 		CT_REQUIRE( l_parser.ScenesBegin() != l_parser.ScenesEnd() );
 		l_scene = l_parser.ScenesBegin()->second;
+		l_scene->GetMeshManager().lock();
 		CT_REQUIRE( l_scene->GetMeshManager().begin() != l_scene->GetMeshManager().end() );
 		auto l_src = l_scene->GetMeshManager().begin()->second;
+		l_scene->GetMeshManager().unlock();
 		auto l_name{ l_src->GetName() };
 
 		for ( auto l_submesh : *l_src )
@@ -147,6 +150,7 @@ namespace Testing
 		m_engine.GetRenderLoop().Cleanup();
 		m_engine.GetSceneManager().Remove( l_scene->GetName() );
 		l_scene->Cleanup();
+		m_engine.GetRenderLoop().Cleanup();
 	}
 
 	//*********************************************************************************************
