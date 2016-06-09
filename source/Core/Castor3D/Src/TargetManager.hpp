@@ -80,12 +80,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
-		 *\param[in]	p_pRenderTarget	The render target
+		 *\param[in]	p_target	The render target
 		 *\~french
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	p_pRenderTarget	La cible de rendu
+		 *\param[in]	p_target	La cible de rendu
 		 */
-		C3D_API void Remove( RenderTargetSPtr && p_pRenderTarget );
+		C3D_API void Remove( RenderTargetSPtr p_target );
 		/**
 		 *\~english
 		 *\brief			Renders into the render targets.

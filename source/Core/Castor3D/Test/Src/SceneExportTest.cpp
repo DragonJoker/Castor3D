@@ -99,46 +99,6 @@ namespace Testing
 		DoRegisterTest( "SceneExportTest::AnimatedScene", std::bind( &SceneExportTest::AnimatedScene, this ) );
 	}
 
-	void SceneExportTest::DoTestScene( String const & p_name )
-	{
-		SceneFileParser l_srcParser{ m_engine };
-		CT_REQUIRE( l_srcParser.ParseFile( TEST_DATA_FOLDER / p_name ) );
-		CT_REQUIRE( l_srcParser.ScenesBegin() != l_srcParser.ScenesEnd() );
-		auto l_src{ l_srcParser.ScenesBegin()->second };
-		l_src->GetWindowManager().lock();
-		CT_REQUIRE( l_src->GetWindowManager().begin() != l_src->GetWindowManager().end() );
-		auto l_windowSrc{ l_src->GetWindowManager().begin()->second };
-		l_src->GetWindowManager().unlock();
-		l_windowSrc->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
-		m_engine.GetRenderLoop().RenderSyncFrame();
-
-		Path l_path{ cuT( "TestScene.cscn" ) };
-		CT_CHECK( ExportScene( *l_src, l_path ) );
-		auto l_name{ l_src->GetName() };
-		m_engine.GetSceneManager().Remove( l_name );
-		m_engine.GetSceneManager().Insert( l_name + cuT( "_exp" ), l_src );
-
-		SceneFileParser l_dstParser{ m_engine };
-		CT_REQUIRE( l_dstParser.ParseFile( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) );
-		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
-		auto l_dst{ l_dstParser.ScenesBegin()->second };
-		l_dst->GetWindowManager().lock();
-		CT_REQUIRE( l_dst->GetWindowManager().begin() != l_dst->GetWindowManager().end() );
-		auto l_windowDst{ l_dst->GetWindowManager().begin()->second };
-		l_dst->GetWindowManager().unlock();
-		l_windowDst->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
-		m_engine.GetRenderLoop().RenderSyncFrame();
-
-		CT_EQUAL( *l_src, *l_dst );
-		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
-		l_src->Cleanup();
-		m_engine.GetRenderLoop().RenderSyncFrame();
-		l_dst->Cleanup();
-		m_engine.GetRenderLoop().RenderSyncFrame();
-		l_src.reset();
-		l_dst.reset();
-	}
-
 	void SceneExportTest::SimpleScene()
 	{
 		DoTestScene( cuT( "primitive.cscn" ) );
@@ -158,4 +118,51 @@ namespace Testing
 	{
 		DoTestScene( cuT( "Anim.zip" ) );
 	}
+
+	SceneSPtr SceneExportTest::DoParseScene( Path const & p_path )
+	{
+		SceneFileParser l_dstParser{ m_engine };
+		CT_REQUIRE( l_dstParser.ParseFile( p_path ) );
+		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
+		SceneSPtr l_scene{ l_dstParser.ScenesBegin()->second };
+		auto & l_windows{ l_scene->GetWindowManager() };
+		RenderWindowSPtr l_window;
+
+		l_windows.lock();
+		if ( l_windows.begin() != l_windows.end() )
+		{
+			l_window = l_windows.begin()->second;
+		}
+		l_windows.unlock();
+
+		if ( l_window )
+		{
+			l_window->Initialise( Size{ 800, 600 }, WindowHandle{ std::make_shared< TestWindowHandle >() } );
+			m_engine.GetRenderLoop().RenderSyncFrame();
+		}
+
+		return l_scene;
+	}
+
+	void SceneExportTest::DoTestScene( String const & p_name )
+	{
+		SceneSPtr l_src{ DoParseScene( TEST_DATA_FOLDER / p_name ) };
+		Path l_path{ cuT( "TestScene.cscn" ) };
+		CT_CHECK( ExportScene( *l_src, l_path ) );
+		auto l_name{ l_src->GetName() };
+		m_engine.GetSceneManager().Remove( l_name );
+		m_engine.GetSceneManager().Insert( l_name + cuT( "_exp" ), l_src );
+
+		SceneSPtr l_dst{ DoParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
+		CT_EQUAL( *l_src, *l_dst );
+		File::DirectoryDelete( Path{ cuT( "TestScene" ) } );
+		l_src->Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
+		l_dst->Cleanup();
+		m_engine.GetRenderLoop().RenderSyncFrame();
+		m_engine.GetSceneManager().Remove( l_name + cuT( "_exp" ) );
+		m_engine.GetSceneManager().Remove( l_name );
+		l_src.reset();
+		l_dst.reset();
+		}
 }

@@ -9,8 +9,8 @@ scene "Scene"
 	{
 		pass
 		{
-			ambient 0.0745	0.0745	0.0745 1.0
-			diffuse 0.75164	0.75164	0.75164 1.0
+			ambient 0.0745 0.0745 0.0745 1.0
+			diffuse 0.75164 0.75164 0.75164 1.0
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.628281 0.628281 1.0
 			shininess 51.2
@@ -38,7 +38,6 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			//type plane 0 0 40 40
 			type torus 40 40 25 50
 		}
 		material "Silver"

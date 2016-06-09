@@ -76,6 +76,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a RenderTechnique.
 		 *\param[in]	p_name			The technique name.
+		 *\param[in]	p_type			The technique type.
 		 *\param[in]	p_renderTarget	The technique render target.
 		 *\param[in]	p_renderSystem	The render system.
 		 *\param[in]	p_params		The technique parameters.
@@ -83,12 +84,13 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée une RenderTechnique.
 		 *\param[in]	p_name			Le nom de la technique.
+		 *\param[in]	p_type			Le type de technique.
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_params		Les paramètres de la technique.
 		 *\return		La RenderTechnique créée.
 		 */
-		C3D_API RenderTechniqueSPtr Create( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
+		C3D_API RenderTechniqueSPtr Create( Castor::String const & p_name, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Retrieves the RenderTechnique factory

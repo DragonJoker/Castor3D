@@ -87,10 +87,11 @@ namespace Castor3D
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
 		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		auto l_target{ m_renderTarget.lock() };
 
-		if ( !m_renderTarget.expired() )
+		if ( l_target )
 		{
-			GetEngine()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetTargetManager().Remove( l_target );
 		}
 	}
 
@@ -137,9 +138,17 @@ namespace Castor3D
 
 	void RenderWindow::Cleanup()
 	{
+		m_initialised = false;
+
 		if ( m_context )
 		{
-			m_context->SetCurrent();
+			auto l_context{ GetEngine()->GetRenderSystem()->GetCurrentContext() };
+
+			if ( l_context != m_context.get() )
+			{
+				m_context->SetCurrent();
+			}
+
 			RenderTargetSPtr l_target = GetRenderTarget();
 
 			if ( l_target )
@@ -147,11 +156,19 @@ namespace Castor3D
 				l_target->Cleanup();
 			}
 
-			m_context->EndCurrent();
+			if ( l_context != m_context.get() )
+			{
+				m_context->EndCurrent();
+			}
 
 			if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
 			{
 				m_context->Cleanup();
+			}
+
+			if ( l_context != m_context.get() )
+			{
+				l_context->SetCurrent();
 			}
 		}
 	}

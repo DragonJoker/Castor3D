@@ -65,19 +65,6 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( p_target.GetTechnique() )
-		{
-			if ( l_return && p_target.GetTechnique()->GetName() == cuT( "msaa" ) )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
-			}
-
-			if ( l_return && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
-			{
-				l_return = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
-			}
-		}
-
 		if ( l_return && p_target.IsUsingStereo() )
 		{
 			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
@@ -218,7 +205,7 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
