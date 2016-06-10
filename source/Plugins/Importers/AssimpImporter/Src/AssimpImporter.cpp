@@ -20,6 +20,8 @@
 
 #include <Logger.hpp>
 
+#include <assimp/version.h>
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -44,40 +46,59 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_extensions =
 	{
-		ImporterPlugin::Extension{ cuT( "DAE" ), cuT( "Collada" ) },
+		ImporterPlugin::Extension{ cuT( "AC" ), cuT( "AC3D" ) },
+		ImporterPlugin::Extension{ cuT( "ACC" ), cuT( "AC3D" ) },
+		ImporterPlugin::Extension{ cuT( "AC3D" ), cuT( "AC3D" ) },
 		ImporterPlugin::Extension{ cuT( "BLEND" ), cuT( "Blender" ) },
-		ImporterPlugin::Extension{ cuT( "BVH" ), cuT( "3 Biovision BVH" ) },
+		ImporterPlugin::Extension{ cuT( "BVH" ), cuT( "Biovision BVH" ) },
+		ImporterPlugin::Extension{ cuT( "COB" ), cuT( "TrueSpace" ) },
+		ImporterPlugin::Extension{ cuT( "CSM" ), cuT( "CharacterStudio Motion" ) },
+		ImporterPlugin::Extension{ cuT( "DAE" ), cuT( "Collada" ) },
+		ImporterPlugin::Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) },
+		ImporterPlugin::Extension{ cuT( "ENFF" ), cuT( "Neutral File Format" ) },
+		ImporterPlugin::Extension{ cuT( "HMP" ), cuT( "3D GameStudio Heightmap" ) },
 		ImporterPlugin::Extension{ cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) },
-		ImporterPlugin::Extension{ cuT( "NFF" ), cuT( "Sense8 WorldToolkit" ) },
-		ImporterPlugin::Extension{ cuT( "SMD" ), cuT( "Valve Model" ) },
-		ImporterPlugin::Extension{ cuT( "VTA" ), cuT( "Valve Model" ) },
-		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3 Quake I" ) },
-		ImporterPlugin::Extension{ cuT( "PK3" ), cuT( "Quake 3 BSP" ) },
-		ImporterPlugin::Extension{ cuT( "MDC" ), cuT( "1 RtCW" ) },
-		ImporterPlugin::Extension{ cuT( "MD5MESH" ), cuT( "Doom 3" ) },
-		ImporterPlugin::Extension{ cuT( "XML" ), cuT( "Ogre XML Mesh" ) },
-		ImporterPlugin::Extension{ cuT( "X" ), cuT( "DirectX X" ) },
+		ImporterPlugin::Extension{ cuT( "IFCZIP" ), cuT( "IFC-STEP, Industry Foundation Classes" ) },
+		ImporterPlugin::Extension{ cuT( "IRR" ), cuT( "Irrlicht Scene" ) },
+		ImporterPlugin::Extension{ cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "LWS" ), cuT( "LightWave Scene" ) },
+		ImporterPlugin::Extension{ cuT( "LXO" ), cuT( "Modo Model" ) },
+		ImporterPlugin::Extension{ cuT( "MD5MESH" ), cuT( "Doom 3 / MD5 Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MDC" ), cuT( "Return To Castle Wolfenstein Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "Quake Mesh / 3D GameStudio Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MESH" ), cuT( "Ogre 3D Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MESH.XML" ), cuT( "Ogre 3D Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MOT" ), cuT( "LightWave Scene" ) },
+		ImporterPlugin::Extension{ cuT( "MS3D" ), cuT( "Milkshape 3D" ) },
+		ImporterPlugin::Extension{ cuT( "NFF" ), cuT( "Neutral File Format" ) },
+		ImporterPlugin::Extension{ cuT( "OFF" ), cuT( "Object File Format" ) },
+		ImporterPlugin::Extension{ cuT( "PK3" ), cuT( "Quake III BSP" ) },
 		ImporterPlugin::Extension{ cuT( "Q3O" ), cuT( "Quick3D" ) },
 		ImporterPlugin::Extension{ cuT( "Q3S" ), cuT( "Quick3D" ) },
 		ImporterPlugin::Extension{ cuT( "RAW" ), cuT( "Raw Triangles" ) },
-		ImporterPlugin::Extension{ cuT( "AC" ), cuT( "AC3D" ) },
-		ImporterPlugin::Extension{ cuT( "STL" ), cuT( "Stereolithography" ) },
-		ImporterPlugin::Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) },
-		ImporterPlugin::Extension{ cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) },
-		ImporterPlugin::Extension{ cuT( "IRR" ), cuT( "Irrlicht Scene" ) },
-		ImporterPlugin::Extension{ cuT( "OFF" ), cuT( "Object File Format" ) },
-		ImporterPlugin::Extension{ cuT( "TER" ), cuT( "Terragen Terrain" ) },
-		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3D GameStudio Model" ) },
-		ImporterPlugin::Extension{ cuT( "HMP" ), cuT( "3D GameStudio Terrain" ) },
-		ImporterPlugin::Extension{ cuT( "MS3D" ), cuT( "3 Milkshape 3D" ) },
-		ImporterPlugin::Extension{ cuT( "LWS" ), cuT( "LightWave Scene" ) },
-		ImporterPlugin::Extension{ cuT( "LXO" ), cuT( "Modo Model" ) },
-		ImporterPlugin::Extension{ cuT( "CSM" ), cuT( "CharacterStudio Motion" ) },
-		ImporterPlugin::Extension{ cuT( "COB" ), cuT( "TrueSpace" ) },
 		ImporterPlugin::Extension{ cuT( "SCN" ), cuT( "TrueSpace" ) },
-		ImporterPlugin::Extension{ cuT( "XGL" ), cuT( "2 XGL" ) },
-		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "2 XGL" ) },
+		ImporterPlugin::Extension{ cuT( "SMD" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "STL" ), cuT( "Stereolithography" ) },
+		ImporterPlugin::Extension{ cuT( "TER" ), cuT( "Terragen Heightmap" ) },
+		ImporterPlugin::Extension{ cuT( "VTA" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "X" ), cuT( "Direct3D XFile" ) },
+		ImporterPlugin::Extension{ cuT( "XGL" ), cuT( "XGL" ) },
+		ImporterPlugin::Extension{ cuT( "XML" ), cuT( "Irrlicht Scene" ) },
+		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "XGL" ) },
 	};
+
+	if ( aiGetVersionMajor() >= 3 )
+	{
+		if (aiGetVersionMajor () >= 2)
+		{
+			l_extensions.emplace_back( cuT( "3D" ), cuT( "Unreal" ) );
+			l_extensions.emplace_back( cuT( "ASSBIN" ), cuT( "Assimp binary dump" ) );
+			l_extensions.emplace_back( cuT( "B3D" ), cuT( "BlitzBasic 3D" ) );
+			l_extensions.emplace_back( cuT( "NDO" ), cuT( "Nendo Mesh" ) );
+			l_extensions.emplace_back( cuT( "OGEX" ), cuT( "Open Game Engine Exchange" ) );
+			l_extensions.emplace_back( cuT( "UC" ), cuT( "Unreal" ) );
+		}
+	}
 
 	std::set< String > l_alreadyLoaded;
 
@@ -97,11 +118,13 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "3DS" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) );
+		l_extensions.emplace_back( cuT( "PRJ" ), cuT( "3D Studio Max 3DS" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "ASE" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) );
+		l_extensions.emplace_back( cuT( "ASK" ), cuT( "3D Studio Max ASE" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "OBJ" ) ) )
@@ -117,17 +140,23 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD2" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II" ) );
+		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II Mesh" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD3" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III" ) );
+		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III Mesh" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "LWO" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave Model" ) );
+		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave/Modo Object" ) );
+		l_extensions.emplace_back( cuT( "LXO" ), cuT( "LightWave/Modo Object" ) );
+	}
+
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "FBX" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "FBX" ), cuT( "Autodesk FBX" ) );
 	}
 
 	return l_extensions;

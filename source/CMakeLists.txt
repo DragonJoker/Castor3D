@@ -150,6 +150,10 @@ endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	if( Boost_FOUND )
+		if ( CASTOR_BUILDGRP_TEST )
+			enable_testing()
+		endif ()
+
 		add_subdirectory( Core )
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			add_subdirectory( Plugins )
