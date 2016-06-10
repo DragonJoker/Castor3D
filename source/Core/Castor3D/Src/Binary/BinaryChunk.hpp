@@ -364,7 +364,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
-			auto l_size{ p_count * uint32_t( sizeof( T ) ) };
+			auto l_size = p_count * uint32_t( sizeof( T ) );
 			bool l_return{ m_index + l_size < m_data.size() };
 
 			if ( l_return )
