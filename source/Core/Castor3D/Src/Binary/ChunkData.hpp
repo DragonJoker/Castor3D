@@ -687,7 +687,7 @@ namespace Castor3D
 		{
 			if ( !Castor::IsBigEndian() )
 			{
-				for ( auto i{ 0u }; i < Count * Count; ++i )
+				for ( auto i = 0u; i < Count * Count; ++i )
 				{
 					Castor::SwitchEndianness( p_value.ptr() );
 				}
