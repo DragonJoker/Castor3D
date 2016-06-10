@@ -167,7 +167,7 @@ namespace Castor
 
 			if ( !l_return )
 			{
-				auto l_error{ errno };
+				auto l_error = errno;
 
 				switch ( l_error )
 				{
