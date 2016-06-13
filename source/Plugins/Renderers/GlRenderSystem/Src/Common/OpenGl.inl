@@ -1042,7 +1042,7 @@ namespace GlRender
 
 		if ( ! glCheckError( *this, "glRenderMode" ) )
 		{
-			l_iReturn = eGL_INVALID_INDEX;
+			l_iReturn = int( eGL_INVALID_INDEX );
 		}
 
 		return l_iReturn;
@@ -2125,7 +2125,7 @@ namespace GlRender
 
 		if ( ! glCheckError( *this, "glGetUniformLocation" ) )
 		{
-			l_iReturn = eGL_INVALID_INDEX;
+			l_iReturn = int( eGL_INVALID_INDEX );
 		}
 
 		return l_iReturn;
@@ -2657,7 +2657,7 @@ namespace GlRender
 
 		if ( !glCheckError( *this, "glGetAttribLocation" ) )
 		{
-			l_iReturn = eGL_INVALID_INDEX;
+			l_iReturn = int( eGL_INVALID_INDEX );
 		}
 
 		return l_iReturn;

@@ -33,7 +33,7 @@ namespace GuiCommon
 
 	private:
 		void DoInitialise();
-		DECLARE_EVENT_TABLE();
+		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent & p_event );
 
 	private:

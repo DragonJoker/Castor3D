@@ -667,7 +667,7 @@ namespace GlRender
 		: FrameVariableBuffer( p_name, p_renderSystem )
 		, Holder( p_gl )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_UNIFORM )
-		, m_uniformBlockIndex( eGL_INVALID_INDEX )
+		, m_uniformBlockIndex( int( eGL_INVALID_INDEX ) )
 		, m_uniformBlockSize( 0 )
 	{
 	}
@@ -884,7 +884,7 @@ namespace GlRender
 				m_uniformBlockIndex = GetOpenGl().GetUniformBlockIndex( l_program->GetGlName(), string::string_cast< char >( m_name ).c_str() );
 				uint32_t l_totalSize = 0;
 
-				if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
+				if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
 				{
 					GetOpenGl().GetActiveUniformBlockiv( l_program->GetGlName(), m_uniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_uniformBlockSize );
 					m_glBuffer.Create();
@@ -957,7 +957,7 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoCleanup()
 	{
-		m_uniformBlockIndex = eGL_INVALID_INDEX;
+		m_uniformBlockIndex = int( eGL_INVALID_INDEX );
 		m_uniformBlockSize = 0;
 		m_glBuffer.Cleanup();
 		m_glBuffer.Destroy();
@@ -965,7 +965,7 @@ namespace GlRender
 
 	bool GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
+		if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
 		{
 			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
@@ -982,7 +982,7 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
+		if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
 		{
 			m_glBuffer.Unbind();
 		}

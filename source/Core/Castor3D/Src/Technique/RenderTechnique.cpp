@@ -88,14 +88,14 @@ namespace Castor3D
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
 		{
 			AnimatedObjectSPtr l_return;
-			auto & l_manager{ p_scene.GetAnimatedObjectGroupManager() };
-			auto l_lock{ make_unique_lock( l_manager ) };
+			auto & l_manager = p_scene.GetAnimatedObjectGroupManager();
+			auto l_lock = make_unique_lock( l_manager );
 
 			for ( auto l_group : l_manager )
 			{
 				if ( !l_return )
 				{
-					auto l_it{ l_group.second->GetObjects().find( p_name ) };
+					auto l_it = l_group.second->GetObjects().find( p_name );
 
 					if ( l_it != l_group.second->GetObjects().end() )
 					{

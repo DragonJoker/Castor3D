@@ -39,7 +39,7 @@ namespace GuiCommon
 		void DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass );
 		void DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture );
 
-		DECLARE_EVENT_TABLE();
+		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
 		void OnSelectItem( wxTreeEvent & p_event );
 		void OnMouseRButtonUp( wxTreeEvent & p_event );

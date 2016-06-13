@@ -155,7 +155,7 @@ namespace Castor3D
 			{
 				Size l_size = m_pRenderer->GetSize();
 
-				for ( auto && l_child : *l_overlay )
+				for ( auto l_child : *l_overlay )
 				{
 					l_child->SetPosition( l_child->GetAbsolutePosition() );
 					l_child->SetSize( l_child->GetAbsoluteSize() );

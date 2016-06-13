@@ -56,10 +56,16 @@ namespace Testing
 			l_submesh->Initialise();
 		}
 
-		CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
+		{
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
+		}
 
 		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
-		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
+		{
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
+		}
 
 		for ( auto l_submesh : *l_dst )
 		{
@@ -81,17 +87,26 @@ namespace Testing
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
 		auto l_src = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
-		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, BinaryFile{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ } ) );
+		{
+			BinaryFile l_file{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ };
+			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
+		}
 
 		for ( auto l_submesh : *l_src )
 		{
 			l_submesh->Initialise();
 		}
 
-		CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
+		{
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
+		}
 
 		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
-		CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
+		{
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
+		}
 
 		for ( auto l_submesh : *l_dst )
 		{
@@ -127,13 +142,15 @@ namespace Testing
 
 		Path l_path{ cuT( "TestMesh.cmsh" ) };
 		{
-			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, BinaryFile{ l_path, File::eOPEN_MODE_WRITE } ) );
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
 		auto l_dst = l_sceneDst.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		{
-			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, BinaryFile{ l_path, File::eOPEN_MODE_READ } ) );
+			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
 		}
 
 		for ( auto l_submesh : *l_dst )

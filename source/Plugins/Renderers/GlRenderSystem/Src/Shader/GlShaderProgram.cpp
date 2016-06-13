@@ -119,7 +119,7 @@ namespace GlRender
 
 	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
 	{
-		int l_iReturn = eGL_INVALID_INDEX;
+		int l_iReturn = int( eGL_INVALID_INDEX );
 
 		if ( GetGlName() != eGL_INVALID_INDEX && GetOpenGl().IsProgram( GetGlName() ) )
 		{

@@ -489,7 +489,7 @@ namespace Castor3D
 				l_offset /= 2;
 			}
 
-			for ( auto && l_character : p_line.m_characters )
+			for ( auto & l_character : p_line.m_characters )
 			{
 				l_character.m_position[0] += l_offset;
 			}
@@ -557,7 +557,7 @@ namespace Castor3D
 				l_offset /= 2;
 			}
 
-			for ( auto && l_line : p_lines )
+			for ( auto & l_line : p_lines )
 			{
 				l_line.m_position[1] += l_offset;
 			}
