@@ -118,6 +118,10 @@ namespace Msaa
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
 		virtual void DoEndRender( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
+		 */
+		virtual bool DoWriteInto( Castor::TextFile & p_file );
 
 	protected:
 		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé

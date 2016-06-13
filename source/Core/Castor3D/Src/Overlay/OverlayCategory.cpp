@@ -13,173 +13,48 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayCategory::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< OverlayCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	OverlayCategory::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< OverlayCategory >{ p_tabs }
 	{
 	}
 
-	bool OverlayCategory::TextLoader::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
+	bool OverlayCategory::TextWriter::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
-
-		while ( l_pParent )
-		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
-
-		bool l_return = p_file.Print( 1024, cuT( "%S\tposition " ), l_strTabs.c_str() ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "\tposition " ) ) > 0
+			&& Point2d::TextWriter{ String{} }( p_overlay.GetPosition(), p_file )
+			&& p_file.WriteText( cuT( "\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = Point2d::TextLoader()( p_overlay.GetPosition(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.Print( 1024, cuT( "\n%S\tsize " ), l_strTabs.c_str() ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Point2d::TextLoader()( p_overlay.GetSize(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tsize " ) ) > 0
+				&& Point2d::TextWriter{ String{} }( p_overlay.GetSize(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && p_overlay.GetMaterial() )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
-		for ( auto && l_overlay : p_overlay.GetOverlay() )
+		for ( auto l_overlay : p_overlay.GetOverlay() )
 		{
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
+				l_return &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
+				l_return &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
+				l_return &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:
 				l_return = false;
 			}
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	OverlayCategory::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< OverlayCategory >( p_path )
-	{
-	}
-
-	bool OverlayCategory::BinaryParser::Fill( OverlayCategory const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetType(), eCHUNK_TYPE_OVERLAY_TYPE, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetPosition(), eCHUNK_TYPE_OVERLAY_POSITION, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetSize().const_ptr(), 2, eCHUNK_TYPE_OVERLAY_SIZE, p_chunk );
-		}
-
-		if ( l_return && p_obj.GetMaterial() )
-		{
-			l_return = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_OVERLAY_MATERIAL, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.IsVisible(), eCHUNK_TYPE_OVERLAY_VISIBLE, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool OverlayCategory::BinaryParser::Parse( OverlayCategory & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		bool l_visible;
-		String l_name;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_OVERLAY_POSITION:
-			l_return = DoParseChunk( p_obj.GetPosition(), p_chunk );
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_SIZE:
-			l_return = DoParseChunk( p_obj.GetSize().ptr(), 2, p_chunk );
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_MATERIAL:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetMaterial( p_obj.m_pOverlay->GetEngine()->GetMaterialManager().Find( l_name ) );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_VISIBLE:
-			l_return = DoParseChunk( l_visible, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetVisible( l_visible );
-			}
-
-			break;
-
-		default:
-			switch ( p_obj.GetType() )
-			{
-			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::BinaryParser( m_path ).Parse( *static_cast< PanelOverlay * >( &p_obj ), p_chunk );
-				break;
-
-			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::BinaryParser( m_path ).Parse( *static_cast< BorderPanelOverlay * >( &p_obj ), p_chunk );
-				break;
-
-			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::BinaryParser( m_path ).Parse( *static_cast< TextOverlay * >( &p_obj ), p_chunk );
-				break;
-
-			default:
-				l_return = false;
-			}
-
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
 		}
 
 		return l_return;
@@ -189,12 +64,6 @@ namespace Castor3D
 
 	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_type )
 		: m_type( p_type )
-		, m_visible( true )
-		, m_sizeChanged( true )
-		, m_positionChanged( true )
-		, m_uv( 0, 0, 1, 1 )
-		, m_index( 0 )
-		, m_level( 0 )
 	{
 	}
 

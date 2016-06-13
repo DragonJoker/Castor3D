@@ -10,103 +10,46 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool BorderPanelOverlay::TextLoader::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
+	BorderPanelOverlay::TextWriter::TextWriter( String const & p_tabs, BorderPanelOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
+		, m_category{ p_category }
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
+	}
 
-		while ( l_pParent )
-		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
-
-		bool l_return = p_file.WriteText( l_strTabs + cuT( "border_panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+	bool BorderPanelOverlay::TextWriter::operator()( BorderPanelOverlay const & p_overlay, TextFile & p_file )
+	{
+		Logger::LogInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + p_overlay.GetOverlayName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 1024, cuT( "%S\tborder_size " ), l_strTabs.c_str() ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Point4d::TextLoader()( p_overlay.GetBorderSize(), p_file );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_size " ) ) > 0
+				&& Point4d::TextWriter{ String{} }( p_overlay.GetBorderSize(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && p_overlay.GetBorderMaterial() )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tborder_material " ) + p_overlay.GetBorderMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.GetBorderMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
 	}
 
-	//*************************************************************************************************
-
-	BorderPanelOverlay::BinaryParser::BinaryParser( Path const & p_path )
-		:	OverlayCategory::BinaryParser( p_path )
+	bool BorderPanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
-	}
-
-	bool BorderPanelOverlay::BinaryParser::Fill( BorderPanelOverlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetBorderSize().const_ptr(), 2, eCHUNK_TYPE_OVERLAY_BORDER_SIZE, p_chunk );
-		}
-
-		if ( l_return && p_obj.GetBorderMaterial() )
-		{
-			l_return = DoFillChunk( p_obj.GetBorderMaterial()->GetName(), eCHUNK_TYPE_OVERLAY_BORDER_MATERIAL, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool BorderPanelOverlay::BinaryParser::Parse( BorderPanelOverlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_OVERLAY_BORDER_SIZE:
-			l_return = DoParseChunk( p_obj.GetBorderSize().ptr(), 2, p_chunk );
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_BORDER_MATERIAL:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetBorderMaterial( p_obj.m_pOverlay->GetEngine()->GetMaterialManager().Find( l_name ) );
-			}
-
-			break;
-
-		default:
-			l_return = false;
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
-		}
-
-		return l_return;
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

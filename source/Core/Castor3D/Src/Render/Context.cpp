@@ -221,7 +221,7 @@ namespace Castor3D
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_X, position.SWIZZLE_Y, 0.0, 1.0 );
 			} );
 			l_strVtxShader = l_writer.Finalise();
 		}
@@ -239,7 +239,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
+				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
 			} );
 			l_strPxlShader = l_writer.Finalise();
 		}

@@ -31,7 +31,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 		variant << value;\
 		return variant;\
 	}\
-	extern const char* classname##_VariantType;
+	extern const char* classname##_VariantType
 
 #define GC_PG_NS_DECLARE_VARIANT_DATA( namspace, classname )\
 	GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, wxEMPTY_PARAMETER_VALUE )

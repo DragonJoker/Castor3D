@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		inline CpuBuffer( Engine & p_engine )
+		inline explicit CpuBuffer( Engine & p_engine )
 			: Castor::OwnedBy< Engine >( p_engine )
 			, m_bAssigned( false )
 			, m_bToDelete( false )

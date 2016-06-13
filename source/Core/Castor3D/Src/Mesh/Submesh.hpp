@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Face.hpp"
 #include "VertexGroup.hpp"
 
-#include "Animation/VertexBoneData.hpp"
+#include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
 #include <OwnedBy.hpp>
@@ -43,110 +43,25 @@ namespace Castor3D
 	\remark		Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh
-		: public Castor::OwnedBy< Engine >
+		: public Castor::OwnedBy< Scene >
 	{
-		friend class GeometryBuffers;
-
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		Submesh text loader
-		\~french
-		\brief		Loader texte de Submesh
-		*/
-		class TextLoader
-			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
-			/**
-			 *\~english
-			 *\brief		Function operator
-			 *\param[in]	p_submesh	The submesh to write in the file
-			 *\param[in]	p_file		The file in which submesh is written
-			 *\return		\p true if OK
-			 *\~french
-			 *\brief		Opérateur fonction
-			 *\param[in]	p_submesh	Le sous-maillage à écrire dans le fichier
-			 *\param[in]	p_file		Le fichier dans lequel le sous-maillage est écrit
-			 *\return		\p true si tout s'est bien passé
-			 */
-			C3D_API virtual bool operator()( Submesh const & p_submesh, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Submesh >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Submesh & p_obj, BinaryChunk & p_chunk )const;
-		};
-
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_mesh		The parent mesh
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_id		The submesh ID
+		 *\brief		Constructor.
+		 *\param[in]	p_mesh	The parent mesh.
+		 *\param[in]	p_scene	The scene.
+		 *\param[in]	p_id	The submesh ID.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_mesh		Le mesh parent
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_id		L'ID du sous-maillage
+		 *\brief		Constructeur.
+		 *\param[in]	p_mesh	Le mesh parent.
+		 *\param[in]	p_scene	La scène.
+		 *\param[in]	p_id	L'ID du sous-maillage.
 		 */
-		C3D_API Submesh( Engine & p_engine, MeshRPtr p_mesh, uint32_t p_id = 1 );
+		C3D_API Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -241,63 +156,37 @@ namespace Castor3D
 		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
 		/**
 		 *\~english
-		 *\brief		Adds a points list to my list
-		 *\param[in]	p_vertices	The vertices
+		 *\brief		Creates and adds a vertex to my list.
+		 *\param[in]	p_v	The vertex.
+		 *\return		The created vertex.
 		 *\~french
-		 *\brief		Ajoute des points à la liste
-		 *\param[in]	p_vertices	Les vertices
+		 *\brief		Crée un Vertex et l'ajoute à la liste.
+		 *\param[in]	p_v	Le sommet.
+		 *\return		Le vertex créé.
 		 */
-		C3D_API void AddPoints( stVERTEX_GROUP const & p_vertices );
+		C3D_API BufferElementGroupSPtr AddPoint( InterleavedVertex const & p_v );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list.
+		 *\param[in]	p_begin	The vertices data begin.
+		 *\param[in]	p_end	The vertices data end.
+		 *\~french
+		 *\brief		Ajoute des points à la liste.
+		 *\param[in]	p_begin	Le début des données de sommets.
+		 *\param[in]	p_end	La fin des données de sommets.
+		 */
+		C3D_API void AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneDataBegin	The bone datas begin.
-		 *\param[in]	p_boneDataEnd	The bone datas end.
+		 *\param[in]	p_begin	The bones data begin.
+		 *\param[in]	p_end	The bones data end.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneDataBegin	Le début des données de bones.
-		 *\param[in]	p_boneDataEnd	La fin des données de bones.
+		 *\param[in]	p_begin	Le début des données de bones.
+		 *\param[in]	p_end	La fin des données de bones.
 		 */
-		C3D_API void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd );
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\param[in]	p_count		The data count.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 *\param[in]	p_count		Les compte des données.
-		 */
-		inline void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneData, uint32_t p_count )
-		{
-			AddBoneDatas( p_boneData, p_boneData + p_count );
-		}
-		/**
-		*\~english
-		*\brief		Adds bone datas.
-		*\param[in]	p_boneData	The bone datas.
-		*\~french
-		*\brief		Ajoute des données de bones.
-		*\param[in]	p_boneData	Les données de bones.
-		*/
-		inline void AddBoneDatas( std::vector< stVERTEX_BONE_DATA > const & p_boneData )
-		{
-			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	p_boneData	The bone datas.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	p_boneData	Les données de bones.
-		 */
-		template< uint32_t Count >
-		inline void AddBoneDatas( stVERTEX_BONE_DATA const( & p_boneData )[Count] )
-		{
-			AddBoneDatas( p_boneData, p_boneData + Count );
-		}
+		C3D_API void AddBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
@@ -323,14 +212,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_faces	The faces
-		 *\param[in]	p_count	The faces count
+		 *\param[in]	p_begin	The faces data begin.
+		 *\param[in]	p_end	The faces data end.
 		 *\~french
-		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_faces	Les faces
-		 *\param[in]	p_count	Le nombre de faces
+		 *\brief		Crée et ajoute des faces au sous-maillage
+		 *\param[in]	p_begin	Le début des données de faces.
+		 *\param[in]	p_end	La fin des données de faces.
 		 */
-		C3D_API void AddFaceGroup( stFACE_INDICES * p_faces, uint32_t p_count );
+		C3D_API void AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
@@ -514,6 +403,81 @@ namespace Castor3D
 		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
+		 *\brief		Adds a points list to my list
+		 *\param[in]	p_vertices	The vertices
+		 *\~french
+		 *\brief		Ajoute des points à la liste
+		 *\param[in]	p_vertices	Les vertices
+		 */
+		inline void AddPoints( std::vector< InterleavedVertex > const & p_vertices )
+		{
+			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds a points list to my list
+		 *\param[in]	p_vertices	The vertices
+		 *\~french
+		 *\brief		Ajoute des points à la liste
+		 *\param[in]	p_vertices	Les vertices
+		 */
+		template< size_t Count >
+		inline void AddPoints( std::array< InterleavedVertex, Count > const & p_vertices )
+		{
+			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
+		}
+		/**
+		*\~english
+		*\brief		Adds bone datas.
+		*\param[in]	p_boneData	The bone datas.
+		*\~french
+		*\brief		Ajoute des données de bones.
+		*\param[in]	p_boneData	Les données de bones.
+		*/
+		inline void AddBoneDatas( std::vector< VertexBoneData > const & p_boneData )
+		{
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 */
+		template< size_t Count >
+		inline void AddBoneDatas( std::array< VertexBoneData, Count > const & p_boneData )
+		{
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_faces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	p_faces	Les faces
+		 */
+		inline void AddFaceGroup( std::vector< FaceIndices > const & p_faces )
+		{
+			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_faces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au sous-maillage
+		 *\param[in]	p_faces	Les faces
+		 */
+		template< size_t Count >
+		inline void AddFaceGroup( std::array< FaceIndices, Count > const & p_faces )
+		{
+			AddFaceGroup( p_faces.data(), p_faces.data() + p_faces.size() );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The value
 		 *\~french
@@ -522,7 +486,7 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return GetParent()->GetSkeleton();
+			return GetParent().GetSkeleton();
 		}
 		/**
 		 *\~english
@@ -829,7 +793,7 @@ namespace Castor3D
 		 *\brief		Récupère le mesh parent
 		 *\return		La valeur
 		 */
-		inline MeshRPtr GetParent()const
+		inline Mesh const & GetParent()const
 		{
 			return m_parentMesh;
 		}
@@ -853,7 +817,7 @@ namespace Castor3D
 		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 */
-		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_faces )[Count] )
+		template< uint32_t Count > void AddFaceGroup( FaceIndices( & p_faces )[Count] )
 		{
 			AddFaceGroup( p_faces, Count );
 		}
@@ -869,50 +833,144 @@ namespace Castor3D
 		void DoGenerateMatrixBuffer( uint32_t p_count );
 
 	private:
-		//!\~english The submesh ID.	\~french L'id du sbmesh.
-		uint32_t m_id;
-		//!\~english The submesh instances count.	\~french Le nombre d'instances du sous-maillage.
+		//!\~english	The submesh ID.
+		//!\~french		L'id du sbmesh.
+		uint32_t m_id{ 0 };
+		//!\~english	Tells if normals exist or need to be computed.
+		//!\~french		Dit si les normales existent ou doivent être calculées.
+		bool m_hasNormals{ false };
+		//!\~english	The shader program flags.
+		//!\~french		Les indicateurs pour le shader.
+		uint32_t m_programFlags{ 0 };
+		//!\~english	Tells the VBOs has been initialised.
+		//!\~french		Dit que les VBOs ont été initialisés.
+		bool m_initialised{ false };
+		//!\~english	Tells the VAO needs reininitialisation.
+		//!\~french		Dit que le VAO a besoin d'être réinitialisé.
+		bool m_dirty{ true };
+		//!\~english	The submesh instances count.
+		//!\~french		Le nombre d'instances du sous-maillage.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
-		//!\~english Vertex elements declaration, deduced from points.	\~french Déclaration des éléments d'un sommet, déduite à partir des points.
+		//!\~english	Vertex elements declaration, deduced from points.
+		//!\~french		Déclaration des éléments d'un sommet, déduite à partir des points.
 		BufferDeclaration m_layout;
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
-		//!\~english The index buffer.	\~french Le tampon d'indices.
+		//!\~english	The index buffer.
+		//!\~french		Le tampon d'indices.
 		IndexBufferSPtr m_indexBuffer;
-		//!\~english The bone data buffer (animation).	\~french Le tampon de données de bones (animation).
+		//!\~english	The bone data buffer (animation).
+		//!\~french		Le tampon de données de bones (animation).
 		VertexBufferSPtr m_bonesBuffer;
-		//!\~english The matrix buffer (instantiation).	\~french Le tampon de matrices (instanciation).
+		//!\~english	The matrix buffer (instantiation).
+		//!\~french		Le tampon de matrices (instanciation).
 		VertexBufferSPtr m_matrixBuffer;
-		//!\~english The faces in the submesh.	\~french Le tableau de faces.
+		//!\~english	The faces in the submesh.
+		//!\~french		Le tableau de faces.
 		FaceArray m_faces;
-		//!\~english Tells if normals exist or need to be computed.	\~french Dit si les normales existent ou doivent être calculées.
-		bool m_hasNormals;
-		//!\~english The Material assigned at creation.	\~french Le Materiau affecté à la création.
+		//!\~english	The Material assigned at creation.
+		//!\~french		Le Materiau affecté à la création.
 		MaterialWPtr m_defaultMaterial;
-		//!\~english The combo box container.	\~french Le conteneur boîte.
+		//!\~english	The combo box container.
+		//!\~french		Le conteneur boîte.
 		Castor::CubeBox m_box;
-		//!\~english The spheric container.	\~french Le conteneur sphère.
+		//!\~english	The spheric container.
+		//!\~french		Le conteneur sphère.
 		Castor::SphereBox m_sphere;
-		//!\~english The vertex data array.	\~french Le tableau de données des sommets.
+		//!\~english	The vertex data array.
+		//!\~french		Le tableau de données des sommets.
 		BytePtrList m_pointsData;
-		//!\~english The vertex pointer array.	\~french Le tableau de sommets.
+		//!\~english	The vertex pointer array.
+		//!\~french		Le tableau de sommets.
 		VertexPtrArray m_points;
-		//!\~english The bones data array.	\~french Le tableau de données des bones.
+		//!\~english	The bones data array.
+		//!\~french		Le tableau de données des bones.
 		BytePtrList m_bonesData;
-		//!\~english The bones pointer array.	\~french Le tableau de bones.
+		//!\~english	The bones pointer array.
+		//!\~french		Le tableau de bones.
 		VertexPtrArray m_bones;
-		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.
+		//!\~english	The transformed camera position at last sort.
+		//!\~french		La position transformée de la caméra au dernier tri.
 		Castor::Point3r m_cameraPosition;
-		//!\~english The parent mesh	\~french Le mesh parent.
-		MeshRPtr m_parentMesh;
-		//!\~english The shader program flags.	\~french Les indicateurs pour le shader.
-		uint32_t m_programFlags;
-		//!\~english Tells the renderer has been initialised.	\~french Dit que le renderer a été initialisé.
-		bool m_initialised;
-		//!\~english Tells the VAO needs reininitialisation.	\~french Dit que le VAO a besoin d'être réinitialisé.
-		bool m_dirty;
-		//!\~english The GeometryBuffers with which this submesh is compatible.	\~french Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
+		//!\~english	The parent mesh.
+		//!\~french		Le maillage parent.
+		Mesh & m_parentMesh;
+		//!\~english	The GeometryBuffers with which this submesh is compatible.
+		//!\~french		Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+
+		friend class GeometryBuffers;
+		friend class BinaryWriter< Submesh >;
+		friend class BinaryParser< Submesh >;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date 		28/05/2016
+	\~english
+	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\remarks	Specialisation for Submesh.
+	\~french
+	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\remarks	Spécialisation pour Submesh.
+	*/
+	template<>
+	struct ChunkTyper< Submesh >
+	{
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SUBMESH;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryWriter< Submesh >
+		: public BinaryWriterBase< Submesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to fill the chunk from specific data.
+		 *\param[in]	p_obj	The object to write.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+		 *\param[in]	p_obj	L'objet à écrire.
+		 *\return		\p false si une erreur quelconque est arrivée.
+		 */
+		C3D_API bool DoWrite( Submesh const & p_obj )override;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\date		14/02/2010
+	\~english
+	\brief		MovableObject loader
+	\~english
+	\brief		Loader de MovableObject
+	*/
+	template<>
+	class BinaryParser< Submesh >
+		: public BinaryParserBase< Submesh >
+	{
+	private:
+		/**
+		 *\~english
+		 *\brief		Function used to retrieve specific data from the chunk
+		 *\param[out]	p_obj	The object to read
+		 *\param[in]	p_chunk	The chunk containing data
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
+		 *\param[out]	p_obj	L'objet à lire
+		 *\param[in]	p_chunk	Le chunk contenant les données
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
+		C3D_API bool DoParse( Submesh & p_obj )override;
 	};
 }
 

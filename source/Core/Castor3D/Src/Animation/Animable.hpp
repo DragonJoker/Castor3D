@@ -19,6 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ANIMABLE_H___
 
 #include "Binary/BinaryParser.hpp"
+#include "Binary/BinaryWriter.hpp"
+
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -32,103 +35,44 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
+		: public Castor::OwnedBy< Scene >
 	{
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		Animable binary loader.
-		\~english
-		\brief		Loader binaire d'Animable.
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Animable >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data.
-			 *\param[in]	p_obj	The object to write.
-			 *\param[out]	p_chunk	The chunk to fill.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-			 *\param[in]	p_obj	L'objet à écrire.
-			 *\param[out]	p_chunk	Le chunk à remplir.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API virtual bool Fill( Animable const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk.
-			 *\param[out]	p_obj	The object to read.
-			 *\param[in]	p_chunk	The chunk containing data.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-			 *\param[out]	p_obj	L'objet à lire.
-			 *\param[in]	p_chunk	Le chunk contenant les données.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API virtual bool Parse( Animable & p_obj, BinaryChunk & p_chunk )const;
-		};
-
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		Animable();
+		explicit Animable( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~Animable();
+		virtual ~Animable();
 
 	public:
-		/**
-		*\~english
-		*\brief		Creates an animation
-		*\param[in]	p_name	The animation name
-		*\return		The animation
-		*\~french
-		*\brief		Crée une animation
-		*\param[in]	p_name	Le nom de l'animation
-		*\return		l'animation
-		*/
-		C3D_API AnimationSPtr CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Empties the animations map.
 		 *\~french
 		 *\brief		Vid ela map d'animations.
-		*/
+		 */
 		C3D_API void CleanupAnimations();
 		/**
-		*\~english
-		*\brief		Retrieves an animation
-		*\param[in]	p_name	The animation name
-		*\return		The animation
-		*\~french
-		*\brief		Récupère une animation
-		*\param[in]	p_name	Le nom de l'animation
-		*\return		L'animation
-		*/
+		 *\~english
+		 *\brief		Retrieves an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+ 		 *\brief		Récupère une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		L'animation
+		 */
 		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
@@ -140,10 +84,49 @@ namespace Castor3D
 		{
 			return m_animations;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the animated skeleton instance
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'instance animée du squelette
+		 *\return		La valeur
+		 */
+		inline AnimatedObjectSPtr const & GetAnimatedObject()const
+		{
+			return m_animatedObject;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animated skeleton instance
+		 *\param[in]	p_object	The new value
+		 *\~french
+		 *\brief		Définit l'instance animée du squelette
+		 *\param[in]	p_object	La nouvelle valeur
+		 */
+		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
+		{
+			m_animatedObject = p_object;
+		}
 
 	protected:
-		//!\~english All animations	\~french Toutes les animations
+		/**
+		 *\~english
+		 *\brief		Adds an animation.
+		 *\param[in]	p_animation	The animation.
+		 *\~french
+		 *\brief		Ajoute une animation.
+		 *\param[in]	p_animation	L'animation.
+		 */
+		void DoAddAnimation( AnimationSPtr p_animation );
+
+	protected:
+		//!\~english	All animations.
+		//!\~french		Toutes les animations.
 		AnimationPtrStrMap m_animations;
+		//!\~english	The animated object instance, if any.
+		//!\~french		L'instance d'objet animé, s'il y en a un.
+		AnimatedObjectSPtr m_animatedObject;
 	};
 }
 

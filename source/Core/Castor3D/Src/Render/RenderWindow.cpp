@@ -32,124 +32,33 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderWindow::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< RenderWindow, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	RenderWindow::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< RenderWindow >{ p_tabs }
 	{
 	}
 
-	bool RenderWindow::TextLoader::operator()( RenderWindow const & p_window, TextFile & p_file )
+	bool RenderWindow::TextWriter::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
-		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
-		bool l_return = p_file.WriteText( cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		Logger::LogInfo( m_tabs + cuT( "Writing Window " ) + p_window.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_return && p_window.GetVSync() )
+		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\tvsync true\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 		}
 
-		if ( l_return && p_window.IsFullscreen() )
+		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\tfullscreen true\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
 		}
 
 		if ( l_return && p_window.GetRenderTarget() )
 		{
-			l_return = RenderTarget::TextLoader( cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			l_return = RenderTarget::TextWriter( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
 		}
 
-		p_file.WriteText( cuT( "}\n" ) );
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	RenderWindow::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< RenderWindow >( p_path )
-	{
-	}
-
-	bool RenderWindow::BinaryParser::Fill( RenderWindow const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_WINDOW );
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetVSync(), eCHUNK_TYPE_WINDOW_VSYNC, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.IsFullscreen(), eCHUNK_TYPE_WINDOW_FULLSCREEN, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = RenderTarget::BinaryParser( m_path ).Fill( *p_obj.GetRenderTarget(), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool RenderWindow::BinaryParser::Parse( RenderWindow & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-		bool l_bool;
-		RenderTargetSPtr l_target;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_WINDOW_VSYNC:
-					l_return = DoParseChunk( l_bool, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetVSync( l_bool );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_WINDOW_FULLSCREEN:
-					l_return = DoParseChunk( l_bool, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetFullscreen( l_bool );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET:
-					l_target = p_obj.GetEngine()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-					l_return = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
+		p_file.WriteText( m_tabs + cuT( "}\n" ) );
 		return l_return;
 	}
 
@@ -178,10 +87,11 @@ namespace Castor3D
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
 		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		auto l_target = m_renderTarget.lock();
 
-		if ( !m_renderTarget.expired() )
+		if ( l_target )
 		{
-			GetEngine()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetTargetManager().Remove( l_target );
 		}
 	}
 
@@ -228,19 +138,38 @@ namespace Castor3D
 
 	void RenderWindow::Cleanup()
 	{
-		m_context->SetCurrent();
-		RenderTargetSPtr l_target = GetRenderTarget();
+		m_initialised = false;
 
-		if ( l_target )
+		if ( m_context )
 		{
-			l_target->Cleanup();
-		}
+			auto l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
 
-		m_context->EndCurrent();
+			if ( l_context != m_context.get() )
+			{
+				m_context->SetCurrent();
+			}
 
-		if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
-		{
-			m_context->Cleanup();
+			RenderTargetSPtr l_target = GetRenderTarget();
+
+			if ( l_target )
+			{
+				l_target->Cleanup();
+			}
+
+			if ( l_context != m_context.get() )
+			{
+				m_context->EndCurrent();
+			}
+
+			if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
+			{
+				m_context->Cleanup();
+			}
+
+			if ( l_context != m_context.get() )
+			{
+				l_context->SetCurrent();
+			}
 		}
 	}
 

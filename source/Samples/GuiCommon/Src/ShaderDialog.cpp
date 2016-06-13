@@ -34,7 +34,7 @@ namespace GuiCommon
 		eID_MENU_PREFS,
 	}	eID;
 
-	ShaderDialog::ShaderDialog( Engine * p_engine, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_position, const wxSize p_size )
+	ShaderDialog::ShaderDialog( Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_position, const wxSize p_size )
 		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_position, p_size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_pPass( p_pPass )
 		, m_bCompiled( true )
@@ -45,7 +45,7 @@ namespace GuiCommon
 #else
 		, m_bCanEdit( p_bCanEdit || true )
 #endif
-		, m_engine( p_engine )
+		, m_scene( p_scene )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
 		DoInitialiseShaderLanguage();
@@ -72,17 +72,16 @@ namespace GuiCommon
 		else
 		{
 			PassSPtr l_pass = m_pPass.lock();
-			Engine * l_engine = l_pass->GetEngine();
-			auto l_lock = Castor::make_unique_lock( l_engine->GetWindowManager() );
-			auto && l_it = l_engine->GetWindowManager().begin();
+			auto l_lock = Castor::make_unique_lock( m_scene.GetWindowManager() );
+			auto l_it = m_scene.GetWindowManager().begin();
 
-			if ( l_it != l_engine->GetWindowManager().end() && l_it->second->GetRenderTarget() )
+			if ( l_it != m_scene.GetWindowManager().end() && l_it->second->GetRenderTarget() )
 			{
 				RenderTechniqueSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 
 				if ( l_technique )
 				{
-					m_shaderProgram = m_engine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_shaderProgram = m_scene.GetEngine()->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
 					m_bOwnShader = true;
 				}
 			}
@@ -91,7 +90,7 @@ namespace GuiCommon
 		PathArray l_arrayFiles;
 		File::ListDirectoryFiles( Engine::GetDataDirectory() / cuT( "Castor3D" ), l_arrayFiles, true );
 
-		for ( auto && l_pathFile : l_arrayFiles )
+		for ( auto l_pathFile : l_arrayFiles )
 		{
 			if ( l_pathFile.GetFileName()[0] != cuT( '.' ) && l_pathFile.GetExtension() == cuT( "lang" ) )
 			{
@@ -193,7 +192,7 @@ namespace GuiCommon
 		{
 			if ( m_shaderProgram.expired() )
 			{
-				m_shaderProgram = m_engine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+				m_shaderProgram = m_scene.GetEngine()->GetShaderManager().GetNewProgram();
 			}
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
@@ -204,7 +203,7 @@ namespace GuiCommon
 				{
 					m_pEditorPages[i]->SaveFile( false );
 					m_shaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
-					m_shaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), ( wxChar const * )l_file.c_str() );
+					m_shaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), Path{ ( wxChar const * )l_file.c_str() } );
 				}
 			}
 

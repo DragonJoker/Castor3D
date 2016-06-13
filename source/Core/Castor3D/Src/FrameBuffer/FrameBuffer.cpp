@@ -45,7 +45,7 @@ namespace Castor3D
 	{
 		uint32_t l_targets = 0;
 
-		for ( auto && l_attach : m_attaches )
+		for ( auto l_attach : m_attaches )
 		{
 			if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
 			{
@@ -82,7 +82,7 @@ namespace Castor3D
 
 		if ( !m_attaches.empty() )
 		{
-			for ( auto && l_attach : m_attaches )
+			for ( auto l_attach : m_attaches )
 			{
 				if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
 				{
@@ -103,14 +103,14 @@ namespace Castor3D
 		DoUnbind();
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
 		p_texture->SetTarget( p_target );
 		p_texture->SetLayer( p_layer );
 		return DoAttach( p_point, p_index, p_texture );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
 		return Attach( p_point, 0, p_texture, p_target, p_layer );
 	}
@@ -154,7 +154,7 @@ namespace Castor3D
 
 	void FrameBuffer::Resize( Castor::Size const & p_size )
 	{
-		for ( auto && l_attach : m_attaches )
+		for ( auto l_attach : m_attaches )
 		{
 			if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 			{
@@ -187,7 +187,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool FrameBuffer::StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
+	bool FrameBuffer::StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
 	{
 		bool l_return = p_buffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
 
@@ -228,7 +228,7 @@ namespace Castor3D
 
 		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
 		{
-			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
 			{
 				return p_attach->GetAttachmentPoint() == p_point;
 			} );

@@ -17,10 +17,15 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	static const String Gamma = cuT( "c3d_gamma" );
+	namespace
+	{
+		String const Gamma = cuT( "c3d_gamma" );
+	}
+
+	String HaarmPeterDuikerToneMapping::Name = cuT( "haarm" );
 
 	HaarmPeterDuikerToneMapping::HaarmPeterDuikerToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: ToneMapping{ eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER, p_engine, p_parameters }
+		: ToneMapping{ Name, p_engine, p_parameters }
 		, m_gamma{ 1.0f }
 	{
 		String l_param;
@@ -64,21 +69,21 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).RGB );
+				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
 				l_hdrColor *= c3d_exposure;
 
 				auto LogColor = l_writer.GetLocale < Vec3 >( cuT( "LogColor" ) );
-				LogColor.RGB = l_writer.Paren( l_writer.Paren( GLSL::log2( vec3( Float( 0.4 ) ) * l_hdrColor.RGB / vec3( Float( 0.18 ) ) ) / GLSL::log2( vec3( Float( 10 ) ) ) ) / vec3( Float( 0.002 ) ) * vec3( Float( 1.0 ) / c3d_gamma ) + vec3( Float( 444 ) ) ) / vec3( Float( 1023.0f ) );
-				LogColor.RGB = clamp( LogColor.RGB, 0.0, 1.0 );
+				LogColor = l_writer.Paren( l_writer.Paren( GLSL::log2( vec3( Float( 0.4 ) ) * l_hdrColor.SWIZZLE_RGB / vec3( Float( 0.18 ) ) ) / GLSL::log2( vec3( Float( 10 ) ) ) ) / vec3( Float( 0.002 ) ) * vec3( Float( 1.0 ) / c3d_gamma ) + vec3( Float( 444 ) ) ) / vec3( Float( 1023.0f ) );
+				LogColor = clamp( LogColor, 0.0, 1.0 );
 
 				LOCALE_ASSIGN( l_writer, Float, FilmLutWidth, Float( 256 ) );
 				LOCALE_ASSIGN( l_writer, Float, Padding, Float( 0.5 ) / FilmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				plx_v4FragColor.R = mix( Padding, 1.0f - Padding, LogColor.R );
-				plx_v4FragColor.G = mix( Padding, 1.0f - Padding, LogColor.G );
-				plx_v4FragColor.B = mix( Padding, 1.0f - Padding, LogColor.B );
-				plx_v4FragColor.A = 1.0f;
+				plx_v4FragColor.SWIZZLE_R = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_R );
+				plx_v4FragColor.SWIZZLE_G = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_G );
+				plx_v4FragColor.SWIZZLE_B = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_B );
+				plx_v4FragColor.SWIZZLE_A = 1.0f;
 			} );
 
 			l_pxl = l_writer.Finalise();
@@ -95,5 +100,10 @@ namespace Castor3D
 	void HaarmPeterDuikerToneMapping::DoUpdate()
 	{
 		m_gammaVar->SetValue( m_gamma );
+	}
+
+	bool HaarmPeterDuikerToneMapping::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -Gamma " ) + string::to_string( m_gamma ) ) > 0;
 	}
 }

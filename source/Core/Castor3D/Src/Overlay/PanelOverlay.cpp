@@ -1,4 +1,4 @@
-﻿#include "PanelOverlay.hpp"
+#include "PanelOverlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "Overlay.hpp"
 
@@ -6,47 +6,34 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool PanelOverlay::TextLoader::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
+	PanelOverlay::TextWriter::TextWriter( String const & p_tabs, PanelOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
+		, m_category{ p_category }
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
+	}
 
-		while ( l_pParent )
-		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
-
-		bool l_return = p_file.WriteText( l_strTabs + cuT( "panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+	bool PanelOverlay::TextWriter::operator()( PanelOverlay const & p_overlay, TextFile & p_file )
+	{
+		Logger::LogInfo( m_tabs + cuT( "Writing PanelOverlay " ) + p_overlay.GetOverlayName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
 	}
 
-	//*************************************************************************************************
-
-	PanelOverlay::BinaryParser::BinaryParser( Path const & p_path )
-		:	OverlayCategory::BinaryParser( p_path )
+	bool PanelOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
-	}
-
-	bool PanelOverlay::BinaryParser::Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		return true;
-	}
-
-	bool PanelOverlay::BinaryParser::Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		return true;
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

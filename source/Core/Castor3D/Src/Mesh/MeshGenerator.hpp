@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		MeshGenerator( eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
+		explicit MeshGenerator( eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
 		/**
 		 *\~english
 		 *\brief		Destructor

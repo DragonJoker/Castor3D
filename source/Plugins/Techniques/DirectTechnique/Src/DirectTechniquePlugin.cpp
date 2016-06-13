@@ -1,5 +1,9 @@
 #include "DirectRenderTechnique.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <Logger.hpp>
 
 #include <Engine.hpp>

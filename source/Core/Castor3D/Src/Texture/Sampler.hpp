@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Binary/BinaryParser.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -49,8 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Sampler
 		*/
-		class TextLoader
-			: public Castor::Loader< Sampler, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< Sampler >
 		{
 		public:
 			/**
@@ -59,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file
@@ -70,55 +69,7 @@ namespace Castor3D
 			 *\param[in]		p_sampler	L'échantillonneur
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		Sampler loader
-		\~english
-		\brief		Loader de Sampler
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Sampler >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Sampler const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Sampler & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -186,9 +137,9 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	Le filtre concerné
 		 *\return		Le mode d'interpolation
 		 */
-		inline eINTERPOLATION_MODE GetInterpolationMode( eINTERPOLATION_FILTER p_eFilter )const
+		inline InterpolationMode GetInterpolationMode( InterpolationFilter p_eFilter )const
 		{
-			return m_eInterpolationModes[p_eFilter];
+			return m_eInterpolationModes[uint32_t( p_eFilter )];
 		}
 		/**
 		 *\~english
@@ -200,9 +151,9 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	Le filtre concerné
 		 *\param[in]	p_mode		Le mode souhaité
 		 */
-		inline void SetInterpolationMode( eINTERPOLATION_FILTER p_eFilter, eINTERPOLATION_MODE p_mode )
+		inline void SetInterpolationMode( InterpolationFilter p_eFilter, InterpolationMode p_mode )
 		{
-			m_eInterpolationModes[p_eFilter] = p_mode;
+			m_eInterpolationModes[uint32_t( p_eFilter )] = p_mode;
 		}
 		/**
 		 *\~english
@@ -214,9 +165,9 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	La dimension
 		 *\return		Le mode de wrap
 		 */
-		inline eWRAP_MODE GetWrappingMode( eTEXTURE_UVW p_eUVW )const
+		inline WrapMode GetWrappingMode( TextureUVW p_eUVW )const
 		{
-			return m_eWrapModes[p_eUVW];
+			return m_eWrapModes[uint32_t( p_eUVW )];
 		}
 		/**
 		 *\~english
@@ -228,9 +179,9 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	La dimension
 		 *\param[in]	p_mode	Le mode de wrap
 		 */
-		inline void SetWrappingMode( eTEXTURE_UVW p_eUVW, eWRAP_MODE p_mode )
+		inline void SetWrappingMode( TextureUVW p_eUVW, WrapMode p_mode )
 		{
-			m_eWrapModes[p_eUVW] = p_mode;
+			m_eWrapModes[uint32_t( p_eUVW )] = p_mode;
 		}
 		/**
 		 *\~english
@@ -379,9 +330,9 @@ namespace Castor3D
 
 	private:
 		//!\~english Sampler interpolation modes	\~french Modes d'interpolation du sampler
-		eINTERPOLATION_MODE m_eInterpolationModes[eINTERPOLATION_FILTER_COUNT];
+		InterpolationMode m_eInterpolationModes[uint32_t( InterpolationFilter::Count )];
 		//!\~english Sampler wrapping modes	\~french Modes de wrapping du sampler
-		eWRAP_MODE m_eWrapModes[eTEXTURE_UVW_COUNT];
+		WrapMode m_eWrapModes[uint32_t( TextureUVW::Count )];
 		//!\~english Minimal LOD Level	\~french Niveau de LOD minimal
 		real m_rMinLod;
 		//!\~english Maximal LOD Level	\~french Niveau de LOD maximal

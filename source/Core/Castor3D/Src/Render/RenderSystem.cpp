@@ -23,9 +23,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
+	RenderSystem::RenderSystem( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >{ p_engine }
-		, m_rendererType{ p_eRendererType }
+		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_currentContext{ nullptr }
 		, m_pCurrentCamera{ nullptr }
@@ -95,13 +95,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_langage )
-	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
-
-		return CreateShaderProgram();
-	}
-
 	Camera * RenderSystem::GetCurrentCamera()const
 	{
 		return m_pCurrentCamera;
@@ -119,8 +112,6 @@ namespace Castor3D
 
 	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
 	{
-#define CHECK_FLAG( flag ) ( ( p_programFlags & ( flag ) ) == ( flag ) )
-
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
 		// Vertex inputs
@@ -129,11 +120,11 @@ namespace Castor3D
 		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ePROGRAM_FLAG_INSTANCIATION ) );
 
 		UBO_MATRIX( l_writer );
 
@@ -147,7 +138,7 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.XYZ, 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.SWIZZLE_XYZ, 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
@@ -195,17 +186,15 @@ namespace Castor3D
 			}
 
 			vtx_texture = texture;
-			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).XYZ;
-			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).XYZ );
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).XYZ );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).XYZ );
+			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).SWIZZLE_XYZ;
+			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).SWIZZLE_XYZ );
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).SWIZZLE_XYZ );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).SWIZZLE_XYZ );
 			gl_Position = c3d_mtxProjection * c3d_mtxView * l_mtxModel * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
-
-#undef CHECK_FLAG
 	}
 
 	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )
@@ -256,7 +245,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = vec4( position.XYZ, 1.0 );
+				gl_Position = vec4( position.SWIZZLE_XYZ, 1.0 );
 			} );
 
 			l_strVtxShader = l_writer.Finalise();
@@ -288,22 +277,22 @@ namespace Castor3D
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxVP, c3d_mtxProjection * c3d_mtxView );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().XYZ );
-				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) - l_pos ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().SWIZZLE_XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.SWIZZLE_X, c3d_v3CameraPosition.SWIZZLE_Y, c3d_v3CameraPosition.SWIZZLE_Z ) - l_pos ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_left, cross( l_toCamera, l_up ) );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.X, 0.0, l_toCamera.Z ) ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.SWIZZLE_X, 0.0, l_toCamera.SWIZZLE_Z ) ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_up );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_left );
 
-				l_left *= c3d_v2iDimensions.X;
-				l_up *= c3d_v2iDimensions.Y;
+				l_left *= c3d_v2iDimensions.SWIZZLE_X;
+				l_up *= c3d_v2iDimensions.SWIZZLE_Y;
 				l_writer << Endl();
 
 				{
 					l_pos -= ( l_left * 0.5 );
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -315,7 +304,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -328,7 +317,7 @@ namespace Castor3D
 				{
 					l_pos -= l_up;
 					l_pos += l_left;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -340,7 +329,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -372,7 +361,7 @@ namespace Castor3D
 
 	void RenderSystem::DoReportTracked()
 	{
-		for ( auto && l_decl : m_allocated )
+		for ( auto const & l_decl : m_allocated )
 		{
 			if ( l_decl.m_ref > 0 )
 			{

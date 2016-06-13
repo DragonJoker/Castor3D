@@ -50,15 +50,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_engine		The engine
-		 *\param[in]	p_eRendererType	The render API
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_name		The renderer name.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine		Le moteur
-		 *\param[in]	p_eRendererType	L'API de rendu
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_name		Le nom du renderer.
 		 */
-		C3D_API RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType );
+		C3D_API RenderSystem( Engine & p_engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -80,19 +80,6 @@ namespace Castor3D
 		 *\brief		Nettoie le render system
 		 */
 		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Creates a ShaderProgram in a given language
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_langage	The shader language
-		 *\return		The created ShaderProgram
-		 *\~french
-		 *\brief		Crée un ShaderProgram dans un langage donné
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_langage	Le langage du shader
-		 *\return		Le ShaderProgram créé
-		 */
-		C3D_API ShaderProgramSPtr CreateShaderProgram( eSHADER_LANGUAGE p_langage );
 		/**
 		 *\~english
 		 *\brief		Renders the scene ambient lighting
@@ -184,6 +171,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Creates a ShaderProgram.
+		 *\return		The created ShaderProgram.
+		 *\~french
+		 *\brief		Crée un ShaderProgram.
+		 *\return		Le ShaderProgram créé.
+		 */
+		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
+		/**
+		 *\~english
 		 *\brief		Creates a geometries buffer holder.
 		 *\param[in]	p_topology	The buffers topology.
 		 *\param[in]	p_program	The shader program.
@@ -251,15 +247,6 @@ namespace Castor3D
 		C3D_API virtual SamplerSPtr CreateSampler( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a ShaderProgram (GLSL or HLSL only)
-		 *\return		The created ShaderProgram
-		 *\~french
-		 *\brief		Crée un ShaderProgram (GLSL ou HLSL seulement)
-		 *\return		Le ShaderProgram créé
-		 */
-		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a texture.
 		 *\param[in]	p_type		The texture type.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
@@ -272,7 +259,7 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
@@ -372,9 +359,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère l'API de rendu
 		 */
-		inline eRENDERER_TYPE GetRendererType()const
+		inline Castor::String const & GetRendererType()const
 		{
-			return m_rendererType;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -504,7 +491,7 @@ namespace Castor3D
 		//!\~english Scene stack	\~french Pile des scènes
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
-		eRENDERER_TYPE m_rendererType;
+		Castor::String m_name;
 		//!\~english The currently active camera	\~french La caméra actuellement active
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
@@ -529,7 +516,7 @@ namespace Castor3D
 		template< typename T >
 		bool DoTrack( T * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
 		{
-			auto && l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
+			auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
 			{
 				return p_object == l_object.m_object;
 			} );

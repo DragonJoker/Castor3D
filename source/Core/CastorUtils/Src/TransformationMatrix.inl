@@ -1,4 +1,4 @@
-﻿#include "Quaternion.hpp"
+#include "Quaternion.hpp"
 
 namespace Castor
 {
@@ -14,19 +14,19 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 		{
-			p_matrix[0][0] = T( 1.0 - 2.0f * p_quat.y * p_quat.y - 2.0 * p_quat.z * p_quat.z );
-			p_matrix[0][1] = T( 2.0 * p_quat.x * p_quat.y - 2.0 * p_quat.z * p_quat.w );
-			p_matrix[0][2] = T( 2.0 * p_quat.x * p_quat.z + 2.0 * p_quat.y * p_quat.w );
+			p_matrix[0][0] = T( 1.0 - 2.0f * p_quat.quat.y * p_quat.quat.y - 2.0 * p_quat.quat.z * p_quat.quat.z );
+			p_matrix[0][1] = T( 2.0 * p_quat.quat.x * p_quat.quat.y - 2.0 * p_quat.quat.z * p_quat.quat.w );
+			p_matrix[0][2] = T( 2.0 * p_quat.quat.x * p_quat.quat.z + 2.0 * p_quat.quat.y * p_quat.quat.w );
 			p_matrix[0][3] = T( 0.0 );
 
-			p_matrix[1][0] = T( 2.0 * p_quat.x * p_quat.y + 2.0 * p_quat.z * p_quat.w );
-			p_matrix[1][1] = T( 1.0 - 2.0f * p_quat.x * p_quat.x - 2.0 * p_quat.z * p_quat.z );
-			p_matrix[1][2] = T( 2.0 * p_quat.y * p_quat.z - 2.0 * p_quat.x * p_quat.w );
+			p_matrix[1][0] = T( 2.0 * p_quat.quat.x * p_quat.quat.y + 2.0 * p_quat.quat.z * p_quat.quat.w );
+			p_matrix[1][1] = T( 1.0 - 2.0f * p_quat.quat.x * p_quat.quat.x - 2.0 * p_quat.quat.z * p_quat.quat.z );
+			p_matrix[1][2] = T( 2.0 * p_quat.quat.y * p_quat.quat.z - 2.0 * p_quat.quat.x * p_quat.quat.w );
 			p_matrix[1][3] = T( 0.0 );
 
-			p_matrix[2][0] = T( 2.0 * p_quat.x * p_quat.z - 2.0 * p_quat.y * p_quat.w );
-			p_matrix[2][1] = T( 2.0 * p_quat.y * p_quat.z + 2.0 * p_quat.x * p_quat.w );
-			p_matrix[2][2] = T( 1.0 - 2.0 * p_quat.x * p_quat.x - 2.0 * p_quat.y * p_quat.y );
+			p_matrix[2][0] = T( 2.0 * p_quat.quat.x * p_quat.quat.z - 2.0 * p_quat.quat.y * p_quat.quat.w );
+			p_matrix[2][1] = T( 2.0 * p_quat.quat.y * p_quat.quat.z + 2.0 * p_quat.quat.x * p_quat.quat.w );
+			p_matrix[2][2] = T( 1.0 - 2.0 * p_quat.quat.x * p_quat.quat.x - 2.0 * p_quat.quat.y * p_quat.quat.y );
 			p_matrix[3][3] = T( 0.0 );
 
 			p_matrix[3][0] = T( 0.0 );
@@ -47,11 +47,11 @@ namespace Castor
 			{
 				// |w| > 1/2, may as well choose w > 1/2
 				l_root = std::sqrt( l_trace + 1 );  // 2w
-				p_quat.w = T( 0.5 * l_root );
+				p_quat.quat.w = T( 0.5 * l_root );
 				l_root = 0.5 / l_root;  // 1/(4w)
-				p_quat.x = ( p_matrix[2][1] - p_matrix[1][2] ) * l_root;
-				p_quat.y = ( p_matrix[0][2] - p_matrix[2][0] ) * l_root;
-				p_quat.z = ( p_matrix[1][0] - p_matrix[0][1] ) * l_root;
+				p_quat.quat.x = ( p_matrix[2][1] - p_matrix[1][2] ) * l_root;
+				p_quat.quat.y = ( p_matrix[0][2] - p_matrix[2][0] ) * l_root;
+				p_quat.quat.z = ( p_matrix[1][0] - p_matrix[0][1] ) * l_root;
 			}
 			else
 			{
@@ -72,12 +72,12 @@ namespace Castor
 				uint32_t j = s_next[i];
 				uint32_t k = s_next[j];
 				l_root = std::sqrt( double( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
-				double * l_apkQuat[3] = { &p_quat.x, &p_quat.y, &p_quat.z };
+				double * l_apkQuat[3] = { &p_quat.quat.x, &p_quat.quat.y, &p_quat.quat.z };
 				*l_apkQuat[i] = 0.5 * l_root;
 				l_root = 0.5 / l_root;
 				*l_apkQuat[j] = double( p_matrix[j][i] + p_matrix[i][j] ) * l_root;
 				*l_apkQuat[k] = double( p_matrix[k][i] + p_matrix[i][k] ) * l_root;
-				p_quat.w = double( p_matrix[k][j] - p_matrix[j][k] ) * l_root;
+				p_quat.quat.w = double( p_matrix[k][j] - p_matrix[j][k] ) * l_root;
 			}
 
 			point::normalise( p_quat );

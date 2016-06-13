@@ -12,11 +12,11 @@ namespace Castor3D
 {
 	namespace
 	{
-		size_t GetImagesCount( eTEXTURE_TYPE p_type )
+		size_t GetImagesCount( TextureType p_type )
 		{
 			size_t l_return = 1;
 
-			if ( p_type == eTEXTURE_TYPE_CUBE )
+			if ( p_type == TextureType::Cube )
 			{
 				l_return = size_t( CubeMapFace::Count );
 			}
@@ -25,7 +25,7 @@ namespace Castor3D
 		}
 	}
 
-	TextureLayout::TextureLayout( RenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureLayout::TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_type{ p_type }
 		, m_images{ GetImagesCount( p_type ) }

@@ -6,41 +6,8 @@
 
 namespace Castor
 {
-	//*************************************************************************************************
-
-	Colour::BinaryLoader::BinaryLoader()
-		:	Loader< Colour, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
-	{
-	}
-
-	bool Colour::BinaryLoader::operator()( Colour & p_colour, BinaryFile & p_file )
-	{
-		bool l_return = true;
-
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
-		{
-			l_return = p_file.Read( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
-		}
-
-		return l_return;
-	}
-
-	bool Colour::BinaryLoader::operator()( Colour const & p_colour, BinaryFile & p_file )
-	{
-		bool l_return = true;
-
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
-		{
-			l_return = p_file.Write( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	Colour::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Colour, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Colour::TextLoader::TextLoader()
+		: Castor::TextLoader< Colour >{}
 	{
 	}
 
@@ -73,23 +40,30 @@ namespace Castor
 		return l_return;
 	}
 
-	bool Colour::TextLoader::operator()( Colour const & p_colour, TextFile & p_file )
+	//*************************************************************************************************
+
+	Colour::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Colour >{ p_tabs }
+	{
+	}
+
+	bool Colour::TextWriter::operator()( Colour const & p_colour, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 		l_streamWord.setf( std::ios::boolalpha );
 		l_streamWord.setf( std::ios::showpoint );
 
-		for ( Colour::ColourComponentArrayConstIt l_it = p_colour.begin(); l_it != p_colour.end(); ++l_it )
+		for ( auto l_component : p_colour )
 		{
 			if ( !l_streamWord.str().empty() )
 			{
 				l_streamWord << cuT( " " );
 			}
 
-			l_streamWord << l_it->value();
+			l_streamWord << l_component.value();
 		}
 
-		return p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
+		return p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
 	}
 
 	//*************************************************************************************************

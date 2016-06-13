@@ -34,8 +34,8 @@
 #include <SceneManager.hpp>
 #include <WindowManager.hpp>
 
-#include <Animation/AnimatedObject.hpp>
 #include <Animation/Animation.hpp>
+#include <Scene/Animation/AnimatedObject.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -99,7 +99,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -126,14 +126,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetEngine()->GetWindowManager().lock();
+			p_scene->GetWindowManager().lock();
 
-			for ( auto l_it : p_scene->GetEngine()->GetWindowManager() )
+			for ( auto l_it : p_scene->GetWindowManager() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetEngine()->GetWindowManager().unlock();
+			p_scene->GetWindowManager().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )
@@ -150,7 +150,7 @@ namespace GuiCommon
 
 			p_scene->GetAnimatedObjectGroupManager().unlock();
 
-			for ( auto && l_overlay : p_engine->GetOverlayManager() )
+			for ( auto l_overlay : p_engine->GetOverlayManager() )
 			{
 				if ( l_overlay->GetOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
 				{
@@ -244,7 +244,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
 	{
-		for ( auto && l_pair : p_node->GetObjects() )
+		for ( auto l_pair : p_node->GetObjects() )
 		{
 			MovableObjectSPtr l_object = l_pair.lock();
 
@@ -268,7 +268,7 @@ namespace GuiCommon
 			}
 		}
 
-		for ( auto && l_pair : p_node->GetChilds() )
+		for ( auto l_pair : p_node->GetChilds() )
 		{
 			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_engine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
@@ -276,7 +276,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group )
 	{
-		for ( auto && l_it : p_group->GetAnimations() )
+		for ( auto l_it : p_group->GetAnimations() )
 		{
 			AppendItem( p_id, l_it.first, eBMP_ANIMATION, eBMP_ANIMATION_SEL, new AnimationTreeItemProperty( m_engine, m_propertiesHolder->IsEditable(), p_group, l_it.first, l_it.second ) );
 		}
@@ -284,7 +284,7 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlayCategorySPtr p_overlay )
 	{
-		for ( auto && l_overlay : p_overlay->GetOverlay() )
+		for ( auto l_overlay : p_overlay->GetOverlay() )
 		{
 			switch ( l_overlay->GetType() )
 			{

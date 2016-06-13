@@ -84,4 +84,9 @@ namespace Direct
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
 	}
+
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
+	{
+		return true;
+	}
 }

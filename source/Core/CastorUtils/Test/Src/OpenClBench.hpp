@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if defined( CASTOR_USE_OCL )
 
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 #include <TransformationMatrix.hpp>
 

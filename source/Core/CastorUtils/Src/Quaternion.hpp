@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -21,7 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Angle.hpp"
 #include "Point.hpp"
 #include "SquareMatrix.hpp"
-#include "Loader.hpp"
 
 namespace Castor
 {
@@ -40,6 +39,76 @@ namespace Castor
 	class QuaternionT
 		: public Coords4< T >
 	{
+	public:
+		/*!
+		\author Sylvain DOREMUS
+		\version 0.6.1.0
+		\date 03/01/2011
+		\~english
+		\brief QuaternionT< T > loader
+		\~french
+		\brief Loader de QuaternionT< T >
+		*/
+		class TextLoader
+			: public Castor::TextLoader< QuaternionT< T > >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			TextLoader();
+			/**
+			 *\~english
+			 *\brief		Loads a Coords< T, Count > object from a text file
+			 *\param[out]	p_object	The Coords< T, Count > object to read
+			 *\param[in]	p_file		The file
+			 *\return		\p true if ok
+			 *\~french
+			 *\brief		Charge un objet Coords< T, Count > à partir d'un fichier texte
+			 *\param[out]	p_object	L'objet Coords< T, Count >
+			 *\param[in]	p_file		Le fichier
+			 *\return		\p true si ok
+			 */
+			virtual bool operator()( QuaternionT< T > & p_object, TextFile & p_file );
+		};
+		/*!
+		\author Sylvain DOREMUS
+		\version 0.6.1.0
+		\date 03/01/2011
+		\~english
+		\brief QuaternionT< T > Writer
+		\~french
+		\brief Writer de QuaternionT< T >
+		*/
+		class TextWriter
+			: public Castor::TextWriter< QuaternionT< T > >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			TextWriter( String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief		Writes a Point2f object into a text file
+			 *\param[in]	p_object	The Point2f object to write
+			 *\param[out]	p_file		The file
+			 *\return		\p true if ok
+			 *\~french
+			 *\brief		Ecrit un objet Point2f dans un fichier texte
+			 *\param[in]	p_object	L'objet Point2f
+			 *\param[out]	p_file		Le fichier
+			 *\return		\p true si ok
+			 */
+			virtual bool operator()( QuaternionT< T > const & p_object, TextFile & p_file );
+		};
+
 	private:
 		typedef Coords4< T > BaseType;
 
@@ -594,7 +663,7 @@ namespace Castor
 				T y;
 				T z;
 				T w;
-			};
+			} quat;
 			T buffer[4];
 		};
 	};
@@ -723,7 +792,7 @@ namespace Castor
 	template< typename CharT, typename T >
 	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_stream, QuaternionT< T > const & p_quat )
 	{
-		p_stream << p_quat.x << ", " << p_quat.y << ", " << p_quat.z << ", " << p_quat.w;
+		p_stream << p_quat.quat.x << ", " << p_quat.quat.y << ", " << p_quat.quat.z << ", " << p_quat.quat.w;
 		return p_stream;
 	}
 }

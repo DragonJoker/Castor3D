@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		C3D_API DepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format );
+		C3D_API explicit DepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -39,7 +39,7 @@ namespace GuiCommon
 		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::FrameVariableBufferSPtr p_buffer );
 		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::eSHADER_TYPE p_type );
 
-		DECLARE_EVENT_TABLE();
+		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
 		void OnSelectItem( wxTreeEvent & p_event );
 		void OnMouseRButtonUp( wxTreeEvent & p_event );

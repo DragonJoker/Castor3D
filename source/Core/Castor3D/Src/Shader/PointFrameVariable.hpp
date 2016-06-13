@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -57,7 +57,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_program	Le programme
 		 */
-		PointFrameVariable( ShaderProgram * p_program );
+		explicit PointFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -69,46 +69,6 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
 		PointFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
-		 */
-		PointFrameVariable( PointFrameVariable< T, Count > const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		PointFrameVariable( PointFrameVariable< T, Count > && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		PointFrameVariable & operator=( PointFrameVariable< T, Count > const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		PointFrameVariable & operator=( PointFrameVariable< T, Count > && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor

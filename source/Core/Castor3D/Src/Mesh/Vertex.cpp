@@ -4,47 +4,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Vertex::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Vertex, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-	{
-	}
-
-	bool Vertex::TextLoader::operator()( Vertex & CU_PARAM_UNUSED( p_object ), TextFile & CU_PARAM_UNUSED( p_file ) )
-	{
-		bool l_return = false;
-		//bool l_return = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
-
-		//if( l_return )
-		//{
-		//	l_return = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
-		//}
-
-		//if( l_return )
-		//{
-		//	l_return = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
-		//}
-		return l_return;
-	}
-
-	bool Vertex::TextLoader::operator()( Vertex const & CU_PARAM_UNUSED( p_object ), TextFile & CU_PARAM_UNUSED( p_file ) )
-	{
-		bool l_return = false;
-		//bool l_return = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
-
-		//if( l_return )
-		//{
-		//	l_return = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
-		//}
-
-		//if( l_return )
-		//{
-		//	l_return = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
-		//}
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
 	Vertex::Vertex( BufferElementGroup & p_group )
 		:	m_group( p_group )
 	{

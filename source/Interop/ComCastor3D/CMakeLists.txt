@@ -5,9 +5,9 @@ if ( MSVC )
 
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
-		set( CMC_VERSION_MAJOR 0 )
-		set( CMC_VERSION_MINOR 8 )
-		set( CMC_VERSION_BUILD 0 )
+		set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+		set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+		set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 		configure_file( 
 			${CMAKE_CURRENT_SOURCE_DIR}/Src/Win32/ComCastorUtils.hpp.in

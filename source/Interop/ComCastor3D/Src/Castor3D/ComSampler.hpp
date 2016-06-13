@@ -62,12 +62,12 @@ namespace CastorCom
 			m_sampler = state;
 		}
 
-		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIN ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIN ) );
-		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MAG ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MAG ) );
-		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIP ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::eINTERPOLATION_FILTER_MIP ) );
-		COM_PROPERTY( UWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_U ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_U ) );
-		COM_PROPERTY( VWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_V ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_V ) );
-		COM_PROPERTY( WWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::eTEXTURE_UVW_W ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::eTEXTURE_UVW_W ) );
+		COM_PROPERTY( MinFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::Min ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::Min ) );
+		COM_PROPERTY( MagFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::Mag ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::Mag ) );
+		COM_PROPERTY( MipFilter, eINTERPOLATION_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetInterpolationMode, Castor3D::InterpolationFilter::Mip ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetInterpolationMode, Castor3D::InterpolationFilter::Mip ) );
+		COM_PROPERTY( UWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::U ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::U ) );
+		COM_PROPERTY( VWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::V ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::V ) );
+		COM_PROPERTY( WWrappingMode, eWRAP_MODE, make_getter( m_sampler.get(), &Castor3D::Sampler::GetWrappingMode, Castor3D::TextureUVW::W ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetWrappingMode, Castor3D::TextureUVW::W ) );
 		COM_PROPERTY( MaxAnisotropy, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMaxAnisotropy ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMaxAnisotropy ) );
 		COM_PROPERTY( MinLod, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMinLod ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMinLod ) );
 		COM_PROPERTY( MaxLod, float, make_getter( m_sampler.get(), &Castor3D::Sampler::GetMaxLod ), make_putter( m_sampler.get(), &Castor3D::Sampler::SetMaxLod ) );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -26,25 +26,31 @@ namespace Castor3D
 	\author 	Sylvain DOREMUS
 	\date 		23/07/2012
 	\~english
-	\brief		Holds the all components of a vertex array
+	\brief		Holds the all components of a vertex.
 	\~french
-	\brief		Contient toutes les composantes d'un tableau de vertex
+	\brief		Contient toutes les composantes d'un sommet.
 	*/
-	struct stVERTEX_GROUP
+	template< typename T >
+	struct InterleavedVertexT
 	{
-		//!\~english The vertices count	\~french Le nombre de vertices
-		uint32_t m_uiCount;
-		//!\~english The vertices coordinates	\~french Les coordonnées des vertices
-		real * m_pVtx;
-		//!\~english The vertices normals	\~french Les normales des vertices
-		real * m_pNml;
-		//!\~english The vertices tangents	\~french Les tangentes des vertices
-		real * m_pTan;
-		//!\~english The vertices bitangents	\~french Les bitangentes des vertices
-		real * m_pBin;
-		//!\~english The vertices texture coordinates	\~french Les coordonnées de texture des vertices
-		real * m_pTex;
+		//!\~english	The vertex coordinates.
+		//!\~french		La position du sommet.
+		std::array< T, 3 > m_pos;
+		//!\~english	The vertex normal.
+		//!\~french		La normale du sommet.
+		std::array< T, 3 > m_nml;
+		//!\~english	The vertex tangent.
+		//!\~french		La tangente du sommet.
+		std::array< T, 3 > m_tan;
+		//!\~english	The vertex bitangent.
+		//!\~french		La bitangente du sommet.
+		std::array< T, 3 > m_bin;
+		//!\~english	The vertex texture coordinates.
+		//!\~french		La coordonnées de texture du sommet.
+		std::array< T, 3 > m_tex;
 	};
+
+	using InterleavedVertex = InterleavedVertexT< real >;
 }
 
 #endif

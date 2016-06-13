@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API BlendState( Engine & p_engine );
+		C3D_API explicit BlendState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -214,7 +214,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbSrcBlend( uint8_t p_index = 0 )const
+		inline BlendOperand GetRgbSrcBlend( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eRgbSrcBlend;
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
+		inline void SetRgbSrcBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbSrcBlend = p_eValue;
@@ -243,7 +243,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbDstBlend( uint8_t p_index = 0 )const
+		inline BlendOperand GetRgbDstBlend( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eRgbDstBlend;
 		}
@@ -257,7 +257,7 @@ namespace Castor3D
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
+		inline void SetRgbDstBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbDstBlend = p_eValue;
@@ -272,7 +272,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetRgbBlendOp( uint8_t p_index = 0 )const
+		inline BlendOperation GetRgbBlendOp( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eRgbBlendOp;
 		}
@@ -286,7 +286,7 @@ namespace Castor3D
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
+		inline void SetRgbBlendOp( BlendOperation p_eValue, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
 			m_rtStates[p_index].m_eRgbBlendOp = p_eValue;
@@ -301,7 +301,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaSrcBlend( uint8_t p_index = 0 )const
+		inline BlendOperand GetAlphaSrcBlend( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eAlphaSrcBlend;
 		}
@@ -315,7 +315,7 @@ namespace Castor3D
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
+		inline void SetAlphaSrcBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaSrcBlend = p_eValue;
@@ -330,7 +330,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaDstBlend( uint8_t p_index = 0 )const
+		inline BlendOperand GetAlphaDstBlend( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eAlphaDstBlend;
 		}
@@ -344,7 +344,7 @@ namespace Castor3D
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
+		inline void SetAlphaDstBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaDstBlend = p_eValue;
@@ -359,7 +359,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_index = 0 )const
+		inline BlendOperation GetAlphaBlendOp( uint8_t p_index = 0 )const
 		{
 			return m_rtStates[p_index].m_eAlphaBlendOp;
 		}
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\param[in]	p_value	La nouvelle valeur
 		 *\param[in]	p_index	L'indice de la valeur
 		 */
-		inline void SetAlphaBlendOp( eBLEND_OP p_value, uint8_t p_index = 0 )
+		inline void SetAlphaBlendOp( BlendOperation p_value, uint8_t p_index = 0 )
 		{
 			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_value;
 			m_rtStates[p_index].m_eAlphaBlendOp = p_value;
@@ -479,12 +479,12 @@ namespace Castor3D
 		struct C3D_API stRT_BLEND_STATE
 		{
 			bool m_bEnableBlend;
-			eBLEND m_eRgbSrcBlend;
-			eBLEND m_eRgbDstBlend;
-			eBLEND_OP m_eRgbBlendOp;
-			eBLEND m_eAlphaSrcBlend;
-			eBLEND m_eAlphaDstBlend;
-			eBLEND_OP m_eAlphaBlendOp;
+			BlendOperand m_eRgbSrcBlend;
+			BlendOperand m_eRgbDstBlend;
+			BlendOperation m_eRgbBlendOp;
+			BlendOperand m_eAlphaSrcBlend;
+			BlendOperand m_eAlphaDstBlend;
+			BlendOperation m_eAlphaBlendOp;
 			uint8_t m_uiWriteMask;
 		};
 		/**
@@ -511,15 +511,15 @@ namespace Castor3D
 
 	protected:
 		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
-		bool m_changed;
+		bool m_changed{ true };
 		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
-		bool m_bEnableAlphaToCoverage;
+		bool m_bEnableAlphaToCoverage{ false };
 		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés
-		bool m_bIndependantBlend;
+		bool m_bIndependantBlend{ false };
 		//!\~english Le blend colour	\~french La couleur de mélange
 		Castor::Colour m_blendFactors;
 		//!\~english The sample mask	\~french Le masque d'échantillonage
-		uint32_t m_uiSampleMask;
+		uint32_t m_uiSampleMask{ 0xFFFFFFFF };
 		//!\~english the blend states	\~french Les états de mélange
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs

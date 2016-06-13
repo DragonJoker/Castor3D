@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_CastorUtilsObjectsPoolTest___
 #define ___CUT_CastorUtilsObjectsPoolTest___
 
-#include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {
@@ -29,16 +28,18 @@ namespace Testing
 	public:
 		CastorUtilsObjectsPoolTest();
 		virtual ~CastorUtilsObjectsPoolTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void ObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void AlignedObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void FixedSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void AllDeallPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void ScatteredMemoryPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void VariableSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void UniquePoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void ObjectPoolTest();
+		void AlignedObjectPoolTest();
+		void FixedSizePerformanceTest();
+		void AllDeallPerformanceTest();
+		void ScatteredMemoryPerformanceTest();
+		void VariableSizePerformanceTest();
+		void UniquePoolTest();
 	};
 }
 

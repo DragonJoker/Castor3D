@@ -77,7 +77,7 @@ typedef wchar_t ychar;
 	using class_name##SPtr = std::shared_ptr< class_name >;\
 	using class_name##WPtr = std::weak_ptr< class_name >;\
 	using class_name##UPtr = std::unique_ptr< class_name >;\
-	using class_name##RPtr = class_name *;
+	using class_name##RPtr = class_name *
 
 #define DECLARE_MAP( key, value, name )\
 	using name##Map = std::map< key, value >;\
@@ -169,7 +169,7 @@ typedef wchar_t ychar;
 #define DECLARE_COLLECTION( elem, key, name )\
 	using name##Collection = Castor::Collection< elem, key >;\
 	using name##CollectionIt = name##Collection::TObjPtrMapIt;\
-	using name##CollectionConstIt = name##Collection::TObjPtrMapConstIt;
+	using name##CollectionConstIt = name##Collection::TObjPtrMapConstIt
 
 #define DECLARE_POINT( type, count, name )\
 	typedef Point< type, count > Point##count##name;\

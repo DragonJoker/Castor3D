@@ -19,15 +19,15 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsZipTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsZipTest, ZipFile, p_errCount, p_testCount );
+		DoRegisterTest( "ZipFile", std::bind( &CastorUtilsZipTest::ZipFile, this ) );
 	}
 
-	void CastorUtilsZipTest::ZipFile( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsZipTest::ZipFile()
 	{
-		Path l_folder1 = cuT( "test1" );
-		Path l_folder2 = l_folder1 / cuT( "test2" );
+		Path l_folder1{ cuT( "test1" ) };
+		Path l_folder2{ l_folder1 / cuT( "test2" ) };
 
 		Logger::LogInfo( "	First folder creation" );
 
@@ -39,7 +39,7 @@ namespace Testing
 			{
 				Path l_binName = l_folder1 / cuT( "binFile.bin" );
 				Path l_txtName = l_folder2 / cuT( "txtFile.txt" );
-				String l_zipName = cuT( "zipFile.zip" );
+				Path l_zipName{ cuT( "zipFile.zip" ) };
 
 				std::vector< uint8_t > l_inBinData( 1024 );
 				String l_inTxtData( cuT( "Coucou, comment allez-vous?" ) );
@@ -82,15 +82,15 @@ namespace Testing
 							BinaryFile l_binary( l_folder / l_binName, File::eOPEN_MODE_READ );
 							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
 							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
-							TEST_EQUAL( l_outBinData.size(), l_inBinData.size() );
-							TEST_CHECK( !std::memcmp( l_outBinData.data(), l_inBinData.data(), std::min( l_outBinData.size(), l_inBinData.size() ) ) );
+							CT_EQUAL( l_outBinData.size(), l_inBinData.size() );
+							CT_CHECK( !std::memcmp( l_outBinData.data(), l_inBinData.data(), std::min( l_outBinData.size(), l_inBinData.size() ) ) );
 						}
 
 						{
 							Logger::LogInfo( "	Check text file content" );
 							TextFile l_text( l_folder / l_txtName, File::eOPEN_MODE_READ );
 							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * sizeof( xchar ) );
-							TEST_EQUAL( l_outTxtData, l_inTxtData );
+							CT_EQUAL( l_outTxtData, l_inTxtData );
 						}
 
 						std::remove( string::string_cast< char >( l_folder / l_binName ).c_str() );
@@ -101,7 +101,7 @@ namespace Testing
 					}
 					else
 					{
-						TEST_CHECK( File::DirectoryExists( l_folder ) );
+						CT_CHECK( File::DirectoryExists( l_folder ) );
 					}
 
 					std::remove( string::string_cast< char >( l_binName ).c_str() );

@@ -23,104 +23,103 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool TextOverlay::TextLoader::operator()( TextOverlay const & p_overlay, TextFile & p_file )
+	TextOverlay::TextWriter::TextWriter( String const & p_tabs, TextOverlay const * p_category )
+		: OverlayCategory::TextWriter{ p_tabs }
+		, m_category{ p_category }
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
+	}
 
-		while ( l_pParent )
+	bool TextOverlay::TextWriter::operator()( TextOverlay const & p_overlay, TextFile & p_file )
+	{
+		static String const TexturingModes[]
 		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
+			cuT( "letter" ),
+			cuT( "text" ),
+		};
 
-		bool l_return = p_file.WriteText( l_strTabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+		static String const LineSpacingModes[]
+		{
+			cuT( "own_height" ),
+			cuT( "max_lines_height" ),
+			cuT( "max_font_height" ),
+		};
+
+		static String const TextWrappingModes[]
+		{
+			cuT( "none" ),
+			cuT( "break" ),
+			cuT( "break_words" ),
+		};
+
+		static String const VerticalAligns[]
+		{
+			cuT( "top" ),
+			cuT( "center" ),
+			cuT( "bottom" ),
+		};
+
+		static String const HorizontalAligns[]
+		{
+			cuT( "left" ),
+			cuT( "center" ),
+			cuT( "right" ),
+		};
+
+		Logger::LogInfo( m_tabs + cuT( "Writing TextOverlay " ) + p_overlay.GetOverlayName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.GetOverlayName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontTexture()->GetFontName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfont \"" ) + p_overlay.GetFontTexture()->GetFontName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttext \"" ) + p_overlay.GetCaption() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[p_overlay.GetTextWrappingMode()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[p_overlay.GetVAlign()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[p_overlay.GetHAlign()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[p_overlay.GetTexturingMode()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[p_overlay.GetLineSpacingMode()] + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = OverlayCategory::TextWriter{ m_tabs }( p_overlay, p_file );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
 	}
 
-	//*************************************************************************************************
-
-	TextOverlay::BinaryParser::BinaryParser( Path const & p_path )
-		:	OverlayCategory::BinaryParser( p_path )
+	bool TextOverlay::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
-	}
-
-	bool TextOverlay::BinaryParser::Fill( TextOverlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetFontTexture()->GetFontName(), eCHUNK_TYPE_OVERLAY_FONT, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetCaption(), eCHUNK_TYPE_OVERLAY_CAPTION, p_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool TextOverlay::BinaryParser::Parse( TextOverlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		switch ( p_chunk.GetChunkType() )
-		{
-		case eCHUNK_TYPE_OVERLAY_FONT:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetFont( l_name );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_CAPTION:
-			l_return = DoParseChunk( l_name, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetCaption( l_name );
-			}
-
-			break;
-
-		default:
-			l_return = false;
-			break;
-		}
-
-		if ( !l_return )
-		{
-			p_chunk.EndParse();
-		}
-
-		return l_return;
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************
@@ -144,7 +143,7 @@ namespace Castor3D
 		// Récupération / Création de la police
 		Engine * l_engine = m_pOverlay->GetEngine();
 		FontManager & l_fontManager = l_engine->GetFontManager();
-		FontSPtr l_pFont = l_fontManager.get( p_strFont );
+		FontSPtr l_pFont = l_fontManager.Find( p_strFont );
 
 		if ( l_pFont )
 		{
@@ -243,7 +242,6 @@ namespace Castor3D
 
 					DisplayableLineArray l_lines = DoPrepareText( p_size, l_size );
 					Size const & l_texDim = l_fontTexture->GetTexture()->GetImage().GetDimensions();
-					uint32_t const l_maxHeight = l_font->GetMaxHeight();
 
 					for ( auto const & l_line : l_lines )
 					{
@@ -491,7 +489,7 @@ namespace Castor3D
 				l_offset /= 2;
 			}
 
-			for ( auto && l_character : p_line.m_characters )
+			for ( auto & l_character : p_line.m_characters )
 			{
 				l_character.m_position[0] += l_offset;
 			}
@@ -559,7 +557,7 @@ namespace Castor3D
 				l_offset /= 2;
 			}
 
-			for ( auto && l_line : p_lines )
+			for ( auto & l_line : p_lines )
 			{
 				l_line.m_position[1] += l_offset;
 			}

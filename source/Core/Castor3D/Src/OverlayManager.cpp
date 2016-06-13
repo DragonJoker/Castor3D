@@ -51,7 +51,7 @@ namespace Castor3D
 		m_viewport.Cleanup();
 		auto l_lock = make_unique_lock( *this );
 
-		for ( auto && l_it : m_fontTextures )
+		for ( auto l_it : m_fontTextures )
 		{
 			GetEngine()->PostEvent( MakeCleanupEvent( *l_it.second ) );
 		}
@@ -130,12 +130,6 @@ namespace Castor3D
 		{
 			l_return = std::make_shared< Overlay >( *GetEngine(), p_type, p_scene, p_parent );
 			l_return->SetName( p_name );
-
-			if ( p_scene )
-			{
-				p_scene->AddOverlay( l_return );
-			}
-
 			DoAddOverlay( p_name, l_return, p_parent );
 			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
@@ -157,11 +151,11 @@ namespace Castor3D
 		{
 			m_elements.erase( p_name );
 
-			if ( l_overlay->GetChildsCount() )
+			if ( l_overlay->GetChildrenCount() )
 			{
 				Size l_size = m_pRenderer->GetSize();
 
-				for ( auto && l_child : *l_overlay )
+				for ( auto l_child : *l_overlay )
 				{
 					l_child->SetPosition( l_child->GetAbsolutePosition() );
 					l_child->SetSize( l_child->GetAbsoluteSize() );
@@ -232,12 +226,12 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 		bool l_return = true;
-		auto && l_it = m_overlays.begin();
+		auto l_it = m_overlays.begin();
 		bool l_first = true;
 
 		while ( l_return && l_it != m_overlays.end() )
 		{
-			Overlay & l_overlay = ( *l_it )->GetOverlay();
+			Overlay const & l_overlay = ( *l_it )->GetOverlay();
 
 			if ( l_first )
 			{
@@ -248,24 +242,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			switch ( l_overlay.GetType() )
-			{
-			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader()( *l_overlay.GetPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader()( *l_overlay.GetBorderPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader()( *l_overlay.GetTextOverlay(), p_file );
-				break;
-
-			default:
-				l_return = false;
-			}
-
+			l_return = Overlay::TextWriter( String{} )( l_overlay, p_file );
 			++l_it;
 		}
 
@@ -277,62 +254,6 @@ namespace Castor3D
 		auto l_lock = make_unique_lock( *this );
 		SceneFileParser l_parser( *GetEngine() );
 		return l_parser.ParseFile( p_file );
-	}
-
-	bool OverlayManager::Save( Castor::BinaryFile & p_file )const
-	{
-		auto l_lock = make_unique_lock( *this );
-		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
-		auto && l_it = m_overlays.begin();
-
-		while ( l_return && l_it != m_overlays.end() )
-		{
-			l_return = BinaryLoader< Overlay >()( ( *l_it )->GetOverlay(), p_file );
-			++l_it;
-		}
-
-		return l_return;
-	}
-
-	bool OverlayManager::Load( Castor::BinaryFile & p_file )
-	{
-		auto l_lock = make_unique_lock( *this );
-		uint32_t l_size;
-		bool l_return = p_file.Write( l_size ) == sizeof( uint32_t );
-		String l_name;
-		eOVERLAY_TYPE l_type;
-		OverlaySPtr l_overlay;
-
-		for ( uint32_t i = 0; i < l_size && l_return; i++ )
-		{
-			l_return = p_file.Read( l_name );
-
-			if ( l_return )
-			{
-				l_return = p_file.Read( l_type ) == sizeof( eOVERLAY_TYPE );
-			}
-
-			if ( l_return )
-			{
-				l_overlay = Find( l_name ) ;
-
-				if ( !l_overlay )
-				{
-					l_overlay = std::make_shared< Overlay >( *GetEngine(), l_type );
-					l_overlay->SetName( l_name );
-					DoAddOverlay( l_name, l_overlay, nullptr );
-				}
-
-				l_return = l_overlay != nullptr;
-			}
-
-			if ( l_return )
-			{
-				l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
-			}
-		}
-
-		return l_return;
 	}
 
 	FontTextureSPtr OverlayManager::GetFontTexture( Castor::String const & p_name )

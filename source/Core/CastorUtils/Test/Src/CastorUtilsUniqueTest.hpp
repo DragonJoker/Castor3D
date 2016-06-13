@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUT_UNIQUE_TEST_H___
 #define ___CUT_UNIQUE_TEST_H___
 
-#include "UnitTest.hpp"
-#include "Benchmark.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 namespace Testing
 {
@@ -29,13 +28,15 @@ namespace Testing
 	public:
 		CastorUtilsUniqueTest();
 		virtual ~CastorUtilsUniqueTest();
-		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
-		void NoInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void OneInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void MultipleInstanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
-		void MemoryTest( uint32_t & p_errCount, uint32_t & p_testCount );
+		void DoRegisterTests() override;
+
+	private:
+		void NoInstanceTest();
+		void OneInstanceTest();
+		void MultipleInstanceTest();
+		void MemoryTest();
 	};
 }
 

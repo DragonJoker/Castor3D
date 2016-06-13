@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API RenderSystem * LoadRenderer( eRENDERER_TYPE p_type );
+		C3D_API RenderSystem * LoadRenderer( Castor::String const & p_type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le tableau des plug-ins de rendu
 		 *\return		L'itérateur
 		 */
-		inline RendererPtrArray const & GetRenderersList()const
+		inline RendererPtrMap const & GetRenderersList()const
 		{
 			return m_renderers;
 		}
@@ -169,7 +169,7 @@ namespace Castor3D
 		//!\~english The mutex protecting the loaded plug-ins map sorted by type	\~french Le mutex protégeant la map de plug-ins chargés triés par type
 		std::recursive_mutex m_mutexLoadedPluginTypes;
 		//!\~english The renderer plug-ins array	\~french Le tableau des plug-ins de rendu
-		RendererPtrArray m_renderers;
+		RendererPtrMap m_renderers;
 		//!\~english The mutex protecting the renderer plug-ins array	\~french Le mutex protégeant le tableau des plug-ins de rendu
 		std::recursive_mutex m_mutexRenderers;
 	};

@@ -301,35 +301,35 @@ namespace CastorShape
 
 			switch ( m_texture->GetChannel() )
 			{
-			case eTEXTURE_CHANNEL_COLOUR:
+			case TextureChannel::Colour:
 				l_selected = PROPERTY_CHANNEL_COLOUR;
 				break;
 
-			case eTEXTURE_CHANNEL_DIFFUSE:
+			case TextureChannel::Diffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
 
-			case eTEXTURE_CHANNEL_NORMAL:
+			case TextureChannel::Normal:
 				l_selected = PROPERTY_CHANNEL_NORMAL;
 				break;
 
-			case eTEXTURE_CHANNEL_OPACITY:
+			case TextureChannel::Opacity:
 				l_selected = PROPERTY_CHANNEL_OPACITY;
 				break;
 
-			case eTEXTURE_CHANNEL_SPECULAR:
+			case TextureChannel::Specular:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
 				break;
 
-			case eTEXTURE_CHANNEL_HEIGHT:
+			case TextureChannel::Height:
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case eTEXTURE_CHANNEL_AMBIENT:
+			case TextureChannel::Ambient:
 				l_selected = PROPERTY_CHANNEL_AMBIENT;
 				break;
 
-			case eTEXTURE_CHANNEL_GLOSS:
+			case TextureChannel::Gloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
 			}
@@ -364,7 +364,7 @@ namespace CastorShape
 		m_properties->HideProperty( PROPERTY_TEXTURE_IMAGE, false );
 	}
 
-	void NewMaterialDialog::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void NewMaterialDialog::OnChannelChange( TextureChannel p_value )
 	{
 		m_texture->SetChannel( p_value );
 	}
@@ -463,42 +463,42 @@ namespace CastorShape
 					{
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_COLOUR );
+							OnChannelChange( TextureChannel::Colour );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_DIFFUSE );
+							OnChannelChange( TextureChannel::Diffuse );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_NORMAL );
+							OnChannelChange( TextureChannel::Normal );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_OPACITY );
+							OnChannelChange( TextureChannel::Opacity );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_SPECULAR );
+							OnChannelChange( TextureChannel::Specular );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_HEIGHT );
+							OnChannelChange( TextureChannel::Height );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_AMBIENT );
+							OnChannelChange( TextureChannel::Ambient );
 						}
 
 						if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 						{
-							OnChannelChange( eTEXTURE_CHANNEL_GLOSS );
+							OnChannelChange( TextureChannel::Gloss );
 						}
 					}
 					else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )

@@ -88,7 +88,7 @@ namespace CastorShape
 		wxPGChoices l_choices;
 		l_choices.Add( wxCOMBO_NEW );
 
-		for ( auto && l_choice : l_choices1 )
+		for ( auto l_choice : l_choices1 )
 		{
 			l_choices.Add( make_wxString( l_choice ) );
 		}

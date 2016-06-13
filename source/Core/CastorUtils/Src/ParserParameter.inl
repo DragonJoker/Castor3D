@@ -60,7 +60,17 @@ namespace Castor
 
 					if ( l_it->size() > p_count )
 					{
-						p_params = ( *l_it )[p_count + 1];
+						String l_params;
+
+						for ( size_t i = p_count + 1; i < l_it->size(); ++i )
+						{
+							if ( ( *l_it )[i].matched )
+							{
+								l_params += ( *l_it )[i];
+							}
+						}
+
+						p_params = l_params;
 					}
 				}
 				else
@@ -292,14 +302,14 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			p_value = p_params;
+			p_value = Path{ p_params };
 			p_params.clear();
 
 			if ( !p_value.empty() )
 			{
 				if ( p_value[0] == cuT( '\"' ) )
 				{
-					p_value = p_value.substr( 1 );
+					p_value = Path{ p_value.substr( 1 ) };
 
 					if ( !p_value.empty() )
 					{
@@ -313,7 +323,7 @@ namespace Castor
 								string::trim( p_params );
 							}
 
-							p_value = p_value.substr( 0, l_index );
+							p_value = Path{ p_value.substr( 0, l_index ) };
 						}
 					}
 				}
@@ -653,7 +663,7 @@ namespace Castor
 		{
 			StringArray l_values = string::split( l_values[0], cuT( "|" ), uint32_t( std::count( l_values[0].begin(), l_values[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto && l_value : l_values )
+			for ( auto l_value : l_values )
 			{
 				auto l_it = m_values.find( l_value );
 
@@ -712,7 +722,7 @@ namespace Castor
 		{
 			StringArray l_values = string::split( l_params[0], cuT( "|" ), uint32_t( std::count( l_params[0].begin(), l_params[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto && l_value : l_values )
+			for ( auto l_value : l_values )
 			{
 				auto l_it = m_values.find( l_value );
 

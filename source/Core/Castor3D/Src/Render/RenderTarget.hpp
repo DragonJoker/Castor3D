@@ -19,11 +19,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_RENDER_TARGET_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 #include "Miscellaneous/Parameter.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "HDR/ToneMappingFactory.hpp"
 
+#include <OwnedBy.hpp>
+#include <Size.hpp>
 #include <OwnedBy.hpp>
 
 namespace Castor3D
@@ -52,8 +53,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class TextLoader
-			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< RenderTarget >
 		{
 		public:
 			/**
@@ -66,7 +67,7 @@ namespace Castor3D
 			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
 			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
-			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -77,59 +78,7 @@ namespace Castor3D
 			 *\param[in]	p_target	La cible de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
-
-		private:
-			//!\~english The tabulations to put at the beginning of each line	\~french Les tabulations à mettre à chaque début de ligne
-			Castor::String m_tabs;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		RenderTarget loader
-		\~english
-		\brief		Loader de RenderTarget
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< RenderTarget >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file )override;
 		};
 
 	private:
@@ -145,7 +94,7 @@ namespace Castor3D
 		struct stFRAME_BUFFER
 		{
 		public:
-			stFRAME_BUFFER( RenderTarget & p_renderTarget );
+			explicit stFRAME_BUFFER( RenderTarget & p_renderTarget );
 			bool Create();
 			void Destroy();
 			bool Initialise( uint32_t p_index, Castor::Size const & p_size );
@@ -271,14 +220,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
-		 *\param[in]	p_type			The type.
+		 *\param[in]	p_name			The type.
 		 *\param[in]	p_parameters	The parameters.
 		 *\~french
 		 *\brief		Définit le type d'implémentation de mappage de tons.
-		 *\param[in]	p_type			Le type.
+		 *\param[in]	p_name			Le type.
 		 *\param[in]	p_parameters	Les paramètres.
 		 */
-		C3D_API void SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters );
+		C3D_API void SetToneMappingType( Castor::String const & p_name, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status

@@ -1,4 +1,4 @@
-﻿namespace Castor3D
+namespace Castor3D
 {
 	template<> struct PntFrameVariableDefinitions< bool, 2 >
 		: public FrameVariableDataTyper< bool >
@@ -137,38 +137,6 @@
 	{
 		this->m_values = new T[p_occurences * Count];
 		memset( this->m_values, 0, size() );
-	}
-
-	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( PointFrameVariable< T, Count> const & p_rVariable )
-		:	TFrameVariable< T >( p_rVariable )
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( PointFrameVariable< T, Count > && p_rVariable )
-		:	TFrameVariable< T >( std::move( p_rVariable ) )
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count > & PointFrameVariable< T, Count >::operator=( PointFrameVariable< T, Count> const & p_rVariable )
-	{
-		PointFrameVariable< T, Count > l_tmp( p_rVariable );
-		std::swap( *this, l_tmp );
-		return *this;
-	}
-
-	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count > & PointFrameVariable< T, Count >::operator=( PointFrameVariable< T, Count > && p_rVariable )
-	{
-		TFrameVariable< T >::operator =( std::move( p_rVariable ) );
-
-		if ( this != &p_rVariable )
-		{
-		}
-
-		return *this;
 	}
 
 	template< typename T, uint32_t Count >

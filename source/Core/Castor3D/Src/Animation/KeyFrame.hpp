@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_KEY_FRAME_H___
 #define ___C3D_KEY_FRAME_H___
 
-#include "Binary/BinaryParser.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
@@ -35,57 +35,6 @@ namespace Castor3D
 	*/
 	class KeyFrame
 	{
-	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		MovingObjectBase binary loader.
-		\~english
-		\brief		Loader binaire de MovingObjectBase.
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< KeyFrame >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\param[in]	p_path	The current folder path.
-			 *\~french
-			 *\brief		Constructeur.
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data.
-			 *\param[in]	p_obj	The object to write.
-			 *\param[out]	p_chunk	The chunk to fill.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
-			 *\param[in]	p_obj	L'objet à écrire.
-			 *\param[out]	p_chunk	Le chunk à remplir.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API virtual bool Fill( KeyFrame const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk.
-			 *\param[out]	p_obj	The object to read.
-			 *\param[in]	p_chunk	The chunk containing data.
-			 *\return		\p false if any error occured.
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
-			 *\param[out]	p_obj	L'objet à lire.
-			 *\param[in]	p_chunk	Le chunk contenant les données.
-			 *\return		\p false si une erreur quelconque est arrivée.
-			 */
-			C3D_API virtual bool Parse( KeyFrame & p_obj, BinaryChunk & p_chunk )const;
-		};
-
 	public:
 		/**
 		 *\~english
@@ -209,14 +158,18 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The start time index.	\~french L'index de temps de début.
-		real m_timeIndex;
-		//!\~english The translation at start time.	\~french La translation à l'index de temps de début.
-		Castor::Point3r m_translate;
-		//!\~english The rotation at start time.	\~french La rotation à l'index de temps de début.
+		//!\~english	The rotation at start time.
+		//!\~french		La rotation à l'index de temps de début.
 		Castor::Quaternion m_rotate;
-		//!\~english The scaling at start time.	\~french L'échelle à l'index de temps de début.
+		//!\~english	The translation at start time.
+		//!\~french		La translation à l'index de temps de début.
+		Castor::Point3r m_translate;
+		//!\~english	The scaling at start time.
+		//!\~french		L'échelle à l'index de temps de début.
 		Castor::Point3r m_scale;
+		//!\~english	The start time index.
+		//!\~french		L'index de temps de début.
+		real m_timeIndex;
 	};
 }
 

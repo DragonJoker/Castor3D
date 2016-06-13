@@ -100,6 +100,10 @@ namespace Castor3D
 	class Geometry;
 	class MovableObject;
 	class Subdivider;
+	class Bone;
+	class Skeleton;
+	class BonedVertex;
+	struct VertexBoneData;
 
 	DECLARE_SMART_PTR( VertexPattern );
 	DECLARE_SMART_PTR( Point3rPattern );
@@ -122,6 +126,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( MovableObject );
 	DECLARE_SMART_PTR( Subdivider );
 	DECLARE_SMART_PTR( FaceGroup );
+	DECLARE_SMART_PTR( Bone );
+	DECLARE_SMART_PTR( Skeleton );
+	DECLARE_SMART_PTR( BonedVertex );
 
 	class MeshFactory;
 	DECLARE_SMART_PTR( MeshFactory );
@@ -151,6 +158,12 @@ namespace Castor3D
 	DECLARE_MAP( uint32_t, int, IntUInt );
 	DECLARE_MAP( Castor::String, SubmeshSPtr, SubmeshPtrStr );
 	DECLARE_MAP( Castor::String, int, IntStr );
+	//! Bone pointer array
+	DECLARE_VECTOR( BoneSPtr, BonePtr );
+	//! Bone pointer map sorted by name
+	DECLARE_MAP( Castor::String, BoneSPtr, BonePtrStr );
+	//! BonedVertex pointer array
+	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 
 	//@}
 }

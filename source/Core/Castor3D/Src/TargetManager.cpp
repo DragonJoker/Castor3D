@@ -27,24 +27,15 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void TargetManager::Remove( RenderTargetSPtr && p_pRenderTarget )
+	void TargetManager::Remove( RenderTargetSPtr p_target )
 	{
-		std::unique_lock< Collection > l_lock( m_elements );
-		eTARGET_TYPE l_type = p_pRenderTarget->GetTargetType();
-		auto l_v = ( m_renderTargets.begin() + l_type );
-		auto l_it = l_v->begin();
+		auto l_lock = make_unique_lock( m_elements );
+		auto l_v = m_renderTargets.begin() + p_target->GetTargetType();
+		auto l_it = std::find( l_v->begin(), l_v->end(), p_target );
 
-		while ( l_it != l_v->end() )
+		if ( l_it != l_v->end() )
 		{
-			if ( *l_it == p_pRenderTarget )
-			{
-				l_v->erase( l_it );
-				l_it = l_v->end();
-			}
-			else
-			{
-				++l_it;
-			}
+			l_v->erase( l_it );
 		}
 	}
 

@@ -97,7 +97,7 @@ namespace CastorGui
 
 		auto l_lock = make_unique_lock( m_mutexControls );
 		EventHandlerSPtr l_return;
-		auto && l_it = m_controlsByZIndex.rbegin();
+		auto l_it = m_controlsByZIndex.rbegin();
 
 		while ( !l_return && l_it != m_controlsByZIndex.rend() )
 		{

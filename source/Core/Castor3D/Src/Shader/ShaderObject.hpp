@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SHADER_OBJECT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 
 namespace Castor3D
 {
@@ -46,8 +45,8 @@ namespace Castor3D
 		\~french
 		\brief Loader de ShaderObject
 		*/
-		class TextLoader
-			: public Castor::Loader< ShaderObject, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< ShaderObject >
 		{
 		public:
 			/**
@@ -56,7 +55,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderObject into a text file
@@ -67,59 +66,11 @@ namespace Castor3D
 			 *\param[in]		p_shaderObject	Le ShaderObject
 			 *\param[in,out]	p_file			Le fichier
 			 */
-			C3D_API virtual bool operator()( ShaderObject const & p_shaderObject, Castor::TextFile & p_file );
+			C3D_API bool operator()( ShaderObject const & p_shaderObject, Castor::TextFile & p_file )override;
 		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		15/04/2013
-		\~english
-		\brief		ShaderObject loader
-		\~french
-		\brief		Loader de ShaderObject
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< ShaderObject >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( ShaderObject const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( ShaderObject & p_obj, BinaryChunk & p_chunk )const;
-		};
+
 	private:
-		static const std::array< Castor::String, eSHADER_TYPE_COUNT >	string_type;
+		static const std::array< Castor::String, eSHADER_TYPE_COUNT > string_type;
 
 	public:
 		/**
@@ -514,10 +465,20 @@ namespace Castor3D
 		virtual Castor::String DoRetrieveCompilerLog() = 0;
 
 	protected:
-		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgram * m_parent;
 		//!<\~english The shader type	\~french Le type de shader
 		eSHADER_TYPE m_type;
+		//!\~english The parent shader program	\~french Le programme parent
+		ShaderProgram * m_parent{ nullptr };
+		//!<\~english The shader compile status	\~french Le statut de compilation du shader
+		eSHADER_STATUS m_status{ eSHADER_STATUS_NOTCOMPILED };
+		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
+		eTOPOLOGY m_eInputType{ eTOPOLOGY_TRIANGLES };
+		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
+		eTOPOLOGY m_eOutputType{ eTOPOLOGY_TRIANGLES };
+		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
+		uint8_t m_uiOutputVtxCount{ 3 };
+		//!\~english The current shader model	\~french Le modèle de shader actuel
+		eSHADER_MODEL m_eShaderModel{ eSHADER_MODEL_1 };
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
@@ -526,20 +487,10 @@ namespace Castor3D
 		Castor::String m_loadedSource;
 		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader
 		Castor::Path m_pathLoadedFile;
-		//!<\~english The shader compile status	\~french Le statut de compilation du shader
-		eSHADER_STATUS m_status;
 		//!\~english The frame variables map, ordered by name	\~french La liste des variables de frame
 		FrameVariablePtrStrMap m_mapFrameVariables;
 		//!\~english The frame variables map	\~french La liste des variables de frame
 		FrameVariablePtrList m_listFrameVariables;
-		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
-		eTOPOLOGY m_eInputType;
-		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
-		eTOPOLOGY m_eOutputType;
-		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
-		uint8_t m_uiOutputVtxCount;
-		//!\~english The current shader model	\~french Le modèle de shader actuel
-		eSHADER_MODEL m_eShaderModel;
 	};
 }
 

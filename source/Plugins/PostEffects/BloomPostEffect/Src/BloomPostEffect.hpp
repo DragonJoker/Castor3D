@@ -58,10 +58,28 @@ namespace Bloom
 	public:
 		BloomPostEffect( Castor3D::RenderSystem & p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
 		virtual ~BloomPostEffect();
-
+		/**
+		 *\copydoc		Castor3D::PostEffect::Initialise
+		 */
 		virtual bool Initialise();
+		/**
+		 *\copydoc		Castor3D::PostEffect::Cleanup
+		 */
 		virtual void Cleanup();
+		/**
+		 *\copydoc		Castor3D::PostEffect::Apply
+		 */
 		virtual bool Apply( Castor3D::FrameBuffer & p_framebuffer );
+
+	private:
+		/**
+		 *\copydoc		Castor3D::PostEffect::DoWriteInto
+		 */
+		virtual bool DoWriteInto( Castor::TextFile & p_file );
+
+	public:
+		static Castor::String Type;
+		static Castor::String Name;
 
 	private:
 		bool DoHiPassFilter();

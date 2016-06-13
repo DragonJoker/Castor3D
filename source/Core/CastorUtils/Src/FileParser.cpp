@@ -43,7 +43,7 @@ namespace Castor
 	{
 	}
 
-	bool FileParser::ParseFile( String const & p_strFileName )
+	bool FileParser::ParseFile( Path const & p_strFileName )
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
@@ -274,7 +274,7 @@ namespace Castor
 
 	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
 	{
-		auto && l_sectionIt = m_parsers.find( p_section );
+		auto l_sectionIt = m_parsers.find( p_section );
 
 		if ( l_sectionIt != m_parsers.end() && l_sectionIt->second.find( p_name ) != l_sectionIt->second.end() )
 		{

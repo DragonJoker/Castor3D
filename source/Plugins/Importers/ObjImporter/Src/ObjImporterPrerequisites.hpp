@@ -43,7 +43,7 @@ namespace Obj
 	typedef std::vector< stNORMAL > NormalArray;
 	typedef std::vector< stUV > UvArray;
 	typedef std::vector< stUVW > UvwArray;
-	typedef std::vector< Castor3D::stFACE_INDICES > FaceArray;
+	typedef std::vector< Castor3D::FaceIndices > FaceArray;
 	typedef std::map< uint32_t, FaceArray > FaceArrayGrpMap;
 	typedef std::map< uint32_t, uint32_t > UIntUIntMap;
 	typedef std::vector< stGROUP * > GroupPtrArray;

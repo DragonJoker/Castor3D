@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Manager.hpp"
 
+#include "Scene/Scene.hpp"
+
 namespace Castor3D
 {
 	/*!
@@ -31,12 +33,42 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer l'Engine d'un ObjectManager.
 	*/
-	struct ResourceManagerEngineGetter
+	template< typename Owner >
+	struct ResourceManagerEngineGetter;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to retrieve an ObjectManager Engine instance.
+	\~french
+	\brief		Structure permettant de récupérer l'Engine d'un ObjectManager.
+	*/
+	template<>
+	struct ResourceManagerEngineGetter< Engine >
 	{
 		template< typename Key, typename Elem >
-		static Engine * Get( Manager< Key, Elem, Engine, ResourceManagerEngineGetter > const & p_this )
+		static Engine * Get( Manager< Key, Elem, Engine, ResourceManagerEngineGetter< Engine > > const & p_this )
 		{
 			return static_cast< Castor::OwnedBy< Engine > const & >( p_this ).GetEngine();
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to retrieve an ObjectManager Engine instance.
+	\~french
+	\brief		Structure permettant de récupérer l'Engine d'un ObjectManager.
+	*/
+	template<>
+	struct ResourceManagerEngineGetter< Scene >
+	{
+		template< typename Key, typename Elem >
+		static Engine * Get( Manager< Key, Elem, Scene, ResourceManagerEngineGetter< Scene > > const & p_this )
+		{
+			return static_cast< Castor::OwnedBy< Scene > const & >( p_this ).GetScene()->GetEngine();
 		}
 	};
 	/*!
@@ -48,9 +80,9 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un gestionnaire d'éléments.
 	*/
-	template< typename Key, typename Elem >
+	template< typename Key, typename Elem, typename Owner=Engine >
 	class ResourceManager
-		: public Manager< Key, Elem, Engine, ResourceManagerEngineGetter >
+		: public Manager< Key, Elem, Owner, ResourceManagerEngineGetter< Owner > >
 	{
 	protected:
 		/**
@@ -61,8 +93,8 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		inline ResourceManager( Engine & p_owner )
-			: Manager< Key, Elem, Engine, ResourceManagerEngineGetter >( p_owner )
+		inline ResourceManager( Owner & p_owner )
+			: Manager< Key, Elem, Owner, ResourceManagerEngineGetter< Owner > >( p_owner )
 		{
 		}
 		/**

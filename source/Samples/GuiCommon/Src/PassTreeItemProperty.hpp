@@ -29,7 +29,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les géométries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scï¿½ne, ou la liste de matï¿½riaux, et PropertiesHolder, pour les gï¿½omï¿½tries
 	*/
 	class PassTreeItemProperty
 		: public TreeItemProperty
@@ -38,15 +38,17 @@ namespace GuiCommon
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_editable	Tells if the properties are modifiable
-		 *\param[in]	p_pass		The target pass
+		 *\brief		Constructor.
+		 *\param[in]	p_editable	Tells if the properties are modifiable.
+		 *\param[in]	p_pass		The target pass.
+		 *\param[in]	p_scene		The scene.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_pass		La passe cible
+		 *\brief		Constructeur.
+		 *\param[in]	p_editable	Dit si les propriï¿½tï¿½s sont modifiables.
+		 *\param[in]	p_pass		La passe cible.
+		 *\param[in]	p_scene		La scï¿½ne.
 		 */
-		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass );
+		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass, Castor3D::Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -59,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la géométrie
+		 *\brief		Rï¿½cupï¿½re la gï¿½omï¿½trie
 		 *\return		La valeur
 		 */
 		inline Castor3D::PassSPtr GetPass()
@@ -89,6 +91,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::PassWPtr m_pass;
+		Castor3D::Scene & m_scene;
 	};
 }
 

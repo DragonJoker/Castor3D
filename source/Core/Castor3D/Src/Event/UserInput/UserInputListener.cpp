@@ -42,7 +42,7 @@ namespace Castor3D
 		DoCleanup();
 
 		auto l_lock = make_unique_lock( m_mutexHandlers );
-		auto && l_it = m_handlers.begin();
+		auto l_it = m_handlers.begin();
 
 		while ( l_it != m_handlers.end() )
 		{
@@ -56,7 +56,7 @@ namespace Castor3D
 	{
 		auto l_handlers = DoGetHandlers();
 
-		for ( auto && l_handler : l_handlers )
+		for ( auto l_handler : l_handlers )
 		{
 			l_handler->ProcessEvents();
 		}
@@ -72,7 +72,6 @@ namespace Castor3D
 	{
 		bool l_return = false;
 		m_mouse.m_position = p_position;
-		bool l_unset = false;
 		auto l_current = DoGetMouseTargetableHandler( p_position );
 		auto l_last = m_lastMouseTarget.lock();
 
@@ -84,7 +83,6 @@ namespace Castor3D
 				l_last->PushEvent( MouseEvent( eMOUSE_EVENT_LEAVE, p_position ) );
 				l_last.reset();
 				m_lastMouseTarget.reset();
-				l_unset = true;
 			}
 		}
 

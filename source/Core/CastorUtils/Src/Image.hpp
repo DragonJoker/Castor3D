@@ -19,7 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_IMAGE_H___
 
 #include "Resource.hpp"
-#include "Loader.hpp"
+#include "BinaryLoader.hpp"
+#include "BinaryWriter.hpp"
 #include "Colour.hpp"
 #include "PixelBuffer.hpp"
 
@@ -46,23 +47,9 @@ namespace Castor
 		\brief		Image resource loader
 		*/
 		class BinaryLoader
-			: public Loader< Image, eFILE_TYPE_BINARY, BinaryFile >
+			: public Castor::BinaryLoader< Image >
 		{
 		public:
-			/**
-			 *\~english
-			 *\brief		Initialises the image loading library.
-			 *\~french
-			 *\brief		Initialise la bibliothèque de chargement d'images.
-			 */
-			CU_API static void InitialiseImageLib();
-			/**
-			 *\~english
-			 *\brief		Cleans up the image loading library.
-			 *\~french
-			 *\brief		Nettoie la bibliothèque de chargement d'images.
-			 */
-			CU_API static void CleanupImageLib();
 			/**
 			 *\~english
 			 *\brief		Constructor
@@ -81,6 +68,26 @@ namespace Castor
 			 *\param[in]		p_path	Le chemin du fichier contenant l'image
 			 */
 			CU_API virtual bool operator()( Image & p_image, Path const & p_path );
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\date		14/02/2010
+		\~english
+		\brief		Image resource loader
+		\~french
+		\brief		Image resource loader
+		*/
+		class BinaryWriter
+			: public Castor::BinaryWriter< Image >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			CU_API BinaryWriter();
 			/**
 			 *\~english
 			 *\brief			Writes an image into a binary file
@@ -374,6 +381,20 @@ namespace Castor
 		 *\return		La référence de l'image
 		 */
 		CU_API Image & Mirror();
+		/**
+		 *\~english
+		 *\brief		Initialises the image loading library.
+		 *\~french
+		 *\brief		Initialise la bibliothèque de chargement d'images.
+		 */
+		CU_API static void InitialiseImageLib();
+		/**
+		 *\~english
+		 *\brief		Cleans up the image loading library.
+		 *\~french
+		 *\brief		Nettoie la bibliothèque de chargement d'images.
+		 */
+		CU_API static void CleanupImageLib();
 		/**
 		 *\~english
 		 *\brief		Retrieves the image dimensions

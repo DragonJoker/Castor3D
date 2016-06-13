@@ -81,10 +81,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Utils.hpp>
 #	include <Unique.hpp>
 #	include <Rectangle.hpp>
-
-#	if defined( __linux__ )
-#		include <GL/glx.h>
-#	endif
 #endif
 
 #endif

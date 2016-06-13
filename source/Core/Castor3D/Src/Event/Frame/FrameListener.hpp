@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom du listener
 		 */
-		C3D_API FrameListener( Castor::String const & p_name );
+		C3D_API explicit FrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -31,6 +31,10 @@ function( CoreBuild )
 		set( C3D ${Build} PARENT_SCOPE )
 	endif ()
 
+	if( ${CASTOR_BUILDGRP_TEST} )
+		add_subdirectory( Core/CastorTest )
+	endif()
+
 	set( CastorMinLibraries
 		${CastorMinLibraries}
 		PARENT_SCOPE
@@ -65,19 +69,36 @@ function( CoreSetup )
 		DEPENDS CastorUtils
 		INSTALL_TYPES Developer Full
 	)
-	cpack_add_component( CastorUtilsTest
-		DISPLAY_NAME "CastorUtils test"
-		DESCRIPTION "Test application for CastorUtils."
-		REQUIRED
-		GROUP Test
-		INSTALL_TYPES Minimal Full
-	)
 	cpack_add_component( CastorUtils_doc
 		DISPLAY_NAME "CastorUtils help"
 		DESCRIPTION "CastorUtils HTML documentation."
 		GROUP Documentation
 		INSTALL_TYPES Developer Full
 	)
+
+	if ( ${CASTOR_BUILDGRP_TEST} )
+		cpack_add_component( CastorTest
+			DISPLAY_NAME "Castor test library"
+			DESCRIPTION "Test library for tests."
+			REQUIRED
+			GROUP Test
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( CastorUtilsTest
+			DISPLAY_NAME "CastorUtils test"
+			DESCRIPTION "Test application for CastorUtils."
+			REQUIRED
+			GROUP Test
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( Castor3DTest
+			DISPLAY_NAME "Castor3D test"
+			DESCRIPTION "Test application for Castor3D."
+			REQUIRED
+			GROUP Test
+			INSTALL_TYPES Minimal Full
+		)
+	endif ()
 
 	if ( ${CASTOR_BUILD_CASTOR3D} )
 		cpack_add_component( GlslWriter

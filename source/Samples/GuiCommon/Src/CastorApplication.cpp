@@ -84,7 +84,7 @@ namespace GuiCommon
 		: m_internalName( p_internalName )
 		, m_displayName( p_displayName )
 		, m_castor( nullptr )
-		, m_rendererType( eRENDERER_TYPE_UNDEFINED )
+		, m_rendererType( RENDERER_TYPE_UNDEFINED )
 		, m_steps( p_steps + 4 )
 		, m_splashScreen( nullptr )
 	{
@@ -143,17 +143,18 @@ namespace GuiCommon
 		l_splashScreen.Close();
 		m_splashScreen = nullptr;
 
+		if ( !l_return )
+		{
+			DoCleanup();
+		}
+
 		return l_return;
 	}
 
 	int CastorApplication::OnExit()
 	{
-		DoCleanupCastor();
-		m_locale.reset();
-		ImagesLoader::Cleanup();
 		Logger::LogInfo( m_internalName + cuT( " - Exit" ) );
-		Logger::Cleanup();
-		wxImage::CleanUpHandlers();
+		DoCleanup();
 		return wxApp::OnExit();
 	}
 
@@ -164,7 +165,6 @@ namespace GuiCommon
 		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
 		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
-		l_parser.AddSwitch( wxT( "directx" ), wxEmptyString, _( "Defines the renderer to Direct3D (11)" ) );
 		bool l_return = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -187,7 +187,7 @@ namespace GuiCommon
 
 			if ( l_parser.Found( wxT( "opengl" ) ) )
 			{
-				m_rendererType = eRENDERER_TYPE_OPENGL;
+				m_rendererType = cuT( "opengl" );
 			}
 
 			wxString l_strFileName;
@@ -272,7 +272,7 @@ namespace GuiCommon
 			m_rendererType = std::static_pointer_cast< RendererPlugin >( l_renderers.begin()->second )->GetRendererType();
 		}
 
-		if ( m_rendererType == eRENDERER_TYPE_UNDEFINED )
+		if ( m_rendererType == RENDERER_TYPE_UNDEFINED )
 		{
 			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
 			int l_iReturn = m_dialog.ShowModal();
@@ -297,12 +297,6 @@ namespace GuiCommon
 		}
 
 		return l_return;
-	}
-
-	void CastorApplication::DoCleanupCastor()
-	{
-		delete m_castor;
-		m_castor = nullptr;
 	}
 
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )
@@ -363,5 +357,20 @@ namespace GuiCommon
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
 		DoLoadAppImages();
 		ImagesLoader::WaitAsyncLoads();
+	}
+
+	void CastorApplication::DoCleanup()
+	{
+		DoCleanupCastor();
+		m_locale.reset();
+		ImagesLoader::Cleanup();
+		Logger::Cleanup();
+		wxImage::CleanUpHandlers();
+	}
+
+	void CastorApplication::DoCleanupCastor()
+	{
+		delete m_castor;
+		m_castor = nullptr;
 	}
 }

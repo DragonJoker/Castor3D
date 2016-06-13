@@ -29,7 +29,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootSamplerState )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RootWindow )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
@@ -54,6 +53,7 @@ namespace Castor3D
 	// Sampler parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMinFilter )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMagFilter )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMipFilter )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMinLod )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMaxLod )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerLodBias )
@@ -66,6 +66,7 @@ namespace Castor3D
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkImage )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSamplerState )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCamera )
@@ -144,7 +145,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
 

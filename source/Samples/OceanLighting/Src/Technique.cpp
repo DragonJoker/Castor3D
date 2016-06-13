@@ -173,7 +173,7 @@ namespace OceanLighting
 		m_vboBuffer[2] = 0.0f;
 		m_vboBuffer[3] = 0.0f;
 		m_frameBuffer = m_renderSystem->CreateFrameBuffer();
-		m_pColorBuffer = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pColorBuffer = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
@@ -192,22 +192,22 @@ namespace OceanLighting
 		m_pSamplerLinearRepeat = l_pEngine->GetSamplerManager().Create( cuT( "LinearRepeat" ) );
 		m_pSamplerAnisotropicClamp = l_pEngine->GetSamplerManager().Create( cuT( "AnisotropicClamp" ) );
 		m_pSamplerAnisotropicRepeat = l_pEngine->GetSamplerManager().Create( cuT( "AnisotropicRepeat" ) );
-		m_pTexIrradiance = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-		m_pTexInscatter = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_3D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-		m_pTexTransmittance = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-		m_pTexSky = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexNoise = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexIrradiance = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+		m_pTexInscatter = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::ThreeDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+		m_pTexTransmittance = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+		m_pTexSky = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexNoise = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #if ENABLE_FFT
 		BufferElementDeclaration l_quadVertexDeclarationElements[] =
 		{
 			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
 		};
-		m_pTexSpectrum_1_2 = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexSpectrum_3_4 = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexSlopeVariance = m_renderSystem->CreateTexture( eTEXTURE_TYPE_3D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexFFTA = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2DARRAY, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexFFTB = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2DARRAY, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pTexButterfly = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexSpectrum_1_2 = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexSpectrum_3_4 = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexSlopeVariance = m_renderSystem->CreateTexture( TextureType::ThreeDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexFFTA = m_renderSystem->CreateTexture( TextureType::TwoDimensionsArray, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexFFTB = m_renderSystem->CreateTexture( TextureType::TwoDimensionsArray, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pTexButterfly = m_renderSystem->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_variancesFbo = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		m_fftFbo1 = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		m_fftFbo2 = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
@@ -695,37 +695,37 @@ namespace OceanLighting
 
 	bool RenderTechnique::DoCreate()
 	{
-		m_pSamplerNearestClamp->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerNearestClamp->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerNearestClamp->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerNearestClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-		m_pSamplerNearestClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
-		m_pSamplerNearestRepeat->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_REPEAT );
-		m_pSamplerNearestRepeat->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_REPEAT );
-		m_pSamplerNearestRepeat->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_REPEAT );
-		m_pSamplerNearestRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-		m_pSamplerNearestRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
-		m_pSamplerLinearClamp->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerLinearClamp->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerLinearClamp->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerLinearClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerLinearClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerLinearRepeat->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_REPEAT );
-		m_pSamplerLinearRepeat->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_REPEAT );
-		m_pSamplerLinearRepeat->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_REPEAT );
-		m_pSamplerLinearRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerLinearRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerAnisotropicClamp->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerAnisotropicClamp->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerAnisotropicClamp->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_pSamplerAnisotropicClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerAnisotropicClamp->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+		m_pSamplerNearestClamp->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		m_pSamplerNearestClamp->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		m_pSamplerNearestClamp->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		m_pSamplerNearestClamp->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
+		m_pSamplerNearestClamp->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
+		m_pSamplerNearestRepeat->SetWrappingMode( TextureUVW::U, WrapMode::Repeat );
+		m_pSamplerNearestRepeat->SetWrappingMode( TextureUVW::V, WrapMode::Repeat );
+		m_pSamplerNearestRepeat->SetWrappingMode( TextureUVW::W, WrapMode::Repeat );
+		m_pSamplerNearestRepeat->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
+		m_pSamplerNearestRepeat->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
+		m_pSamplerLinearClamp->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		m_pSamplerLinearClamp->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		m_pSamplerLinearClamp->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		m_pSamplerLinearClamp->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		m_pSamplerLinearClamp->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		m_pSamplerLinearRepeat->SetWrappingMode( TextureUVW::U, WrapMode::Repeat );
+		m_pSamplerLinearRepeat->SetWrappingMode( TextureUVW::V, WrapMode::Repeat );
+		m_pSamplerLinearRepeat->SetWrappingMode( TextureUVW::W, WrapMode::Repeat );
+		m_pSamplerLinearRepeat->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		m_pSamplerLinearRepeat->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		m_pSamplerAnisotropicClamp->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		m_pSamplerAnisotropicClamp->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		m_pSamplerAnisotropicClamp->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		m_pSamplerAnisotropicClamp->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		m_pSamplerAnisotropicClamp->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_pSamplerAnisotropicClamp->SetMaxAnisotropy( real( 0.1 ) );
-		m_pSamplerAnisotropicRepeat->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_REPEAT );
-		m_pSamplerAnisotropicRepeat->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_REPEAT );
-		m_pSamplerAnisotropicRepeat->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_REPEAT );
-		m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+		m_pSamplerAnisotropicRepeat->SetWrappingMode( TextureUVW::U, WrapMode::Repeat );
+		m_pSamplerAnisotropicRepeat->SetWrappingMode( TextureUVW::V, WrapMode::Repeat );
+		m_pSamplerAnisotropicRepeat->SetWrappingMode( TextureUVW::W, WrapMode::Repeat );
+		m_pSamplerAnisotropicRepeat->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		m_pSamplerAnisotropicRepeat->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_pSamplerAnisotropicRepeat->SetMaxAnisotropy( real( 0.1 ) );
 		m_frameBuffer->Create();
 		m_pColorBuffer->Create();
@@ -765,8 +765,8 @@ namespace OceanLighting
 #endif
 		BlendStateSPtr l_pBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OL_Clouds" ) );
 		l_pBlendState->EnableBlend( true );
-		l_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-		l_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
 		m_cloudsBlendState = l_pBlendState;
 		m_renderBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OL_Render" ) );
 		m_skyBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OL_Sky" ) );
@@ -936,14 +936,14 @@ namespace OceanLighting
 		ENSURE( m_fftFbo1->IsComplete() );
 		m_fftFbo1->Unbind();
 		m_fftFbo2->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, eTEXTURE_TYPE_2D );
-		m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, eTEXTURE_TYPE_2D );
+		m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, TextureType::TwoDimensions );
+		m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, TextureType::TwoDimensions );
 		ENSURE( m_fftFbo2->IsComplete() );
 		m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
 		m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
 		m_fftFbo2->Unbind();
 #else
-		m_pTexWave->SetType( eTEXTURE_TYPE_1D );
+		m_pTexWave->SetType( TextureType::OneDimension );
 		m_pTexWave->GetImage().SetSource( Size( m_nbWaves, 1 ), ePIXEL_FORMAT_ARGB32F );
 		m_pTexWave->Initialise( WAVE_UNIT );
 		m_pTexWave->SetSampler( m_pSamplerNearestClamp );

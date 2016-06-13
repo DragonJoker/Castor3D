@@ -44,10 +44,17 @@ namespace Castor3D
 		\brief		PanelOverlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class TextLoader
-			: public OverlayCategory::TextLoader
+		class TextWriter
+			: public OverlayCategory::TextWriter
 		{
 		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API TextWriter( Castor::String const & p_tabs, PanelOverlay const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -60,55 +67,14 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API virtual bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		PanelOverlay loader
-		\~english
-		\brief		Loader de PanelOverlay
-		*/
-		class BinaryParser
-			: public OverlayCategory::BinaryParser
-		{
-		public:
+			C3D_API bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
 			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\copydoc		Castor::OverlayCategory::WriteInto
 			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+
+		private:
+			PanelOverlay const * m_category;
 		};
 
 	public:
@@ -135,6 +101,13 @@ namespace Castor3D
 		 *\return		Un overlay
 		 */
 		C3D_API static OverlayCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::OverlayCategory::CreateTextLoader
+		 */
+		C3D_API std::unique_ptr < OverlayCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		{
+			return std::make_unique< TextWriter >( p_tabs, this );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel vertex buffer

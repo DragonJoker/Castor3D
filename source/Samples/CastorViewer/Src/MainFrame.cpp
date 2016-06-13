@@ -2,7 +2,6 @@
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
-#include "SceneExporter.hpp"
 #include "PropertiesHolder.hpp"
 
 #include <wx/display.h>
@@ -39,6 +38,7 @@
 #include <AuiDockArt.hpp>
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
+#include <SceneExporter.hpp>
 
 #include <xpms/castor.xpm>
 #include <xpms/print_screen.xpm>
@@ -165,7 +165,7 @@ namespace CastorViewer
 		{
 			if ( !p_strFileName.empty() )
 			{
-				m_strFilePath = ( wxChar const * )p_strFileName.c_str();
+				m_strFilePath = Path{ ( wxChar const * )p_strFileName.c_str() };
 			}
 
 			if ( !m_strFilePath.empty() )
@@ -217,8 +217,13 @@ namespace CastorViewer
 						wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
 					}
 
-					m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), m_pMainScene.lock() );
-					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+					auto l_scene = m_pMainScene.lock();
+
+					if ( l_scene )
+					{
+						m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_scene );
+						m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_scene );
+					}
 
 #if wxCHECK_VERSION( 2, 9, 0 )
 
@@ -335,7 +340,6 @@ namespace CastorViewer
 		try
 		{
 			wxGetApp().GetCastor()->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-
 			Logger::LogInfo( cuT( "Castor3D Initialised" ) );
 
 			if ( !CASTOR3D_THREADED && !m_timer )
@@ -508,7 +512,7 @@ namespace CastorViewer
 
 			if ( l_dialog.ShowModal() == wxID_OK )
 			{
-				auto l_image( l_bitmap.ConvertToImage() );
+				auto l_image = l_bitmap.ConvertToImage();
 				l_image.SaveFile( l_dialog.GetPath() );
 			}
 		}
@@ -752,11 +756,9 @@ namespace CastorViewer
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D scene files" );
-		l_wildcard << wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
-		l_wildcard << _( "Castor3D text scene file" );
+		l_wildcard << wxT( " (*.cscn;*.zip)|*.cscn;*.zip|" );
+		l_wildcard << _( "Castor3D scene file" );
 		l_wildcard << CSCN_WILDCARD;
-		l_wildcard << _( "Castor3D binary scene file" );
-		l_wildcard << CBSN_WILDCARD;
 		l_wildcard << _( "Zip archive" );
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );
@@ -772,12 +774,11 @@ namespace CastorViewer
 
 	void MainFrame::OnExportScene( wxCommandEvent & p_event )
 	{
-		wxString l_wildcard = _( "Castor3D text scene" );
+		wxString l_wildcard = _( "Castor3D scene" );
 		l_wildcard += CSCN_WILDCARD;
-		l_wildcard += _( "Castor3D binary scene" );
-		l_wildcard += CBSN_WILDCARD;
 		l_wildcard += _( "Wavefront OBJ" );
 		l_wildcard += OBJ_WILDCARD;
+		l_wildcard += wxT( "|" );
 		wxFileDialog l_fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 		SceneSPtr l_scene = m_pMainScene.lock();
 
@@ -790,17 +791,12 @@ namespace CastorViewer
 				if ( l_pathFile.GetExtension() == cuT( "obj" ) )
 				{
 					ObjSceneExporter l_exporter;
-					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( *m_pMainScene.lock(), l_pathFile );
 				}
 				else if ( l_pathFile.GetExtension() == cuT( "cscn" ) )
 				{
 					CscnSceneExporter l_exporter;
-					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
-				}
-				else if ( l_pathFile.GetExtension() == cuT( "cbsn" ) )
-				{
-					CbsnSceneExporter l_exporter;
-					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( *m_pMainScene.lock(), l_pathFile );
 				}
 			}
 		}

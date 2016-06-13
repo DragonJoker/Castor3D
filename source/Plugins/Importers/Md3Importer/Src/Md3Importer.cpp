@@ -61,7 +61,7 @@ SceneSPtr Md3Importer::DoImportScene()
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -82,7 +82,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName = m_fileName.GetFileName();
-	MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -105,7 +105,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 		l_pass->SetShininess( 64.0f );
 		DoReadMD3Data( p_scene, l_mesh, l_pass );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}
@@ -151,8 +151,6 @@ void Md3Importer::DoReadMD3Data( Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_p
  	//}
 
 	long long l_meshOffset = m_pFile->Tell();
-	String l_strFileName = m_pFile->GetFileFullPath();
-	l_strFileName = l_strFileName.substr( 0, l_strFileName.find_last_of( '.' ) );
 	Md3MeshInfo l_meshHeader = { 0 };
 
 	for ( i = 0; i < m_header.m_numMeshes; i++ )
@@ -166,11 +164,11 @@ void Md3Importer::DoReadMD3Data( Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_p
 
 		for ( int i = 0 ; i < l_meshHeader.m_numSkins && !l_pTexture ; i++ )
 		{
-			String l_strValue = string::string_cast< xchar >( m_skins[i].m_strName );
+			Path l_strValue{ string::string_cast< xchar >( m_skins[i].m_strName ) };
 
 			if ( p_pPass && !l_strValue.empty() )
 			{
-				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, TextureChannel::Diffuse );
 
 				if ( l_pTexture )
 				{
@@ -205,8 +203,10 @@ void Md3Importer::DoReadMD3Data( Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_p
 
 	p_pMesh->ComputeContainers();
 	p_pMesh->ComputeNormals();
-	DoLoadSkin( p_scene, l_strFileName + cuT( ".skin" ) );
-	DoLoadShader( p_scene, p_pMesh, l_strFileName + cuT( ".shader" ) );
+	String l_strFileName = m_pFile->GetFileFullPath();
+	l_strFileName = l_strFileName.substr( 0, l_strFileName.find_last_of( '.' ) );
+	DoLoadSkin( p_scene, Path{ l_strFileName + cuT( ".skin" ) } );
+	DoLoadShader( p_scene, p_pMesh, Path{ l_strFileName + cuT( ".shader" ) } );
 	delete [] m_links;
 }
 
@@ -248,7 +248,7 @@ void Md3Importer::DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshH
 	////	l_texVerts.push_back( Point2r( m_texCoords[i].m_textureCoord[0], 1-m_texCoords[i].m_textureCoord[1] ) );
 	////}
 
-	////std::vector< stFACE_INDICES > l_arrayFaces( p_meshHeader.m_numTriangles );
+	////std::vector< FaceIndices > l_arrayFaces( p_meshHeader.m_numTriangles );
 	////std::vector< float > l_arrayTex;
 
 	////for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
@@ -270,7 +270,7 @@ void Md3Importer::DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshH
 	////l_pSubmesh->AddFaceGroup( &l_arrayFaces[0], p_meshHeader.m_numTriangles, NULL, &l_arrayTex[0] );
 }
 
-bool Md3Importer::DoLoadSkin( Scene & p_scene, String const & p_strSkin )
+bool Md3Importer::DoLoadSkin( Scene & p_scene, Path const & p_strSkin )
 {
 	bool l_bReturn = false;
 
@@ -307,7 +307,7 @@ bool Md3Importer::DoLoadSkin( Scene & p_scene, String const & p_strSkin )
 
 				if ( !l_strImage.empty() )
 				{
-					LoadTexture( l_strImage, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+					LoadTexture( Path{ l_strImage }, *l_pass, TextureChannel::Diffuse );
 				}
 
 				m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
@@ -321,7 +321,7 @@ bool Md3Importer::DoLoadSkin( Scene & p_scene, String const & p_strSkin )
 	return l_bReturn;
 }
 
-bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, String const & p_strShader )
+bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, Path const & p_strShader )
 {
 	bool l_bReturn = false;
 
@@ -353,7 +353,7 @@ bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, String const 
 
 			if ( !l_strLine.empty() )
 			{
-				LoadTexture( l_strLine, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+				LoadTexture( Path{ l_strLine }, *l_pass, TextureChannel::Diffuse );
 			}
 
 			p_pMesh->GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );

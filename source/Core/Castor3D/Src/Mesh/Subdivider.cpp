@@ -6,6 +6,7 @@
 #include "Vertex.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Scene/Scene.hpp"
 
 #include <Line3D.hpp>
 #include <PlaneEquation.hpp>
@@ -172,7 +173,7 @@ namespace Castor3D
 
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			m_submesh->GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_submesh->ComputeNormals();
 				m_submesh->Initialise();

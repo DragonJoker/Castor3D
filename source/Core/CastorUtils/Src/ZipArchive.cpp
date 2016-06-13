@@ -189,7 +189,7 @@ namespace Castor
 
 						//Read the compressed file
 						zip_uint64_t l_read = 0;
-						Path l_name = string::string_cast< xchar >( l_stat.name );
+						Path l_name = Path{ string::string_cast< xchar >( l_stat.name ) };
 						StringArray l_folders = string::split( l_name.GetPath(), string::to_string( Path::Separator ), 100, false );
 
 						if ( !l_folders.empty() )
@@ -270,7 +270,7 @@ namespace Castor
 				{
 					std::string l_file = string::string_cast< char >( p_path + cuT( "/" ) + ( *l_it ) );
 
-					if ( !File::FileExists( string::string_cast< xchar >( l_file ) ) )
+					if ( !File::FileExists( Path{ string::string_cast< xchar >( l_file ) } ) )
 					{
 						CASTOR_EXCEPTION( "The file doesn't exist: " + l_file );
 					}
@@ -348,7 +348,7 @@ namespace Castor
 		else if ( p_path.find( name + Path::Separator ) == 0 )
 		{
 			// The file is inside this folder or inside a subfolder
-			Path l_path = p_path.substr( name.size() + 1 );
+			Path l_path = Path{ p_path.substr( name.size() + 1 ) };
 
 			FolderList::iterator l_it = std::find_if( folders.begin(), folders.end(), [&]( Folder & p_folder )
 			{
@@ -396,7 +396,7 @@ namespace Castor
 			if ( p_path.find( name + Path::Separator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
-				l_path = p_path.substr( name.size() + 1 );
+				l_path = Path{ p_path.substr( name.size() + 1 ) };
 
 				if ( l_path == p_path.GetFileName() + cuT( "." ) + p_path.GetExtension() )
 				{
@@ -405,14 +405,14 @@ namespace Castor
 				else
 				{
 					size_t l_found = l_path.find( Path::Separator );
-					folders.push_back( Folder( l_path.substr( 0, l_found ), l_path.substr( l_found + 1 ) ) );
+					folders.push_back( Folder( l_path.substr( 0, l_found ), Path{ l_path.substr( l_found + 1 ) } ) );
 				}
 			}
 			else
 			{
 				// This file is in a subfolder
 				size_t l_found = p_path.find( Path::Separator );
-				folders.push_back( Folder( p_path.substr( 0, l_found ), p_path.substr( l_found + 1 ) ) );
+				folders.push_back( Folder( p_path.substr( 0, l_found ), Path{ p_path.substr( l_found + 1 ) } ) );
 			}
 		}
 	}
@@ -467,7 +467,7 @@ namespace Castor
 			for ( StringArray::iterator l_it = l_entries.begin(); l_it != l_entries.end(); ++l_it )
 			{
 				string::replace( *l_it, m_rootFolder + Path::Separator, String() );
-				AddFile( *l_it );
+				AddFile( Path{ *l_it } );
 			}
 
 			l_return = true;

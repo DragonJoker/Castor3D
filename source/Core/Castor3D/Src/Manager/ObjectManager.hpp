@@ -209,7 +209,7 @@ namespace Castor3D
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
 
-			for ( auto && l_it : this->m_elements )
+			for ( auto l_it : this->m_elements )
 			{
 				ElementDetacher< Elem >::Detach( *l_it.second );
 			}

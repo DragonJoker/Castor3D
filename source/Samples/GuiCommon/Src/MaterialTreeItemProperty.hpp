@@ -29,7 +29,7 @@ namespace GuiCommon
 	\~english
 	\brief		Material helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les matériaux
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scï¿½ne, ou la liste de matï¿½riaux, et PropertiesHolder, pour les matï¿½riaux
 	*/
 	class MaterialTreeItemProperty
 		: public TreeItemProperty
@@ -42,8 +42,8 @@ namespace GuiCommon
 		 *\param[in]	p_material	The target material
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_material	Le matériau cible
+		 *\param[in]	p_editable	Dit si les propriï¿½tï¿½s sont modifiables
+		 *\param[in]	p_material	Le matï¿½riau cible
 		 */
 		MaterialTreeItemProperty( bool p_editable, Castor3D::MaterialSPtr p_material );
 		/**
@@ -58,7 +58,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the material
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le matériau
+		 *\brief		Rï¿½cupï¿½re le matï¿½riau
 		 *\return		La valeur
 		 */
 		inline Castor3D::MaterialSPtr GetMaterial()

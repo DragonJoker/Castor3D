@@ -1,8 +1,11 @@
 #include "TextureTreeItemProperty.hpp"
 
+#include <Engine.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Render/RenderSystem.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
-#include <Event/Frame/FunctorEvent.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -71,39 +74,39 @@ namespace GuiCommon
 
 			switch ( l_unit->GetChannel() )
 			{
-			case eTEXTURE_CHANNEL_COLOUR:
+			case TextureChannel::Colour:
 				l_selected = PROPERTY_CHANNEL_COLOUR;
 				break;
 
-			case eTEXTURE_CHANNEL_DIFFUSE:
+			case TextureChannel::Diffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
 
-			case eTEXTURE_CHANNEL_NORMAL:
+			case TextureChannel::Normal:
 				l_selected = PROPERTY_CHANNEL_NORMAL;
 				break;
 
-			case eTEXTURE_CHANNEL_OPACITY:
+			case TextureChannel::Opacity:
 				l_selected = PROPERTY_CHANNEL_OPACITY;
 				break;
 
-			case eTEXTURE_CHANNEL_SPECULAR:
+			case TextureChannel::Specular:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
 				break;
 
-			case eTEXTURE_CHANNEL_EMISSIVE:
+			case TextureChannel::Emissive:
 				l_selected = PROPERTY_CHANNEL_EMISSIVE;
 				break;
 
-			case eTEXTURE_CHANNEL_HEIGHT:
+			case TextureChannel::Height:
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case eTEXTURE_CHANNEL_AMBIENT:
+			case TextureChannel::Ambient:
 				l_selected = PROPERTY_CHANNEL_AMBIENT;
 				break;
 
-			case eTEXTURE_CHANNEL_GLOSS:
+			case TextureChannel::Gloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
 			}
@@ -113,7 +116,8 @@ namespace GuiCommon
 
 			if ( l_unit->GetTexture()->GetImage().IsStaticSource() )
 			{
-				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_unit->GetTexturePath() );
+				Path l_path{ l_unit->GetTexture()->GetImage().ToString() };
+				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_path );
 			}
 		}
 	}
@@ -129,47 +133,47 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_COLOUR );
+					OnChannelChange( TextureChannel::Colour );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_DIFFUSE );
+					OnChannelChange( TextureChannel::Diffuse );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_NORMAL );
+					OnChannelChange( TextureChannel::Normal );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_OPACITY );
+					OnChannelChange( TextureChannel::Opacity );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_SPECULAR );
+					OnChannelChange( TextureChannel::Specular );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_EMISSIVE );
+					OnChannelChange( TextureChannel::Emissive );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_HEIGHT );
+					OnChannelChange( TextureChannel::Height );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_AMBIENT );
+					OnChannelChange( TextureChannel::Ambient );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
-					OnChannelChange( eTEXTURE_CHANNEL_GLOSS );
+					OnChannelChange( TextureChannel::Gloss );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
@@ -179,7 +183,7 @@ namespace GuiCommon
 		}
 	}
 
-	void TextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void TextureTreeItemProperty::OnChannelChange( TextureChannel p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -195,11 +199,13 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_unit]()
 		{
-			if ( File::FileExists( p_value ) )
+			if ( File::FileExists( Path{ p_value }  ) )
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				l_unit->LoadTexture( p_value );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				l_texture->GetImage().SetSource( Path{}, Path{ p_value } );
+				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();
 			}
 		} );

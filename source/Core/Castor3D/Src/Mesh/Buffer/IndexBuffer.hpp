@@ -45,7 +45,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		C3D_API IndexBuffer( Engine & p_engine );
+		C3D_API explicit IndexBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

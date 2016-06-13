@@ -557,6 +557,18 @@ namespace Castor
 		{
 			return *m_pfComponent;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the component value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la valeur de la composante
+		 *\return		La valeur
+		 */
+		inline float & value()
+		{
+			return *m_pfComponent;
+		}
 
 	private:
 		void DoClamp()

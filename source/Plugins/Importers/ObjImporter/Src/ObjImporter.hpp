@@ -49,12 +49,12 @@ namespace Obj
 		void DoCreateSubmesh();
 		Castor3D::MeshSPtr DoReadObjFile( Castor3D::Scene & p_scene );
 		uint32_t DoRetrieveIndex( Castor::String & p_strIndex, uint32_t p_uiSize );
-		uint32_t DoTreatFace( Castor3D::stFACE_INDICES & p_face, uint32_t p_uiIndex, Castor::String const & p_strFace, stGROUP * p_pGroup, VertexArray const & p_arrayVertex, NormalArray const & p_arrayNormals, UvArray const & p_arrayUv );
+		uint32_t DoTreatFace( Castor3D::FaceIndices & p_face, uint32_t p_uiIndex, Castor::String const & p_strFace, stGROUP * p_pGroup, VertexArray const & p_arrayVertex, NormalArray const & p_arrayNormals, UvArray const & p_arrayUv );
 		void DoCreateSubmesh( Castor3D::MeshSPtr p_pMesh, stGROUP * p_pGroup );
 		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
 		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
 		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_uiIndex );
-		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::eTEXTURE_CHANNEL p_channel );
+		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::TextureChannel p_channel );
 		void DoReadMaterials( Castor3D::Scene & p_scene, Castor::Path const & p_pathMatFile );
 
 	private:

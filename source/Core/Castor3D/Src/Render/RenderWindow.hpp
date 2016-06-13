@@ -20,10 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Event/Frame/FrameListener.hpp"
-#include "Binary/BinaryParser.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
 
 #include <OwnedBy.hpp>
+#include <Size.hpp>
 
 namespace Castor3D
 {
@@ -51,8 +51,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class TextLoader
-			: public Castor::Loader< RenderWindow, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< RenderWindow >
 		{
 		public:
 			/**
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a render window into a text file
@@ -72,55 +72,7 @@ namespace Castor3D
 			 *\param[in]	p_window	La fenêtre de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( RenderWindow const & p_window, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		RenderWindow loader
-		\~english
-		\brief		Loader de RenderWindow
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< RenderWindow >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( RenderWindow const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( RenderWindow & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( RenderWindow const & p_window, Castor::TextFile & p_file )override;
 		};
 
 	public:

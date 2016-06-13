@@ -119,6 +119,54 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom d'objet.
 		 */
 		inline void Remove( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Returns an iterator to the first element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur sur le premier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto begin()
+		{
+			return m_createdElements.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an constant iterator to the first element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto begin()const
+		{
+			return m_createdElements.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an iterator to the after last element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto end()
+		{
+			return m_createdElements.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an constant iterator to the after last element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto end()const
+		{
+			return m_createdElements.end();
+		}
 
 	private:
 		//!\~english The viewed manager.	\~french Le gestionnaire vu.

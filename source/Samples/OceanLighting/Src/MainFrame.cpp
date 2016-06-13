@@ -315,11 +315,11 @@ namespace OceanLighting
 
 		try
 		{
-			eRENDERER_TYPE l_eRenderer = eRENDERER_TYPE_OPENGL;
+			String l_renderer = cuT( "opengl" );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_pCastor3D->LoadRenderer( l_eRenderer );
+				l_bReturn = m_pCastor3D->LoadRenderer( l_renderer );
 			}
 		}
 		catch ( ... )

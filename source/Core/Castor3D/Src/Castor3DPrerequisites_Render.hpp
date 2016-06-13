@@ -479,25 +479,6 @@ namespace Castor3D
 
 		return 0;
 	}
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		10/03/2016
-	\~english
-	\brief		Tone mapping type enumeration.
-	\~french
-	\brief		Enumération des types de mappage de tons.
-	*/
-	typedef enum eTONE_MAPPING_TYPE
-		: uint8_t
-	{
-		eTONE_MAPPING_TYPE_LINEAR,
-		eTONE_MAPPING_TYPE_REINHARD,
-		eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER,
-		eTONE_MAPPING_TYPE_HEJL_BURGESS_DAWSON,
-		eTONE_MAPPING_TYPE_HABLE,
-		CASTOR_ENUM_BOUNDS( eTONE_MAPPING_TYPE, eTONE_MAPPING_TYPE_LINEAR )
-	}	eTONE_MAPPING_TYPE;
 
 	template< typename T > class CpuBuffer;
 	class GpuInformations;
@@ -514,7 +495,8 @@ namespace Castor3D
 	class ToneMappingFactory;
 	struct RenderNode;
 	struct SceneRenderNode;
-	struct GeometryRenderNode;
+	struct StaticGeometryRenderNode;
+	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
 
 	struct BufferElementDeclaration;
@@ -541,7 +523,8 @@ namespace Castor3D
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	//!\~english Multimap of RenderNodes sorted by distance.	\~french Multimap de RenderNodes triés par distance.
-	DECLARE_MULTIMAP( double, GeometryRenderNode, GeometryRenderNodeByDistance );
+	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
+	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 
 	//@}

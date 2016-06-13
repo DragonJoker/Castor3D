@@ -51,7 +51,7 @@ namespace Castor3D
 			m_mapVariables.erase( l_itMap );
 		}
 
-		auto && l_itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( FrameVariableSPtr p_variable )
+		auto l_itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( FrameVariableSPtr p_variable )
 		{
 			return p_name == p_variable->GetName();
 		} );
@@ -70,7 +70,7 @@ namespace Castor3D
 		{
 			uint32_t l_totalSize = 0;
 
-			for ( auto && l_variable : m_listVariables )
+			for ( auto l_variable : m_listVariables )
 			{
 				if ( l_variable->Initialise() )
 				{
@@ -82,7 +82,7 @@ namespace Castor3D
 			m_buffer.resize( l_totalSize );
 			uint8_t * l_buffer = m_buffer.data();
 
-			for ( auto && l_variable : m_listInitialised )
+			for ( auto l_variable : m_listInitialised )
 			{
 				l_variable->link( l_buffer );
 				l_buffer += l_variable->size();

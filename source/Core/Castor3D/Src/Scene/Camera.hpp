@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_CAMERA_H___
 
 #include "MovableObject.hpp"
-#include "Binary/BinaryParser.hpp"
 #include "Render/Viewport.hpp"
 
 #include <PlaneEquation.hpp>
@@ -51,10 +50,17 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class TextLoader
-			: public MovableObject::TextLoader
+		class TextWriter
+			: public Castor::TextWriter< Camera >
 		{
 		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a camera into a text file
@@ -65,55 +71,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			C3D_API virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
-		};
-		/*
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		Camera loader
-		\~english
-		\brief		Loader de Camera
-		*/
-		class BinaryParser
-			: public MovableObject::BinaryParser
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Camera const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Camera const & p_camera, Castor::TextFile & p_file )override;
 		};
 
 	public:

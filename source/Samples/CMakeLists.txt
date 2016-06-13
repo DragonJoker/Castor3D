@@ -30,17 +30,18 @@ function( SamplesBuild )
 			endif()
 
 			set( OpenCV_STATIC FALSE )
-			find_package( OpenCV )
 			find_package( FFMPEG )
-
-			if( OPENCV_FOUND OR OpenCV_FOUND )
-				include_directories( ${OpenCV_INCLUDE_DIR} )
-				include_directories( ${OpenCV_INCLUDE_DIRS} )
-				link_directories( ${OpenCV_LINK_DIRECTORIES} )
-			endif()
 
 			if( FFMPEG_FOUND )
 				include_directories( ${FFMPEG_INCLUDE_DIR} )
+			else ()
+				find_package( OpenCV )
+
+				if( OPENCV_FOUND OR OpenCV_FOUND )
+					include_directories( ${OpenCV_INCLUDE_DIR} )
+					include_directories( ${OpenCV_INCLUDE_DIRS} )
+					link_directories( ${OpenCV_LINK_DIRECTORIES} )
+				endif()
 			endif ()
 
 			set( GUICOMMON_C_FLAGS "" )

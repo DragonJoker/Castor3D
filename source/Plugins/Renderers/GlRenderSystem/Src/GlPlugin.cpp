@@ -1,4 +1,4 @@
-#include "GlRenderSystem.hpp"
+#include "Render/GlRenderSystem.hpp"
 
 #include <Engine.hpp>
 
@@ -16,9 +16,9 @@ C3D_Gl_API ePLUGIN_TYPE GetType()
 	return ePLUGIN_TYPE_RENDERER;
 }
 
-C3D_Gl_API eRENDERER_TYPE GetRendererType()
+C3D_Gl_API Castor::String GetRendererType()
 {
-	return eRENDERER_TYPE_OPENGL;
+	return GlRenderSystem::Name;
 }
 
 C3D_Gl_API String GetName()

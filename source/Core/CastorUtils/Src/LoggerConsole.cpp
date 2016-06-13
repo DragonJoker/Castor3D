@@ -17,9 +17,14 @@ namespace Castor
 	class ConsoleHandle
 	{
 	public:
-		bool Initialise()
+		bool Initialise( HANDLE p_screenBuffer )
 		{
-			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
+			m_screenBuffer = p_screenBuffer;
+
+			if ( m_screenBuffer == INVALID_HANDLE_VALUE )
+			{
+				m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
+			}
 
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
 			{
@@ -85,7 +90,7 @@ namespace Castor
 			::SetConsoleTextAttribute( m_screenBuffer, p_attributes );
 		}
 
-		void WriteText( String const & p_text, bool p_newLine )
+		void WriteText( String p_text, bool p_newLine )
 		{
 			if ( ::IsDebuggerPresent() )
 			{
@@ -103,6 +108,7 @@ namespace Castor
 
 			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &l_csbiInfo ) )
 			{
+				// Manually managed screen buffer.
 				l_csbiInfo.dwCursorPosition.X = 0;
 				DWORD l_written = 0;
 				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
@@ -136,6 +142,18 @@ namespace Castor
 				}
 
 				::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
+			}
+			else
+			{
+				// Automatically managed screen buffer.
+				DWORD l_written = 0;
+
+				if ( p_newLine )
+				{
+					p_text += cuT( "\n" );
+				}
+
+				::WriteConsole( m_screenBuffer, p_text.c_str(), DWORD( p_text.size() ), &l_written, nullptr );
 			}
 		}
 
@@ -277,7 +295,7 @@ namespace Castor
 			if ( ::AllocConsole() )
 			{
 				m_allocated = true;
-				DoInitialiseConsole();
+				DoInitialiseConsole( INVALID_HANDLE_VALUE );
 			}
 			else
 			{
@@ -285,7 +303,7 @@ namespace Castor
 
 				if ( lastError == ERROR_ACCESS_DENIED )
 				{
-					DoInitialiseConsole();
+					DoInitialiseConsole( ::GetStdHandle( STD_OUTPUT_HANDLE ) );
 				}
 				else
 				{
@@ -336,9 +354,9 @@ namespace Castor
 		}
 
 	private:
-		void DoInitialiseConsole()
+		void DoInitialiseConsole( HANDLE p_handle )
 		{
-			if ( m_handle.Initialise() )
+			if ( m_handle.Initialise( p_handle ) )
 			{
 				FILE * l_dump;
 				freopen_s( &l_dump, "conout$", "w", stdout );

@@ -52,7 +52,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetBackgroundImage( FromBstr( path ) );
+			m_internal->SetBackground( FromBstr( path ) );
 			hr = S_OK;
 		}
 		else

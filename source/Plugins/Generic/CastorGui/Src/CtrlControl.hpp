@@ -334,7 +334,7 @@ namespace CastorGui
 		//! The border panel overlay used as a background
 		Castor3D::BorderPanelOverlayWPtr m_background;
 		//! The child controls
-		std::vector< ControlWPtr > m_childs;
+		std::vector< ControlWPtr > m_children;
 		//! The engine
 		Castor3D::Engine * m_engine;
 		//! The controls manager

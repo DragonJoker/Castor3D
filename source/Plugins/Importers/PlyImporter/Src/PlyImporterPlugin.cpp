@@ -1,5 +1,9 @@
 #include "PlyImporter.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <Engine.hpp>
 
 #include <Plugin/ImporterPlugin.hpp>
