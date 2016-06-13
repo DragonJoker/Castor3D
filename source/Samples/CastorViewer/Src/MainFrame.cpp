@@ -217,7 +217,7 @@ namespace CastorViewer
 						wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
 					}
 
-					auto l_scene{  m_pMainScene.lock() };
+					auto l_scene = m_pMainScene.lock();
 
 					if ( l_scene )
 					{
@@ -512,7 +512,7 @@ namespace CastorViewer
 
 			if ( l_dialog.ShowModal() == wxID_OK )
 			{
-				auto l_image( l_bitmap.ConvertToImage() );
+				auto l_image = l_bitmap.ConvertToImage();
 				l_image.SaveFile( l_dialog.GetPath() );
 			}
 		}

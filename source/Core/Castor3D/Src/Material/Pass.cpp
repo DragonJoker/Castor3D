@@ -288,7 +288,7 @@ namespace Castor3D
 	TextureUnitSPtr Pass::GetTextureUnit( TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_return;
-		auto && l_it = m_arrayTextureUnits.begin();
+		auto l_it = m_arrayTextureUnits.begin();
 
 		while ( l_it != m_arrayTextureUnits.end() && !l_return )
 		{

@@ -1120,7 +1120,7 @@ namespace Castor3D
 					l_bonesBuffer.Resize( l_size );
 				}
 
-				auto l_buffer{ l_bonesBuffer.data() };
+				auto l_buffer = l_bonesBuffer.data();
 
 				for ( auto l_it : m_bonesData )
 				{

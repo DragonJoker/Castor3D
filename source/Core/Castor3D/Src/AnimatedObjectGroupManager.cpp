@@ -19,7 +19,7 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( m_elements );
 
-		for ( auto && l_pair : m_elements )
+		for ( auto l_pair : m_elements )
 		{
 			l_pair.second->Update();
 		}
