@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_PIPELINE_H___
 #define ___TRS_PIPELINE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Render/Pipeline.hpp>
 
 namespace TestRender

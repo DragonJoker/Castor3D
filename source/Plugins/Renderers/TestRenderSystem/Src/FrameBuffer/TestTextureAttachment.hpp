@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_TEXTURE_ATTACHMENT_H___
 #define ___TRS_TEXTURE_ATTACHMENT_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <FrameBuffer/TextureAttachment.hpp>
 
 namespace TestRender

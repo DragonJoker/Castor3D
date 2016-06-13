@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_ONE_FRAME_VARIABLE_H___
 #define ___TRS_ONE_FRAME_VARIABLE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Shader/OneFrameVariable.hpp>
 
 namespace TestRender

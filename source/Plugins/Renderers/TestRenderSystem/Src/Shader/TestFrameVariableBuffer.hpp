@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_FRAME_VARIABLE_BUFFER_H___
 #define ___TRS_FRAME_VARIABLE_BUFFER_H___
 
-#include <Shader/FrameVariableBuffer.hpp>
-
 #include "TestRenderSystemPrerequisites.hpp"
+
+#include <Shader/FrameVariableBuffer.hpp>
 
 namespace TestRender
 {

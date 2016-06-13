@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_DEPTH_RENDER_BUFFER_H___
 #define ___TRS_DEPTH_RENDER_BUFFER_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 
 namespace TestRender

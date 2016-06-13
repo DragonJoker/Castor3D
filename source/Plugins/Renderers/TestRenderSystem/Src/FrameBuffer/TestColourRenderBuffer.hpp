@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_COLOUR_RENDER_BUFFER_H___
 #define ___TRS_COLOUR_RENDER_BUFFER_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 
 namespace TestRender

@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_RENDER_BUFFER_ATTACHMENT_H___
 #define ___TRS_RENDER_BUFFER_ATTACHMENT_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <FrameBuffer/RenderBufferAttachment.hpp>
 
 namespace TestRender

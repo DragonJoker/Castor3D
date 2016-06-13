@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_POINT_FRAME_VARIABLE_H___
 #define ___TRS_POINT_FRAME_VARIABLE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Shader/PointFrameVariable.hpp>
 
 namespace TestRender

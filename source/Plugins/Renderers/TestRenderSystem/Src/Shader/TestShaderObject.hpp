@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_SHADER_OBJECT_H___
 #define ___TRS_SHADER_OBJECT_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Shader/ShaderObject.hpp>
 
 namespace TestRender
