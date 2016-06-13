@@ -61,7 +61,7 @@ SceneSPtr Md3Importer::DoImportScene()
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -82,7 +82,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName = m_fileName.GetFileName();
-	MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -105,7 +105,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 		l_pass->SetShininess( 64.0f );
 		DoReadMD3Data( p_scene, l_mesh, l_pass );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}

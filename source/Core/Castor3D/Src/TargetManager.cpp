@@ -29,9 +29,9 @@ namespace Castor3D
 
 	void TargetManager::Remove( RenderTargetSPtr p_target )
 	{
-		auto l_lock{ make_unique_lock( m_elements ) };
-		auto l_v = ( m_renderTargets.begin() + p_target->GetTargetType() );
-		auto l_it{ std::find( l_v->begin(), l_v->end(), p_target ) };
+		auto l_lock = make_unique_lock( m_elements );
+		auto l_v = m_renderTargets.begin() + p_target->GetTargetType();
+		auto l_it = std::find( l_v->begin(), l_v->end(), p_target );
 
 		if ( l_it != l_v->end() )
 		{

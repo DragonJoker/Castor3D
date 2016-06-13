@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_TEXTURE_STORAGE_H___
 #define ___TRS_TEXTURE_STORAGE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Texture/TextureStorage.hpp>
 
 namespace TestRender

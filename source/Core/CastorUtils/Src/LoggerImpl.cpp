@@ -43,7 +43,7 @@ namespace Castor
 	void LoggerImpl::UnregisterCallback( void * p_pCaller )
 	{
 		std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
-		auto && l_it = m_mapCallbacks.find( p_pCaller );
+		auto l_it = m_mapCallbacks.find( p_pCaller );
 
 		if ( l_it != m_mapCallbacks.end() )
 		{
@@ -97,7 +97,7 @@ namespace Castor
 
 		try
 		{
-			for ( auto && message : p_queue )
+			for ( auto const & message : p_queue )
 			{
 				StringStream & l_stream = l_logs[message->m_type];
 				String l_toLog = message->GetMessage();
@@ -106,7 +106,7 @@ namespace Castor
 				{
 					StringArray l_array = string::split( l_toLog, cuT( "\n" ), uint32_t( std::count( l_toLog.begin(), l_toLog.end(), cuT( '\n' ) ) + 1 ) );
 
-					for ( auto && l_line : l_array )
+					for ( auto l_line : l_array )
 					{
 						DoLogLine( l_timeStamp, l_line, l_stream, message->m_type );
 					}
@@ -119,7 +119,7 @@ namespace Castor
 
 			int i = 0;
 
-			for ( auto && l_stream : l_logs )
+			for ( auto const & l_stream : l_logs )
 			{
 				String l_text = l_stream.str();
 
@@ -149,7 +149,7 @@ namespace Castor
 		{
 			StringArray array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
 
-			for ( auto && line : array )
+			for ( auto line : array )
 			{
 				DoPrintLine( line, logLevel );
 			}
@@ -177,7 +177,7 @@ namespace Castor
 
 			if ( !m_mapCallbacks.empty() )
 			{
-				for ( auto && l_it : m_mapCallbacks )
+				for ( auto l_it : m_mapCallbacks )
 				{
 					l_it.second( line, logLevel );
 				}

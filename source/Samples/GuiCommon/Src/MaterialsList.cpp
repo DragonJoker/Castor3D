@@ -60,7 +60,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -87,7 +87,7 @@ namespace GuiCommon
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
 		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialManager() );
 
-		for ( auto && l_pair : m_engine->GetMaterialManager() )
+		for ( auto l_pair : m_engine->GetMaterialManager() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
@@ -103,7 +103,7 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable(), p_material ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_pass : *p_material )
+		for ( auto l_pass : *p_material )
 		{
 			DoAddPass( l_id, l_index++, l_pass );
 		}
@@ -114,9 +114,9 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass, *m_scene ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_pass : *p_pass )
+		for ( auto l_unit : *p_pass )
 		{
-			DoAddTexture( l_id, l_index++, l_pass );
+			DoAddTexture( l_id, l_index++, l_unit );
 		}
 	}
 

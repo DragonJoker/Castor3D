@@ -29,7 +29,7 @@ namespace Castor3D
 
 		if ( l_it == m_animations.end() )
 		{
-			auto l_animation{ std::static_pointer_cast< SkeletonAnimation >( m_skeleton.GetAnimation( p_name ) ) };
+			auto l_animation = std::static_pointer_cast< SkeletonAnimation >( m_skeleton.GetAnimation( p_name ) );
 
 			if ( l_animation )
 			{

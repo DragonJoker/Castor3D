@@ -18,9 +18,9 @@ namespace Castor3D
 
 	void AnimationInstance::Update( real p_tslf )
 	{
-		auto l_length{ m_animation.GetLength() };
-		auto l_scale{ m_scale };
-		auto l_looped{ m_looped };
+		auto l_length = m_animation.GetLength();
+		auto l_scale = m_scale;
+		auto l_looped = m_looped;
 
 		if ( m_state != AnimationState::Stopped && l_length > 0 )
 		{

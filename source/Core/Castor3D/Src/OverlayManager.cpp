@@ -51,7 +51,7 @@ namespace Castor3D
 		m_viewport.Cleanup();
 		auto l_lock = make_unique_lock( *this );
 
-		for ( auto && l_it : m_fontTextures )
+		for ( auto l_it : m_fontTextures )
 		{
 			GetEngine()->PostEvent( MakeCleanupEvent( *l_it.second ) );
 		}
@@ -226,7 +226,7 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 		bool l_return = true;
-		auto && l_it = m_overlays.begin();
+		auto l_it = m_overlays.begin();
 		bool l_first = true;
 
 		while ( l_return && l_it != m_overlays.end() )

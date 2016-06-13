@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -663,7 +663,7 @@ namespace Castor
 				T y;
 				T z;
 				T w;
-			};
+			} quat;
 			T buffer[4];
 		};
 	};
@@ -792,7 +792,7 @@ namespace Castor
 	template< typename CharT, typename T >
 	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_stream, QuaternionT< T > const & p_quat )
 	{
-		p_stream << p_quat.x << ", " << p_quat.y << ", " << p_quat.z << ", " << p_quat.w;
+		p_stream << p_quat.quat.x << ", " << p_quat.quat.y << ", " << p_quat.quat.z << ", " << p_quat.quat.w;
 		return p_stream;
 	}
 }

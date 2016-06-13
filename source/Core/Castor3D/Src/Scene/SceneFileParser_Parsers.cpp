@@ -1381,7 +1381,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 
 			if ( l_manager.Has( l_name ) )
 			{
-				for ( auto && l_submesh : *l_parsingContext->pGeometry->GetMesh() )
+				for ( auto l_submesh : *l_parsingContext->pGeometry->GetMesh() )
 				{
 					MaterialSPtr l_material = l_manager.Find( l_name );
 					l_parsingContext->pGeometry->SetMaterial( l_submesh, l_material );
@@ -1704,7 +1704,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 			l_parsingContext->pMesh->ComputeContainers();
 			Point3r l_ptCenter = l_parsingContext->pMesh->GetCollisionBox().GetCenter();
 
-			for ( auto && l_submesh : *l_parsingContext->pMesh )
+			for ( auto l_submesh : *l_parsingContext->pMesh )
 			{
 				l_pDivider->Subdivide( l_submesh, l_count, false );
 			}
@@ -2099,7 +2099,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshEnd )
 
 		if ( l_parsingContext->faces.size() )
 		{
-			auto l_indices{ reinterpret_cast< FaceIndices * >( &l_parsingContext->faces[0] ) };
+			auto l_indices = reinterpret_cast< FaceIndices * >( &l_parsingContext->faces[0] );
 			l_parsingContext->pSubmesh->AddFaceGroup( l_indices, l_indices + ( l_parsingContext->faces.size() / 3 ) );
 
 			if ( !l_parsingContext->vertexNml.empty() )
@@ -3616,7 +3616,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 
 			if ( l_geometry->GetMesh() )
 			{
-				auto l_mesh{ l_geometry->GetMesh() };
+				auto l_mesh = l_geometry->GetMesh();
 				l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
 
 				if ( l_mesh->GetSkeleton() )

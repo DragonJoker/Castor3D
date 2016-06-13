@@ -24,7 +24,7 @@ namespace Castor3D
 
 		bool l_first{ true };
 
-		for ( auto && l_pass : p_material )
+		for ( auto l_pass : p_material )
 		{
 			l_return = Pass::TextWriter( m_tabs + cuT( "\t" ) )( *l_pass, p_file );
 		}
@@ -55,7 +55,7 @@ namespace Castor3D
 	{
 		Logger::LogDebug( cuT( "Initialising material [" ) + GetName() + cuT( "]" ) );
 
-		for ( auto && l_pass : m_passes )
+		for ( auto l_pass : m_passes )
 		{
 			l_pass->Initialise();
 		}
@@ -63,7 +63,7 @@ namespace Castor3D
 
 	void Material::Cleanup()
 	{
-		for ( auto && l_pass : m_passes )
+		for ( auto l_pass : m_passes )
 		{
 			l_pass->Cleanup();
 		}

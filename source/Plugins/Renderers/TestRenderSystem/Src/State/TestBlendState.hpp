@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_BLEND_STATE_H___
 #define ___TRS_BLEND_STATE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <State/BlendState.hpp>
 
 namespace TestRender

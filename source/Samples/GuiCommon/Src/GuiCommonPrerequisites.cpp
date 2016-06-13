@@ -284,7 +284,7 @@ namespace GuiCommon
 		PathArray l_arrayKept;
 
 		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
-		for ( auto && l_file : l_arrayFiles )
+		for ( auto l_file : l_arrayFiles )
 		{
 #if defined( NDEBUG )
 
@@ -304,7 +304,7 @@ namespace GuiCommon
 			PathArray l_arrayFailed;
 			PathArray l_otherPlugins;
 
-			for ( auto && l_file : l_arrayKept )
+			for ( auto l_file : l_arrayKept )
 			{
 				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
 				{
@@ -324,7 +324,7 @@ namespace GuiCommon
 			}
 
 			// Then we load other plug-ins
-			for ( auto && l_file : l_otherPlugins )
+			for ( auto l_file : l_otherPlugins )
 			{
 				if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
 				{
@@ -336,7 +336,7 @@ namespace GuiCommon
 			{
 				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
-				for ( auto && l_file : l_arrayFailed )
+				for ( auto l_file : l_arrayFailed )
 				{
 					Logger::LogWarning( Path( l_file ).GetFileName() );
 				}

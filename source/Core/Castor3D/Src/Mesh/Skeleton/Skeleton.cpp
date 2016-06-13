@@ -21,7 +21,7 @@ namespace Castor3D
 			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE, m_chunk );
 		}
 
-		for ( auto && l_bone : p_obj.m_bones )
+		for ( auto l_bone : p_obj.m_bones )
 		{
 			l_return &= BinaryWriter< Bone >{}.Write( *l_bone, m_chunk );
 		}

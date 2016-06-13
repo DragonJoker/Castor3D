@@ -79,7 +79,7 @@ namespace Castor
 				ReportError< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 				size_t size = sizeof( Object ) + 1;
 
-				for ( auto && buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
+				for ( auto buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
 				{
 					uint8_t * data = buffer->m_data;
 
@@ -97,7 +97,7 @@ namespace Castor
 
 			delete [] m_free;
 
-			for ( auto && buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
+			for ( auto buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
 			{
 				delete [] buffer->m_data;
 			}

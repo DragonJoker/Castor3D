@@ -94,7 +94,7 @@ namespace Castor3D
 		ByteArray l_buffer;
 		l_buffer.reserve( sizeof( uint32_t ) + sizeof( eCHUNK_TYPE ) + l_size );
 		// Write subchunk type
-		auto l_type{ SystemEndianToBigEndian( p_subchunk.m_type ) };
+		auto l_type = SystemEndianToBigEndian( p_subchunk.m_type );
 		auto l_data = reinterpret_cast< uint8_t const * >( &l_type );
 		l_buffer.insert( l_buffer.end(), l_data, l_data + sizeof( eCHUNK_TYPE ) );
 		// The its size
@@ -114,14 +114,14 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			auto l_type{ SystemEndianToBigEndian( GetChunkType() ) };
+			auto l_type = SystemEndianToBigEndian( GetChunkType() );
 			l_return = p_file.Write( l_type ) == sizeof( eCHUNK_TYPE );
 		}
 
 		if ( l_return )
 		{
 			Finalise();
-			auto l_size{ SystemEndianToBigEndian( GetDataSize() ) };
+			auto l_size = SystemEndianToBigEndian( GetDataSize() );
 			l_return = p_file.Write( l_size ) == sizeof( uint32_t );
 		}
 

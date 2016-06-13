@@ -516,7 +516,7 @@ namespace Castor3D
 		template< typename T >
 		bool DoTrack( T * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
 		{
-			auto && l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
+			auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
 			{
 				return p_object == l_object.m_object;
 			} );

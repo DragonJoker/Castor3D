@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Un itérateur sur le premier os.
 		 */
-		inline decltype( auto ) begin()
+		inline auto begin()
 		{
 			return m_bones.begin();
 		}
@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Un itérateur sur le premier os.
 		 */
-		inline decltype( auto ) begin()const
+		inline auto begin()const
 		{
 			return m_bones.begin();
 		}
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Un itérateur sur la fin du tableau d'os.
 		 */
-		inline decltype( auto ) end()
+		inline auto end()
 		{
 			return m_bones.end();
 		}
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Un itérateur sur la fin du tableau d'os.
 		 */
-		inline decltype( auto ) end()const
+		inline auto end()const
 		{
 			return m_bones.end();
 		}

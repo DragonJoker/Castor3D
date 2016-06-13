@@ -89,7 +89,7 @@ namespace Testing
 			Logger::LogInfo( l_testSep );
 			uint32_t l_testCount = 0;
 
-			for ( auto && l_testCase : m_arrayTests )
+			for ( auto l_testCase : m_arrayTests )
 			{
 				l_testCase->Execute( l_errCount, l_testCount );
 				Logger::LogInfo( l_testSep );

@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Miscellaneous/WindowHandle.hpp"
 
 #include <OwnedBy.hpp>
+#include <Size.hpp>
 
 namespace Castor3D
 {

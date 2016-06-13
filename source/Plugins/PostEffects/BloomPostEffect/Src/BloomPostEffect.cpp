@@ -337,7 +337,7 @@ namespace Bloom
 
 		uint32_t l_index = 0;
 
-		for ( auto && l_surface : m_hiPassSurfaces )
+		for ( auto & l_surface : m_hiPassSurfaces )
 		{
 			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_linearSampler );
 			l_size.width() >>= 1;
@@ -347,7 +347,7 @@ namespace Bloom
 		l_size = m_renderTarget.GetSize();
 		l_index = 0;
 
-		for ( auto && l_surface : m_blurSurfaces )
+		for ( auto & l_surface : m_blurSurfaces )
 		{
 			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_nearestSampler );
 			l_size.width() >>= 1;
@@ -371,12 +371,12 @@ namespace Bloom
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
 
-		for ( auto && l_surface : m_blurSurfaces )
+		for ( auto & l_surface : m_blurSurfaces )
 		{
 			l_surface.Cleanup();
 		}
 
-		for ( auto && l_surface : m_hiPassSurfaces )
+		for ( auto & l_surface : m_hiPassSurfaces )
 		{
 			l_surface.Cleanup();
 		}

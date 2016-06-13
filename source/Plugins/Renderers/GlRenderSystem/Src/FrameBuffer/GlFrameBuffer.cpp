@@ -50,7 +50,7 @@ namespace GlRender
 			UIntArray l_arrayAttaches;
 			l_arrayAttaches.reserve( p_attaches.size() );
 
-			for ( auto && l_attach : p_attaches )
+			for ( auto l_attach : p_attaches )
 			{
 				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
 

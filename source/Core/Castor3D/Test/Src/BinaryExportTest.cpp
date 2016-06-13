@@ -118,7 +118,7 @@ namespace Testing
 		CT_REQUIRE( l_scene->GetMeshManager().begin() != l_scene->GetMeshManager().end() );
 		auto l_src = l_scene->GetMeshManager().begin()->second;
 		l_scene->GetMeshManager().unlock();
-		auto l_name{ l_src->GetName() };
+		auto l_name = l_src->GetName();
 
 		for ( auto l_submesh : *l_src )
 		{

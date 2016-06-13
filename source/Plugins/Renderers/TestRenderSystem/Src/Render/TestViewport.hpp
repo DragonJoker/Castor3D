@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_VIEWPORT_H___
 #define ___TRS_VIEWPORT_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Render/Viewport.hpp>
 
 namespace TestRender

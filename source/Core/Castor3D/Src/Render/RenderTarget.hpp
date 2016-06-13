@@ -24,6 +24,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "HDR/ToneMappingFactory.hpp"
 
 #include <OwnedBy.hpp>
+#include <Size.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {

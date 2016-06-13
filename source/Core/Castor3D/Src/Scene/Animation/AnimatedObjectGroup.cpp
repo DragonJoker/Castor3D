@@ -47,7 +47,7 @@ namespace Castor3D
 
 		for ( auto l_it : p_group.GetObjects() )
 		{
-			auto l_name{ l_it.first };
+			auto l_name = l_it.first;
 			bool l_write{ true };
 			size_t l_skel = l_name.find( cuT( "_Skeleton" ) );
 			size_t l_mesh = l_name.find( cuT( "_Mesh" ) );

@@ -79,7 +79,7 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
+			for ( auto l_it : p_shaderObject.GetFrameVariables() )
 			{
 				l_return = FrameVariable::TextWriter( m_tabs + cuT( "\t" ) )( *l_it, p_file );
 			}
@@ -121,7 +121,7 @@ namespace Castor3D
 
 	void ShaderObject::Bind()
 	{
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto l_variable : m_listFrameVariables )
 		{
 			l_variable->Bind();
 		}
@@ -129,7 +129,7 @@ namespace Castor3D
 
 	void ShaderObject::Unbind()
 	{
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto l_variable : m_listFrameVariables )
 		{
 			l_variable->Unbind();
 		}

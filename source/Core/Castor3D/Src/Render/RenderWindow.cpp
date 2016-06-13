@@ -87,7 +87,7 @@ namespace Castor3D
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
 		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
-		auto l_target{ m_renderTarget.lock() };
+		auto l_target = m_renderTarget.lock();
 
 		if ( l_target )
 		{
@@ -142,7 +142,7 @@ namespace Castor3D
 
 		if ( m_context )
 		{
-			auto l_context{ GetEngine()->GetRenderSystem()->GetCurrentContext() };
+			auto l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
 
 			if ( l_context != m_context.get() )
 			{

@@ -90,7 +90,7 @@ namespace Castor3D
 		{
 			EventQueue l_queue = DoSwapQueue();
 
-			for ( auto && l_eventPair : l_queue )
+			for ( auto const & l_eventPair : l_queue )
 			{
 				l_eventPair.second();
 			}

@@ -52,7 +52,7 @@ namespace Lwo
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
-			for ( auto && l_submesh : *l_mesh )
+			for ( auto l_submesh : *l_mesh )
 			{
 				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
@@ -78,7 +78,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_return = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4 ) );

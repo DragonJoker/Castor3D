@@ -47,7 +47,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh: *l_mesh )
+		for ( auto l_submesh: *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -71,7 +71,7 @@ MeshSPtr SMaxImporter::DoImportMesh( Scene & p_scene )
 
 	if ( m_pFile->IsOk() )
 	{
-		l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )

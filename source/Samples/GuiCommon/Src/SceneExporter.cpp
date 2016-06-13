@@ -12,6 +12,7 @@
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Scene/Scene.hpp>
+#include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <iomanip>
@@ -260,7 +261,7 @@ namespace GuiCommon
 				File::DirectoryCreate( l_folder / l_subfolder );
 			}
 
-			auto l_lock{ make_unique_lock( p_scene.GetMeshManager() ) };
+			auto l_lock = make_unique_lock( p_scene.GetMeshManager() );
 
 			for ( auto const & l_it : p_scene.GetMeshManager() )
 			{

@@ -101,7 +101,7 @@ namespace Castor3D
 			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_panelVertexBuffer->data();
 
-			for ( auto && l_vertex : m_panelVertex )
+			for ( auto & l_vertex : m_panelVertex )
 			{
 				l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 				l_buffer += l_stride;
@@ -126,7 +126,7 @@ namespace Castor3D
 			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_borderVertexBuffer->data();
 
-			for ( auto && l_vertex : m_borderVertex )
+			for ( auto & l_vertex : m_borderVertex )
 			{
 				l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 				l_buffer += l_stride;
@@ -175,17 +175,17 @@ namespace Castor3D
 		auto l_rsState = m_wpRasteriserState.lock();
 		l_rsState->Cleanup();
 
-		for ( auto && l_vertex : m_borderVertex )
+		for ( auto & l_vertex : m_borderVertex )
 		{
 			l_vertex.reset();
 		}
 
-		for ( auto && l_vertex : m_panelVertex )
+		for ( auto & l_vertex : m_panelVertex )
 		{
 			l_vertex.reset();
 		}
 
-		for ( auto && l_pair : m_programs )
+		for ( auto l_pair : m_programs )
 		{
 			l_pair.second->Cleanup();
 		}
@@ -224,7 +224,7 @@ namespace Castor3D
 
 		m_textsGeometryBuffers.clear();
 
-		for ( auto && l_buffer : m_textsVertexBuffers )
+		for ( auto l_buffer : m_textsVertexBuffers )
 		{
 			l_buffer->Cleanup();
 			l_buffer->Destroy();
@@ -334,7 +334,7 @@ namespace Castor3D
 
 	RenderNode & OverlayRenderer::DoGetPanelProgram( Pass & p_pass )
 	{
-		auto && l_it = m_mapPanelPrograms.find( &p_pass );
+		auto l_it = m_mapPanelPrograms.find( &p_pass );
 
 		if ( l_it == m_mapPanelPrograms.end() )
 		{
@@ -367,7 +367,7 @@ namespace Castor3D
 
 	RenderNode & OverlayRenderer::DoGetTextProgram( Pass & p_pass )
 	{
-		auto && l_it = m_mapTextPrograms.find( &p_pass );
+		auto l_it = m_mapTextPrograms.find( &p_pass );
 
 		if ( l_it == m_mapTextPrograms.end() )
 		{
@@ -431,7 +431,7 @@ namespace Castor3D
 
 	ShaderProgramSPtr OverlayRenderer::DoGetProgram( uint32_t p_flags )
 	{
-		auto && l_it = m_programs.find( p_flags );
+		auto l_it = m_programs.find( p_flags );
 
 		if ( l_it == m_programs.end() )
 		{
@@ -511,7 +511,7 @@ namespace Castor3D
 
 	void OverlayRenderer::DoDrawItem( Material & p_material, OverlayRenderer::OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
-		for ( auto && l_pass : p_material )
+		for ( auto l_pass : p_material )
 		{
 			if ( CheckFlag( l_pass->GetTextureFlags(), TextureChannel::Colour ) )
 			{

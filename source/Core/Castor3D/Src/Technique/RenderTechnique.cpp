@@ -124,14 +124,14 @@ namespace Castor3D
 			p_animated.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetGeometryManager() );
 
-			for ( auto && l_primitive : p_scene.GetGeometryManager() )
+			for ( auto l_primitive : p_scene.GetGeometryManager() )
 			{
 				MeshSPtr l_mesh = l_primitive.second->GetMesh();
 				SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
 
 				if ( l_mesh && l_sceneNode )
 				{
-					for ( auto && l_submesh : *l_mesh )
+					for ( auto l_submesh : *l_mesh )
 					{
 						MaterialSPtr l_material( l_primitive.second->GetMaterial( l_submesh ) );
 
@@ -242,7 +242,7 @@ namespace Castor3D
 			p_nodes.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetBillboardManager() );
 
-			for ( auto && l_billboard : p_scene.GetBillboardManager() )
+			for ( auto l_billboard : p_scene.GetBillboardManager() )
 			{
 				SceneNodeSPtr l_sceneNode = l_billboard.second->GetParent();
 
@@ -508,7 +508,7 @@ namespace Castor3D
 				DoEndRender( p_scene );
 			}
 
-			for ( auto && l_effect : m_renderTarget->GetPostEffects() )
+			for ( auto l_effect : m_renderTarget->GetPostEffects() )
 			{
 				l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 			}
@@ -622,7 +622,7 @@ namespace Castor3D
 	{
 		DoTraverseNodes( p_nodes, [this, &p_scene, &p_camera, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
@@ -639,7 +639,7 @@ namespace Castor3D
 	{
 		DoTraverseNodes( p_nodes, [this, &p_scene, &p_camera, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, AnimatedGeometryRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
@@ -664,7 +664,7 @@ namespace Castor3D
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );
 
-				for ( auto && l_renderNode : p_renderNodes )
+				for ( auto const & l_renderNode : p_renderNodes )
 				{
 					std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
 					l_buffer += l_size;
@@ -676,7 +676,7 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( auto l_renderNode : p_renderNodes )
+				for ( auto & l_renderNode : p_renderNodes )
 				{
 					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 					{
@@ -692,7 +692,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, StaticGeometryRenderNodeByDistanceMMap & p_nodes )
 	{
-		for ( auto l_it : p_nodes )
+		for ( auto & l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
 			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
@@ -703,7 +703,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, AnimatedGeometryRenderNodeByDistanceMMap & p_nodes )
 	{
-		for ( auto l_it : p_nodes )
+		for ( auto & l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
 			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
@@ -714,7 +714,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes )
 	{
-		for ( auto l_it : p_nodes )
+		for ( auto & l_it : p_nodes )
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
 			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
@@ -727,7 +727,7 @@ namespace Castor3D
 	{
 		DoTraverseNodes( p_nodes, [this, &p_scene, &p_camera, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, BillboardList & p_billboard, BillboardRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
@@ -746,7 +746,7 @@ namespace Castor3D
 
 		DoTraverseNodes( p_input, [this, &p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
@@ -770,7 +770,7 @@ namespace Castor3D
 
 		DoTraverseNodes( p_input, [this, &p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, AnimatedGeometryRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{
@@ -794,7 +794,7 @@ namespace Castor3D
 
 		DoTraverseNodes( p_input, [this, &p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, BillboardList & p_billboard, BillboardRenderNodeArray & p_renderNodes )
 		{
-			for ( auto l_renderNode : p_renderNodes )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
 				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
 				{

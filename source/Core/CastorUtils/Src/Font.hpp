@@ -230,7 +230,7 @@ namespace Castor
 		 */
 		inline Glyph const & GetGlyphAt( char32_t p_char )const
 		{
-			auto && l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 			{
 				return p_glyph.GetCharacter() == p_char;
 			} );
@@ -254,7 +254,7 @@ namespace Castor
 		 */
 		inline Glyph & GetGlyphAt( char32_t p_char )
 		{
-			auto && l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 			{
 				return p_glyph.GetCharacter() == p_char;
 			} );
@@ -408,7 +408,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()
+		inline auto begin()
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -420,7 +420,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()const
+		inline auto begin()const
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -432,7 +432,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()
+		inline auto end()
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -444,7 +444,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()const
+		inline auto end()const
 		{
 			return m_loadedGlyphs.end();
 		}

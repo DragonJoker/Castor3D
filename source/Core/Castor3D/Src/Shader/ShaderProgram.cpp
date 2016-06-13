@@ -158,7 +158,7 @@ namespace Castor3D
 			m_pShaders[p_type] = l_return;
 			int i = eSHADER_MODEL_1;
 
-			for ( auto && l_file : m_arrayFiles )
+			for ( auto const & l_file : m_arrayFiles )
 			{
 				if ( !l_file.empty() )
 				{
@@ -187,7 +187,7 @@ namespace Castor3D
 
 		m_frameVariableBuffersByName.clear();
 
-		for ( auto && l_list : m_frameVariableBuffers )
+		for ( auto & l_list : m_frameVariableBuffers )
 		{
 			l_list.clear();
 		}
@@ -203,7 +203,7 @@ namespace Castor3D
 		m_arrayFiles[p_eModel] = p_path;
 		int i = eSHADER_TYPE_VERTEX;
 
-		for ( auto && l_shader : m_pShaders )
+		for ( auto l_shader : m_pShaders )
 		{
 			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( eSHADER_TYPE( i++ ) ) )
 			{
@@ -470,7 +470,7 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( auto && l_buffer : m_listFrameVariableBuffers )
+				for ( auto l_buffer : m_listFrameVariableBuffers )
 				{
 					l_buffer->Initialise( *this );
 				}
@@ -486,7 +486,7 @@ namespace Castor3D
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
-			for ( auto && l_shader : m_activeShaders )
+			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Bind();
 			}
@@ -514,7 +514,7 @@ namespace Castor3D
 				l_variableBuffer->Unbind( l_index++ );
 			}
 
-			for ( auto && l_shader : m_activeShaders )
+			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Unbind();
 			}
@@ -527,9 +527,9 @@ namespace Castor3D
 		{
 			if ( m_status != ePROGRAM_STATUS_LINKED )
 			{
-				for ( auto && l_shader : m_activeShaders )
+				for ( auto l_shader : m_activeShaders )
 				{
-					for ( auto && l_it : l_shader->GetFrameVariables() )
+					for ( auto l_it : l_shader->GetFrameVariables() )
 					{
 						l_it->Initialise();
 					}

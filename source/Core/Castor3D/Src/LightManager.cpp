@@ -89,7 +89,7 @@ namespace Castor3D
 				l_lights->SetValue( m_lightsTexture->GetIndex() );
 				int l_index = 0;
 
-				for ( auto && l_it : m_typeSortedLights )
+				for ( auto l_it : m_typeSortedLights )
 				{
 					l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
 
@@ -123,7 +123,7 @@ namespace Castor3D
 			m_lightsTexture->Unbind();
 			int l_index = 0;
 
-			for ( auto && l_it : m_typeSortedLights )
+			for ( auto l_it : m_typeSortedLights )
 			{
 				l_lightsCount->GetValue( 0 )[l_it.first] -= uint32_t( l_it.second.size() );
 			}

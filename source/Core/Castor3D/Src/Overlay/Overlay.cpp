@@ -59,7 +59,7 @@ namespace Castor3D
 		{
 			m_category->Render();
 
-			for ( auto && l_overlay : m_overlays )
+			for ( auto l_overlay : m_overlays )
 			{
 				l_overlay->Render( p_size );
 			}
@@ -89,7 +89,7 @@ namespace Castor3D
 		}
 		else if ( p_level > GetLevel() )
 		{
-			for ( auto && l_overlay : m_overlays )
+			for ( auto l_overlay : m_overlays )
 			{
 				l_return += l_overlay->GetChildrenCount( p_level );
 			}

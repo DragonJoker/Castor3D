@@ -45,7 +45,7 @@ namespace Castor3D
 			CASTOR_EXCEPTION( cuT( "The import failed." ) );
 		}
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}

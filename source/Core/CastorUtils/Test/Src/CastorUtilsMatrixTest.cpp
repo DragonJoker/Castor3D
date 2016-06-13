@@ -474,10 +474,10 @@ namespace Testing
 		{
 			Quaternion l_quaternion( Angle::from_degrees( r ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) );
 			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 1, 0, 0 ) );
-			CT_EQUAL( l_quaternion.x, l_quat.x );
-			CT_EQUAL( l_quaternion.y, l_quat.y );
-			CT_EQUAL( l_quaternion.z, l_quat.z );
-			CT_EQUAL( l_quaternion.w, l_quat.w );
+			CT_EQUAL( l_quaternion.quat.x, l_quat.x );
+			CT_EQUAL( l_quaternion.quat.y, l_quat.y );
+			CT_EQUAL( l_quaternion.quat.z, l_quat.z );
+			CT_EQUAL( l_quaternion.quat.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on Y" ) );
@@ -486,10 +486,10 @@ namespace Testing
 		{
 			Quaternion l_quaternion( Angle::from_degrees( 0 ), Angle::from_degrees( r ), Angle::from_degrees( 0 ) );
 			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 1, 0 ) );
-			CT_EQUAL( l_quaternion.x, l_quat.x );
-			CT_EQUAL( l_quaternion.y, l_quat.y );
-			CT_EQUAL( l_quaternion.z, l_quat.z );
-			CT_EQUAL( l_quaternion.w, l_quat.w );
+			CT_EQUAL( l_quaternion.quat.x, l_quat.x );
+			CT_EQUAL( l_quaternion.quat.y, l_quat.y );
+			CT_EQUAL( l_quaternion.quat.z, l_quat.z );
+			CT_EQUAL( l_quaternion.quat.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on Z" ) );
@@ -498,10 +498,10 @@ namespace Testing
 		{
 			Quaternion l_quaternion( Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( r ) );
 			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 0, 1 ) );
-			CT_EQUAL( l_quaternion.x, l_quat.x );
-			CT_EQUAL( l_quaternion.y, l_quat.y );
-			CT_EQUAL( l_quaternion.z, l_quat.z );
-			CT_EQUAL( l_quaternion.w, l_quat.w );
+			CT_EQUAL( l_quaternion.quat.x, l_quat.x );
+			CT_EQUAL( l_quaternion.quat.y, l_quat.y );
+			CT_EQUAL( l_quaternion.quat.z, l_quat.z );
+			CT_EQUAL( l_quaternion.quat.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on all" ) );
@@ -515,10 +515,10 @@ namespace Testing
 					//Logger::LogDebug( StringStream() << cuT( "Pitch: " ) << x << cuT( ", Yaw: " ) << y << cuT( ", Roll: " ) << z );
 					Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( y ), Angle::from_degrees( z ) );
 					glm::quat l_quat( glm::vec3( glm::radians( float( x ) ), glm::radians( float( y ) ), glm::radians( float( z ) ) ) );
-					CT_EQUAL( l_quaternion.x, l_quat.x );
-					CT_EQUAL( l_quaternion.y, l_quat.y );
-					CT_EQUAL( l_quaternion.z, l_quat.z );
-					CT_EQUAL( l_quaternion.w, l_quat.w );
+					CT_EQUAL( l_quaternion.quat.x, l_quat.x );
+					CT_EQUAL( l_quaternion.quat.y, l_quat.y );
+					CT_EQUAL( l_quaternion.quat.z, l_quat.z );
+					CT_EQUAL( l_quaternion.quat.w, l_quat.w );
 					CT_EQUAL( l_quaternion.get_pitch().radians(), glm::pitch( l_quat ) );
 					CT_EQUAL( l_quaternion.get_yaw().radians(), glm::yaw( l_quat ) );
 					CT_EQUAL( l_quaternion.get_roll().radians(), glm::roll( l_quat ) );

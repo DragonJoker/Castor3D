@@ -126,7 +126,7 @@ namespace Castor3D
 		 */
 		static inline bool Write( T const & p_value, eCHUNK_TYPE p_type, BinaryChunk & p_chunk )
 		{
-			auto l_value{ p_value };
+			auto l_value = p_value;
 			ChunkDataPreparator< T >::Prepare( l_value );
 			auto l_begin = ChunkData< T >::GetBuffer( l_value );
 			auto l_end = l_begin + ChunkData< T >::GetDataSize( l_value );

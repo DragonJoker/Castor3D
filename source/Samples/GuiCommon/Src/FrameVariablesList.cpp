@@ -57,7 +57,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image : l_icons )
+		for ( auto l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -84,12 +84,12 @@ namespace GuiCommon
 
 		if ( p_program->GetObjectStatus( p_type ) != eSHADER_STATUS_DONTEXIST )
 		{
-			for ( auto && l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
+			for ( auto l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
 			{
 				DoAddBuffer( l_root, l_buffer );
 			}
 
-			for ( auto && l_variable : p_program->GetFrameVariables( p_type ) )
+			for ( auto l_variable : p_program->GetFrameVariables( p_type ) )
 			{
 				DoAddVariable( l_root, l_variable, p_type );
 			}
@@ -106,7 +106,7 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
 		uint32_t l_index = 0;
 
-		for ( auto && l_variable : *p_buffer )
+		for ( auto l_variable : *p_buffer )
 		{
 			DoAddVariable( l_id, l_variable, p_buffer );
 		}

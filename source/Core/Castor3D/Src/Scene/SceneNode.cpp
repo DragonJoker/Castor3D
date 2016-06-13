@@ -232,7 +232,7 @@ namespace Castor3D
 
 	void SceneNode::DetachChild( String const & p_childName )
 	{
-		auto && l_it = m_children.find( p_childName );
+		auto l_it = m_children.find( p_childName );
 
 		if ( l_it != m_children.end() )
 		{
@@ -255,7 +255,7 @@ namespace Castor3D
 		SceneNodePtrStrMap l_flush;
 		std::swap( l_flush, m_children );
 
-		for ( auto && l_it : l_flush )
+		for ( auto l_it : l_flush )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 
@@ -328,7 +328,7 @@ namespace Castor3D
 		GeometrySPtr l_return = nullptr;
 		real l_distance;
 
-		for ( auto && l_it : m_objects )
+		for ( auto l_it : m_objects )
 		{
 			MovableObjectSPtr l_current = l_it.lock();
 
@@ -346,7 +346,7 @@ namespace Castor3D
 
 		GeometrySPtr l_pTmp;
 
-		for ( auto && l_it : m_children )
+		for ( auto l_it : m_children )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 
@@ -445,7 +445,7 @@ namespace Castor3D
 
 	void SceneNode::DoUpdateChildsDerivedTransform()
 	{
-		for ( auto && l_it : m_children )
+		for ( auto l_it : m_children )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 

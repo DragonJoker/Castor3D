@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_VERTEX_BUFFER_OBJECT_H___
 #define ___TRS_VERTEX_BUFFER_OBJECT_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Mesh/Buffer/Buffer.hpp>
 
 namespace TestRender

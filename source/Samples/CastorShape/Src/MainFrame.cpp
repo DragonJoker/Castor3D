@@ -150,7 +150,7 @@ namespace CastorShape
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 				uint32_t l_index = 0;
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = m_selectedGeometryMaterials[l_index++];
 					m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( l_infos->m_ambient ) );
@@ -166,7 +166,7 @@ namespace CastorShape
 			{
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = new MaterialInfos;
 					l_infos->m_ambient[0] = m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->GetAmbient().red();
@@ -577,7 +577,7 @@ namespace CastorShape
 				String l_materialName = p_dialog->GetMaterialName();
 				MeshSPtr l_mesh = l_geometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().Find( l_materialName ) );
 				}

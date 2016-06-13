@@ -77,7 +77,7 @@ namespace Castor
 
 			delete [] m_free;
 
-			for ( auto && buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
+			for ( auto buffer = m_buffers; buffer != m_buffersEnd; ++buffer )
 			{
 				MemoryAllocator::Deallocate( buffer->m_data );
 			}

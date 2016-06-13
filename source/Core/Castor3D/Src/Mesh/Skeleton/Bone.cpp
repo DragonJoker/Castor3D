@@ -38,7 +38,7 @@ namespace Castor3D
 		BoneSPtr l_bone;
 		String l_name;
 		BinaryChunk l_chunk;
-		auto & l_skeleton{ p_obj.m_skeleton };
+		auto & l_skeleton = p_obj.m_skeleton;
 
 		while ( l_return && DoGetSubChunk( l_chunk ) )
 		{
@@ -63,7 +63,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					auto l_parent{ l_skeleton.FindBone( l_name ) };
+					auto l_parent = l_skeleton.FindBone( l_name );
 
 					if ( l_parent )
 					{
