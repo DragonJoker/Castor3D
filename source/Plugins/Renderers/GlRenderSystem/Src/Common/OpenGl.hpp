@@ -18,6 +18,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
 
+#if defined( _WIN32 )
+#	include <Windows.h>
+#elif defined( __linux__ )
+#	include <X11/Xlib.h>
+#	include <GL/glx.h>
+#	undef None
+#	undef Always
+#endif
+#include <GL/gl.h>
+
 #include "Common/GlObject.hpp"
 
 #include <GlslWriterPrerequisites.hpp>

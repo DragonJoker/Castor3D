@@ -18,14 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_RENDER_SYSTEM_PREREQUISITES_H___
 #define ___GL_RENDER_SYSTEM_PREREQUISITES_H___
 
-#if defined( _WIN32 )
-#	include <Windows.h>
-#elif defined( __linux__ )
-#	include <X11/Xlib.h>
-#	include <GL/glx.h>
-#	undef None
-#endif
-#include <GL/gl.h>
+#include <cstddef>
 
 #include <CastorUtils.hpp>
 #include <Castor3DPrerequisites.hpp>

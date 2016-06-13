@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if defined( __linux__ )
 #include "Common/GlHolder.hpp"
+#include "Common/OpenGl.hpp"
 
 #include <Miscellaneous/GpuInformations.hpp>
 

@@ -1,5 +1,7 @@
 ﻿#include "Angle.hpp"
 
+#include <cmath>
+
 namespace Castor
 {
 	const double Angle::Pi = 3.1415926535897932384626433832795028841968;
@@ -65,47 +67,47 @@ namespace Castor
 
 	double Angle::cos()const
 	{
-		return ::cos( m_radians );
+		return std::cos( m_radians );
 	}
 
 	double Angle::sin()const
 	{
-		return ::sin( m_radians );
+		return std::sin( m_radians );
 	}
 
 	double Angle::tan()const
 	{
-		return ::tan( m_radians );
+		return std::tan( m_radians );
 	}
 
 	double Angle::cosh()const
 	{
-		return ::cosh( m_radians );
+		return std::cosh( m_radians );
 	}
 
 	double Angle::sinh()const
 	{
-		return ::sinh( m_radians );
+		return std::sinh( m_radians );
 	}
 
 	double Angle::tanh()const
 	{
-		return ::tanh( m_radians );
+		return std::tanh( m_radians );
 	}
 
 	void Angle::acos( double p_rValue )
 	{
-		m_radians = ::acos( p_rValue );
+		m_radians = std::acos( p_rValue );
 	}
 
 	void Angle::asin( double p_rValue )
 	{
-		m_radians = ::asin( p_rValue );
+		m_radians = std::asin( p_rValue );
 	}
 
 	void Angle::atan( double p_rValue )
 	{
-		m_radians = ::atan( p_rValue );
+		m_radians = std::atan( p_rValue );
 	}
 
 	Angle & Angle::operator=( Angle const & p_rhs )

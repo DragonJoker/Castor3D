@@ -19,8 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_MSW_CONTEXT_H___
 
 #ifdef _WIN32
-
 #include "Common/GlHolder.hpp"
+#include "Common/OpenGl.hpp"
 
 #include <Miscellaneous/GpuInformations.hpp>
 
