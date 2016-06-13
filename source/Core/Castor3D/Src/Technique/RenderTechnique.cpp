@@ -124,14 +124,14 @@ namespace Castor3D
 			p_animated.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetGeometryManager() );
 
-			for ( auto && l_primitive : p_scene.GetGeometryManager() )
+			for ( auto l_primitive : p_scene.GetGeometryManager() )
 			{
 				MeshSPtr l_mesh = l_primitive.second->GetMesh();
 				SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
 
 				if ( l_mesh && l_sceneNode )
 				{
-					for ( auto && l_submesh : *l_mesh )
+					for ( auto l_submesh : *l_mesh )
 					{
 						MaterialSPtr l_material( l_primitive.second->GetMaterial( l_submesh ) );
 
@@ -242,7 +242,7 @@ namespace Castor3D
 			p_nodes.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetBillboardManager() );
 
-			for ( auto && l_billboard : p_scene.GetBillboardManager() )
+			for ( auto l_billboard : p_scene.GetBillboardManager() )
 			{
 				SceneNodeSPtr l_sceneNode = l_billboard.second->GetParent();
 
@@ -508,7 +508,7 @@ namespace Castor3D
 				DoEndRender( p_scene );
 			}
 
-			for ( auto && l_effect : m_renderTarget->GetPostEffects() )
+			for ( auto l_effect : m_renderTarget->GetPostEffects() )
 			{
 				l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 			}
@@ -664,7 +664,7 @@ namespace Castor3D
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );
 
-				for ( auto && l_renderNode : p_renderNodes )
+				for ( auto l_renderNode : p_renderNodes )
 				{
 					std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
 					l_buffer += l_size;

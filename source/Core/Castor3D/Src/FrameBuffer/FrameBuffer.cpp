@@ -45,7 +45,7 @@ namespace Castor3D
 	{
 		uint32_t l_targets = 0;
 
-		for ( auto && l_attach : m_attaches )
+		for ( auto l_attach : m_attaches )
 		{
 			if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
 			{
@@ -82,7 +82,7 @@ namespace Castor3D
 
 		if ( !m_attaches.empty() )
 		{
-			for ( auto && l_attach : m_attaches )
+			for ( auto l_attach : m_attaches )
 			{
 				if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
 				{
@@ -154,7 +154,7 @@ namespace Castor3D
 
 	void FrameBuffer::Resize( Castor::Size const & p_size )
 	{
-		for ( auto && l_attach : m_attaches )
+		for ( auto l_attach : m_attaches )
 		{
 			if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 			{
@@ -228,7 +228,7 @@ namespace Castor3D
 
 		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
 		{
-			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
 			{
 				return p_attach->GetAttachmentPoint() == p_point;
 			} );

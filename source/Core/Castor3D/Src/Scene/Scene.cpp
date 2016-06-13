@@ -496,7 +496,7 @@ namespace Castor3D
 		uint32_t l_return = 0;
 		auto l_lock = make_unique_lock( *m_geometryManager );
 
-		for ( auto && l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryManager )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 
@@ -514,7 +514,7 @@ namespace Castor3D
 		uint32_t l_return = 0;
 		auto l_lock = make_unique_lock( *m_geometryManager );
 
-		for ( auto && l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryManager )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 

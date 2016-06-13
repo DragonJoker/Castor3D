@@ -32,7 +32,7 @@ namespace Castor3D
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 
-		for ( auto && l_it : m_elements )
+		for ( auto l_it : m_elements )
 		{
 			l_it.second->Render( p_force );
 		}

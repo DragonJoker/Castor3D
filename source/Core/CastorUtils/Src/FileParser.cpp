@@ -274,7 +274,7 @@ namespace Castor
 
 	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
 	{
-		auto && l_sectionIt = m_parsers.find( p_section );
+		auto l_sectionIt = m_parsers.find( p_section );
 
 		if ( l_sectionIt != m_parsers.end() && l_sectionIt->second.find( p_name ) != l_sectionIt->second.end() )
 		{

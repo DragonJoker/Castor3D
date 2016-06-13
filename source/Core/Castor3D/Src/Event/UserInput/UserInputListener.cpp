@@ -42,7 +42,7 @@ namespace Castor3D
 		DoCleanup();
 
 		auto l_lock = make_unique_lock( m_mutexHandlers );
-		auto && l_it = m_handlers.begin();
+		auto l_it = m_handlers.begin();
 
 		while ( l_it != m_handlers.end() )
 		{
@@ -56,7 +56,7 @@ namespace Castor3D
 	{
 		auto l_handlers = DoGetHandlers();
 
-		for ( auto && l_handler : l_handlers )
+		for ( auto l_handler : l_handlers )
 		{
 			l_handler->ProcessEvents();
 		}

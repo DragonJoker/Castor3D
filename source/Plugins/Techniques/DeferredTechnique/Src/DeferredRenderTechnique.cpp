@@ -127,7 +127,7 @@ namespace Deferred
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 
-		for ( auto && l_vertex : m_arrayVertex )
+		for ( auto & l_vertex : m_arrayVertex )
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 			l_buffer += l_stride;

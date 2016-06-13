@@ -34,12 +34,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA{ make_unique_lock( p_a.GetSceneNodeManager() ) };
-			auto l_lockB{ make_unique_lock( p_b.GetSceneNodeManager() ) };
-			auto l_itA{ p_a.GetSceneNodeManager().begin() };
-			auto l_endItA{  p_a.GetSceneNodeManager().end() };
-			auto l_itB{ p_b.GetSceneNodeManager().begin() };
-			auto l_endItB{ p_b.GetSceneNodeManager().end() };
+			auto l_lockA = make_unique_lock( p_a.GetSceneNodeManager() );
+			auto l_lockB = make_unique_lock( p_b.GetSceneNodeManager() );
+			auto l_itA = p_a.GetSceneNodeManager().begin();
+			auto l_endItA =  p_a.GetSceneNodeManager().end();
+			auto l_itB = p_b.GetSceneNodeManager().begin();
+			auto l_endItB = p_b.GetSceneNodeManager().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -58,12 +58,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA{ make_unique_lock( p_a.GetGeometryManager() ) };
-			auto l_lockB{ make_unique_lock( p_b.GetGeometryManager() ) };
-			auto l_itA{ p_a.GetGeometryManager().begin() };
-			auto l_endItA{  p_a.GetGeometryManager().end() };
-			auto l_itB{ p_b.GetGeometryManager().begin() };
-			auto l_endItB{ p_b.GetGeometryManager().end() };
+			auto l_lockA = make_unique_lock( p_a.GetGeometryManager() );
+			auto l_lockB = make_unique_lock( p_b.GetGeometryManager() );
+			auto l_itA = p_a.GetGeometryManager().begin();
+			auto l_endItA =  p_a.GetGeometryManager().end();
+			auto l_itB = p_b.GetGeometryManager().begin();
+			auto l_endItB = p_b.GetGeometryManager().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -76,12 +76,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA{ make_unique_lock( p_a.GetLightManager() ) };
-			auto l_lockB{ make_unique_lock( p_b.GetLightManager() ) };
-			auto l_itA{ p_a.GetLightManager().begin() };
-			auto l_endItA{  p_a.GetLightManager().end() };
-			auto l_itB{ p_b.GetLightManager().begin() };
-			auto l_endItB{ p_b.GetLightManager().end() };
+			auto l_lockA = make_unique_lock( p_a.GetLightManager() );
+			auto l_lockB = make_unique_lock( p_b.GetLightManager() );
+			auto l_itA = p_a.GetLightManager().begin();
+			auto l_endItA =  p_a.GetLightManager().end();
+			auto l_itB = p_b.GetLightManager().begin();
+			auto l_endItB = p_b.GetLightManager().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -94,12 +94,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA{ make_unique_lock( p_a.GetCameraManager() ) };
-			auto l_lockB{ make_unique_lock( p_b.GetCameraManager() ) };
-			auto l_itA{ p_a.GetCameraManager().begin() };
-			auto l_endItA{  p_a.GetCameraManager().end() };
-			auto l_itB{ p_b.GetCameraManager().begin() };
-			auto l_endItB{ p_b.GetCameraManager().end() };
+			auto l_lockA = make_unique_lock( p_a.GetCameraManager() );
+			auto l_lockB = make_unique_lock( p_b.GetCameraManager() );
+			auto l_itA = p_a.GetCameraManager().begin();
+			auto l_endItA =  p_a.GetCameraManager().end();
+			auto l_itB = p_b.GetCameraManager().begin();
+			auto l_endItB = p_b.GetCameraManager().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -118,12 +118,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA{ make_unique_lock( p_a.GetAnimatedObjectGroupManager() ) };
-			auto l_lockB{ make_unique_lock( p_b.GetAnimatedObjectGroupManager() ) };
-			auto l_itA{ p_a.GetAnimatedObjectGroupManager().begin() };
-			auto l_endItA{  p_a.GetAnimatedObjectGroupManager().end() };
-			auto l_itB{ p_b.GetAnimatedObjectGroupManager().begin() };
-			auto l_endItB{ p_b.GetAnimatedObjectGroupManager().end() };
+			auto l_lockA = make_unique_lock( p_a.GetAnimatedObjectGroupManager() );
+			auto l_lockB = make_unique_lock( p_b.GetAnimatedObjectGroupManager() );
+			auto l_itA = p_a.GetAnimatedObjectGroupManager().begin();
+			auto l_endItA =  p_a.GetAnimatedObjectGroupManager().end();
+			auto l_itB = p_b.GetAnimatedObjectGroupManager().begin();
+			auto l_endItB = p_b.GetAnimatedObjectGroupManager().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{

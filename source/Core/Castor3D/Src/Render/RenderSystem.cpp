@@ -361,7 +361,7 @@ namespace Castor3D
 
 	void RenderSystem::DoReportTracked()
 	{
-		for ( auto && l_decl : m_allocated )
+		for ( auto const & l_decl : m_allocated )
 		{
 			if ( l_decl.m_ref > 0 )
 			{

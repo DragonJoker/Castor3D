@@ -67,7 +67,7 @@ namespace Testing
 					File::DirectoryCreate( l_folder / l_subfolder );
 				}
 
-				auto l_lock{ make_unique_lock( p_scene.GetMeshManager() ) };
+				auto l_lock = make_unique_lock( p_scene.GetMeshManager() );
 
 				for ( auto const & l_it : p_scene.GetMeshManager() )
 				{
@@ -125,7 +125,7 @@ namespace Testing
 		CT_REQUIRE( l_dstParser.ParseFile( p_path ) );
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		SceneSPtr l_scene{ l_dstParser.ScenesBegin()->second };
-		auto & l_windows{ l_scene->GetWindowManager() };
+		auto & l_windows = l_scene->GetWindowManager();
 		RenderWindowSPtr l_window;
 
 		l_windows.lock();
@@ -149,7 +149,7 @@ namespace Testing
 		SceneSPtr l_src{ DoParseScene( TEST_DATA_FOLDER / p_name ) };
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
-		auto l_name{ l_src->GetName() };
+		auto l_name = l_src->GetName();
 		m_engine.GetSceneManager().Remove( l_name );
 		m_engine.GetSceneManager().Insert( l_name + cuT( "_exp" ), l_src );
 

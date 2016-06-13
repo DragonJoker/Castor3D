@@ -228,7 +228,7 @@ namespace Castor3D
 				m_renderTechnique->AddScene( *l_scene );
 			}
 
-			for ( auto && l_effect : m_postEffects )
+			for ( auto l_effect : m_postEffects )
 			{
 				l_effect->Initialise();
 			}
@@ -244,7 +244,7 @@ namespace Castor3D
 			m_toneMapping->Cleanup();
 			m_toneMapping.reset();
 
-			for ( auto && l_effect : m_postEffects )
+			for ( auto l_effect : m_postEffects )
 			{
 				l_effect->Cleanup();
 			}

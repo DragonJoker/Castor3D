@@ -35,12 +35,12 @@ namespace Loop
 		Castor3D::Subdivider::DoInitialise();
 		uint32_t l_index = 0;
 
-		for ( auto && l_point : GetPoints() )
+		for ( auto & l_point : GetPoints() )
 		{
 			m_mapVertex.insert( std::make_pair( l_index++, std::make_shared< Vertex >( l_point ) ) );
 		}
 
-		for ( auto && l_face : m_submesh->GetFaces() )
+		for ( auto & l_face : m_submesh->GetFaces() )
 		{
 			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, l_face, m_mapVertex ) );
 		}
@@ -88,7 +88,7 @@ namespace Loop
 		FaceEdgesPtrArray l_old;
 		std::swap( l_old, m_facesEdges );
 
-		for ( auto && l_faceEdges : l_old )
+		for ( auto & l_faceEdges : l_old )
 		{
 			l_faceEdges->Divide( real( 0.5 ), m_mapVertex, m_facesEdges );
 		}
@@ -98,14 +98,14 @@ namespace Loop
 	{
 		std::map< uint32_t, Point3r > l_positions;
 
-		for ( auto && l_it : m_mapVertex )
+		for ( auto & l_it : m_mapVertex )
 		{
 			Point3r l_point;
 			Castor3D::Vertex::GetPosition( l_it.second->GetPoint(), l_point );
 			l_positions.insert( std::make_pair( l_it.first, l_point ) );
 		}
 
-		for ( auto && l_it : m_mapVertex )
+		for ( auto & l_it : m_mapVertex )
 		{
 			VertexSPtr l_vertex = l_it.second;
 			uint32_t l_nbEdges = l_vertex->size();
@@ -113,7 +113,7 @@ namespace Loop
 			real l_alpha = real( alpha( l_nbEdges ) );
 			l_position *= l_alpha;
 
-			for ( auto && l_it : *l_vertex )
+			for ( auto & l_it : *l_vertex )
 			{
 				l_position += l_positions[l_it.first];
 			}

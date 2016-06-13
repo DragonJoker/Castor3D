@@ -57,7 +57,7 @@ namespace Castor3D
 			{
 				uint16_t l_index{ 0u };
 
-				for ( auto && l_submesh : *p_geometry.GetMesh() )
+				for ( auto l_submesh : *p_geometry.GetMesh() )
 				{
 					l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
 				}
@@ -135,7 +135,7 @@ namespace Castor3D
 		{
 			m_strMeshName = p_mesh->GetName();
 
-			for ( auto && l_submesh : *p_mesh )
+			for ( auto l_submesh : *p_mesh )
 			{
 				SetMaterial( l_submesh, l_submesh->GetDefaultMaterial() );
 			}
@@ -152,7 +152,7 @@ namespace Castor3D
 
 		if ( l_mesh )
 		{
-			auto && l_it = std::find( l_mesh->begin(), l_mesh->end(), p_submesh );
+			auto l_it = std::find( l_mesh->begin(), l_mesh->end(), p_submesh );
 
 			if ( l_it != l_mesh->end() )
 			{

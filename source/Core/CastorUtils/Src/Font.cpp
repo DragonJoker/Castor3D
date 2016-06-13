@@ -320,7 +320,7 @@ namespace Castor
 
 	Glyph const & Font::DoLoadGlyph( char32_t p_char )
 	{
-		auto && l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+		auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 		{
 			return p_glyph.GetCharacter() == p_char;
 		} );

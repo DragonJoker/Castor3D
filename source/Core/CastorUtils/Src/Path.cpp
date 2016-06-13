@@ -233,7 +233,7 @@ namespace Castor
 
 			l_tmp = l_begin;
 
-			for ( auto && l_folder : l_list )
+			for ( auto l_folder : l_list )
 			{
 				if ( !l_tmp.empty() )
 				{

@@ -48,7 +48,7 @@ namespace CastorGui
 		m_selectedItemBackgroundMaterial = p_value;
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ == m_selected )
 			{
@@ -62,7 +62,7 @@ namespace CastorGui
 		m_selectedItemForegroundMaterial = p_value;
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ == m_selected )
 			{
@@ -197,7 +197,7 @@ namespace CastorGui
 	{
 		m_fontName = p_font;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetFont( m_fontName );
 		}
@@ -207,7 +207,7 @@ namespace CastorGui
 	{
 		Position l_position;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetPosition( l_position );
 			l_item->SetSize( Size( GetSize().width(), DEFAULT_HEIGHT ) );
@@ -302,7 +302,7 @@ namespace CastorGui
 			OnKeyDown( p_event );
 		} );
 
-		for ( auto && l_value : m_initialValues )
+		for ( auto l_value : m_initialValues )
 		{
 			DoCreateItem( l_value );
 		}
@@ -314,7 +314,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::DoDestroy()
 	{
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->Destroy();
 		}
@@ -352,7 +352,7 @@ namespace CastorGui
 		l_colour.alpha() = 0.0;
 		p_material->GetPass( 0 )->SetAmbient( l_colour );
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ != m_selected )
 			{
@@ -365,7 +365,7 @@ namespace CastorGui
 	{
 		int i = 0;
 
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			if ( i++ != m_selected )
 			{
@@ -376,7 +376,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::DoSetVisible( bool p_visible )
 	{
-		for ( auto && l_item : m_items )
+		for ( auto l_item : m_items )
 		{
 			l_item->SetVisible( p_visible );
 		}
@@ -407,7 +407,7 @@ namespace CastorGui
 
 			if ( m_selectedItem.lock() != p_control )
 			{
-				auto && l_it = m_items.begin();
+				auto l_it = m_items.begin();
 				int i = 0;
 
 				while ( l_index == -1 && l_it != m_items.end() )

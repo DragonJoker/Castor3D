@@ -254,7 +254,7 @@ namespace Castor3D
 	{
 		m_pBlendState->Cleanup();
 
-		for ( auto && l_unit : m_arrayTextureUnits )
+		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			l_unit->Cleanup();
 		}
@@ -338,7 +338,7 @@ namespace Castor3D
 
 	void Pass::Bind()
 	{
-		for ( auto && l_it : m_arrayTextureUnits )
+		for ( auto l_it : m_arrayTextureUnits )
 		{
 			l_it->Bind();
 		}
@@ -346,7 +346,7 @@ namespace Castor3D
 
 	void Pass::FillShaderVariables( RenderNode & p_node )
 	{
-		for ( auto && l_pair : p_node.m_textures )
+		for ( auto l_pair : p_node.m_textures )
 		{
 			auto l_texture = l_pair.first;
 			auto & l_variable = l_pair.second;
@@ -528,7 +528,7 @@ namespace Castor3D
 
 	void Pass::DoRender()
 	{
-		for ( auto && l_it : m_arrayTextureUnits )
+		for ( auto l_it : m_arrayTextureUnits )
 		{
 			l_it->Bind();
 		}
@@ -536,7 +536,7 @@ namespace Castor3D
 
 	void Pass::DoEndRender()
 	{
-		for ( auto && l_rit = m_arrayTextureUnits.rbegin(); l_rit != m_arrayTextureUnits.rend(); ++l_rit )
+		for ( auto l_rit = m_arrayTextureUnits.rbegin(); l_rit != m_arrayTextureUnits.rend(); ++l_rit )
 		{
 			( *l_rit )->Unbind();
 		}

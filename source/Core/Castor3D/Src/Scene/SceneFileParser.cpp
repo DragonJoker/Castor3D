@@ -293,7 +293,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 
 			if ( File::ListDirectoryFiles( l_path, l_files ) )
 			{
-				auto && l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
+				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
 					return p_path.GetExtension() == cuT( "cscn" );
 				} );
@@ -552,11 +552,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SKYBOX, cuT( "back" ), Parser_SkyboxBack, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SKYBOX, cuT( "}" ), Parser_SkyboxEnd );
 
-	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
+	for ( auto const & l_it : GetEngine()->GetAdditionalParsers() )
 	{
-		for ( auto && l_itSections : l_it.second )
+		for ( auto const & l_itSections : l_it.second )
 		{
-			for ( auto && l_itParsers : l_itSections.second )
+			for ( auto const & l_itParsers : l_itSections.second )
 			{
 				auto l_params = l_itParsers.second.m_params;
 				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_params ) );

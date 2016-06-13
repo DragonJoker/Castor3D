@@ -663,7 +663,7 @@ namespace Castor
 		{
 			StringArray l_values = string::split( l_values[0], cuT( "|" ), uint32_t( std::count( l_values[0].begin(), l_values[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto && l_value : l_values )
+			for ( auto l_value : l_values )
 			{
 				auto l_it = m_values.find( l_value );
 
@@ -722,7 +722,7 @@ namespace Castor
 		{
 			StringArray l_values = string::split( l_params[0], cuT( "|" ), uint32_t( std::count( l_params[0].begin(), l_params[0].end(), cuT( '|' ) ) + 1 ), false );
 
-			for ( auto && l_value : l_values )
+			for ( auto l_value : l_values )
 			{
 				auto l_it = m_values.find( l_value );
 

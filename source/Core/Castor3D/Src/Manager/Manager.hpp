@@ -228,7 +228,7 @@ namespace Castor3D
 		{
 			std::unique_lock< Collection > l_lock( m_elements );
 
-			for ( auto && l_it : this->m_elements )
+			for ( auto l_it : this->m_elements )
 			{
 				ElementCleaner< Elem >::Cleanup( *GetEngine(), *l_it.second );
 			}

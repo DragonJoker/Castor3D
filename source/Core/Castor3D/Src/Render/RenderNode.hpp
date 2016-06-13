@@ -197,32 +197,32 @@ namespace Castor3D
 	template< typename T >
 	struct TypeRenderNodesByPassMap
 	{
-		inline decltype( auto ) begin()const
+		inline auto begin()const
 		{
 			return m_map.begin();
 		}
 
-		inline decltype( auto ) begin()
+		inline auto begin()
 		{
 			return m_map.begin();
 		}
 
-		inline decltype( auto ) end()const
+		inline auto end()const
 		{
 			return m_map.end();
 		}
 
-		inline decltype( auto ) end()
+		inline auto end()
 		{
 			return m_map.end();
 		}
 
-		inline decltype( auto ) find( PassSPtr p_pass )const
+		inline auto find( PassSPtr p_pass )const
 		{
 			return m_map.find( p_pass );
 		}
 
-		inline decltype( auto ) insert( std::pair< PassSPtr, T > p_pair )
+		inline auto insert( std::pair< PassSPtr, T > p_pair )
 		{
 			return m_map.insert( p_pair );
 		}

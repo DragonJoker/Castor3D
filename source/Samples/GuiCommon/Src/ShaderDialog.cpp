@@ -73,7 +73,7 @@ namespace GuiCommon
 		{
 			PassSPtr l_pass = m_pPass.lock();
 			auto l_lock = Castor::make_unique_lock( m_scene.GetWindowManager() );
-			auto && l_it = m_scene.GetWindowManager().begin();
+			auto l_it = m_scene.GetWindowManager().begin();
 
 			if ( l_it != m_scene.GetWindowManager().end() && l_it->second->GetRenderTarget() )
 			{
@@ -90,7 +90,7 @@ namespace GuiCommon
 		PathArray l_arrayFiles;
 		File::ListDirectoryFiles( Engine::GetDataDirectory() / cuT( "Castor3D" ), l_arrayFiles, true );
 
-		for ( auto && l_pathFile : l_arrayFiles )
+		for ( auto l_pathFile : l_arrayFiles )
 		{
 			if ( l_pathFile.GetFileName()[0] != cuT( '.' ) && l_pathFile.GetExtension() == cuT( "lang" ) )
 			{

@@ -712,7 +712,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryMaterialRef )
 
 	if ( l_it != l_pContext->m_mapMaterials.end() )
 	{
-		for ( auto && l_submesh : *l_pContext->pMesh )
+		for ( auto l_submesh : *l_pContext->pMesh )
 		{
 			l_submesh->SetDefaultMaterial( l_it->second );
 		}
@@ -724,7 +724,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryEnd )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
-	for ( auto && l_submesh : *l_pContext->pMesh )
+	for ( auto l_submesh : *l_pContext->pMesh )
 	{
 		l_pContext->pMesh->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 	}

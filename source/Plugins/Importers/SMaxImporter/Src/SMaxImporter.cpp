@@ -47,7 +47,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh: *l_mesh )
+		for ( auto l_submesh: *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}

@@ -12,7 +12,7 @@ namespace Castor3D
 
 	FrameListener::~FrameListener()
 	{
-		for ( auto && l_it : m_events )
+		for ( auto & l_it : m_events )
 		{
 			l_it.clear();
 		}
@@ -20,7 +20,7 @@ namespace Castor3D
 
 	void FrameListener::Flush()
 	{
-		for ( auto && l_list : m_events )
+		for ( auto & l_list : m_events )
 		{
 			l_list.clear();
 		}
@@ -44,7 +44,7 @@ namespace Castor3D
 
 		try
 		{
-			for ( auto && l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_return; ++l_it )
+			for ( auto & l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_return; ++l_it )
 			{
 				l_return = ( *l_it )->Apply();
 			}

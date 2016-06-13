@@ -562,7 +562,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()const
+		inline auto begin()const
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -574,7 +574,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()
+		inline auto begin()
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -586,7 +586,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()const
+		inline auto end()const
 		{
 			return m_arrayTextureUnits.end();
 		}
@@ -598,7 +598,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()
+		inline auto end()
 		{
 			return m_arrayTextureUnits.end();
 		}

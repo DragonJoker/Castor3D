@@ -66,7 +66,7 @@ namespace Phong
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
 		uint32_t i = 0;
 
-		for ( auto && l_point : m_submesh->GetPoints() )
+		for ( auto const & l_point : m_submesh->GetPoints() )
 		{
 			Point3r l_position, l_normal;
 			Castor3D::Vertex::GetPosition( l_point, l_position );

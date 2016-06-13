@@ -51,7 +51,7 @@ SceneSPtr Md2Importer::DoImportScene()
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -101,7 +101,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 		DoReadMD2Data( l_pass );
 		DoConvertDataStructures( l_mesh );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}

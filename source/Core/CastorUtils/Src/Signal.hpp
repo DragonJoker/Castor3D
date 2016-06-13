@@ -78,9 +78,9 @@ namespace Castor
 		 */
 		void operator()()const
 		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
+			for ( auto it : m_slots )
 			{
-				it->second();
+				it.second();
 			}
 		}
 		/**
@@ -94,9 +94,9 @@ namespace Castor
 		template< typename ... Params >
 		void operator()( Params && ... p_params )const
 		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
+			for ( auto it : m_slots )
 			{
-				it->second( std::move( p_params )... );
+				it.second( std::forward< Params >( p_params )... );
 			}
 		}
 

@@ -140,7 +140,7 @@ void Icosahedron::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArra
 		Vertex::SetTexCoord( l_submesh->GetPoint( l_face[2] ), u, v );
 	}
 
-	for ( auto && l_vertex : l_submesh->GetPoints() )
+	for ( auto & l_vertex : l_submesh->GetPoints() )
 	{
 		Point3r l_ptNml;
 		Vertex::GetNormal( l_vertex, l_ptNml );

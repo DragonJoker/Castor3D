@@ -70,7 +70,7 @@ namespace Castor
 			{
 				--sm_instances;
 
-				for ( auto && l_buffer : m_list )
+				for ( auto l_buffer : m_list )
 				{
 					delete l_buffer.second;
 				}

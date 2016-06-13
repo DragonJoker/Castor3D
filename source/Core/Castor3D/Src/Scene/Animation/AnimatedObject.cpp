@@ -39,7 +39,7 @@ namespace Castor3D
 
 	void AnimatedObject::AddAnimation( String const & p_name )
 	{
-		auto l_animation{ DoAddAnimation( p_name ) };
+		auto l_animation = DoAddAnimation( p_name );
 
 		if ( l_animation )
 		{
@@ -49,7 +49,7 @@ namespace Castor3D
 
 	void AnimatedObject::StartAnimation( String const & p_name )
 	{
-		auto l_it{ m_animations.find( p_name ) };
+		auto l_it = m_animations.find( p_name );
 
 		if ( l_it != m_animations.end() )
 		{
@@ -66,7 +66,7 @@ namespace Castor3D
 
 	void AnimatedObject::StopAnimation( String const & p_name )
 	{
-		auto l_it{ m_animations.find( p_name ) };
+		auto l_it = m_animations.find( p_name );
 
 		if ( l_it != m_animations.end() )
 		{
@@ -82,7 +82,7 @@ namespace Castor3D
 
 	void AnimatedObject::PauseAnimation( String const & p_name )
 	{
-		auto l_it{ m_animations.find( p_name ) };
+		auto l_it = m_animations.find( p_name );
 
 		if ( l_it != m_animations.end() )
 		{
@@ -122,7 +122,7 @@ namespace Castor3D
 	AnimationInstanceSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
 		AnimationInstanceSPtr l_return;
-		auto l_it{ m_animations.find( p_name ) };
+		auto l_it = m_animations.find( p_name );
 
 		if ( l_it != m_animations.end() )
 		{

@@ -35,7 +35,7 @@ namespace Castor3D
 	{
 		bool l_return = true;
 
-		for ( auto && l_moving : p_obj.m_arrayMoving )
+		for ( auto l_moving : p_obj.m_arrayMoving )
 		{
 			switch ( l_moving->GetType() )
 			{
@@ -114,7 +114,7 @@ namespace Castor3D
 	{
 		std::shared_ptr< SkeletonAnimationBone > l_return = std::make_shared< SkeletonAnimationBone >( *this );
 		l_return->SetBone( p_bone );
-		auto l_added{ AddObject( l_return, p_parent ) };
+		auto l_added = AddObject( l_return, p_parent );
 		return l_return;
 	}
 
