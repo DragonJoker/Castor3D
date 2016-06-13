@@ -44,9 +44,12 @@ namespace Castor3D
 
 		try
 		{
-			for ( auto & l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_return; ++l_it )
+			for ( auto & l_event : l_arrayEvents )
 			{
-				l_return = ( *l_it )->Apply();
+				if ( l_return )
+				{
+					l_return = l_event->Apply();
+				}
 			}
 		}
 		catch ( Exception & p_exc )
