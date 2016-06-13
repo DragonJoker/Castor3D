@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_SAMPLER_H___
 #define ___TRS_SAMPLER_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Texture/Sampler.hpp>
 
 namespace TestRender

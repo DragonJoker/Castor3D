@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_TEXTURE_H___
 #define ___TRS_TEXTURE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Texture/TextureLayout.hpp>
 
 namespace TestRender

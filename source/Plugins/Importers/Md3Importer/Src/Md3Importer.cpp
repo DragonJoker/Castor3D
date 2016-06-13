@@ -82,7 +82,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName = m_fileName.GetFileName();
-	MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 

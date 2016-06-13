@@ -12,6 +12,7 @@
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Scene/Scene.hpp>
+#include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <iomanip>

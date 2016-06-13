@@ -672,7 +672,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	p_params[0]->Get( l_pContext->strName );
-	l_pContext->pMesh = l_pContext->scene.GetMeshView().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
+	l_pContext->pMesh = l_pContext->scene.GetMeshManager().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
 }
 END_ATTRIBUTE()
 
@@ -726,7 +726,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryEnd )
 
 	for ( auto l_submesh : *l_pContext->pMesh )
 	{
-		l_pContext->pMesh->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+		l_pContext->pMesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 	}
 }
 END_ATTRIBUTE_POP()

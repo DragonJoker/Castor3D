@@ -122,7 +122,7 @@ namespace Obj
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_return = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		MeshSPtr l_return = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
 		String l_strSection;
 		String l_strValue;
 		String l_strLine;

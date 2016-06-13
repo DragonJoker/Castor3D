@@ -21,6 +21,7 @@
 #include "State/DepthStencilState.hpp"
 #include "Texture/TextureLayout.hpp"
 
+#include <Font.hpp>
 #include <Image.hpp>
 #include <Logger.hpp>
 

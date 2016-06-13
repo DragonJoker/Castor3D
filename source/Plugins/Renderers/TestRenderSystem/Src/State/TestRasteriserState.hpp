@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_RASTERISER_STATE_H___
 #define ___TRS_RASTERISER_STATE_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <State/RasteriserState.hpp>
 
 namespace TestRender

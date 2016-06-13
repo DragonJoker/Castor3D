@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TRS_QUERY_H___
 #define ___TRS_QUERY_H___
 
+#include "TestRenderSystemPrerequisites.hpp"
+
 #include <Miscellaneous/GpuQuery.hpp>
 
 namespace TestRender
