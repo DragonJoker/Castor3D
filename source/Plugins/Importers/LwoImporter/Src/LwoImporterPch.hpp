@@ -42,7 +42,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Plugin/Plugin.hpp>
 #	include <Texture/TextureLayout.hpp>
 #	include <Texture/TextureUnit.hpp>
-#	include <Texture/StaticTexture.hpp>
 #endif
 
 #endif

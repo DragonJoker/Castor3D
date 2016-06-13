@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API OverlayRenderer( RenderSystem & p_renderSystem );
+		C3D_API explicit OverlayRenderer( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -157,44 +157,44 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
-		 *\param[in]	p_pass	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_pass	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée.
-		 *\param[in]	p_pass	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API RenderNode & DoGetTextProgram( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief			Retrieves a program compiled using given flags.
-		 *\param[in]		p_flags		Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]		p_flags		Bitwise ORed TextureChannel.
 		 *\return			The program
 		 *\~french
 		 *\brief			Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]		p_flags		Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]		p_flags		Combinaison de TextureChannel.
 		 *\return			Le programme
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags );
@@ -305,11 +305,11 @@ namespace Castor3D
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
 		OneIntFrameVariableSPtr m_mapText;
 		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu
-		int m_previousBorderZIndex;
+		int m_previousBorderZIndex{ 0 };
 		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du précedent PanelOverlay rendu
-		int m_previousPanelZIndex;
+		int m_previousPanelZIndex{ 0 };
 		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du précedent TextOverlay rendu
-		int m_previousTextZIndex;
+		int m_previousTextZIndex{ 0 };
 		//!\~english The previously rendered text	\~french Le texte rendu précédemment
 		Castor::String m_previousCaption;
 		//!\~english Panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations panneau
@@ -317,7 +317,7 @@ namespace Castor3D
 		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations bordure
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
 		//!\~english Tells if the render size has changed.	\~french Dit si les dimension du rendu ont changé.
-		bool m_sizeChanged;
+		bool m_sizeChanged{ true };
 		//!\~english The overlays blend state.	\~french L'état de mélange pour les incrustations.
 		BlendStateWPtr m_wpBlendState;
 		//!\~english The overlays depth stencil state.	\~french L'état de profoundeur et stencil pour les incrustations.

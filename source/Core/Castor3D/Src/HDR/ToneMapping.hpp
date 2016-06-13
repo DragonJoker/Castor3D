@@ -35,21 +35,22 @@ namespace Castor3D
 	*/
 	class ToneMapping
 		: public Castor::OwnedBy< Engine >
+		, public Castor::Named
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Specified constructor.
-		 *\param[in]	p_type			The tone mapping type.
+		 *\param[in]	p_name			The tone mapping name.
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
 		 *\brief		Constructeur spécifié.
-		 *\param[in]	p_type			Le type de mappage de tons.
+		 *\param[in]	p_name			Le nom du mappage de tons.
 		 *\param[in]	p_engine		Le moteur.
 		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
 		 */
-		C3D_API ToneMapping( eTONE_MAPPING_TYPE p_type, Engine & p_engine, Parameters const & p_parameters );
+		C3D_API ToneMapping( Castor::String const & p_name, Engine & p_engine, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -82,8 +83,17 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture HDR.
 		 */
 		C3D_API void Apply( Castor::Size const & p_size, TextureLayout const & p_texture );
+		/**
+		 *\~english
+		 *\brief		Writes the tone mapping into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit le mappage de tons dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API bool WriteInto( Castor::TextFile & p_file );
 
-	protected:
+	private:
 		/**
 		 *\~english
 		 *\brief		Creates tone mapping shader, and the shader variables.
@@ -107,10 +117,17 @@ namespace Castor3D
 		 *\brief		Met à jour les variables shader du mappage de tons.
 		 */
 		C3D_API virtual void DoUpdate() = 0;
+		/**
+		 *\~english
+		 *\brief		Writes the tone mapping into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit le mappage de tons dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english The tone mapping type.	\~french Le type de mappage de tons.
-		eTONE_MAPPING_TYPE m_type;
 		//!\~english The Reinhard tone mapping shader program.	\~french Le shader de mappage de ton de Reinhard
 		ShaderProgramSPtr m_program;
 		//!\~english The exposure value.	\~french La valeur d'exposition.

@@ -30,10 +30,11 @@ namespace Castor3D
 	\~french
 	\brief		Contient simplement les index des 3 vertex d'une face
 	*/
-	struct stFACE_INDICES
+	struct FaceIndices
 	{
-		//!\~english The indices	\~french Les indices
-		uint32_t m_uiVertexIndex[3];
+		//!\~english	The indices.
+		//!\~french		Les indices.
+		std::array< uint32_t, 3 > m_index;
 	};
 }
 

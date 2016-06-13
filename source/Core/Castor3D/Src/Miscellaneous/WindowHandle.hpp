@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pHandle	Le handle alloué
 		 */
-		C3D_API WindowHandle( IWindowHandleSPtr p_pHandle );
+		C3D_API explicit WindowHandle( IWindowHandleSPtr p_pHandle );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

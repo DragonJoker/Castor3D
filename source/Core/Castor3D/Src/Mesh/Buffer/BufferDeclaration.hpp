@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_elements	Tableau des éléments
 		 */
 		template< uint32_t N >
-		inline BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
+		inline explicit BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
 			: BufferDeclaration( p_elements, N )
 		{
 		}
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_elements		Tableau d'éléments
 		 */
-		inline BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
+		inline explicit BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
 			: BufferDeclaration( p_elements.data(), uint32_t( p_elements.size() ) )
 		{
 		}

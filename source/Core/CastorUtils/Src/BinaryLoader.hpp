@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_BINARY_LOADER_H___
 
 #include "Loader.hpp"
+#include "BinaryFile.hpp"
 
 namespace Castor
 {
@@ -33,8 +34,11 @@ namespace Castor
 	*/
 	template< class T >
 	class BinaryLoader
-		: public Loader< T, eFILE_TYPE_BINARY, BinaryFile >
+		: public Loader< T, eFILE_TYPE_BINARY >
 	{
+	protected:
+		using FileType = typename Loader< T, eFILE_TYPE_BINARY >::FileType;
+
 	public:
 		/**
 		 *\~english
@@ -42,19 +46,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		BinaryLoader()
-			: Loader< T, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_BINARY )
-		{
-		}
+		BinaryLoader() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BinaryLoader()
-		{
-		}
+		virtual ~BinaryLoader() = default;
 	};
 }
 

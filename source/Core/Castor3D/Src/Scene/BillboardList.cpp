@@ -20,134 +20,47 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool BillboardList::TextLoader::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
+	BillboardList::TextWriter::TextWriter( String const & p_tabs )
+		: MovableObject::TextWriter{ p_tabs }
 	{
-		bool l_return = p_file.WriteText( cuT( "\tbillboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+	}
+
+	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader()( p_obj, p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( p_obj, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\t\tdimensions %d %d" ), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
 		}
 
 		if ( l_return && p_obj.GetCount() )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tpositions\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
 
 			for ( auto const & l_point : p_obj )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_point[0], l_point[1], l_point[2] ) > 0;
+				l_return &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
 			}
 
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	BillboardList::BinaryParser::BinaryParser( Path const & p_path )
-		:	MovableObject::BinaryParser( p_path )
-	{
-	}
-
-	bool BillboardList::BinaryParser::Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_BILLBOARD );
-
-		if ( l_return )
-		{
-			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_BILLBOARD_MATERIAL, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetDimensions(), eCHUNK_TYPE_BILLBOARD_DIMENSIONS, l_chunk );
-		}
-
-		if ( l_return && p_obj.GetCount() )
-		{
-			for ( auto const & l_point : p_obj )
-			{
-				l_return = DoFillChunk( l_point, eCHUNK_TYPE_BILLBOARD_POSITION, l_chunk );
-			}
-		}
-
-		if ( l_return )
-		{
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool BillboardList::BinaryParser::Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-		Size l_size;
-		Point3r l_position;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_BILLBOARD_MATERIAL:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetMaterial( p_obj.GetScene()->GetEngine()->GetMaterialManager().Find( l_name ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_BILLBOARD_DIMENSIONS:
-					l_return = DoParseChunk( l_size, l_chunk );
-					p_obj.SetDimensions( l_size );
-					break;
-
-				case eCHUNK_TYPE_BILLBOARD_POSITION:
-					l_return = DoParseChunk( l_position, l_chunk );
-					p_obj.AddPoint( l_position );
-					break;
-
-				default:
-					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

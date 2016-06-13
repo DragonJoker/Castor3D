@@ -59,7 +59,7 @@ namespace CastorGui
 
 		if ( l_parent )
 		{
-			l_parent->m_childs.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
+			l_parent->m_children.push_back( std::static_pointer_cast< Control >( shared_from_this() ) );
 		}
 
 		BorderPanelOverlaySPtr l_panel = GetBackground();
@@ -183,12 +183,12 @@ namespace CastorGui
 
 	ControlSPtr Control::GetChildControl( uint32_t p_id )
 	{
-		auto l_it = std::find_if( std::begin( m_childs ), std::end( m_childs ), [&p_id]( ControlWPtr p_ctrl )
+		auto l_it = std::find_if( std::begin( m_children ), std::end( m_children ), [&p_id]( ControlWPtr p_ctrl )
 		{
 			return p_ctrl.expired() ? false : p_ctrl.lock()->GetId() == p_id;
 		} );
 
-		if ( l_it == m_childs.end() )
+		if ( l_it == m_children.end() )
 		{
 			CASTOR_EXCEPTION( "This control does not exist in my childs" );
 		}

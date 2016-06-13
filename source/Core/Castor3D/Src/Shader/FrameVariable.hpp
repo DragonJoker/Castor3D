@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Binary/BinaryParser.hpp"
 #include "Texture/TextureLayout.hpp"
 
 namespace Castor3D
@@ -37,6 +36,7 @@ namespace Castor3D
 	\remark		Il s'agit d'une variable donnée à un shader au cours de son exécution
 	*/
 	class FrameVariable
+		: public Castor::NonCopyable
 	{
 	public:
 		/*!
@@ -48,8 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de FrameVariable
 		*/
-		class TextLoader
-			: public Castor::Loader< FrameVariable, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< FrameVariable >
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a FrameVariable into a text file
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_variable	La FrameVariable
 			 */
-			C3D_API virtual bool operator()( FrameVariable const & p_variable, Castor::TextFile & p_file );
+			C3D_API bool operator()( FrameVariable const & p_variable, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_program	Le programme
 		 */
-		C3D_API FrameVariable( ShaderProgram * p_program );
+		C3D_API explicit FrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -93,46 +93,6 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
 		C3D_API FrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
-		 */
-		C3D_API FrameVariable( FrameVariable const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		C3D_API FrameVariable( FrameVariable && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API FrameVariable & operator=( FrameVariable const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API FrameVariable & operator=( FrameVariable && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -366,7 +326,6 @@ namespace Castor3D
 	\brief		Structure d'aide pour récupérer le nom du type de données d'une variable de frame.
 	*/
 	template< typename T > struct FrameVariableDataTyper;
-
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -389,7 +348,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_program	Le programme
 		 */
-		TFrameVariable( ShaderProgram * p_program );
+		explicit TFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -401,46 +360,6 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme
 		 */
 		TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
-		 */
-		TFrameVariable( TFrameVariable< T > const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		TFrameVariable( TFrameVariable< T > && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		TFrameVariable & operator =( TFrameVariable< T > const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		TFrameVariable & operator =( TFrameVariable< T > && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor

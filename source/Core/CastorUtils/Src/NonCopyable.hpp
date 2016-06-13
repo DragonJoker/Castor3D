@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -63,20 +63,6 @@ namespace Castor
 		 *\brief		Operateur d'affectation par copie privé, afin d'en interdire la possibilité
 		 */
 		NonCopyable & operator =( NonCopyable const & ) = delete;
-		/**
-		 *\~english
-		 *\brief		Private move constructor, to forbid move by construction
-		 *\~french
-		 *\brief		Constructeur par déplacement privé, afin d'en interdire la possiblité
-		 */
-		NonCopyable( NonCopyable && /*src*/ ) = delete;
-		/**
-		 *\~english
-		 *\brief		Private move assignment operator, to forbid assignment move
-		 *\~french
-		 *\brief		Operateur d'affectation par déplacement privé, afin d'en interdire la possibilité
-		 */
-		NonCopyable & operator =( NonCopyable && ) = delete;
 	};
 }
 

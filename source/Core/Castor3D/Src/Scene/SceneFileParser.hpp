@@ -119,15 +119,16 @@ namespace Castor3D
 		SceneNodeSPtr m_pGeneralParentMaterial;
 		ScenePtrStrMap mapScenes;
 		SceneFileParser * m_pParser;
-		eRENDERER_TYPE eRendererType;
 		RealArray vertexPos;
 		RealArray vertexNml;
 		RealArray vertexTan;
 		RealArray vertexTex;
 		UIntArray faces;
 		AnimatedObjectGroupSPtr pAnimGroup;
-		AnimatedObjectSPtr pAnimObject;
-		AnimationSPtr pAnimation;
+		AnimatedObjectSPtr pAnimSkeleton;
+		AnimatedObjectSPtr pAnimMesh;
+		AnimatedObjectSPtr pAnimMovable;
+		AnimationInstanceSPtr pAnimation;
 		SkyboxSPtr pSkybox;
 
 	public:
@@ -154,7 +155,7 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		C3D_API SceneFileParser( Engine & p_engine );
+		C3D_API explicit SceneFileParser( Engine & p_engine );
 		/**
 		 * Destructor
 		 */

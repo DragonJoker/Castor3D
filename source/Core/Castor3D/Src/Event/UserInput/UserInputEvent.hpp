@@ -44,7 +44,7 @@ namespace Castor3D
 		 *\~brief		Constructeur.
 		 *\param[in]	p_type	Le type d'évènement entrée utilisateur.
 		 */
-		UserInputEvent( eUSER_INPUT_EVENT_TYPE p_type )
+		explicit UserInputEvent( eUSER_INPUT_EVENT_TYPE p_type )
 			: m_eventType( p_type )
 		{
 		}

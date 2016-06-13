@@ -228,7 +228,7 @@ namespace Castor3D
 		{
 			std::unique_lock< Collection > l_lock( m_elements );
 
-			for ( auto && l_it : this->m_elements )
+			for ( auto l_it : this->m_elements )
 			{
 				ElementCleaner< Elem >::Cleanup( *GetEngine(), *l_it.second );
 			}
@@ -389,7 +389,7 @@ namespace Castor3D
 		 *\brief		Renvoie un itérateur sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline typename Collection::TObjPtrMapIt begin()
+		inline auto begin()
 		{
 			return m_elements.begin();
 		}
@@ -401,7 +401,7 @@ namespace Castor3D
 		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline typename Collection::TObjPtrMapConstIt begin()const
+		inline auto begin()const
 		{
 			return m_elements.begin();
 		}
@@ -413,7 +413,7 @@ namespace Castor3D
 		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline typename Collection::TObjPtrMapIt end()
+		inline auto end()
 		{
 			return m_elements.end();
 		}
@@ -425,7 +425,7 @@ namespace Castor3D
 		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
 		 *\return		L'itérateur
 		 */
-		inline typename Collection::TObjPtrMapConstIt end()const
+		inline auto end()const
 		{
 			return m_elements.end();
 		}

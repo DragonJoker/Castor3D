@@ -52,7 +52,7 @@ namespace GuiCommon
 		wxPGChoices l_choices;
 		std::unique_lock< MaterialManager > l_lock( l_manager );
 
-		for ( auto && l_pair : l_manager )
+		for ( auto l_pair : l_manager )
 		{
 			l_choices.Add( l_pair.first );
 		}

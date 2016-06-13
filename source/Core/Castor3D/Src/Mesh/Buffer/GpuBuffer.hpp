@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		GpuBuffer( RenderSystem & p_renderSystem )
+		explicit GpuBuffer( RenderSystem & p_renderSystem )
 			: Castor::OwnedBy< RenderSystem >( p_renderSystem )
 		{
 		}

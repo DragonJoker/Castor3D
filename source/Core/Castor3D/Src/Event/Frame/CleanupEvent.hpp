@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_object	L'objet à nettoyer
 		 */
-		CleanupEvent( T & p_object )
+		explicit CleanupEvent( T & p_object )
 			: FrameEvent( eEVENT_TYPE_PRE_RENDER )
 			, m_object( p_object )
 		{

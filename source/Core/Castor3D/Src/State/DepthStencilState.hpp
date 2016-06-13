@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API DepthStencilState( Engine & p_engine );
+		C3D_API explicit DepthStencilState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -223,7 +223,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilTest( bool p_enable )
 		{
-			m_changed |= true;
+			m_changed = true;
 			m_bStencilTest = p_enable;
 		}
 		/**

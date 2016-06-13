@@ -20,6 +20,7 @@
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
 #include <SplashScreen.hpp>
+#include <SceneExporter.hpp>
 
 #include <GeometryManager.hpp>
 #include <LightManager.hpp>
@@ -149,7 +150,7 @@ namespace CastorShape
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 				uint32_t l_index = 0;
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = m_selectedGeometryMaterials[l_index++];
 					m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( l_infos->m_ambient ) );
@@ -165,7 +166,7 @@ namespace CastorShape
 			{
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					MaterialInfos * l_infos = new MaterialInfos;
 					l_infos->m_ambient[0] = m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->GetAmbient().red();
@@ -576,7 +577,7 @@ namespace CastorShape
 				String l_materialName = p_dialog->GetMaterialName();
 				MeshSPtr l_mesh = l_geometry->GetMesh();
 
-				for ( auto && l_submesh : *l_mesh )
+				for ( auto l_submesh : *l_mesh )
 				{
 					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().Find( l_materialName ) );
 				}
@@ -899,33 +900,12 @@ namespace CastorShape
 
 	void MainFrame::OnSaveScene( wxCommandEvent & p_event )
 	{
-		wxFileDialog * l_fileDialog = new wxFileDialog( this, _( "Save scene" ), wxEmptyString, wxEmptyString, _( "Castor Shape files (*.cscn)|*.cscn" ) );
+		wxFileDialog * l_fileDialog = new wxFileDialog( this, _( "Save scene" ), wxEmptyString, wxEmptyString, _( "Castor 3D Scene" ) + wxT( " (*.cscn)|*.cscn" ) );
 
 		if ( l_fileDialog->ShowModal() == wxID_OK )
 		{
-			BinaryFile l_file( ( char const * )l_fileDialog->GetPath().char_str(), File::eOPEN_MODE_WRITE );
-			Path l_filePath = ( char const * )l_fileDialog->GetPath().c_str();
-			Collection<Scene, String> l_scnManager;
-
-			if ( wxGetApp().GetCastor()->GetMaterialManager().Save( l_file ) )
-			{
-				Logger::LogInfo( cuT( "Materials written" ) );
-			}
-			else
-			{
-				Logger::LogInfo( cuT( "Can't write materials" ) );
-				return;
-			}
-
-			if ( wxGetApp().GetCastor()->GetMeshManager().Save( l_file ) )
-			{
-				Logger::LogInfo( cuT( "Meshes written" ) );
-			}
-			else
-			{
-				Logger::LogInfo( cuT( "Can't write meshes" ) );
-				return;
-			}
+			CscnSceneExporter l_exporter;
+			l_exporter.ExportScene( *m_mainScene.lock(), make_String( l_fileDialog->GetPath() ) );
 		}
 
 		p_event.Skip();
@@ -937,8 +917,6 @@ namespace CastorShape
 		l_wildcard << wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
 		l_wildcard << _( "Castor3D text scene file" );
 		l_wildcard << CSCN_WILDCARD;
-		l_wildcard << _( "Castor3D binary scene file" );
-		l_wildcard << CBSN_WILDCARD;
 		l_wildcard << _( "Zip archive" );
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );

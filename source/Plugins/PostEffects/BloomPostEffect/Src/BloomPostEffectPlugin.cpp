@@ -21,12 +21,12 @@ C3D_Bloom_API Castor3D::ePLUGIN_TYPE GetType()
 
 C3D_Bloom_API Castor::String GetName()
 {
-	return cuT( "Bloom PostEffect" );
+	return BloomPostEffect::Name;
 }
 
 C3D_Bloom_API Castor::String GetPostEffectType()
 {
-	return cuT( "bloom" );
+	return BloomPostEffect::Type;
 }
 
 C3D_Bloom_API Castor3D::PostEffectSPtr CreateEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_params )

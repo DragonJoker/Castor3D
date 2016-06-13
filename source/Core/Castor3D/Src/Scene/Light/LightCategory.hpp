@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_LIGHT_CATEGORY_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 
 namespace Castor3D
 {
@@ -44,76 +43,39 @@ namespace Castor3D
 		\~french
 		\brief		Loader de LightCategory
 		*/
-		class TextLoader
-			: public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< LightCategory >
 		{
 		public:
+			/**
+			 *\~english
+			 *\brief		Writes a LightCategory into a text file.
+			 *\param[in]	p_file	The file.
+			 *\~french
+			 *\brief		Ecrit une LightCategory dans un fichier texte.
+			 *\param[in]	p_file	Le fichier.
+			 */
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file ) = 0;
+
+		protected:
 			/**
 			 *\~english
 			 *\brief		Constructor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
-			 *\brief		Writes a light into a text file
-			 *\param[in]	p_file	The file to save the cameras in
-			 *\param[in]	p_light	The light to save
+			 *\brief		Writes a LightCategory into a text file.
+			 *\param[in]	p_file	The file.
+			 *\param[in]	p_light	The LightCategory to save.
 			 *\~french
-			 *\brief		Ecrit une lumière dans un fichier texte
-			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_light	La lumière
+			 *\brief		Ecrit une LightCategory dans un fichier texte.
+			 *\param[in]	p_file	Le fichier.
+			 *\param[in]	p_light	La LightCategory.
 			 */
-			C3D_API virtual bool operator()( LightCategory const & p_light, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		LightCategory loader
-		\~english
-		\brief		Loader de LightCategory
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< LightCategory >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( LightCategory const & p_light, Castor::TextFile & p_file )override;
 		};
 
 	private:
@@ -128,7 +90,7 @@ namespace Castor3D
 		 *\brief		Le constructeur utilisé par la fonction de clonage
 		 *\param[in]	p_lightType	Le type de catégorie de lumière
 		 */
-		C3D_API LightCategory( eLIGHT_TYPE p_lightType );
+		C3D_API explicit LightCategory( eLIGHT_TYPE p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -136,6 +98,19 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~LightCategory();
+		/**
+		 *\~english
+		 *\brief		Creates a LightCategroy specific TextLoader.
+		 *\param[in]	p_tabs			The current indentation level.
+		 *\param[in]	p_encodingMode	The file encoding mode.
+		 *\return		The TextLoader.
+		 *\~french
+		 *\brief		Crée un TextLoader spécifique à la LightCategory.
+		 *\param[in]	p_tabs			Le niveau d'intentation actuel.
+		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
+		 *\return		Le TextLoader.
+		 */
+		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
@@ -373,7 +348,7 @@ namespace Castor3D
 		//!\~english The light type	\~french Le type de lumière
 		eLIGHT_TYPE m_eLightType;
 		//!\~english The parent light	\~french La lumière parente
-		Light * m_pLight;
+		Light * m_pLight{ nullptr };
 		//!\~english The colour.	\~french La couleur.
 		Castor::Point3f m_colour;
 		//!\~english The intensity values.	\~french Les valeurs d'intensité.

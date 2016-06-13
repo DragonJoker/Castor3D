@@ -455,13 +455,13 @@ namespace Testing
 	{
 	}
 
-	void CastorUtilsPixelFormatTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::DoRegisterTests()
 	{
-		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestPixelConversions, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestBufferConversions, p_errCount, p_testCount );
+		DoRegisterTest( "TestPixelConversions", std::bind( &CastorUtilsPixelFormatTest::TestPixelConversions, this ) );
+		DoRegisterTest( "TestBufferConversions", std::bind( &CastorUtilsPixelFormatTest::TestBufferConversions, this ) );
 	}
 
-	void CastorUtilsPixelFormatTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::TestPixelConversions()
 	{
 		CheckPixelConversions< ePIXEL_FORMAT_L8 >();
 		CheckPixelConversions< ePIXEL_FORMAT_L32F >();
@@ -481,7 +481,7 @@ namespace Testing
 		CheckPixelConversions< ePIXEL_FORMAT_STENCIL8 >();
 	}
 
-	void CastorUtilsPixelFormatTest::TestBufferConversions( uint32_t & p_errCount, uint32_t & p_testCount )
+	void CastorUtilsPixelFormatTest::TestBufferConversions()
 	{
 		CheckBufferConversions< ePIXEL_FORMAT_L8 >();
 		CheckBufferConversions< ePIXEL_FORMAT_L32F >();

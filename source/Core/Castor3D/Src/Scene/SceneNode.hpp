@@ -20,8 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Binary/BinaryParser.hpp"
-
 #include <OwnedBy.hpp>
 #include <Signal.hpp>
 
@@ -59,8 +57,8 @@ namespace Castor3D
 		\brief SceneNode loader
 		\remark Charge/écrit des Castor3D::SceneNode à partir de/dans un fichier
 		*/
-		class TextLoader
-			: public Castor::Loader< SceneNode, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< SceneNode >
 		{
 		public:
 			/**
@@ -69,7 +67,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 * Writes a Castor3D::SceneNode into a text file
@@ -82,55 +80,7 @@ namespace Castor3D
 			 *\param[in]	p_node	Le Castor3D::SceneNode à écrire
 			 *\return \p true si tout s'est bien passé, \p false sinon
 			 */
-			C3D_API virtual bool operator()( SceneNode const & p_node, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		Sampler loader
-		\~english
-		\brief		Loader de Sampler
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< SceneNode >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( SceneNode const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( SceneNode & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( SceneNode const & p_node, Castor::TextFile & p_file )override;
 		};
 
 	protected:
@@ -478,7 +428,7 @@ namespace Castor3D
 		 */
 		inline SceneNodePtrStrMap const & GetChilds()const
 		{
-			return m_childs;
+			return m_children;
 		}
 		/**
 		 *\~english
@@ -490,7 +440,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsBegin()
 		{
-			return m_childs.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -502,7 +452,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsBegin()const
 		{
-			return m_childs.begin();
+			return m_children.begin();
 		}
 		/**
 		 *\~english
@@ -514,7 +464,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsEnd()
 		{
-			return m_childs.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -526,7 +476,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsEnd()const
 		{
-			return m_childs.end();
+			return m_children.end();
 		}
 		/**
 		 *\~english
@@ -600,7 +550,7 @@ namespace Castor3D
 		 */
 		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
 		{
-			return ( m_childs.find( p_name ) != m_childs.end() ? m_childs.find( p_name )->second.lock() : nullptr );
+			return ( m_children.find( p_name ) != m_children.end() ? m_children.find( p_name )->second.lock() : nullptr );
 		}
 		/**
 		 *\~english
@@ -685,7 +635,7 @@ namespace Castor3D
 		//!\~english  This node's parent	\~french Le noeud parent
 		SceneNodeWPtr m_parent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
-		SceneNodePtrStrMap m_childs;
+		SceneNodePtrStrMap m_children;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
 		MovableObjectPtrArray m_objects;
 		//!\~english  Signal used to notify attached objects that the node has changed.	\~french Signal utilisé pour notifier aux objets attachés que le noeud a changé.

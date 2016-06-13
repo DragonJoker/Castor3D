@@ -12,11 +12,14 @@ namespace Castor3D
 	BufferDeclaration::BufferDeclaration( BufferElementDeclaration const * p_elements, uint32_t p_count )
 		: m_uiStride( 0 )
 	{
-		for ( uint32_t i = 0; i < p_count; i++ )
+		if ( p_elements )
 		{
-			m_arrayElements.push_back( p_elements[i] );
-			m_arrayElements[i].m_offset = m_uiStride;
-			m_uiStride += Castor3D::GetSize( m_arrayElements[i].m_dataType );
+			for ( uint32_t i = 0; i < p_count; i++ )
+			{
+				m_arrayElements.push_back( p_elements[i] );
+				m_arrayElements[i].m_offset = m_uiStride;
+				m_uiStride += Castor3D::GetSize( m_arrayElements[i].m_dataType );
+			}
 		}
 	}
 

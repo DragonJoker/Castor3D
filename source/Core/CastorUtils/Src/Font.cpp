@@ -1,4 +1,4 @@
-﻿#include "Font.hpp"
+#include "Font.hpp"
 #include "Image.hpp"
 
 #include <ft2build.h>
@@ -194,8 +194,42 @@ namespace Castor
 		};
 	}
 
+	//************************************************************************************************
+
+	Font::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Font >{ p_tabs }
+	{
+	}
+
+
+	bool Font::TextWriter::operator()( Font const & p_object, TextFile & p_file )
+	{
+		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		if ( l_return )
+		{
+			Path l_relative = CopyFile( p_object.GetFilePath(), p_file.GetFilePath(), Path{} );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return l_return;
+	}
+
+	//************************************************************************************************
+
 	Font::BinaryLoader::BinaryLoader()
-		: Loader< Font, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
@@ -261,7 +295,7 @@ namespace Castor
 	{
 	}
 
-	Font::Font( Path const & p_path, String const & p_name, uint32_t p_height )
+	Font::Font( String const & p_name, uint32_t p_height, Path const & p_path )
 		: Resource< Font >( p_name )
 		, m_height( p_height )
 		, m_maxHeight( 0 )
@@ -286,7 +320,7 @@ namespace Castor
 
 	Glyph const & Font::DoLoadGlyph( char32_t p_char )
 	{
-		auto && l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+		auto l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
 		{
 			return p_glyph.GetCharacter() == p_char;
 		} );

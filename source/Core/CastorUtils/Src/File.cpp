@@ -1,4 +1,4 @@
-﻿#include "File.hpp"
+#include "File.hpp"
 #include "Math.hpp"
 #include "Utils.hpp"
 #include "Logger.hpp"
@@ -157,7 +157,7 @@ namespace Castor
 		{
 #if defined( _MSC_VER )
 
-			bool l_return = _trmdir( p_path.c_str() ) == TRUE;
+			bool l_return = _trmdir( p_path.c_str() ) == 0;
 
 #else
 
@@ -167,22 +167,24 @@ namespace Castor
 
 			if ( !l_return )
 			{
-				switch ( errno )
+				auto l_error = errno;
+
+				switch ( l_error )
 				{
 				case ENOTEMPTY:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], it is not empty." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], it is not empty." ) );
 					break;
 
 				case ENOENT:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], the path is invalid." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], the path is invalid." ) );
 					break;
 
 				case EACCES:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], a program has an open handle to this directory." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], a program has an open handle to this directory." ) );
 					break;
 
 				default:
-					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], unknown error." ) );
+					Logger::LogError( StringStream() << cuT( "Couldn't remove directory [" ) << p_path << cuT( "], unknown error (" ) << l_error << cuT( ")." ) );
 					break;
 				}
 			}
@@ -266,15 +268,11 @@ namespace Castor
 #endif
 
 	File::File( Path const & p_strFileName, int p_mode, eENCODING_MODE p_eEncoding )
-		:	m_iMode( p_mode	)
-		,	m_eEncoding( p_eEncoding	)
-		,	m_strFileFullPath( p_strFileName	)
-		,	m_ullCursor( 0	)
-		,	m_ullLength( 0	)
-		,	m_pFile( nullptr	)
-		,	m_bOwnFile( true	)
+		: m_iMode{ p_mode }
+		, m_eEncoding{ p_eEncoding }
+		, m_strFileFullPath{ p_strFileName }
 	{
-		REQUIRE( ! p_strFileName.empty() );
+		REQUIRE( !p_strFileName.empty() );
 		String l_strMode;
 
 		switch ( p_mode )
@@ -353,7 +351,7 @@ namespace Castor
 
 	File::~File()
 	{
-		if ( m_pFile != nullptr && m_bOwnFile )
+		if ( m_pFile != nullptr )
 		{
 			fclose( m_pFile );
 		}
@@ -532,25 +530,25 @@ namespace Castor
 
 #if defined( _WIN32 )
 
-		xchar l_pPath[FILENAME_MAX];
-		DWORD dwResult = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
+		xchar l_path[FILENAME_MAX];
+		DWORD l_result = GetModuleFileName( nullptr, l_path, _countof( l_path ) );
 
-		if ( dwResult != 0 )
+		if ( l_result != 0 )
 		{
-			l_pathReturn = l_pPath;
+			l_pathReturn = Path{ l_path };
 		}
 
 #elif defined( __linux__ )
 
-		char l_pPath[FILENAME_MAX];
-		char l_szTmp[32];
-		sprintf( l_szTmp, "/proc/%d/exe", getpid() );
-		int l_iBytes = std::min< std::size_t >( readlink( l_szTmp, l_pPath, sizeof( l_pPath ) ), sizeof( l_pPath ) - 1 );
+		char l_path[FILENAME_MAX];
+		char l_buffer[32];
+		sprintf( l_buffer, "/proc/%d/exe", getpid() );
+		int l_bytes = std::min< std::size_t >( readlink( l_buffer, l_path, sizeof( l_path ) ), sizeof( l_path ) - 1 );
 
-		if ( l_iBytes > 0 )
+		if ( l_bytes > 0 )
 		{
-			l_pPath[l_iBytes] = '\0';
-			l_pathReturn = l_pPath;
+			l_path[l_bytes] = '\0';
+			l_pathReturn = Path{ string::string_cast< xchar >( l_path ) };
 		}
 
 #else
@@ -572,14 +570,14 @@ namespace Castor
 
 		if ( SUCCEEDED( l_hr ) )
 		{
-			l_pathReturn = l_path;
+			l_pathReturn = Path{ l_path };
 		}
 
 #elif defined( __linux__ )
 
 		struct passwd * l_pw = getpwuid( getuid() );
 		const char * l_homedir = l_pw->pw_dir;
-		l_pathReturn = string::string_cast< xchar >( l_homedir );
+		l_pathReturn = Path{ string::string_cast< xchar >( l_homedir ) };
 
 #else
 #	error "Unsupported platform"
@@ -735,7 +733,7 @@ namespace Castor
 	bool File::CopyFile( Path const & p_file, Path const & p_folder )
 	{
 		bool l_return = false;
-		Path l_file = p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension();
+		Path l_file{ p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension() };
 		std::ifstream l_src( string::string_cast< char >( p_file ), std::ios::binary );
 
 		if ( l_src.is_open() )

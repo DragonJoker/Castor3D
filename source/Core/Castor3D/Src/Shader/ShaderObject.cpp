@@ -1,4 +1,4 @@
-﻿#include "ShaderObject.hpp"
+#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "FrameVariable.hpp"
 #include "OneFrameVariable.hpp"
@@ -33,230 +33,29 @@ namespace Castor3D
 		}
 	}
 
-	ShaderObject::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< ShaderObject >( p_path )
-	{
-	}
-
-	bool ShaderObject::BinaryParser::Fill( ShaderObject const & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_object.GetLoadedSource(), eCHUNK_TYPE_SHADER_OBJECT_SOURCE, l_chunk );
-		}
-
-		if ( p_object.GetType() == eSHADER_TYPE_GEOMETRY )
-		{
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_object.GetInputType(), eCHUNK_TYPE_SHADER_OBJECT_INPUT, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_object.GetOutputType(), eCHUNK_TYPE_SHADER_OBJECT_OUTPUT, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_object.GetOutputVtxCount(), eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT, l_chunk );
-			}
-		}
-
-		for ( auto && l_it : p_object.GetFrameVariables() )
-		{
-			FrameVariableSPtr l_variable = l_it;
-			BinaryChunk l_chunkVariable( eCHUNK_TYPE_PROGRAM_VARIABLE );
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( l_variable->GetOccCount(), eCHUNK_TYPE_VARIABLE_COUNT, l_chunkVariable );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( l_variable->GetFullType(), eCHUNK_TYPE_VARIABLE_TYPE, l_chunkVariable );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( l_variable->GetName(), eCHUNK_TYPE_NAME, l_chunkVariable );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( l_variable->GetStrValue(), eCHUNK_TYPE_VARIABLE_VALUE, l_chunkVariable );
-			}
-
-			if ( l_return )
-			{
-				l_chunkVariable.Finalise();
-				l_return = l_chunk.AddSubChunk( l_chunkVariable );
-			}
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			l_return = p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool ShaderObject::BinaryParser::Parse( ShaderObject & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_strText;
-		eTOPOLOGY l_ePrimType;
-		eFRAME_VARIABLE_TYPE l_type;
-		FrameVariableSPtr l_variable;
-		uint8_t l_count;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			switch ( l_chunk.GetChunkType() )
-			{
-			case eCHUNK_TYPE_SHADER_OBJECT_SOURCE:
-				l_return = DoParseChunk( l_strText, l_chunk );
-
-				if ( l_return )
-				{
-					p_object.SetSource( eSHADER_MODEL_5, l_strText );
-					p_object.SetSource( eSHADER_MODEL_4, l_strText );
-					p_object.SetSource( eSHADER_MODEL_3, l_strText );
-					p_object.SetSource( eSHADER_MODEL_2, l_strText );
-					p_object.SetSource( eSHADER_MODEL_1, l_strText );
-				}
-
-				break;
-
-			case eCHUNK_TYPE_PROGRAM_VARIABLE:
-				l_count = 0;
-				l_type = eFRAME_VARIABLE_TYPE( -1 );
-				l_strText.clear();
-				l_variable.reset();
-
-				while ( l_chunk.CheckAvailable( 1 ) )
-				{
-					BinaryChunk l_chunkVariable;
-					l_return = l_chunk.GetSubChunk( l_chunkVariable );
-
-					switch ( l_chunkVariable.GetChunkType() )
-					{
-					case eCHUNK_TYPE_VARIABLE_COUNT:
-						l_return = DoParseChunk( l_count, l_chunkVariable );
-						break;
-
-					case eCHUNK_TYPE_NAME:
-						l_return = DoParseChunk( l_strText, l_chunkVariable );
-						break;
-
-					case eCHUNK_TYPE_VARIABLE_TYPE:
-						l_return = DoParseChunk( l_type, l_chunkVariable );
-						break;
-
-					case eCHUNK_TYPE_VARIABLE_VALUE:
-						l_return = DoParseChunk( l_strText, l_chunkVariable );
-
-						if ( l_return )
-						{
-							l_variable->SetValueStr( l_strText );
-						}
-
-						break;
-					}
-
-					//if ( l_return && !l_variable )
-					//{
-					//	if ( l_count && l_type != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
-					//	{
-					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-					//		l_variable = l_buffer->CreateVariable( *p_object.GetParent(), l_type, l_strText, l_count );
-					//	}
-					//}
-
-					if ( !l_return )
-					{
-						p_chunk.EndParse();
-					}
-				}
-
-				break;
-			}
-
-			if ( p_object.GetType() == eSHADER_TYPE_GEOMETRY )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_SHADER_OBJECT_INPUT:
-					l_return = DoParseChunk( l_ePrimType, l_chunk );
-
-					if ( l_return )
-					{
-						p_object.SetInputType( l_ePrimType );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SHADER_OBJECT_OUTPUT:
-					l_return = DoParseChunk( l_ePrimType, l_chunk );
-
-					if ( l_return )
-					{
-						p_object.SetOutputType( l_ePrimType );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT:
-					l_return = DoParseChunk( l_count, l_chunk );
-
-					if ( l_return )
-					{
-						p_object.SetOutputVtxCount( l_count );
-					}
-
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
-	}
-
 	//*************************************************************************************************
 
-	ShaderObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderObject::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< ShaderObject >{ p_tabs }
 	{
 	}
 
-	bool ShaderObject::TextLoader::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
+	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		String l_strTabs = cuT( "\t\t\t" );
-		bool l_return = p_file.WriteText( l_strTabs + p_shaderObject.GetStrType() ) > 0;
-		static std::array< String, eSHADER_MODEL_COUNT > l_arrayModels;
-		l_arrayModels[eSHADER_MODEL_1] = cuT( "sm_1" );
-		l_arrayModels[eSHADER_MODEL_2] = cuT( "sm_2" );
-		l_arrayModels[eSHADER_MODEL_3] = cuT( "sm_3" );
-		l_arrayModels[eSHADER_MODEL_4] = cuT( "sm_4" );
-		l_arrayModels[eSHADER_MODEL_5] = cuT( "sm_5" );
+		static std::array< String, eSHADER_MODEL_COUNT > const l_arrayModels
+		{
+			cuT( "sm_1" ),
+			cuT( "sm_2" ),
+			cuT( "sm_3" ),
+			cuT( "sm_4" ),
+			cuT( "sm_5" ),
+		};
+
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + p_shaderObject.GetStrType()+ cuT( "\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\n{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		}
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
@@ -272,23 +71,23 @@ namespace Castor3D
 				if ( !l_file.empty() )
 				{
 					File::CopyFile( l_file, l_pathFile );
-					l_file = Path( cuT( "Shaders" ) ) / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-					l_return = p_file.WriteText( l_strTabs + cuT( "\tfile \"" ) + l_arrayModels[i] + cuT( " " ) + l_file + cuT( "\"\n" ) ) > 0;
+					l_file = Path{ Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension() };
+					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_file + cuT( "\"\n" ) ) > 0;
 				}
 			}
 		}
 
 		if ( l_hasFile )
 		{
-			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
+			for ( auto l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_return = FrameVariable::TextLoader()( *l_it, p_file );
+				l_return = FrameVariable::TextWriter( m_tabs + cuT( "\t" ) )( *l_it, p_file );
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
@@ -306,12 +105,8 @@ namespace Castor3D
 	};
 
 	ShaderObject::ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type )
-		: m_status( eSHADER_STATUS_NOTCOMPILED )
-		, m_type( p_type )
+		: m_type( p_type )
 		, m_parent( p_parent )
-		, m_eInputType( eTOPOLOGY_TRIANGLES )
-		, m_eOutputType( eTOPOLOGY_TRIANGLES )
-		, m_eShaderModel( eSHADER_MODEL_1 )
 	{
 	}
 
@@ -326,7 +121,7 @@ namespace Castor3D
 
 	void ShaderObject::Bind()
 	{
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto l_variable : m_listFrameVariables )
 		{
 			l_variable->Bind();
 		}
@@ -334,7 +129,7 @@ namespace Castor3D
 
 	void ShaderObject::Unbind()
 	{
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto l_variable : m_listFrameVariables )
 		{
 			l_variable->Unbind();
 		}
@@ -348,7 +143,7 @@ namespace Castor3D
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename.c_str(), File::eOPEN_MODE_READ );
+			TextFile l_file( p_filename, File::eOPEN_MODE_READ );
 
 			if ( l_file.IsOk() )
 			{

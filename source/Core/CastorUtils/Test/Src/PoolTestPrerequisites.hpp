@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___TEST_PREREQUISITES_H___
 #define ___TEST_PREREQUISITES_H___
 
-#include "TestPrerequisites.hpp"
+#include "CastorUtilsTestPrerequisites.hpp"
 
 #include <FixedSizeMemoryData.hpp>
 #include <FixedSizeMarkedMemoryData.hpp>

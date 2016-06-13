@@ -17,10 +17,15 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	String const Gamma = cuT( "c3d_gamma" );
+	namespace
+	{
+		String const Gamma = cuT( "c3d_gamma" );
+	}
+
+	String ReinhardToneMapping::Name = cuT( "reinhard" );
 
 	ReinhardToneMapping::ReinhardToneMapping( Engine & p_engine, Parameters const & p_parameters )
-		: ToneMapping{ eTONE_MAPPING_TYPE_REINHARD, p_engine, p_parameters }
+		: ToneMapping{ Name, p_engine, p_parameters }
 		, m_gamma{ 1.0f }
 	{
 		String l_param;
@@ -64,7 +69,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).RGB );
+				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
 				// Exposure tone mapping
 				LOCALE_ASSIGN( l_writer, Vec3, l_mapped, vec3( Float( 1.0f ) ) - exp( -l_hdrColor * c3d_exposure ) );
 				// Gamma correction
@@ -86,5 +91,10 @@ namespace Castor3D
 	void ReinhardToneMapping::DoUpdate()
 	{
 		m_gammaVar->SetValue( m_gamma );
+	}
+
+	bool ReinhardToneMapping::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -Gamma " ) + string::to_string( m_gamma ) ) > 0;
 	}
 }

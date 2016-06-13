@@ -35,16 +35,15 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-		, m_tabs( p_tabs )
+	RenderTarget::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< RenderTarget >{ p_tabs }
 	{
 	}
 
-	bool RenderTarget::TextLoader::operator()( RenderTarget const & p_target, TextFile & p_file )
+	bool RenderTarget::TextWriter::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
-		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
-		bool l_return = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::LogInfo( m_tabs + cuT( "Writing RenderTarget" ) );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return && p_target.GetScene() )
 		{
@@ -66,195 +65,36 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "MSAA" ) )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
-		}
-
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "SSAA" ) )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tssaa true\n" ) ) > 0;
-		}
-
-		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
-		}
-
 		if ( l_return && p_target.IsUsingStereo() )
 		{
 			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
 		}
 
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
+				&& p_target.m_toneMapping->WriteInto( p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return && p_target.m_renderTechnique )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
+				&& p_target.m_renderTechnique->WriteInto( p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			for ( auto const & l_effect : p_target.m_postEffects )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
+					&& l_effect->WriteInto( p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			}
+		}
+
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	RenderTarget::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< RenderTarget >( p_path )
-	{
-	}
-
-	bool RenderTarget::BinaryParser::Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_TARGET );
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetScene()->GetName(), eCHUNK_TYPE_TARGET_SCENE, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetCamera()->GetName(), eCHUNK_TYPE_TARGET_CAMERA, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetSize(), eCHUNK_TYPE_TARGET_SIZE, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetPixelFormat(), eCHUNK_TYPE_TARGET_FORMAT, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetTechnique()->GetName(), eCHUNK_TYPE_TARGET_TECHNIQUE, l_chunk );
-		}
-
-		if ( l_return && ( p_obj.GetTechnique()->GetName() == cuT( "MSAA" ) || p_obj.GetTechnique()->GetName() == cuT( "SSAA" ) ) )
-		{
-			l_return = DoFillChunk( p_obj.GetSamplesCount(), eCHUNK_TYPE_TARGET_SAMPLES, l_chunk );
-		}
-
-		if ( l_return && p_obj.IsUsingStereo() )
-		{
-			float l_dist = float( p_obj.GetIntraOcularDistance() );
-			l_return = DoFillChunk( l_dist, eCHUNK_TYPE_TARGET_STEREO, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool RenderTarget::BinaryParser::Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-		String l_camName;
-		SceneSPtr l_scene;
-		Size l_size;
-		ePIXEL_FORMAT l_format;
-		uint32_t l_samples = 0;
-		float l_dist = 0;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_TARGET_SCENE:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						l_scene = p_obj.GetEngine()->GetSceneManager().Find( l_name );
-						p_obj.SetScene( l_scene );
-
-						if ( l_scene && !l_camName.empty() )
-						{
-							p_obj.SetCamera( l_scene->GetCameraManager().Find( l_camName ) );
-						}
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_CAMERA:
-					l_return = DoParseChunk( l_camName, l_chunk );
-
-					if ( l_return && l_scene )
-					{
-						p_obj.SetCamera( l_scene->GetCameraManager().Find( l_camName ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_SIZE:
-					l_return = DoParseChunk( l_size, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetSize( l_size );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_FORMAT:
-					l_return = DoParseChunk( l_format, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetPixelFormat( l_format );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_TECHNIQUE:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetTechnique( l_name, Parameters() );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_SAMPLES:
-					l_return = DoParseChunk( l_samples, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetSamplesCount( l_samples );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_TARGET_STEREO:
-					l_return = DoParseChunk( l_dist, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetIntraOcularDistance( real( l_dist ) );
-					}
-
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
 		return l_return;
 	}
 
@@ -270,7 +110,7 @@ namespace Castor3D
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		m_colorTexture.SetTexture( l_colourTexture );
 		m_colorTexture.SetSampler( l_pSampler );
@@ -337,12 +177,12 @@ namespace Castor3D
 		, m_fbRightEye{ *this }
 	{
 		m_toneMappingFactory.Initialise();
-		m_toneMapping = m_toneMappingFactory.Create( eTONE_MAPPING_TYPE_LINEAR, *GetEngine(), Parameters{} );
+		m_toneMapping = m_toneMappingFactory.Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -365,7 +205,7 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
@@ -388,7 +228,7 @@ namespace Castor3D
 				m_renderTechnique->AddScene( *l_scene );
 			}
 
-			for ( auto && l_effect : m_postEffects )
+			for ( auto l_effect : m_postEffects )
 			{
 				l_effect->Initialise();
 			}
@@ -404,7 +244,7 @@ namespace Castor3D
 			m_toneMapping->Cleanup();
 			m_toneMapping.reset();
 
-			for ( auto && l_effect : m_postEffects )
+			for ( auto l_effect : m_postEffects )
 			{
 				l_effect->Cleanup();
 			}
@@ -545,18 +385,20 @@ namespace Castor3D
 		m_rIntraOcularDistance = p_rIod;
 	}
 
-	void RenderTarget::SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters )
+	void RenderTarget::SetToneMappingType( String const & p_name, Parameters const & p_parameters )
 	{
 		if ( m_toneMapping )
 		{
-			auto l_toneMapping = m_toneMapping;
+			ToneMappingSPtr l_toneMapping;
+			std::swap( m_toneMapping, l_toneMapping );
+			// Give ownership of the tone mapping to the event (capture by value in the lambda).
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_toneMapping]()
 			{
 				l_toneMapping->Cleanup();
 			} ) );
 		}
 
-		m_toneMapping = m_toneMappingFactory.Create( p_type, *GetEngine(), p_parameters );
+		m_toneMapping = m_toneMappingFactory.Create( p_name, *GetEngine(), p_parameters );
 	}
 
 	void RenderTarget::SetSize( Size const & p_size )

@@ -1,5 +1,9 @@
 #include "AssimpImporter.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <GeometryManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
@@ -7,14 +11,16 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 
-#include <Animation/AnimationObject.hpp>
-#include <Animation/Bone.hpp>
-#include <Animation/SkeletonAnimationBone.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Plugin/ImporterPlugin.hpp>
 #include <Manager/ManagerView.hpp>
+#include <Mesh/Skeleton/Bone.hpp>
+#include <Plugin/ImporterPlugin.hpp>
 
 #include <Logger.hpp>
+
+#include <assimp/version.h>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -40,40 +46,59 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_extensions =
 	{
-		ImporterPlugin::Extension{ cuT( "DAE" ), cuT( "Collada" ) },
+		ImporterPlugin::Extension{ cuT( "AC" ), cuT( "AC3D" ) },
+		ImporterPlugin::Extension{ cuT( "ACC" ), cuT( "AC3D" ) },
+		ImporterPlugin::Extension{ cuT( "AC3D" ), cuT( "AC3D" ) },
 		ImporterPlugin::Extension{ cuT( "BLEND" ), cuT( "Blender" ) },
-		ImporterPlugin::Extension{ cuT( "BVH" ), cuT( "3 Biovision BVH" ) },
+		ImporterPlugin::Extension{ cuT( "BVH" ), cuT( "Biovision BVH" ) },
+		ImporterPlugin::Extension{ cuT( "COB" ), cuT( "TrueSpace" ) },
+		ImporterPlugin::Extension{ cuT( "CSM" ), cuT( "CharacterStudio Motion" ) },
+		ImporterPlugin::Extension{ cuT( "DAE" ), cuT( "Collada" ) },
+		ImporterPlugin::Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) },
+		ImporterPlugin::Extension{ cuT( "ENFF" ), cuT( "Neutral File Format" ) },
+		ImporterPlugin::Extension{ cuT( "HMP" ), cuT( "3D GameStudio Heightmap" ) },
 		ImporterPlugin::Extension{ cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) },
-		ImporterPlugin::Extension{ cuT( "NFF" ), cuT( "Sense8 WorldToolkit" ) },
-		ImporterPlugin::Extension{ cuT( "SMD" ), cuT( "Valve Model" ) },
-		ImporterPlugin::Extension{ cuT( "VTA" ), cuT( "Valve Model" ) },
-		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3 Quake I" ) },
-		ImporterPlugin::Extension{ cuT( "PK3" ), cuT( "Quake 3 BSP" ) },
-		ImporterPlugin::Extension{ cuT( "MDC" ), cuT( "1 RtCW" ) },
-		ImporterPlugin::Extension{ cuT( "MD5MESH" ), cuT( "Doom 3" ) },
-		ImporterPlugin::Extension{ cuT( "XML" ), cuT( "Ogre XML Mesh" ) },
-		ImporterPlugin::Extension{ cuT( "X" ), cuT( "DirectX X" ) },
+		ImporterPlugin::Extension{ cuT( "IFCZIP" ), cuT( "IFC-STEP, Industry Foundation Classes" ) },
+		ImporterPlugin::Extension{ cuT( "IRR" ), cuT( "Irrlicht Scene" ) },
+		ImporterPlugin::Extension{ cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "LWS" ), cuT( "LightWave Scene" ) },
+		ImporterPlugin::Extension{ cuT( "LXO" ), cuT( "Modo Model" ) },
+		ImporterPlugin::Extension{ cuT( "MD5MESH" ), cuT( "Doom 3 / MD5 Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MDC" ), cuT( "Return To Castle Wolfenstein Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "Quake Mesh / 3D GameStudio Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MESH" ), cuT( "Ogre 3D Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MESH.XML" ), cuT( "Ogre 3D Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "MOT" ), cuT( "LightWave Scene" ) },
+		ImporterPlugin::Extension{ cuT( "MS3D" ), cuT( "Milkshape 3D" ) },
+		ImporterPlugin::Extension{ cuT( "NFF" ), cuT( "Neutral File Format" ) },
+		ImporterPlugin::Extension{ cuT( "OFF" ), cuT( "Object File Format" ) },
+		ImporterPlugin::Extension{ cuT( "PK3" ), cuT( "Quake III BSP" ) },
 		ImporterPlugin::Extension{ cuT( "Q3O" ), cuT( "Quick3D" ) },
 		ImporterPlugin::Extension{ cuT( "Q3S" ), cuT( "Quick3D" ) },
 		ImporterPlugin::Extension{ cuT( "RAW" ), cuT( "Raw Triangles" ) },
-		ImporterPlugin::Extension{ cuT( "AC" ), cuT( "AC3D" ) },
-		ImporterPlugin::Extension{ cuT( "STL" ), cuT( "Stereolithography" ) },
-		ImporterPlugin::Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) },
-		ImporterPlugin::Extension{ cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) },
-		ImporterPlugin::Extension{ cuT( "IRR" ), cuT( "Irrlicht Scene" ) },
-		ImporterPlugin::Extension{ cuT( "OFF" ), cuT( "Object File Format" ) },
-		ImporterPlugin::Extension{ cuT( "TER" ), cuT( "Terragen Terrain" ) },
-		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3D GameStudio Model" ) },
-		ImporterPlugin::Extension{ cuT( "HMP" ), cuT( "3D GameStudio Terrain" ) },
-		ImporterPlugin::Extension{ cuT( "MS3D" ), cuT( "3 Milkshape 3D" ) },
-		ImporterPlugin::Extension{ cuT( "LWS" ), cuT( "LightWave Scene" ) },
-		ImporterPlugin::Extension{ cuT( "LXO" ), cuT( "Modo Model" ) },
-		ImporterPlugin::Extension{ cuT( "CSM" ), cuT( "CharacterStudio Motion" ) },
-		ImporterPlugin::Extension{ cuT( "COB" ), cuT( "TrueSpace" ) },
 		ImporterPlugin::Extension{ cuT( "SCN" ), cuT( "TrueSpace" ) },
-		ImporterPlugin::Extension{ cuT( "XGL" ), cuT( "2 XGL" ) },
-		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "2 XGL" ) },
+		ImporterPlugin::Extension{ cuT( "SMD" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "STL" ), cuT( "Stereolithography" ) },
+		ImporterPlugin::Extension{ cuT( "TER" ), cuT( "Terragen Heightmap" ) },
+		ImporterPlugin::Extension{ cuT( "VTA" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "X" ), cuT( "Direct3D XFile" ) },
+		ImporterPlugin::Extension{ cuT( "XGL" ), cuT( "XGL" ) },
+		ImporterPlugin::Extension{ cuT( "XML" ), cuT( "Irrlicht Scene" ) },
+		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "XGL" ) },
 	};
+
+	if ( aiGetVersionMajor() >= 3 )
+	{
+		if (aiGetVersionMajor () >= 2)
+		{
+			l_extensions.emplace_back( cuT( "3D" ), cuT( "Unreal" ) );
+			l_extensions.emplace_back( cuT( "ASSBIN" ), cuT( "Assimp binary dump" ) );
+			l_extensions.emplace_back( cuT( "B3D" ), cuT( "BlitzBasic 3D" ) );
+			l_extensions.emplace_back( cuT( "NDO" ), cuT( "Nendo Mesh" ) );
+			l_extensions.emplace_back( cuT( "OGEX" ), cuT( "Open Game Engine Exchange" ) );
+			l_extensions.emplace_back( cuT( "UC" ), cuT( "Unreal" ) );
+		}
+	}
 
 	std::set< String > l_alreadyLoaded;
 
@@ -93,11 +118,13 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "3DS" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) );
+		l_extensions.emplace_back( cuT( "PRJ" ), cuT( "3D Studio Max 3DS" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "ASE" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) );
+		l_extensions.emplace_back( cuT( "ASK" ), cuT( "3D Studio Max ASE" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "OBJ" ) ) )
@@ -113,17 +140,23 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD2" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II" ) );
+		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II Mesh" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD3" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III" ) );
+		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III Mesh" ) );
 	}
 
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "LWO" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave Model" ) );
+		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave/Modo Object" ) );
+		l_extensions.emplace_back( cuT( "LXO" ), cuT( "LightWave/Modo Object" ) );
+	}
+
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "FBX" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "FBX" ), cuT( "Autodesk FBX" ) );
 	}
 
 	return l_extensions;
@@ -249,7 +282,7 @@ namespace C3dAssimp
 
 			for ( auto && l_submesh : *m_mesh )
 			{
-				m_mesh->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+				m_mesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
 			l_geometry->SetMesh( m_mesh );
@@ -266,13 +299,13 @@ namespace C3dAssimp
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( GetEngine()->GetMeshManager().Has( l_meshName ) )
+		if ( p_scene.GetMeshManager().Has( l_meshName ) )
 		{
-			m_mesh = GetEngine()->GetMeshManager().Find( l_meshName );
+			m_mesh = p_scene.GetMeshManager().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -303,7 +336,7 @@ namespace C3dAssimp
 
 			if ( l_aiScene )
 			{
-				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
+				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( p_scene );
 				l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
 
 				if ( l_aiScene->HasMeshes() )
@@ -333,7 +366,7 @@ namespace C3dAssimp
 					{
 						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 						{
-							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
+							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] )->Initialise();
 						}
 
 						l_importer.FreeScene();
@@ -355,7 +388,7 @@ namespace C3dAssimp
 
 										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
 										{
-											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] );
+											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] )->Initialise();
 										}
 
 										l_importer.FreeScene();
@@ -371,7 +404,7 @@ namespace C3dAssimp
 				}
 				else
 				{
-					GetEngine()->GetMeshManager().Remove( l_meshName );
+					p_scene.GetMeshManager().Remove( l_meshName );
 					m_mesh.reset();
 					l_importer.FreeScene();
 				}
@@ -380,7 +413,7 @@ namespace C3dAssimp
 			{
 				// The import failed, report it
 				Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
-				GetEngine()->GetMeshManager().Remove( l_meshName );
+				p_scene.GetMeshManager().Remove( l_meshName );
 				m_mesh.reset();
 			}
 		}
@@ -405,97 +438,72 @@ namespace C3dAssimp
 		{
 			p_submesh->SetDefaultMaterial( l_material );
 			p_submesh->Ref( l_material );
-			stVERTEX_GROUP l_vertices = { 0 };
-			l_vertices.m_uiCount = p_aiMesh->mNumVertices;
-#if CASTOR_USE_DOUBLE
-			std::vector< real > vtx;
-			std::vector< real > nml;
-			std::vector< real > tan;
-			std::vector< real > bin;
-			std::vector< real > tex;
-			vtx.reserve( p_aiMesh->mNumVertices * 3 );
+			std::vector< InterleavedVertex > l_vertices{ p_aiMesh->mNumVertices };
+			uint32_t l_index{ 0u };
 
-			for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+			for ( auto & l_vertex : l_vertices )
 			{
-				vtx.push_back( p_aiMesh->mVertices[i].x );
-				vtx.push_back( p_aiMesh->mVertices[i].y );
-				vtx.push_back( p_aiMesh->mVertices[i].z );
+				l_vertex.m_pos[0] = real( p_aiMesh->mVertices[l_index].x );
+				l_vertex.m_pos[1] = real( p_aiMesh->mVertices[l_index].y );
+				l_vertex.m_pos[2] = real( p_aiMesh->mVertices[l_index].z );
+				++l_index;
 			}
-
-			l_vertices.m_pVtx = vtx.data();
 
 			if ( p_aiMesh->mNormals )
 			{
-				nml.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					nml.push_back( p_aiMesh->mNormals[i].x );
-					nml.push_back( p_aiMesh->mNormals[i].y );
-					nml.push_back( p_aiMesh->mNormals[i].z );
+					l_vertex.m_nml[0] = real( p_aiMesh->mNormals[l_index].x );
+					l_vertex.m_nml[1] = real( p_aiMesh->mNormals[l_index].y );
+					l_vertex.m_nml[2] = real( p_aiMesh->mNormals[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pNml = nml.data();
 			}
 
 			if ( p_aiMesh->mTangents )
 			{
-				tan.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					tan.push_back( p_aiMesh->mTangents[i].x );
-					tan.push_back( p_aiMesh->mTangents[i].y );
-					tan.push_back( p_aiMesh->mTangents[i].z );
+					l_vertex.m_tan[0] = real( p_aiMesh->mTangents[l_index].x );
+					l_vertex.m_tan[1] = real( p_aiMesh->mTangents[l_index].y );
+					l_vertex.m_tan[2] = real( p_aiMesh->mTangents[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pTan = tan.data();
 			}
 
 			if ( p_aiMesh->mBitangents )
 			{
-				bin.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					bin.push_back( p_aiMesh->mBitangents[i].x );
-					bin.push_back( p_aiMesh->mBitangents[i].y );
-					bin.push_back( p_aiMesh->mBitangents[i].z );
+					l_vertex.m_bin[0] = real( p_aiMesh->mBitangents[l_index].x );
+					l_vertex.m_bin[1] = real( p_aiMesh->mBitangents[l_index].y );
+					l_vertex.m_bin[2] = real( p_aiMesh->mBitangents[l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pBin = bin.data();
 			}
 
 			if ( p_aiMesh->HasTextureCoords( 0 ) )
 			{
-				tex.reserve( p_aiMesh->mNumVertices * 3 );
+				l_index = 0u;
 
-				for ( unsigned int i = 0; i < p_aiMesh->mNumVertices; ++i )
+				for ( auto & l_vertex : l_vertices )
 				{
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].x );
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].y );
-					tex.push_back( p_aiMesh->mTextureCoords[0][i].z );
+					l_vertex.m_tex[0] = real( p_aiMesh->mTextureCoords[0][l_index].x );
+					l_vertex.m_tex[1] = real( p_aiMesh->mTextureCoords[0][l_index].y );
+					l_vertex.m_tex[2] = real( p_aiMesh->mTextureCoords[0][l_index].z );
+					++l_index;
 				}
-
-				l_vertices.m_pTex = tex.data();
 			}
-
-#else
-			l_vertices.m_pVtx = ( real * )p_aiMesh->mVertices;
-			l_vertices.m_pNml = ( real * )p_aiMesh->mNormals;
-			l_vertices.m_pTan = ( real * )p_aiMesh->mTangents;
-			l_vertices.m_pBin = ( real * )p_aiMesh->mBitangents;
-
-			if ( p_aiMesh->HasTextureCoords( 0 ) )
-			{
-				l_vertices.m_pTex = ( real * )p_aiMesh->mTextureCoords[0];
-			}
-
-#endif
 
 			p_submesh->AddPoints( l_vertices );
 
-			std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_aiMesh->mNumVertices );
+			std::vector< VertexBoneData > l_arrayBones( p_aiMesh->mNumVertices );
 
 			if ( p_aiMesh->HasBones() && p_skeleton )
 			{
@@ -513,11 +521,11 @@ namespace C3dAssimp
 				}
 			}
 
-			if ( !l_vertices.m_pNml )
+			if ( !p_aiMesh->mNormals )
 			{
 				p_submesh->ComputeNormals( true );
 			}
-			else if ( !l_vertices.m_pTan )
+			else if ( !p_aiMesh->mTangents )
 			{
 				p_submesh->ComputeTangentsFromNormals();
 			}
@@ -528,11 +536,11 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, TextureChannel p_channel )
 	{
 		if ( p_name.length > 0 )
 		{
-			LoadTexture( string::string_cast< xchar >( p_name.C_Str() ), p_pass, p_channel );
+			LoadTexture( Path{ string::string_cast< xchar >( p_name.C_Str() ) }, p_pass, p_channel );
 		}
 	}
 
@@ -621,32 +629,32 @@ namespace C3dAssimp
 				String l_strNorm = l_strGlob;
 				String l_strSpec = l_strGlob;
 				String l_strOpac = l_strGlob;
-				LoadTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				LoadTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), *l_pass, eTEXTURE_CHANNEL_NORMAL );
-				LoadTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				LoadTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), *l_pass, eTEXTURE_CHANNEL_OPACITY );
+				LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, *l_pass, TextureChannel::Diffuse );
+				LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, *l_pass, TextureChannel::Normal );
+				LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, *l_pass, TextureChannel::Specular );
+				LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, *l_pass, TextureChannel::Opacity );
 			}
 			else
 			{
-				DoLoadTexture( l_ambTexName, *l_pass, eTEXTURE_CHANNEL_AMBIENT );
-				DoLoadTexture( l_difTexName, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				DoLoadTexture( l_spcTexName, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				DoLoadTexture( l_emiTexName, *l_pass, eTEXTURE_CHANNEL_EMISSIVE );
-				DoLoadTexture( l_opaTexName, *l_pass, eTEXTURE_CHANNEL_OPACITY );
-				DoLoadTexture( l_shnTexName, *l_pass, eTEXTURE_CHANNEL_GLOSS );
+				DoLoadTexture( l_ambTexName, *l_pass, TextureChannel::Ambient );
+				DoLoadTexture( l_difTexName, *l_pass, TextureChannel::Diffuse );
+				DoLoadTexture( l_spcTexName, *l_pass, TextureChannel::Specular );
+				DoLoadTexture( l_emiTexName, *l_pass, TextureChannel::Emissive );
+				DoLoadTexture( l_opaTexName, *l_pass, TextureChannel::Opacity );
+				DoLoadTexture( l_shnTexName, *l_pass, TextureChannel::Gloss );
 
 				if ( l_nmlTexName.length > 0 )
 				{
-					DoLoadTexture( l_nmlTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_nmlTexName, *l_pass, TextureChannel::Normal );
 
 					//if ( l_hgtTexName.length > 0 )
 					//{
-					//	DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_HEIGHT );
+					//	DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Height );
 					//}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{
-					DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Normal );
 				}
 			}
 		}
@@ -654,7 +662,7 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
+	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
 	{
 		for ( uint32_t i = 0; i < p_count; ++i )
 		{
@@ -685,7 +693,7 @@ namespace C3dAssimp
 		}
 	}
 
-	AnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
+	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
 		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
@@ -694,17 +702,17 @@ namespace C3dAssimp
 			l_name = p_name;
 		}
 
-		AnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
+		SkeletonAnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
 		real l_ticksPerSecond = real( p_aiAnimation->mTicksPerSecond ? p_aiAnimation->mTicksPerSecond : 25.0_r );
 		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_node, p_aiAnimation, nullptr );
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
-		AnimationObjectSPtr l_object;
+		SkeletonAnimationObjectSPtr l_object;
 
 		if ( l_aiNodeAnim )
 		{
@@ -715,7 +723,7 @@ namespace C3dAssimp
 				auto l_bone = m_arrayBones[l_itBone->second];
 				l_object = p_animation->AddObject( l_bone, p_object );
 
-				if ( p_object->GetType() == eANIMATION_OBJECT_TYPE_BONE )
+				if ( p_object->GetType() == AnimationObjectType::Bone )
 				{
 					p_skeleton->SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
 				}
@@ -755,8 +763,8 @@ namespace C3dAssimp
 
 			// We process translations
 			KeyFrameRealMap l_keyframes;
-			InterpolatorT< Point3r, eINTERPOLATOR_MODE_LINEAR > l_pointInterpolator;
-			InterpolatorT< Quaternion, eINTERPOLATOR_MODE_LINEAR > l_quatInterpolator;
+			InterpolatorT< Point3r, InterpolatorType::Linear > l_pointInterpolator;
+			InterpolatorT< Quaternion, InterpolatorType::Linear > l_quatInterpolator;
 
 			for ( auto l_time : l_times )
 			{

@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type	Le type d'évènement
 		 */
-		C3D_API FrameEvent( eEVENT_TYPE p_type );
+		C3D_API explicit FrameEvent( eEVENT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

@@ -1,4 +1,4 @@
-﻿namespace Castor3D
+namespace Castor3D
 {
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 2 >
 		: public FrameVariableDataTyper< bool >
@@ -385,51 +385,6 @@
 		{
 			m_mtxValue[i].link( &this->m_values[i * Rows * Columns] );
 		}
-	}
-
-	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( MatrixFrameVariable< T, Rows, Columns > const & p_rVariable )
-		:	TFrameVariable< T >( p_rVariable )
-	{
-		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_rVariable.m_occurences];
-
-		for ( uint32_t i = 0; i < p_rVariable.m_occurences; i++ )
-		{
-			m_mtxValue[i].link( &this->m_values[i * Rows * Columns] );
-		}
-	}
-
-	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( MatrixFrameVariable< T, Rows, Columns > && p_rVariable )
-		:	TFrameVariable< T >( std::move( p_rVariable ) )
-		,	m_mtxValue( std::move( p_rVariable.m_mtxValue ) )
-	{
-		p_rVariable.m_values = nullptr;
-		p_rVariable.m_mtxValue = nullptr;
-	}
-
-	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::operator=( MatrixFrameVariable< T, Rows, Columns > const & p_rVariable )
-	{
-		MatrixFrameVariable< T, Rows, Columns > l_tmp( p_rVariable );
-		std::swap( *this, l_tmp );
-		return *this;
-	}
-
-	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::operator=( MatrixFrameVariable< T, Rows, Columns > && p_rVariable )
-	{
-		TFrameVariable< T >::operator =( std::move( p_rVariable ) );
-
-		if ( this != &p_rVariable )
-		{
-			delete [] m_mtxValue;
-			m_mtxValue	= std::move( p_rVariable.m_mtxValue );
-			p_rVariable.m_values = nullptr;
-			p_rVariable.m_mtxValue = nullptr;
-		}
-
-		return *this;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >

@@ -51,34 +51,6 @@ namespace Castor3D
 		{
 		}
 
-		IMswWindowHandle( IMswWindowHandle const & p_handle )
-			: m_hWnd( p_handle.m_hWnd )
-		{
-		}
-
-		IMswWindowHandle( IMswWindowHandle && p_handle )
-			: m_hWnd( std::move( p_handle.m_hWnd ) )
-		{
-			p_handle.m_hWnd = nullptr;
-		}
-
-		IMswWindowHandle & operator =( IMswWindowHandle const & p_handle )
-		{
-			m_hWnd = p_handle.m_hWnd;
-			return * this;
-		}
-
-		IMswWindowHandle & operator =( IMswWindowHandle && p_handle )
-		{
-			if ( this != & p_handle )
-			{
-				m_hWnd = std::move( p_handle.m_hWnd );
-				p_handle.m_hWnd = nullptr;
-			}
-
-			return * this;
-		}
-
 		virtual ~IMswWindowHandle()
 		{
 		}
@@ -110,47 +82,13 @@ namespace Castor3D
 		{
 		}
 
-		IXWindowHandle( IXWindowHandle const & p_handle )
-			: m_drawable( p_handle.m_drawable )
-			, m_display( p_handle.m_display )
-		{
-		}
-
-		IXWindowHandle( IXWindowHandle && p_handle )
-			: m_drawable( std::move( p_handle.m_drawable ) )
-			, m_display( std::move( p_handle.m_display ) )
-		{
-			p_handle.m_drawable = None;
-			p_handle.m_display = nullptr;
-		}
-
-		IXWindowHandle & operator =( IXWindowHandle const & p_handle )
-		{
-			m_drawable = p_handle.m_drawable;
-			m_display = p_handle.m_display;
-			return * this;
-		}
-
-		IXWindowHandle & operator =( IXWindowHandle && p_handle )
-		{
-			if ( this != & p_handle )
-			{
-				m_drawable = std::move( p_handle.m_drawable );
-				m_display = std::move( p_handle.m_display );
-				p_handle.m_drawable = None;
-				p_handle.m_display = nullptr;
-			}
-
-			return * this;
-		}
-
 		virtual ~IXWindowHandle()
 		{
 		}
 
 		virtual operator bool()
 		{
-			return m_drawable != None && m_display != nullptr;
+			return m_drawable != 0 && m_display != nullptr;
 		}
 
 		inline GLXDrawable GetDrawable()const

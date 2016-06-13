@@ -5,42 +5,8 @@
 namespace Castor
 {
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::BinaryLoader::BinaryLoader()
-		: Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
-	{
-	}
-
-	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::BinaryLoader::operator()( Coords< T, Count > & p_object, BinaryFile & p_file )
-	{
-		bool l_return = true;
-
-		for ( uint32_t i = 0; i < Count && l_return; ++i )
-		{
-			l_return = p_file.Read( p_object[i] ) == sizeof( T );
-		}
-
-		return l_return;
-	}
-
-	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::BinaryLoader::operator()( Coords< T, Count > const & p_object, BinaryFile & p_file )
-	{
-		bool l_return = true;
-
-		for ( uint32_t i = 0; i < Count && l_return; ++i )
-		{
-			l_return = p_file.Write( p_object[i] ) == sizeof( T );
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Coords< T, Count >::TextLoader::TextLoader()
+		: Castor::TextLoader< Coords< T, Count > >()
 	{
 	}
 
@@ -64,8 +30,16 @@ namespace Castor
 		return true;
 	}
 
+	//*************************************************************************************************
+
 	template< typename T, uint32_t Count >
-	bool Coords< T, Count >::TextLoader::operator()( Coords< T, Count > const & p_object, TextFile & p_file )
+	Coords< T, Count >::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Coords< T, Count > >( p_tabs )
+	{
+	}
+
+	template< typename T, uint32_t Count >
+	bool Coords< T, Count >::TextWriter::operator()( Coords< T, Count > const & p_object, TextFile & p_file )
 	{
 		StringStream l_streamWord;
 		l_streamWord.setf( std::ios::boolalpha );
@@ -81,7 +55,7 @@ namespace Castor
 			l_streamWord << p_object[i];
 		}
 
-		bool l_return = p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
+		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
 		return l_return;
 	}
 

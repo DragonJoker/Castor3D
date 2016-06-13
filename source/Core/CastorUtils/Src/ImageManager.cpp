@@ -16,16 +16,6 @@ namespace Castor
 		static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - nullptr " );
 	}
 
-	ImageManager::BinaryLoader::BinaryLoader()
-		: Loader< ImageManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
-	{
-	}
-
-	bool ImageManager::BinaryLoader::operator()( ImageManager & p_manager, BinaryFile & p_file )
-	{
-		return true;
-	}
-
 	//*********************************************************************************************
 
 	ImageManager::ImageManager()

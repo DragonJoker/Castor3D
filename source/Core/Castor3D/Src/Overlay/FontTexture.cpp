@@ -19,15 +19,13 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
-		// Récupération / Création de la police
-		FontManager & l_fontManager = GetEngine()->GetFontManager();
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( p_font->GetName() );
-		l_pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-		l_pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+		l_pSampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_pSampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_sampler = l_pSampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 	}
 
 	FontTexture::~FontTexture()

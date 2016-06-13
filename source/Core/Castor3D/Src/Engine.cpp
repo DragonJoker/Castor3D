@@ -56,7 +56,7 @@ namespace Castor3D
 		, m_threaded( false )
 	{
 		std::locale::global( std::locale() );
-		Image::BinaryLoader::InitialiseImageLib();
+		Image::InitialiseImageLib();
 
 		// m_listenerManager *MUST* be the first created.
 		m_listenerManager = std::make_unique< ListenerManager >( *this );
@@ -67,8 +67,6 @@ namespace Castor3D
 		m_rasteriserStateManager = std::make_unique< RasteriserStateManager >( *this );
 		m_blendStateManager = std::make_unique< BlendStateManager >( *this );
 		m_materialManager = std::make_unique< MaterialManager >( *this );
-		m_windowManager = std::make_unique< WindowManager >( *this );
-		m_meshManager = std::make_unique < MeshManager >( *this );
 		m_pluginManager = std::make_unique< PluginManager >( *this );
 		m_overlayManager = std::make_unique< OverlayManager >( *this );
 		m_sceneManager = std::make_unique< SceneManager >( *this );
@@ -97,24 +95,23 @@ namespace Castor3D
 		m_depthStencilStateManager->Clear();
 		m_rasteriserStateManager->Clear();
 		m_blendStateManager->Clear();
-		m_meshManager->Clear();
 		m_overlayManager->Clear();
-		m_fontManager.clear();
+		m_fontManager.Clear();
 		m_imageManager.clear();
 		m_sceneManager->Clear();
 		m_materialManager->Clear();
-		m_windowManager->Clear();
 		m_listenerManager->Clear();
 		m_techniqueManager->Clear();
 
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
 		{
-			RendererPluginSPtr l_plugin = m_pluginManager->GetRenderersList()[m_renderSystem->GetRendererType()];
+			auto const & l_renderers = m_pluginManager->GetRenderersList();
+			auto l_it = l_renderers.find( m_renderSystem->GetRendererType() );
 
-			if ( l_plugin )
+			if ( l_it != l_renderers.end() )
 			{
-				l_plugin->DestroyRenderSystem( m_renderSystem );
+				l_it->second->DestroyRenderSystem( m_renderSystem );
 				m_renderSystem = nullptr;
 			}
 			else
@@ -124,7 +121,7 @@ namespace Castor3D
 		}
 
 		m_pluginManager->Clear();
-		Image::BinaryLoader::CleanupImageLib();
+		Image::CleanupImageLib();
 	}
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
@@ -144,17 +141,16 @@ namespace Castor3D
 			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
 			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
 			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_windowManager->SetRenderSystem( m_renderSystem );
 			m_techniqueManager->SetRenderSystem( m_renderSystem );
 
 			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
 			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mip, InterpolationMode::Linear );
 			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
 
 			DoLoadCoreData();
 		}
@@ -208,7 +204,6 @@ namespace Castor3D
 			m_rasteriserStateManager->Cleanup();
 			m_blendStateManager->Cleanup();
 			m_samplerManager->Cleanup();
-			m_meshManager->Cleanup();
 			m_overlayManager->Cleanup();
 			m_materialManager->Cleanup();
 			m_shaderManager->Cleanup();
@@ -228,30 +223,27 @@ namespace Castor3D
 				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
-			m_windowManager->Cleanup();
 			m_techniqueManager->Cleanup();
 			m_renderLoop.reset();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();
-			m_meshManager->Clear();
 			m_shaderManager->Clear();
 			m_overlayManager->Clear();
 			m_materialManager->Clear();
 			m_sceneManager->Clear();
 			m_blendStateManager->Clear();
-			m_fontManager.clear();
+			m_fontManager.Clear();
 			m_imageManager.clear();
 			m_shaderManager->Clear();
 			m_depthStencilStateManager->Clear();
 			m_rasteriserStateManager->Clear();
 			m_blendStateManager->Clear();
-			m_windowManager->Clear();
 			m_techniqueManager->Clear();
 		}
 	}
 
-	bool Engine::LoadRenderer( eRENDERER_TYPE p_type )
+	bool Engine::LoadRenderer( String const & p_type )
 	{
 		bool l_return = false;
 		m_renderSystem = m_pluginManager->LoadRenderer( p_type );

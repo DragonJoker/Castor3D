@@ -2,9 +2,9 @@ project( PyCastor3D )
 
 link_directories( ${BOOST_LIBRARY_DIR} )
 
-set( PYC_VERSION_MAJOR 0 )
-set( PYC_VERSION_MINOR 7 )
-set( PYC_VERSION_BUILD 0 )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	9 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )

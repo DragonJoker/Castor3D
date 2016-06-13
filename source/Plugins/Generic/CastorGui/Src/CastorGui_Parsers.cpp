@@ -136,7 +136,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_DefaultFont )
 	FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 	String l_name;
 	p_params[0]->Get( l_name );
-	FontSPtr l_font = l_fontManager.get( l_name );
+	FontSPtr l_font = l_fontManager.Find( l_name );
 
 	if ( l_font )
 	{

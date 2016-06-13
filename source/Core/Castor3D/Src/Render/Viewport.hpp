@@ -19,11 +19,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_VIEWPORT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 
 #include <Angle.hpp>
 #include <PlaneEquation.hpp>
 #include <OwnedBy.hpp>
+#include <Size.hpp>
 
 namespace Castor3D
 {
@@ -98,8 +98,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Viewport
 		*/
-		class TextLoader
-			: public Castor::Loader< Viewport, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< Viewport >
 		{
 		public:
 			/**
@@ -108,7 +108,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
@@ -119,56 +119,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_viewport	Le Viewport
 			 */
-			C3D_API virtual bool operator()( Castor3D::Viewport const & p_viewport, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		15/04/2013
-		\~english
-		\brief		Viewport loader
-		\~french
-		\brief		Loader de Viewport
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Viewport >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Viewport const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Viewport & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Castor3D::Viewport const & p_viewport, Castor::TextFile & p_file )override;
 		};
 
 	private:
@@ -209,7 +160,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API Viewport( Engine & p_engine );
+		C3D_API explicit Viewport( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.

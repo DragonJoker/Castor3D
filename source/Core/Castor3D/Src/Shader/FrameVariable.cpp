@@ -1,4 +1,4 @@
-﻿#include "FrameVariable.hpp"
+#include "FrameVariable.hpp"
 
 #include "FrameVariableBuffer.hpp"
 #include "OneFrameVariable.hpp"
@@ -91,39 +91,34 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	FrameVariable::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< FrameVariable >{ p_tabs }
 	{
 	}
 
-	bool FrameVariable::TextLoader::operator()( FrameVariable const & p_variable, TextFile & p_file )
+	bool FrameVariable::TextWriter::operator()( FrameVariable const & p_variable, TextFile & p_file )
 	{
-		String l_strTabs = cuT( "\t\t\t\t" );
-		bool l_return = p_file.WriteText( l_strTabs + cuT( "variable\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "variable\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
@@ -145,52 +140,6 @@ namespace Castor3D
 		, m_strValue( m_occurences )
 		, m_program( p_program )
 	{
-	}
-
-	FrameVariable::FrameVariable( FrameVariable const & p_object )
-		: m_name( p_object.m_name )
-		, m_occurences( p_object.m_occurences )
-		, m_strValue( p_object.m_strValue )
-		, m_program( p_object.m_program )
-	{
-	}
-
-	FrameVariable::FrameVariable( FrameVariable && p_object )
-		: m_name( std::move( p_object.m_name ) )
-		, m_occurences( std::move( p_object.m_occurences ) )
-		, m_strValue( std::move( p_object.m_strValue ) )
-		, m_program( std::move( p_object.m_program ) )
-	{
-		p_object.m_name.clear();
-		p_object.m_occurences = 0;
-		p_object.m_strValue.clear();
-		p_object.m_program = nullptr;
-	}
-
-	FrameVariable & FrameVariable::operator =( FrameVariable const & p_object )
-	{
-		m_name = p_object.m_name;
-		m_occurences = p_object.m_occurences;
-		m_strValue = p_object.m_strValue;
-		m_program = p_object.m_program;
-		return *this;
-	}
-
-	FrameVariable & FrameVariable::operator =( FrameVariable && p_object )
-	{
-		if ( this != &p_object )
-		{
-			m_name = std::move( p_object.m_name );
-			m_occurences = std::move( p_object.m_occurences );
-			m_strValue = std::move( p_object.m_strValue );
-			m_program = std::move( p_object.m_program );
-			p_object.m_name.clear();
-			p_object.m_occurences = 0;
-			p_object.m_strValue.clear();
-			p_object.m_program = nullptr;
-		}
-
-		return *this;
 	}
 
 	FrameVariable::~FrameVariable()

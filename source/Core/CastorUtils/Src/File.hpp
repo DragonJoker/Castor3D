@@ -35,27 +35,6 @@ namespace Castor
 {
 	/**
 	 *\~english
-	 *\brief Convert from little or big endian to the other.
-	 *\param[in,out]	p_value	Data to be converted.
-	 *\~french
-	 *\brief Change le boutisme du paramètre
-	 *\param[in,out]	p_value	La valeur dont on veut changer le boutisme.
-	 */
-	template< class T > inline void SwitchEndianness( T & p_value )
-	{
-		T l_tTmp;
-		uint8_t * l_pToConvert = reinterpret_cast< uint8_t * >( & p_value );
-		uint8_t * l_pConverted = reinterpret_cast< uint8_t * >( & l_tTmp );
-
-		for ( std::size_t i = 0; i < sizeof( T ); ++i )
-		{
-			l_pConverted[i] = l_pToConvert[sizeof( T ) - i - 1];
-		}
-
-		p_value = l_tTmp;
-	}
-	/**
-	 *\~english
 	 *\brief		Opens a file
 	 *\param[out]	p_pFile		Receives the file descriptor
 	 *\param[in]	p_pszPath	The file path
@@ -389,7 +368,7 @@ namespace Castor
 		 *\brief		Récupère le chemin, nom et extension du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path const & GetFileFullPath()const
+		inline	Path const & GetFileFullPath()const
 		{
 			return m_strFileFullPath;
 		}
@@ -401,7 +380,7 @@ namespace Castor
 		 *\brief		Récupère le chemin du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path GetFilePath()const
+		inline Path GetFilePath()const
 		{
 			return m_strFileFullPath.GetPath();
 		}
@@ -413,9 +392,9 @@ namespace Castor
 		 *\brief		Récupère le nom et l'extension du fichier
 		 *\return		La valeur
 		*/
-		inline 	Path GetFileName()const
+		inline Path GetFileName()const
 		{
-			return m_strFileFullPath.GetFullFileName();
+			return Path{ m_strFileFullPath.GetFullFileName() };
 		}
 
 	protected:
@@ -425,19 +404,17 @@ namespace Castor
 
 	protected:
 		//!\~english The opening mode	\~french Le mode d'ouverture
-		int m_iMode;
+		int m_iMode{ 0 };
 		//!\~english The encoding mode	\~french Le mode d'encodage
-		eENCODING_MODE m_eEncoding;
+		eENCODING_MODE m_eEncoding{ eENCODING_MODE_ASCII };
 		//!\~english The full file path	\~french Le chemin d'accès au fichier
 		Path m_strFileFullPath;
 		//!\~english The file	\~french Le fichier
-		FILE * m_pFile;
-		//!\~english Tells the FILE is owned by this instance	\~french Dit si le fichier est géré par cette instance
-		bool m_bOwnFile;
+		FILE * m_pFile{ nullptr };
 		//!\~english The current cursor position in file	\~french La position actuelle du curseur dans le fichier
-		unsigned long long m_ullCursor;
+		unsigned long long m_ullCursor{ 0 };
 		//!\~english The total file length	\~french La taille totale du fichier
-		unsigned long long m_ullLength;
+		unsigned long long m_ullLength{ 0 };
 	};
 }
 

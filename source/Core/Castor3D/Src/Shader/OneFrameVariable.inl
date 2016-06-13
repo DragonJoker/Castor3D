@@ -1,4 +1,4 @@
-﻿namespace Castor3D
+namespace Castor3D
 {
 	namespace
 	{
@@ -66,38 +66,6 @@
 	{
 		this->m_values = new T[p_occurences];
 		memset( this->m_values, 0, size() );
-	}
-
-	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( OneFrameVariable< T > const & p_rVariable )
-		:	TFrameVariable< T >( p_rVariable )
-	{
-	}
-
-	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( OneFrameVariable< T > && p_rVariable )
-		:	TFrameVariable< T >( std::move( p_rVariable ) )
-	{
-	}
-
-	template< typename T >
-	OneFrameVariable< T > & OneFrameVariable< T >::operator=( OneFrameVariable< T > const & p_rVariable )
-	{
-		OneFrameVariable< T > l_tmp( p_rVariable );
-		std::swap( *this, l_tmp );
-		return *this;
-	}
-
-	template< typename T >
-	OneFrameVariable< T > & OneFrameVariable< T >::operator=( OneFrameVariable< T > && p_rVariable )
-	{
-		TFrameVariable< T >::operator =( std::move( p_rVariable ) );
-
-		if ( this = &p_rVariable )
-		{
-		}
-
-		return *this;
 	}
 
 	template< typename T >

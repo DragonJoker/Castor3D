@@ -31,55 +31,14 @@ namespace Castor3D
 		}
 	}
 
-	ShaderProgram::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< ShaderProgram >( p_path )
-	{
-	}
-
-	bool ShaderProgram::BinaryParser::Fill( ShaderProgram const & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
-
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; ++i )
-		{
-			ShaderObjectSPtr l_obj = p_object.m_pShaders[i];
-
-			if ( l_obj )
-			{
-				BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_OBJECT );
-				l_return = DoFillChunk( eSHADER_TYPE( i ), eCHUNK_TYPE_SHADER_OBJECT_TYPE, l_chunk );
-
-				if ( l_return )
-				{
-					l_return = ShaderObject::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
-				}
-
-				if ( l_return )
-				{
-					l_chunk.Finalise();
-					p_chunk.AddSubChunk( l_chunk );
-				}
-			}
-		}
-
-		return l_return;
-	}
-
-	bool ShaderProgram::BinaryParser::Parse( ShaderProgram & p_object, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		return l_return;
-	}
-
 	//*************************************************************************************************
 
-	ShaderProgram::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderProgram, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderProgram::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< ShaderProgram >{ p_tabs }
 	{
 	}
 
-	bool ShaderProgram::TextLoader::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
+	bool ShaderProgram::TextWriter::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
 	{
 		bool l_return = false;
 		bool l_hasFile = false;
@@ -99,24 +58,9 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			String l_strTabs = cuT( "\t\t" );
 			ShaderObjectSPtr l_object;
-
-			switch ( p_shaderProgram.GetLanguage() )
-			{
-			case eSHADER_LANGUAGE_GLSL:
-				l_return = p_file.WriteText( l_strTabs + cuT( "gl_shader_program\n" ) ) > 0;
-				break;
-
-			default:
-				l_return = false;
-				break;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
-			}
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
 			{
@@ -124,13 +68,13 @@ namespace Castor3D
 
 				if ( l_object )
 				{
-					l_return = ShaderObject::TextLoader()( *l_object, p_file );
+					l_return = ShaderObject::TextWriter( m_tabs + cuT( "\t" ) )( *l_object, p_file );
 				}
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 		else
@@ -193,10 +137,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_langage )
+	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_status( ePROGRAM_STATUS_NOTLINKED )
-		, m_eLanguage( p_langage )
 	{
 	}
 
@@ -215,7 +158,7 @@ namespace Castor3D
 			m_pShaders[p_type] = l_return;
 			int i = eSHADER_MODEL_1;
 
-			for ( auto && l_file : m_arrayFiles )
+			for ( auto & l_file : m_arrayFiles )
 			{
 				if ( !l_file.empty() )
 				{
@@ -244,7 +187,7 @@ namespace Castor3D
 
 		m_frameVariableBuffersByName.clear();
 
-		for ( auto && l_list : m_frameVariableBuffers )
+		for ( auto & l_list : m_frameVariableBuffers )
 		{
 			l_list.clear();
 		}
@@ -260,7 +203,7 @@ namespace Castor3D
 		m_arrayFiles[p_eModel] = p_path;
 		int i = eSHADER_TYPE_VERTEX;
 
-		for ( auto && l_shader : m_pShaders )
+		for ( auto l_shader : m_pShaders )
 		{
 			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( eSHADER_TYPE( i++ ) ) )
 			{
@@ -527,7 +470,7 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( auto && l_buffer : m_listFrameVariableBuffers )
+				for ( auto l_buffer : m_listFrameVariableBuffers )
 				{
 					l_buffer->Initialise( *this );
 				}
@@ -543,7 +486,7 @@ namespace Castor3D
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
-			for ( auto && l_shader : m_activeShaders )
+			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Bind();
 			}
@@ -571,7 +514,7 @@ namespace Castor3D
 				l_variableBuffer->Unbind( l_index++ );
 			}
 
-			for ( auto && l_shader : m_activeShaders )
+			for ( auto l_shader : m_activeShaders )
 			{
 				l_shader->Unbind();
 			}
@@ -584,9 +527,9 @@ namespace Castor3D
 		{
 			if ( m_status != ePROGRAM_STATUS_LINKED )
 			{
-				for ( auto && l_shader : m_activeShaders )
+				for ( auto l_shader : m_activeShaders )
 				{
-					for ( auto && l_it : l_shader->GetFrameVariables() )
+					for ( auto l_it : l_shader->GetFrameVariables() )
 					{
 						l_it->Initialise();
 					}

@@ -23,6 +23,22 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 {
 	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		24/05/2016
+	\~english
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\remarks	Specialisation for eFILE_TYPE_BINARY.
+	\~french
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	\remarks	Spécialisation pour eFILE_TYPE_BINARY.
+	*/
+	template<>
+	struct FileTyper< eFILE_TYPE_BINARY >
+	{
+		using FileType = BinaryFile;
+	};
+	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
 	\date 03/01/2011

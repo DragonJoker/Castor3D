@@ -50,18 +50,18 @@ namespace Castor3D
 	\brief		Gestionnaire de maillages.
 	*/
 	class MeshManager
-		: public ResourceManager< Castor::String, Mesh >
+		: public ResourceManager< Castor::String, Mesh, Scene >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_scene	The scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_scene	La scène.
 		 */
-		C3D_API MeshManager( Engine & p_engine );
+		C3D_API MeshManager( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -120,28 +120,6 @@ namespace Castor3D
 		 *\return		Le mesh créé
 		 */
 		C3D_API MeshSPtr Create( Castor::String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
-		/**
-		 *\~english
-		 *\brief		Saves in a file all currently loaded meshes
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Enregistre tous les meshes chargés dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Save( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		Loads all meshes contained in the given file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Charge tous les meshes contenus dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Load( Castor::BinaryFile & p_file );
 
 	private:
 		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator

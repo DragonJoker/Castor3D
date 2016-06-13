@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -46,10 +46,17 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Geometry
 		*/
-		class TextLoader
-			: public MovableObject::TextLoader
+		class TextWriter
+			: public Castor::TextWriter< Geometry >
 		{
 		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a geometry into a text file
@@ -60,55 +67,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_geometry	La géométrie
 			 */
-			C3D_API virtual bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		MovableObject loader
-		\~english
-		\brief		Loader de MovableObject
-		*/
-		class BinaryParser
-			: public MovableObject::BinaryParser
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Geometry const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Geometry & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -247,30 +206,6 @@ namespace Castor3D
 		{
 			m_visible = p_visible;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animated skeleton instance
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'instance animée du squelette
-		 *\return		La valeur
-		 */
-		inline AnimatedObjectSPtr const & GetAnimatedObject()const
-		{
-			return m_animatedObject;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animated skeleton instance
-		 *\param[in]	p_object	The new value
-		 *\~french
-		 *\brief		Définit l'instance animée du squelette
-		 *\param[in]	p_object	La nouvelle valeur
-		 */
-		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
-		{
-			m_animatedObject = p_object;
-		}
 
 	protected:
 		//!\~english The mesh	\~french Le maillage
@@ -283,8 +218,6 @@ namespace Castor3D
 		bool m_listCreated;
 		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
 		bool m_visible;
-		//!\~english The animated object instance, if any	\~french L'instance d'objet animé, s'il y en a un
-		AnimatedObjectSPtr m_animatedObject;
 		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
 		std::map< SubmeshSPtr, MaterialSPtr > m_submeshesMaterials;
 	};

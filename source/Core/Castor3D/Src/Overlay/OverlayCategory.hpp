@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OVERLAY_CATEGORY_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
+
+#include <Position.hpp>
+#include <Size.hpp>
 
 namespace Castor3D
 {
@@ -60,8 +62,8 @@ namespace Castor3D
 		\brief		OverlayCategory loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class TextLoader
-			: public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< OverlayCategory >
 		{
 		public:
 			/**
@@ -70,68 +72,34 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
-			 *\brief		Saves an overlay into a text file
-			 *\param[in]	p_file		the file to save the overlay in
-			 *\param[in]	p_overlay	the overlay to save
-			 *\return		\p true if everything is OK
+			 *\brief		Saves an overlay into a text file.
+			 *\param[in]	p_file		the file to save the overlay in.
+			 *\param[in]	p_overlay	the overlay to save.
+			 *\return		\p true if everything is OK.
 			 *\~french
-			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
-			 *\return		\p true si tout s'est bien passé
+			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte.
+			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation.
+			 *\param[in]	p_overlay	L'incrustation à enregistrer.
+			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API virtual bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		OverlayCategory loader
-		\~english
-		\brief		Loader de OverlayCategory
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< OverlayCategory >
-		{
-		public:
+			C3D_API bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file )override;
 			/**
 			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
+			 *\brief		Writes a OverlayCategory into a text file.
+			 *\param[in]	p_file	The file.
+			 *\return		\p true if everything is OK.
 			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\brief		Ecrit une OverlayCategory dans un fichier texte.
+			 *\param[in]	p_file	Le fichier.
+			 *\return		\p true si tout s'est bien passé.
 			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( OverlayCategory const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( OverlayCategory & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool WriteInto( Castor::TextFile & p_file )
+			{
+				return false;
+			}
 		};
 
 	public:
@@ -143,7 +111,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API OverlayCategory( eOVERLAY_TYPE p_type );
+		C3D_API explicit OverlayCategory( eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -151,6 +119,19 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~OverlayCategory();
+		/**
+		 *\~english
+		 *\brief		Creates an OverlayCategory specific TextLoader.
+		 *\param[in]	p_tabs			The current indentation level.
+		 *\param[in]	p_encodingMode	The file encoding mode.
+		 *\return		The TextLoader.
+		 *\~french
+		 *\brief		Crée un OverlayCategory spécifique à la LightCategory.
+		 *\param[in]	p_tabs			Le niveau d'intentation actuel.
+		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier.
+		 *\return		Le TextLoader.
+		 */
+		C3D_API virtual std::unique_ptr< TextWriter > CreateTextWriter( Castor::String const & p_tabs ) = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the overlay position, size...
@@ -593,7 +574,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The overlay	\~french L'incrustation
-		Overlay * m_pOverlay;
+		Overlay * m_pOverlay{ nullptr };
 		//!\~english The relative position (to parent or screen)	\~french La position relative (au parent ou à l'écran)
 		Castor::Point2d m_position;
 		//!\~english The relative size (to parent or screen)	\~french La taille relative (à l'écran ou au parent)
@@ -603,23 +584,23 @@ namespace Castor3D
 		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
 		Castor::Size m_size;
 		//!\~english The visibility	\~french La visibilité
-		bool m_visible;
+		bool m_visible{ true };
 		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
 		MaterialWPtr m_pMaterial;
 		//!\~english The overlay index	\~french L'index de l'overlay
-		int m_index;
+		int m_index{ 0 };
 		//!\~english The overlay level	\~french Le niveau de l'overlay
-		int m_level;
+		int m_level{ 0 };
 		//!\~english The material name	\~french Le nom du matériau
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
 		eOVERLAY_TYPE m_type;
 		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
-		bool m_sizeChanged;
+		bool m_sizeChanged{ true };
 		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.
-		bool m_positionChanged;
+		bool m_positionChanged{ true };
 		//!\~english The UV for the panel	\~french Les UV du panneau
-		Castor::Point4d m_uv;
+		Castor::Point4d m_uv{ 0.0, 0.0, 1.0, 1.0 };
 	};
 }
 

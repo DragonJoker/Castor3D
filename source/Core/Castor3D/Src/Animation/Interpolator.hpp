@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -76,7 +76,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
 	*/
-	template< class Type, eINTERPOLATOR_MODE Mode > class InterpolatorT;
+	template< class Type, InterpolatorType Mode > class InterpolatorT;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -87,7 +87,7 @@ namespace Castor3D
 	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
 	*/
 	template< class Type >
-	class InterpolatorT< Type, eINTERPOLATOR_MODE_NONE >
+	class InterpolatorT< Type, InterpolatorType::Nearest >
 		: public Interpolator< Type >
 	{
 	public:
@@ -132,7 +132,7 @@ namespace Castor3D
 	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
 	*/
 	template< class Type >
-	class InterpolatorT< Type, eINTERPOLATOR_MODE_LINEAR >
+	class InterpolatorT< Type, InterpolatorType::Linear >
 		: public Interpolator< Type >
 	{
 	public:
@@ -196,7 +196,7 @@ namespace Castor3D
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
 	template<>
-	class InterpolatorT< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
+	class InterpolatorT< Castor::Quaternion, InterpolatorType::Linear >
 		: public Interpolator< Castor::Quaternion >
 	{
 	public:

@@ -51,7 +51,7 @@ SceneSPtr Md2Importer::DoImportScene()
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -77,7 +77,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName = m_fileName.GetFileName();
 	l_materialName = m_fileName.GetFileName();
-	l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -101,7 +101,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 		DoReadMD2Data( l_pass );
 		DoConvertDataStructures( l_mesh );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}
@@ -131,11 +131,11 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 
 		for ( int i = 0; i < m_header.m_numSkins && !l_pTexture; i++ )
 		{
-			String l_strValue = string::string_cast< xchar >( m_skins[i] );
+			Path l_strValue{ string::string_cast< xchar >( m_skins[i] ) };
 
 			if ( p_pPass && !l_strValue.empty() )
 			{
-				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, TextureChannel::Diffuse );
 
 				if ( l_pTexture )
 				{
@@ -190,7 +190,7 @@ void Md2Importer::DoConvertDataStructures( MeshSPtr p_pMesh )
 {
 	SubmeshSPtr l_pSubmesh = p_pMesh->CreateSubmesh();
 	std::vector< float > l_arrayNml( m_header.m_numTriangles * 9 );
-	std::vector< stFACE_INDICES > l_arrayFaces( m_header.m_numTriangles );
+	std::vector< FaceIndices > l_arrayFaces( m_header.m_numTriangles );
 	BufferElementGroupSPtr l_pVertex;
 
 	if ( m_header.m_numFrames > 0 )

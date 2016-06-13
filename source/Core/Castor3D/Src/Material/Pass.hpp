@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PASS_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -50,8 +49,8 @@ namespace Castor3D
 		\~french
 		\brief Loader de Pass
 		*/
-		class TextLoader
-			: public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< Pass >
 		{
 		public:
 			/**
@@ -60,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -71,56 +70,7 @@ namespace Castor3D
 			 *\param[in]		p_pass	La passe à écrire
 			 *\param[in,out]	p_file	Le file où écrire la passe
 			 */
-			C3D_API virtual bool operator()( Pass const & p_pass, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		15/04/2013
-		\~english
-		\brief		Pass loader
-		\~french
-		\brief		Loader de Pass
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Pass >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_pathFile	The current path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_pathFile	Le chemin courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_pathFile );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Pass const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Pass & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Pass const & p_pass, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -220,7 +170,7 @@ namespace Castor3D
 		 *\param[in]	p_channel	Le canal
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_channel );
+		C3D_API TextureUnitSPtr GetTextureUnit( TextureChannel p_channel );
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
@@ -243,17 +193,6 @@ namespace Castor3D
 		 *\return		La TextureUnit récupérée, nullptr si p_index était hors bornes
 		 */
 		C3D_API TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the image path of the TextureUnit at the given index
-		 *\param[in]	p_index	The index of the TextureUnit we want the image path
-		 *\return		The path, void if none
-		 *\~french
-		 *\brief		Récupère le chemin de l'image de la TextureUnit à l'index donné
-		 *\param[in]	p_index	L'index voulu
-		 *\return		Le chemin, vide si aucun
-		 */
-		C3D_API Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending
@@ -408,7 +347,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de mélange alpha
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
+		inline void SetAlphaBlendMode( BlendMode p_value )
 		{
 			m_alphaBlendMode = p_value;
 		}
@@ -420,7 +359,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de mélange couleur
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetColourBlendMode( eBLEND_MODE p_value )
+		inline void SetColourBlendMode( BlendMode p_value )
 		{
 			m_colourBlendMode = p_value;
 		}
@@ -503,7 +442,7 @@ namespace Castor3D
 		 *\brief		Récupère le mode de mélange alpha
 		 *\return		La valeur
 		 */
-		inline eBLEND_MODE GetAlphaBlendMode()const
+		inline BlendMode GetAlphaBlendMode()const
 		{
 			return m_alphaBlendMode;
 		}
@@ -515,7 +454,7 @@ namespace Castor3D
 		 *\brief		Récupère le mode de mélange couleur
 		 *\return		La valeur
 		 */
-		inline eBLEND_MODE GetColourBlendMode()const
+		inline BlendMode GetColourBlendMode()const
 		{
 			return m_colourBlendMode;
 		}
@@ -623,7 +562,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()const
+		inline auto begin()const
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -635,7 +574,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) begin()
+		inline auto begin()
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -647,7 +586,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()const
+		inline auto end()const
 		{
 			return m_arrayTextureUnits.end();
 		}
@@ -659,7 +598,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline decltype( auto ) end()
+		inline auto end()
 		{
 			return m_arrayTextureUnits.end();
 		}
@@ -679,7 +618,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, RenderNode & p_node );
+		C3D_API void DoGetTexture( TextureChannel p_channel, Castor::String const & p_name, RenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
@@ -721,7 +660,7 @@ namespace Castor3D
 		 *\param[in,out]p_opacity		Reçoit le canal alpha de la texture
 		 *\return		\p true Si la texture possédait un canal alpha
 		 */
-		C3D_API bool DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
+		C3D_API bool DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -738,7 +677,7 @@ namespace Castor3D
 		 *\param[in,out]p_index			L'index de la texture
 		 *\return		Le canal alpha de la texture originale.
 		 */
-		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
+		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -763,7 +702,7 @@ namespace Castor3D
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneIntFrameVariableWPtr > UnitVariablePair;
-		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
+		DECLARE_MAP( TextureChannel, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
@@ -787,14 +726,14 @@ namespace Castor3D
 		UnitVariableChannelMap m_mapUnits;
 		//!\~english Blend states	\~french Etats de blend
 		BlendStateSPtr m_pBlendState;
-		//!\~english Bitwise ORed eTEXTURE_CHANNEL	\~french Combinaison des eTEXTURE_CHANNEL affectés à une texture pour cette passe
+		//!\~english Bitwise ORed TextureChannel	\~french Combinaison des TextureChannel affectés à une texture pour cette passe
 		uint32_t m_textureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
 		//!\~english The alpha blend mode \~french Le mode de mélange alpha
-		eBLEND_MODE m_alphaBlendMode;
+		BlendMode m_alphaBlendMode;
 		//!\~english The colour blend mode \~french Le mode de mélange couleur
-		eBLEND_MODE m_colourBlendMode;
+		BlendMode m_colourBlendMode;
 		//!\~english Tells if the pass' textures are reduced. \~french Dit si les textures de la passe sont réduites.
 		bool m_texturesReduced;
 	};

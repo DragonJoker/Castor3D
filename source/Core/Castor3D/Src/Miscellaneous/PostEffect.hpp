@@ -37,6 +37,7 @@ namespace Castor3D
 	*/
 	class PostEffect
 		: public Castor::OwnedBy< RenderSystem >
+		, public Castor::Named
 	{
 	public:
 		/**
@@ -51,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		C3D_API PostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
+		C3D_API PostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Castor::String const & p_name, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -59,6 +60,15 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~PostEffect();
+		/**
+		 *\~english
+		 *\brief		Writes the effect into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit l'effet dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API bool WriteInto( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
@@ -86,6 +96,17 @@ namespace Castor3D
 		 *\return			\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Writes the effect into a text file.
+		 *\param[in]	p_file	The file.
+		 *\~french
+		 *\brief		Ecrit l'effet dans un fichier texte.
+		 *\param[in]	p_file	Le fichier.
+		 */
+		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
 		//!\~english The render target to which this effect is attached.	\~french La cible de rendu à laquelle est attachée cet effet.

@@ -16,16 +16,6 @@ namespace Castor
 		static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - nullptr " );
 	}
 
-	FontManager::BinaryLoader::BinaryLoader()
-		: Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
-	{
-	}
-
-	bool FontManager::BinaryLoader::operator()( FontManager & p_manager, BinaryFile & p_file )
-	{
-		return true;
-	}
-
 	//*********************************************************************************************
 
 	FontManager::FontManager()
@@ -36,7 +26,7 @@ namespace Castor
 	{
 	}
 
-	FontSPtr FontManager::create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height )
+	FontSPtr FontManager::Create( String const & p_name, uint32_t p_height, Path const & p_path )
 	{
 		auto l_lock = make_unique_lock( *this );
 		FontSPtr l_return;
@@ -44,7 +34,7 @@ namespace Castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			l_return = Collection< Font, String >::find( p_name );
-			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
+			Logger::LogWarning( StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
@@ -52,8 +42,8 @@ namespace Castor
 
 			if ( File::FileExists( p_path ) )
 			{
-				l_return = std::make_shared< Font >( p_path, p_name, p_height );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << cuT( "Font: " ) << p_name );
+				l_return = std::make_shared< Font >( p_name, p_height, p_path );
+				Logger::LogInfo( StringStream() << INFO_MANAGER_CREATED_OBJECT << cuT( "Font: " ) << p_name );
 				Collection< Font, String >::insert( p_name, l_return );
 
 				if ( m_paths.find( l_name ) == m_paths.end() )
@@ -67,7 +57,7 @@ namespace Castor
 
 				if ( l_it != m_paths.end() )
 				{
-					l_return = std::make_shared< Font >( l_it->second, p_name, p_height );
+					l_return = std::make_shared< Font >( p_name, p_height, l_it->second );
 					Collection< Font, String >::insert( p_name, l_return );
 				}
 				else
@@ -80,12 +70,17 @@ namespace Castor
 		return l_return;
 	}
 
-	FontSPtr FontManager::get( Castor::String const & p_name )
+	FontSPtr FontManager::Find( String const & p_name )
 	{
 		return Collection< Font, String >::find( p_name );
 	}
 
-	void FontManager::clear()
+	void FontManager::Remove( String const & p_name )
+	{
+		Collection< Font, String >::erase( p_name );
+	}
+
+	void FontManager::Clear()
 	{
 		Collection< Font, String >::lock();
 		Collection< Font, String >::clear();

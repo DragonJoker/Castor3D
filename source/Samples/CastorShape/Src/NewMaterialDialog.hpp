@@ -55,7 +55,7 @@ namespace CastorShape
 		bool OnEditShader( wxPGProperty * p_property );
 		void OnTextureChange( Castor::String const & p_value );
 		// Texture properties
-		void OnChannelChange( Castor3D::eTEXTURE_CHANNEL p_value );
+		void OnChannelChange( Castor3D::TextureChannel p_value );
 		void OnImageChange( Castor::String const & p_value );
 
 		DECLARE_EVENT_TABLE()

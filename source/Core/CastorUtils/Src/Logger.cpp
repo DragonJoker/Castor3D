@@ -136,8 +136,6 @@ namespace Castor
 	};
 
 	Logger * Logger::m_singleton = nullptr;
-	bool Logger::m_ownInstance = true;
-	uint32_t Logger::m_counter = 0;
 
 	Logger::Logger()
 		: m_impl( nullptr )
@@ -166,55 +164,20 @@ namespace Castor
 		delete m_wcout;
 		delete m_wcerr;
 		delete m_wclog;
-
-		if ( m_ownInstance )
-		{
-			m_impl->Cleanup();
-			delete m_impl;
-			m_impl = nullptr;
-		}
-	}
-
-	void Logger::Initialise( Logger * p_pLogger )
-	{
-		m_counter++;
-#if defined( _WIN32 )
-
-		if ( m_singleton )
-		{
-			m_counter--;
-			Logger::LogWarning( ERROR_LOGGER_ALREADY_INITIALISED );
-		}
-		else
-		{
-			m_ownInstance = false;
-			Logger & l_logger = GetSingleton();
-			delete l_logger.m_impl;
-			l_logger.m_impl = p_pLogger->m_impl;
-
-			for ( int i = 0; i < ELogType_COUNT; i++ )
-			{
-				l_logger.m_headers[i] = p_pLogger->m_headers[i];
-			}
-
-			l_logger.m_logLevel = p_pLogger->m_logLevel;
-			l_logger.DoInitialiseThread();
-		}
-
-#endif
+		m_impl->Cleanup();
+		delete m_impl;
+		m_impl = nullptr;
 	}
 
 	void Logger::Initialise( ELogType p_eLogLevel )
 	{
-		m_counter++;
-
 		if ( m_singleton )
 		{
 			CASTOR_EXCEPTION( ERROR_LOGGER_ALREADY_INITIALISED );
 		}
 		else
 		{
-			m_ownInstance = true;
+			m_singleton = new Logger();
 			Logger & l_logger = GetSingleton();
 			delete l_logger.m_impl;
 			l_logger.m_impl = new LoggerImpl;
@@ -226,11 +189,9 @@ namespace Castor
 
 	void Logger::Cleanup()
 	{
-		GetSingleton().DoCleanupThread();
-
-		if ( m_counter > 0 )
+		if ( m_singleton )
 		{
-			m_counter--;
+			m_singleton->DoCleanupThread();
 			delete m_singleton;
 			m_singleton = nullptr;
 		}
@@ -355,7 +316,7 @@ namespace Castor
 	{
 		if ( !m_singleton )
 		{
-			m_singleton = new Logger();
+			CASTOR_EXCEPTION( cuT( "No Logger initialised." ) );
 		}
 
 		return *m_singleton;

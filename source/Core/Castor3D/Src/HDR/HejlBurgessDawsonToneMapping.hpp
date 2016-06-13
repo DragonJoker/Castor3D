@@ -80,6 +80,13 @@ namespace Castor3D
 		 *\copydoc		Castor3D::ToneMapping::DoUpdate
 		 */
 		C3D_API virtual void DoUpdate();
+		/**
+		 *\copydoc		Castor3D::ToneMapping::DoWriteInto
+		 */
+		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file );
+
+	public:
+		static Castor::String Name;
 	};
 }
 

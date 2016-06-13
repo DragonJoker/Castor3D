@@ -133,15 +133,6 @@ namespace Castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Initialises this Logger instance to another one
-		 *\param[in]	p_pLogger	The logger
-		 *\~french
-		 *\brief		Initialise l'instance de ce Logger à une autre
-		 *\param[in]	p_pLogger	Le logger
-		 */
-		CU_API static void Initialise( Logger * p_pLogger );
-		/**
-		 *\~english
 		 *\brief		Initialises this logger instance level
 		 *\param[in]	p_eLogLevel		The log level
 		 *\~french
@@ -363,12 +354,8 @@ namespace Castor
 	private:
 		friend class LoggerImpl;
 
-		//! Tells if the logger owns its instance or not
-		static bool m_ownInstance;
 		//! The logger
 		static Logger * m_singleton;
-		//! The instances count
-		static uint32_t m_counter;
 		//! The streambuf used to log info messages
 		std::streambuf * m_cout;
 		//! The streambuf used to log error messages

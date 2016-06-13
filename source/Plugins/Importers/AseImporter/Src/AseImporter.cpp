@@ -29,12 +29,12 @@ namespace Ase
 		m_pFileParser->ParseFile( m_fileName );
 		MeshSPtr l_mesh;
 
-		for ( auto && l_it : m_geometries )
+		for ( auto l_it : m_geometries )
 		{
 			l_mesh = l_it.second->GetMesh();
 			l_mesh->ComputeContainers();
 
-			for ( auto && l_submesh : *l_mesh )
+			for ( auto l_submesh : *l_mesh )
 			{
 				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}

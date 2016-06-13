@@ -2,6 +2,8 @@
 
 namespace Castor
 {
+	//*************************************************************************************************
+
 	namespace
 	{
 		template< typename T >
@@ -10,6 +12,79 @@ namespace Castor
 			return p_a + ( p_f * ( p_b - p_a ) );
 		}
 	}
+
+	//*************************************************************************************************
+
+	template< typename T >
+	QuaternionT< T >::TextLoader::TextLoader()
+		: Castor::TextLoader< QuaternionT< T > >()
+	{
+	}
+
+	template< typename T >
+	bool QuaternionT< T >::TextLoader::operator()( QuaternionT< T > & p_object, TextFile & p_file )
+	{
+		String l_strWord;
+		Point3< T > l_axis;
+		Angle l_angle;
+
+		for ( uint32_t i = 0; i < 3; ++i )
+		{
+			if ( p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+			{
+				StringStream l_streamWord( l_strWord );
+				l_streamWord >> l_axis[i];
+			}
+
+			xchar l_cDump;
+			p_file.ReadChar( l_cDump );
+		}
+
+		if ( p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t" ) ) > 0 )
+		{
+			real l_degrees;
+			StringStream l_streamWord( l_strWord );
+			l_streamWord >> l_degrees;
+			l_angle.degrees( l_degrees );
+		}
+
+		p_object.from_axis_angle( l_axis, l_angle );
+		return true;
+	}
+
+	//*************************************************************************************************
+
+	template< typename T >
+	QuaternionT< T >::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< QuaternionT< T > >( p_tabs )
+	{
+	}
+
+
+	template< typename T >
+	bool QuaternionT< T >::TextWriter::operator()( QuaternionT< T > const & p_object, TextFile & p_file )
+	{
+		StringStream l_streamWord;
+		Point3< T > l_axis;
+		Angle l_angle;
+		p_object.to_axis_angle( l_axis, l_angle );
+
+		for ( uint32_t i = 0; i < 3; ++i )
+		{
+			if ( !l_streamWord.str().empty() )
+			{
+				l_streamWord << cuT( " " );
+			}
+
+			l_streamWord << l_axis[i];
+		}
+
+		l_streamWord << cuT( " " ) << l_angle.degrees();
+		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		return l_return;
+	}
+
+	//*************************************************************************************************
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( NoInit const & )

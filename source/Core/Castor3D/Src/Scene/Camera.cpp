@@ -16,91 +16,35 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool Camera::TextLoader::operator()( Camera const & p_camera, TextFile & p_file )
+	Camera::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Camera >{ p_tabs }
 	{
-		bool l_return = p_file.WriteText( cuT( "\tcamera \"" ) + p_camera.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+	}
+
+	bool Camera::TextWriter::operator()( Camera const & p_camera, TextFile & p_file )
+	{
+		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader()( p_camera, p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( p_camera, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = Viewport::TextLoader()( p_camera.GetViewport(), p_file );
+			l_return = Viewport::TextWriter( m_tabs + cuT( "\t" ) )( p_camera.GetViewport(), p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
 	}
 
-	//*************************************************************************************************
-
-	Camera::BinaryParser::BinaryParser( Path const & p_path )
-		:	MovableObject::BinaryParser( p_path )
-	{
-	}
-
-	bool Camera::BinaryParser::Fill( Camera const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_CAMERA );
-
-		if ( l_return )
-		{
-			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = Viewport::BinaryParser( m_path ).Fill( p_obj.GetViewport(), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Camera::BinaryParser::Parse( Camera & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_VIEWPORT:
-					l_return = Viewport::BinaryParser( m_path ).Parse( p_obj.GetViewport(), l_chunk );
-					break;
-
-				default:
-					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
-	}
 	//*************************************************************************************************
 
 	namespace

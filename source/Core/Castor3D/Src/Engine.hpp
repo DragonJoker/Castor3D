@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool LoadRenderer( eRENDERER_TYPE p_type );
+		C3D_API bool LoadRenderer( Castor::String const & p_type );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -459,20 +459,16 @@ namespace Castor3D
 		DECLARE_MANAGER_MEMBER( blendState, BlendState );
 		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
 		DECLARE_MANAGER_MEMBER( material, Material );
-		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
-		DECLARE_MANAGER_MEMBER( window, Window );
-		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
-		DECLARE_MANAGER_MEMBER( mesh, Mesh );
 		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
 		DECLARE_MANAGER_MEMBER( plugin, Plugin );
 		//!\~english The overlays collection.	\~french La collection d'overlays.
 		DECLARE_MANAGER_MEMBER( overlay, Overlay );
 		//!\~english The scenes collection.	\~french La collection de scènes.
 		DECLARE_MANAGER_MEMBER( scene, Scene );
-		//!\~english The render targets map.	\~french La map des cibles de rendu.
-		DECLARE_MANAGER_MEMBER( target, Target );
 		//!\~english The frame listeners array	\~french Le tableau de frame listeners
 		DECLARE_MANAGER_MEMBER( listener, Listener );
+		//!\~english The render targets map.	\~french La map des cibles de rendu.
+		DECLARE_MANAGER_MEMBER( target, Target );
 		//!\~english The render technique manager	\~french Le gestionnaire de techniques de rendu.
 		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
 		//!\~english The fonts collection	\~french La collection de polices

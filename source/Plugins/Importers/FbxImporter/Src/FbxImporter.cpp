@@ -1,5 +1,9 @@
 #include "FbxImporter.hpp"
 
+#if defined( VLD_AVAILABLE )
+#	include <vld.h>
+#endif
+
 #include <GeometryManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
@@ -8,12 +12,12 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 
-#include <Animation/AnimationObject.hpp>
-#include <Animation/Bone.hpp>
-#include <Animation/SkeletonAnimationBone.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Plugin/ImporterPlugin.hpp>
 #include <Manager/ManagerView.hpp>
+#include <Mesh/Skeleton/Bone.hpp>
+#include <Plugin/ImporterPlugin.hpp>
 
 #include <Logger.hpp>
 
@@ -221,7 +225,7 @@ namespace C3dFbx
 			return l_return;
 		}
 
-		inline stFACE_INDICES DoGetFace( FbxMesh * p_fbxMesh, uint32_t p_poly, uint32_t a, uint32_t b, uint32_t c )
+		inline FaceIndices DoGetFace( FbxMesh * p_fbxMesh, uint32_t p_poly, uint32_t a, uint32_t b, uint32_t c )
 		{
 			auto l_a = DoGetIndex( p_fbxMesh, p_poly, a );
 			auto l_b = DoGetIndex( p_fbxMesh, p_poly, b );
@@ -419,13 +423,13 @@ namespace C3dFbx
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( p_scene.GetMeshView().Has( l_meshName ) )
+		if ( p_scene.GetMeshManager().Has( l_meshName ) )
 		{
-			m_mesh = p_scene.GetMeshView().Find( l_meshName );
+			m_mesh = p_scene.GetMeshManager().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -459,7 +463,7 @@ namespace C3dFbx
 			else
 			{
 				// The import failed.
-				p_scene.GetMeshView().Remove( l_meshName );
+				p_scene.GetMeshManager().Remove( l_meshName );
 				m_mesh.reset();
 			}
 
@@ -468,7 +472,7 @@ namespace C3dFbx
 		else
 		{
 			// The import failed.
-			p_scene.GetMeshView().Remove( l_meshName );
+			p_scene.GetMeshManager().Remove( l_meshName );
 			m_mesh.reset();
 		}
 
@@ -492,7 +496,7 @@ namespace C3dFbx
 			if ( m_mesh->GetSkeleton() )
 			{
 				FbxMesh * l_mesh = p_node->GetMesh();
-				std::vector< stVERTEX_BONE_DATA > l_boneData{ l_submesh->GetPointsCount() };
+				std::vector< VertexBoneData > l_boneData{ l_submesh->GetPointsCount() };
 				DoProcessBonesWeights( p_node, *m_mesh->GetSkeleton(), l_boneData );
 				l_submesh->AddBoneDatas( l_boneData );
 			}
@@ -501,7 +505,7 @@ namespace C3dFbx
 
 	void FbxSdkImporter::DoLoadSkeleton( FbxNode * p_node )
 	{
-		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
+		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *m_mesh->GetScene() );
 
 		for ( int i = 0; i < p_node->GetChildCount(); ++i )
 		{
@@ -556,12 +560,12 @@ namespace C3dFbx
 			{
 				FbxAnimStack * l_animStack = p_scene->GetSrcObject< FbxAnimStack >( l_animationIndex );
 				auto l_name = l_animStack->GetName();
-				AnimationSPtr l_animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( l_name ) );
+				SkeletonAnimationSPtr l_animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( l_name ) );
 				FbxTakeInfo * l_takeInfo = p_scene->GetTakeInfo( l_name );
 				uint64_t l_start = l_takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_finish = l_takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_animationLength = l_finish - l_start + 1;
-				AnimationObjectSPtr l_object;
+				SkeletonAnimationObjectSPtr l_object;
 
 				if ( l_bone->GetParent() )
 				{
@@ -632,7 +636,7 @@ namespace C3dFbx
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_node, Skeleton const & p_skeleton, std::vector< stVERTEX_BONE_DATA > & p_boneData )
+	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_node, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
 	{
 		FbxMesh * l_mesh = p_node->GetMesh();
 		uint32_t l_deformersCount = l_mesh->GetDeformerCount();
@@ -690,11 +694,11 @@ namespace C3dFbx
 			FbxDouble3 l_emissive = l_lambert->Emissive;
 			p_pass.SetEmissive( Colour::from_rgb( { float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor );
 
-			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, eTEXTURE_CHANNEL_AMBIENT );
-			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, eTEXTURE_CHANNEL_DIFFUSE );
-			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, eTEXTURE_CHANNEL_EMISSIVE );
-			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, eTEXTURE_CHANNEL_NORMAL );
-			DoLoadTexture( p_scene, l_lambert->TransparentColor, p_pass, eTEXTURE_CHANNEL_OPACITY );
+			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, TextureChannel::Ambient );
+			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, TextureChannel::Diffuse );
+			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, TextureChannel::Emissive );
+			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, TextureChannel::Normal );
+			DoLoadTexture( p_scene, l_lambert->TransparentColor, p_pass, TextureChannel::Opacity );
 		};
 
 		for ( int i = 0; i < l_mats.Size(); ++i )
@@ -720,8 +724,8 @@ namespace C3dFbx
 					l_pass->SetShininess( float( l_phong->Shininess ) );
 					FbxDouble3 l_specular = l_phong->Specular;
 					l_pass->SetSpecular( Colour::from_rgb( { float( l_specular[0] ), float( l_specular[1] ), float( l_specular[2] ) } ) * l_phong->SpecularFactor );
-					DoLoadTexture( p_scene, l_phong->Specular, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-					DoLoadTexture( p_scene, l_phong->Shininess, *l_pass, eTEXTURE_CHANNEL_GLOSS );
+					DoLoadTexture( p_scene, l_phong->Specular, *l_pass, TextureChannel::Specular );
+					DoLoadTexture( p_scene, l_phong->Shininess, *l_pass, TextureChannel::Gloss );
 				}
 			}
 		}
@@ -745,19 +749,16 @@ namespace C3dFbx
 		std::vector< real > l_tan( l_pointsCount * 3 );
 		std::vector< real > l_bit( l_pointsCount * 3 );
 		std::vector< real > l_tex( l_pointsCount * 3 );
-		real * l_vtxBuffer = l_vtx.data();
-		real * l_nmlBuffer = nullptr;
-		real * l_tanBuffer = nullptr;
-		real * l_bitBuffer = nullptr;
-		real * l_texBuffer = nullptr;
+		std::vector< InterleavedVertex > l_vertices{ l_pointsCount };
+		uint32_t l_index{ 0u };
 
 		// Positions
-		for ( auto l_point = 0u; l_point < l_pointsCount; ++l_point )
+		for ( auto & l_vertex : l_vertices )
 		{
-			FbxVector4 l_fbxVertex = p_mesh->GetControlPointAt( l_point );
-			*l_vtxBuffer++ = real( l_fbxVertex[0] );
-			*l_vtxBuffer++ = real( l_fbxVertex[1] );
-			*l_vtxBuffer++ = real( l_fbxVertex[2] );
+			FbxVector4 l_fbxVertex = p_mesh->GetControlPointAt( l_index++ );
+			l_vertex.m_pos[0] = real( l_fbxVertex[0] );
+			l_vertex.m_pos[1] = real( l_fbxVertex[1] );
+			l_vertex.m_pos[2] = real( l_fbxVertex[2] );
 		}
 
 		// Normals
@@ -765,7 +766,14 @@ namespace C3dFbx
 
 		if ( DoRetrieveMeshValues( cuT( "Normals" ), p_mesh, l_normals, l_nml ) )
 		{
-			l_nmlBuffer = l_nml.data();
+			l_index = 0u;
+			real * l_buffer{ l_nml.data() };
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				std::memcpy( l_vertex.m_nml.data(), l_buffer, sizeof( l_vertex.m_nml ) );
+				l_buffer += 3;
+			}
 		}
 
 		// Texture UVs
@@ -773,7 +781,14 @@ namespace C3dFbx
 
 		if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_mesh, l_uvs, l_tex ) )
 		{
-			l_texBuffer = l_tex.data();
+			l_index = 0u;
+			real * l_buffer{ l_tex.data() };
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				std::memcpy( l_vertex.m_tex.data(), l_buffer, sizeof( l_vertex.m_tex ) );
+				l_buffer += 3;
+			}
 		}
 
 		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
@@ -785,7 +800,14 @@ namespace C3dFbx
 
 			if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_mesh, l_tangents, l_tan ) )
 			{
-				l_tanBuffer = l_tan.data();
+				l_index = 0u;
+				real * l_buffer{ l_tan.data() };
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					std::memcpy( l_vertex.m_tan.data(), l_buffer, sizeof( l_vertex.m_tan ) );
+					l_buffer += 3;
+				}
 			}
 
 			// Bitangents
@@ -793,13 +815,20 @@ namespace C3dFbx
 
 			if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_mesh, l_bitangents, l_bit ) )
 			{
-				l_bitBuffer = l_bit.data();
+				l_index = 0u;
+				real * l_buffer{ l_bit.data() };
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					std::memcpy( l_vertex.m_bin.data(), l_buffer, sizeof( l_vertex.m_bin ) );
+					l_buffer += 3;
+				}
 			}
 		}
 
 		// Faces
 		uint32_t l_polyCount = p_mesh->GetPolygonCount();
-		std::vector< stFACE_INDICES > l_faces;
+		std::vector< FaceIndices > l_faces;
 		l_faces.reserve( l_polyCount );
 
 		for ( auto l_poly = 0u; l_poly < l_polyCount; ++l_poly )
@@ -807,41 +836,41 @@ namespace C3dFbx
 			l_faces.push_back( DoGetFace( p_mesh, l_poly, 0, 1, 2 ) );
 		}
 
-		l_submesh->AddPoints( { l_pointsCount, l_vtx.data(), l_nmlBuffer, l_tanBuffer, l_bitBuffer, l_texBuffer } );
-		l_submesh->AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+		l_submesh->AddPoints( l_vertices );
+		l_submesh->AddFaceGroup( l_faces );
 
 		return l_submesh;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxFileTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
-		return LoadTexture( Path( string::string_cast< xchar >( p_texture->GetRelativeFileName() ) ).GetFileName( true ), p_pass, p_channel );
+		return LoadTexture( Path{ string::string_cast< xchar >( p_texture->GetRelativeFileName() ) }.GetFileName( true ), p_pass, p_channel );
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxLayeredTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxProceduralTexture * p_texture, Pass & p_pass, TextureChannel p_channel )
 	{
 		return nullptr;
 	}
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME =
+	std::map< TextureChannel, String > TEXTURE_CHANNEL_NAME =
 	{
-		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
-		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },
-		{ eTEXTURE_CHANNEL_NORMAL, cuT( "Normal" ) },
-		{ eTEXTURE_CHANNEL_OPACITY, cuT( "Opacity" ) },
-		{ eTEXTURE_CHANNEL_SPECULAR, cuT( "Specular" ) },
-		{ eTEXTURE_CHANNEL_HEIGHT, cuT( "Height" ) },
-		{ eTEXTURE_CHANNEL_AMBIENT, cuT( "Ambient" ) },
-		{ eTEXTURE_CHANNEL_GLOSS, cuT( "Gloss" ) },
-		{ eTEXTURE_CHANNEL_EMISSIVE, cuT( "Emissive" ) },
+		{ TextureChannel::Colour, cuT( "Colour" ) },
+		{ TextureChannel::Diffuse, cuT( "Diffuse" ) },
+		{ TextureChannel::Normal, cuT( "Normal" ) },
+		{ TextureChannel::Opacity, cuT( "Opacity" ) },
+		{ TextureChannel::Specular, cuT( "Specular" ) },
+		{ TextureChannel::Height, cuT( "Height" ) },
+		{ TextureChannel::Ambient, cuT( "Ambient" ) },
+		{ TextureChannel::Gloss, cuT( "Gloss" ) },
+		{ TextureChannel::Emissive, cuT( "Emissive" ) },
 	};
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, TextureChannel p_channel )
 	{
 		TextureUnitSPtr l_texture = nullptr;
 		FbxTexture * l_fbxtex = nullptr;
@@ -875,10 +904,10 @@ namespace C3dFbx
 			l_texture->SetChannel( p_channel );
 			l_texture->SetAlphaValue( float( l_fbxtex->Alpha ) );
 
-			static const eWRAP_MODE l_mode[2] =
+			static const WrapMode l_mode[2] =
 			{
-				eWRAP_MODE_REPEAT,
-				eWRAP_MODE_CLAMP_TO_BORDER,
+				WrapMode::Repeat,
+				WrapMode::ClampToBorder,
 			};
 
 			SamplerSPtr l_sampler;
@@ -886,8 +915,8 @@ namespace C3dFbx
 			if ( !p_scene.GetSamplerView().Has( l_fbxtex->GetName() ) )
 			{
 				l_sampler = p_scene.GetSamplerView().Create( l_fbxtex->GetName() );
-				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeU] );
-				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeV] );
+				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeU] );
+				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeV] );
 			}
 			else
 			{

@@ -161,4 +161,9 @@ namespace Msaa
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->BlitInto( m_frameBuffer.m_frameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
 	}
+
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -samples_count " ) + string::to_string( m_samplesCount ) ) > 0;
+	}
 }

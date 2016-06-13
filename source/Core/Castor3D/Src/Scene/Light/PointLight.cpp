@@ -6,85 +6,34 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	bool PointLight::TextLoader::operator()( PointLight const & p_light, TextFile & p_file )
+	PointLight::TextWriter::TextWriter( String const & p_tabs, PointLight const * p_category )
+		: LightCategory::TextWriter{ p_tabs }
+		, m_category{ p_category }
 	{
-		bool l_return = LightCategory::TextLoader()( p_light, p_file );
+	}
+
+	bool PointLight::TextWriter::operator()( PointLight const & p_light, TextFile & p_file )
+	{
+		bool l_return = LightCategory::TextWriter::operator()( p_light, p_file );
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\t\tattenuation " ) ) > 0 && Point3f::TextLoader()( p_light.GetAttenuation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+				&& Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
 	}
 
-	//*************************************************************************************************
-
-	PointLight::BinaryParser::BinaryParser( Path const & p_path )
-		: LightCategory::BinaryParser( p_path )
+	bool PointLight::TextWriter::WriteInto( Castor::TextFile & p_file )
 	{
-	}
-
-	bool PointLight::BinaryParser::Fill( PointLight const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_LIGHT );
-
-		if ( l_return )
-		{
-			l_return = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetAttenuation(), eCHUNK_TYPE_LIGHT_ATTENUATION, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool PointLight::BinaryParser::Parse( PointLight & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_LIGHT_ATTENUATION:
-					l_return = DoParseChunk( p_obj.GetAttenuation(), l_chunk );
-					break;
-
-				default:
-					l_return = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
+		return ( *this )( *m_category, p_file );
 	}
 
 	//*************************************************************************************************

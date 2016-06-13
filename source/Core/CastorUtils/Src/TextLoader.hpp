@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_TEXT_LOADER_H___
 
 #include "Loader.hpp"
+#include "TextFile.hpp"
 
 namespace Castor
 {
@@ -33,8 +34,11 @@ namespace Castor
 	*/
 	template< class T >
 	class TextLoader
-		: public Loader< T, eFILE_TYPE_TEXT, TextFile >
+		: public Loader< T, eFILE_TYPE_TEXT >
 	{
+	protected:
+		using FileType = typename Loader< T, eFILE_TYPE_TEXT >::FileType;
+
 	public:
 		/**
 		 *\~english
@@ -42,19 +46,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
-			: Loader< T, eFILE_TYPE_BINARY, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-		{
-		}
+		TextLoader() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextLoader()
-		{
-		}
+		virtual ~TextLoader() = default;
 	};
 }
 

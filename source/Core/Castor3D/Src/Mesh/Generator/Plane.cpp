@@ -30,12 +30,6 @@ void Plane::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray cons
 	m_subDivisionsD = p_faces[1];
 	m_width = std::abs( p_dimensions[0] );
 	m_depth = std::abs( p_dimensions[1] );
-
-	if ( m_subDivisionsW < 0 || m_subDivisionsD < 0 )
-	{
-		return;
-	}
-
 	uint32_t l_nbVertexW = m_subDivisionsW + 2;
 	uint32_t l_nbVertexH = m_subDivisionsD + 2;
 	real l_offsetW = -m_width / 2;

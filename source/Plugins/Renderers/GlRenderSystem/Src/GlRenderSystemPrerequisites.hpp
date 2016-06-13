@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #elif defined( __linux__ )
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
+#	undef None
 #endif
 #include <GL/gl.h>
 
@@ -1394,5 +1395,5 @@ namespace GlRender
 #		define glUntrack( gl, object )
 #	endif
 
-//#include "OpenGl.hpp"
+//#include "Common/OpenGl.hpp"
 #endif

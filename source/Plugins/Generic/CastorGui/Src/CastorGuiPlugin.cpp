@@ -25,7 +25,7 @@ namespace CastorGui
 
 		void AddParser( FileParser::AttributeParsersBySection & p_parsers, uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_array = ParserParameterArray() )
 		{
-			auto && l_sectionIt = p_parsers.find( p_section );
+			auto l_sectionIt = p_parsers.find( p_section );
 
 			if ( l_sectionIt != p_parsers.end() && l_sectionIt->second.find( p_name ) != l_sectionIt->second.end() )
 			{

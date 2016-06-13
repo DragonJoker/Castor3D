@@ -63,7 +63,7 @@ namespace Castor3D
 		*\~brief		Constructeur.
 		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
 		 */
-		EventHandler( bool p_catchMouseEvents )
+		explicit EventHandler( bool p_catchMouseEvents )
 			: m_enabled{ true }
 			, m_catchMouseEvents{ p_catchMouseEvents }
 			, m_catchTabKey{ false }
@@ -90,7 +90,7 @@ namespace Castor3D
 		{
 			EventQueue l_queue = DoSwapQueue();
 
-			for ( auto && l_eventPair : l_queue )
+			for ( auto const & l_eventPair : l_queue )
 			{
 				l_eventPair.second();
 			}
@@ -404,7 +404,7 @@ namespace Castor3D
 		*\~brief		Constructeur.
 		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
 		 */
-		NonClientEventHandler( bool p_catchMouseEvents )
+		explicit NonClientEventHandler( bool p_catchMouseEvents )
 			: EventHandler{ p_catchMouseEvents }
 		{
 		}

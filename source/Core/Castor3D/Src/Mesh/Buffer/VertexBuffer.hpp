@@ -92,7 +92,7 @@ namespace Castor3D
 			uint32_t l_stride = m_bufferDeclaration.GetStride();
 			uint8_t * l_buffer = CpuBuffer< uint8_t >::data();
 
-			for ( auto && l_it = p_begin; l_it != p_end; ++l_it )
+			for ( auto l_it = p_begin; l_it != p_end; ++l_it )
 			{
 				( *l_it )->LinkCoords( l_buffer, l_stride );
 				l_buffer += l_stride;

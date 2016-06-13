@@ -79,6 +79,17 @@ namespace Castor
 		CASTOR_ENUM_BOUNDS( eFILE_TYPE, eFILE_TYPE_BINARY )
 	}	eFILE_TYPE;
 	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		24/05/2016
+	\~english
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\~french
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	*/
+	template< eFILE_TYPE FT >
+	struct FileTyper;
+	/*!
 	\~english
 	\brief Pixel format enumeration
 	\~french
@@ -199,7 +210,7 @@ namespace Castor
 	class Line2D;
 	template< typename T >
 	class Line3D;
-	template< class T, eFILE_TYPE FT, class TFile >
+	template< class T, eFILE_TYPE FT >
 	class Loader;
 	class ILoggerImpl;
 	class Logger;

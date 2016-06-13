@@ -47,7 +47,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh: *l_mesh )
+		for ( auto l_submesh: *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -71,7 +71,7 @@ MeshSPtr SMaxImporter::DoImportMesh( Scene & p_scene )
 
 	if ( m_pFile->IsOk() )
 	{
-		l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
@@ -229,7 +229,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 	Colour l_crAmbient( Colour::from_rgb( 0 ) );
 	Colour l_crSpecular( Colour::from_rgb( 0 ) );
 	String l_strMatName;
-	String l_strTextures[eTEXTURE_CHANNEL_ALL];
+	std::map< TextureChannel, Path > l_strTextures;
 	bool l_bContinue = true;
 	bool l_bTwoSided = false;
 
@@ -270,29 +270,29 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 				break;
 
 			case eSMAX_CHUNK_MAT_TEXMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
-				Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Diffuse] );
+				Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[TextureChannel::Diffuse] );
 				break;
 
 			case eSMAX_CHUNK_MAT_SPECMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
-				Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Specular] );
+				Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[TextureChannel::Specular] );
 				break;
 
 			case eSMAX_CHUNK_MAT_OPACMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
-				Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Opacity] );
+				Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[TextureChannel::Opacity] );
 				break;
 
 			case eSMAX_CHUNK_MAT_BUMPMAP:
-				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
-				Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
+				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Normal] );
+				Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[TextureChannel::Normal] );
 				break;
 
 			case eSMAX_CHUNK_MAT_MAPNAME:
-				l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[TextureChannel::Diffuse] );
 				l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
-				Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[TextureChannel::Diffuse] );
 				break;
 
 			default:
@@ -327,13 +327,13 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 		l_pPass->SetTwoSided( l_bTwoSided );
 		String l_strTexture;
 
-		for ( int i = 0 ; i < eTEXTURE_CHANNEL_ALL ; i++ )
+		for ( auto l_it : l_strTextures )
 		{
-			l_strTexture = l_strTextures[i];
+			auto l_strTexture = l_it.second;
 
 			if ( !l_strTexture.empty() )
 			{
-				LoadTexture( l_strTexture, *l_pPass, eTEXTURE_CHANNEL( i ) );
+				LoadTexture( l_strTexture, *l_pPass, l_it.first );
 			}
 		}
 
@@ -454,12 +454,12 @@ void SMaxImporter::DoReadColorChunk( SMaxChunk * p_pChunk, Colour & p_colour )
 void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
 {
 	std::vector< uint32_t > l_arrayGroups;
-	std::vector< stFACE_INDICES > l_arrayFaces;
+	std::vector< FaceIndices > l_arrayFaces;
 	BufferElementGroupSPtr l_pV1;
 	BufferElementGroupSPtr l_pV2;
 	BufferElementGroupSPtr l_pV3;
 	uint16_t l_usIndices[4];
-	stFACE_INDICES l_face = { 0 };
+	FaceIndices l_face = { 0 };
 	FaceSPtr l_pFace;
 	SMaxChunk l_currentChunk;
 	String l_strMatName;
@@ -474,9 +474,9 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 		for ( uint16_t i = 0 ; i < l_usNumOfFaces && m_pFile->IsOk() && p_pChunk->m_ulBytesRead < p_pChunk->m_ulLength ; i++ )
 		{
 			p_pChunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_usIndices ) );
-			l_arrayFaces[i].m_uiVertexIndex[0] = l_usIndices[0];
-			l_arrayFaces[i].m_uiVertexIndex[1] = l_usIndices[2];
-			l_arrayFaces[i].m_uiVertexIndex[2] = l_usIndices[1];
+			l_arrayFaces[i].m_index[0] = l_usIndices[0];
+			l_arrayFaces[i].m_index[1] = l_usIndices[2];
+			l_arrayFaces[i].m_index[2] = l_usIndices[1];
 		}
 
 		m_bIndicesFound = true;
@@ -522,9 +522,9 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 				if ( l_bFace )
 				{
 					// The chunk describes a triangle
-					l_face.m_uiVertexIndex[0] = l_currentChunk.m_eChunkId;
-					l_face.m_uiVertexIndex[1] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0x0000FFFF ) >>  0 );
-					l_face.m_uiVertexIndex[2] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
+					l_face.m_index[0] = l_currentChunk.m_eChunkId;
+					l_face.m_index[1] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0x0000FFFF ) >>  0 );
+					l_face.m_index[2] = static_cast< uint16_t >( ( l_currentChunk.m_ulLength & 0xFFFF0000 ) >> 16 );
 
 					if ( p_pChunk->m_ulBytesRead + 8 >= p_pChunk->m_ulLength )
 					{
@@ -533,7 +533,7 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 						DoDiscardChunk( p_pChunk );
 						l_bFace = false;
 					}
-					else if ( l_face.m_uiVertexIndex[0] < m_uiNbVertex && l_face.m_uiVertexIndex[1] < m_uiNbVertex && l_face.m_uiVertexIndex[2] < m_uiNbVertex )
+					else if ( l_face.m_index[0] < m_uiNbVertex && l_face.m_index[1] < m_uiNbVertex && l_face.m_index[2] < m_uiNbVertex )
 					{
 						// Vertex indices are correct, so we consider we really are processing a face
 						l_arrayFaces.push_back( l_face );
@@ -623,12 +623,12 @@ void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, S
 			}
 		}
 
-		for ( std::vector< stFACE_INDICES >::const_iterator l_it = l_arrayFaces.begin() ; l_it != l_arrayFaces.end() ; ++l_it )
+		for ( std::vector< FaceIndices >::const_iterator l_it = l_arrayFaces.begin() ; l_it != l_arrayFaces.end() ; ++l_it )
 		{
 			// It seems faces are inverted in 3DS so I invert the indices to fall back in a good order
-			uint32_t l_uiV1 = l_it->m_uiVertexIndex[0];
-			uint32_t l_uiV2 = l_it->m_uiVertexIndex[1];
-			uint32_t l_uiV3 = l_it->m_uiVertexIndex[2];
+			uint32_t l_uiV1 = l_it->m_index[0];
+			uint32_t l_uiV2 = l_it->m_index[1];
+			uint32_t l_uiV3 = l_it->m_index[2];
 			l_pV1 = p_pSubmesh->GetPoint( l_uiV1 );
 			l_pV2 = p_pSubmesh->GetPoint( l_uiV2 );
 			l_pV3 = p_pSubmesh->GetPoint( l_uiV3 );

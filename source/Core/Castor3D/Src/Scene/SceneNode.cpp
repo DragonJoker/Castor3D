@@ -20,210 +20,73 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneNode::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	SceneNode::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< SceneNode >{ p_tabs }
 	{
 	}
 
-	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
+	bool SceneNode::TextWriter::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_return = false;
-		Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
 
-		if ( p_node.GetName() != cuT( "RootNode" ) )
+		if ( p_node.GetName() != cuT( "RootNode" )
+			 && p_node.GetName() != cuT( "ObjectRootNode" )
+			 && p_node.GetName() != cuT( "CameraRootNode" ) )
 		{
-			l_return = p_file.WriteText( cuT( "\tscene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+			Logger::LogInfo( m_tabs + cuT( "Writing Node " ) + p_node.GetName() );
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 			if ( l_return && p_node.GetParent() )
 			{
-				l_return = p_file.WriteText( cuT( "\t\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\torientation " ) ) > 0 && Quaternion::TextLoader()( p_node.GetOrientation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				Point3r l_axis;
+				Angle l_angle;
+				p_node.GetOrientation().to_axis_angle( l_axis, l_angle );
+				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
+					&& Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\tposition " ) ) > 0 && Point3r::TextLoader()( p_node.GetPosition(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
+					&& Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\tscale " ) ) > 0 && Point3r::TextLoader()( p_node.GetScale(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
+					&& Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Writing Childs" ) );
-
-			for ( auto && l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_return; ++l_it )
+			for ( auto const & l_it : p_node.m_children )
 			{
-				SceneNodeSPtr l_node = l_it->second.lock();
-
-				if ( l_node )
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
 				{
-					l_return = SceneNode::TextLoader()( *l_node, p_file );
-				}
-			}
-		}
+					SceneNodeSPtr l_node = l_it.second.lock();
 
-		if ( l_return )
-		{
-			Logger::LogInfo( cuT( "Childs Written" ) );
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	SceneNode::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< SceneNode >( p_path )
-	{
-	}
-
-	bool SceneNode::BinaryParser::Fill( SceneNode const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SCENE_NODE );
-		Point3f l_scale;
-		Point3f l_position;
-
-		if ( p_obj.GetName() != cuT( "RootNode" ) )
-		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_obj.GetOrientation(), eCHUNK_TYPE_NODE_ORIENTATION, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_position = p_obj.GetPosition();
-				l_return = DoFillChunk( l_position, eCHUNK_TYPE_NODE_POSITION, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_scale = p_obj.GetScale();
-				l_return = DoFillChunk( l_scale, eCHUNK_TYPE_NODE_SCALE, l_chunk );
-			}
-		}
-
-		if ( l_return )
-		{
-			for ( auto && l_it = p_obj.ChildsBegin(); l_it != p_obj.ChildsEnd() && l_return; ++l_it )
-			{
-				SceneNodeSPtr l_node = l_it->second.lock();
-
-				if ( l_node )
-				{
-					l_return = SceneNode::BinaryParser( m_path ).Fill( *l_node, l_chunk );
-				}
-			}
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool SceneNode::BinaryParser::Parse( SceneNode & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		Quaternion l_orientation;
-		Point3f l_scale;
-		Point3f l_position;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_NODE_ORIENTATION:
-					l_return = DoParseChunk( l_orientation, l_chunk );
-
-					if ( l_return )
+					if ( l_node )
 					{
-						p_obj.SetOrientation( l_orientation );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_NODE_POSITION:
-					l_return = DoParseChunk( l_position, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetPosition( l_position );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_NODE_SCALE:
-					l_return = DoParseChunk( l_scale, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetScale( l_scale );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SCENE_NODE:
-				{
-					BinaryChunk l_chunkNode;
-					String l_name;
-					l_return = l_chunk.GetSubChunk( l_chunkNode );
-
-					if ( l_return )
-					{
-						switch ( l_chunkNode.GetChunkType() )
-						{
-						case eCHUNK_TYPE_NAME:
-							l_return = DoParseChunk( l_name, l_chunkNode );
-							break;
-
-						default:
-							l_return = false;
-							break;
-						}
-
-						if ( l_return )
-						{
-							SceneNodeSPtr l_node = p_obj.GetScene()->GetSceneNodeManager().Create( l_name, p_obj.shared_from_this() );
-							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
-						}
+						l_return = SceneNode::TextWriter{ m_tabs }( *l_node, p_file );
 					}
 				}
-				break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
 			}
 		}
 
@@ -330,9 +193,9 @@ namespace Castor3D
 	{
 		bool l_bFound = false;
 
-		if ( m_childs.find( p_name ) == m_childs.end() )
+		if ( m_children.find( p_name ) == m_children.end() )
 		{
-			l_bFound = m_childs.end() != std::find_if( m_childs.begin(), m_childs.end(), [&p_name]( std::pair< String, SceneNodeWPtr > p_pair )
+			l_bFound = m_children.end() != std::find_if( m_children.begin(), m_children.end(), [&p_name]( std::pair< String, SceneNodeWPtr > p_pair )
 			{
 				return p_pair.second.lock()->HasChild( p_name );
 			} );
@@ -345,9 +208,9 @@ namespace Castor3D
 	{
 		String l_name = p_child->GetName();
 
-		if ( m_childs.find( l_name ) == m_childs.end() )
+		if ( m_children.find( l_name ) == m_children.end() )
 		{
-			m_childs.insert( std::make_pair( l_name, p_child ) );
+			m_children.insert( std::make_pair( l_name, p_child ) );
 		}
 		else
 		{
@@ -369,12 +232,12 @@ namespace Castor3D
 
 	void SceneNode::DetachChild( String const & p_childName )
 	{
-		auto && l_it = m_childs.find( p_childName );
+		auto l_it = m_children.find( p_childName );
 
-		if ( l_it != m_childs.end() )
+		if ( l_it != m_children.end() )
 		{
 			SceneNodeSPtr l_current = l_it->second.lock();
-			m_childs.erase( l_it );
+			m_children.erase( l_it );
 
 			if ( l_current )
 			{
@@ -390,9 +253,9 @@ namespace Castor3D
 	void SceneNode::DetachAllChilds()
 	{
 		SceneNodePtrStrMap l_flush;
-		std::swap( l_flush, m_childs );
+		std::swap( l_flush, m_children );
 
-		for ( auto && l_it : l_flush )
+		for ( auto l_it : l_flush )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 
@@ -465,7 +328,7 @@ namespace Castor3D
 		GeometrySPtr l_return = nullptr;
 		real l_distance;
 
-		for ( auto && l_it : m_objects )
+		for ( auto l_it : m_objects )
 		{
 			MovableObjectSPtr l_current = l_it.lock();
 
@@ -483,7 +346,7 @@ namespace Castor3D
 
 		GeometrySPtr l_pTmp;
 
-		for ( auto && l_it : m_childs )
+		for ( auto l_it : m_children )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 
@@ -582,7 +445,7 @@ namespace Castor3D
 
 	void SceneNode::DoUpdateChildsDerivedTransform()
 	{
-		for ( auto && l_it : m_childs )
+		for ( auto l_it : m_children )
 		{
 			SceneNodeSPtr l_current = l_it.second.lock();
 

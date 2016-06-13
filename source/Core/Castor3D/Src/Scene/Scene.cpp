@@ -1,10 +1,8 @@
 #include "SceneManager.hpp"
 
 #include "AnimatedObjectGroupManager.hpp"
-#include "BlendStateManager.hpp"
 #include "CameraManager.hpp"
 #include "BillboardManager.hpp"
-#include "DepthStencilStateManager.hpp"
 #include "Engine.hpp"
 #include "GeometryManager.hpp"
 #include "LightManager.hpp"
@@ -13,40 +11,17 @@
 #include "OverlayManager.hpp"
 #include "SamplerManager.hpp"
 #include "SceneNodeManager.hpp"
-#include "ShaderManager.hpp"
 #include "WindowManager.hpp"
 
 #include "Skybox.hpp"
 
-#include "Animation/AnimatedObject.hpp"
-#include "Animation/Animation.hpp"
-#include "Animation/Bone.hpp"
-#include "Animation/Skeleton.hpp"
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Event/Frame/FunctorEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Face.hpp"
-#include "Mesh/Importer.hpp"
-#include "Mesh/Submesh.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
-#include "Miscellaneous/Ray.hpp"
-#include "Render/Pipeline.hpp"
-#include "Render/RenderSystem.hpp"
-#include "Scene/Light/DirectionalLight.hpp"
-#include "Scene/Light/PointLight.hpp"
-#include "Scene/Light/SpotLight.hpp"
-#include "Shader/FrameVariable.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
-#include "Shader/OneFrameVariable.hpp"
-#include "Shader/PointFrameVariable.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureLayout.hpp"
-#include "Texture/TextureUnit.hpp"
 #include "Manager/ManagerView.hpp"
+#include "Mesh/Importer.hpp"
+#include "Render/RenderLoop.hpp"
+#include "State/DepthStencilState.hpp"
+#include "Texture/TextureLayout.hpp"
 
+#include <Font.hpp>
 #include <Image.hpp>
 #include <Logger.hpp>
 
@@ -54,36 +29,167 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Scene::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Scene, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	//*************************************************************************************************
+
+	namespace
+	{
+		template< typename ResourceType, eEVENT_TYPE EventType, typename ManagerType >
+		std::unique_ptr< ManagerView< ResourceType, ManagerType, EventType > > make_manager_view( Castor::String const & p_name, ManagerType & p_manager )
+		{
+			return std::make_unique< ManagerView< ResourceType, ManagerType, EventType > >( p_name, p_manager );
+		}
+	}
+
+	//*************************************************************************************************
+
+	template<>
+	inline void ManagerView< Overlay, OverlayManager, eEVENT_TYPE_PRE_RENDER >::Clear()
+	{
+		for ( auto l_name : m_createdElements )
+		{
+			auto l_resource = m_manager.Find( l_name );
+
+			if ( l_resource )
+			{
+				m_manager.Remove( l_name );
+			}
+		}
+	}
+
+	//*************************************************************************************************
+
+	template<>
+	inline void ManagerView< Font, FontManager, eEVENT_TYPE_PRE_RENDER >::Clear()
+	{
+		for ( auto l_name : m_createdElements )
+		{
+			auto l_resource = m_manager.Find( l_name );
+
+			if ( l_resource )
+			{
+				m_manager.Remove( l_name );
+			}
+		}
+	}
+
+	//*************************************************************************************************
+
+	Scene::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Scene >{ p_tabs }
 	{
 	}
 
-	bool Scene::TextLoader::operator()( Scene const & p_scene, TextFile & p_file )
+	bool Scene::TextWriter::operator()( Scene const & p_scene, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
-		bool l_return = p_file.WriteText( cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
-		if ( l_return )
+		bool l_return = true;
+
+		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
 		{
-			l_return = p_file.Print( 256, cuT( "\tbackground_colour " ) ) > 0 && Colour::TextLoader()( p_scene.GetBackgroundColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\tambient_light " ) ) > 0 && Colour::TextLoader()( p_scene.GetAmbientLight(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Camera Nodes" ) );
-			l_return = SceneNode::TextLoader()( *p_scene.GetCameraRootNode(), p_file );
+			Logger::LogInfo( cuT( "Scene::Write - Fonts" ) );
+			for ( auto const & l_name : p_scene.GetFontView() )
+			{
+				auto l_font = p_scene.GetFontView().Find( l_name );
+				l_return &= Font::TextWriter( m_tabs + cuT( "\t" ) )( *l_font, p_file );
+			}
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Object Nodes" ) );
-			l_return = SceneNode::TextLoader()( *p_scene.GetObjectRootNode(), p_file );
+			Logger::LogInfo( cuT( "Scene::Write - Samplers" ) );
+			for ( auto const & l_name : p_scene.GetSamplerView() )
+			{
+				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
+				l_return &= Sampler::TextWriter( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Materials" ) );
+			for ( auto const & l_name : p_scene.GetMaterialView() )
+			{
+				auto l_material = p_scene.GetMaterialView().Find( l_name );
+				l_return &= Material::TextWriter( m_tabs + cuT( "\t" ) )( *l_material, p_file );
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Overlays" ) );
+			for ( auto const & l_name : p_scene.GetOverlayView() )
+			{
+				auto l_overlay = p_scene.GetOverlayView().Find( l_name );
+
+				if ( !l_overlay->GetParent() )
+				{
+					l_return &= Overlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay, p_file );
+				}
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
+			l_return = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+				&& Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return && p_scene.GetBackgroundImage() )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Background image" ) );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_scene.GetBackgroundImage()->GetImage().ToString() }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
+			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
+				&& Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		}
+
+		if ( l_return && p_scene.GetSkybox() )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Skybox" ) );
+			l_return = Skybox::TextWriter( m_tabs + cuT( "\t" ) )( *p_scene.GetSkybox(), p_file );
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
+			for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
+			{
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				{
+					l_return = SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+				}
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
+			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+			{
+				l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+			}
 		}
 
 		if ( l_return )
@@ -93,7 +199,12 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetCameraManager() )
 			{
-				l_return &= Camera::TextLoader()( *l_it.second, p_file );
+				if ( l_return
+					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
+					 && l_it.first.find( cuT( "_LEye" ) ) == String::npos )
+				{
+					l_return = Camera::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				}
 			}
 		}
 
@@ -104,26 +215,7 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetLightManager() )
 			{
-				auto l_light = l_it.second;
-
-				switch ( l_light->GetType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return &= DirectionalLight::TextLoader()( *l_light->GetDirectionalLight(), p_file );
-					break;
-
-				case eLIGHT_TYPE_POINT:
-					l_return &= PointLight::TextLoader()( *l_light->GetPointLight(), p_file );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					l_return &= SpotLight::TextLoader()( *l_light->GetSpotLight(), p_file );
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
+				l_return &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
@@ -134,316 +226,41 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetGeometryManager() )
 			{
-				l_return &= Geometry::TextLoader()( *l_it.second, p_file );
+				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 
-		p_file.WriteText( cuT( "}\n\n" ) );
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Animated object groups" ) );
+			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupManager() );
+
+			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupManager() )
+			{
+				l_return &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
+			auto l_lock = make_unique_lock( p_scene.GetWindowManager() );
+
+			for ( auto const & l_it : p_scene.GetWindowManager() )
+			{
+				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+			}
+		}
+
+		p_file.WriteText( cuT( "}\n" ) );
 		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	Scene::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Scene >( p_path )
-	{
-	}
-
-	bool Scene::BinaryParser::Fill( Scene const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SCENE );
-		l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetBackgroundColour(), eCHUNK_TYPE_SCENE_BACKGROUND, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetAmbientLight(), eCHUNK_TYPE_SCENE_AMBIENT, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetCameraRootNode(), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetObjectRootNode(), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			auto l_lock = make_unique_lock( p_obj.GetCameraManager() );
-
-			for ( auto const & l_it : p_obj.GetCameraManager() )
-			{
-				l_return &= Camera::BinaryParser( m_path ).Fill( *l_it.second, l_chunk );
-			}
-		}
-
-		if ( l_return )
-		{
-			auto l_lock = make_unique_lock( p_obj.GetLightManager() );
-
-			for ( auto const & l_it : p_obj.GetLightManager() )
-			{
-				auto l_light = l_it.second;
-
-				switch ( l_light->GetType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return &= DirectionalLight::BinaryParser( m_path ).Fill( *l_light->GetDirectionalLight(), l_chunk );
-					break;
-
-				case eLIGHT_TYPE_POINT:
-					l_return &= PointLight::BinaryParser( m_path ).Fill( *l_light->GetPointLight(), l_chunk );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					l_return &= SpotLight::BinaryParser( m_path ).Fill( *l_light->GetSpotLight(), l_chunk );
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-		}
-
-		if ( l_return )
-		{
-			auto l_lock = make_unique_lock( p_obj.GetGeometryManager() );
-
-			for ( auto const & l_it : p_obj.GetGeometryManager() )
-			{
-				l_return &= Geometry::BinaryParser( m_path ).Fill( *l_it.second, l_chunk );
-			}
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Scene::BinaryParser::Parse( Scene & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		Colour l_colour;
-		String l_name;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetName( l_name );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SCENE_BACKGROUND:
-					l_return = DoParseChunk( l_colour, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetBackgroundColour( l_colour );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SCENE_AMBIENT:
-					l_return = DoParseChunk( l_colour, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetAmbientLight( l_colour );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SCENE_NODE:
-				{
-					BinaryChunk l_chunkNode;
-					l_return = l_chunk.GetSubChunk( l_chunkNode );
-
-					if ( l_return )
-					{
-						switch ( l_chunkNode.GetChunkType() )
-						{
-						case eCHUNK_TYPE_NAME:
-							l_return = DoParseChunk( l_name, l_chunkNode );
-							break;
-
-						default:
-							l_return = false;
-							break;
-						}
-
-						if ( l_return )
-						{
-							SceneNodeSPtr l_node;
-
-							if ( l_name == cuT( "CameraRootNode" ) )
-							{
-								l_node = p_obj.GetCameraRootNode();
-							}
-							else if ( l_name == cuT( "ObjectRootNode" ) )
-							{
-								l_node = p_obj.GetObjectRootNode();
-							}
-
-							if ( !l_node )
-							{
-								l_node = p_obj.GetSceneNodeManager().Find( l_name );
-							}
-
-							if ( !l_node )
-							{
-								l_node = p_obj.GetSceneNodeManager().Create( l_name );
-							}
-
-							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
-						}
-					}
-				}
-				break;
-
-				case eCHUNK_TYPE_CAMERA:
-				{
-					BinaryChunk l_chunkCamera;
-					l_return = l_chunk.GetSubChunk( l_chunkCamera );
-
-					if ( l_return )
-					{
-						switch ( l_chunkCamera.GetChunkType() )
-						{
-						case eCHUNK_TYPE_NAME:
-							l_return = DoParseChunk( l_name, l_chunkCamera );
-							break;
-
-						default:
-							l_return = false;
-							break;
-						}
-
-						if ( l_return )
-						{
-							CameraSPtr l_camera = p_obj.GetCameraManager().Create( l_name, nullptr );
-							l_return = Camera::BinaryParser( m_path ).Parse( *l_camera, l_chunk );
-						}
-					}
-				}
-				break;
-
-				case eCHUNK_TYPE_LIGHT:
-				{
-					SceneNodeSPtr l_node;
-					l_name.clear();
-					String l_nodeName;
-					eLIGHT_TYPE l_type = eLIGHT_TYPE_COUNT;
-
-					while ( l_return && ( l_name.empty() || l_type == eLIGHT_TYPE_COUNT ) )
-					{
-						BinaryChunk l_chunkLight;
-						l_return = l_chunk.GetSubChunk( l_chunkLight );
-
-						if ( l_return )
-						{
-							switch ( l_chunkLight.GetChunkType() )
-							{
-							case eCHUNK_TYPE_NAME:
-								l_return = DoParseChunk( l_name, l_chunkLight );
-								break;
-
-							case eCHUNK_TYPE_MOVABLE_NODE:
-								l_return = DoParseChunk( l_nodeName, l_chunkLight );
-
-								if ( l_return )
-								{
-									l_node = p_obj.GetSceneNodeManager().Find( l_nodeName );
-								}
-
-								break;
-
-							case eCHUNK_TYPE_LIGHT_TYPE:
-								l_return = DoParseChunk( l_type, l_chunkLight );
-								break;
-
-							default:
-								l_return = false;
-								break;
-							}
-						}
-					}
-
-					if ( l_return && !l_name.empty() && l_type != eLIGHT_TYPE_COUNT )
-					{
-						LightSPtr l_light = p_obj.GetLightManager().Create( l_name, l_node, l_type );
-						l_return = Light::BinaryParser( m_path ).Parse( *l_light, l_chunk );
-					}
-				}
-				break;
-
-				case eCHUNK_TYPE_GEOMETRY:
-				{
-					BinaryChunk l_chunkGeometry;
-					l_return = l_chunk.GetSubChunk( l_chunkGeometry );
-
-					if ( l_return )
-					{
-						switch ( l_chunkGeometry.GetChunkType() )
-						{
-						case eCHUNK_TYPE_NAME:
-							l_return = DoParseChunk( l_name, l_chunkGeometry );
-							break;
-
-						default:
-							l_return = false;
-							break;
-						}
-
-						if ( l_return )
-						{
-							GeometrySPtr l_geometry = p_obj.GetGeometryManager().Create( l_name, nullptr );
-							l_return = Geometry::BinaryParser( m_path ).Parse( *l_geometry, l_chunk );
-						}
-					}
-				}
-				break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
+	String Scene::RootNode = cuT( "RootNode" );
+	String Scene::CameraRootNode = cuT( "CameraRootNode" );
+	String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
 
 	Scene::Scene( String const & p_name, Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
@@ -452,9 +269,9 @@ namespace Castor3D
 		, m_rootObjectNode()
 		, m_changed( false )
 	{
-		m_rootNode = std::make_shared< SceneNode >( cuT( "RootNode" ), *this );
-		m_rootCameraNode = std::make_shared< SceneNode >( cuT( "CameraRootNode" ), *this );
-		m_rootObjectNode = std::make_shared< SceneNode >( cuT( "ObjectRootNode" ), *this );
+		m_rootNode = std::make_shared< SceneNode >( RootNode, *this );
+		m_rootCameraNode = std::make_shared< SceneNode >( CameraRootNode, *this );
+		m_rootObjectNode = std::make_shared< SceneNode >( ObjectRootNode, *this );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 
@@ -462,13 +279,18 @@ namespace Castor3D
 		m_billboardManager = std::make_unique< BillboardManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_cameraManager = std::make_unique< CameraManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_geometryManager = std::make_unique< GeometryManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+		m_meshManager = std::make_unique< MeshManager >( *this );
 		m_lightManager = std::make_unique< LightManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_sceneNodeManager = std::make_unique< SceneNodeManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+		m_windowManager = std::make_unique< WindowManager >( *this );
 
-		m_meshManagerView = std::make_unique< ManagerView< Mesh, MeshManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetMeshManager() );
-		m_materialManagerView = std::make_unique< ManagerView< Material, MaterialManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetMaterialManager() );
-		m_samplerManagerView = std::make_unique< ManagerView< Sampler, SamplerManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetSamplerManager() );
-		m_windowManagerView = std::make_unique< ManagerView< RenderWindow, WindowManager, eEVENT_TYPE_POST_RENDER > >( GetName(), GetEngine()->GetWindowManager() );
+		m_materialManagerView = make_manager_view< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialManager() );
+		m_samplerManagerView = make_manager_view< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerManager() );
+		m_overlayManagerView = make_manager_view< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayManager() );
+		m_fontManagerView = make_manager_view< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontManager() );
+
+		m_meshManager->SetRenderSystem( p_engine.GetRenderSystem() );
+		m_windowManager->SetRenderSystem( p_engine.GetRenderSystem() );
 
 		auto l_notify = [this]()
 		{
@@ -480,6 +302,9 @@ namespace Castor3D
 
 	Scene::~Scene()
 	{
+		m_meshManager->Clear();
+		m_windowManager->Clear();
+
 		m_skybox.reset();
 		m_animatedObjectGroupManager.reset();
 		m_billboardManager.reset();
@@ -488,10 +313,12 @@ namespace Castor3D
 		m_lightManager.reset();
 		m_sceneNodeManager.reset();
 
-		m_meshManagerView.reset();
+		m_meshManager.reset();
 		m_materialManagerView.reset();
 		m_samplerManagerView.reset();
-		m_windowManagerView.reset();
+		m_windowManager.reset();
+		m_overlayManagerView.reset();
+		m_fontManagerView.reset();
 
 		if ( m_rootCameraNode )
 		{
@@ -527,10 +354,15 @@ namespace Castor3D
 		m_geometryManager->Cleanup();
 		m_lightManager->Cleanup();
 		m_sceneNodeManager->Cleanup();
-		m_meshManagerView->Clear();
+
 		m_materialManagerView->Clear();
 		m_samplerManagerView->Clear();
-		m_windowManagerView->Clear();
+		m_overlayManagerView->Clear();
+		m_fontManagerView->Clear();
+
+		// Those two ones, being ResourceManager, need to be cleared in destructor only
+		m_meshManager->Cleanup();
+		m_windowManager->Cleanup();
 
 		if ( m_backgroundImage )
 		{
@@ -577,14 +409,14 @@ namespace Castor3D
 		m_changed = false;
 	}
 
-	bool Scene::SetBackground( Path const & p_pathFile )
+	bool Scene::SetBackground( Path const & p_folder, Path const & p_relative )
 	{
 		bool l_return = false;
 
 		try
 		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
-			l_texture->GetImage().SetSource( p_pathFile );
+			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
+			l_texture->GetImage().SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
@@ -632,7 +464,7 @@ namespace Castor3D
 		p_scene->Cleanup();
 	}
 
-	bool Scene::ImportExternal( String const & p_fileName, Importer & p_importer )
+	bool Scene::ImportExternal( Path const & p_fileName, Importer & p_importer )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 		bool l_return = true;
@@ -654,16 +486,10 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			m_meshManagerView->Insert( l_return->GetName(), l_return );
+			m_meshManager->Insert( l_return->GetName(), l_return );
 		}
 
 		return l_return;
-	}
-
-	void Scene::AddOverlay( OverlaySPtr p_overlay )
-	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
-		m_overlays.push_back( p_overlay );
 	}
 
 	uint32_t Scene::GetVertexCount()const
@@ -671,7 +497,7 @@ namespace Castor3D
 		uint32_t l_return = 0;
 		auto l_lock = make_unique_lock( *m_geometryManager );
 
-		for ( auto && l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryManager )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 
@@ -689,7 +515,7 @@ namespace Castor3D
 		uint32_t l_return = 0;
 		auto l_lock = make_unique_lock( *m_geometryManager );
 
-		for ( auto && l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryManager )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 

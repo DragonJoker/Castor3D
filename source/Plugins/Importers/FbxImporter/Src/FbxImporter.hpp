@@ -26,7 +26,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>
-#include <Animation/Skeleton.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
@@ -35,6 +34,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Skeleton/Skeleton.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
@@ -85,13 +85,13 @@ namespace C3dFbx
 		void DoLoadMaterials( Castor3D::Scene & p_scene, FbxScene * p_fbxScene );
 		void DoLoadAnimations( FbxScene * p_fbxScene );
 		void DoProcessBones( FbxNode * p_node, Castor3D::Skeleton & p_skeleton, Castor3D::BoneSPtr p_parent );
-		void DoProcessBonesWeights( FbxNode * p_node, Castor3D::Skeleton const & p_skeleton, std::vector< Castor3D::stVERTEX_BONE_DATA > & p_boneData );
+		void DoProcessBonesWeights( FbxNode * p_node, Castor3D::Skeleton const & p_skeleton, std::vector< Castor3D::VertexBoneData > & p_boneData );
 		void DoProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_node, FbxSkin * p_skin, Castor3D::Skeleton & p_skeleton );
 		Castor3D::SubmeshSPtr DoProcessMesh( FbxMesh * p_mesh );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxFileTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::eTEXTURE_CHANNEL p_channel );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxLayeredTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::eTEXTURE_CHANNEL p_channel );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxProceduralTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::eTEXTURE_CHANNEL p_channel );
-		Castor3D::TextureUnitSPtr DoLoadTexture( Castor3D::Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Castor3D::Pass & p_pass, Castor3D::eTEXTURE_CHANNEL p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxFileTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxLayeredTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxProceduralTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( Castor3D::Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 
 	private:
 		int m_anonymous;

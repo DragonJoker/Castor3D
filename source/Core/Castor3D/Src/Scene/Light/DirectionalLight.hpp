@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -45,10 +45,17 @@ namespace Castor3D
 		\~french
 		\brief		Loader de DirectionalLight
 		*/
-		class TextLoader
-			: public LightCategory::TextLoader
+		class TextWriter
+			: public LightCategory::TextWriter
 		{
 		public:
+			/**
+			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API TextWriter( Castor::String const & p_tabs, DirectionalLight const * p_category = nullptr );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -59,55 +66,14 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			C3D_API virtual bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
-		\brief		DirectionalLight loader
-		\~english
-		\brief		Loader de DirectionalLight
-		*/
-		class BinaryParser
-			: public LightCategory::BinaryParser
-		{
-		public:
+			C3D_API bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
 			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\copydoc		Castor::LightCategory::WriteInto
 			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( DirectionalLight const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( DirectionalLight & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool WriteInto( Castor::TextFile & p_file )override;
+
+		private:
+			DirectionalLight const * m_category;
 		};
 
 	private:
@@ -139,6 +105,13 @@ namespace Castor3D
 		 *\return		La lumière
 		 */
 		C3D_API static LightCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::LightCategory::CreateTextLoader
+		 */
+		C3D_API std::unique_ptr < LightCategory::TextWriter > CreateTextWriter( Castor::String const & p_tabs )override
+		{
+			return std::make_unique< TextWriter >( p_tabs, this );
+		}
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.

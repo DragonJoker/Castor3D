@@ -6,205 +6,100 @@
 
 #include "Face.hpp"
 
-#include "Animation/BonedVertex.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Material/Pass.hpp"
+#include "Mesh/Skeleton/BonedVertex.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Animation/Skeleton.hpp"
+#include "Scene/Scene.hpp"
 #include "Vertex.hpp"
 
 #include <BlockTracker.hpp>
 
 using namespace Castor;
 
+//*************************************************************************************************
+
 namespace Castor3D
 {
-	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	namespace
 	{
-	}
-
-	bool Submesh::TextLoader::operator()( Submesh const & p_submesh, TextFile & p_file )
-	{
-		bool l_return = p_file.WriteText( cuT( "\t\t\tsubmesh\n\t\t\t{\n" ) ) > 0;
-		Point3r l_pos;
-		Point3r l_tan;
-		Point3r l_nml;
-		Point3r l_tex;
-
-		for ( uint32_t i = 0; i < p_submesh.GetPointsCount() && l_return; i++ )
+		template< typename T, typename U >
+		inline void DoCopyVertices( uint32_t p_count, InterleavedVertexT< T > const * p_src, InterleavedVertexT< U > * p_dst )
 		{
-			Vertex::GetPosition( p_submesh[i]->const_ptr(), l_pos );
-			Vertex::GetNormal( p_submesh[i]->const_ptr(), l_nml );
-			Vertex::GetTangent( p_submesh[i]->const_ptr(), l_tan );
-			Vertex::GetTexCoord( p_submesh[i]->const_ptr(), l_tex );
-			StringStream l_streamPos, l_streamNml, l_streamTan, l_streamTex;
-			l_streamPos << l_pos[0] << cuT( " " ) << l_pos[1] << cuT( " " ) << l_pos[2];
-			l_streamNml << l_nml[0] << cuT( " " ) << l_nml[1] << cuT( " " ) << l_nml[2];
-			l_streamTan << l_tan[0] << cuT( " " ) << l_tan[1] << cuT( " " ) << l_tan[2];
-			l_streamTex << l_tex[0] << cuT( " " ) << l_tex[1] << cuT( " " ) << l_tex[2];
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tvertex %s\n" ), l_streamPos.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tnormal %s\n" ), l_streamNml.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\ttangent %s\n" ), l_streamTan.str().c_str() ) > 0;
-			l_return = p_file.Print( 1024, cuT( "\t\t\t\tuvw %s\n" ), l_streamTex.str().c_str() ) > 0;
+			for ( uint32_t i{ 0u }; i < p_count; ++i )
+			{
+				p_dst->m_pos[0] = U( p_src->m_pos[0] );
+				p_dst->m_pos[1] = U( p_src->m_pos[1] );
+				p_dst->m_pos[2] = U( p_src->m_pos[2] );
+				p_dst->m_nml[0] = U( p_src->m_nml[0] );
+				p_dst->m_nml[1] = U( p_src->m_nml[1] );
+				p_dst->m_nml[2] = U( p_src->m_nml[2] );
+				p_dst->m_tan[0] = U( p_src->m_tan[0] );
+				p_dst->m_tan[1] = U( p_src->m_tan[1] );
+				p_dst->m_tan[2] = U( p_src->m_tan[2] );
+				p_dst->m_bin[0] = U( p_src->m_bin[0] );
+				p_dst->m_bin[1] = U( p_src->m_bin[1] );
+				p_dst->m_bin[2] = U( p_src->m_bin[2] );
+				p_dst->m_tex[0] = U( p_src->m_tex[0] );
+				p_dst->m_tex[1] = U( p_src->m_tex[1] );
+				p_dst->m_tex[2] = U( p_src->m_tex[2] );
+				p_dst++;
+				p_src++;
+			}
 		}
-
-		uint32_t l_uiNbFaces = p_submesh.GetFaceCount();
-
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
-		{
-			l_return = Face::TextLoader()( p_submesh.GetFace( j ), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\t\t}\n" ) ) > 0;
-		}
-
-		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	Submesh::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< Submesh >( p_path )
-	{
-	}
-
-	bool Submesh::BinaryParser::Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const
+	bool BinaryWriter< Submesh >::DoWrite( Submesh const & p_obj )
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_SUBMESH );
-		double l_buffer[15];
-		Point3r l_pos;
-		Point3r l_tan;
-		Point3r l_bit;
-		Point3r l_nml;
-		Point3r l_tex;
 
-		for ( uint32_t i = 0; i < p_obj.GetPointsCount() && l_return; i++ )
 		{
-			Vertex::GetPosition( p_obj[i]->const_ptr(), l_pos );
-			Vertex::GetNormal( p_obj[i]->const_ptr(), l_tan );
-			Vertex::GetTangent( p_obj[i]->const_ptr(), l_bit );
-			Vertex::GetBitangent( p_obj[i]->const_ptr(), l_nml );
-			Vertex::GetTexCoord( p_obj[i]->const_ptr(), l_tex );
-			l_buffer[ 0] = double( l_pos[0] );
-			l_buffer[ 1] = double( l_pos[1] );
-			l_buffer[ 2] = double( l_pos[2] );
-			l_buffer[ 3] = double( l_tan[0] );
-			l_buffer[ 4] = double( l_tan[1] );
-			l_buffer[ 5] = double( l_tan[2] );
-			l_buffer[ 6] = double( l_bit[0] );
-			l_buffer[ 7] = double( l_bit[1] );
-			l_buffer[ 8] = double( l_bit[2] );
-			l_buffer[ 9] = double( l_nml[0] );
-			l_buffer[10] = double( l_nml[1] );
-			l_buffer[11] = double( l_nml[2] );
-			l_buffer[12] = double( l_tex[0] );
-			l_buffer[13] = double( l_tex[1] );
-			l_buffer[14] = double( l_tex[2] );
-			l_return = DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
-		}
-
-		uint32_t l_uiNbFaces = p_obj.GetFaceCount();
-
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
-		{
-			l_return = Face::BinaryParser( m_path ).Fill( p_obj.GetFace( j ), l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Submesh::BinaryParser::Parse( Submesh & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		String l_name;
-		std::vector< real > l_pos;
-		std::vector< real > l_tan;
-		std::vector< real > l_bit;
-		std::vector< real > l_nml;
-		std::vector< real > l_tex;
-		std::vector< stFACE_INDICES > l_faces;
-		double l_buffer[12];
-		Face l_face( 0, 0, 0 );
-		l_pos.reserve( p_chunk.GetRemaining() / 6 );
-		l_tan.reserve( p_chunk.GetRemaining() / 6 );
-		l_bit.reserve( p_chunk.GetRemaining() / 6 );
-		l_nml.reserve( p_chunk.GetRemaining() / 6 );
-		l_tex.reserve( p_chunk.GetRemaining() / 6 );
-		l_faces.reserve( p_chunk.GetRemaining() / 6 );
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
+			VertexBuffer const & l_buffer = p_obj.GetVertexBuffer();
+			size_t l_size = l_buffer.GetSize();
+			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_count = uint32_t( l_size / l_stride );
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_VERTEX_COUNT, m_chunk );
 
 			if ( l_return )
 			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_SUBMESH_VERTEX:
-					l_return = DoParseChunk( l_buffer, l_chunk );
-
-					if ( l_return )
-					{
-						l_pos.push_back( real( l_buffer[ 0] ) );
-						l_pos.push_back( real( l_buffer[ 1] ) );
-						l_pos.push_back( real( l_buffer[ 2] ) );
-						l_tan.push_back( real( l_buffer[ 2] ) );
-						l_tan.push_back( real( l_buffer[ 3] ) );
-						l_tan.push_back( real( l_buffer[ 4] ) );
-						l_bit.push_back( real( l_buffer[ 5] ) );
-						l_bit.push_back( real( l_buffer[ 6] ) );
-						l_bit.push_back( real( l_buffer[ 7] ) );
-						l_nml.push_back( real( l_buffer[ 8] ) );
-						l_nml.push_back( real( l_buffer[ 9] ) );
-						l_nml.push_back( real( l_buffer[10] ) );
-						l_tex.push_back( real( l_buffer[11] ) );
-						l_tex.push_back( real( l_buffer[12] ) );
-						l_tex.push_back( real( l_buffer[13] ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_SUBMESH_FACE:
-					l_return = Face::BinaryParser( m_path ).Parse( l_face, l_chunk );
-
-					if ( l_return )
-					{
-						l_faces.push_back( { l_face[0], l_face[1], l_face[2] } );
-					}
-
-					break;
-
-				default:
-					l_return = false;
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
+				InterleavedVertex const * l_srcbuf = reinterpret_cast< InterleavedVertex const * >( l_buffer.data() );
+				std::vector< InterleavedVertexT< double > > l_dstbuf( l_count );
+				DoCopyVertices( l_count, l_srcbuf, l_dstbuf.data() );
+				l_return = DoWriteChunk( l_dstbuf, eCHUNK_TYPE_SUBMESH_VERTEX, m_chunk );
 			}
 		}
 
-		if ( l_return && !l_pos.empty() )
+		if ( l_return && p_obj.HasIndexBuffer() )
 		{
-			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), nullptr, l_tex.data() };
-			p_obj.AddPoints( l_group );
-			p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
+			IndexBuffer const & l_buffer = p_obj.GetIndexBuffer();
+			uint32_t l_count = l_buffer.GetSize() / 3;
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_FACE_COUNT, m_chunk );
+
+			if ( l_return )
+			{
+				FaceIndices const * l_srcbuf = reinterpret_cast< FaceIndices const * >( l_buffer.data() );
+				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, eCHUNK_TYPE_SUBMESH_FACES, m_chunk );
+			}
+		}
+
+		if ( l_return && p_obj.HasBonesBuffer() )
+		{
+			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
+			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_count = l_buffer.GetSize() / l_stride;
+			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_BONE_COUNT, m_chunk );
+
+			if ( l_return )
+			{
+				VertexBoneData const * l_srcbuf = reinterpret_cast< VertexBoneData const * >( l_buffer.data() );
+				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), eCHUNK_TYPE_SUBMESH_BONES, m_chunk );
+			}
 		}
 
 		return l_return;
@@ -212,14 +107,104 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( Engine & p_engine, MeshRPtr p_mesh, uint32_t p_uiId )
-		: OwnedBy< Engine >( p_engine )
-		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
-		, m_id( p_uiId )
+	bool BinaryParser< Submesh >::DoParse( Submesh & p_obj )
+	{
+		bool l_return = true;
+		String l_name;
+		std::vector< FaceIndices > l_faces;
+		std::vector< VertexBoneData > l_bones;
+		std::vector< InterleavedVertexT< double > > l_srcbuf;
+		uint32_t l_count{ 0u };
+		uint32_t l_faceCount{ 0u };
+		uint32_t l_boneCount{ 0u };
+		BinaryChunk l_chunk;
+
+		while ( l_return && DoGetSubChunk( l_chunk ) )
+		{
+			switch ( l_chunk.GetChunkType() )
+			{
+			case eCHUNK_TYPE_SUBMESH_VERTEX_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_srcbuf.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_VERTEX:
+				l_return = DoParseChunk( l_srcbuf, l_chunk );
+
+				if ( l_return && !l_srcbuf.empty() )
+				{
+					std::vector< InterleavedVertex > l_dstbuf( l_srcbuf.size() );
+					DoCopyVertices( uint32_t( l_srcbuf.size() ), l_srcbuf.data(), l_dstbuf.data() );
+					p_obj.AddPoints( l_dstbuf );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_BONE_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_boneCount = l_count;
+					l_bones.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_BONES:
+				l_return = DoParseChunk( l_bones, l_chunk );
+
+				if ( l_return && l_boneCount > 0 )
+				{
+					p_obj.AddBoneDatas( l_bones );
+				}
+
+				l_boneCount = 0u;
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_FACE_COUNT:
+				l_return = DoParseChunk( l_count, l_chunk );
+
+				if ( l_return )
+				{
+					l_faceCount = l_count;
+					l_faces.resize( l_count );
+				}
+
+				break;
+
+			case eCHUNK_TYPE_SUBMESH_FACES:
+				l_return = DoParseChunk( l_faces, l_chunk );
+
+				if ( l_return && l_faceCount > 0 )
+				{
+					p_obj.AddFaceGroup( l_faces );
+				}
+
+				l_faceCount = 0u;
+				break;
+
+			default:
+				l_return = false;
+				break;
+			}
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
+	Submesh::Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id )
+		: OwnedBy< Scene >( p_scene )
+		, m_defaultMaterial( p_scene.GetEngine()->GetMaterialManager().GetDefaultMaterial() )
+		, m_id( p_id )
 		, m_parentMesh( p_mesh )
-		, m_programFlags( 0 )
-		, m_initialised( false )
-		, m_dirty( true )
 		, m_layout( {
 						BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
 						BufferElementDeclaration( ShaderProgram::Normal, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
@@ -366,8 +351,8 @@ namespace Castor3D
 		BufferElementGroupSPtr l_return;
 		uint32_t l_stride = 3 * sizeof( real ) * 5;
 		m_pointsData.push_back( ByteArray( l_stride ) );
-		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
-		l_return = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+		uint8_t * l_data = m_pointsData.back().data();
+		l_return = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 		Vertex::SetPosition( l_return, x, y, z );
 		m_points.push_back( l_return );
 		return l_return;
@@ -383,97 +368,32 @@ namespace Castor3D
 		return AddPoint( p_v[0], p_v[1], p_v[2] );
 	}
 
-	void Submesh::AddPoints( stVERTEX_GROUP const & p_vertices )
+	void Submesh::AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end )
 	{
-		stVERTEX_GROUP l_vertices = p_vertices;
 		uint32_t l_stride = m_layout.GetStride();
-		m_pointsData.push_back( ByteArray( l_vertices.m_uiCount * l_stride ) );
-		uint8_t * l_data = &( *m_pointsData.rbegin() )[0];
-		uint32_t l_uiVtxCount = uint32_t( m_points.size() );
+		m_pointsData.push_back( ByteArray( std::distance( p_begin, p_end ) * l_stride ) );
+		uint8_t * l_data = m_pointsData.back().data();
 
-		if ( l_vertices.m_pVtx )
+		std::for_each( p_begin, p_end, [this, &l_data, &l_stride]( InterleavedVertex const & p_data )
 		{
-			if ( l_vertices.m_pNml && l_vertices.m_pTan && l_vertices.m_pBin && l_vertices.m_pTex )
-			{
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
-					Vertex::SetTangent( l_vertex, l_vertices.m_pTan );
-					Vertex::SetBitangent( l_vertex, l_vertices.m_pBin );
-					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
-					m_points.push_back( l_vertex );
-					l_data += l_stride;
-					l_vertices.m_pVtx += Vertex::GetCountPos();
-					l_vertices.m_pNml += Vertex::GetCountNml();
-					l_vertices.m_pTan += Vertex::GetCountTan();
-					l_vertices.m_pBin += Vertex::GetCountBin();
-					l_vertices.m_pTex += Vertex::GetCountTex();
-				}
-			}
-			else if ( l_vertices.m_pNml && l_vertices.m_pTex )
-			{
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
-					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
-					m_points.push_back( l_vertex );
-					l_data += l_stride;
-					l_vertices.m_pVtx += Vertex::GetCountPos();
-					l_vertices.m_pNml += Vertex::GetCountNml();
-					l_vertices.m_pTex += Vertex::GetCountTex();
-				}
-			}
-			else if ( l_vertices.m_pNml )
-			{
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
-					m_points.push_back( l_vertex );
-					l_data += l_stride;
-					l_vertices.m_pVtx += Vertex::GetCountPos();
-					l_vertices.m_pNml += Vertex::GetCountNml();
-				}
-			}
-			else if ( l_vertices.m_pTex )
-			{
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
-					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
-					m_points.push_back( l_vertex );
-					l_data += l_stride;
-					l_vertices.m_pVtx += Vertex::GetCountPos();
-					l_vertices.m_pTex += Vertex::GetCountTex();
-				}
-			}
-			else
-			{
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
-					m_points.push_back( l_vertex );
-					l_data += l_stride;
-					l_vertices.m_pVtx += Vertex::GetCountPos();
-				}
-			}
-		}
+			BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
+			Vertex::SetPosition( l_vertex, p_data.m_pos.data() );
+			Vertex::SetNormal( l_vertex, p_data.m_nml.data() );
+			Vertex::SetTangent( l_vertex, p_data.m_tan.data() );
+			Vertex::SetBitangent( l_vertex, p_data.m_bin.data() );
+			Vertex::SetTexCoord( l_vertex, p_data.m_tex.data() );
+			m_points.push_back( l_vertex );
+			l_data += l_stride;
+		} );
 	}
 
-	void Submesh::AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd )
+	void Submesh::AddBoneDatas( VertexBoneData const * const p_begin, VertexBoneData const * const p_end )
 	{
 		uint32_t l_stride = BonedVertex::Stride;
-		m_bonesData.push_back( ByteArray( std::distance( p_boneDataBegin, p_boneDataEnd ) * l_stride ) );
+		m_bonesData.push_back( ByteArray( std::distance( p_begin, p_end ) * l_stride ) );
 		auto l_data = &( *m_bonesData.rbegin() )[0];
 
-		std::for_each( p_boneDataBegin, p_boneDataEnd, [this, &l_data, &l_stride]( stVERTEX_BONE_DATA const & p_data )
+		std::for_each( p_begin, p_end, [this, &l_data, &l_stride]( VertexBoneData const & p_data )
 		{
 			BufferElementGroupSPtr l_bonesData = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_bones.size() ) );
 			BonedVertex::SetBones( l_bonesData, p_data );
@@ -501,12 +421,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Submesh::AddFaceGroup( stFACE_INDICES * p_faces, uint32_t p_count )
+	void Submesh::AddFaceGroup( FaceIndices const * const p_begin, FaceIndices const * const p_end )
 	{
-		for ( uint32_t i = 0; i < p_count; i++ )
+		std::for_each( p_begin, p_end, [this]( FaceIndices const & p_data )
 		{
-			AddFace( p_faces[i].m_uiVertexIndex[0], p_faces[i].m_uiVertexIndex[1], p_faces[i].m_uiVertexIndex[2] );
-		}
+			AddFace( p_data.m_index[0], p_data.m_index[1], p_data.m_index[2] );
+		} );
 	}
 
 	void Submesh::AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Point3r const & p_minUV, Point3r const & p_maxUV )
@@ -531,7 +451,7 @@ namespace Castor3D
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetEngine(), m_parentMesh, m_id );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetScene(), m_parentMesh, m_id );
 		uint32_t l_stride = m_layout.GetStride();
 
 		//On effectue une copie des vertex
@@ -561,6 +481,7 @@ namespace Castor3D
 
 	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
+		ENSURE( m_initialised );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -573,6 +494,7 @@ namespace Castor3D
 
 	void Submesh::DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
+		ENSURE( m_initialised );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -851,6 +773,7 @@ namespace Castor3D
 
 	void Submesh::SortFaces( Point3r const & p_ptCameraPosition )
 	{
+		ENSURE( m_initialised );
 		try
 		{
 			if ( m_cameraPosition != p_ptCameraPosition )
@@ -1000,8 +923,8 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
 			{
 				l_buffers->Initialise( m_vertexBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
 			} ) );
@@ -1017,12 +940,12 @@ namespace Castor3D
 
 	void Submesh::DoCreateBuffers()
 	{
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_layout );
-		m_indexBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_layout );
+		m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
 
-		if ( ( GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+		if ( CheckFlag( GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) && m_parentMesh.GetSkeleton() )
 		{
-			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
+			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 			{
 				{
 					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
@@ -1033,7 +956,7 @@ namespace Castor3D
 			} );
 			ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
 		}
-		else if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
+		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
 			uint32_t l_count = 0;
 			l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
@@ -1044,7 +967,7 @@ namespace Castor3D
 			if ( l_count > 1 )
 			{
 				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
-				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
+				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
 						BufferElementDeclaration{ ShaderProgram::Transform, eELEMENT_USAGE_TRANSFORM, eELEMENT_TYPE_4x4FLOATS, 0 },
@@ -1117,7 +1040,7 @@ namespace Castor3D
 	{
 		if ( m_vertexBuffer )
 		{
-			uint8_t * l_buffer = nullptr;
+			uint8_t * l_buffer{ nullptr };
 			VertexBuffer & l_vertexBuffer = *m_vertexBuffer;
 			uint32_t l_stride = m_layout.GetStride();
 			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
@@ -1157,7 +1080,6 @@ namespace Castor3D
 		if ( m_indexBuffer )
 		{
 			FaceSPtr l_pFace;
-			uint32_t l_index = 0;
 			IndexBuffer & l_indexBuffer = *m_indexBuffer;
 			uint32_t l_uiSize = uint32_t( m_faces.size() * 3 );
 
@@ -1167,6 +1089,8 @@ namespace Castor3D
 				{
 					l_indexBuffer.Resize( l_uiSize );
 				}
+
+				uint32_t l_index = 0;
 
 				for ( auto const & l_face : m_faces )
 				{
@@ -1184,7 +1108,6 @@ namespace Castor3D
 	{
 		if ( m_bonesBuffer )
 		{
-			uint8_t * l_buffer = nullptr;
 			VertexBuffer & l_bonesBuffer = *m_bonesBuffer;
 			uint32_t l_stride = BonedVertex::Stride;
 			uint32_t l_size = uint32_t( m_bones.size() ) * l_stride;
@@ -1197,7 +1120,7 @@ namespace Castor3D
 					l_bonesBuffer.Resize( l_size );
 				}
 
-				l_buffer = l_bonesBuffer.data();
+				auto l_buffer = l_bonesBuffer.data();
 
 				for ( auto l_it : m_bonesData )
 				{

@@ -50,6 +50,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 	private:\
 		std::unique_ptr< ManagerView< className, className##Manager, eventType > > m_##memberName##ManagerView
 
+#define DECLARE_MANAGER_VIEW_MEMBER_CU( memberName, className, eventType )\
+	public:\
+		inline ManagerView< Castor::className, Castor::className##Manager, eventType > & Get##className##View()\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+		inline ManagerView< Castor::className, Castor::className##Manager, eventType > const & Get##className##View()const\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+	private:\
+		std::unique_ptr< ManagerView< Castor::className, Castor::className##Manager, eventType > > m_##memberName##ManagerView
+
 #define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
 		inline ManagerView< className, mgrName##Manager, eventType > & Get##className##View()\
@@ -92,8 +105,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de scène
 		*/
-		class TextLoader
-			: public Castor::Loader< Scene, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< Scene >
 		{
 		public:
 			/**
@@ -102,7 +115,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -113,55 +126,7 @@ namespace Castor3D
 			 *\param[in]	p_scene	La scène
 			 *\param[in]	p_file	Le fichier
 			 */
-			C3D_API virtual bool operator()( Scene const & p_scene, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		Sampler loader
-		\~english
-		\brief		Loader de Sampler
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Scene >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Scene const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Scene & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( Scene const & p_scene, Castor::TextFile & p_file )override;
 		};
 
 	public:
@@ -229,12 +194,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
-		 *\param[in]	p_pathFile	The image file path
+		 *\param[in]	p_folder	The folder containing the image.
+		 *\param[in]	p_relative	The image file path, relative to p_folder.
 		 *\~french
 		 *\brief		Définit l'image de fond pour la scène
-		 *\param[in]	p_pathFile	Le chemin d'accès à l'image
+		 *\param[in]	p_folder	Le dossier contenant l'image.
+		 *\param[in]	p_relative	Le chemin d'accès à l'image, relatif à p_folder.
 		 */
-		C3D_API bool SetBackground( Castor::Path const & p_pathFile );
+		C3D_API bool SetBackground( Castor::Path const & p_folder, Castor::Path const & p_relative );
 		/**
 		 *\~english
 		 *\brief		Sets the skybox for the scene.
@@ -256,7 +223,7 @@ namespace Castor3D
 		 *\param[in]	p_importer	L'importeur chargé de la récupération des données
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
-		C3D_API bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
+		C3D_API bool ImportExternal( Castor::Path const & p_fileName, Importer & p_importer );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
@@ -281,16 +248,6 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène à intégrer
 		 */
 		C3D_API void Merge( SceneSPtr p_scene );
-		/**
-		 *\~english
-		 *\brief		Adds an overlay to the list
-		 *\param[in]	p_overlay	The overlay to add
-		 *\~french
-		 *\brief		Ajoute un overlay à ceux déjà présents
-		 *\param[in]	p_overlay	L'overlay
-		 *\return
-		 */
-		C3D_API void AddOverlay( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count
@@ -425,6 +382,16 @@ namespace Castor3D
 		{
 			m_ambientLight = p_value;
 		}
+		/**
+		 *\~english
+		 *\return		The skybox.
+		 *\~french
+		 *\return		La skybox.
+		 */
+		inline SkyboxSPtr GetSkybox()const
+		{
+			return m_skybox;
+		}
 
 		//@}
 
@@ -450,24 +417,30 @@ namespace Castor3D
 		//!\~english	The geometies manager.
 		//!\~french		Le gestionnaire de géométries.
 		DECLARE_MANAGER_MEMBER( geometry, Geometry );
+		//!\~english	The meshes manager.
+		//!\~french		Le gestionnaire de maillages.
+		DECLARE_MANAGER_MEMBER( mesh, Mesh );
 		//!\~english	The billboards manager.
 		//!\~french		Le gestionnaire de billboards.
 		DECLARE_MANAGER_MEMBER( billboard, Billboard );
 		//!\~english	The animated objects groups manager.
 		//!\~french		Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The scene meshes view.
-		//!\~french		La vue sur les maillages de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh, eEVENT_TYPE_PRE_RENDER );
+		//!\~english	The render windows manager.
+		//!\~french		Le gestionnaire de fenêtres de rendu.
+		DECLARE_MANAGER_MEMBER( window, Window );
+		//!\~english	The overlays view.
+		//!\~french		La vue sur le incrustations de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene materials view.
 		//!\~french		La vue sur les matériaux de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene samplers view.
 		//!\~french		La vue sur les échantillonneurs de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
-		//!\~english	The scene render windows view.
-		//!\~french		La vue sur les fenêtres de rendu de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow, eEVENT_TYPE_POST_RENDER );
+		//!\~english	The scene fonts view.
+		//!\~french		La vue sur les polices de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
@@ -489,6 +462,17 @@ namespace Castor3D
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxSPtr m_skybox;
+
+	public:
+		//!\~english	The cameras root node name.
+		//!\~french		Le nom du noeud de scène racine des caméras.
+		static Castor::String CameraRootNode;
+		//!\~english	The objects root node name.
+		//!\~french		Le nom du noeud de scène racine des objets.
+		static Castor::String ObjectRootNode;
+		//!\~english	The root node name.
+		//!\~french		Le nom du noeud de scène racine.
+		static Castor::String RootNode;
 	};
 }
 

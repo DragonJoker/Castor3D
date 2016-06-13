@@ -31,18 +31,18 @@ namespace Castor3D
 		class Thread
 		{
 		private:
-			bool m_bEnded;
-			bool m_bLaunched;
-			bool m_bStopped;
+			bool m_bEnded{ true };
+			bool m_bLaunched{ false };
+			bool m_bStopped{ false };
 
 		protected:
-			Generator * m_parent;
-			int m_iWidth;
-			int m_iTop;
-			int m_iBottom;
-			int m_iHeight;
+			Generator * m_parent{ nullptr };
+			int m_iWidth{ 0 };
+			int m_iTop{ 0 };
+			int m_iBottom{ 0 };
+			int m_iHeight{ 0 };
 			Castor::UbPixel m_pxColour;
-			uint32_t m_index;
+			uint32_t m_index{ 0u };
 			std::shared_ptr< std::thread > m_pThread;
 			mutable std::recursive_mutex m_mutex;
 
@@ -93,18 +93,18 @@ namespace Castor3D
 		};
 
 	protected:
-		int m_iWidth;
-		int m_iHeight;
-		unsigned long long m_ullStep;
+		int m_iWidth{ 0 };
+		int m_iHeight{ 0 };
+		unsigned long long m_ullStep{ 0u };
 		Castor::PixelBuffer m_frontBuffer;
 		Castor::PixelBuffer m_backBuffer;
 		Castor::UbPixel m_pxColour;
-		uint32_t m_uiThreadCount;
-		bool m_bEnded;
+		uint32_t m_uiThreadCount{ 0u };
+		bool m_bEnded{ true };
 		std::vector <Thread *> m_arraySlaveThreads;
-		bool m_initialised;
-		TextureUnit * m_pTexture;
-		Engine * m_engine;
+		bool m_initialised{ false };
+		TextureUnit * m_pTexture{ nullptr };
+		Engine * m_engine{ nullptr };
 
 	public:
 		C3D_API Generator( Engine * p_engine, int p_width, int p_height );

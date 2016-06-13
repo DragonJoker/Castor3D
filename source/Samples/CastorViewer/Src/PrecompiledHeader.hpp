@@ -66,7 +66,6 @@
 #	include <Engine.hpp>
 #	include <ShaderManager.hpp>
 
-#	include <Animation/AnimatedObjectGroup.hpp>
 #	include <Animation/Animation.hpp>
 #	include <Animation/KeyFrame.hpp>
 #	include <Event/Frame/FrameListener.hpp>
@@ -87,6 +86,7 @@
 #	include <Scene/Scene.hpp>
 #	include <Scene/SceneFileParser.hpp>
 #	include <Scene/SceneNode.hpp>
+#	include <Scene/Animation/AnimatedObjectGroup.hpp>
 #	include <Scene/Light/DirectionalLight.hpp>
 #	include <Scene/Light/Light.hpp>
 #	include <Scene/Light/PointLight.hpp>
@@ -110,6 +110,12 @@
 #	include <SplashScreen.hpp>
 #else
 #	include <GuiCommonPrerequisites.hpp>
+#endif
+
+#if !defined( VLD_AVAILABLE ) && defined( _MSC_VER ) && !defined( NDEBUG )
+#	define _CRTDBG_MAP_ALLOC
+#	include <cstdlib>
+#	include <crtdbg.h>
 #endif
 
 #endif

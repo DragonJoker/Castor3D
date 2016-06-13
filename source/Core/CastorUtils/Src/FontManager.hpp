@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_FONT_MANAGER_H___
 
 #include "Collection.hpp"
-#include "Loader.hpp"
 
 #if defined( CreateFont )
 #	undef CreateFont
@@ -42,39 +41,6 @@ namespace Castor
 		: private Collection< Font, String >
 	{
 	public:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		29/09/2015
-		\~english
-		\brief		FontManager loader.
-		\~french
-		\brief		Loader de FontManager.
-		*/
-		class BinaryLoader
-			: public Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor.
-			 *\~french
-			 *\brief		Constructeur.
-			 */
-			CU_API BinaryLoader();
-			/**
-			 *\~english
-			 *\brief			Loads the font manager.
-			 *\param[in,out]	p_manager	The manager to load.
-			 *\param[in]		p_file		The source file.
-			 *\~french
-			 *\brief			Charge le gestionnaire de polices.
-			 *\param[in,out]	p_manager	Le gestionnaire à charger.
-			 *\param[in]		p_file		Le fichier source.
-			 */
-			CU_API virtual bool operator()( FontManager & p_manager, BinaryFile & p_file );
-		};
-
 		DECLARE_MAP( Castor::String, Castor::Path, PathName );
 
 	public:
@@ -108,7 +74,7 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height );
+		CU_API FontSPtr Create( Castor::String const & p_name, uint32_t p_height, Castor::Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -119,14 +85,25 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API FontSPtr get( Castor::String const & p_name );
+		CU_API FontSPtr Find( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Retrieves a font.
+		 *\param[in]	p_name	The font name.
+		 *\return		The font, nullptr if not found.
+		 *\~french
+		 *\brief		Récupère une police.
+		 *\param[in]	p_name	Le nom de la police.
+		 *\return		La police, nullptr si non trouvée.
+		 */
+		CU_API void Remove( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Clears the collection and file paths.
 		 *\~french
 		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
 		 */
-		CU_API void clear();
+		CU_API void Clear();
 
 	public:
 		using Collection< Font, String >::begin;

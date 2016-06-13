@@ -115,28 +115,6 @@ namespace Castor3D
 		C3D_API bool Read( Castor::TextFile & p_file );
 		/**
 		 *\~english
-		 *\brief		Writes materials in a binary file
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Ecrit les matériaux dans un fichier binaire
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Save( Castor::BinaryFile & p_file )const;
-		/**
-		 *\~english
-		 *\brief		Reads materials from a binary file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Lit les matériaux à partir d'un fichier binaire
-		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Load( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
 		 *\brief		Retrieves the default material
 		 *\~french
 		 *\brief		Récupère le matériau par défaut

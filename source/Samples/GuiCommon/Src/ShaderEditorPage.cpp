@@ -52,14 +52,8 @@ namespace GuiCommon
 		if ( m_shaderFile.empty() && p_createIfNone )
 		{
 			wxString l_wildcard;
-
-			switch ( l_program->GetLanguage() )
-			{
-			case Castor3D::eSHADER_LANGUAGE_GLSL:
-				l_wildcard = _( "GLSL Files" );
-				l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
-				break;
-			}
+			l_wildcard = _( "GLSL Files" );
+			l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
 
 			wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
@@ -127,14 +121,7 @@ namespace GuiCommon
 	void ShaderEditorPage::DoLoadPage()
 	{
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
-		wxString l_extension;
-
-		switch ( l_program->GetLanguage() )
-		{
-		case Castor3D::eSHADER_LANGUAGE_GLSL:
-			l_extension = wxT( ".glsl" );
-			break;
-		}
+		wxString l_extension = wxT( ".glsl" );
 
 		wxArrayString l_arrayChoices;
 		l_arrayChoices.push_back( wxCOMBO_NEW );

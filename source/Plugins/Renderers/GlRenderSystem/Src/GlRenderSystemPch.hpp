@@ -73,4 +73,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <StringUtils.hpp>
 
+#ifdef None
+#	undef None
+#endif
+
 #endif

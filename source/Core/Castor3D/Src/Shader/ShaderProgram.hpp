@@ -40,7 +40,7 @@ namespace Castor3D
 		: public Castor::OwnedBy< RenderSystem >
 		, public std::enable_shared_from_this< ShaderProgram >
 	{
-		friend class Castor::TextLoader< Castor3D::ShaderProgram >;
+		friend class Castor::TextWriter< Castor3D::ShaderProgram >;
 
 	public:
 		/*!
@@ -52,8 +52,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de ShaderProgram
 		*/
-		class TextLoader
-			: public Castor::Loader< ShaderProgram, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< ShaderProgram >
 		{
 		public:
 			/**
@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderProgram into a text file
@@ -73,56 +73,7 @@ namespace Castor3D
 			 *\param[in]		p_program	Le ShaderProgram
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.7.0.0
-		\date		15/04/2013
-		\~english
-		\brief		ShaderProgram loader
-		\~french
-		\brief		Loader de ShaderProgram
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< ShaderProgram >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path	The current folder path
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( ShaderProgram const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( ShaderProgram & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file )override;
 		};
 
 		/**@name Attributes */
@@ -234,7 +185,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	L'instance du RenderSystem
 		 *\param[in]	p_langage		Le langage du programme
 		 */
-		C3D_API ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_langage );
+		C3D_API explicit ShaderProgram( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -585,18 +536,6 @@ namespace Castor3D
 		{
 			return m_status;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the shader language
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le language du shader
-		 *\return		La valeur
-		 */
-		inline eSHADER_LANGUAGE GetLanguage()const
-		{
-			return m_eLanguage;
-		}
 
 	protected:
 		/**
@@ -662,8 +601,6 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status	\~french Le statut du programme
 		ePROGRAM_STATUS m_status;
-		//!<\~english The program language	\~french Le langage du programme
-		eSHADER_LANGUAGE m_eLanguage;
 		//!\~english The shaders array	\~french Le tableau de shaders
 		std::array< ShaderObjectSPtr, eSHADER_TYPE_COUNT > m_pShaders;
 		//!\~english The active shaders array	\~french Le tableau de shaders actifs

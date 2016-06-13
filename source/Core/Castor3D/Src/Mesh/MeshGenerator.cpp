@@ -6,6 +6,7 @@
 #include "Submesh.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Scene/Scene.hpp"
 
 using namespace Castor;
 
@@ -29,15 +30,15 @@ namespace Castor3D
 	{
 		DoGenerate( p_mesh, p_faces, p_dimensions );
 
-		for ( auto && l_submesh : p_mesh )
+		for ( auto l_submesh : p_mesh )
 		{
-			p_mesh.GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			p_mesh.GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
 	}
 
 	void MeshGenerator::ComputeNormals( Mesh & p_mesh, bool p_reverted )
 	{
-		for ( auto && l_submesh : p_mesh )
+		for ( auto l_submesh : p_mesh )
 		{
 			l_submesh->ComputeNormals( p_reverted );
 		}

@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Manager/ObjectManager.hpp"
 
-#include "Animation/AnimatedObjectGroup.hpp"
+#include "Scene/Animation/AnimatedObjectGroup.hpp"
 
 namespace Castor3D
 {

@@ -154,6 +154,16 @@ namespace Castor3D
 		 *\param[in]	p_enable	Le statut.
 		 */
 		C3D_API virtual void UpdateVSync( bool p_enable );
+		/**
+		 *\~english
+		 *\return		The debug overlays shown status.
+		 *\~french
+		 *\return		Le statut d'affichage des incrustations de débogage.
+		 */
+		inline bool GetShowDebugOverlays()const
+		{
+			return m_debugOverlays != nullptr;
+		}
 
 	protected:
 		/**

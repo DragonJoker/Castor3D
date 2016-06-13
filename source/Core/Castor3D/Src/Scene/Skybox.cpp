@@ -15,8 +15,10 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Texture/TextureLayout.hpp"
+#include "Texture/TextureImage.hpp"
 
 #include <GlslSource.hpp>
 
@@ -25,9 +27,67 @@ using namespace GLSL;
 
 namespace Castor3D
 {
+	Skybox::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Skybox >{ p_tabs }
+	{
+	}
+
+	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+		Path l_subfolder{ cuT( "Textures" ) };
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+		}
+
+		return l_return;
+	}
+
+	//************************************************************************************************
+
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_CUBE, 0, eACCESS_TYPE_READ ) }
+		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, 0, eACCESS_TYPE_READ ) }
 		, m_declaration
 		{
 			{
@@ -44,11 +104,11 @@ namespace Castor3D
 		else
 		{
 			auto l_sampler = GetEngine()->GetSamplerManager().Create( l_skybox );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_EDGE );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
 			m_sampler = l_sampler;
 		}
 
@@ -200,7 +260,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).XYWW;
+				gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * c3d_mtxModel * vec4( position, 1.0 ) ).SWIZZLE_XYWW;
 				vtx_texture = position;
 			};
 
@@ -221,7 +281,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.X, -vtx_texture.Y, vtx_texture.Z ) );
+				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.SWIZZLE_X, -vtx_texture.SWIZZLE_Y, vtx_texture.SWIZZLE_Z ) );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

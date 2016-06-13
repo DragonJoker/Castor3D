@@ -52,7 +52,7 @@ namespace Lwo
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
-			for ( auto && l_submesh : *l_mesh )
+			for ( auto l_submesh : *l_mesh )
 			{
 				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
@@ -78,7 +78,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_return = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4 ) );
@@ -849,27 +849,27 @@ namespace Lwo
 			switch ( p_channel )
 			{
 			case eTEX_CHANNEL_COLR:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
+				p_pTexture->SetChannel( TextureChannel::Diffuse );
 				break;
 
 			case eTEX_CHANNEL_DIFF:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
+				p_pTexture->SetChannel( TextureChannel::Diffuse );
 				break;
 
 			case eTEX_CHANNEL_SPEC:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_SPECULAR );
+				p_pTexture->SetChannel( TextureChannel::Specular );
 				break;
 
 			case eTEX_CHANNEL_GLOS:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_GLOSS );
+				p_pTexture->SetChannel( TextureChannel::Gloss );
 				break;
 
 			case eTEX_CHANNEL_TRAN:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_OPACITY );
+				p_pTexture->SetChannel( TextureChannel::Opacity );
 				break;
 
 			case eTEX_CHANNEL_BUMP:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_NORMAL );
+				p_pTexture->SetChannel( TextureChannel::Normal );
 				break;
 			}
 		}
@@ -921,7 +921,7 @@ namespace Lwo
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_unit = std::make_shared< TextureUnit >( *p_pPass->GetEngine() );
-						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
+						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
 						l_texture->GetImage().SetSource( l_it->second->GetPixels() );
 						l_unit->SetTexture( l_texture );
 						DoSetChannel( l_unit, l_eChannel );
@@ -1144,7 +1144,7 @@ namespace Lwo
 					DoRead( l_strName );
 					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
 					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
-					l_pathImage = string::string_cast< xchar >( l_strName );
+					l_pathImage = Path{ string::string_cast< xchar >( l_strName ) };
 
 					if ( !File::FileExists( l_pathImage ) )
 					{

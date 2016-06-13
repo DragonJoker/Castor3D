@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API TextureAttachment( TextureLayoutSPtr p_texture );
+		C3D_API explicit TextureAttachment( TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\brief		Récupère la dimension cible attachée
 		 *\return		La dimension cible
 		 */
-		inline eTEXTURE_TYPE GetTarget()const
+		inline TextureType GetTarget()const
 		{
 			return m_target;
 		}
@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\brief		Récupère la dimension cible attachée.
 		 *\param[in]	p_target	La dimension cible.
 		 */
-		inline void SetTarget( eTEXTURE_TYPE p_target )
+		inline void SetTarget( TextureType p_target )
 		{
 			m_target = p_target;
 		}
@@ -122,7 +122,7 @@ namespace Castor3D
 		//!\~english The attached texture	\~french La texture attachée
 		TextureLayoutWPtr m_texture;
 		//!\~english The texture target type	\~french Le type de cible de la texture
-		eTEXTURE_TYPE m_target;
+		TextureType m_target;
 		//!\~english The attached layer	\~french La couche attachée
 		int m_layer;
 	};

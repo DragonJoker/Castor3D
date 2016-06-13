@@ -46,7 +46,7 @@ namespace Bloom
 		static const String CombineMapPass3 = cuT( "c3d_mapPass3" );
 		static const String CombineMapScene = cuT( "c3d_mapScene" );
 
-		Castor::String GetGlslVertexProgram( RenderSystem * p_renderSystem )
+		Castor::String GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -63,12 +63,12 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_XY, 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslHiPassProgram( RenderSystem * p_renderSystem )
+		Castor::String GetHiPassProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -82,16 +82,16 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
+				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
 
-				plx_v4FragColor.X = TERNARY( l_writer, Float, plx_v4FragColor.X > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.Y = TERNARY( l_writer, Float, plx_v4FragColor.Y > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.Z = TERNARY( l_writer, Float, plx_v4FragColor.Z > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_X = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_X > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_Y = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Y > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.SWIZZLE_Z = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Z > 1.0, Float( 1 ), Float( 0 ) );
 			} );
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslBlurProgram( RenderSystem * p_renderSystem )
+		Castor::String GetBlurProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -124,7 +124,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslCombineProgram( RenderSystem * p_renderSystem )
+		Castor::String GetCombineProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -166,7 +166,7 @@ namespace Bloom
 		m_colourTexture->SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture->SetSampler( p_sampler );
 		//l_colourTexture->GetImage().SetSource( p_renderTarget );
@@ -206,8 +206,11 @@ namespace Bloom
 
 	//*********************************************************************************************
 
+	String BloomPostEffect::Type = cuT( "bloom" );
+	String BloomPostEffect::Name = cuT( "Bloom PostEffect" );
+
 	BloomPostEffect::BloomPostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
-		: PostEffect( p_renderSystem, p_renderTarget, p_param )
+		: PostEffect( p_renderSystem, p_renderTarget, BloomPostEffect::Type, p_param )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
@@ -274,17 +277,10 @@ namespace Bloom
 		String l_blur;
 		String l_combine;
 
-		if ( GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			l_vertex = GetGlslVertexProgram( GetRenderSystem() );
-			l_hipass = GetGlslHiPassProgram( GetRenderSystem() );
-			l_blur = GetGlslBlurProgram( GetRenderSystem() );
-			l_combine = GetGlslCombineProgram( GetRenderSystem() );
-		}
-		else
-		{
-			CASTOR_EXCEPTION( "Unsupported renderer type" );
-		}
+		l_vertex = GetVertexProgram( GetRenderSystem() );
+		l_hipass = GetHiPassProgram( GetRenderSystem() );
+		l_blur = GetBlurProgram( GetRenderSystem() );
+		l_combine = GetCombineProgram( GetRenderSystem() );
 
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
@@ -341,7 +337,7 @@ namespace Bloom
 
 		uint32_t l_index = 0;
 
-		for ( auto && l_surface : m_hiPassSurfaces )
+		for ( auto & l_surface : m_hiPassSurfaces )
 		{
 			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_linearSampler );
 			l_size.width() >>= 1;
@@ -351,7 +347,7 @@ namespace Bloom
 		l_size = m_renderTarget.GetSize();
 		l_index = 0;
 
-		for ( auto && l_surface : m_blurSurfaces )
+		for ( auto & l_surface : m_blurSurfaces )
 		{
 			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_nearestSampler );
 			l_size.width() >>= 1;
@@ -375,12 +371,12 @@ namespace Bloom
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
 
-		for ( auto && l_surface : m_blurSurfaces )
+		for ( auto & l_surface : m_blurSurfaces )
 		{
 			l_surface.Cleanup();
 		}
 
-		for ( auto && l_surface : m_hiPassSurfaces )
+		for ( auto & l_surface : m_hiPassSurfaces )
 		{
 			l_surface.Cleanup();
 		}
@@ -412,6 +408,11 @@ namespace Bloom
 		}
 
 		return true;
+	}
+
+	bool BloomPostEffect::DoWriteInto( TextFile & p_file )
+	{
+		return p_file.WriteText( cuT( " -OffsetX " ) + string::to_string( m_offsetX ) + cuT( " -OffsetY " ) + string::to_string( m_offsetY ) ) > 0;
 	}
 
 	bool BloomPostEffect::DoHiPassFilter()
@@ -529,17 +530,17 @@ namespace Bloom
 	SamplerSPtr BloomPostEffect::DoCreateSampler( bool p_linear )
 	{
 		String l_name = cuT( "BloomSampler_" );
-		eINTERPOLATION_MODE l_mode;
+		InterpolationMode l_mode;
 
 		if ( p_linear )
 		{
 			l_name += cuT( "Linear" );
-			l_mode = eINTERPOLATION_MODE_LINEAR;
+			l_mode = InterpolationMode::Linear;
 		}
 		else
 		{
 			l_name += cuT( "Nearest" );
-			l_mode = eINTERPOLATION_MODE_NEAREST;
+			l_mode = InterpolationMode::Nearest;
 		}
 
 		SamplerSPtr l_sampler;
@@ -547,11 +548,11 @@ namespace Bloom
 		if ( !m_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
 		{
 			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Min, l_mode );
+			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, l_mode );
+			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
+			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToBorder );
+			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToBorder );
 		}
 		else
 		{

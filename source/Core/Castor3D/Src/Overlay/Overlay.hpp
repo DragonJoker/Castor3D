@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OVERLAY_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Binary/BinaryParser.hpp"
 #include "OverlayCategory.hpp"
 
 #include <OwnedBy.hpp>
@@ -51,8 +50,8 @@ namespace Castor3D
 		\brief		Overlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class TextLoader
-			: public Castor::Loader< Overlay, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+		class TextWriter
+			: public Castor::TextWriter< Overlay >
 		{
 		public:
 			/**
@@ -61,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API explicit TextWriter( Castor::String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -74,65 +73,12 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			C3D_API virtual bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		08/04/2014
-		\~english
-		\brief		Overlay loader
-		\~english
-		\brief		Loader de Overlay
-		*/
-		class BinaryParser
-			: public Castor3D::BinaryParser< Overlay >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\param[in]	p_path		The current folder path
-			 *\param[in]	p_engine	The engine
-			 *\~french
-			 *\brief		Constructeur
-			 *\param[in]	p_path		Le chemin d'accès au dossier courant
-			 *\param[in]	p_engine	Le moteur
-			 */
-			C3D_API BinaryParser( Castor::Path const & p_path, Engine * p_engine );
-			/**
-			 *\~english
-			 *\brief		Function used to fill the chunk from specific data
-			 *\param[in]	p_obj	The object to write
-			 *\param[out]	p_chunk	The chunk to fill
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const;
-			/**
-			 *\~english
-			 *\brief		Function used to retrieve specific data from the chunk
-			 *\param[out]	p_obj	The object to read
-			 *\param[in]	p_chunk	The chunk containing data
-			 *\return		\p false if any error occured
-			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
-			 */
-			C3D_API virtual bool Parse( Overlay & p_obj, BinaryChunk & p_chunk )const;
-
-			//!\~english The engine	\~french Le moteur
-			Engine * m_engine;
+			C3D_API bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file )override;
 		};
 
 	public:
-		typedef OverlayPtrArray::iterator iterator;
-		typedef OverlayPtrArray::const_iterator const_iterator;
+		using iterator = OverlayPtrArray::iterator;
+		using const_iterator = OverlayPtrArray::const_iterator;
 
 	public:
 		/**
@@ -187,7 +133,7 @@ namespace Castor3D
 		 *\param[in]	p_overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool AddChild( OverlaySPtr p_overlay );
+		C3D_API void AddChild( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level
@@ -198,7 +144,7 @@ namespace Castor3D
 		 *\param[in]	p_level	Le niveau voulu
 		 *\return		Le compte
 		 */
-		C3D_API int GetChildsCount( int p_level )const;
+		C3D_API uint32_t GetChildrenCount( int p_level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel overlay.
@@ -507,7 +453,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'enfants
 		 *\return		La valeur
 		 */
-		inline uint32_t GetChildsCount()const
+		inline uint32_t GetChildrenCount()const
 		{
 			return uint32_t( m_overlays.size() );
 		}
@@ -689,7 +635,7 @@ namespace Castor3D
 		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
 		OverlayWPtr m_parent;
-		//!\~english The childs	\~french Les enfants
+		//!\~english The children	\~french Les enfants
 		OverlayPtrArray m_overlays;
 		//!\~english The overlay category	\~french La catégorie de l'incrustation
 		OverlayCategorySPtr m_category;

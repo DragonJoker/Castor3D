@@ -1,4 +1,4 @@
-﻿#include "Overlay.hpp"
+#include "Overlay.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
@@ -15,108 +15,14 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Overlay::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Overlay, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Overlay::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Overlay >{ p_tabs }
 	{
 	}
 
-	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
+	bool Overlay::TextWriter::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
-		return OverlayCategory::TextLoader()( *p_overlay.m_category, p_file );
-	}
-
-	//*************************************************************************************************
-
-	Overlay::BinaryParser::BinaryParser( Path const & p_path, Engine * p_engine )
-		:	Castor3D::BinaryParser< Overlay >( p_path )
-		,	m_engine( p_engine )
-	{
-	}
-
-	bool Overlay::BinaryParser::Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_OVERLAY );
-
-		if ( l_return )
-		{
-			l_return = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_category, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
-		}
-
-		for ( auto && l_it = p_obj.begin(); l_it != p_obj.end() && l_return; ++l_it )
-		{
-			OverlaySPtr l_overlay = *l_it;
-			l_return = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_overlay, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
-		}
-
-		return l_return;
-	}
-
-	bool Overlay::BinaryParser::Parse( Overlay & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		eOVERLAY_TYPE l_type;
-		String l_name;
-		OverlaySPtr l_overlay;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( p_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_OVERLAY:
-					l_overlay.reset();
-					break;
-
-				case eCHUNK_TYPE_OVERLAY_TYPE:
-					l_return = DoParseChunk( l_type, l_chunk );
-
-					if ( l_return )
-					{
-						l_overlay = m_engine->GetOverlayManager().Create( cuT( "" ), l_type, p_obj.shared_from_this(), p_obj.GetScene() );
-						l_return = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_NAME:
-					l_return = DoParseChunk( l_name, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetName( l_name );
-					}
-
-					break;
-
-				default:
-					l_return = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_category, l_chunk );
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
+		return p_overlay.m_category->CreateTextWriter( m_tabs )->WriteInto( p_file );
 	}
 
 	//*************************************************************************************************
@@ -153,16 +59,15 @@ namespace Castor3D
 		{
 			m_category->Render();
 
-			for ( auto && l_overlay : m_overlays )
+			for ( auto l_overlay : m_overlays )
 			{
 				l_overlay->Render( p_size );
 			}
 		}
 	}
 
-	bool Overlay::AddChild( OverlaySPtr p_overlay )
+	void Overlay::AddChild( OverlaySPtr p_overlay )
 	{
-		bool l_return = false;
 		int l_index = 1;
 
 		if ( !m_overlays.empty() )
@@ -172,12 +77,11 @@ namespace Castor3D
 
 		p_overlay->SetOrder( l_index, GetLevel() + 1 );
 		m_overlays.push_back( p_overlay );
-		return true;
 	}
 
-	int Overlay::GetChildsCount( int p_level )const
+	uint32_t Overlay::GetChildrenCount( int p_level )const
 	{
-		int l_return = 0;
+		uint32_t l_return{ 0 };
 
 		if ( p_level == GetLevel() + 1 )
 		{
@@ -185,9 +89,9 @@ namespace Castor3D
 		}
 		else if ( p_level > GetLevel() )
 		{
-			for ( auto && l_overlay : m_overlays )
+			for ( auto l_overlay : m_overlays )
 			{
-				l_return += l_overlay->GetChildsCount( p_level );
+				l_return += l_overlay->GetChildrenCount( p_level );
 			}
 		}
 

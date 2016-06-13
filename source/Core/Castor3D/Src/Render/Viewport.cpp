@@ -1,4 +1,4 @@
-﻿#include "Viewport.hpp"
+#include "Viewport.hpp"
 
 #include "Engine.hpp"
 #include "Pipeline.hpp"
@@ -10,209 +10,44 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Viewport::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< Viewport >( p_path )
+	Viewport::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< Viewport >{ p_tabs }
 	{
 	}
 
-	bool Viewport::BinaryParser::Fill( Viewport const & p_obj, BinaryChunk & p_chunk )const
+	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_CAMERA );
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( uint8_t( p_obj.GetType() ), eCHUNK_TYPE_VIEWPORT_TYPE, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( double( p_obj.GetNear() ), eCHUNK_TYPE_VIEWPORT_NEAR, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( double( p_obj.GetFar() ), eCHUNK_TYPE_VIEWPORT_FAR, l_chunk );
-		}
-
-		if ( p_obj.GetType() != eVIEWPORT_TYPE_PERSPECTIVE )
-		{
-			if ( l_return )
-			{
-				l_return = DoFillChunk( double( p_obj.GetLeft() ), eCHUNK_TYPE_VIEWPORT_LEFT, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( double( p_obj.GetRight() ), eCHUNK_TYPE_VIEWPORT_RIGHT, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( double( p_obj.GetTop() ), eCHUNK_TYPE_VIEWPORT_TOP, l_chunk );
-			}
-
-			if ( l_return )
-			{
-				l_return = DoFillChunk( double( p_obj.GetBottom() ), eCHUNK_TYPE_VIEWPORT_BOTTOM, l_chunk );
-			}
-		}
-		else
-		{
-			if ( l_return )
-			{
-				l_return = DoFillChunk( double( p_obj.GetFovY().degrees() ), eCHUNK_TYPE_VIEWPORT_FOVY, l_chunk );
-			}
-		}
-
-		return l_return;
-	}
-
-	bool Viewport::BinaryParser::Parse( Viewport & p_obj, BinaryChunk & p_chunk )const
-	{
-		bool l_return = true;
-		uint8_t l_type;
-		String l_name;
-		double l_value;
-
-		while ( p_chunk.CheckAvailable( 1 ) )
-		{
-			BinaryChunk l_chunk;
-			l_return = p_chunk.GetSubChunk( l_chunk );
-
-			if ( l_return )
-			{
-				switch ( l_chunk.GetChunkType() )
-				{
-				case eCHUNK_TYPE_VIEWPORT_TYPE:
-					l_return = DoParseChunk( l_type, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateType( eVIEWPORT_TYPE( l_type ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_NEAR:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateNear( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_FAR:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateFar( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_LEFT:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateLeft( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_RIGHT:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateRight( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_TOP:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateTop( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_BOTTOM:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateBottom( real( l_value ) );
-					}
-
-					break;
-
-				case eCHUNK_TYPE_VIEWPORT_FOVY:
-					l_return = DoParseChunk( l_value, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.UpdateFovY( Angle::from_degrees( l_value ) );
-					}
-
-					break;
-				}
-			}
-
-			if ( !l_return )
-			{
-				p_chunk.EndParse();
-			}
-		}
-
-		return l_return;
-	}
-
-	//*************************************************************************************************
-
-	Viewport::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Viewport, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-	{
-	}
-
-	bool Viewport::TextLoader::operator()( Viewport const & p_viewport, TextFile & p_file )
-	{
-		bool l_return = p_file.WriteText( cuT( "\t\tviewport\n\t\t{\n" ) ) > 0;
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\t\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			if ( p_viewport.GetType() == eVIEWPORT_TYPE_ORTHO || p_viewport.GetType() == eVIEWPORT_TYPE_FRUSTUM )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tleft %f\n" ), p_viewport.GetLeft() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tright %f\n" ), p_viewport.GetRight() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\ttop %f\n" ), p_viewport.GetTop() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tbottom %f\n" ), p_viewport.GetBottom() ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\ttop " ) + string::to_string( p_viewport.GetTop() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tbottom " ) + string::to_string( p_viewport.GetBottom() ) + cuT( "\n" ) ) > 0;
 			}
 			else
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().degrees() ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;
