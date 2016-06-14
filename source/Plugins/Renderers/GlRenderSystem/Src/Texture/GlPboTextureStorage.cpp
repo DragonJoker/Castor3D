@@ -18,7 +18,7 @@ namespace GlRender
 		bool l_return = true;
 		auto l_pxbuffer = GetOwner()->GetBuffer();
 
-		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
 		{
 			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
 			l_return = m_uploadBuffer->Create();
@@ -29,7 +29,7 @@ namespace GlRender
 			}
 		}
 
-		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
 		{
 			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
 			l_return = m_downloadBuffer->Create();
@@ -48,7 +48,7 @@ namespace GlRender
 
 	GlPboTextureStorage::~GlPboTextureStorage()
 	{
-		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
 		{
 			if ( m_uploadBuffer )
 			{
@@ -58,7 +58,7 @@ namespace GlRender
 			}
 		}
 
-		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
 		{
 			if ( m_downloadBuffer )
 			{
@@ -80,13 +80,21 @@ namespace GlRender
 
 	uint8_t * GlPboTextureStorage::Lock( uint32_t p_lock )
 	{
-		if ( ( p_lock & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ
-				&& ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		uint8_t * l_return = nullptr;
+
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ )
+			 && CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ ) )
 		{
 			DoDownloadAsync();
 		}
 
-		return GetOwner()->GetBuffer()->ptr();
+		if ( CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ )
+			 || CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_WRITE ) )
+		{
+			l_return = GetOwner()->GetBuffer()->ptr();
+		}
+
+		return l_return;
 	}
 
 	void GlPboTextureStorage::Unlock( bool p_modified )
@@ -99,7 +107,7 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoUploadAsync()
 	{
-		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
 		{
 			auto l_buffer = GetOwner()->GetBuffer();
 
@@ -116,7 +124,7 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoUploadSync()
 	{
-		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
 		{
 			auto l_buffer = GetOwner()->GetBuffer();
 			DoUploadImage( l_buffer->width(), l_buffer->height(), l_buffer->format(), l_buffer->const_ptr() );
@@ -125,7 +133,7 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoDownloadAsync()
 	{
-		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
 		{
 			auto l_buffer = GetOwner()->GetBuffer();
 			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
@@ -148,7 +156,7 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoDownloadSync()
 	{
-		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
 		{
 			auto l_buffer = GetOwner()->GetBuffer();
 			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );

@@ -23,6 +23,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #elif defined( __linux__ )
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
+#	define GLX_GLXEXT_PROTOTYPES
+#	include <GL/glxext.h>
 #	undef None
 #	undef Bool
 #	undef Always
@@ -42,12 +44,6 @@ using Bool = int;
 #	else
 #		define CALLBACK
 #	endif
-#endif
-
-#if defined( __linux__ )
-#	include <GL/glx.h>
-#	define GLX_GLXEXT_PROTOTYPES
-#	include <GL/glxext.h>
 #endif
 
 //*************************************************************************************************

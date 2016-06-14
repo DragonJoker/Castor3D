@@ -90,22 +90,16 @@ namespace Castor3D
 
 		if ( m_rendering )
 		{
-			try
+			// trick pour éviter les problèmes de contexte dans des threads différents:
+			// On enlève la pause le temps de dessiner une frame.
+			m_paused = false;
+
+			while ( !m_frameEnded )
 			{
-				DoRenderFrame();
+				System::Sleep( 1 );
 			}
-			catch ( Exception & p_exc )
-			{
-				Logger::LogError( p_exc.GetFullDescription() );
-			}
-			catch ( std::exception & p_exc )
-			{
-				Logger::LogError( p_exc.what() );
-			}
-			catch ( ... )
-			{
-				Logger::LogError( RLA_UNKNOWN_EXCEPTION );
-			}
+
+			m_paused = true;
 		}
 	}
 

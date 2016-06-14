@@ -110,7 +110,7 @@ namespace Castor3D
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		m_colorTexture.SetTexture( l_colourTexture );
 		m_colorTexture.SetSampler( l_pSampler );
@@ -269,22 +269,14 @@ namespace Castor3D
 		{
 			if ( m_initialised )
 			{
-				if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
+				if ( m_bStereo
+					 && m_rIntraOcularDistance > 0
+					 && GetEngine()->GetRenderSystem()->GetGpuInformations().IsStereoAvailable()
+					 && GetCameraLEye()
+					 && GetCameraREye() )
 				{
-					if ( GetCameraLEye() && GetCameraREye() )
-					{
-						DoRender( m_fbLeftEye, GetCameraLEye(), p_frameTime );
-						DoRender( m_fbRightEye, GetCameraREye(), p_frameTime );
-					}
-					else
-					{
-						CameraSPtr l_pCamera = GetCamera();
-
-						if ( l_pCamera )
-						{
-							DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
-						}
-					}
+					DoRender( m_fbLeftEye, GetCameraLEye(), p_frameTime );
+					DoRender( m_fbRightEye, GetCameraREye(), p_frameTime );
 				}
 				else
 				{

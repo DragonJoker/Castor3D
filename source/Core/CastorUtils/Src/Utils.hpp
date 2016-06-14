@@ -73,18 +73,51 @@ namespace Castor
 	void Localtime( std::tm * p_tm, time_t const * p_pTime );
 	/**
 	 *\~english
-	 *\param[in]	p_flags	The flags.
+	 *\param[in]	p_value	The value.
 	 *\param[in]	p_flag	The flag looked for.
 	 *\return		\p true if p_flags contain p_flag.
 	 *\~french
-	 *\param[in]	p_flags	Les indicateurs.
+	 *\param[in]	p_value	La valeur.
 	 *\param[in]	p_flag	L'indicateur recherché.
 	 *\return		\p true si p_flags contient p_flag.
 	 */
 	template< typename T, typename U >
-	inline bool CheckFlag( T p_flags, U p_flag )
+	inline bool CheckFlag( T const & p_value, U const & p_flag )
 	{
-		return ( p_flags & p_flag ) == p_flag;
+		static_assert( sizeof( T ) == sizeof( U ), "Can't check flags for different size parameters" );
+		return U( p_value & T( p_flag ) ) == p_flag;
+	}
+	/**
+	 *\~english
+	 *\brief		Adds a flag to the given value.
+	 *\param[in,out]p_value	The value.
+	 *\param[in]	p_flag	The flag to add.
+	 *\~french
+	 *\brief		Ajoute un indicateur à la valeur donnée.
+	 *\param[in,out]p_value	La valeur.
+	 *\param[in]	p_flag	L'indicateur à ajouter.
+	 */
+	template< typename T, typename U >
+	inline void AddFlag( T & p_value, U const & p_flag )
+	{
+		static_assert( sizeof( T ) == sizeof( U ), "Can't add flags for different size parameters" );
+		p_value |= T( p_flag );
+	}
+	/**
+	 *\~english
+	 *\brief		Removes a flag from the given value.
+	 *\param[in,out]p_value	The value.
+	 *\param[in]	p_flag	The flag to remove.
+	 *\~french
+	 *\brief		Enlève un indicateur de la valeur donnée.
+	 *\param[in,out]p_value	La valeur.
+	 *\param[in]	p_flag	L'indicateur à enlever.
+	 */
+	template< typename T, typename U >
+	inline void RemFlag( T & p_value, U const & p_flag )
+	{
+		static_assert( sizeof( T ) == sizeof( U ), "Can't remove flags for different size parameters" );
+		p_value &= ~T( p_flag );
 	}
 }
 

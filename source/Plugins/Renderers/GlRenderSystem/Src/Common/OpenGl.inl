@@ -30,9 +30,29 @@ namespace GlRender
 		return glCheckError( GetOpenGl(), cuT( "glGenerateMipmap" ) );
 	}
 
-	bool TexFunctions::BindTexture( eGL_TEXTURE_STORAGE mode, uint32_t texture )
+	bool TexFunctions::BindTexture( eGL_TEXDIM mode, uint32_t texture )
 	{
 		return EXEC_FUNCTION( BindTexture, mode, texture );
+	}
+
+	bool TexFunctions::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, int param )
+	{
+		return EXEC_FUNCTION( TexParameteri, mode, pname, param );
+	}
+
+	bool TexFunctions::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, float param )
+	{
+		return EXEC_FUNCTION( TexParameterf, mode, pname, param );
+	}
+
+	bool TexFunctions::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, const int * params )
+	{
+		return EXEC_FUNCTION( TexParameteriv, mode, pname, params );
+	}
+
+	bool TexFunctions::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, const float * params )
+	{
+		return EXEC_FUNCTION( TexParameterfv, mode, pname, params );
 	}
 
 	bool TexFunctions::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
@@ -108,26 +128,6 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, int param )
-	{
-		return EXEC_FUNCTION( TexParameteri, mode, pname, param );
-	}
-
-	bool TexFunctions::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, float param )
-	{
-		return EXEC_FUNCTION( TexParameterf, mode, pname, param );
-	}
-
-	bool TexFunctions::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, const int * params )
-	{
-		return EXEC_FUNCTION( TexParameteriv, mode, pname, params );
-	}
-
-	bool TexFunctions::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, const float * params )
-	{
-		return EXEC_FUNCTION( TexParameterfv, mode, pname, params );
-	}
-
 	bool TexFunctions::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
 	{
 		return EXEC_FUNCTION( GetTexImage, mode, level, format, type, img );
@@ -143,6 +143,26 @@ namespace GlRender
 		}
 
 		return glCheckError( GetOpenGl(), cuT( "glGenerateTextureMipmap" ) );
+	}
+
+	bool TexFunctionsDSA::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, int param )
+	{
+		return EXEC_FUNCTION( TextureParameteri, m_uiTexture, mode, pname, param );
+	}
+
+	bool TexFunctionsDSA::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, float param )
+	{
+		return EXEC_FUNCTION( TextureParameterf, m_uiTexture, mode, pname, param );
+	}
+
+	bool TexFunctionsDSA::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, const int * params )
+	{
+		return EXEC_FUNCTION( TextureParameteriv, m_uiTexture, mode, pname, params );
+	}
+
+	bool TexFunctionsDSA::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, const float * params )
+	{
+		return EXEC_FUNCTION( TextureParameterfv, m_uiTexture, mode, pname, params );
 	}
 
 	bool TexFunctionsDSA::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
@@ -218,27 +238,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, int param )
-	{
-		return EXEC_FUNCTION( TextureParameteri, m_uiTexture, mode, pname, param );
-	}
-
-	bool TexFunctionsDSA::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, float param )
-	{
-		return EXEC_FUNCTION( TextureParameterf, m_uiTexture, mode, pname, param );
-	}
-
-	bool TexFunctionsDSA::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, const int * params )
-	{
-		return EXEC_FUNCTION( TextureParameteriv, m_uiTexture, mode, pname, params );
-	}
-
-	bool TexFunctionsDSA::TexParameter( eGL_TEXTURE_STORAGE mode, eGL_TEXTURE_PARAMETER pname, const float * params )
-	{
-		return EXEC_FUNCTION( TextureParameterfv, m_uiTexture, mode, pname, params );
-	}
-
-	bool TexFunctionsDSA::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
+	bool TexFunctionsDSA::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
 	{
 		return EXEC_FUNCTION( GetTextureImage, m_uiTexture, mode, level, format, type, img );
 	}
