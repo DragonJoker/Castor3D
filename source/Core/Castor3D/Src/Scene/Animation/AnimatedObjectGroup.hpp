@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du Mesh donné, l'ajoute à la liste.
 		 *\param[in]	p_object	Le Mesh à partir duquel l'AnimatedObject est créé.
-		 *\param[in]	p_name		Le nom de l'instance du maillage.
+		 *\param[in]	p_name		Le nom de l'instance du Mesh.
 		 */
 		C3D_API AnimatedObjectSPtr AddObject( Mesh & p_object, Castor::String const & p_name );
 		/**

@@ -58,7 +58,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_ANIMATION_OBJECT:
+			case eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT:
 				l_return = BinaryParser< SkeletonAnimationObject >{}.Parse( p_obj, l_chunk );
 				break;
 			}
@@ -70,7 +70,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & p_animation )
-		: SkeletonAnimationObject{ p_animation, AnimationObjectType::Bone }
+		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::Bone }
 	{
 	}
 

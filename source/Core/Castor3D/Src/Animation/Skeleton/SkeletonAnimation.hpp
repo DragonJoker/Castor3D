@@ -29,7 +29,6 @@ namespace Castor3D
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
 	\~english
 	\brief		Skeleton animation class.
 	\~french
@@ -100,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API bool HasObject( AnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API bool HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -156,10 +155,10 @@ namespace Castor3D
 	\date 		28/05/2016
 	\~english
 	\brief		Helper structure to find eCHUNK_TYPE from a type.
-	\remarks	Specialisation for Animation.
+	\remarks	Specialisation for SkeletonAnimation.
 	\~french
 	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
-	\remarks	Spécialisation pour Animation.
+	\remarks	Spécialisation pour SkeletonAnimation.
 	*/
 	template<>
 	struct ChunkTyper< SkeletonAnimation >
@@ -171,9 +170,9 @@ namespace Castor3D
 	\version	0.8.0
 	\date		26/01/2016
 	\~english
-	\brief		Animation binary loader.
+	\brief		SkeletonAnimation binary loader.
 	\~english
-	\brief		Loader binaire d'Animation.
+	\brief		Loader binaire de SkeletonAnimation.
 	*/
 	template<>
 	class BinaryWriter< SkeletonAnimation >
@@ -197,9 +196,9 @@ namespace Castor3D
 	\version	0.8.0
 	\date		26/01/2016
 	\~english
-	\brief		Animation binary loader.
+	\brief		SkeletonAnimation binary loader.
 	\~english
-	\brief		Loader binaire d'Animation.
+	\brief		Loader binaire de SkeletonAnimation.
 	*/
 	template<>
 	class BinaryParser< SkeletonAnimation >

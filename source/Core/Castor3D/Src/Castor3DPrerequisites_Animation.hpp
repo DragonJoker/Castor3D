@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PREREQUISITES_ANIMTION_H___
 #define ___C3D_PREREQUISITES_ANIMTION_H___
 
+#include "Mesh/VertexGroup.hpp"
+
 namespace Castor3D
 {
 	/**@name Animation */
@@ -41,8 +43,8 @@ namespace Castor3D
 		//!\~english	Skeleton animation.
 		//!\~french		Animation de squelette.
 		Skeleton,
-		//!\~english	Mesh animation (morphing).
-		//!\~french		Animation de maillage (morphing).
+		//!\~english	Submesh animation (morphing).
+		//!\~french		Animation de sous-maillage (morphing).
 		Mesh,
 		CASTOR_ENUM_CLASS_BOUNDS( Movable )
 	};
@@ -99,7 +101,7 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	enum class AnimationObjectType
+	enum class SkeletonAnimationObjectType
 		: uint8_t
 	{
 		//!\~english	Node objects.
@@ -117,6 +119,8 @@ namespace Castor3D
 	class SkeletonAnimationObject;
 	class SkeletonAnimationBone;
 	class SkeletonAnimationNode;
+	class MeshAnimation;
+	class MeshAnimationSubmesh;
 	class KeyFrame;
 	template< typename T > class Interpolator;
 	template< typename T, InterpolatorType > class InterpolatorT;
@@ -132,16 +136,20 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationObject );
 	DECLARE_SMART_PTR( SkeletonAnimationBone );
 	DECLARE_SMART_PTR( SkeletonAnimationNode );
+	DECLARE_SMART_PTR( MeshAnimation );
+	DECLARE_SMART_PTR( MeshAnimationSubmesh );
 	DECLARE_SMART_PTR( Animable );
 
-	//! Animation pointer map, sorted by name
+	//! Animation pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
-	//! Animation pointer array
+	//! Animation pointer array.
 	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
-	//! MovingObject pointer map, sorted by name
+	//! SkeletonAnimationObject pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
-	//! AnimationObject pointer array
+	//! SkeletonAnimationObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtr );
+	//! SkeletonAnimationObject pointer array.
+	DECLARE_VECTOR( MeshAnimationSubmeshSPtr, MeshAnimationSubmeshPtr );
 
 	//@}
 }

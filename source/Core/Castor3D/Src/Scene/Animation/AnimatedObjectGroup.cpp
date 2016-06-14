@@ -2,6 +2,7 @@
 
 #include "AnimatedObject.hpp"
 #include "AnimatedSkeleton.hpp"
+#include "AnimatedMesh.hpp"
 
 #include "Animation/Animation.hpp"
 #include "Scene/Geometry.hpp"
@@ -133,7 +134,14 @@ namespace Castor3D
 
 	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Mesh & p_object, String const & p_name )
 	{
-		return nullptr;
+		auto l_object = std::make_shared< AnimatedMesh >( p_name, p_object );
+
+		if ( !AddObject( l_object ) )
+		{
+			l_object.reset();
+		}
+
+		return l_object;
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Skeleton & p_object, String const & p_name )

@@ -88,13 +88,6 @@ namespace Castor3D
 		C3D_API void Stop();
 		/**
 		 *\~english
-		 *\return		The key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames.
-		 */
-		C3D_API virtual void SetInterpolationMode( InterpolatorType p_mode ) = 0;
-		/**
-		 *\~english
 		 *\return		The animation state.
 		 *\~french
 		 *\return		L'état de l'animation.
@@ -162,12 +155,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index.
-		 *\param[in]	p_tslf	The time since the last frame.
 		 *\~french
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
-		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		virtual void DoUpdate( real p_tslf ) = 0;
+		virtual void DoUpdate() = 0;
 
 	protected:
 		//!\~english	The animation.

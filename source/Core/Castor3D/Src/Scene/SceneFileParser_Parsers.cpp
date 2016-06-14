@@ -45,6 +45,8 @@
 #include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/AnimationInstance.hpp"
+#include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
@@ -3773,7 +3775,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationInterpolation )
 
 	if ( l_parsingContext->pAnimation )
 	{
-		l_parsingContext->pAnimation->SetInterpolationMode( InterpolatorType( l_value ) );
+		switch ( l_parsingContext->pAnimation->GetAnimation().GetType() )
+		{
+		case AnimationType::Skeleton:
+			std::static_pointer_cast< SkeletonAnimationInstance >( l_parsingContext->pAnimation )->SetInterpolatorType( InterpolatorType( l_value ) );
+			break;
+
+		case AnimationType::Mesh:
+			PARSING_ERROR( cuT( "Can't apply interpolation mode to submesh animations" ) );
+			break;
+		}
 	}
 	else
 	{

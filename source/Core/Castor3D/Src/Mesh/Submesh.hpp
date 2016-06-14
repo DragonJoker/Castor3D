@@ -427,13 +427,13 @@ namespace Castor3D
 			AddPoints( p_vertices.data(), p_vertices.data() + p_vertices.size() );
 		}
 		/**
-		*\~english
-		*\brief		Adds bone datas.
-		*\param[in]	p_boneData	The bone datas.
-		*\~french
-		*\brief		Ajoute des données de bones.
-		*\param[in]	p_boneData	Les données de bones.
-		*/
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 */
 		inline void AddBoneDatas( std::vector< VertexBoneData > const & p_boneData )
 		{
 			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
@@ -478,11 +478,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the skeleton
-		 *\return		The value
+		 *\return		The skeleton.
 		 *\~french
-		 *\brief		Récupère le squelette
-		 *\return		La valeur
+		 *\return		Le squelette.
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
@@ -532,11 +530,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
+		 *\return		The material.
 		 *\~french
-		 *\brief		Récupère le material
-		 *\return		La valeur
+		 *\return		Le matériau.
 		 */
 		inline MaterialSPtr GetDefaultMaterial()const
 		{
@@ -544,11 +540,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the cube bounding box
-		 *\return		The value
+		 *\return		The cube bounding box.
 		 *\~french
-		 *\brief		Récupère la boundig box cube
-		 *\return		La valeur
+		 *\return		La bounding box cube.
 		 */
 		inline Castor::CubeBox const & GetCubeBox()const
 		{
@@ -556,11 +550,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the cube bounding box
-		 *\return		The value
+		 *\return		The cube bounding box.
 		 *\~french
-		 *\brief		Récupère la boundig box cube
-		 *\return		La valeur
+		 *\return		La bounding box cube.
 		 */
 		inline Castor::CubeBox & GetCubeBox()
 		{
@@ -568,11 +560,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the sphere bounding box
-		 *\return		The value
+		 *\return		The sphere bounding box.
 		 *\~french
-		 *\brief		Récupère la bounding box sphere
-		 *\return		La valeur
+		 *\return		La bounding box sphère.
 		 */
 		inline Castor::SphereBox const & GetSphere()const
 		{
@@ -580,11 +570,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the sphere bounding box
-		 *\return		The value
+		 *\return		The sphere bounding box.
 		 *\~french
-		 *\brief		Récupère la bounding box sphere
-		 *\return		La valeur
+		 *\return		La bounding box sphère.
 		 */
 		inline Castor::SphereBox & GetSphere()
 		{
@@ -592,11 +580,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the points array
-		 *\return		The value
+		 *\return		The points array.
 		 *\~french
-		 *\brief		Récupère le tableau de points
-		 *\return		La valeur
+		 *\return		Le tableau de points.
 		 */
 		inline VertexPtrArray const & GetPoints()const
 		{
@@ -604,11 +590,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the points array
-		 *\return		The value
+		 *\return		The points array.
 		 *\~french
-		 *\brief		Récupère le tableau de points
-		 *\return		La valeur
+		 *\return		Le tableau de points.
 		 */
 		inline VertexPtrArray & GetPoints()
 		{
@@ -631,11 +615,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the faces array
-		 *\return		The value
+		 *\return		The faces array.
 		 *\~french
-		 *\brief		Récupère le tableau de faces
-		 *\return		La valeur
+		 *\return		Le tableau de faces.
 		 */
 		inline FaceArray const & GetFaces()const
 		{
@@ -643,11 +625,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the faces array
-		 *\return		The value
+		 *\return		The faces array.
 		 *\~french
-		 *\brief		Récupère le tableau de faces
-		 *\return		La valeur
+		 *\return		Le tableau de faces.
 		 */
 		inline FaceArray & GetFaces()
 		{
@@ -775,11 +755,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the initialisation status
-		 *\return		\p true if initialised
+		 *\return		The initialisation status.
 		 *\~french
-		 *\brief		Récupère le statut d'initialisation
-		 *\return		\p true si initialisé
+		 *\return		Le statut d'initialisation.
 		 */
 		inline bool	IsInitialised()const
 		{
@@ -787,11 +765,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parent mesh
-		 *\return		The value
+		 *\return		The parent mesh.
 		 *\~french
-		 *\brief		Récupère le mesh parent
-		 *\return		La valeur
+		 *\return		Le maillage parent.
 		 */
 		inline Mesh const & GetParent()const
 		{
@@ -799,15 +775,23 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader program flags
-		 *\return		The value
+		 *\return		The shader program flags.
 		 *\~french
-		 *\brief		Récupère les indicateurs de shader
-		 *\return		La valeur
+		 *\return		Les indicateurs de shader.
 		 */
 		inline uint32_t GetProgramFlags()const
 		{
 			return m_programFlags;
+		}
+		/**
+		 *\~english
+		 *\return		The submesh ID.
+		 *\~french
+		 *\return		L'ID du sous-maillage.
+		 */
+		inline uint32_t GetId()const
+		{
+			return m_id;
 		}
 		/**
 		 *\~english

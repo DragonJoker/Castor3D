@@ -82,14 +82,16 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( AnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\return		The key frames interpolation mode.
+		 *\brief		Sets the key frames interpolator type.
+		 *\param[in]	p_type	The interpolator type.
 		 *\~french
-		 *\return		Le mode d'interpolation des key frames.
+		 *\return		Définit le type d'interpolateur des key frames.
+		 *\param[in]	p_type	Le type d'interpolateur.
 		 */
-		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
+		C3D_API void SetInterpolatorType( InterpolatorType p_type );
 		/**
 		 *\~english
 		 *\return		The objects count.
@@ -153,9 +155,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::Animation::DoUpdate
+		 *\~copydoc		Casto3D::AnimationInstance::DoUpdate
 		 */
-		void DoUpdate( real p_tslf )override;
+		void DoUpdate()override;
 
 	protected:
 		//!\~english	The root moving objects.

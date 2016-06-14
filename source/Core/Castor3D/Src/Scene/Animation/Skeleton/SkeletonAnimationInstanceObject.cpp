@@ -39,12 +39,12 @@ namespace Castor3D
 			ENSURE( p_prv != p_cur );
 		}
 
-		String const & GetObjectTypeName( AnimationObjectType p_type )
+		String const & GetObjectTypeName( SkeletonAnimationObjectType p_type )
 		{
-			static std::map< AnimationObjectType, String > Names
+			static std::map< SkeletonAnimationObjectType, String > Names
 			{
-				{ AnimationObjectType::Node, cuT( "Node_" ) },
-				{ AnimationObjectType::Bone, cuT( "Bone_" ) },
+				{ SkeletonAnimationObjectType::Node, cuT( "Node_" ) },
+				{ SkeletonAnimationObjectType::Bone, cuT( "Bone_" ) },
 			};
 
 			return Names[p_type];
@@ -65,12 +65,12 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case AnimationObjectType::Node:
+			case SkeletonAnimationObjectType::Node:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_allObjects ) );
 				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
 				break;
 
-			case AnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::Bone:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_allObjects ) );
 				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
 				break;
