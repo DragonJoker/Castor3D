@@ -7,6 +7,8 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 
+#include <Animation/Mesh/MeshAnimation.hpp>
+#include <Animation/Mesh/MeshAnimationSubmesh.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
@@ -57,6 +59,72 @@ namespace C3dAssimp
 			}
 
 			return l_return;
+		}
+
+		template< typename aiMeshType >
+		InterleavedVertexArray DoCreateVertexBuffer( aiMeshType const * p_aiMesh )
+		{
+			InterleavedVertexArray l_vertices{ p_aiMesh->mNumVertices };
+			uint32_t l_index{ 0u };
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				l_vertex.m_pos[0] = real( p_aiMesh->mVertices[l_index].x );
+				l_vertex.m_pos[1] = real( p_aiMesh->mVertices[l_index].y );
+				l_vertex.m_pos[2] = real( p_aiMesh->mVertices[l_index].z );
+				++l_index;
+			}
+
+			if ( p_aiMesh->HasNormals() )
+			{
+				l_index = 0u;
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					l_vertex.m_nml[0] = real( p_aiMesh->mNormals[l_index].x );
+					l_vertex.m_nml[1] = real( p_aiMesh->mNormals[l_index].y );
+					l_vertex.m_nml[2] = real( p_aiMesh->mNormals[l_index].z );
+					++l_index;
+				}
+			}
+
+			if ( p_aiMesh->HasTangentsAndBitangents() )
+			{
+				l_index = 0u;
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					l_vertex.m_tan[0] = real( p_aiMesh->mTangents[l_index].x );
+					l_vertex.m_tan[1] = real( p_aiMesh->mTangents[l_index].y );
+					l_vertex.m_tan[2] = real( p_aiMesh->mTangents[l_index].z );
+					++l_index;
+				}
+
+				l_index = 0u;
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					l_vertex.m_bin[0] = real( p_aiMesh->mBitangents[l_index].x );
+					l_vertex.m_bin[1] = real( p_aiMesh->mBitangents[l_index].y );
+					l_vertex.m_bin[2] = real( p_aiMesh->mBitangents[l_index].z );
+					++l_index;
+				}
+			}
+
+			if ( p_aiMesh->HasTextureCoords( 0 ) )
+			{
+				l_index = 0u;
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					l_vertex.m_tex[0] = real( p_aiMesh->mTextureCoords[0][l_index].x );
+					l_vertex.m_tex[1] = real( p_aiMesh->mTextureCoords[0][l_index].y );
+					l_vertex.m_tex[2] = real( p_aiMesh->mTextureCoords[0][l_index].z );
+					++l_index;
+				}
+			}
+
+			return l_vertices;
 		}
 
 		template< typename T >
@@ -278,7 +346,6 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-
 	bool AssimpImporter::DoProcessMesh( Scene & p_scene, SkeletonSPtr p_skeleton, aiMesh const * p_aiMesh, aiScene const * p_aiScene, SubmeshSPtr p_submesh )
 	{
 		bool l_return = false;
@@ -293,70 +360,7 @@ namespace C3dAssimp
 		{
 			p_submesh->SetDefaultMaterial( l_material );
 			p_submesh->Ref( l_material );
-			std::vector< InterleavedVertex > l_vertices{ p_aiMesh->mNumVertices };
-			uint32_t l_index{ 0u };
-
-			for ( auto & l_vertex : l_vertices )
-			{
-				l_vertex.m_pos[0] = real( p_aiMesh->mVertices[l_index].x );
-				l_vertex.m_pos[1] = real( p_aiMesh->mVertices[l_index].y );
-				l_vertex.m_pos[2] = real( p_aiMesh->mVertices[l_index].z );
-				++l_index;
-			}
-
-			if ( p_aiMesh->mNormals )
-			{
-				l_index = 0u;
-
-				for ( auto & l_vertex : l_vertices )
-				{
-					l_vertex.m_nml[0] = real( p_aiMesh->mNormals[l_index].x );
-					l_vertex.m_nml[1] = real( p_aiMesh->mNormals[l_index].y );
-					l_vertex.m_nml[2] = real( p_aiMesh->mNormals[l_index].z );
-					++l_index;
-				}
-			}
-
-			if ( p_aiMesh->mTangents )
-			{
-				l_index = 0u;
-
-				for ( auto & l_vertex : l_vertices )
-				{
-					l_vertex.m_tan[0] = real( p_aiMesh->mTangents[l_index].x );
-					l_vertex.m_tan[1] = real( p_aiMesh->mTangents[l_index].y );
-					l_vertex.m_tan[2] = real( p_aiMesh->mTangents[l_index].z );
-					++l_index;
-				}
-			}
-
-			if ( p_aiMesh->mBitangents )
-			{
-				l_index = 0u;
-
-				for ( auto & l_vertex : l_vertices )
-				{
-					l_vertex.m_bin[0] = real( p_aiMesh->mBitangents[l_index].x );
-					l_vertex.m_bin[1] = real( p_aiMesh->mBitangents[l_index].y );
-					l_vertex.m_bin[2] = real( p_aiMesh->mBitangents[l_index].z );
-					++l_index;
-				}
-			}
-
-			if ( p_aiMesh->HasTextureCoords( 0 ) )
-			{
-				l_index = 0u;
-
-				for ( auto & l_vertex : l_vertices )
-				{
-					l_vertex.m_tex[0] = real( p_aiMesh->mTextureCoords[0][l_index].x );
-					l_vertex.m_tex[1] = real( p_aiMesh->mTextureCoords[0][l_index].y );
-					l_vertex.m_tex[2] = real( p_aiMesh->mTextureCoords[0][l_index].z );
-					++l_index;
-				}
-			}
-
-			p_submesh->AddPoints( l_vertices );
+			p_submesh->AddPoints( DoCreateVertexBuffer( p_aiMesh ) );
 
 			std::vector< VertexBoneData > l_arrayBones( p_aiMesh->mNumVertices );
 
@@ -396,7 +400,7 @@ namespace C3dAssimp
 
 					if ( l_it != p_animation->mMeshChannels + p_animation->mNumMeshChannels )
 					{
-						DoProcessAnimationMeshes( *p_submesh, *l_it );
+						DoProcessAnimationMeshes( *p_submesh, p_aiMesh, *l_it );
 					}
 				} );
 			}
@@ -407,19 +411,17 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessAnimationMeshes( Submesh & p_submesh, aiMeshAnim const * p_aiMeshAnim )
+	void AssimpImporter::DoProcessAnimationMeshes( Submesh & p_submesh, aiMesh const * p_aiMesh, aiMeshAnim const * p_aiMeshAnim )
 	{
 		if ( p_aiMeshAnim->mNumKeys )
 		{
-			auto l_animation = m_mesh->GetAnimation( string::string_cast< xchar >( p_aiMeshAnim->mName.C_Str() ) );
+			auto l_animation = m_mesh->CreateAnimation( string::string_cast< xchar >( p_aiMeshAnim->mName.C_Str() ) );
+			auto l_animSubmesh = std::make_shared< MeshAnimationSubmesh >( *l_animation, p_submesh );
+			l_animation->AddChild( l_animSubmesh );
 
-			if ( !l_animation )
+			std::for_each( p_aiMeshAnim->mKeys, p_aiMeshAnim->mKeys + p_aiMeshAnim->mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
 			{
-			}
-
-			std::for_each( p_aiMeshAnim->mKeys, p_aiMeshAnim->mKeys + p_aiMeshAnim->mNumKeys, [&p_submesh]( aiMeshKey const & p_aiKey )
-			{
-
+				l_animSubmesh->AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( p_aiMesh->mAnimMeshes[p_aiKey.mValue] ) );
 			} );
 		}
 	}
@@ -535,10 +537,10 @@ namespace C3dAssimp
 				{
 					DoLoadTexture( l_nmlTexName, *l_pass, TextureChannel::Normal );
 
-					//if ( l_hgtTexName.length > 0 )
-					//{
-					//	DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Height );
-					//}
+					if ( l_hgtTexName.length > 0 )
+					{
+						DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Height );
+					}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{
@@ -550,7 +552,7 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone const ** p_pBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
+	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone const * const * p_pBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
 	{
 		for ( uint32_t i = 0; i < p_count; ++i )
 		{

@@ -172,6 +172,17 @@ namespace Castor3D
 		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
 		/**
 		 *\~english
+		 *\brief		Creates an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+		 *\brief		Crée une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		l'animation
+		 */
+		C3D_API MeshAnimationSPtr CreateAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages

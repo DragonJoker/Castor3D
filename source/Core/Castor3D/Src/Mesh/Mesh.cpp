@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 
-#include "Animation/Animation.hpp"
+#include "Animation/Mesh/MeshAnimation.hpp"
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
@@ -269,5 +269,23 @@ namespace Castor3D
 	void Mesh::SetSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;
+	}
+
+	MeshAnimationSPtr Mesh::CreateAnimation( Castor::String const & p_name )
+	{
+		MeshAnimationSPtr l_return;
+		auto l_anim = GetAnimation( p_name );
+
+		if ( !l_anim )
+		{
+			l_return = std::make_shared< MeshAnimation >( *this, p_name );
+			DoAddAnimation( l_return );
+		}
+		else
+		{
+			l_return = std::static_pointer_cast< MeshAnimation >( l_anim );
+		}
+
+		return l_return;
 	}
 }
