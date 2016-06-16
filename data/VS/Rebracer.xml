@@ -115,7 +115,7 @@
         <PropertyValue name="AutoFormatOnPaste">true</PropertyValue>
         <PropertyValue name="AutoFormatOnPaste2">1</PropertyValue>
         <PropertyValue name="AutoFormatOnSemicolon">true</PropertyValue>
-        <PropertyValue name="AutoIndentOnTab">false</PropertyValue>
+        <PropertyValue name="AutoIndentOnTab">true</PropertyValue>
         <PropertyValue name="ColorizeInactiveBlocksDifferently">true</PropertyValue>
         <PropertyValue name="DisableBrowsingUpToDateCheck">true</PropertyValue>
         <PropertyValue name="DisableCreateDeclDefnScan">false</PropertyValue>

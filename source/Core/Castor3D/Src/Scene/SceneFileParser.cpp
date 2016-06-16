@@ -535,6 +535,10 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_AnimatedObjectGroupAnimationStart, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ANIMGROUP, cuT( "}" ), Parser_AnimatedObjectGroupEnd );
 
+	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "looped" ), Parser_GroupAnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
+	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "scale" ), Parser_GroupAnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser(eSECTION_ANIMGROUP_ANIMATION, cuT( "}" ), Parser_GroupAnimationEnd );
+
 	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "animation" ), Parser_AnimatedObjectAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "}" ), Parser_AnimatedObjectEnd );
 

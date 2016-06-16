@@ -70,7 +70,8 @@ namespace Castor3D
 			File::ListDirectoryFiles( m_filePath, l_files, true );
 			auto l_it = std::find_if( l_files.begin(), l_files.end(), [&l_fileName]( Path const & p_file )
 			{
-				return p_file.GetFileName( true ) == l_fileName;
+				return p_file.GetFileName( true ) == l_fileName
+					|| p_file.GetFileName( true ).find( l_fileName ) == 0;
 			} );
 
 			l_folder = m_filePath;

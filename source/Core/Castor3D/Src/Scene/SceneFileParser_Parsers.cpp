@@ -1659,7 +1659,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 
 		if ( l_importer )
 		{
-			l_parsingContext->pMesh = l_parsingContext->pScene->ImportMesh( l_pathFile, *l_importer, l_parameters );
+			l_parsingContext->pMesh = l_importer->ImportMesh( *l_parsingContext->pScene, l_pathFile, l_parameters );
 		}
 		else
 		{
@@ -3642,19 +3642,18 @@ END_ATTRIBUTE_PUSH( eSECTION_ANIMATED_OBJECT )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimation )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	String l_name;
-	p_params[0]->Get( l_name );
+	p_params[0]->Get( l_parsingContext->strName2 );
 
 	if ( l_parsingContext->pAnimGroup )
 	{
-		l_parsingContext->pAnimGroup->AddAnimation( l_name );
+		l_parsingContext->pAnimGroup->AddAnimation( l_parsingContext->strName2 );
 	}
 	else
 	{
 		PARSING_ERROR( cuT( "No animated object group initialised" ) );
 	}
 }
-END_ATTRIBUTE()
+END_ATTRIBUTE_PUSH( eSECTION_ANIMGROUP_ANIMATION )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimationStart )
 {
@@ -3685,6 +3684,45 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupEnd )
 	{
 		PARSING_ERROR( cuT( "No animated object group initialised" ) );
 	}
+}
+END_ATTRIBUTE_POP()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationLooped )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	bool l_value;
+	p_params[0]->Get( l_value );
+	
+	if ( l_parsingContext->pAnimGroup )
+	{
+		l_parsingContext->pAnimGroup->SetAnimationLooped( l_parsingContext->strName2, l_value );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationScale )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	float l_value;
+	p_params[0]->Get( l_value );
+	
+	if ( l_parsingContext->pAnimGroup )
+	{
+		l_parsingContext->pAnimGroup->SetAnimationScale( l_parsingContext->strName2, l_value );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationEnd )
+{
 }
 END_ATTRIBUTE_POP()
 

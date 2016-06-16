@@ -39,9 +39,6 @@ namespace Castor
 
 		namespace
 		{
-			const int CALLS_TO_CAPTURE( 20 );
-			const int CALLS_TO_SKIP( 2 );
-
 #	if defined( __GNUG__ )
 
 			template< typename CharU, typename CharT >
@@ -72,14 +69,14 @@ namespace Castor
 			}
 
 			template< typename CharT >
-			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
+			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
 				p_stream << "CALL STACK:" << std::endl;
-				void * l_backTrace[CALLS_TO_CAPTURE];
-				unsigned int l_num( ::backtrace( l_backTrace, CALLS_TO_CAPTURE ) );
-				char ** l_fnStrings( ::backtrace_symbols( l_backTrace, l_num ) );
+				std::vector< void * > l_backTrace( p_toCapture );
+				unsigned int l_num( ::backtrace( l_backTrace.data(), p_toCapture ) );
+				char ** l_fnStrings( ::backtrace_symbols( l_backTrace.data(), l_num ) );
 
-				for ( unsigned i = CALLS_TO_SKIP; i < l_num; ++i )
+				for ( unsigned i = p_toSkip; i < l_num; ++i )
 				{
 					p_stream << "== " << Demangle< CharT >( string::string_cast< char >( l_fnStrings[i] ) ) << std::endl;
 				}
@@ -112,13 +109,13 @@ namespace Castor
 			}
 
 			template< typename CharT >
-			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
+			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
 				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
 
-				void * l_backTrace[CALLS_TO_CAPTURE - CALLS_TO_SKIP];
-				unsigned int l_num( ::RtlCaptureStackBackTrace( CALLS_TO_SKIP, CALLS_TO_CAPTURE - CALLS_TO_SKIP, l_backTrace, nullptr ) );
+				std::vector< void * > l_backTrace( p_toCapture - p_toSkip );
+				unsigned int l_num( ::RtlCaptureStackBackTrace( p_toSkip, p_toCapture - p_toSkip, l_backTrace.data(), nullptr ) );
 
 				::HANDLE l_process( ::GetCurrentProcess() );
 				p_stream << "CALL STACK:" << std::endl;
@@ -163,13 +160,13 @@ namespace Castor
 
 		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream );
+			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 
 		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
-			DoShowBacktrace( p_stream );
+			DoShowBacktrace( p_stream, p_backtrace.m_toCapture, p_backtrace.m_toSkip );
 			return p_stream;
 		}
 

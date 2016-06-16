@@ -178,14 +178,14 @@ namespace GlRender
 		GlslStrings[l_index] = cuT( "[Empty]" );
 
 		l_index = 0;
-		GlslErrors[l_index++] = cuT( "[500] Invalid Enum !" );
-		GlslErrors[l_index++] = cuT( "[501] Invalid Value !" );
-		GlslErrors[l_index++] = cuT( "[502] Invalid Operation !" );
-		GlslErrors[l_index++] = cuT( "[503] Stack Overflow !" );
-		GlslErrors[l_index++] = cuT( "[504] Stack Underflow !" );
-		GlslErrors[l_index++] = cuT( "[505] Out of memory !" );
-		GlslErrors[l_index++] = cuT( "[506] Invalid frame buffer operation" );
-		GlslErrors[l_index] = cuT( "[Empty] Unknown Error" );
+		GlslErrors[l_index++] = cuT( "Invalid Enum !" );
+		GlslErrors[l_index++] = cuT( "Invalid Value !" );
+		GlslErrors[l_index++] = cuT( "Invalid Operation !" );
+		GlslErrors[l_index++] = cuT( "Stack Overflow !" );
+		GlslErrors[l_index++] = cuT( "Stack Underflow !" );
+		GlslErrors[l_index++] = cuT( "Out of memory !" );
+		GlslErrors[l_index++] = cuT( "Invalid frame buffer operation" );
+		GlslErrors[l_index++] = cuT( "Unknown Error" );
 
 		PrimitiveTypes[uint32_t( eTOPOLOGY_POINTS )] = eGL_PRIMITIVE_POINTS;
 		PrimitiveTypes[uint32_t( eTOPOLOGY_LINES )] = eGL_PRIMITIVE_LINES;
@@ -1047,16 +1047,20 @@ namespace GlRender
 
 		if ( l_errorCode != GL_NO_ERROR )
 		{
-			String l_strSysError = System::GetLastErrorText();
 			l_errorCode -= GL_INVALID_ENUM;
-			String l_strError = p_text + cuT( " - " ) + GlslErrors[l_errorCode];
+			StringStream l_error;
+			l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;
+			l_error << cuT( "  ID: " ) << ( l_errorCode + GL_INVALID_ENUM ) << std::endl;
+			l_error << cuT( "  Message: " ) << GlslErrors[l_errorCode] << std::endl;
+			String l_sysError = System::GetLastErrorText();
 
-			if ( !l_strSysError.empty() )
+			if ( !l_sysError.empty() )
 			{
-				l_strError += cuT( " - " ) + l_strSysError;
+				l_error << cuT( "  System: " ) << l_sysError << std::endl;
 			}
 
-			Logger::LogError( l_strError );
+			l_error << Debug::Backtrace{ 20, 4 };
+			Logger::LogError( l_error );
 			l_return = false;
 		}
 
@@ -1161,7 +1165,7 @@ namespace GlRender
 
 			if ( l_error )
 			{
-				l_toLog << cuT( "\n  " ) << Debug::Backtrace{};
+				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 13 };
 				Logger::LogError( l_toLog );
 			}
 			else
@@ -1242,7 +1246,7 @@ namespace GlRender
 
 		if ( l_error )
 		{
-			l_toLog << cuT( "\n  " ) << Debug::Backtrace{};
+			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 5 };
 			Logger::LogError( l_toLog );
 		}
 		else

@@ -480,18 +480,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MeshSPtr Scene::ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters )
-	{
-		auto l_return = p_importer.ImportMesh( *this, p_fileName, p_parameters );
-
-		if ( l_return )
-		{
-			m_meshManager->Insert( l_return->GetName(), l_return );
-		}
-
-		return l_return;
-	}
-
 	uint32_t Scene::GetVertexCount()const
 	{
 		uint32_t l_return = 0;

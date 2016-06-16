@@ -27,13 +27,13 @@ namespace C3dAssimp
 {
 	namespace
 	{
-		aiNodeAnim const * const FindNodeAnim( const aiAnimation * p_animation, const String p_nodeName )
+		aiNodeAnim const * const FindNodeAnim( const aiAnimation & p_animation, const String & p_nodeName )
 		{
 			aiNodeAnim const * l_return = nullptr;
 
-			for ( uint32_t i = 0; i < p_animation->mNumChannels && !l_return; ++i )
+			for ( uint32_t i = 0; i < p_animation.mNumChannels && !l_return; ++i )
 			{
-				aiNodeAnim const * const l_nodeAnim = p_animation->mChannels[i];
+				aiNodeAnim const * const l_nodeAnim = p_animation.mChannels[i];
 
 				if ( string::string_cast< xchar >( l_nodeAnim->mNodeName.data ) == p_nodeName )
 				{
@@ -44,13 +44,13 @@ namespace C3dAssimp
 			return l_return;
 		}
 
-		aiMeshAnim const * const FindMeshAnim( const aiAnimation * p_animation, const String p_meshName )
+		aiMeshAnim const * const FindMeshAnim( const aiAnimation & p_animation, const String & p_meshName )
 		{
 			aiMeshAnim const * l_return = nullptr;
 
-			for ( uint32_t i = 0; i < p_animation->mNumMeshChannels && !l_return; ++i )
+			for ( uint32_t i = 0; i < p_animation.mNumMeshChannels && !l_return; ++i )
 			{
-				aiMeshAnim const * const l_meshAnim = p_animation->mMeshChannels[i];
+				aiMeshAnim const * const l_meshAnim = p_animation.mMeshChannels[i];
 
 				if ( string::string_cast< xchar >(l_meshAnim->mName.data ) == p_meshName)
 				{
@@ -62,41 +62,41 @@ namespace C3dAssimp
 		}
 
 		template< typename aiMeshType >
-		InterleavedVertexArray DoCreateVertexBuffer( aiMeshType const * p_aiMesh )
+		InterleavedVertexArray DoCreateVertexBuffer( aiMeshType const & p_aiMesh )
 		{
-			InterleavedVertexArray l_vertices{ p_aiMesh->mNumVertices };
+			InterleavedVertexArray l_vertices{ p_aiMesh.mNumVertices };
 			uint32_t l_index{ 0u };
 
 			for ( auto & l_vertex : l_vertices )
 			{
-				l_vertex.m_pos[0] = real( p_aiMesh->mVertices[l_index].x );
-				l_vertex.m_pos[1] = real( p_aiMesh->mVertices[l_index].y );
-				l_vertex.m_pos[2] = real( p_aiMesh->mVertices[l_index].z );
+				l_vertex.m_pos[0] = real( p_aiMesh.mVertices[l_index].x );
+				l_vertex.m_pos[1] = real( p_aiMesh.mVertices[l_index].y );
+				l_vertex.m_pos[2] = real( p_aiMesh.mVertices[l_index].z );
 				++l_index;
 			}
 
-			if ( p_aiMesh->HasNormals() )
+			if ( p_aiMesh.HasNormals() )
 			{
 				l_index = 0u;
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					l_vertex.m_nml[0] = real( p_aiMesh->mNormals[l_index].x );
-					l_vertex.m_nml[1] = real( p_aiMesh->mNormals[l_index].y );
-					l_vertex.m_nml[2] = real( p_aiMesh->mNormals[l_index].z );
+					l_vertex.m_nml[0] = real( p_aiMesh.mNormals[l_index].x );
+					l_vertex.m_nml[1] = real( p_aiMesh.mNormals[l_index].y );
+					l_vertex.m_nml[2] = real( p_aiMesh.mNormals[l_index].z );
 					++l_index;
 				}
 			}
 
-			if ( p_aiMesh->HasTangentsAndBitangents() )
+			if ( p_aiMesh.HasTangentsAndBitangents() )
 			{
 				l_index = 0u;
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					l_vertex.m_tan[0] = real( p_aiMesh->mTangents[l_index].x );
-					l_vertex.m_tan[1] = real( p_aiMesh->mTangents[l_index].y );
-					l_vertex.m_tan[2] = real( p_aiMesh->mTangents[l_index].z );
+					l_vertex.m_tan[0] = real( p_aiMesh.mTangents[l_index].x );
+					l_vertex.m_tan[1] = real( p_aiMesh.mTangents[l_index].y );
+					l_vertex.m_tan[2] = real( p_aiMesh.mTangents[l_index].z );
 					++l_index;
 				}
 
@@ -104,22 +104,22 @@ namespace C3dAssimp
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					l_vertex.m_bin[0] = real( p_aiMesh->mBitangents[l_index].x );
-					l_vertex.m_bin[1] = real( p_aiMesh->mBitangents[l_index].y );
-					l_vertex.m_bin[2] = real( p_aiMesh->mBitangents[l_index].z );
+					l_vertex.m_bin[0] = real( p_aiMesh.mBitangents[l_index].x );
+					l_vertex.m_bin[1] = real( p_aiMesh.mBitangents[l_index].y );
+					l_vertex.m_bin[2] = real( p_aiMesh.mBitangents[l_index].z );
 					++l_index;
 				}
 			}
 
-			if ( p_aiMesh->HasTextureCoords( 0 ) )
+			if ( p_aiMesh.HasTextureCoords( 0 ) )
 			{
 				l_index = 0u;
 
 				for ( auto & l_vertex : l_vertices )
 				{
-					l_vertex.m_tex[0] = real( p_aiMesh->mTextureCoords[0][l_index].x );
-					l_vertex.m_tex[1] = real( p_aiMesh->mTextureCoords[0][l_index].y );
-					l_vertex.m_tex[2] = real( p_aiMesh->mTextureCoords[0][l_index].z );
+					l_vertex.m_tex[0] = real( p_aiMesh.mTextureCoords[0][l_index].x );
+					l_vertex.m_tex[1] = real( p_aiMesh.mTextureCoords[0][l_index].y );
+					l_vertex.m_tex[2] = real( p_aiMesh.mTextureCoords[0][l_index].z );
 					++l_index;
 				}
 			}
@@ -273,7 +273,7 @@ namespace C3dAssimp
 							l_submesh = m_mesh->CreateSubmesh();
 						}
 
-						l_create = DoProcessMesh( p_scene, l_skeleton, l_aiScene->mMeshes[i], l_aiScene, l_submesh );
+						l_create = DoProcessMesh( p_scene, *l_skeleton, *l_aiScene->mMeshes[i], *l_aiScene, *l_submesh );
 					}
 
 					if ( m_arrayBones.empty() )
@@ -289,7 +289,7 @@ namespace C3dAssimp
 					{
 						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 						{
-							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] )->Initialise();
+							DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] )->Initialise();
 						}
 
 						l_importer.FreeScene();
@@ -311,7 +311,7 @@ namespace C3dAssimp
 
 										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
 										{
-											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] )->Initialise();
+											DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] )->Initialise();
 										}
 
 										l_importer.FreeScene();
@@ -346,61 +346,61 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	bool AssimpImporter::DoProcessMesh( Scene & p_scene, SkeletonSPtr p_skeleton, aiMesh const * p_aiMesh, aiScene const * p_aiScene, SubmeshSPtr p_submesh )
+	bool AssimpImporter::DoProcessMesh( Scene & p_scene, Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Submesh & p_submesh )
 	{
 		bool l_return = false;
 		MaterialSPtr l_material;
 
-		if ( p_aiMesh->mMaterialIndex < p_aiScene->mNumMaterials )
+		if ( p_aiMesh.mMaterialIndex < p_aiScene.mNumMaterials )
 		{
-			l_material = DoProcessMaterial( p_scene, p_aiScene->mMaterials[p_aiMesh->mMaterialIndex] );
+			l_material = DoProcessMaterial( p_scene, *p_aiScene.mMaterials[p_aiMesh.mMaterialIndex] );
 		}
 
-		if ( p_aiMesh->HasFaces() && p_aiMesh->HasPositions() && l_material )
+		if ( p_aiMesh.HasFaces() && p_aiMesh.HasPositions() && l_material )
 		{
-			p_submesh->SetDefaultMaterial( l_material );
-			p_submesh->Ref( l_material );
-			p_submesh->AddPoints( DoCreateVertexBuffer( p_aiMesh ) );
+			p_submesh.SetDefaultMaterial( l_material );
+			p_submesh.Ref( l_material );
+			p_submesh.AddPoints( DoCreateVertexBuffer( p_aiMesh ) );
 
-			std::vector< VertexBoneData > l_arrayBones( p_aiMesh->mNumVertices );
+			std::vector< VertexBoneData > l_arrayBones( p_aiMesh.mNumVertices );
 
-			if ( p_aiMesh->HasBones() && p_skeleton )
+			if ( p_aiMesh.HasBones() )
 			{
-				DoProcessBones( p_skeleton, p_aiMesh->mBones, p_aiMesh->mNumBones, l_arrayBones );
-				p_submesh->AddBoneDatas( l_arrayBones );
+				DoProcessBones( p_skeleton, p_aiMesh.mBones, p_aiMesh.mNumBones, l_arrayBones );
+				p_submesh.AddBoneDatas( l_arrayBones );
 			}
 
-			for ( uint32_t l_index = 0; l_index < p_aiMesh->mNumFaces; l_index++ )
+			for ( uint32_t l_index = 0; l_index < p_aiMesh.mNumFaces; l_index++ )
 			{
-				aiFace const & l_face = p_aiMesh->mFaces[l_index];
+				aiFace const & l_face = p_aiMesh.mFaces[l_index];
 
 				if ( l_face.mNumIndices == 3 )
 				{
-					p_submesh->AddFace( l_face.mIndices[0], l_face.mIndices[1], l_face.mIndices[2] );
+					p_submesh.AddFace( l_face.mIndices[0], l_face.mIndices[1], l_face.mIndices[2] );
 				}
 			}
 
-			if ( !p_aiMesh->mNormals )
+			if ( !p_aiMesh.mNormals )
 			{
-				p_submesh->ComputeNormals( true );
+				p_submesh.ComputeNormals( true );
 			}
-			else if ( !p_aiMesh->mTangents )
+			else if ( !p_aiMesh.mTangents )
 			{
-				p_submesh->ComputeTangentsFromNormals();
+				p_submesh.ComputeTangentsFromNormals();
 			}
 
-			if ( p_aiScene->HasAnimations() )
+			if ( p_aiScene.HasAnimations() )
 			{
-				std::for_each( p_aiScene->mAnimations, p_aiScene->mAnimations + p_aiScene->mNumAnimations, [this, &p_aiMesh, &p_submesh]( aiAnimation const * p_animation )
+				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh, &p_submesh]( aiAnimation const * p_aiAnimation )
 				{
-					auto l_it = std::find_if( p_animation->mMeshChannels, p_animation->mMeshChannels + p_animation->mNumMeshChannels, [this, &p_aiMesh, &p_submesh]( aiMeshAnim const * p_meshAnimation )
+					auto l_it = std::find_if( p_aiAnimation->mMeshChannels, p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels, [this, &p_aiMesh, &p_submesh]( aiMeshAnim const * p_aiMeshAnim )
 					{
-						return p_meshAnimation->mName == p_aiMesh->mName;
+						return p_aiMeshAnim->mName == p_aiMesh.mName;
 					} );
 
-					if ( l_it != p_animation->mMeshChannels + p_animation->mNumMeshChannels )
+					if ( l_it != p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels )
 					{
-						DoProcessAnimationMeshes( *p_submesh, p_aiMesh, *l_it );
+						DoProcessAnimationMeshes( p_submesh, p_aiMesh, *( *l_it ) );
 					}
 				} );
 			}
@@ -411,17 +411,19 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessAnimationMeshes( Submesh & p_submesh, aiMesh const * p_aiMesh, aiMeshAnim const * p_aiMeshAnim )
+	void AssimpImporter::DoProcessAnimationMeshes( Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim )
 	{
-		if ( p_aiMeshAnim->mNumKeys )
+		if ( p_aiMeshAnim.mNumKeys )
 		{
-			auto l_animation = m_mesh->CreateAnimation( string::string_cast< xchar >( p_aiMeshAnim->mName.C_Str() ) );
+			String l_name{ string::string_cast< xchar >( p_aiMeshAnim.mName.C_Str() ) };
+			Logger::LogDebug( cuT( "Mesh animation found: " ) + l_name );
+			auto l_animation = m_mesh->CreateAnimation( l_name );
 			auto l_animSubmesh = std::make_shared< MeshAnimationSubmesh >( *l_animation, p_submesh );
 			l_animation->AddChild( l_animSubmesh );
 
-			std::for_each( p_aiMeshAnim->mKeys, p_aiMeshAnim->mKeys + p_aiMeshAnim->mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
+			std::for_each( p_aiMeshAnim.mKeys, p_aiMeshAnim.mKeys + p_aiMeshAnim.mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
 			{
-				l_animSubmesh->AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( p_aiMesh->mAnimMeshes[p_aiKey.mValue] ) );
+				l_animSubmesh->AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
 			} );
 		}
 	}
@@ -434,12 +436,12 @@ namespace C3dAssimp
 		}
 	}
 
-	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const * p_pAiMaterial )
+	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const & p_aiMaterial )
 	{
 		MaterialSPtr l_return;
 		auto & l_manager = p_scene.GetMaterialView();
 		aiString l_mtlname;
-		p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
+		p_aiMaterial.Get( AI_MATKEY_NAME, l_mtlname );
 		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
 
 		if ( l_name.empty() )
@@ -454,38 +456,38 @@ namespace C3dAssimp
 		else
 		{
 			aiColor3D l_ambient( 1, 1, 1 );
-			p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
 			aiColor3D l_diffuse( 1, 1, 1 );
-			p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
 			aiColor3D l_specular( 1, 1, 1 );
-			p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
 			aiColor3D l_emissive( 1, 1, 1 );
-			p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
 			float l_opacity = 1;
-			p_pAiMaterial->Get( AI_MATKEY_OPACITY, l_opacity );
+			p_aiMaterial.Get( AI_MATKEY_OPACITY, l_opacity );
 			float l_shininess = 0.5f;
-			p_pAiMaterial->Get( AI_MATKEY_SHININESS, l_shininess );
+			p_aiMaterial.Get( AI_MATKEY_SHININESS, l_shininess );
 			float l_shininessStrength = 1.0f;
-			p_pAiMaterial->Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
+			p_aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
 			int l_twoSided = 0;
-			p_pAiMaterial->Get( AI_MATKEY_TWOSIDED, l_twoSided );
+			p_aiMaterial.Get( AI_MATKEY_TWOSIDED, l_twoSided );
 
 			aiString l_ambTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
 			aiString l_difTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
 			aiString l_spcTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
 			aiString l_emiTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
 			aiString l_nmlTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
 			aiString l_hgtTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
 			aiString l_opaTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
 			aiString l_shnTexName;
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
 
 			if ( l_ambient.IsBlack() && l_diffuse.IsBlack() && l_specular.IsBlack() && l_emissive.IsBlack() )
 			{
@@ -552,57 +554,58 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone const * const * p_pBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
+	void AssimpImporter::DoProcessBones( Skeleton & p_skeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< VertexBoneData > & p_arrayVertices )
 	{
 		for ( uint32_t i = 0; i < p_count; ++i )
 		{
-			aiBone const * l_aiBone = p_pBones[i];
-			String l_name = string::string_cast< xchar >( l_aiBone->mName.C_Str() );
+			aiBone const & l_aiBone = *p_aiBones[i];
+			String l_name = string::string_cast< xchar >( l_aiBone.mName.C_Str() );
 			uint32_t l_index;
 
 			if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
 			{
-				BoneSPtr l_bone = std::make_shared< Bone >( *p_skeleton );
+				BoneSPtr l_bone = std::make_shared< Bone >( p_skeleton );
 				l_bone->SetName( l_name );
-				aiMatrix4x4 l_mtx{ l_aiBone->mOffsetMatrix };
+				aiMatrix4x4 l_mtx{ l_aiBone.mOffsetMatrix };
 				l_bone->SetOffsetMatrix( Matrix4x4r{ &l_mtx.Transpose().a1 } );
 				l_index = uint32_t( m_arrayBones.size() );
 				m_arrayBones.push_back( l_bone );
 				m_mapBoneByID[l_name] = l_index;
-				p_skeleton->AddBone( l_bone );
+				p_skeleton.AddBone( l_bone );
 			}
 			else
 			{
 				l_index = m_mapBoneByID[l_name];
-				aiMatrix4x4 l_mtx{ l_aiBone->mOffsetMatrix };
+				aiMatrix4x4 l_mtx{ l_aiBone.mOffsetMatrix };
 				ENSURE( m_arrayBones[l_index]->GetOffsetMatrix() == Matrix4x4r( &l_mtx.Transpose().a1 ) );
 			}
 
-			for ( uint32_t j = 0; j < l_aiBone->mNumWeights; ++j )
+			for ( uint32_t j = 0; j < l_aiBone.mNumWeights; ++j )
 			{
-				p_arrayVertices[l_aiBone->mWeights[j].mVertexId].AddBoneData( l_index, real( l_aiBone->mWeights[j].mWeight ) );
+				p_arrayVertices[l_aiBone.mWeights[j].mVertexId].AddBoneData( l_index, real( l_aiBone.mWeights[j].mWeight ) );
 			}
 		}
 	}
 
-	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode const * p_node, aiAnimation const * p_aiAnimation )
+	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation )
 	{
-		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
+		String l_name{ string::string_cast< xchar >( p_aiAnimation.mName.C_Str() ) };
+		Logger::LogDebug( cuT( "Skeleton animation found: " ) + l_name );
 
 		if ( l_name.empty() )
 		{
 			l_name = p_name;
 		}
 
-		SkeletonAnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
-		real l_ticksPerSecond = real( p_aiAnimation->mTicksPerSecond ? p_aiAnimation->mTicksPerSecond : 25.0_r );
-		DoProcessAnimationNodes (l_animation, l_ticksPerSecond, p_skeleton, p_node, p_aiAnimation, nullptr);
+		SkeletonAnimationSPtr l_animation = p_skeleton.CreateAnimation( l_name );
+		real l_ticksPerSecond = real( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25.0_r );
+		DoProcessAnimationNodes( *l_animation, l_ticksPerSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes (SkeletonAnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode const * p_aiNode, aiAnimation const * p_aiAnimation, SkeletonAnimationObjectSPtr p_object)
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object)
 	{
-		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
+		String l_name = string::string_cast< xchar >( p_aiNode.mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
 		SkeletonAnimationObjectSPtr l_object;
 
@@ -613,16 +616,16 @@ namespace C3dAssimp
 			if ( l_itBone != m_mapBoneByID.end() )
 			{
 				auto l_bone = m_arrayBones[l_itBone->second];
-				l_object = p_animation->AddObject( l_bone, p_object );
+				l_object = p_animation.AddObject( l_bone, p_object );
 
 				if ( p_object->GetType() == SkeletonAnimationObjectType::Bone )
 				{
-					p_skeleton->SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
+					p_skeleton.SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
 				}
 			}
 			else
 			{
-				l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
+				l_object = p_animation.AddObject( p_aiNode.mName.C_Str(), p_object );
 			}
 
 			std::map< real, Point3r > l_translates;
@@ -669,7 +672,7 @@ namespace C3dAssimp
 
 		if ( !l_object )
 		{
-			l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
+			l_object = p_animation.AddObject( p_aiNode.mName.C_Str(), p_object );
 		}
 
 		if ( l_object )
@@ -681,13 +684,13 @@ namespace C3dAssimp
 
 			if ( !l_object->HasKeyFrames() )
 			{
-				l_object->SetNodeTransform( Matrix4x4r( &p_aiNode->mTransformation.a1 ) );
+				l_object->SetNodeTransform( Matrix4x4r( &p_aiNode.mTransformation.a1 ) );
 			}
 		}
 
-		for ( uint32_t i = 0; i < p_aiNode->mNumChildren; i++ )
+		for ( uint32_t i = 0; i < p_aiNode.mNumChildren; i++ )
 		{
-			DoProcessAnimationNodes( p_animation, p_ticksPerSecond, p_skeleton, p_aiNode->mChildren[i], p_aiAnimation, l_object );
+			DoProcessAnimationNodes( p_animation, p_ticksPerSecond, p_skeleton, *p_aiNode.mChildren[i], p_aiAnimation, l_object );
 		}
 	}
 }
