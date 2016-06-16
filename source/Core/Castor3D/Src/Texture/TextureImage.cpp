@@ -286,9 +286,11 @@ namespace Castor3D
 
 		if ( !Engine::GetInstance().GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
-			p_depth = GetNext2Pow( p_depth );
-			p_size.set( GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) );
-			l_return = true;
+			uint32_t l_depth{ GetNext2Pow( p_depth ) };
+			l_return = p_depth != l_depth;
+			p_depth = l_depth;
+			Size l_size{ GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) };
+			l_return |= l_size != p_size;
 		}
 
 		p_size[1] *= p_depth;
