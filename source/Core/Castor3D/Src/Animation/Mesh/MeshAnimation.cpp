@@ -18,10 +18,10 @@ namespace Castor3D
 	{
 		bool l_return = true;
 
-		for ( auto l_submesh : p_obj.m_submeshes )
+		for ( auto const & l_submesh : p_obj.m_submeshes )
 		{
-			l_return &= DoWriteChunk( l_submesh->GetSubmesh().GetId(), eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID, m_chunk );
-			l_return &= BinaryWriter< MeshAnimationSubmesh >{}.Write( *l_submesh, m_chunk );
+			l_return &= DoWriteChunk( l_submesh.GetSubmesh().GetId(), eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID, m_chunk );
+			l_return &= BinaryWriter< MeshAnimationSubmesh >{}.Write( l_submesh, m_chunk );
 		}
 
 		return l_return;
@@ -32,7 +32,7 @@ namespace Castor3D
 	bool BinaryParser< MeshAnimation >::DoParse( MeshAnimation & p_obj )
 	{
 		bool l_return = true;
-		MeshAnimationSubmeshSPtr l_submeshAnim;
+		MeshAnimationSubmeshUPtr l_submeshAnim;
 		SubmeshSPtr l_submesh;
 		BinaryChunk l_chunk;
 		uint32_t l_id{ 0u };
@@ -54,12 +54,12 @@ namespace Castor3D
 			case eCHUNK_TYPE_MESH_ANIMATION_SUBMESH:
 				if ( l_submesh )
 				{
-					l_submeshAnim = std::make_shared< MeshAnimationSubmesh >( p_obj, *l_submesh );
-					l_return = BinaryParser< MeshAnimationSubmesh >{}.Parse( *l_submeshAnim, l_chunk );
+					MeshAnimationSubmesh l_submeshAnim{ p_obj, *l_submesh };
+					l_return = BinaryParser< MeshAnimationSubmesh >{}.Parse( l_submeshAnim, l_chunk );
 
 					if ( l_return )
 					{
-						p_obj.AddChild( l_submeshAnim );
+						p_obj.AddChild( std::move( l_submeshAnim ) );
 					}
 				}
 				break;
@@ -80,16 +80,16 @@ namespace Castor3D
 	{
 	}
 
-	void MeshAnimation::AddChild( MeshAnimationSubmeshSPtr p_object )
+	void MeshAnimation::AddChild( MeshAnimationSubmesh && p_object )
 	{
-		m_submeshes.push_back( p_object );
+		m_submeshes.push_back( std::move( p_object ) );
 	}
 
 	bool MeshAnimation::DoInitialise()
 	{
-		for ( auto l_it : m_submeshes )
+		for ( auto const & l_submesh : m_submeshes )
 		{
-			m_length = std::max( m_length, l_it->GetLength() );
+			m_length = std::max( m_length, l_submesh.GetLength() );
 		}
 
 		return true;

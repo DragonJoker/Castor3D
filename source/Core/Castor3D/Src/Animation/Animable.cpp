@@ -22,22 +22,38 @@ namespace Castor3D
 		m_animations.clear();
 	}
 
-	AnimationSPtr Animable::GetAnimation( Castor::String const & p_name )
+	bool Animable::HasAnimation( Castor::String const & p_name )const
 	{
-		AnimationSPtr l_return;
+		return m_animations.find( p_name ) != m_animations.end();
+	}
+
+	Animation const & Animable::GetAnimation( Castor::String const & p_name )const
+	{
 		auto l_it = m_animations.find( p_name );
 
 		if ( l_it != m_animations.end() )
 		{
-			l_return = l_it->second;
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
 
-		return l_return;
+		return *l_it->second;
 	}
 
-	void Animable::DoAddAnimation( AnimationSPtr p_animation )
+	void Animable::DoAddAnimation( AnimationUPtr && p_animation )
 	{
-		m_animations[p_animation->GetName()] = p_animation;
+		m_animations[p_animation->GetName()] = std::move( p_animation );
+	}
+
+	Animation & Animable::DoGetAnimation( Castor::String const & p_name )
+	{
+		auto l_it = m_animations.find( p_name );
+
+		if ( l_it != m_animations.end() )
+		{
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+		}
+
+		return *l_it->second;
 	}
 
 	//*************************************************************************************************

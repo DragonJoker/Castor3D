@@ -40,7 +40,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject )
+	MeshAnimationInstanceSubmesh::MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh const & p_animationObject )
 		: OwnedBy< MeshAnimationInstance >{ p_animationInstance }
 		, m_animationObject{ p_animationObject }
 		, m_begin{ p_animationObject.GetBuffers().begin() }

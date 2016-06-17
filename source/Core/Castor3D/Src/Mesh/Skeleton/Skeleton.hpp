@@ -92,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SkeletonAnimationSPtr CreateAnimation( Castor::String const & p_name );
+		C3D_API SkeletonAnimation & CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		The global inverse transform.

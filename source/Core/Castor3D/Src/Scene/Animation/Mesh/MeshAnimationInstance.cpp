@@ -22,9 +22,9 @@ namespace Castor3D
 	{
 		m_submeshes.reserve(p_animation.m_submeshes.size() );
 
-		for ( auto & l_submesh : p_animation.m_submeshes )
+		for ( auto const & l_submesh : p_animation.m_submeshes )
 		{
-			m_submeshes.emplace_back( *this, *l_submesh );
+			m_submeshes.emplace_back( *this, l_submesh );
 		}
 	}
 

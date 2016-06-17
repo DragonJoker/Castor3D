@@ -126,7 +126,7 @@ namespace Castor3D
 
 		if ( l_it == m_toMove.end() )
 		{
-			m_toMove.insert( std::make_pair( l_name, p_object ) );
+			m_toMove.insert( { l_name, p_object } );
 
 			if ( !p_parent )
 			{
@@ -149,10 +149,10 @@ namespace Castor3D
 		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( BoneSPtr p_bone )const
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( Bone const & p_bone )const
 	{
 		SkeletonAnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( GetMovingTypeName( SkeletonAnimationObjectType::Bone ) + p_bone->GetName() );
+		auto l_it = m_toMove.find( GetMovingTypeName( SkeletonAnimationObjectType::Bone ) + p_bone.GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{

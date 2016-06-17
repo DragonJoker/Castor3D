@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
+		C3D_API SkeletonAnimationObjectSPtr GetObject( Bone const & p_bone )const;
 		/**
 		 *\~english
 		 *\return		The moving objects.
@@ -135,7 +135,7 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Casto3D::Animation::DoInitialise
 		 */
-		bool DoInitialise()override;
+		C3D_API bool DoInitialise()override;
 
 	protected:
 		//!\~english	The root moving objects.

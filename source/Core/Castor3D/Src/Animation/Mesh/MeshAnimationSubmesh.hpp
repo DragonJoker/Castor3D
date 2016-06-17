@@ -69,11 +69,32 @@ namespace Castor3D
 		C3D_API MeshAnimationSubmesh( MeshAnimation & p_animation, Submesh & p_submesh );
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh && p_rhs ) = default;
+		/**
+		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
 		C3D_API MeshAnimationSubmesh( MeshAnimationSubmesh const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API MeshAnimationSubmesh & operator=( MeshAnimationSubmesh const & p_rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -109,6 +130,16 @@ namespace Castor3D
 		 *\return		Le sous-maillage.
 		 */
 		inline Submesh & GetSubmesh()
+		{
+			return m_submesh;
+		}
+		/**
+		 *\~english
+		 *\return		The submesh.
+		 *\~french
+		 *\return		Le sous-maillage.
+		 */
+		inline Submesh const & GetSubmesh()const
 		{
 			return m_submesh;
 		}
