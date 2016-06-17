@@ -74,30 +74,36 @@ namespace Castor3D
 				: m_folder{ p_folder }
 				, m_relative{ p_relative }
 			{
-				ImageSPtr l_image;
-
 				if ( File::FileExists( p_folder / p_relative ) )
 				{
-					l_image = Engine::GetInstance().GetImageManager().create( p_relative.GetFileName(), p_folder / p_relative );
+					String l_name{ p_relative.GetFileName() };
+
+					if ( Engine::GetInstance().GetImageManager().has( l_name ) )
+					{
+						auto l_image = Engine::GetInstance().GetImageManager().find( l_name );
+						m_buffer = l_image->GetPixels();
+					}
+					else
+					{
+						auto l_image = Engine::GetInstance().GetImageManager().create( l_name, p_folder / p_relative );
+						auto l_buffer = l_image->GetPixels();
+						Size l_size{ l_buffer->dimensions() };
+						uint32_t l_depth{ 1u };
+
+						if ( DoAdjustDimensions( l_size, l_depth ) )
+						{
+							m_buffer = l_image->Resample( l_size ).GetPixels();
+						}
+						else
+						{
+							m_buffer = l_buffer;
+						}
+					}
 				}
 
-				if ( !l_image )
+				if ( !m_buffer )
 				{
 					CASTOR_EXCEPTION( cuT( "TextureImage::SetSource - Couldn't load image " ) + p_relative );
-				}
-
-				auto l_buffer = l_image->GetPixels();
-				Size l_size{ l_buffer->dimensions() };
-				uint32_t l_depth{ 1u };
-
-				if ( DoAdjustDimensions( l_size, l_depth ) )
-				{
-					Image l_img( cuT( "Tmp" ), *l_buffer );
-					m_buffer = l_img.Resample( l_size ).GetPixels();
-				}
-				else
-				{
-					m_buffer = l_buffer;
 				}
 			}
 
