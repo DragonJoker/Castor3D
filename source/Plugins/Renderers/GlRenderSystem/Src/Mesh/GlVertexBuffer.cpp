@@ -42,9 +42,9 @@ namespace GlRender
 	bool GlVertexBufferObject::Bind()
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = false;
 
-		if ( l_return )
+		if ( l_pBuffer )
 		{
 			l_return = DoBind();
 		}
@@ -56,7 +56,7 @@ namespace GlRender
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->IsAssigned() )
+		if ( l_pBuffer )
 		{
 			DoUnbind();
 		}
@@ -67,7 +67,7 @@ namespace GlRender
 		uint8_t * l_return = nullptr;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->IsAssigned() )
+		if ( l_pBuffer )
 		{
 			l_return = GlBuffer< uint8_t >::DoLock( p_offset, p_count, p_flags );
 		}
@@ -79,7 +79,7 @@ namespace GlRender
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->IsAssigned() )
+		if ( l_pBuffer )
 		{
 			GlBuffer< uint8_t >::DoUnlock();
 		}

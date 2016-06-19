@@ -227,7 +227,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'animations.
 		 */
-		inline AnimationStateMap const & GetAnimations()const
+		inline GroupAnimationMap const & GetAnimations()const
 		{
 			return m_animations;
 		}
@@ -245,7 +245,7 @@ namespace Castor3D
 	private:
 		//!<\~english	The list of animations.
 		//!\~french		La liste des animations.
-		AnimationStateMap m_animations;
+		GroupAnimationMap m_animations;
 		//!<\~english	The list of AnimatedObjects.
 		//!\~french		La liste des AnimatedObject.
 		AnimatedObjectPtrStrMap m_objects;

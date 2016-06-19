@@ -85,15 +85,6 @@ namespace Castor3D
 		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\brief		Sets the key frames interpolator type.
-		 *\param[in]	p_type	The interpolator type.
-		 *\~french
-		 *\return		Définit le type d'interpolateur des key frames.
-		 *\param[in]	p_type	Le type d'interpolateur.
-		 */
-		C3D_API void SetInterpolatorType( InterpolatorType p_type );
-		/**
-		 *\~english
 		 *\return		The objects count.
 		 *\~french
 		 *\return		Le nombre d'objets.

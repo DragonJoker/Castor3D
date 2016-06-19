@@ -125,7 +125,14 @@ namespace Castor3D
 	template< typename T > class Interpolator;
 	template< typename T, InterpolatorType > class InterpolatorT;
 
-	using AnimationStateMap = std::map< Castor::String, AnimationState >;
+	struct GroupAnimation
+	{
+		AnimationState m_state;
+		bool m_looped;
+		float m_scale;
+	};
+
+	using GroupAnimationMap = std::map< Castor::String, GroupAnimation >;
 	using Point3rInterpolator = Interpolator< Castor::Point3r >;
 	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
 	using KeyFrameRealMap = std::map< real, KeyFrame >;

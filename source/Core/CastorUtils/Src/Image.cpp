@@ -72,7 +72,7 @@ namespace Castor
 			LOADER_ERROR( "Can't load image : path is empty" );
 		}
 
-		p_image.m_pBuffer.reset();
+		p_image.m_buffer.reset();
 		ePIXEL_FORMAT l_ePF = ePIXEL_FORMAT_R8G8B8;
 		int l_flags = BMP_DEFAULT;
 		FREE_IMAGE_FORMAT l_fiFormat = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
@@ -156,7 +156,7 @@ namespace Castor
 			}
 		}
 
-		if ( !p_image.m_pBuffer )
+		if ( !p_image.m_buffer )
 		{
 			uint8_t * l_pixels = FreeImage_GetBits( l_fiImage );
 			//0=Blue, 1=Green, 2=Red, 3=Alpha
@@ -171,11 +171,11 @@ namespace Castor
 			}
 
 #endif
-			p_image.m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
+			p_image.m_buffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
 			FreeImage_Unload( l_fiImage );
 		}
 
-		return p_image.m_pBuffer != nullptr;
+		return p_image.m_buffer != nullptr;
 	}
 
 	//************************************************************************************************
@@ -252,21 +252,21 @@ namespace Castor
 
 	Image::Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
-		, m_pBuffer( PxBufferBase::create( p_size, p_format, &p_buffer[0], p_eBufferFormat ) )
+		, m_buffer( PxBufferBase::create( p_size, p_format, &p_buffer[0], p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
-		, m_pBuffer( PxBufferBase::create( p_size, p_format, p_buffer, p_eBufferFormat ) )
+		, m_buffer( PxBufferBase::create( p_size, p_format, p_buffer, p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( String const & p_name, PxBufferBase const & p_buffer )
 		: Resource< Image >( p_name )
-		, m_pBuffer( p_buffer.clone() )
+		, m_buffer( p_buffer.clone() )
 	{
 		CHECK_INVARIANTS();
 	}
@@ -281,7 +281,7 @@ namespace Castor
 	Image::Image( Image const & p_image )
 		: Resource< Image >( p_image )
 		, m_pathFile( p_image.m_pathFile )
-		, m_pBuffer( p_image.m_pBuffer->clone() )
+		, m_buffer( p_image.m_buffer->clone() )
 	{
 		CHECK_INVARIANTS();
 	}
@@ -289,10 +289,10 @@ namespace Castor
 	Image::Image( Image && p_image )
 		: Resource< Image >( std::move( p_image ) )
 		, m_pathFile( std::move( p_image.m_pathFile ) )
-		, m_pBuffer( std::move( p_image.m_pBuffer ) )
+		, m_buffer( std::move( p_image.m_buffer ) )
 	{
 		p_image.m_pathFile.clear();
-		p_image.m_pBuffer.reset();
+		p_image.m_buffer.reset();
 		CHECK_INVARIANTS();
 	}
 
@@ -300,7 +300,7 @@ namespace Castor
 	{
 		Resource< Image >::operator=( p_image );
 		m_pathFile = p_image.m_pathFile;
-		m_pBuffer = p_image.m_pBuffer->clone();
+		m_buffer = p_image.m_buffer->clone();
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -312,9 +312,9 @@ namespace Castor
 		if ( this != & p_image )
 		{
 			m_pathFile = std::move( p_image.m_pathFile );
-			m_pBuffer = std::move( p_image.m_pBuffer );
+			m_buffer = std::move( p_image.m_buffer );
 			p_image.m_pathFile.clear();
-			p_image.m_pBuffer.reset();
+			p_image.m_buffer.reset();
 			CHECK_INVARIANTS();
 		}
 
@@ -326,7 +326,7 @@ namespace Castor
 	}
 
 	BEGIN_INVARIANT_BLOCK( Image )
-	CHECK_INVARIANT( m_pBuffer->count() > 0 );
+	CHECK_INVARIANT( m_buffer->count() > 0 );
 	END_INVARIANT_BLOCK()
 
 	Image & Image::Resample( Size const & p_size )
@@ -354,7 +354,7 @@ namespace Castor
 
 			if ( l_fiImage )
 			{
-				memcpy( FreeImage_GetBits( l_fiImage ), m_pBuffer->const_ptr(), m_pBuffer->size() );
+				memcpy( FreeImage_GetBits( l_fiImage ), m_buffer->const_ptr(), m_buffer->size() );
 				uint32_t l_width = p_size.width();
 				uint32_t l_height = p_size.height();
 				FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_fiImage );
@@ -379,7 +379,7 @@ namespace Castor
 					}
 
 #endif
-					m_pBuffer = PxBufferBase::create( p_size, l_ePF, l_pixels, l_ePF );
+					m_buffer = PxBufferBase::create( p_size, l_ePF, l_pixels, l_ePF );
 				}
 
 				FreeImage_Unload( l_fiImage );
@@ -395,9 +395,9 @@ namespace Castor
 		SetPixel( 0, 0, p_clrColour );
 		uint32_t l_uiBpp = PF::GetBytesPerPixel( GetPixelFormat() );
 
-		for ( uint32_t i = l_uiBpp; i < m_pBuffer->size(); i += l_uiBpp )
+		for ( uint32_t i = l_uiBpp; i < m_buffer->size(); i += l_uiBpp )
 		{
-			memcpy( &m_pBuffer->ptr()[i], &m_pBuffer->const_ptr()[0], l_uiBpp );
+			memcpy( &m_buffer->ptr()[i], &m_buffer->const_ptr()[0], l_uiBpp );
 		}
 
 		CHECK_INVARIANTS();
@@ -408,7 +408,7 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
-		memcpy( &m_pBuffer->ptr()[( x + y * GetWidth() ) * PF::GetBytesPerPixel( GetPixelFormat() )], p_pPixel, PF::GetBytesPerPixel( GetPixelFormat() ) );
+		memcpy( &m_buffer->ptr()[( x + y * GetWidth() ) * PF::GetBytesPerPixel( GetPixelFormat() )], p_pPixel, PF::GetBytesPerPixel( GetPixelFormat() ) );
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -419,7 +419,7 @@ namespace Castor
 		REQUIRE( x < GetWidth() && y < GetHeight() );
 		Point4ub l_ptComponents = bgra_byte( p_clrColour );
 		uint8_t const * l_pSrc = l_ptComponents.const_ptr();
-		uint8_t * l_pDst = &( *m_pBuffer->get_at( x, y ) );
+		uint8_t * l_pDst = &( *m_buffer->get_at( x, y ) );
 		PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );
 		CHECK_INVARIANTS();
 		return * this;
@@ -429,7 +429,7 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
-		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
+		uint8_t const * l_pSrc = &( *m_buffer->get_at( x, y ) );
 		uint8_t * l_pDst = p_pPixel;
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, p_format, l_pDst );
 		CHECK_INVARIANTS();
@@ -440,7 +440,7 @@ namespace Castor
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() );
 		Point4ub l_ptComponents;
-		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
+		uint8_t const * l_pSrc = &( *m_buffer->get_at( x, y ) );
 		uint8_t * l_pDst = l_ptComponents.ptr();
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, ePIXEL_FORMAT_A8R8G8B8, l_pDst );
 		CHECK_INVARIANTS();
@@ -455,7 +455,7 @@ namespace Castor
 		{
 			if ( GetPixelFormat() == p_src.GetPixelFormat() )
 			{
-				m_pBuffer = p_src.m_pBuffer->clone();
+				m_buffer = p_src.m_buffer->clone();
 			}
 			else
 			{
@@ -463,8 +463,8 @@ namespace Castor
 				{
 					for ( uint32_t j = 0; j < GetHeight(); ++j )
 					{
-						uint8_t const * l_pSrc = &( *p_src.m_pBuffer->get_at( i, j ) );
-						uint8_t * l_pDst = &( *m_pBuffer->get_at( i, j ) );
+						uint8_t const * l_pSrc = &( *p_src.m_buffer->get_at( i, j ) );
+						uint8_t * l_pDst = &( *m_buffer->get_at( i, j ) );
 						PF::ConvertPixel( GetPixelFormat(), l_pSrc, GetPixelFormat(), l_pDst );
 					}
 				}
@@ -476,7 +476,7 @@ namespace Castor
 
 			if ( GetPixelFormat() == p_src.GetPixelFormat() )
 			{
-				uint8_t * l_pSrcPix	= new uint8_t[PF::GetBytesPerPixel( m_pBuffer->format() )];
+				uint8_t * l_pSrcPix	= new uint8_t[PF::GetBytesPerPixel( m_buffer->format() )];
 
 				for ( uint32_t i = 0; i < GetWidth(); ++i )
 				{
@@ -519,8 +519,8 @@ namespace Castor
 		// Création de la sous-image à remplir
 		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );
 		// Calcul de variables temporaires
-		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() ) );
-		uint8_t * l_pDest = &( *l_img.m_pBuffer->get_at( 0, 0 ) );
+		uint8_t const * l_pSrc = &( *m_buffer->get_at( l_rcRect.left(), l_rcRect.top() ) );
+		uint8_t * l_pDest = &( *l_img.m_buffer->get_at( 0, 0 ) );
 		uint32_t l_uiSrcPitch = GetWidth() * PF::GetBytesPerPixel( GetPixelFormat() );
 		uint32_t l_uiDestPitch = l_img.GetWidth() * PF::GetBytesPerPixel( l_img.GetPixelFormat() );
 
@@ -539,7 +539,7 @@ namespace Castor
 	Image & Image::Flip()
 	{
 		CHECK_INVARIANTS();
-		m_pBuffer->flip();
+		m_buffer->flip();
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -547,7 +547,7 @@ namespace Castor
 	Image & Image::Mirror()
 	{
 		CHECK_INVARIANTS();
-		m_pBuffer->mirror();
+		m_buffer->mirror();
 		CHECK_INVARIANTS();
 		return * this;
 	}

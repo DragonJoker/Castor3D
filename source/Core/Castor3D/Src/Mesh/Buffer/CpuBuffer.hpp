@@ -55,11 +55,9 @@ namespace Castor3D
 		 */
 		inline explicit CpuBuffer( Engine & p_engine )
 			: Castor::OwnedBy< Engine >( p_engine )
-			, m_bAssigned( false )
-			, m_bToDelete( false )
-			, m_pBuffer()
-			, m_arrayData()
-			, m_uiSavedSize( 0 )
+			, m_gpuBuffer()
+			, m_data()
+			, m_savedSize( 0 )
 
 		{
 		}
@@ -82,12 +80,10 @@ namespace Castor3D
 		 */
 		inline void Destroy()
 		{
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
-
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_pBuffer->Destroy();
-				m_pBuffer.reset();
+				m_gpuBuffer->Destroy();
+				m_gpuBuffer.reset();
 			}
 		}
 		/**
@@ -98,11 +94,9 @@ namespace Castor3D
 		 */
 		inline void Cleanup()
 		{
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
-
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_pBuffer->Cleanup();
+				m_gpuBuffer->Cleanup();
 			}
 		}
 		/**
@@ -119,12 +113,11 @@ namespace Castor3D
 		 */
 		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
 		{
-			bool l_return	= false;
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
+			bool l_return = false;
 
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_return = l_pBuffer->Initialise( p_type, p_nature );
+				l_return = m_gpuBuffer->Initialise( p_type, p_nature );
 			}
 
 			return l_return;
@@ -148,11 +141,10 @@ namespace Castor3D
 		inline T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 		{
 			T * l_return = nullptr;
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_return = l_pBuffer->Lock( p_offset, p_count, p_flags );
+				l_return = m_gpuBuffer->Lock( p_offset, p_count, p_flags );
 			}
 
 			return l_return;
@@ -167,11 +159,9 @@ namespace Castor3D
 		 */
 		inline void Unlock()
 		{
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
-
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_pBuffer->Unlock();
+				m_gpuBuffer->Unlock();
 			}
 		}
 		/**
@@ -193,11 +183,10 @@ namespace Castor3D
 		inline bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 		{
 			bool l_return = false;
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_return = l_pBuffer->Fill( p_buffer, p_size, p_type, p_nature );
+				l_return = m_gpuBuffer->Fill( p_buffer, p_size, p_type, p_nature );
 			}
 
 			return l_return;
@@ -212,12 +201,11 @@ namespace Castor3D
 		 */
 		inline bool Bind()
 		{
-			bool l_return	= false;
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
+			bool l_return = false;
 
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_return = l_pBuffer->Bind();
+				l_return = m_gpuBuffer->Bind();
 			}
 
 			return l_return;
@@ -232,11 +220,9 @@ namespace Castor3D
 		 */
 		inline void Unbind()
 		{
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
-
-			if ( l_pBuffer )
+			if ( m_gpuBuffer )
 			{
-				l_pBuffer->Unbind();
+				m_gpuBuffer->Unbind();
 			}
 		}
 		/**
@@ -251,8 +237,8 @@ namespace Castor3D
 		 */
 		inline void SetElement( uint32_t p_index, T const & p_value )
 		{
-			REQUIRE( p_index < m_arrayData.size() );
-			m_arrayData[p_index] = p_value;
+			REQUIRE( p_index < m_data.size() );
+			m_data[p_index] = p_value;
 		}
 		/**
 		 *\~english
@@ -264,7 +250,7 @@ namespace Castor3D
 		 */
 		inline void AddElement( T const & p_value )
 		{
-			m_arrayData.push_back( p_value );
+			m_data.push_back( p_value );
 		}
 		/**
 		 *\~english
@@ -276,11 +262,11 @@ namespace Castor3D
 		 */
 		inline uint32_t GetSize()const
 		{
-			uint32_t l_uiReturn = m_uiSavedSize;
+			uint32_t l_uiReturn = m_savedSize;
 
-			if ( m_arrayData.size() )
+			if ( m_data.size() )
 			{
-				l_uiReturn = uint32_t( m_arrayData.size() );
+				l_uiReturn = uint32_t( m_data.size() );
 			}
 
 			return l_uiReturn;
@@ -296,7 +282,7 @@ namespace Castor3D
 		inline uint32_t GetCapacity()const
 		{
 			// Safe cast since I limit a buffer size to uint32_t
-			return uint32_t( m_arrayData.capacity() );
+			return uint32_t( m_data.capacity() );
 		}
 		/**
 		 *\~english
@@ -308,7 +294,7 @@ namespace Castor3D
 		 */
 		inline void Resize( uint32_t p_uiNewSize )
 		{
-			m_arrayData.resize( p_uiNewSize, 0 );
+			m_data.resize( p_uiNewSize, 0 );
 		}
 		/**
 		 *\~english
@@ -326,7 +312,7 @@ namespace Castor3D
 			}
 			else
 			{
-				m_arrayData.reserve( m_arrayData.capacity() + p_uiIncrement );
+				m_data.reserve( m_data.capacity() + p_uiIncrement );
 			}
 		}
 		/**
@@ -337,32 +323,8 @@ namespace Castor3D
 		 */
 		inline void Clear()
 		{
-			m_uiSavedSize = uint32_t( m_arrayData.size() );
-			m_arrayData.clear();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the delete status of the buffer
-		 *\return		The delete status
-		 *\~french
-		 *\brief		Récupère le statut de suppression du tampon
-		 *\return		Le statut de suppression
-		 */
-		inline bool IsToDelete()const
-		{
-			return m_bToDelete;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the assignment status of the buffer
-		 *\return		The assignment status
-		 *\~french
-		 *\brief		Récupère le statut d'affectation du tampon
-		 *\return		Le statut d'affectation
-		 */
-		inline bool IsAssigned()const
-		{
-			return m_bAssigned;
+			m_savedSize = uint32_t( m_data.size() );
+			m_data.clear();
 		}
 		/**
 		 *\~english
@@ -374,27 +336,7 @@ namespace Castor3D
 		 */
 		inline GpuBufferSPtr GetGpuBuffer()const
 		{
-			return m_pBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the assignment status to \p true
-		 *\~french
-		 *\brief		Définit le status d'affectation à \p true
-		 */
-		inline void Assign()
-		{
-			m_bAssigned = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the assignment status to \p false
-		 *\~french
-		 *\brief		Définit le status d'affectation à \p false
-		 */
-		inline void Unassign()
-		{
-			m_bAssigned = false;
+			return m_gpuBuffer;
 		}
 		/**
 		 *\~english
@@ -406,7 +348,7 @@ namespace Castor3D
 		 */
 		inline T const * data()const
 		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
+			return ( m_data.size() ? &m_data[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -418,20 +360,19 @@ namespace Castor3D
 		 */
 		inline T * data()
 		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
+			return ( m_data.size() ? &m_data[0] : nullptr );
 		}
 
 	protected:
-		//!\~english Tells the buffer is to be deleted at next render loop	\~french Dit que le tampon doit être détruit à la prochaîne boucle de rendu
-		bool m_bToDelete;
-		//!\~english Tells the buffer has it's GPU buffer assigned	\~french Dit que le tampon s'est vu affecter un tampon GPU
-		bool m_bAssigned;
-		//!\~english The GPU buffer	\~french Le tampon GPU
-		GpuBufferSPtr m_pBuffer;
-		//!\~english The buffer data	\~french Les données du tampon
-		TArray m_arrayData;
-		//!<\~english The saved buffer size (to still have a size after clear)	\~french La taille sauvegardée, afin de toujours l'avoir après un clear
-		uint32_t m_uiSavedSize;
+		//!\~english	The GPU buffer.
+		//!\~french		Le tampon GPU.
+		GpuBufferSPtr m_gpuBuffer;
+		//!\~english	The buffer data.
+		//!\~french		Les données du tampon.
+		TArray m_data;
+		//!<\~english	The saved buffer size (to still have a size after clear).
+		//!\~french		La taille sauvegardée, afin de toujours l'avoir après un clear.
+		uint32_t m_savedSize;
 	};
 }
 

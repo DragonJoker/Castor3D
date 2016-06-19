@@ -21,6 +21,8 @@
 
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Animation.hpp"
+#include "Animation/Mesh/MeshAnimation.hpp"
+#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Manager/ManagerView.hpp"
 #include "Material/Pass.hpp"
@@ -61,6 +63,29 @@
 
 using namespace Castor3D;
 using namespace Castor;
+
+namespace
+{
+	InterleavedVertexArray Convert( VertexPtrArray const & p_points )
+	{
+		InterleavedVertexArray l_return;
+		l_return.reserve( p_points.size() );
+
+		for ( auto l_point : p_points )
+		{
+			InterleavedVertex l_vertex;
+			Vertex::GetPosition( *l_point, l_vertex.m_pos );
+			Vertex::GetNormal( *l_point, l_vertex.m_nml );
+			Vertex::GetTangent( *l_point, l_vertex.m_tan );
+			Vertex::GetBitangent( *l_point, l_vertex.m_bin );
+			Vertex::GetTexCoord( *l_point, l_vertex.m_tex );
+			l_return.push_back( l_vertex );
+		}
+
+		return l_return;
+	}
+
+}
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMtlFile )
 {
@@ -1659,7 +1684,125 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 
 		if ( l_importer )
 		{
-			l_parsingContext->pMesh = l_importer->ImportMesh( *l_parsingContext->pScene, l_pathFile, l_parameters );
+			l_parsingContext->pMesh = l_importer->ImportMesh( *l_parsingContext->pScene, l_pathFile, l_parameters, true );
+		}
+		else
+		{
+			PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+		}
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshMorphImport )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( !l_parsingContext->pMesh )
+	{
+		PARSING_ERROR( cuT( "No mesh initialised." ) );
+	}
+	else
+	{
+		real l_timeIndex;
+		p_params[1]->Get( l_timeIndex );
+		Path l_path;
+		Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		Parameters l_parameters;
+
+		if ( p_params.size() > 1 )
+		{
+			String l_tmp;
+			StringArray l_arrayStrParams = string::split( p_params[2]->Get( l_tmp ), cuT( "-" ), 20, false );
+
+			if ( l_arrayStrParams.size() )
+			{
+				for ( StringArrayConstIt l_it = l_arrayStrParams.begin(); l_it != l_arrayStrParams.end(); ++l_it )
+				{
+					if ( l_it->find( cuT( "smooth_normals" ) ) == 0 )
+					{
+						String l_strNml = cuT( "smooth" );
+						l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+					}
+					else if ( l_it->find( cuT( "flat_normals" ) ) == 0 )
+					{
+						String l_strNml = cuT( "flat" );
+						l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+					}
+					else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
+					{
+						bool l_bValue = true;
+						l_parameters.Add( cuT( "tangent_space" ), l_bValue );
+					}
+				}
+			}
+		}
+
+		Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
+		ImporterSPtr l_importer;
+
+		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+		{
+			l_importer = std::make_shared< CmshImporter >( *l_pEngine );
+		}
+		else
+		{
+			ImporterPluginSPtr l_pPlugin;
+			ImporterPlugin::ExtensionArray l_arrayExtensions;
+
+			for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+			{
+				l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+
+				if ( !l_importer && l_pPlugin )
+				{
+					l_arrayExtensions = l_pPlugin->GetExtensions();
+
+					for ( auto l_itExt : l_arrayExtensions )
+					{
+						if ( !l_importer && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
+						{
+							l_importer = l_pPlugin->GetImporter();
+						}
+					}
+				}
+			}
+		}
+
+		if ( l_importer )
+		{
+			Scene l_scene{ cuT( "MorphImport" ), *l_importer->GetEngine() };
+			MeshSPtr l_mesh = l_importer->ImportMesh( l_scene, l_pathFile, l_parameters, false );
+
+			if ( l_mesh && l_mesh->GetSubmeshCount() == l_parsingContext->pMesh->GetSubmeshCount() )
+			{
+				MeshAnimationSPtr l_animation{ std::static_pointer_cast< MeshAnimation >( l_parsingContext->pMesh->GetAnimation( cuT( "Morph" ) ) ) };
+
+				if ( !l_animation )
+				{
+					l_animation = l_parsingContext->pMesh->CreateAnimation( cuT( "Morph" ) );
+
+					for ( auto l_submesh : *l_parsingContext->pMesh )
+					{
+						l_animation->AddChild( std::make_shared< MeshAnimationSubmesh >( *l_animation, *l_submesh ) );
+					}
+				}
+
+				uint32_t l_index = 0u;
+				auto l_submeshAnims = l_animation->GetSubmeshes();
+
+				for ( auto l_submesh : *l_mesh )
+				{
+					auto l_submeshAnim = l_submeshAnims[l_index];
+
+					if ( l_submesh->GetPointsCount() == l_submeshAnim->GetSubmesh().GetPointsCount() )
+					{
+						l_submeshAnim->AddBuffer( l_timeIndex, Convert( l_submesh->GetPoints() ) );
+					}
+				}
+
+				l_animation->Initialise();
+			}
 		}
 		else
 		{
@@ -3797,32 +3940,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
 	if ( l_parsingContext->pAnimation )
 	{
 		l_parsingContext->pAnimation->SetScale( l_value );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationInterpolation )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	uint32_t l_value;
-	p_params[0]->Get( l_value );
-
-	if ( l_parsingContext->pAnimation )
-	{
-		switch ( l_parsingContext->pAnimation->GetAnimation().GetType() )
-		{
-		case AnimationType::Skeleton:
-			std::static_pointer_cast< SkeletonAnimationInstance >( l_parsingContext->pAnimation )->SetInterpolatorType( InterpolatorType( l_value ) );
-			break;
-
-		case AnimationType::Mesh:
-			PARSING_ERROR( cuT( "Can't apply interpolation mode to submesh animations" ) );
-			break;
-		}
 	}
 	else
 	{

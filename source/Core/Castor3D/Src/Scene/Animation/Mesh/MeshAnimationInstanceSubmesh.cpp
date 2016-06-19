@@ -61,7 +61,7 @@ namespace Castor3D
 
 	void MeshAnimationInstanceSubmesh::Update( real p_time )
 	{
-		if ( m_begin != m_end )
+		if ( m_begin != m_end && m_animationObject.GetSubmesh().HasVertexBuffer() )
 		{
 			DoFind( p_time, m_begin, m_end, m_prev, m_curr );
 			uint32_t const l_size = uint32_t( m_curr->m_buffer.size() * sizeof( InterleavedVertex ) );

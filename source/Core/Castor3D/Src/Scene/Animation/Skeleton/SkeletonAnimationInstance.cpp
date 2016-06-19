@@ -83,14 +83,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void SkeletonAnimationInstance::SetInterpolatorType( InterpolatorType p_type )
-	{
-		for ( auto l_moving : m_arrayMoving )
-		{
-			l_moving->SetInterpolationMode( p_type );
-		}
-	}
-
 	void SkeletonAnimationInstance::DoUpdate()
 	{
 		for ( auto l_moving : m_arrayMoving )

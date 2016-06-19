@@ -248,9 +248,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
 	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
 
-	m_mapInterpolatorModes[cuT( "none" )] = uint32_t( InterpolatorType::Nearest );
-	m_mapInterpolatorModes[cuT( "linear" )] = uint32_t( InterpolatorType::Linear );
-
 	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
 	m_mapTextTexturingModes[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;
 
@@ -395,6 +392,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "morph_import" ), Parser_MeshMorphImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_FLOAT >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_MESH, cuT( "division" ), Parser_MeshDivide, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_UINT16 >() } );
 	AddParser( eSECTION_MESH, cuT( "}" ), Parser_MeshEnd );
 
@@ -537,14 +535,13 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "looped" ), Parser_GroupAnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "scale" ), Parser_GroupAnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser(eSECTION_ANIMGROUP_ANIMATION, cuT( "}" ), Parser_GroupAnimationEnd );
+	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "}" ), Parser_GroupAnimationEnd );
 
 	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "animation" ), Parser_AnimatedObjectAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "}" ), Parser_AnimatedObjectEnd );
 
 	AddParser( eSECTION_ANIMATION, cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_ANIMATION, cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_ANIMATION, cuT( "interpolation" ), Parser_AnimationInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
 	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
 	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
 

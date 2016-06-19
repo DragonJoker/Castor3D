@@ -31,7 +31,7 @@ namespace Castor3D
 		return DoImportScene();
 	}
 
-	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
+	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
 	{
 		m_fileName = p_fileName;
 		m_filePath = m_fileName.GetPath();
@@ -45,9 +45,12 @@ namespace Castor3D
 			CASTOR_EXCEPTION( cuT( "The import failed." ) );
 		}
 
-		for ( auto l_submesh : *l_mesh )
+		if ( p_initialise )
 		{
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			for ( auto l_submesh : *l_mesh )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			}
 		}
 
 		return l_mesh;

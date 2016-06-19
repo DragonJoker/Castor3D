@@ -21,13 +21,11 @@ namespace GuiCommon
 		static wxString PROPERTY_ANIMATION_STATE[] = { _( "Play" ), _( "Stop" ), _( "Pause" ) };
 	}
 
-	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, AnimationState p_state )
+	AnimationTreeItemProperty::AnimationTreeItemProperty( Engine * p_engine, bool p_editable, AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, GroupAnimation p_anim )
 		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_name( p_name )
 		, m_group( p_group )
-		, m_state( p_state )
-		, m_scale( 1.0 )
-		, m_looped( false )
+		, m_groupAnim( p_anim )
 	{
 		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		PROPERTY_ANIMATION_SPEED = _( "Speed" );
@@ -50,9 +48,9 @@ namespace GuiCommon
 		if ( l_group )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
-			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_scale ), _( "The animation time scale." ) ) );
-			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_looped ), _( "Sets the animation looped or not" ) ) );
-			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[uint32_t( m_state )], PROPERTY_ANIMATION_STATE[uint32_t( m_state )], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
+			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_groupAnim.m_scale ), _( "The animation time scale." ) ) );
+			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_groupAnim.m_looped ), _( "Sets the animation looped or not" ) ) );
+			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );
 		}
 	}
 
@@ -78,21 +76,21 @@ namespace GuiCommon
 
 	void AnimationTreeItemProperty::OnSpeedChange( double p_value )
 	{
-		m_scale = p_value;
+		m_groupAnim.m_scale = p_value;
 
 		DoApplyChange( [this]()
 		{
-			GetGroup()->SetAnimationScale( m_name, m_scale );
+			GetGroup()->SetAnimationScale( m_name, m_groupAnim.m_scale );
 		} );
 	}
 
 	void AnimationTreeItemProperty::OnLoopedChange( bool p_value )
 	{
-		m_looped = p_value;
+		m_groupAnim.m_looped = p_value;
 
 		DoApplyChange( [this]()
 		{
-			GetGroup()->SetAnimationLooped( m_name, m_looped );
+			GetGroup()->SetAnimationLooped( m_name, m_groupAnim.m_looped );
 		} );
 	}
 
@@ -103,25 +101,25 @@ namespace GuiCommon
 			auto l_group = GetGroup();
 			ButtonData * l_data = reinterpret_cast< ButtonData * >( p_property->GetClientObject() );
 
-			switch ( m_state )
+			switch ( m_groupAnim.m_state )
 			{
 			case AnimationState::Playing:
 				l_group->PauseAnimation( m_name );
-				m_state = AnimationState::Paused;
+				m_groupAnim.m_state = AnimationState::Paused;
 				break;
 
 			case AnimationState::Stopped:
 				l_group->StartAnimation( m_name );
-				m_state = AnimationState::Playing;
+				m_groupAnim.m_state = AnimationState::Playing;
 				break;
 
 			case AnimationState::Paused:
 				l_group->StopAnimation( m_name );
-				m_state = AnimationState::Stopped;
+				m_groupAnim.m_state = AnimationState::Stopped;
 				break;
 			}
 
-			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_state )] );
+			p_property->SetLabel( PROPERTY_ANIMATION_STATE[uint32_t( m_groupAnim.m_state )] );
 		} );
 
 		return false;

@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
-		 *\param[in]	p_parent		Le noeud de sc�ne parent.
+		 *\param[in]	p_parent		Le noeud de scène parent.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
 		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem );

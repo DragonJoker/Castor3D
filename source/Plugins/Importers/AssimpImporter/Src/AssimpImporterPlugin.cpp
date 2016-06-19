@@ -49,8 +49,6 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 		{ cuT( "MD5MESH" ), cuT( "Doom 3 / MD5 Mesh" ) },
 		{ cuT( "MDC" ), cuT( "Return To Castle Wolfenstein Mesh" ) },
 		{ cuT( "MDL" ), cuT( "Quake Mesh / 3D GameStudio Mesh" ) },
-		{ cuT( "MESH" ), cuT( "Ogre 3D Mesh" ) },
-		{ cuT( "MESH.XML" ), cuT( "Ogre 3D Mesh" ) },
 		{ cuT( "MOT" ), cuT( "LightWave Scene" ) },
 		{ cuT( "MS3D" ), cuT( "Milkshape 3D" ) },
 		{ cuT( "NFF" ), cuT( "Neutral File Format" ) },
@@ -140,6 +138,12 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "FBX" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "FBX" ), cuT( "Autodesk FBX" ) );
+	}
+
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MESH" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "MESH" ), cuT( "Ogre 3D Mesh" ) );
+		l_extensions.emplace_back( cuT( "MESH.XML" ), cuT( "LOgre 3D Mesh" ) );
 	}
 
 	return l_extensions;

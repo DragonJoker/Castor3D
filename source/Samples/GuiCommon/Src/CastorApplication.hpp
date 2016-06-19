@@ -51,7 +51,7 @@ namespace GuiCommon
 				<ul>
 				<li>h (--help)	Affiche l'aide.
 				<li>l (--log)	D�finit le niveau de log.
-				<li>f (--file)	D�finit un fichier de sc�ne � charger au lancement.
+				<li>f (--file)	D�finit un fichier de scène � charger au lancement.
 				<li>opengl"		D�finit l'API de rendu � OpenGl (la fen�tre de choix du renderer ne sera pas affich�e).
 				<li>directx		D�finit l'API de rendu � Direct3D 11 (la fen�tre de choix du renderer ne sera pas affich�e).
 				</ul>

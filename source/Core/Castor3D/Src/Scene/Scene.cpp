@@ -342,6 +342,7 @@ namespace Castor3D
 
 	void Scene::Initialise()
 	{
+		m_lightManager->Initialise();
 	}
 
 	void Scene::Cleanup()

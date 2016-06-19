@@ -230,7 +230,6 @@ namespace Castor3D
 		UIntStrMap m_mapBlendModes;
 		UIntStrMap m_mapVerticalAligns;
 		UIntStrMap m_mapHorizontalAligns;
-		UIntStrMap m_mapInterpolatorModes;
 		UIntStrMap m_mapToneMappings;
 		UIntStrMap m_mapTextTexturingModes;
 		UIntStrMap m_mapLineSpacingModes;

@@ -15,6 +15,7 @@
 #include <Manager/ManagerView.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
+#include <Render/RenderLoop.hpp>
 
 #include <Logger.hpp>
 
@@ -25,6 +26,8 @@ using namespace Castor;
 
 namespace C3dAssimp
 {
+	//*********************************************************************************************
+
 	namespace
 	{
 		aiNodeAnim const * const FindNodeAnim( const aiAnimation & p_animation, const String & p_nodeName )
@@ -183,6 +186,8 @@ namespace C3dAssimp
 		}
 	}
 
+	//*********************************************************************************************
+
 	AssimpImporter::AssimpImporter( Engine & p_engine )
 		: Importer( p_engine )
 		, m_anonymous( 0 )
@@ -235,7 +240,13 @@ namespace C3dAssimp
 		{
 			SubmeshSPtr l_submesh;
 			Assimp::Importer l_importer;
-			uint32_t l_flags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_FixInfacingNormals;
+			uint32_t l_flags = aiProcess_Triangulate
+				| aiProcess_JoinIdenticalVertices
+				| aiProcess_OptimizeMeshes
+				| aiProcess_OptimizeGraph
+				| aiProcess_FixInfacingNormals
+				| aiProcess_LimitBoneWeights
+				| aiProcess_Debone;
 			bool l_tangentSpace = false;
 			xchar l_buffer[1024] = { 0 };
 
@@ -636,24 +647,24 @@ namespace C3dAssimp
 			// We process translations
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumPositionKeys; ++i )
 			{
-				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
-				l_translates[real( l_aiNodeAnim->mPositionKeys[i].mTime )] = Point3r{ l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z };
+				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime / p_ticksPerSecond ) );
+				l_translates[real( l_aiNodeAnim->mPositionKeys[i].mTime / p_ticksPerSecond )] = Point3r{ l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z };
 			}
 
 			// Then we process scalings
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumScalingKeys; ++i )
 			{
-				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
-				l_scales[real( l_aiNodeAnim->mScalingKeys[i].mTime )] = Point3r{ l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z };
+				l_times.insert( real( l_aiNodeAnim->mScalingKeys[i].mTime / p_ticksPerSecond ) );
+				l_scales[real( l_aiNodeAnim->mScalingKeys[i].mTime / p_ticksPerSecond )] = Point3r{ l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z };
 			}
 
 			// And eventually the rotations
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumRotationKeys; ++i )
 			{
-				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
+				l_times.insert( real( l_aiNodeAnim->mRotationKeys[i].mTime / p_ticksPerSecond ) );
 				Quaternion l_rotate;
 				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 } } );
-				l_rotates[real( l_aiNodeAnim->mRotationKeys[i].mTime )] = l_rotate;
+				l_rotates[real( l_aiNodeAnim->mRotationKeys[i].mTime / p_ticksPerSecond )] = l_rotate;
 			}
 
 			// We synchronise the three arrays
@@ -661,12 +672,29 @@ namespace C3dAssimp
 			InterpolatorT< Point3r, InterpolatorType::Linear > l_pointInterpolator;
 			InterpolatorT< Quaternion, InterpolatorType::Linear > l_quatInterpolator;
 
-			for ( auto l_time : l_times )
+			if ( p_ticksPerSecond >= GetEngine()->GetRenderLoop().GetWantedFps() )
 			{
-				Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
-				Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
-				Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
-				l_object->AddKeyFrame( l_time / p_ticksPerSecond, l_translate, l_rotate, l_scale );
+				for ( auto l_time : l_times )
+				{
+					Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
+					Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
+					Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
+					l_object->AddKeyFrame( l_time, l_translate, l_rotate, l_scale );
+				}
+			}
+			else
+			{
+				// Limit the key frames per second to 60, to spare RAM...
+				real l_step{ 1.0_r / std::min( 60.0_r, real( GetEngine()->GetRenderLoop().GetWantedFps() ) ) };
+				real l_maxTime{ *l_times.rbegin() + l_step };
+
+				for ( real l_time{ 0.0_r }; l_time < l_maxTime; l_time += l_step )
+				{
+					Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
+					Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
+					Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
+					l_object->AddKeyFrame( l_time, l_translate, l_rotate, l_scale );
+				}
 			}
 		}
 
@@ -693,4 +721,6 @@ namespace C3dAssimp
 			DoProcessAnimationNodes( p_animation, p_ticksPerSecond, p_skeleton, *p_aiNode.mChildren[i], p_aiAnimation, l_object );
 		}
 	}
+
+	//*********************************************************************************************
 }
