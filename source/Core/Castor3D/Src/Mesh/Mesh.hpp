@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API MeshAnimationSPtr CreateAnimation( Castor::String const & p_name );
+		C3D_API MeshAnimation & CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes

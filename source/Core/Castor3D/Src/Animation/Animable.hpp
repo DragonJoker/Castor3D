@@ -73,7 +73,18 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
+		C3D_API bool HasAnimation( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+ 		 *\brief		Récupère une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		L'animation
+		 */
+		C3D_API Animation const & GetAnimation( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The animations.
@@ -83,30 +94,6 @@ namespace Castor3D
 		inline AnimationPtrStrMap const & GetAnimations()const
 		{
 			return m_animations;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animated skeleton instance
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'instance animée du squelette
-		 *\return		La valeur
-		 */
-		inline AnimatedObjectSPtr const & GetAnimatedObject()const
-		{
-			return m_animatedObject;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the animated skeleton instance
-		 *\param[in]	p_object	The new value
-		 *\~french
-		 *\brief		Définit l'instance animée du squelette
-		 *\param[in]	p_object	La nouvelle valeur
-		 */
-		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
-		{
-			m_animatedObject = p_object;
 		}
 
 	protected:
@@ -118,15 +105,23 @@ namespace Castor3D
 		 *\brief		Ajoute une animation.
 		 *\param[in]	p_animation	L'animation.
 		 */
-		void DoAddAnimation( AnimationSPtr p_animation );
+		void DoAddAnimation( AnimationUPtr && p_animation );
+		/**
+		 *\~english
+		 *\brief		Retrieves an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+ 		 *\brief		Récupère une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		L'animation
+		 */
+		Animation & DoGetAnimation( Castor::String const & p_name );
 
 	protected:
 		//!\~english	All animations.
 		//!\~french		Toutes les animations.
 		AnimationPtrStrMap m_animations;
-		//!\~english	The animated object instance, if any.
-		//!\~french		L'instance d'objet animé, s'il y en a un.
-		AnimatedObjectSPtr m_animatedObject;
 	};
 }
 

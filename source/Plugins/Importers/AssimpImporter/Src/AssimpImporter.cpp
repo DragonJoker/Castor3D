@@ -300,7 +300,7 @@ namespace C3dAssimp
 					{
 						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 						{
-							DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] )->Initialise();
+							DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] );
 						}
 
 						l_importer.FreeScene();
@@ -322,7 +322,7 @@ namespace C3dAssimp
 
 										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
 										{
-											DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] )->Initialise();
+											DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] );
 										}
 
 										l_importer.FreeScene();
@@ -428,14 +428,15 @@ namespace C3dAssimp
 		{
 			String l_name{ string::string_cast< xchar >( p_aiMeshAnim.mName.C_Str() ) };
 			Logger::LogDebug( cuT( "Mesh animation found: " ) + l_name );
-			auto l_animation = m_mesh->CreateAnimation( l_name );
-			auto l_animSubmesh = std::make_shared< MeshAnimationSubmesh >( *l_animation, p_submesh );
-			l_animation->AddChild( l_animSubmesh );
+			auto & l_animation = m_mesh->CreateAnimation( l_name );
+			MeshAnimationSubmesh l_animSubmesh{ l_animation, p_submesh };
 
 			std::for_each( p_aiMeshAnim.mKeys, p_aiMeshAnim.mKeys + p_aiMeshAnim.mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )
 			{
-				l_animSubmesh->AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
+				l_animSubmesh.AddBuffer( real( p_aiKey.mTime ), DoCreateVertexBuffer( *p_aiMesh.mAnimMeshes[p_aiKey.mValue] ) );
 			} );
+
+			l_animation.AddChild( std::move( l_animSubmesh ) );
 		}
 	}
 
@@ -598,7 +599,7 @@ namespace C3dAssimp
 		}
 	}
 
-	SkeletonAnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation )
+	void AssimpImporter::DoProcessAnimation( String const & p_name, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation )
 	{
 		String l_name{ string::string_cast< xchar >( p_aiAnimation.mName.C_Str() ) };
 		Logger::LogDebug( cuT( "Skeleton animation found: " ) + l_name );
@@ -608,10 +609,10 @@ namespace C3dAssimp
 			l_name = p_name;
 		}
 
-		SkeletonAnimationSPtr l_animation = p_skeleton.CreateAnimation( l_name );
+		auto l_animation = p_skeleton.CreateAnimation( l_name );
 		real l_ticksPerSecond = real( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25.0_r );
-		DoProcessAnimationNodes( *l_animation, l_ticksPerSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
-		return l_animation;
+		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
+		l_animation.Initialise();
 	}
 
 	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object)

@@ -27,13 +27,9 @@ namespace Castor3D
 
 		if ( l_it == m_animations.end() )
 		{
-			auto l_animation = std::static_pointer_cast< MeshAnimation >( m_mesh.GetAnimation( p_name ) );
-
-			if ( l_animation )
-			{
-				l_instance = std::make_shared< MeshAnimationInstance >( *this, *l_animation );
-				m_animations.insert( { p_name, l_instance } );
-			}
+			auto & l_animation = static_cast< MeshAnimation const & >( m_mesh.GetAnimation( p_name ) );
+			l_instance = std::make_shared< MeshAnimationInstance >( *this, l_animation );
+			m_animations.insert( { p_name, l_instance } );
 		}
 
 		return l_instance;

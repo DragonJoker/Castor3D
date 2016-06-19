@@ -86,7 +86,7 @@ namespace C3dAssimp
 		void DoLoadTexture( aiString const & p_name, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
 		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
-		Castor3D::SkeletonAnimationSPtr DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
+		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
 		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, Castor::real p_ticksPerSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
 		void DoProcessAnimationMeshes( Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
 

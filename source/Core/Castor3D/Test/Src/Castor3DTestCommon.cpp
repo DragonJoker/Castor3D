@@ -173,13 +173,6 @@ namespace Testing
 			++l_itB;
 		}
 
-		l_return &= CT_EQUAL( p_a.GetAnimatedObject() != nullptr, p_b.GetAnimatedObject() != nullptr );
-
-		if ( l_return && p_a.GetAnimatedObject() && p_b.GetAnimatedObject() )
-		{
-			l_return &= CT_EQUAL( p_a.GetAnimatedObject()->GetName(), p_b.GetAnimatedObject()->GetName() );
-		}
-
 		return l_return;
 	}
 

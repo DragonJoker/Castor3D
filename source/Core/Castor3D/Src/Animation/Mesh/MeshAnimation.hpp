@@ -65,14 +65,14 @@ namespace Castor3D
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( MeshAnimationSubmeshSPtr p_object );
+		C3D_API void AddChild( MeshAnimationSubmesh && p_object );
 		/**
 		 *\~english
 		 *\return		The moving objects.
 		 *\~french
 		 *\return		Les objets mouvants.
 		 */
-		inline MeshAnimationSubmeshPtrArray const & GetSubmeshes()const
+		inline MeshAnimationSubmeshArray const & GetSubmeshes()const
 		{
 			return m_submeshes;
 		}
@@ -81,12 +81,12 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Casto3D::Animation::DoInitialise
 		 */
-		bool DoInitialise()override;
+		C3D_API bool DoInitialise()override;
 
 	protected:
 		//!\~english	The animated submesh.
 		//!\~french		Les sous-maillages animés.
-		MeshAnimationSubmeshPtrArray m_submeshes;
+		MeshAnimationSubmeshArray m_submeshes;
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;

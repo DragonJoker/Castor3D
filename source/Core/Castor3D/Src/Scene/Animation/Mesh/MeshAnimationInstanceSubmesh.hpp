@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_animationObject	L'animation d'objet.
 		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject );
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh const & p_animationObject );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -103,7 +103,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
-		MeshAnimationSubmesh & m_animationObject;
+		MeshAnimationSubmesh const & m_animationObject;
 		//!\~english	Iterator to the buffers beginning.
 		//!\~french		Itérateur sur le début des tampons.
 		SubmeshAnimationBufferArray::const_iterator m_begin;

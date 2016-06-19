@@ -271,21 +271,13 @@ namespace Castor3D
 		m_skeleton = p_skeleton;
 	}
 
-	MeshAnimationSPtr Mesh::CreateAnimation( Castor::String const & p_name )
+	MeshAnimation & Mesh::CreateAnimation( Castor::String const & p_name )
 	{
-		MeshAnimationSPtr l_return;
-		auto l_anim = GetAnimation( p_name );
-
-		if ( !l_anim )
+		if ( !HasAnimation( p_name ) )
 		{
-			l_return = std::make_shared< MeshAnimation >( *this, p_name );
-			DoAddAnimation( l_return );
-		}
-		else
-		{
-			l_return = std::static_pointer_cast< MeshAnimation >( l_anim );
+			DoAddAnimation( std::make_unique< MeshAnimation >( *this, p_name ) );
 		}
 
-		return l_return;
+		return static_cast< MeshAnimation & >( DoGetAnimation( p_name ) );
 	}
 }
