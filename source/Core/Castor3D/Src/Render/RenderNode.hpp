@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -130,7 +130,7 @@ namespace Castor3D
 		Geometry & m_geometry;
 		//!\~english	The animated object.
 		//!\~french		L'objet animé.
-		AnimatedObject & m_animated;
+		AnimatedSkeleton & m_animated;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;

@@ -111,6 +111,24 @@ namespace Castor3D
 		C3D_API SkeletonAnimationObjectSPtr GetObject( Bone const & p_bone )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves an animated bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Récupère un os animé.
+		 *\param[in]	p_bone	L'os.
+		 */
+		C3D_API SkeletonAnimationObjectSPtr GetObject( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Récupère un os animé.
+		 *\param[in]	p_bone	L'os.
+		 */
+		C3D_API SkeletonAnimationObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
+		/**
+		 *\~english
 		 *\return		The moving objects.
 		 *\~french
 		 *\return		Les objets mouvants.

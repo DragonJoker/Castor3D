@@ -55,6 +55,15 @@ namespace Castor3D
 		C3D_API ~AnimatedSkeleton();
 		/**
 		 *\~english
+		 *\brief		Fills a shader variable with this object's skeleton transforms.
+		 *\param[out]	p_variable	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
+		 *\param[out]	p_variable	Reçoit les transformations.
+		 */
+		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
+		/**
+		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The skeleton
 		 *\~french
@@ -70,11 +79,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name )override;
-		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoFillShader
-		 */
-		void DoFillShader( Matrix4x4rFrameVariable & p_variable )override;
+		void DoAddAnimation( Castor::String const & p_name )override;
 
 	protected:
 		//!\~english	The skeleton affected by the animations.

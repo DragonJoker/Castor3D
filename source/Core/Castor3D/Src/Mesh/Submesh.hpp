@@ -243,15 +243,6 @@ namespace Castor3D
 		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
-		 *\brief		Clones the submesh and returns the clone
-		 *\return		The clone
-		 *\~french
-		 *\brief		Clône le sous-maillage
-		 *\return		Le clône
-		 */
-		C3D_API SubmeshSPtr Clone();
-		/**
-		 *\~english
 		 *\brief		Recreates the Vertex and Index buffers
 		 *\~french
 		 *\brief		Recrée les Vertex et Index buffers
@@ -401,6 +392,13 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme.
 		 */
 		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\return		The animated status.
+		 *\~french
+		 *\return		Le statut de sous-maillage animé.
+		 */
+		C3D_API void SetAnimated( bool p_animated );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -649,6 +647,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'IndexBuffer.
 		 */
+		inline bool HasAnimationBuffer()const
+		{
+			return bool( m_animBuffer );
+		}
+		/**
+		 *\~english
+		 *\return		The IndexBuffer.
+		 *\~french
+		 *\return		L'IndexBuffer.
+		 */
 		inline bool HasIndexBuffer()const
 		{
 			return bool( m_indexBuffer );
@@ -692,6 +700,26 @@ namespace Castor3D
 		inline VertexBuffer & GetVertexBuffer()
 		{
 			return *m_vertexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer.
+		 */
+		inline VertexBuffer const & GetAnimationBuffer()const
+		{
+			return *m_animBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer.
+		 */
+		inline VertexBuffer & GetAnimationBuffer()
+		{
+			return *m_animBuffer;
 		}
 		/**
 		 *\~english
@@ -812,6 +840,7 @@ namespace Castor3D
 		void DoDestroyBuffers();
 		void DoGenerateBuffers();
 		void DoGenerateVertexBuffer();
+		void DoGenerateAnimBuffer();
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
@@ -841,6 +870,9 @@ namespace Castor3D
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The animated vertex buffer.
+		//!\~french		Le tampon de sommets animés.
+		VertexBufferSPtr m_animBuffer;
 		//!\~english	The index buffer.
 		//!\~french		Le tampon d'indices.
 		IndexBufferSPtr m_indexBuffer;

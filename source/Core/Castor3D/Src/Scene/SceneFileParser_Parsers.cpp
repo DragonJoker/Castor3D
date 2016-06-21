@@ -1776,32 +1776,35 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshMorphImport )
 
 			if ( l_mesh && l_mesh->GetSubmeshCount() == l_parsingContext->pMesh->GetSubmeshCount() )
 			{
-				MeshAnimationSPtr l_animation{ std::static_pointer_cast< MeshAnimation >( l_parsingContext->pMesh->GetAnimation( cuT( "Morph" ) ) ) };
+				String l_animName{ "Morph" };
 
-				if ( !l_animation )
+				if ( !l_parsingContext->pMesh->HasAnimation( l_animName ) )
 				{
-					l_animation = l_parsingContext->pMesh->CreateAnimation( cuT( "Morph" ) );
+					auto & l_animation = l_parsingContext->pMesh->CreateAnimation( l_animName );
 
 					for ( auto l_submesh : *l_parsingContext->pMesh )
 					{
-						l_animation->AddChild( std::make_shared< MeshAnimationSubmesh >( *l_animation, *l_submesh ) );
+						l_submesh->SetAnimated( true );
+						l_animation.AddChild( MeshAnimationSubmesh{ l_animation, *l_submesh } );
 					}
 				}
 
+				MeshAnimation & l_animation{ static_cast< MeshAnimation & >( l_parsingContext->pMesh->GetAnimation( l_animName ) ) };
 				uint32_t l_index = 0u;
-				auto l_submeshAnims = l_animation->GetSubmeshes();
 
 				for ( auto l_submesh : *l_mesh )
 				{
-					auto l_submeshAnim = l_submeshAnims[l_index];
+					auto & l_submeshAnim = l_animation.GetSubmesh( l_index );
 
-					if ( l_submesh->GetPointsCount() == l_submeshAnim->GetSubmesh().GetPointsCount() )
+					if ( l_submesh->GetPointsCount() == l_submeshAnim.GetSubmesh().GetPointsCount() )
 					{
-						l_submeshAnim->AddBuffer( l_timeIndex, Convert( l_submesh->GetPoints() ) );
+						l_submeshAnim.AddBuffer( l_timeIndex, Convert( l_submesh->GetPoints() ) );
 					}
+
+					++l_index;
 				}
 
-				l_animation->Initialise();
+				l_animation.Initialise();
 			}
 		}
 		else
@@ -3891,11 +3894,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectAnimation )
 
 	if ( l_object )
 	{
-		l_parsingContext->pAnimation = l_object->GetAnimation( l_name );
-
-		if ( !l_parsingContext->pAnimation )
+		try
 		{
-			PARSING_ERROR( cuT( "No animation named [" ) + l_name + cuT( "] in object [" ) + l_object->GetName() + cuT( "]" ) );
+			l_parsingContext->pAnimation = &l_object->GetAnimation( l_name );
+		}
+		catch ( Exception & p_exc )
+		{
+			PARSING_ERROR( p_exc.GetFullDescription() );
 		}
 	}
 	else
@@ -3990,7 +3995,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationEnd )
 
 	if ( l_parsingContext->pAnimation )
 	{
-		l_parsingContext->pAnimation.reset();
+		l_parsingContext->pAnimation = nullptr;
 	}
 	else
 	{

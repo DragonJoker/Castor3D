@@ -39,12 +39,7 @@ namespace Castor3D
 		return *l_it->second;
 	}
 
-	void Animable::DoAddAnimation( AnimationUPtr && p_animation )
-	{
-		m_animations[p_animation->GetName()] = std::move( p_animation );
-	}
-
-	Animation & Animable::DoGetAnimation( Castor::String const & p_name )
+	Animation & Animable::GetAnimation( Castor::String const & p_name )
 	{
 		auto l_it = m_animations.find( p_name );
 
@@ -54,6 +49,11 @@ namespace Castor3D
 		}
 
 		return *l_it->second;
+	}
+
+	void Animable::DoAddAnimation( AnimationUPtr && p_animation )
+	{
+		m_animations[p_animation->GetName()] = std::move( p_animation );
 	}
 
 	//*************************************************************************************************

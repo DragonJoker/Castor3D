@@ -120,11 +120,11 @@ namespace Castor3D
 		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ePROGRAM_FLAG_INSTANCIATION ) );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
 
 		UBO_MATRIX( l_writer );
 
@@ -145,7 +145,7 @@ namespace Castor3D
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
 			bool l_set = false;
 
-			if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxBoneTransform, c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
@@ -159,7 +159,7 @@ namespace Castor3D
 				l_set = true;
 			}
 
-			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );

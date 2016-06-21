@@ -32,19 +32,9 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedObject::FillShader( Matrix4x4rFrameVariable & p_variable )
-	{
-		DoFillShader( p_variable );
-	}
-
 	void AnimatedObject::AddAnimation( String const & p_name )
 	{
-		auto l_animation = DoAddAnimation( p_name );
-
-		if ( l_animation )
-		{
-			m_animations.insert( { p_name, l_animation } );
-		}
+		DoAddAnimation( p_name );
 	}
 
 	void AnimatedObject::StartAnimation( String const & p_name )
@@ -119,16 +109,15 @@ namespace Castor3D
 		}
 	}
 
-	AnimationInstanceSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
+	AnimationInstance & AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
-		AnimationInstanceSPtr l_return;
 		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_animations.end() )
+		if ( l_it == m_animations.end() )
 		{
-			l_return = l_it->second;
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
 
-		return l_return;
+		return *l_it->second;
 	}
 }

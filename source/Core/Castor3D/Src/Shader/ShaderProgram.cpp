@@ -103,6 +103,12 @@ namespace Castor3D
 	const String ShaderProgram::Bitangent = cuT( "bitangent" );
 	const String ShaderProgram::Texture = cuT( "texture" );
 	const String ShaderProgram::Colour = cuT( "colour" );
+	const String ShaderProgram::Position2 = cuT( "position2" );
+	const String ShaderProgram::Normal2 = cuT( "normal2" );
+	const String ShaderProgram::Tangent2 = cuT( "tangent2" );
+	const String ShaderProgram::Bitangent2 = cuT( "bitangent2" );
+	const String ShaderProgram::Texture2 = cuT( "texture2" );
+	const String ShaderProgram::Colour2 = cuT( "colour2" );
 	const String ShaderProgram::Text = cuT( "text" );
 	const String ShaderProgram::BoneIds0 = cuT( "bone_ids0" );
 	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );

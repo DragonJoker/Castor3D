@@ -79,6 +79,10 @@ namespace Castor3D
 		{
 			l_return = l_it->second;
 		}
+		else
+		{
+			Logger::LogWarning( cuT( "No object named " ) + p_name + cuT( " for this animation instance" ) );
+		}
 
 		return l_return;
 	}

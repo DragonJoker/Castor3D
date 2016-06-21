@@ -30,7 +30,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Animation/AnimatedObject.hpp"
+#include "Scene/Animation/AnimatedMesh.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -140,16 +141,17 @@ namespace Castor3D
 							for ( auto l_pass : *l_material )
 							{
 								ShaderProgramSPtr l_program;
-								uint32_t l_programFlags = l_submesh->GetProgramFlags() & ~ePROGRAM_FLAG_SKINNING;
-								auto l_animated = DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) );
+								uint32_t l_programFlags = l_submesh->GetProgramFlags();
+								RemFlag( l_programFlags, ProgramFlag::Skinning );
+								auto l_animated = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 
 								if ( l_animated )
 								{
-									l_programFlags |= ePROGRAM_FLAG_SKINNING;
+									AddFlag( l_programFlags, ProgramFlag::Skinning );
 								}
 								else if ( l_submesh->GetRefCount( l_material ) > 1 )
 								{
-									l_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
+									AddFlag( l_programFlags, ProgramFlag::Instantiation );
 								}
 
 								l_pass->PrepareTextures();
@@ -161,7 +163,7 @@ namespace Castor3D
 								Point3rFrameVariableSPtr l_pt3r;
 								OneFloatFrameVariableSPtr l_1f;
 
-								if ( CheckFlag( l_programFlags, ePROGRAM_FLAG_SKINNING ) )
+								if ( CheckFlag( l_programFlags, ProgramFlag::Skinning ) )
 								{
 									AnimatedGeometryRenderNode l_renderNode
 									{
@@ -219,7 +221,7 @@ namespace Castor3D
 
 									l_pass->BindToNode( l_renderNode.m_scene );
 
-									if ( CheckFlag( l_programFlags, ePROGRAM_FLAG_INSTANCIATION ) )
+									if ( CheckFlag( l_programFlags, ProgramFlag::Instantiation ) )
 									{
 										DoAddRenderNode( l_pass, l_program, l_submesh, l_renderNode, p_instanced );
 									}
@@ -255,12 +257,12 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderManager().GetBillboardProgram( l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
+							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderManager().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 
 							if ( !l_program )
 							{
 								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
-								p_scene.GetEngine()->GetShaderManager().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
+								p_scene.GetEngine()->GetShaderManager().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 							}
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
@@ -659,7 +661,7 @@ namespace Castor3D
 			auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
 
 			if ( l_count > 1 && p_submesh.HasMatrixBuffer()
-				 && !CheckFlag( p_submesh.GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) )
+				 && !CheckFlag( p_submesh.GetProgramFlags(), ProgramFlag::Skinning ) )
 			{
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );

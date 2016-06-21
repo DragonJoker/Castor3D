@@ -112,10 +112,10 @@ namespace Castor3D
 
 			auto l_program = DoGetPanelProgram( 0 );
 			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
+			m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
 			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
+			m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		}
 
 		if ( !m_borderVertexBuffer )
@@ -137,10 +137,10 @@ namespace Castor3D
 
 			auto l_program = DoGetPanelProgram( 0 );
 			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
+			m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
 			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
+			m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		}
 
 		// Create one text overlays buffer
@@ -462,10 +462,10 @@ namespace Castor3D
 		OverlayGeometryBuffers l_geometryBuffers;
 		auto l_program = DoGetTextProgram( 0 );
 		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-		l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
+		l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		l_program = DoGetTextProgram( uint32_t( TextureChannel::Colour ) );
 		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-		l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
+		l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 
 		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
 		m_textsGeometryBuffers.push_back( l_geometryBuffers );

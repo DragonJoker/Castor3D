@@ -69,14 +69,6 @@ namespace Castor3D
 
 			if ( l_vertexBuffer.Bind() )
 			{
-				uint8_t * l_locked{ l_vertexBuffer.Lock( 0, l_size, eACCESS_TYPE_WRITE ) };
-
-				if ( l_locked )
-				{
-					std::memcpy( l_locked, m_curr->m_buffer.data(), l_size );
-					l_vertexBuffer.Unlock();
-				}
-
 				l_vertexBuffer.Unbind();
 			}
 		}

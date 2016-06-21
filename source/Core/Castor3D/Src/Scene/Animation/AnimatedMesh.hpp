@@ -82,11 +82,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name )override;
-		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoFillShader
-		 */
-		void DoFillShader( Matrix4x4rFrameVariable & p_variable )override;
+		void DoAddAnimation( Castor::String const & p_name )override;
 
 	protected:
 		//!\~english	The submesh affected by the animations.

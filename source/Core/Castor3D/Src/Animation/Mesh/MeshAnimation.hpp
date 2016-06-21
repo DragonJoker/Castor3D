@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "Animation/Animation.hpp"
+#include "Animation/Mesh/MeshAnimationSubmesh.hpp"
 
 namespace Castor3D
 {
@@ -68,13 +69,16 @@ namespace Castor3D
 		C3D_API void AddChild( MeshAnimationSubmesh && p_object );
 		/**
 		 *\~english
-		 *\return		The moving objects.
+		 *\param[in]	p_index	The index.
+		 *\return		The animated submesh at given index.
 		 *\~french
-		 *\return		Les objets mouvants.
+		 *\param[in]	p_index	L'indice.
+		 *\return		Le sous-maillage animé à l'indice donné.
 		 */
-		inline MeshAnimationSubmeshArray const & GetSubmeshes()const
+		inline MeshAnimationSubmesh & GetSubmesh( uint32_t p_index )
 		{
-			return m_submeshes;
+			REQUIRE( p_index < m_submeshes.size() );
+			return m_submeshes[p_index];
 		}
 
 	private:

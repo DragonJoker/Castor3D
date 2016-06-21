@@ -110,6 +110,15 @@ namespace GlRender
 				DoBindAttributes( m_vertexAttributes );
 			}
 
+			if ( m_animationBuffer )
+			{
+				if ( DoCreateAttributes( m_program.GetLayout(), m_animationBuffer->GetDeclaration(), m_animationAttributes ) )
+				{
+					m_animationBuffer->Bind();
+					DoBindAttributes( m_animationAttributes );
+				}
+			}
+
 			if ( m_indexBuffer )
 			{
 				m_indexBuffer->Bind();
@@ -142,6 +151,7 @@ namespace GlRender
 	void GlGeometryBuffers::DoCleanup()
 	{
 		m_vertexAttributes.clear();
+		m_animationAttributes.clear();
 		m_matrixAttributes.clear();
 		m_bonesAttributes.clear();
 		ObjectType::Destroy();

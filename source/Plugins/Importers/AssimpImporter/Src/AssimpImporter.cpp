@@ -1,5 +1,7 @@
 #include "AssimpImporter.hpp"
 
+#include <ArrayView.hpp>
+
 #include <GeometryManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
@@ -646,26 +648,26 @@ namespace C3dAssimp
 			std::set< real > l_times;
 
 			// We process translations
-			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumPositionKeys; ++i )
+			for ( auto const & l_translate : ArrayView< aiVectorKey >( l_aiNodeAnim->mPositionKeys, l_aiNodeAnim->mNumPositionKeys ) )
 			{
-				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime / p_ticksPerSecond ) );
-				l_translates[real( l_aiNodeAnim->mPositionKeys[i].mTime / p_ticksPerSecond )] = Point3r{ l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z };
+				l_times.insert( real( l_translate.mTime / p_ticksPerSecond ) );
+				l_translates[real( l_translate.mTime / p_ticksPerSecond )] = Point3r{ l_translate.mValue.x, l_translate.mValue.y, l_translate.mValue.z };
 			}
 
 			// Then we process scalings
-			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumScalingKeys; ++i )
+			for ( auto const & l_scale : ArrayView< aiVectorKey >( l_aiNodeAnim->mScalingKeys, l_aiNodeAnim->mNumScalingKeys ) )
 			{
-				l_times.insert( real( l_aiNodeAnim->mScalingKeys[i].mTime / p_ticksPerSecond ) );
-				l_scales[real( l_aiNodeAnim->mScalingKeys[i].mTime / p_ticksPerSecond )] = Point3r{ l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z };
+				l_times.insert( real( l_scale.mTime / p_ticksPerSecond ) );
+				l_scales[real( l_scale.mTime / p_ticksPerSecond )] = Point3r{ l_scale.mValue.x, l_scale.mValue.y, l_scale.mValue.z };
 			}
 
 			// And eventually the rotations
-			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumRotationKeys; ++i )
+			for ( auto const & l_rot : ArrayView< aiQuatKey >( l_aiNodeAnim->mRotationKeys, l_aiNodeAnim->mNumRotationKeys ) )
 			{
-				l_times.insert( real( l_aiNodeAnim->mRotationKeys[i].mTime / p_ticksPerSecond ) );
+				l_times.insert( real(l_rot.mTime / p_ticksPerSecond ) );
 				Quaternion l_rotate;
-				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 } } );
-				l_rotates[real( l_aiNodeAnim->mRotationKeys[i].mTime / p_ticksPerSecond )] = l_rotate;
+				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_rot.mValue.GetMatrix().Transpose().a1 } } );
+				l_rotates[real( l_rot.mTime / p_ticksPerSecond )] = l_rotate;
 			}
 
 			// We synchronise the three arrays

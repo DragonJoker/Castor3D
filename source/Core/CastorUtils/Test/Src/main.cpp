@@ -1,10 +1,11 @@
-﻿#include "Benchmark.hpp"
+#include "Benchmark.hpp"
 
 #include <Logger.hpp>
 #include <File.hpp>
 
 #include "BenchManager.hpp"
 #include "OpenClBench.hpp"
+#include "CastorUtilsArrayViewTest.hpp"
 #include "CastorUtilsMatrixTest.hpp"
 #include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsStringTest.hpp"
@@ -34,6 +35,7 @@ int main( int argc, char const * argv[] )
 #endif
 	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringBench >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsArrayViewTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsUniqueTest >() );
 	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );

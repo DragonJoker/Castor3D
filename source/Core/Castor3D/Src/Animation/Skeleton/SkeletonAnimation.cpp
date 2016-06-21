@@ -114,34 +114,29 @@ namespace Castor3D
 	{
 		std::shared_ptr< SkeletonAnimationBone > l_return = std::make_shared< SkeletonAnimationBone >( *this );
 		l_return->SetBone( p_bone );
-		auto l_added = AddObject( l_return, p_parent );
-		return l_return;
+		return AddObject( l_return, p_parent );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent )
 	{
 		String l_name = GetMovingTypeName( p_object->GetType() ) + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
-		SkeletonAnimationObjectSPtr l_return;
 
 		if ( l_it == m_toMove.end() )
 		{
-			m_toMove.insert( { l_name, p_object } );
+			l_it = m_toMove.insert( { l_name, p_object } ).first;
 
 			if ( !p_parent )
 			{
 				m_arrayMoving.push_back( p_object );
 			}
-
-			l_return = p_object;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "This object was already added" ) );
-			l_return = l_it->second;
 		}
 
-		return l_return;
+		return l_it->second;
 	}
 
 	bool SkeletonAnimation::HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
@@ -149,10 +144,20 @@ namespace Castor3D
 		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( String const & p_name )const
+	{
+		return GetObject( SkeletonAnimationObjectType::Node, p_name );
+	}
+
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( Bone const & p_bone )const
 	{
+		return GetObject( SkeletonAnimationObjectType::Node, p_bone.GetName() );
+	}
+
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
+	{
 		SkeletonAnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( GetMovingTypeName( SkeletonAnimationObjectType::Bone ) + p_bone.GetName() );
+		auto l_it = m_toMove.find( GetMovingTypeName( p_type ) + p_name );
 
 		if ( l_it != m_toMove.end() )
 		{

@@ -129,7 +129,7 @@ namespace Castor3D
 		AnimatedObjectSPtr pAnimSkeleton;
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
-		AnimationInstanceSPtr pAnimation;
+		AnimationInstanceRPtr pAnimation;
 		SkyboxSPtr pSkybox;
 
 	public:

@@ -127,17 +127,6 @@ namespace Castor3D
 		C3D_API void DeleteSubmesh( SubmeshSPtr & p_pSubmesh );
 		/**
 		 *\~english
-		 *\brief		Clones the mesh, with a new name
-		 *\param[in]	p_name	The name of the cloned mesh
-		 *\return		The cloned mesh
-		 *\~french
-		 *\brief		Clone le maillage, avec un nouveau nom
-		 *\param[in]	p_name	Le nom du clone
-		 *\return		Le clone
-		 */
-		C3D_API MeshSPtr Clone( Castor::String const & p_name );
-		/**
-		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes

@@ -88,7 +88,7 @@ namespace Castor3D
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
+			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			m_dsStateNoDepth->Initialise();
 			m_dsStateNoDepthWrite->Initialise();
 			DoEndCurrent();

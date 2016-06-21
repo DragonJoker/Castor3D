@@ -64,15 +64,6 @@ namespace Castor3D
 		C3D_API void Update( real p_tslf );
 		/**
 		 *\~english
-		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	p_variable	Receives the transforms.
-		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
-		 */
-		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
-		/**
-		 *\~english
 		 *\brief		Adds the animation to the list
 		 *\param[in]	p_name	The animation to add
 		 *\~english
@@ -138,7 +129,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationInstanceSPtr GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationInstance & GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.
@@ -179,16 +170,7 @@ namespace Castor3D
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		virtual AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name ) = 0;
-		/**
-		 *\~english
-		 *\brief		Fills a shader variable with this object's transforms.
-		 *\param[out]	p_variable	Receives the transforms.
-		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
-		 */
-		virtual void DoFillShader( Matrix4x4rFrameVariable & p_variable ) = 0;
+		virtual void DoAddAnimation( Castor::String const & p_name ) = 0;
 
 	protected:
 		//!\~english	All animations.

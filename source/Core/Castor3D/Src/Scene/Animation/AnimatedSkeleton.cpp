@@ -22,22 +22,7 @@ namespace Castor3D
 	{
 	}
 
-	AnimationInstanceSPtr AnimatedSkeleton::DoAddAnimation( String const & p_name )
-	{
-		SkeletonAnimationInstanceSPtr l_instance;
-		auto l_it = m_animations.find( p_name );
-
-		if ( l_it == m_animations.end() )
-		{
-			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
-			l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
-			m_animations.insert( { p_name, l_instance } );
-		}
-
-		return l_instance;
-	}
-
-	void AnimatedSkeleton::DoFillShader( Matrix4x4rFrameVariable & p_variable )
+	void AnimatedSkeleton::FillShader( Matrix4x4rFrameVariable & p_variable )
 	{
 		Skeleton & l_skeleton = m_skeleton;
 
@@ -68,6 +53,18 @@ namespace Castor3D
 
 				p_variable.SetValue( l_final, i++ );
 			}
+		}
+	}
+
+	void AnimatedSkeleton::DoAddAnimation( String const & p_name )
+	{
+		auto l_it = m_animations.find( p_name );
+
+		if ( l_it == m_animations.end() )
+		{
+			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
+			auto l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
+			l_it = m_animations.insert( { p_name, l_instance } ).first;
 		}
 	}
 }

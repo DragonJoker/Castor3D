@@ -235,22 +235,28 @@ namespace Castor3D
 				m_initialised &= m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
+			if ( m_initialised && m_animBuffer )
+			{
+				m_initialised = m_animBuffer->Create();
+				m_initialised &= m_animBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			}
+
 			if ( m_initialised && m_indexBuffer )
 			{
 				m_initialised = m_indexBuffer->Create();
-				m_initialised &= m_indexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_indexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
 			if ( m_initialised && m_bonesBuffer )
 			{
 				m_initialised = m_bonesBuffer->Create();
-				m_initialised &= m_bonesBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_bonesBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
 			if ( m_initialised && m_matrixBuffer )
 			{
 				m_initialised = m_matrixBuffer->Create();
-				m_initialised &= m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 		}
 	}
@@ -401,7 +407,7 @@ namespace Castor3D
 			l_data += l_stride;
 		} );
 
-		m_programFlags |= ePROGRAM_FLAG_SKINNING;
+		m_programFlags |= uint32_t( ProgramFlag::Skinning );
 	}
 
 	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
@@ -449,30 +455,6 @@ namespace Castor3D
 		}
 	}
 
-	SubmeshSPtr Submesh::Clone()
-	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetScene(), m_parentMesh, m_id );
-		uint32_t l_stride = m_layout.GetStride();
-
-		//On effectue une copie des vertex
-		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end(); ++l_it )
-		{
-			BufferElementGroupSPtr l_pVertexSrc = ( *l_it );
-			BufferElementGroupSPtr l_pVertexDst = l_clone->AddPoint( 0, 0, 0 );
-			memcpy( l_pVertexDst->ptr(), l_pVertexSrc->const_ptr(), l_stride );
-		}
-
-		// TODO copier les bones
-
-		for ( uint32_t j = 0; j < GetFaceCount(); j++ )
-		{
-			auto const & l_faceSrc = GetFace( j );
-			l_clone->AddFace( l_faceSrc[0], l_faceSrc[1], l_faceSrc[2] );
-		}
-
-		return l_clone;
-	}
-
 	void Submesh::ResetGpuBuffers()
 	{
 		DoDestroyBuffers();
@@ -489,6 +471,16 @@ namespace Castor3D
 			l_size = m_indexBuffer->GetSize();
 		}
 
+		if ( m_dirty )
+		{
+			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+
+			if ( m_animBuffer )
+			{
+				m_animBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			}
+		}
+
 		p_geometryBuffers.Draw( l_size, 0 );
 	}
 
@@ -500,6 +492,11 @@ namespace Castor3D
 		if ( m_indexBuffer )
 		{
 			l_size = m_indexBuffer->GetSize();
+		}
+
+		if ( m_dirty )
+		{
+			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 
 		p_geometryBuffers.DrawInstanced( l_size, 0, p_count );
@@ -926,7 +923,7 @@ namespace Castor3D
 			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
 			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
 			{
-				l_buffers->Initialise( m_vertexBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
+				l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
 			} ) );
 			m_geometryBuffers.push_back( l_buffers );
 		}
@@ -938,23 +935,52 @@ namespace Castor3D
 		return *l_buffers;
 	}
 
+	void Submesh::SetAnimated( bool p_animated )
+	{
+		if ( p_animated )
+		{
+			AddFlag( m_programFlags, ProgramFlag::Morphing );
+		}
+		else
+		{
+			RemFlag( m_programFlags, ProgramFlag::Morphing );
+		}
+	}
+
 	void Submesh::DoCreateBuffers()
 	{
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_layout );
 		m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
 
-		if ( CheckFlag( GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) && m_parentMesh.GetSkeleton() )
+		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::Skinning ) && m_parentMesh.GetSkeleton() )
+			|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 		{
-			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
+			if ( CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 			{
+				m_animBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
-					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
-					BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_4INTS, 16 },
-					BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_4FLOATS, 32 },
-					BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_4FLOATS, 48 },
-				}
-			} );
-			ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
+					{
+						BufferElementDeclaration( ShaderProgram::Position2, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
+						BufferElementDeclaration( ShaderProgram::Normal2, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
+						BufferElementDeclaration( ShaderProgram::Tangent2, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTan() ),
+						BufferElementDeclaration( ShaderProgram::Bitangent2, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetBin() ),
+						BufferElementDeclaration( ShaderProgram::Texture2, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTex() ),
+					}
+				} );
+			}
+			else
+			{
+				m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
+				{
+					{
+						BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
+						BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_4INTS, 16 },
+						BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_4FLOATS, 32 },
+						BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_4FLOATS, 48 },
+					}
+				} );
+				ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
+			}
 		}
 		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
@@ -966,7 +992,7 @@ namespace Castor3D
 
 			if ( l_count > 1 )
 			{
-				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
+				AddFlag( m_programFlags, ProgramFlag::Instantiation );
 				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
@@ -985,6 +1011,12 @@ namespace Castor3D
 		{
 			m_vertexBuffer->Cleanup();
 			m_vertexBuffer->Destroy();
+		}
+
+		if ( m_animBuffer )
+		{
+			m_animBuffer->Cleanup();
+			m_animBuffer->Destroy();
 		}
 
 		if ( m_indexBuffer )
@@ -1026,7 +1058,7 @@ namespace Castor3D
 
 		if ( l_count > 1 )
 		{
-			m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
+			AddFlag( m_programFlags, ProgramFlag::Instantiation );
 			DoGenerateMatrixBuffer( l_count );
 		}
 
@@ -1040,11 +1072,9 @@ namespace Castor3D
 	{
 		if ( m_vertexBuffer )
 		{
-			uint8_t * l_buffer{ nullptr };
 			VertexBuffer & l_vertexBuffer = *m_vertexBuffer;
 			uint32_t l_stride = m_layout.GetStride();
 			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
-			VertexPtrArrayIt l_itPoints = m_points.begin();
 
 			if ( l_size )
 			{
@@ -1053,7 +1083,7 @@ namespace Castor3D
 					l_vertexBuffer.Resize( l_size );
 				}
 
-				l_buffer = l_vertexBuffer.data();
+				auto l_buffer = l_vertexBuffer.data();
 
 				for ( auto l_it : m_pointsData )
 				{
@@ -1071,6 +1101,21 @@ namespace Castor3D
 
 				m_points.clear();
 				m_pointsData.clear();
+			}
+		}
+	}
+
+	void Submesh::DoGenerateAnimBuffer()
+	{
+		if ( m_animBuffer )
+		{
+			VertexBuffer & l_animBuffer = *m_animBuffer;
+			uint32_t l_stride = l_animBuffer.GetDeclaration().GetStride();
+			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
+
+			if ( l_size && l_animBuffer.GetSize() != l_size )
+			{
+				l_animBuffer.Resize( l_size );
 			}
 		}
 	}

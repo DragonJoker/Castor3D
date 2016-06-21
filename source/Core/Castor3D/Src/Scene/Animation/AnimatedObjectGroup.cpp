@@ -152,9 +152,9 @@ namespace Castor3D
 		for ( auto l_it : m_animations )
 		{
 			p_object->AddAnimation( l_it.first );
-			auto l_animation = p_object->GetAnimation( l_it.first );
-			l_animation->SetLooped( l_it.second.m_looped );
-			l_animation->SetScale( l_it.second.m_scale );
+			auto & l_animation = p_object->GetAnimation( l_it.first );
+			l_animation.SetLooped( l_it.second.m_looped );
+			l_animation.SetScale( l_it.second.m_scale );
 		}
 
 		return l_return;
@@ -181,11 +181,14 @@ namespace Castor3D
 		{
 			for ( auto l_it : m_objects )
 			{
-				auto l_animation = l_it.second->GetAnimation( p_name );
-
-				if ( l_animation )
+				try
 				{
-					l_animation->SetLooped( p_looped );
+					auto & l_animation = l_it.second->GetAnimation( p_name );
+					l_animation.SetLooped( p_looped );
+				}
+				catch ( Exception & p_exc )
+				{
+					Logger::LogWarning( cuT( "SetAnimationLooped error: " ) + p_exc.GetFullDescription() );
 				}
 			}
 
@@ -201,11 +204,14 @@ namespace Castor3D
 		{
 			for ( auto l_it : m_objects )
 			{
-				auto l_animation = l_it.second->GetAnimation( p_name );
-
-				if ( l_animation )
+				try
 				{
-					l_animation->SetScale( p_scale );
+					auto & l_animation = l_it.second->GetAnimation( p_name );
+					l_animation.SetScale( p_scale );
+				}
+				catch ( Exception & p_exc )
+				{
+					Logger::LogWarning( cuT( "SetAnimationLooped error: " ) + p_exc.GetFullDescription() );
 				}
 			}
 

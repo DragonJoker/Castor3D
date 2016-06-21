@@ -87,6 +87,17 @@ namespace Castor3D
 		C3D_API Animation const & GetAnimation( Castor::String const & p_name )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+ 		 *\brief		Récupère une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		L'animation
+		 */
+		C3D_API Animation & GetAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
 		 *\return		The animations.
 		 *\~french
 		 *\return		Les animations.
@@ -116,7 +127,18 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		Animation & DoGetAnimation( Castor::String const & p_name );
+		template< typename Type >
+		Type & DoGetAnimation( Castor::String const & p_name )
+		{
+			auto l_it = m_animations.find( p_name );
+
+			if ( l_it != m_animations.end() )
+			{
+				CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
+			}
+
+			return static_cast< Type & >( *l_it->second );
+		}
 
 	protected:
 		//!\~english	All animations.

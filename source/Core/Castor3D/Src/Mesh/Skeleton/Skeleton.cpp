@@ -136,6 +136,6 @@ namespace Castor3D
 			DoAddAnimation( std::make_unique< SkeletonAnimation >( *this, p_name ) );
 		}
 
-		return static_cast< SkeletonAnimation & >( DoGetAnimation( p_name ) );
+		return DoGetAnimation< SkeletonAnimation >( p_name );
 	}
 }

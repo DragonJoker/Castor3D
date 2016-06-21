@@ -122,16 +122,18 @@ namespace Castor3D
 	\~french
 	\brief		Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
-	typedef enum ePROGRAM_FLAG
+	enum class ProgramFlag
 		: uint32_t
 	{
-		//!\~english Program using instanciation	\~french Programme utilisant l'instanciation
-		ePROGRAM_FLAG_INSTANCIATION = 0x01,
-		//!\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-		ePROGRAM_FLAG_SKINNING = 0x02,
-		//!\~english Program used by billboards	\~french Programme utilisé par des billboards
-		ePROGRAM_FLAG_BILLBOARDS = 0x04,
-	}	ePROGRAM_FLAG;
+		//!\~english Program using instanciation.	\~french Programme utilisant l'instanciation.
+		Instantiation = 0x01,
+		//!\~english Program using skeleton animations.	\~french Programme utilisant les animations par squelette.
+		Skinning = 0x02,
+		//!\~english Program used by billboards.	\~french Programme utilisé par des billboards.
+		Billboards = 0x04,
+		//!\~english Program using per-vertex animations.	\~french Programme utilisant les animations par sommet.
+		Morphing = 0x08,
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
