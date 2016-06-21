@@ -31,7 +31,7 @@ namespace Castor3D
 	{
 		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_animations.end() )
+		if ( l_it == m_animations.end() )
 		{
 			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
@@ -43,7 +43,7 @@ namespace Castor3D
 	{
 		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_animations.end() )
+		if ( l_it == m_animations.end() )
 		{
 			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}

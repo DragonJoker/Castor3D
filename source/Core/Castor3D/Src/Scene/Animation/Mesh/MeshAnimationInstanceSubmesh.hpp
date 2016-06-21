@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_animationObject	L'animation d'objet.
 		 *\param[out]	p_allObjects		Reçoit les enfants de cet objet.
 		 */
-		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh const & p_animationObject );
+		C3D_API MeshAnimationInstanceSubmesh( MeshAnimationInstance & p_animationInstance, MeshAnimationSubmesh & p_animationObject );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -93,29 +93,43 @@ namespace Castor3D
 		 *\brief		Updates the object, applies the transformations at given time.
 		 *\param[in]	p_time				Current time index.
 		 *\param[in]	p_transformations	The current transformation matrix.
+		 *\return		The time elapsed relative to previous keyframe.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
+		 *\return		Le temps écoulé, relatif à la keyframe précédente.
 		 */
 		C3D_API void Update( real p_time );
+		/**
+		 *\~english
+		 *\brief		Fills a shader variable with this object's skeleton transforms.
+		 *\param[out]	p_variable	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
+		 *\param[out]	p_variable	Reçoit les transformations.
+		 */
+		C3D_API void FillShader( OneFloatFrameVariable & p_variable )const;
 
 	protected:
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
-		MeshAnimationSubmesh const & m_animationObject;
-		//!\~english	Iterator to the buffers beginning.
-		//!\~french		Itérateur sur le début des tampons.
-		SubmeshAnimationBufferArray::const_iterator m_begin;
-		//!\~english	Iterator to the buffer end.
-		//!\~french		Itérateur sur la fin des tampons.
-		SubmeshAnimationBufferArray::const_iterator m_end;
+		MeshAnimationSubmesh & m_animationObject;
+		//!\~english	Iterator to the first buffer.
+		//!\~french		Itérateur sur le premier tampon.
+		SubmeshAnimationBufferArray::const_iterator m_first;
+		//!\~english	Iterator to the last buffer.
+		//!\~french		Itérateur sur le dernier tampon.
+		SubmeshAnimationBufferArray::const_iterator m_last;
 		//!\~english	Iterator to the previous buffer (when playing the animation).
 		//!\~french		Itérateur sur le tampon précédent (quand l'animation est jouée).
 		SubmeshAnimationBufferArray::const_iterator m_prev;
 		//!\~english	Iterator to the current buffer (when playing the animation).
 		//!\~french		Itérateur sur le tampon courant (quand l'animation est jouée).
 		SubmeshAnimationBufferArray::const_iterator m_curr;
+		//!\~english	The time elapsed since the last keyframe.
+		//!\~french		Le temps écoulé depuis la dernière keyframe.
+		float m_currentFactor;
 	};
 }
 

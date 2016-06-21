@@ -479,6 +479,8 @@ namespace Castor3D
 			{
 				m_animBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}
+
+			m_dirty = false;
 		}
 
 		p_geometryBuffers.Draw( l_size, 0 );
@@ -950,7 +952,11 @@ namespace Castor3D
 	void Submesh::DoCreateBuffers()
 	{
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_layout );
-		m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
+
+		if ( !m_faces.empty() )
+		{
+			m_indexBuffer = std::make_shared< IndexBuffer >( *GetScene()->GetEngine() );
+		}
 
 		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::Skinning ) && m_parentMesh.GetSkeleton() )
 			|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
@@ -1066,6 +1072,11 @@ namespace Castor3D
 		{
 			DoGenerateBonesBuffer();
 		}
+
+		if ( CheckFlag( m_programFlags, ProgramFlag::Morphing ) )
+		{
+			DoGenerateAnimBuffer();
+		}
 	}
 
 	void Submesh::DoGenerateVertexBuffer()
@@ -1109,9 +1120,9 @@ namespace Castor3D
 	{
 		if ( m_animBuffer )
 		{
+			VertexBuffer & l_vertexBuffer = *m_vertexBuffer;
 			VertexBuffer & l_animBuffer = *m_animBuffer;
-			uint32_t l_stride = l_animBuffer.GetDeclaration().GetStride();
-			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
+			uint32_t l_size = l_vertexBuffer.GetSize();
 
 			if ( l_size && l_animBuffer.GetSize() != l_size )
 			{

@@ -211,17 +211,18 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapShaderTypes[cuT( "pixel" )] = MASK_SHADER_TYPE_PIXEL;
 	m_mapShaderTypes[cuT( "compute" )] = MASK_SHADER_TYPE_COMPUTE;
 
-	m_mapVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
-	m_mapVariableTypes[cuT( "uint" )] = eFRAME_VARIABLE_TYPE_UINT;
-	m_mapVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
-	m_mapVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
-	m_mapVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
-	m_mapVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
-	m_mapVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
-	m_mapVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
-	m_mapVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
-	m_mapVariableTypes[cuT( "mat3x3f" )] = eFRAME_VARIABLE_TYPE_MAT3X3F;
-	m_mapVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
+	m_mapVariableTypes[cuT( "int" )] = uint32_t( FrameVariableType::Int );
+	m_mapVariableTypes[cuT( "sampler" )] = uint32_t( FrameVariableType::Sampler );
+	m_mapVariableTypes[cuT( "uint" )] = uint32_t( FrameVariableType::UInt );
+	m_mapVariableTypes[cuT( "float" )] = uint32_t( FrameVariableType::Float );
+	m_mapVariableTypes[cuT( "vec2i" )] = uint32_t( FrameVariableType::Vec2i );
+	m_mapVariableTypes[cuT( "vec3i" )] = uint32_t( FrameVariableType::Vec3i );
+	m_mapVariableTypes[cuT( "vec4i" )] = uint32_t( FrameVariableType::Vec4i );
+	m_mapVariableTypes[cuT( "vec2f" )] = uint32_t( FrameVariableType::Vec2f );
+	m_mapVariableTypes[cuT( "vec3f" )] = uint32_t( FrameVariableType::Vec3f );
+	m_mapVariableTypes[cuT( "vec4f" )] = uint32_t( FrameVariableType::Vec4f );
+	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( FrameVariableType::Mat3x3f );
+	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( FrameVariableType::Mat4x4f );
 
 	m_mapMovables[cuT( "camera" )] = eMOVABLE_TYPE_CAMERA;
 	m_mapMovables[cuT( "light" )] = eMOVABLE_TYPE_LIGHT;

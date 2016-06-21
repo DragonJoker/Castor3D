@@ -14,7 +14,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_BOOL;
+		static const FrameVariableType Full = FrameVariableType::Bool;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< int >
@@ -22,7 +22,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_INT;
+		static const FrameVariableType Full = FrameVariableType::Int;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< uint32_t >
@@ -30,7 +30,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_UINT;
+		static const FrameVariableType Full = FrameVariableType::UInt;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< float >
@@ -38,7 +38,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_FLOAT;
+		static const FrameVariableType Full = FrameVariableType::Float;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< double >
@@ -46,7 +46,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_DOUBLE;
+		static const FrameVariableType Full = FrameVariableType::Double;
 		C3D_API static const xchar * FullTypeName;
 	};
 
@@ -140,9 +140,9 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	inline eFRAME_VARIABLE_TYPE OneFrameVariable< T >::GetFrameVariableType()
+	inline FrameVariableType OneFrameVariable< T >::GetFrameVariableType()
 	{
-		return eFRAME_VARIABLE_TYPE( OneFrameVariableDefinitions< T >::Full );
+		return FrameVariableType( OneFrameVariableDefinitions< T >::Full );
 	}
 
 	template< typename T >

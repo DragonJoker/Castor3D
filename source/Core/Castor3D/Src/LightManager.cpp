@@ -78,7 +78,7 @@ namespace Castor3D
 	void LightManager::BindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer )
 	{
 		GetEngine()->GetRenderSystem()->RenderAmbientLight( GetScene()->GetAmbientLight(), p_sceneBuffer );
-		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
 		Point4iFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
 

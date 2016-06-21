@@ -24,14 +24,6 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedObject::Update( real p_tslf )
-	{
-		for ( auto l_animation : m_playingAnimations )
-		{
-			l_animation->Update( p_tslf );
-		}
-	}
-
 	void AnimatedObject::AddAnimation( String const & p_name )
 	{
 		DoAddAnimation( p_name );
@@ -49,7 +41,7 @@ namespace Castor3D
 					&& l_animation->GetState() != AnimationState::Paused )
 			{
 				l_animation->Play();
-				m_playingAnimations.push_back( l_animation );
+				DoStartAnimation( l_animation );
 			}
 		}
 	}
@@ -65,7 +57,7 @@ namespace Castor3D
 			if ( l_animation->GetState() != AnimationState::Stopped )
 			{
 				l_animation->Stop();
-				m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), l_animation ) );
+				DoStopAnimation( l_animation );
 			}
 		}
 	}
@@ -82,23 +74,23 @@ namespace Castor3D
 
 	void AnimatedObject::StartAllAnimations()
 	{
-		m_playingAnimations.clear();
+		DoClearAnimations();
 
 		for ( auto l_it : m_animations )
 		{
 			l_it.second->Play();
-			m_playingAnimations.push_back( l_it.second );
+			DoStartAnimation( l_it.second );
 		}
 	}
 
 	void AnimatedObject::StopAllAnimations()
 	{
-		m_playingAnimations.clear();
-
 		for ( auto l_it : m_animations )
 		{
 			l_it.second->Stop();
 		}
+
+		DoClearAnimations();
 	}
 
 	void AnimatedObject::PauseAllAnimations()

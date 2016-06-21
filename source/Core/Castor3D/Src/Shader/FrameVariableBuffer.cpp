@@ -19,7 +19,7 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgram & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_occurences )
+	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgram & p_program, FrameVariableType p_type, String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );

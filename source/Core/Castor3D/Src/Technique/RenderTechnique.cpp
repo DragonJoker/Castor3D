@@ -32,6 +32,8 @@
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -143,13 +145,23 @@ namespace Castor3D
 								ShaderProgramSPtr l_program;
 								uint32_t l_programFlags = l_submesh->GetProgramFlags();
 								RemFlag( l_programFlags, ProgramFlag::Skinning );
-								auto l_animated = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
+								RemFlag( l_programFlags, ProgramFlag::Morphing );
+								auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
+								auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-								if ( l_animated )
+								if ( l_skeleton )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Skinning );
 								}
-								else if ( l_submesh->GetRefCount( l_material ) > 1 )
+
+								if ( l_mesh )
+								{
+									AddFlag( l_programFlags, ProgramFlag::Morphing );
+								}
+
+								if ( l_submesh->GetRefCount( l_material ) > 1
+									 && !l_mesh
+									 && !l_skeleton )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Instantiation );
 								}
@@ -163,12 +175,14 @@ namespace Castor3D
 								Point3rFrameVariableSPtr l_pt3r;
 								OneFloatFrameVariableSPtr l_1f;
 
-								if ( CheckFlag( l_programFlags, ProgramFlag::Skinning ) )
+								if ( CheckFlag( l_programFlags, ProgramFlag::Skinning )
+									 || CheckFlag( l_programFlags, ProgramFlag::Morphing ) )
 								{
 									AnimatedGeometryRenderNode l_renderNode
 									{
 										*l_primitive.second,
-										*l_animated,
+										l_skeleton.get(),
+										l_mesh.get(),
 										l_submesh->GetGeometryBuffers( *l_program ),
 										*l_submesh,
 										*l_sceneNode,
@@ -569,12 +583,39 @@ namespace Castor3D
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
-		Matrix4x4rFrameVariableSPtr l_variable;
-		p_node.m_scene.m_node.m_matrixUbo.GetVariable( Pipeline::MtxBones, l_variable );
 
-		if ( l_variable )
+		if ( p_node.m_skeleton )
 		{
-			p_node.m_animated.FillShader( *l_variable );
+			Matrix4x4rFrameVariableSPtr l_variable;
+			p_node.m_scene.m_node.m_matrixUbo.GetVariable( Pipeline::MtxBones, l_variable );
+
+			if ( l_variable )
+			{
+				p_node.m_skeleton->FillShader( *l_variable );
+			}
+		}
+
+		if ( p_node.m_mesh )
+		{
+			OneFloatFrameVariableSPtr l_variable;
+			l_variable = p_node.m_scene.m_node.m_program.FindFrameVariable< OneFloatFrameVariable >( ShaderProgram::Time, eSHADER_TYPE_VERTEX );
+
+			if ( l_variable )
+			{
+				if ( p_node.m_mesh->IsPlayingAnimation() )
+				{
+					auto l_submesh = p_node.m_mesh->GetPlayingAnimation().GetAnimationSubmesh( p_node.m_submesh.GetId() );
+
+					if ( l_submesh )
+					{
+						l_submesh->FillShader( *l_variable );
+					}
+				}
+				else
+				{
+					l_variable->SetValue( 1.0f );
+				}
+			}
 		}
 
 		p_node.m_scene.m_node.m_pass.FillShaderVariables( p_node.m_scene.m_node );
@@ -963,6 +1004,7 @@ namespace Castor3D
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
 		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
+		auto vtx_time( l_writer.GetInput< Float >( cuT( "vtx_time" ) ) );
 
 		if ( l_writer.HasTextureBuffers() )
 		{

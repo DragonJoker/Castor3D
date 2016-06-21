@@ -5,7 +5,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC2B;
+		static const FrameVariableType Full = FrameVariableType::Vec2b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 2 >
@@ -13,7 +13,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC2I;
+		static const FrameVariableType Full = FrameVariableType::Vec2i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 2 >
@@ -21,7 +21,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC2UI;
+		static const FrameVariableType Full = FrameVariableType::Vec2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 2 >
@@ -29,7 +29,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC2F;
+		static const FrameVariableType Full = FrameVariableType::Vec2f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 2 >
@@ -37,7 +37,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC2D;
+		static const FrameVariableType Full = FrameVariableType::Vec2d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 3 >
@@ -45,7 +45,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC3B;
+		static const FrameVariableType Full = FrameVariableType::Vec3b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 3 >
@@ -53,7 +53,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC3I;
+		static const FrameVariableType Full = FrameVariableType::Vec3i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 3 >
@@ -61,7 +61,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC3UI;
+		static const FrameVariableType Full = FrameVariableType::Vec3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 3 >
@@ -69,7 +69,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC3F;
+		static const FrameVariableType Full = FrameVariableType::Vec3f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 3 >
@@ -77,7 +77,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC3D;
+		static const FrameVariableType Full = FrameVariableType::Vec3d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 4 >
@@ -85,7 +85,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC4B;
+		static const FrameVariableType Full = FrameVariableType::Vec4b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 4 >
@@ -93,7 +93,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC4I;
+		static const FrameVariableType Full = FrameVariableType::Vec4i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 4 >
@@ -101,7 +101,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC4UI;
+		static const FrameVariableType Full = FrameVariableType::Vec4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 4 >
@@ -109,7 +109,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC4F;
+		static const FrameVariableType Full = FrameVariableType::Vec4f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 4 >
@@ -117,7 +117,7 @@ namespace Castor3D
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_VEC4D;
+		static const FrameVariableType Full = FrameVariableType::Vec4d;
 		C3D_API static const xchar * FullTypeName;
 	};
 
@@ -209,9 +209,9 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Count >
-	inline eFRAME_VARIABLE_TYPE PointFrameVariable< T, Count >::GetFrameVariableType()
+	inline FrameVariableType PointFrameVariable< T, Count >::GetFrameVariableType()
 	{
-		return eFRAME_VARIABLE_TYPE( PntFrameVariableDefinitions< T, Count >::Full );
+		return FrameVariableType( PntFrameVariableDefinitions< T, Count >::Full );
 	}
 
 	template< typename T, uint32_t Count >

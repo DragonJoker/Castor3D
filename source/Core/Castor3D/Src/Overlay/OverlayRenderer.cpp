@@ -489,7 +489,7 @@ namespace Castor3D
 		RenderNode & l_node = DoGetTextProgram( p_pass );
 		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
 
-		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 
 		if ( l_textureVariable )
 		{
@@ -640,17 +640,17 @@ namespace Castor3D
 
 		if ( CheckFlag( p_flags, TextureChannel::Text ) )
 		{
-			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 		}
 
 		if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 		{
-			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
 		}
 
 		if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
 		{
-			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
 
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();

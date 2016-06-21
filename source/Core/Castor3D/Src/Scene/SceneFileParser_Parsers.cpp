@@ -2859,7 +2859,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramSampler )
 
 		if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
 		{
-			l_parsingContext->pSamplerFrameVariable = l_parsingContext->pShaderProgram->CreateFrameVariable( l_name, l_parsingContext->eShaderObject );
+			l_parsingContext->pSamplerFrameVariable = l_parsingContext->pShaderProgram->CreateFrameVariable< OneIntFrameVariable >( l_name, l_parsingContext->eShaderObject );
 		}
 		else
 		{
@@ -3034,7 +3034,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableType )
 	{
 		if ( !l_parsingContext->pFrameVariable )
 		{
-			l_parsingContext->pFrameVariable = l_parsingContext->pFrameVariableBuffer->CreateVariable( *l_parsingContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
+			l_parsingContext->pFrameVariable = l_parsingContext->pFrameVariableBuffer->CreateVariable( *l_parsingContext->pShaderProgram.get(), FrameVariableType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
 		}
 		else
 		{

@@ -49,7 +49,7 @@ namespace Castor3D
 	{
 		auto l_configBuffer = m_program->FindFrameVariableBuffer( ToneMapping::HdrConfig );
 		REQUIRE( l_configBuffer != nullptr );
-		l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Gamma );
+		l_configBuffer->CreateVariable( *m_program, FrameVariableType::Float, Gamma );
 		l_configBuffer->GetVariable( Gamma, m_gammaVar );
 
 		String l_pxl;

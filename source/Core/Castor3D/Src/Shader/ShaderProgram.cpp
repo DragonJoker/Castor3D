@@ -115,6 +115,8 @@ namespace Castor3D
 	const String ShaderProgram::Weights0 = cuT( "weights0" );
 	const String ShaderProgram::Weights1 = cuT( "weights1" );
 	const String ShaderProgram::Transform = cuT( "transform" );
+	const String ShaderProgram::Time = cuT( "time" );
+	const String ShaderProgram::Count = cuT( "count" );
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
 	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
@@ -360,31 +362,37 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneIntFrameVariableSPtr ShaderProgram::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
+	FrameVariableSPtr ShaderProgram::CreateFrameVariable( FrameVariableType p_type, String const & p_name, eSHADER_TYPE p_shader, int p_iNbOcc )
 	{
-		OneIntFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
+		FrameVariableSPtr l_return = FindFrameVariable( p_type, p_name, p_shader );
 
 		if ( !l_return )
 		{
-			l_return = DoCreateTextureVariable( p_iNbOcc );
+			l_return = DoCreateVariable( p_type, p_iNbOcc );
 			l_return->SetName( p_name );
 
-			if ( m_pShaders[p_type] )
+			if ( m_pShaders[p_shader] )
 			{
-				m_pShaders[p_type]->AddFrameVariable( l_return );
+				m_pShaders[p_shader]->AddFrameVariable( l_return );
 			}
 		}
 
 		return l_return;
 	}
 
-	OneIntFrameVariableSPtr ShaderProgram::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
+	FrameVariableSPtr ShaderProgram::FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader )const
 	{
-		OneIntFrameVariableSPtr l_return;
+		FrameVariableSPtr l_return;
 
-		if ( m_pShaders[p_type] )
+		if ( m_pShaders[p_shader] )
 		{
-			l_return = m_pShaders[p_type]->FindFrameVariable( p_name );
+			l_return = m_pShaders[p_shader]->FindFrameVariable( p_name );
+
+			if ( l_return && l_return->GetFullType() != p_type )
+			{
+				Logger::LogError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
+				l_return.reset();
+			}
 		}
 
 		return l_return;

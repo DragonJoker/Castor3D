@@ -128,9 +128,12 @@ namespace Castor3D
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
-		//!\~english	The animated object.
-		//!\~french		L'objet animé.
-		AnimatedSkeleton & m_animated;
+		//!\~english	The animated skeleton.
+		//!\~french		Le squelette animé.
+		AnimatedSkeleton * m_skeleton;
+		//!\~english	The animated mesh.
+		//!\~french		Le maillage animé.
+		AnimatedMesh * m_mesh;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;

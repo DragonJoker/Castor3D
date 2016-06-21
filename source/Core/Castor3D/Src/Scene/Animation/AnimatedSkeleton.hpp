@@ -63,6 +63,17 @@ namespace Castor3D
 		 */
 		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
 		/**
+		 *\copydoc		Castor3D::AnimatedObject::Update
+		 */
+		C3D_API void Update( real p_tslf )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 */
+		C3D_API bool IsPlayingAnimation()const override
+		{
+			return !m_playingAnimations.empty();
+		}
+		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The skeleton
@@ -74,17 +85,42 @@ namespace Castor3D
 		{
 			return m_skeleton;
 		}
+		/**
+		 *\~english
+		 *\return		The currently animations for this object.
+		 *\~french
+		 *\return		Les animations en cours de lecture sur cet objet.
+		 */
+		inline SkeletonAnimationInstancePtrArray const & GetPlayingAnimations()const
+		{
+			return m_playingAnimations;
+		}
 
 	private:
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
 		void DoAddAnimation( Castor::String const & p_name )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoClearAnimations()override;
 
 	protected:
 		//!\~english	The skeleton affected by the animations.
 		//!\~french		Le squelette affecté par les animations.
 		Skeleton & m_skeleton;
+		//!\~english	Currently playing animations.
+		//!\~french		Les animations en cours de lecture.
+		SkeletonAnimationInstancePtrArray m_playingAnimations;
 	};
 }
 

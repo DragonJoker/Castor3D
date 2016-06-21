@@ -70,12 +70,12 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! SkeletonAnimationInstanceObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
-	//! MeshAnimationInstanceSubmesh array.
-	DECLARE_VECTOR( MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
+	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
+	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
 	//! Animation pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, AnimationInstanceSPtr, AnimationInstancePtrStr );
-	//! Animation pointer array.
-	DECLARE_VECTOR( AnimationInstanceSPtr, AnimationInstancePtr );
+	//! Skeleton animation instance pointer array.
+	DECLARE_VECTOR( SkeletonAnimationInstanceSPtr, SkeletonAnimationInstancePtr );
 
 	//@}
 }

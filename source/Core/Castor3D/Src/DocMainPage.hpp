@@ -132,7 +132,7 @@
  *<li>Introducing SamplerState class to group calls to SetSamplerState and all relative stuff.</li>
  *<li>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified  SceneFileParser, added &lt;size&gt; directive for viewport.</li>
  *<li>Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.</li>
- *<li>Modified a bit FrameVariable in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
+ *<li>Modified a bit FrameVariable in order to take care of FrameVariableType previously defined for SceneFileParser.</li>
  *<li>Modified Submesh::AddPoints so it takes a stVERTEX_GROUP structure as a parameter.</li>
  *<li>Introducing FrameVariableBuffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
  *<li>Implemented initialisation and cleanup of GPU side objects in two events : InitialiseEvent and CleanupEvent.</li>
@@ -628,7 +628,7 @@
  *<li>Suppression des appels à ShaderObject afin d'en faire une classe interne à Castor3D.</li>
  *<li>Modification des shaders, ils prennent maintenant en compte le modèle de shader, contiennent tous les fichiers et sources définis par modèle. Le choix du modèle est fait à la compilation, en choisissant le modèle le plus haut supporté.</li>
  *<li>Modification des sources par défaut pour les shaders. Elles sont maitenant générées automatiquement et plus aucun fichier externe n'est nécessaire.</li>
- *<li>Modification de FrameVariable afin de prendre en compte eFRAME_VARIABLE_TYPE.</li>
+ *<li>Modification de FrameVariable afin de prendre en compte FrameVariableType.</li>
  *</ul>
  *</li>
  *<li>Modifications de Castor3D::Context

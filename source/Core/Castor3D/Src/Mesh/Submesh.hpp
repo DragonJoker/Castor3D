@@ -823,6 +823,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the submesh to be updated.
+		 *\~french
+		 *\return		Dit que le sous-maillage doit être mis à jour.
+		 */
+		inline void NeedUpdate()
+		{
+			m_dirty = true;
+		}
+		/**
+		 *\~english
 		 *\brief		Creates and adds faces to the submesh
 		 *\param[in]	p_faces	The faces
 		 *\~french

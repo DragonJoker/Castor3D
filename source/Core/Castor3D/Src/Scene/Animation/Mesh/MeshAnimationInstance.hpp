@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'AnimatedMesh parent.
 		 *\param[in]	p_animation	L'animation.
 		 */
-		C3D_API MeshAnimationInstance( AnimatedMesh & p_object, MeshAnimation const & p_animation );
+		C3D_API MeshAnimationInstance( AnimatedMesh & p_object, MeshAnimation & p_animation );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -54,6 +54,13 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~MeshAnimationInstance();
+		/**
+		*\~english
+		*\return		The animation submesh at given ID, nullptr if not found.
+		*\~french
+		*\return		Le sous-maillage d'animation, à l'ID donné, nullptr si non trouvé.
+		*/
+		C3D_API MeshAnimationInstanceSubmesh const * GetAnimationSubmesh( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\return		The animation.
@@ -80,7 +87,7 @@ namespace Castor3D
 		MeshAnimation const & m_meshAnimation;
 		//!\~english	The animated submeshes.
 		//!\~french		Les sous-maillages animés.
-		MeshAnimationInstanceSubmeshArray m_submeshes;
+		MeshAnimationInstanceSubmeshMap m_submeshes;
 
 		friend class BinaryWriter< MeshAnimation >;
 		friend class BinaryParser< MeshAnimation >;

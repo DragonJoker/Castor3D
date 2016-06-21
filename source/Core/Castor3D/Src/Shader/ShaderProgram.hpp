@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "FrameVariable.hpp"
+#include "FrameVariableTyper.hpp"
 #include "ProgramInputLayout.hpp"
 
 #include <OwnedBy.hpp>
@@ -133,6 +134,12 @@ namespace Castor3D
 		//!\~english	Name of the instance transform attribute.
 		//!\~french		Nom de l'attribut de transformation d'instance.
 		C3D_API static const Castor::String Transform;
+		//!\~english	Name of the morphing times attribute.
+		//!\~french		Nom de l'attribut des temps d'animation par sommet.
+		C3D_API static const Castor::String Time;
+		//!\~english	Name of the morphing times count attribute.
+		//!\~french		Nom de l'attribut de compte des temps d'animation par sommet.
+		C3D_API static const Castor::String Count;
 
 		//@}
 		/**@name Scene */
@@ -419,31 +426,71 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a variable
-		 *\param[in]	p_name	The variable name
-		 *\param[in]	p_type		The shader type
-		 *\param[in]	p_iNbOcc	The array dimension
+		 *\param[in]	p_type		The variable type
+		 *\param[in]	p_name		The variable name
+		 *\param[in]	p_shader	The shader type
+		 *\param[in]	p_nbOcc		The array dimension
 		 *\return		The created variable, nullptr if failed
 		 *\~french
 		 *\brief		Crée une variable
-		 *\param[in]	p_name	Le nom de la variable
-		 *\param[in]	p_type		Le type du shader
-		 *\param[in]	p_iNbOcc	Les dimensions du tableau
+		 *\param[in]	p_type		Le type de variable
+		 *\param[in]	p_name		Le nom de la variable
+		 *\param[in]	p_shader	Le type du shader
+		 *\param[in]	p_nbOcc		Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API OneIntFrameVariableSPtr CreateFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc = 1 );
+		C3D_API FrameVariableSPtr CreateFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader, int p_nbOcc = 1 );
+		/**
+		 *\~english
+		 *\brief		Creates a variable
+		 *\param[in]	p_name		The variable name
+		 *\param[in]	p_shader	The shader type
+		 *\param[in]	p_nbOcc		The array dimension
+		 *\return		The created variable, nullptr if failed
+		 *\~french
+		 *\brief		Crée une variable
+		 *\param[in]	p_name		Le nom de la variable
+		 *\param[in]	p_shader	Le type du shader
+		 *\param[in]	p_nbOcc		Les dimensions du tableau
+		 *\return		La variable créée, nullptr en cas d'échec
+		 */
+		template< typename T >
+		inline std::shared_ptr< T > CreateFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_shader, int p_nbOcc = 1 )
+		{
+			return std::static_pointer_cast< T >( CreateFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader, p_nbOcc ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Looks for a variable
-		 *\param[in]	p_name	The variable name
-		 *\param[in]	p_type		The shader type
+		 *\param[in]	p_type		The variable type
+		 *\param[in]	p_name		The variable name
+		 *\param[in]	p_shader	The shader type
 		 *\return		The found variable, nullptr if failed
 		 *\~french
 		 *\brief		Cherche une variable
-		 *\param[in]	p_name	Le nom de la variable
-		 *\param[in]	p_type		Le type du shader
+		 *\param[in]	p_type		Le type de variable
+		 *\param[in]	p_name		Le nom de la variable
+		 *\param[in]	p_shader	Le type du shader
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API OneIntFrameVariableSPtr FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const;
+		C3D_API FrameVariableSPtr FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader )const;
+		/**
+		 *\~english
+		 *\brief		Looks for a variable
+		 *\param[in]	p_name		The variable name
+		 *\param[in]	p_shader	The shader type
+		 *\return		The found variable, nullptr if failed
+		 *\~french
+		 *\brief		Cherche une variable
+		 *\param[in]	p_name		Le nom de la variable
+		 *\param[in]	p_shader	Le type du shader
+		 *\return		La variable trouvé, nullptr en cas d'échec
+		 */
+		template< typename T >
+		inline std::shared_ptr< T > FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_shader )const
+		{
+			return std::static_pointer_cast< T >( FindFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -650,7 +697,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		virtual OneIntFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
+		virtual FrameVariableSPtr DoCreateVariable( FrameVariableType p_type, int p_iNbOcc ) = 0;
 
 	protected:
 		//!<\~english The program status.

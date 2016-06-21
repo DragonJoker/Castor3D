@@ -17,19 +17,19 @@ namespace Castor3D
 	namespace
 	{
 		inline void DoFind( real p_time,
-					 typename KeyFrameArray::const_iterator const & p_beg,
-					 typename KeyFrameArray::const_iterator const & p_end,
+					 typename KeyFrameArray::const_iterator const & p_first,
+					 typename KeyFrameArray::const_iterator const & p_last,
 					 typename KeyFrameArray::const_iterator & p_prv,
 					 typename KeyFrameArray::const_iterator & p_cur )
 		{
-			while ( p_prv != p_beg && p_prv->GetTimeIndex() >= p_time )
+			while ( p_prv != p_first && p_prv->GetTimeIndex() >= p_time )
 			{
 				// Time has gone too fast backward.
 				--p_prv;
 				--p_cur;
 			}
 
-			while ( p_cur != p_end && p_cur->GetTimeIndex() < p_time )
+			while ( p_cur != p_last && p_cur->GetTimeIndex() < p_time )
 			{
 				// Time has gone too fast forward.
 				++p_prv;

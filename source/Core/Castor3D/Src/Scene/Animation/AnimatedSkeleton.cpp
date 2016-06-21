@@ -18,8 +18,16 @@ namespace Castor3D
 	{
 	}
 
-	AnimatedSkeleton :: ~AnimatedSkeleton()
+	AnimatedSkeleton::~AnimatedSkeleton()
 	{
+	}
+
+	void AnimatedSkeleton::Update( real p_tslf )
+	{
+		for ( auto l_animation : m_playingAnimations )
+		{
+			l_animation->Update( p_tslf );
+		}
 	}
 
 	void AnimatedSkeleton::FillShader( Matrix4x4rFrameVariable & p_variable )
@@ -43,7 +51,7 @@ namespace Castor3D
 
 				for ( auto l_animation : m_playingAnimations )
 				{
-					auto l_object = std::static_pointer_cast< SkeletonAnimationInstance >( l_animation )->GetObject( *l_bone );
+					auto l_object = l_animation->GetObject( *l_bone );
 
 					if ( l_object )
 					{
@@ -66,5 +74,20 @@ namespace Castor3D
 			auto l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
 			l_it = m_animations.insert( { p_name, l_instance } ).first;
 		}
+	}
+
+	void AnimatedSkeleton::DoStartAnimation( AnimationInstanceSPtr p_animation )
+	{
+		m_playingAnimations.push_back( std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) );
+	}
+
+	void AnimatedSkeleton::DoStopAnimation( AnimationInstanceSPtr p_animation )
+	{
+		m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) ) );
+	}
+
+	void AnimatedSkeleton::DoClearAnimations()
+	{
+		m_playingAnimations.clear();
 	}
 }

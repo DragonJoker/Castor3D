@@ -4,7 +4,6 @@
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
-#include "Shader/MatrixFrameVariable.hpp"
 
 using namespace Castor;
 
@@ -20,15 +19,40 @@ namespace Castor3D
 	{
 	}
 
+	void AnimatedMesh::Update( real p_tslf )
+	{
+		if ( m_playingAnimation )
+		{
+			m_playingAnimation->Update( p_tslf );
+		}
+	}
+
 	void AnimatedMesh::DoAddAnimation( String const & p_name )
 	{
 		auto l_it = m_animations.find( p_name );
 
 		if ( l_it == m_animations.end() )
 		{
-			auto & l_animation = static_cast< MeshAnimation const & >( m_mesh.GetAnimation( p_name ) );
+			auto & l_animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
 			auto l_instance = std::make_shared< MeshAnimationInstance >( *this, l_animation );
 			m_animations.insert( { p_name, l_instance } );
 		}
+	}
+
+	void AnimatedMesh::DoStartAnimation( AnimationInstanceSPtr p_animation )
+	{
+		REQUIRE( m_playingAnimation == nullptr );
+		m_playingAnimation = std::static_pointer_cast< MeshAnimationInstance >( p_animation );
+	}
+
+	void AnimatedMesh::DoStopAnimation( AnimationInstanceSPtr p_animation )
+	{
+		REQUIRE( m_playingAnimation == p_animation );
+		m_playingAnimation.reset();
+	}
+
+	void AnimatedMesh::DoClearAnimations()
+	{
+		m_playingAnimation.reset();
 	}
 }

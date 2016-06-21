@@ -199,7 +199,7 @@ namespace Castor3D
 
 		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
 		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 		m_mapDiffuse->SetValue( 0 );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 

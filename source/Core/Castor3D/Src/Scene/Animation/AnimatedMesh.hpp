@@ -54,6 +54,17 @@ namespace Castor3D
 		 */
 		C3D_API ~AnimatedMesh();
 		/**
+		 *\copydoc		Castor3D::AnimatedObject::Update
+		 */
+		C3D_API void Update( real p_tslf )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 */
+		C3D_API bool IsPlayingAnimation()const override
+		{
+			return m_playingAnimation != nullptr;
+		}
+		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The skeleton
@@ -77,17 +88,42 @@ namespace Castor3D
 		{
 			return m_mesh;
 		}
+		/**
+		 *\~english
+		 *\return		The currently playing animation for this object.
+		 *\~french
+		 *\return		L'animation en cours de lecture sur cet objet.
+		 */
+		inline MeshAnimationInstance const & GetPlayingAnimation()const
+		{
+			return *m_playingAnimation;
+		}
 
 	private:
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
 		void DoAddAnimation( Castor::String const & p_name )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoClearAnimations()override;
 
 	protected:
 		//!\~english	The submesh affected by the animations.
 		//!\~french		Le sous-maillage affecté par les animations.
 		Mesh & m_mesh;
+		//!\~english	Currently playing animation.
+		//!\~french		L'animation en cours de lecture.
+		MeshAnimationInstanceSPtr m_playingAnimation;
 	};
 }
 

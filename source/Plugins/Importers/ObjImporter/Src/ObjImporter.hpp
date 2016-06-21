@@ -46,11 +46,8 @@ namespace Obj
 		virtual Castor3D::SceneSPtr DoImportScene();
 		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
 
-		void DoCreateSubmesh();
 		Castor3D::MeshSPtr DoReadObjFile( Castor3D::Scene & p_scene );
-		uint32_t DoRetrieveIndex( Castor::String & p_strIndex, uint32_t p_uiSize );
-		uint32_t DoTreatFace( Castor3D::FaceIndices & p_face, uint32_t p_uiIndex, Castor::String const & p_strFace, stGROUP * p_pGroup, VertexArray const & p_arrayVertex, NormalArray const & p_arrayNormals, UvArray const & p_arrayUv );
-		void DoCreateSubmesh( Castor3D::MeshSPtr p_pMesh, stGROUP * p_pGroup );
+		void DoCreateSubmesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< Castor3D::FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex );
 		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
 		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
 		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_uiIndex );

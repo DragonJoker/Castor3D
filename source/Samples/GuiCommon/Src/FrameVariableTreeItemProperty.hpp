@@ -104,7 +104,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTypeChange( Castor3D::eFRAME_VARIABLE_TYPE p_value );
+		void OnTypeChange( Castor3D::FrameVariableType p_value );
 		void OnNameChange( Castor::String const & p_value );
 		void OnValueChange( wxVariant const & p_value );
 
