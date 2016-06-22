@@ -54,6 +54,34 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		virtual ~Animable();
+		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API Animable( Animable && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API Animable & operator=( Animable && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API Animable( Animable const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API Animable & operator=( Animable const & p_rhs ) = delete;
 
 	public:
 		/**
@@ -116,7 +144,7 @@ namespace Castor3D
 		 *\brief		Ajoute une animation.
 		 *\param[in]	p_animation	L'animation.
 		 */
-		void DoAddAnimation( AnimationUPtr && p_animation );
+		void DoAddAnimation( AnimationSPtr && p_animation );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -130,14 +158,7 @@ namespace Castor3D
 		template< typename Type >
 		Type & DoGetAnimation( Castor::String const & p_name )
 		{
-			auto l_it = m_animations.find( p_name );
-
-			if ( l_it == m_animations.end() )
-			{
-				CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
-			}
-
-			return static_cast< Type & >( *l_it->second );
+			return static_cast< Type & >( GetAnimation( p_name ) );
 		}
 
 	protected:

@@ -66,6 +66,34 @@ namespace Castor3D
 		C3D_API ~Mesh();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API Mesh( Mesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API Mesh & operator=( Mesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API Mesh( Mesh const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API Mesh & operator=( Mesh const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Clears all submeshes
 		 *\~french
 		 *\brief		Supprime les sous maillages

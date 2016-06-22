@@ -93,12 +93,10 @@ namespace Castor3D
 		 *\brief		Updates the object, applies the transformations at given time.
 		 *\param[in]	p_time				Current time index.
 		 *\param[in]	p_transformations	The current transformation matrix.
-		 *\return		The time elapsed relative to previous keyframe.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time				Index de temps courant.
 		 *\param[in]	p_transformations	La matrice de transformation courante.
-		 *\return		Le temps écoulé, relatif à la keyframe précédente.
 		 */
 		C3D_API void Update( real p_time );
 		/**

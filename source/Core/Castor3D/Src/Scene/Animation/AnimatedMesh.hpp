@@ -54,6 +54,34 @@ namespace Castor3D
 		 */
 		C3D_API ~AnimatedMesh();
 		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API AnimatedMesh( AnimatedMesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API AnimatedMesh & operator=( AnimatedMesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API AnimatedMesh( AnimatedMesh const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API AnimatedMesh & operator=( AnimatedMesh const & p_rhs ) = delete;
+		/**
 		 *\copydoc		Castor3D::AnimatedObject::Update
 		 */
 		C3D_API void Update( real p_tslf )override;
@@ -105,15 +133,15 @@ namespace Castor3D
 		 */
 		void DoAddAnimation( Castor::String const & p_name )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		Castor3D::AnimatedObject::DoStartAnimation
 		 */
 		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		Castor3D::AnimatedObject::DoStopAnimation
 		 */
 		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 *\copydoc		Castor3D::AnimatedObject::DoClearAnimations
 		 */
 		void DoClearAnimations()override;
 

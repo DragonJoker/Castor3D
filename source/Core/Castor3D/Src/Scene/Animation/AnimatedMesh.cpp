@@ -4,6 +4,7 @@
 #include "Animation/Mesh/MeshAnimation.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
 using namespace Castor;
 
@@ -33,9 +34,12 @@ namespace Castor3D
 
 		if ( l_it == m_animations.end() )
 		{
-			auto & l_animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
-			auto l_instance = std::make_shared< MeshAnimationInstance >( *this, l_animation );
-			m_animations.insert( { p_name, l_instance } );
+			if ( m_mesh.HasAnimation( p_name ) )
+			{
+				auto & l_animation = static_cast< MeshAnimation & >( m_mesh.GetAnimation( p_name ) );
+				auto l_instance = std::make_shared< MeshAnimationInstance >( *this, l_animation );
+				m_animations.insert( { p_name, l_instance } );
+			}
 		}
 	}
 

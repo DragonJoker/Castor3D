@@ -72,7 +72,7 @@ namespace Castor3D
 		{
 			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
 			auto l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
-			l_it = m_animations.insert( { p_name, l_instance } ).first;
+			m_animations.insert( { p_name, l_instance } );
 		}
 	}
 

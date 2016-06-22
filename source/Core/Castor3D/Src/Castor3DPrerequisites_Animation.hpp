@@ -148,9 +148,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Animable );
 
 	//! Animation pointer map, sorted by name.
-	DECLARE_MAP( Castor::String, AnimationUPtr, AnimationPtrStr );
-	//! Animation pointer array.
-	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
+	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
 	//! SkeletonAnimationObject pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, SkeletonAnimationObjectSPtr, SkeletonAnimationObjectPtrStr );
 	//! SkeletonAnimationObject pointer array.

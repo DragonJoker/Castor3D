@@ -58,6 +58,34 @@ namespace Castor3D
 		C3D_API ~MeshAnimation();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API MeshAnimation( MeshAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API MeshAnimation & operator=( MeshAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API MeshAnimation( MeshAnimation const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API MeshAnimation & operator=( MeshAnimation const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Adds a child to this object.
 		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	p_object	The child.
@@ -85,7 +113,7 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Casto3D::Animation::DoInitialise
 		 */
-		C3D_API bool DoInitialise()override;
+		C3D_API void DoUpdateLength()override;
 
 	protected:
 		//!\~english	The animated submesh.

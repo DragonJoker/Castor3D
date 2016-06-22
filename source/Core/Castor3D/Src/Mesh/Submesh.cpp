@@ -499,6 +499,7 @@ namespace Castor3D
 		if ( m_dirty )
 		{
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_dirty = false;
 		}
 
 		p_geometryBuffers.DrawInstanced( l_size, 0, p_count );

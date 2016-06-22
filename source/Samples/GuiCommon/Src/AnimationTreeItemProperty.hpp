@@ -52,7 +52,7 @@ namespace GuiCommon
 		 *\param[in]	p_name		Le nom de l'animation cible.
 		 *\param[in]	p_state		L'état de l'animation cible.
 		 */
-		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::GroupAnimation p_anim );
+		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::GroupAnimation const & p_anim );
 		/**
 		 *\~english
 		 *\brief		Destructor.

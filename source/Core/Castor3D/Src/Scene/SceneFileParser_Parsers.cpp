@@ -49,6 +49,7 @@
 #include "Scene/Animation/AnimationInstance.hpp"
 #include "Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
@@ -84,7 +85,6 @@ namespace
 
 		return l_return;
 	}
-
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMtlFile )
@@ -1804,7 +1804,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshMorphImport )
 					++l_index;
 				}
 
-				l_animation.Initialise();
+				l_animation.UpdateLength();
 			}
 		}
 		else

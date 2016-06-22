@@ -58,6 +58,34 @@ namespace Castor3D
 		C3D_API ~SkeletonAnimation();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API SkeletonAnimation( SkeletonAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API SkeletonAnimation( SkeletonAnimation const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Creates and adds a moving node.
 		 *\param[in]	p_name		The node name.
 		 *\param[in]	p_parent	The moving object's parent.
@@ -151,9 +179,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::Animation::DoInitialise
+		 *\~copydoc		Casto3D::Animation::DoUpdateLength
 		 */
-		C3D_API bool DoInitialise()override;
+		C3D_API void DoUpdateLength()override;
 
 	protected:
 		//!\~english	The root moving objects.

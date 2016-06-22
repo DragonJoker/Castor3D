@@ -51,7 +51,7 @@ namespace Castor3D
 		return *l_it->second;
 	}
 
-	void Animable::DoAddAnimation( AnimationUPtr && p_animation )
+	void Animable::DoAddAnimation( AnimationSPtr && p_animation )
 	{
 		m_animations[p_animation->GetName()] = std::move( p_animation );
 	}

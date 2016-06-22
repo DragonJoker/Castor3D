@@ -133,7 +133,7 @@ namespace Castor3D
 	{
 		if ( !HasAnimation( p_name ) )
 		{
-			DoAddAnimation( std::make_unique< SkeletonAnimation >( *this, p_name ) );
+			DoAddAnimation( std::make_shared< SkeletonAnimation >( *this, p_name ) );
 		}
 
 		return DoGetAnimation< SkeletonAnimation >( p_name );

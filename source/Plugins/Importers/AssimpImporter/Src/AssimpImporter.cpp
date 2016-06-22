@@ -611,10 +611,10 @@ namespace C3dAssimp
 			l_name = p_name;
 		}
 
-		auto l_animation = p_skeleton.CreateAnimation( l_name );
+		auto & l_animation = p_skeleton.CreateAnimation( l_name );
 		real l_ticksPerSecond = real( p_aiAnimation.mTicksPerSecond ? p_aiAnimation.mTicksPerSecond : 25.0_r );
 		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_aiNode, p_aiAnimation, nullptr );
-		l_animation.Initialise();
+		l_animation.UpdateLength();
 	}
 
 	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object)

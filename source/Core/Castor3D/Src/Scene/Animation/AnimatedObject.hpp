@@ -112,6 +112,18 @@ namespace Castor3D
 		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
+		 *\brief		Checks if an animation with given name exists.
+		 *\param[in]	p_name	The animation name.
+		 *\~french
+		 *\brief		Vérifie si l'animation avec le nom donné existe.
+		 *\param[in]	p_name	Le nom de l'animation.
+		 */
+		C3D_API bool HasAnimation( Castor::String const & p_name )
+		{
+			return m_animations.find( p_name ) != m_animations.end();
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves an animation
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation

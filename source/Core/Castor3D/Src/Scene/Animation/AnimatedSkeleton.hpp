@@ -55,6 +55,34 @@ namespace Castor3D
 		C3D_API ~AnimatedSkeleton();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API AnimatedSkeleton( AnimatedSkeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API AnimatedSkeleton( AnimatedSkeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Fills a shader variable with this object's skeleton transforms.
 		 *\param[out]	p_variable	Receives the transforms.
 		 *\~french

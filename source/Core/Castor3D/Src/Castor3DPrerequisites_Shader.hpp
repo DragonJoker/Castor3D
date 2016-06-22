@@ -141,41 +141,41 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des dimensions de variable supportées
 	*/
-	typedef enum eVARIABLE_TYPE
+	enum class VariableType
 		: uint8_t
 	{
 		//!\~english One variable	\~french Une variable
-		eVARIABLE_TYPE_ONE,
+		One,
 		//!\~english 1 variable array	\~french Tableau de 1 variable
-		eVARIABLE_TYPE_VEC1,
+		Vec1,
 		//!\~english 2 variables array	\~french Tableau de 2 variables
-		eVARIABLE_TYPE_VEC2,
+		Vec2,
 		//!\~english 3 variables array	\~french Tableau de 3 variables
-		eVARIABLE_TYPE_VEC3,
+		Vec3,
 		//!\~english 4 variables array	\~french Tableau de 4 variables
-		eVARIABLE_TYPE_VEC4,
+		Vec4,
 		//!\~english 1x1 matrix	\~french Matrice 1x1
-		eVARIABLE_TYPE_MAT1,
+		Mat1,
 		//!\~english 2x2 matrix	\~french Matrice 2x2
-		eVARIABLE_TYPE_MAT2X2,
+		Mat2x2,
 		//!\~english 2x3 matrix	\~french Matrice 2x3
-		eVARIABLE_TYPE_MAT2X3,
+		Mat2x3,
 		//!\~english 2x4 matrix	\~french Matrice 2x4
-		eVARIABLE_TYPE_MAT2X4,
+		Mat2x4,
 		//!\~english 3x2 matrix	\~french Matrice 3x2
-		eVARIABLE_TYPE_MAT3X2,
+		Mat3x2,
 		//!\~english 3x3 matrix	\~french Matrice 3x3
-		eVARIABLE_TYPE_MAT3X3,
+		Mat3x3,
 		//!\~english 3x4 matrix	\~french Matrice 3x4
-		eVARIABLE_TYPE_MAT3X4,
+		Mat3x4,
 		//!\~english 4x2 matrix	\~french Matrice 4x2
-		eVARIABLE_TYPE_MAT4X2,
+		Mat4x2,
 		//!\~english 4x3 matrix	\~french Matrice 4x3
-		eVARIABLE_TYPE_MAT4X3,
+		Mat4x3,
 		//!\~english 4x4 matrix	\~french Matrice 4x4
-		eVARIABLE_TYPE_MAT4X4,
-		CASTOR_ENUM_BOUNDS( eVARIABLE_TYPE, eVARIABLE_TYPE_ONE )
-	}	eVARIABLE_TYPE;
+		Mat4x4,
+		CASTOR_ENUM_CLASS_BOUNDS( One )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -253,33 +253,33 @@ namespace Castor3D
 		Mat4x3d,
 		Mat4x4d,
 #if CASTOR_USE_DOUBLE
-		Real	= Double,
-		Vec2r	= Vec2d,
-		Vec3r	= Vec3d,
-		Vec4r	= Vec4d,
-		Mat2x2r	= Mat2x2d,
-		Mat2x3r	= Mat2x3d,
-		Mat2x4r	= Mat2x4d,
-		Mat3x2r	= Mat3x2d,
-		Mat3x3r	= Mat3x3d,
-		Mat3x4r	= Mat3x4d,
-		Mat4x2r	= Mat4x2d,
-		Mat4x3r	= Mat4x3d,
-		Mat4x4r	= Mat4x4d,
+		Real = Double,
+		Vec2r = Vec2d,
+		Vec3r = Vec3d,
+		Vec4r = Vec4d,
+		Mat2x2r = Mat2x2d,
+		Mat2x3r = Mat2x3d,
+		Mat2x4r = Mat2x4d,
+		Mat3x2r = Mat3x2d,
+		Mat3x3r = Mat3x3d,
+		Mat3x4r = Mat3x4d,
+		Mat4x2r = Mat4x2d,
+		Mat4x3r = Mat4x3d,
+		Mat4x4r = Mat4x4d,
 #else
-		Real	= Float,
-		Vec2r	= Vec2f,
-		Vec3r	= Vec3f,
-		Vec4r	= Vec4f,
-		Mat2x2r	= Mat2x2f,
-		Mat2x3r	= Mat2x3f,
-		Mat2x4r	= Mat2x4f,
-		Mat3x2r	= Mat3x2f,
-		Mat3x3r	= Mat3x3f,
-		Mat3x4r	= Mat3x4f,
-		Mat4x2r	= Mat4x2f,
-		Mat4x3r	= Mat4x3f,
-		Mat4x4r	= Mat4x4f,
+		Real = Float,
+		Vec2r = Vec2f,
+		Vec3r = Vec3f,
+		Vec4r = Vec4f,
+		Mat2x2r = Mat2x2f,
+		Mat2x3r = Mat2x3f,
+		Mat2x4r = Mat2x4f,
+		Mat3x2r = Mat3x2f,
+		Mat3x3r = Mat3x3f,
+		Mat3x4r = Mat3x4f,
+		Mat4x2r = Mat4x2f,
+		Mat4x3r = Mat4x3f,
+		Mat4x4r = Mat4x4f,
 #endif
 		CASTOR_ENUM_CLASS_BOUNDS( Bool )
 	};
@@ -294,7 +294,7 @@ namespace Castor3D
 	template < typename T > class OneFrameVariable;
 	template < typename T, uint32_t Count > class PointFrameVariable;
 	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
-	
+
 	typedef OneFrameVariable< bool > OneBoolFrameVariable;
 	typedef OneFrameVariable< int > OneIntFrameVariable;
 	typedef OneFrameVariable< uint32_t > OneUIntFrameVariable;

@@ -4,7 +4,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
+		static const VariableType Count = VariableType::Mat2x2;
 		static const FrameVariableType Full = FrameVariableType::Mat2x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -12,7 +12,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
+		static const VariableType Count = VariableType::Mat2x3;
 		static const FrameVariableType Full = FrameVariableType::Mat2x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -20,7 +20,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
+		static const VariableType Count = VariableType::Mat2x4;
 		static const FrameVariableType Full = FrameVariableType::Mat2x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -28,7 +28,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
+		static const VariableType Count = VariableType::Mat2x2;
 		static const FrameVariableType Full = FrameVariableType::Mat2x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -36,7 +36,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
+		static const VariableType Count = VariableType::Mat2x3;
 		static const FrameVariableType Full = FrameVariableType::Mat2x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -44,7 +44,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
+		static const VariableType Count = VariableType::Mat2x4;
 		static const FrameVariableType Full = FrameVariableType::Mat2x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -52,7 +52,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
+		static const VariableType Count = VariableType::Mat2x2;
 		static const FrameVariableType Full = FrameVariableType::Mat2x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -60,7 +60,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
+		static const VariableType Count = VariableType::Mat2x3;
 		static const FrameVariableType Full = FrameVariableType::Mat2x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -68,7 +68,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
+		static const VariableType Count = VariableType::Mat2x4;
 		static const FrameVariableType Full = FrameVariableType::Mat2x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -76,7 +76,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
+		static const VariableType Count = VariableType::Mat2x2;
 		static const FrameVariableType Full = FrameVariableType::Mat2x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -84,7 +84,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
+		static const VariableType Count = VariableType::Mat2x3;
 		static const FrameVariableType Full = FrameVariableType::Mat2x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -92,7 +92,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
+		static const VariableType Count = VariableType::Mat2x4;
 		static const FrameVariableType Full = FrameVariableType::Mat2x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -100,7 +100,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
+		static const VariableType Count = VariableType::Mat2x2;
 		static const FrameVariableType Full = FrameVariableType::Mat2x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -108,7 +108,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
+		static const VariableType Count = VariableType::Mat2x3;
 		static const FrameVariableType Full = FrameVariableType::Mat2x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -116,7 +116,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
+		static const VariableType Count = VariableType::Mat2x4;
 		static const FrameVariableType Full = FrameVariableType::Mat2x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -124,7 +124,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
+		static const VariableType Count = VariableType::Mat3x2;
 		static const FrameVariableType Full = FrameVariableType::Mat3x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -132,7 +132,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
+		static const VariableType Count = VariableType::Mat3x3;
 		static const FrameVariableType Full = FrameVariableType::Mat3x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -140,7 +140,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
+		static const VariableType Count = VariableType::Mat3x4;
 		static const FrameVariableType Full = FrameVariableType::Mat3x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -148,7 +148,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
+		static const VariableType Count = VariableType::Mat3x2;
 		static const FrameVariableType Full = FrameVariableType::Mat3x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -156,7 +156,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
+		static const VariableType Count = VariableType::Mat3x3;
 		static const FrameVariableType Full = FrameVariableType::Mat3x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -164,7 +164,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
+		static const VariableType Count = VariableType::Mat3x4;
 		static const FrameVariableType Full = FrameVariableType::Mat3x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -172,7 +172,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
+		static const VariableType Count = VariableType::Mat3x2;
 		static const FrameVariableType Full = FrameVariableType::Mat3x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -180,7 +180,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
+		static const VariableType Count = VariableType::Mat3x3;
 		static const FrameVariableType Full = FrameVariableType::Mat3x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -188,7 +188,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
+		static const VariableType Count = VariableType::Mat3x4;
 		static const FrameVariableType Full = FrameVariableType::Mat3x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -196,7 +196,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
+		static const VariableType Count = VariableType::Mat3x2;
 		static const FrameVariableType Full = FrameVariableType::Mat3x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -204,7 +204,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
+		static const VariableType Count = VariableType::Mat3x3;
 		static const FrameVariableType Full = FrameVariableType::Mat3x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -212,7 +212,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
+		static const VariableType Count = VariableType::Mat3x4;
 		static const FrameVariableType Full = FrameVariableType::Mat3x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -220,7 +220,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
+		static const VariableType Count = VariableType::Mat3x2;
 		static const FrameVariableType Full = FrameVariableType::Mat3x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -228,7 +228,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
+		static const VariableType Count = VariableType::Mat3x3;
 		static const FrameVariableType Full = FrameVariableType::Mat3x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -236,7 +236,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
+		static const VariableType Count = VariableType::Mat3x4;
 		static const FrameVariableType Full = FrameVariableType::Mat3x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -244,7 +244,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
+		static const VariableType Count = VariableType::Mat4x2;
 		static const FrameVariableType Full = FrameVariableType::Mat4x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -252,7 +252,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
+		static const VariableType Count = VariableType::Mat4x3;
 		static const FrameVariableType Full = FrameVariableType::Mat4x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -260,7 +260,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
+		static const VariableType Count = VariableType::Mat4x4;
 		static const FrameVariableType Full = FrameVariableType::Mat4x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -268,7 +268,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
+		static const VariableType Count = VariableType::Mat4x2;
 		static const FrameVariableType Full = FrameVariableType::Mat4x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -276,7 +276,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
+		static const VariableType Count = VariableType::Mat4x3;
 		static const FrameVariableType Full = FrameVariableType::Mat4x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -284,7 +284,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
+		static const VariableType Count = VariableType::Mat4x4;
 		static const FrameVariableType Full = FrameVariableType::Mat4x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -292,7 +292,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
+		static const VariableType Count = VariableType::Mat4x2;
 		static const FrameVariableType Full = FrameVariableType::Mat4x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -300,7 +300,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
+		static const VariableType Count = VariableType::Mat4x3;
 		static const FrameVariableType Full = FrameVariableType::Mat4x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -308,7 +308,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
+		static const VariableType Count = VariableType::Mat4x4;
 		static const FrameVariableType Full = FrameVariableType::Mat4x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -316,7 +316,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
+		static const VariableType Count = VariableType::Mat4x2;
 		static const FrameVariableType Full = FrameVariableType::Mat4x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -324,7 +324,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
+		static const VariableType Count = VariableType::Mat4x3;
 		static const FrameVariableType Full = FrameVariableType::Mat4x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -332,7 +332,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
+		static const VariableType Count = VariableType::Mat4x4;
 		static const FrameVariableType Full = FrameVariableType::Mat4x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -340,7 +340,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 2 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
+		static const VariableType Count = VariableType::Mat4x2;
 		static const FrameVariableType Full = FrameVariableType::Mat4x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -348,7 +348,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 3 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
+		static const VariableType Count = VariableType::Mat4x3;
 		static const FrameVariableType Full = FrameVariableType::Mat4x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -356,7 +356,7 @@ namespace Castor3D
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 4 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
+		static const VariableType Count = VariableType::Mat4x4;
 		static const FrameVariableType Full = FrameVariableType::Mat4x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
@@ -465,9 +465,9 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline eVARIABLE_TYPE MatrixFrameVariable< T, Rows, Columns >::GetVariableType()
+	inline VariableType MatrixFrameVariable< T, Rows, Columns >::GetVariableType()
 	{
-		return eVARIABLE_TYPE( MtxFrameVariableDefinitions< T, Rows, Columns >::Count );
+		return VariableType( MtxFrameVariableDefinitions< T, Rows, Columns >::Count );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >

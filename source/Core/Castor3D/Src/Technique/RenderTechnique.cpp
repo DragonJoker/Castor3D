@@ -149,12 +149,12 @@ namespace Castor3D
 								auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 								auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-								if ( l_skeleton )
+								if ( l_skeleton && !l_skeleton->GetAnimations().empty() )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Skinning );
 								}
 
-								if ( l_mesh )
+								if ( l_mesh && !l_mesh->GetAnimations().empty() )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Morphing );
 								}
@@ -1004,7 +1004,6 @@ namespace Castor3D
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
 		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
-		auto vtx_time( l_writer.GetInput< Float >( cuT( "vtx_time" ) ) );
 
 		if ( l_writer.HasTextureBuffers() )
 		{

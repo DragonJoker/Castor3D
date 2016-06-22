@@ -55,6 +55,34 @@ namespace Castor3D
 		 */
 		C3D_API ~MeshAnimationInstance();
 		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API MeshAnimationInstance( MeshAnimationInstance && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API MeshAnimationInstance( MeshAnimationInstance const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API MeshAnimationInstance & operator=( MeshAnimationInstance const & p_rhs ) = delete;
+		/**
 		*\~english
 		*\return		The animation submesh at given ID, nullptr if not found.
 		*\~french

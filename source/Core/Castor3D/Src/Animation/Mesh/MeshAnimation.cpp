@@ -85,14 +85,12 @@ namespace Castor3D
 		m_submeshes.push_back( std::move( p_object ) );
 	}
 
-	bool MeshAnimation::DoInitialise()
+	void MeshAnimation::DoUpdateLength()
 	{
 		for ( auto const & l_submesh : m_submeshes )
 		{
 			m_length = std::max( m_length, l_submesh.GetLength() );
 		}
-
-		return true;
 	}
 
 	//*************************************************************************************************

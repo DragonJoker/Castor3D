@@ -114,29 +114,34 @@ namespace Castor3D
 	{
 		std::shared_ptr< SkeletonAnimationBone > l_return = std::make_shared< SkeletonAnimationBone >( *this );
 		l_return->SetBone( p_bone );
-		return AddObject( l_return, p_parent );
+		auto l_added = AddObject( l_return, p_parent );
+		return l_return;
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::AddObject( SkeletonAnimationObjectSPtr p_object, SkeletonAnimationObjectSPtr p_parent )
 	{
 		String l_name = GetMovingTypeName( p_object->GetType() ) + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
+		SkeletonAnimationObjectSPtr l_return;
 
 		if ( l_it == m_toMove.end() )
 		{
-			l_it = m_toMove.insert( { l_name, p_object } ).first;
+			m_toMove.insert( { l_name, p_object } );
 
 			if ( !p_parent )
 			{
 				m_arrayMoving.push_back( p_object );
 			}
+
+			l_return = p_object;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "This object was already added" ) );
+			l_return = l_it->second;
 		}
 
-		return l_it->second;
+		return l_return;
 	}
 
 	bool SkeletonAnimation::HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
@@ -144,14 +149,14 @@ namespace Castor3D
 		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( String const & p_name )const
-	{
-		return GetObject( SkeletonAnimationObjectType::Node, p_name );
-	}
-
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( Bone const & p_bone )const
 	{
 		return GetObject( SkeletonAnimationObjectType::Node, p_bone.GetName() );
+	}
+
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( String const & p_name )const
+	{
+		return GetObject( SkeletonAnimationObjectType::Node, p_name );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
@@ -167,14 +172,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool SkeletonAnimation::DoInitialise()
+	void SkeletonAnimation::DoUpdateLength()
 	{
 		for ( auto l_it : m_toMove )
 		{
 			m_length = std::max( m_length, l_it.second->GetLength() );
 		}
-
-		return true;
 	}
 
 	//*************************************************************************************************
