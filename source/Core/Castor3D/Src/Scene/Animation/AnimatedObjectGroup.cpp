@@ -111,7 +111,7 @@ namespace Castor3D
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object, String const & p_name )
 	{
 		return nullptr;
 	}

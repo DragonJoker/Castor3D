@@ -256,18 +256,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupEnd )
 
 	// Animated object group animation parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimationLooped )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimationScale )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimationEnd )
-
-	// Animated object parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectAnimation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectEnd )
-
-	// Animated object animation parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationLooped )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScale )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
 
 	// Skybox parsers

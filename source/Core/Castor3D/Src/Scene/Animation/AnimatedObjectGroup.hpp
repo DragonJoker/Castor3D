@@ -97,11 +97,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list.
 		 *\param[in]	p_object	The MovableObject from which AnimatedObject is created.
+		 *\param[in]	p_name		The MovableObject instance name.
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste.
 		 *\param[in]	p_object	Le MovableObject à partir duquel l'AnimatedObject est créé.
+		 *\param[in]	p_name		Le nom de l'instance du MovableObject.
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( MovableObject & p_object );
+		C3D_API AnimatedObjectSPtr AddObject( MovableObject & p_object, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the Mesh given as a parameter, adds it to the list.

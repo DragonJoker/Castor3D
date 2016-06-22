@@ -149,12 +149,12 @@ namespace Castor3D
 								auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 								auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-								if ( l_skeleton && !l_skeleton->GetAnimations().empty() )
+								if ( l_skeleton )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Skinning );
 								}
 
-								if ( l_mesh && !l_mesh->GetAnimations().empty() )
+								if ( l_mesh )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Morphing );
 								}

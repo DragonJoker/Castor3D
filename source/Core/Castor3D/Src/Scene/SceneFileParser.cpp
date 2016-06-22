@@ -534,16 +534,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_AnimatedObjectGroupAnimationStart, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ANIMGROUP, cuT( "}" ), Parser_AnimatedObjectGroupEnd );
 
-	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "looped" ), Parser_GroupAnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
-	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "scale" ), Parser_GroupAnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_ANIMGROUP_ANIMATION, cuT( "}" ), Parser_GroupAnimationEnd );
-
-	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "animation" ), Parser_AnimatedObjectAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "}" ), Parser_AnimatedObjectEnd );
-
 	AddParser( eSECTION_ANIMATION, cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_ANIMATION, cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
 	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
 
 	AddParser( eSECTION_SKYBOX, cuT( "left" ), Parser_SkyboxLeft, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
@@ -703,12 +695,12 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		l_return = cuT( "animated_object_group" );
 		break;
 
-	case eSECTION_ANIMATED_OBJECT:
-		l_return = cuT( "animated_object" );
-		break;
-
 	case eSECTION_ANIMATION:
 		l_return = cuT( "animation" );
+		break;
+
+	case eSECTION_SKYBOX:
+		l_return = cuT( "skybox" );
 		break;
 
 	default:

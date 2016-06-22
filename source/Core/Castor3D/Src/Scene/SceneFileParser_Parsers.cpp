@@ -32,6 +32,7 @@
 #include "Mesh/Subdivider.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Mesh/Skeleton/Skeleton.hpp"
 #include "Miscellaneous/PostEffect.hpp"
 #include "Overlay/BorderPanelOverlay.hpp"
 #include "Overlay/PanelOverlay.hpp"
@@ -3760,16 +3761,28 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 
 		if ( l_geometry )
 		{
-			l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( *l_geometry );
+			if ( !l_geometry->GetAnimations().empty() )
+			{
+				l_parsingContext->pAnimMovable = l_parsingContext->pAnimGroup->AddObject( *l_geometry, l_geometry->GetName() + cuT( "_Movable" ) );
+			}
 
 			if ( l_geometry->GetMesh() )
 			{
 				auto l_mesh = l_geometry->GetMesh();
-				l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
+
+				if ( !l_mesh->GetAnimations().empty() )
+				{
+					l_parsingContext->pAnimMesh = l_parsingContext->pAnimGroup->AddObject( *l_mesh, l_geometry->GetName() + cuT( "_Mesh" ) );
+				}
 
 				if ( l_mesh->GetSkeleton() )
 				{
-					l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
+					auto l_skeleton = l_mesh->GetSkeleton();
+
+					if ( !l_skeleton->GetAnimations().empty() )
+					{
+						l_parsingContext->pAnimSkeleton = l_parsingContext->pAnimGroup->AddObject( *l_mesh->GetSkeleton(), l_geometry->GetName() + cuT( "_Skeleton" ) );
+					}
 				}
 			}
 		}
@@ -3783,7 +3796,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 		PARSING_ERROR( cuT( "No animated object group not initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_ANIMATED_OBJECT )
+END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimation )
 {
@@ -3799,7 +3812,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimation )
 		PARSING_ERROR( cuT( "No animated object group initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_ANIMGROUP_ANIMATION )
+END_ATTRIBUTE_PUSH( eSECTION_ANIMATION )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimationStart )
 {
@@ -3833,7 +3846,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupEnd )
 }
 END_ATTRIBUTE_POP()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationLooped )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationLooped )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	bool l_value;
@@ -3850,7 +3863,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationLooped )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationScale )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	float l_value;
@@ -3867,140 +3880,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationScale )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimationEnd )
-{
-}
-END_ATTRIBUTE_POP()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectAnimation )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	String l_name;
-	p_params[0]->Get( l_name );
-	AnimatedObjectSPtr l_object;
-
-	if ( l_parsingContext->pAnimMovable )
-	{
-		l_object = l_parsingContext->pAnimMovable;
-	}
-	else if ( l_parsingContext->pAnimMesh )
-	{
-		l_object = l_parsingContext->pAnimMesh;
-	}
-	else if ( l_parsingContext->pAnimSkeleton )
-	{
-		l_object = l_parsingContext->pAnimSkeleton;
-	}
-
-	if ( l_object )
-	{
-		try
-		{
-			l_parsingContext->pAnimation = &l_object->GetAnimation( l_name );
-		}
-		catch ( Exception & p_exc )
-		{
-			PARSING_ERROR( p_exc.GetFullDescription() );
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animated object initialised" ) );
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_ANIMATION )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectEnd )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_parsingContext->pAnimMovable.reset();
-	l_parsingContext->pAnimMesh.reset();
-	l_parsingContext->pAnimSkeleton.reset();
-}
-END_ATTRIBUTE_POP()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationLooped )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	bool l_value;
-	p_params[0]->Get( l_value );
-
-	if ( l_parsingContext->pAnimation )
-	{
-		l_parsingContext->pAnimation->SetLooped( l_value );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	float l_value;
-	p_params[0]->Get( l_value );
-
-	if ( l_parsingContext->pAnimation )
-	{
-		l_parsingContext->pAnimation->SetScale( l_value );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationStart )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	AnimatedObjectSPtr l_object;
-
-	if ( l_parsingContext->pAnimMovable )
-	{
-		l_object = l_parsingContext->pAnimMovable;
-	}
-	else if ( l_parsingContext->pAnimMesh )
-	{
-		l_object = l_parsingContext->pAnimMesh;
-	}
-	else if ( l_parsingContext->pAnimSkeleton )
-	{
-		l_object = l_parsingContext->pAnimSkeleton;
-	}
-
-	if ( l_object )
-	{
-		if ( l_parsingContext->pAnimation )
-		{
-			l_object->StartAnimation( l_parsingContext->pAnimation->GetAnimation().GetName() );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "No animation initialised" ) );
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animated object initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationEnd )
 {
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_parsingContext->pAnimation )
-	{
-		l_parsingContext->pAnimation = nullptr;
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
 }
 END_ATTRIBUTE_POP()
 

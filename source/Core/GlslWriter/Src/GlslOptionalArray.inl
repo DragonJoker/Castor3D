@@ -30,7 +30,7 @@ namespace GLSL
 
 	template< typename TypeT >
 	Optional< Array< TypeT > >::Optional( Array< TypeT > const & p_other, bool p_enabled )
-		: Array< TypeT >( p_other, m_dimension )
+		: Array< TypeT >( p_other )
 		, m_enabled( p_enabled )
 	{
 	}
