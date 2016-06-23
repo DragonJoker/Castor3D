@@ -31,7 +31,7 @@ namespace GuiCommon
 	\~english
 	\brief		Scene exporter base class.
 	\~french
-	\brief		Classe de base pour les exporteurs de sc�ne.
+	\brief		Classe de base pour les exporteurs de scène.
 	*/
 	class SceneExporter
 	{
@@ -43,7 +43,7 @@ namespace GuiCommon
 		 *\param[in]	p_fileName	The exported file name.
 		 *\~french
 		 *\brief		Fonction d'export
-		 *\param[in]	p_scene		La sc�ne � exporter.
+		 *\param[in]	p_scene		La scène � exporter.
 		 *\param[in]	p_fileName	Le nom du fichier export�.
 		 */
 		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName ) = 0;
@@ -55,7 +55,7 @@ namespace GuiCommon
 	\~english
 	\brief		Scene exporter, to Wavefront OBJ files.
 	\~french
-	\brief		Classe d'exporteur de sc�ne, vers fichiers Wavefront OBJ.
+	\brief		Classe d'exporteur de scène, vers fichiers Wavefront OBJ.
 	*/
 	class ObjSceneExporter
 	{
@@ -76,7 +76,7 @@ namespace GuiCommon
 	\~english
 	\brief		Scene exporter, to Castor3D scene files.
 	\~french
-	\brief		Classe d'exporteur de sc�ne, vers fichiers de sc�ne Castor3D.
+	\brief		Classe d'exporteur de scène, vers fichiers de scène Castor3D.
 	*/
 	class CscnSceneExporter
 	{

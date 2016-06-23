@@ -674,6 +674,23 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves a vertex position from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\~french
+		 *\brief		Récupère la position d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 */
+		static void GetPosition( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto l_position = GetPosition( p_buffer );
+			p_coord[0] = l_position[0];
+			p_coord[1] = l_position[1];
+			p_coord[2] = l_position[2];
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
@@ -728,6 +745,25 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves a vertex normal from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la normale d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 *\return		La valeur
+		 */
+		static void GetNormal( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto l_normal = GetNormal( p_buffer );
+			p_coord[0] = l_normal[0];
+			p_coord[1] = l_normal[1];
+			p_coord[2] = l_normal[2];
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
@@ -763,6 +799,25 @@ namespace Castor3D
 		static Castor::Coords3r & GetTangent( void * p_buffer, Castor::Coords3r & p_coord )
 		{
 			return p_coord = GetTangent( p_buffer );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a vertex tangent from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la tangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 *\return		La valeur
+		 */
+		static void GetTangent( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto l_tangent = GetTangent( p_buffer );
+			p_coord[0] = l_tangent[0];
+			p_coord[1] = l_tangent[1];
+			p_coord[2] = l_tangent[2];
 		}
 		/**
 		 *\~english
@@ -836,6 +891,25 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves a vertex bitangent from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la bitangente d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 *\return		La valeur
+		 */
+		static void GetBitangent( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto l_bitangent = GetBitangent( p_buffer );
+			p_coord[0] = l_bitangent[0];
+			p_coord[1] = l_bitangent[1];
+			p_coord[2] = l_bitangent[2];
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
@@ -887,6 +961,25 @@ namespace Castor3D
 		static Castor::Point3r & GetTexCoord( void const * p_buffer, Castor::Point3r & p_coord )
 		{
 			return p_coord = GetTexCoord( p_buffer );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a vertex texture coordinates from a buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[out]	p_coord		Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère les coordonnées de texture d'un sommet à partir d'un tampon
+		 *\param[in]	p_buffer	Le tampon
+		 *\param[out]	p_coord		Reçoit la valeur
+		 *\return		La valeur
+		 */
+		static void GetTexCoord( void const * p_buffer, std::array< real, 3 > & p_coord )
+		{
+			auto l_texcoord = GetTexCoord( p_buffer );
+			p_coord[0] = l_texcoord[0];
+			p_coord[1] = l_texcoord[1];
+			p_coord[2] = l_texcoord[2];
 		}
 		/**
 		 *\~english
@@ -1612,6 +1705,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the group position
+		 *\param[in]	p_element	The group
+		 *\param[out]	p_point		Receives the coordinates
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du groupe
+		 *\param[in]	p_element	Le groupe
+		 *\param[out]	p_point		Reçoit les coordonnées
+		 *\return		La valeur
+		 */
+		static inline void GetPosition( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		{
+			GetPosition( p_element.const_ptr(), p_point );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the group normal
 		 *\param[in]	p_element	The group
 		 *\param[out]	p_coord		Receives the normal
@@ -1641,6 +1750,22 @@ namespace Castor3D
 		static inline Castor::Point3r & GetNormal( BufferElementGroup const & p_element, Castor::Point3r & p_point )
 		{
 			return GetNormal( p_element.const_ptr(), p_point );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the group normal
+		 *\param[in]	p_element	The group
+		 *\param[out]	p_point		Receives the normal
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la normale du groupe
+		 *\param[in]	p_element	Le groupe
+		 *\param[out]	p_point		Reçoit la normale
+		 *\return		La valeur
+		 */
+		static inline void GetNormal( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		{
+			GetNormal( p_element.const_ptr(), p_point );
 		}
 		/**
 		 *\~english
@@ -1676,6 +1801,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the group tangent
+		 *\param[in]	p_element	The group
+		 *\param[out]	p_point		Receives the tangent
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la tangente du groupe
+		 *\param[in]	p_element	Le groupe
+		 *\param[out]	p_point		Reçoit la tangente
+		 *\return		La valeur
+		 */
+		static inline void GetTangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		{
+			GetTangent( p_element.const_ptr(), p_point );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the group bitangent
 		 *\param[in]	p_element	The group
 		 *\param[out]	p_coord		Receives the bitangent
@@ -1708,6 +1849,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the group bitangent
+		 *\param[in]	p_element	The group
+		 *\param[out]	p_point		Receives the bitangent
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la bitangente du groupe
+		 *\param[in]	p_element	Le groupe
+		 *\param[out]	p_point		Reçoit la bitangente
+		 *\return		La valeur
+		 */
+		static inline void GetBitangent( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		{
+			GetBitangent( p_element.const_ptr(), p_point );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the group texture coordinates
 		 *\param[in]	p_element	The group
 		 *\param[out]	p_coord		Receives the texture coordinates
@@ -1737,6 +1894,22 @@ namespace Castor3D
 		static inline Castor::Point3r & GetTexCoord( BufferElementGroup const & p_element, Castor::Point3r & p_point )
 		{
 			return GetTexCoord( p_element.const_ptr(), p_point );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the group texture coordinates
+		 *\param[in]	p_element	The group
+		 *\param[out]	p_point		Receives the texture coordinates
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère les coordonnées de texture du groupe
+		 *\param[in]	p_element	Le groupe
+		 *\param[out]	p_point		Reçoit les coordonnées de texture
+		 *\return		La valeur
+		 */
+		static inline void GetTexCoord( BufferElementGroup const & p_element, std::array< real, 3 > & p_point )
+		{
+			GetTexCoord( p_element.const_ptr(), p_point );
 		}
 		/**
 		 *\~english

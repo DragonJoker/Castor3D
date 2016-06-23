@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -63,6 +63,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates the VAO.
 		 *\param[in]	p_vtx	The vertex buffer.
+		 *\param[in]	p_anm	The animation vertex buffer.
 		 *\param[in]	p_idx	The index buffer.
 		 *\param[in]	p_bones	The bones data buffer.
 		 *\param[in]	p_inst	The instances matrices buffer.
@@ -70,12 +71,13 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée le VAO.
 		 *\param[in]	p_vtx	Le tampon de sommets.
+		 *\param[in]	p_anm	Le tampon de sommets d'animation.
 		 *\param[in]	p_idx	Le tampon d'indices.
 		 *\param[in]	p_bones	Le tampon de données de bones.
 		 *\param[in]	p_inst	Le tampon de matrices d'instances.
 		 *\return		\p true si ça s'est bien passé.
 		 */
-		C3D_API bool Initialise( VertexBufferSPtr p_vtx, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst );
+		C3D_API bool Initialise( VertexBufferSPtr p_vtx, VertexBufferSPtr p_anm, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst );
 		/**
 		 *\~english
 		 *\brief		Destroys the VAO.
@@ -163,17 +165,26 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		//!\~english	The vertex buffer.
+		//!\\~french	Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer{ nullptr };
-		//!\~english The index buffer.	\~french Le tampon d'indices.
+		//!\~english	The animation vertex buffer.
+		//!\\~french	Le tampon de sommets d'animation.
+		VertexBufferSPtr m_animationBuffer{ nullptr };
+		//!\~english	The index buffer.
+		//!\\~french	Le tampon d'indices.
 		IndexBufferSPtr m_indexBuffer{ nullptr };
-		//!\~english The bones buffer.	\~french Le tampon de bones.
+		//!\~english	The bones buffer.
+		//!\\~french	Le tampon de bones.
 		VertexBufferSPtr m_bonesBuffer{ nullptr };
-		//!\~english The matrix buffer.	\~french Le tampon de matrices.
+		//!\~english	The matrix buffer.
+		//!\\~french	Le tampon de matrices.
 		VertexBufferSPtr m_matrixBuffer{ nullptr };
-		//!\~english The shader program.	\~french Le programme de rendu.
+		//!\~english	The shader program.
+		//!\\~french	Le programme de rendu.
 		ShaderProgram const & m_program;
-		//!\~english The buffers topology.	\~french La topologie des tampons.
+		//!\~english	The buffers topology.
+		//!\\~french	La topologie des tampons.
 		eTOPOLOGY m_topology;
 	};
 }

@@ -11,48 +11,8 @@ namespace Castor3D
 	{
 	}
 
-	Version::Version( Version const & p_version )
-		: m_iMajor( p_version.m_iMajor )
-		, m_iMinor( p_version.m_iMinor )
-		, m_iBuild( p_version.m_iBuild )
-	{
-	}
-
-	Version::Version( Version && p_version )
-		: m_iMajor( std::move( p_version.m_iMajor ) )
-		, m_iMinor( std::move( p_version.m_iMinor ) )
-		, m_iBuild( std::move( p_version.m_iBuild ) )
-	{
-		p_version.m_iMajor = 0;
-		p_version.m_iMinor = 0;
-		p_version.m_iBuild = 0;
-	}
-
 	Version::~Version()
 	{
-	}
-
-	Version & Version::operator=( Version const & p_version )
-	{
-		m_iMajor = p_version.m_iMajor;
-		m_iMinor = p_version.m_iMinor;
-		m_iBuild = p_version.m_iBuild;
-		return * this;
-	}
-
-	Version & Version::operator=( Version && p_version )
-	{
-		if ( this != & p_version )
-		{
-			m_iMajor = std::move( p_version.m_iMajor );
-			m_iMinor = std::move( p_version.m_iMinor );
-			m_iBuild = std::move( p_version.m_iBuild );
-			p_version.m_iMajor = 0;
-			p_version.m_iMinor = 0;
-			p_version.m_iBuild = 0;
-		}
-
-		return * this;
 	}
 
 	bool operator==( Version const & p_a, Version const & p_b )

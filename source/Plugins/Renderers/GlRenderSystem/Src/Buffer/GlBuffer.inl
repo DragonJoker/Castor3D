@@ -6,7 +6,7 @@ namespace GlRender
 	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer )
 		: Castor3D::GpuBuffer< T >( p_renderSystem )
 		, Holder( p_gl )
-		, m_pBuffer( p_buffer )
+		, m_buffer( p_buffer )
 		, m_glBuffer( p_gl, p_target )
 	{
 	}
@@ -38,16 +38,11 @@ namespace GlRender
 	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
 		bool l_return = true;
-		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
+		HardwareBufferPtr l_cpuBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->GetSize() )
+		if ( l_cpuBuffer && l_cpuBuffer->GetSize() )
 		{
-			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_type, p_nature );
-		}
-
-		if ( l_return )
-		{
-			l_pBuffer->Assign();
+			l_return = m_glBuffer.Initialise( &l_cpuBuffer->data()[0], l_cpuBuffer->GetSize(), p_type, p_nature );
 		}
 
 		return l_return;
@@ -56,15 +51,11 @@ namespace GlRender
 	template< typename T >
 	void GlBuffer< T >::DoCleanup()
 	{
-		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
+		HardwareBufferPtr l_cpuBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer )
+		if ( l_cpuBuffer )
 		{
-			if ( l_pBuffer->IsAssigned() )
-			{
-				m_glBuffer.Cleanup();
-				l_pBuffer->Unassign();
-			}
+			m_glBuffer.Cleanup();
 		}
 	}
 

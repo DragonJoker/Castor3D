@@ -83,13 +83,20 @@ namespace Castor3D
 		eCHUNK_TYPE_ANIMATION = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
 		eCHUNK_TYPE_ANIM_LENGTH = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ),
+		eCHUNK_TYPE_MESH_ANIMATION = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', 'A', 'N', 'I', 'M' ),
 		eCHUNK_TYPE_ANIM_INTERPOLATOR = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
-		eCHUNK_TYPE_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'O', 'B', 'J', 'T' ),
+		eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION_NODE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
 		eCHUNK_TYPE_SKELETON_ANIMATION_BONE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
 		eCHUNK_TYPE_MOVING_TRANSFORM = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
 		eCHUNK_TYPE_KEYFRAME_COUNT = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
 		eCHUNK_TYPE_KEYFRAMES = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
+		eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'I', 'D' ),
+		eCHUNK_TYPE_MESH_ANIMATION_SUBMESH = MAKE_CHUNK_ID( 'M', 'S', 'H', 'A', 'N', 'S', 'M', 'H' ),
+		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'B', 'F' ),
+		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER_SIZE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
+		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS_COUNT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
+		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
 	}	eCHUNK_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS

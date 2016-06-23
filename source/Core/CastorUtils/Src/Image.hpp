@@ -170,7 +170,7 @@ namespace Castor
 		template< ePIXEL_FORMAT PFSrc, ePIXEL_FORMAT PFDst >
 		Image( String const & p_name, Size const & p_size, uint8_t const * p_buffer = nullptr )
 			: Resource< Image > ( p_name )
-			, m_pBuffer( std::make_shared< PxBuffer< PFDst > >( p_size, p_buffer, PFSrc ) )
+			, m_buffer( std::make_shared< PxBuffer< PFDst > >( p_size, p_buffer, PFSrc ) )
 		{
 			CHECK_INVARIANTS();
 		}
@@ -295,8 +295,8 @@ namespace Castor
 		template< ePIXEL_FORMAT PF > Image & SetPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
 		{
 			CHECK_INVARIANTS();
-			REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height() );
-			ConvertPixel( PF, p_pixel.const_ptr(), GetPixelFormat(), m_pBuffer->get_at( x, y ) );
+			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
+			ConvertPixel( PF, p_pixel.const_ptr(), GetPixelFormat(), m_buffer->get_at( x, y ) );
 			CHECK_INVARIANTS();
 			return * this;
 		}
@@ -313,8 +313,8 @@ namespace Castor
 		template< ePIXEL_FORMAT PF > void GetPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
 		{
 			CHECK_INVARIANTS();
-			REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height() );
-			ConvertPixel( GetPixelFormat(), m_pBuffer->get_at( x, y ), PF, p_pixel.ptr() );
+			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
+			ConvertPixel( GetPixelFormat(), m_buffer->get_at( x, y ), PF, p_pixel.ptr() );
 			CHECK_INVARIANTS();
 		}
 		/**
@@ -405,7 +405,7 @@ namespace Castor
 		 */
 		inline Size const & GetDimensions()const
 		{
-			return m_pBuffer->dimensions();
+			return m_buffer->dimensions();
 		}
 		/**
 		 *\~english
@@ -417,7 +417,7 @@ namespace Castor
 		 */
 		inline std::size_t GetSize()const
 		{
-			return m_pBuffer->size();
+			return m_buffer->size();
 		}
 		/**
 		 *\~english
@@ -429,7 +429,7 @@ namespace Castor
 		 */
 		inline uint32_t GetWidth()const
 		{
-			return m_pBuffer->width();
+			return m_buffer->width();
 		}
 		/**
 		 *\~english
@@ -441,7 +441,7 @@ namespace Castor
 		 */
 		inline uint32_t GetHeight()const
 		{
-			return m_pBuffer->height();
+			return m_buffer->height();
 		}
 		/**
 		 *\~english
@@ -465,7 +465,7 @@ namespace Castor
 		 */
 		inline uint8_t * GetBuffer()
 		{
-			return m_pBuffer->ptr();
+			return m_buffer->ptr();
 		}
 		/**
 		 *\~english
@@ -477,7 +477,7 @@ namespace Castor
 		 */
 		inline uint8_t const * GetBuffer()const
 		{
-			return m_pBuffer->const_ptr();
+			return m_buffer->const_ptr();
 		}
 		/**
 		 *\~english
@@ -489,7 +489,7 @@ namespace Castor
 		 */
 		inline PxBufferBaseSPtr GetPixels()
 		{
-			return m_pBuffer;
+			return m_buffer;
 		}
 		/**
 		 *\~english
@@ -501,7 +501,7 @@ namespace Castor
 		 */
 		inline PxBufferBaseSPtr GetPixels()const
 		{
-			return m_pBuffer;
+			return m_buffer;
 		}
 		/**
 		 *\~english
@@ -513,12 +513,12 @@ namespace Castor
 		 */
 		inline ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return m_pBuffer->format();
+			return m_buffer->format();
 		}
 
 	private:
 		Path m_pathFile;
-		PxBufferBaseSPtr m_pBuffer;
+		PxBufferBaseSPtr m_buffer;
 	};
 }
 

@@ -55,6 +55,54 @@ namespace Castor3D
 		C3D_API ~AnimatedSkeleton();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API AnimatedSkeleton( AnimatedSkeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API AnimatedSkeleton( AnimatedSkeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API AnimatedSkeleton & operator=( AnimatedSkeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Fills a shader variable with this object's skeleton transforms.
+		 *\param[out]	p_variable	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
+		 *\param[out]	p_variable	Reçoit les transformations.
+		 */
+		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::Update
+		 */
+		C3D_API void Update( real p_tslf )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::IsPlayingAnimation
+		 */
+		C3D_API bool IsPlayingAnimation()const override
+		{
+			return !m_playingAnimations.empty();
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The skeleton
 		 *\~french
@@ -65,21 +113,42 @@ namespace Castor3D
 		{
 			return m_skeleton;
 		}
+		/**
+		 *\~english
+		 *\return		The currently animations for this object.
+		 *\~french
+		 *\return		Les animations en cours de lecture sur cet objet.
+		 */
+		inline SkeletonAnimationInstancePtrArray const & GetPlayingAnimations()const
+		{
+			return m_playingAnimations;
+		}
 
 	private:
 		/**
 		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name )override;
+		void DoAddAnimation( Castor::String const & p_name )override;
 		/**
-		 *\copydoc		Castor3D::AnimatedObject::DoFillShader
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
 		 */
-		void DoFillShader( Matrix4x4rFrameVariable & p_variable )override;
+		void DoStartAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoStopAnimation( AnimationInstanceSPtr p_animation )override;
+		/**
+		 *\copydoc		Castor3D::AnimatedObject::DoAddAnimation
+		 */
+		void DoClearAnimations()override;
 
 	protected:
 		//!\~english	The skeleton affected by the animations.
 		//!\~french		Le squelette affecté par les animations.
 		Skeleton & m_skeleton;
+		//!\~english	Currently playing animations.
+		//!\~french		Les animations en cours de lecture.
+		SkeletonAnimationInstancePtrArray m_playingAnimations;
 	};
 }
 

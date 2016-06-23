@@ -30,7 +30,10 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
-#include "Scene/Animation/AnimatedObject.hpp"
+#include "Scene/Animation/AnimatedMesh.hpp"
+#include "Scene/Animation/AnimatedSkeleton.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
+#include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -140,16 +143,27 @@ namespace Castor3D
 							for ( auto l_pass : *l_material )
 							{
 								ShaderProgramSPtr l_program;
-								uint32_t l_programFlags = l_submesh->GetProgramFlags() & ~ePROGRAM_FLAG_SKINNING;
-								auto l_animated = DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) );
+								uint32_t l_programFlags = l_submesh->GetProgramFlags();
+								RemFlag( l_programFlags, ProgramFlag::Skinning );
+								RemFlag( l_programFlags, ProgramFlag::Morphing );
+								auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
+								auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
-								if ( l_animated )
+								if ( l_skeleton )
 								{
-									l_programFlags |= ePROGRAM_FLAG_SKINNING;
+									AddFlag( l_programFlags, ProgramFlag::Skinning );
 								}
-								else if ( l_submesh->GetRefCount( l_material ) > 1 )
+
+								if ( l_mesh )
 								{
-									l_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
+									AddFlag( l_programFlags, ProgramFlag::Morphing );
+								}
+
+								if ( l_submesh->GetRefCount( l_material ) > 1
+									 && !l_mesh
+									 && !l_skeleton )
+								{
+									AddFlag( l_programFlags, ProgramFlag::Instantiation );
 								}
 
 								l_pass->PrepareTextures();
@@ -157,22 +171,17 @@ namespace Castor3D
 
 								auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 								auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
+								auto l_animationBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
 								Point4rFrameVariableSPtr l_pt4r;
 								Point3rFrameVariableSPtr l_pt3r;
 								OneFloatFrameVariableSPtr l_1f;
 
-								if ( CheckFlag( l_programFlags, ePROGRAM_FLAG_SKINNING ) )
+								if ( CheckFlag( l_programFlags, ProgramFlag::Skinning )
+									 || CheckFlag( l_programFlags, ProgramFlag::Morphing ) )
 								{
 									AnimatedGeometryRenderNode l_renderNode
 									{
-										*l_primitive.second,
-										*l_animated,
-										l_submesh->GetGeometryBuffers( *l_program ),
-										*l_submesh,
-										*l_sceneNode,
 										{
-											*l_sceneBuffer,
-											*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r ),
 											{
 												*l_pass,
 												*l_program,
@@ -184,8 +193,17 @@ namespace Castor3D
 												*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
 												*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
 												*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-											}
-										}
+											},
+											*l_sceneBuffer,
+											*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r )
+										},
+										*l_primitive.second,
+										l_submesh->GetGeometryBuffers( *l_program ),
+										*l_submesh,
+										*l_sceneNode,
+										l_skeleton.get(),
+										l_mesh.get(),
+										*l_animationBuffer
 									};
 
 									l_pass->BindToNode( l_renderNode.m_scene );
@@ -195,13 +213,7 @@ namespace Castor3D
 								{
 									StaticGeometryRenderNode l_renderNode
 									{
-										*l_primitive.second,
-										l_submesh->GetGeometryBuffers( *l_program ),
-										*l_submesh,
-										*l_sceneNode,
 										{
-											*l_sceneBuffer,
-											*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r ),
 											{
 												*l_pass,
 												*l_program,
@@ -213,13 +225,19 @@ namespace Castor3D
 												*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
 												*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
 												*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-											}
-										}
+											},
+											*l_sceneBuffer,
+											*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r )
+										},
+										*l_primitive.second,
+										l_submesh->GetGeometryBuffers( *l_program ),
+										*l_submesh,
+										*l_sceneNode
 									};
 
 									l_pass->BindToNode( l_renderNode.m_scene );
 
-									if ( CheckFlag( l_programFlags, ePROGRAM_FLAG_INSTANCIATION ) )
+									if ( CheckFlag( l_programFlags, ProgramFlag::Instantiation ) )
 									{
 										DoAddRenderNode( l_pass, l_program, l_submesh, l_renderNode, p_instanced );
 									}
@@ -255,17 +273,17 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderManager().GetBillboardProgram( l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
+							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderManager().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 
 							if ( !l_program )
 							{
 								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
-								p_scene.GetEngine()->GetShaderManager().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
+								p_scene.GetEngine()->GetShaderManager().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 							}
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 							auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
-							auto l_billboardBuffer = l_program->FindFrameVariableBuffer( cuT( "Billboard" ) );
+							auto l_billboardBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 							Point4rFrameVariableSPtr l_pt4r;
 							Point3rFrameVariableSPtr l_pt3r;
 							Point2iFrameVariableSPtr l_pt2i;
@@ -273,14 +291,7 @@ namespace Castor3D
 
 							BillboardRenderNode l_renderNode =
 							{
-								*l_billboard.second,
-								l_billboard.second->GetGeometryBuffers( *l_program ),
-								*l_sceneNode,
-								*l_billboardBuffer,
-								*l_billboardBuffer->GetVariable( cuT( "c3d_v2iDimensions" ), l_pt2i ),
 								{
-									*l_sceneBuffer,
-									*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r ),
 									{
 										*l_pass,
 										*l_program,
@@ -292,8 +303,15 @@ namespace Castor3D
 										*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
 										*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
 										*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-									}
-								}
+									},
+									*l_sceneBuffer,
+									*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r )
+								},
+								*l_billboard.second,
+								l_billboard.second->GetGeometryBuffers( *l_program ),
+								*l_sceneNode,
+								*l_billboardBuffer,
+								*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i )
 							};
 
 							l_pass->BindToNode( l_renderNode.m_scene );
@@ -567,12 +585,39 @@ namespace Castor3D
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
-		Matrix4x4rFrameVariableSPtr l_variable;
-		p_node.m_scene.m_node.m_matrixUbo.GetVariable( Pipeline::MtxBones, l_variable );
 
-		if ( l_variable )
+		if ( p_node.m_skeleton )
 		{
-			p_node.m_animated.FillShader( *l_variable );
+			Matrix4x4rFrameVariableSPtr l_variable;
+			p_node.m_animationUbo.GetVariable( ShaderProgram::Bones, l_variable );
+
+			if ( l_variable )
+			{
+				p_node.m_skeleton->FillShader( *l_variable );
+			}
+		}
+
+		if ( p_node.m_mesh )
+		{
+			OneFloatFrameVariableSPtr l_variable;
+			p_node.m_animationUbo.GetVariable( ShaderProgram::Time, l_variable );
+
+			if ( l_variable )
+			{
+				if ( p_node.m_mesh->IsPlayingAnimation() )
+				{
+					auto l_submesh = p_node.m_mesh->GetPlayingAnimation().GetAnimationSubmesh( p_node.m_submesh.GetId() );
+
+					if ( l_submesh )
+					{
+						l_submesh->FillShader( *l_variable );
+					}
+				}
+				else
+				{
+					l_variable->SetValue( 1.0f );
+				}
+			}
 		}
 
 		p_node.m_scene.m_node.m_pass.FillShaderVariables( p_node.m_scene.m_node );
@@ -659,7 +704,7 @@ namespace Castor3D
 			auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
 
 			if ( l_count > 1 && p_submesh.HasMatrixBuffer()
-				 && !CheckFlag( p_submesh.GetProgramFlags(), ePROGRAM_FLAG_SKINNING ) )
+				 && !CheckFlag( p_submesh.GetProgramFlags(), ProgramFlag::Skinning ) )
 			{
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );

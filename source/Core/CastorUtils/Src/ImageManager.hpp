@@ -80,17 +80,6 @@ namespace Castor
 		 *\param[in]	p_format	Le format de pixel voulu pour l'image.
 		 */
 		CU_API ImageSPtr create( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format );
-		/**
-		 *\~english
-		 *\brief		Retrieves a image.
-		 *\param[in]	p_name	The image name.
-		 *\return		The image, nullptr if not found.
-		 *\~french
-		 *\brief		Récupère une image.
-		 *\param[in]	p_name	Le nom de l'image.
-		 *\return		L'image, nullptr si non trouvée.
-		 */
-		CU_API ImageSPtr get( String const & p_name );
 
 	public:
 		using Collection< Image, String >::begin;
@@ -98,6 +87,8 @@ namespace Castor
 		using Collection< Image, String >::lock;
 		using Collection< Image, String >::unlock;
 		using Collection< Image, String >::clear;
+		using Collection< Image, String >::find;
+		using Collection< Image, String >::has;
 	};
 }
 

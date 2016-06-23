@@ -49,7 +49,7 @@ namespace Castor3D
 	{
 		auto l_configBuffer = m_program->FindFrameVariableBuffer( ToneMapping::HdrConfig );
 		REQUIRE( l_configBuffer != nullptr );
-		l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Gamma );
+		l_configBuffer->CreateVariable( *m_program, FrameVariableType::Float, Gamma );
 		l_configBuffer->GetVariable( Gamma, m_gammaVar );
 
 		String l_pxl;
@@ -57,7 +57,7 @@ namespace Castor3D
 			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config = l_writer.GetUbo( ToneMapping::HdrConfig );
+			Ubo l_config{ l_writer, ToneMapping::HdrConfig };
 			auto c3d_exposure = l_config.GetUniform< Float >( ToneMapping::Exposure );
 			auto c3d_gamma = l_config.GetUniform< Float >( Gamma );
 			l_config.End();

@@ -156,7 +156,7 @@ namespace Castor3D
 
 			if ( l_it != l_mesh->end() )
 			{
-				m_submeshesMaterials[p_submesh] = p_material;
+				m_submeshesMaterials[p_submesh.get()] = p_material;
 			}
 			else
 			{
@@ -172,11 +172,11 @@ namespace Castor3D
 	MaterialSPtr Geometry::GetMaterial( SubmeshSPtr p_submesh )const
 	{
 		MaterialSPtr l_return;
-		std::map< SubmeshSPtr, MaterialSPtr >::const_iterator l_it = m_submeshesMaterials.find( p_submesh );
+		auto l_it = m_submeshesMaterials.find( p_submesh.get() );
 
 		if ( l_it != m_submeshesMaterials.end() )
 		{
-			l_return = l_it->second;
+			l_return = l_it->second.lock();
 		}
 		else
 		{

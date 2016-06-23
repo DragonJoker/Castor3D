@@ -18,30 +18,19 @@ namespace Castor3D
 	{
 	}
 
-	AnimatedSkeleton :: ~AnimatedSkeleton()
+	AnimatedSkeleton::~AnimatedSkeleton()
 	{
 	}
 
-	AnimationInstanceSPtr AnimatedSkeleton::DoAddAnimation( String const & p_name )
+	void AnimatedSkeleton::Update( real p_tslf )
 	{
-		SkeletonAnimationInstanceSPtr l_instance;
-		auto l_it = m_animations.find( p_name );
-
-		if ( l_it == m_animations.end() )
+		for ( auto l_animation : m_playingAnimations )
 		{
-			auto l_animation = std::static_pointer_cast< SkeletonAnimation >( m_skeleton.GetAnimation( p_name ) );
-
-			if ( l_animation )
-			{
-				l_instance = std::make_shared< SkeletonAnimationInstance >( *this, *l_animation );
-				m_animations.insert( { p_name, l_instance } );
-			}
+			l_animation->Update( p_tslf );
 		}
-
-		return l_instance;
 	}
 
-	void AnimatedSkeleton::DoFillShader( Matrix4x4rFrameVariable & p_variable )
+	void AnimatedSkeleton::FillShader( Matrix4x4rFrameVariable & p_variable )
 	{
 		Skeleton & l_skeleton = m_skeleton;
 
@@ -62,7 +51,7 @@ namespace Castor3D
 
 				for ( auto l_animation : m_playingAnimations )
 				{
-					auto l_object = std::static_pointer_cast< SkeletonAnimationInstance >( l_animation )->GetObject( *l_bone );
+					auto l_object = l_animation->GetObject( *l_bone );
 
 					if ( l_object )
 					{
@@ -73,5 +62,32 @@ namespace Castor3D
 				p_variable.SetValue( l_final, i++ );
 			}
 		}
+	}
+
+	void AnimatedSkeleton::DoAddAnimation( String const & p_name )
+	{
+		auto l_it = m_animations.find( p_name );
+
+		if ( l_it == m_animations.end() )
+		{
+			auto & l_animation = static_cast< SkeletonAnimation const & >( m_skeleton.GetAnimation( p_name ) );
+			auto l_instance = std::make_shared< SkeletonAnimationInstance >( *this, l_animation );
+			m_animations.insert( { p_name, l_instance } );
+		}
+	}
+
+	void AnimatedSkeleton::DoStartAnimation( AnimationInstanceSPtr p_animation )
+	{
+		m_playingAnimations.push_back( std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) );
+	}
+
+	void AnimatedSkeleton::DoStopAnimation( AnimationInstanceSPtr p_animation )
+	{
+		m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), std::static_pointer_cast< SkeletonAnimationInstance >( p_animation ) ) );
+	}
+
+	void AnimatedSkeleton::DoClearAnimations()
+	{
+		m_playingAnimations.clear();
 	}
 }

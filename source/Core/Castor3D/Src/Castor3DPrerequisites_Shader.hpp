@@ -122,16 +122,18 @@ namespace Castor3D
 	\~french
 	\brief		Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
-	typedef enum ePROGRAM_FLAG
+	enum class ProgramFlag
 		: uint32_t
 	{
-		//!\~english Program using instanciation	\~french Programme utilisant l'instanciation
-		ePROGRAM_FLAG_INSTANCIATION = 0x01,
-		//!\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-		ePROGRAM_FLAG_SKINNING = 0x02,
-		//!\~english Program used by billboards	\~french Programme utilisé par des billboards
-		ePROGRAM_FLAG_BILLBOARDS = 0x04,
-	}	ePROGRAM_FLAG;
+		//!\~english Program using instanciation.	\~french Programme utilisant l'instanciation.
+		Instantiation = 0x01,
+		//!\~english Program using skeleton animations.	\~french Programme utilisant les animations par squelette.
+		Skinning = 0x02,
+		//!\~english Program used by billboards.	\~french Programme utilisé par des billboards.
+		Billboards = 0x04,
+		//!\~english Program using per-vertex animations.	\~french Programme utilisant les animations par sommet.
+		Morphing = 0x08,
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -139,41 +141,41 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des dimensions de variable supportées
 	*/
-	typedef enum eVARIABLE_TYPE
+	enum class VariableType
 		: uint8_t
 	{
 		//!\~english One variable	\~french Une variable
-		eVARIABLE_TYPE_ONE,
+		One,
 		//!\~english 1 variable array	\~french Tableau de 1 variable
-		eVARIABLE_TYPE_VEC1,
+		Vec1,
 		//!\~english 2 variables array	\~french Tableau de 2 variables
-		eVARIABLE_TYPE_VEC2,
+		Vec2,
 		//!\~english 3 variables array	\~french Tableau de 3 variables
-		eVARIABLE_TYPE_VEC3,
+		Vec3,
 		//!\~english 4 variables array	\~french Tableau de 4 variables
-		eVARIABLE_TYPE_VEC4,
+		Vec4,
 		//!\~english 1x1 matrix	\~french Matrice 1x1
-		eVARIABLE_TYPE_MAT1,
+		Mat1,
 		//!\~english 2x2 matrix	\~french Matrice 2x2
-		eVARIABLE_TYPE_MAT2X2,
+		Mat2x2,
 		//!\~english 2x3 matrix	\~french Matrice 2x3
-		eVARIABLE_TYPE_MAT2X3,
+		Mat2x3,
 		//!\~english 2x4 matrix	\~french Matrice 2x4
-		eVARIABLE_TYPE_MAT2X4,
+		Mat2x4,
 		//!\~english 3x2 matrix	\~french Matrice 3x2
-		eVARIABLE_TYPE_MAT3X2,
+		Mat3x2,
 		//!\~english 3x3 matrix	\~french Matrice 3x3
-		eVARIABLE_TYPE_MAT3X3,
+		Mat3x3,
 		//!\~english 3x4 matrix	\~french Matrice 3x4
-		eVARIABLE_TYPE_MAT3X4,
+		Mat3x4,
 		//!\~english 4x2 matrix	\~french Matrice 4x2
-		eVARIABLE_TYPE_MAT4X2,
+		Mat4x2,
 		//!\~english 4x3 matrix	\~french Matrice 4x3
-		eVARIABLE_TYPE_MAT4X3,
+		Mat4x3,
 		//!\~english 4x4 matrix	\~french Matrice 4x4
-		eVARIABLE_TYPE_MAT4X4,
-		CASTOR_ENUM_BOUNDS( eVARIABLE_TYPE, eVARIABLE_TYPE_ONE )
-	}	eVARIABLE_TYPE;
+		Mat4x4,
+		CASTOR_ENUM_CLASS_BOUNDS( One )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -181,107 +183,106 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types complets de variable supportées
 	*/
-	typedef enum eFRAME_VARIABLE_TYPE
+	enum class FrameVariableType
 		: uint8_t
 	{
-		eFRAME_VARIABLE_TYPE_BOOL,
-		eFRAME_VARIABLE_TYPE_INT,
-		eFRAME_VARIABLE_TYPE_UINT,
-		eFRAME_VARIABLE_TYPE_FLOAT,
-		eFRAME_VARIABLE_TYPE_DOUBLE,
-		eFRAME_VARIABLE_TYPE_SAMPLER,
-		eFRAME_VARIABLE_TYPE_VEC2B,
-		eFRAME_VARIABLE_TYPE_VEC3B,
-		eFRAME_VARIABLE_TYPE_VEC4B,
-		eFRAME_VARIABLE_TYPE_VEC2I,
-		eFRAME_VARIABLE_TYPE_VEC3I,
-		eFRAME_VARIABLE_TYPE_VEC4I,
-		eFRAME_VARIABLE_TYPE_VEC2UI,
-		eFRAME_VARIABLE_TYPE_VEC3UI,
-		eFRAME_VARIABLE_TYPE_VEC4UI,
-		eFRAME_VARIABLE_TYPE_VEC2F,
-		eFRAME_VARIABLE_TYPE_VEC3F,
-		eFRAME_VARIABLE_TYPE_VEC4F,
-		eFRAME_VARIABLE_TYPE_VEC2D,
-		eFRAME_VARIABLE_TYPE_VEC3D,
-		eFRAME_VARIABLE_TYPE_VEC4D,
-		eFRAME_VARIABLE_TYPE_MAT2X2B,
-		eFRAME_VARIABLE_TYPE_MAT2X3B,
-		eFRAME_VARIABLE_TYPE_MAT2X4B,
-		eFRAME_VARIABLE_TYPE_MAT3X2B,
-		eFRAME_VARIABLE_TYPE_MAT3X3B,
-		eFRAME_VARIABLE_TYPE_MAT3X4B,
-		eFRAME_VARIABLE_TYPE_MAT4X2B,
-		eFRAME_VARIABLE_TYPE_MAT4X3B,
-		eFRAME_VARIABLE_TYPE_MAT4X4B,
-		eFRAME_VARIABLE_TYPE_MAT2X2I,
-		eFRAME_VARIABLE_TYPE_MAT2X3I,
-		eFRAME_VARIABLE_TYPE_MAT2X4I,
-		eFRAME_VARIABLE_TYPE_MAT3X2I,
-		eFRAME_VARIABLE_TYPE_MAT3X3I,
-		eFRAME_VARIABLE_TYPE_MAT3X4I,
-		eFRAME_VARIABLE_TYPE_MAT4X2I,
-		eFRAME_VARIABLE_TYPE_MAT4X3I,
-		eFRAME_VARIABLE_TYPE_MAT4X4I,
-		eFRAME_VARIABLE_TYPE_MAT2X2UI,
-		eFRAME_VARIABLE_TYPE_MAT2X3UI,
-		eFRAME_VARIABLE_TYPE_MAT2X4UI,
-		eFRAME_VARIABLE_TYPE_MAT3X2UI,
-		eFRAME_VARIABLE_TYPE_MAT3X3UI,
-		eFRAME_VARIABLE_TYPE_MAT3X4UI,
-		eFRAME_VARIABLE_TYPE_MAT4X2UI,
-		eFRAME_VARIABLE_TYPE_MAT4X3UI,
-		eFRAME_VARIABLE_TYPE_MAT4X4UI,
-		eFRAME_VARIABLE_TYPE_MAT2X2F,
-		eFRAME_VARIABLE_TYPE_MAT2X3F,
-		eFRAME_VARIABLE_TYPE_MAT2X4F,
-		eFRAME_VARIABLE_TYPE_MAT3X2F,
-		eFRAME_VARIABLE_TYPE_MAT3X3F,
-		eFRAME_VARIABLE_TYPE_MAT3X4F,
-		eFRAME_VARIABLE_TYPE_MAT4X2F,
-		eFRAME_VARIABLE_TYPE_MAT4X3F,
-		eFRAME_VARIABLE_TYPE_MAT4X4F,
-		eFRAME_VARIABLE_TYPE_MAT2X2D,
-		eFRAME_VARIABLE_TYPE_MAT2X3D,
-		eFRAME_VARIABLE_TYPE_MAT2X4D,
-		eFRAME_VARIABLE_TYPE_MAT3X2D,
-		eFRAME_VARIABLE_TYPE_MAT3X3D,
-		eFRAME_VARIABLE_TYPE_MAT3X4D,
-		eFRAME_VARIABLE_TYPE_MAT4X2D,
-		eFRAME_VARIABLE_TYPE_MAT4X3D,
-		eFRAME_VARIABLE_TYPE_MAT4X4D,
-		CASTOR_ENUM_BOUNDS( eFRAME_VARIABLE_TYPE, eFRAME_VARIABLE_TYPE_BOOL )
-	}	eFRAME_VARIABLE_TYPE;
-
+		Bool,
+		Int,
+		UInt,
+		Float,
+		Double,
+		Sampler,
+		Vec2b,
+		Vec3b,
+		Vec4b,
+		Vec2i,
+		Vec3i,
+		Vec4i,
+		Vec2ui,
+		Vec3ui,
+		Vec4ui,
+		Vec2f,
+		Vec3f,
+		Vec4f,
+		Vec2d,
+		Vec3d,
+		Vec4d,
+		Mat2x2b,
+		Mat2x3b,
+		Mat2x4b,
+		Mat3x2b,
+		Mat3x3b,
+		Mat3x4b,
+		Mat4x2b,
+		Mat4x3b,
+		Mat4x4b,
+		Mat2x2i,
+		Mat2x3i,
+		Mat2x4i,
+		Mat3x2i,
+		Mat3x3i,
+		Mat3x4i,
+		Mat4x2i,
+		Mat4x3i,
+		Mat4x4i,
+		Mat2x2ui,
+		Mat2x3ui,
+		Mat2x4ui,
+		Mat3x2ui,
+		Mat3x3ui,
+		Mat3x4ui,
+		Mat4x2ui,
+		Mat4x3ui,
+		Mat4x4ui,
+		Mat2x2f,
+		Mat2x3f,
+		Mat2x4f,
+		Mat3x2f,
+		Mat3x3f,
+		Mat3x4f,
+		Mat4x2f,
+		Mat4x3f,
+		Mat4x4f,
+		Mat2x2d,
+		Mat2x3d,
+		Mat2x4d,
+		Mat3x2d,
+		Mat3x3d,
+		Mat3x4d,
+		Mat4x2d,
+		Mat4x3d,
+		Mat4x4d,
 #if CASTOR_USE_DOUBLE
-#	define eFRAME_VARIABLE_TYPE_REAL	eFRAME_VARIABLE_TYPE_DOUBLE
-#	define eFRAME_VARIABLE_TYPE_VEC2R	eFRAME_VARIABLE_TYPE_VEC2D
-#	define eFRAME_VARIABLE_TYPE_VEC3R	eFRAME_VARIABLE_TYPE_VEC3D
-#	define eFRAME_VARIABLE_TYPE_VEC4R	eFRAME_VARIABLE_TYPE_VEC4D
-#	define eFRAME_VARIABLE_TYPE_MAT2X2R	eFRAME_VARIABLE_TYPE_MAT2X2D
-#	define eFRAME_VARIABLE_TYPE_MAT2X3R	eFRAME_VARIABLE_TYPE_MAT2X3D
-#	define eFRAME_VARIABLE_TYPE_MAT2X4R	eFRAME_VARIABLE_TYPE_MAT2X4D
-#	define eFRAME_VARIABLE_TYPE_MAT3X2R	eFRAME_VARIABLE_TYPE_MAT3X2D
-#	define eFRAME_VARIABLE_TYPE_MAT3X3R	eFRAME_VARIABLE_TYPE_MAT3X3D
-#	define eFRAME_VARIABLE_TYPE_MAT3X4R	eFRAME_VARIABLE_TYPE_MAT3X4D
-#	define eFRAME_VARIABLE_TYPE_MAT4X2R	eFRAME_VARIABLE_TYPE_MAT4X2D
-#	define eFRAME_VARIABLE_TYPE_MAT4X3R	eFRAME_VARIABLE_TYPE_MAT4X3D
-#	define eFRAME_VARIABLE_TYPE_MAT4X4R	eFRAME_VARIABLE_TYPE_MAT4X4D
+		Real = Double,
+		Vec2r = Vec2d,
+		Vec3r = Vec3d,
+		Vec4r = Vec4d,
+		Mat2x2r = Mat2x2d,
+		Mat2x3r = Mat2x3d,
+		Mat2x4r = Mat2x4d,
+		Mat3x2r = Mat3x2d,
+		Mat3x3r = Mat3x3d,
+		Mat3x4r = Mat3x4d,
+		Mat4x2r = Mat4x2d,
+		Mat4x3r = Mat4x3d,
+		Mat4x4r = Mat4x4d,
 #else
-#	define eFRAME_VARIABLE_TYPE_REAL	eFRAME_VARIABLE_TYPE_FLOAT
-#	define eFRAME_VARIABLE_TYPE_VEC2R	eFRAME_VARIABLE_TYPE_VEC2F
-#	define eFRAME_VARIABLE_TYPE_VEC3R	eFRAME_VARIABLE_TYPE_VEC3F
-#	define eFRAME_VARIABLE_TYPE_VEC4R	eFRAME_VARIABLE_TYPE_VEC4F
-#	define eFRAME_VARIABLE_TYPE_MAT2X2R	eFRAME_VARIABLE_TYPE_MAT2X2F
-#	define eFRAME_VARIABLE_TYPE_MAT2X3R	eFRAME_VARIABLE_TYPE_MAT2X3F
-#	define eFRAME_VARIABLE_TYPE_MAT2X4R	eFRAME_VARIABLE_TYPE_MAT2X4F
-#	define eFRAME_VARIABLE_TYPE_MAT3X2R	eFRAME_VARIABLE_TYPE_MAT3X2F
-#	define eFRAME_VARIABLE_TYPE_MAT3X3R	eFRAME_VARIABLE_TYPE_MAT3X3F
-#	define eFRAME_VARIABLE_TYPE_MAT3X4R	eFRAME_VARIABLE_TYPE_MAT3X4F
-#	define eFRAME_VARIABLE_TYPE_MAT4X2R	eFRAME_VARIABLE_TYPE_MAT4X2F
-#	define eFRAME_VARIABLE_TYPE_MAT4X3R	eFRAME_VARIABLE_TYPE_MAT4X3F
-#	define eFRAME_VARIABLE_TYPE_MAT4X4R	eFRAME_VARIABLE_TYPE_MAT4X4F
+		Real = Float,
+		Vec2r = Vec2f,
+		Vec3r = Vec3f,
+		Vec4r = Vec4f,
+		Mat2x2r = Mat2x2f,
+		Mat2x3r = Mat2x3f,
+		Mat2x4r = Mat2x4f,
+		Mat3x2r = Mat3x2f,
+		Mat3x3r = Mat3x3f,
+		Mat3x4r = Mat3x4f,
+		Mat4x2r = Mat4x2f,
+		Mat4x3r = Mat4x3f,
+		Mat4x4r = Mat4x4f,
 #endif
+		CASTOR_ENUM_CLASS_BOUNDS( Bool )
+	};
 
 	class ShaderProgram;
 	class ShaderObject;
@@ -467,9 +468,50 @@ namespace Castor3D
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
-	DECLARE_MAP( eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
+	DECLARE_MAP (eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader);
 
 	//@}
+
+#define UBO_MATRIX( Writer )\
+	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
+	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxProjection );\
+	auto c3d_mtxModel = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxModel );\
+	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxView );\
+	auto c3d_mtxNormal = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxNormal );\
+	auto c3d_mtxTexture0 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[0] );\
+	auto c3d_mtxTexture1 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[1] );\
+	auto c3d_mtxTexture2 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[2] );\
+	auto c3d_mtxTexture3 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[3] );\
+	l_matrices.End()
+
+#define UBO_PASS( Writer )\
+	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
+	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
+	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
+	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
+	auto c3d_v4MatSpecular = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatSpecular );\
+	auto c3d_fMatShininess = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatShininess );\
+	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
+	l_pass.End()
+
+#define UBO_SCENE( Writer )\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
+	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
+	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	l_scene.End()
+
+#define UBO_BILLBOARD( Writer )\
+	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
+	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
+	l_billboard.End()
+
+#define UBO_ANIMATION( Writer, Flags )\
+	GLSL::Ubo l_animation{ l_writer, ShaderProgram::BufferAnimation };\
+	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::Skinning ) );\
+	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::Morphing ) );\
+	l_animation.End()
 }
 
 #endif

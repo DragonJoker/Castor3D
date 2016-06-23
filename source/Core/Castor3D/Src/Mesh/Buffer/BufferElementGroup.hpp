@@ -82,7 +82,7 @@ namespace Castor3D
 		 */
 		inline uint8_t * ptr()
 		{
-			return m_pBuffer;
+			return m_buffer;
 		}
 		/**
 		 *\~english
@@ -94,7 +94,7 @@ namespace Castor3D
 		 */
 		inline uint8_t const * const_ptr()const
 		{
-			return m_pBuffer;
+			return m_buffer;
 		}
 		/**
 		 *\~english
@@ -123,7 +123,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The elements values	\~french Les valeurs des éléments
-		uint8_t * m_pBuffer;
+		uint8_t * m_buffer;
 		//!\~english The group index	\~french L'indice du groupe
 		uint32_t m_index;
 	};

@@ -93,11 +93,11 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case AnimationObjectType::Node:
+			case SkeletonAnimationObjectType::Node:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
-			case AnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::Bone:
 				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}
@@ -182,7 +182,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & p_animation, AnimationObjectType p_type )
+	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & p_animation, SkeletonAnimationObjectType p_type )
 		: OwnedBy< SkeletonAnimation >{ p_animation }
 		, m_type{ p_type }
 	{

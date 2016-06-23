@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -26,6 +26,14 @@ namespace Castor
 	{
 		struct Backtrace
 		{
+			int const m_toCapture;
+			int const m_toSkip;
+
+			inline Backtrace( int p_toCapture = 20, int p_toSkip = 2 )
+				: m_toCapture{ p_toCapture }
+				, m_toSkip{ p_toSkip }
+			{
+			}
 		};
 		/**
 		 *\~english
@@ -63,7 +71,7 @@ namespace Castor
 			Backtraced()
 			{
 				std::stringstream l_callStack;
-				l_callStack << Castor::Debug::Backtrace();
+				l_callStack << Castor::Debug::Backtrace{};
 				m_callStack = l_callStack.str();
 			}
 

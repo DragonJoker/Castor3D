@@ -120,13 +120,19 @@ namespace Castor3D
 		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ePROGRAM_FLAG_SKINNING ) );
-		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ePROGRAM_FLAG_INSTANCIATION ) );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
+		Optional< Vec4 > position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		Optional< Vec3 > normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		Optional< Vec3 > tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		Optional< Vec3 > bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		Optional< Vec3 > texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 
 		UBO_MATRIX( l_writer );
+		UBO_ANIMATION( l_writer, p_programFlags );
 
 		// Outputs
 		auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
@@ -142,10 +148,11 @@ namespace Castor3D
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Texture, texture );
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
 			bool l_set = false;
 
-			if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxBoneTransform, c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
@@ -159,7 +166,17 @@ namespace Castor3D
 				l_set = true;
 			}
 
-			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
+			{
+				LOCALE_ASSIGN( l_writer, Float, l_time, Float( 1.0 ) - c3d_fTime );
+				l_v4Vertex = vec4( l_v4Vertex.SWIZZLE_XYZ * l_time + position2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Normal = vec4( l_v4Normal.SWIZZLE_XYZ * l_time + normal2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Tangent = vec4( l_v4Tangent.SWIZZLE_XYZ * l_time + tangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Bitangent = vec4( l_v4Bitangent.SWIZZLE_XYZ * l_time + bitangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
+			}
+
+			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
@@ -185,7 +202,7 @@ namespace Castor3D
 				}
 			}
 
-			vtx_texture = texture;
+			vtx_texture = l_v3Texture;
 			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).SWIZZLE_XYZ;
 			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).SWIZZLE_XYZ );
 			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).SWIZZLE_XYZ );
@@ -225,7 +242,8 @@ namespace Castor3D
 		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreateTextureVariables( *l_program, p_flags );
-		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
+		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
@@ -346,7 +364,6 @@ namespace Castor3D
 
 		String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
 
-		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
 		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
 		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
 		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );

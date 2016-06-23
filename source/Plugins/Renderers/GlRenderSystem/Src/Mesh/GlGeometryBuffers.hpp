@@ -96,6 +96,8 @@ namespace GlRender
 		Castor3D::ShaderProgram const & m_program;
 		//! The vertex attributes.
 		GlAttributePtrArray m_vertexAttributes;
+		//! The vertex animation attributes.
+		GlAttributePtrArray m_animationAttributes;
 		//! The instantiation matrix attribute.
 		GlAttributePtrArray m_matrixAttributes;
 		//! The bones data attributes.

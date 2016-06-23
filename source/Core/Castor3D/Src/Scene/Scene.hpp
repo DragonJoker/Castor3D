@@ -226,21 +226,6 @@ namespace Castor3D
 		C3D_API bool ImportExternal( Castor::Path const & p_fileName, Importer & p_importer );
 		/**
 		 *\~english
-		 *\brief		Mesh import Function.
-		 *\param[in]	p_fileName		The location of the file to import.
-		 *\param[in]	p_importer		The importer.
-		 *\param[in]	p_parameters	Import configuration parameters.
-		 *\return		The imported Mesh
-		 *\~french
-		 *\brief		Fonction d'import de Mesh.
-		 *\param[in]	p_fileName		Le chemin vers le fichier à importer.
-		 *\param[in]	p_importer		L'importeur.
-		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
-		 *\return		Le Mesh importé
-		 */
-		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters );
-		/**
-		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
 		 *\param[in]	p_scene	The scene to merge into this one
 		 *\~french

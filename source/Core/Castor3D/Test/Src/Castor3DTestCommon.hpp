@@ -231,12 +231,12 @@ namespace Testing
 	}
 
 	template<>
-	inline std::string to_string< Castor3D::AnimationObjectType >( Castor3D::AnimationObjectType const & p_value )
+	inline std::string to_string< Castor3D::SkeletonAnimationObjectType >( Castor3D::SkeletonAnimationObjectType const & p_value )
 	{
-		static std::map< Castor3D::AnimationObjectType, std::string > Names
+		static std::map< Castor3D::SkeletonAnimationObjectType, std::string > Names
 		{
-			{ Castor3D::AnimationObjectType::Bone, "Bone" },
-			{ Castor3D::AnimationObjectType::Node, "Node" },
+			{ Castor3D::SkeletonAnimationObjectType::Bone, "Bone" },
+			{ Castor3D::SkeletonAnimationObjectType::Node, "Node" },
 		};
 		return Names[p_value];
 	}

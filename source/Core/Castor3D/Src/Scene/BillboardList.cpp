@@ -184,7 +184,7 @@ namespace Castor3D
 
 			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
 			{
-				l_buffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
+				l_buffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			} ) );
 			m_geometryBuffers.push_back( l_buffers );
 		}

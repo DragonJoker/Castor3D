@@ -20,6 +20,15 @@ namespace Castor3D
 		: ObjectManager< Castor::String, Light >{ p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode }
 		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
+	}
+
+	LightManager::~LightManager()
+	{
+		m_lightsTexture.reset();
+	}
+
+	void LightManager::Initialise()
+	{
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 		l_texture->GetImage().SetSource( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
@@ -27,11 +36,6 @@ namespace Castor3D
 		m_lightsTexture->SetSampler( l_sampler );
 		m_lightsTexture->SetTexture( l_texture );
 		GetEngine()->PostEvent( MakeInitialiseEvent( *m_lightsTexture ) );
-	}
-
-	LightManager::~LightManager()
-	{
-		m_lightsTexture.reset();
 	}
 
 	void LightManager::Cleanup()
@@ -74,7 +78,7 @@ namespace Castor3D
 	void LightManager::BindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer )
 	{
 		GetEngine()->GetRenderSystem()->RenderAmbientLight( GetScene()->GetAmbientLight(), p_sceneBuffer );
-		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
 		Point4iFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
 

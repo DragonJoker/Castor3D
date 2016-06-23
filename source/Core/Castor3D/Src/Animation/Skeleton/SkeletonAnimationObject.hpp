@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_animation	L'animation parente.
 		 *\param[in]	p_type		Le type d'objet d'animation de squelette.
 		 */
-		C3D_API SkeletonAnimationObject( SkeletonAnimation & p_animation, AnimationObjectType p_type );
+		C3D_API SkeletonAnimationObject( SkeletonAnimation & p_animation, SkeletonAnimationObjectType p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline AnimationObjectType GetType()const
+		inline SkeletonAnimationObjectType GetType()const
 		{
 			return m_type;
 		}
@@ -234,7 +234,7 @@ namespace Castor3D
 		real m_length{ 0.0_r };
 		//!\~english	The moving thing type.
 		//!\~french		Le type du machin mouvant.
-		AnimationObjectType m_type;
+		SkeletonAnimationObjectType m_type;
 		//!\~english	The key frames.
 		//!\~french		Les keyframes.
 		KeyFrameArray m_keyframes;
@@ -266,7 +266,7 @@ namespace Castor3D
 	template<>
 	struct ChunkTyper< SkeletonAnimationObject >
 	{
-		static eCHUNK_TYPE const Value = eCHUNK_TYPE_ANIMATION_OBJECT;
+		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT;
 	};
 	/*!
 	\author		Sylvain DOREMUS
