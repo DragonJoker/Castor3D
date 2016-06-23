@@ -5,6 +5,7 @@
 
 #include "Miscellaneous/Parameter.hpp"
 #include "Render/Context.hpp"
+#include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"

@@ -115,8 +115,6 @@ namespace Castor3D
 	const String ShaderProgram::Weights0 = cuT( "weights0" );
 	const String ShaderProgram::Weights1 = cuT( "weights1" );
 	const String ShaderProgram::Transform = cuT( "transform" );
-	const String ShaderProgram::Time = cuT( "time" );
-	const String ShaderProgram::Count = cuT( "count" );
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
 	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
@@ -129,6 +127,9 @@ namespace Castor3D
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
+	const String ShaderProgram::Time = cuT ("c3d_fTime");
+	const String ShaderProgram::Bones = cuT ("c3d_mtxBones");
+	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
 	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
@@ -139,9 +140,12 @@ namespace Castor3D
 	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
+
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
-	const String ShaderProgram::BufferPass = cuT( "Pass" );
+	const String ShaderProgram::BufferPass = cuT ("Pass");
+	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
+	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
 
 	//*************************************************************************************************
 

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GLSL_EXPR_H___
 #define ___GLSL_EXPR_H___
 
-#include "GlslVariables.hpp"
+#include "GlslKeywords.hpp"
 
 namespace GLSL
 {

@@ -134,12 +134,6 @@ namespace Castor3D
 		//!\~english	Name of the instance transform attribute.
 		//!\~french		Nom de l'attribut de transformation d'instance.
 		C3D_API static const Castor::String Transform;
-		//!\~english	Name of the morphing times attribute.
-		//!\~french		Nom de l'attribut des temps d'animation par sommet.
-		C3D_API static const Castor::String Time;
-		//!\~english	Name of the morphing times count attribute.
-		//!\~french		Nom de l'attribut de compte des temps d'animation par sommet.
-		C3D_API static const Castor::String Count;
 
 		//@}
 		/**@name Scene */
@@ -188,6 +182,25 @@ namespace Castor3D
 		C3D_API static const Castor::String MapText;
 
 		//@}
+		/**@name Animation */
+		//@{
+
+		//!\~english	Name of the bones matrices attribute.
+		//!\~french		Nom de l'attribut de de matrices d'os.
+		C3D_API static const Castor::String Bones;
+		//!\~english	Name of the morphing time attribute.
+		//!\~french		Nom de l'attribut du temps d'animation par sommet.
+		C3D_API static const Castor::String Time;
+
+		//@}
+		/**@name Billboard */
+		//@{
+
+		//!\~english	Name of the billboard dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
+		C3D_API static const Castor::String Dimensions;
+
+		//@}
 		/**@name Textures */
 		//@{
 
@@ -232,6 +245,12 @@ namespace Castor3D
 		//!\~english	Name of the pass frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de passe.
 		C3D_API static const Castor::String BufferPass;
+		//!\~english	Name of the billboards frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de billboards.
+		C3D_API static const Castor::String BufferBillboards;
+		//!\~english	Name of the animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation.
+		C3D_API static const Castor::String BufferAnimation;
 
 		//@}
 

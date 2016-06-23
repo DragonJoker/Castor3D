@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -261,12 +261,11 @@ namespace Castor3D
 		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );
 
 	public:
-		static const Castor::String MtxProjection;
-		static const Castor::String MtxModel;
-		static const Castor::String MtxView;
-		static const Castor::String MtxNormal;
-		static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
-		static const Castor::String MtxBones;
+		C3D_API static const Castor::String MtxProjection;
+		C3D_API static const Castor::String MtxModel;
+		C3D_API static const Castor::String MtxView;
+		C3D_API static const Castor::String MtxNormal;
+		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
 	public:
 		//!\~english The identity matrix	\~french La matrice identité

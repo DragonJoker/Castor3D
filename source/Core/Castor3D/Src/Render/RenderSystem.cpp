@@ -130,9 +130,9 @@ namespace Castor3D
 		Optional< Vec3 > tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 		Optional< Vec3 > bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 		Optional< Vec3 > texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		Optional< Float > time = l_writer.GetUniform< Float >( ShaderProgram::Time, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 
 		UBO_MATRIX( l_writer );
+		UBO_ANIMATION( l_writer, p_programFlags );
 
 		// Outputs
 		auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
@@ -140,7 +140,6 @@ namespace Castor3D
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
 		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_time = l_writer.GetOutput< Float >( cuT( "vtx_time" ), CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		std::function< void() > l_main = [&]()
@@ -169,13 +168,12 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
 			{
-				LOCALE_ASSIGN( l_writer, Float, l_time, Float( 1.0 ) - time );
-				l_v4Vertex = vec4( l_v4Vertex.SWIZZLE_XYZ * l_time + position2.SWIZZLE_XYZ * time, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.SWIZZLE_XYZ * l_time + normal2.SWIZZLE_XYZ * time, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.SWIZZLE_XYZ * l_time + tangent2.SWIZZLE_XYZ * time, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.SWIZZLE_XYZ * l_time + bitangent2.SWIZZLE_XYZ * time, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - time ) + texture2 * time;
-				vtx_time = time;
+				LOCALE_ASSIGN( l_writer, Float, l_time, Float( 1.0 ) - c3d_fTime );
+				l_v4Vertex = vec4( l_v4Vertex.SWIZZLE_XYZ * l_time + position2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Normal = vec4( l_v4Normal.SWIZZLE_XYZ * l_time + normal2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Tangent = vec4( l_v4Tangent.SWIZZLE_XYZ * l_time + tangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Bitangent = vec4( l_v4Bitangent.SWIZZLE_XYZ * l_time + bitangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
@@ -244,7 +242,8 @@ namespace Castor3D
 		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreateTextureVariables( *l_program, p_flags );
-		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
+		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
@@ -365,7 +364,6 @@ namespace Castor3D
 
 		String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
 
-		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, cuT( "c3d_v2iDimensions" ) ) );
 		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
 		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
 		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
