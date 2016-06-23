@@ -172,6 +172,7 @@ namespace Obj
 			else if ( l_ident == "mtllib" )
 			{
 				l_mtlfile = l_line.substr( l_line.find_first_of( " " ) + 1 );
+				string::trim( l_mtlfile );
 			}
 		}
 
@@ -184,6 +185,10 @@ namespace Obj
 		if ( File::FileExists( m_filePath / l_mtlfile ) )
 		{
 			DoReadMaterials( p_scene, m_filePath / l_mtlfile );
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "Mtl file " ) + m_filePath / l_mtlfile + cuT( " doesn't exist" ) );
 		}
 
 		l_file.clear();
