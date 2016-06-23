@@ -58,10 +58,6 @@ namespace GLSL
 	struct Ubo
 	{
 		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
-		GlslWriter_API Ubo( Ubo && p_rhs );
-		GlslWriter_API Ubo( Ubo const & p_rhs ) = delete;
-		GlslWriter_API Ubo & operator=( Ubo && p_rhs ) = delete;
-		GlslWriter_API Ubo & operator=( Ubo const & p_rhs ) = delete;
 		GlslWriter_API void End();
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
