@@ -57,6 +57,15 @@ namespace GLSL
 		}
 	}
 
+	Ubo::Ubo( Ubo && p_rhs )
+		: m_writer( std::move( p_rhs.m_writer ) )
+		, m_stream( std::move( p_rhs.m_stream ) )
+		, m_block( std::move( p_rhs.m_block ) )
+		, m_name( std::move( p_rhs.m_name ) )
+		, m_count( std::move( p_rhs.m_count ) )
+	{
+	}
+
 	void Ubo::End()
 	{
 		delete m_block;

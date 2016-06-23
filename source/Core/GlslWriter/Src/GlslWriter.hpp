@@ -58,8 +58,8 @@ namespace GLSL
 	struct Ubo
 	{
 		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
-		GlslWriter_API Ubo( Ubo && p_rhs ) = default;
-		GlslWriter_API Ubo( Ubo const & p_rhs ) = default;
+		GlslWriter_API Ubo( Ubo && p_rhs );
+		GlslWriter_API Ubo( Ubo const & p_rhs ) = delete;
 		GlslWriter_API Ubo & operator=( Ubo && p_rhs ) = delete;
 		GlslWriter_API Ubo & operator=( Ubo const & p_rhs ) = delete;
 		GlslWriter_API void End();
