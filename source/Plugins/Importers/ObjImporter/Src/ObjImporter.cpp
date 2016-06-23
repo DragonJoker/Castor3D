@@ -97,19 +97,19 @@ namespace Obj
 		Point3f l_scale( 1, 1, 1 );
 		Point3f l_turbulence( 0, 0, 0 );
 		ImageSPtr l_pImage;
-		String l_strValue( p_strValue );
-		DoParseTexParams( l_strValue, l_offset.ptr(), l_scale.ptr(), l_turbulence.ptr() );
+		String l_value( p_strValue );
+		DoParseTexParams( l_value, l_offset.ptr(), l_scale.ptr(), l_turbulence.ptr() );
 		m_mapOffsets[p_pPass] = l_offset;
 		m_mapScales[p_pPass] = l_scale;
 		m_mapTurbulences[p_pPass] = l_turbulence;
-		Logger::LogDebug( StringStream() << cuT( "-	Texture :    " ) + l_strValue );
+		Logger::LogDebug( StringStream() << cuT( "-	Texture :    " ) + l_value );
 		Logger::LogDebug( StringStream() << cuT( "-	Offset :     " ) << l_offset );
 		Logger::LogDebug( StringStream() << cuT( "-	Scale :      " ) << l_scale );
 		Logger::LogDebug( StringStream() << cuT( "-	Turbulence : " ) << l_turbulence );
 
-		if ( !l_strValue.empty() )
+		if ( !l_value.empty() )
 		{
-			auto l_texture = LoadTexture( Path{ l_strValue }, *p_pPass, p_channel );
+			auto l_texture = LoadTexture( Path{ l_value }, *p_pPass, p_channel );
 
 			if ( l_texture )
 			{
@@ -120,396 +120,229 @@ namespace Obj
 
 	MeshSPtr ObjImporter::DoReadObjFile( Scene & p_scene )
 	{
-		String l_name = m_fileName.GetFileName();
-		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_return = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
-		String l_strSection;
-		String l_strValue;
-		String l_strLine;
-		String l_strFace;
-		StringArray l_arrayValues;
-		StringArray l_arrayIndex;
-		StringArray l_arraySplitted;
-		StringArray l_arrayFace;
-		MaterialSPtr l_pMaterial;
-		UvArray l_arrayAllTex;
-		NormalArray l_arrayAllNml;
-		VertexArray l_arrayAllVtx;
-		FaceArrayGrpMap::iterator l_itGroup;
-		FaceIndices l_face;
-		stVERTEX l_vertex;
-		stUV l_uv;
-		stNORMAL l_normal;
-		stGROUP * l_pGroup = NULL;
-		auto & l_mtlManager = p_scene.GetMaterialView();
-		FaceArray * l_pArrayIndex = NULL;
+		std::ifstream l_file( m_fileName.c_str() );
+		std::string l_line;
+		std::string l_mtlfile;
+		uint32_t l_nv = 0u;
+		uint32_t l_nvt = 0u;
+		uint32_t l_nvn = 0u;
+		uint32_t l_nf = 0u;
+		uint32_t l_ntf = 0u;
+		uint32_t l_ng = 0u;
+		std::vector< uint32_t > l_faces;
 
-		while ( m_pFile->IsOk() )
+		while ( std::getline( l_file, l_line ) )
 		{
-			m_pFile->ReadLine( l_strLine, 1000 );
+			string::trim( l_line );
+			std::stringstream l_stream{ l_line };
+			std::string l_ident;
+			l_stream >> l_ident;
 
-			if ( !l_strLine.empty() )
+			if ( l_ident == "v" )
 			{
-				l_arraySplitted = string::split( l_strLine, cuT( " " ), 1 );
-
-				if ( l_arraySplitted.size() >= 1 )
+				if ( l_ntf )
 				{
-					l_strSection = l_arraySplitted[0];
-
-					if ( l_arraySplitted.size() > 1 )
-					{
-						l_strValue = l_arraySplitted[1];
-					}
-					else
-					{
-						l_strValue.clear();
-					}
-
-					string::trim( l_strValue );
-					string::trim( l_strSection );
-
-					if ( l_strSection == cuT( "mtllib" ) )
-					{
-						// Material description file
-						if ( File::FileExists( m_filePath / l_strValue ) )
-						{
-							DoReadMaterials( p_scene, m_filePath / l_strValue );
-						}
-					}
-					else if ( l_strSection == cuT( "usemtl" ) )
-					{
-						// Material
-						l_pMaterial = l_mtlManager.Find( l_strValue );
-
-						if ( l_pGroup && l_pMaterial )
-						{
-							if ( !l_pGroup->m_mapVtxIndex.empty() )
-							{
-								DoCreateSubmesh( l_return, l_pGroup );
-								delete l_pGroup;
-								l_pGroup = new stGROUP;
-								l_pGroup->m_strName = cuT( "" );
-								l_itGroup = l_pGroup->m_mapIdx.find( l_pGroup->m_uiGroupId );
-								l_pArrayIndex = &( l_itGroup->second );
-							}
-
-							l_pGroup->m_pMaterial = l_pMaterial;
-						}
-					}
-					else if ( l_strSection == cuT( "group" ) || l_strSection == cuT( "g" ) )
-					{
-						// Submesh
-						if ( l_strValue.empty() )
-						{
-							l_strValue = cuT( "(null)" );
-						}
-
-						if ( l_pGroup )
-						{
-							DoCreateSubmesh( l_return, l_pGroup );
-							delete l_pGroup;
-							l_pGroup = NULL;
-						}
-
-						// We create the group then put the group arrays into it
-						l_pGroup = new stGROUP;
-						l_pGroup->m_strName = l_strValue;
-						l_pGroup->m_pMaterial = l_pMaterial;
-						l_itGroup = l_pGroup->m_mapIdx.find( l_pGroup->m_uiGroupId );
-						l_pArrayIndex = &( l_itGroup->second );
-					}
-					else if ( l_strSection == cuT( "v" ) )
-					{
-						// Vertex position
-						StringStream l_stream( l_strValue );
-						l_stream >> l_vertex.m_val[0] >> l_vertex.m_val[1] >> l_vertex.m_val[2];
-						l_arrayAllVtx.push_back( l_vertex );
-					}
-					else if ( l_strSection == cuT( "vt" ) )
-					{
-						// Vertex UV
-						StringStream l_stream( l_strValue );
-						l_stream >> l_uv.m_val[0] >> l_uv.m_val[1];
-						l_arrayAllTex.push_back( l_uv );
-					}
-					else if ( l_strSection == cuT( "vn" ) )
-					{
-						// Vertex Normal
-						StringStream l_stream( l_strValue );
-						l_stream >> l_normal.m_val[0] >> l_normal.m_val[1] >> l_normal.m_val[2];
-						l_arrayAllNml.push_back( l_normal );
-					}
-					else if ( l_strSection == cuT( "s" ) )
-					{
-						// Smoothing Group
-						if ( !l_pGroup )
-						{
-							l_pGroup = new stGROUP;
-							l_pGroup->m_pMaterial = l_pMaterial;
-							l_itGroup = l_pGroup->m_mapIdx.find( l_pGroup->m_uiGroupId );
-							l_pArrayIndex = &( l_itGroup->second );
-						}
-					}
-					else if ( l_strSection == cuT( "f" ) )
-					{
-						// Face indices
-						if ( !l_pGroup )
-						{
-							l_pGroup = new stGROUP;
-							l_pGroup->m_pMaterial = l_pMaterial;
-							l_itGroup = l_pGroup->m_mapIdx.find( l_pGroup->m_uiGroupId );
-							l_pArrayIndex = &( l_itGroup->second );
-						}
-
-						String l_strName = string::lower_case( l_pGroup->m_strName );
-
-						if ( l_strName.find( cuT( "gundummy" ) ) == String::npos && l_strName.find( cuT( "bip01" ) ) == String::npos && l_strName.find( cuT( "fcfx_" ) ) == String::npos && l_strName.find( cuT( "bbone_" ) ) == String::npos )
-						{
-							l_arrayFace = string::split( l_strValue, cuT( " " ) );
-							uint32_t l_uiV1, l_uiV2, l_uiV3;
-
-							if ( l_arrayFace.size() == 3 )
-							{
-								// Face represented by 3 vertices
-								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[1], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								FaceIndices l_indices = { l_uiV1, l_uiV2, l_uiV3 };
-								l_pGroup->m_arrayFaces.push_back( l_indices );
-								l_pArrayIndex->push_back( l_face );
-							}
-							else if ( l_arrayFace.size() == 4 )
-							{
-								// Face represented by 4 vertices
-								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[1], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								FaceIndices l_indices1 = { l_uiV1, l_uiV2, l_uiV3 };
-								l_pGroup->m_arrayFaces.push_back( l_indices1 );
-								l_pArrayIndex->push_back( l_face );
-								l_uiV1 = DoTreatFace( l_face, 0, l_arrayFace[0], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV2 = DoTreatFace( l_face, 1, l_arrayFace[3], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								l_uiV3 = DoTreatFace( l_face, 2, l_arrayFace[2], l_pGroup, l_arrayAllVtx, l_arrayAllNml, l_arrayAllTex );
-								FaceIndices l_indices2 = { l_uiV1, l_uiV2, l_uiV3 };
-								l_pGroup->m_arrayFaces.push_back( l_indices2 );
-								l_pArrayIndex->push_back( l_face );
-							}
-						}
-					}
+					l_faces.push_back( l_ntf );
+					l_ntf = 0u;
 				}
+
+				++l_nv;
+			}
+			else if ( l_ident == "vt" )
+			{
+				++l_nvt;
+			}
+			else if ( l_ident == "vn" )
+			{
+				++l_nvn;
+			}
+			else if ( l_ident == "f" )
+			{
+				++l_nf;
+				++l_ntf;
+			}
+			else if ( l_ident == "g" || l_ident == "usemtl" )
+			{
+				if ( l_ntf )
+				{
+					l_faces.push_back( l_ntf );
+					l_ntf = 0u;
+				}
+			}
+			else if ( l_ident == "mtllib" )
+			{
+				l_mtlfile = l_line.substr( l_line.find_first_of( " " ) + 1 );
 			}
 		}
 
-		if ( l_pGroup )
+		if ( l_ntf )
 		{
-			DoCreateSubmesh( l_return, l_pGroup );
-			delete l_pGroup;
-			l_pGroup = NULL;
+			l_faces.push_back( l_ntf );
 		}
 
-		clear_container( l_arrayAllVtx );
-		clear_container( l_arrayAllNml );
-		clear_container( l_arrayAllTex );
-		Logger::LogDebug( cuT( "LastLine : " ) + l_strSection + cuT( " " ) + l_strValue );
+		// Material description file
+		if ( File::FileExists( m_filePath / l_mtlfile ) )
+		{
+			DoReadMaterials( p_scene, m_filePath / l_mtlfile );
+		}
+
+		l_file.clear();
+		l_file.seekg( 0, std::ios::beg );
+
+		Point3rArray l_allvtx( l_nv );
+		Point2rArray l_alltex( l_nvt );
+		Point3rArray l_allnml( l_nvn );
+		Point3rArray::iterator l_vtxit = l_allvtx.begin();
+		Point2rArray::iterator l_texit = l_alltex.begin();
+		Point3rArray::iterator l_nmlit = l_allnml.begin();
+
+		std::cout << "    Vertex count: " << l_nv << std::endl;
+		std::cout << "    TexCoord count: " << l_nvt << std::endl;
+		std::cout << "    Normal count: " << l_nvn << std::endl;
+		std::cout << "    Group count: " << l_faces.size() << std::endl;
+
+		while ( std::getline( l_file, l_line ) )
+		{
+			string::trim( l_line );
+			std::stringstream l_stream( l_line );
+			std::string l_ident;
+			l_stream >> l_ident;
+
+			if ( l_ident == "v" )
+			{
+				l_stream >> ( *l_vtxit )[0] >> ( *l_vtxit )[1] >> ( *l_vtxit )[2];
+				++l_vtxit;
+			}
+			else if ( l_ident == "vt" )
+			{
+				l_stream >> ( *l_texit )[0] >> ( *l_texit )[1];
+				++l_texit;
+			}
+			else if ( l_ident == "vn" )
+			{
+				l_stream >> ( *l_nmlit )[0] >> ( *l_nmlit )[1] >> ( *l_nmlit )[2];
+				++l_nmlit;
+			}
+		}
+
+		l_file.clear();
+		l_file.seekg( 0, std::ios::beg );
+
+		InterleavedVertexArray l_vertex{ l_nf * 3 };
+		std::vector< FaceIndices > l_index{ l_nf };
+		auto l_vit = l_vertex.begin();
+		auto l_fit = l_index.begin();
+		auto l_facesit = l_faces.end();
+		uint32_t i{ 0u };
+		std::string l_mtlname;
+		MeshSPtr l_return = p_scene.GetMeshManager().Create( m_fileName.GetFileName(), eMESH_TYPE_CUSTOM );
+
+		while ( std::getline( l_file, l_line ) )
+		{
+			string::trim( l_line );
+			std::stringstream l_stream( l_line );
+			std::string l_ident;
+			l_stream >> l_ident;
+
+			if ( l_ident == "g" )
+			{
+				if ( l_facesit == l_faces.end() )
+				{
+					l_facesit = l_faces.begin();
+				}
+				else
+				{
+					DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+					l_vit = l_vertex.begin();
+					l_fit = l_index.begin();
+					i = 0u;
+					++l_facesit;
+				}
+
+				std::cout << "    Group faces count: " << *l_facesit << std::endl;
+			}
+			else if ( l_ident == "usemtl" )
+			{
+				if ( l_vertex.begin() != l_vit )
+				{
+					DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+					l_vit = l_vertex.begin();
+					l_fit = l_index.begin();
+					i = 0u;
+					++l_facesit;
+				}
+
+				l_stream >> l_mtlname;
+			}
+			else if ( l_ident == "f" )
+			{
+				for ( uint32_t i = 0u; i < 3u; i++ )
+				{
+					std::string l_face;
+					l_stream >> l_face;
+
+					size_t l_index1 = l_face.find( '/' );
+					std::string l_component = l_face.substr( 0, l_index1 );
+					uint32_t l_iv = std::stoi( l_component ) - 1;
+					l_vit->m_pos[0] = l_allvtx[l_iv][0];
+					l_vit->m_pos[1] = l_allvtx[l_iv][1];
+					l_vit->m_pos[2] = l_allvtx[l_iv][2];
+
+					++l_index1;
+					size_t l_index2 = l_face.find( '/', l_index1 );
+					l_component = l_face.substr( l_index1, l_index2 - l_index1 );
+
+					if ( !l_component.empty() )
+					{
+						uint32_t l_ivt = std::stoi( l_component ) - 1;
+						l_vit->m_tex[0] = l_alltex[l_ivt][0];
+						l_vit->m_tex[1] = l_alltex[l_ivt][1];
+					}
+
+					++l_index2;
+					l_component = l_face.substr( l_index2 );
+
+					if ( !l_component.empty() )
+					{
+						uint32_t l_ivn = std::stoi( l_component ) - 1;
+						l_vit->m_nml[0] = l_allnml[l_ivn][0];
+						l_vit->m_nml[1] = l_allnml[l_ivn][1];
+						l_vit->m_nml[2] = l_allnml[l_ivn][2];
+					}
+
+					++l_vit;
+				}
+
+				l_fit->m_index[0] = i++;
+				l_fit->m_index[1] = i++;
+				l_fit->m_index[2] = i++;
+				++l_fit;
+			}
+		}
+
+		if ( l_vit != l_vertex.begin()
+			 && l_fit != l_index.begin() )
+		{
+			DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+		}
+
 		return l_return;
 	}
 
-	uint32_t ObjImporter::DoRetrieveIndex( String & p_strIndex, uint32_t p_uiSize )
+	void ObjImporter::DoCreateSubmesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex )
 	{
-		string::trim( p_strIndex );
-		int l_iIndex = string::to_int( p_strIndex );
-		uint32_t l_uiReturn;
-
-		if ( l_iIndex < 0 )
-		{
-			l_uiReturn = uint32_t( p_uiSize ) + l_iIndex;
-		}
-		else
-		{
-			l_uiReturn = uint32_t( l_iIndex ) - 1;
-		}
-
-		return l_uiReturn;
-	}
-
-	uint32_t ObjImporter::DoTreatFace( FaceIndices & p_face, uint32_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
-	{
-		//	VertexSPtr l_return;
-		String l_strFace( p_strFace );
-		StringArray l_arrayIndex;
-		uint32_t l_uiIndex = 0;
-		UIntUIntMap::iterator l_it;
-		string::replace( l_strFace, cuT( "//" ), cuT( "/ /" ) );
-		l_arrayIndex = string::split( l_strFace, cuT( "/" ) );
-
-		if ( l_arrayIndex.size() > 0 )
-		{
-			// Face description seems to contain at least positions
-			l_uiIndex = DoRetrieveIndex( l_arrayIndex[0], uint32_t( p_arrayVtx.size() ) );
-			l_it = p_pGroup->m_mapVtxIndex.find( l_uiIndex );
-
-			if ( l_it == p_pGroup->m_mapVtxIndex.end() )
-			{
-				// Vertex hasn't been inserted yet, so we insert it, to have good index, relative to the group's vertex
-				p_pGroup->m_mapVtxIndex.insert( std::make_pair( l_uiIndex, uint32_t( p_pGroup->m_arrayVtx.size() ) ) );
-				p_pGroup->m_arrayVtx.push_back( p_arrayVtx[l_uiIndex] );
-				l_it = p_pGroup->m_mapVtxIndex.find( l_uiIndex );
-			}
-
-			p_face.m_index[p_uiIndex] = l_it->second;
-			p_pGroup->m_arraySubVtx.push_back( p_arrayVtx[l_uiIndex] );
-			//l_return = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
-
-			if ( l_arrayIndex.size() >= 2 )
-			{
-				// It seems there are more than only vertex index
-				string::trim( l_arrayIndex[1] );
-
-				if ( !l_arrayIndex[1].empty() )
-				{
-					// We treat texture coordinates
-					l_uiIndex = DoRetrieveIndex( l_arrayIndex[1], uint32_t( p_arrayTex.size() ) );
-					p_pGroup->m_arrayTex.push_back( p_arrayTex[l_uiIndex] );
-					//l_return->SetTexCoord( p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1] );
-					stUVW l_uvw = { p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1], 0.0 };
-					p_pGroup->m_arraySubTex.push_back( l_uvw );
-				}
-
-				if ( l_arrayIndex.size() >= 3 )
-				{
-					p_pGroup->m_bHasNormals = true;
-					// It seems there are normals index
-					string::trim( l_arrayIndex[2] );
-
-					if ( !l_arrayIndex[2].empty() )
-					{
-						// We treat the found normal
-						l_uiIndex = DoRetrieveIndex( l_arrayIndex[2], uint32_t( p_arrayNml.size() ) );
-						p_pGroup->m_arrayNml.push_back( p_arrayNml[l_uiIndex] );
-						//l_return->SetNormal( p_arrayNml[l_uiIndex].m_val[0], p_arrayNml[l_uiIndex].m_val[1], p_arrayNml[l_uiIndex].m_val[2] );
-						p_pGroup->m_arraySubNml.push_back( p_arrayNml[l_uiIndex] );
-					}
-				}
-			}
-
-			l_uiIndex = uint32_t( p_pGroup->m_arraySubVtx.size() ) - 1;
-		}
-
-		//	return l_return;
-		return l_uiIndex;
-	}
-
-	void ObjImporter::DoCreateSubmesh( Castor3D::MeshSPtr p_pMesh, stGROUP * p_pGroup )
-	{
-		if ( m_pThread )
-		{
-			m_pThread->join();
-			m_pThread.reset();
-		}
-
-		if ( p_pGroup )
-		{
-			if ( p_pGroup->m_arraySubVtx.size() )
-			{
-				String l_strName = string::lower_case( p_pGroup->m_strName );
-
-				if ( l_strName.find( cuT( "gundummy" ) ) == String::npos && l_strName.find( cuT( "bip01" ) ) == String::npos && l_strName.find( cuT( "fcfx_" ) ) == String::npos && l_strName.find( cuT( "bbone_" ) ) == String::npos && p_pGroup->m_arrayVtx.size() )
-				{
-					if ( p_pGroup->m_pMaterial )
-					{
-						struct stTHREAD_CONTEXT
-						{
-							String m_strName;
-							SubmeshSPtr m_pSubmesh;
-							MaterialSPtr m_pMaterial;
-							VertexArray m_arrayVtx;
-							NormalArray m_arrayNml;
-							UvwArray m_arrayUvw;
-							FaceArray m_arrayFaces;
-						};
-						stTHREAD_CONTEXT l_context
-						{
-							l_strName,
-							p_pMesh->CreateSubmesh(),
-							p_pGroup->m_pMaterial,
-							std::move( p_pGroup->m_arraySubVtx ),
-							std::move( p_pGroup->m_arraySubNml ),
-							std::move( p_pGroup->m_arraySubTex ),
-							std::move( p_pGroup->m_arrayFaces )
-						};
-						m_pThread = std::make_shared< std::thread >( [this]( stTHREAD_CONTEXT p_context )
-						{
-							Point3f l_ptOffset;
-							Point3f l_ptScale;
-							Point3f l_ptTurb;
-							Point3f l_ptDefaultOffset( 0, 0, 0 );
-							Point3f l_ptDefaultScale( 1, 1, 1 );
-							Point3f l_ptDefaultTurb( 0, 0, 0 );
-							String l_strName;
-							VertexSPtr l_pVertex;
-							Point2r l_ptTex;
-							Coords3r l_ptNml;
-							Coords3r l_ptTan;
-							Logger::LogDebug( cuT( "Submesh :         " ) + p_context.m_strName );
-							Logger::LogDebug( cuT( "-	Vertices :    " ) + string::to_string( uint32_t( p_context.m_arrayVtx.size() ) ) );
-							Logger::LogDebug( cuT( "-	Material :    " ) + p_context.m_pMaterial->GetName() );
-							// Valid because for each pass of each material we have an entry in those 3 maps
-							p_context.m_pSubmesh->SetDefaultMaterial( p_context.m_pMaterial );
-							l_ptOffset = m_mapOffsets[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptScale = m_mapScales[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptTurb = m_mapTurbulences[p_context.m_pMaterial->GetPass( 0 )];
-							std::vector< Castor3D::InterleavedVertex > l_submesh{ p_context.m_arrayVtx.size() };
-
-							for ( auto & l_vertex : l_submesh )
-							{
-								std::memcpy( l_vertex.m_pos.data(), p_context.m_arrayVtx[0].m_val, sizeof( l_vertex.m_pos ) );
-
-								if ( p_context.m_arrayUvw.size() == p_context.m_arrayVtx.size() )
-								{
-									// if texture coordinates are available, we apply modifiers
-									for ( UvwArray::iterator l_it = p_context.m_arrayUvw.begin() ; l_it != p_context.m_arrayUvw.end() ; ++l_it )
-									{
-										l_it->m_val[0] = ( l_it->m_val[0] + l_ptOffset[0] ) * l_ptScale[0];
-										l_it->m_val[1] = ( l_it->m_val[1] + l_ptOffset[1] ) * l_ptScale[1];
-										l_it->m_val[2] = ( l_it->m_val[2] + l_ptOffset[2] ) * l_ptScale[2];
-									}
-
-									std::memcpy( l_vertex.m_tex.data(), p_context.m_arrayUvw[0].m_val, sizeof( l_vertex.m_tex ) );
-								}
-
-								if ( p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
-								{
-									std::memcpy( l_vertex.m_nml.data(), p_context.m_arrayNml[0].m_val, sizeof( l_vertex.m_nml ) );
-								}
-							}
-
-							p_context.m_pSubmesh->AddPoints( l_submesh );
-							p_context.m_pSubmesh->AddFaceGroup( p_context.m_arrayFaces );
-
-							if ( !p_context.m_arrayNml.empty() && p_context.m_arrayNml.size() == p_context.m_arrayVtx.size() )
-							{
-								p_context.m_pSubmesh->ComputeTangentsFromNormals();
-							}
-							else
-							{
-								p_context.m_pSubmesh->ComputeNormals();
-							}
-						}, l_context );
-						p_pGroup->m_arraySubVtx.clear();
-						p_pGroup->m_arraySubNml.clear();
-						p_pGroup->m_arraySubTex.clear();
-						p_pGroup->m_arrayFaces.clear();
-					}
-				}
-			}
-		}
+		auto l_submesh = p_mesh.CreateSubmesh();
+		l_submesh->SetDefaultMaterial( p_scene.GetMaterialView().Find( p_mtlName ) );
+		l_submesh->AddPoints( p_vertex );
+		l_submesh->AddFaceGroup( p_faces );
+		l_submesh->ComputeTangentsFromNormals();
 	}
 
 	void ObjImporter::DoParseTexParams( String & p_strValue, float * p_offset, float * p_scale, float * p_turb )
 	{
 		String l_strSrc( p_strValue );
 		String l_strParam;
-		String l_strValue;
+		String l_value;
 		bool l_bParam = false;
 		bool l_bValue = false;
 		xchar l_char;
@@ -541,7 +374,7 @@ namespace Obj
 					// On est sur un espace, on vérifie le caractère suivant pour savoir, en fonction du param si c'est une valeur ou pas
 					if ( DoIsValidValue( l_strParam, l_strSrc, uint32_t( i + 1 ) ) )
 					{
-						l_strValue += l_char;
+						l_value += l_char;
 					}
 					else
 					{
@@ -550,21 +383,21 @@ namespace Obj
 
 						if ( l_strParam == cuT( "s" ) )
 						{
-							DoParseTexParam( l_strParam + cuT( " " ) + l_strValue, p_scale );
+							DoParseTexParam( l_strParam + cuT( " " ) + l_value, p_scale );
 						}
 						else if ( l_strParam == cuT( "o" ) )
 						{
-							DoParseTexParam( l_strParam + cuT( " " ) + l_strValue, p_offset );
+							DoParseTexParam( l_strParam + cuT( " " ) + l_value, p_offset );
 						}
 						else if ( l_strParam == cuT( "t" ) )
 						{
-							DoParseTexParam( l_strParam + cuT( " " ) + l_strValue, p_turb );
+							DoParseTexParam( l_strParam + cuT( " " ) + l_value, p_turb );
 						}
 					}
 				}
 				else
 				{
-					l_strValue += l_char;
+					l_value += l_char;
 				}
 			}
 			else if ( l_char == cuT( '-' ) )
@@ -637,15 +470,14 @@ namespace Obj
 	void ObjImporter::DoReadMaterials( Scene & p_scene, Path const & p_pathMatFile )
 	{
 		String l_strLine;
-		String l_strSection;
-		String l_strValue;
+		String l_section;
+		String l_value;
 		StringArray l_arraySplitted;
 		PassSPtr l_pPass;
-		MaterialSPtr l_pMaterial;
+		MaterialSPtr l_material;
 		float l_components[3];
 		float l_fAlpha = 1.0f;
 		bool l_bOpaFound = false;
-		auto & l_mtlManager = p_scene.GetMaterialView();
 		TextFile l_matFile( p_pathMatFile, File::eOPEN_MODE_READ );
 
 		while ( l_matFile.IsOk() )
@@ -658,21 +490,21 @@ namespace Obj
 
 				if ( l_arraySplitted.size() >= 1 )
 				{
-					l_strSection = l_arraySplitted[0];
+					l_section = l_arraySplitted[0];
 
 					if ( l_arraySplitted.size() > 1 )
 					{
-						l_strValue = l_arraySplitted[1];
+						l_value = l_arraySplitted[1];
 					}
 					else
 					{
-						l_strValue.clear();
+						l_value.clear();
 					}
 
-					string::trim( l_strValue );
-					string::trim( string::to_lower_case( l_strSection ) );
+					string::trim( l_value );
+					string::trim( string::to_lower_case( l_section ) );
 
-					if ( l_strSection == cuT( "newmtl" ) )
+					if ( l_section == cuT( "newmtl" ) )
 					{
 						// New material description
 						if ( l_pPass )
@@ -685,99 +517,100 @@ namespace Obj
 							l_fAlpha = 1.0f;
 						}
 
-						if ( l_mtlManager.Has( l_strValue ) )
+						if ( p_scene.GetMaterialView().Has( l_value ) )
 						{
-							l_pMaterial = l_mtlManager.Find( l_strValue );
+							l_material = p_scene.GetMaterialView().Find( l_value );
+							l_pPass = l_material->GetPass( 0 );
 						}
 						else
 						{
-							l_pMaterial.reset();
+							l_material.reset();
 						}
 
-						if ( !l_pMaterial )
+						if ( !l_material )
 						{
-							l_pMaterial = l_mtlManager.Create( l_strValue, *GetEngine() );
-							m_arrayLoadedMaterials.push_back( l_pMaterial );
+							l_material = p_scene.GetMaterialView().Create( l_value, *GetEngine() );
+							l_pPass = l_material->CreatePass();
+							m_arrayLoadedMaterials.push_back( l_material );
 						}
 
-						l_pPass = l_pMaterial->CreatePass();
 						l_pPass->SetTwoSided( true );
 						l_bOpaFound = false;
 						l_fAlpha = 1.0f;
-						Logger::LogDebug( cuT( "Material : " ) + l_strValue );
+						Logger::LogDebug( cuT( "Material : " ) + l_value );
 					}
-					else if ( l_strSection == cuT( "illum" ) )
+					else if ( l_section == cuT( "illum" ) )
 					{
 						// Illumination description
 					}
-					else if ( l_strSection == cuT( "ka" ) )
+					else if ( l_section == cuT( "ka" ) )
 					{
 						// Ambient colour
-						StringStream l_stream( l_strValue );
+						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
 						l_pPass->SetAmbient( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
-					else if ( l_strSection == cuT( "kd" ) )
+					else if ( l_section == cuT( "kd" ) )
 					{
 						// Diffuse colour
-						StringStream l_stream( l_strValue );
+						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
 						l_pPass->SetDiffuse( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
-					else if ( l_strSection == cuT( "ks" ) )
+					else if ( l_section == cuT( "ks" ) )
 					{
 						// Specular colour
-						StringStream l_stream( l_strValue );
+						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
 						l_pPass->SetSpecular( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
-					else if ( l_strSection == cuT( "tr" ) || l_strSection == cuT( "d" ) )
+					else if ( l_section == cuT( "tr" ) || l_section == cuT( "d" ) )
 					{
 						// Opacity
 						if ( !l_bOpaFound )
 						{
 							l_bOpaFound = true;
-							l_fAlpha = string::to_float( l_strValue );
+							l_fAlpha = string::to_float( l_value );
 						}
 					}
-					else if ( l_strSection == cuT( "ns" ) )
+					else if ( l_section == cuT( "ns" ) )
 					{
 						// Shininess
-						l_pPass->SetShininess( string::to_float( l_strValue ) );
+						l_pPass->SetShininess( string::to_float( l_value ) );
 					}
-					else if ( l_strSection == cuT( "map_kd" ) )
+					else if ( l_section == cuT( "map_kd" ) )
 					{
 						// Diffuse map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Diffuse );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Diffuse );
 					}
-					else if ( l_strSection == cuT( "bump" ) || l_strSection == cuT( "map_bump" ) )
+					else if ( l_section == cuT( "bump" ) || l_section == cuT( "map_bump" ) )
 					{
 						// Normal map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Normal );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Normal );
 					}
-					else if ( l_strSection == cuT( "map_d" ) || l_strSection == cuT( "map_opacity" ) )
+					else if ( l_section == cuT( "map_d" ) || l_section == cuT( "map_opacity" ) )
 					{
 						// Opacity map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Opacity );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Opacity );
 					}
-					else if ( l_strSection == cuT( "refl" ) )
+					else if ( l_section == cuT( "refl" ) )
 					{
 						// Reflection map
 					}
-					else if ( l_strSection == cuT( "map_ks" ) )
+					else if ( l_section == cuT( "map_ks" ) )
 					{
 						// Specular map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Specular );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Specular );
 					}
-					else if ( l_strSection == cuT( "map_ka" ) )
+					else if ( l_section == cuT( "map_ka" ) )
 					{
 						// Ambient map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Ambient );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Ambient );
 					}
-					else if ( l_strSection == cuT( "map_ns" ) )
+					else if ( l_section == cuT( "map_ns" ) )
 					{
 						// Gloss/Shininess map
-						DoAddTexture( l_strValue, l_pPass, TextureChannel::Gloss );
+						DoAddTexture( l_value, l_pPass, TextureChannel::Gloss );
 					}
 				}
 			}

@@ -66,6 +66,34 @@ namespace Castor3D
 		C3D_API ~Mesh();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API Mesh( Mesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API Mesh & operator=( Mesh && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API Mesh( Mesh const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API Mesh & operator=( Mesh const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Clears all submeshes
 		 *\~french
 		 *\brief		Supprime les sous maillages
@@ -127,17 +155,6 @@ namespace Castor3D
 		C3D_API void DeleteSubmesh( SubmeshSPtr & p_pSubmesh );
 		/**
 		 *\~english
-		 *\brief		Clones the mesh, with a new name
-		 *\param[in]	p_name	The name of the cloned mesh
-		 *\return		The cloned mesh
-		 *\~french
-		 *\brief		Clone le maillage, avec un nouveau nom
-		 *\param[in]	p_name	Le nom du clone
-		 *\return		Le clone
-		 */
-		C3D_API MeshSPtr Clone( Castor::String const & p_name );
-		/**
-		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
@@ -170,6 +187,17 @@ namespace Castor3D
 		 *\param[in]	p_skeleton	La nouvelle valeur
 		 */
 		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
+		/**
+		 *\~english
+		 *\brief		Creates an animation
+		 *\param[in]	p_name	The animation name
+		 *\return		The animation
+		 *\~french
+		 *\brief		Crée une animation
+		 *\param[in]	p_name	Le nom de l'animation
+		 *\return		l'animation
+		 */
+		C3D_API MeshAnimation & CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes

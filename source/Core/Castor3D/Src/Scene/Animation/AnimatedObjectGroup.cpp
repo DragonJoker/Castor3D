@@ -2,6 +2,7 @@
 
 #include "AnimatedObject.hpp"
 #include "AnimatedSkeleton.hpp"
+#include "AnimatedMesh.hpp"
 
 #include "Animation/Animation.hpp"
 #include "Scene/Geometry.hpp"
@@ -28,22 +29,9 @@ namespace Castor3D
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + p_group.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-		std::set< String > l_animations;
-
-		if ( !p_group.GetAnimations().empty() )
-		{
-			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
-
-			for ( auto l_it : p_group.GetAnimations() )
-			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
-				l_animations.insert( l_it.first );
-			}
-		}
-
-		StringArray l_playing;
+		StrSet l_written;
 
 		for ( auto l_it : p_group.GetObjects() )
 		{
@@ -56,50 +44,47 @@ namespace Castor3D
 			if ( l_skel != String::npos )
 			{
 				l_name = l_name.substr( 0, l_skel );
-				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end();
+				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
+					&& l_written.find( l_name ) == l_written.end();
 			}
 			else if ( l_mesh != String::npos )
 			{
 				l_name = l_name.substr( 0, l_mesh );
-				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end();
+				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
+					&& l_written.find( l_name ) == l_written.end();
 			}
 
 			if ( l_write )
 			{
-				l_return &= p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
-
-				for ( auto l_itAnim : l_it.second->GetAnimations() )
-				{
-					if ( l_animations.end() != l_animations.find( l_itAnim.first ) )
-					{
-						l_return &= p_file.WriteText( m_tabs + cuT( "\t\tanimation \"" ) + l_itAnim.first + cuT( "\"\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\t{\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\t\tlooped " ) + String{ l_itAnim.second->IsLooped() ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\t\tscale " ) + string::to_string( l_itAnim.second->GetScale() ) + cuT( "\n" ) ) > 0
-							&& p_file.WriteText( m_tabs + cuT( "\t\t}\n" ) ) > 0;
-					}
-				}
-
-				if ( l_return )
-				{
-					l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
-				}
-
-				for ( auto l_anim : l_it.second->GetPlayingAnimations() )
-				{
-					l_playing.push_back( l_anim->GetAnimation().GetName() );
-				}
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object \"" ) + l_name + cuT( "\"\n" ) ) > 0;
+				l_written.insert( l_name );
 			}
 		}
 
-		if ( !l_playing.empty() )
+		if ( !p_group.GetAnimations().empty() )
 		{
 			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
 
-			for ( auto l_it : l_playing )
+			for ( auto l_it : p_group.GetAnimations() )
 			{
-				l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it + cuT( "\"\n" ) ) > 0;
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second.m_scale ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+			}
+		}
+
+		if ( !p_group.GetAnimations().empty() )
+		{
+			l_return &= p_file.WriteText( cuT( "\n" ) ) > 0;
+
+			for ( auto l_it : p_group.GetAnimations() )
+			{
+				if ( l_it.second.m_state == AnimationState::Playing )
+				{
+					l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
+				}
 			}
 		}
 
@@ -126,14 +111,21 @@ namespace Castor3D
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( MovableObject & p_object, String const & p_name )
 	{
 		return nullptr;
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Mesh & p_object, String const & p_name )
 	{
-		return nullptr;
+		auto l_object = std::make_shared< AnimatedMesh >( p_name, p_object );
+
+		if ( !AddObject( l_object ) )
+		{
+			l_object.reset();
+		}
+
+		return l_object;
 	}
 
 	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( Skeleton & p_object, String const & p_name )
@@ -160,6 +152,9 @@ namespace Castor3D
 		for ( auto l_it : m_animations )
 		{
 			p_object->AddAnimation( l_it.first );
+			auto & l_animation = p_object->GetAnimation( l_it.first );
+			l_animation.SetLooped( l_it.second.m_looped );
+			l_animation.SetScale( l_it.second.m_scale );
 		}
 
 		return l_return;
@@ -169,7 +164,7 @@ namespace Castor3D
 	{
 		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
-			m_animations.insert( { p_name, AnimationState::Stopped } );
+			m_animations.insert( { p_name, { AnimationState::Stopped, false, 1.0f } } );
 
 			for ( auto l_it : m_objects )
 			{
@@ -180,33 +175,39 @@ namespace Castor3D
 
 	void AnimatedObjectGroup::SetAnimationLooped( Castor::String const & p_name, bool p_looped )
 	{
-		if ( m_animations.find( p_name ) != m_animations.end() )
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
 		{
 			for ( auto l_it : m_objects )
 			{
-				auto l_animation = l_it.second->GetAnimation( p_name );
-
-				if ( l_animation )
+				if ( l_it.second->HasAnimation( p_name ) )
 				{
-					l_animation->SetLooped( p_looped );
+					auto & l_animation = l_it.second->GetAnimation( p_name );
+					l_animation.SetLooped( p_looped );
 				}
 			}
+
+			l_itAnim->second.m_looped = p_looped;
 		}
 	}
 
 	void AnimatedObjectGroup::SetAnimationScale( Castor::String const & p_name, float p_scale )
 	{
-		if ( m_animations.find( p_name ) != m_animations.end() )
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
 		{
 			for ( auto l_it : m_objects )
 			{
-				auto l_animation = l_it.second->GetAnimation( p_name );
-
-				if ( l_animation )
+				if ( l_it.second->HasAnimation( p_name ) )
 				{
-					l_animation->SetScale( p_scale );
+					auto & l_animation = l_it.second->GetAnimation( p_name );
+					l_animation.SetScale( p_scale );
 				}
 			}
+
+			l_itAnim->second.m_scale = p_scale;
 		}
 	}
 
@@ -231,7 +232,7 @@ namespace Castor3D
 				l_it.second->StartAnimation( p_name );
 			}
 
-			l_itAnim->second = AnimationState::Playing;
+			l_itAnim->second.m_state = AnimationState::Playing;
 		}
 	}
 
@@ -246,7 +247,7 @@ namespace Castor3D
 				l_it.second->StopAnimation( p_name );
 			}
 
-			l_itAnim->second = AnimationState::Stopped;
+			l_itAnim->second.m_state = AnimationState::Stopped;
 		}
 	}
 
@@ -261,7 +262,7 @@ namespace Castor3D
 				l_it.second->PauseAnimation( p_name );
 			}
 
-			l_itAnim->second = AnimationState::Paused;
+			l_itAnim->second.m_state = AnimationState::Paused;
 		}
 	}
 
@@ -274,7 +275,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second = AnimationState::Playing;
+			l_it.second.m_state = AnimationState::Playing;
 		}
 	}
 
@@ -287,7 +288,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second = AnimationState::Stopped;
+			l_it.second.m_state = AnimationState::Stopped;
 		}
 	}
 
@@ -300,7 +301,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second = AnimationState::Paused;
+			l_it.second.m_state = AnimationState::Paused;
 		}
 	}
 }

@@ -536,7 +536,7 @@ namespace C3dFbx
 			}
 		} );
 
-		for ( auto l_it : m_mesh->GetSkeleton()->GetAnimations() )
+		for ( auto const & l_it : m_mesh->GetSkeleton()->GetAnimations() )
 		{
 			Logger::LogDebug( StringStream() << cuT( "Found Animation: " ) << l_it.first );
 		}
@@ -560,7 +560,7 @@ namespace C3dFbx
 			{
 				FbxAnimStack * l_animStack = p_scene->GetSrcObject< FbxAnimStack >( l_animationIndex );
 				auto l_name = l_animStack->GetName();
-				SkeletonAnimationSPtr l_animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( l_name ) );
+				auto & l_animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( l_name ) );
 				FbxTakeInfo * l_takeInfo = p_scene->GetTakeInfo( l_name );
 				uint64_t l_start = l_takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_finish = l_takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
@@ -569,11 +569,11 @@ namespace C3dFbx
 
 				if ( l_bone->GetParent() )
 				{
-					l_object = l_animation->AddObject( l_bone, l_animation->GetObject( l_bone->GetParent() ) );
+					l_object = l_animation.AddObject( l_bone, l_animation.GetObject( *l_bone->GetParent() ) );
 				}
 				else
 				{
-					l_object = l_animation->AddObject( l_bone, nullptr );
+					l_object = l_animation.AddObject( l_bone, nullptr );
 				}
 
 				if ( l_object )
@@ -598,6 +598,8 @@ namespace C3dFbx
 						l_from += l_inc;
 					}
 				}
+
+				l_animation.UpdateLength();
 			}
 		}
 	}

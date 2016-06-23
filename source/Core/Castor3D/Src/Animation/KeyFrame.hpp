@@ -56,6 +56,7 @@ namespace Castor3D
 			, m_rotate( p_rotate )
 			, m_scale( p_scale )
 		{
+			Castor::matrix::set_transform( m_transform, p_translate, p_scale, p_rotate );
 		}
 		/**
 		 *\~english
@@ -68,39 +69,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the wanted translation
-		 *\param[in]	p_value	The value
+		 *\return		The transformation matrix.
 		 *\~french
-		 *\brief		Définit la translation voulue
-		 *\param[in]	p_value	La valeur
+		 *\return		La matrice de transformation.
 		 */
-		inline void SetTranslate( Castor::Point3r const & p_value )
+		inline Castor::Matrix4x4r const & GetTransform()const
 		{
-			m_translate = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the wanted rotation
-		 *\param[in]	p_value	The value
-		 *\~french
-		 *\brief		Définit la rotation voulue
-		 *\param[in]	p_value	La valeur
-		 */
-		inline void SetRotate( Castor::Quaternion const & p_value )
-		{
-			m_rotate = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the wanted scaling
-		 *\param[in]	p_value	The value
-		 *\~french
-		 *\brief		Définit l'échelle voulue
-		 *\param[in]	p_value	La valeur
-		 */
-		inline void SetScale( Castor::Point3r const & p_value )
-		{
-			m_scale = p_value;
+			return m_transform;
 		}
 		/**
 		 *\~english
@@ -144,20 +119,11 @@ namespace Castor3D
 		{
 			return m_timeIndex;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the start time index
-		 *\param[in]	p_value	The time index
-		 *\~french
-		 *\brief		Définit le temps de départ
-		 *\param[in]	p_value	Le temps
-		 */
-		inline void SetTimeIndex( real p_value )
-		{
-			m_timeIndex = p_value;
-		}
 
 	protected:
+		//!\~english	The transformation matrix at start time.
+		//!\~french		La matrice de transformation à l'index de temps de début.
+		Castor::Matrix4x4r m_transform;
 		//!\~english	The rotation at start time.
 		//!\~french		La rotation à l'index de temps de début.
 		Castor::Quaternion m_rotate;

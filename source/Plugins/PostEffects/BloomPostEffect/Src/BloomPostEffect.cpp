@@ -285,7 +285,7 @@ namespace Bloom
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-			m_hiPassMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+			m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_hipass );
@@ -296,11 +296,11 @@ namespace Bloom
 		if ( !l_vertex.empty() && !l_blur.empty() )
 		{
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+			m_filterMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			auto l_filterConfig = GetRenderSystem()->CreateFrameVariableBuffer( FilterConfig );
-			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, KERNEL_SIZE ) );
-			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetX ) );
-			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetY ) );
+			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigCoefficients, KERNEL_SIZE ) );
+			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetX ) );
+			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetY ) );
 			l_program->AddFrameVariableBuffer( l_filterConfig, MASK_SHADER_TYPE_PIXEL );
 			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
@@ -313,11 +313,11 @@ namespace Bloom
 		if ( !l_vertex.empty() && !l_combine.empty() )
 		{
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-			l_program->CreateFrameVariable( CombineMapPass0, eSHADER_TYPE_PIXEL )->SetValue( 0 );
-			l_program->CreateFrameVariable( CombineMapPass1, eSHADER_TYPE_PIXEL )->SetValue( 1 );
-			l_program->CreateFrameVariable( CombineMapPass2, eSHADER_TYPE_PIXEL )->SetValue( 2 );
-			l_program->CreateFrameVariable( CombineMapPass3, eSHADER_TYPE_PIXEL )->SetValue( 3 );
-			l_program->CreateFrameVariable( CombineMapScene, eSHADER_TYPE_PIXEL )->SetValue( 4 );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass0, eSHADER_TYPE_PIXEL )->SetValue( 0 );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass1, eSHADER_TYPE_PIXEL )->SetValue( 1 );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass2, eSHADER_TYPE_PIXEL )->SetValue( 2 );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass3, eSHADER_TYPE_PIXEL )->SetValue( 3 );
+			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapScene, eSHADER_TYPE_PIXEL )->SetValue( 4 );
 
 			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
@@ -332,7 +332,7 @@ namespace Bloom
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
-			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
+			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		}
 
 		uint32_t l_index = 0;

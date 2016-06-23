@@ -56,6 +56,34 @@ namespace Castor3D
 		C3D_API ~SkeletonAnimationInstance();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API SkeletonAnimationInstance( SkeletonAnimationInstance const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API SkeletonAnimationInstance & operator=( SkeletonAnimationInstance const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Retrieves an animated bone.
 		 *\param[in]	p_bone	The bone.
 		 *\~french
@@ -82,14 +110,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( AnimationObjectType p_type, Castor::String const & p_name )const;
-		/**
-		 *\~english
-		 *\return		The key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames.
-		 */
-		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
+		C3D_API SkeletonAnimationInstanceObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The objects count.
@@ -153,9 +174,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::Animation::DoUpdate
+		 *\~copydoc		Casto3D::AnimationInstance::DoUpdate
 		 */
-		void DoUpdate( real p_tslf )override;
+		void DoUpdate()override;
 
 	protected:
 		//!\~english	The root moving objects.

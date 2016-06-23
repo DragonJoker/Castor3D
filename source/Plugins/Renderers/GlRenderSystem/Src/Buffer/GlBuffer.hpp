@@ -53,7 +53,7 @@ namespace GlRender
 		}
 		HardwareBufferPtr GetCpuBuffer()const
 		{
-			return m_pBuffer;
+			return m_buffer;
 		}
 
 	protected:
@@ -70,7 +70,7 @@ namespace GlRender
 
 	protected:
 		GlBufferBase< T > m_glBuffer;
-		HardwareBufferPtr m_pBuffer;
+		HardwareBufferPtr m_buffer;
 	};
 }
 

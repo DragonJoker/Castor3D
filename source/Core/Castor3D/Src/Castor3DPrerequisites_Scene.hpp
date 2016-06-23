@@ -32,11 +32,14 @@ namespace Castor3D
 	class AnimatedObject;
 	class AnimatedObjectGroup;
 	class AnimatedSkeleton;
+	class AnimatedMesh;
 	class AnimationInstance;
 	class SkeletonAnimationInstance;
 	class SkeletonAnimationInstanceObject;
 	class SkeletonAnimationInstanceNode;
 	class SkeletonAnimationInstanceBone;
+	class MeshAnimationInstance;
+	class MeshAnimationInstanceSubmesh;
 
 	DECLARE_SMART_PTR( SceneNode );
 	DECLARE_SMART_PTR( Scene );
@@ -51,25 +54,28 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceObject );
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceNode );
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
+	DECLARE_SMART_PTR( MeshAnimationInstance );
 
-	//! SceneNode pointer array
+	//! SceneNode pointer array.
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
-	//! Scene pointer map, sorted by name
+	//! Scene pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
-	//! SceneNode pointer map, sorted by name
+	//! SceneNode pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
-	//! AnimatedObjectGroup pointer map, sorted by name
+	//! AnimatedObjectGroup pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
-	//! AnimatedObject pointer map, sorted by name
+	//! AnimatedObject pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
-	//! MovingObject pointer map, sorted by name
+	//! MovingObject pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
-	//! AnimationObject pointer array
+	//! SkeletonAnimationInstanceObject pointer array.
 	DECLARE_VECTOR( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
-	//! Animation pointer map, sorted by name
+	//! MeshAnimationInstanceSubmesh map, sorted by submesh ID.
+	DECLARE_MAP( uint32_t, MeshAnimationInstanceSubmesh, MeshAnimationInstanceSubmesh );
+	//! Animation pointer map, sorted by name.
 	DECLARE_MAP( Castor::String, AnimationInstanceSPtr, AnimationInstancePtrStr );
-	//! Animation pointer array
-	DECLARE_VECTOR( AnimationInstanceSPtr, AnimationInstancePtr );
+	//! Skeleton animation instance pointer array.
+	DECLARE_VECTOR( SkeletonAnimationInstanceSPtr, SkeletonAnimationInstancePtr );
 
 	//@}
 }

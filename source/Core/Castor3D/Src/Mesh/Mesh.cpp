@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 
-#include "Animation/Animation.hpp"
+#include "Animation/Mesh/MeshAnimation.hpp"
 #include "Mesh/MeshFactory.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
@@ -237,19 +237,6 @@ namespace Castor3D
 		}
 	}
 
-	MeshSPtr Mesh::Clone( String const & p_name )
-	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( p_name, *GetScene() );
-
-		for ( auto l_submesh : m_submeshes )
-		{
-			l_clone->m_submeshes.push_back( l_submesh->Clone() );
-		}
-
-		l_clone->ComputeContainers();
-		return l_clone;
-	}
-
 	void Mesh::Ref( MaterialSPtr p_material )
 	{
 		for ( auto l_submesh : m_submeshes )
@@ -269,5 +256,15 @@ namespace Castor3D
 	void Mesh::SetSkeleton( SkeletonSPtr p_skeleton )
 	{
 		m_skeleton = p_skeleton;
+	}
+
+	MeshAnimation & Mesh::CreateAnimation( Castor::String const & p_name )
+	{
+		if ( !HasAnimation( p_name ) )
+		{
+			DoAddAnimation( std::make_shared< MeshAnimation >( *this, p_name ) );
+		}
+
+		return DoGetAnimation< MeshAnimation >( p_name );
 	}
 }

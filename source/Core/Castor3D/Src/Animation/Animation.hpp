@@ -61,13 +61,39 @@ namespace Castor3D
 		C3D_API ~Animation();
 		/**
 		 *\~english
-		 *\brief		Initialises the animation (length and GPU stuff if needed).
-		 *\return		\p false if there is a problem (The animation is then unsuitable for use).
+		 *\brief		Move constructor.
 		 *\~french
-		 *\brief		Initialise l'animation (longueur et bidules GPU si nécessaire).
-		 *\return		\p false s'il y a un problème (l'animation n'est alors pas utilisable).
+		 *\brief		Constructeur par déplacement.
 		 */
-		C3D_API bool Initialise();
+		C3D_API Animation( Animation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API Animation & operator=( Animation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API Animation( Animation const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API Animation & operator=( Animation const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Updates the animation length.
+		 *\~french
+		 *\brief		Initialise la longueur de l'animation.
+		 */
+		C3D_API void UpdateLength();
 		/**
 		 *\~english
 		 *\return		The animation type.
@@ -92,13 +118,11 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Initialises the animation (length and GPU stuff if needed).
-		 *\return		\p false if there is a problem (The animation is then unsuitable for use).
+		 *\brief		Updates the animation length.
 		 *\~french
-		 *\brief		Initialise l'animation (longueur et bidules GPU si nécessaire).
-		 *\return		\p false s'il y a un problème (l'animation n'est alors pas utilisable).
+		 *\brief		Initialise la longueur de l'animation.
 		 */
-		virtual bool DoInitialise() = 0;
+		virtual void DoUpdateLength() = 0;
 
 	protected:
 		//!\~english	The animation type.

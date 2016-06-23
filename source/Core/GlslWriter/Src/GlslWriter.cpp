@@ -24,6 +24,16 @@ namespace GLSL
 		m_stream << std::endl;
 	}
 
+	IndentBlock::IndentBlock( Castor::StringStream & p_stream )
+		: m_stream( p_stream )
+	{
+		using namespace Castor;
+		m_stream << cuT( "{" );
+		m_indent = format::get_indent( m_stream );
+		m_stream << format::indent( m_indent + 4 );
+		m_stream << std::endl;
+	}
+
 	IndentBlock::~IndentBlock()
 	{
 		using namespace Castor;
@@ -40,10 +50,10 @@ namespace GLSL
 	{
 		if ( m_writer.HasConstantsBuffers() )
 		{
-			m_writer << Endl();
-			m_writer << StdLayout { 140 } << Uniform() << p_name << Endl();
+			m_stream << std::endl;
+			m_stream << m_writer.m_keywords->GetStdLayout( 140 ) << m_writer.m_uniform << p_name << std::endl;
 			m_writer.m_uniform.clear();
-			m_block = new IndentBlock( m_writer );
+			m_block = new IndentBlock( m_stream );
 		}
 	}
 
@@ -55,10 +65,15 @@ namespace GLSL
 
 		if ( m_writer.HasConstantsBuffers() )
 		{
-			m_writer << cuT( ";" );
+			m_stream << cuT( ";" );
 		}
 
-		m_writer << Endl();
+		m_stream << std::endl;
+
+		if ( m_count )
+		{
+			m_writer.m_stream << m_stream.rdbuf();
+		}
 	}
 
 	//*****************************************************************************************
@@ -83,9 +98,7 @@ namespace GLSL
 	//*****************************************************************************************
 
 	GlslWriter::GlslWriter( GlslWriterConfig const & p_config )
-		: m_variables( GLSL::VariablesBase::Get( p_config ) )
-		, m_constants( GLSL::ConstantsBase::Get( p_config ) )
-		, m_keywords( GLSL::KeywordsBase::Get( p_config ) )
+		: m_keywords( GLSL::KeywordsBase::Get( p_config ) )
 		, m_attributeIndex( 0 )
 		, m_layoutIndex( 0 )
 		, m_uniform( cuT( "uniform " ) )
@@ -96,9 +109,7 @@ namespace GLSL
 	}
 
 	GlslWriter::GlslWriter( GlslWriter const & p_rhs )
-		: m_variables( GLSL::VariablesBase::Get( p_rhs.m_config ) )
-		, m_constants( GLSL::ConstantsBase::Get( p_rhs.m_config ) )
-		, m_keywords( GLSL::KeywordsBase::Get( p_rhs.m_config ) )
+		: m_keywords( GLSL::KeywordsBase::Get( p_rhs.m_config ) )
 		, m_attributeIndex( p_rhs.m_attributeIndex )
 		, m_layoutIndex( p_rhs.m_layoutIndex )
 		, m_uniform( p_rhs.m_uniform )

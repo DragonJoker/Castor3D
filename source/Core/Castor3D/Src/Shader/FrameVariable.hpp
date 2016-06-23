@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Donne le type complet de la variable
 		 *\return		Le type
 		 */
-		C3D_API virtual eFRAME_VARIABLE_TYPE GetFullType()const = 0;
+		C3D_API virtual FrameVariableType GetFullType()const = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable dimension
@@ -147,7 +147,7 @@ namespace Castor3D
 		 *\brief		Donne la dimension de la variable
 		 *\return		La dimension
 		 */
-		C3D_API virtual eVARIABLE_TYPE GetType()const = 0;
+		C3D_API virtual VariableType GetType()const = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type name

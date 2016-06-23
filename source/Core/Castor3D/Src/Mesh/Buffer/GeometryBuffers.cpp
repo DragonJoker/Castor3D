@@ -14,9 +14,10 @@ namespace Castor3D
 	{
 	}
 
-	bool GeometryBuffers::Initialise( VertexBufferSPtr p_vtx, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst )
+	bool GeometryBuffers::Initialise( VertexBufferSPtr p_vtx, VertexBufferSPtr p_anm, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst )
 	{
 		m_vertexBuffer = p_vtx;
+		m_animationBuffer = p_anm;
 		m_indexBuffer = p_idx;
 		m_bonesBuffer = p_bones;
 		m_matrixBuffer = p_inst;
@@ -27,6 +28,7 @@ namespace Castor3D
 	{
 		DoCleanup();
 		m_vertexBuffer.reset();
+		m_animationBuffer.reset();
 		m_indexBuffer.reset();
 		m_bonesBuffer.reset();
 		m_matrixBuffer.reset();

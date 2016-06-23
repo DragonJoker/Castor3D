@@ -342,6 +342,7 @@ namespace Castor3D
 
 	void Scene::Initialise()
 	{
+		m_lightManager->Initialise();
 	}
 
 	void Scene::Cleanup()
@@ -475,18 +476,6 @@ namespace Castor3D
 			Merge( l_scene );
 			m_changed = true;
 			l_return = true;
-		}
-
-		return l_return;
-	}
-
-	MeshSPtr Scene::ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters )
-	{
-		auto l_return = p_importer.ImportMesh( *this, p_fileName, p_parameters );
-
-		if ( l_return )
-		{
-			m_meshManager->Insert( l_return->GetName(), l_return );
 		}
 
 		return l_return;

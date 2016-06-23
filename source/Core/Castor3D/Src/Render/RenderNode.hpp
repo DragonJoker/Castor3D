@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -79,15 +79,15 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		RenderNode m_node;
 		//!\~english	The scene UBO.
 		//!\~french		L'UBO de scène.
 		FrameVariableBuffer & m_sceneUbo;
 		//!\~english	The pass opacity.
 		//!\~french		L'opacité de passe.
 		Point3rFrameVariable & m_cameraPos;
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		RenderNode m_node;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -99,6 +99,9 @@ namespace Castor3D
 	*/
 	struct StaticGeometryRenderNode
 	{
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		SceneRenderNode m_scene;
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
@@ -111,9 +114,6 @@ namespace Castor3D
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -125,12 +125,12 @@ namespace Castor3D
 	*/
 	struct AnimatedGeometryRenderNode
 	{
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		SceneRenderNode m_scene;
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
-		//!\~english	The animated object.
-		//!\~french		L'objet animé.
-		AnimatedObject & m_animated;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;
@@ -140,9 +140,15 @@ namespace Castor3D
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
+		//!\~english	The animated skeleton.
+		//!\~french		Le squelette animé.
+		AnimatedSkeleton * m_skeleton;
+		//!\~english	The animated mesh.
+		//!\~french		Le maillage animé.
+		AnimatedMesh * m_mesh;
+		//!\~english	The animation UBO.
+		//!\~french		L'UBO d'animation.
+		FrameVariableBuffer & m_animationUbo;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -154,6 +160,9 @@ namespace Castor3D
 	*/
 	struct BillboardRenderNode
 	{
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		SceneRenderNode m_scene;
 		//!\~english	The billboard.
 		//!\~french		Le billboard.
 		BillboardList & m_billboard;
@@ -169,9 +178,6 @@ namespace Castor3D
 		//!\~english	The dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions.
 		Point2iFrameVariable & m_dimensions;
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
 	};
 
 	//!\~english	StaticGeometryRenderNode array.

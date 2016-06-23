@@ -219,7 +219,7 @@ namespace Castor3D
 		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
 		bool m_visible;
 		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
-		std::map< SubmeshSPtr, MaterialSPtr > m_submeshesMaterials;
+		std::map< Submesh *, MaterialWPtr > m_submeshesMaterials;
 	};
 }
 

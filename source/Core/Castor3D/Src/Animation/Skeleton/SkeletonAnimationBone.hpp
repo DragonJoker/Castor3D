@@ -53,6 +53,34 @@ namespace Castor3D
 		C3D_API ~SkeletonAnimationBone();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API SkeletonAnimationBone( SkeletonAnimationBone && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API SkeletonAnimationBone & operator=( SkeletonAnimationBone && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API SkeletonAnimationBone( SkeletonAnimationBone const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API SkeletonAnimationBone & operator=( SkeletonAnimationBone const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\return		The object name.
 		 *\~french
 		 *\return		Le nom de l'objet.

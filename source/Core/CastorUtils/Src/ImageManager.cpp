@@ -90,9 +90,4 @@ namespace Castor
 
 		return l_return;
 	}
-
-	ImageSPtr ImageManager::get( String const & p_name )
-	{
-		return Collection< Image, String >::find( p_name );
-	}
 }

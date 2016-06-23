@@ -62,7 +62,7 @@ namespace Castor3D
 				}
 			}
 
-			DoUpdate( p_tslf );
+			DoUpdate();
 		}
 	}
 

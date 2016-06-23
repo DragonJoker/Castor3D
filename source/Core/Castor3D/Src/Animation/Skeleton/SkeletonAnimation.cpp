@@ -17,12 +17,12 @@ namespace Castor3D
 
 	namespace
 	{
-		Castor::String const & GetMovingTypeName( AnimationObjectType p_type )
+		Castor::String const & GetMovingTypeName( SkeletonAnimationObjectType p_type )
 		{
-			static std::map< AnimationObjectType, String > Names
+			static std::map< SkeletonAnimationObjectType, String > Names
 			{
-				{ AnimationObjectType::Node, cuT( "Node_" ) },
-				{ AnimationObjectType::Bone, cuT( "Bone_" ) },
+				{ SkeletonAnimationObjectType::Node, cuT( "Node_" ) },
+				{ SkeletonAnimationObjectType::Bone, cuT( "Bone_" ) },
 			};
 
 			return Names[p_type];
@@ -39,11 +39,11 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case AnimationObjectType::Node:
+			case SkeletonAnimationObjectType::Node:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
-			case AnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::Bone:
 				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}
@@ -126,7 +126,7 @@ namespace Castor3D
 
 		if ( l_it == m_toMove.end() )
 		{
-			m_toMove.insert( std::make_pair( l_name, p_object ) );
+			m_toMove.insert( { l_name, p_object } );
 
 			if ( !p_parent )
 			{
@@ -144,15 +144,25 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool SkeletonAnimation::HasObject( AnimationObjectType p_type, Castor::String const & p_name )const
+	bool SkeletonAnimation::HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
 	{
 		return m_toMove.find( GetMovingTypeName( p_type ) + p_name ) != m_toMove.end();
 	}
 
-	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( BoneSPtr p_bone )const
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( Bone const & p_bone )const
+	{
+		return GetObject( SkeletonAnimationObjectType::Node, p_bone.GetName() );
+	}
+
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( String const & p_name )const
+	{
+		return GetObject( SkeletonAnimationObjectType::Node, p_name );
+	}
+
+	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const
 	{
 		SkeletonAnimationObjectSPtr l_return;
-		auto l_it = m_toMove.find( GetMovingTypeName( AnimationObjectType::Bone ) + p_bone->GetName() );
+		auto l_it = m_toMove.find( GetMovingTypeName( p_type ) + p_name );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -162,14 +172,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool SkeletonAnimation::DoInitialise()
+	void SkeletonAnimation::DoUpdateLength()
 	{
 		for ( auto l_it : m_toMove )
 		{
 			m_length = std::max( m_length, l_it.second->GetLength() );
 		}
-
-		return true;
 	}
 
 	//*************************************************************************************************

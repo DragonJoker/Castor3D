@@ -173,13 +173,6 @@ namespace Testing
 			++l_itB;
 		}
 
-		l_return &= CT_EQUAL( p_a.GetAnimatedObject() != nullptr, p_b.GetAnimatedObject() != nullptr );
-
-		if ( l_return && p_a.GetAnimatedObject() && p_b.GetAnimatedObject() )
-		{
-			l_return &= CT_EQUAL( p_a.GetAnimatedObject()->GetName(), p_b.GetAnimatedObject()->GetName() );
-		}
-
 		return l_return;
 	}
 
@@ -506,7 +499,9 @@ namespace Testing
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
 				l_return = CT_EQUAL( l_itA->first, l_itB->first );
-				l_return &= CT_EQUAL( l_itA->second, l_itB->second );
+				l_return &= CT_EQUAL( l_itA->second.m_state, l_itB->second.m_state );
+				l_return &= CT_EQUAL( l_itA->second.m_scale, l_itB->second.m_scale );
+				l_return &= CT_EQUAL( l_itA->second.m_looped, l_itB->second.m_looped );
 				++l_itA;
 				++l_itB;
 			}
@@ -599,7 +594,7 @@ namespace Testing
 
 	bool C3DTestCase::C3DTestCase::compare( SkeletonAnimationInstanceObject const & p_a, SkeletonAnimationInstanceObject const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetInterpolationMode(), p_b.GetInterpolationMode() ) };
+		bool l_return{ true };
 
 		if ( l_return )
 		{

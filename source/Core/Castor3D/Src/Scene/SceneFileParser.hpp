@@ -63,7 +63,6 @@ namespace Castor3D
 		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
 		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),
 		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
-		eSECTION_ANIMATED_OBJECT = MAKE_SECTION_NAME( 'A', 'N', 'O', 'J' ),
 		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
 		eSECTION_SKYBOX = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
 	}	eSECTION;
@@ -128,7 +127,7 @@ namespace Castor3D
 		AnimatedObjectSPtr pAnimSkeleton;
 		AnimatedObjectSPtr pAnimMesh;
 		AnimatedObjectSPtr pAnimMovable;
-		AnimationInstanceSPtr pAnimation;
+		AnimationInstanceRPtr pAnimation;
 		SkyboxSPtr pSkybox;
 
 	public:
@@ -229,7 +228,6 @@ namespace Castor3D
 		UIntStrMap m_mapBlendModes;
 		UIntStrMap m_mapVerticalAligns;
 		UIntStrMap m_mapHorizontalAligns;
-		UIntStrMap m_mapInterpolatorModes;
 		UIntStrMap m_mapToneMappings;
 		UIntStrMap m_mapTextTexturingModes;
 		UIntStrMap m_mapLineSpacingModes;

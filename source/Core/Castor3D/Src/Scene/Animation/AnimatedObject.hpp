@@ -55,24 +55,6 @@ namespace Castor3D
 		C3D_API ~AnimatedObject();
 		/**
 		 *\~english
-		 *\brief		Updates the animations of the object, given the time since the last frame
-		 *\param[in]	p_tslf		Time elapsed since the last frame
-		 *\~french
-		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
-		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
-		 */
-		C3D_API void Update( real p_tslf );
-		/**
-		 *\~english
-		 *\brief		Fills a shader variable with this object's skeleton transforms.
-		 *\param[out]	p_variable	Receives the transforms.
-		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
-		 */
-		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
-		/**
-		 *\~english
 		 *\brief		Adds the animation to the list
 		 *\param[in]	p_name	The animation to add
 		 *\~english
@@ -130,6 +112,18 @@ namespace Castor3D
 		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
+		 *\brief		Checks if an animation with given name exists.
+		 *\param[in]	p_name	The animation name.
+		 *\~french
+		 *\brief		Vérifie si l'animation avec le nom donné existe.
+		 *\param[in]	p_name	Le nom de l'animation.
+		 */
+		C3D_API bool HasAnimation( Castor::String const & p_name )
+		{
+			return m_animations.find( p_name ) != m_animations.end();
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves an animation
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation
@@ -138,17 +132,23 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		C3D_API AnimationInstanceSPtr GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationInstance & GetAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Updates the animations of the object, given the time since the last frame
+		 *\param[in]	p_tslf		Time elapsed since the last frame
+		 *\~french
+		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
+		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
+		 */
+		C3D_API virtual void Update( real p_tslf ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the object is playing an animation.
 		 *\~french
 		 *\return		\p true si l'objet joue une animation.
 		 */
-		inline bool IsPlayingAnimation()const
-		{
-			return !m_playingAnimations.empty();
-		}
+		C3D_API virtual bool IsPlayingAnimation()const = 0;
 		/**
 		 *\~english
 		 *\return		The animations for this object.
@@ -158,16 +158,6 @@ namespace Castor3D
 		inline AnimationInstancePtrStrMap const & GetAnimations()const
 		{
 			return m_animations;
-		}
-		/**
-		 *\~english
-		 *\return		The currently animations for this object.
-		 *\~french
-		 *\return		Les animations en cours de lecture sur cet objet.
-		 */
-		inline AnimationInstancePtrArray const & GetPlayingAnimations()const
-		{
-			return m_playingAnimations;
 		}
 
 	private:
@@ -179,24 +169,37 @@ namespace Castor3D
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		virtual AnimationInstanceSPtr DoAddAnimation( Castor::String const & p_name ) = 0;
+		virtual void DoAddAnimation( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Fills a shader variable with this object's transforms.
-		 *\param[out]	p_variable	Receives the transforms.
+		 *\brief		Starts the animation identified by the given name
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
-		 *\brief		Remplit une variable de shader avec les transformations de cet objet.
-		 *\param[out]	p_variable	Reçoit les transformations.
+		 *\brief		Démarre l'animation identifiée par le nom donné
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		virtual void DoFillShader( Matrix4x4rFrameVariable & p_variable ) = 0;
+		virtual void DoStartAnimation( AnimationInstanceSPtr p_animation ) = 0;
+		/**
+		 *\~english
+		 *\brief		Stops the animation identified by the given name
+		 *\param[in]	p_name	The name of the animation
+		 *\~french
+		 *\brief		Stoppe l'animation identifiée par le nom donné
+		 *\param[in]	p_name	Le nom de l'animation
+		 */
+		virtual void DoStopAnimation( AnimationInstanceSPtr p_animation ) = 0;
+		/**
+		 *\~english
+		 *\brief		Stops all animations
+		 *\~french
+		 *\brief		Stoppe toutes les animations
+		 */
+		virtual void DoClearAnimations() = 0;
 
 	protected:
 		//!\~english	All animations.
 		//!\~french		Toutes les animations.
 		AnimationInstancePtrStrMap m_animations;
-		//!\~english	Currently playing animations.
-		//!\~french		Les animations en cours de lecture.
-		AnimationInstancePtrArray m_playingAnimations;
 	};
 }
 

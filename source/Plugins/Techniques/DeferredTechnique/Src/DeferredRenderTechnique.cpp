@@ -154,11 +154,11 @@ namespace Deferred
 
 		if ( l_return )
 		{
-			m_lightPassShaderProgram->CreateFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+			m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i );
+				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i );
 			}
 
 			m_lightPassMatrices = GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -245,7 +245,7 @@ namespace Deferred
 		m_lightPassScene = l_scene;
 		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram );
-		m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
+		m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		return l_return;
 	}
 

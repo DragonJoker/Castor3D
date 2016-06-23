@@ -196,7 +196,7 @@ namespace Castor3D
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
 		 *\param[in]	p_variable	La variable à donner
 		 */
-		C3D_API virtual void AddFrameVariable( OneIntFrameVariableSPtr p_variable );
+		C3D_API virtual void AddFrameVariable( FrameVariableSPtr p_variable );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -205,7 +205,7 @@ namespace Castor3D
 		 *\brief		Trouve une variable
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API OneIntFrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
+		C3D_API FrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables

@@ -95,23 +95,6 @@ namespace Castor3D
 		C3D_API void Update( real p_time, Castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english
-		 *\return		The scaling key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
-		 */
-		C3D_API void SetInterpolationMode( InterpolatorType p_mode );
-		/**
-		 *\~english
-		 *\return		The scaling key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
-		 */
-		inline InterpolatorType GetInterpolationMode()const
-		{
-			return m_mode;
-		}
-		/**
-		 *\~english
 		 *\brief		The final object's animations transformation.
 		 *\~french
 		 *\brief		La transfomation finale des animations du de cet objet.
@@ -144,15 +127,6 @@ namespace Castor3D
 		//!\~english	The animation object.
 		//!\~french		L'animation d'objet.
 		SkeletonAnimationObject & m_animationObject;
-		//!\~english	The interpolation mode.
-		//!\~french		Le mode d'interpolation.
-		InterpolatorType m_mode{ InterpolatorType::Count };
-		//!\~english	The point interpolator.
-		//!\~french		L'interpolateur de points.
-		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;
-		//!\~english	The quaternion interpolator.
-		//!\~french		L'interpolateur de quaternions.
-		std::unique_ptr< QuaternionInterpolator > m_quaternionInterpolator;
 		//!\~english	Iterator to the previous keyframe (when playing the animation).
 		//!\~french		Itérateur sur la key frame précédente (quand l'animation est jouée).
 		KeyFrameArray::const_iterator m_prev;
