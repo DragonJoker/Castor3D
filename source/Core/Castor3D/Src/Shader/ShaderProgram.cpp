@@ -103,6 +103,12 @@ namespace Castor3D
 	const String ShaderProgram::Bitangent = cuT( "bitangent" );
 	const String ShaderProgram::Texture = cuT( "texture" );
 	const String ShaderProgram::Colour = cuT( "colour" );
+	const String ShaderProgram::Position2 = cuT( "position2" );
+	const String ShaderProgram::Normal2 = cuT( "normal2" );
+	const String ShaderProgram::Tangent2 = cuT( "tangent2" );
+	const String ShaderProgram::Bitangent2 = cuT( "bitangent2" );
+	const String ShaderProgram::Texture2 = cuT( "texture2" );
+	const String ShaderProgram::Colour2 = cuT( "colour2" );
 	const String ShaderProgram::Text = cuT( "text" );
 	const String ShaderProgram::BoneIds0 = cuT( "bone_ids0" );
 	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );
@@ -121,6 +127,9 @@ namespace Castor3D
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
+	const String ShaderProgram::Time = cuT ("c3d_fTime");
+	const String ShaderProgram::Bones = cuT ("c3d_mtxBones");
+	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
 	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
@@ -131,9 +140,12 @@ namespace Castor3D
 	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
+
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
-	const String ShaderProgram::BufferPass = cuT( "Pass" );
+	const String ShaderProgram::BufferPass = cuT ("Pass");
+	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
+	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
 
 	//*************************************************************************************************
 
@@ -354,31 +366,37 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneIntFrameVariableSPtr ShaderProgram::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
+	FrameVariableSPtr ShaderProgram::CreateFrameVariable( FrameVariableType p_type, String const & p_name, eSHADER_TYPE p_shader, int p_iNbOcc )
 	{
-		OneIntFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
+		FrameVariableSPtr l_return = FindFrameVariable( p_type, p_name, p_shader );
 
 		if ( !l_return )
 		{
-			l_return = DoCreateTextureVariable( p_iNbOcc );
+			l_return = DoCreateVariable( p_type, p_iNbOcc );
 			l_return->SetName( p_name );
 
-			if ( m_pShaders[p_type] )
+			if ( m_pShaders[p_shader] )
 			{
-				m_pShaders[p_type]->AddFrameVariable( l_return );
+				m_pShaders[p_shader]->AddFrameVariable( l_return );
 			}
 		}
 
 		return l_return;
 	}
 
-	OneIntFrameVariableSPtr ShaderProgram::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
+	FrameVariableSPtr ShaderProgram::FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader )const
 	{
-		OneIntFrameVariableSPtr l_return;
+		FrameVariableSPtr l_return;
 
-		if ( m_pShaders[p_type] )
+		if ( m_pShaders[p_shader] )
 		{
-			l_return = m_pShaders[p_type]->FindFrameVariable( p_name );
+			l_return = m_pShaders[p_shader]->FindFrameVariable( p_name );
+
+			if ( l_return && l_return->GetFullType() != p_type )
+			{
+				Logger::LogError( cuT( "Frame variable named " ) + p_name + cuT( " exists but with a different type" ) );
+				l_return.reset();
+			}
 		}
 
 		return l_return;

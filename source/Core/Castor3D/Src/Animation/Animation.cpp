@@ -86,9 +86,9 @@ namespace Castor3D
 	{
 	}
 
-	bool Animation::Initialise()
+	void Animation::UpdateLength()
 	{
-		return DoInitialise();
+		DoUpdateLength();
 	}
 
 	//*************************************************************************************************

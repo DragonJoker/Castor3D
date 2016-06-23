@@ -19,16 +19,16 @@ namespace Castor3D
 
 	bool VertexBuffer::Create()
 	{
-		if ( !m_pBuffer )
+		if ( !m_gpuBuffer )
 		{
-			m_pBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer( this );
+			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer( this );
 		}
 
-		bool l_return = m_pBuffer != nullptr;
+		bool l_return = m_gpuBuffer != nullptr;
 
 		if ( l_return )
 		{
-			l_return = GetGpuBuffer()->Create();
+			l_return = m_gpuBuffer->Create();
 		}
 
 		return l_return;

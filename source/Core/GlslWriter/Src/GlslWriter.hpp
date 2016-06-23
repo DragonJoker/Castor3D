@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GLSL_WRITER_H___
 #define ___GLSL_WRITER_H___
 
-#include "GlslArray.hpp"
+#include "GlslOptionalArray.hpp"
 
 #include <Factory.hpp>
 #include <OwnedBy.hpp>
@@ -49,6 +49,7 @@ namespace GLSL
 	struct IndentBlock
 	{
 		GlslWriter_API IndentBlock( GlslWriter & p_writter );
+		GlslWriter_API IndentBlock( Castor::StringStream & p_stream );
 		GlslWriter_API ~IndentBlock();
 		Castor::StringStream & m_stream;
 		int m_indent;
@@ -57,12 +58,20 @@ namespace GLSL
 	struct Ubo
 	{
 		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
+		GlslWriter_API Ubo( Ubo && p_rhs );
+		GlslWriter_API Ubo( Ubo const & p_rhs ) = delete;
+		GlslWriter_API Ubo & operator=( Ubo && p_rhs ) = delete;
+		GlslWriter_API Ubo & operator=( Ubo const & p_rhs ) = delete;
 		GlslWriter_API void End();
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		IndentBlock * m_block;
 		GlslWriter & m_writer;
+		Castor::StringStream m_stream;
 		Castor::String m_name;
+		uint32_t m_count{ 0u };
 	};
 
 	struct Struct
@@ -179,6 +188,14 @@ namespace GLSL
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs );
 		template< typename T > inline Optional< T > GetBuiltin( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Expr const & p_rhs );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Type const & p_rhs );
+		template< typename T > inline Optional< Array< T > > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
+		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 
 		GlslWriter_API GlslWriter & operator<<( Version const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Attribute const & p_rhs );
@@ -197,8 +214,6 @@ namespace GLSL
 	private:
 		GlslWriterConfig m_config;
 		Castor::String m_uniform;
-		VariablesBase * m_variables;
-		ConstantsBase * m_constants;
 		std::unique_ptr< KeywordsBase > m_keywords;
 		Castor::StringStream m_stream;
 		int m_attributeIndex;
@@ -233,42 +248,6 @@ namespace GLSL
 
 #define LOCALE_ASSIGN_ARRAY( Writer, Type, Name, Dimension, Assign )\
 	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
-
-#define UBO_MATRIX( Writer )\
-	Ubo l_matrices = l_writer.GetUbo( cuT( "Matrices" ) );\
-	auto c3d_mtxProjection = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjection" ) );\
-	auto c3d_mtxModel = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxModel" ) );\
-	auto c3d_mtxView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxView" ) );\
-	auto c3d_mtxNormal = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxNormal" ) );\
-	auto c3d_mtxTexture0 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture0" ) );\
-	auto c3d_mtxTexture1 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture1" ) );\
-	auto c3d_mtxTexture2 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture2" ) );\
-	auto c3d_mtxTexture3 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture3" ) );\
-	auto c3d_mtxBones = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxBones" ), 400 );\
-	l_matrices.End()
-
-#define UBO_PASS( Writer )\
-	Ubo l_pass = l_writer.GetUbo( cuT( "Pass" ) );\
-	auto c3d_v4MatAmbient = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatAmbient" ) );\
-	auto c3d_v4MatDiffuse = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatDiffuse" ) );\
-	auto c3d_v4MatEmissive = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatEmissive" ) );\
-	auto c3d_v4MatSpecular = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatSpecular" ) );\
-	auto c3d_fMatShininess = l_pass.GetUniform< Float >( cuT( "c3d_fMatShininess" ) );\
-	auto c3d_fMatOpacity = l_pass.GetUniform< Float >( cuT( "c3d_fMatOpacity" ) );\
-	l_pass.End()
-
-#define UBO_SCENE( Writer )\
-	Ubo l_scene = l_writer.GetUbo( cuT( "Scene" ) );\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4AmbientLight" ) );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );\
-	auto c3d_iLightsCount = l_scene.GetUniform< IVec4 >( cuT( "c3d_iLightsCount" ) );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< Vec3 >( cuT( "c3d_v3CameraPosition" ) );\
-	l_scene.End()
-
-#define UBO_BILLBOARD( Writer )\
-	Ubo l_billboard = l_writer.GetUbo( cuT( "Billboard" ) );\
-	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( cuT( "c3d_v2iDimensions" ) );\
-	l_billboard.End();
 }
 
 #define TERNARY( Writer, ExprType, Condition, Left, Right )\

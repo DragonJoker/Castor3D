@@ -29,7 +29,6 @@ namespace Castor3D
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		31/05/2016
-	\todo		Write and Read functions.
 	\~english
 	\brief		Skeleton animation class.
 	\~french
@@ -57,6 +56,34 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API ~SkeletonAnimation();
+		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API SkeletonAnimation( SkeletonAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API SkeletonAnimation( SkeletonAnimation const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API SkeletonAnimation & operator=( SkeletonAnimation const & p_rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving node.
@@ -100,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API bool HasObject( AnimationObjectType p_type, Castor::String const & p_name )const;
+		C3D_API bool HasObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -109,7 +136,25 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
+		C3D_API SkeletonAnimationObjectSPtr GetObject( Bone const & p_bone )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Récupère un os animé.
+		 *\param[in]	p_bone	L'os.
+		 */
+		C3D_API SkeletonAnimationObjectSPtr GetObject( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Récupère un os animé.
+		 *\param[in]	p_bone	L'os.
+		 */
+		C3D_API SkeletonAnimationObjectSPtr GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\return		The moving objects.
@@ -134,9 +179,9 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::Animation::DoInitialise
+		 *\~copydoc		Casto3D::Animation::DoUpdateLength
 		 */
-		bool DoInitialise()override;
+		C3D_API void DoUpdateLength()override;
 
 	protected:
 		//!\~english	The root moving objects.
@@ -156,10 +201,10 @@ namespace Castor3D
 	\date 		28/05/2016
 	\~english
 	\brief		Helper structure to find eCHUNK_TYPE from a type.
-	\remarks	Specialisation for Animation.
+	\remarks	Specialisation for SkeletonAnimation.
 	\~french
 	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
-	\remarks	Spécialisation pour Animation.
+	\remarks	Spécialisation pour SkeletonAnimation.
 	*/
 	template<>
 	struct ChunkTyper< SkeletonAnimation >
@@ -171,9 +216,9 @@ namespace Castor3D
 	\version	0.8.0
 	\date		26/01/2016
 	\~english
-	\brief		Animation binary loader.
+	\brief		SkeletonAnimation binary loader.
 	\~english
-	\brief		Loader binaire d'Animation.
+	\brief		Loader binaire de SkeletonAnimation.
 	*/
 	template<>
 	class BinaryWriter< SkeletonAnimation >
@@ -197,9 +242,9 @@ namespace Castor3D
 	\version	0.8.0
 	\date		26/01/2016
 	\~english
-	\brief		Animation binary loader.
+	\brief		SkeletonAnimation binary loader.
 	\~english
-	\brief		Loader binaire d'Animation.
+	\brief		Loader binaire de SkeletonAnimation.
 	*/
 	template<>
 	class BinaryParser< SkeletonAnimation >

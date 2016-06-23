@@ -40,34 +40,34 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Initialise
 		 */
-		virtual bool Initialise();
+		bool Initialise()override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Cleanup
 		 */
-		virtual void Cleanup();
+		void Cleanup()override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Bind
 		 */
-		virtual void Bind( bool p_bindUbo )const;
+		void Bind( bool p_bindUbo )const override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Unbind
 		 */
-		virtual void Unbind()const;
+		void Unbind()const override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Link
 		 */
-		virtual bool Link();
+		bool Link()override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::GetLayout
 		 */
-		virtual Castor3D::ProgramInputLayout const & GetLayout()const
+		Castor3D::ProgramInputLayout const & GetLayout()const override
 		{
 			return m_layout;
 		}
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::GetLayout
 		 */
-		virtual Castor3D::ProgramInputLayout & GetLayout()
+		Castor3D::ProgramInputLayout & GetLayout()override
 		{
 			return m_layout;
 		}
@@ -76,15 +76,11 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
-		virtual Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
+		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */
-		virtual std::shared_ptr< Castor3D::OneIntFrameVariable > DoCreateTextureVariable( int p_occurences );
-		/**
-		 *\copydoc		Castor3D::ShaderProgram::DoGetVertexShaderSource
-		 */
-		virtual Castor::String DoRetrieveLinkerLog();
+		std::shared_ptr< Castor3D::FrameVariable > DoCreateVariable( Castor3D::FrameVariableType p_type, int p_occurences )override;
 
 	private:
 		TestProgramInputLayout m_layout;

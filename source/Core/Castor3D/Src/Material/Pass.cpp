@@ -452,7 +452,7 @@ namespace Castor3D
 
 		if ( l_unit )
 		{
-			auto l_variable = p_node.m_program.FindFrameVariable( p_name, eSHADER_TYPE_PIXEL );
+			auto l_variable = p_node.m_program.FindFrameVariable< OneIntFrameVariable >( p_name, eSHADER_TYPE_PIXEL );
 
 			if ( l_variable )
 			{

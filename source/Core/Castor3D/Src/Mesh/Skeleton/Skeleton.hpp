@@ -55,6 +55,34 @@ namespace Castor3D
 		C3D_API ~Skeleton();
 		/**
 		 *\~english
+		 *\brief		Move constructor.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 */
+		C3D_API Skeleton( Skeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 */
+		C3D_API Skeleton & operator=( Skeleton && p_rhs ) = default;
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API Skeleton( Skeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 */
+		C3D_API Skeleton & operator=( Skeleton const & p_rhs ) = delete;
+		/**
+		 *\~english
 		 *\brief		Adds a bone to the skeleton
 		 *\param[in]	p_bone	The bone.
 		 *\~french
@@ -92,7 +120,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		C3D_API SkeletonAnimationSPtr CreateAnimation( Castor::String const & p_name );
+		C3D_API SkeletonAnimation & CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\return		The global inverse transform.

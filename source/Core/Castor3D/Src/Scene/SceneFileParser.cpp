@@ -211,17 +211,18 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapShaderTypes[cuT( "pixel" )] = MASK_SHADER_TYPE_PIXEL;
 	m_mapShaderTypes[cuT( "compute" )] = MASK_SHADER_TYPE_COMPUTE;
 
-	m_mapVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
-	m_mapVariableTypes[cuT( "uint" )] = eFRAME_VARIABLE_TYPE_UINT;
-	m_mapVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
-	m_mapVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
-	m_mapVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
-	m_mapVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
-	m_mapVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
-	m_mapVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
-	m_mapVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
-	m_mapVariableTypes[cuT( "mat3x3f" )] = eFRAME_VARIABLE_TYPE_MAT3X3F;
-	m_mapVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
+	m_mapVariableTypes[cuT( "int" )] = uint32_t( FrameVariableType::Int );
+	m_mapVariableTypes[cuT( "sampler" )] = uint32_t( FrameVariableType::Sampler );
+	m_mapVariableTypes[cuT( "uint" )] = uint32_t( FrameVariableType::UInt );
+	m_mapVariableTypes[cuT( "float" )] = uint32_t( FrameVariableType::Float );
+	m_mapVariableTypes[cuT( "vec2i" )] = uint32_t( FrameVariableType::Vec2i );
+	m_mapVariableTypes[cuT( "vec3i" )] = uint32_t( FrameVariableType::Vec3i );
+	m_mapVariableTypes[cuT( "vec4i" )] = uint32_t( FrameVariableType::Vec4i );
+	m_mapVariableTypes[cuT( "vec2f" )] = uint32_t( FrameVariableType::Vec2f );
+	m_mapVariableTypes[cuT( "vec3f" )] = uint32_t( FrameVariableType::Vec3f );
+	m_mapVariableTypes[cuT( "vec4f" )] = uint32_t( FrameVariableType::Vec4f );
+	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( FrameVariableType::Mat3x3f );
+	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( FrameVariableType::Mat4x4f );
 
 	m_mapMovables[cuT( "camera" )] = eMOVABLE_TYPE_CAMERA;
 	m_mapMovables[cuT( "light" )] = eMOVABLE_TYPE_LIGHT;
@@ -247,9 +248,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapHorizontalAligns[cuT( "left" )] = eHALIGN_LEFT;
 	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
 	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
-
-	m_mapInterpolatorModes[cuT( "none" )] = uint32_t( InterpolatorType::Nearest );
-	m_mapInterpolatorModes[cuT( "linear" )] = uint32_t( InterpolatorType::Linear );
 
 	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
 	m_mapTextTexturingModes[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;
@@ -395,6 +393,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "morph_import" ), Parser_MeshMorphImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_FLOAT >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_MESH, cuT( "division" ), Parser_MeshDivide, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_UINT16 >() } );
 	AddParser( eSECTION_MESH, cuT( "}" ), Parser_MeshEnd );
 
@@ -535,13 +534,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_AnimatedObjectGroupAnimationStart, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ANIMGROUP, cuT( "}" ), Parser_AnimatedObjectGroupEnd );
 
-	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "animation" ), Parser_AnimatedObjectAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "}" ), Parser_AnimatedObjectEnd );
-
 	AddParser( eSECTION_ANIMATION, cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_ANIMATION, cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_ANIMATION, cuT( "interpolation" ), Parser_AnimationInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
-	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
 	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
 
 	AddParser( eSECTION_SKYBOX, cuT( "left" ), Parser_SkyboxLeft, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
@@ -701,12 +695,12 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		l_return = cuT( "animated_object_group" );
 		break;
 
-	case eSECTION_ANIMATED_OBJECT:
-		l_return = cuT( "animated_object" );
-		break;
-
 	case eSECTION_ANIMATION:
 		l_return = cuT( "animation" );
+		break;
+
+	case eSECTION_SKYBOX:
+		l_return = cuT( "skybox" );
 		break;
 
 	default:

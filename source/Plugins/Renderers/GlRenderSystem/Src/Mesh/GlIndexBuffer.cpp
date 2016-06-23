@@ -30,7 +30,7 @@ namespace GlRender
 
 		//if( l_return )
 		//{
-		//	m_pBuffer->Clear();
+		//	m_buffer->Clear();
 		//}
 
 		return l_return;
@@ -49,9 +49,9 @@ namespace GlRender
 	bool GlIndexBufferObject::Bind()
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = false;
 
-		if ( l_return )
+		if ( l_pBuffer )
 		{
 			l_return = GlBuffer< uint32_t >::DoBind();
 		}
@@ -69,7 +69,7 @@ namespace GlRender
 		uint32_t * l_return = nullptr;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->IsAssigned() )
+		if ( l_pBuffer )
 		{
 			l_return = GlBuffer< uint32_t >::DoLock( p_offset, p_count, p_flags );
 		}
@@ -81,7 +81,7 @@ namespace GlRender
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
-		if ( l_pBuffer && l_pBuffer->IsAssigned() )
+		if ( l_pBuffer )
 		{
 			GlBuffer< uint32_t >::DoUnlock();
 		}

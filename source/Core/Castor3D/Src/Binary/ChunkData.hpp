@@ -931,10 +931,13 @@ namespace Castor3D
 		{
 			if ( !Castor::IsBigEndian() )
 			{
-				p_value.SetTimeIndex( Castor::SwitchEndianness( p_value.GetTimeIndex() ) );
-				p_value.SetRotate( Castor::SwitchEndianness( p_value.GetRotate() ) );
-				p_value.SetScale( Castor::SwitchEndianness( p_value.GetScale() ) );
-				p_value.SetTranslate( Castor::SwitchEndianness( p_value.GetTranslate() ) );
+				p_value = KeyFrame
+				{
+					Castor::SwitchEndianness( p_value.GetTimeIndex() ),
+					Castor::SwitchEndianness( p_value.GetTranslate() ),
+					Castor::SwitchEndianness( p_value.GetRotate() ),
+					Castor::SwitchEndianness( p_value.GetScale() )
+				};
 			}
 		}
 	};

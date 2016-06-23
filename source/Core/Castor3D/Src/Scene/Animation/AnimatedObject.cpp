@@ -24,27 +24,9 @@ namespace Castor3D
 	{
 	}
 
-	void AnimatedObject::Update( real p_tslf )
-	{
-		for ( auto l_animation : m_playingAnimations )
-		{
-			l_animation->Update( p_tslf );
-		}
-	}
-
-	void AnimatedObject::FillShader( Matrix4x4rFrameVariable & p_variable )
-	{
-		DoFillShader( p_variable );
-	}
-
 	void AnimatedObject::AddAnimation( String const & p_name )
 	{
-		auto l_animation = DoAddAnimation( p_name );
-
-		if ( l_animation )
-		{
-			m_animations.insert( { p_name, l_animation } );
-		}
+		DoAddAnimation( p_name );
 	}
 
 	void AnimatedObject::StartAnimation( String const & p_name )
@@ -59,7 +41,7 @@ namespace Castor3D
 					&& l_animation->GetState() != AnimationState::Paused )
 			{
 				l_animation->Play();
-				m_playingAnimations.push_back( l_animation );
+				DoStartAnimation( l_animation );
 			}
 		}
 	}
@@ -75,7 +57,7 @@ namespace Castor3D
 			if ( l_animation->GetState() != AnimationState::Stopped )
 			{
 				l_animation->Stop();
-				m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), l_animation ) );
+				DoStopAnimation( l_animation );
 			}
 		}
 	}
@@ -92,23 +74,23 @@ namespace Castor3D
 
 	void AnimatedObject::StartAllAnimations()
 	{
-		m_playingAnimations.clear();
+		DoClearAnimations();
 
 		for ( auto l_it : m_animations )
 		{
 			l_it.second->Play();
-			m_playingAnimations.push_back( l_it.second );
+			DoStartAnimation( l_it.second );
 		}
 	}
 
 	void AnimatedObject::StopAllAnimations()
 	{
-		m_playingAnimations.clear();
-
 		for ( auto l_it : m_animations )
 		{
 			l_it.second->Stop();
 		}
+
+		DoClearAnimations();
 	}
 
 	void AnimatedObject::PauseAllAnimations()
@@ -119,16 +101,15 @@ namespace Castor3D
 		}
 	}
 
-	AnimationInstanceSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
+	AnimationInstance & AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
-		AnimationInstanceSPtr l_return;
 		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_animations.end() )
+		if ( l_it == m_animations.end() )
 		{
-			l_return = l_it->second;
+			CASTOR_EXCEPTION( cuT( "No animation named " ) + p_name );
 		}
 
-		return l_return;
+		return *l_it->second;
 	}
 }

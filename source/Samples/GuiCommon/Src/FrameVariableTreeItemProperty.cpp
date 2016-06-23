@@ -66,111 +66,111 @@ namespace GuiCommon
 
 			switch ( p_variable->GetFullType() )
 			{
-			case eFRAME_VARIABLE_TYPE_BOOL:
+			case FrameVariableType::Bool:
 				l_return = new wxBoolProperty( p_name, p_name, std::static_pointer_cast< OneBoolFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_INT:
+			case FrameVariableType::Int:
 				l_return = new wxIntProperty( p_name, p_name, std::static_pointer_cast< OneIntFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_UINT:
+			case FrameVariableType::UInt:
 				l_return = new wxUIntProperty( p_name, p_name, std::static_pointer_cast< OneUIntFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_FLOAT:
+			case FrameVariableType::Float:
 				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< OneFloatFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_DOUBLE:
+			case FrameVariableType::Double:
 				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< OneDoubleFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_SAMPLER:
+			case FrameVariableType::Sampler:
 				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< OneIntFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2B:
+			case FrameVariableType::Vec2b:
 				l_return = new BoolPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Point2bFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3B:
+			case FrameVariableType::Vec3b:
 				l_return = new BoolPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Point3bFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4B:
+			case FrameVariableType::Vec4b:
 				l_return = new BoolPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Point4bFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2I:
+			case FrameVariableType::Vec2i:
 				l_return = new IntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Point2iFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3I:
+			case FrameVariableType::Vec3i:
 				l_return = new IntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Point3iFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4I:
+			case FrameVariableType::Vec4i:
 				l_return = new IntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Point4iFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2UI:
+			case FrameVariableType::Vec2ui:
 				l_return = new UIntPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Point2uiFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3UI:
+			case FrameVariableType::Vec3ui:
 				l_return = new UIntPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Point3uiFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4UI:
+			case FrameVariableType::Vec4ui:
 				l_return = new UIntPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Point4uiFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2F:
+			case FrameVariableType::Vec2f:
 				l_return = new FloatPointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Point2fFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3F:
+			case FrameVariableType::Vec3f:
 				l_return = new FloatPointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Point3fFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4F:
+			case FrameVariableType::Vec4f:
 				l_return = new FloatPointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Point4fFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2D:
+			case FrameVariableType::Vec2d:
 				l_return = new DoublePointProperty< 2 >( GC_POINT_XY, p_name, p_name, std::static_pointer_cast< Point2dFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3D:
+			case FrameVariableType::Vec3d:
 				l_return = new DoublePointProperty< 3 >( GC_POINT_XYZ, p_name, p_name, std::static_pointer_cast< Point3dFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4D:
+			case FrameVariableType::Vec4d:
 				l_return = new DoublePointProperty< 4 >( GC_POINT_XYZW, p_name, p_name, std::static_pointer_cast< Point4dFrameVariable >( p_variable )->GetValue() );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT2X2F:
+			case FrameVariableType::Mat2x2f:
 				l_return = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT3X3F:
+			case FrameVariableType::Mat3x3f:
 				l_return = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT4X4F:
+			case FrameVariableType::Mat4x4f:
 				l_return = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT2X2D:
+			case FrameVariableType::Mat2x2d:
 				l_return = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->GetValue() } );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT3X3D:
+			case FrameVariableType::Mat3x3d:
 				l_return = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->GetValue() } );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT4X4D:
+			case FrameVariableType::Mat4x4d:
 				l_return = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->GetValue() } );
 				break;
 			}
@@ -182,111 +182,111 @@ namespace GuiCommon
 		{
 			switch ( p_variable->GetFullType() )
 			{
-			case eFRAME_VARIABLE_TYPE_BOOL:
+			case FrameVariableType::Bool:
 				std::static_pointer_cast< OneBoolFrameVariable >( p_variable )->SetValue( GetValue< bool >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_INT:
+			case FrameVariableType::Int:
 				std::static_pointer_cast< OneIntFrameVariable >( p_variable )->SetValue( GetValue< int >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_UINT:
+			case FrameVariableType::UInt:
 				std::static_pointer_cast< OneUIntFrameVariable >( p_variable )->SetValue( GetValue< uint32_t >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_FLOAT:
+			case FrameVariableType::Float:
 				std::static_pointer_cast< OneFloatFrameVariable >( p_variable )->SetValue( GetValue< float >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_DOUBLE:
+			case FrameVariableType::Double:
 				std::static_pointer_cast< OneDoubleFrameVariable >( p_variable )->SetValue( GetValue< double >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_SAMPLER:
+			case FrameVariableType::Sampler:
 				// TODO
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2B:
+			case FrameVariableType::Vec2b:
 				std::static_pointer_cast< Point2bFrameVariable >( p_variable )->SetValue( PointRefFromVariant< bool, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3B:
+			case FrameVariableType::Vec3b:
 				std::static_pointer_cast< Point3bFrameVariable >( p_variable )->SetValue( PointRefFromVariant< bool, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4B:
+			case FrameVariableType::Vec4b:
 				std::static_pointer_cast< Point4bFrameVariable >( p_variable )->SetValue( PointRefFromVariant< bool, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2I:
+			case FrameVariableType::Vec2i:
 				std::static_pointer_cast< Point2iFrameVariable >( p_variable )->SetValue( PointRefFromVariant< int, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3I:
+			case FrameVariableType::Vec3i:
 				std::static_pointer_cast< Point3iFrameVariable >( p_variable )->SetValue( PointRefFromVariant< int, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4I:
+			case FrameVariableType::Vec4i:
 				std::static_pointer_cast< Point4iFrameVariable >( p_variable )->SetValue( PointRefFromVariant< int, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2UI:
+			case FrameVariableType::Vec2ui:
 				std::static_pointer_cast< Point2uiFrameVariable >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3UI:
+			case FrameVariableType::Vec3ui:
 				std::static_pointer_cast< Point3uiFrameVariable >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4UI:
+			case FrameVariableType::Vec4ui:
 				std::static_pointer_cast< Point4uiFrameVariable >( p_variable )->SetValue( PointRefFromVariant< uint32_t, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2F:
+			case FrameVariableType::Vec2f:
 				std::static_pointer_cast< Point2fFrameVariable >( p_variable )->SetValue( PointRefFromVariant< float, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3F:
+			case FrameVariableType::Vec3f:
 				std::static_pointer_cast< Point3fFrameVariable >( p_variable )->SetValue( PointRefFromVariant< float, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4F:
+			case FrameVariableType::Vec4f:
 				std::static_pointer_cast< Point4fFrameVariable >( p_variable )->SetValue( PointRefFromVariant< float, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC2D:
+			case FrameVariableType::Vec2d:
 				std::static_pointer_cast< Point2dFrameVariable >( p_variable )->SetValue( PointRefFromVariant< double, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC3D:
+			case FrameVariableType::Vec3d:
 				std::static_pointer_cast< Point3dFrameVariable >( p_variable )->SetValue( PointRefFromVariant< double, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_VEC4D:
+			case FrameVariableType::Vec4d:
 				std::static_pointer_cast< Point4dFrameVariable >( p_variable )->SetValue( PointRefFromVariant< double, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT2X2F:
+			case FrameVariableType::Mat2x2f:
 				std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< float, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT3X3F:
+			case FrameVariableType::Mat3x3f:
 				std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< float, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT4X4F:
+			case FrameVariableType::Mat4x4f:
 				std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< float, 4 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT2X2D:
+			case FrameVariableType::Mat2x2d:
 				std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< double, 2 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT3X3D:
+			case FrameVariableType::Mat3x3d:
 				std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< double, 3 >( p_value ), p_index );
 				break;
 
-			case eFRAME_VARIABLE_TYPE_MAT4X4D:
+			case FrameVariableType::Mat4x4d:
 				std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->SetValue( MatrixRefFromVariant< double, 4 >( p_value ), p_index );
 				break;
 			}
@@ -419,107 +419,107 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_TYPE_BOOL )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_BOOL );
+					OnTypeChange( FrameVariableType::Bool );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_INT )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_INT );
+					OnTypeChange( FrameVariableType::Int );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_FLOAT )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_FLOAT );
+					OnTypeChange( FrameVariableType::Float );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DOUBLE )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_DOUBLE );
+					OnTypeChange( FrameVariableType::Double );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_BVEC2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC2B );
+					OnTypeChange( FrameVariableType::Vec2b );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_BVEC3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC3B );
+					OnTypeChange( FrameVariableType::Vec3b );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_BVEC4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC4B );
+					OnTypeChange( FrameVariableType::Vec4b );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_IVEC2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC2I );
+					OnTypeChange( FrameVariableType::Vec2i );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_IVEC3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC3I );
+					OnTypeChange( FrameVariableType::Vec3i );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_IVEC4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC4I );
+					OnTypeChange( FrameVariableType::Vec4i );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_UIVEC2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC2UI );
+					OnTypeChange( FrameVariableType::Vec2ui );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_UIVEC3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC3UI );
+					OnTypeChange( FrameVariableType::Vec3ui );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_UIVEC4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC4UI );
+					OnTypeChange( FrameVariableType::Vec4ui );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_VEC2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC2F );
+					OnTypeChange( FrameVariableType::Vec2f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_VEC3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC3F );
+					OnTypeChange( FrameVariableType::Vec3f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_VEC4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC4F );
+					OnTypeChange( FrameVariableType::Vec4f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DVEC2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC2D );
+					OnTypeChange( FrameVariableType::Vec2d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DVEC3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC3D );
+					OnTypeChange( FrameVariableType::Vec3d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DVEC4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_VEC4D );
+					OnTypeChange( FrameVariableType::Vec4d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_MAT2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT2X2F );
+					OnTypeChange( FrameVariableType::Mat2x2f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_MAT3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT3X3F );
+					OnTypeChange( FrameVariableType::Mat3x3f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_MAT4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT4X4F );
+					OnTypeChange( FrameVariableType::Mat4x4f );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DMAT2 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT2X2D );
+					OnTypeChange( FrameVariableType::Mat2x2d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DMAT3 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT3X3D );
+					OnTypeChange( FrameVariableType::Mat3x3d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_DMAT4 )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_MAT4X4D );
+					OnTypeChange( FrameVariableType::Mat4x4d );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TYPE_SAMPLER )
 				{
-					OnTypeChange( eFRAME_VARIABLE_TYPE_SAMPLER );
+					OnTypeChange( FrameVariableType::Sampler );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_NAME )
@@ -533,7 +533,7 @@ namespace GuiCommon
 		}
 	}
 
-	void FrameVariableTreeItemProperty::OnTypeChange( eFRAME_VARIABLE_TYPE p_value )
+	void FrameVariableTreeItemProperty::OnTypeChange( FrameVariableType p_value )
 	{
 		FrameVariableSPtr l_variable = GetVariable();
 		FrameVariableBufferSPtr l_buffer = GetBuffer();

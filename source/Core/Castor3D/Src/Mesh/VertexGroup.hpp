@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_VERTEX_GROUP_H___
 #define ___C3D_VERTEX_GROUP_H___
 
-#include "Castor3DPrerequisites.hpp"
-
 namespace Castor3D
 {
 	/*!
@@ -51,6 +49,7 @@ namespace Castor3D
 	};
 
 	using InterleavedVertex = InterleavedVertexT< real >;
+	using InterleavedVertexArray = std::vector< InterleavedVertex >;
 }
 
 #endif

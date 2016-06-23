@@ -108,15 +108,6 @@ foreach(Lib ${Boost_LIBRARIES})
 	endif()
 endforeach()
 
-if( MSVC )
-	# We remove the existing /Zm flag to replace it by /Zm300
-	string( REGEX REPLACE ".*(/Zm[0-9]+).*" "\\1" ZmFlag ${CMAKE_CXX_FLAGS} )
-	if( (NOT "${ZmFlag}" STREQUAL "") AND (NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${ZmFlag}") )
-		string( REPLACE ${ZmFlag} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
-	endif()
-	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
-endif()
-
 msg_debug( "CMAKE_BUILD_TYPE : ${CMAKE_BUILD_TYPE}")
 msg_debug( "CMAKE_C_FLAGS    : ${CMAKE_C_FLAGS}" )
 msg_debug( "CMAKE_CXX_FLAGS  : ${CMAKE_CXX_FLAGS}" )
@@ -129,6 +120,20 @@ set( CastorBinsDependencies
 	CastorUtils
 	Castor3D
 )
+
+#--------------------------------------------------------------------------------------------------
+#	MSVC specifics
+#--------------------------------------------------------------------------------------------------
+if( MSVC )
+	# We remove the existing /Zm flag to replace it by /Zm300
+	string( REGEX REPLACE ".*(/Zm[0-9]+).*" "\\1" ZmFlag ${CMAKE_CXX_FLAGS} )
+	if( (NOT "${ZmFlag}" STREQUAL "") AND (NOT "${CMAKE_CXX_FLAGS}" STREQUAL "${ZmFlag}") )
+		string( REPLACE ${ZmFlag} "" CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} )
+	endif()
+	set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm300" )
+	# Copy Rebracer.xml file so we can use Rebracer extension to uniformise code formatting
+	file( COPY ${CMAKE_SOURCE_DIR}/../data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
+endif()
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )

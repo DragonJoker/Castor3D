@@ -13,144 +13,144 @@ namespace TestRender
 {
 	namespace
 	{
-		template< eFRAME_VARIABLE_TYPE Type > FrameVariableSPtr TestFrameVariableCreator( TestShaderProgram * p_program, uint32_t p_occurences );
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template< FrameVariableType Type > FrameVariableSPtr TestFrameVariableCreator( TestShaderProgram * p_program, uint32_t p_occurences );
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Int >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestOneFrameVariable< int > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::UInt >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestOneFrameVariable< uint32_t > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Float >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestOneFrameVariable< float > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Double >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestOneFrameVariable< double > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Sampler >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestOneFrameVariable< int > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec2i >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< int, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec3i >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< int, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec4i >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< int, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec2ui >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< uint32_t, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec3ui >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< uint32_t, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec4ui >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< uint32_t, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec2f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< float, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec3f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< float, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec4f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< float, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec2d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< double, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec3d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< double, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Vec4d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestPointFrameVariable< double, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x2f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 2, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x3f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 2, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x4f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 2, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x2f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 3, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x3f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 3, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x4f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 3, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x2f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 4, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x3f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 4, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x4f >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< float, 4, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x2d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 2, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x3d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 2, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat2x4d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 2, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x2d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 3, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x3d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 3, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat3x4d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 3, 4 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x2d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 4, 2 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x3d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 4, 3 > >( p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( TestShaderProgram * p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr TestFrameVariableCreator< FrameVariableType::Mat4x4d >( TestShaderProgram * p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< TestMatrixFrameVariable< double, 4, 4 > >( p_occurences, p_program );
 		}
@@ -165,151 +165,151 @@ namespace TestRender
 	{
 	}
 
-	FrameVariableSPtr TestFrameVariableBuffer::DoCreateVariable( ShaderProgram * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences )
+	FrameVariableSPtr TestFrameVariableBuffer::DoCreateVariable( ShaderProgram * p_program, FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		TestShaderProgram * l_program = static_cast< TestShaderProgram * >( p_program );
 
 		switch ( p_type )
 		{
-		case eFRAME_VARIABLE_TYPE_INT:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( l_program, p_occurences );
+		case FrameVariableType::Int:
+			l_return = TestFrameVariableCreator< FrameVariableType::Int >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_UINT:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( l_program, p_occurences );
+		case FrameVariableType::UInt:
+			l_return = TestFrameVariableCreator< FrameVariableType::UInt >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_FLOAT:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( l_program, p_occurences );
+		case FrameVariableType::Float:
+			l_return = TestFrameVariableCreator< FrameVariableType::Float >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_DOUBLE:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( l_program, p_occurences );
+		case FrameVariableType::Double:
+			l_return = TestFrameVariableCreator< FrameVariableType::Double >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_SAMPLER:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( l_program, p_occurences );
+		case FrameVariableType::Sampler:
+			l_return = TestFrameVariableCreator< FrameVariableType::Sampler >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC2I:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( l_program, p_occurences );
+		case FrameVariableType::Vec2i:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec2i >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC3I:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( l_program, p_occurences );
+		case FrameVariableType::Vec3i:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec3i >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC4I:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( l_program, p_occurences );
+		case FrameVariableType::Vec4i:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec4i >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC2UI:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( l_program, p_occurences );
+		case FrameVariableType::Vec2ui:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec2ui >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC3UI:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( l_program, p_occurences );
+		case FrameVariableType::Vec3ui:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec3ui >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC4UI:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( l_program, p_occurences );
+		case FrameVariableType::Vec4ui:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec4ui >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC2F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( l_program, p_occurences );
+		case FrameVariableType::Vec2f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec2f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC3F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( l_program, p_occurences );
+		case FrameVariableType::Vec3f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec3f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC4F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( l_program, p_occurences );
+		case FrameVariableType::Vec4f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec4f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC2D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( l_program, p_occurences );
+		case FrameVariableType::Vec2d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec2d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC3D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( l_program, p_occurences );
+		case FrameVariableType::Vec3d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec3d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_VEC4D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( l_program, p_occurences );
+		case FrameVariableType::Vec4d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Vec4d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X2F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( l_program, p_occurences );
+		case FrameVariableType::Mat2x2f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x2f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X3F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( l_program, p_occurences );
+		case FrameVariableType::Mat2x3f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x3f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X4F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( l_program, p_occurences );
+		case FrameVariableType::Mat2x4f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x4f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X2F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( l_program, p_occurences );
+		case FrameVariableType::Mat3x2f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x2f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X3F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( l_program, p_occurences );
+		case FrameVariableType::Mat3x3f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x3f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X4F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( l_program, p_occurences );
+		case FrameVariableType::Mat3x4f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x4f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X2F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( l_program, p_occurences );
+		case FrameVariableType::Mat4x2f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x2f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X3F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( l_program, p_occurences );
+		case FrameVariableType::Mat4x3f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x3f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X4F:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( l_program, p_occurences );
+		case FrameVariableType::Mat4x4f:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x4f >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X2D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( l_program, p_occurences );
+		case FrameVariableType::Mat2x2d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x2d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X3D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( l_program, p_occurences );
+		case FrameVariableType::Mat2x3d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x3d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT2X4D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( l_program, p_occurences );
+		case FrameVariableType::Mat2x4d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat2x4d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X2D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( l_program, p_occurences );
+		case FrameVariableType::Mat3x2d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x2d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X3D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( l_program, p_occurences );
+		case FrameVariableType::Mat3x3d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x3d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT3X4D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( l_program, p_occurences );
+		case FrameVariableType::Mat3x4d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat3x4d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X2D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( l_program, p_occurences );
+		case FrameVariableType::Mat4x2d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x2d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X3D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( l_program, p_occurences );
+		case FrameVariableType::Mat4x3d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x3d >( l_program, p_occurences );
 			break;
 
-		case eFRAME_VARIABLE_TYPE_MAT4X4D:
-			l_return = TestFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( l_program, p_occurences );
+		case FrameVariableType::Mat4x4d:
+			l_return = TestFrameVariableCreator< FrameVariableType::Mat4x4d >( l_program, p_occurences );
 			break;
 		}
 

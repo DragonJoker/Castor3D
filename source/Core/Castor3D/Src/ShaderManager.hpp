@@ -109,13 +109,13 @@ namespace Castor3D
 		 *\brief		Adds a billboards shader program corresponding to given flags.
 		 *\param[in]	p_program		The program to add.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\return		The found program.
 		 *\~french
 		 *\brief		Ajoute un programme de billboards correspondant aux flags donnés.
 		 *\param[in]	p_program		Le programme à ajouter.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\return		Le programme trouvé.
 		 */
 		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint32_t p_textureFlags, uint32_t p_programFlags );
@@ -158,6 +158,21 @@ namespace Castor3D
 		 *\return		Le frame variable buffer
 		 */
 		C3D_API FrameVariableBufferSPtr CreatePassBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates an animation frame variable buffer
+		 *\param[in]	p_program		The program to which the buffer is bound
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données d'animation
+		 *\param[in]	p_program		Le programme auquel le buffer est lié
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
+		 *\return		Le frame variable buffer
+		 */
+		C3D_API FrameVariableBufferSPtr CreateAnimationBuffer( ShaderProgram & p_program, uint32_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables

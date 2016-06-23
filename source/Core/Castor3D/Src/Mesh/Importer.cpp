@@ -31,7 +31,7 @@ namespace Castor3D
 		return DoImportScene();
 	}
 
-	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
+	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
 	{
 		m_fileName = p_fileName;
 		m_filePath = m_fileName.GetPath();
@@ -45,9 +45,12 @@ namespace Castor3D
 			CASTOR_EXCEPTION( cuT( "The import failed." ) );
 		}
 
-		for ( auto l_submesh : *l_mesh )
+		if ( p_initialise )
 		{
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			for ( auto l_submesh : *l_mesh )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			}
 		}
 
 		return l_mesh;
@@ -70,7 +73,8 @@ namespace Castor3D
 			File::ListDirectoryFiles( m_filePath, l_files, true );
 			auto l_it = std::find_if( l_files.begin(), l_files.end(), [&l_fileName]( Path const & p_file )
 			{
-				return p_file.GetFileName( true ) == l_fileName;
+				return p_file.GetFileName( true ) == l_fileName
+					|| p_file.GetFileName( true ).find( l_fileName ) == 0;
 			} );
 
 			l_folder = m_filePath;

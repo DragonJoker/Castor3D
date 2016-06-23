@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -53,51 +53,11 @@ namespace Castor3D
 		C3D_API Version( int p_iMajor = CASTOR_VERSION_MAJOR, int p_iMinor = CASTOR_VERSION_MINOR, int p_iBuild = CASTOR_VERSION_BUILD );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_version	The source
-		 *\~french
-		 *\brief		Constructeur par recopie
-		 *\param[in]	p_version	La source
-		 */
-		C3D_API Version( Version const & p_version );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_version	The source
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_version	La source
-		 */
-		C3D_API Version( Version && p_version );
-		/**
-		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
 		C3D_API ~Version();
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_version	The source
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par recopie
-		 *\param[in]	p_version	La source
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API Version & operator=( Version const & p_version );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_version	The source
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_version	La source
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API Version & operator=( Version && p_version );
 
 	public:
 		//!~english The major version number	\~french Le numéro majeur

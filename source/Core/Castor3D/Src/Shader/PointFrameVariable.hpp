@@ -157,7 +157,7 @@ namespace Castor3D
 		 *\brief		Donne le type complet de la variable
 		 *\return		Le type complet
 		 */
-		static inline eVARIABLE_TYPE GetVariableType();
+		static inline VariableType GetVariableType();
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type
@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\brief		Donne le type complet de la variable
 		 *\return		Le type
 		 */
-		static inline eFRAME_VARIABLE_TYPE GetFrameVariableType();
+		static inline FrameVariableType GetFrameVariableType();
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type name
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de la variable
 		 *\return		Le type de variable
 		 */
-		inline eVARIABLE_TYPE GetType()const
+		inline VariableType GetType()const
 		{
 			return PointFrameVariable< T, Count >::GetVariableType();
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère le type complet de la variable
 		 *\return		Le type
 		 */
-		inline eFRAME_VARIABLE_TYPE GetFullType()const
+		inline FrameVariableType GetFullType()const
 		{
 			return PointFrameVariable< T, Count >::GetFrameVariableType();
 		}

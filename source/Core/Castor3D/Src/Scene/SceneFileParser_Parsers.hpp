@@ -115,6 +115,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshNormals )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshSubmesh )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshImport )
+	DECLARE_ATTRIBUTE_PARSER( Parser_MeshMorphImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshDivide )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshEnd )
 
@@ -254,15 +255,9 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimationStart )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupEnd )
 
-	// Animated object parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectAnimation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectEnd )
-
-	// Animation parsers
+	// Animated object group animation parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationLooped )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScale )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationInterpolation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
 
 	// Skybox parsers
