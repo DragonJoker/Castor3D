@@ -473,7 +473,7 @@ namespace Castor3D
 	//@}
 
 #define UBO_MATRIX( Writer )\
-	auto l_matrices = l_writer.GetUbo( ShaderProgram::BufferMatrix );\
+	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
 	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxProjection );\
 	auto c3d_mtxModel = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxModel );\
 	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxView );\
@@ -485,7 +485,7 @@ namespace Castor3D
 	l_matrices.End()
 
 #define UBO_PASS( Writer )\
-	auto l_pass = l_writer.GetUbo( ShaderProgram::BufferPass );\
+	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
 	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
 	auto c3d_v4MatDiffuse = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatDiffuse );\
 	auto c3d_v4MatEmissive = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatEmissive );\
@@ -495,7 +495,7 @@ namespace Castor3D
 	l_pass.End()
 
 #define UBO_SCENE( Writer )\
-	auto l_scene = l_writer.GetUbo( ShaderProgram::BufferScene );\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
 	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
 	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
 	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
@@ -503,12 +503,12 @@ namespace Castor3D
 	l_scene.End()
 
 #define UBO_BILLBOARD( Writer )\
-	auto l_billboard = l_writer.GetUbo( ShaderProgram::BufferBillboards );\
+	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
 	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
 	l_billboard.End()
 
 #define UBO_ANIMATION( Writer, Flags )\
-	auto l_animation = l_writer.GetUbo( ShaderProgram::BufferAnimation );\
+	GLSL::Ubo l_animation{ l_writer, ShaderProgram::BufferAnimation };\
 	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::Skinning ) );\
 	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::Morphing ) );\
 	l_animation.End()

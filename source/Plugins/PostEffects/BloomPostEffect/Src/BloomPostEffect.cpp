@@ -100,7 +100,7 @@ namespace Bloom
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			Ubo l_config = l_writer.GetUbo( FilterConfig );
+			Ubo l_config{ l_writer, FilterConfig };
 			auto c3d_fCoefficients = l_writer.GetUniform< Float >( FilterConfigCoefficients, 3u );
 			auto c3d_fOffsetX = l_writer.GetUniform< Float >( FilterConfigOffsetX );
 			auto c3d_fOffsetY = l_writer.GetUniform< Float >( FilterConfigOffsetY );

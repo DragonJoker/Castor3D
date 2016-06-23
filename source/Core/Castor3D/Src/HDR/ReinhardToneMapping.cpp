@@ -57,7 +57,7 @@ namespace Castor3D
 			auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 			// Shader inputs
-			Ubo l_config = l_writer.GetUbo( ToneMapping::HdrConfig );
+			Ubo l_config{ l_writer, ToneMapping::HdrConfig };
 			auto c3d_exposure = l_config.GetUniform< Float >( ToneMapping::Exposure );
 			auto c3d_gamma = l_config.GetUniform< Float >( Gamma );
 			l_config.End();

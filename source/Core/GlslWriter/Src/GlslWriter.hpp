@@ -58,8 +58,8 @@ namespace GLSL
 	struct Ubo
 	{
 		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
-		GlslWriter_API Ubo( Ubo && p_rhs ) = default;
-		GlslWriter_API Ubo( Ubo const & p_rhs ) = default;
+		GlslWriter_API Ubo( Ubo && p_rhs );
+		GlslWriter_API Ubo( Ubo const & p_rhs ) = delete;
 		GlslWriter_API Ubo & operator=( Ubo && p_rhs ) = delete;
 		GlslWriter_API Ubo & operator=( Ubo const & p_rhs ) = delete;
 		GlslWriter_API void End();
@@ -133,7 +133,6 @@ namespace GLSL
 		GlslWriter_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
 		GlslWriter_API void Else( std::function< void() > p_function );
 		GlslWriter_API Struct GetStruct( Castor::String const & p_name );
-		GlslWriter_API Ubo GetUbo( Castor::String const & p_name );
 		GlslWriter_API void EmitVertex();
 		GlslWriter_API void EndPrimitive();
 		GlslWriter_API void Discard();
