@@ -23,7 +23,8 @@ namespace Castor3D
 	{
 		for ( auto & l_submesh : p_animation.m_submeshes )
 		{
-			m_submeshes.insert( { l_submesh.GetSubmesh().GetId(), MeshAnimationInstanceSubmesh{ *this, l_submesh } } );
+			// using std::make_pair to prevent GCC from using copy ctor...
+			m_submeshes.insert( std::make_pair( l_submesh.GetSubmesh().GetId(), MeshAnimationInstanceSubmesh{ *this, l_submesh } ) );
 		}
 	}
 
@@ -31,7 +32,7 @@ namespace Castor3D
 	{
 	}
 
-	inline MeshAnimationInstanceSubmesh const * MeshAnimationInstance::GetAnimationSubmesh( uint32_t p_index )const
+	MeshAnimationInstanceSubmesh const * MeshAnimationInstance::GetAnimationSubmesh( uint32_t p_index )const
 	{
 		auto l_it = m_submeshes.find( p_index );
 		MeshAnimationInstanceSubmesh const * l_return = nullptr;

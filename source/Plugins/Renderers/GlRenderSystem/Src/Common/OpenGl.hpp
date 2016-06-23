@@ -24,7 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <X11/Xlib.h>
 #	include <GL/glx.h>
 #	undef None
+#	undef Bool
 #	undef Always
+using Bool = int;
 #endif
 #include <GL/gl.h>
 
