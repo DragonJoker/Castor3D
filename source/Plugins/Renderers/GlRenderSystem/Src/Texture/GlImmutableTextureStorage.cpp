@@ -1,7 +1,7 @@
 #include "GlImmutableTextureStorage.hpp"
 
 #include "GlTexture.hpp"
-#include "OpenGl.hpp"
+#include "Common/OpenGl.hpp"
 
 #include <Logger.hpp>
 #include <PixelBufferBase.hpp>

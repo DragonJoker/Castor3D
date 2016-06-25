@@ -390,19 +390,19 @@ namespace Bloom
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
-			m_colourTexture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
+			auto const & l_texture = *std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 
-			if ( DoHiPassFilter() )
+			if ( DoHiPassFilter( l_texture ) )
 			{
-				DoDownSample();
-				DoBlur( m_hiPassSurfaces, m_blurSurfaces, m_filterOffsetX, m_offsetX );
-				DoBlur( m_blurSurfaces, m_hiPassSurfaces, m_filterOffsetY, m_offsetY );
-				DoCombine();
+				DoDownSample( l_texture );
+				DoBlur( l_texture, m_hiPassSurfaces, m_blurSurfaces, m_filterOffsetX, m_offsetX );
+				DoBlur( l_texture, m_blurSurfaces, m_hiPassSurfaces, m_filterOffsetY, m_offsetY );
+				DoCombine( l_texture );
 			}
 
 			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_colourTexture->GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
@@ -415,7 +415,7 @@ namespace Bloom
 		return p_file.WriteText( cuT( " -OffsetX " ) + string::to_string( m_offsetX ) + cuT( " -OffsetY " ) + string::to_string( m_offsetY ) ) > 0;
 	}
 
-	bool BloomPostEffect::DoHiPassFilter()
+	bool BloomPostEffect::DoHiPassFilter( TextureLayout const & p_origin )
 	{
 		auto l_source = &m_hiPassSurfaces[0];
 		bool l_return = l_source->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
@@ -424,14 +424,14 @@ namespace Bloom
 		{
 			l_source->m_fbo->Clear();
 			m_hiPassMapDiffuse->SetValue( 0 );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, *m_colourTexture, m_hiPassProgram.lock() );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, p_origin, m_hiPassProgram.lock() );
 			l_source->m_fbo->Unbind();
 		}
 
 		return l_return;
 	}
 
-	void BloomPostEffect::DoDownSample()
+	void BloomPostEffect::DoDownSample( TextureLayout const & p_origin )
 	{
 		auto l_context = GetRenderSystem()->GetCurrentContext();
 		auto l_source = &m_hiPassSurfaces[0];
@@ -451,7 +451,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
+	void BloomPostEffect::DoBlur( TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
 		auto l_context = GetRenderSystem()->GetCurrentContext();
 		m_filterCoefficients->SetValues( m_kernel );
@@ -473,7 +473,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoCombine()
+	void BloomPostEffect::DoCombine( TextureLayout const & p_origin )
 	{
 		if ( m_blurSurfaces[0].m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
@@ -483,14 +483,13 @@ namespace Bloom
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
-				m_viewport.Resize( m_colourTexture->GetImage().GetDimensions() );
+				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
 				m_viewport.Render( l_pipeline );
 
 				auto const & l_texture0 = *m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = *m_hiPassSurfaces[1].m_colourTexture;
 				auto const & l_texture2 = *m_hiPassSurfaces[2].m_colourTexture;
 				auto const & l_texture3 = *m_hiPassSurfaces[3].m_colourTexture;
-				auto const & l_texture4 = m_colourTexture;
 				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 				if ( l_matrices )
@@ -504,7 +503,7 @@ namespace Bloom
 				l_texture1.Bind();
 				l_texture2.Bind();
 				l_texture3.Bind();
-				m_colourTexture->Bind( 4 );
+				p_origin.Bind( 4 );
 				m_linearSampler->Bind( 4 );
 
 				m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
@@ -513,7 +512,7 @@ namespace Bloom
 				l_texture1.Unbind();
 				l_texture2.Unbind();
 				l_texture3.Unbind();
-				m_colourTexture->Unbind( 4 );
+				p_origin.Unbind( 4 );
 				m_linearSampler->Unbind( 4 );
 
 				l_program->Unbind();

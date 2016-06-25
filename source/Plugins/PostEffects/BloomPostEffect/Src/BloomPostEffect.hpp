@@ -82,13 +82,12 @@ namespace Bloom
 		static Castor::String Name;
 
 	private:
-		bool DoHiPassFilter();
-		void DoDownSample();
-		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
-		void DoCombine();
+		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
+		void DoDownSample( Castor3D::TextureLayout const & p_origin );
+		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
+		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 
-		Castor3D::TextureLayoutSPtr m_colourTexture;
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 

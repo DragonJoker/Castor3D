@@ -21,6 +21,7 @@
 #include "Texture/GlSampler.hpp"
 #include "Texture/GlImmutableTextureStorage.hpp"
 #include "Texture/GlTboTextureStorage.hpp"
+#include "Texture/GlGpuOnlyTextureStorage.hpp"
 #include "Texture/GlTexture.hpp"
 
 #include <Logger.hpp>
@@ -405,7 +406,8 @@ namespace GlRender
 					 && p_type != TextureStorageType::CubeMapPositiveY
 					 && p_type != TextureStorageType::CubeMapNegativeY
 					 && p_type != TextureStorageType::CubeMapPositiveZ
-					 && p_type != TextureStorageType::CubeMapNegativeZ )
+					 && p_type != TextureStorageType::CubeMapNegativeZ
+					 && !p_cpuAccess )
 				{
 					l_return = std::make_unique< GlImmutableTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
@@ -414,9 +416,13 @@ namespace GlRender
 					l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
-			else
+			else if ( p_cpuAccess )
 			{
 				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			}
+			else
+			{
+				l_return = std::make_unique< GlGpuOnlyTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_gpuAccess );
 			}
 		}
 
