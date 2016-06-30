@@ -511,27 +511,6 @@ namespace Castor3D
 	//! Material pointer map
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
 
-	template< typename T, typename U >
-	inline bool CheckFlag( T const & p_value, U const & p_flag )
-	{
-		static_assert( sizeof( T ) == sizeof( U ), "Can't check flags for different size parameters" );
-		return U( p_value & T( p_flag ) ) == p_flag;
-	}
-
-	template< typename T, typename U >
-	inline void AddFlag( T & p_value, U const & p_flag )
-	{
-		static_assert( sizeof( T ) == sizeof( U ), "Can't add flags for different size parameters" );
-		p_value |= T( p_flag );
-	}
-
-	template< typename T, typename U >
-	inline void RemFlag( T & p_value, U const & p_flag )
-	{
-		static_assert( sizeof( T ) == sizeof( U ), "Can't remove flags for different size parameters" );
-		p_value &= ~T( p_flag );
-	}
-
 	//@}
 }
 

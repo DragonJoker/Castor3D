@@ -88,8 +88,8 @@ set( CastorMinLibraries
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
-add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
+add_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
+add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 
 # Copying core zip data files
 file(

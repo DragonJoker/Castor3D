@@ -36,11 +36,19 @@ namespace GlRender
 	uint8_t * GlDirectTextureStorage::Lock( uint32_t p_lock )
 	{
 		uint8_t * l_return = nullptr;
+		auto l_buffer = GetOwner()->GetBuffer();
 
-		if ( ( m_cpuAccess && p_lock & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ
-				|| ( m_cpuAccess & p_lock & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ )
+			   && CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ ) )
 		{
-			l_return = GetOwner()->GetBuffer()->ptr();
+			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
+			GetOpenGl().GetTexImage( m_glType, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+		}
+
+		if ( CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ )
+			 || CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_WRITE ) )
+		{
+			l_return = l_buffer->ptr();
 		}
 
 		return l_return;
@@ -48,7 +56,7 @@ namespace GlRender
 
 	void GlDirectTextureStorage::Unlock( bool p_modified )
 	{
-		if ( p_modified && ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		if ( p_modified && CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
 		{
 			auto l_buffer = GetOwner()->GetBuffer();
 			DoUploadImage( l_buffer->dimensions().width(), l_buffer->dimensions().height(), l_buffer->format(), l_buffer->const_ptr() );

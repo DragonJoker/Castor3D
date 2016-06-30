@@ -83,19 +83,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Pauses the render loop.
-		 *\remarks		Use only with a synchronous render loop.
+		 *\remarks		Use only with an asynchronous render loop.
 		 *\~french
 		 *\brief		Met la boucle de rendu en pause.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
 		 */
 		C3D_API void Pause();
 		/**
 		 *\~english
 		 *\brief		Resumes the render loop.
-		 *\remarks		Use only with a synchronous render loop.
+		 *\remarks		Use only with an asynchronous render loop.
 		 *\~french
 		 *\brief		Relance la boucle de rendu.
-		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
 		 */
 		C3D_API void Resume();
 		/**

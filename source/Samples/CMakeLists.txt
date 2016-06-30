@@ -30,7 +30,7 @@ function( SamplesBuild )
 			endif()
 
 			set( OpenCV_STATIC FALSE )
-			find_package( FFMPEG )
+			find_package( FFMPEG QUIET )
 
 			if( FFMPEG_FOUND )
 				include_directories( ${FFMPEG_INCLUDE_DIR} )
@@ -64,7 +64,7 @@ function( SamplesBuild )
 			else ()
 				find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 			endif()
-		
+
 			if( wxWidgets_FOUND AND GTK2_FOUND )
 				message( STATUS "+ Found GTK2" )
 				message( STATUS "+ Found wxWidgets" )
