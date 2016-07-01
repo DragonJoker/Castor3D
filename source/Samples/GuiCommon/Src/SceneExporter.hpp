@@ -43,8 +43,8 @@ namespace GuiCommon
 		 *\param[in]	p_fileName	The exported file name.
 		 *\~french
 		 *\brief		Fonction d'export
-		 *\param[in]	p_scene		La scène � exporter.
-		 *\param[in]	p_fileName	Le nom du fichier export�.
+		 *\param[in]	p_scene		La scène à exporter.
+		 *\param[in]	p_fileName	Le nom du fichier exportà.
 		 */
 		virtual void ExportScene( Castor3D::Scene const & p_scene, Castor::Path const & p_fileName ) = 0;
 	};

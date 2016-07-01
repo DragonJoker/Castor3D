@@ -29,7 +29,7 @@ namespace GuiCommon
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les g�om�tries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les gàomàtries
 	*/
 	class PassTreeItemProperty
 		: public TreeItemProperty
@@ -61,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the geometry
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la g�om�trie
+		 *\brief		Récupère la gàomàtrie
 		 *\return		La valeur
 		 */
 		inline Castor3D::PassSPtr GetPass()

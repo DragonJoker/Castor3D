@@ -43,7 +43,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
-		 *\param[in]	p_material	Le mat�riau cible
+		 *\param[in]	p_material	Le matàriau cible
 		 */
 		MaterialTreeItemProperty( bool p_editable, Castor3D::MaterialSPtr p_material );
 		/**
@@ -58,7 +58,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the material
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le mat�riau
+		 *\brief		Récupère le matàriau
 		 *\return		La valeur
 		 */
 		inline Castor3D::MaterialSPtr GetMaterial()

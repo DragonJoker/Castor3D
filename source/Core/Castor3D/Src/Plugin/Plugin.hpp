@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type du plug-in
-		 *\param[in]	p_library	La librairie partagée contenant le plug-in
+		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
 		C3D_API PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );

@@ -149,7 +149,6 @@ namespace Castor3D
 
 	private:
 		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_library );
-		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_library );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 
 	private:

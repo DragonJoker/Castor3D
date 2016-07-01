@@ -21,7 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "Miscellaneous/Parameter.hpp"
 #include "Texture/TextureUnit.hpp"
-#include "HDR/ToneMappingFactory.hpp"
 
 #include <OwnedBy.hpp>
 #include <Size.hpp>
@@ -641,8 +640,6 @@ namespace Castor3D
 		PostEffectPtrArray m_postEffects;
 		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
-		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
-		ToneMappingFactory m_toneMappingFactory;
 	};
 }
 

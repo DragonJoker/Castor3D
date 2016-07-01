@@ -733,7 +733,7 @@
  *<li>Revue du système de VertexBuffers et IndexBuffers, in troduction de la notion de VertexDeclaration et BufferElementGroup, ainsi on peut créer des VertexBuffers en mettant à peu près ce que l'on veut comme données dedans (parmi vertex, normals, tangents, diffuse, texcoords0,1,2,3) et ordonnées comme on veut.</li>
  *<li>La classe Vertex dérive donc maintenant de BufferElementGroup.</li>
  *<li>Les TextureEnvironment vont disparaitre à la prochaine version, la gestion du multitexturing se faisant maintenant directement au niveau des passes et des texture units.</li>
- *<li>Suppression des fonctions issues de GLU, afin d'avoir une librairie de moins à linker.</li>
+ *<li>Suppression des fonctions issues de GLU, afin d'avoir une bibliothèque de moins à linker.</li>
  *</ul>
  *
  *\subsection bugs_0_6_1_2 Bugs
