@@ -43,12 +43,12 @@ namespace Bloom
 	{
 		struct BloomPostEffectSurface
 		{
-			BloomPostEffectSurface();
+			BloomPostEffectSurface( Castor3D::Engine & p_engine );
 			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
 			void Cleanup();
 
 			Castor3D::FrameBufferSPtr m_fbo;
-			Castor3D::TextureUnitSPtr m_colourTexture;
+			Castor3D::TextureUnit m_colourTexture;
 			Castor3D::TextureAttachmentSPtr m_colourAttach;
 			Castor::Size m_size;
 		};

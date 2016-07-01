@@ -1057,8 +1057,8 @@ namespace GlRender
 	{
 		bool l_return = true;
 		uint32_t l_errorCode = GetError();
-
-		if ( l_errorCode != GL_NO_ERROR )
+		
+		while ( l_errorCode != GL_NO_ERROR );
 		{
 			l_errorCode -= GL_INVALID_ENUM;
 			StringStream l_error;
@@ -1075,6 +1075,7 @@ namespace GlRender
 			l_error << Debug::Backtrace{ 20, 4 };
 			Logger::LogError( l_error );
 			l_return = false;
+			l_errorCode = GetError();
 		}
 
 		return l_return;

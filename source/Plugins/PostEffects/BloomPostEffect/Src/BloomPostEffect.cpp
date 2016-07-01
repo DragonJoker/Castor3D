@@ -154,7 +154,8 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BloomPostEffect::BloomPostEffectSurface::BloomPostEffectSurface()
+	BloomPostEffect::BloomPostEffectSurface::BloomPostEffectSurface( Engine & p_engine )
+		: m_colourTexture( p_engine )
 	{
 	}
 
@@ -162,20 +163,19 @@ namespace Bloom
 	{
 		bool l_return = false;
 		m_size = p_size;
-		m_colourTexture = std::make_shared< TextureUnit >( *p_renderTarget.GetEngine() );
-		m_colourTexture->SetIndex( p_index );
+		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
-		m_colourTexture->SetSampler( p_sampler );
+		m_colourTexture.SetSampler( p_sampler );
 		//l_colourTexture->GetImage().SetSource( p_renderTarget );
 		l_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_A8R8G8B8 );
 		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
 
 		m_fbo->Create();
-		m_colourTexture->SetTexture( l_colourTexture );
-		m_colourTexture->Initialise();
+		m_colourTexture.SetTexture( l_colourTexture );
+		m_colourTexture.Initialise();
 		m_fbo->Initialise( p_size );
 		m_fbo->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_BLACK ) );
 
@@ -196,12 +196,11 @@ namespace Bloom
 		m_fbo->Unbind();
 		m_fbo->Cleanup();
 
-		m_colourTexture->Cleanup();
+		m_colourTexture.Cleanup();
 		m_fbo->Destroy();
 
 		m_fbo.reset();
 		m_colourAttach.reset();
-		m_colourTexture.reset();
 	}
 
 	//*********************************************************************************************
@@ -218,6 +217,24 @@ namespace Bloom
 		, m_declaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
+		} )
+		, m_hiPassSurfaces(
+		{
+			{
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() }
+			}
+		} )
+		, m_blurSurfaces(
+		{
+			{
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
+				BloomPostEffectSurface{ *p_renderSystem.GetEngine() }
+			}
 		} )
 	{
 		String l_count;
@@ -402,7 +419,7 @@ namespace Bloom
 
 			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture.GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
@@ -443,7 +460,7 @@ namespace Bloom
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
 				l_destination->m_fbo->Clear();
-				l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture->GetTexture() );
+				l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture.GetTexture() );
 				l_destination->m_fbo->Unbind();
 			}
 
@@ -467,7 +484,7 @@ namespace Bloom
 			{
 				l_destination->m_fbo->Clear();
 				p_offset->SetValue( p_offsetValue / l_source->m_size.width() );
-				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture->GetTexture(), m_filterProgram.lock() );
+				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture.GetTexture(), m_filterProgram.lock() );
 				l_destination->m_fbo->Unbind();
 			}
 		}
@@ -486,10 +503,10 @@ namespace Bloom
 				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
 				m_viewport.Render( l_pipeline );
 
-				auto const & l_texture0 = *m_hiPassSurfaces[0].m_colourTexture;
-				auto const & l_texture1 = *m_hiPassSurfaces[1].m_colourTexture;
-				auto const & l_texture2 = *m_hiPassSurfaces[2].m_colourTexture;
-				auto const & l_texture3 = *m_hiPassSurfaces[3].m_colourTexture;
+				auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
+				auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
+				auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
+				auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
 				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 				if ( l_matrices )
@@ -520,9 +537,9 @@ namespace Bloom
 
 			m_blurSurfaces[0].m_fbo->Unbind();
 
-			m_blurSurfaces[0].m_colourTexture->Bind();
-			m_blurSurfaces[0].m_colourTexture->GetTexture()->GenerateMipmaps();
-			m_blurSurfaces[0].m_colourTexture->Unbind();
+			m_blurSurfaces[0].m_colourTexture.Bind();
+			m_blurSurfaces[0].m_colourTexture.GetTexture()->GenerateMipmaps();
+			m_blurSurfaces[0].m_colourTexture.Unbind();
 		}
 	}
 
