@@ -31,7 +31,7 @@ namespace Castor
 	\~english
 	\brief		Templated class that provide std::array style buffer view.
 	\~french
-	\brief		Classe template qui fournit une vue sur un tampon, � la mani�re d'un std::array.
+	\brief		Classe template qui fournit une vue sur un tampon, à la maniàre d'un std::array.
 	*/
 	template< typename T >
 	class ArrayView

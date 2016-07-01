@@ -176,8 +176,7 @@ namespace Castor3D
 		, m_fbLeftEye{ *this }
 		, m_fbRightEye{ *this }
 	{
-		m_toneMappingFactory.Initialise();
-		m_toneMapping = m_toneMappingFactory.Create( cuT( "linear" ), *GetEngine(), Parameters{} );
+		m_toneMapping = GetEngine()->GetTargetManager().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
@@ -390,7 +389,7 @@ namespace Castor3D
 			} ) );
 		}
 
-		m_toneMapping = m_toneMappingFactory.Create( p_name, *GetEngine(), p_parameters );
+		m_toneMapping = GetEngine()->GetTargetManager().GetToneMappingFactory().Create( p_name, *GetEngine(), p_parameters );
 	}
 
 	void RenderTarget::SetSize( Size const & p_size )

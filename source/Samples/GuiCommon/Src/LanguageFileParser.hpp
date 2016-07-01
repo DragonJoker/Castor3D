@@ -31,7 +31,7 @@ namespace GuiCommon
 	\~english
 	\brief Language file sections enumeration
 	\~french
-	\brief Enum�ration des sections de fichier de langage
+	\brief Enumàration des sections de fichier de langage
 	*/
 	typedef enum eSECTION
 	{

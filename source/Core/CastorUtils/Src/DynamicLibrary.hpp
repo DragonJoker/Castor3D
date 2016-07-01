@@ -31,8 +31,8 @@ namespace Castor
 	\brief		Platform independant library
 	\remark		Loads a library and gives access to it's functions in a platform independant way
 	\~french
-	\brief		Librairie dynamique (Dll, shared lib)
-	\remark		Charge une librairie et permet l'accès a ses fonction de manière indépendante de l'OS
+	\brief		bibliothèque dynamique (Dll, shared lib)
+	\remark		Charge une bibliothèque et permet l'accès a ses fonction de manière indépendante de l'OS
 	*/
 	class DynamicLibrary
 	{
@@ -97,7 +97,7 @@ namespace Castor
 		 *\param[in]	p_szPath	The file path
 		 *\return		\p true if library was successfully loaded
 		 *\~french
-		 *\brief		Charge une librairie à partir d'un chemin
+		 *\brief		Charge une bibliothèque à partir d'un chemin
 		 *\param[in]	p_szPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
@@ -108,7 +108,7 @@ namespace Castor
 		 *\param[in]	p_strPath	The file path
 		 *\return		\p true if library was successfully loaded
 		 *\~french
-		 *\brief		Charge une librairie à partir d'un chemin
+		 *\brief		Charge une bibliothèque à partir d'un chemin
 		 *\param[in]	p_strPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
@@ -119,7 +119,7 @@ namespace Castor
 		 *\param[in]	p_pathFile	The file path
 		 *\return		\p true if library was successfully loaded
 		 *\~french
-		 *\brief		Charge une librairie à partir d'un chemin
+		 *\brief		Charge une bibliothèque à partir d'un chemin
 		 *\param[in]	p_pathFile	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */

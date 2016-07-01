@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Manager/ResourceManager.hpp"
 
+#include "HDR/ToneMappingFactory.hpp"
 #include "Render/RenderTarget.hpp"
 
 namespace Castor3D
@@ -102,14 +103,39 @@ namespace Castor3D
 		 */
 		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
 
+		/**
+		 *\~english
+		 *\return		The ToneMapping factory.
+		 *\~french
+		 *\return		La fabrique de ToneMapping.
+		 */
+		inline ToneMappingFactory const & GetToneMappingFactory()const
+		{
+			return m_toneMappingFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The ToneMapping factory.
+		 *\~french
+		 *\return		La fabrique de ToneMapping.
+		 */
+		inline ToneMappingFactory & GetToneMappingFactory()
+		{
+			return m_toneMappingFactory;
+		}
+
 	private:
 		using ResourceManager< Castor::String, RenderTarget >::Create;
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
 		DECLARE_ARRAY( RenderTargetArray, eTARGET_TYPE_COUNT, TargetType );
-		//!\~english The render targets sorted by target type	\~french Les cibles de rendu, triées par type de cible de rendu
+		//!\~english	The render targets sorted by target type.
+		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;
+		//!\~english	The tone mapping factory.
+		//!\~french		La fabrique de mappage de tons.
+		ToneMappingFactory m_toneMappingFactory;
 	};
 }
 

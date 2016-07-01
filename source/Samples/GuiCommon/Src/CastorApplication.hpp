@@ -44,16 +44,16 @@ namespace GuiCommon
 				<li>directx" )	Defines the renderer to Direct3D 11 (the renderer selection dialog will not be displayed)
 				</ul>
 	\~french
-	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les param�tres en ligne de commande.
-	\args		T	Doit �tre un descendant de wxApp.
-	\remarks	Les options en ligne de commande peuvent �tre pass�es ainsi : -abr, /abr, --long.
-				<br />Les options support�es sont les suivantes :
+	\brief		Classe de base pour les applications Castor, initialise la locale et le logger, prend en compte les paramètres en ligne de commande.
+	\args		T	Doit àtre un descendant de wxApp.
+	\remarks	Les options en ligne de commande peuvent àtre passàes ainsi : -abr, /abr, --long.
+				<br />Les options supportàes sont les suivantes :
 				<ul>
 				<li>h (--help)	Affiche l'aide.
-				<li>l (--log)	D�finit le niveau de log.
-				<li>f (--file)	D�finit un fichier de scène � charger au lancement.
-				<li>opengl"		D�finit l'API de rendu � OpenGl (la fen�tre de choix du renderer ne sera pas affich�e).
-				<li>directx		D�finit l'API de rendu � Direct3D 11 (la fen�tre de choix du renderer ne sera pas affich�e).
+				<li>l (--log)	Dàfinit le niveau de log.
+				<li>f (--file)	Dàfinit un fichier de scène à charger au lancement.
+				<li>opengl"		Dàfinit l'API de rendu à OpenGl (la fenàtre de choix du renderer ne sera pas affichàe).
+				<li>directx		Dàfinit l'API de rendu à Direct3D 11 (la fenàtre de choix du renderer ne sera pas affichàe).
 				</ul>
 	*/
 	class CastorApplication
@@ -68,9 +68,9 @@ namespace GuiCommon
 		 *\param[in]	p_steps			The initialisation steps count, used for splash screen.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_internalName	Le nom de l'application, utilis� pour rechercher les fichiers de langages, et �crit dans les logs.
-		 *\param[in]	p_displayName	Le nom de l'application, affich� dans les fen�tres.
-		 *\param[in]	p_steps			Le nombre d'�tapes de l'initialisation, sert pour l'affichage du splash screen.
+		 *\param[in]	p_internalName	Le nom de l'application, utilisà pour rechercher les fichiers de langages, et àcrit dans les logs.
+		 *\param[in]	p_displayName	Le nom de l'application, affichà dans les fenàtres.
+		 *\param[in]	p_steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
 		 */
 		CastorApplication( Castor::String const & p_internalName, Castor::String const & p_displayName, uint32_t p_steps );
 		/**
@@ -87,7 +87,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The application displayed name.
 		 *\~french
-		 *\return		Le nom de l'application, tel qu'affich� dans les fen�tres.
+		 *\return		Le nom de l'application, tel qu'affichà dans les fenàtres.
 		 */
 		inline Castor::String const & GetDisplayName()const
 		{
@@ -97,7 +97,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The file name given in command line with -f option
 		 *\~french
-		 *\return		Le nom du fichier donn� en ligne de commande via l'option -f
+		 *\return		Le nom du fichier donnà en ligne de commande via l'option -f
 		 */
 		inline Castor::String const & GetFileName()const
 		{
@@ -107,7 +107,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The renderer type given in command line, Castor3D::RENDERER_TYPE_UNDEFINED if none was given
 		 *\~french
-		 *\return		Le type d'API de rendu donn� en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a �t� donn�
+		 *\return		Le type d'API de rendu donnà en ligne de commande, Castor3D::RENDERER_TYPE_UNDEFINED si aucun n'a àtà donnà
 		 */
 		inline Castor::String const & GetRendererType()const
 		{
@@ -143,7 +143,7 @@ namespace GuiCommon
 		 *\~french
 		 *\brief		Initialise l'application.
 		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plug-ins.
-		 *\return		Si false, l'application s'arr�tera.
+		 *\return		Si false, l'application s'arràtera.
 		 */
 		virtual bool OnInit();
 		/**
@@ -157,7 +157,7 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Used to add application specific images to ImagesLoader
 		 *\~french
-		 *\brief		Utilis� afin d'ajouter � ImagesLoader des images sp�cifiques � l'application
+		 *\brief		Utilisà afin d'ajouter à ImagesLoader des images spécifiques à l'application
 		 */
 		virtual void DoLoadAppImages() = 0;
 		/**
@@ -166,9 +166,9 @@ namespace GuiCommon
 		 *\param[in]	p_splashScreen	The splash screen.
 		 *\return		The main frame. If nullptr, the application will stop.
 		 *\~french
-		 *\brief		Devrait contenir le code d'initialisation de la fen�tre principale de l'application.
+		 *\brief		Devrait contenir le code d'initialisation de la fenàtre principale de l'application.
 		 *\param[in]	p_splashScreen	Le splash screen.
-		 *\return		La fen�tre principale. Si nullptr, l'application s'arr�tera.
+		 *\return		La fenàtre principale. Si nullptr, l'application s'arràtera.
 		 */
 		virtual wxWindow * DoInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
 

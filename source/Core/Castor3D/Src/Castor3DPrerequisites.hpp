@@ -125,19 +125,29 @@ namespace Castor3D
 	typedef enum ePLUGIN_TYPE
 		: uint8_t
 	{
-		//!\~english Renderer plug-in	\~french Plug-in de rendu
+		//!\~english	Renderer plug-in.
+		//!\~french		Plug-in de rendu.
 		ePLUGIN_TYPE_RENDERER,
-		//!\~english Importer plug-in	\~french Plug-in d'importation
+		//!\~english	Importer plug-in.
+		//!\~french		Plug-in d'importation.
 		ePLUGIN_TYPE_IMPORTER,
-		//!\~english Mesh Divider plug-in	\~french Plug-in de subdivision de maillage
+		//!\~english	Mesh Divider plug-in.
+		//!\~french		Plug-in de subdivision de maillage.
 		ePLUGIN_TYPE_DIVIDER,
-		//!\~english Procedural generator	\~french Plug-in de génération procédurale
+		//!\~english	Procedural generator.
+		//!\~french		Plug-in de génération procédurale.
 		ePLUGIN_TYPE_GENERATOR,
-		//!\~english Render technique plug-in	\~french Plug-in de technique de rendu
+		//!\~english	Render technique plug-in.
+		//!\~french		Plug-in de technique de rendu.
 		ePLUGIN_TYPE_TECHNIQUE,
-		//!\~english Post effect plug-in	\~french Plug-in d'effet post-rendu
+		//!\~english	Tone mapping plug-in.
+		//!\~french		Plug-in d'effet de mappage de tons.
+		ePLUGIN_TYPE_TONEMAPPING,
+		//!\~english	Post effect plug-in.
+		//!\~french		Plug-in d'effet post-rendu.
 		ePLUGIN_TYPE_POSTFX,
-		//!\~english Generic plug-in	\~french Plug-in générique
+		//!\~english	Generic plug-in.
+		//!\~french		Plug-in générique.
 		ePLUGIN_TYPE_GENERIC,
 		CASTOR_ENUM_BOUNDS( ePLUGIN_TYPE, ePLUGIN_TYPE_RENDERER )
 	}	ePLUGIN_TYPE;
@@ -415,6 +425,7 @@ namespace Castor3D
 	class DividerPlugin;
 	class GenericPlugin;
 	class PostFxPlugin;
+	class ToneMappingPlugin;
 	class FrameEvent;
 	class FrameListener;
 	class Version;

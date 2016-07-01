@@ -46,7 +46,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_szFunction	La fonction appelante
-		 *\param[in]	p_szFile		Le fichier o� se trouve la fonction
+		 *\param[in]	p_szFile		Le fichier oà se trouve la fonction
 		 *\param[in]	p_uiLine		La ligne dans la fonction
 		 */
 		CU_API BlockTimer( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );

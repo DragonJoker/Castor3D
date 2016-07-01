@@ -304,7 +304,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the vertex buffer, if needed.
 		 *\~french
-		 *\brief		Met � jour le tampon de sommets si n�cessaire.
+		 *\brief		Met à jour le tampon de sommets si nàcessaire.
 		 */
 		void DoUpdate();
 

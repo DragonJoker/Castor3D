@@ -31,7 +31,7 @@ namespace GlRender
 	\~english
 	\brief 		Class implementing OpenGL VBO.
 	\~french
-	\brief 		Classe impl�mentant les VBO OpenGL.
+	\brief 		Classe implàmentant les VBO OpenGL.
 	*/
 	template< typename T >
 	class GlBuffer

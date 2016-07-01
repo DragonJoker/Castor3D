@@ -6,6 +6,7 @@
 #include "Plugin/PostFxPlugin.hpp"
 #include "Plugin/RendererPlugin.hpp"
 #include "Plugin/TechniquePlugin.hpp"
+#include "Plugin/ToneMappingPlugin.hpp"
 #include "Miscellaneous/VersionException.hpp"
 
 #include <DynamicLibrary.hpp>
@@ -147,15 +148,13 @@ namespace Castor3D
 
 	void PluginManager::LoadAllPlugins( Path const & p_folder )
 	{
-		PathArray l_arrayFiles;
-		File::ListDirectoryFiles( p_folder, l_arrayFiles );
+		PathArray l_files;
+		File::ListDirectoryFiles( p_folder, l_files );
 
-		if ( l_arrayFiles.size() > 0 )
+		if ( l_files.size() > 0 )
 		{
-			for ( uint32_t i = 0; i < l_arrayFiles.size(); i++ )
+			for ( auto l_file : l_files )
 			{
-				Path l_file = l_arrayFiles[i];
-
 				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
 				{
 					try
@@ -190,11 +189,6 @@ namespace Castor3D
 		return l_renderer;
 	}
 
-	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_library )
-	{
-		return std::make_shared< TechniquePlugin >( p_library, GetEngine() );
-	}
-
 	PluginBaseSPtr PluginManager::InternalLoadPlugin( Path const & p_pathFile )
 	{
 		PluginBaseSPtr l_return;
@@ -207,16 +201,16 @@ namespace Castor3D
 
 			if ( File::FileExists( p_pathFile ) )
 			{
-				DynamicLibrarySPtr l_pLibrary = std::make_shared< DynamicLibrary >();
+				DynamicLibrarySPtr l_library = std::make_shared< DynamicLibrary >();
 
-				if ( !l_pLibrary->Open( p_pathFile ) )
+				if ( !l_library->Open( p_pathFile ) )
 				{
 					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
 				}
 
 				PluginBase::PGetTypeFunction l_pfnGetType;
 
-				if ( !l_pLibrary->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
+				if ( !l_library->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
 				{
 					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName() + cuT( "] GetType plug-in function => Not a Castor3D plug-in" );
 					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
@@ -227,30 +221,35 @@ namespace Castor3D
 				switch ( l_type )
 				{
 				case ePLUGIN_TYPE_DIVIDER:
-					l_return = std::make_shared< DividerPlugin >( l_pLibrary, GetEngine() );
+					l_return = std::make_shared< DividerPlugin >( l_library, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_IMPORTER:
-					l_return = std::make_shared< ImporterPlugin >( l_pLibrary, GetEngine() );
+					l_return = std::make_shared< ImporterPlugin >( l_library, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
-					l_return = LoadRendererPlugin( l_pLibrary );
+					l_return = LoadRendererPlugin( l_library );
 					break;
 
 				case ePLUGIN_TYPE_GENERIC:
-					l_return = std::make_shared< GenericPlugin >( l_pLibrary, GetEngine() );
+					l_return = std::make_shared< GenericPlugin >( l_library, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_TECHNIQUE:
-					l_return = LoadTechniquePlugin( l_pLibrary );
+					l_return = std::make_shared< TechniquePlugin >( l_library, GetEngine() );
+					break;
+
+				case ePLUGIN_TYPE_TONEMAPPING:
+					l_return = std::make_shared< ToneMappingPlugin >( l_library, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_POSTFX:
-					l_return = std::make_shared< PostFxPlugin >( l_pLibrary, GetEngine() );
+					l_return = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
 					break;
 
 				default:
+					FAILURE( "Unknown plug-in type" );
 					break;
 				}
 
@@ -271,7 +270,7 @@ namespace Castor3D
 						m_loadedPlugins[l_type].insert( std::make_pair( p_pathFile, l_return ) );
 						m_mutexLoadedPlugins.unlock();
 						m_mutexLibraries.lock();
-						m_libraries[l_type].insert( std::make_pair( p_pathFile, l_pLibrary ) );
+						m_libraries[l_type].insert( std::make_pair( p_pathFile, l_library ) );
 						m_mutexLibraries.unlock();
 						l_strToLog = cuT( "LoadPlugin - Plugin [" );
 						Logger::LogInfo( l_strToLog + l_return->GetName() + cuT( "] loaded" ) );

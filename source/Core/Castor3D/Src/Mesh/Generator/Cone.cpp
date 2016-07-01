@@ -65,7 +65,7 @@ namespace Castor3D
 				m_height = -m_height;
 			}
 
-			//Composition des extr�mit�s
+			//Composition des extràmitàs
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
@@ -75,7 +75,7 @@ namespace Castor3D
 			//Composition du bas
 			l_submeshBase.AddFace( l_submeshBase[m_nbFaces - 1]->GetIndex(), l_submeshBase[0]->GetIndex(), l_ptBottomCenter->GetIndex() );
 
-			//Composition des c�t�s
+			//Composition des càtàs
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
 				l_submeshSide.AddFace( l_submeshSide[i + 0]->GetIndex(), l_submeshSide[i + 1]->GetIndex(), l_submeshSide[i + 2]->GetIndex() );

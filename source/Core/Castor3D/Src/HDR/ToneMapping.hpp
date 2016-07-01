@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -135,9 +135,9 @@ namespace Castor3D
 		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.
 		OneFloatFrameVariableSPtr m_exposureVar;
 		//!\~english The configuration constants buffer name.	\~french Le nom du tampon de constantes de configuration.
-		static Castor::String const HdrConfig;
+		C3D_API static Castor::String const HdrConfig;
 		//!\~english The exposure constant name.	\~french Le nom de la constante d'exposition.
-		static Castor::String const Exposure;
+		C3D_API static Castor::String const Exposure;
 	};
 }
 
