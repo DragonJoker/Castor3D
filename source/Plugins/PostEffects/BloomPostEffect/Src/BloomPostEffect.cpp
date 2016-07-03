@@ -101,9 +101,9 @@ namespace Bloom
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			Ubo l_config{ l_writer, FilterConfig };
-			auto c3d_fCoefficients = l_writer.GetUniform< Float >( FilterConfigCoefficients, 3u );
-			auto c3d_fOffsetX = l_writer.GetUniform< Float >( FilterConfigOffsetX );
-			auto c3d_fOffsetY = l_writer.GetUniform< Float >( FilterConfigOffsetY );
+			auto c3d_fCoefficients = l_config.GetUniform< Float >( FilterConfigCoefficients, 3u );
+			auto c3d_fOffsetX = l_config.GetUniform< Float >( FilterConfigOffsetX );
+			auto c3d_fOffsetY = l_config.GetUniform< Float >( FilterConfigOffsetY );
 			l_config.End();
 
 			// Shader outputs
@@ -208,8 +208,8 @@ namespace Bloom
 	String BloomPostEffect::Type = cuT( "bloom" );
 	String BloomPostEffect::Name = cuT( "Bloom PostEffect" );
 
-	BloomPostEffect::BloomPostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
-		: PostEffect( p_renderSystem, p_renderTarget, BloomPostEffect::Type, p_param )
+	BloomPostEffect::BloomPostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
+		: PostEffect( BloomPostEffect::Type, p_renderTarget, p_renderSystem, p_param )
 		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
@@ -280,6 +280,11 @@ namespace Bloom
 
 	BloomPostEffect::~BloomPostEffect()
 	{
+	}
+
+	PostEffectSPtr BloomPostEffect::Create( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
+	{
+		return std::make_shared< BloomPostEffect >( p_renderTarget, p_renderSystem, p_param );
 	}
 
 	bool BloomPostEffect::Initialise()

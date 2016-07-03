@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_TECHNIQUE_FACTORY_H___
-#define ___C3D_TECHNIQUE_FACTORY_H___
+#ifndef ___C3D_POST_EFFECT_FACTORY_H___
+#define ___C3D_POST_EFFECT_FACTORY_H___
 
-#include "RenderTechnique.hpp"
+#include "PostEffect.hpp"
 
 #include <Factory.hpp>
 
@@ -26,15 +26,15 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.7.0.0
-	\date		24/11/2014
+	\version	0.9.0
+	\date		03/07/2016
 	\~english
-	\brief		Render technique factory
+	\brief		Post effect factory.
 	\~french
-	\brief		La fabrique de techniques de rendu
+	\brief		La fabrique d'eefets post rendu.
 	*/
-	class TechniqueFactory
-		: public Castor::Factory< RenderTechnique, Castor::String, std::shared_ptr< RenderTechnique >, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >
+	class PostEffectFactory
+		: public Castor::Factory< PostEffect, Castor::String, std::shared_ptr< PostEffect >, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >
 	{
 	public:
 		/**
@@ -43,21 +43,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API TechniqueFactory();
+		C3D_API PostEffectFactory();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~TechniqueFactory();
+		C3D_API ~PostEffectFactory();
 		/**
 		 *\~english
 		 *\brief		Registers all objects types
 		 *\~french
 		 *\brief		Enregistre tous les types d'objets
 		 */
-		C3D_API virtual void Initialise();
+		C3D_API void Initialise()override;
 	};
 }
 

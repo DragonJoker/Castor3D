@@ -8,7 +8,7 @@ option( CASTOR_BUILD_IMPORTER_MD3 "Build MD3 Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_OBJ "Build OBJ Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_PLY "Build PLY Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_3DS "Build 3DS Importer plugin" TRUE )
-option( CASTOR_BUILD_IMPORTER_OGR "Build Ogre Importer plugin" TRUE )
+option( CASTOR_BUILD_IMPORTER_OGR "Build Ogre Importer plugin" FALSE )
 option( CASTOR_FORCE_ALL_IMPORTERS "Build every Importer plugin regardless of the presence of ASSIMP" FALSE )
 
 function( ImportersInit )

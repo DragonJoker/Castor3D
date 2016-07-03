@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <HDR/ToneMapping.hpp>
 
-namespace HaarmPeterDuiker
+namespace HaarmPieterDuiker
 {
 	/*!
 	\author		Sylvain DOREMUS

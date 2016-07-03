@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SsaoPostEffect___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Miscellaneous/PostEffect.hpp>
+#include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 
@@ -56,8 +56,9 @@ namespace Bloom
 		using SurfaceArray = std::array< BloomPostEffectSurface, FILTER_COUNT >;
 
 	public:
-		BloomPostEffect( Castor3D::RenderSystem & p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
+		BloomPostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		virtual ~BloomPostEffect();
+		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		/**
 		 *\copydoc		Castor3D::PostEffect::Initialise
 		 */

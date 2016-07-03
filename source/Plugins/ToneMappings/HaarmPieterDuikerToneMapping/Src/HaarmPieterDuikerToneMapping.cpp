@@ -16,7 +16,7 @@ using namespace Castor;
 using namespace Castor3D;
 using namespace GLSL;
 
-namespace HaarmPeterDuiker
+namespace HaarmPieterDuiker
 {
 	namespace
 	{

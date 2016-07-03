@@ -25,7 +25,7 @@
 #include "FrameBuffer/TextureAttachment.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/Parameter.hpp"
-#include "Miscellaneous/PostEffect.hpp"
+#include "PostEffect/PostEffectFactory.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <Logger.hpp>
@@ -204,7 +204,7 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, *GetEngine()->GetRenderSystem(), m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{

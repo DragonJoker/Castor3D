@@ -7,6 +7,16 @@
 
 #include <Miscellaneous/Version.hpp>
 
+#ifndef _WIN32
+#	define C3D_MsaaTechnique_API
+#else
+#	ifdef MsaaTechnique_EXPORTS
+#		define C3D_MsaaTechnique_API __declspec(dllexport)
+#	else
+#		define C3D_MsaaTechnique_API __declspec(dllimport)
+#	endif
+#endif
+
 using namespace Msaa;
 static const Castor::String NAME = cuT( "msaa" );
 
@@ -27,10 +37,10 @@ C3D_MsaaTechnique_API Castor::String GetName()
 
 C3D_MsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueManager().GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
+	p_engine->GetRenderTechniqueManager().GetFactory().Register( NAME, &RenderTechnique::CreateInstance );
 }
 
 C3D_MsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueManager().GetTechniqueFactory().Unregister( NAME );
+	p_engine->GetRenderTechniqueManager().GetFactory().Unregister( NAME );
 }

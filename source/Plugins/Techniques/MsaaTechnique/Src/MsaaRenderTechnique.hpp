@@ -20,16 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Technique/RenderTechnique.hpp>
 
-#ifndef _WIN32
-#	define C3D_MsaaTechnique_API
-#else
-#	ifdef MsaaTechnique_EXPORTS
-#		define C3D_MsaaTechnique_API __declspec(dllexport)
-#	else
-#		define C3D_MsaaTechnique_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace Msaa
 {
 	/*!
@@ -63,7 +53,7 @@ namespace Msaa
 		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		/**
@@ -87,7 +77,7 @@ namespace Msaa
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
 		/**

@@ -17,6 +17,10 @@
 using namespace Castor3D;
 using namespace Castor;
 
+#ifndef GL_INVALID_FRAMEBUFFER_OPERATION
+#	define GL_INVALID_FRAMEBUFFER_OPERATION 0x506
+#endif
+
 #define DEF_USE_DIRECT_STATE_ACCESS 0
 
 namespace GlRender

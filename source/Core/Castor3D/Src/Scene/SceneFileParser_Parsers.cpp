@@ -33,7 +33,6 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Miscellaneous/PostEffect.hpp"
 #include "Overlay/BorderPanelOverlay.hpp"
 #include "Overlay/PanelOverlay.hpp"
 #include "Overlay/TextOverlay.hpp"
@@ -352,7 +351,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetTechnique )
 
 		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
 
-		if ( !l_engine->GetRenderTechniqueManager().GetTechniqueFactory().IsRegistered( string::lower_case( l_name ) ) )
+		if ( !l_engine->GetRenderTechniqueManager().GetFactory().IsRegistered( string::lower_case( l_name ) ) )
 		{
 			PARSING_ERROR( cuT( "Technique [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			l_name = cuT( "direct" );
@@ -395,9 +394,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 	}
 	else if ( !p_params.empty() )
 	{
-		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
-		PostFxPluginSPtr l_plugin;
-		PostEffectSPtr l_effect;
 		String l_name;
 		p_params[0]->Get( l_name );
 		Parameters l_parameters;
@@ -418,22 +414,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 			}
 		}
 
-		for ( auto l_it : l_engine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_POSTFX ) )
-		{
-			l_plugin = std::static_pointer_cast< PostFxPlugin >( l_it.second );
+		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
 
-			if ( !l_effect && string::lower_case( l_plugin->GetPostEffectType() ) == string::lower_case( l_name ) )
-			{
-				l_effect = l_plugin->CreateEffect( l_engine->GetRenderSystem(), *l_parsingContext->pRenderTarget, l_parameters );
-			}
-		}
-
-		if ( !l_effect )
+		if ( !l_engine->GetTargetManager().GetPostEffectFactory().IsRegistered( string::lower_case( l_name ) ) )
 		{
-			PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plug-in is installed" ) );
+			PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 		}
 		else
 		{
+			PostEffectSPtr l_effect = l_engine->GetTargetManager().GetPostEffectFactory().Create( l_name, *l_parsingContext->pRenderTarget, *l_engine->GetRenderSystem(), l_parameters );
 			l_parsingContext->pRenderTarget->AddPostEffect( l_effect );
 		}
 	}

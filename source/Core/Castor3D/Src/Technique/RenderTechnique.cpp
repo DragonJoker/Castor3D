@@ -24,7 +24,7 @@
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Miscellaneous/PostEffect.hpp"
+#include "PostEffect/PostEffect.hpp"
 #include "Render/Context.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
@@ -326,7 +326,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTechnique::stFRAME_BUFFER::stFRAME_BUFFER( RenderTechnique & p_technique )
-		: m_technique( p_technique )
+		: m_technique{ p_technique }
 	{
 	}
 
@@ -417,11 +417,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
-		: OwnedBy< Engine >{ *p_renderSystem->GetEngine() }
-		, m_renderTarget{ &p_renderTarget }
+	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
+		: OwnedBy< Engine >{ *p_renderSystem.GetEngine() }
+		, Named{ p_name }
+		, m_renderTarget{ p_renderTarget }
 		, m_renderSystem{ p_renderSystem }
-		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 	{
@@ -451,7 +451,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			m_size = m_renderTarget->GetSize();
+			m_size = m_renderTarget.GetSize();
 			m_initialised = DoInitialise( p_index );
 
 			if ( m_initialised )
@@ -517,7 +517,7 @@ namespace Castor3D
 
 		if ( l_it != m_scenesRenderNodes.end() )
 		{
-			m_renderSystem->PushScene( &p_scene );
+			m_renderSystem.PushScene( &p_scene );
 
 			if ( DoBeginRender( p_scene ) )
 			{
@@ -526,12 +526,12 @@ namespace Castor3D
 				DoEndRender( p_scene );
 			}
 
-			for ( auto l_effect : m_renderTarget->GetPostEffects() )
+			for ( auto l_effect : m_renderTarget.GetPostEffects() )
 			{
 				l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 			}
 
-			m_renderSystem->PopScene();
+			m_renderSystem.PopScene();
 		}
 	}
 
@@ -987,11 +987,6 @@ namespace Castor3D
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
@@ -1128,7 +1123,7 @@ namespace Castor3D
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.SWIZZLE_XYZ ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.SWIZZLE_XYZ ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.SWIZZLE_XYZ ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.SWIZZLE_XYZ ) +
 									l_v3Emissive, l_fAlpha );

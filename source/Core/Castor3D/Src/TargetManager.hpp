@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Manager/ResourceManager.hpp"
 
 #include "HDR/ToneMappingFactory.hpp"
+#include "PostEffect/PostEffectFactory.hpp"
 #include "Render/RenderTarget.hpp"
 
 namespace Castor3D
@@ -102,7 +103,6 @@ namespace Castor3D
 		 *\param[in,out]	p_objCount	Reçoit le nombre d'objets dessinés.
 		 */
 		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
-
 		/**
 		 *\~english
 		 *\return		The ToneMapping factory.
@@ -123,6 +123,26 @@ namespace Castor3D
 		{
 			return m_toneMappingFactory;
 		}
+		/**
+		 *\~english
+		 *\return		The PostEffect factory.
+		 *\~french
+		 *\return		La fabrique de PostEffect.
+		 */
+		inline PostEffectFactory const & GetPostEffectFactory()const
+		{
+			return m_postEffectFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The PostEffect factory.
+		 *\~french
+		 *\return		La fabrique de PostEffect.
+		 */
+		inline PostEffectFactory & GetPostEffectFactory()
+		{
+			return m_postEffectFactory;
+		}
 
 	private:
 		using ResourceManager< Castor::String, RenderTarget >::Create;
@@ -136,6 +156,9 @@ namespace Castor3D
 		//!\~english	The tone mapping factory.
 		//!\~french		La fabrique de mappage de tons.
 		ToneMappingFactory m_toneMappingFactory;
+		//!\~english	The post effect factory.
+		//!\~french		La fabrique d'effets post rendu.
+		PostEffectFactory m_postEffectFactory;
 	};
 }
 

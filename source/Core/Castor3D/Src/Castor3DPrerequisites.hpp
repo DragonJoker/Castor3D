@@ -429,7 +429,6 @@ namespace Castor3D
 	class FrameEvent;
 	class FrameListener;
 	class Version;
-	class PostEffect;
 	class Parameters;
 	class BillboardList;
 	class RenderLoop;
@@ -448,7 +447,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameBuffer );
 	DECLARE_SMART_PTR( BackBuffers );
 	DECLARE_SMART_PTR( RenderTechnique );
-	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( Engine );
 	DECLARE_SMART_PTR( RendererServer );
 	DECLARE_SMART_PTR( PluginBase );

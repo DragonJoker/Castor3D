@@ -1,6 +1,7 @@
 #include <Logger.hpp>
 
 #include <Engine.hpp>
+#include <TargetManager.hpp>
 
 #include <Plugin/PostFxPlugin.hpp>
 #include <Render/RenderSystem.hpp>
@@ -24,12 +25,12 @@ C3D_Bloom_API Castor::String GetName()
 	return BloomPostEffect::Name;
 }
 
-C3D_Bloom_API Castor::String GetPostEffectType()
+C3D_Bloom_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	return BloomPostEffect::Type;
+	p_engine->GetTargetManager().GetPostEffectFactory().Register( BloomPostEffect::Type, &BloomPostEffect::Create );
 }
 
-C3D_Bloom_API Castor3D::PostEffectSPtr CreateEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_params )
+C3D_Bloom_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	return std::make_shared< BloomPostEffect >( *p_renderSystem, p_renderTarget, p_params );
+	p_engine->GetTargetManager().GetPostEffectFactory().Unregister( BloomPostEffect::Type );
 }
