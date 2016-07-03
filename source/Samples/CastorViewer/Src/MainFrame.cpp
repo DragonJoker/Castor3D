@@ -196,12 +196,12 @@ namespace CastorViewer
 
 						if ( !IsMaximized() )
 						{
-							SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+							SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
 						}
 						else
 						{
 							Maximize( false );
-							SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+							SetClientSize( l_window->GetSize().width(), l_window->GetSize().height() );
 							Maximize();
 						}
 

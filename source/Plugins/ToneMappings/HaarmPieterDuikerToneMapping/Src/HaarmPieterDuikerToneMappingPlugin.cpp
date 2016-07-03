@@ -31,7 +31,7 @@ C3D_HaarmPeterDuikerToneMapping_API Castor3D::ePLUGIN_TYPE GetType()
 
 C3D_HaarmPeterDuikerToneMapping_API Castor::String GetName()
 {
-	return cuT( "Haarm Peter Duiker Tone Mapping" );
+	return cuT( "Haarm Pieter Duiker Tone Mapping" );
 }
 
 C3D_HaarmPeterDuikerToneMapping_API void OnLoad( Castor3D::Engine * p_engine )

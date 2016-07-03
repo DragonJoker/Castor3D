@@ -54,13 +54,13 @@ namespace GlRender
 	{
 		uint32_t l_return{ 0u };
 		HDC l_hdc = ::CreateDC( "DISPLAY", 0, 0, 0 );
-	 
+
 		if ( l_hdc )
 		{
 			std::array< uint32_t, 5 > l_input = { 0, 0, 0x27, 0, 0 };
 			std::array< uint32_t, 5 > l_output = { 0, 0, 0, 0, 0 };
 			int const l_size = int( l_input.size() * sizeof( uint32_t ) );
-	 
+
 			if ( ::ExtEscape( l_hdc, 0x7032, l_size, LPCSTR( l_input.data() ), l_size, LPSTR( l_output.data() ) ) > 0 )
 			{
 				l_return = l_output[3] * 1048576;

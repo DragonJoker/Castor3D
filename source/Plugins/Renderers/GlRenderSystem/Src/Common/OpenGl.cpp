@@ -177,16 +177,6 @@ namespace GlRender
 		GlslStrings[l_index++] = cuT( "[e06] Compiler log is not available!" );
 		GlslStrings[l_index] = cuT( "[Empty]" );
 
-		l_index = 0;
-		GlslErrors[l_index++] = cuT( "Invalid Enum !" );
-		GlslErrors[l_index++] = cuT( "Invalid Value !" );
-		GlslErrors[l_index++] = cuT( "Invalid Operation !" );
-		GlslErrors[l_index++] = cuT( "Stack Overflow !" );
-		GlslErrors[l_index++] = cuT( "Stack Underflow !" );
-		GlslErrors[l_index++] = cuT( "Out of memory !" );
-		GlslErrors[l_index++] = cuT( "Invalid frame buffer operation" );
-		GlslErrors[l_index++] = cuT( "Unknown Error" );
-
 		PrimitiveTypes[uint32_t( eTOPOLOGY_POINTS )] = eGL_PRIMITIVE_POINTS;
 		PrimitiveTypes[uint32_t( eTOPOLOGY_LINES )] = eGL_PRIMITIVE_LINES;
 		PrimitiveTypes[uint32_t( eTOPOLOGY_LINE_LOOP )] = eGL_PRIMITIVE_LINE_LOOP;
@@ -1055,16 +1045,36 @@ namespace GlRender
 
 	bool OpenGl::DoGlCheckError( String const & p_text )const
 	{
+		static std::map< uint32_t, String > const Errors
+		{
+			{ GL_INVALID_ENUM, cuT( "Invalid Enum" ) },
+			{ GL_INVALID_VALUE, cuT( "Invalid Value" ) },
+			{ GL_INVALID_OPERATION, cuT( "Invalid Operation" ) },
+			{ GL_STACK_OVERFLOW, cuT( "Stack Overflow" ) },
+			{ GL_STACK_UNDERFLOW, cuT( "Stack Underflow" ) },
+			{ GL_OUT_OF_MEMORY, cuT( "Out of memory" ) },
+			{ GL_INVALID_FRAMEBUFFER_OPERATION, cuT( "Invalid frame buffer operation" ) },
+		};
+
 		bool l_return = true;
 		uint32_t l_errorCode = GetError();
-		
-		while ( l_errorCode != GL_NO_ERROR );
+
+		while ( l_errorCode )
 		{
-			l_errorCode -= GL_INVALID_ENUM;
+			auto l_it = Errors.find( l_errorCode );
 			StringStream l_error;
 			l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;
-			l_error << cuT( "  ID: " ) << ( l_errorCode + GL_INVALID_ENUM ) << std::endl;
-			l_error << cuT( "  Message: " ) << GlslErrors[l_errorCode] << std::endl;
+			l_error << cuT( "  ID: 0x" ) << std::hex << l_errorCode << std::endl;
+
+			if ( l_it == Errors.end() )
+			{
+				l_error << cuT( "  Message: Unknown error" ) << std::endl;
+			}
+			else
+			{
+				l_error << cuT( "  Message: " ) << l_it->second << std::endl;
+			}
+
 			String l_sysError = System::GetLastErrorText();
 
 			if ( !l_sysError.empty() )
