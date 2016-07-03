@@ -153,58 +153,6 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 	}
-
-	//*********************************************************************************************
-
-	BloomPostEffect::BloomPostEffectSurface::BloomPostEffectSurface( Engine & p_engine )
-		: m_colourTexture( p_engine )
-	{
-	}
-
-	bool BloomPostEffect::BloomPostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
-	{
-		bool l_return = false;
-		m_size = p_size;
-		m_colourTexture.SetIndex( p_index );
-
-		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-
-		m_colourTexture.SetSampler( p_sampler );
-		//l_colourTexture->GetImage().SetSource( p_renderTarget );
-		l_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_A8R8G8B8 );
-		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
-
-		m_fbo->Create();
-		m_colourTexture.SetTexture( l_colourTexture );
-		m_colourTexture.Initialise();
-		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_BLACK ) );
-
-		if ( m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
-		{
-			m_fbo->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, l_colourTexture->GetType() );
-			l_return = m_fbo->IsComplete();
-			m_fbo->Unbind();
-		}
-
-		return l_return;
-	}
-
-	void BloomPostEffect::BloomPostEffectSurface::Cleanup()
-	{
-		m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_fbo->DetachAll();
-		m_fbo->Unbind();
-		m_fbo->Cleanup();
-
-		m_colourTexture.Cleanup();
-		m_fbo->Destroy();
-
-		m_fbo.reset();
-		m_colourAttach.reset();
-	}
-
 	//*********************************************************************************************
 
 	String BloomPostEffect::Type = cuT( "bloom" );
@@ -223,19 +171,19 @@ namespace Bloom
 		, m_hiPassSurfaces(
 		{
 			{
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() }
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() }
 			}
 		} )
 		, m_blurSurfaces(
 		{
 			{
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() },
-				BloomPostEffectSurface{ *p_renderSystem.GetEngine() }
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() },
+				PostEffectSurface{ *p_renderSystem.GetEngine() }
 			}
 		} )
 	{

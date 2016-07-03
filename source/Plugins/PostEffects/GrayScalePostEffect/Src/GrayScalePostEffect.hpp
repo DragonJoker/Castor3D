@@ -19,19 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_GrayScalePostEffect___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Miscellaneous/PostEffect.hpp>
+#include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
-
-#ifndef _WIN32
-#	define C3D_GrayScale_API
-#else
-#	ifdef GrayScalePostEffect_EXPORTS
-#		define C3D_GrayScale_API __declspec( dllexport )
-#	else
-#		define C3D_GrayScale_API __declspec( dllimport )
-#	endif
-#endif
 
 namespace GrayScale
 {
@@ -41,21 +31,10 @@ namespace GrayScale
 	class GrayScalePostEffect
 		: public Castor3D::PostEffect
 	{
-		struct PostEffectSurface
-		{
-			PostEffectSurface();
-			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
-			void Cleanup();
-
-			Castor3D::FrameBufferSPtr m_fbo;
-			Castor3D::TextureUnitSPtr m_colourTexture;
-			Castor3D::TextureAttachmentSPtr m_colourAttach;
-			Castor::Size m_size;
-		};
-
 	public:
-		GrayScalePostEffect( Castor3D::RenderSystem & p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
+		GrayScalePostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		~GrayScalePostEffect();
+		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		/**
 		 *\copydoc		Castor3D::PostEffect::Initialise
 		 */

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_POST_EFFECT_H___
 #define ___C3D_POST_EFFECT_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
 {
@@ -32,13 +32,73 @@ namespace Castor3D
 				<br />Post render effects are applied in a cumulative way.
 	\~french
 	\brief		Classe de base d'effet post rendu.
-	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D.
+	\remark		Un effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D.
 				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect
 		: public Castor::OwnedBy< RenderSystem >
 		, public Castor::Named
 	{
+	protected:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.9.0
+		\date		03/07/2016
+		\~english
+		\brief		Post render effect surface structure.
+		\remark		Holds basic informations for a possible post effect surface: framebuffer and colour texture.
+		\~french
+		\brief		Surface pour effet post rendu.
+		\remark		Contient les informations basiques de surface d'un effet: framebuffer, texture de couleur.
+		*/
+		struct PostEffectSurface
+		{
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_engine	The engine.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_engine	Le moteur.
+			 */
+			C3D_API PostEffectSurface( Castor3D::Engine & p_engine );
+			/**
+			 *\~english
+			 *\brief		Initialises the surface.
+			 *\param[in]	p_renderTarget	The render target to which is attached this effect.
+			 *\param[in]	p_size			The surface size.
+			 *\param[in]	p_index			The surface index.
+			 *\param[in]	p_sampler		The surface sampler.
+			 *\~french
+			 *\brief		Initialise la surface.
+			 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+			 *\param[in]	p_size			Les dimensions de la surface.
+			 *\param[in]	p_index			L'index de la surface.
+			 *\param[in]	p_sampler		L'échantillonneur de la surface.
+			 */
+			C3D_API bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
+			/**
+			 *\~english
+			 *\brief		Cleans up the surface.
+			 *\~french
+			 *\brief		Nettoie la surface.
+			 */
+			C3D_API void Cleanup();
+
+			//!\~english	The surface framebuffer.
+			//!\~french		Le framebuffer de la surface.
+			Castor3D::FrameBufferSPtr m_fbo;
+			//!\~english	The surface colour texture.
+			//!\~french		La texture couleur de la surface.
+			Castor3D::TextureUnit m_colourTexture;
+			//!\~english	The attach between framebuffer and texture.
+			//!\~french		L'attache entre la texture et le framebuffer.
+			Castor3D::TextureAttachmentSPtr m_colourAttach;
+			//!\~english	The surface dimensions.
+			//!\~french		Les dimensions de la surface.
+			Castor::Size m_size;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -111,7 +171,8 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english The render target to which this effect is attached.	\~french La cible de rendu à laquelle est attachée cet effet.
+		//!\~english	The render target to which this effect is attached.
+		//!\~french		La cible de rendu à laquelle est attachée cet effet.
 		RenderTarget & m_renderTarget;
 	};
 }

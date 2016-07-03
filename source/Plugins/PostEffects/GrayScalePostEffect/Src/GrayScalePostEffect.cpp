@@ -72,8 +72,8 @@ namespace GrayScale
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
-				LOCALE_ASSIGN( l_writer, Float, l_average, Float( 0.2126f ) * plx_v4FragColor.SWIZZLE_R + 0.7152f * plx_v4FragColor.SWIZZLE_G + 0.0722f * plx_v4FragColor.SWIZZLE_B );
+				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ );
+				LOCALE_ASSIGN( l_writer, Float, l_average, Float( 0.2126f ) * l_colour.SWIZZLE_R + 0.7152f * l_colour.SWIZZLE_G + 0.0722f * l_colour.SWIZZLE_B );
 				plx_v4FragColor = vec4( l_average, l_average, l_average, 1.0 );
 			} );
 			return l_writer.Finalise();
@@ -82,63 +82,12 @@ namespace GrayScale
 
 	//*********************************************************************************************
 
-	GrayScalePostEffect::PostEffectSurface::PostEffectSurface()
-	{
-	}
-
-	bool GrayScalePostEffect::PostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
-	{
-		bool l_return = false;
-		m_size = p_size;
-		m_colourTexture = std::make_shared< TextureUnit >( *p_renderTarget.GetEngine() );
-		m_colourTexture->SetIndex( p_index );
-
-		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-
-		m_colourTexture->SetSampler( p_sampler );
-		//l_colourTexture->GetImage().SetSource( p_renderTarget );
-		l_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_A8R8G8B8 );
-		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
-
-		m_fbo->Create();
-		m_colourTexture->SetTexture( l_colourTexture );
-		m_colourTexture->Initialise();
-		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_BLACK ) );
-
-		if ( m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
-		{
-			m_fbo->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, l_colourTexture->GetType() );
-			l_return = m_fbo->IsComplete();
-			m_fbo->Unbind();
-		}
-
-		return l_return;
-	}
-
-	void GrayScalePostEffect::PostEffectSurface::Cleanup()
-	{
-		m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_fbo->DetachAll();
-		m_fbo->Unbind();
-		m_fbo->Cleanup();
-
-		m_colourTexture->Cleanup();
-		m_fbo->Destroy();
-
-		m_fbo.reset();
-		m_colourAttach.reset();
-		m_colourTexture.reset();
-	}
-
-	//*********************************************************************************************
-
 	String GrayScalePostEffect::Type = cuT( "grayscale" );
 	String GrayScalePostEffect::Name = cuT( "GrayScale PostEffect" );
 
-	GrayScalePostEffect::GrayScalePostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
-		: PostEffect( p_renderSystem, p_renderTarget, GrayScalePostEffect::Type, p_param )
+	GrayScalePostEffect::GrayScalePostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
+		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, p_renderSystem, p_param }
+		, m_surface{ *p_renderSystem.GetEngine() }
 	{
 		String l_name = cuT( "GrayScaleSampler" );
 
@@ -159,6 +108,11 @@ namespace GrayScale
 
 	GrayScalePostEffect::~GrayScalePostEffect()
 	{
+	}
+
+	PostEffectSPtr GrayScalePostEffect::Create( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
+	{
+		return std::make_shared< GrayScalePostEffect >( p_renderTarget, p_renderSystem, p_param );
 	}
 
 	bool GrayScalePostEffect::Initialise()
@@ -210,7 +164,7 @@ namespace GrayScale
 
 			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetImage().GetDimensions(), *m_surface.m_colourTexture->GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetImage().GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
