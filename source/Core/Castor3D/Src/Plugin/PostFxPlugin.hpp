@@ -36,11 +36,6 @@ namespace Castor3D
 	{
 	private:
 		friend class PluginBase;
-		typedef PostEffectSPtr CreateEffectFunction( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
-		typedef Castor::String GetPostEffectTypeFunction();
-
-		typedef CreateEffectFunction * PCreateEffectFunction;
-		typedef GetPostEffectTypeFunction * PGetPostEffectTypeFunction;
 
 	public:
 		/**
@@ -61,32 +56,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~PostFxPlugin();
-		/**
-		 *\~english
-		 *\brief		Creates a PostEffect object.
-		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_renderTarget	The render target to which is attached the effect.
-		 *\param[in]	p_params		The optional parameters.
-		 *\return		The created PostEffect instance.
-		 *\~french
-		 *\brief		Crée un objet PostEffect.
-		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle l'effet s'applique.
-		 *\param[in]	p_params		Les paramètres optionnels.
-		 *\return		L'instance de PostEffect créée.
-		 */
-		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
-		/**
-		 *\~english
-		 *\brief		Tells the effect short name
-		 *\~french
-		 *\brief		Donne le nom court de l'effet
-		 */
-		C3D_API Castor::String GetPostEffectType();
-
-	private:
-		PCreateEffectFunction m_pfnCreateEffect;
-		PGetPostEffectTypeFunction m_pfnGetPostEffectType;
 	};
 }
 

@@ -27,7 +27,6 @@ namespace CastorViewer
 
 		if ( l_pWindow )
 		{
-			wxGetApp().GetMainFrame()->ToggleFullScreen( !l_pWindow->IsFullscreen() );
 			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
 		}
 

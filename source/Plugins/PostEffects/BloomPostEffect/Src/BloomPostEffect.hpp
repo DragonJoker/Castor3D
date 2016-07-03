@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SsaoPostEffect___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
-#include <Miscellaneous/PostEffect.hpp>
+#include <PostEffect/PostEffect.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Render/Viewport.hpp>
 
@@ -43,12 +43,12 @@ namespace Bloom
 	{
 		struct BloomPostEffectSurface
 		{
-			BloomPostEffectSurface();
+			BloomPostEffectSurface( Castor3D::Engine & p_engine );
 			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
 			void Cleanup();
 
 			Castor3D::FrameBufferSPtr m_fbo;
-			Castor3D::TextureUnitSPtr m_colourTexture;
+			Castor3D::TextureUnit m_colourTexture;
 			Castor3D::TextureAttachmentSPtr m_colourAttach;
 			Castor::Size m_size;
 		};
@@ -56,8 +56,9 @@ namespace Bloom
 		using SurfaceArray = std::array< BloomPostEffectSurface, FILTER_COUNT >;
 
 	public:
-		BloomPostEffect( Castor3D::RenderSystem & p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
+		BloomPostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		virtual ~BloomPostEffect();
+		static Castor3D::PostEffectSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );
 		/**
 		 *\copydoc		Castor3D::PostEffect::Initialise
 		 */
@@ -82,13 +83,12 @@ namespace Bloom
 		static Castor::String Name;
 
 	private:
-		bool DoHiPassFilter();
-		void DoDownSample();
-		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
-		void DoCombine();
+		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
+		void DoDownSample( Castor3D::TextureLayout const & p_origin );
+		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
+		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 
-		Castor3D::TextureLayoutSPtr m_colourTexture;
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 

@@ -429,60 +429,87 @@ namespace Castor3D
 		void DoLoadCoreData();
 
 	private:
-		//!\~english The mutex, to make the engine resources access thread-safe	\~french Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe
+		//!\~english	The mutex, to make the engine resources access thread-safe.
+		//!\~french		Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe.
 		std::recursive_mutex m_mutexResources;
-		//!\~english The render loop.	\~french La boucle de rendu.
+		//!\~english	The render loop.
+		//!\~french		La boucle de rendu.
 		RenderLoopUPtr m_renderLoop;
-		//!\~english The engine version	\~french La version du moteur
+		//!\~english	The engine version.
+		//!\~french		La version du moteur.
 		Version m_version;
-		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
+		//!\~english	The current RenderSystem.
+		//!\~french		Le RenderSystem courant.
 		RenderSystem * m_renderSystem;
-		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
+		//!\~english	Tells if engine is cleaned up.
+		//!\~french		Dit si le moteur est nettoyé.
 		bool m_cleaned;
-		//!\~english Tells if engine uses an asynchronous render loop.	\~french Dit si le moteur utilise un boucle de rendu asynchrone.
+		//!\~english	Tells if engine uses an asynchronous render loop.
+		//!\~french		Dit si le moteur utilise un boucle de rendu asynchrone.
 		bool m_threaded;
-		//!\~english Default blend states (no blend).	\~french Etats de blend par défaut (pas de blend).
-		BlendStateSPtr m_defaultBlendState;
-		//!\~english Default sampler.	\~french Le sampler par défaut.
-		SamplerSPtr m_defaultSampler;
-		//!\~english Lights textures sampler.	\~french L'échantillonneur utilisé pour les textures de lumières.
-		SamplerSPtr m_lightsSampler;
-		//!\~english The shaders collection.	\~french La collection de shaders.
-		DECLARE_MANAGER_MEMBER( shader, Shader );
-		//!\~english The sampler states collection.	\~french La collection de sampler states.
-		DECLARE_MANAGER_MEMBER( sampler, Sampler );
-		//!\~english The DepthStencilState collection.	\~french La collection de DepthStencilState.
-		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
-		//!\~english The RasteriserState collection.	\~french La collection de RasteriserState.
-		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
-		//!\~english The BlendState collection.	\~french La collection de BlendState.
-		DECLARE_MANAGER_MEMBER( blendState, BlendState );
-		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
-		DECLARE_MANAGER_MEMBER( material, Material );
-		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
-		DECLARE_MANAGER_MEMBER( plugin, Plugin );
-		//!\~english The overlays collection.	\~french La collection d'overlays.
-		DECLARE_MANAGER_MEMBER( overlay, Overlay );
-		//!\~english The scenes collection.	\~french La collection de scènes.
-		DECLARE_MANAGER_MEMBER( scene, Scene );
-		//!\~english The frame listeners array	\~french Le tableau de frame listeners
-		DECLARE_MANAGER_MEMBER( listener, Listener );
-		//!\~english The render targets map.	\~french La map des cibles de rendu.
-		DECLARE_MANAGER_MEMBER( target, Target );
-		//!\~english The render technique manager	\~french Le gestionnaire de techniques de rendu.
-		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
-		//!\~english The fonts collection	\~french La collection de polices
-		Castor::FontManager m_fontManager;
-		//!\~english The images collection	\~french La collection d'images
-		Castor::ImageManager m_imageManager;
-		//!\~english The user input listener.	\~french La listener d'entrées utilisateur.
-		UserInputListenerSPtr m_userInputListener;
-		//!\~english The map holding the parsers, sorted by section, and plug-in name	\~french La map de parseurs, triés par section, et nom de plug-in
-		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		//!\~english The map holding the sections, sorted plug-in name.	\~french La map de sections, triées par nom de plug-in.
-		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
-		//!\~english The need for per object lighting.	\~french Le besoin d'un éclairage par objet.
+		//!\~english	The need for per object lighting.
+		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
+		//!\~english	Default blend states (no blend).
+		//!\~french		Etats de blend par défaut (pas de blend).
+		BlendStateSPtr m_defaultBlendState;
+		//!\~english	Default sampler.
+		//!\~french		Le sampler par défaut.
+		SamplerSPtr m_defaultSampler;
+		//!\~english	Lights textures sampler.
+		//!\~french		L'échantillonneur utilisé pour les textures de lumières.
+		SamplerSPtr m_lightsSampler;
+		//!\~english	The shaders collection.
+		//!\~french		La collection de shaders.
+		DECLARE_MANAGER_MEMBER( shader, Shader );
+		//!\~english	The sampler states collection.
+		//!\~french		La collection de sampler states.
+		DECLARE_MANAGER_MEMBER( sampler, Sampler );
+		//!\~english	The DepthStencilState collection.
+		//!\~french		La collection de DepthStencilState.
+		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
+		//!\~english	The RasteriserState collection.
+		//!\~french		La collection de RasteriserState.
+		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
+		//!\~english	The BlendState collection.
+		//!\~french		La collection de BlendState.
+		DECLARE_MANAGER_MEMBER( blendState, BlendState );
+		//!\~english	The materials manager.
+		//!\~french		Le gestionnaire de matériaux.
+		DECLARE_MANAGER_MEMBER( material, Material );
+		//!\~english	The plug-ins manager.
+		//!\~french		Le gestionnaire de plug-ins.
+		DECLARE_MANAGER_MEMBER( plugin, Plugin );
+		//!\~english	The overlays collection.
+		//!\~french		La collection d'overlays.
+		DECLARE_MANAGER_MEMBER( overlay, Overlay );
+		//!\~english	The scenes collection.
+		//!\~french		La collection de scènes.
+		DECLARE_MANAGER_MEMBER( scene, Scene );
+		//!\~english	The frame listeners array.
+		//!\~french		Le tableau de frame listeners.
+		DECLARE_MANAGER_MEMBER( listener, Listener );
+		//!\~english	The render targets map.
+		//!\~french		La map des cibles de rendu.
+		DECLARE_MANAGER_MEMBER( target, Target );
+		//!\~english	The render technique manager.
+		//!\~french		Le gestionnaire de techniques de rendu.
+		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
+		//!\~english	The fonts collection.
+		//!\~french		La collection de polices.
+		Castor::FontManager m_fontManager;
+		//!\~english	The images collection.
+		//!\~french		La collection d'images.
+		Castor::ImageManager m_imageManager;
+		//!\~english	The user input listener.
+		//!\~french		Le listener d'entrées utilisateur.
+		UserInputListenerSPtr m_userInputListener;
+		//!\~english	The map holding the parsers, sorted by section, and plug-in name.
+		//!\~french		La map de parseurs, triés par section, et nom de plug-in.
+		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
+		//!\~english	The map holding the sections, sorted plug-in name.
+		//!\~french		La map de sections, triées par nom de plug-in.
+		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
 	};
 }
 

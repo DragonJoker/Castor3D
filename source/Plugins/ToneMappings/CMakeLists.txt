@@ -1,5 +1,5 @@
 option( CASTOR_BUILDGRP_TONEMAPS "Build Castor3D Tone mapping plug-ins" TRUE )
-option( CASTOR_BUILD_TONEMAP_HAARM "Build Haarm Peter Duiker Tone mapping plug-in" TRUE )
+option( CASTOR_BUILD_TONEMAP_HAARM "Build Haarm Pieter Duiker Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_HEJL "Build Hejl Burgess Dawson Tone mapping plug-in" TRUE )
 option( CASTOR_BUILD_TONEMAP_REINHARD "Build Reinhard Tone mapping plug-in" TRUE )
 
@@ -27,7 +27,7 @@ function( ToneMappingsBuild )
 
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			set( Build ${Haarm} )
-			add_subdirectory( Plugins/ToneMappings/HaarmPeterDuikerToneMapping )
+			add_subdirectory( Plugins/ToneMappings/HaarmPieterDuikerToneMapping )
 			set( Haarm ${Build} PARENT_SCOPE )
 		endif()
 
@@ -60,7 +60,7 @@ function( ToneMappingsSummary msg )
 		set( msg_tmp "\n\nToneMappings :" )
 			set( msg_tmp "${msg_tmp}\n    Linear              ${Linear}" )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
-			set( msg_tmp "${msg_tmp}\n    Haarm Peter Duiker  ${Haarm}" )
+			set( msg_tmp "${msg_tmp}\n    Haarm Pieter Duiker ${Haarm}" )
 		endif ()
 		if( ${CASTOR_BUILD_TONEMAP_HEJL} )
 			set( msg_tmp "${msg_tmp}\n    Hejl Burgess Dawson ${Hejl}" )
@@ -88,8 +88,8 @@ function( ToneMappingsSetup )
 		)
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			cpack_add_component( HaarmPeterDuikerToneMapping
-				DISPLAY_NAME "Haarm Peter Duiker ToneMapping"
-				DESCRIPTION "Allows Haarm Peter Duiker Tone mapping."
+				DISPLAY_NAME "Haarm Pieter Duiker ToneMapping"
+				DESCRIPTION "Allows Haarm Pieter Duiker Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full

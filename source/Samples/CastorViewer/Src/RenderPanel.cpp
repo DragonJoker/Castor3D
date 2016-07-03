@@ -133,11 +133,10 @@ namespace CastorViewer
 				Castor::Size l_sizeScreen;
 				Castor::System::GetScreenSize( 0, l_sizeScreen );
 				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
+				l_sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
 				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
 				m_pListener = p_window->GetListener();
 				SceneSPtr l_scene = p_window->GetScene();
-				wxDisplay l_wxDisplay;
-				wxRect l_rect( 0, 0, l_sizeScreen.width(), l_sizeScreen.height() );
 
 				if ( l_scene )
 				{
@@ -194,9 +193,9 @@ namespace CastorViewer
 
 	void RenderPanel::DoResetCamera()
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
-		if ( l_pWindow )
+		if ( l_window )
 		{
 			DoResetTimers();
 
@@ -334,11 +333,11 @@ namespace CastorViewer
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
-		if ( l_pWindow )
+		if ( l_window )
 		{
-			l_pWindow->Resize( p_event.GetSize().x, p_event.GetSize().y );
+			l_window->Resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 		else
 		{
@@ -353,9 +352,9 @@ namespace CastorViewer
 
 	void RenderPanel::OnMove( wxMoveEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
-		if ( !l_pWindow )
+		if ( !l_window )
 		{
 			wxClientDC l_dc( this );
 			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
@@ -368,9 +367,9 @@ namespace CastorViewer
 
 	void RenderPanel::OnPaint( wxPaintEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
-		if ( !l_pWindow )
+		if ( !l_window )
 		{
 			wxPaintDC l_dc( this );
 			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
@@ -525,6 +524,12 @@ namespace CastorViewer
 		if ( m_pListener )
 		{
 			m_pListener->PostEvent( m_pKeyboardEvent );
+			RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+			if ( l_window )
+			{
+				wxGetApp().GetMainFrame()->ToggleFullScreen( !l_window->IsFullscreen() );
+			}
 		}
 
 		p_event.Skip();
@@ -631,9 +636,9 @@ namespace CastorViewer
 		}
 		else
 		{
-			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+			RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
-			if ( l_pWindow )
+			if ( l_window )
 			{
 				real l_deltaX = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
 				real l_deltaY = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;

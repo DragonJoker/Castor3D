@@ -46,6 +46,7 @@ namespace Castor3D
 	*/
 	class RenderTechnique
 		: public Castor::OwnedBy< Engine >
+		, public Castor::Named
 	{
 	public:
 		/*!
@@ -152,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
+		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
 
 	public:
 		/**
@@ -245,16 +246,6 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier.
 		 */
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
-		/**
-		 *\~english
-		 *\return		The technique name.
-		 *\~french
-		 *\return		Le nom de la technique.
-		 */
-		inline Castor::String const & GetName()const
-		{
-			return m_name;
-		}
 		/**
 		 *\~english
 		 *\return		The render area dimensions.
@@ -622,18 +613,15 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
-		//!\~english	The technique name.
-		//!\~french		Le nom de la technique.
-		Castor::String m_name;
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
 		//!\~english	The parent render target.
 		//!\~french		La render target parente.
-		RenderTarget * m_renderTarget;
+		RenderTarget & m_renderTarget;
 		//!\~english	The render system.
 		//!\~french		Le render system.
-		RenderSystem * m_renderSystem;
+		RenderSystem & m_renderSystem;
 		//!\~english	The render area dimension.
 		//!\~french		Les dimensions de l'aire de rendu.
 		Castor::Size m_size;

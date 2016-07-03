@@ -19,7 +19,9 @@
 #include "Texture/GlDirectTextureStorage.hpp"
 #include "Texture/GlPboTextureStorage.hpp"
 #include "Texture/GlSampler.hpp"
+#include "Texture/GlImmutableTextureStorage.hpp"
 #include "Texture/GlTboTextureStorage.hpp"
+#include "Texture/GlGpuOnlyTextureStorage.hpp"
 #include "Texture/GlTexture.hpp"
 
 #include <Logger.hpp>
@@ -52,13 +54,13 @@ namespace GlRender
 	{
 		uint32_t l_return{ 0u };
 		HDC l_hdc = ::CreateDC( "DISPLAY", 0, 0, 0 );
-	 
+
 		if ( l_hdc )
 		{
 			std::array< uint32_t, 5 > l_input = { 0, 0, 0x27, 0, 0 };
 			std::array< uint32_t, 5 > l_output = { 0, 0, 0, 0, 0 };
 			int const l_size = int( l_input.size() * sizeof( uint32_t ) );
-	 
+
 			if ( ::ExtEscape( l_hdc, 0x7032, l_size, LPCSTR( l_input.data() ), l_size, LPSTR( l_output.data() ) ) > 0 )
 			{
 				l_return = l_output[3] * 1048576;
@@ -398,11 +400,29 @@ namespace GlRender
 		{
 			if ( true )//p_image.IsStaticSource() )
 			{
-				l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				if ( GetOpenGl().HasExtension( ARB_texture_storage )
+					 && p_type != TextureStorageType::CubeMapPositiveX
+					 && p_type != TextureStorageType::CubeMapNegativeX
+					 && p_type != TextureStorageType::CubeMapPositiveY
+					 && p_type != TextureStorageType::CubeMapNegativeY
+					 && p_type != TextureStorageType::CubeMapPositiveZ
+					 && p_type != TextureStorageType::CubeMapNegativeZ
+					 && !p_cpuAccess )
+				{
+					l_return = std::make_unique< GlImmutableTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				}
+				else
+				{
+					l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				}
+			}
+			else if ( p_cpuAccess )
+			{
+				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				l_return = std::make_unique< GlGpuOnlyTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_gpuAccess );
 			}
 		}
 

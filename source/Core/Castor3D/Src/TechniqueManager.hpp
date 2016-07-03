@@ -90,30 +90,26 @@ namespace Castor3D
 		 *\param[in]	p_params		Les paramètres de la technique.
 		 *\return		La RenderTechnique créée.
 		 */
-		C3D_API RenderTechniqueSPtr Create( Castor::String const & p_name, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
+		C3D_API RenderTechniqueSPtr Create( Castor::String const & p_name, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
 		/**
 		 *\~english
-		 *\brief		Retrieves the RenderTechnique factory
-		 *\return		The factory
+		 *\return		The RenderTechnique factory.
 		 *\~french
-		 *\brief		Récupère la fabrique de RenderTechnique
-		 *\return		La fabrique
+		 *\return		La fabrique de RenderTechnique.
 		 */
-		inline TechniqueFactory const & GetTechniqueFactory()const
+		inline TechniqueFactory const & GetFactory()const
 		{
-			return m_techniqueFactory;
+			return m_factory;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the RenderTechnique factory
-		 *\return		The factory
+		 *\return		The RenderTechnique factory.
 		 *\~french
-		 *\brief		Récupère la fabrique de RenderTechnique
-		 *\return		La fabrique
+		 *\return		La fabrique de RenderTechnique.
 		 */
-		inline TechniqueFactory & GetTechniqueFactory()
+		inline TechniqueFactory & GetFactory()
 		{
-			return m_techniqueFactory;
+			return m_factory;
 		}
 
 	public:
@@ -125,7 +121,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
-		TechniqueFactory m_techniqueFactory;
+		TechniqueFactory m_factory;
 	};
 }
 

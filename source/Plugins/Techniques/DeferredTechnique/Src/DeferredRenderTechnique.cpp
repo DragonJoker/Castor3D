@@ -55,17 +55,17 @@ namespace Deferred
 		cuT( "c3d_mapDepth" ),
 	};
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
-		, m_viewport( *p_renderSystem->GetEngine() )
+		, m_viewport( *p_renderSystem.GetEngine() )
 	{
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_geometryPassFrameBuffer = m_renderSystem->CreateFrameBuffer();
+		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			auto l_texture = m_renderSystem->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			m_lightPassTextures[i] = std::make_shared< TextureUnit >( *GetEngine() );
 			m_lightPassTextures[i]->SetIndex( i );
@@ -121,7 +121,7 @@ namespace Deferred
 			1, 1, 1, 1,
 		};
 
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
 		uint32_t l_stride = m_declaration.GetStride();
 		m_vertexBuffer->Resize( sizeof( l_data ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
@@ -142,7 +142,7 @@ namespace Deferred
 		m_lightPassShaderProgram.reset();
 	}
 
-	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
@@ -244,7 +244,7 @@ namespace Deferred
 		l_scene->GetVariable( ShaderProgram::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
 		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram );
+		m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram );
 		m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		return l_return;
 	}
@@ -285,7 +285,7 @@ namespace Deferred
 
 	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
-		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget.GetDepthStencilState()->Apply();
 		//m_geometryPassDsState->Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
@@ -316,13 +316,13 @@ namespace Deferred
 
 		if ( m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			Pipeline & l_pipeline = m_renderSystem->GetCurrentContext()->GetPipeline();
+			Pipeline & l_pipeline = m_renderSystem.GetCurrentContext()->GetPipeline();
 
 			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 
-			m_renderTarget->GetDepthStencilState()->Apply();
-			m_renderTarget->GetRasteriserState()->Apply();
+			m_renderTarget.GetDepthStencilState()->Apply();
+			m_renderTarget.GetRasteriserState()->Apply();
 			m_lightPassBlendState->Apply();
 
 			m_viewport.Resize( m_size );
@@ -331,7 +331,7 @@ namespace Deferred
 			if ( m_pShaderCamera )
 			{
 				bool l_return = true;
-				//Point3r l_position = m_renderTarget->GetCamera()->GetParent()->GetDerivedPosition();
+				//Point3r l_position = m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition();
 				//m_pShaderCamera->SetValue( l_position );
 				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
@@ -366,11 +366,6 @@ namespace Deferred
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
@@ -509,11 +504,6 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
@@ -537,11 +527,6 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_flags )const
 	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
