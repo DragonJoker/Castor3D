@@ -513,7 +513,7 @@ namespace Castor3D
 		 *\brief		Récupère le gestionnaire d'incrustations
 		 *\return		La valeur
 		 */
-		inline OverlayManager const & GetOverlayManager()const
+		inline OverlayManager const & GetOverlayCache()const
 		{
 			return m_manager;
 		}
@@ -525,7 +525,7 @@ namespace Castor3D
 		 *\brief		Récupère le gestionnaire d'incrustations
 		 *\return		La valeur
 		 */
-		inline OverlayManager & GetOverlayManager()
+		inline OverlayManager & GetOverlayCache()
 		{
 			return m_manager;
 		}

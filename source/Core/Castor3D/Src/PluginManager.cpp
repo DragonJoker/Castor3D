@@ -15,28 +15,23 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< PluginBase >::Name = cuT( "Plugin" );
+	const String CachedObjectNamer< PluginBase >::Name = cuT( "Plugin" );
 
 #if defined( _MSC_VER)
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );
 #elif defined( __GNUG__)
 	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 #endif
-
-	PluginManager::PluginManager( Engine & p_engine )
-		: ResourceManager< Path, PluginBase >( p_engine )
+	PluginCache ::PluginCache( Engine & p_engine )
+		: Castor::OwnedBy< Engine >{ p_engine }
+	{
+	}
+	
+	PluginCache::~PluginCache()
 	{
 	}
 
-	PluginManager::~PluginManager()
-	{
-	}
-
-	void PluginManager::Cleanup()
-	{
-	}
-
-	void PluginManager::Clear()
+	void PluginCache::Clear()
 	{
 		m_mutexLoadedPlugins.lock();
 		m_mutexLibraries.lock();
@@ -61,7 +56,7 @@ namespace Castor3D
 		m_mutexLoadedPlugins.unlock();
 	}
 
-	PluginBaseSPtr PluginManager::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
+	PluginBaseSPtr PluginCache::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
 		Path l_strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
 		PluginBaseSPtr l_return;
@@ -97,7 +92,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PluginBaseSPtr PluginManager::LoadPlugin( Path const & p_fileFullPath )throw( )
+	PluginBaseSPtr PluginCache::LoadPlugin( Path const & p_fileFullPath )throw( )
 	{
 		PluginBaseSPtr l_return;
 
@@ -125,13 +120,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PluginStrMap PluginManager::GetPlugins( ePLUGIN_TYPE p_type )
+	PluginStrMap PluginCache::GetPlugins( ePLUGIN_TYPE p_type )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutexLoadedPlugins );
 		return m_loadedPlugins[p_type];
 	}
 
-	RenderSystem * PluginManager::LoadRenderer( String const & p_type )
+	RenderSystem * PluginCache::LoadRenderer( String const & p_type )
 	{
 		bool l_return = false;
 		m_mutexRenderers.lock();
@@ -146,7 +141,7 @@ namespace Castor3D
 		return m_renderSystem;
 	}
 
-	void PluginManager::LoadAllPlugins( Path const & p_folder )
+	void PluginCache::LoadAllPlugins( Path const & p_folder )
 	{
 		PathArray l_files;
 		File::ListDirectoryFiles( p_folder, l_files );
@@ -170,7 +165,7 @@ namespace Castor3D
 		}
 	}
 
-	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_library )
+	PluginBaseSPtr PluginCache::LoadRendererPlugin( DynamicLibrarySPtr p_library )
 	{
 		RendererPluginSPtr l_renderer = std::make_shared< RendererPlugin >( p_library, GetEngine() );
 		String l_rendererType = l_renderer->GetRendererType();
@@ -189,7 +184,7 @@ namespace Castor3D
 		return l_renderer;
 	}
 
-	PluginBaseSPtr PluginManager::InternalLoadPlugin( Path const & p_pathFile )
+	PluginBaseSPtr PluginCache::InternalLoadPlugin( Path const & p_pathFile )
 	{
 		PluginBaseSPtr l_return;
 		m_mutexLoadedPluginTypes.lock();

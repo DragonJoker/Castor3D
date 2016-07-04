@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -42,7 +42,6 @@ namespace Castor
 	*/
 	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
-		: public Castor::NonCopyable
 	{
 	protected:
 		typedef PtrType ObjPtr;

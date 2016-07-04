@@ -19,7 +19,7 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
-		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( p_font->GetName() );
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerCache().Create( p_font->GetName() );
 		l_pSampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_pSampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );

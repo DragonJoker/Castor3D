@@ -4,14 +4,10 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Sampler >::Name = cuT( "Sampler" );
+	const String CachedObjectNamer< Sampler >::Name = cuT( "Sampler" );
 
-	SamplerManager::SamplerManager( Engine & p_engine )
-		: ResourceManager< String, Sampler >( p_engine )
+	void testSamplerCache( Engine & p_engine )
 	{
-	}
-
-	SamplerManager::~SamplerManager()
-	{
+		auto cache = MakeCache< Sampler, Castor::String >( EngineGetter{ p_engine }, ElementProducer< Sampler, Castor::String >{ p_engine } );
 	}
 }

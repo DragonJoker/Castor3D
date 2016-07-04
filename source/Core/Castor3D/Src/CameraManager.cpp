@@ -9,25 +9,16 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Camera >::Name = cuT( "Camera" );
+	const String CachedObjectNamer< Camera >::Name = cuT( "Camera" );
 
-	CameraManager::CameraManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		: ObjectManager< Castor::String, Camera >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
+	void BindCamera( ObjectCache< Camera, Castor::String, CameraProducer > const & p_cache, FrameVariableBuffer & p_sceneBuffer )
 	{
-	}
+		RenderSystem * l_renderSystem = p_cache.GetEngine()->GetRenderSystem();
+		Camera * l_camera = l_renderSystem->GetCurrentCamera();
 
-	CameraManager::~CameraManager()
-	{
-	}
-
-	void CameraManager::BindCamera( FrameVariableBuffer & p_sceneBuffer )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		Camera * l_pCamera = l_renderSystem->GetCurrentCamera();
-
-		if ( l_pCamera )
+		if ( l_camera )
 		{
-			Point3r l_position = l_pCamera->GetParent()->GetDerivedPosition();
+			Point3r l_position = l_camera->GetParent()->GetDerivedPosition();
 			Point3rFrameVariableSPtr l_cameraPos;
 			p_sceneBuffer.GetVariable( ShaderProgram::CameraPos, l_cameraPos );
 
@@ -36,5 +27,10 @@ namespace Castor3D
 				l_cameraPos->SetValue( l_position );
 			}
 		}
+	}
+
+	void testCameraCache( Scene & p_scene )
+	{
+		auto cache = MakeObjectCache< Camera, Castor::String, CameraProducer >( p_scene.GetRootNode(), p_scene.GetCameraRootNode(), p_scene.GetObjectRootNode(), SceneGetter{ p_scene }, CameraProducer{} );
 	}
 }

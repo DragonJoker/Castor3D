@@ -34,9 +34,39 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Geometry >
+	template<>
+	struct CachedObjectNamer< Geometry >
 	{
 		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui supportent le cleanup.
+	*/
+	template<>
+	struct ElementInitialiser< Geometry >
+	{
+		ElementInitialiser()
+		{
+		}
+
+		void operator()( Engine & p_engine, Geometry & p_element )
+		{
+			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_element, this]()
+			{
+				p_element.CreateBuffers( m_facesCount, m_vertexCount );
+			} ) );
+		}
+
+		uint32_t m_facesCount{ 0 };
+		uint32_t m_vertexCount{ 0 };
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -82,111 +112,40 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		Geometry manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de Geometry.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class GeometryManager
-		: public ObjectManager< Castor::String, Geometry >
+	template<>
+	struct ElementProducer< Geometry, Castor::String, Scene, SceneNodeSPtr, MeshSPtr >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_owner				Le propriétaire.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		inline GeometryManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-			: ObjectManager< Castor::String, Geometry >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		inline ~GeometryManager()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Creates an object from a name.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_params	The other constructor parameters.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_params	Les autres paramètres de construction.
-		 *\return		L'objet créé.
-		 */
-		template< typename ... Parameters >
-		inline std::shared_ptr< Geometry > Create( Castor::String const & p_name, SceneNodeSPtr p_parent, Parameters && ... p_params )
-		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
-			std::shared_ptr< Geometry > l_return;
+		using ElemPtr = std::shared_ptr< Geometry >;
 
-			if ( !m_elements.has( p_name ) )
-			{
-				l_return = std::make_shared< Geometry >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
-				m_elements.insert( p_name, l_return );
-				ElementAttacher< Geometry >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_return, this]()
-				{
-					l_return->CreateBuffers( m_facesCount, m_vertexCount );
-				} ) );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				GetScene()->SetChanged();
-			}
-			else
-			{
-				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			}
-
-			return l_return;
-		}
-		/**
-		 *\~english
-		 *\return		The faces count.
-		 *\~french
-		 *\return		Le nombre de faces.
-		 */
-		inline uint32_t GetFaceCount()const
+		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene, SceneNodeSPtr p_parent, MeshSPtr const & p_mesh )
 		{
-			return m_facesCount;
+			return std::make_shared< Geometry >( p_key, p_scene, p_parent, p_mesh );
 		}
-		/**
-		 *\~english
-		 *\return		The vertex count.
-		 *\~french
-		 *\return		Le nombre de sommets.
-		 */
-		inline uint32_t GetVertexCount()const
-		{
-			return m_vertexCount;
-		}
-
-	private:
-		//!\~english The scene faces count	\~french Le nombre de faces dans la scène
-		uint32_t m_facesCount = 0;
-		//!\~english The scene vertices count	\~french Le nombre de vertices dans la scène
-		uint32_t m_vertexCount = 0;
 	};
+	using GeometryProducer = ElementProducer< Geometry, Castor::String, Scene, SceneNodeSPtr, MeshSPtr >;
+	/**
+	 *\~english
+	 *\brief		Creates a Geometry cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de Geometry.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< ObjectCache< Geometry, Castor::String, GeometryProducer > >
+	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter const & p_get, GeometryProducer const & p_produce )
+	{
+		return std::make_unique< ObjectCache< Geometry, Castor::String, GeometryProducer > >( p_get, p_produce, p_rootNode, p_rootCameraNode, p_rootObjectNode );
+	}
 }
 
 #endif

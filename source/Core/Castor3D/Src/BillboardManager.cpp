@@ -1,26 +1,11 @@
-﻿#include "BillboardManager.hpp"
+#include "BillboardManager.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	BillboardManager::BillboardManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		: ObjectManager< Castor::String, BillboardList >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
+	void testBillboardCache( Scene & p_scene )
 	{
-	}
-
-	BillboardManager::~BillboardManager()
-	{
-	}
-
-	void BillboardManager::Cleanup()
-	{
-		ObjectManager< Castor::String, BillboardList >::Cleanup();
-		auto l_lock = make_unique_lock( *this );
-
-		for ( auto l_billboard : *this )
-		{
-			GetEngine()->PostEvent( MakeCleanupEvent( *l_billboard.second ) );
-		}
+		auto cache = MakeObjectCache< BillboardList, Castor::String, BillboardProducer >( p_scene.GetRootNode(), p_scene.GetCameraRootNode(), p_scene.GetObjectRootNode(), SceneGetter{ p_scene }, BillboardProducer{} );
 	}
 }

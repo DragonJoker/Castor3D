@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< BillboardList >
+	template<> struct CachedObjectNamer< BillboardList >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -81,47 +81,40 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		BillboardsList manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de BillboardsList.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class BillboardManager
-		: public ObjectManager< Castor::String, BillboardList >
+	template<>
+	struct ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_owner				Le propriétaire.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		C3D_API BillboardManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~BillboardManager();
-		/**
-		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		C3D_API void Cleanup();
+		using ElemPtr = std::shared_ptr< BillboardList >;
+
+		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
+		{
+			return std::make_shared< BillboardList >( p_key, p_scene, p_parent, p_renderSystem );
+		}
 	};
+	using BillboardProducer = ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem >;
+	/**
+	 *\~english
+	 *\brief		Creates a BillboardList cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de BillboardList.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< ObjectCache< BillboardList, Castor::String, BillboardProducer > >
+	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter const & p_get, BillboardProducer const & p_produce )
+	{
+		return std::make_unique< ObjectCache< BillboardList, Castor::String, BillboardProducer > >( p_get, p_produce, p_rootNode, p_rootCameraNode, p_rootObjectNode);
+	}
 }
 
 #endif

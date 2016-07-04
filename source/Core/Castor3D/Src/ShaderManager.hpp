@@ -30,7 +30,7 @@ namespace Castor3D
 	\~french
 	\brief		Manager utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
 	*/
-	class ShaderManager
+	class ShaderCache
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
@@ -42,14 +42,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API explicit ShaderManager( Engine & p_engine );
+		C3D_API explicit ShaderCache( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ShaderManager();
+		C3D_API ~ShaderCache();
 		/**
 		 *\~english
 		 *\brief		Destroys all the shaders of the array of shaders to destroy
@@ -279,6 +279,19 @@ namespace Castor3D
 		//!\~english The RenderSystem used to create programs	\~french Le RenderSystem utilisé pour la création des programmes
 		RenderSystem * m_renderSystem{ nullptr };
 	};
+	/**
+	 *\~english
+	 *\brief		Creates a ShaderProgram cache.
+	 *\param[in]	p_engine	The engine.
+	 *\~french
+	 *\brief		Crée un cache de ShaderProgram.
+	 *\param[in]	p_engine	Le moteur.
+	 */
+	inline std::unique_ptr< ShaderCache >
+	MakeCache( Engine & p_engine )
+	{
+		return std::make_unique< ShaderCache >( p_engine );
+	}
 }
 
 #endif

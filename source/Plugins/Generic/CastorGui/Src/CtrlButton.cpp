@@ -44,7 +44,7 @@ namespace CastorGui
 			OnMouseButtonUp( p_event );
 		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Create( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetHAlign( eHALIGN_CENTER );
 		l_text->SetVAlign( eVALIGN_CENTER );

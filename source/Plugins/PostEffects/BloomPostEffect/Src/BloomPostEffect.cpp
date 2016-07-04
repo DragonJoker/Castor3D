@@ -566,9 +566,9 @@ namespace Bloom
 
 		SamplerSPtr l_sampler;
 
-		if ( !m_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
+		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
 		{
-			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
+			l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Create( l_name );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Min, l_mode );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, l_mode );
 			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
@@ -577,7 +577,7 @@ namespace Bloom
 		}
 		else
 		{
-			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( l_name );
+			l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 
 		return l_sampler;

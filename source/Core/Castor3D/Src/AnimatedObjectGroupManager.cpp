@@ -1,25 +1,16 @@
-﻿#include "AnimatedObjectGroupManager.hpp"
+#include "AnimatedObjectGroupManager.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< AnimatedObjectGroup >::Name = cuT( "AnimatedObjectGroup" );
+	const String CachedObjectNamer< AnimatedObjectGroup >::Name = cuT( "AnimatedObjectGroup" );
 
-	AnimatedObjectGroupManager::AnimatedObjectGroupManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		: ObjectManager< Castor::String, AnimatedObjectGroup >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
+	void Update( Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > & p_cache )
 	{
-	}
+		auto l_lock = make_unique_lock( p_cache );
 
-	AnimatedObjectGroupManager::~AnimatedObjectGroupManager()
-	{
-	}
-
-	void AnimatedObjectGroupManager::Update()
-	{
-		auto l_lock = make_unique_lock( m_elements );
-
-		for ( auto l_pair : m_elements )
+		for ( auto l_pair : p_cache )
 		{
 			l_pair.second->Update();
 		}

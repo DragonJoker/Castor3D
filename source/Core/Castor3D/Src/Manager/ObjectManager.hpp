@@ -33,7 +33,30 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant d'attacher les éléments qui le supportent.
 	*/
-	template< typename Elem, typename Enable = void > struct ElementAttacher;
+	template< typename Elem, typename Enable = void >
+	struct ElementAttacher;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		29/01/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable detaching if a type supports it.
+	\~french
+	\brief		Structure permettant de détacher les éléments qui le supportent.
+	*/
+	template< typename Elem, typename Enable = void >
+	struct ElementDetacher;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable moving elements from a manager to another.
+	\~french
+	\brief		Structure permettant de déplacer les éléments d'un gestionnaire à l'autre.
+	*/
+	template< typename Elem, typename Key, typename Enable = void >
+	struct ElementMerger;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
@@ -64,20 +87,10 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		static void Attach( std::shared_ptr< Elem > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
+		void operator()( std::shared_ptr< Elem > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
 		}
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable detaching if a type supports it.
-	\~french
-	\brief		Structure permettant de détacher les éléments qui le supportent.
-	*/
-	template< typename Elem, typename Enable = void > struct ElementDetacher;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
@@ -92,7 +105,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementDetacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
-		static void Detach( Elem & p_element )
+		void operator()( Elem & p_element )
 		{
 		}
 	};
@@ -110,7 +123,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementDetacher< Elem, typename std::enable_if< is_detachable< Elem >::value >::type >
 	{
-		static void Detach( Elem & p_element )
+		void operator()( Elem & p_element )
 		{
 			p_element.Detach();
 		}
@@ -120,27 +133,28 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable moving elements from a manager to another.
+	\brief		Helper structure to retrieve the engine instance.
 	\~french
-	\brief		Structure permettant de déplacer les éléments d'un gestionnaire à l'autre.
+	\brief		Structure permettant de récupérer le moteur.
 	*/
-	template< typename Key, typename Elem, typename Enable = void > struct ElementMerger;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to retrieve an ObjectManager Engine instance.
-	\~french
-	\brief		Structure permettant de récupérer l'Engine d'un ObjectManager.
-	*/
-	struct ObjectManagerEngineGetter
+	struct SceneGetter
 	{
-		template< typename Key, typename Elem >
-		static Engine * Get( Manager< Key, Elem, Scene, ObjectManagerEngineGetter > const & p_this )
+		SceneGetter( Scene & p_scene )
+			: m_scene{ p_scene }
 		{
-			return p_this.GetScene()->GetEngine();
 		}
+
+		Scene * operator()()const
+		{
+			return &m_scene;
+		}
+
+		Scene * operator()()
+		{
+			return &m_scene;
+		}
+
+		Scene & m_scene;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -151,11 +165,18 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un gestionnaire d'éléments de scène.
 	*/
-	template< typename Key, typename Elem >
-	class ObjectManager
-		: public Manager< Key, Elem, Scene, ObjectManagerEngineGetter >
+	template< typename Elem, typename Key, typename ProducerType >
+	class ObjectCache
+		: public Cache< Elem, Key, ProducerType >
 	{
-	protected:
+		using MyCacheType = Cache< Elem, Key, ProducerType >;
+		using Initialiser = typename MyCache::Initialiser;
+		using Cleaner = typename MyCache::Cleaner;
+		using Attacher = ElementAttacher< Elem >;
+		using Detacher = ElementDetacher< Elem >;
+		using Merger = ElementMerger< Elem, Key >;
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -170,13 +191,26 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		ObjectManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-			: Manager< Key, Elem, Scene, ObjectManagerEngineGetter >( p_owner )
+		ObjectCache( SceneNodeSPtr p_rootNode
+					, SceneNodeSPtr p_rootCameraNode
+					, SceneNodeSPtr p_rootObjectNode
+					, SceneGetter && p_get
+					, ProducerType && p_produce
+					, Initialiser && p_initialise = Initialiser{}
+					, Cleaner && p_clean = Cleaner{}
+					, Attacher && p_attach = Attacher{}
+					, Detacher && p_detach = Detacher{}
+					, Merger && p_merge = Merger{} )
+			: MyCacheType( EngineGetter{ p_get()->GetEngine() }, std::move( p_produce ) )
+			, m_scene( std::move( p_get ) )
 			, m_rootNode( p_rootNode )
 			, m_rootCameraNode( p_rootCameraNode )
 			, m_rootObjectNode( p_rootObjectNode )
+			, m_attach( p_attach )
+			, m_detach( p_detach )
+			, m_merge( p_merge )
 		{
-			this->m_renderSystem = p_owner.GetEngine()->GetRenderSystem();
+			this->m_renderSystem = p_get()->GetRenderSystem();
 		}
 		/**
 		 *\~english
@@ -184,20 +218,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ObjectManager()
+		~ObjectCache()
 		{
 		}
-
-	public:
 		/**
-		 *\~english
-		 *\return		The Engine.
-		 *\~french
-		 *\return		L'Engine.
-		 */
-		inline Engine * GetEngine()const
+		*\~english
+		*\return		The Engine.
+		*\~french
+		*\return		L'Engine.
+		*/
+		inline Scene * GetScene()const
 		{
-			return this->GetScene()->GetEngine();
+			return m_scene();
 		}
 		/**
 		 *\~english
@@ -211,7 +243,7 @@ namespace Castor3D
 
 			for ( auto l_it : this->m_elements )
 			{
-				ElementDetacher< Elem >::Detach( *l_it.second );
+				m_detach( *l_it.second );
 			}
 
 			this->GetScene()->SetChanged();
@@ -231,7 +263,7 @@ namespace Castor3D
 			if ( this->m_elements.has( p_name ) )
 			{
 				auto l_element = this->m_elements.find( p_name );
-				ElementDetacher< Elem >::Detach( *l_element );
+				m_detach( *l_element );
 				this->m_elements.erase( p_name );
 				this->GetScene()->SetChanged();
 			}
@@ -244,17 +276,17 @@ namespace Castor3D
 		 *\return		Met les éléments de ce gestionnaire dans ceux de celui donné.
 		 *\param[out]	p_destination		Le gestionnaire de destination.
 		 */
-		inline void MergeInto( ObjectManager< Key, Elem > & p_destination )
+		inline void MergeInto( ObjectCache< Elem, Key, ProducerType > & p_destination )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
 			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
 
 			for ( auto l_it : this->m_elements )
 			{
-				ElementMerger< Key, Elem >::Merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
+				m_merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
 			}
 
-			Manager< Key, Elem, Scene, ObjectManagerEngineGetter >::Clear();
+			MyCacheType::Clear();
 			p_destination.GetScene()->SetChanged();
 		}
 		/**
@@ -272,23 +304,23 @@ namespace Castor3D
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
-		inline std::shared_ptr< Elem > Create( Key const & p_name, SceneNodeSPtr p_parent = nullptr, Parameters && ... p_params )
+		inline std::shared_ptr< Elem > Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr, Parameters && ... p_params )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
 			std::shared_ptr< Elem > l_return;
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = std::make_shared< Elem >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
+				l_return = m_produce( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
 				this->m_elements.insert( p_name, l_return );
-				ElementAttacher< Elem >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 				this->GetScene()->SetChanged();
 			}
 			else
 			{
 				l_return = this->m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return l_return;
@@ -305,14 +337,29 @@ namespace Castor3D
 		}
 
 	private:
-		using Manager< Key, Elem, Scene, ObjectManagerEngineGetter >::SetRenderSystem;
+		using Cache< Elem, Key, ProducerType >::SetRenderSystem;
 
 	protected:
-		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène
+		//!\~english	The object attacher.
+		//!\~french		L'attacheur d'objet.
+		SceneGetter m_scene;
+		//!\~english	The object attacher.
+		//!\~french		L'attacheur d'objet.
+		Attacher m_attach;
+		//!\~english	The object detacher.
+		//!\~french		Le détacheur d'objet.
+		Detacher m_detach;
+		//!\~english	The objects collection merger.
+		//!\~french		Le fusionneur de collection d'objets.
+		Merger m_merge;
+		//!\~english	The root node.
+		//!\~french		Le noeud père de tous les noeuds de la scène.
 		SceneNodeWPtr m_rootNode;
-		//!\~english The root node used only for cameras (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds de caméra
+		//!\~english	The root node used only for cameras.
+		//!\~french		Le noeud père de tous les noeuds de caméra.
 		SceneNodeWPtr m_rootCameraNode;
-		//!\~english The root node for every object other than camera (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds d'objet
+		//!\~english	The root node for every object other than camera.
+		//!\~french		Le noeud père de tous les noeuds d'objet.
 		SceneNodeWPtr m_rootObjectNode;
 	};
 	/*!
@@ -326,10 +373,11 @@ namespace Castor3D
 	\brief		Structure permettant de déplacer les éléments d'un gestionnaire à l'autre.
 	\remarks	Spécialisation pour les types d'objet détachables.
 	*/
-	template< typename Key, typename Elem >
-	struct ElementMerger< Key, Elem, typename std::enable_if< is_detachable< Elem >::value >::type >
+	template< typename Elem, typename Key >
+	struct ElementMerger< Elem, Key, typename std::enable_if< is_detachable< Elem >::value >::type >
 	{
-		static void Merge( ObjectManager< Key, Elem > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
+		template< typename ProducerType >
+		void operator()( ObjectCache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
 		{
 			//if ( p_element->GetParent()->GetName() == p_cameraRootNode->GetName() )
 			//{
@@ -364,10 +412,11 @@ namespace Castor3D
 	\brief		Structure permettant de déplacer les éléments d'un gestionnaire à l'autre.
 	\remarks	Spécialisation pour les types d'objet non détachables.
 	*/
-	template< typename Key, typename Elem >
-	struct ElementMerger < Key, Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
+	template< typename Elem, typename Key >
+	struct ElementMerger < Elem, Key, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
-		static void Merge( ObjectManager< Key, Elem > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
+		template< typename ProducerType >
+		void operator()( ObjectCache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
 		{
 			//Castor::String l_name = p_element->GetName();
 
@@ -380,6 +429,22 @@ namespace Castor3D
 			//p_destination.insert( l_name, p_element );
 		}
 	};
+	/**
+	 *\~english
+	 *\brief		Creates an object cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache d'objets.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template< typename Elem, typename Key, typename ProducerType >
+	std::unique_ptr< ObjectCache< Elem, Key, ProducerType > >
+	MakeObjectCache( SceneNodeSPtr p_rootNode , SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter const & p_get, ProducerType const & p_produce )
+	{
+		return std::make_unique< ObjectCache< Elem, Key, ProducerType > >( p_get, p_produce, p_rootNode, p_rootCameraNode, p_rootObjectNode);
+	}
 }
 
 #endif

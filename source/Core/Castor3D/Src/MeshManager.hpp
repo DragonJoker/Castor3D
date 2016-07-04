@@ -36,7 +36,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Mesh >
+	template<> struct CachedObjectNamer< Mesh >
 	{
 		C3D_API static const Castor::String Name;
 	};

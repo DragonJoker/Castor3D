@@ -28,18 +28,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <ImageManager.hpp>
 #include <Unique.hpp>
 
-#define DECLARE_MANAGER_MEMBER( memberName, className )\
+#define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline className##Manager & Get##className##Manager()\
+		inline className##Cache & Get##className##Cache()\
 		{\
-			return *m_##memberName##Manager;\
+			return *m_##memberName##Cache;\
 		}\
-		inline className##Manager const & Get##className##Manager()const\
+		inline className##Cache const & Get##className##Cache()const\
 		{\
-			return *m_##memberName##Manager;\
+			return *m_##memberName##Cache;\
 		}\
 	private:\
-		className##ManagerUPtr m_##memberName##Manager
+		className##CacheUPtr m_##memberName##Cache
 
 namespace Castor3D
 {
@@ -461,40 +461,40 @@ namespace Castor3D
 		SamplerSPtr m_lightsSampler;
 		//!\~english	The shaders collection.
 		//!\~french		La collection de shaders.
-		DECLARE_MANAGER_MEMBER( shader, Shader );
+		DECLARE_CACHE_MEMBER( shader, Shader );
 		//!\~english	The sampler states collection.
 		//!\~french		La collection de sampler states.
-		DECLARE_MANAGER_MEMBER( sampler, Sampler );
+		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		//!\~english	The DepthStencilState collection.
 		//!\~french		La collection de DepthStencilState.
-		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
+		DECLARE_CACHE_MEMBER( depthStencilState, DepthStencilState );
 		//!\~english	The RasteriserState collection.
 		//!\~french		La collection de RasteriserState.
-		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
+		DECLARE_CACHE_MEMBER( rasteriserState, RasteriserState );
 		//!\~english	The BlendState collection.
 		//!\~french		La collection de BlendState.
-		DECLARE_MANAGER_MEMBER( blendState, BlendState );
+		DECLARE_CACHE_MEMBER( blendState, BlendState );
 		//!\~english	The materials manager.
 		//!\~french		Le gestionnaire de matériaux.
-		DECLARE_MANAGER_MEMBER( material, Material );
+		DECLARE_CACHE_MEMBER( material, Material );
 		//!\~english	The plug-ins manager.
 		//!\~french		Le gestionnaire de plug-ins.
-		DECLARE_MANAGER_MEMBER( plugin, Plugin );
+		DECLARE_CACHE_MEMBER( plugin, Plugin );
 		//!\~english	The overlays collection.
 		//!\~french		La collection d'overlays.
-		DECLARE_MANAGER_MEMBER( overlay, Overlay );
+		DECLARE_CACHE_MEMBER( overlay, Overlay );
 		//!\~english	The scenes collection.
 		//!\~french		La collection de scènes.
-		DECLARE_MANAGER_MEMBER( scene, Scene );
+		DECLARE_CACHE_MEMBER( scene, Scene );
 		//!\~english	The frame listeners array.
 		//!\~french		Le tableau de frame listeners.
-		DECLARE_MANAGER_MEMBER( listener, Listener );
+		DECLARE_CACHE_MEMBER( listener, Listener );
 		//!\~english	The render targets map.
 		//!\~french		La map des cibles de rendu.
-		DECLARE_MANAGER_MEMBER( target, Target );
+		DECLARE_CACHE_MEMBER( target, Target );
 		//!\~english	The render technique manager.
 		//!\~french		Le gestionnaire de techniques de rendu.
-		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
+		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
 		//!\~english	The fonts collection.
 		//!\~french		La collection de polices.
 		Castor::FontManager m_fontManager;
@@ -513,6 +513,6 @@ namespace Castor3D
 	};
 }
 
-#undef DECLARE_MANAGER_MEMBER
+#undef DECLARE_CACHE_MEMBER
 
 #endif

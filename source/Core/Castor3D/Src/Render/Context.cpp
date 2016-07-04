@@ -63,10 +63,10 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_bMultiSampling = p_window->IsMultisampling();
-		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
+		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Create( cuT( "NoDepthState" ) );
 		m_dsStateNoDepth->SetDepthTest( false );
 		m_dsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthWriterState" ) );
+		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Create( cuT( "NoDepthWriterState" ) );
 		m_dsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 

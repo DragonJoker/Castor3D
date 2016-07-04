@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Camera >
+	template<> struct CachedObjectNamer< Camera >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -81,49 +81,49 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		Camera manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de Camera.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class CameraManager
-		: public ObjectManager< Castor::String, Camera >
+	template<>
+	struct ElementProducer< Camera, Castor::String, Scene, SceneNodeSPtr, Viewport >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_owner				Le propriétaire.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		C3D_API CameraManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~CameraManager();
-		/**
-		 *\~english
-		 *\brief		Bind the camera.
-		 *\param[in]	p_sceneBuffer	The constants buffer.
-		 *\~french
-		 *\brief		Attache la caméra.
-		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
-		 */
-		C3D_API void BindCamera( FrameVariableBuffer & p_sceneBuffer );
+		using ElemPtr = std::shared_ptr< Camera >;
+
+		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene, SceneNodeSPtr p_parent, Viewport const & p_viewport )
+		{
+			return std::make_shared< Camera >( p_key, p_scene, p_parent, p_viewport );
+		}
 	};
+	using CameraProducer = ElementProducer< Camera, Castor::String, Scene, SceneNodeSPtr, Viewport >;
+	/**
+	 *\~english
+	 *\brief		Creates a BillboardList cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de BillboardList.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< ObjectCache< Camera, Castor::String, CameraProducer > >
+	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter const & p_get, CameraProducer const & p_produce )
+	{
+		return std::make_unique< ObjectCache< Camera, Castor::String, CameraProducer > >( p_get, p_produce, p_rootNode, p_rootCameraNode, p_rootObjectNode);
+	}
+	/**
+	 *\~english
+	 *\brief		Bind the camera.
+	 *\param[in]	p_sceneBuffer	The constants buffer.
+	 *\~french
+	 *\brief		Attache la caméra.
+	 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+	 */
+	C3D_API void BindCamera( ObjectCache< Camera, Castor::String, CameraProducer > const & p_cache, FrameVariableBuffer & p_sceneBuffer );
 }
 
 #endif

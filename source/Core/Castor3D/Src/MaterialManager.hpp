@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MATERIAL_MANAGER_H___
 #define ___C3D_MATERIAL_MANAGER_H___
 
-#include "Manager/ResourceManager.hpp"
+#include "Manager/Manager.hpp"
 
 #include "Material/Material.hpp"
 
@@ -33,10 +33,30 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Material >
+	template<> struct CachedObjectNamer< Material >
 	{
 		C3D_API static const Castor::String Name;
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Material, Castor::String, Engine >
+	{
+		using ElemPtr = std::shared_ptr< Material >;
+
+		ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		{
+			return std::make_shared< Material >( p_key, p_engine );
+		}
+	};
+	using MaterialProducer = ElementProducer< Material, Castor::String, Engine >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -46,29 +66,40 @@ namespace Castor3D
 	\~french
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
-	class MaterialManager
-		: public ResourceManager< Castor::String, Material >
+	class MaterialCache
+		: public Cache< Material, Castor::String, MaterialProducer >
 	{
-	private:
-		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
+	public:
+		using Elem = Material;
+		using Key = Castor::String;
+		using Collection = Castor::Collection< Elem, Key >;
+		using ElemPtr = std::shared_ptr< Elem >;
+		using Producer = ElementProducer< Elem, Key, Engine & >;
+		using Initialiser = ElementInitialiser< Elem >;
+		using Cleaner = ElementCleaner< Elem >;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_owner	The owner.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\brief		Constructeur.
+		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		C3D_API MaterialManager( Engine & p_engine );
+		inline MaterialCache( Engine & p_engine )
+			: Cache< Material, Castor::String, MaterialProducer >( EngineGetter{ p_engine }, MaterialProducer{} )
+		{
+		}
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		C3D_API ~MaterialManager();
+		inline ~MaterialCache ()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Materials initialisation function.
@@ -124,10 +155,26 @@ namespace Castor3D
 			return m_defaultMaterial;
 		}
 
-	private:
-		//!\~english The default material	\~french Le matériau par défaut
+	protected:
+		//!\~english	The default material.
+		//!\~french		Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
 	};
+	/**
+	 *\~english
+	 *\brief		Creates a Material cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de Material.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	std::unique_ptr< MaterialCache >
+	MakeCache( Engine & p_engine )
+	{
+		return std::make_unique< MaterialCache >( p_engine );
+	}
 }
 
 #endif

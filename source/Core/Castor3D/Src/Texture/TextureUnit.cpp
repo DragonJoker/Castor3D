@@ -206,7 +206,7 @@ namespace Castor3D
 	{
 		if ( !m_renderTarget.expired() )
 		{
-			GetEngine()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetTargetCache().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 

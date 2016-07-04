@@ -15,11 +15,12 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_BLEND_STATE_MANAGER_H___
-#define ___C3D_BLEND_STATE_MANAGER_H___
+#ifndef ___C3D_BLEND_STATE_CACHE_H___
+#define ___C3D_BLEND_STATE_CACHE_H___
 
-#include "Manager/ResourceManager.hpp"
+#include "Manager/Manager.hpp"
 
+#include "Render/RenderSystem.hpp"
 #include "State/BlendState.hpp"
 
 namespace Castor3D
@@ -33,56 +34,53 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< BlendState >
+	template<> struct CachedObjectNamer< BlendState >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		BlendState manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de BlendState.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class BlendStateManager
-		: public ResourceManager< Castor::String, BlendState >
+	template<>
+	struct ElementProducer< BlendState, Castor::String >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API BlendStateManager( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~BlendStateManager();
-		/**
-		 *\~english
-		 *\brief		Creates and returns a BlendState, given a name
-		 *\remarks		If a BlendState with the same name exists, none is created
-		 *\param[in]	p_name	The BlendState name
-		 *\return		The created or existing BlendState
-		 *\~french
-		 *\brief		Crée et renvoie un BlendState, avec le nom donné
-		 *\remarks		Si un BlendState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du BlendState
-		 *\return		Le BlendState créé ou existant
-		 */
-		C3D_API BlendStateSPtr Create( Castor::String const & p_name );
+		using ElemPtr = std::shared_ptr< BlendState >;
 
-	private:
-		using ResourceManager< Castor::String, BlendState >::Create;
+		ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return m_engine.GetRenderSystem()->CreateBlendState();
+		}
+
+		Engine & m_engine;
 	};
+	using BlendStateProducer = ElementProducer< BlendState, Castor::String >;
+	/**
+	 *\~english
+	 *\brief		Creates a BlendState cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de BlendState.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< Cache< BlendState, Castor::String, BlendStateProducer > >
+	MakeCache< BlendState, Castor::String, BlendStateProducer >( EngineGetter const & p_get, BlendStateProducer const & p_produce )
+	{
+		return std::make_unique< Cache< BlendState, Castor::String, BlendStateProducer > >( p_get, p_produce );
+	}
 }
 
 #endif

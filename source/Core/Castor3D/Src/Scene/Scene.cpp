@@ -222,9 +222,9 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Geometries" ) );
-			auto l_lock = make_unique_lock( p_scene.GetGeometryManager() );
+			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
 
-			for ( auto const & l_it : p_scene.GetGeometryManager() )
+			for ( auto const & l_it : p_scene.GetGeometryCache() )
 			{
 				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
@@ -285,8 +285,8 @@ namespace Castor3D
 		m_windowManager = std::make_unique< WindowManager >( *this );
 
 		m_materialManagerView = make_manager_view< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialManager() );
-		m_samplerManagerView = make_manager_view< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerManager() );
-		m_overlayManagerView = make_manager_view< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayManager() );
+		m_samplerManagerView = make_manager_view< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerCache() );
+		m_overlayManagerView = make_manager_view< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayCache() );
 		m_fontManagerView = make_manager_view< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontManager() );
 
 		m_meshManager->SetRenderSystem( p_engine.GetRenderSystem() );
@@ -455,7 +455,7 @@ namespace Castor3D
 			p_scene->GetAnimatedObjectGroupManager().MergeInto( *m_animatedObjectGroupManager );
 			p_scene->GetCameraManager().MergeInto( *m_cameraManager );
 			p_scene->GetBillboardManager().MergeInto( *m_billboardManager );
-			p_scene->GetGeometryManager().MergeInto( *m_geometryManager );
+			p_scene->GetGeometryCache().MergeInto( *m_geometryManager );
 			p_scene->GetLightManager().MergeInto( *m_lightManager );
 			p_scene->GetSceneNodeManager().MergeInto( *m_sceneNodeManager );
 			m_ambientLight = p_scene->GetAmbientLight();

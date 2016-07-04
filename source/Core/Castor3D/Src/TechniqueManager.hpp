@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TECHNIQUE_MANAGER_H___
 #define ___C3D_TECHNIQUE_MANAGER_H___
 
-#include "Manager/ResourceManager.hpp"
+#include "Manager/Manager.hpp"
 
 #include "Technique/RenderTechnique.hpp"
 #include "Technique/TechniqueFactory.hpp"
@@ -34,10 +34,35 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< RenderTechnique >
+	template<> struct CachedObjectNamer< RenderTechnique >
 	{
 		C3D_API static const Castor::String Name;
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >
+	{
+		using ElemPtr = std::shared_ptr< RenderTechnique >;
+
+		ElementProducer() = default;
+
+		ElemPtr operator()( Castor::String const & p_key, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_parameters )
+		{
+			return m_factory.Create( p_type, p_renderTarget, p_renderSystem, p_parameters );
+		}
+		//!\~english	The RenderTechnique factory.
+		//!\~french		La fabrique de RenderTechnique.
+		TechniqueFactory m_factory;
+	};
+	using RenderTechniqueProducer = ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -47,9 +72,11 @@ namespace Castor3D
 	\~french
 	\brief		Le gestionnaire de techniques de rendu.
 	*/
-	class RenderTechniqueManager
-		: protected ResourceManager< Castor::String, RenderTechnique >
+	class RenderTechniqueCache
+		: public Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >
 	{
+		using CacheType = Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >;
+
 	public:
 		/**
 		 *\~english
@@ -57,14 +84,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		C3D_API RenderTechniqueManager( Engine & p_engine );
+		C3D_API RenderTechniqueCache( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~RenderTechniqueManager();
+		C3D_API ~RenderTechniqueCache();
 		/**
 		 *\~english
 		 *\brief		Updates all techniques.
@@ -74,32 +101,13 @@ namespace Castor3D
 		C3D_API void Update();
 		/**
 		 *\~english
-		 *\brief		Creates a RenderTechnique.
-		 *\param[in]	p_name			The technique name.
-		 *\param[in]	p_type			The technique type.
-		 *\param[in]	p_renderTarget	The technique render target.
-		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_params		The technique parameters.
-		 *\return		The created RenderTechnique.
-		 *\~french
-		 *\brief		Crée une RenderTechnique.
-		 *\param[in]	p_name			Le nom de la technique.
-		 *\param[in]	p_type			Le type de technique.
-		 *\param[in]	p_renderTarget	La cible de rendu de la technique.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_params		Les paramètres de la technique.
-		 *\return		La RenderTechnique créée.
-		 */
-		C3D_API RenderTechniqueSPtr Create( Castor::String const & p_name, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
-		/**
-		 *\~english
 		 *\return		The RenderTechnique factory.
 		 *\~french
 		 *\return		La fabrique de RenderTechnique.
 		 */
 		inline TechniqueFactory const & GetFactory()const
 		{
-			return m_factory;
+			return m_produce.m_factory;
 		}
 		/**
 		 *\~english
@@ -109,19 +117,8 @@ namespace Castor3D
 		 */
 		inline TechniqueFactory & GetFactory()
 		{
-			return m_factory;
+			return m_produce.m_factory;
 		}
-
-	public:
-		using ResourceManager< Castor::String, RenderTechnique >::Cleanup;
-		using ResourceManager< Castor::String, RenderTechnique >::Clear;
-		using ResourceManager< Castor::String, RenderTechnique >::SetRenderSystem;
-		using ResourceManager< Castor::String, RenderTechnique >::lock;
-		using ResourceManager< Castor::String, RenderTechnique >::unlock;
-
-	private:
-		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
-		TechniqueFactory m_factory;
 	};
 }
 

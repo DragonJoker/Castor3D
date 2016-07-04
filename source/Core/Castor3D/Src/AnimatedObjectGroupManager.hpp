@@ -33,86 +33,53 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< AnimatedObjectGroup >
+	template<> struct CachedObjectNamer< AnimatedObjectGroup >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		AnimatedObjectGroup manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de AnimatedObjectGroup.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class AnimatedObjectGroupManager
-		: public ObjectManager< Castor::String, AnimatedObjectGroup >
+	template<>
+	struct ElementProducer< AnimatedObjectGroup, Castor::String, Scene >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_owner				The owner.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_owner				Le propriétaire.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		C3D_API AnimatedObjectGroupManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~AnimatedObjectGroupManager();
-		/**
-		 *\~english
-		 *\brief		Updates currently playing animations in animated objects.
-		 *\~french
-		 *\brief		Met à jour les animations en cours pour les objets animés.
-		 */
-		C3D_API void Update();
-		/**
-		 *\~english
-		 *\brief		Creates an object from a name.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_params	The other constructor parameters.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_params	Les autres paramètres de construction.
-		 *\return		L'objet créé.
-		 */
-		template< typename ... Parameters >
-		inline std::shared_ptr< AnimatedObjectGroup > Create( Castor::String const & p_name, Parameters && ... p_params )
+		using ElemPtr = std::shared_ptr< AnimatedObjectGroup >;
+
+		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
-			std::shared_ptr< AnimatedObjectGroup > l_return;
-
-			if ( !m_elements.has( p_name ) )
-			{
-				l_return = std::make_shared< AnimatedObjectGroup >( p_name, *this->GetScene(), std::forward< Parameters >( p_params )... );
-				m_elements.insert( p_name, l_return );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				GetScene()->SetChanged();
-			}
-			else
-			{
-				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			}
-
-			return l_return;
+			return std::make_shared< AnimatedObjectGroup >( p_key, p_scene );
 		}
 	};
+	using AnimatedObjectGroupProducer = ElementProducer< AnimatedObjectGroup, Castor::String, Scene >;
+	/**
+	 *\~english
+	 *\brief		Creates a BlendState cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de BlendState.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >
+	MakeCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >( EngineGetter const & p_get, AnimatedObjectGroupProducer const & p_produce )
+	{
+		return std::make_unique< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >( p_get, p_produce );
+	}
+	/**
+	 *\~english
+	 *\brief		Updates currently playing animations in animated objects.
+	 *\~french
+	 *\brief		Met à jour les animations en cours pour les objets animés.
+	 */
+	C3D_API void Update( Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > & p_cache );
 }
 
 #endif

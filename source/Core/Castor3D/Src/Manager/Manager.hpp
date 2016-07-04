@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MANAGER_H___
-#define ___C3D_MANAGER_H___
+#ifndef ___C3D_CACHE_H___
+#define ___C3D_CACHE_H___
 
 #include "Castor3DPrerequisites.hpp"
 
@@ -32,29 +32,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created " );
-	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate " );
-	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - nullptr " );
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to get an object type name.
-	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
-	*/
-	template< typename Elem > struct ManagedObjectNamer;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable initialisation if a type supports it.
-	\~french
-	\brief		Structure permettant d'initialiser les éléments qui le supportent.
-	*/
-	template< typename Elem, typename Enable = void > struct ElementInitialiser;
+	static const xchar * INFO_CACHE_CREATED_OBJECT = cuT( "Cache::Create - Created " );
+	static const xchar * WARNING_CACHE_DUPLICATE_OBJECT = cuT( "Cache::Create - Duplicate " );
+	static const xchar * WARNING_CACHE_NULL_OBJECT = cuT( "Cache::Insert - nullptr " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -69,7 +49,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
 	{
-		static void Initialise( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 		}
 	};
@@ -87,7 +67,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		static void Initialise( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 			p_element.Initialise();
 		}
@@ -106,21 +86,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		static void Initialise( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 			p_engine.PostEvent( MakeInitialiseEvent( p_element ) );
 		}
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	*/
-	template< typename Elem, typename Enable = void > struct ElementCleaner;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -135,7 +105,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
 	{
-		static void Cleanup( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 		}
 	};
@@ -153,7 +123,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		static void Cleanup( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 			p_element.Cleanup();
 		}
@@ -172,10 +142,49 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		static void Cleanup( Engine & p_engine, Elem & p_element )
+		void operator()( Engine & p_engine, Elem & p_element )
 		{
 			p_engine.PostEvent( MakeCleanupEvent( p_element ) );
 		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template< typename Elem, typename Key, typename ... Parameters >
+	struct ElementProducer;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to retrieve the engine instance.
+	\~french
+	\brief		Structure permettant de récupérer le moteur.
+	*/
+	struct EngineGetter
+	{
+		EngineGetter( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		Engine * operator()()const
+		{
+			return &m_engine;
+		}
+
+		Engine * operator()()
+		{
+			return &m_engine;
+		}
+
+		Engine & m_engine;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -186,14 +195,17 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un gestionnaire d'éléments.
 	*/
-	template< typename Key, typename Elem, typename Owner, typename EngineGetter >
-	class Manager
-		: public Castor::OwnedBy< Owner >
+	template< typename Elem, typename Key, typename ProducerType >
+	class Cache
 	{
 	public:
-		typedef Castor::Collection< Elem, Key > Collection;
+		using Collection = Castor::Collection< Elem, Key >;
+		using ElemPtr = std::shared_ptr< Elem >;
+		using Producer = ProducerType;
+		using Initialiser = ElementInitialiser< Elem >;
+		using Cleaner = ElementCleaner< Elem >;
 
-	protected:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -202,9 +214,14 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		inline Manager( Owner & p_owner )
-			: Castor::OwnedBy< Owner >( p_owner )
-			, m_renderSystem( nullptr )
+		inline Cache( EngineGetter && p_get
+					  , Producer && p_produce
+					  , Initialiser && p_initialise = Initialiser{}
+					  , Cleaner && p_clean = Cleaner{} )
+			: m_get{ std::move( p_get ) }
+			, m_produce{ std::move( p_produce ) }
+			, m_initialise{ std::move( p_initialise ) }
+			, m_clean{ std::move( p_clean ) }
 		{
 		}
 		/**
@@ -213,11 +230,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Manager()
+		inline ~Cache()
 		{
 		}
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
@@ -226,11 +241,11 @@ namespace Castor3D
 		 */
 		inline void Cleanup()
 		{
-			std::unique_lock< Collection > l_lock( m_elements );
+			auto l_lock = Castor::make_unique_lock( m_elements );
 
 			for ( auto l_it : this->m_elements )
 			{
-				ElementCleaner< Elem >::Cleanup( *GetEngine(), *l_it.second );
+				m_clean( *GetEngine(), *l_it.second );
 			}
 		}
 		/**
@@ -263,15 +278,18 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline void Insert( Key const & p_name, std::shared_ptr< Elem > p_element )
+		inline ElemPtr Add( Key const & p_name, ElemPtr p_element )
 		{
+			ElemPtr l_return;
+
 			if ( p_element )
 			{
-				std::unique_lock< Collection > l_lock( m_elements );
+				auto l_lock = Castor::make_unique_lock( m_elements );
 
 				if ( m_elements.has( p_name ) )
 				{
-					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+					l_return = m_elements.find( p_name );
 				}
 				else
 				{
@@ -280,8 +298,41 @@ namespace Castor3D
 			}
 			else
 			{
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
 			}
+		}
+		/**
+		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_params	The other constructor parameters.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\return		L'objet créé.
+		 */
+		template< typename ... Parameters >
+		inline ElemPtr Add( Key const & p_name, Parameters && ... p_params )
+		{
+			ElemPtr l_return;
+			auto l_lock = Castor::make_unique_lock( m_elements );
+
+			if ( !m_elements.has( p_name ) )
+			{
+				l_return = m_produce( p_name, std::forward< Parameters >( p_params )... );
+				m_initialise( *GetEngine(), *l_return );
+				m_elements.insert( p_name, l_return );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+			}
+			else
+			{
+				l_return = m_elements.find( p_name );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+			}
+
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -323,7 +374,7 @@ namespace Castor3D
 		*/
 		inline Engine * GetEngine()const
 		{
-			return EngineGetter::Get( *this );
+			return m_get();
 		}
 		/**
 		*\~english
@@ -333,7 +384,7 @@ namespace Castor3D
 		*/
 		inline Castor::String const & GetObjectTypeName()const
 		{
-			return ManagedObjectNamer< Elem >::Name;
+			return CachedObjectNamer< Elem >::Name;
 		}
 		/**
 		 *\~english
@@ -357,7 +408,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline std::shared_ptr< Elem > Find( Key const & p_name )const
+		inline ElemPtr Find( Key const & p_name )const
 		{
 			return m_elements.find( p_name );
 		}
@@ -429,46 +480,43 @@ namespace Castor3D
 		{
 			return m_elements.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_params	The other constructor parameters.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_params	Les autres paramètres de construction.
-		 *\return		L'objet créé.
-		 */
-		template< typename ... Parameters >
-		inline std::shared_ptr< Elem > Create( Key const & p_name, Parameters && ... p_params )
-		{
-			std::unique_lock< Collection > l_lock( m_elements );
-			std::shared_ptr< Elem > l_return;
-
-			if ( !m_elements.has( p_name ) )
-			{
-				l_return = std::make_shared< Elem >( p_name, std::forward< Parameters >( p_params )... );
-				m_elements.insert( p_name, l_return );
-				ElementInitialiser< Elem >::Initialise( *GetEngine(), *l_return );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			}
-			else
-			{
-				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			}
-
-			return l_return;
-		}
 
 	protected:
-		//!\~english The RenderSystem.	\~french Le RenderSystem.
-		RenderSystem * m_renderSystem;
-		//!\~english The elements collection.	\~french La collection d'éléments.
+		//!\~english	The RenderSystem.
+		//!\~french		Le RenderSystem.
+		RenderSystem * m_renderSystem{ nullptr };
+		//!\~english	The elements collection.
+		//!\~french		La collection d'éléments.
 		mutable Collection m_elements;
+		//!\~english	The engine getter.
+		//!\~french		Le récupérateur de moteur.
+		EngineGetter m_get;
+		//!\~english	The element producer.
+		//!\~french		Le créateur d'éléments.
+		Producer m_produce;
+		//!\~english	The element initialiser.
+		//!\~french		L'initaliseur d'éléments.
+		Initialiser m_initialise;
+		//!\~english	The element cleaner.
+		//!\~french		Le nettoyeur d'éléments.
+		Cleaner m_clean;
 	};
+	/**
+	 *\~english
+	 *\brief		Creates a cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template< typename Elem, typename Key, typename ProducerType >
+	std::unique_ptr< Cache< Elem, Key, ProducerType > >
+	MakeCache( EngineGetter const & p_get, ProducerType const & p_produce )
+	{
+		return std::make_unique< Cache< Elem, Key, ProducerType > >( p_get, p_produce );
+	}
 }
 
 #endif

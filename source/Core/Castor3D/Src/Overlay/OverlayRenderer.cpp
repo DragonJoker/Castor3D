@@ -74,8 +74,8 @@ namespace Castor3D
 		} }
 	{
 		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
-		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
-		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateManager().Create( cuT( "OVERLAY_RS" ) );
+		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Create( cuT( "OVERLAY_DS" ) );
+		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateCache().Create( cuT( "OVERLAY_RS" ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()

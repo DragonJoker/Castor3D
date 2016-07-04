@@ -33,74 +33,55 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< RenderWindow >
+	template<> struct CachedObjectNamer< RenderWindow >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		Render windows manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de fenêtres de rendu.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class WindowManager
-		: private ResourceManager< Castor::String, RenderWindow, Scene >
+	template<>
+	struct ElementProducer< RenderWindow, Castor::String, Engine & >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_scene	The scene.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_scene	La scène.
-		 */
-		C3D_API WindowManager( Scene & p_scene );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~WindowManager();
-		/**
-		 *\~english
-		 *\brief		Creates an object.
-		 *\param[in]	p_name		The object name.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée un objet.
-		 *\param[in]	p_name		Le nom de l'objet.
-		 *\return		L'objet créé.
-		 */
-		C3D_API RenderWindowSPtr Create( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Renders one frame for each window.
-		 *\param[in]	p_force		Forces the rendering.
-		 *\~english
-		 *\brief		Dessine une image de chaque fenêtre.
-		 *\param[in]	p_force		Dit si on force le rendu.
-		 */
-		C3D_API void Render( bool p_force );
+		using ElemPtr = std::shared_ptr< RenderWindow >;
 
-	public:
-		using ResourceManager< Castor::String, RenderWindow, Scene >::lock;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::unlock;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::begin;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::end;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Has;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Find;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Insert;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Remove;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Cleanup;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::Clear;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::GetEngine;
-		using ResourceManager< Castor::String, RenderWindow, Scene >::SetRenderSystem;
+		ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		{
+			return std::make_shared< RenderWindow >( p_key, p_engine );
+		}
 	};
+	using WindowProducer = ElementProducer< RenderWindow, Castor::String, Engine & >;
+	/**
+	 *\~english
+	 *\brief		Creates a RenderWindow cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de RenderWindow.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< Cache< RenderWindow, Castor::String, WindowProducer > >
+	MakeCache< RenderWindow, Castor::String, WindowProducer >( EngineGetter const & p_get, WindowProducer const & p_produce )
+	{
+		return std::make_unique< Cache< RenderWindow, Castor::String, WindowProducer > >( p_get, p_produce );
+	}
+	/**
+	 *\~english
+	 *\brief		Renders one frame for each window.
+	 *\param[in]	p_force		Forces the rendering.
+	 *\~english
+	 *\brief		Dessine une image de chaque fenêtre.
+	 *\param[in]	p_force		Dit si on force le rendu.
+	 */
+	C3D_API void Render( Cache< RenderWindow, Castor::String, WindowProducer > & p_cache, bool p_force );
 }
 
 #endif

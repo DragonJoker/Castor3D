@@ -13,25 +13,15 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Material >::Name = cuT( "Material" );
+	const String CachedObjectNamer< Material >::Name = cuT( "Material" );
 
-	MaterialManager::MaterialManager( Engine & p_engine )
-		: ResourceManager< Castor::String, Material >( p_engine )
+	void MaterialCache::Initialise()
 	{
-	}
-
-	MaterialManager::~MaterialManager()
-	{
-		m_defaultMaterial.reset();
-	}
-
-	void MaterialManager::Initialise()
-	{
-		std::unique_lock< Collection > l_lock( m_elements );
+		auto l_lock = make_unique_lock( m_elements );
 
 		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = Create( Material::DefaultMaterialName, *GetEngine() );
+			m_defaultMaterial = m_produce( Material::DefaultMaterialName, *GetEngine() );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 		}
@@ -42,16 +32,16 @@ namespace Castor3D
 		}
 	}
 
-	void MaterialManager::Clear()
+	void MaterialCache::Clear()
 	{
-		std::unique_lock< Collection > l_lock( m_elements );
+		auto l_lock = make_unique_lock( m_elements );
 		m_defaultMaterial.reset();
-		ResourceManager< Castor::String, Material >::Clear();
+		m_elements.clear ();
 	}
 
-	void MaterialManager::GetNames( StringArray & l_names )
+	void MaterialCache::GetNames( StringArray & l_names )
 	{
-		std::unique_lock< Collection > l_lock( m_elements );
+		auto l_lock = make_unique_lock( m_elements );
 		l_names.clear();
 		auto l_it = m_elements.begin();
 
@@ -62,17 +52,18 @@ namespace Castor3D
 		}
 	}
 
-	bool MaterialManager::Write( TextFile & p_file )const
+	bool MaterialCache::Write( TextFile & p_file )const
 	{
-		std::unique_lock< Collection > l_lock( m_elements );
-		GetEngine()->GetSamplerManager().lock();
-
-		for ( auto l_it : GetEngine()->GetSamplerManager() )
+		auto l_lockA = make_unique_lock( m_elements );
 		{
-			Sampler::TextWriter( String{} )( *l_it.second, p_file );
-		}
+			auto l_lockB = make_unique_lock( GetEngine()->GetSamplerCache() );
+			GetEngine()->GetSamplerCache().lock();
 
-		GetEngine()->GetSamplerManager().unlock();
+			for ( auto l_it : GetEngine()->GetSamplerCache() )
+			{
+				Sampler::TextWriter( String{} )( *l_it.second, p_file );
+			}
+		}
 
 		bool l_return = true;
 		auto l_it = m_elements.begin();
@@ -96,9 +87,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool MaterialManager::Read( TextFile & p_file )
+	bool MaterialCache::Read( TextFile & p_file )
 	{
-		std::unique_lock< Collection > l_lock( m_elements );
+		auto l_lock = make_unique_lock( m_elements );
 		SceneFileParser l_parser( *GetEngine() );
 		l_parser.ParseFile( p_file );
 		return true;

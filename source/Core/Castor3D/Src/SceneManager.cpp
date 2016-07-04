@@ -8,27 +8,13 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Scene >::Name = cuT( "Scene" );
-	const String ManagedObjectNamer< SceneNode >::Name = cuT( "SceneNode" );
-	const String ManagedObjectNamer< Geometry >::Name = cuT( "Geometry" );
-	const String ManagedObjectNamer< BillboardList >::Name = cuT( "BillboardList" );
+	const String CachedObjectNamer< Scene >::Name = cuT( "Scene" );
+	const String CachedObjectNamer< SceneNode >::Name = cuT( "SceneNode" );
+	const String CachedObjectNamer< Geometry >::Name = cuT( "Geometry" );
+	const String CachedObjectNamer< BillboardList >::Name = cuT( "BillboardList" );
 
-	SceneManager::SceneManager( Engine & p_engine )
-		: ResourceManager< String, Scene >( p_engine )
+	void testSceneCache( Engine & p_engine )
 	{
-	}
-
-	SceneManager::~SceneManager()
-	{
-	}
-
-	void SceneManager::Update()
-	{
-		auto l_lock = make_unique_lock( *this );
-
-		for ( auto l_it : *this )
-		{
-			l_it.second->Update();
-		}
+		auto cache = MakeCache< Scene, Castor::String >( EngineGetter{ p_engine }, ElementProducer< Scene, Castor::String, Engine & >{} );
 	}
 }

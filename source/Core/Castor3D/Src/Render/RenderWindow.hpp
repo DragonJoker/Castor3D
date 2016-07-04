@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_name		Le nom de la fenêtre
 		 */
-		C3D_API RenderWindow( Engine & p_engine, Castor::String const & p_name );
+		C3D_API RenderWindow( Castor::String const & p_name, Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

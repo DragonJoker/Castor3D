@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< PluginBase >
+	template<> struct CachedObjectNamer< PluginBase >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -45,33 +45,34 @@ namespace Castor3D
 	\~french
 	\brief		Gestionnaire de plug-ins.
 	*/
-	class PluginManager
-		: public ResourceManager< Castor::Path, PluginBase >
+	class PluginCache
+		: Castor::OwnedBy< Engine >
 	{
+	public:
+		using Elem = PluginBase;
+		using Key = Castor::Path;
+		using Collection = Castor::Collection< Elem, Key >;
+		using ElemPtr = std::shared_ptr< Elem >;
+		using Initialiser = ElementInitialiser< Elem >;
+		using Cleaner = ElementCleaner< Elem >;
+
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_engine	The owner.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le propriétaire.
 		 */
-		C3D_API PluginManager( Engine & p_engine );
+		C3D_API PluginCache (Engine & p_engine);
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		C3D_API ~PluginManager();
-		/**
-		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		C3D_API void Cleanup();
+		C3D_API ~PluginCache();
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
@@ -146,30 +147,175 @@ namespace Castor3D
 		{
 			return m_renderers;
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the manager is empty.
+		 *\~french
+		 *\return		\p true si le gestionnaire est vide.
+		 */
+		inline bool IsEmpty()
+		{
+			return m_elements.empty();
+		}
+		/**
+		*\~english
+		*\param[in]	p_renderSystem	The RenderSystem.
+		*\~french
+		*\param[in]	p_renderSystem	Le RenderSystem.
+		*/
+		inline void SetRenderSystem( RenderSystem * p_renderSystem )
+		{
+			m_renderSystem = p_renderSystem;
+		}
+		/**
+		*\~english
+		*\return		The RenderSystem.
+		*\~french
+		*\return		Le RenderSystem.
+		*/
+		inline RenderSystem * SetRenderSystem()const
+		{
+			return m_renderSystem;
+		}
+		/**
+		*\~english
+		*\return		The Engine.
+		*\~french
+		*\return		L'Engine.
+		*/
+		inline Castor::String const & GetObjectTypeName()const
+		{
+			return CachedObjectNamer< Elem >::Name;
+		}
+		/**
+		 *\~english
+		 *\param[in]	p_name		The object name.
+		 *\return		\p true if an element with given name exists.
+		 *\~french
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\return		\p true Si un élément avec le nom donné existe.
+		 */
+		inline bool Has( Key const & p_name )const
+		{
+			return m_elements.has( p_name );
+		}
+		/**
+		 *\~english
+		 *\brief		Looks for an element with given name.
+		 *\param[in]	p_name		The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\brief		Cherche un élément par son nom.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		inline ElemPtr Find( Key const & p_name )const
+		{
+			return m_elements.find( p_name );
+		}
+		/**
+		 *\~english
+		 *\brief		Locks the collection mutex
+		 *\~french
+		 *\brief		Locke le mutex de la collection
+		 */
+		inline void lock()const
+		{
+			m_elements.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Unlocks the collection mutex
+		 *\~french
+		 *\brief		Délocke le mutex de la collection
+		 */
+		inline void unlock()const
+		{
+			m_elements.unlock();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an iterator to the first element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur sur le premier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto begin()
+		{
+			return m_elements.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an constant iterator to the first element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur constant sur le premier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto begin()const
+		{
+			return m_elements.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an iterator to the after last element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur sur l'après dernier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto end()
+		{
+			return m_elements.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Returns an constant iterator to the after last element of the collection
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Renvoie un itérateur constant sur l'après dernier élément de la collection
+		 *\return		L'itérateur
+		 */
+		inline auto end()const
+		{
+			return m_elements.end();
+		}
 
 	private:
 		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_library );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 
 	private:
-		using ResourceManager< Castor::Path, PluginBase >::Create;
-
-	private:
-		//!\~english The loaded shared libraries map	\~french La map des shared libraries chargées
+		//!\~english	The RenderSystem.
+		//!\~french		Le RenderSystem.
+		RenderSystem * m_renderSystem{ nullptr };
+		//!\~english	The elements collection.
+		//!\~french		La collection d'éléments.
+		mutable Collection m_elements;
+		//!\~english	The loaded shared libraries map.
+		//!\~french		La map des shared libraries chargées.
 		DynamicLibraryPtrPathMapArray m_libraries;
-		//!\~english The mutex protecting the loaded shared libraries map	\~french Le mutex protégeant la map des shared libraries chargées
+		//!\~english	The mutex protecting the loaded shared libraries map.
+		//!\~french		Le mutex protégeant la map des shared libraries chargées.
 		std::recursive_mutex m_mutexLibraries;
-		//!\~english The loaded plug-ins map	\~french La map des plug-ins chargés
+		//!\~english	The loaded plug-ins map.
+		//!\~french		La map des plug-ins chargés.
 		PluginStrMapArray m_loadedPlugins;
-		//!\~english The mutex protecting the loaded plug-ins map	\~french Le mutex protégeant la map des plug-ins chargés
+		//!\~english	The mutex protecting the loaded plug-ins map.
+		//!\~french		Le mutex protégeant la map des plug-ins chargés.
 		std::recursive_mutex m_mutexLoadedPlugins;
-		//!\~english The loaded plug-ins map, sorted by plug-in type	\~french La map des plug-ins chargés, triés par type de plug-in
+		//!\~english	The loaded plug-ins map, sorted by plug-in type.
+		//!\~french		La map des plug-ins chargés, triés par type de plug-in.
 		PluginTypePathMap m_loadedPluginTypes;
-		//!\~english The mutex protecting the loaded plug-ins map sorted by type	\~french Le mutex protégeant la map de plug-ins chargés triés par type
+		//!\~english	The mutex protecting the loaded plug-ins map sorted by type.
+		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
 		std::recursive_mutex m_mutexLoadedPluginTypes;
-		//!\~english The renderer plug-ins array	\~french Le tableau des plug-ins de rendu
+		//!\~english	The renderer plug-ins array.
+		//!\~french		Le tableau des plug-ins de rendu.
 		RendererPtrMap m_renderers;
-		//!\~english The mutex protecting the renderer plug-ins array	\~french Le mutex protégeant le tableau des plug-ins de rendu
+		//!\~english	The mutex protecting the renderer plug-ins array.
+		//!\~french		Le mutex protégeant le tableau des plug-ins de rendu.
 		std::recursive_mutex m_mutexRenderers;
 	};
 }

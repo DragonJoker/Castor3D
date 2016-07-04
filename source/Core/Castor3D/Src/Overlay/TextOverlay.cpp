@@ -147,11 +147,11 @@ namespace Castor3D
 
 		if ( l_pFont )
 		{
-			FontTextureSPtr l_fontTexture = l_engine->GetOverlayManager().GetFontTexture( l_pFont->GetName() );
+			FontTextureSPtr l_fontTexture = l_engine->GetOverlayCache().GetFontTexture( l_pFont->GetName() );
 
 			if ( !l_fontTexture )
 			{
-				l_fontTexture = l_engine->GetOverlayManager().CreateFontTexture( l_pFont );
+				l_fontTexture = l_engine->GetOverlayCache().CreateFontTexture( l_pFont );
 				l_fontTexture->Update();
 			}
 

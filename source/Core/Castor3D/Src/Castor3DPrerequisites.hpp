@@ -462,51 +462,94 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
 
-	class OverlayManager;
-	class ShaderManager;
-	class MaterialManager;
-	class WindowManager;
-	class MeshManager;
-	class PluginManager;
-	class SceneManager;
-	class SamplerManager;
-	class DepthStencilStateManager;
-	class RasteriserStateManager;
-	class BlendStateManager;
-	class AnimationManager;
-	class TargetManager;
-	class ListenerManager;
-	class GeometryManager;
-	class CameraManager;
-	class LightManager;
-	class AnimatedObjectGroupManager;
-	class SceneNodeManager;
-	class BillboardManager;
-	class RenderTechniqueManager;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	*/
+	template< typename Elem >
+	struct CachedObjectNamer;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable initialisation if a type supports it.
+	\~french
+	\brief		Structure permettant d'initialiser les éléments qui le supportent.
+	*/
+	template< typename Elem, typename Enable = void >
+	struct ElementInitialiser;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	*/
+	template< typename Elem, typename Enable = void >
+	struct ElementCleaner;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template< typename Elem, typename Key, typename ... Parameters >
+	struct ElementProducer;
+
+	template< typename Elem, typename Key, typename ProducerType >
+	class Cache;
+
+	class MaterialCache;
+	class OverlayCache;
+	class PluginCache;
+	class RenderTechniqueCache;
+	class ShaderCache;
+	class TargetCache;
+
+	using BlendStateCache = Cache< BlendState, Castor::String, ElementProducer< BlendState, Castor::String > >;
+	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String, ElementProducer< DepthStencilState, Castor::String > >;
+	using ListenerCache = Cache< FrameListener, Castor::String, ElementProducer< FrameListener, Castor::String > >;
+	using RasteriserStateCache = Cache< RasteriserState, Castor::String, ElementProducer< RasteriserState, Castor::String > >;
+	using SceneCache = Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > >;
+	using SamplerCache = Cache< Sampler, Castor::String, ElementProducer< Sampler, Castor::String > >;
+	using WindowCache = Cache< RenderWindow, Castor::String, ElementProducer< RenderWindow, Castor::String, Engine & > >;
+
+	DECLARE_SMART_PTR( BlendStateCache );
+	DECLARE_SMART_PTR( DepthStencilStateCache );
+	DECLARE_SMART_PTR( ListenerCache );
+	DECLARE_SMART_PTR( MaterialCache );
+	DECLARE_SMART_PTR( OverlayCache );
+	DECLARE_SMART_PTR( PluginCache );
+	DECLARE_SMART_PTR( RasteriserStateCache );
+	DECLARE_SMART_PTR( RenderTechniqueCache );
+	DECLARE_SMART_PTR( SceneCache );
+	DECLARE_SMART_PTR( SamplerCache );
+	DECLARE_SMART_PTR( ShaderCache );
+	DECLARE_SMART_PTR( TargetCache );
+	DECLARE_SMART_PTR( WindowCache );
+
+	template< typename Elem, typename Key, typename ProducerType >
+	class ObjectCache;
+
+	using BillboardCache = ObjectCache< BillboardList, Castor::String, ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem > >;
+	using CameraCache = ObjectCache< Camera, Castor::String, ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, Viewport > >;
+
+	DECLARE_SMART_PTR( BillboardCache );
+	DECLARE_SMART_PTR( CameraCache );
+
 	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
 	class ManagerView;
-
-	DECLARE_SMART_PTR( OverlayManager );
-	DECLARE_SMART_PTR( ShaderManager );
-	DECLARE_SMART_PTR( MaterialManager );
-	DECLARE_SMART_PTR( WindowManager );
-	DECLARE_SMART_PTR( MeshManager );
-	DECLARE_SMART_PTR( PluginManager );
-	DECLARE_SMART_PTR( SceneManager );
-	DECLARE_SMART_PTR( SamplerManager );
-	DECLARE_SMART_PTR( DepthStencilStateManager );
-	DECLARE_SMART_PTR( RasteriserStateManager );
-	DECLARE_SMART_PTR( BlendStateManager );
-	DECLARE_SMART_PTR( AnimationManager );
-	DECLARE_SMART_PTR( TargetManager );
-	DECLARE_SMART_PTR( ListenerManager );
-	DECLARE_SMART_PTR( GeometryManager );
-	DECLARE_SMART_PTR( CameraManager );
-	DECLARE_SMART_PTR( LightManager );
-	DECLARE_SMART_PTR( AnimatedObjectGroupManager );
-	DECLARE_SMART_PTR( SceneNodeManager );
-	DECLARE_SMART_PTR( BillboardManager );
-	DECLARE_SMART_PTR( RenderTechniqueManager );
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );

@@ -36,10 +36,10 @@ C3D_ReinhardToneMapping_API Castor::String GetName()
 
 C3D_ReinhardToneMapping_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetToneMappingFactory().Register( ToneMapping::Name, &ToneMapping::Create );
+	p_engine->GetTargetCache().GetToneMappingFactory().Register( ToneMapping::Name, &ToneMapping::Create );
 }
 
 C3D_ReinhardToneMapping_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetToneMappingFactory().Unregister( ToneMapping::Name );
+	p_engine->GetTargetCache().GetToneMappingFactory().Unregister( ToneMapping::Name );
 }

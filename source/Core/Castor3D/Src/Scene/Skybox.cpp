@@ -97,13 +97,13 @@ namespace Castor3D
 	{
 		String const l_skybox = cuT( "Skybox" );
 
-		if ( GetEngine()->GetSamplerManager().Has( l_skybox ) )
+		if ( GetEngine()->GetSamplerCache().Has( l_skybox ) )
 		{
-			m_sampler = GetEngine()->GetSamplerManager().Find( l_skybox );
+			m_sampler = GetEngine()->GetSamplerCache().Find( l_skybox );
 		}
 		else
 		{
-			auto l_sampler = GetEngine()->GetSamplerManager().Create( l_skybox );
+			auto l_sampler = GetEngine()->GetSamplerCache().Create( l_skybox );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
@@ -112,24 +112,24 @@ namespace Castor3D
 			m_sampler = l_sampler;
 		}
 
-		if ( GetEngine()->GetDepthStencilStateManager().Has( l_skybox ) )
+		if ( GetEngine()->GetDepthStencilStateCache().Has( l_skybox ) )
 		{
-			m_dss = GetEngine()->GetDepthStencilStateManager().Find( l_skybox );
+			m_dss = GetEngine()->GetDepthStencilStateCache().Find( l_skybox );
 		}
 		else
 		{
-			auto l_dss = GetEngine()->GetDepthStencilStateManager().Create( l_skybox );
+			auto l_dss = GetEngine()->GetDepthStencilStateCache().Create( l_skybox );
 			l_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
 			m_dss = l_dss;
 		}
 
-		if ( GetEngine()->GetRasteriserStateManager().Has( l_skybox ) )
+		if ( GetEngine()->GetRasteriserStateCache().Has( l_skybox ) )
 		{
-			m_rs = GetEngine()->GetRasteriserStateManager().Find( l_skybox );
+			m_rs = GetEngine()->GetRasteriserStateCache().Find( l_skybox );
 		}
 		else
 		{
-			auto l_rs = GetEngine()->GetRasteriserStateManager().Create( l_skybox );
+			auto l_rs = GetEngine()->GetRasteriserStateCache().Create( l_skybox );
 			l_rs->SetCulledFaces( eFACE_FRONT );
 			m_rs = l_rs;
 		}

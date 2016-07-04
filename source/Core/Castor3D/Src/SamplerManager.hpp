@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_SAMPLER_MANAGER_H___
-#define ___C3D_SAMPLER_MANAGER_H___
+#ifndef ___C3D_SAMPLER_CACHE_H___
+#define ___C3D_SAMPLER_CACHE_H___
 
-#include "Manager/ResourceManager.hpp"
+#include "Manager/Manager.hpp"
 
 #include "Render/RenderSystem.hpp"
 #include "Texture/Sampler.hpp"
@@ -34,96 +34,52 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Sampler >
+	template<> struct CachedObjectNamer< Sampler >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		Sampler manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de Sampler.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class SamplerManager
-		: private ResourceManager< Castor::String, Sampler >
+	template<>
+	struct ElementProducer< Sampler, Castor::String >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API SamplerManager( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~SamplerManager();
-		/**
-		 *\~english
-		 *\brief		Creates and returns a Sampler, given a name
-		 *\remarks		If a Sampler with the same name exists, none is created
-		 *\param[in]	p_name		The Sampler name
-		 *\param[in]	p_params	The other constructor parameters
-		 *\return		The created or existing Sampler
-		 *\~french
-		 *\brief		Crée et renvoie un Sampler, avec le nom donné
-		 *\remarks		Si un Sampler avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name		Le nom du Sampler
-		 *\param[in]	p_params	Les autres paramètres du constructeur
-		 *\return		Le Sampler créé ou existant
-		 */
-		template< typename ... Parameters >
-		inline std::shared_ptr< Sampler > Create( Castor::String const & p_name, Parameters && ... p_params )
+		using ElemPtr = std::shared_ptr< Sampler >;
+
+		ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
 		{
-			std::unique_lock< Collection > l_lock( m_elements );
-			SamplerSPtr l_return;
-
-			if ( p_name.empty() )
-			{
-				l_return = m_renderSystem->CreateSampler( p_name );
-			}
-			else
-			{
-				if ( !m_elements.has( p_name ) )
-				{
-					l_return = m_renderSystem->CreateSampler( p_name );
-					m_elements.insert( p_name, l_return );
-					GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
-					Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				}
-				else
-				{
-					l_return = m_elements.find( p_name );
-					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				}
-			}
-
-			return l_return;
 		}
 
-	public:
-		using ResourceManager< Castor::String, Sampler >::lock;
-		using ResourceManager< Castor::String, Sampler >::unlock;
-		using ResourceManager< Castor::String, Sampler >::begin;
-		using ResourceManager< Castor::String, Sampler >::end;
-		using ResourceManager< Castor::String, Sampler >::Has;
-		using ResourceManager< Castor::String, Sampler >::Find;
-		using ResourceManager< Castor::String, Sampler >::Insert;
-		using ResourceManager< Castor::String, Sampler >::Remove;
-		using ResourceManager< Castor::String, Sampler >::Cleanup;
-		using ResourceManager< Castor::String, Sampler >::Clear;
-		using ResourceManager< Castor::String, Sampler >::GetEngine;
-		using ResourceManager< Castor::String, Sampler >::SetRenderSystem;
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return m_engine.GetRenderSystem()->CreateSampler( p_key );
+		}
+
+		Engine & m_engine;
 	};
+	/**
+	 *\~english
+	 *\brief		Creates a Sampler cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de Sampler.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< Cache< Sampler, Castor::String, ElementProducer< Sampler, Castor::String > > >
+	MakeCache< Sampler, Castor::String, ElementProducer< Sampler, Castor::String > >( EngineGetter const & p_get, ElementProducer< Sampler, Castor::String > const & p_produce )
+	{
+		return std::make_unique< Cache< Sampler, Castor::String, ElementProducer< Sampler, Castor::String > > >( p_get, p_produce );
+	}
 }
 
 #endif

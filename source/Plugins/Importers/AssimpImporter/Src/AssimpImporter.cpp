@@ -208,7 +208,7 @@ namespace C3dAssimp
 		if ( m_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Create( m_mesh->GetName(), l_node );
 
 			for ( auto && l_submesh : *m_mesh )
 			{

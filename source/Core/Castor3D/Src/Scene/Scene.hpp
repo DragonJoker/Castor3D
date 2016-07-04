@@ -24,57 +24,57 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Logger.hpp>
 #include <OwnedBy.hpp>
 
-#define DECLARE_MANAGER_MEMBER( memberName, className )\
+#define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
-		inline className##Manager & Get##className##Manager()\
+		inline className##Cache & Get##className##Cache()\
 		{\
-			return *m_##memberName##Manager;\
+			return *m_##memberName##Cache;\
 		}\
-		inline className##Manager const & Get##className##Manager()const\
+		inline className##Cache const & Get##className##Cache()const\
 		{\
-			return *m_##memberName##Manager;\
+			return *m_##memberName##Cache;\
 		}\
 	private:\
-		className##ManagerUPtr m_##memberName##Manager
+		className##CacheUPtr m_##memberName##Cache
 
-#define DECLARE_MANAGER_VIEW_MEMBER( memberName, className, eventType )\
+#define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		inline ManagerView< className, className##Manager, eventType > & Get##className##View()\
+		inline CacheView< className, className##Cache, eventType > & Get##className##View()\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
-		inline ManagerView< className, className##Manager, eventType > const & Get##className##View()const\
+		inline CacheView< className, className##Cache, eventType > const & Get##className##View()const\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< ManagerView< className, className##Manager, eventType > > m_##memberName##ManagerView
+		std::unique_ptr< CacheView< className, className##Cache, eventType > > m_##memberName##CacheView
 
-#define DECLARE_MANAGER_VIEW_MEMBER_CU( memberName, className, eventType )\
+#define DECLARE_CACHE_VIEW_MEMBER_CU( memberName, className, eventType )\
 	public:\
-		inline ManagerView< Castor::className, Castor::className##Manager, eventType > & Get##className##View()\
+		inline CacheView< Castor::className, Castor::className##Cache, eventType > & Get##className##View()\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
-		inline ManagerView< Castor::className, Castor::className##Manager, eventType > const & Get##className##View()const\
+		inline CacheView< Castor::className, Castor::className##Cache, eventType > const & Get##className##View()const\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< ManagerView< Castor::className, Castor::className##Manager, eventType > > m_##memberName##ManagerView
+		std::unique_ptr< CacheView< Castor::className, Castor::className##Cache, eventType > > m_##memberName##CacheView
 
-#define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
+#define DECLARE_CACHE_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
-		inline ManagerView< className, mgrName##Manager, eventType > & Get##className##View()\
+		inline CacheView< className, mgrName##Cache, eventType > & Get##className##View()\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
-		inline ManagerView< className, mgrName##Manager, eventType > const & Get##className##View()const\
+		inline CacheView< className, mgrName##Cache, eventType > const & Get##className##View()const\
 		{\
-			return *m_##memberName##ManagerView;\
+			return *m_##memberName##CacheView;\
 		}\
 	private:\
-		std::unique_ptr< ManagerView< className, mgrName##Manager, eventType > > m_##memberName##ManagerView
+		std::unique_ptr< CacheView< className, mgrName##Cache, eventType > > m_##memberName##CacheView
 
 namespace Castor3D
 {
@@ -392,40 +392,40 @@ namespace Castor3D
 		SceneNodeSPtr m_rootObjectNode;
 		//!\~english	The scene nodes manager.
 		//!\~french		Le gestionnaire de noeuds de scène.
-		DECLARE_MANAGER_MEMBER( sceneNode, SceneNode );
+		DECLARE_CACHE_MEMBER( sceneNode, SceneNode );
 		//!\~english	The camera manager.
 		//!\~french		Le gestionnaire de caméras.
-		DECLARE_MANAGER_MEMBER( camera, Camera );
+		DECLARE_CACHE_MEMBER( camera, Camera );
 		//!\~english	The lights manager.
 		//!\~french		Le gestionnaire de lumières.
-		DECLARE_MANAGER_MEMBER( light, Light );
+		DECLARE_CACHE_MEMBER( light, Light );
 		//!\~english	The geometies manager.
 		//!\~french		Le gestionnaire de géométries.
-		DECLARE_MANAGER_MEMBER( geometry, Geometry );
+		DECLARE_CACHE_MEMBER( geometry, Geometry );
 		//!\~english	The meshes manager.
 		//!\~french		Le gestionnaire de maillages.
-		DECLARE_MANAGER_MEMBER( mesh, Mesh );
+		DECLARE_CACHE_MEMBER( mesh, Mesh );
 		//!\~english	The billboards manager.
 		//!\~french		Le gestionnaire de billboards.
-		DECLARE_MANAGER_MEMBER( billboard, Billboard );
+		DECLARE_CACHE_MEMBER( billboard, Billboard );
 		//!\~english	The animated objects groups manager.
 		//!\~french		Le gestionnaire de groupes d'objets animés.
-		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
+		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
 		//!\~english	The render windows manager.
 		//!\~french		Le gestionnaire de fenêtres de rendu.
-		DECLARE_MANAGER_MEMBER( window, Window );
+		DECLARE_CACHE_MEMBER( window, Window );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene materials view.
 		//!\~french		La vue sur les matériaux de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene samplers view.
 		//!\~french		La vue sur les échantillonneurs de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene fonts view.
 		//!\~french		La vue sur les polices de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;

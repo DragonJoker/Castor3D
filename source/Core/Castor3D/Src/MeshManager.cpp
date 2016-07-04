@@ -4,7 +4,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Mesh >::Name = cuT( "Mesh" );
+	const String CachedObjectNamer< Mesh >::Name = cuT( "Mesh" );
 
 	MeshManager::MeshManager( Scene & p_scene )
 		: ResourceManager< Castor::String, Mesh, Scene >( p_scene )

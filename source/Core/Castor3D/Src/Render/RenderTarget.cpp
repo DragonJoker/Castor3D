@@ -109,7 +109,7 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Create()
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
+		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		m_colorTexture.SetTexture( l_colourTexture );
@@ -176,10 +176,10 @@ namespace Castor3D
 		, m_fbLeftEye{ *this }
 		, m_fbRightEye{ *this }
 	{
-		m_toneMapping = GetEngine()->GetTargetManager().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
-		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
-		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
+		m_toneMapping = GetEngine()->GetTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
+		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateCache().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerCache().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
 		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 	}
@@ -389,7 +389,7 @@ namespace Castor3D
 			} ) );
 		}
 
-		m_toneMapping = GetEngine()->GetTargetManager().GetToneMappingFactory().Create( p_name, *GetEngine(), p_parameters );
+		m_toneMapping = GetEngine()->GetTargetCache().GetToneMappingFactory().Create( p_name, *GetEngine(), p_parameters );
 	}
 
 	void RenderTarget::SetSize( Size const & p_size )
@@ -424,7 +424,7 @@ namespace Castor3D
 				GetRasteriserState()->Apply();
 				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
 				// We also render overlays.
-				GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
+				GetEngine()->GetOverlayCache().Render( *l_scene, m_size );
 				p_fb.m_frameBuffer->Unbind();
 			}
 		}

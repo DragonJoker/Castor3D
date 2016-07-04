@@ -27,10 +27,10 @@ C3D_Bloom_API Castor::String GetName()
 
 C3D_Bloom_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetPostEffectFactory().Register( BloomPostEffect::Type, &BloomPostEffect::Create );
+	p_engine->GetTargetCache().GetPostEffectFactory().Register( BloomPostEffect::Type, &BloomPostEffect::Create );
 }
 
 C3D_Bloom_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetPostEffectFactory().Unregister( BloomPostEffect::Type );
+	p_engine->GetTargetCache().GetPostEffectFactory().Unregister( BloomPostEffect::Type );
 }

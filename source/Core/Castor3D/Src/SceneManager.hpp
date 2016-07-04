@@ -17,10 +17,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_SCENE_MANAGER_H___
 #define ___C3D_SCENE_MANAGER_H___
+#include "Manager/Manager.hpp"
 
-#include "Manager/ResourceManager.hpp"
-
-#include "Scene/Light/LightFactory.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 
 namespace Castor3D
@@ -34,47 +33,62 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< Scene >
+	template<> struct CachedObjectNamer< Scene >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
+	\date 		04/07/2016
+	\version	0.9.0
 	\~english
-	\brief		Scene manager.
+	\brief		Helper structure to create an element.
 	\~french
-	\brief		Gestionnaire de Scene.
+	\brief		Structure permettant de créer un élément.
 	*/
-	class SceneManager
-		: public ResourceManager< Castor::String, Scene >
+	template<>
+	struct ElementProducer< Scene, Castor::String, Engine & >
 	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API SceneManager( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~SceneManager();
-		/**
-		 *\~english
-		 *\brief		Updates all scenes.
-		 *\~french
-		 *\brief		Met à jout toutes les scènes.
-		 */
-		C3D_API void Update();
+		using ElemPtr = std::shared_ptr< Scene >;
+
+		ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		{
+			return std::make_shared< Scene >( p_key, p_engine );
+		}
 	};
+	/**
+	 *\~english
+	 *\brief		Creates a Scene cache.
+	 *\param[in]	p_get		The engine getter.
+	 *\param[in]	p_produce	The element producer.
+	 *\~french
+	 *\brief		Crée un cache de Scene.
+	 *\param[in]	p_get		Le récupérteur de moteur.
+	 *\param[in]	p_produce	Le créateur d'objet.
+	 */
+	template<>
+	std::unique_ptr< Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > > >
+	MakeCache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > >( EngineGetter const & p_get, ElementProducer< Scene, Castor::String, Engine & > const & p_produce )
+	{
+		return std::make_unique< Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > > >( p_get, p_produce );
+	}
+	/**
+	 *\~english
+	 *\brief		Updates all scenes of the given cache.
+	 *\param[in]	p_cache	The cache.
+	 *\~french
+	 *\brief		Met à jour toutes les scènes du cache donné.
+	 *\param[in]	p_cache	Le cache.
+	 */
+	inline void Update( Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > > & p_cache )
+	{
+		auto l_lock = make_unique_lock( p_cache );
+
+		for ( auto l_it : p_cache )
+		{
+			l_it.second->Update();
+		}
+	}
 }
 
 #endif

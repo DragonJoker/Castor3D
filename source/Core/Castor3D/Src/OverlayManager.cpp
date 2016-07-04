@@ -21,12 +21,12 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< Overlay >::Name = cuT( "Overlay" );
+	const String CachedObjectNamer< Overlay >::Name = cuT( "Overlay" );
 
 	//*************************************************************************************************
 
-	OverlayManager::OverlayManager( Engine & p_engine )
-		: ResourceManager< String, Overlay >{ p_engine }
+	OverlayCache::OverlayCache( Engine & p_engine )
+		: OwnedBy< Engine >{ p_engine }
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ p_engine }
 	{
@@ -34,19 +34,18 @@ namespace Castor3D
 		p_engine.PostEvent( MakeInitialiseEvent( m_viewport ) );
 	}
 
-	OverlayManager::~OverlayManager()
+	OverlayCache::~OverlayCache()
 	{
 	}
 
-	void OverlayManager::Clear()
+	void OverlayCache::Clear()
 	{
 		auto l_lock = make_unique_lock( *this );
-		ResourceManager< String, Overlay >::Clear();
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}
 
-	void OverlayManager::Cleanup()
+	void OverlayCache::Cleanup()
 	{
 		m_viewport.Cleanup();
 		auto l_lock = make_unique_lock( *this );
@@ -57,71 +56,7 @@ namespace Castor3D
 		}
 	}
 
-	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
-		l_overlay->SetPosition( p_position );
-		l_overlay->SetSize( p_size );
-		l_overlay->SetMaterial( p_material );
-		return l_overlay->GetPanelOverlay();
-	}
-
-	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
-		l_overlay->SetPixelPosition( p_position );
-		l_overlay->SetPixelSize( p_size );
-		l_overlay->SetMaterial( p_material );
-		return l_overlay->GetPanelOverlay();
-	}
-
-	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		l_overlay->SetPosition( p_position );
-		l_overlay->SetSize( p_size );
-		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
-		l_return->SetBorderMaterial( p_bordersMaterial );
-		l_return->SetBorderSize( p_bordersSize );
-		return l_return;
-	}
-
-	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
-		l_overlay->SetPixelPosition( p_position );
-		l_overlay->SetPixelSize( p_size );
-		l_overlay->SetMaterial( p_material );
-		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
-		l_return->SetBorderMaterial( p_bordersMaterial );
-		l_return->SetBorderPixelSize( p_bordersSize );
-		return l_return;
-	}
-
-	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
-		l_return->SetPosition( p_position );
-		l_return->SetSize( p_size );
-		l_return->SetFont( p_font->GetName() );
-		return l_return;
-	}
-
-	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
-		l_return->SetPixelPosition( p_position );
-		l_return->SetPixelSize( p_size );
-		l_return->SetFont( p_font->GetName() );
-		return l_return;
-	}
-
-	OverlaySPtr OverlayManager::Create( String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene )
+	OverlaySPtr OverlayCache::Add( String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene )
 	{
 		auto l_lock = make_unique_lock( *this );
 		OverlaySPtr l_return;
@@ -131,18 +66,18 @@ namespace Castor3D
 			l_return = std::make_shared< Overlay >( *GetEngine(), p_type, p_scene, p_parent );
 			l_return->SetName( p_name );
 			DoAddOverlay( p_name, l_return, p_parent );
-			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << CachedObjectNamer< Overlay >::Name << cuT( ": " ) << p_name );
 		}
 		else
 		{
 			l_return = m_elements.find( p_name );
-			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << CachedObjectNamer< Overlay >::Name << cuT( ": " ) << p_name );
 		}
 
 		return  l_return;
 	}
 
-	void OverlayManager::Remove( Castor::String const & p_name )
+	void OverlayCache::Remove( Castor::String const & p_name )
 	{
 		auto l_lock = make_unique_lock( *this );
 		OverlaySPtr l_overlay = m_elements.find( p_name );
@@ -164,7 +99,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayManager::UpdateRenderer()
+	void OverlayCache::UpdateRenderer()
 	{
 		if ( GetEngine()->IsCleaned() )
 		{
@@ -184,7 +119,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayManager::Update()
+	void OverlayCache::Update()
 	{
 		auto l_lock = make_unique_lock( *this );
 
@@ -194,7 +129,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayManager::Render( Scene const & p_scene, Castor::Size const & p_size )
+	void OverlayCache::Render( Scene const & p_scene, Castor::Size const & p_size )
 	{
 		auto l_lock = make_unique_lock( *this );
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
@@ -222,7 +157,7 @@ namespace Castor3D
 		}
 	}
 
-	bool OverlayManager::Write( Castor::TextFile & p_file )const
+	bool OverlayCache::Write( Castor::TextFile & p_file )const
 	{
 		auto l_lock = make_unique_lock( *this );
 		bool l_return = true;
@@ -249,14 +184,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool OverlayManager::Read( Castor::TextFile & p_file )
+	bool OverlayCache::Read( Castor::TextFile & p_file )
 	{
 		auto l_lock = make_unique_lock( *this );
 		SceneFileParser l_parser( *GetEngine() );
 		return l_parser.ParseFile( p_file );
 	}
 
-	FontTextureSPtr OverlayManager::GetFontTexture( Castor::String const & p_name )
+	FontTextureSPtr OverlayCache::GetFontTexture( Castor::String const & p_name )
 	{
 		auto l_it = m_fontTextures.find( p_name );
 		FontTextureSPtr l_return;
@@ -269,7 +204,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	FontTextureSPtr OverlayManager::CreateFontTexture( Castor::FontSPtr p_font )
+	FontTextureSPtr OverlayCache::CreateFontTexture( Castor::FontSPtr p_font )
 	{
 		auto l_it = m_fontTextures.find( p_font->GetName() );
 		FontTextureSPtr l_return;
@@ -284,7 +219,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void OverlayManager::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
+	void OverlayCache::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
 	{
 		auto l_lock = make_unique_lock( *this );
 		m_elements.insert( p_name, p_overlay );

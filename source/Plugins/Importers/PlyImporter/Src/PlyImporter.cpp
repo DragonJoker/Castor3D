@@ -38,7 +38,7 @@ namespace C3dPly
 		if ( l_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Create( l_mesh->GetName(), l_node );
 
 			for ( auto l_submesh : *l_mesh )
 			{

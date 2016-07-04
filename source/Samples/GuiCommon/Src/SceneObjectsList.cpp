@@ -150,7 +150,7 @@ namespace GuiCommon
 
 			p_scene->GetAnimatedObjectGroupManager().unlock();
 
-			for ( auto l_overlay : p_engine->GetOverlayManager() )
+			for ( auto l_overlay : p_engine->GetOverlayCache() )
 			{
 				if ( l_overlay->GetOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
 				{

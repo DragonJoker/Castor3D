@@ -29,7 +29,7 @@ namespace Castor3D
 		, m_renderSystem( p_renderSystem )
 		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
 	{
-		m_debugOverlays->Initialise( GetEngine()->GetOverlayManager() );
+		m_debugOverlays->Initialise( GetEngine()->GetOverlayCache() );
 	}
 
 	RenderLoop::~RenderLoop()
@@ -42,12 +42,12 @@ namespace Castor3D
 		if ( m_renderSystem->GetMainContext() )
 		{
 			m_renderSystem->GetMainContext()->SetCurrent();
-			GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-			GetEngine()->GetOverlayManager().UpdateRenderer();
+			GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetEngine()->GetOverlayCache().UpdateRenderer();
 			m_renderSystem->GetMainContext()->EndCurrent();
 		}
 
-		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
+		GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
 	void RenderLoop::StartRendering()
@@ -110,7 +110,7 @@ namespace Castor3D
 	{
 		GetEngine()->GetRenderTechniqueManager().Update();
 		GetEngine()->GetSceneManager().Update();
-		GetEngine()->GetOverlayManager().Update();
+		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();
 	}
 
@@ -120,9 +120,9 @@ namespace Castor3D
 
 		try
 		{
-			GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-			GetEngine()->GetOverlayManager().UpdateRenderer();
-			GetEngine()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
+			GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetEngine()->GetOverlayCache().UpdateRenderer();
+			GetEngine()->GetTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
 		catch ( Exception & p_exc )
 		{
@@ -151,7 +151,7 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
+		GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_POST_RENDER );
 		m_debugOverlays->EndCpuTask();
 	}
 

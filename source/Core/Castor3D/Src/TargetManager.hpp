@@ -35,7 +35,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct ManagedObjectNamer< RenderTarget >
+	template<> struct CachedObjectNamer< RenderTarget >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -44,12 +44,12 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		RenderTarget manager.
+	\brief		RenderTarget cache.
 	\~french
-	\brief		Gestionnaire de RenderTarget.
+	\brief		Cache de RenderTarget.
 	*/
-	class TargetManager
-		: public ResourceManager< Castor::String, RenderTarget >
+	class TargetCache
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -60,14 +60,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API TargetManager( Engine & p_engine );
+		C3D_API TargetCache( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~TargetManager();
+		C3D_API ~TargetCache();
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr Create( eTARGET_TYPE p_type );
+		C3D_API RenderTargetSPtr Add( eTARGET_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -103,6 +103,13 @@ namespace Castor3D
 		 *\param[in,out]	p_objCount	Reçoit le nombre d'objets dessinés.
 		 */
 		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+		/**
+		 *\~english
+		 *\brief		Flushes the collection.
+		 *\~french
+		 *\brief		Vide la collection.
+		 */
+		C3D_API void Clear ();
 		/**
 		 *\~english
 		 *\return		The ToneMapping factory.
@@ -143,16 +150,59 @@ namespace Castor3D
 		{
 			return m_postEffectFactory;
 		}
-
-	private:
-		using ResourceManager< Castor::String, RenderTarget >::Create;
+		/**
+		 *\~english
+		 *\brief		Locks the collection mutex
+		 *\~french
+		 *\brief		Locke le mutex de la collection
+		 */
+		inline void lock()const
+		{
+			m_mutex.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Unlocks the collection mutex
+		 *\~french
+		 *\brief		Délocke le mutex de la collection
+		 */
+		inline void unlock()const
+		{
+			m_mutex.unlock();
+		}
+		/**
+		*\~english
+		*\param[in]	p_renderSystem	The RenderSystem.
+		*\~french
+		*\param[in]	p_renderSystem	Le RenderSystem.
+		*/
+		inline void SetRenderSystem( RenderSystem * p_renderSystem )
+		{
+			m_renderSystem = p_renderSystem;
+		}
+		/**
+		*\~english
+		*\return		The RenderSystem.
+		*\~french
+		*\return		Le RenderSystem.
+		*/
+		inline RenderSystem * SetRenderSystem()const
+		{
+			return m_renderSystem;
+		}
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
 		DECLARE_ARRAY( RenderTargetArray, eTARGET_TYPE_COUNT, TargetType );
+		//!\~english	The RenderSystem.
+		//!\~french		Le RenderSystem.
+		RenderSystem * m_renderSystem{ nullptr };
 		//!\~english	The render targets sorted by target type.
 		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;
+		//!\~english	The mutex protecting the render targets array.
+		//!\~french		Le mutex protégeant le tableau de cibles de rendu.
+		mutable std::mutex m_mutex;
 		//!\~english	The tone mapping factory.
 		//!\~french		La fabrique de mappage de tons.
 		ToneMappingFactory m_toneMappingFactory;

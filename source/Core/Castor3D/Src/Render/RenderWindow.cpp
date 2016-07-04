@@ -66,32 +66,32 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( Engine & p_engine, String const & p_name )
+	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
 		, Named( p_name )
 		, m_index( s_nbRenderWindows )
-		, m_wpListener( p_engine.GetListenerManager().Create( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
+		, m_wpListener( p_engine.GetListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_initialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		auto l_dsstate = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		auto l_dsstate = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		l_dsstate->SetDepthTest( false );
 		m_wpDepthStencilState = l_dsstate;
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		GetEngine()->GetListenerCache().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 		auto l_target = m_renderTarget.lock();
 
 		if ( l_target )
 		{
-			GetEngine()->GetTargetManager().Remove( l_target );
+			GetEngine()->GetTargetCache().Remove( l_target );
 		}
 	}
 

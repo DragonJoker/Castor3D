@@ -4,35 +4,18 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ManagedObjectNamer< RenderWindow >::Name = cuT( "RenderWindow" );
+	const String CachedObjectNamer< RenderWindow >::Name = cuT( "RenderWindow" );
 
-	WindowManager::WindowManager( Scene & p_scene )
-		: ResourceManager< String, RenderWindow, Scene >( p_scene )
+	void testWindowCache( Engine & p_engine )
 	{
+		auto cache = MakeCache< RenderWindow, Castor::String >( EngineGetter{ p_engine }, WindowProducer {} );
 	}
 
-	WindowManager::~WindowManager()
+	void Render( Cache< RenderWindow, Castor::String, WindowProducer > & p_cache, bool p_force )
 	{
-	}
+		auto l_lock = make_unique_lock( p_cache );
 
-	RenderWindowSPtr WindowManager::Create( String const & p_name )
-	{
-		std::unique_lock< Collection > l_lock( m_elements );
-		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetEngine(), p_name );
-
-		if ( l_return )
-		{
-			m_elements.insert( l_return->GetName(), l_return );
-		}
-
-		return l_return;
-	}
-
-	void WindowManager::Render( bool p_force )
-	{
-		std::unique_lock< Collection > l_lock( m_elements );
-
-		for ( auto l_it : m_elements )
+		for ( auto l_it : p_cache )
 		{
 			l_it.second->Render( p_force );
 		}

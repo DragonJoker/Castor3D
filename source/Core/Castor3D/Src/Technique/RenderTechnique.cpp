@@ -125,9 +125,9 @@ namespace Castor3D
 			p_animated.m_renderNodes.clear();
 			p_animated.m_opaqueRenderNodes.clear();
 			p_animated.m_transparentRenderNodes.clear();
-			auto l_lock = make_unique_lock( p_scene.GetGeometryManager() );
+			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
 
-			for ( auto l_primitive : p_scene.GetGeometryManager() )
+			for ( auto l_primitive : p_scene.GetGeometryCache() )
 			{
 				MeshSPtr l_mesh = l_primitive.second->GetMesh();
 				SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
@@ -425,10 +425,10 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 	{
-		auto l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
+		auto l_rsState = GetEngine()->GetRasteriserStateCache().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
 		l_rsState->SetCulledFaces( eFACE_FRONT );
 		m_wpFrontRasteriserState = l_rsState;
-		l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
+		l_rsState = GetEngine()->GetRasteriserStateCache().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
 		l_rsState->SetCulledFaces( eFACE_BACK );
 		m_wpBackRasteriserState = l_rsState;
 	}
