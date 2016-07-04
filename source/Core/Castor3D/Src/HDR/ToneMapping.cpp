@@ -1,7 +1,7 @@
 #include "ToneMapping.hpp"
 
 #include "Engine.hpp"
-#include "ShaderManager.hpp"
+#include "ShaderCache.hpp"
 
 #include "Miscellaneous/Parameter.hpp"
 #include "Render/Context.hpp"
@@ -39,7 +39,7 @@ namespace Castor3D
 
 	bool ToneMapping::Initialise()
 	{
-		m_program = GetEngine()->GetShaderManager().GetNewProgram();
+		m_program = GetEngine()->GetShaderCache().GetNewProgram();
 		bool l_return = m_program != nullptr;
 
 		if ( l_return )
@@ -67,7 +67,7 @@ namespace Castor3D
 				l_vtx = l_writer.Finalise();
 			}
 
-			GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
+			GetEngine()->GetShaderCache().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
 			auto l_configBuffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ToneMapping::HdrConfig );
 			m_program->AddFrameVariableBuffer( l_configBuffer, MASK_SHADER_TYPE_PIXEL );
 			l_configBuffer->CreateVariable( *m_program, FrameVariableType::Float, ToneMapping::Exposure );

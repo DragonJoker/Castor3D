@@ -1,16 +1,16 @@
 #include "BinaryExportTest.hpp"
 
 #include <Engine.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SceneManager.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <SceneCache.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -49,7 +49,7 @@ namespace Testing
 		Path l_path{ l_name + cuT( ".cmsh" ) };
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = l_scene.GetMeshManager().Create( l_name, eMESH_TYPE_CUBE, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
+		auto l_src = l_scene.GetMeshCache().Add( l_name, eMESH_TYPE_CUBE, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 
 		for ( auto l_submesh : *l_src )
 		{
@@ -61,7 +61,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -76,8 +76,8 @@ namespace Testing
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
-		l_scene.GetMeshManager().Remove( l_name );
-		l_scene.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
+		l_scene.GetMeshCache().Remove( l_name );
+		l_scene.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -86,7 +86,7 @@ namespace Testing
 		Path l_path{ l_name + cuT( ".cmsh" ) };
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = l_scene.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_src = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		{
 			BinaryFile l_file{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
@@ -102,7 +102,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshManager().Create( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -117,8 +117,8 @@ namespace Testing
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
-		l_scene.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
-		l_scene.GetMeshManager().Remove( l_name + cuT( "_exp" ) );
+		l_scene.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
+		l_scene.GetMeshCache().Remove( l_name + cuT( "_exp" ) );
 		m_engine.GetRenderLoop().Cleanup();
 	}
 
@@ -129,10 +129,10 @@ namespace Testing
 		CT_REQUIRE( l_parser.ParseFile( TEST_DATA_FOLDER / cuT( "Anim.zip" ) ) );
 		CT_REQUIRE( l_parser.ScenesBegin() != l_parser.ScenesEnd() );
 		l_scene = l_parser.ScenesBegin()->second;
-		l_scene->GetMeshManager().lock();
-		CT_REQUIRE( l_scene->GetMeshManager().begin() != l_scene->GetMeshManager().end() );
-		auto l_src = l_scene->GetMeshManager().begin()->second;
-		l_scene->GetMeshManager().unlock();
+		l_scene->GetMeshCache().lock();
+		CT_REQUIRE( l_scene->GetMeshCache().begin() != l_scene->GetMeshCache().end() );
+		auto l_src = l_scene->GetMeshCache().begin()->second;
+		l_scene->GetMeshCache().unlock();
 		auto l_name = l_src->GetName();
 
 		for ( auto l_submesh : *l_src )
@@ -147,7 +147,7 @@ namespace Testing
 		}
 
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
-		auto l_dst = l_sceneDst.GetMeshManager().Create( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -161,11 +161,11 @@ namespace Testing
 		CT_EQUAL( *l_src, *l_dst );
 		File::DeleteFile( l_path );
 		l_dst.reset();
-		l_sceneDst.GetMeshManager().Remove( l_name + cuT( "_imp" ) );
+		l_sceneDst.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
 		l_src.reset();
-		l_scene->GetMeshManager().Remove( l_name );
+		l_scene->GetMeshCache().Remove( l_name );
 		m_engine.GetRenderLoop().Cleanup();
-		m_engine.GetSceneManager().Remove( l_scene->GetName() );
+		m_engine.GetSceneCache().Remove( l_scene->GetName() );
 		l_scene->Cleanup();
 		m_engine.GetRenderLoop().Cleanup();
 	}

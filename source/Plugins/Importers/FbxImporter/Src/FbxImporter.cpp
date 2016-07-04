@@ -4,18 +4,18 @@
 #	include <vld.h>
 #endif
 
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SamplerManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <SamplerCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 
@@ -409,7 +409,7 @@ namespace C3dFbx
 		// Prepare the FBX SDK.
 		DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
 
-		auto l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_FBX" ), *GetEngine() );
+		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_FBX" ), *GetEngine() );
 
 		DoDestroySdkObjects( l_fbxManager );
 
@@ -423,13 +423,13 @@ namespace C3dFbx
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( p_scene.GetMeshManager().Has( l_meshName ) )
+		if ( p_scene.GetMeshCache().Has( l_meshName ) )
 		{
-			m_mesh = p_scene.GetMeshManager().Find( l_meshName );
+			m_mesh = p_scene.GetMeshCache().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -463,7 +463,7 @@ namespace C3dFbx
 			else
 			{
 				// The import failed.
-				p_scene.GetMeshManager().Remove( l_meshName );
+				p_scene.GetMeshCache().Remove( l_meshName );
 				m_mesh.reset();
 			}
 
@@ -472,7 +472,7 @@ namespace C3dFbx
 		else
 		{
 			// The import failed.
-			p_scene.GetMeshManager().Remove( l_meshName );
+			p_scene.GetMeshCache().Remove( l_meshName );
 			m_mesh.reset();
 		}
 
@@ -680,7 +680,7 @@ namespace C3dFbx
 
 	void FbxSdkImporter::DoLoadMaterials( Scene & p_scene, FbxScene * p_fbxScene )
 	{
-		auto & l_manager = p_scene.GetMaterialView();
+		auto & l_cache = p_scene.GetMaterialView();
 		FbxArray< FbxSurfaceMaterial * > l_mats;
 		p_fbxScene->FillMaterialArray( l_mats );
 		MaterialPtrStrMap l_materials;
@@ -709,7 +709,7 @@ namespace C3dFbx
 
 			if ( l_materials.find( l_fbxMaterial->GetName() ) == l_materials.end() )
 			{
-				auto l_material = l_manager.Create( l_fbxMaterial->GetName(), *GetEngine() );
+				auto l_material = l_cache.Add( l_fbxMaterial->GetName(), *GetEngine() );
 				auto l_pass = l_material->CreatePass();
 				Logger::LogDebug( StringStream() << "Material: " << l_fbxMaterial->GetName() );
 				String l_model = string::string_cast< xchar >( l_fbxMaterial->ShadingModel.Get().Buffer() );
@@ -737,7 +737,7 @@ namespace C3dFbx
 	{
 		p_mesh->GenerateNormals();
 		auto l_submesh = m_mesh->CreateSubmesh();
-		l_submesh->SetDefaultMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
+		l_submesh->SetDefaultMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		bool l_tangentSpace = false;
 
 		Logger::LogDebug( StringStream() << "Mesh: " << p_mesh->GetName() );
@@ -916,7 +916,7 @@ namespace C3dFbx
 
 			if ( !p_scene.GetSamplerView().Has( l_fbxtex->GetName() ) )
 			{
-				l_sampler = p_scene.GetSamplerView().Create( l_fbxtex->GetName() );
+				l_sampler = p_scene.GetSamplerView().Add( l_fbxtex->GetName() );
 				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeU] );
 				l_sampler->SetWrappingMode( TextureUVW::U, l_mode[l_fbxtex->WrapModeV] );
 			}

@@ -6,14 +6,14 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -44,13 +44,13 @@ namespace Lwo
 
 	SceneSPtr LwoImporter::DoImportScene()
 	{
-		auto l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
+		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_LWO" ), *GetEngine() );
 		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
 
 			for ( auto l_submesh : *l_mesh )
 			{
@@ -78,7 +78,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_return = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4 ) );
@@ -1035,7 +1035,7 @@ namespace Lwo
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
 			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
 			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
-			l_pMaterial = GetEngine()->GetMaterialManager().Create( string::string_cast< xchar >( m_strName ), *GetEngine() );
+			l_pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ), *GetEngine() );
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 
@@ -1156,7 +1156,7 @@ namespace Lwo
 						l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
 					}
 
-					ImageSPtr l_pImage = GetEngine()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
+					ImageSPtr l_pImage = GetEngine()->GetImageCache().Add( string::string_cast< xchar >( l_strName ), l_pathImage );
 					break;
 				}
 

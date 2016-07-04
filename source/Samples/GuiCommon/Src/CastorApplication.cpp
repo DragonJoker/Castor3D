@@ -8,7 +8,7 @@
 #include <wx/display.h>
 
 #include <Engine.hpp>
-#include <PluginManager.hpp>
+#include <PluginCache.hpp>
 #include <Plugin/RendererPlugin.hpp>
 
 #include <File.hpp>
@@ -261,7 +261,7 @@ namespace GuiCommon
 		DoLoadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto l_renderers = m_castor->GetPluginManager().GetPlugins( ePLUGIN_TYPE_RENDERER );
+		auto l_renderers = m_castor->GetPluginCache().GetPlugins( ePLUGIN_TYPE_RENDERER );
 
 		if ( l_renderers.empty() )
 		{

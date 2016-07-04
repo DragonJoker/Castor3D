@@ -1,13 +1,13 @@
 #include "DirectRenderTechnique.hpp"
 
-#include <CameraManager.hpp>
-#include <DepthStencilStateManager.hpp>
-#include <LightManager.hpp>
-#include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
-#include <RasteriserStateManager.hpp>
-#include <SceneManager.hpp>
-#include <TargetManager.hpp>
+#include <CameraCache.hpp>
+#include <DepthStencilStateCache.hpp>
+#include <LightCache.hpp>
+#include <MaterialCache.hpp>
+#include <OverlayCache.hpp>
+#include <RasteriserStateCache.hpp>
+#include <SceneCache.hpp>
+#include <TargetCache.hpp>
 
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
@@ -19,7 +19,7 @@
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
 
-#include <FontManager.hpp>
+#include <FontCache.hpp>
 #include <Logger.hpp>
 
 using namespace Castor;

@@ -1,7 +1,7 @@
 #include "OverlayTreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/Overlay.hpp>
@@ -302,8 +302,8 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
-			MaterialManager & l_manager = l_overlay->GetOverlay().GetEngine()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.Find( p_name );
+			auto & l_cache = l_overlay->GetOverlay().GetEngine()->GetMaterialCache();
+			MaterialSPtr l_material = l_cache.Find( p_name );
 
 			if ( l_material )
 			{
@@ -339,8 +339,8 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
-			MaterialManager & l_manager = l_overlay->GetOverlay().GetEngine()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.Find( p_name );
+			auto & l_cache = l_overlay->GetOverlay().GetEngine()->GetMaterialCache();
+			MaterialSPtr l_material = l_cache.Find( p_name );
 
 			if ( l_material )
 			{

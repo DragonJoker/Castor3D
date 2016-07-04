@@ -24,8 +24,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Miscellaneous/Version.hpp"
 
 #include <FileParser.hpp>
-#include <FontManager.hpp>
-#include <ImageManager.hpp>
+#include <FontCache.hpp>
+#include <ImageCache.hpp>
 #include <Unique.hpp>
 
 #define DECLARE_CACHE_MEMBER( memberName, className )\
@@ -218,9 +218,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager const & GetImageManager()const
+		inline Castor::ImageCache const & GetImageCache()const
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -230,9 +230,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager & GetImageManager()
+		inline Castor::ImageCache & GetImageCache()
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -242,9 +242,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager const & GetFontManager()const
+		inline Castor::FontCache const & GetFontCache()const
 		{
-			return m_fontManager;
+			return m_fontCache;
 		}
 		/**
 		 *\~english
@@ -254,9 +254,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager & GetFontManager()
+		inline Castor::FontCache & GetFontCache()
 		{
-			return m_fontManager;
+			return m_fontCache;
 		}
 		/**
 		 *\~english
@@ -474,33 +474,33 @@ namespace Castor3D
 		//!\~english	The BlendState collection.
 		//!\~french		La collection de BlendState.
 		DECLARE_CACHE_MEMBER( blendState, BlendState );
-		//!\~english	The materials manager.
-		//!\~french		Le gestionnaire de matériaux.
+		//!\~english	The materials cache.
+		//!\~french		Le cache de matériaux.
 		DECLARE_CACHE_MEMBER( material, Material );
-		//!\~english	The plug-ins manager.
-		//!\~french		Le gestionnaire de plug-ins.
+		//!\~english	The plug-ins cache.
+		//!\~french		Le cache de plug-ins.
 		DECLARE_CACHE_MEMBER( plugin, Plugin );
-		//!\~english	The overlays collection.
-		//!\~french		La collection d'overlays.
+		//!\~english	The overlays cache.
+		//!\~french		La cache d'overlays.
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
-		//!\~english	The scenes collection.
-		//!\~french		La collection de scènes.
+		//!\~english	The scenes cache.
+		//!\~french		La cache de scènes.
 		DECLARE_CACHE_MEMBER( scene, Scene );
-		//!\~english	The frame listeners array.
-		//!\~french		Le tableau de frame listeners.
+		//!\~english	The frame listeners cache.
+		//!\~french		Le cache de frame listeners.
 		DECLARE_CACHE_MEMBER( listener, Listener );
-		//!\~english	The render targets map.
-		//!\~french		La map des cibles de rendu.
+		//!\~english	The render targets cache.
+		//!\~french		Le cache de cibles de rendu.
 		DECLARE_CACHE_MEMBER( target, Target );
-		//!\~english	The render technique manager.
-		//!\~french		Le gestionnaire de techniques de rendu.
+		//!\~english	The render technique cache.
+		//!\~french		Le cache de techniques de rendu.
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
-		//!\~english	The fonts collection.
-		//!\~french		La collection de polices.
-		Castor::FontManager m_fontManager;
-		//!\~english	The images collection.
-		//!\~french		La collection d'images.
-		Castor::ImageManager m_imageManager;
+		//!\~english	The fonts cache.
+		//!\~french		La cache de polices.
+		Castor::FontCache m_fontCache;
+		//!\~english	The images cache.
+		//!\~french		La cache d'images.
+		Castor::ImageCache m_imageCache;
 		//!\~english	The user input listener.
 		//!\~french		Le listener d'entrées utilisateur.
 		UserInputListenerSPtr m_userInputListener;

@@ -4,7 +4,7 @@
 #	include <vld.h>
 #endif
 
-#include <PluginManager.hpp>
+#include <PluginCache.hpp>
 
 #include <Plugin/ImporterPlugin.hpp>
 
@@ -83,7 +83,7 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 
 	std::set< Castor::String > l_alreadyLoaded;
 
-	for ( auto l_it : p_engine->GetPluginManager().GetPlugins( Castor3D::ePLUGIN_TYPE_IMPORTER ) )
+	for ( auto l_it : p_engine->GetPluginCache().GetPlugins( Castor3D::ePLUGIN_TYPE_IMPORTER ) )
 	{
 		auto const l_importer = std::static_pointer_cast< Castor3D::ImporterPlugin >( l_it.second );
 

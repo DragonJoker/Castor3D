@@ -8,8 +8,8 @@
 #include "CtrlSlider.hpp"
 #include "CtrlStatic.hpp"
 
-#include <ListenerManager.hpp>
-#include <MaterialManager.hpp>
+#include <ListenerCache.hpp>
+#include <MaterialCache.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Scene/SceneFileParser.hpp>
@@ -133,10 +133,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_DefaultFont )
 {
 	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 	ParserContext & l_context = GetParserContext( p_context );
-	FontManager & l_fontManager = l_context.m_engine->GetFontManager();
+	auto & l_cache = l_context.m_engine->GetFontCache();
 	String l_name;
 	p_params[0]->Get( l_name );
-	FontSPtr l_font = l_fontManager.Find( l_name );
+	FontSPtr l_font = l_cache.Find( l_name );
 
 	if ( l_font )
 	{
@@ -169,7 +169,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonFont )
 
 	if ( l_button )
 	{
-		FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 		l_button->SetFont( l_name );
@@ -208,8 +207,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonTextMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetTextMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetTextMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -227,8 +226,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedBackgroundMateria
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetHighlightedBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -246,8 +245,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedForegroundMateria
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedForegroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetHighlightedForegroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -265,8 +264,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedTextMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedTextMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetHighlightedTextMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -284,8 +283,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedBackgroundMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetPushedBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -303,8 +302,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedForegroundMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedForegroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetPushedForegroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -322,8 +321,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedTextMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedTextMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_button->SetPushedTextMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -354,7 +353,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxFont )
 
 	if ( l_combo )
 	{
-		FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 		l_combo->SetFont( l_name );
@@ -393,8 +391,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemBackgroundMate
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetSelectedItemBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_combo->SetSelectedItemBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -412,8 +410,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemForegroundMate
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetSelectedItemForegroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_combo->SetSelectedItemForegroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -431,8 +429,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxHighlightedItemBackgroundM
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetHighlightedItemBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_combo->SetHighlightedItemBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -463,7 +461,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_EditFont )
 
 	if ( l_edit )
 	{
-		FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 		l_edit->SetFont( l_name );
@@ -533,7 +530,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxFont )
 
 	if ( l_listbox )
 	{
-		FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 		l_listbox->SetFont( l_name );
@@ -572,8 +568,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemBackgroundMater
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetSelectedItemBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_listbox->SetSelectedItemBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -591,8 +587,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxHighlightedItemBackgroundMa
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetHighlightedItemBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_listbox->SetHighlightedItemBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -610,8 +606,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemForegroundMater
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetSelectedItemForegroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_listbox->SetSelectedItemForegroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -657,7 +653,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_StaticFont )
 
 	if ( l_static )
 	{
-		FontManager & l_fontManager = l_context.m_engine->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 		l_static->SetFont( l_name );
@@ -758,8 +753,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBackgroundMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_control->SetBackgroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_control->SetBackgroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{
@@ -777,8 +772,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBorderMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_control->SetForegroundMaterial( l_manager.Find( l_name ) );
+		auto & l_cache = l_context.m_engine->GetMaterialCache();
+		l_control->SetForegroundMaterial( l_cache.Find( l_name ) );
 	}
 	else
 	{

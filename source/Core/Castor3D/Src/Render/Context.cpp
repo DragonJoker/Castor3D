@@ -1,9 +1,9 @@
 #include "Context.hpp"
 
-#include "BlendStateManager.hpp"
-#include "DepthStencilStateManager.hpp"
+#include "BlendStateCache.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "ShaderManager.hpp"
+#include "ShaderCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderWindow.hpp"
@@ -63,10 +63,10 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_bMultiSampling = p_window->IsMultisampling();
-		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Create( cuT( "NoDepthState" ) );
+		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthState" ) );
 		m_dsStateNoDepth->SetDepthTest( false );
 		m_dsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Create( cuT( "NoDepthWriterState" ) );
+		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthWriterState" ) );
 		m_dsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 
@@ -197,11 +197,11 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 
-		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
-		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderCache();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 		m_mapDiffuse->SetValue( 0 );
-		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
 		String l_strVtxShader;
 		{

@@ -58,7 +58,7 @@ namespace CastorCom
 	template<>
 	inline Castor::Path parameter_cast< Castor::Path, BSTR >( BSTR const & value )
 	{
-		return FromBstr( value );
+		return Castor::Path{ FromBstr( value ) };
 	}
 	template<>
 	inline FLOAT parameter_cast< FLOAT, Castor::ColourComponent >( Castor::ColourComponent const & value )

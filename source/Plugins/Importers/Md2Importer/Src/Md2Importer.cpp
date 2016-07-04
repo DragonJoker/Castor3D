@@ -4,14 +4,14 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -42,13 +42,13 @@ Md2Importer::Md2Importer( Engine & p_pEngine, String const & p_textureName )
 
 SceneSPtr Md2Importer::DoImportScene()
 {
-	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD2" ), *GetEngine() );
 	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
-		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
 		for ( auto l_submesh : *l_mesh )
@@ -77,7 +77,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName = m_fileName.GetFileName();
 	l_materialName = m_fileName.GetFileName();
-	l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -90,7 +90,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 
 		if ( !l_material )
 		{
-			l_material = p_scene.GetMaterialView().Create( l_materialName, *GetEngine() );
+			l_material = p_scene.GetMaterialView().Add( l_materialName, *GetEngine() );
 			l_material->CreatePass();
 		}
 

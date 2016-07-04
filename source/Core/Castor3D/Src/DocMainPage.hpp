@@ -224,7 +224,7 @@
  *<li>Moved TargetRenderer::PostRender code into RenderWindow.</li>
  *<li>Created WindowRenderer::EndScene function to prepare the render of the RenderTarget's frame buffer into the window.</li>
  *<li>Removed calls to ShaderObject in order to make it more internal to Castor3D.</li>
- *<li>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayManager. All overlays will be rendered through this instance by the OverlayManager.</li>
+ *<li>Overlays are no more Renderable, there is one instance of OverlayRenderer class in the OverlayCache. All overlays will be rendered through this instance by the OverlayCache.</li>
  *<li>Modified Scene, added template functions to add, remove or get an object whatever it's type may be (Light, Geometry, Camera, SceneNode).</li>
  *</ul>
  *\subsubsection misc_0_7_0_gl GlRenderSystem
@@ -574,7 +574,7 @@
  *<li>Implémentation des Frame Buffers.</li>
  *<li>Réduction de l'occupation mémoire des tampons de sommets.</li>
  *<li>Modification de BufferElementGroup afin qu'il ne puisse plus contenir son tampon.</li>
- *<li>La classe Overlay n'étend plus Renderable, il n'y a plus qu'une instance de OverlayRenderer, gérée par la classe OverlayManager. Toutes les incrustations sont maintenant rendues via cette instance.</li>
+ *<li>La classe Overlay n'étend plus Renderable, il n'y a plus qu'une instance de OverlayRenderer, gérée par la classe OverlayCache. Toutes les incrustations sont maintenant rendues via cette instance.</li>
  *<li>Amélioration de l'occupation mémoire : diminution drastique de la taille d'un Vertex (de 152 à 24 octets) et d'une Face (de 140 à 16 octets).</li>
  *<li>Modification de Subdivision, elle se trouve maintenant uniquement dans Subdivider et plus dans Geometry, Mesh ou Submesh.</li>
  *<li>Les lumières sont maintenant implémentées dans une texture, passant la limite de 8 à 100 sources.</li>

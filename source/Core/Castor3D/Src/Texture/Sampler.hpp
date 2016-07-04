@@ -18,13 +18,39 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Sampler___
 #define ___C3D_Sampler___
 
-#include "Castor3DPrerequisites.hpp"
-
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 #include <OwnedBy.hpp>
 
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Sampler, Castor::String >
+	{
+		using ElemPtr = std::shared_ptr< Sampler >;
+
+		ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return m_engine.GetRenderSystem()->CreateSampler( p_key );
+		}
+
+		Engine & m_engine;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		25/03/2013

@@ -1,12 +1,12 @@
 #include "Skybox.hpp"
 
 #include "Engine.hpp"
-#include "ShaderManager.hpp"
+#include "ShaderCache.hpp"
 
-#include "DepthStencilStateManager.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "RasteriserStateManager.hpp"
-#include "SamplerManager.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
@@ -103,7 +103,7 @@ namespace Castor3D
 		}
 		else
 		{
-			auto l_sampler = GetEngine()->GetSamplerCache().Create( l_skybox );
+			auto l_sampler = GetEngine()->GetSamplerCache().Add( l_skybox );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
@@ -118,7 +118,7 @@ namespace Castor3D
 		}
 		else
 		{
-			auto l_dss = GetEngine()->GetDepthStencilStateCache().Create( l_skybox );
+			auto l_dss = GetEngine()->GetDepthStencilStateCache().Add( l_skybox );
 			l_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
 			m_dss = l_dss;
 		}
@@ -129,7 +129,7 @@ namespace Castor3D
 		}
 		else
 		{
-			auto l_rs = GetEngine()->GetRasteriserStateCache().Create( l_skybox );
+			auto l_rs = GetEngine()->GetRasteriserStateCache().Add( l_skybox );
 			l_rs->SetCulledFaces( eFACE_FRONT );
 			m_rs = l_rs;
 		}
@@ -243,7 +243,7 @@ namespace Castor3D
 
 	bool Skybox::DoInitialiseShader()
 	{
-		auto l_program = GetEngine()->GetShaderManager().GetNewProgram();
+		auto l_program = GetEngine()->GetShaderCache().GetNewProgram();
 		m_program = l_program;
 
 		String l_vtx;
@@ -291,7 +291,7 @@ namespace Castor3D
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vtx );
 		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_pxl );
-		m_matricesBuffer = GetEngine()->GetShaderManager().CreateMatrixBuffer( *l_program, eSHADER_TYPE_VERTEX );
+		m_matricesBuffer = GetEngine()->GetShaderCache().CreateMatrixBuffer( *l_program, eSHADER_TYPE_VERTEX );
 		return l_program->Initialise();
 	}
 

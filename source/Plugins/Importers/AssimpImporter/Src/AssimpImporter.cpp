@@ -2,19 +2,19 @@
 
 #include <ArrayView.hpp>
 
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Animation/Mesh/MeshAnimation.hpp>
 #include <Animation/Mesh/MeshAnimationSubmesh.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Render/RenderLoop.hpp>
@@ -202,13 +202,13 @@ namespace C3dAssimp
 
 	SceneSPtr AssimpImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ), *GetEngine() );
 		DoImportMesh( *l_scene );
 
 		if ( m_mesh )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Create( m_mesh->GetName(), l_node );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( m_mesh->GetName(), l_scene->GetObjectRootNode() );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node );
 
 			for ( auto && l_submesh : *m_mesh )
 			{
@@ -229,13 +229,13 @@ namespace C3dAssimp
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( p_scene.GetMeshManager().Has( l_meshName ) )
+		if ( p_scene.GetMeshCache().Has( l_meshName ) )
 		{
-			m_mesh = p_scene.GetMeshManager().Find( l_meshName );
+			m_mesh = p_scene.GetMeshCache().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -340,7 +340,7 @@ namespace C3dAssimp
 				}
 				else
 				{
-					p_scene.GetMeshManager().Remove( l_meshName );
+					p_scene.GetMeshCache().Remove( l_meshName );
 					m_mesh.reset();
 					l_importer.FreeScene();
 				}
@@ -349,7 +349,7 @@ namespace C3dAssimp
 			{
 				// The import failed, report it
 				Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
-				p_scene.GetMeshManager().Remove( l_meshName );
+				p_scene.GetMeshCache().Remove( l_meshName );
 				m_mesh.reset();
 			}
 		}
@@ -453,7 +453,7 @@ namespace C3dAssimp
 	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const & p_aiMaterial )
 	{
 		MaterialSPtr l_return;
-		auto & l_manager = p_scene.GetMaterialView();
+		auto & l_cache = p_scene.GetMaterialView();
 		aiString l_mtlname;
 		p_aiMaterial.Get( AI_MATKEY_NAME, l_mtlname );
 		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
@@ -463,9 +463,9 @@ namespace C3dAssimp
 			l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 		}
 
-		if ( l_manager.Has( l_name ) )
+		if ( l_cache.Has( l_name ) )
 		{
-			l_return = l_manager.Find( l_name );
+			l_return = l_cache.Find( l_name );
 		}
 		else
 		{
@@ -510,7 +510,7 @@ namespace C3dAssimp
 				l_diffuse.b = 1.0;
 			}
 
-			l_return = l_manager.Create( l_name, *GetEngine() );
+			l_return = l_cache.Add( l_name, *GetEngine() );
 			l_return->CreatePass();
 			auto l_pass = l_return->GetPass( 0 );
 

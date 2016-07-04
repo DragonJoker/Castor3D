@@ -24,11 +24,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Colour.hpp>
 
 #	include <Engine.hpp>
-#	include <MeshManager.hpp>
-#	include <GeometryManager.hpp>
-#	include <MaterialManager.hpp>
-#	include <SceneManager.hpp>
-#	include <SceneNodeManager.hpp>
+#	include <MeshCache.hpp>
+#	include <GeometryCache.hpp>
+#	include <MaterialCache.hpp>
+#	include <SceneCache.hpp>
+#	include <SceneNodeCache.hpp>
 
 #	include <Event/Frame/InitialiseEvent.hpp>
 #	include <Material/Pass.hpp>

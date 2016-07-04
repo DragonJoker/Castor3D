@@ -1,19 +1,19 @@
 #include "Engine.hpp"
 
-#include "BlendStateManager.hpp"
-#include "DepthStencilStateManager.hpp"
-#include "ListenerManager.hpp"
-#include "MaterialManager.hpp"
-#include "MeshManager.hpp"
-#include "OverlayManager.hpp"
-#include "PluginManager.hpp"
-#include "RasteriserStateManager.hpp"
-#include "SamplerManager.hpp"
-#include "SceneManager.hpp"
-#include "ShaderManager.hpp"
-#include "TargetManager.hpp"
-#include "TechniqueManager.hpp"
-#include "WindowManager.hpp"
+#include "BlendStateCache.hpp"
+#include "DepthStencilStateCache.hpp"
+#include "ListenerCache.hpp"
+#include "MaterialCache.hpp"
+#include "MeshCache.hpp"
+#include "OverlayCache.hpp"
+#include "PluginCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneCache.hpp"
+#include "ShaderCache.hpp"
+#include "TargetCache.hpp"
+#include "TechniqueCache.hpp"
+#include "WindowCache.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
@@ -58,20 +58,20 @@ namespace Castor3D
 		std::locale::global( std::locale() );
 		Image::InitialiseImageLib();
 
-		// m_listenerManager *MUST* be the first created.
-		m_listenerManager = std::make_unique< ListenerManager >( *this );
+		// m_listenerCache *MUST* be the first created.
+		m_listenerCache = MakeCache< FrameListener, String >( EngineGetter{ *this }, ListenerProducer{} );
 
-		m_shaderManager = std::make_unique< ShaderManager >( *this );
-		m_samplerManager = std::make_unique< SamplerManager >( *this );
-		m_depthStencilStateManager = std::make_unique< DepthStencilStateManager >( *this );
-		m_rasteriserStateManager = std::make_unique< RasteriserStateManager >( *this );
-		m_blendStateManager = std::make_unique< BlendStateManager >( *this );
-		m_materialManager = std::make_unique< MaterialManager >( *this );
-		m_pluginManager = std::make_unique< PluginManager >( *this );
-		m_overlayManager = std::make_unique< OverlayManager >( *this );
-		m_sceneManager = std::make_unique< SceneManager >( *this );
-		m_targetManager = std::make_unique< TargetManager >( *this );
-		m_techniqueManager = std::make_unique< RenderTechniqueManager >( *this );
+		m_shaderCache = MakeCache( *this );
+		m_samplerCache = MakeCache< Sampler, String >( EngineGetter{ *this }, SamplerProducer{ *this } );
+		m_depthStencilStateCache = MakeCache< DepthStencilState, String >( EngineGetter{ *this }, DepthStencilStateProducer{ *this } );
+		m_rasteriserStateCache = MakeCache< RasteriserState, String >( EngineGetter{ *this }, RasteriserStateProducer{ *this } );
+		m_blendStateCache = MakeCache< BlendState, String >( EngineGetter{ *this }, BlendStateProducer{ *this } );
+		m_materialCache = MakeCache( EngineGetter{ *this }, MaterialProducer{} );
+		m_pluginCache = MakeCache( EngineGetter{ *this }, PluginProducer{} );
+		m_overlayCache = MakeCache( EngineGetter{ *this }, OverlayProducer{ *this } );
+		m_sceneCache = MakeCache< Scene, String >( EngineGetter{ *this }, SceneProducer{} );
+		m_targetCache = std::make_unique< TargetCache >( *this );
+		m_techniqueCache = MakeCache( EngineGetter{ *this }, RenderTechniqueProducer{} );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -90,23 +90,23 @@ namespace Castor3D
 		m_defaultSampler.reset();
 
 		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
-		m_samplerManager->Clear();
-		m_shaderManager->Clear();
-		m_depthStencilStateManager->Clear();
-		m_rasteriserStateManager->Clear();
-		m_blendStateManager->Clear();
-		m_overlayManager->Clear();
-		m_fontManager.Clear();
-		m_imageManager.clear();
-		m_sceneManager->Clear();
-		m_materialManager->Clear();
-		m_listenerManager->Clear();
-		m_techniqueManager->Clear();
+		m_samplerCache->Clear();
+		m_shaderCache->Clear();
+		m_depthStencilStateCache->Clear();
+		m_rasteriserStateCache->Clear();
+		m_blendStateCache->Clear();
+		m_overlayCache->Clear();
+		m_fontCache.Clear();
+		m_imageCache.clear();
+		m_sceneCache->Clear();
+		m_materialCache->Clear();
+		m_listenerCache->Clear();
+		m_techniqueCache->Clear();
 
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
 		{
-			auto const & l_renderers = m_pluginManager->GetRenderersList();
+			auto const & l_renderers = m_pluginCache->GetRenderersList();
 			auto l_it = l_renderers.find( m_renderSystem->GetRendererType() );
 
 			if ( l_it != l_renderers.end() )
@@ -120,7 +120,7 @@ namespace Castor3D
 			}
 		}
 
-		m_pluginManager->Clear();
+		m_pluginCache->Clear();
 		Image::CleanupImageLib();
 	}
 
@@ -130,25 +130,25 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			m_targetManager->SetRenderSystem( m_renderSystem );
-			m_samplerManager->SetRenderSystem( m_renderSystem );
-			m_shaderManager->SetRenderSystem( m_renderSystem );
-			m_overlayManager->SetRenderSystem( m_renderSystem );
-			m_materialManager->SetRenderSystem( m_renderSystem );
-			m_sceneManager->SetRenderSystem( m_renderSystem );
-			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_shaderManager->SetRenderSystem( m_renderSystem );
-			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
-			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
-			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_techniqueManager->SetRenderSystem( m_renderSystem );
+			m_targetCache->SetRenderSystem( m_renderSystem );
+			m_samplerCache->SetRenderSystem( m_renderSystem );
+			m_shaderCache->SetRenderSystem( m_renderSystem );
+			m_overlayCache->SetRenderSystem( m_renderSystem );
+			m_materialCache->SetRenderSystem( m_renderSystem );
+			m_sceneCache->SetRenderSystem( m_renderSystem );
+			m_blendStateCache->SetRenderSystem( m_renderSystem );
+			m_shaderCache->SetRenderSystem( m_renderSystem );
+			m_depthStencilStateCache->SetRenderSystem( m_renderSystem );
+			m_rasteriserStateCache->SetRenderSystem( m_renderSystem );
+			m_blendStateCache->SetRenderSystem( m_renderSystem );
+			m_techniqueCache->SetRenderSystem( m_renderSystem );
 
-			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
-			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
+			m_defaultBlendState = m_blendStateCache->Add( cuT( "Default" ) );
+			m_defaultSampler = m_samplerCache->Add( cuT( "Default" ) );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mip, InterpolationMode::Linear );
-			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
+			m_lightsSampler = m_samplerCache->Add( cuT( "LightsSampler" ) );
 			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
 			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
 
@@ -162,17 +162,17 @@ namespace Castor3D
 
 		if ( m_defaultBlendState )
 		{
-			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
+			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
 		}
 
 		if ( m_lightsSampler )
 		{
-			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
+			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
 		}
 
 		if ( m_defaultSampler )
 		{
-			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
+			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		if ( p_threaded )
@@ -198,55 +198,55 @@ namespace Castor3D
 				m_renderLoop->Pause();
 			}
 
-			m_listenerManager->Cleanup();
-			m_sceneManager->Cleanup();
-			m_depthStencilStateManager->Cleanup();
-			m_rasteriserStateManager->Cleanup();
-			m_blendStateManager->Cleanup();
-			m_samplerManager->Cleanup();
-			m_overlayManager->Cleanup();
-			m_materialManager->Cleanup();
-			m_shaderManager->Cleanup();
+			m_listenerCache->Cleanup();
+			m_sceneCache->Cleanup();
+			m_depthStencilStateCache->Cleanup();
+			m_rasteriserStateCache->Cleanup();
+			m_blendStateCache->Cleanup();
+			m_samplerCache->Cleanup();
+			m_overlayCache->Cleanup();
+			m_materialCache->Cleanup();
+			m_shaderCache->Cleanup();
 
 			if ( m_defaultBlendState )
 			{
-				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
+				m_listenerCache->PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
 			}
 
 			if ( m_lightsSampler )
 			{
-				m_listenerManager->PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
+				m_listenerCache->PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
+				m_listenerCache->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
-			m_techniqueManager->Cleanup();
+			m_techniqueCache->Cleanup();
 			m_renderLoop.reset();
 
-			m_targetManager->Clear();
-			m_samplerManager->Clear();
-			m_shaderManager->Clear();
-			m_overlayManager->Clear();
-			m_materialManager->Clear();
-			m_sceneManager->Clear();
-			m_blendStateManager->Clear();
-			m_fontManager.Clear();
-			m_imageManager.clear();
-			m_shaderManager->Clear();
-			m_depthStencilStateManager->Clear();
-			m_rasteriserStateManager->Clear();
-			m_blendStateManager->Clear();
-			m_techniqueManager->Clear();
+			m_targetCache->Clear();
+			m_samplerCache->Clear();
+			m_shaderCache->Clear();
+			m_overlayCache->Clear();
+			m_materialCache->Clear();
+			m_sceneCache->Clear();
+			m_blendStateCache->Clear();
+			m_fontCache.Clear();
+			m_imageCache.clear();
+			m_shaderCache->Clear();
+			m_depthStencilStateCache->Clear();
+			m_rasteriserStateCache->Clear();
+			m_blendStateCache->Clear();
+			m_techniqueCache->Clear();
 		}
 	}
 
 	bool Engine::LoadRenderer( String const & p_type )
 	{
 		bool l_return = false;
-		m_renderSystem = m_pluginManager->LoadRenderer( p_type );
+		m_renderSystem = m_pluginCache->LoadRenderer( p_type );
 
 		if ( m_renderSystem )
 		{
@@ -258,7 +258,7 @@ namespace Castor3D
 
 	void Engine::PostEvent( FrameEventSPtr p_event )
 	{
-		m_listenerManager->PostEvent( p_event );
+		m_listenerCache->PostEvent( p_event );
 	}
 
 	Path Engine::GetPluginsDirectory()

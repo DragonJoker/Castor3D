@@ -507,27 +507,27 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay manager
+		 *\brief		Retrieves the overlay cache
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le gestionnaire d'incrustations
+		 *\brief		Récupère le cache d'incrustations
 		 *\return		La valeur
 		 */
-		inline OverlayManager const & GetOverlayCache()const
+		inline OverlayCache const & GetOverlayCache()const
 		{
-			return m_manager;
+			return m_cache;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay manager
+		 *\brief		Retrieves the overlay cache
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le gestionnaire d'incrustations
+		 *\brief		Récupère le cache d'incrustations
 		 *\return		La valeur
 		 */
-		inline OverlayManager & GetOverlayCache()
+		inline OverlayCache & GetOverlayCache()
 		{
-			return m_manager;
+			return m_cache;
 		}
 		/**
 		 *\~english
@@ -629,8 +629,8 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The overlay manager	\~french Le gestionnaire d'inscrustations
-		OverlayManager & m_manager;
+		//!\~english The overlay cache	\~french Le cache d'inscrustations
+		OverlayCache & m_cache;
 		//!\~english The overlay name	\~french Le nom de l'incrustation
 		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a

@@ -4,7 +4,7 @@
 #include <File.hpp>
 
 #include <Engine.hpp>
-#include <PluginManager.hpp>
+#include <PluginCache.hpp>
 
 #include <BenchManager.hpp>
 
@@ -50,7 +50,7 @@ namespace
 					// Since techniques depend on renderers, we load these first
 					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
+						if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
 						{
 							l_arrayFailed.push_back( l_file );
 						}
@@ -65,7 +65,7 @@ namespace
 			// Then we load other plug-ins
 			for ( auto l_file : l_otherPlugins )
 			{
-				if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
+				if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
 				{
 					l_arrayFailed.push_back( l_file );
 				}
@@ -97,7 +97,7 @@ namespace
 		std::unique_ptr< Engine > l_return = std::make_unique< Engine >();
 		DoLoadPlugins( *l_return );
 
-		auto l_renderers = l_return->GetPluginManager().GetPlugins( ePLUGIN_TYPE_RENDERER );
+		auto l_renderers = l_return->GetPluginCache().GetPlugins( ePLUGIN_TYPE_RENDERER );
 
 		if ( l_renderers.empty() )
 		{

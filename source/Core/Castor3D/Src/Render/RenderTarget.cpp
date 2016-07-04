@@ -1,17 +1,17 @@
 #include "RenderTarget.hpp"
 
-#include "BlendStateManager.hpp"
-#include "CameraManager.hpp"
-#include "DepthStencilStateManager.hpp"
+#include "BlendStateCache.hpp"
+#include "CameraCache.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "OverlayManager.hpp"
-#include "RasteriserStateManager.hpp"
-#include "SamplerManager.hpp"
-#include "SceneManager.hpp"
-#include "SceneNodeManager.hpp"
-#include "TargetManager.hpp"
-#include "TechniqueManager.hpp"
+#include "MaterialCache.hpp"
+#include "OverlayCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneCache.hpp"
+#include "SceneNodeCache.hpp"
+#include "TargetCache.hpp"
+#include "TechniqueCache.hpp"
 
 #include "Context.hpp"
 #include "Pipeline.hpp"
@@ -177,9 +177,9 @@ namespace Castor3D
 		, m_fbRightEye{ *this }
 	{
 		m_toneMapping = GetEngine()->GetTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
-		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateCache().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
-		SamplerSPtr l_pSampler = GetEngine()->GetSamplerCache().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
+		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
 		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 	}
@@ -204,7 +204,7 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, *GetEngine()->GetRenderSystem(), m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueCache().Add( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ), m_techniqueName, *this, *GetEngine()->GetRenderSystem(), m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
@@ -317,12 +317,12 @@ namespace Castor3D
 		{
 			if ( GetCameraLEye() )
 			{
-				l_scene->GetCameraManager().Remove( GetCameraLEye()->GetName() );
+				l_scene->GetCameraCache().Remove( GetCameraLEye()->GetName() );
 			}
 
 			if ( GetCameraREye() )
 			{
-				l_scene->GetCameraManager().Remove( GetCameraREye()->GetName() );
+				l_scene->GetCameraCache().Remove( GetCameraREye()->GetName() );
 			}
 		}
 
@@ -336,8 +336,8 @@ namespace Castor3D
 
 			if ( l_scene )
 			{
-				l_scene->GetSceneNodeManager().Remove( l_strLENodeName );
-				l_scene->GetSceneNodeManager().Remove( l_strRENodeName );
+				l_scene->GetSceneNodeCache().Remove( l_strLENodeName );
+				l_scene->GetSceneNodeCache().Remove( l_strRENodeName );
 			}
 		}
 
@@ -351,12 +351,12 @@ namespace Castor3D
 			{
 				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
 				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
-				l_pLECamNode = l_scene->GetSceneNodeManager().Create( l_strLENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
-				l_pRECamNode = l_scene->GetSceneNodeManager().Create( l_strRENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
+				l_pLECamNode = l_scene->GetSceneNodeCache().Add( l_strLENodeName, l_scene->GetSceneNodeCache().Find( l_pCamNode->GetName() ) );
+				l_pRECamNode = l_scene->GetSceneNodeCache().Add( l_strRENodeName, l_scene->GetSceneNodeCache().Find( l_pCamNode->GetName() ) );
 				l_pLECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 				l_pRECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
-				m_pCameraLEye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
-				m_pCameraREye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
+				m_pCameraLEye = l_scene->GetCameraCache().Add( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
+				m_pCameraREye = l_scene->GetCameraCache().Add( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
 			}
 		}
 	}

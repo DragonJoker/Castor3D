@@ -1,7 +1,7 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
-#include "OverlayManager.hpp"
+#include "OverlayCache.hpp"
 
 #include "TextOverlay.hpp"
 
@@ -16,10 +16,10 @@ namespace Castor3D
 {
 	namespace
 	{
-		TextOverlaySPtr GetTextOverlay( OverlayManager & p_manager, String const & p_name )
+		TextOverlaySPtr GetTextOverlay( OverlayCache & p_cache, String const & p_name )
 		{
 			TextOverlaySPtr l_return;
-			OverlaySPtr l_overlay = p_manager.Find( p_name );
+			OverlaySPtr l_overlay = p_cache.Find( p_name );
 
 			if ( l_overlay )
 			{
@@ -39,21 +39,21 @@ namespace Castor3D
 	{
 	}
 
-	void DebugOverlays::Initialise( OverlayManager & p_manager )
+	void DebugOverlays::Initialise( OverlayCache & p_cache )
 	{
-		OverlaySPtr l_panel = p_manager.Find( cuT( "DebugPanel" ) );
+		OverlaySPtr l_panel = p_cache.Find( cuT( "DebugPanel" ) );
 		m_debugPanel = l_panel;
-		m_debugCpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-CpuTime-Value" ) );
-		m_debugGpuClientTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuClientTime-Value" ) );
-		m_debugGpuServerTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuServerTime-Value" ) );
-		m_debugTotalTime = GetTextOverlay( p_manager, cuT( "DebugPanel-TotalTime-Value" ) );
-		m_debugAverageFps = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageFPS-Value" ) );
-		m_debugAverageTime = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageTime-Value" ) );
-		m_debugVertexCount = GetTextOverlay( p_manager, cuT( "DebugPanel-VertexCount-Value" ) );
-		m_debugFaceCount = GetTextOverlay( p_manager, cuT( "DebugPanel-FaceCount-Value" ) );
-		m_debugObjectCount = GetTextOverlay( p_manager, cuT( "DebugPanel-ObjectCount-Value" ) );
-		m_debugTime = GetTextOverlay( p_manager, cuT( "DebugPanel-DebugTime-Value" ) );
-		m_externTime = GetTextOverlay( p_manager, cuT( "DebugPanel-ExternalTime-Value" ) );
+		m_debugCpuTime = GetTextOverlay( p_cache, cuT( "DebugPanel-CpuTime-Value" ) );
+		m_debugGpuClientTime = GetTextOverlay( p_cache, cuT( "DebugPanel-GpuClientTime-Value" ) );
+		m_debugGpuServerTime = GetTextOverlay( p_cache, cuT( "DebugPanel-GpuServerTime-Value" ) );
+		m_debugTotalTime = GetTextOverlay( p_cache, cuT( "DebugPanel-TotalTime-Value" ) );
+		m_debugAverageFps = GetTextOverlay( p_cache, cuT( "DebugPanel-AverageFPS-Value" ) );
+		m_debugAverageTime = GetTextOverlay( p_cache, cuT( "DebugPanel-AverageTime-Value" ) );
+		m_debugVertexCount = GetTextOverlay( p_cache, cuT( "DebugPanel-VertexCount-Value" ) );
+		m_debugFaceCount = GetTextOverlay( p_cache, cuT( "DebugPanel-FaceCount-Value" ) );
+		m_debugObjectCount = GetTextOverlay( p_cache, cuT( "DebugPanel-ObjectCount-Value" ) );
+		m_debugTime = GetTextOverlay( p_cache, cuT( "DebugPanel-DebugTime-Value" ) );
+		m_externTime = GetTextOverlay( p_cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_valid = m_debugCpuTime
 				  && m_debugGpuClientTime

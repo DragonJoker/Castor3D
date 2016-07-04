@@ -1,9 +1,9 @@
 #include "BorderPanelOverlay.hpp"
 
 #include "Overlay.hpp"
-#include "OverlayManager.hpp"
+#include "OverlayCache.hpp"
 #include "OverlayRenderer.hpp"
-#include "MaterialManager.hpp"
+#include "MaterialCache.hpp"
 #include "Engine.hpp"
 
 using namespace Castor;

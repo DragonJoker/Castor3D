@@ -9,9 +9,9 @@
 #include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
-#include <ShaderManager.hpp>
-#include <TargetManager.hpp>
-#include <WindowManager.hpp>
+#include <ShaderCache.hpp>
+#include <TargetCache.hpp>
+#include <WindowCache.hpp>
 #include <Material/Pass.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/RenderSystem.hpp>
@@ -72,16 +72,16 @@ namespace GuiCommon
 		else
 		{
 			PassSPtr l_pass = m_pPass.lock();
-			auto l_lock = Castor::make_unique_lock( m_scene.GetWindowManager() );
-			auto l_it = m_scene.GetWindowManager().begin();
+			auto l_lock = Castor::make_unique_lock( m_scene.GetWindowCache() );
+			auto l_it = m_scene.GetWindowCache().begin();
 
-			if ( l_it != m_scene.GetWindowManager().end() && l_it->second->GetRenderTarget() )
+			if ( l_it != m_scene.GetWindowCache().end() && l_it->second->GetRenderTarget() )
 			{
 				RenderTechniqueSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 
 				if ( l_technique )
 				{
-					m_shaderProgram = m_scene.GetEngine()->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_shaderProgram = m_scene.GetEngine()->GetShaderCache().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
 					m_bOwnShader = true;
 				}
 			}
@@ -192,7 +192,7 @@ namespace GuiCommon
 		{
 			if ( m_shaderProgram.expired() )
 			{
-				m_shaderProgram = m_scene.GetEngine()->GetShaderManager().GetNewProgram();
+				m_shaderProgram = m_scene.GetEngine()->GetShaderCache().GetNewProgram();
 			}
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )

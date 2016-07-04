@@ -1,7 +1,7 @@
 #include "TextureUnit.hpp"
 
 #include "Engine.hpp"
-#include "TargetManager.hpp"
+#include "TargetCache.hpp"
 
 #include "TextureLayout.hpp"
 #include "Sampler.hpp"

@@ -22,17 +22,17 @@
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
-#include <AnimatedObjectGroupManager.hpp>
-#include <BillboardManager.hpp>
-#include <CameraManager.hpp>
-#include <GeometryManager.hpp>
+#include <AnimatedObjectGroupCache.hpp>
+#include <BillboardCache.hpp>
+#include <CameraCache.hpp>
+#include <GeometryCache.hpp>
 #include <Engine.hpp>
-#include <LightManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <OverlayManager.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <LightCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <OverlayCache.hpp>
+#include <SceneCache.hpp>
+#include <WindowCache.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>
@@ -126,14 +126,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetWindowManager().lock();
+			p_scene->GetWindowCache().lock();
 
-			for ( auto l_it : p_scene->GetWindowManager() )
+			for ( auto l_it : p_scene->GetWindowCache() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetWindowManager().unlock();
+			p_scene->GetWindowCache().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )
@@ -141,14 +141,14 @@ namespace GuiCommon
 				DoAddNode( l_scene, l_rootNode );
 			}
 
-			p_scene->GetAnimatedObjectGroupManager().lock();
+			p_scene->GetAnimatedObjectGroupCache().lock();
 
-			for ( auto l_it : p_scene->GetAnimatedObjectGroupManager() )
+			for ( auto l_it : p_scene->GetAnimatedObjectGroupCache() )
 			{
 				DoAddAnimatedObjectGroup( AppendItem( l_scene, l_it.first, eBMP_ANIMATED_OBJECTGROUP, eBMP_ANIMATED_OBJECTGROUP_SEL, new AnimatedObjectGroupTreeItemProperty( m_propertiesHolder->IsEditable(), l_it.second ) ), l_it.second );
 			}
 
-			p_scene->GetAnimatedObjectGroupManager().unlock();
+			p_scene->GetAnimatedObjectGroupCache().unlock();
 
 			for ( auto l_overlay : p_engine->GetOverlayCache() )
 			{

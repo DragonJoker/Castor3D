@@ -2,8 +2,8 @@
 
 #include "ControlsManager.hpp"
 
-#include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
+#include <MaterialCache.hpp>
+#include <OverlayCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Pass.hpp>
@@ -44,7 +44,7 @@ namespace CastorGui
 			OnMouseButtonUp( p_event );
 		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Create( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetHAlign( eHALIGN_CENTER );
 		l_text->SetVAlign( eVALIGN_CENTER );
@@ -119,7 +119,7 @@ namespace CastorGui
 
 		if ( !GetBackgroundMaterial() )
 		{
-			SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "Black" ) ) );
+			SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Black" ) ) );
 		}
 
 		if ( m_textMaterial.expired() )

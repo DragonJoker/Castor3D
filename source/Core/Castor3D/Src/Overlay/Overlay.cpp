@@ -3,7 +3,7 @@
 #include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
 #include "OverlayFactory.hpp"
-#include "OverlayManager.hpp"
+#include "OverlayCache.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
 
@@ -29,7 +29,7 @@ namespace Castor3D
 
 	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type )
 		: OwnedBy< Engine >( p_engine )
-		, m_manager( p_engine.GetOverlayCache() )
+		, m_cache( p_engine.GetOverlayCache() )
 		, m_parent()
 		, m_pScene()
 		, m_renderSystem( p_engine.GetRenderSystem() )
@@ -40,7 +40,7 @@ namespace Castor3D
 
 	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 		: OwnedBy< Engine >( p_engine )
-		, m_manager( p_engine.GetOverlayCache() )
+		, m_cache( p_engine.GetOverlayCache() )
 		, m_parent( p_parent )
 		, m_pScene( p_scene )
 		, m_renderSystem( p_engine.GetRenderSystem() )

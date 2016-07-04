@@ -26,6 +26,25 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Geometry, Castor::String, Scene, SceneNodeSPtr, MeshSPtr >
+	{
+		using ElemPtr = std::shared_ptr< Geometry >;
+
+		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene, SceneNodeSPtr p_parent = nullptr, MeshSPtr const & p_mesh = nullptr )
+		{
+			return std::make_shared< Geometry >( p_key, p_scene, p_parent, p_mesh );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
 	\~english

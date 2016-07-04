@@ -2,8 +2,8 @@
 #include "AseFileParser.hpp"
 
 #include <Engine.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
+#include <MeshCache.hpp>
+#include <SceneCache.hpp>
 
 #include <Mesh/Submesh.hpp>
 #include <Scene/Geometry.hpp>
@@ -24,7 +24,7 @@ namespace Ase
 
 	SceneSPtr AseImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASE" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASE" ), *GetEngine() );
 		m_pFileParser = new AseFileParser( GetEngine(), *this, *l_scene );
 		m_pFileParser->ParseFile( m_fileName );
 		MeshSPtr l_mesh;

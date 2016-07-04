@@ -1,10 +1,10 @@
 #include "Pass.hpp"
 
-#include "BlendStateManager.hpp"
-#include "CameraManager.hpp"
+#include "BlendStateCache.hpp"
+#include "CameraCache.hpp"
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "ShaderManager.hpp"
+#include "MaterialCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Render/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"

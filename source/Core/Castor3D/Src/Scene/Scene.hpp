@@ -21,6 +21,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "SceneNode.hpp"
 
+#include "BillboardList.hpp"
+#include "Camera.hpp"
+#include "Geometry.hpp"
+#include "SceneNode.hpp"
+#include "Animation/AnimatedObjectGroup.hpp"
+#include "Light/Light.hpp"
+#include "Mesh/Mesh.hpp"
+#include "Texture/Sampler.hpp"
+#include "Render/RenderWindow.hpp"
+
 #include <Logger.hpp>
 #include <OwnedBy.hpp>
 
@@ -78,6 +88,25 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Scene, Castor::String, Engine & >
+	{
+		using ElemPtr = std::shared_ptr< Scene >;
+
+		ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		{
+			return std::make_shared< Scene >( p_key, p_engine );
+		}
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.1
@@ -390,29 +419,29 @@ namespace Castor3D
 		//!\~english	The root node for every object other than camera (used to ease the use of cameras)
 		//!\~french		Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
-		//!\~english	The scene nodes manager.
-		//!\~french		Le gestionnaire de noeuds de scène.
+		//!\~english	The scene nodes cache.
+		//!\~french		Le cache de noeuds de scène.
 		DECLARE_CACHE_MEMBER( sceneNode, SceneNode );
-		//!\~english	The camera manager.
-		//!\~french		Le gestionnaire de caméras.
+		//!\~english	The camera cache.
+		//!\~french		Le cache de caméras.
 		DECLARE_CACHE_MEMBER( camera, Camera );
-		//!\~english	The lights manager.
-		//!\~french		Le gestionnaire de lumières.
+		//!\~english	The lights cache.
+		//!\~french		Le cache de lumières.
 		DECLARE_CACHE_MEMBER( light, Light );
-		//!\~english	The geometies manager.
-		//!\~french		Le gestionnaire de géométries.
+		//!\~english	The geometies cache.
+		//!\~french		Le cache de géométries.
 		DECLARE_CACHE_MEMBER( geometry, Geometry );
-		//!\~english	The meshes manager.
-		//!\~french		Le gestionnaire de maillages.
+		//!\~english	The meshes cache.
+		//!\~french		Le cache de maillages.
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
-		//!\~english	The billboards manager.
-		//!\~french		Le gestionnaire de billboards.
+		//!\~english	The billboards cache.
+		//!\~french		Le cache de billboards.
 		DECLARE_CACHE_MEMBER( billboard, Billboard );
-		//!\~english	The animated objects groups manager.
-		//!\~french		Le gestionnaire de groupes d'objets animés.
+		//!\~english	The animated objects groups cache.
+		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The render windows manager.
-		//!\~french		Le gestionnaire de fenêtres de rendu.
+		//!\~english	The render windows cache.
+		//!\~french		Le cache de fenêtres de rendu.
 		DECLARE_CACHE_MEMBER( window, Window );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
@@ -447,6 +476,12 @@ namespace Castor3D
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxSPtr m_skybox;
+		//!\~english	The objects face count.
+		//!\~french		Le compte de faces de tous les objets.
+		uint32_t m_faceCount{ 0 };
+		//!\~english	The objects vertex count.
+		//!\~french		Le compte de sommets de tous les objets.
+		uint32_t m_vertexCount{ 0 };
 
 	public:
 		//!\~english	The cameras root node name.
@@ -461,6 +496,6 @@ namespace Castor3D
 	};
 }
 
-#undef DECLARE_MANAGER_MEMBER
+#undef DECLARE_CACHE_MEMBER
 
 #endif

@@ -55,7 +55,7 @@ namespace Obj
 		void DoReadMaterials( Castor3D::Scene & p_scene, Castor::Path const & p_pathMatFile );
 
 	private:
-		Castor::ImageManager & m_collImages;
+		Castor::ImageCache & m_collImages;
 		Castor3D::MaterialPtrArray m_arrayLoadedMaterials;
 		TextureArray m_arrayTextures;
 		Castor::TextFile * m_pFile;

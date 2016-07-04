@@ -1,7 +1,7 @@
 #include "HaarmPieterDuikerToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <ShaderManager.hpp>
+#include <ShaderCache.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>

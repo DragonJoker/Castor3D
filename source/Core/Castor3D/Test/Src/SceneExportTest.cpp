@@ -1,17 +1,17 @@
 #include "SceneExportTest.hpp"
 
 #include <Engine.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <SceneCache.hpp>
+#include <WindowCache.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Animation/Skeleton/SkeletonAnimationNode.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Mesh/Importer.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -67,9 +67,9 @@ namespace Testing
 					File::DirectoryCreate( l_folder / l_subfolder );
 				}
 
-				auto l_lock = make_unique_lock( p_scene.GetMeshManager() );
+				auto l_lock = make_unique_lock( p_scene.GetMeshCache() );
 
-				for ( auto const & l_it : p_scene.GetMeshManager() )
+				for ( auto const & l_it : p_scene.GetMeshCache() )
 				{
 					auto l_mesh = l_it.second;
 					Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
@@ -125,7 +125,7 @@ namespace Testing
 		CT_REQUIRE( l_dstParser.ParseFile( p_path ) );
 		CT_REQUIRE( l_dstParser.ScenesBegin() != l_dstParser.ScenesEnd() );
 		SceneSPtr l_scene{ l_dstParser.ScenesBegin()->second };
-		auto & l_windows = l_scene->GetWindowManager();
+		auto & l_windows = l_scene->GetWindowCache();
 		RenderWindowSPtr l_window;
 
 		l_windows.lock();
@@ -150,8 +150,8 @@ namespace Testing
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
 		auto l_name = l_src->GetName();
-		m_engine.GetSceneManager().Remove( l_name );
-		m_engine.GetSceneManager().Insert( l_name + cuT( "_exp" ), l_src );
+		m_engine.GetSceneCache().Remove( l_name );
+		m_engine.GetSceneCache().Add( l_name + cuT( "_exp" ), l_src );
 
 		SceneSPtr l_dst{ DoParseScene( Path{ cuT( "TestScene" ) } / cuT( "TestScene.cscn" ) ) };
 		CT_EQUAL( *l_src, *l_dst );
@@ -160,8 +160,8 @@ namespace Testing
 		m_engine.GetRenderLoop().RenderSyncFrame();
 		l_dst->Cleanup();
 		m_engine.GetRenderLoop().RenderSyncFrame();
-		m_engine.GetSceneManager().Remove( l_name + cuT( "_exp" ) );
-		m_engine.GetSceneManager().Remove( l_name );
+		m_engine.GetSceneCache().Remove( l_name + cuT( "_exp" ) );
+		m_engine.GetSceneCache().Remove( l_name );
 		l_src.reset();
 		l_dst.reset();
 		m_engine.GetRenderLoop().Cleanup();

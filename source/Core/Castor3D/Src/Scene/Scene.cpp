@@ -1,21 +1,21 @@
-#include "SceneManager.hpp"
+#include "SceneCache.hpp"
 
-#include "AnimatedObjectGroupManager.hpp"
-#include "CameraManager.hpp"
-#include "BillboardManager.hpp"
+#include "AnimatedObjectGroupCache.hpp"
+#include "CameraCache.hpp"
+#include "BillboardCache.hpp"
 #include "Engine.hpp"
-#include "GeometryManager.hpp"
-#include "LightManager.hpp"
-#include "MaterialManager.hpp"
-#include "MeshManager.hpp"
-#include "OverlayManager.hpp"
-#include "SamplerManager.hpp"
-#include "SceneNodeManager.hpp"
-#include "WindowManager.hpp"
+#include "GeometryCache.hpp"
+#include "LightCache.hpp"
+#include "MaterialCache.hpp"
+#include "MeshCache.hpp"
+#include "OverlayCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneNodeCache.hpp"
+#include "WindowCache.hpp"
 
 #include "Skybox.hpp"
 
-#include "Manager/ManagerView.hpp"
+#include "Cache/CacheView.hpp"
 #include "Mesh/Importer.hpp"
 #include "Render/RenderLoop.hpp"
 #include "State/DepthStencilState.hpp"
@@ -33,25 +33,25 @@ namespace Castor3D
 
 	namespace
 	{
-		template< typename ResourceType, eEVENT_TYPE EventType, typename ManagerType >
-		std::unique_ptr< ManagerView< ResourceType, ManagerType, EventType > > make_manager_view( Castor::String const & p_name, ManagerType & p_manager )
+		template< typename ResourceType, eEVENT_TYPE EventType, typename CacheType >
+		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > MakeCacheView( Castor::String const & p_name, CacheType & p_cache )
 		{
-			return std::make_unique< ManagerView< ResourceType, ManagerType, EventType > >( p_name, p_manager );
+			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( p_name, p_cache );
 		}
 	}
 
 	//*************************************************************************************************
 
 	template<>
-	inline void ManagerView< Overlay, OverlayManager, eEVENT_TYPE_PRE_RENDER >::Clear()
+	inline void CacheView< Overlay, OverlayCache, eEVENT_TYPE_PRE_RENDER >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
-			auto l_resource = m_manager.Find( l_name );
+			auto l_resource = m_cache.Find( l_name );
 
 			if ( l_resource )
 			{
-				m_manager.Remove( l_name );
+				m_cache.Remove( l_name );
 			}
 		}
 	}
@@ -59,15 +59,15 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void ManagerView< Font, FontManager, eEVENT_TYPE_PRE_RENDER >::Clear()
+	inline void CacheView< Font, FontCache, eEVENT_TYPE_PRE_RENDER >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
-			auto l_resource = m_manager.Find( l_name );
+			auto l_resource = m_cache.Find( l_name );
 
 			if ( l_resource )
 			{
-				m_manager.Remove( l_name );
+				m_cache.Remove( l_name );
 			}
 		}
 	}
@@ -195,9 +195,9 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
-			auto l_lock = make_unique_lock( p_scene.GetCameraManager() );
+			auto l_lock = make_unique_lock( p_scene.GetCameraCache() );
 
-			for ( auto const & l_it : p_scene.GetCameraManager() )
+			for ( auto const & l_it : p_scene.GetCameraCache() )
 			{
 				if ( l_return
 					 && l_it.first.find( cuT( "_REye" ) ) == String::npos
@@ -211,9 +211,9 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
-			auto l_lock = make_unique_lock( p_scene.GetLightManager() );
+			auto l_lock = make_unique_lock( p_scene.GetLightCache() );
 
-			for ( auto const & l_it : p_scene.GetLightManager() )
+			for ( auto const & l_it : p_scene.GetLightCache() )
 			{
 				l_return &= Light::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
@@ -233,9 +233,9 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Animated object groups" ) );
-			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupManager() );
+			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupCache() );
 
-			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupManager() )
+			for ( auto const & l_it : p_scene.GetAnimatedObjectGroupCache() )
 			{
 				l_return &= AnimatedObjectGroup::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
@@ -244,9 +244,9 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
-			auto l_lock = make_unique_lock( p_scene.GetWindowManager() );
+			auto l_lock = make_unique_lock( p_scene.GetWindowCache() );
 
-			for ( auto const & l_it : p_scene.GetWindowManager() )
+			for ( auto const & l_it : p_scene.GetWindowCache() )
 			{
 				l_return &= RenderWindow::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
@@ -275,50 +275,50 @@ namespace Castor3D
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 
-		m_animatedObjectGroupManager = std::make_unique< AnimatedObjectGroupManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_billboardManager = std::make_unique< BillboardManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_cameraManager = std::make_unique< CameraManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_geometryManager = std::make_unique< GeometryManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_meshManager = std::make_unique< MeshManager >( *this );
-		m_lightManager = std::make_unique< LightManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_sceneNodeManager = std::make_unique< SceneNodeManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-		m_windowManager = std::make_unique< WindowManager >( *this );
+		m_billboardCache = MakeObjectCache< BillboardList, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, BillboardProducer{} );
+		m_cameraCache = MakeObjectCache< Camera, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, CameraProducer{} );
+		m_geometryCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, GeometryProducer{}, ElementInitialiser< Geometry >{ m_faceCount, m_vertexCount } );
+		m_lightCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, LightProducer{} );
+		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, SceneNodeProducer{} );
+		m_animatedObjectGroupCache = MakeObjectCache< AnimatedObjectGroup, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, AnimatedObjectGroupProducer{} );
+		m_meshCache = MakeCache< Mesh, String >( EngineGetter{ *GetEngine() }, MeshProducer{ *this } );
+		m_windowCache = MakeCache < RenderWindow, String >( EngineGetter{ *GetEngine() }, WindowProducer{ *GetEngine() } );
 
-		m_materialManagerView = make_manager_view< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialManager() );
-		m_samplerManagerView = make_manager_view< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerCache() );
-		m_overlayManagerView = make_manager_view< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayCache() );
-		m_fontManagerView = make_manager_view< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontManager() );
+		m_materialCacheView = MakeCacheView< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialCache() );
+		m_samplerCacheView = MakeCacheView< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerCache() );
+		m_overlayCacheView = MakeCacheView< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayCache() );
+		m_fontCacheView = MakeCacheView< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontCache() );
 
-		m_meshManager->SetRenderSystem( p_engine.GetRenderSystem() );
-		m_windowManager->SetRenderSystem( p_engine.GetRenderSystem() );
+		m_meshCache->SetRenderSystem( p_engine.GetRenderSystem() );
+		m_windowCache->SetRenderSystem( p_engine.GetRenderSystem() );
 
 		auto l_notify = [this]()
 		{
 			m_changed = true;
 		};
 
-		m_sceneNodeManager->Insert( cuT( "ObjectRootNode" ), m_rootObjectNode );
+		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
 	}
 
 	Scene::~Scene()
 	{
-		m_meshManager->Clear();
-		m_windowManager->Clear();
+		m_meshCache->Clear();
+		m_windowCache->Clear();
 
 		m_skybox.reset();
-		m_animatedObjectGroupManager.reset();
-		m_billboardManager.reset();
-		m_cameraManager.reset();
-		m_geometryManager.reset();
-		m_lightManager.reset();
-		m_sceneNodeManager.reset();
+		m_animatedObjectGroupCache.reset();
+		m_billboardCache.reset();
+		m_cameraCache.reset();
+		m_geometryCache.reset();
+		m_lightCache.reset();
+		m_sceneNodeCache.reset();
 
-		m_meshManager.reset();
-		m_materialManagerView.reset();
-		m_samplerManagerView.reset();
-		m_windowManager.reset();
-		m_overlayManagerView.reset();
-		m_fontManagerView.reset();
+		m_meshCache.reset();
+		m_materialCacheView.reset();
+		m_samplerCacheView.reset();
+		m_windowCache.reset();
+		m_overlayCacheView.reset();
+		m_fontCacheView.reset();
 
 		if ( m_rootCameraNode )
 		{
@@ -342,28 +342,28 @@ namespace Castor3D
 
 	void Scene::Initialise()
 	{
-		m_lightManager->Initialise();
+		m_lightCache->Initialise();
 	}
 
 	void Scene::Cleanup()
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_overlays.clear();
-		m_animatedObjectGroupManager->Cleanup();
-		m_cameraManager->Cleanup();
-		m_billboardManager->Cleanup();
-		m_geometryManager->Cleanup();
-		m_lightManager->Cleanup();
-		m_sceneNodeManager->Cleanup();
+		m_animatedObjectGroupCache->Cleanup();
+		m_cameraCache->Cleanup();
+		m_billboardCache->Cleanup();
+		m_geometryCache->Cleanup();
+		m_lightCache->Cleanup();
+		m_sceneNodeCache->Cleanup();
 
-		m_materialManagerView->Clear();
-		m_samplerManagerView->Clear();
-		m_overlayManagerView->Clear();
-		m_fontManagerView->Clear();
+		m_materialCacheView->Clear();
+		m_samplerCacheView->Clear();
+		m_overlayCacheView->Clear();
+		m_fontCacheView->Clear();
 
-		// Those two ones, being ResourceManager, need to be cleared in destructor only
-		m_meshManager->Cleanup();
-		m_windowManager->Cleanup();
+		// Those two ones, being ResourceCache, need to be cleared in destructor only
+		m_meshCache->Cleanup();
+		m_windowCache->Cleanup();
 
 		if ( m_backgroundImage )
 		{
@@ -406,7 +406,7 @@ namespace Castor3D
 
 	void Scene::Update()
 	{
-		m_animatedObjectGroupManager->Update();
+		Castor3D::Update( *m_animatedObjectGroupCache );
 		m_changed = false;
 	}
 
@@ -452,12 +452,12 @@ namespace Castor3D
 		{
 			auto l_lock = Castor::make_unique_lock( m_mutex );
 			auto l_lockOther = Castor::make_unique_lock( p_scene->m_mutex );
-			p_scene->GetAnimatedObjectGroupManager().MergeInto( *m_animatedObjectGroupManager );
-			p_scene->GetCameraManager().MergeInto( *m_cameraManager );
-			p_scene->GetBillboardManager().MergeInto( *m_billboardManager );
-			p_scene->GetGeometryCache().MergeInto( *m_geometryManager );
-			p_scene->GetLightManager().MergeInto( *m_lightManager );
-			p_scene->GetSceneNodeManager().MergeInto( *m_sceneNodeManager );
+			p_scene->GetAnimatedObjectGroupCache().MergeInto( *m_animatedObjectGroupCache );
+			p_scene->GetCameraCache().MergeInto( *m_cameraCache );
+			p_scene->GetBillboardCache().MergeInto( *m_billboardCache );
+			p_scene->GetGeometryCache().MergeInto( *m_geometryCache );
+			p_scene->GetLightCache().MergeInto( *m_lightCache );
+			p_scene->GetSceneNodeCache().MergeInto( *m_sceneNodeCache );
 			m_ambientLight = p_scene->GetAmbientLight();
 			m_changed = true;
 		}
@@ -484,9 +484,9 @@ namespace Castor3D
 	uint32_t Scene::GetVertexCount()const
 	{
 		uint32_t l_return = 0;
-		auto l_lock = make_unique_lock( *m_geometryManager );
+		auto l_lock = make_unique_lock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryCache )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 
@@ -502,9 +502,9 @@ namespace Castor3D
 	uint32_t Scene::GetFaceCount()const
 	{
 		uint32_t l_return = 0;
-		auto l_lock = make_unique_lock( *m_geometryManager );
+		auto l_lock = make_unique_lock( *m_geometryCache );
 
-		for ( auto l_pair : *m_geometryManager )
+		for ( auto l_pair : *m_geometryCache )
 		{
 			auto l_mesh = l_pair.second->GetMesh();
 

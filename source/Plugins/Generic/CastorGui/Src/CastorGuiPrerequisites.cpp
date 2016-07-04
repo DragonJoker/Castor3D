@@ -1,7 +1,7 @@
 #include "CastorGuiPrerequisites.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Pass.hpp>
@@ -20,17 +20,17 @@ namespace CastorGui
 {
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, Colour const & p_colour )
 	{
-		MaterialManager & l_manager = p_engine->GetMaterialManager();
+		auto & l_cache = p_engine->GetMaterialCache();
 		MaterialSPtr l_return;
 
-		if ( l_manager.Has( p_name ) )
+		if ( l_cache.Has( p_name ) )
 		{
-			l_return = l_manager.Find( p_name );
+			l_return = l_cache.Find( p_name );
 		}
 
 		if ( !l_return )
 		{
-			l_return = l_manager.Create( p_name, *p_engine );
+			l_return = l_cache.Add( p_name, *p_engine );
 			l_return->CreatePass();
 		}
 
@@ -40,17 +40,17 @@ namespace CastorGui
 
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
-		MaterialManager & l_manager = p_engine->GetMaterialManager();
+		auto & l_cache = p_engine->GetMaterialCache();
 		MaterialSPtr l_return;
 
-		if ( l_manager.Has( p_name ) )
+		if ( l_cache.Has( p_name ) )
 		{
-			l_return = l_manager.Find( p_name );
+			l_return = l_cache.Find( p_name );
 		}
 
 		if ( !l_return )
 		{
-			l_return = l_manager.Create( p_name, *p_engine );
+			l_return = l_cache.Add( p_name, *p_engine );
 			l_return->CreatePass();
 		}
 

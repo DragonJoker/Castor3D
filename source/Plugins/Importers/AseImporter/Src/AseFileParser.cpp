@@ -3,12 +3,12 @@
 #include "AseImporter.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Face.hpp>
@@ -22,7 +22,6 @@
 #include <Scene/Camera.hpp>
 #include <Scene/Geometry.hpp>
 #include <Texture/TextureUnit.hpp>
-#include <Manager/ManagerView.hpp>
 
 #include <Image.hpp>
 
@@ -433,15 +432,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
-	auto & l_manager = l_pContext->scene.GetMaterialView();
+	auto & l_cache = l_pContext->scene.GetMaterialView();
 	String l_strName;
 	p_params[0]->Get( l_strName );
 	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
-	MaterialSPtr l_pMaterial = l_manager.Find( l_strName );
+	MaterialSPtr l_pMaterial = l_cache.Find( l_strName );
 
 	if ( !l_pMaterial )
 	{
-		l_pMaterial = l_manager.Create( l_strName, *l_pEngine );
+		l_pMaterial = l_cache.Add( l_strName, *l_pEngine );
 		l_pMaterial->CreatePass();
 	}
 
@@ -672,7 +671,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	p_params[0]->Get( l_pContext->strName );
-	l_pContext->pMesh = l_pContext->scene.GetMeshManager().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
+	l_pContext->pMesh = l_pContext->scene.GetMeshCache().Add( l_pContext->strName, eMESH_TYPE_CUSTOM );
 }
 END_ATTRIBUTE()
 
@@ -736,7 +735,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	String l_strValue;
 	p_params[0]->Get( l_strValue );
-	l_pContext->pSceneNode = l_pContext->scene.GetSceneNodeManager().Create( l_strValue, nullptr );
+	l_pContext->pSceneNode = l_pContext->scene.GetSceneNodeCache().Add( l_strValue, nullptr );
 }
 END_ATTRIBUTE()
 

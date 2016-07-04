@@ -19,7 +19,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			hr = m_internal->LoadTexture( FromBstr( path ) ) ? S_OK : E_FAIL;
+			hr = m_internal->LoadTexture( Castor::Path{ FromBstr( path ) } ) ? S_OK : E_FAIL;
 		}
 		else
 		{

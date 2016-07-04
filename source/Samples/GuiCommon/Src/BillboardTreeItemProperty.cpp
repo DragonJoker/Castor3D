@@ -1,6 +1,6 @@
 #include "BillboardTreeItemProperty.hpp"
 
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 #include <Scene/BillboardList.hpp>
 #include <Scene/Scene.hpp>
 
@@ -72,8 +72,8 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_billboard]()
 		{
-			MaterialManager & l_manager = l_billboard->GetScene()->GetEngine()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.Find( p_name );
+			auto & l_cache = l_billboard->GetScene()->GetEngine()->GetMaterialCache();
+			MaterialSPtr l_material = l_cache.Find( p_name );
 
 			if ( l_material )
 			{

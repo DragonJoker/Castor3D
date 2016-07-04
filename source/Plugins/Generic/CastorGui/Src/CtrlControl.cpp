@@ -3,8 +3,8 @@
 #include "ControlsManager.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
+#include <MaterialCache.hpp>
+#include <OverlayCache.hpp>
 
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
@@ -39,7 +39,7 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Create( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_BORDER_PANEL, l_parentOv, nullptr );
+		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_BORDER_PANEL, l_parentOv, nullptr );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();

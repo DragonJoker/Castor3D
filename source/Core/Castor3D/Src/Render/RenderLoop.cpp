@@ -1,14 +1,14 @@
 #include "RenderLoop.hpp"
 
-#include "BlendStateManager.hpp"
+#include "BlendStateCache.hpp"
 #include "Engine.hpp"
-#include "ListenerManager.hpp"
-#include "OverlayManager.hpp"
-#include "SamplerManager.hpp"
-#include "SceneManager.hpp"
-#include "TargetManager.hpp"
-#include "TechniqueManager.hpp"
-#include "WindowManager.hpp"
+#include "ListenerCache.hpp"
+#include "OverlayCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneCache.hpp"
+#include "TargetCache.hpp"
+#include "TechniqueCache.hpp"
+#include "WindowCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
@@ -108,8 +108,8 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuUpdate()
 	{
-		GetEngine()->GetRenderTechniqueManager().Update();
-		GetEngine()->GetSceneManager().Update();
+		GetEngine()->GetRenderTechniqueCache().Update();
+		Castor3D::Update( GetEngine()->GetSceneCache() );
 		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();
 	}
@@ -139,11 +139,11 @@ namespace Castor3D
 
 		m_renderSystem->GetMainContext()->EndCurrent();
 		{
-			auto l_lock = make_unique_lock( GetEngine()->GetSceneManager() );
+			auto l_lock = make_unique_lock( GetEngine()->GetSceneCache() );
 
-			for ( auto l_it : GetEngine()->GetSceneManager() )
+			for ( auto l_it : GetEngine()->GetSceneCache() )
 			{
-				l_it.second->GetWindowManager().Render( true );
+				Castor3D::Render( l_it.second->GetWindowCache(), true );
 			}
 		}
 		m_debugOverlays->EndGpuTask();

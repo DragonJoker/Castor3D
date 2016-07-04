@@ -18,12 +18,39 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEPTH_STENCIL_STATE_H___
 #define ___C3D_DEPTH_STENCIL_STATE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 #include <OwnedBy.hpp>
 
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< DepthStencilState, Castor::String >
+	{
+		using ElemPtr = std::shared_ptr< DepthStencilState >;
+
+		ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return m_engine.GetRenderSystem()->CreateDepthStencilState();
+		}
+
+		Engine & m_engine;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0

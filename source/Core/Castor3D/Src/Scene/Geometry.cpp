@@ -1,9 +1,9 @@
 #include "Geometry.hpp"
 
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "MeshManager.hpp"
-#include "ShaderManager.hpp"
+#include "MaterialCache.hpp"
+#include "MeshCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Scene.hpp"
 #include "SceneNode.hpp"

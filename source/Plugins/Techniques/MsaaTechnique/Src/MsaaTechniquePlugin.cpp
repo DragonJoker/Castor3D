@@ -3,7 +3,7 @@
 #include <Logger.hpp>
 
 #include <Engine.hpp>
-#include <TechniqueManager.hpp>
+#include <TechniqueCache.hpp>
 
 #include <Miscellaneous/Version.hpp>
 
@@ -37,10 +37,10 @@ C3D_MsaaTechnique_API Castor::String GetName()
 
 C3D_MsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueManager().GetFactory().Register( NAME, &RenderTechnique::CreateInstance );
+	p_engine->GetRenderTechniqueCache().GetFactory().Register( NAME, &RenderTechnique::CreateInstance );
 }
 
 C3D_MsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueManager().GetFactory().Unregister( NAME );
+	p_engine->GetRenderTechniqueCache().GetFactory().Unregister( NAME );
 }

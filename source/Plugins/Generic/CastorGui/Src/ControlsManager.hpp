@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CI_CONTROLS_MANAGER_H___
-#define ___CI_CONTROLS_MANAGER_H___
+#ifndef ___CI_CONTROLS_CACHE_H___
+#define ___CI_CONTROLS_CACHE_H___
 
 #include "CastorGuiPrerequisites.hpp"
 

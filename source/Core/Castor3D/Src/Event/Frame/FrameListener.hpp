@@ -26,11 +26,30 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< FrameListener, Castor::String >
+	{
+		using ElemPtr = std::shared_ptr< FrameListener >;
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return std::make_shared< FrameListener >( p_key );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		03/03/2010
 	\~english
 	\brief		User event synchronisation class
-	\remark		The manager of the frame events. It can add frame events and applies them at the wanted times
+	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times
 	\~french
 	\brief		Classe de synchronisation des évènements
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)

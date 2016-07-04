@@ -517,13 +517,22 @@ namespace Castor3D
 	class ShaderCache;
 	class TargetCache;
 
-	using BlendStateCache = Cache< BlendState, Castor::String, ElementProducer< BlendState, Castor::String > >;
-	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String, ElementProducer< DepthStencilState, Castor::String > >;
-	using ListenerCache = Cache< FrameListener, Castor::String, ElementProducer< FrameListener, Castor::String > >;
-	using RasteriserStateCache = Cache< RasteriserState, Castor::String, ElementProducer< RasteriserState, Castor::String > >;
-	using SceneCache = Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > >;
-	using SamplerCache = Cache< Sampler, Castor::String, ElementProducer< Sampler, Castor::String > >;
-	using WindowCache = Cache< RenderWindow, Castor::String, ElementProducer< RenderWindow, Castor::String, Engine & > >;
+	using BlendStateProducer = ElementProducer< BlendState, Castor::String >;
+	using DepthStencilStateProducer = ElementProducer< DepthStencilState, Castor::String >;
+	using ListenerProducer = ElementProducer< FrameListener, Castor::String >;
+	using RasteriserStateProducer = ElementProducer< RasteriserState, Castor::String >;
+	using RenderTechniqueProducer = ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >;
+	using SamplerProducer = ElementProducer< Sampler, Castor::String >;
+	using SceneProducer = ElementProducer< Scene, Castor::String, Engine & >;
+	using WindowProducer = ElementProducer< RenderWindow, Castor::String >;
+
+	using BlendStateCache = Cache< BlendState, Castor::String, BlendStateProducer >;
+	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String, DepthStencilStateProducer >;
+	using ListenerCache = Cache< FrameListener, Castor::String, ListenerProducer >;
+	using RasteriserStateCache = Cache< RasteriserState, Castor::String, RasteriserStateProducer >;
+	using SamplerCache = Cache< Sampler, Castor::String, SamplerProducer >;
+	using SceneCache = Cache< Scene, Castor::String, SceneProducer >;
+	using WindowCache = Cache< RenderWindow, Castor::String, WindowProducer >;
 
 	DECLARE_SMART_PTR( BlendStateCache );
 	DECLARE_SMART_PTR( DepthStencilStateCache );
@@ -542,14 +551,32 @@ namespace Castor3D
 	template< typename Elem, typename Key, typename ProducerType >
 	class ObjectCache;
 
-	using BillboardCache = ObjectCache< BillboardList, Castor::String, ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem > >;
-	using CameraCache = ObjectCache< Camera, Castor::String, ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, Viewport > >;
+	class GeometryCache;
+	class LightCache;
 
+	using AnimatedObjectGroupProducer = ElementProducer< AnimatedObjectGroup, Castor::String >;
+	using BillboardProducer = ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem >;
+	using CameraProducer = ElementProducer< Camera, Castor::String, Scene, SceneNodeSPtr, Viewport >;
+	using GeometryProducer = ElementProducer< Geometry, Castor::String, Scene, SceneNodeSPtr, MeshSPtr >;
+	using MeshProducer = ElementProducer< Mesh, Castor::String, eMESH_TYPE >;
+	using SceneNodeProducer = ElementProducer< SceneNode, Castor::String, Scene >;
+
+	using AnimatedObjectGroupCache = ObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >;
+	using BillboardCache = ObjectCache< BillboardList, Castor::String, BillboardProducer >;
+	using CameraCache = ObjectCache< Camera, Castor::String, CameraProducer >;
+	using MeshCache = Cache< Mesh, Castor::String, MeshProducer >;
+	using SceneNodeCache  = ObjectCache< SceneNode, Castor::String, SceneNodeProducer >;
+
+	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
 	DECLARE_SMART_PTR( BillboardCache );
 	DECLARE_SMART_PTR( CameraCache );
+	DECLARE_SMART_PTR( GeometryCache );
+	DECLARE_SMART_PTR( LightCache );
+	DECLARE_SMART_PTR( MeshCache );
+	DECLARE_SMART_PTR( SceneNodeCache );
 
-	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
-	class ManagerView;
+	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
+	class CacheView;
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );

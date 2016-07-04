@@ -29,6 +29,32 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< RenderWindow, Castor::String >
+	{
+		using ElemPtr = std::shared_ptr< RenderWindow >;
+
+		ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return std::make_shared< RenderWindow >( p_key, m_engine );
+		}
+		
+		Engine & m_engine;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english

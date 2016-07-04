@@ -1,7 +1,7 @@
 #include "TreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 
 using namespace Castor;
@@ -48,11 +48,11 @@ namespace GuiCommon
 	wxEnumProperty * TreeItemProperty::DoCreateMaterialProperty( wxString const & p_name )
 	{
 		wxEnumProperty * l_material = new wxEnumProperty( p_name );
-		MaterialManager & l_manager = m_engine->GetMaterialManager();
+		auto & l_cache = m_engine->GetMaterialCache();
 		wxPGChoices l_choices;
-		std::unique_lock< MaterialManager > l_lock( l_manager );
+		auto l_lock = make_unique_lock( l_cache );
 
-		for ( auto l_pair : l_manager )
+		for ( auto l_pair : l_cache )
 		{
 			l_choices.Add( l_pair.first );
 		}

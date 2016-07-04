@@ -1,9 +1,9 @@
 #include "BloomPostEffect.hpp"
 
-#include <BlendStateManager.hpp>
+#include <BlendStateCache.hpp>
 #include <Engine.hpp>
-#include <SamplerManager.hpp>
-#include <ShaderManager.hpp>
+#include <SamplerCache.hpp>
+#include <ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
@@ -291,7 +291,7 @@ namespace Bloom
 	{
 		bool l_return = false;
 		m_viewport.Initialise();
-		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderCache();
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;
@@ -306,9 +306,9 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
-			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
-			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_hipass );
 			l_program->Initialise();
@@ -317,14 +317,14 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_blur.empty() )
 		{
-			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_filterMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			auto l_filterConfig = GetRenderSystem()->CreateFrameVariableBuffer( FilterConfig );
 			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigCoefficients, KERNEL_SIZE ) );
 			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetX ) );
 			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetY ) );
 			l_program->AddFrameVariableBuffer( l_filterConfig, MASK_SHADER_TYPE_PIXEL );
-			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_blur );
@@ -334,14 +334,14 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_combine.empty() )
 		{
-			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass0, eSHADER_TYPE_PIXEL )->SetValue( 0 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass1, eSHADER_TYPE_PIXEL )->SetValue( 1 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass2, eSHADER_TYPE_PIXEL )->SetValue( 2 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass3, eSHADER_TYPE_PIXEL )->SetValue( 3 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapScene, eSHADER_TYPE_PIXEL )->SetValue( 4 );
 
-			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_combine );
@@ -568,7 +568,7 @@ namespace Bloom
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
 		{
-			l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Create( l_name );
+			l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Add( l_name );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Min, l_mode );
 			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, l_mode );
 			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
