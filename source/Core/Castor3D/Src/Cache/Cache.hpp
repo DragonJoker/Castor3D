@@ -164,6 +164,34 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
+	\brief		Helper structure to enable moving elements from a cache to another.
+	\remarks	Specialisation for non detachable object types.
+	\~french
+	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
+	\remarks	Spécialisation pour les types d'objet non détachables.
+	*/
+	template< typename Elem, typename Key >
+	struct ElementMerger < Elem, Key, typename std::enable_if < !is_detachable< Elem >::value >::type >
+	{
+		template< typename ProducerType >
+		inline void operator()( Cache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element )
+		{
+			//Castor::String l_name = p_element->GetName();
+
+			//while ( p_destination.find( l_name ) != p_destination.end() )
+			//{
+			//	l_name = p_source.GetScene()->GetName() + cuT( "_" ) + l_name;
+			//}
+
+			//p_element->SetName( l_name );
+			//p_destination.insert( l_name, p_element );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
 	\brief		Helper structure to retrieve the engine instance.
 	\~french
 	\brief		Structure permettant de récupérer le moteur.
@@ -196,15 +224,18 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un cache d'éléments.
 	*/
-	template< typename Elem, typename Key, typename ProducerType >
+	template< typename ElemType, typename KeyType, typename ProducerType >
 	class Cache
 	{
 	public:
-		using Collection = Castor::Collection< Elem, Key >;
-		using ElemPtr = std::shared_ptr< Elem >;
+		using Element = ElemType;
+		using Key = KeyType;
+		using Collection = Castor::Collection< Element, Key >;
+		using ElemPtr = std::shared_ptr< Element >;
 		using Producer = ProducerType;
-		using Initialiser = ElementInitialiser< Elem >;
-		using Cleaner = ElementCleaner< Elem >;
+		using Initialiser = ElementInitialiser< Element >;
+		using Cleaner = ElementCleaner< Element >;
+		using Merger = ElementMerger< Element, Key >;
 
 	public:
 		/**
@@ -218,11 +249,13 @@ namespace Castor3D
 		inline Cache( EngineGetter && p_get
 					  , Producer && p_produce
 					  , Initialiser && p_initialise = Initialiser{}
-					  , Cleaner && p_clean = Cleaner{} )
+					  , Cleaner && p_clean = Cleaner{}
+					  , Merger && p_merge = Merger{} )
 			: m_get{ std::move( p_get ) }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
 			, m_clean{ std::move( p_clean ) }
+			, m_merge{ std::move( p_merge ) }
 		{
 		}
 		/**
@@ -339,6 +372,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		Merges this cache's elements to the one given.
+		 *\param[out]	p_destination		The destination cache.
+		 *\~french
+		 *\return		Met les éléments de ce cache dans ceux de celui donné.
+		 *\param[out]	p_destination		Le cache de destination.
+		 */
+		inline void MergeInto( Cache< Element, Key, ProducerType > & p_destination )
+		{
+			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
+
+			for ( auto l_it : m_elements )
+			{
+				m_merge( *this, p_destination.m_elements, l_it.second );
+			}
+
+			Clear();
+		}
+		/**
+		 *\~english
 		 *\brief		Removes an object, given a name.
 		 *\param[in]	p_name		The object name.
 		 *\~french
@@ -387,7 +440,7 @@ namespace Castor3D
 		*/
 		inline Castor::String const & GetObjectTypeName()const
 		{
-			return CachedObjectNamer< Elem >::Name;
+			return CachedObjectNamer< Element >::Name;
 		}
 		/**
 		 *\~english
@@ -503,6 +556,9 @@ namespace Castor3D
 		//!\~english	The element cleaner.
 		//!\~french		Le nettoyeur d'éléments.
 		Cleaner m_clean;
+		//!\~english	The objects collection merger.
+		//!\~french		Le fusionneur de collection d'objets.
+		Merger m_merge;
 	};
 	/**
 	 *\~english

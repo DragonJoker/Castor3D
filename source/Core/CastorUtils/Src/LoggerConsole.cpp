@@ -4,6 +4,9 @@
 #	include <Windows.h>
 #	include <tchar.h>
 #	include <codecvt>
+#	undef min
+#	undef max
+#	undef abs
 #endif
 
 #include "LoggerConsole.hpp"
@@ -54,8 +57,13 @@ namespace Castor
 					m_oldInfos = nullptr;
 				}
 
-				COORD l_coord = { 160, 9999 };
+				COORD l_coord = { 160, 32766 };
 				::SetConsoleScreenBufferSize( m_screenBuffer, l_coord );
+				COORD l_size = ::GetLargestConsoleWindowSize( m_screenBuffer );
+				SMALL_RECT l_windowRect = { 0 };
+				l_windowRect.Right = std::min( l_size.X, l_coord.X ) - 1;
+				l_windowRect.Bottom = std::min( l_size.Y, l_coord.Y ) - 1;
+				::SetConsoleWindowInfo( m_screenBuffer, TRUE, &l_windowRect );
 			}
 
 			m_oldCodePage = ::GetConsoleOutputCP();

@@ -30,39 +30,6 @@ namespace Castor3D
 	\version	0.8.0
 	\~english
 	\brief		Helper structure to enable attaching if a type supports it.
-	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
-	*/
-	template< typename Elem, typename Enable = void >
-	struct ElementAttacher;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable detaching if a type supports it.
-	\~french
-	\brief		Structure permettant de détacher les éléments qui le supportent.
-	*/
-	template< typename Elem, typename Enable = void >
-	struct ElementDetacher;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable moving elements from a cache to another.
-	\~french
-	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
-	*/
-	template< typename Elem, typename Key, typename Enable = void >
-	struct ElementMerger;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
 	\remarks	Specialisation for non attachable object types.
 	\~french
 	\brief		Structure permettant d'attacher les éléments qui le supportent.
@@ -176,13 +143,13 @@ namespace Castor3D
 	{
 	protected:
 		using MyCacheType = Cache< Elem, Key, ProducerType >;
-		using Producer = ProducerType;
+		using Producer = typename MyCacheType::Producer;
 		using ElemPtr = typename MyCacheType::ElemPtr;
 		using Initialiser = typename MyCacheType::Initialiser;
 		using Cleaner = typename MyCacheType::Cleaner;
+		using Merger = typename MyCacheType::Merger;
 		using Attacher = ElementAttacher< Elem >;
 		using Detacher = ElementDetacher< Elem >;
-		using Merger = ElementMerger< Elem, Key >;
 
 	public:
 		/**
@@ -206,17 +173,16 @@ namespace Castor3D
 							, Producer && p_produce
 							, Initialiser && p_initialise = Initialiser{}
 							, Cleaner && p_clean = Cleaner{}
+							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
-							, Detacher && p_detach = Detacher{}
-							, Merger && p_merge = Merger{} )
-			: MyCacheType( EngineGetter{ *p_get()->GetEngine() }, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ) )
+							, Detacher && p_detach = Detacher{} )
+			: MyCacheType( EngineGetter{ *p_get()->GetEngine() }, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
 			, m_rootNode( p_rootNode )
 			, m_rootCameraNode( p_rootCameraNode )
 			, m_rootObjectNode( p_rootObjectNode )
 			, m_scene( std::move( p_get ) )
 			, m_attach( std::move( p_attach ) )
 			, m_detach( std::move( p_detach ) )
-			, m_merge( std::move( p_merge ) )
 		{
 			this->m_renderSystem = this->m_get()->GetRenderSystem();
 		}
@@ -396,9 +362,6 @@ namespace Castor3D
 		//!\~english	The object detacher.
 		//!\~french		Le détacheur d'objet.
 		Detacher m_detach;
-		//!\~english	The objects collection merger.
-		//!\~french		Le fusionneur de collection d'objets.
-		Merger m_merge;
 		//!\~english	The root node.
 		//!\~french		Le noeud père de tous les noeuds de la scène.
 		SceneNodeWPtr m_rootNode;
@@ -437,34 +400,6 @@ namespace Castor3D
 			//	p_element->AttachTo( p_objectRootNode );
 			//}
 
-			//Castor::String l_name = p_element->GetName();
-
-			//while ( p_destination.find( l_name ) != p_destination.end() )
-			//{
-			//	l_name = p_source.GetScene()->GetName() + cuT( "_" ) + l_name;
-			//}
-
-			//p_element->SetName( l_name );
-			//p_destination.insert( l_name, p_element );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable moving elements from a cache to another.
-	\remarks	Specialisation for non detachable object types.
-	\~french
-	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
-	\remarks	Spécialisation pour les types d'objet non détachables.
-	*/
-	template< typename Elem, typename Key >
-	struct ElementMerger < Elem, Key, typename std::enable_if < !is_detachable< Elem >::value >::type >
-	{
-		template< typename ProducerType >
-		inline void operator()( ObjectCache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
-		{
 			//Castor::String l_name = p_element->GetName();
 
 			//while ( p_destination.find( l_name ) != p_destination.end() )

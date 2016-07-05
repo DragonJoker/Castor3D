@@ -277,10 +277,10 @@ namespace Castor3D
 
 		m_billboardCache = MakeObjectCache< BillboardList, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, BillboardProducer{} );
 		m_cameraCache = MakeObjectCache< Camera, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, CameraProducer{} );
-		m_geometryCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, GeometryProducer{}, ElementInitialiser< Geometry >{ m_faceCount, m_vertexCount } );
+		m_geometryCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, GeometryProducer{} );
 		m_lightCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, LightProducer{} );
 		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, SceneNodeProducer{} );
-		m_animatedObjectGroupCache = MakeObjectCache< AnimatedObjectGroup, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, AnimatedObjectGroupProducer{} );
+		m_animatedObjectGroupCache = MakeCache< AnimatedObjectGroup, String >( EngineGetter{ *GetEngine() }, AnimatedObjectGroupProducer{ *this } );
 		m_meshCache = MakeCache< Mesh, String >( EngineGetter{ *GetEngine() }, MeshProducer{ *this } );
 		m_windowCache = MakeCache < RenderWindow, String >( EngineGetter{ *GetEngine() }, WindowProducer{ *GetEngine() } );
 

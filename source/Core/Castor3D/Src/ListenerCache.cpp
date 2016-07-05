@@ -6,6 +6,19 @@ namespace Castor3D
 {
 	const String CachedObjectNamer< FrameListener >::Name = cuT( "FrameListener" );
 
+	ListenerCache::ListenerCache( EngineGetter && p_get
+								  , Producer && p_produce
+								  , Initialiser && p_initialise
+								  , Cleaner && p_clean )
+		: MyCacheType{ std::move( p_get ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ) }
+	{
+		m_defaultListener = Add( cuT( "Default" ) );
+	}
+
+	ListenerCache::~ListenerCache()
+	{
+	}
+
 	void ListenerCache::PostEvent( FrameEventSPtr p_pEvent )
 	{
 		auto l_lock = make_unique_lock( m_elements );

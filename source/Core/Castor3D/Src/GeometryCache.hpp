@@ -53,22 +53,16 @@ namespace Castor3D
 	template<>
 	struct ElementInitialiser< Geometry >
 	{
-		inline ElementInitialiser( uint32_t & p_faceCount, uint32_t & p_vertexCount )
-			: m_faceCount{ p_faceCount }
-			, m_vertexCount{ p_vertexCount }
-		{
-		}
-
 		inline void operator()( Engine & p_engine, GeometrySPtr p_element )
 		{
-			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_element, this]()
+			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_element, this]()
 			{
 				p_element->CreateBuffers( m_faceCount, m_vertexCount );
 			} ) );
 		}
 
-		uint32_t & m_faceCount;
-		uint32_t & m_vertexCount;
+		uint32_t m_faceCount{ 0 };
+		uint32_t m_vertexCount{ 0 };
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -124,9 +118,8 @@ namespace Castor3D
 	class GeometryCache
 		: public ObjectCache< Geometry, Castor::String, GeometryProducer >
 	{
-		friend ElementAttacher< Geometry >;
 		using MyObjectCache = ObjectCache< Geometry, Castor::String, GeometryProducer >;
-		using Producer = GeometryProducer;
+		using Producer = typename MyObjectCache::Producer;
 		using Initialiser = typename MyObjectCache::Initialiser;
 		using Cleaner = typename MyObjectCache::Cleaner;
 		using Attacher = typename MyObjectCache::Attacher;
@@ -147,23 +140,23 @@ namespace Castor3D
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
 		inline GeometryCache( SceneNodeSPtr p_rootNode
-							   , SceneNodeSPtr p_rootCameraNode
-							   , SceneNodeSPtr p_rootObjectNode
-							   , SceneGetter && p_get
-							   , Producer && p_produce
-							   , Initialiser && p_initialise
-							   , Cleaner && p_clean = Cleaner{}
-							   , Attacher && p_attach = Attacher{}
-							   , Detacher && p_detach = Detacher{}
-							   , Merger && p_merge = Merger{} )
+							  , SceneNodeSPtr p_rootCameraNode
+							  , SceneNodeSPtr p_rootObjectNode
+							  , SceneGetter && p_get
+							  , Producer && p_produce
+							  , Initialiser && p_initialise = Initialiser{}
+							  , Cleaner && p_clean = Cleaner{}
+							  , Merger && p_merge = Merger{}
+							  , Attacher && p_attach = Attacher{}
+							  , Detacher && p_detach = Detacher{} )
 			: MyObjectCache{ p_rootNode, p_rootCameraNode, p_rootCameraNode
 							 , std::move( p_get )
 							 , std::move( p_produce )
 							 , std::move( p_initialise )
 							 , std::move( p_clean )
+							 , std::move( p_merge )
 							 , std::move( p_attach )
-							 , std::move( p_detach )
-							 , std::move( p_merge ) }
+							 , std::move( p_detach ) }
 		{
 		}
 		/**
@@ -213,9 +206,9 @@ namespace Castor3D
 	 *\param[in]	p_produce			Le créateur d'objet.
 	 */
 	inline std::unique_ptr< GeometryCache >
-	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, GeometryProducer && p_produce, ElementInitialiser< Geometry > && p_initialise )
+	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, GeometryProducer && p_produce )
 	{
-		return std::make_unique< GeometryCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ), std::move( p_initialise ) );
+		return std::make_unique< GeometryCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
 	}
 }
 

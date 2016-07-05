@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ANIMATED_OBJECT_GROUP_CACHE_H___
 #define ___C3D_ANIMATED_OBJECT_GROUP_CACHE_H___
 
-#include "Cache/ObjectCache.hpp"
+#include "Cache/Cache.hpp"
 
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 
@@ -48,10 +48,10 @@ namespace Castor3D
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
 	template<>
-	inline std::unique_ptr< ObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >
-	MakeObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, AnimatedObjectGroupProducer && p_produce )
+	inline std::unique_ptr< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >
+	MakeCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >( EngineGetter && p_get, AnimatedObjectGroupProducer && p_produce )
 	{
-		return std::make_unique< ObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >( std::move( p_get ), std::move( p_produce ) );
 	}
 }
 

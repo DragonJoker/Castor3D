@@ -21,21 +21,25 @@ namespace Castor3D
 							, SceneNodeSPtr p_rootObjectNode
 							, SceneGetter && p_get
 							, Producer && p_produce
+							, Initialiser && p_initialise
+							, Cleaner && p_clean
+							, Merger && p_merge
 							, Attacher && p_attach
-							, Detacher && p_detach
-							, Merger && p_merge )
+							, Detacher && p_detach )
 		: MyObjectCache{ p_rootNode
 					   , p_rootCameraNode
 					   , p_rootObjectNode
 					   , std::move( p_get )
 					   , std::move( p_produce )
-					   , Initialiser{ m_typeSortedLights }
-					   , Cleaner{ m_typeSortedLights }
+					   , std::move( p_initialise )
+					   , std::move( p_clean )
+					   , std::move( p_merge )
 					   , std::move( p_attach )
-					   , std::move( p_detach )
-					   , std::move( p_merge ) }
+					   , std::move( p_detach ) }
 		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
+		m_initialise.m_typeSortedLights = &m_typeSortedLights;
+		m_clean.m_typeSortedLights = &m_typeSortedLights;
 	}
 
 	LightCache::~LightCache()

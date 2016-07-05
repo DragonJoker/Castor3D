@@ -68,12 +68,12 @@ namespace GuiCommon
 
 	void TreeItemProperty::CreateTreeItemMenu()
 	{
-		if ( m_editable )
-		{
-			m_menu = new wxMenu();
-			m_menu->Append( eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
-			DoCreateTreeItemMenu();
-		}
+		//if ( m_editable )
+		//{
+		//	m_menu = new wxMenu();
+		//	m_menu->Append( eID_DELETE, _( "Delete" ) + wxT( "\tDEL" ) );
+		//	DoCreateTreeItemMenu();
+		//}
 	}
 
 	void TreeItemProperty::DoCreateTreeItemMenu()

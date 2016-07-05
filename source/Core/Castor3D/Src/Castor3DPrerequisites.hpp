@@ -506,6 +506,17 @@ namespace Castor3D
 	*/
 	template< typename Elem, typename Key, typename ... Parameters >
 	struct ElementProducer;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable moving elements from a cache to another.
+	\~french
+	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
+	*/
+	template< typename Elem, typename Key, typename Enable = void >
+	struct ElementMerger;
 
 	template< typename Elem, typename Key, typename ProducerType >
 	class Cache;
@@ -550,6 +561,29 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TargetCache );
 	DECLARE_SMART_PTR( WindowCache );
 
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		29/01/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable attaching if a type supports it.
+	\~french
+	\brief		Structure permettant d'attacher les éléments qui le supportent.
+	*/
+	template< typename Elem, typename Enable = void >
+	struct ElementAttacher;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		29/01/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable detaching if a type supports it.
+	\~french
+	\brief		Structure permettant de détacher les éléments qui le supportent.
+	*/
+	template< typename Elem, typename Enable = void >
+	struct ElementDetacher;
+
 	template< typename Elem, typename Key, typename ProducerType >
 	class ObjectCache;
 
@@ -564,7 +598,7 @@ namespace Castor3D
 	using MeshProducer = ElementProducer< Mesh, Castor::String, eMESH_TYPE >;
 	using SceneNodeProducer = ElementProducer< SceneNode, Castor::String, Scene >;
 
-	using AnimatedObjectGroupCache = ObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >;
+	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >;
 	using BillboardCache = ObjectCache< BillboardList, Castor::String, BillboardProducer >;
 	using CameraCache = ObjectCache< Camera, Castor::String, CameraProducer >;
 	using MeshCache = Cache< Mesh, Castor::String, MeshProducer >;

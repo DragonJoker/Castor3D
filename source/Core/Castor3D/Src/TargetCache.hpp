@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TARGET_CACHE_H___
 #define ___C3D_TARGET_CACHE_H___
 
-#include "Cache/ResourceCache.hpp"
+#include "Cache/Cache.hpp"
 
 #include "HDR/ToneMappingFactory.hpp"
 #include "PostEffect/PostEffectFactory.hpp"

@@ -48,7 +48,14 @@ namespace Castor
 	bool DO_WRITE_PARSER_NAME( funcname );
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
-#define IMPLEMENT_ATTRIBUTE_PARSER( nmspc, funcname )\
+#define IMPLEMENT_ATTRIBUTE_PARSER( funcname )\
+	bool DO_WRITE_PARSER_NAME( funcname )\
+	{\
+		bool l_return = false;\
+		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
+
+	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
+#define IMPLEMENT_ATTRIBUTE_PARSER_NMSPC( nmspc, funcname )\
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool l_return = false;\

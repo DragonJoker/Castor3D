@@ -336,7 +336,7 @@ namespace Deferred
 				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
 				p_scene.GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
-				BindCamera( p_scene.GetCameraCache(), l_sceneBuffer );
+				GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( l_sceneBuffer );
 				m_lightPassShaderProgram->Bind();
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PLUGIN_CACHE_H___
 #define ___C3D_PLUGIN_CACHE_H___
 
-#include "Cache/ResourceCache.hpp"
+#include "Cache/Cache.hpp"
 #include "Plugin/Plugin.hpp"
 
 namespace Castor3D

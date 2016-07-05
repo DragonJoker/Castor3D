@@ -476,12 +476,6 @@ namespace Castor3D
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxSPtr m_skybox;
-		//!\~english	The objects face count.
-		//!\~french		Le compte de faces de tous les objets.
-		uint32_t m_faceCount{ 0 };
-		//!\~english	The objects vertex count.
-		//!\~french		Le compte de sommets de tous les objets.
-		uint32_t m_vertexCount{ 0 };
 
 	public:
 		//!\~english	The cameras root node name.

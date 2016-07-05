@@ -39,10 +39,17 @@ namespace Castor3D
 	{
 		using ElemPtr = std::shared_ptr< AnimatedObjectGroup >;
 
-		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene )
+		ElementProducer( Scene & p_scene )
+			: m_scene{ p_scene }
 		{
-			return std::make_shared< AnimatedObjectGroup >( p_key, p_scene );
 		}
+
+		ElemPtr operator()( Castor::String const & p_key )
+		{
+			return std::make_shared< AnimatedObjectGroup >( p_key, m_scene );
+		}
+
+		Scene & m_scene;
 	};
 	/*!
 	\author		Sylvain DOREMUS

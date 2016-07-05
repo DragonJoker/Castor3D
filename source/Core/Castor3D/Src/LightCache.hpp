@@ -54,14 +54,9 @@ namespace Castor3D
 	template<>
 	struct ElementInitialiser< Light >
 	{
-		ElementInitialiser( LightsMap & p_typeSortedLights )
-			: m_typeSortedLights{ p_typeSortedLights }
-		{
-		}
-
 		inline void operator()( Engine & p_engine, LightSPtr p_element )
 		{
-			auto l_it = m_typeSortedLights.insert( { p_element->GetLightType(), LightsArray() } ).first;
+			auto l_it = m_typeSortedLights->insert( { p_element->GetLightType(), LightsArray() } ).first;
 			bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_element );
 
 			if ( !l_found )
@@ -70,7 +65,7 @@ namespace Castor3D
 			}
 		}
 
-		LightsMap & m_typeSortedLights;
+		LightsMap * m_typeSortedLights{ nullptr };
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -86,16 +81,11 @@ namespace Castor3D
 	template<>
 	struct ElementCleaner< Light >
 	{
-		ElementCleaner( LightsMap & p_typeSortedLights )
-			: m_typeSortedLights{ p_typeSortedLights }
-		{
-		}
-
 		inline void operator()( Engine & p_engine, LightSPtr p_element )
 		{
-			auto l_itMap = m_typeSortedLights.find( p_element->GetLightType() );
+			auto l_itMap = m_typeSortedLights->find( p_element->GetLightType() );
 
-			if ( l_itMap != m_typeSortedLights.end() )
+			if ( l_itMap != m_typeSortedLights->end() )
 			{
 				auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_element );
 
@@ -106,7 +96,7 @@ namespace Castor3D
 			}
 		}
 
-		LightsMap & m_typeSortedLights;
+		LightsMap * m_typeSortedLights{ nullptr };
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -164,7 +154,7 @@ namespace Castor3D
 	{
 		friend ElementAttacher< Light >;
 		using MyObjectCache = ObjectCache< Light, Castor::String, LightProducer >;
-		using Producer = LightProducer;
+		using Producer = typename MyObjectCache::Producer;
 		using Initialiser = typename MyObjectCache::Initialiser;
 		using Cleaner = typename MyObjectCache::Cleaner;
 		using Attacher = typename MyObjectCache::Attacher;
@@ -189,9 +179,11 @@ namespace Castor3D
 							, SceneNodeSPtr p_rootObjectNode
 							, SceneGetter && p_get
 							, Producer && p_produce
+							, Initialiser && p_initialise = Initialiser{}
+							, Cleaner && p_clean = Cleaner{}
+							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
-							, Detacher && p_detach = Detacher{}
-							, Merger && p_merge = Merger{} );
+							, Detacher && p_detach = Detacher{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.

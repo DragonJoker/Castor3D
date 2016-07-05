@@ -83,22 +83,17 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		inline ListenerCache( EngineGetter && p_get
-							  , Producer && p_produce
-							  , Initialiser && p_initialise = Initialiser{}
-							  , Cleaner && p_clean = Cleaner{} )
-			: MyCacheType{ std::move( p_get ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ) }
-		{
-		}
+		C3D_API ListenerCache( EngineGetter && p_get
+							   , Producer && p_produce
+							   , Initialiser && p_initialise = Initialiser{}
+							   , Cleaner && p_clean = Cleaner{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~ListenerCache()
-		{
-		}
+		C3D_API ~ListenerCache();
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener.
