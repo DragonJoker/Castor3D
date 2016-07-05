@@ -95,15 +95,6 @@ namespace Castor3D
 	{
 		return std::make_unique< ObjectCache< Camera, Castor::String, CameraProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
 	}
-	/**
-	 *\~english
-	 *\brief		Bind the camera.
-	 *\param[in]	p_sceneBuffer	The constants buffer.
-	 *\~french
-	 *\brief		Attache la caméra.
-	 *\param[in]	p_sceneBuffer	Le tampon de constantes.
-	 */
-	C3D_API void BindCamera( ObjectCache< Camera, Castor::String, CameraProducer > const & p_cache, FrameVariableBuffer & p_sceneBuffer );
 }
 
 #endif

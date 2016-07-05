@@ -59,7 +59,7 @@ namespace Castor3D
 		Image::InitialiseImageLib();
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = MakeCache< FrameListener, String >( EngineGetter{ *this }, ListenerProducer{} );
+		m_listenerCache = MakeCache( EngineGetter{ *this }, ListenerProducer{} );
 
 		m_shaderCache = MakeCache( *this );
 		m_samplerCache = MakeCache< Sampler, String >( EngineGetter{ *this }, SamplerProducer{ *this } );

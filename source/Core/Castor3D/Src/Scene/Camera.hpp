@@ -245,6 +245,15 @@ namespace Castor3D
 		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
 		/**
 		 *\~english
+		 *\brief		Puts the camera values into the given constants buffer.
+		 *\param[in]	p_sceneBuffer	The constants buffer.
+		 *\~french
+		 *\brief		Met les valeurs de la caméra dans le tampon de constantes donné.
+		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+		 */
+		C3D_API void FillShader( FrameVariableBuffer & p_sceneBuffer );
+		/**
+		 *\~english
 		 *\brief		Retrieves the Viewport
 		 *\return		The Viewport
 		 *\~french

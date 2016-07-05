@@ -2,8 +2,6 @@
 
 using namespace Castor;
 
-//*************************************************************************************************
-
 namespace Castor3D
 {
 	const String CachedObjectNamer< FrameListener >::Name = cuT( "FrameListener" );
@@ -27,10 +25,5 @@ namespace Castor3D
 		{
 			l_pair.second->FireEvents( p_type );
 		}
-	}
-
-	void testListenerCache( Engine & p_engine )
-	{
-		auto cache = MakeCache< FrameListener, Castor::String >( EngineGetter{ p_engine }, ListenerProducer{} );
 	}
 }

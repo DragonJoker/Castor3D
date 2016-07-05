@@ -59,11 +59,11 @@ namespace Castor3D
 		{
 		}
 
-		inline void operator()( Engine & p_engine, Geometry & p_element )
+		inline void operator()( Engine & p_engine, GeometrySPtr p_element )
 		{
 			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_element, this]()
 			{
-				p_element.CreateBuffers( m_faceCount, m_vertexCount );
+				p_element->CreateBuffers( m_faceCount, m_vertexCount );
 			} ) );
 		}
 

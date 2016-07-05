@@ -25,6 +25,25 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor3D
 {
 	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Material, Castor::String, Engine >
+	{
+		using ElemPtr = std::shared_ptr< Material >;
+
+		inline ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		{
+			return std::make_shared< Material >( p_key, p_engine );
+		}
+	};
+	/*!
 	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010

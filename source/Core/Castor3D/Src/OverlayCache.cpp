@@ -26,7 +26,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayCache::OverlayCache( EngineGetter && p_get, OverlayProducer && p_produce )
-		: Cache< Overlay, String, OverlayProducer >{ std::move( p_get ), std::move( p_produce ) }
+		: Cache< Overlay, String, OverlayProducer >{ std::move( p_get ), std::move( p_produce ), Initialiser{ m_overlays, m_overlayCountPerLevel }, Cleaner{ m_overlays, m_overlayCountPerLevel } }
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ *GetEngine() }
 	{
@@ -53,48 +53,6 @@ namespace Castor3D
 		for ( auto l_it : m_fontTextures )
 		{
 			GetEngine()->PostEvent( MakeCleanupEvent( *l_it.second ) );
-		}
-	}
-
-	OverlaySPtr OverlayCache::Add( String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene )
-	{
-		auto l_lock = make_unique_lock( *this );
-		OverlaySPtr l_return;
-
-		if ( !m_elements.has( p_name ) )
-		{
-			l_return = m_produce( p_name, p_type, p_scene, p_parent );
-			DoAddOverlay( p_name, l_return, p_parent );
-			Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << CachedObjectNamer< Overlay >::Name << cuT( ": " ) << p_name );
-		}
-		else
-		{
-			l_return = m_elements.find( p_name );
-			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << CachedObjectNamer< Overlay >::Name << cuT( ": " ) << p_name );
-		}
-
-		return  l_return;
-	}
-
-	void OverlayCache::Remove( Castor::String const & p_name )
-	{
-		auto l_lock = make_unique_lock( *this );
-		OverlaySPtr l_overlay = m_elements.find( p_name );
-
-		if ( l_overlay )
-		{
-			m_elements.erase( p_name );
-
-			if ( l_overlay->GetChildrenCount() )
-			{
-				Size l_size = m_pRenderer->GetSize();
-
-				for ( auto l_child : *l_overlay )
-				{
-					l_child->SetPosition( l_child->GetAbsolutePosition() );
-					l_child->SetSize( l_child->GetAbsoluteSize() );
-				}
-			}
 		}
 	}
 
@@ -216,26 +174,5 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	void OverlayCache::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
-	{
-		auto l_lock = make_unique_lock( *this );
-		m_elements.insert( p_name, p_overlay );
-		int l_level = 0;
-
-		if ( p_parent )
-		{
-			l_level = p_parent->GetLevel() + 1;
-			p_parent->AddChild( p_overlay );
-		}
-
-		while ( l_level >= int( m_overlayCountPerLevel.size() ) )
-		{
-			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-		}
-
-		p_overlay->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
-		m_overlays.insert( p_overlay->GetCategory() );
 	}
 }

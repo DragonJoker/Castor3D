@@ -39,26 +39,6 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< Material, Castor::String, Engine >
-	{
-		using ElemPtr = std::shared_ptr< Material >;
-
-		inline ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
-		{
-			return std::make_shared< Material >( p_key, p_engine );
-		}
-	};
-	using MaterialProducer = ElementProducer< Material, Castor::String, Engine >;
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
 	\~english
@@ -70,13 +50,12 @@ namespace Castor3D
 		: public Cache< Material, Castor::String, MaterialProducer >
 	{
 	public:
-		using Elem = Material;
-		using Key = Castor::String;
-		using Collection = Castor::Collection< Elem, Key >;
-		using ElemPtr = std::shared_ptr< Elem >;
-		using Producer = MaterialProducer;
-		using Initialiser = ElementInitialiser< Elem >;
-		using Cleaner = ElementCleaner< Elem >;
+		using MyCacheType = Cache< Material, Castor::String, MaterialProducer >;
+		using Collection = typename MyCacheType::Collection;
+		using ElemPtr = typename MyCacheType::ElemPtr;
+		using Producer = typename MyCacheType::Producer;
+		using Initialiser = typename MyCacheType::Initialiser;
+		using Cleaner = typename MyCacheType::Cleaner;
 
 	public:
 		/**

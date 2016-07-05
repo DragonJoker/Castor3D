@@ -21,8 +21,6 @@ namespace Castor3D
 							, SceneNodeSPtr p_rootObjectNode
 							, SceneGetter && p_get
 							, Producer && p_produce
-							, Initialiser && p_initialise
-							, Cleaner && p_clean
 							, Attacher && p_attach
 							, Detacher && p_detach
 							, Merger && p_merge )
@@ -31,8 +29,8 @@ namespace Castor3D
 					   , p_rootObjectNode
 					   , std::move( p_get )
 					   , std::move( p_produce )
-					   , std::move( p_initialise )
-					   , std::move( p_clean )
+					   , Initialiser{ m_typeSortedLights }
+					   , Cleaner{ m_typeSortedLights }
 					   , std::move( p_attach )
 					   , std::move( p_detach )
 					   , std::move( p_merge ) }
@@ -60,54 +58,6 @@ namespace Castor3D
 	{
 		GetEngine()->PostEvent( MakeCleanupEvent( *m_lightsTexture ) );
 		MyObjectCache::Cleanup();
-	}
-
-	LightSPtr LightCache::Add( String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_lightType )
-	{
-		auto l_lock = Castor::make_unique_lock( this->m_elements );
-		LightSPtr l_return;
-
-		if ( !m_elements.has( p_name ) )
-		{
-			l_return = m_produce( p_name, *this->GetScene(), p_parent, p_lightType );
-			m_elements.insert( p_name, l_return );
-			m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-			Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			DoAddLight( l_return );
-			GetScene()->SetChanged();
-		}
-		else
-		{
-			l_return = m_elements.find( p_name );
-			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-		}
-
-		return l_return;
-	}
-
-	void LightCache::Remove( String const & p_name )
-	{
-		auto l_lock = make_unique_lock( m_elements );
-
-		if ( m_elements.has( p_name ) )
-		{
-			auto l_element = m_elements.find( p_name );
-			m_detach( *l_element );
-			m_elements.erase( p_name );
-			auto l_itMap = m_typeSortedLights.find( l_element->GetLightType() );
-
-			if ( l_itMap != m_typeSortedLights.end() )
-			{
-				auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), l_element );
-
-				if ( l_it != l_itMap->second.end() )
-				{
-					l_itMap->second.erase( l_it );
-				}
-			}
-
-			GetScene()->SetChanged();
-		}
 	}
 
 	void LightCache::BindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer )
@@ -166,17 +116,6 @@ namespace Castor3D
 			{
 				l_lightsCount->GetValue( 0 )[l_it.first] -= uint32_t( l_it.second.size() );
 			}
-		}
-	}
-
-	void LightCache::DoAddLight( LightSPtr p_light )
-	{
-		auto l_it = m_typeSortedLights.insert( std::make_pair( p_light->GetLightType(), LightsArray() ) ).first;
-		bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_light );
-
-		if ( !l_found )
-		{
-			l_it->second.push_back( p_light );
 		}
 	}
 }

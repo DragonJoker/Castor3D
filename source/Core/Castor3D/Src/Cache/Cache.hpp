@@ -49,7 +49,9 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
 		}
 	};
@@ -67,9 +69,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
-			p_element.Initialise();
+			p_element->Initialise();
 		}
 	};
 	/*!
@@ -86,9 +90,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
-			p_engine.PostEvent( MakeInitialiseEvent( p_element ) );
+			p_engine.PostEvent( MakeInitialiseEvent( *p_element ) );
 		}
 	};
 	/*!
@@ -105,7 +111,9 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
 		}
 	};
@@ -123,9 +131,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
-			p_element.Cleanup();
+			p_element->Cleanup();
 		}
 	};
 	/*!
@@ -142,9 +152,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		inline void operator()( Engine & p_engine, Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( Engine & p_engine, ElemPtr p_element )
 		{
-			p_engine.PostEvent( MakeCleanupEvent( p_element ) );
+			p_engine.PostEvent( MakeCleanupEvent( *p_element ) );
 		}
 	};
 	/*!
@@ -234,7 +246,7 @@ namespace Castor3D
 
 			for ( auto l_it : this->m_elements )
 			{
-				m_clean( *GetEngine(), *l_it.second );
+				m_clean( *GetEngine(), l_it.second );
 			}
 		}
 		/**
@@ -313,7 +325,7 @@ namespace Castor3D
 			if ( !m_elements.has( p_name ) )
 			{
 				l_return = m_produce( p_name, std::forward< Parameters >( p_params )... );
-				m_initialise( *GetEngine(), *l_return );
+				m_initialise( *GetEngine(), l_return );
 				m_elements.insert( p_name, l_return );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}

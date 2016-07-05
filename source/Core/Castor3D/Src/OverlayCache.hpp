@@ -62,35 +62,84 @@ namespace Castor3D
 			return p_a->GetLevel() < p_b->GetLevel() || ( p_a->GetLevel() == p_b->GetLevel() && p_a->GetIndex() < p_b->GetIndex() );
 		}
 	};
+	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
+	\date 		13/10/2015
+	\version	0.8.0
 	\~english
-	\brief		Helper structure to create an element.
+	\brief		Helper structure to enable initialisation if a type supports it.
+	\remarks	Specialisation for Light.
 	\~french
-	\brief		Structure permettant de créer un élément.
+	\brief		Structure permettant d'initialiser les éléments qui le supportent.
+	\remarks	Spécialisation pour Light.
 	*/
 	template<>
-	struct ElementProducer< Overlay, Castor::String, eOVERLAY_TYPE, OverlaySPtr, SceneSPtr >
+	struct ElementInitialiser< Overlay >
 	{
-		using ElemPtr = std::shared_ptr< Overlay >;
-
-		inline ElementProducer( Engine & p_engine )
-			: m_engine{ p_engine }
+		ElementInitialiser( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
+			: m_overlays{ p_overlays }
+			, m_overlayCountPerLevel{ p_overlayCountPerLevel }
 		{
 		}
 
-		inline ElemPtr operator()( Castor::String const & p_key, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		inline void operator()( Engine & p_engine, OverlaySPtr p_element )
 		{
-			auto l_return = std::make_shared< Overlay >( m_engine, p_type, p_scene, p_parent );
-			l_return->SetName( p_key );
-			return l_return;
+			int l_level = 0;
+
+			if ( p_element->GetParent() )
+			{
+				l_level = p_element->GetParent()->GetLevel() + 1;
+				p_element->GetParent()->AddChild( p_element );
+			}
+
+			while ( l_level >= int( m_overlayCountPerLevel.size() ) )
+			{
+				m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+			}
+
+			p_element->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+			m_overlays.insert( p_element->GetCategory() );
 		}
 
-		Engine & m_engine;
+		OverlayCategorySet & m_overlays;
+		std::vector< int > & m_overlayCountPerLevel;
 	};
-	using OverlayProducer = ElementProducer< Overlay, Castor::String, eOVERLAY_TYPE, OverlaySPtr, SceneSPtr >;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for Light.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour Light.
+	*/
+	template<>
+	struct ElementCleaner< Overlay >
+	{
+		ElementCleaner( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
+			: m_overlays{ p_overlays }
+			, m_overlayCountPerLevel{ p_overlayCountPerLevel }
+		{
+		}
+
+		inline void operator()( Engine & p_engine, OverlaySPtr p_element )
+		{
+			if ( p_element->GetChildrenCount() )
+			{
+				for ( auto l_child : *p_element )
+				{
+					l_child->SetPosition( l_child->GetAbsolutePosition() );
+					l_child->SetSize( l_child->GetAbsoluteSize() );
+				}
+			}
+		}
+
+		OverlayCategorySet & m_overlays;
+		std::vector< int > & m_overlayCountPerLevel;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -106,7 +155,6 @@ namespace Castor3D
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
-		typedef std::set< OverlayCategorySPtr, OverlayCategorySort > OverlayCategorySet;
 		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
 
 	public:
@@ -138,34 +186,6 @@ namespace Castor3D
 		 *\brief		Nettoie les incrustations.
 		 */
 		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Creates an overlay, given a type and the overlay definitions
-		 *\remarks		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
-		 *\param[in]	p_type		The overlay type (panel, text ...)
-		 *\param[in]	p_name	The overlay name
-		 *\param[in]	p_parent	The parent overlay, nullptr if none
-		 *\param[in]	p_scene	The scene that holds the overlay
-		 *\return		The created overlay
-		 *\~french
-		 *\brief		Crée un overlay
-		 *\remarks		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
-		 *\param[in]	p_type		Le type d'overlay
-		 *\param[in]	p_name	Le nom voulu pour l'overlay
-		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
-		 *\param[in]	p_scene	La scène contenant l'overlay
-		 *\return		L'overlay
-		 */
-		C3D_API OverlaySPtr Add( Castor::String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene );
-		/**
-		 *\~english
-		 *\brief		Removes an overlay from the lists.
-		 *\param[in]	p_name		The overlay name.
-		 *\~french
-		 *\brief		Enlève une incrustation des listes.
-		 *\param[in]	p_name		Le nom de l'incrustation.
-		 */
-		C3D_API void Remove( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
@@ -319,21 +339,6 @@ namespace Castor3D
 		{
 			return m_overlayFactory;
 		}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Add an overlay to the lists, given it's name
-		 *\param[in]	p_name		The overlay name
-		 *\param[in]	p_overlay	The overlay
-		 *\param[in]	p_parent	The parent overlay
-		 *\~french
-		 *\brief		Ajoute une incrustation aux listes, selon son nom
-		 *\param[in]	p_name		Le nom
-		 *\param[in]	p_overlay	L'incrustation
-		 *\param[in]	p_parent	L'incrustation parente
-		 */
-		C3D_API void DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
 
 	private:
 		//!\~english	The OverlayCategory factory.

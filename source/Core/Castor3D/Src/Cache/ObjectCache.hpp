@@ -71,6 +71,7 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementAttacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
+		using ElemPtr = std::shared_ptr< Elem >;
 		/**
 		 *\~english
 		 *\brief		Attaches an element to the appropriate parent node.
@@ -87,7 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		inline void operator()( std::shared_ptr< Elem > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
+		inline void operator()( ElemPtr p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
 		}
 	};
@@ -105,7 +106,9 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementDetacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
-		inline void operator()( Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( ElemPtr p_element )
 		{
 		}
 	};
@@ -123,9 +126,11 @@ namespace Castor3D
 	template< typename Elem >
 	struct ElementDetacher< Elem, typename std::enable_if< is_detachable< Elem >::value >::type >
 	{
-		inline void operator()( Elem & p_element )
+		using ElemPtr = std::shared_ptr< Elem >;
+
+		inline void operator()( ElemPtr p_element )
 		{
-			p_element.Detach();
+			p_element->Detach();
 		}
 	};
 	/*!
@@ -246,7 +251,7 @@ namespace Castor3D
 
 			for ( auto l_it : this->m_elements )
 			{
-				m_detach( *l_it.second );
+				m_detach( l_it.second );
 			}
 
 			this->GetScene()->SetChanged();
@@ -266,7 +271,7 @@ namespace Castor3D
 			if ( this->m_elements.has( p_name ) )
 			{
 				auto l_element = this->m_elements.find( p_name );
-				m_detach( *l_element );
+				m_detach( l_element );
 				this->m_elements.erase( p_name );
 				this->GetScene()->SetChanged();
 			}
@@ -294,6 +299,44 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Adds an object.
+		 *\param[in]	p_name	The object name.
+		 *\param[in]	p_value	The object.
+		 *\return		The added object, or the existing one.
+		 *\~french
+		 *\brief		Ajoute un objet.
+		 *\param[in]	p_name	Le nom d'objet.
+		 *\param[in]	p_value	L'objet.
+		 *\return		L'objet ajouté, ou celui existant.
+		 */
+		template< typename ... Parameters >
+		inline ElemPtr Add( Key const & p_name, ElemPtr p_element )
+		{
+			ElemPtr l_return{ p_element };
+
+			if ( p_element )
+			{
+				auto l_lock = Castor::make_unique_lock( this->m_elements );
+
+				if ( this->m_elements.has( p_name ) )
+				{
+					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+					l_return = this->m_elements.find( p_name );
+				}
+				else
+				{
+					this->m_elements.insert( p_name, p_element );
+				}
+			}
+			else
+			{
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
+			}
+
+			return l_return;
+		}
+		/**
+		 *\~english
 		 *\brief		Creates an object.
 		 *\param[in]	p_name		The object name.
 		 *\param[in]	p_parent	The parent scene node.
@@ -314,7 +357,8 @@ namespace Castor3D
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = m_produce( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
+				l_return = this->m_produce( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
+				this->m_initialise( *this->GetEngine(), l_return );
 				this->m_elements.insert( p_name, l_return );
 				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
@@ -324,44 +368,6 @@ namespace Castor3D
 			{
 				l_return = this->m_elements.find( p_name );
 				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-			}
-
-			return l_return;
-		}
-		/**
-		 *\~english
-		 *\brief		Adds an object.
-		 *\param[in]	p_name	The object name.
-		 *\param[in]	p_value	The object.
-		 *\return		The added object, or the existing one.
-		 *\~french
-		 *\brief		Ajoute un objet.
-		 *\param[in]	p_name	Le nom d'objet.
-		 *\param[in]	p_value	L'objet.
-		 *\return		L'objet ajouté, ou celui existant.
-		 */
-		template< typename ... Parameters >
-		inline ElemPtr Add( Key const & p_name, ElemPtr p_element )
-		{
-			ElemPtr l_return{ p_element };
-
-			if ( p_element )
-			{
-				auto l_lock = Castor::make_unique_lock( m_elements );
-
-				if ( m_elements.has( p_name ) )
-				{
-					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-					l_return = m_elements.find( p_name );
-				}
-				else
-				{
-					m_elements.insert( p_name, p_element );
-				}
-			}
-			else
-			{
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
 			}
 
 			return l_return;

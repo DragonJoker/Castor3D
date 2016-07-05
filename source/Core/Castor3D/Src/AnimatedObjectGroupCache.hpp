@@ -53,13 +53,6 @@ namespace Castor3D
 	{
 		return std::make_unique< ObjectCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
 	}
-	/**
-	 *\~english
-	 *\brief		Updates currently playing animations in animated objects.
-	 *\~french
-	 *\brief		Met à jour les animations en cours pour les objets animés.
-	 */
-	C3D_API void Update( Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > & p_cache );
 }
 
 #endif

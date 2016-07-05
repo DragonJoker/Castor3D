@@ -25,6 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	using LightsArray = std::vector< LightSPtr >;
+	using LightsMap = std::map< eLIGHT_TYPE, LightsArray >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/02/2016
@@ -37,6 +39,74 @@ namespace Castor3D
 	template<> struct CachedObjectNamer< Light >
 	{
 		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable initialisation if a type supports it.
+	\remarks	Specialisation for Light.
+	\~french
+	\brief		Structure permettant d'initialiser les éléments qui le supportent.
+	\remarks	Spécialisation pour Light.
+	*/
+	template<>
+	struct ElementInitialiser< Light >
+	{
+		ElementInitialiser( LightsMap & p_typeSortedLights )
+			: m_typeSortedLights{ p_typeSortedLights }
+		{
+		}
+
+		inline void operator()( Engine & p_engine, LightSPtr p_element )
+		{
+			auto l_it = m_typeSortedLights.insert( { p_element->GetLightType(), LightsArray() } ).first;
+			bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_element );
+
+			if ( !l_found )
+			{
+				l_it->second.push_back( p_element );
+			}
+		}
+
+		LightsMap & m_typeSortedLights;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for Light.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour Light.
+	*/
+	template<>
+	struct ElementCleaner< Light >
+	{
+		ElementCleaner( LightsMap & p_typeSortedLights )
+			: m_typeSortedLights{ p_typeSortedLights }
+		{
+		}
+
+		inline void operator()( Engine & p_engine, LightSPtr p_element )
+		{
+			auto l_itMap = m_typeSortedLights.find( p_element->GetLightType() );
+
+			if ( l_itMap != m_typeSortedLights.end() )
+			{
+				auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_element );
+
+				if ( l_it != l_itMap->second.end() )
+				{
+					l_itMap->second.erase( l_it );
+				}
+			}
+		}
+
+		LightsMap & m_typeSortedLights;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -82,33 +152,6 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< Light, Castor::String, Scene, SceneNodeSPtr, eLIGHT_TYPE >
-	{
-		using ElemPtr = std::shared_ptr< Light >;
-
-		inline ElementProducer()
-		{
-		}
-
-		inline ElemPtr operator()( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
-		{
-			return std::make_shared< Light >( p_name, p_scene, p_node, m_lightFactory, p_lightType );
-		}
-		//!\~english	The lights factory.
-		//!\~french		La fabrique de lumières.
-		LightFactory m_lightFactory;
-	};
-	using LightProducer = ElementProducer< Light, Castor::String, Scene, SceneNodeSPtr, eLIGHT_TYPE >;
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0
 	\~english
@@ -146,8 +189,6 @@ namespace Castor3D
 							, SceneNodeSPtr p_rootObjectNode
 							, SceneGetter && p_get
 							, Producer && p_produce
-							, Initialiser && p_initialise = Initialiser{}
-							, Cleaner && p_clean = Cleaner{}
 							, Attacher && p_attach = Attacher{}
 							, Detacher && p_detach = Detacher{}
 							, Merger && p_merge = Merger{} );
@@ -174,30 +215,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates a light.
-		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_parent	The parent scene node.
-		 *\param[in]	p_lightType	The light source type.
-		 *\return		The created object.
-		 *\~french
-		 *\brief		Crée une source lumineuse.
-		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_parent	Le noeud de scène parent.
-		 *\param[in]	p_lightType	Le type de source lumineuse.
-		 *\return		L'objet créé.
-		 */
-		C3D_API LightSPtr Add( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_lightType );
-		/**
-		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
-		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
-		 */
-		C3D_API void Remove( Castor::String const & p_name );
-		/**
-		 *\~english
 		 *\brief		Binds the scene lights.
 		 *\param[in]	p_program		The shader program.
 		 *\param[in]	p_sceneBuffer	The constants buffer.
@@ -218,13 +235,6 @@ namespace Castor3D
 		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
 		 */
 		C3D_API void UnbindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer );
-
-	private:
-		C3D_API void DoAddLight( LightSPtr p_light );
-
-	private:
-		using LightsArray = std::vector< LightSPtr >;
-		using LightsMap = std::map< eLIGHT_TYPE, LightsArray >;
 
 	private:
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.

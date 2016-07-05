@@ -644,6 +644,34 @@ namespace Castor3D
 		//!\~english The render system	\~french Le système de rendu
 		RenderSystem * m_renderSystem;
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/07/2016
+	\version	0.9.0
+	\~english
+	\brief		Helper structure to create an element.
+	\~french
+	\brief		Structure permettant de créer un élément.
+	*/
+	template<>
+	struct ElementProducer< Overlay, Castor::String, eOVERLAY_TYPE, OverlaySPtr, SceneSPtr >
+	{
+		using ElemPtr = std::shared_ptr< Overlay >;
+
+		inline ElementProducer( Engine & p_engine )
+			: m_engine{ p_engine }
+		{
+		}
+
+		inline ElemPtr operator()( Castor::String const & p_key, eOVERLAY_TYPE p_type, OverlaySPtr p_parent = nullptr, SceneSPtr p_scene = nullptr )
+		{
+			auto l_return = std::make_shared< Overlay >( m_engine, p_type, p_scene, p_parent );
+			l_return->SetName( p_key );
+			return l_return;
+		}
+
+		Engine & m_engine;
+	};
 }
 
 #endif

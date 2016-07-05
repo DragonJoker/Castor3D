@@ -406,7 +406,13 @@ namespace Castor3D
 
 	void Scene::Update()
 	{
-		Castor3D::Update( *m_animatedObjectGroupCache );
+		auto l_lock = make_unique_lock( *m_animatedObjectGroupCache );
+
+		for ( auto l_pair : *m_animatedObjectGroupCache )
+		{
+			l_pair.second->Update();
+		}
+
 		m_changed = false;
 	}
 

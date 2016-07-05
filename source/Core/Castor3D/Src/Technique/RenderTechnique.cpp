@@ -556,7 +556,7 @@ namespace Castor3D
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			BindCamera( p_scene.GetCameraCache(), p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -581,7 +581,7 @@ namespace Castor3D
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			BindCamera( p_scene.GetCameraCache(), p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -641,7 +641,7 @@ namespace Castor3D
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			BindCamera( p_scene.GetCameraCache(), p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );

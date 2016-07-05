@@ -510,6 +510,7 @@ namespace Castor3D
 	template< typename Elem, typename Key, typename ProducerType >
 	class Cache;
 
+	class ListenerCache;
 	class MaterialCache;
 	class OverlayCache;
 	class PluginCache;
@@ -520,6 +521,8 @@ namespace Castor3D
 	using BlendStateProducer = ElementProducer< BlendState, Castor::String >;
 	using DepthStencilStateProducer = ElementProducer< DepthStencilState, Castor::String >;
 	using ListenerProducer = ElementProducer< FrameListener, Castor::String >;
+	using MaterialProducer = ElementProducer< Material, Castor::String, Engine >;
+	using OverlayProducer = ElementProducer< Overlay, Castor::String, eOVERLAY_TYPE, OverlaySPtr, SceneSPtr >;
 	using RasteriserStateProducer = ElementProducer< RasteriserState, Castor::String >;
 	using RenderTechniqueProducer = ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >;
 	using SamplerProducer = ElementProducer< Sampler, Castor::String >;
@@ -528,7 +531,6 @@ namespace Castor3D
 
 	using BlendStateCache = Cache< BlendState, Castor::String, BlendStateProducer >;
 	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String, DepthStencilStateProducer >;
-	using ListenerCache = Cache< FrameListener, Castor::String, ListenerProducer >;
 	using RasteriserStateCache = Cache< RasteriserState, Castor::String, RasteriserStateProducer >;
 	using SamplerCache = Cache< Sampler, Castor::String, SamplerProducer >;
 	using SceneCache = Cache< Scene, Castor::String, SceneProducer >;
@@ -558,6 +560,7 @@ namespace Castor3D
 	using BillboardProducer = ElementProducer< BillboardList, Castor::String, Scene, SceneNodeSPtr, RenderSystem >;
 	using CameraProducer = ElementProducer< Camera, Castor::String, Scene, SceneNodeSPtr, Viewport >;
 	using GeometryProducer = ElementProducer< Geometry, Castor::String, Scene, SceneNodeSPtr, MeshSPtr >;
+	using LightProducer = ElementProducer< Light, Castor::String, Scene, SceneNodeSPtr, eLIGHT_TYPE >;
 	using MeshProducer = ElementProducer< Mesh, Castor::String, eMESH_TYPE >;
 	using SceneNodeProducer = ElementProducer< SceneNode, Castor::String, Scene >;
 
