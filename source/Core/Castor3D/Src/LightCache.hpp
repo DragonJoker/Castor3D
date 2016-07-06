@@ -18,9 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_LIGHT_CACHE_H___
 #define ___C3D_LIGHT_CACHE_H___
 
-#include "Cache/ObjectCache.hpp"
-
 #include "Scene/Light/LightFactory.hpp"
+#include "Cache/ObjectCache.hpp"
 
 namespace Castor3D
 {
@@ -31,70 +30,22 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a scene cache behaviour.
+	\remarks	Specialisation for Light.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
+	\remarks	Spécialisation pour Light.
 	*/
-	template<>
-	struct CachedObjectNamer< Light >
+	template< typename KeyType >
+	struct ObjectCacheTraits< Light, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable initialisation if a type supports it.
-	\remarks	Specialisation for Light.
-	\~french
-	\brief		Structure permettant d'initialiser les éléments qui le supportent.
-	\remarks	Spécialisation pour Light.
-	*/
-	struct LightInitialiser
-	{
-		inline void operator()( Engine & p_engine, LightSPtr p_element )
-		{
-			auto l_it = m_typeSortedLights->insert( { p_element->GetLightType(), LightsArray() } ).first;
-			bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_element );
-
-			if ( !l_found )
-			{
-				l_it->second.push_back( p_element );
-			}
-		}
-
-		LightsMap * m_typeSortedLights{ nullptr };
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for Light.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour Light.
-	*/
-	struct LightCleaner
-	{
-		inline void operator()( Engine & p_engine, LightSPtr p_element )
-		{
-			auto l_itMap = m_typeSortedLights->find( p_element->GetLightType() );
-
-			if ( l_itMap != m_typeSortedLights->end() )
-			{
-				auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_element );
-
-				if ( l_it != l_itMap->second.end() )
-				{
-					l_itMap->second.erase( l_it );
-				}
-			}
-		}
-
-		LightsMap * m_typeSortedLights{ nullptr };
+		using Producer = std::function< std::shared_ptr< Light >( KeyType const &, SceneNodeSPtr, eLIGHT_TYPE ) >;
+		using Merger = std::function< void( ObjectCacheBase< Light, KeyType > const &
+											, Castor::Collection< Light, KeyType > &
+											, std::shared_ptr< Light >
+											, SceneNodeSPtr
+											, SceneNodeSPtr ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -106,12 +57,12 @@ namespace Castor3D
 	\brief		Cache de Light.
 	*/
 	template<>
-	class ObjectCache< Light, Castor::String, LightProducer, LightInitialiser, LightCleaner, ElementMerger< Light, Castor::String >, MovableAttacher, MovableDetacher >
-		: public ObjectCacheBase< Light, Castor::String, LightProducer, LightInitialiser, LightCleaner, ElementMerger< Light, Castor::String >, MovableAttacher, MovableDetacher >
+	class ObjectCache< Light, Castor::String >
+		: public ObjectCacheBase< Light, Castor::String >
 	{
 	public:
-		using MyObjectCache = ObjectCacheBase< Light, Castor::String, LightProducer, LightInitialiser, LightCleaner, ElementMerger< Light, Castor::String >, MovableAttacher, MovableDetacher >;
-		using MyCacheType = typename MyObjectCacheType::MyCacheType;
+		using MyObjectCache = ObjectCacheBase< Light, Castor::String >;
+		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
 		using Collection = typename MyObjectCacheType::Collection;
@@ -134,11 +85,11 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		C3D_API ObjectCache( SceneNodeSPtr p_rootNode
+		C3D_API ObjectCache( Engine & p_engine
+							 , Scene & p_scene
+							 , SceneNodeSPtr p_rootNode
 							 , SceneNodeSPtr p_rootCameraNode
 							 , SceneNodeSPtr p_rootObjectNode
-							 , Engine & p_engine
-							 , Scene & p_scene
 							 , Producer && p_produce
 							 , Initialiser && p_initialise = Initialiser{}
 							 , Cleaner && p_clean = Cleaner{}
@@ -195,31 +146,8 @@ namespace Castor3D
 		//!\~english The lights texture	\~french La texture contenant les lumières
 		TextureUnitSPtr m_lightsTexture;
 	};
-	using LightCache = ObjectCache< Light, Castor::String, LightProducer, LightInitialiser, LightCleaner, ElementMerger< Light, Castor::String >, ElementAttacher< MovableObject >, ElementDetacher< MovableObject > >;
-	DECLARE_SMART_PTR (LightCache);
-	/**
-	 *\~english
-	 *\brief		Creates a Light cache.
-	 *\param[in]	p_rootNode			The root node.
-	 *\param[in]	p_rootCameraNode	The cameras root node.
-	 *\param[in]	p_rootObjectNode	The objects root node.
-	 *\param[in]	p_get				The engine getter.
-	 *\param[in]	p_produce			The element producer.
-	 *\~french
-	 *\brief		Crée un cache de Light.
-	 *\param[in]	p_rootNode			Le noeud racine.
-	 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-	 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-	 *\param[in]	p_get				Le récupérteur de moteur.
-	 *\param[in]	p_produce			Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< LightCache >
-	MakeObjectCache< Light, Castor::String, LightProducer, MovableAttacher, MovableDetacher, LightInitialiser, LightCleaner, ElementMerger< Light, Castor::String > >
-		( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, LightProducer && p_produce )
-	{
-		return std::make_unique< LightCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
-	}
+	using LightCache = ObjectCache< Light, Castor::String >;
+	DECLARE_SMART_PTR( LightCache );
 }
 
 #endif

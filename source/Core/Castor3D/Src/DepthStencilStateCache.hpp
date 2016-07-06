@@ -18,10 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEPTH_STENCIL_STATE_CACHE_H___
 #define ___C3D_DEPTH_STENCIL_STATE_CACHE_H___
 
-#include "Cache/Cache.hpp"
-
-#include "Render/RenderSystem.hpp"
-#include "State/DepthStencilState.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
@@ -30,31 +27,24 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for DepthStencilState.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour DepthStencilState.
 	*/
-	template<>
-	struct CachedObjectNamer< DepthStencilState >
+	template< typename KeyType >
+	struct CacheTraits< DepthStencilState, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< DepthStencilState >( KeyType const & ) >;
+		using Merger = std::function< void( CacheBase< DepthStencilState, KeyType > const &
+											, Castor::Collection< DepthStencilState, KeyType > &
+											, std::shared_ptr< DepthStencilState > ) >;
 	};
-	/**
-	 *\~english
-	 *\brief		Creates a DepthStencilState cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de DepthStencilState.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< DepthStencilState, Castor::String, DepthStencilStateProducer > >
-	MakeCache< DepthStencilState, Castor::String, DepthStencilStateProducer >( Engine & p_engine, DepthStencilStateProducer && p_produce )
-	{
-		return std::make_unique< Cache< DepthStencilState, Castor::String, DepthStencilStateProducer > >( p_engine, std::move( p_produce ) );
-	}
 }
+
+// included after because it depends on CacheTraits
+#include "Cache/Cache.hpp"
 
 #endif

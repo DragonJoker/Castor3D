@@ -23,7 +23,7 @@
 #include <wx/artprov.h>
 
 #include <AnimatedObjectGroupCache.hpp>
-#include <BillboardListCache.hpp>
+#include <BillboardCache.hpp>
 #include <CameraCache.hpp>
 #include <GeometryCache.hpp>
 #include <Engine.hpp>
@@ -32,7 +32,9 @@
 #include <MeshCache.hpp>
 #include <OverlayCache.hpp>
 #include <SceneCache.hpp>
-#include <RenderWindowCache.hpp>
+#include <WindowCache.hpp>
+
+#include <Scene/BillboardList.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>
@@ -126,14 +128,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetWindowCache().lock();
+			p_scene->GetRenderWindowCache().lock();
 
-			for ( auto l_it : p_scene->GetWindowCache() )
+			for ( auto l_it : p_scene->GetRenderWindowCache() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetWindowCache().unlock();
+			p_scene->GetRenderWindowCache().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )

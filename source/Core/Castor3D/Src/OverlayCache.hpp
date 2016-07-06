@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_OVERLAY_CACHE_H___
 #define ___C3D_OVERLAY_CACHE_H___
 
-#include "Cache/Cache.hpp"
 #include "Overlay/Overlay.hpp"
+#include "Cache/Cache.hpp"
 #include "Overlay/OverlayFactory.hpp"
 #include "Render/Viewport.hpp"
 
@@ -32,14 +32,20 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for Overlay.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour Overlay.
 	*/
-	template<>
-	struct CachedObjectNamer< Overlay >
+	template< typename KeyType >
+	struct CacheTraits< Overlay, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, eOVERLAY_TYPE, SceneSPtr, OverlaySPtr ) >;
+		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
+											, Castor::Collection< Overlay, KeyType > &
+											, std::shared_ptr< Overlay > ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -66,83 +72,6 @@ namespace Castor3D
 	using OverlayCategorySet = std::set< OverlayCategorySPtr, OverlayCategorySort >;
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable initialisation if a type supports it.
-	\remarks	Specialisation for Light.
-	\~french
-	\brief		Structure permettant d'initialiser les éléments qui le supportent.
-	\remarks	Spécialisation pour Light.
-	*/
-	template<>
-	struct ElementInitialiser< Overlay >
-	{
-		ElementInitialiser( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
-			: m_overlays{ p_overlays }
-			, m_overlayCountPerLevel{ p_overlayCountPerLevel }
-		{
-		}
-
-		inline void operator()( Engine & p_engine, OverlaySPtr p_element )
-		{
-			int l_level = 0;
-
-			if ( p_element->GetParent() )
-			{
-				l_level = p_element->GetParent()->GetLevel() + 1;
-				p_element->GetParent()->AddChild( p_element );
-			}
-
-			while ( l_level >= int( m_overlayCountPerLevel.size() ) )
-			{
-				m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-			}
-
-			p_element->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
-			m_overlays.insert( p_element->GetCategory() );
-		}
-
-		OverlayCategorySet & m_overlays;
-		std::vector< int > & m_overlayCountPerLevel;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for Light.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour Light.
-	*/
-	template<>
-	struct ElementCleaner< Overlay >
-	{
-		ElementCleaner( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
-			: m_overlays{ p_overlays }
-			, m_overlayCountPerLevel{ p_overlayCountPerLevel }
-		{
-		}
-
-		inline void operator()( Engine & p_engine, OverlaySPtr p_element )
-		{
-			if ( p_element->GetChildrenCount() )
-			{
-				for ( auto l_child : *p_element )
-				{
-					l_child->SetPosition( l_child->GetAbsolutePosition() );
-					l_child->SetSize( l_child->GetAbsoluteSize() );
-				}
-			}
-		}
-
-		OverlayCategorySet & m_overlays;
-		std::vector< int > & m_overlayCountPerLevel;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
 	\~english
@@ -151,18 +80,16 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	template<>
-	class Cache< Overlay, Castor::String, OverlayProducer >
-		: public CacheBase< Overlay, Castor::String, OverlayProducer, ElementInitialiser< Overlay >, ElementCleaner< Overlay >, ElementMerger< Overlay, Castor::String > >
+	class Cache< Overlay, Castor::String >
+		: public CacheBase< Overlay, Castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Overlay, Castor::String, OverlayProducer, ElementInitialiser< Overlay >, ElementCleaner< Overlay >, ElementMerger< Overlay, Castor::String > >;
+		using MyCacheType = CacheBase< Overlay, Castor::String >;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
 		using ElementPtr = typename MyCacheType::ElementPtr;
 		using Producer = typename MyCacheType::Producer;
-		using Initialiser = typename MyCacheType::Initialiser;
-		using Cleaner = typename MyCacheType::Cleaner;
 		using Merger = typename MyCacheType::Merger;
 
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
@@ -177,8 +104,10 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 */
 		C3D_API Cache( Engine & p_engine
-					  , Producer && p_produce
-					  , Merger && p_merge = Merger{} );
+					   , Producer && p_produce
+					   , Initialiser && p_initialise = Initialiser{}
+					   , Cleaner && p_clean = Cleaner{}
+					   , Merger && p_merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -377,24 +306,8 @@ namespace Castor3D
 		//!\~french		Les FontTexutrs, triées par nom de police.
 		FontTextureStrMap m_fontTextures;
 	};
-	using OverlayCache = Cache< Overlay, Castor::String, OverlayProducer >;
-	DECLARE_SMART_PTR (OverlayCache);
-	/**
-	 *\~english
-	 *\brief		Creates a Overlay cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de Overlay.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< Overlay, Castor::String, OverlayProducer > >
-	MakeCache< Overlay, Castor::String, OverlayProducer >( Engine & p_engine, OverlayProducer && p_produce )
-	{
-		return std::make_unique< Cache< Overlay, Castor::String, OverlayProducer > >( p_engine, std::move( p_produce ) );
-	}
+	using OverlayCache = Cache< Overlay, Castor::String >;
+	DECLARE_SMART_PTR( OverlayCache );
 }
 
 #endif

@@ -10,6 +10,7 @@
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -18,6 +19,8 @@
 #include <Miscellaneous/Version.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/Viewport.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
 #include <Texture/TextureUnit.hpp>
 
 using namespace Castor3D;
@@ -32,20 +35,19 @@ namespace C3dPly
 
 	SceneSPtr PlyImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_PLY" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_PLY" ) );
 		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
 
 			for ( auto l_submesh : *l_mesh )
 			{
 				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
-			l_geometry->SetMesh( l_mesh );
+			l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, l_mesh );
 		}
 
 		return l_scene;
@@ -73,7 +75,7 @@ namespace C3dPly
 
 		if ( !l_pMaterial )
 		{
-			l_pMaterial = p_scene.GetMaterialView().Add( l_materialName, *GetEngine() );
+			l_pMaterial = p_scene.GetMaterialView().Add( l_materialName );
 			l_pMaterial->CreatePass();
 		}
 

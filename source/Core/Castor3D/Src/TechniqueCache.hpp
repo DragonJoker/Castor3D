@@ -18,109 +18,33 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TECHNIQUE_CACHE_H___
 #define ___C3D_TECHNIQUE_CACHE_H___
 
-#include "Cache/Cache.hpp"
-
-#include "Technique/TechniqueFactory.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
 	\version	0.8.0
-	\date		21/02/2016
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for RenderTechnique.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour RenderTechnique.
 	*/
-	template<>
-	struct CachedObjectNamer< RenderTechnique >
+	template< typename KeyType >
+	struct CacheTraits< RenderTechnique, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< RenderTechnique >( KeyType const &, Castor::String const &, RenderTarget &, Parameters const & ) >;
+		using Merger = std::function< void( CacheBase< RenderTechnique, KeyType > const &
+											, Castor::Collection< RenderTechnique, KeyType > &
+											, std::shared_ptr< RenderTechnique > ) >;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		21/02/2016
-	\~english
-	\brief		Render technique cache.
-	\~french
-	\brief		Le cache de techniques de rendu.
-	*/
-	template<>
-	class Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >
-		: public CacheBase< RenderTechnique, Castor::String, RenderTechniqueProducer, ElementInitialiser< RenderTechnique >, ElementCleaner< RenderTechnique >, ElementMerger< RenderTechnique, Castor::String > >
-	{
-	public:
-		using MyCacheType = CacheBase< RenderTechnique, Castor::String, RenderTechniqueProducer, ElementInitialiser< RenderTechnique >, ElementCleaner< RenderTechnique >, ElementMerger< RenderTechnique, Castor::String > >;
-		using Element = typename MyCacheType::Element;
-		using Key = typename MyCacheType::Key;
-		using Collection = typename MyCacheType::Collection;
-		using ElementPtr = typename MyCacheType::ElementPtr;
-		using Producer = typename MyCacheType::Producer;
-		using Initialiser = typename MyCacheType::Initialiser;
-		using Cleaner = typename MyCacheType::Cleaner;
-		using Merger = typename MyCacheType::Merger;
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\~french
-		 *\brief		Constructeur.
-		 */
-		C3D_API Cache( Engine & p_engine
-					  , RenderTechniqueProducer && p_produce
-					  , Initialiser && p_initialise = Initialiser{}
-					  , Cleaner && p_clean = Cleaner{}
-					  , Merger && p_merge = Merger{} )
-			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API ~Cache();
-		/**
-		 *\~english
-		 *\return		The RenderTechnique factory.
-		 *\~french
-		 *\return		La fabrique de RenderTechnique.
-		 */
-		inline TechniqueFactory const & GetFactory()const
-		{
-			return m_produce.m_factory;
-		}
-		/**
-		 *\~english
-		 *\return		The RenderTechnique factory.
-		 *\~french
-		 *\return		La fabrique de RenderTechnique.
-		 */
-		inline TechniqueFactory & GetFactory()
-		{
-			return m_produce.m_factory;
-		}
-	};
-	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >;
-	DECLARE_SMART_PTR (RenderTechniqueCache);
-	/**
-	 *\~english
-	 *\brief		Creates a RenderTechnique cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de RenderTechnique.
-	 *\param[in]	p_get		Le récupérateur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< RenderTechnique, Castor::String, RenderTechniqueProducer > >
-	MakeCache< RenderTechnique, Castor::String, RenderTechniqueProducer > ( Engine & p_engine, RenderTechniqueProducer && p_produce )
-	{
-		return std::make_unique< Cache< RenderTechnique, Castor::String, RenderTechniqueProducer > >( p_engine, std::move( p_produce ) );
-	}
 }
+
+// included after because it depends on CacheTraits
+#include "Cache/Cache.hpp"
 
 #endif

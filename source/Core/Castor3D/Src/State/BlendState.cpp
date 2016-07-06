@@ -10,11 +10,6 @@ namespace Castor3D
 		bool g_creatingCurrent = false;
 	}
 
-	BlendStateProducer::ElementPtr BlendStateProducer::operator()( Castor::String const & p_key )
-	{
-		return m_engine.GetRenderSystem()->CreateBlendState();
-	}
-
 	BlendStateWPtr BlendState::m_wCurrentState;
 
 	BlendState::BlendState( Engine & p_engine )

@@ -33,7 +33,7 @@ namespace Castor3D
 		}
 		else
 		{
-			l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM );
+			l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 		}
 
 		if ( !l_mesh->GetSubmeshCount() )

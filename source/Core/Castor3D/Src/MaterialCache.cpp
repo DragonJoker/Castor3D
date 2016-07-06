@@ -4,8 +4,10 @@
 #include "SamplerCache.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Scene/SceneFileParser.hpp"
+#include "Texture/Sampler.hpp"
 
 #include <Logger.hpp>
 
@@ -13,7 +15,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< Material >::Name = cuT( "Material" );
+	const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
 	void MaterialCache::Initialise()
 	{
@@ -21,7 +23,7 @@ namespace Castor3D
 
 		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = m_produce( Material::DefaultMaterialName, *GetEngine() );
+			m_defaultMaterial = m_produce( Material::DefaultMaterialName );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 		}

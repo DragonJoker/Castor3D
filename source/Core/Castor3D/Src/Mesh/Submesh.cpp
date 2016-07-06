@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Face.hpp"
 
@@ -15,6 +15,7 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Vertex.hpp"
 
 #include <BlockTracker.hpp>

@@ -12,7 +12,7 @@ namespace Castor3D
 {
 	UserInputListener::UserInputListener( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >{ p_engine }
-		, m_frameListener{ p_engine.GetListenerCache().Add( p_name ) }
+		, m_frameListener{ p_engine.GetFrameListenerCache().Add( p_name ) }
 	{
 		m_mouse.m_buttons[eMOUSE_BUTTON_LEFT] = false;
 		m_mouse.m_buttons[eMOUSE_BUTTON_MIDDLE] = false;

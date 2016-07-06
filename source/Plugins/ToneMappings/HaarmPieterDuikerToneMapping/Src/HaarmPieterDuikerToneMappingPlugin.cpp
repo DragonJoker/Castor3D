@@ -3,7 +3,7 @@
 #include <Logger.hpp>
 
 #include <Engine.hpp>
-#include <RenderTargetCache.hpp>
+#include <TargetCache.hpp>
 
 #include <Miscellaneous/Version.hpp>
 
@@ -36,10 +36,10 @@ C3D_HaarmPieterDuikerToneMapping_API Castor::String GetName()
 
 C3D_HaarmPieterDuikerToneMapping_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetCache().GetToneMappingFactory().Register( ToneMapping::Name, &ToneMapping::Create );
+	p_engine->GetRenderTargetCache().GetToneMappingFactory().Register( ToneMapping::Name, &ToneMapping::Create );
 }
 
 C3D_HaarmPieterDuikerToneMapping_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetCache().GetToneMappingFactory().Unregister( ToneMapping::Name );
+	p_engine->GetRenderTargetCache().GetToneMappingFactory().Unregister( ToneMapping::Name );
 }

@@ -27,7 +27,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
-#	include <ShaderProgramCache.hpp>
+#	include <ShaderCache.hpp>
 #	include <FrameBuffer/ColourRenderBuffer.hpp>
 #	include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #	include <FrameBuffer/FrameBuffer.hpp>

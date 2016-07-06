@@ -10,11 +10,6 @@ namespace Castor3D
 		bool g_creatingCurrent = false;
 	}
 
-	RasteriserStateProducer::ElementPtr RasteriserStateProducer::operator()( Castor::String const & p_key )
-	{
-		return m_engine.GetRenderSystem()->CreateRasteriserState();
-	}
-
 	RasteriserStateWPtr RasteriserState::m_wCurrentState;
 
 	RasteriserState::RasteriserState( Engine & p_engine )

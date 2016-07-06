@@ -18,6 +18,8 @@
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Render/RenderLoop.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
 
 #include <Logger.hpp>
 
@@ -202,20 +204,19 @@ namespace C3dAssimp
 
 	SceneSPtr AssimpImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ) );
 		DoImportMesh( *l_scene );
 
 		if ( m_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node );
 
 			for ( auto && l_submesh : *m_mesh )
 			{
 				m_mesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
-			l_geometry->SetMesh( m_mesh );
+			l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node, m_mesh );
 			m_mesh.reset();
 		}
 
@@ -510,7 +511,7 @@ namespace C3dAssimp
 				l_diffuse.b = 1.0;
 			}
 
-			l_return = l_cache.Add( l_name, *GetEngine() );
+			l_return = l_cache.Add( l_name );
 			l_return->CreatePass();
 			auto l_pass = l_return->GetPass( 0 );
 

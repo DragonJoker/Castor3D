@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PLUGIN_CACHE_H___
 
 #include "Cache/Cache.hpp"
-#include "Plugin/Plugin.hpp"
 
 namespace Castor3D
 {
@@ -28,14 +27,20 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for Plugin.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour Plugin.
 	*/
-	template<>
-	struct CachedObjectNamer< Plugin >
+	template< typename KeyType >
+	struct CacheTraits< Plugin, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, ePLUGIN_TYPE, Castor::DynamicLibrarySPtr ) >;
+		using Merger = std::function< void( CacheBase< Plugin, KeyType > const &
+											, Castor::Collection< Plugin, KeyType > &
+											, std::shared_ptr< Plugin > ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -47,11 +52,11 @@ namespace Castor3D
 	\brief		Cache de plug-ins.
 	*/
 	template<>
-	class Cache< Plugin, Castor::String, PluginProducer >
-		: public CacheBase< Plugin, Castor::String, PluginProducer, ElementInitialiser< Plugin >, ElementCleaner< Plugin >, ElementMerger< Plugin, Castor::String > >
+	class Cache< Plugin, Castor::String >
+		: public CacheBase< Plugin, Castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Plugin, Castor::String, PluginProducer, ElementInitialiser< Plugin >, ElementCleaner< Plugin >, ElementMerger< Plugin, Castor::String > >;
+		using MyCacheType = CacheBase< Plugin, Castor::String >;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
@@ -68,7 +73,11 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le propriétaire.
 		 */
-		C3D_API Cache( Engine & p_engine, Producer && p_produce );
+		C3D_API Cache( Engine & p_engine
+					   , Producer && p_produce
+					   , Initialiser && p_initialise = Initialiser{}
+					   , Cleaner && p_clean = Cleaner{}
+					   , Merger && p_merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -204,24 +213,8 @@ namespace Castor3D
 		//!\~french		Le mutex protégeant le tableau des plug-ins de rendu.
 		std::recursive_mutex m_mutexRenderers;
 	};
-	using PluginCache = Cache< Plugin, Castor::String, PluginProducer >;
-	DECLARE_SMART_PTR (PluginCache);
-	/**
-	 *\~english
-	 *\brief		Creates a Plugin cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de Plugin.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< Plugin, Castor::String, PluginProducer > >
-	MakeCache< Plugin, Castor::String, PluginProducer >( Engine & p_engine, PluginProducer && p_produce )
-	{
-		return std::make_unique< Cache< Plugin, Castor::String, PluginProducer > >( p_engine, std::move( p_produce ) );
-	}
+	using PluginCache = Cache< Plugin, Castor::String >;
+	DECLARE_SMART_PTR( PluginCache );
 }
 
 #endif

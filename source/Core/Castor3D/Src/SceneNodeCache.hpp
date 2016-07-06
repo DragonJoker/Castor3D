@@ -18,9 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_NODE_CACHE_H___
 #define ___C3D_SCENE_NODE_CACHE_H___
 
-#include "Cache/ObjectCache.hpp"
-
 #include "Scene/SceneNode.hpp"
+#include "Cache/ObjectCache.hpp"
 
 namespace Castor3D
 {
@@ -29,56 +28,22 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
-	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
-	*/
-	template<>
-	struct CachedObjectNamer< SceneNode >
-	{
-		C3D_API static const Castor::String Name;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
+	\brief		Helper structure to specialise a scene cache behaviour.
 	\remarks	Specialisation for SceneNode.
 	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
+	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
 	\remarks	Spécialisation pour SceneNode.
 	*/
-	template<>
-	struct ElementAttacher< SceneNode >
+	template< typename KeyType >
+	struct ObjectCacheTraits< SceneNode, KeyType >
 	{
-		/**
-		 *\~english
-		 *\brief		Attaches an element to the appropriate parent node.
-		 *\param[in]	p_element			The scene node.
-		 *\param[in]	p_parent			The parent scene node.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Attache un élément au parent approprié.
-		 *\param[in]	p_element			Le noeud de scène.
-		 *\param[in]	p_parent			Le noeud de scène parent.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		inline void operator()( std::shared_ptr< SceneNode > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		{
-			if ( p_parent )
-			{
-				p_element->AttachTo( p_parent );
-			}
-			else
-			{
-				p_element->AttachTo( p_rootNode );
-			}
-		}
+		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< SceneNode >( KeyType const & ) >;
+		using Merger = std::function< void( ObjectCacheBase< SceneNode, KeyType > const &
+											, Castor::Collection< SceneNode, KeyType > &
+											, std::shared_ptr< SceneNode >
+											, SceneNodeSPtr
+											, SceneNodeSPtr ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -90,12 +55,12 @@ namespace Castor3D
 	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCache< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >
-		: public ObjectCacheBase< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >
+	class ObjectCache< SceneNode, Castor::String >
+		: public ObjectCacheBase< SceneNode, Castor::String >
 	{
 	public:
-		using MyObjectCacheType = ObjectCacheBase< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >;
-		using MyCacheType = typename MyObjectCacheType::MyCacheType;
+		using MyObjectCacheType = ObjectCacheBase< SceneNode, Castor::String >;
+		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
 		using Collection = typename MyObjectCacheType::Collection;
@@ -118,22 +83,22 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		C3D_API ObjectCache( SceneNodeSPtr p_rootNode
+		C3D_API ObjectCache( Engine & p_engine
+							, Scene & p_scene
+							, SceneNodeSPtr p_rootNode
 							, SceneNodeSPtr p_rootCameraNode
 							, SceneNodeSPtr p_rootObjectNode
-							, Engine & p_engine
-							, Scene & p_scene
 							, Producer && p_produce
 							, Initialiser && p_initialise = Initialiser{}
 							, Cleaner && p_clean = Cleaner{}
 							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
 							, Detacher && p_detach = Detacher{} )
-			: MyObjectCacheType{ p_rootNode
+			: MyObjectCacheType{ p_engine
+								 , p_scene
+								 , p_rootNode
 								 , p_rootCameraNode
 								 , p_rootObjectNode
-								 , p_engine
-								 , p_scene
 								 , std::move( p_produce )
 								 , std::move( p_initialise )
 								 , std::move( p_clean )
@@ -173,8 +138,8 @@ namespace Castor3D
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = this->m_produce( p_name, *this->GetScene() );
-				this->m_initialise( *this->GetEngine(), l_return );
+				l_return = this->m_produce( p_name );
+				this->m_initialise( l_return );
 				this->m_elements.insert( p_name, l_return );
 				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
@@ -189,30 +154,8 @@ namespace Castor3D
 			return l_return;
 		}
 	};
-	using SceneNodeCache = ObjectCache< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >;
+	using SceneNodeCache = ObjectCache< SceneNode, Castor::String >;
 	DECLARE_SMART_PTR( SceneNodeCache );
-	/**
-	 *\~english
-	 *\brief		Creates a SceneNode cache.
-	 *\param[in]	p_rootNode			The root node.
-	 *\param[in]	p_rootCameraNode	The cameras root node.
-	 *\param[in]	p_rootObjectNode	The objects root node.
-	 *\param[in]	p_get				The engine getter.
-	 *\param[in]	p_produce			The element producer.
-	 *\~french
-	 *\brief		Crée un cache de SceneNode.
-	 *\param[in]	p_rootNode			Le noeud racine.
-	 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-	 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-	 *\param[in]	p_get				Le récupérteur de moteur.
-	 *\param[in]	p_produce			Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< ObjectCache< SceneNode, Castor::String, SceneNodeProducer > >
-	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, SceneNodeProducer && p_produce )
-	{
-		return std::make_unique< ObjectCache< SceneNode, Castor::String, SceneNodeProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
-	}
 }
 
 #endif

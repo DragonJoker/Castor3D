@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
 #define ___C3D_DEBUG_OVERLAYS_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "OverlayCache.hpp"
 
 #include <PreciseTimer.hpp>
 #include <OwnedBy.hpp>

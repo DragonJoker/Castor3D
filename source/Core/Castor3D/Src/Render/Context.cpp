@@ -3,7 +3,7 @@
 #include "BlendStateCache.hpp"
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderWindow.hpp"
@@ -17,6 +17,8 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 #include "Shader/OneFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/DepthStencilState.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
@@ -197,7 +199,7 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 
-		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderCache();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 		m_mapDiffuse->SetValue( 0 );

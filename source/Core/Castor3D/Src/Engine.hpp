@@ -19,18 +19,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ENGINE_H___
 
 #include "Cache/Cache.hpp"
-
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-#include "Material/Material.hpp"
 #include "Miscellaneous/Version.hpp"
-#include "Overlay/Overlay.hpp"
-#include "Plugin/Plugin.hpp"
-#include "Scene/Scene.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/RasteriserState.hpp"
-#include "Texture/Sampler.hpp"
+
+#include "BlendStateCache.hpp"
+#include "DepthStencilStateCache.hpp"
+#include "ListenerCache.hpp"
+#include "MaterialCache.hpp"
+#include "OverlayCache.hpp"
+#include "PluginCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneCache.hpp"
+#include "ShaderCache.hpp"
+#include "TargetCache.hpp"
+#include "TechniqueCache.hpp"
+
+#include "Mesh/MeshFactory.hpp"
+#include "Technique/TechniqueFactory.hpp"
 
 #include <FileParser.hpp>
 #include <FontCache.hpp>
@@ -39,48 +44,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename ElementType >
-	struct ElementInitialiser < ElementType, typename std::enable_if < is_initialisable< ElementType >::value && !is_instant< ElementType >::value >::type >
-	{
-		using ElementPtr = std::shared_ptr< ElementType >;
-
-		inline void operator()( Engine & p_engine, ElementPtr p_element )
-		{
-			p_engine.PostEvent( MakeInitialiseEvent( *p_element ) );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename ElementType >
-	struct ElementCleaner < ElementType, typename std::enable_if < is_cleanable< ElementType >::value && !is_instant< ElementType >::value >::type >
-	{
-		using ElementPtr = std::shared_ptr< ElementType >;
-
-		inline void operator()( Engine & p_engine, ElementPtr p_element )
-		{
-			p_engine.PostEvent( MakeCleanupEvent( *p_element ) );
-		}
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -462,6 +425,46 @@ namespace Castor3D
 		{
 			return m_threaded;
 		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory const & GetMeshFactory()const
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory & GetMeshFactory()
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory const & GetTechniqueFactory()const
+		{
+			return m_techniqueFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory & GetTechniqueFactory()
+		{
+			return m_techniqueFactory;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -551,6 +554,12 @@ namespace Castor3D
 		//!\~english	The default frame listener.
 		//!\~french		Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
+		//!\~english	The MeshGenerator factory.
+		//!\~french		La fabrique de MeshGenerator.
+		MeshFactory m_meshFactory;
+		//!\~english	The RenderTechnique factory.
+		//!\~french		La fabrique de RenderTechnique.
+		TechniqueFactory m_techniqueFactory;
 	};
 }
 

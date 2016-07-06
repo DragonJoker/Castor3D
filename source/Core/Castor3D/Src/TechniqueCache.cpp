@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< RenderTechnique >::Name = cuT( "RenderTechnique" );
+	const String CacheTraits< RenderTechnique, String >::Name = cuT( "RenderTechnique" );
 }

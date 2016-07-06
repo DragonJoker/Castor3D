@@ -5,6 +5,7 @@
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
@@ -19,12 +20,12 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
-		SamplerSPtr l_pSampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
-		l_pSampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_pSampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_pSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_pSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		m_sampler = l_pSampler;
+		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		m_sampler = l_sampler;
 		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 	}
 

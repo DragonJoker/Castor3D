@@ -3,7 +3,7 @@
 #include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
-#include <ShaderProgramCache.hpp>
+#include <ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
@@ -22,6 +22,8 @@
 #include <Render/Viewport.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -291,7 +293,7 @@ namespace Bloom
 	{
 		bool l_return = false;
 		m_viewport.Initialise();
-		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderCache();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;

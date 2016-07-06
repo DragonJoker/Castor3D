@@ -3,12 +3,13 @@
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
 #include "MeshCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 
 #include "Animation/AnimatedObject.hpp"
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Mesh/Submesh.hpp"

@@ -16,7 +16,7 @@
 #include <PluginCache.hpp>
 #include <SamplerCache.hpp>
 #include <SceneCache.hpp>
-#include <RenderWindowCache.hpp>
+#include <WindowCache.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>

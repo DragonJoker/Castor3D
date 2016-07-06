@@ -1,6 +1,8 @@
 #include "OverlayCache.hpp"
 
 #include "Engine.hpp"
+#include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Overlay/BorderPanelOverlay.hpp"
 #include "Overlay/Overlay.hpp"
 #include "Overlay/OverlayRenderer.hpp"
@@ -21,12 +23,78 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< Overlay >::Name = cuT( "Overlay" );
+	const String CacheTraits< Overlay, String >::Name = cuT( "Overlay" );
+
+	namespace
+	{
+		struct OverlayInitialiser
+		{
+			OverlayInitialiser( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
+				: m_overlays{ p_overlays }
+				, m_overlayCountPerLevel{ p_overlayCountPerLevel }
+			{
+			}
+
+			inline void operator()( OverlaySPtr p_element )
+			{
+				int l_level = 0;
+
+				if ( p_element->GetParent() )
+				{
+					l_level = p_element->GetParent()->GetLevel() + 1;
+					p_element->GetParent()->AddChild( p_element );
+				}
+
+				while ( l_level >= int( m_overlayCountPerLevel.size() ) )
+				{
+					m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+				}
+
+				p_element->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+				m_overlays.insert( p_element->GetCategory() );
+			}
+
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+
+		struct OverlayCleaner
+		{
+			OverlayCleaner( OverlayCategorySet & p_overlays, std::vector< int > & p_overlayCountPerLevel )
+				: m_overlays{ p_overlays }
+				, m_overlayCountPerLevel{ p_overlayCountPerLevel }
+			{
+			}
+
+			inline void operator()( OverlaySPtr p_element )
+			{
+				if ( p_element->GetChildrenCount() )
+				{
+					for ( auto l_child : *p_element )
+					{
+						l_child->SetPosition( l_child->GetAbsolutePosition() );
+						l_child->SetSize( l_child->GetAbsoluteSize() );
+					}
+				}
+			}
+
+			OverlayCategorySet & m_overlays;
+			std::vector< int > & m_overlayCountPerLevel;
+		};
+	}
 
 	//*************************************************************************************************
 
-	OverlayCache::Cache( Engine & p_engine, OverlayProducer && p_produce, Merger && p_merge )
-		: Cache< Overlay, String, OverlayProducer >{ p_engine, std::move( p_produce ), Initialiser{ m_overlays, m_overlayCountPerLevel }, Cleaner{ m_overlays, m_overlayCountPerLevel }, std::move( p_merge ) }
+	OverlayCache::Cache( Engine & p_engine
+						 , Producer && p_produce
+						 , Initialiser && p_initialise
+						 , Cleaner && p_clean
+						 , Merger && p_merge )
+		: MyCacheType( p_engine
+					   , std::move( p_produce )
+					   , std::bind( OverlayInitialiser{ m_overlays, m_overlayCountPerLevel }, std::placeholders::_1 )
+					   , std::bind( OverlayCleaner{ m_overlays, m_overlayCountPerLevel }, std::placeholders::_1 )
+					   , std::move( p_merge ) )
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ *GetEngine() }
 	{

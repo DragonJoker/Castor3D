@@ -3,7 +3,7 @@
 #include <MaterialCache.hpp>
 #include <MeshCache.hpp>
 #include <SamplerCache.hpp>
-#include <RenderWindowCache.hpp>
+#include <WindowCache.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Submesh.hpp>
@@ -41,8 +41,8 @@ namespace GuiCommon
 			return l_result;
 		}
 
-		template< typename TObj, typename TKey, typename TProd >
-		bool ParseManager( Engine * p_engine, Cache< TKey, TObj, TProd > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		template< typename TObj, typename TKey >
+		bool ParseManager( Engine * p_engine, Cache< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			bool l_result = true;
 			auto l_lock = make_unique_lock( p_manager );

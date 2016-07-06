@@ -64,7 +64,7 @@
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
-#	include <ShaderProgramCache.hpp>
+#	include <ShaderCache.hpp>
 
 #	include <Animation/Animation.hpp>
 #	include <Animation/KeyFrame.hpp>

@@ -28,6 +28,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	template< typename KeyType >
+	struct ElementProducer< RenderTarget, KeyType >
+	{
+		using Type = std::function< std::shared_ptr< RenderTarget >( KeyType const &, eTARGET_TYPE ) >;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0

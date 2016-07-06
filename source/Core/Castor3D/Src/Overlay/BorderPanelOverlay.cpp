@@ -6,6 +6,8 @@
 #include "MaterialCache.hpp"
 #include "Engine.hpp"
 
+#include "Material/Material.hpp"
+
 using namespace Castor;
 
 namespace Castor3D

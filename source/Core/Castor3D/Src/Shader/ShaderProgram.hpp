@@ -28,6 +28,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	template< typename KeyType >
+	struct ElementProducer< ShaderProgram, KeyType >
+	{
+		using Type = std::function< std::shared_ptr< ShaderProgram >( KeyType const & ) >;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.2
@@ -76,183 +81,6 @@ namespace Castor3D
 			 */
 			C3D_API bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file )override;
 		};
-
-		/**@name Attributes */
-		//@{
-
-		//!\~english	Name of the position attribute.
-		//!\~french		Nom de l'attribut position.
-		C3D_API static const Castor::String Position;
-		//!\~english	Name of the normal attribute.
-		//!\~french		Nom de l'attribut normale.
-		C3D_API static const Castor::String Normal;
-		//!\~english	Name of the tangent attribute.
-		//!\~french		Nom de l'attribut tangente.
-		C3D_API static const Castor::String Tangent;
-		//!\~english	Name of the bitangent attribute.
-		//!\~french		Nom de l'attribut bitangente.
-		C3D_API static const Castor::String Bitangent;
-		//!\~english	Name of the texture attribute.
-		//!\~french		Nom du de l'attribut texture.
-		C3D_API static const Castor::String Texture;
-		//!\~english	Name of the colour attribute.
-		//!\~french		Nom du de l'attribut couleur.
-		C3D_API static const Castor::String Colour;
-		//!\~english	Name of the position attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut position pour les animations par sommet.
-		C3D_API static const Castor::String Position2;
-		//!\~english	Name of the normal attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut normale pour les animations par sommet.
-		C3D_API static const Castor::String Normal2;
-		//!\~english	Name of the tangent attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut tangente pour les animations par sommet.
-		C3D_API static const Castor::String Tangent2;
-		//!\~english	Name of the bitangent attribute for per-vertex animations.
-		//!\~french		Nom de l'attribut bitangente pour les animations par sommet.
-		C3D_API static const Castor::String Bitangent2;
-		//!\~english	Name of the texture attribute for per-vertex animations.
-		//!\~french		Nom du de l'attribut texture pour les animations par sommet.
-		C3D_API static const Castor::String Texture2;
-		//!\~english	Name of the colour attribute for per-vertex animations.
-		//!\~french		Nom du de l'attribut couleur pour les animations par sommet.
-		C3D_API static const Castor::String Colour2;
-		//!\~english	Name of the text overlay texture attribute.
-		//!\~french		Nom du de l'attribut texture pour les incrustations texte.
-		C3D_API static const Castor::String Text;
-		//!\~english	Name of the first bones ID attribute.
-		//!\~french		Nom du premier attribut d'ID des bones.
-		C3D_API static const Castor::String BoneIds0;
-		//!\~english	Name of the second bones ID attribute.
-		//!\~french		Nom du second attribut d'ID des bones.
-		C3D_API static const Castor::String BoneIds1;
-		//!\~english	Name of the first bones weight attribute.
-		//!\~french		Nom du premier attribut de poids des bones.
-		C3D_API static const Castor::String Weights0;
-		//!\~english	Name of the second bones weight attribute.
-		//!\~french		Nom du second attribut de poids des bones.
-		C3D_API static const Castor::String Weights1;
-		//!\~english	Name of the instance transform attribute.
-		//!\~french		Nom de l'attribut de transformation d'instance.
-		C3D_API static const Castor::String Transform;
-
-		//@}
-		/**@name Scene */
-		//@{
-
-		//!\~english	Name of the camera position frame variable.
-		//!\~french		Nom de la frame variable contenant la position de la caméra.
-		C3D_API static const Castor::String CameraPos;
-		//!\~english	Name of the ambient light frame variable.
-		//!\~french		Nom de la frame variable contenant la lumière ambiante.
-		C3D_API static const Castor::String AmbientLight;
-		//!\~english	Name of the background colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur de fond.
-		C3D_API static const Castor::String BackgroundColour;
-		//!\~english	Name of the lights count frame variable.
-		//!\~french		Nom de la frame variable contenant le compte des lumières.
-		C3D_API static const Castor::String LightsCount;
-		//!\~english	Name of the lights frame variable.
-		//!\~french		Nom de la frame variable contenant les lumières.
-		C3D_API static const Castor::String Lights;
-
-		//@}
-		/**@name Pass */
-		//@{
-
-		//!\~english	Name of the ambient material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur ambiante du matériau.
-		C3D_API static const Castor::String MatAmbient;
-		//!\~english	Name of the diffuse material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
-		C3D_API static const Castor::String MatDiffuse;
-		//!\~english	Name of the specular material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur spéculaire du matériau.
-		C3D_API static const Castor::String MatSpecular;
-		//!\~english	Name of the emissive material colour frame variable.
-		//!\~french		Nom de la frame variable contenant la couleur émissive du matériau.
-		C3D_API static const Castor::String MatEmissive;
-		//!\~english	Name of the material shininess frame variable.
-		//!\~french		Nom de la frame variable contenant l'exposante du matériau.
-		C3D_API static const Castor::String MatShininess;
-		//!\~english	Name of the material opacity frame variable.
-		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
-		C3D_API static const Castor::String MatOpacity;
-		//!\~english	Name of the overlay text image frame variable.
-		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
-		C3D_API static const Castor::String MapText;
-
-		//@}
-		/**@name Animation */
-		//@{
-
-		//!\~english	Name of the bones matrices attribute.
-		//!\~french		Nom de l'attribut de de matrices d'os.
-		C3D_API static const Castor::String Bones;
-		//!\~english	Name of the morphing time attribute.
-		//!\~french		Nom de l'attribut du temps d'animation par sommet.
-		C3D_API static const Castor::String Time;
-
-		//@}
-		/**@name Billboard */
-		//@{
-
-		//!\~english	Name of the billboard dimensions frame variable.
-		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
-		C3D_API static const Castor::String Dimensions;
-
-		//@}
-		/**@name Textures */
-		//@{
-
-		//!\~english	Name of the colour texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur.
-		C3D_API static const Castor::String MapColour;
-		//!\~english	Name of the ambient texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur ambiante.
-		C3D_API static const Castor::String MapAmbient;
-		//!\~english	Name of the diffuse texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
-		C3D_API static const Castor::String MapDiffuse;
-		//!\~english	Name of the specular texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur spéculaire.
-		C3D_API static const Castor::String MapSpecular;
-		//!\~english	Name of the emissive texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de couleur émissive.
-		C3D_API static const Castor::String MapEmissive;
-		//!\~english	Name of the emissive texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture de normales.
-		C3D_API static const Castor::String MapNormal;
-		//!\~english	Name of the opacity texture frame variable.
-		//!\~french		Nom de la frame variable contenant texture d'opacité.
-		C3D_API static const Castor::String MapOpacity;
-		//!\~english	Name of the shininess texture frame variable.
-		//!\~french		Nom de la frame variable contenant la texture d'exposante.
-		C3D_API static const Castor::String MapGloss;
-		//!\~english	Name of the height texture frame variable.
-		//!\~french		Nom de la frame variable contenant texture de hauteur.
-		C3D_API static const Castor::String MapHeight;
-
-		//@}
-		/**@name Frame Variable Buffers */
-		//@{
-
-		//!\~english	Name of the matrix frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les matrices.
-		C3D_API static const Castor::String BufferMatrix;
-		//!\~english	Name of the scene frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de scène.
-		C3D_API static const Castor::String BufferScene;
-		//!\~english	Name of the pass frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de passe.
-		C3D_API static const Castor::String BufferPass;
-		//!\~english	Name of the billboards frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données de billboards.
-		C3D_API static const Castor::String BufferBillboards;
-		//!\~english	Name of the animation frame variable buffer.
-		//!\~french		Nom du frame variable buffer contenant les données d'animation.
-		C3D_API static const Castor::String BufferAnimation;
-
-		//@}
 
 	public:
 		/**
@@ -717,6 +545,185 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		virtual FrameVariableSPtr DoCreateVariable( FrameVariableType p_type, int p_iNbOcc ) = 0;
+
+	public:
+		/**@name Attributes */
+		//@{
+
+		//!\~english	Name of the position attribute.
+		//!\~french		Nom de l'attribut position.
+		C3D_API static const Castor::String Position;
+		//!\~english	Name of the normal attribute.
+		//!\~french		Nom de l'attribut normale.
+		C3D_API static const Castor::String Normal;
+		//!\~english	Name of the tangent attribute.
+		//!\~french		Nom de l'attribut tangente.
+		C3D_API static const Castor::String Tangent;
+		//!\~english	Name of the bitangent attribute.
+		//!\~french		Nom de l'attribut bitangente.
+		C3D_API static const Castor::String Bitangent;
+		//!\~english	Name of the texture attribute.
+		//!\~french		Nom du de l'attribut texture.
+		C3D_API static const Castor::String Texture;
+		//!\~english	Name of the colour attribute.
+		//!\~french		Nom du de l'attribut couleur.
+		C3D_API static const Castor::String Colour;
+		//!\~english	Name of the position attribute for per-vertex animations.
+		//!\~french		Nom de l'attribut position pour les animations par sommet.
+		C3D_API static const Castor::String Position2;
+		//!\~english	Name of the normal attribute for per-vertex animations.
+		//!\~french		Nom de l'attribut normale pour les animations par sommet.
+		C3D_API static const Castor::String Normal2;
+		//!\~english	Name of the tangent attribute for per-vertex animations.
+		//!\~french		Nom de l'attribut tangente pour les animations par sommet.
+		C3D_API static const Castor::String Tangent2;
+		//!\~english	Name of the bitangent attribute for per-vertex animations.
+		//!\~french		Nom de l'attribut bitangente pour les animations par sommet.
+		C3D_API static const Castor::String Bitangent2;
+		//!\~english	Name of the texture attribute for per-vertex animations.
+		//!\~french		Nom du de l'attribut texture pour les animations par sommet.
+		C3D_API static const Castor::String Texture2;
+		//!\~english	Name of the colour attribute for per-vertex animations.
+		//!\~french		Nom du de l'attribut couleur pour les animations par sommet.
+		C3D_API static const Castor::String Colour2;
+		//!\~english	Name of the text overlay texture attribute.
+		//!\~french		Nom du de l'attribut texture pour les incrustations texte.
+		C3D_API static const Castor::String Text;
+		//!\~english	Name of the first bones ID attribute.
+		//!\~french		Nom du premier attribut d'ID des bones.
+		C3D_API static const Castor::String BoneIds0;
+		//!\~english	Name of the second bones ID attribute.
+		//!\~french		Nom du second attribut d'ID des bones.
+		C3D_API static const Castor::String BoneIds1;
+		//!\~english	Name of the first bones weight attribute.
+		//!\~french		Nom du premier attribut de poids des bones.
+		C3D_API static const Castor::String Weights0;
+		//!\~english	Name of the second bones weight attribute.
+		//!\~french		Nom du second attribut de poids des bones.
+		C3D_API static const Castor::String Weights1;
+		//!\~english	Name of the instance transform attribute.
+		//!\~french		Nom de l'attribut de transformation d'instance.
+		C3D_API static const Castor::String Transform;
+
+		//@}
+		/**@name Scene */
+		//@{
+
+		//!\~english	Name of the camera position frame variable.
+		//!\~french		Nom de la frame variable contenant la position de la caméra.
+		C3D_API static const Castor::String CameraPos;
+		//!\~english	Name of the ambient light frame variable.
+		//!\~french		Nom de la frame variable contenant la lumière ambiante.
+		C3D_API static const Castor::String AmbientLight;
+		//!\~english	Name of the background colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur de fond.
+		C3D_API static const Castor::String BackgroundColour;
+		//!\~english	Name of the lights count frame variable.
+		//!\~french		Nom de la frame variable contenant le compte des lumières.
+		C3D_API static const Castor::String LightsCount;
+		//!\~english	Name of the lights frame variable.
+		//!\~french		Nom de la frame variable contenant les lumières.
+		C3D_API static const Castor::String Lights;
+
+		//@}
+		/**@name Pass */
+		//@{
+
+		//!\~english	Name of the ambient material colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur ambiante du matériau.
+		C3D_API static const Castor::String MatAmbient;
+		//!\~english	Name of the diffuse material colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur diffuse du matériau.
+		C3D_API static const Castor::String MatDiffuse;
+		//!\~english	Name of the specular material colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur spéculaire du matériau.
+		C3D_API static const Castor::String MatSpecular;
+		//!\~english	Name of the emissive material colour frame variable.
+		//!\~french		Nom de la frame variable contenant la couleur émissive du matériau.
+		C3D_API static const Castor::String MatEmissive;
+		//!\~english	Name of the material shininess frame variable.
+		//!\~french		Nom de la frame variable contenant l'exposante du matériau.
+		C3D_API static const Castor::String MatShininess;
+		//!\~english	Name of the material opacity frame variable.
+		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
+		C3D_API static const Castor::String MatOpacity;
+		//!\~english	Name of the overlay text image frame variable.
+		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
+		C3D_API static const Castor::String MapText;
+
+		//@}
+		/**@name Animation */
+		//@{
+
+		//!\~english	Name of the bones matrices attribute.
+		//!\~french		Nom de l'attribut de de matrices d'os.
+		C3D_API static const Castor::String Bones;
+		//!\~english	Name of the morphing time attribute.
+		//!\~french		Nom de l'attribut du temps d'animation par sommet.
+		C3D_API static const Castor::String Time;
+
+		//@}
+		/**@name Billboard */
+		//@{
+
+		//!\~english	Name of the billboard dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
+		C3D_API static const Castor::String Dimensions;
+
+		//@}
+		/**@name Textures */
+		//@{
+
+		//!\~english	Name of the colour texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur.
+		C3D_API static const Castor::String MapColour;
+		//!\~english	Name of the ambient texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur ambiante.
+		C3D_API static const Castor::String MapAmbient;
+		//!\~english	Name of the diffuse texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur diffuse.
+		C3D_API static const Castor::String MapDiffuse;
+		//!\~english	Name of the specular texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur spéculaire.
+		C3D_API static const Castor::String MapSpecular;
+		//!\~english	Name of the emissive texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de couleur émissive.
+		C3D_API static const Castor::String MapEmissive;
+		//!\~english	Name of the emissive texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture de normales.
+		C3D_API static const Castor::String MapNormal;
+		//!\~english	Name of the opacity texture frame variable.
+		//!\~french		Nom de la frame variable contenant texture d'opacité.
+		C3D_API static const Castor::String MapOpacity;
+		//!\~english	Name of the shininess texture frame variable.
+		//!\~french		Nom de la frame variable contenant la texture d'exposante.
+		C3D_API static const Castor::String MapGloss;
+		//!\~english	Name of the height texture frame variable.
+		//!\~french		Nom de la frame variable contenant texture de hauteur.
+		C3D_API static const Castor::String MapHeight;
+
+		//@}
+		/**@name Frame Variable Buffers */
+		//@{
+
+		//!\~english	Name of the matrix frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les matrices.
+		C3D_API static const Castor::String BufferMatrix;
+		//!\~english	Name of the scene frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de scène.
+		C3D_API static const Castor::String BufferScene;
+		//!\~english	Name of the pass frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de passe.
+		C3D_API static const Castor::String BufferPass;
+		//!\~english	Name of the billboards frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de billboards.
+		C3D_API static const Castor::String BufferBillboards;
+		//!\~english	Name of the animation frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données d'animation.
+		C3D_API static const Castor::String BufferAnimation;
+
+		//@}
+
 
 	protected:
 		//!<\~english The program status.

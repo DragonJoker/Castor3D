@@ -44,14 +44,15 @@ namespace Castor3D
 	{
 	public:
 		using MyCacheType = CacheBase< ElementType, KeyType >;
+		using MyCacheTraits = CacheTraits< ElementType, KeyType >;
 		using Element = ElementType;
 		using Key = KeyType;
 		using Collection = Castor::Collection< Element, Key >;
 		using ElementPtr = std::shared_ptr< Element >;
-		using Producer = ElementProducer< Element, Key >;
+		using Producer = typename MyCacheTraits::Producer;
+		using Merger = typename MyCacheTraits::Merger;
 		using Initialiser = ElementInitialiser< Element >;
 		using Cleaner = ElementCleaner< Element >;
-		using Merger = ElementMerger< Element, Key >;
 
 	public:
 		/**
@@ -93,9 +94,9 @@ namespace Castor3D
 		{
 			auto l_lock = Castor::make_unique_lock( m_elements );
 
-			for ( auto l_it : this->m_elements )
+			for ( auto l_it : m_elements )
 			{
-				m_clean( *GetEngine(), l_it.second );
+				m_clean( l_it.second );
 			}
 		}
 		/**
@@ -138,7 +139,7 @@ namespace Castor3D
 
 				if ( m_elements.has( p_name ) )
 				{
-					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 					l_return = m_elements.find( p_name );
 				}
 				else
@@ -148,7 +149,7 @@ namespace Castor3D
 			}
 			else
 			{
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_NULL_OBJECT << GetObjectTypeName() << cuT( ": " ) );
 			}
 
 			return l_return;
@@ -165,25 +166,38 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Get( Key const & p_name )
+		template< typename ... Parameters >
+		inline ElementPtr Add( Key const & p_name, Parameters && ... p_parameters )
 		{
 			ElementPtr l_return;
 			auto l_lock = Castor::make_unique_lock( m_elements );
 
 			if ( !m_elements.has( p_name ) )
 			{
-				l_return = m_produce( p_name );
-				m_initialise( *GetEngine(), l_return );
+				l_return = m_produce( p_name, std::forward< Parameters >( p_parameters )... );
+				m_initialise( l_return );
 				m_elements.insert( p_name, l_return );
-				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 			else
 			{
 				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_CACHE_DUPLICATE_OBJECT << GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return l_return;
+		}
+		/**
+		 *\~english
+		 *\brief		Removes an object, given a name.
+		 *\param[in]	p_name		The object name.
+		 *\~french
+		 *\brief		Retire un objet à partir d'un nom.
+		 *\param[in]	p_name		Le nom d'objet.
+		 */
+		inline void Remove( Key const & p_name )
+		{
+			m_elements.erase( p_name );
 		}
 		/**
 		 *\~english
@@ -243,35 +257,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
+		 *\return		The objects count.
 		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
+		 *\return		Le nombre d'objets
 		 */
-		inline void Remove( Key const & p_name )
+		inline uint32_t GetObjectCount()const
 		{
-			m_elements.erase( p_name );
-		}
-		/**
-		*\~english
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*\~french
-		*\param[in]	p_renderSystem	Le RenderSystem.
-		*/
-		inline void SetRenderSystem( RenderSystem * p_renderSystem )
-		{
-			m_renderSystem = p_renderSystem;
-		}
-		/**
-		*\~english
-		*\return		The RenderSystem.
-		*\~french
-		*\return		Le RenderSystem.
-		*/
-		inline RenderSystem * SetRenderSystem()const
-		{
-			return m_renderSystem;
+			return uint32_t( m_elements.size() );
 		}
 		/**
 		*\~english
@@ -281,7 +273,7 @@ namespace Castor3D
 		*/
 		inline Engine * GetEngine()const
 		{
-			return m_engine;
+			return &m_engine;
 		}
 		/**
 		*\~english
@@ -291,7 +283,7 @@ namespace Castor3D
 		*/
 		inline Castor::String const & GetObjectTypeName()const
 		{
-			return CachedObjectNamer< Element >::Name;
+			return MyCacheTraits::Name;
 		}
 		/**
 		 *\~english
@@ -392,9 +384,6 @@ namespace Castor3D
 		//!\~english	The engine.
 		//!\~french		Le moteur.
 		Engine & m_engine;
-		//!\~english	The RenderSystem.
-		//!\~french		Le RenderSystem.
-		RenderSystem * m_renderSystem{ nullptr };
 		//!\~english	The elements collection.
 		//!\~french		La collection d'éléments.
 		mutable Collection m_elements;
@@ -426,6 +415,7 @@ namespace Castor3D
 	{
 	public:
 		using MyCacheType = CacheBase< ElementType, KeyType >;
+		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
@@ -447,7 +437,11 @@ namespace Castor3D
 					 , Initialiser && p_initialise = Initialiser{}
 					 , Cleaner && p_clean = Cleaner{}
 					 , Merger && p_merge = Merger{} )
-			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
+			: MyCacheType( p_engine
+						   , std::move( p_produce )
+						   , std::move( p_initialise )
+						   , std::move( p_clean )
+						   , std::move( p_merge ) )
 		{
 		}
 		/**
@@ -473,12 +467,18 @@ namespace Castor3D
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
 	MakeCache( Engine & p_engine
-			  , ElementProducer< ElementType, KeyType > && p_produce
+			  , typename CacheTraits< ElementType, KeyType >::Producer && p_produce
 			  , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
 			  , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-			  , ElementMerger< ElementType, KeyType > && p_merge = []( Cache< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ){} )
+			  , typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
+																					  , Castor::Collection< ElementType, KeyType > &
+																					  , std::shared_ptr< ElementType > ){} )
 	{
-		return std::make_unique< Cache< ElementType, KeyType > >( std::move( p_engine ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move(p_merge) );
+		return std::make_unique< Cache< ElementType, KeyType > >( p_engine
+																  , std::move( p_produce )
+																  , std::move( p_initialise )
+																  , std::move( p_clean )
+																  , std::move(p_merge) );
 	}
 }
 

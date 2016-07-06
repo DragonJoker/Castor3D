@@ -27,25 +27,6 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< Plugin, Castor::String >
-	{
-		using ElementPtr = std::shared_ptr< Plugin >;
-
-		inline ElementPtr operator()( Castor::String const & p_key )
-		{
-			return nullptr;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english

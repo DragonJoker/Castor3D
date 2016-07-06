@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< Scene >::Name = cuT( "Scene" );
+	const String CacheTraits< Scene, String >::Name = cuT( "Scene" );
 }

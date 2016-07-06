@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< BlendState >::Name = cuT( "BlendState" );
+	const String CacheTraits< BlendState, String >::Name = cuT( "BlendState" );
 }

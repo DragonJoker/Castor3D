@@ -59,32 +59,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual void Initialise();
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< Light, Castor::String, Scene, SceneNodeSPtr, eLIGHT_TYPE >
-	{
-		using ElementPtr = std::shared_ptr< Light >;
-
-		inline ElementProducer()
-		{
-		}
-
-		inline ElementPtr operator()( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
-		{
-			return std::make_shared< Light >( p_name, p_scene, p_node, m_lightFactory, p_lightType );
-		}
-		//!\~english	The lights factory.
-		//!\~french		La fabrique de lumières.
-		LightFactory m_lightFactory;
-	};
 }
 
 #endif

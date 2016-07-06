@@ -18,28 +18,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TARGET_CACHE_H___
 #define ___C3D_TARGET_CACHE_H___
 
-#include "Cache/Cache.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include "HDR/ToneMappingFactory.hpp"
 #include "PostEffect/PostEffectFactory.hpp"
-#include "Render/RenderTarget.hpp"
 
 namespace Castor3D
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/02/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to get an object type name.
-	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
-	*/
-	template<>
-	struct CachedObjectNamer< RenderTarget >
-	{
-		C3D_API static const Castor::String Name;
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -171,33 +156,10 @@ namespace Castor3D
 		{
 			m_mutex.unlock();
 		}
-		/**
-		*\~english
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*\~french
-		*\param[in]	p_renderSystem	Le RenderSystem.
-		*/
-		inline void SetRenderSystem( RenderSystem * p_renderSystem )
-		{
-			m_renderSystem = p_renderSystem;
-		}
-		/**
-		*\~english
-		*\return		The RenderSystem.
-		*\~french
-		*\return		Le RenderSystem.
-		*/
-		inline RenderSystem * SetRenderSystem()const
-		{
-			return m_renderSystem;
-		}
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
 		DECLARE_ARRAY( RenderTargetArray, eTARGET_TYPE_COUNT, TargetType );
-		//!\~english	The RenderSystem.
-		//!\~french		Le RenderSystem.
-		RenderSystem * m_renderSystem{ nullptr };
 		//!\~english	The render targets sorted by target type.
 		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;

@@ -18,9 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_LISTENER_CACHE_H___
 #define ___C3D_LISTENER_CACHE_H___
 
-#include "Cache/Cache.hpp"
-
-#include "Event/Frame/FrameListener.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
@@ -29,59 +27,24 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for FrameListener.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour FrameListener.
 	*/
-	template<>
-	struct CachedObjectNamer< FrameListener >
+	template< typename KeyType >
+	struct CacheTraits< FrameListener, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< FrameListener >( KeyType const & ) >;
+		using Merger = std::function< void( CacheBase< FrameListener, KeyType > const &
+											, Castor::Collection< FrameListener, KeyType > &
+											, std::shared_ptr< FrameListener > ) >;
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template<>
-	struct ElementCleaner< FrameListener, FrameListener >
-	{
-		inline void operator()( Engine & p_engine, FrameListener & p_element )
-		{
-		}
-	};
-	/**
-	 *\~english
-	 *\brief		Creates a FrameListener cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de FrameListener.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< FrameListener, Castor::String > >
-	MakeCache< FrameListener, Castor::String > 
-		( Engine & p_engine
-		 , ElementProducer< FrameListener, Castor::String > && p_produce
-		 , ElementInitialiser< FrameListener > && p_initialise = []( FrameListenerSPtr ){}
-		 , ElementCleaner< FrameListener > && p_clean = []( FrameListenerSPtr p_element )
-		 {
-			 p_element->Flush();
-		 }
-		 , ElementMerger< FrameListener, Castor::String > && p_merge = []( Cache< FrameListener, Castor::String > const &, Castor::Collection< FrameListener, Castor::String > &, FrameListenerSPtr ){} )
-	{
-		return std::make_unique< Cache< FrameListener, Castor::String > >( std::move( p_engine ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move(p_merge) );
-	}
 }
 
-#undef DECLARE_MANAGED_MEMBER
+// included after because it depends on CacheTraits
+#include "Cache/Cache.hpp"
 
 #endif

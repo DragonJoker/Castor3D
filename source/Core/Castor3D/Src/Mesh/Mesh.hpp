@@ -34,46 +34,6 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< Mesh, Castor::String, eMESH_TYPE >
-	{
-		using ElementPtr = std::shared_ptr< Mesh >;
-
-		ElementProducer( Scene & p_scene )
-			: m_scene{ p_scene }
-		{
-		}
-
-		ElementPtr operator()( Castor::String const & p_name, eMESH_TYPE p_type )
-		{
-			return operator()( p_name, p_type, UIntArray(), RealArray() );
-		}
-
-		ElementPtr operator()( Castor::String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces )
-		{
-			return operator()( p_name, p_type, p_arrayFaces, RealArray() );
-		}
-
-		ElementPtr operator()( Castor::String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
-		{
-			auto l_return = std::make_shared< Mesh >( p_name, m_scene );
-			m_factory.Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
-			return l_return;
-		}
-		Scene & m_scene;
-		//!\~english	The MeshGenerator factory.
-		//!\~french		La fabrique de MeshGenerator.
-		MeshFactory m_factory;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
 	\brief		The mesh representation

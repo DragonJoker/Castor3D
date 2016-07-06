@@ -6,14 +6,17 @@
 #include "OverlayCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
-#include "RenderTargetCache.hpp"
+#include "TargetCache.hpp"
 #include "TechniqueCache.hpp"
-#include "RenderWindowCache.hpp"
+#include "WindowCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
+#include "RenderWindow.hpp"
 
+#include "Event/Frame/FrameListener.hpp"
 #include "Overlay/DebugOverlays.hpp"
+#include "Scene/Scene.hpp"
 
 using namespace Castor;
 
@@ -42,7 +45,7 @@ namespace Castor3D
 		if (m_renderSystem->GetMainContext ())
 		{
 			m_renderSystem->GetMainContext()->SetCurrent ();
-			GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
 				p_listener.FireEvents( eEVENT_TYPE_PRE_RENDER );
 			} );
@@ -50,7 +53,7 @@ namespace Castor3D
 			m_renderSystem->GetMainContext()->EndCurrent();
 		}
 
-		GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{
 			p_listener.FireEvents( eEVENT_TYPE_POST_RENDER );
 		} );
@@ -132,13 +135,13 @@ namespace Castor3D
 
 		try
 		{
-			GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
 				p_listener.FireEvents( eEVENT_TYPE_PRE_RENDER );
 			} );
 
 			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
+			GetEngine()->GetRenderTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
 		catch ( Exception & p_exc )
 		{
@@ -157,7 +160,7 @@ namespace Castor3D
 		{
 			GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 			{
-				p_scene.GetWindowCache().ForEach( []( RenderWindow & p_window )
+				p_scene.GetRenderWindowCache().ForEach( []( RenderWindow & p_window )
 				{
 					p_window.Render( true );
 				} );
@@ -168,7 +171,7 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{
 			p_listener.FireEvents( eEVENT_TYPE_POST_RENDER );
 		} );

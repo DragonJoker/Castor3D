@@ -1,13 +1,14 @@
 #include "LinearToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <ShaderProgramCache.hpp>
+#include <ShaderCache.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
+#include <Shader/ShaderProgram.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <GlslSource.hpp>

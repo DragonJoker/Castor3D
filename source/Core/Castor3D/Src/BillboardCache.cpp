@@ -1,8 +1,8 @@
-#include "BillboardListCache.hpp"
+#include "BillboardCache.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< BillboardList >::Name = cuT( "BillboardList" );
+	const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
 }

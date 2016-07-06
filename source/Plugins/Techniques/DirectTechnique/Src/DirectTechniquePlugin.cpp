@@ -41,10 +41,10 @@ C3D_DirectTechnique_API Castor::String GetName()
 
 C3D_DirectTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueCache().GetFactory().Register( NAME, &RenderTechnique::CreateInstance );
+	p_engine->GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
 }
 
 C3D_DirectTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTechniqueCache().GetFactory().Unregister( NAME );
+	p_engine->GetTechniqueFactory().Unregister( NAME );
 }

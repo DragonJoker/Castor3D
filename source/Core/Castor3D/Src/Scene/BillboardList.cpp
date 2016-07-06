@@ -2,19 +2,20 @@
 
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/PointFrameVariable.hpp"
-#include "Shader/ShaderObject.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 using namespace Castor;
 

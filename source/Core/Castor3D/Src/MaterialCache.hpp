@@ -20,8 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Cache/Cache.hpp"
 
-#include "Material/Material.hpp"
-
 namespace Castor3D
 {
 	/*!
@@ -29,14 +27,20 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	\remarks	Specialisation for Material.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	\remarks	Spécialisation pour Material.
 	*/
-	template<>
-	struct CachedObjectNamer< Material >
+	template< typename KeyType >
+	struct CacheTraits< Material, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< Material >( KeyType const & ) >;
+		using Merger = std::function< void( CacheBase< Material, KeyType > const &
+											, Castor::Collection< Material, KeyType > &
+											, std::shared_ptr< Material > ) >;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -48,11 +52,12 @@ namespace Castor3D
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	template<>
-	class Cache< Material, Castor::String, MaterialProducer >
-		: public CacheBase< Material, Castor::String, MaterialProducer, ElementInitialiser< Material >, ElementCleaner< Material >, ElementMerger< Material, Castor::String > >
+	class Cache< Material, Castor::String >
+		: public CacheBase< Material, Castor::String >
 	{
 	public:
-		using MyCacheType = CacheBase< Material, Castor::String, MaterialProducer, ElementInitialiser< Material >, ElementCleaner< Material >, ElementMerger< Material, Castor::String > >;
+		using MyCacheType = CacheBase< Material, Castor::String >;
+		using MyCacheTraits = typename MyCacheType::MyCacheTraits;
 		using Element = typename MyCacheType::Element;
 		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
@@ -73,9 +78,9 @@ namespace Castor3D
 		 */
 		inline Cache( Engine & p_engine
 					  , Producer && p_produce
-					  , Initialiser && p_initialise = Initialiser{}
-					  , Cleaner && p_clean = Cleaner{}
-					  , Merger && p_merge = Merger{} )
+					  , Initialiser && p_initialise
+					  , Cleaner && p_clean
+					  , Merger && p_merge )
 			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
 		{
 		}
@@ -148,24 +153,8 @@ namespace Castor3D
 		//!\~french		Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
 	};
-	using MaterialCache = Cache< Material, Castor::String, MaterialProducer >;
-	DECLARE_SMART_PTR (MaterialCache);
-	/**
-	 *\~english
-	 *\brief		Creates a Material cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de Material.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< Cache< Material, Castor::String, MaterialProducer > >
-	MakeCache< Material, Castor::String, MaterialProducer >( Engine & p_engine, MaterialProducer && p_produce )
-	{
-		return std::make_unique< Cache< Material, Castor::String, MaterialProducer > >( p_engine, std::move( p_produce ) );
-	}
+	using MaterialCache = Cache< Material, Castor::String >;
+	DECLARE_SMART_PTR( MaterialCache );
 }
 
 #endif

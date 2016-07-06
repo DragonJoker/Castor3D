@@ -6,9 +6,9 @@
 #include "Engine.hpp"
 #include "ListenerCache.hpp"
 #include "RasteriserStateCache.hpp"
-#include "RenderTargetCache.hpp"
+#include "TargetCache.hpp"
 #include "SceneCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Context.hpp"
 #include "Pipeline.hpp"
@@ -16,13 +16,18 @@
 #include "RenderSystem.hpp"
 #include "Viewport.hpp"
 
-#include "FrameBuffer/BackBuffers.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "FrameBuffer/BackBuffers.hpp"
+#include "Mesh/Vertex.hpp"
+#include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Scene/Scene.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/FrameVariable.hpp"
 
@@ -70,7 +75,7 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, Named( p_name )
 		, m_index( s_nbRenderWindows )
-		, m_wpListener( p_engine.GetListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
+		, m_wpListener( p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_initialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
@@ -86,12 +91,12 @@ namespace Castor3D
 	RenderWindow::~RenderWindow()
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		GetEngine()->GetListenerCache().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		GetEngine()->GetFrameListenerCache().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 		auto l_target = m_renderTarget.lock();
 
 		if ( l_target )
 		{
-			GetEngine()->GetTargetCache().Remove( l_target );
+			GetEngine()->GetRenderTargetCache().Remove( l_target );
 		}
 	}
 

@@ -1,15 +1,15 @@
-#include "RenderTargetCache.hpp"
+#include "TargetCache.hpp"
+
+#include "Engine.hpp"
 
 #include "GeometryCache.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< RenderTarget >::Name = cuT( "RenderTarget" );
-
 	RenderTargetCache::RenderTargetCache( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 	{

@@ -1,5 +1,7 @@
 #include "PluginCache.hpp"
 
+#include "Engine.hpp"
+
 #include "Plugin/DividerPlugin.hpp"
 #include "Plugin/GenericPlugin.hpp"
 #include "Plugin/ImporterPlugin.hpp"
@@ -15,15 +17,23 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< Plugin >::Name = cuT( "Plugin" );
+	const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 
 #if defined( _MSC_VER)
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );
 #elif defined( __GNUG__)
 	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 #endif
-	PluginCache::Cache( EngineGetter && p_getter, Producer && p_produce )
-		: MyCacheType{ std::move( p_getter ), std::move( p_produce ), Initialiser{}, Cleaner{}, Merger{} }
+	PluginCache::Cache( Engine & p_engine
+						, Producer && p_produce
+						, Initialiser && p_initialise
+						, Cleaner && p_clean
+						, Merger && p_merge )
+		: MyCacheType( p_engine
+					   , std::move( p_produce )
+					   , std::move( p_initialise )
+					   , std::move( p_clean )
+					   , std::move( p_merge ) )
 	{
 	}
 	

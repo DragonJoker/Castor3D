@@ -18,6 +18,7 @@
 #include <Cache/CacheView.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
+#include <Texture/Sampler.hpp>
 
 #include <Logger.hpp>
 
@@ -409,7 +410,7 @@ namespace C3dFbx
 		// Prepare the FBX SDK.
 		DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
 
-		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_FBX" ), *GetEngine() );
+		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_FBX" ) );
 
 		DoDestroySdkObjects( l_fbxManager );
 
@@ -709,7 +710,7 @@ namespace C3dFbx
 
 			if ( l_materials.find( l_fbxMaterial->GetName() ) == l_materials.end() )
 			{
-				auto l_material = l_cache.Add( l_fbxMaterial->GetName(), *GetEngine() );
+				auto l_material = l_cache.Add( l_fbxMaterial->GetName() );
 				auto l_pass = l_material->CreatePass();
 				Logger::LogDebug( StringStream() << "Material: " << l_fbxMaterial->GetName() );
 				String l_model = string::string_cast< xchar >( l_fbxMaterial->ShadingModel.Get().Buffer() );

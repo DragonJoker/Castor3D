@@ -25,10 +25,17 @@
 #include <Render/Context.hpp>
 #include <Render/Pipeline.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Scene.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <State/BlendState.hpp>
+#include <State/DepthStencilState.hpp>
+#include <State/RasteriserState.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Logger.hpp>
@@ -73,7 +80,7 @@ namespace Deferred
 			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 		}
 
-		m_lightPassShaderProgram = GetEngine()->GetShaderCache().GetNewProgram();
+		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
 		m_geometryPassDsState = GetEngine()->GetDepthStencilStateCache().Add( cuT( "GeometricPassState" ) );
 		m_geometryPassDsState->SetStencilTest( true );
@@ -161,8 +168,8 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i );
 			}
 
-			m_lightPassMatrices = GetEngine()->GetShaderCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = GetEngine()->GetShaderCache().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassMatrices = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
 			m_vertexBuffer->Create();

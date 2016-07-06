@@ -1,7 +1,7 @@
 #include "RenderTechnique.hpp"
 
 #include "AnimatedObjectGroupCache.hpp"
-#include "BillboardListCache.hpp"
+#include "BillboardCache.hpp"
 #include "CameraCache.hpp"
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
@@ -10,7 +10,7 @@
 #include "OverlayCache.hpp"
 #include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -29,12 +29,19 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
+#include "Scene/BillboardList.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
+#include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
@@ -167,7 +174,7 @@ namespace Castor3D
 								}
 
 								l_pass->PrepareTextures();
-								l_program = p_scene.GetEngine()->GetShaderCache().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
+								l_program = p_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
 
 								auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 								auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
@@ -258,9 +265,9 @@ namespace Castor3D
 			p_nodes.m_renderNodes.clear();
 			p_nodes.m_opaqueRenderNodes.clear();
 			p_nodes.m_transparentRenderNodes.clear();
-			auto l_lock = make_unique_lock( p_scene.GetBillboardCache() );
+			auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
 
-			for ( auto l_billboard : p_scene.GetBillboardCache() )
+			for ( auto l_billboard : p_scene.GetBillboardListCache() )
 			{
 				SceneNodeSPtr l_sceneNode = l_billboard.second->GetParent();
 
@@ -273,12 +280,12 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderCache().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderProgramCache().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 
 							if ( !l_program )
 							{
 								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
-								p_scene.GetEngine()->GetShaderCache().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+								p_scene.GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 							}
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );

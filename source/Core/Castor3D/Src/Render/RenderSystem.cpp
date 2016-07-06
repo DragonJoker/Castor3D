@@ -1,7 +1,7 @@
 #include "RenderSystem.hpp"
 
 #include "Engine.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Pipeline.hpp"
 #include "Viewport.hpp"
@@ -15,6 +15,7 @@
 #include "Shader/PointFrameVariable.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/FrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 
 #include <GlslSource.hpp>
@@ -236,7 +237,7 @@ namespace Castor3D
 		eTOPOLOGY l_output = eTOPOLOGY_TRIANGLE_STRIPS;
 		uint32_t l_count = 4;
 
-		auto & l_cache = GetEngine()->GetShaderCache();
+		auto & l_cache = GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );

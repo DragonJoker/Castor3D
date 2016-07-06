@@ -30,7 +30,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_cache.Add( p_name, *p_engine );
+			l_return = l_cache.Add( p_name );
 			l_return->CreatePass();
 		}
 
@@ -50,7 +50,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_cache.Add( p_name, *p_engine );
+			l_return = l_cache.Add( p_name );
 			l_return->CreatePass();
 		}
 

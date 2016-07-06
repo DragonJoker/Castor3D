@@ -7,17 +7,20 @@
 #include <OverlayCache.hpp>
 #include <RasteriserStateCache.hpp>
 #include <SceneCache.hpp>
-#include <RenderTargetCache.hpp>
+#include <TargetCache.hpp>
 
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>
+#include <Scene/Scene.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
+#include <State/DepthStencilState.hpp>
 
 #include <FontCache.hpp>
 #include <Logger.hpp>

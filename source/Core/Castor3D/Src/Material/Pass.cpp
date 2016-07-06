@@ -4,7 +4,7 @@
 #include "CameraCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Render/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"
@@ -12,6 +12,8 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"
 #include "Shader/PointFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/BlendState.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 

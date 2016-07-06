@@ -1,7 +1,7 @@
 #include "Skybox.hpp"
 
 #include "Engine.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
@@ -17,6 +17,10 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
@@ -243,7 +247,7 @@ namespace Castor3D
 
 	bool Skybox::DoInitialiseShader()
 	{
-		auto l_program = GetEngine()->GetShaderCache().GetNewProgram();
+		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_program = l_program;
 
 		String l_vtx;
@@ -291,7 +295,7 @@ namespace Castor3D
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vtx );
 		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_pxl );
-		m_matricesBuffer = GetEngine()->GetShaderCache().CreateMatrixBuffer( *l_program, eSHADER_TYPE_VERTEX );
+		m_matricesBuffer = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, eSHADER_TYPE_VERTEX );
 		return l_program->Initialise();
 	}
 

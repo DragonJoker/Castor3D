@@ -27,48 +27,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor3D
 {
 	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
-	\remarks	Specialisation for MovableObject.
-	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
-	\remarks	Spécialisation pour MovableObject.
-	*/
-	template<>
-	struct ElementAttacher< MovableObject >
-	{
-		/**
-		 *\~english
-		 *\brief		Attaches an element to the appropriate parent node.
-		 *\param[in]	p_element			The scene node.
-		 *\param[in]	p_parent			The parent scene node.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Attache un élément au parent approprié.
-		 *\param[in]	p_element			Le noeud de scène.
-		 *\param[in]	p_parent			Le noeud de scène parent.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		inline void operator()( std::shared_ptr< MovableObject > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		{
-			if ( p_parent )
-			{
-				p_parent->AttachObject( p_element );
-			}
-			else
-			{
-				p_rootCameraNode->AttachObject( p_element );
-			}
-		}
-	};
-	/*!
 	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010

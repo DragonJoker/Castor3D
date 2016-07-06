@@ -1,7 +1,7 @@
 #include "TextureUnit.hpp"
 
 #include "Engine.hpp"
-#include "RenderTargetCache.hpp"
+#include "TargetCache.hpp"
 
 #include "TextureLayout.hpp"
 #include "Sampler.hpp"
@@ -10,6 +10,7 @@
 
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
 #include "Technique/RenderTechnique.hpp"
 
@@ -206,7 +207,7 @@ namespace Castor3D
 	{
 		if ( !m_renderTarget.expired() )
 		{
-			GetEngine()->GetTargetCache().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetRenderTargetCache().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 

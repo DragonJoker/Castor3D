@@ -2,9 +2,10 @@
 
 #include "Engine.hpp"
 
-#include "SceneCache.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Event/Frame/CleanupEvent.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -16,34 +17,81 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< Light >::Name = cuT( "Light" );
+	const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
 
-	LightCache::ObjectCache( SceneNodeSPtr p_rootNode
-							, SceneNodeSPtr p_rootCameraNode
-							, SceneNodeSPtr p_rootObjectNode
-							, Engine & p_engine
-							, Scene & p_scene
-							, Producer && p_produce
-							, Initialiser && p_initialise
-							, Cleaner && p_clean
-							, Merger && p_merge
-							, Attacher && p_attach
-							, Detacher && p_detach )
-		: MyObjectCache{ p_rootNode
-					   , p_rootCameraNode
-					   , p_rootObjectNode
-					   , p_engine
-					   , p_scene
-					   , std::move( p_produce )
-					   , std::move( p_initialise )
-					   , std::move( p_clean )
-					   , std::move( p_merge )
-					   , std::move( p_attach )
-					   , std::move( p_detach ) }
+	namespace
+	{
+		struct LightInitialiser
+		{
+			LightInitialiser( LightsMap & p_typeSortedLights )
+				: m_typeSortedLights{ p_typeSortedLights }
+			{
+			}
+
+			inline void operator()( LightSPtr p_element )
+			{
+				auto l_it = m_typeSortedLights.insert( { p_element->GetLightType(), LightsArray() } ).first;
+				bool l_found = std::binary_search( l_it->second.begin(), l_it->second.end(), p_element );
+
+				if ( !l_found )
+				{
+					l_it->second.push_back( p_element );
+				}
+			}
+
+			LightsMap & m_typeSortedLights;
+		};
+
+		struct LightCleaner
+		{
+			LightCleaner( LightsMap & p_typeSortedLights )
+				: m_typeSortedLights{ p_typeSortedLights }
+			{
+			}
+
+			inline void operator()( LightSPtr p_element )
+			{
+				auto l_itMap = m_typeSortedLights.find( p_element->GetLightType() );
+
+				if ( l_itMap != m_typeSortedLights.end() )
+				{
+					auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_element );
+
+					if ( l_it != l_itMap->second.end() )
+					{
+						l_itMap->second.erase( l_it );
+					}
+				}
+			}
+
+			LightsMap & m_typeSortedLights;
+		};
+	}
+
+	LightCache::ObjectCache( Engine & p_engine
+							 , Scene & p_scene
+							 , SceneNodeSPtr p_rootNode
+							 , SceneNodeSPtr p_rootCameraNode
+							 , SceneNodeSPtr p_rootObjectNode
+							 , Producer && p_produce
+							 , Initialiser && p_initialise
+							 , Cleaner && p_clean
+							 , Merger && p_merge
+							 , Attacher && p_attach
+							 , Detacher && p_detach )
+		: MyObjectCache( p_engine
+						 , p_scene
+						 , p_rootNode
+						 , p_rootCameraNode
+						 , p_rootObjectNode
+						 , std::move( p_produce )
+						 , std::bind( LightInitialiser{ m_typeSortedLights }, std::placeholders::_1 )
+						 , std::bind( LightCleaner{ m_typeSortedLights }, std::placeholders::_1 )
+						 , std::move( p_merge )
+						 , std::move( p_attach )
+						 , std::move( p_detach ) )
 		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
-		m_initialise.m_typeSortedLights = &m_typeSortedLights;
-		m_clean.m_typeSortedLights = &m_typeSortedLights;
 	}
 
 	LightCache::~ObjectCache()

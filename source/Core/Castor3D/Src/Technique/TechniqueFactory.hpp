@@ -59,30 +59,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual void Initialise();
 	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		04/07/2016
-	\version	0.9.0
-	\~english
-	\brief		Helper structure to create an element.
-	\~french
-	\brief		Structure permettant de créer un élément.
-	*/
-	template<>
-	struct ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >
-	{
-		using ElementPtr = std::shared_ptr< RenderTechnique >;
-
-		ElementProducer() = default;
-
-		ElementPtr operator()( Castor::String const & p_key, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_parameters )
-		{
-			return m_factory.Create( p_type, p_renderTarget, p_renderSystem, p_parameters );
-		}
-		//!\~english	The RenderTechnique factory.
-		//!\~french		La fabrique de RenderTechnique.
-		TechniqueFactory m_factory;
-	};
 }
 
 #endif

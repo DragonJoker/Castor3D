@@ -6,13 +6,14 @@
 #include "MaterialCache.hpp"
 #include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
-#include "ShaderProgramCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
 
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/Pipeline.hpp"
@@ -21,8 +22,13 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 #include "Shader/OneFrameVariable.hpp"
-#include "Texture/TextureLayout.hpp"
 #include "Shader/PointFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Font.hpp>
 
@@ -555,7 +561,7 @@ namespace Castor3D
 		using namespace GLSL;
 
 		// Shader program
-		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderCache();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );

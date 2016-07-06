@@ -1,8 +1,10 @@
 #include "SceneNodeCache.hpp"
 
+#include "Engine.hpp"
+
 using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< SceneNode >::Name = cuT( "SceneNode" );
+	const String ObjectCacheTraits< SceneNode, String >::Name = cuT( "SceneNode" );
 }

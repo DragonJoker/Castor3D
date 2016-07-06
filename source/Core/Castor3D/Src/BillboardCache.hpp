@@ -18,9 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BILLBOARD_CACHE_H___
 #define ___C3D_BILLBOARD_CACHE_H___
 
-#include "Cache/ObjectCache.hpp"
-
-#include "Scene/BillboardList.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
 {
@@ -29,32 +27,26 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a scene cache behaviour.
+	\remarks	Specialisation for BillboardList.
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache de scène.
+	\remarks	Spécialisation pour BillboardList.
 	*/
-	template<>
-	struct CachedObjectNamer< BillboardList >
+	template< typename KeyType >
+	struct ObjectCacheTraits< BillboardList, KeyType >
 	{
 		C3D_API static const Castor::String Name;
+		using Producer = std::function< std::shared_ptr< BillboardList >( KeyType const &, SceneNodeSPtr ) >;
+		using Merger = std::function< void( ObjectCacheBase< BillboardList, KeyType > const &
+											, Castor::Collection< BillboardList, KeyType > &
+											, std::shared_ptr< BillboardList >
+											, SceneNodeSPtr
+											, SceneNodeSPtr ) >;
 	};
-	/**
-	 *\~english
-	 *\brief		Creates a BillboardList cache.
-	 *\param[in]	p_get		The engine getter.
-	 *\param[in]	p_produce	The element producer.
-	 *\~french
-	 *\brief		Crée un cache de BillboardList.
-	 *\param[in]	p_get		Le récupérteur de moteur.
-	 *\param[in]	p_produce	Le créateur d'objet.
-	 */
-	template<>
-	inline std::unique_ptr< BillboardListCache >
-	MakeObjectCache< BillboardList, Castor::String, BillboardListProducer, MovableAttacher, MovableDetacher, ElementInitialiser< BillboardList >, ElementCleaner< BillboardList >, ElementMerger< BillboardList, Castor::String > >
-		( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, BillboardListProducer && p_produce )
-	{
-		return std::make_unique< BillboardListCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
-	}
 }
+
+// included after because it depends on CacheTraits
+#include "Cache/ObjectCache.hpp"
 
 #endif

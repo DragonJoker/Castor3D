@@ -12,11 +12,6 @@ namespace Castor3D
 		bool g_creatingCurrent = false;
 	}
 	
-	DepthStencilStateProducer::ElementPtr DepthStencilStateProducer::operator()( Castor::String const & p_key )
-	{
-		return m_engine.GetRenderSystem()->CreateDepthStencilState();
-	}
-
 	DepthStencilStateWPtr DepthStencilState::m_wCurrentState;
 
 	DepthStencilState::DepthStencilState( Engine & p_engine )

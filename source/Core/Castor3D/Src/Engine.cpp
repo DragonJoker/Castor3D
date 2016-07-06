@@ -1,25 +1,15 @@
 #include "Engine.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
-#include "ListenerCache.hpp"
-#include "MaterialCache.hpp"
-#include "MeshCache.hpp"
-#include "OverlayCache.hpp"
-#include "PluginCache.hpp"
-#include "RasteriserStateCache.hpp"
-#include "SamplerCache.hpp"
-#include "SceneCache.hpp"
-#include "ShaderProgramCache.hpp"
-#include "RenderTargetCache.hpp"
-#include "TechniqueCache.hpp"
-#include "RenderWindowCache.hpp"
-
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/FrameListener.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Overlay/DebugOverlays.hpp"
-#include "Overlay/TextOverlay.hpp"
+#include "Material/Material.hpp"
+#include "Mesh/Mesh.hpp"
 #include "Miscellaneous/VersionException.hpp"
+#include "Overlay/DebugOverlays.hpp"
+#include "Overlay/Overlay.hpp"
+#include "Overlay/TextOverlay.hpp"
+#include "Plugin/Plugin.hpp"
 #include "Plugin/PostFxPlugin.hpp"
 #include "Plugin/RendererPlugin.hpp"
 #include "Plugin/TechniquePlugin.hpp"
@@ -27,7 +17,16 @@
 #include "Render/RenderLoopAsync.hpp"
 #include "Render/RenderLoopSync.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Render/RenderWindow.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Technique/RenderTechnique.hpp"
+#include "Texture/Sampler.hpp"
 
 #include <DynamicLibrary.hpp>
 #include <Factory.hpp>
@@ -59,32 +58,57 @@ namespace Castor3D
 		Image::InitialiseImageLib();
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = MakeCache< FrameListener, String >( *this, [this]( String const & p_name )
+		m_listenerCache = MakeCache< FrameListener, String >( *this, []( String const & p_name )
 		{
-			std::make_shared< FrameListener >( p_name );
+			return std::make_shared< FrameListener >( p_name );
+		}, []( FrameListenerSPtr )
+		{
+		}, []( FrameListenerSPtr p_element )
+		{
+			p_element->Flush();
 		} );
 		m_defaultListener = m_listenerCache->Add( cuT( "Default" ) );
 
 		m_shaderCache = MakeCache( *this );
 		m_samplerCache = MakeCache< Sampler, String >( *this, [this]( String const & p_name )
 		{
-			GetRenderSystem()->CreateSampler( p_name );
+			return GetRenderSystem()->CreateSampler( p_name );
 		} );
 		m_depthStencilStateCache = MakeCache< DepthStencilState, String >( *this, [this]( String const & p_name )
 		{
-			GetRenderSystem()->CreateDepthStencilState();
+			return GetRenderSystem()->CreateDepthStencilState();
 		} );
 		m_rasteriserStateCache = MakeCache< RasteriserState, String >( *this, [this]( String const & p_name )
 		{
-			GetRenderSystem()->CreateRasteriserState();
+			return GetRenderSystem()->CreateRasteriserState();
 		} );
-		m_blendStateCache = MakeCache< BlendState, String >( *this, BlendStateProducer{ *this } );
-		m_materialCache = MakeCache< Material, String > ( *this, MaterialProducer{} );
-		m_pluginCache = MakeCache< Plugin, String >( *this, PluginProducer{} );
-		m_overlayCache = MakeCache< Overlay, String >( *this, OverlayProducer{ *this } );
-		m_sceneCache = MakeCache< Scene, String >( *this, SceneProducer{} );
+		m_blendStateCache = MakeCache< BlendState, String >( *this, [this]( String const & p_name )
+		{
+			return GetRenderSystem()->CreateBlendState();
+		} );
+		m_materialCache = MakeCache< Material, String >( *this, [this]( String const & p_name )
+		{
+			return std::make_shared< Material >( p_name, *this );
+		} );
+		m_pluginCache = MakeCache< Plugin, String >( *this, []( String const & p_name, ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library )
+		{
+			return nullptr;
+		} );
+		m_overlayCache = MakeCache< Overlay, String >( *this, [this]( String const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		{
+			auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
+			l_return->SetName( p_name );
+			return l_return;
+		} );
+		m_sceneCache = MakeCache< Scene, String >( *this, [this]( Castor::String const & p_name )
+		{
+			return std::make_shared< Scene >( p_name, *this );
+		} );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
-		m_techniqueCache = MakeCache< RenderTechnique, String >( *this, RenderTechniqueProducer{} );
+		m_techniqueCache = MakeCache< RenderTechnique, String >( *this, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
+		{
+			return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
+		} );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -143,19 +167,6 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			m_targetCache->SetRenderSystem( m_renderSystem );
-			m_samplerCache->SetRenderSystem( m_renderSystem );
-			m_shaderCache->SetRenderSystem( m_renderSystem );
-			m_overlayCache->SetRenderSystem( m_renderSystem );
-			m_materialCache->SetRenderSystem( m_renderSystem );
-			m_sceneCache->SetRenderSystem( m_renderSystem );
-			m_blendStateCache->SetRenderSystem( m_renderSystem );
-			m_shaderCache->SetRenderSystem( m_renderSystem );
-			m_depthStencilStateCache->SetRenderSystem( m_renderSystem );
-			m_rasteriserStateCache->SetRenderSystem( m_renderSystem );
-			m_blendStateCache->SetRenderSystem( m_renderSystem );
-			m_techniqueCache->SetRenderSystem( m_renderSystem );
-
 			m_defaultBlendState = m_blendStateCache->Add( cuT( "Default" ) );
 			m_defaultSampler = m_samplerCache->Add( cuT( "Default" ) );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );

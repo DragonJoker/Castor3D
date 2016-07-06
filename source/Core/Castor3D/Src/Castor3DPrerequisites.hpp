@@ -467,18 +467,33 @@ namespace Castor3D
 	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to get an object type name.
+	\brief		Helper structure to specialise a cache behaviour.
+	*\remarks	Must hold:
+				<ul>
+				<li>Name: The element type name.</li>
+				<li>Producer: The element creation function prototype.</li>
+				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+				</ul>
 	\~french
-	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks	doit contenir:
+				<ul>
+				<li>Name: Le nom du type d'élément.</li>
+				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+				</ul>
 	*/
-	template< typename ElementType >
-	struct CachedObjectNamer;
+	template< typename ElementType, typename KeyType >
+	struct CacheTraits;
+
+	template< typename ElementType, typename KeyType >
+	class CacheBase;
 
 	template< typename ElementType, typename KeyType >
 	class Cache;
 
 	template< typename ElementType, typename KeyType >
-	using ElementProducer = std::function< std::shared_ptr< ElementType >( KeyType const & ) >;
+	struct ElementProducer;
 
 	template< typename ElementType >
 	using ElementInitialiser = std::function< void( std::shared_ptr< ElementType > ) >;
@@ -487,7 +502,7 @@ namespace Castor3D
 	using ElementCleaner = std::function< void( std::shared_ptr< ElementType > ) >;
 
 	template< typename ElementType, typename KeyType >
-	using ElementMerger = std::function< void( Cache< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
+	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
 
 	class ShaderProgramCache;
 	class RenderTargetCache;
@@ -495,69 +510,68 @@ namespace Castor3D
 	using BlendStateCache = Cache< BlendState, Castor::String >;
 	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String >;
 	using ListenerCache = Cache< FrameListener, Castor::String >;
+	using MeshCache = Cache< Mesh, Castor::String >;
 	using RasteriserStateCache = Cache< RasteriserState, Castor::String >;
 	using SamplerCache = Cache< Sampler, Castor::String >;
 	using SceneCache = Cache< Scene, Castor::String >;
+	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String >;
 	using RenderWindowCache = Cache< RenderWindow, Castor::String >;
 
 	DECLARE_SMART_PTR( BlendStateCache );
 	DECLARE_SMART_PTR( DepthStencilStateCache );
 	DECLARE_SMART_PTR( ListenerCache );
+	DECLARE_SMART_PTR( MeshCache );
 	DECLARE_SMART_PTR( RasteriserStateCache );
 	DECLARE_SMART_PTR( SceneCache );
 	DECLARE_SMART_PTR( SamplerCache );
 	DECLARE_SMART_PTR( ShaderProgramCache );
 	DECLARE_SMART_PTR( RenderTargetCache );
+	DECLARE_SMART_PTR( RenderTechniqueCache );
 	DECLARE_SMART_PTR( RenderWindowCache );
 
 	/*!
 	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
+	\date 		04/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
+	\brief		Helper structure to specialise a cache behaviour.
+	*\remarks	Must hold:
+				<ul>
+				<li>Name: The element type name.</li>
+				<li>Producer: The element creation function prototype.</li>
+				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+				</ul>
 	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks	doit contenir:
+				<ul>
+				<li>Name: Le nom du type d'élément.</li>
+				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+				</ul>
 	*/
-	template< typename ElementType, typename Enable = void >
-	struct ElementAttacher;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable detaching if a type supports it.
-	\~french
-	\brief		Structure permettant de détacher les éléments qui le supportent.
-	*/
-	template< typename ElementType, typename Enable = void >
-	struct ElementDetacher;
+	template< typename ElementType, typename KeyType >
+	struct ObjectCacheTraits;
 
-	using MovableAttacher = ElementAttacher< MovableObject >;
-	using MovableDetacher = ElementDetacher< MovableObject >;
+	template< typename ElementType >
+	using ElementAttacher = std::function< void( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ) >;
 
-	struct GeometryInitialiser;
-	struct LightInitialiser;
-	struct LightCleaner;
+	template< typename ElementType >
+	using ElementDetacher = std::function< void( std::shared_ptr< ElementType > ) >;
 
-	template< typename ElementType
-		, typename KeyType
-		, typename InitialiserType = ElementInitialiser< ElementType >
-		, typename CleanerType = ElementCleaner< ElementType >
-		, typename MergerType = ElementMerger< ElementType, KeyType >
-		, typename AttacherType = ElementAttacher< ElementType >
-		, typename DetacherType = ElementDetacher< ElementType > >
+	template< typename ElementType, typename KeyType >
+	class ObjectCacheBase;
+
+	template< typename ElementType, typename KeyType >
 	class ObjectCache;
 
 	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, Castor::String >;
-	using BillboardListCache = ObjectCache< BillboardList, Castor::String, ElementInitialiser< BillboardList >, ElementCleaner< BillboardList >, ElementMerger< BillboardList, Castor::String >, ElementAttacher< MovableObject >, ElementDetacher< MovableObject > >;
-	using CameraCache = ObjectCache< Camera, Castor::String, ElementInitialiser< Camera >, ElementCleaner< Camera >, ElementMerger< Camera, Castor::String >, ElementAttacher< MovableObject >, ElementDetacher< MovableObject > >;
-	using MeshCache = Cache< Mesh, Castor::String >;
+	using BillboardListCache = ObjectCache< BillboardList, Castor::String >;
+	using CameraCache = ObjectCache< Camera, Castor::String >;
 
 	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
 	DECLARE_SMART_PTR( BillboardListCache );
 	DECLARE_SMART_PTR( CameraCache );
-	DECLARE_SMART_PTR( MeshCache );
 
 	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
 	class CacheView;
@@ -656,7 +670,7 @@ namespace Castor3D
 	//@}
 
 #define MAKE_CACHE_NAME( className )\
-	Cache< className, Castor::String, className##Producer, ElementInitialiser< className >, ElementCleaner< className >, ElementMerger< className, Castor::String > >
+	Cache< className, Castor::String >
 
 #define DECLARE_CACHE_MEMBER( memberName, className )\
 	public:\
@@ -683,6 +697,22 @@ namespace Castor3D
 		}\
 	private:\
 		std::unique_ptr< className##Cache > m_##memberName##Cache
+
+#define MAKE_OBJECT_CACHE_NAME( className )\
+	ObjectCache< className, Castor::String >
+
+#define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
+	public:\
+		inline MAKE_OBJECT_CACHE_NAME( className ) & Get##className##Cache()\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+		inline MAKE_OBJECT_CACHE_NAME( className ) const & Get##className##Cache()const\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+	private:\
+		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
