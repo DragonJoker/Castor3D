@@ -1,5 +1,7 @@
 #include "LightCache.hpp"
 
+#include "Engine.hpp"
+
 #include "SceneCache.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"
@@ -16,10 +18,11 @@ namespace Castor3D
 {
 	const String CachedObjectNamer< Light >::Name = cuT( "Light" );
 
-	LightCache::LightCache( SceneNodeSPtr p_rootNode
+	LightCache::ObjectCache( SceneNodeSPtr p_rootNode
 							, SceneNodeSPtr p_rootCameraNode
 							, SceneNodeSPtr p_rootObjectNode
-							, SceneGetter && p_get
+							, Engine & p_engine
+							, Scene & p_scene
 							, Producer && p_produce
 							, Initialiser && p_initialise
 							, Cleaner && p_clean
@@ -29,7 +32,8 @@ namespace Castor3D
 		: MyObjectCache{ p_rootNode
 					   , p_rootCameraNode
 					   , p_rootObjectNode
-					   , std::move( p_get )
+					   , p_engine
+					   , p_scene
 					   , std::move( p_produce )
 					   , std::move( p_initialise )
 					   , std::move( p_clean )
@@ -42,7 +46,7 @@ namespace Castor3D
 		m_clean.m_typeSortedLights = &m_typeSortedLights;
 	}
 
-	LightCache::~LightCache()
+	LightCache::~ObjectCache()
 	{
 		m_lightsTexture.reset();
 	}

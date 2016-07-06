@@ -4,7 +4,7 @@
 #include "CameraCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "Render/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"

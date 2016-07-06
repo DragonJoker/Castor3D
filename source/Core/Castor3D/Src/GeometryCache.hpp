@@ -50,8 +50,7 @@ namespace Castor3D
 	\brief		Structure permettant de nettoyer les éléments qui le supportent.
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
-	template<>
-	struct ElementInitialiser< Geometry >
+	struct GeometryInitialiser
 	{
 		inline void operator()( Engine & p_engine, GeometrySPtr p_element )
 		{
@@ -69,64 +68,27 @@ namespace Castor3D
 	\date 		29/01/2016
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
-	\remarks	Specialisation for Geometry.
-	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
-	\remarks	Spécialisation pour Geometry.
-	*/
-	template<>
-	struct ElementAttacher< Geometry >
-	{
-		/**
-		 *\~english
-		 *\brief		Attaches an element to the appropriate parent node.
-		 *\param[in]	p_element			The scene node.
-		 *\param[in]	p_parent			The parent scene node.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Attache un élément au parent approprié.
-		 *\param[in]	p_element			Le noeud de scène.
-		 *\param[in]	p_parent			Le noeud de scène parent.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		inline void operator()( std::shared_ptr< Geometry > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		{
-			if ( p_parent )
-			{
-				p_parent->AttachObject( p_element );
-			}
-			else
-			{
-				p_rootObjectNode->AttachObject( p_element );
-			}
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
 	\brief		Geometry cache.
 	\~french
 	\brief		Cache de Geometry.
 	*/
-	class GeometryCache
-		: public ObjectCache< Geometry, Castor::String, GeometryProducer >
+	template<>
+	class ObjectCache< Geometry, Castor::String, GeometryProducer, GeometryInitialiser, ElementCleaner< Geometry >, ElementMerger< Geometry, Castor::String >, MovableAttacher, MovableDetacher >
+		: public ObjectCacheBase< Geometry, Castor::String, GeometryProducer, GeometryInitialiser, ElementCleaner< Geometry >, ElementMerger< Geometry, Castor::String >, MovableAttacher, MovableDetacher >
 	{
-		using MyObjectCache = ObjectCache< Geometry, Castor::String, GeometryProducer >;
-		using Producer = typename MyObjectCache::Producer;
-		using Initialiser = typename MyObjectCache::Initialiser;
-		using Cleaner = typename MyObjectCache::Cleaner;
-		using Attacher = typename MyObjectCache::Attacher;
-		using Detacher = typename MyObjectCache::Detacher;
-		using Merger = typename MyObjectCache::Merger;
-
 	public:
+		using MyObjectCache = ObjectCacheBase< Geometry, Castor::String, GeometryProducer, GeometryInitialiser, ElementCleaner< Geometry >, ElementMerger< Geometry, Castor::String >, MovableAttacher, MovableDetacher >;
+		using MyCacheType = typename MyObjectCacheType::MyCacheType;
+		using Element = typename MyObjectCacheType::Element;
+		using Key = typename MyObjectCacheType::Key;
+		using Collection = typename MyObjectCacheType::Collection;
+		using ElementPtr = typename MyObjectCacheType::ElementPtr;
+		using Producer = typename MyObjectCacheType::Producer;
+		using Initialiser = typename MyObjectCacheType::Initialiser;
+		using Cleaner = typename MyObjectCacheType::Cleaner;
+		using Merger = typename MyObjectCacheType::Merger;
+		using Attacher = typename MyObjectCacheType::Attacher;
+		using Detacher = typename MyObjectCacheType::Detacher;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -139,24 +101,28 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		inline GeometryCache( SceneNodeSPtr p_rootNode
-							  , SceneNodeSPtr p_rootCameraNode
-							  , SceneNodeSPtr p_rootObjectNode
-							  , SceneGetter && p_get
-							  , Producer && p_produce
-							  , Initialiser && p_initialise = Initialiser{}
-							  , Cleaner && p_clean = Cleaner{}
-							  , Merger && p_merge = Merger{}
-							  , Attacher && p_attach = Attacher{}
-							  , Detacher && p_detach = Detacher{} )
-			: MyObjectCache{ p_rootNode, p_rootCameraNode, p_rootCameraNode
-							 , std::move( p_get )
-							 , std::move( p_produce )
-							 , std::move( p_initialise )
-							 , std::move( p_clean )
-							 , std::move( p_merge )
-							 , std::move( p_attach )
-							 , std::move( p_detach ) }
+		inline ObjectCache( SceneNodeSPtr p_rootNode
+							, SceneNodeSPtr p_rootCameraNode
+							, SceneNodeSPtr p_rootObjectNode
+							, Engine & p_engine
+							, Scene & p_scene
+							, Producer && p_produce
+							, Initialiser && p_initialise = Initialiser{}
+							, Cleaner && p_clean = Cleaner{}
+							, Merger && p_merge = Merger{}
+							, Attacher && p_attach = Attacher{}
+							, Detacher && p_detach = Detacher{} )
+			: MyObjectCache{ p_rootNode
+							, p_rootCameraNode
+							, p_rootCameraNode
+							, p_engine
+							, p_scene
+							, std::move( p_produce )
+							, std::move( p_initialise )
+							, std::move( p_clean )
+							, std::move( p_merge )
+							, std::move( p_attach )
+							, std::move( p_detach ) }
 		{
 		}
 		/**
@@ -165,7 +131,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~GeometryCache()
+		inline ~ObjectCache()
 		{
 		}
 		/**
@@ -189,6 +155,8 @@ namespace Castor3D
 			return m_initialise.m_vertexCount;
 		}
 	};
+	using GeometryCache = ObjectCache< Geometry, Castor::String, GeometryProducer, GeometryInitialiser, ElementCleaner< Geometry >, ElementMerger< Geometry, Castor::String >, ElementAttacher< MovableObject >, ElementDetacher< MovableObject > >;
+	DECLARE_SMART_PTR (GeometryCache);
 	/**
 	 *\~english
 	 *\brief		Creates a Geometry cache.
@@ -205,10 +173,12 @@ namespace Castor3D
 	 *\param[in]	p_get				Le récupérteur de moteur.
 	 *\param[in]	p_produce			Le créateur d'objet.
 	 */
+	template<>
 	inline std::unique_ptr< GeometryCache >
-	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, GeometryProducer && p_produce )
+	MakeObjectCache< Geometry, Castor::String, GeometryProducer, MovableAttacher, MovableDetacher, GeometryInitialiser, ElementCleaner< Geometry >, ElementMerger< Geometry, Castor::String > >
+		( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, GeometryProducer && p_produce )
 	{
-		return std::make_unique< GeometryCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< GeometryCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
 	}
 }
 

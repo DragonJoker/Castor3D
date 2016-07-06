@@ -39,14 +39,14 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< RenderWindow, Castor::String >
 	{
-		using ElemPtr = std::shared_ptr< RenderWindow >;
+		using ElementPtr = std::shared_ptr< RenderWindow >;
 
 		ElementProducer( Engine & p_engine )
 			: m_engine{ p_engine }
 		{
 		}
 
-		ElemPtr operator()( Castor::String const & p_key )
+		ElementPtr operator()( Castor::String const & p_key )
 		{
 			return std::make_shared< RenderWindow >( p_key, m_engine );
 		}

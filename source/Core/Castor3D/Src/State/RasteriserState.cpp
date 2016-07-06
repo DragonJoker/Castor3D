@@ -1,10 +1,18 @@
-﻿#include "RasteriserState.hpp"
+#include "RasteriserState.hpp"
+
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 namespace Castor3D
 {
 	namespace
 	{
 		bool g_creatingCurrent = false;
+	}
+
+	RasteriserStateProducer::ElementPtr RasteriserStateProducer::operator()( Castor::String const & p_key )
+	{
+		return m_engine.GetRenderSystem()->CreateRasteriserState();
 	}
 
 	RasteriserStateWPtr RasteriserState::m_wCurrentState;

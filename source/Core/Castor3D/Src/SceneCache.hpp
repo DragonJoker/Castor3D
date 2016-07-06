@@ -34,7 +34,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< Scene >
+	template<>
+	struct CachedObjectNamer< Scene >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -50,26 +51,9 @@ namespace Castor3D
 	 */
 	template<>
 	inline std::unique_ptr< Cache< Scene, Castor::String, SceneProducer > >
-	MakeCache< Scene, Castor::String, SceneProducer >( EngineGetter && p_get, SceneProducer && p_produce )
+	MakeCache< Scene, Castor::String, SceneProducer >( Engine & p_engine, SceneProducer && p_produce )
 	{
-		return std::make_unique< Cache< Scene, Castor::String, SceneProducer > >( std::move( p_get ), std::move( p_produce ) );
-	}
-	/**
-	 *\~english
-	 *\brief		Updates all scenes of the given cache.
-	 *\param[in]	p_cache	The cache.
-	 *\~french
-	 *\brief		Met à jour toutes les scènes du cache donné.
-	 *\param[in]	p_cache	Le cache.
-	 */
-	inline void Update( Cache< Scene, Castor::String, ElementProducer< Scene, Castor::String, Engine & > > & p_cache )
-	{
-		auto l_lock = make_unique_lock( p_cache );
-
-		for ( auto l_it : p_cache )
-		{
-			l_it.second->Update();
-		}
+		return std::make_unique< Cache< Scene, Castor::String, SceneProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

@@ -1,7 +1,7 @@
 #include <Logger.hpp>
 
 #include <Engine.hpp>
-#include <TargetCache.hpp>
+#include <RenderTargetCache.hpp>
 
 #include <Plugin/PostFxPlugin.hpp>
 #include <Render/RenderSystem.hpp>

@@ -71,11 +71,11 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< RenderTechnique, Castor::String, Castor::String, RenderTarget, RenderSystem, Parameters >
 	{
-		using ElemPtr = std::shared_ptr< RenderTechnique >;
+		using ElementPtr = std::shared_ptr< RenderTechnique >;
 
 		ElementProducer() = default;
 
-		ElemPtr operator()( Castor::String const & p_key, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_parameters )
+		ElementPtr operator()( Castor::String const & p_key, Castor::String const & p_type, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_parameters )
 		{
 			return m_factory.Create( p_type, p_renderTarget, p_renderSystem, p_parameters );
 		}

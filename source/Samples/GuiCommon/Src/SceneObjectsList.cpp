@@ -23,7 +23,7 @@
 #include <wx/artprov.h>
 
 #include <AnimatedObjectGroupCache.hpp>
-#include <BillboardCache.hpp>
+#include <BillboardListCache.hpp>
 #include <CameraCache.hpp>
 #include <GeometryCache.hpp>
 #include <Engine.hpp>
@@ -32,7 +32,7 @@
 #include <MeshCache.hpp>
 #include <OverlayCache.hpp>
 #include <SceneCache.hpp>
-#include <WindowCache.hpp>
+#include <RenderWindowCache.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>

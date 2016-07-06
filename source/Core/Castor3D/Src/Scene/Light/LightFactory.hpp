@@ -71,13 +71,13 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< Light, Castor::String, Scene, SceneNodeSPtr, eLIGHT_TYPE >
 	{
-		using ElemPtr = std::shared_ptr< Light >;
+		using ElementPtr = std::shared_ptr< Light >;
 
 		inline ElementProducer()
 		{
 		}
 
-		inline ElemPtr operator()( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
+		inline ElementPtr operator()( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
 		{
 			return std::make_shared< Light >( p_name, p_scene, p_node, m_lightFactory, p_lightType );
 		}

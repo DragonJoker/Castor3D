@@ -33,25 +33,26 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< AnimatedObjectGroup >
+	template<>
+	struct CachedObjectNamer< AnimatedObjectGroup >
 	{
 		C3D_API static const Castor::String Name;
 	};
 	/**
 	 *\~english
-	 *\brief		Creates a BlendState cache.
+	 *\brief		Creates a AnimatedObjectGroup cache.
 	 *\param[in]	p_get		The engine getter.
 	 *\param[in]	p_produce	The element producer.
 	 *\~french
-	 *\brief		Crée un cache de BlendState.
+	 *\brief		Crée un cache de AnimatedObjectGroup.
 	 *\param[in]	p_get		Le récupérteur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
 	template<>
-	inline std::unique_ptr< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >
-	MakeCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >( EngineGetter && p_get, AnimatedObjectGroupProducer && p_produce )
+	inline std::unique_ptr< AnimatedObjectGroupCache >
+	MakeCache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer >( Engine & p_engine, AnimatedObjectGroupProducer && p_produce )
 	{
-		return std::make_unique< Cache< AnimatedObjectGroup, Castor::String, AnimatedObjectGroupProducer > >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< AnimatedObjectGroupCache >( p_engine, std::move( p_produce ) );
 	}
 }
 

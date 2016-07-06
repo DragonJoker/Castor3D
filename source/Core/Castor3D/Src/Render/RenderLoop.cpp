@@ -6,9 +6,9 @@
 #include "OverlayCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
-#include "TargetCache.hpp"
+#include "RenderTargetCache.hpp"
 #include "TechniqueCache.hpp"
-#include "WindowCache.hpp"
+#include "RenderWindowCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
@@ -39,15 +39,21 @@ namespace Castor3D
 
 	void RenderLoop::Cleanup()
 	{
-		if ( m_renderSystem->GetMainContext() )
+		if (m_renderSystem->GetMainContext ())
 		{
-			m_renderSystem->GetMainContext()->SetCurrent();
-			GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			m_renderSystem->GetMainContext()->SetCurrent ();
+			GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+			{
+				p_listener.FireEvents( eEVENT_TYPE_PRE_RENDER );
+			} );
 			GetEngine()->GetOverlayCache().UpdateRenderer();
 			m_renderSystem->GetMainContext()->EndCurrent();
 		}
 
-		GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_POST_RENDER );
+		GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+		{
+			p_listener.FireEvents( eEVENT_TYPE_POST_RENDER );
+		} );
 	}
 
 	void RenderLoop::StartRendering()
@@ -108,8 +114,14 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuUpdate()
 	{
-		GetEngine()->GetRenderTechniqueCache().Update();
-		Castor3D::Update( GetEngine()->GetSceneCache() );
+		GetEngine()->GetRenderTechniqueCache().ForEach( []( RenderTechnique & p_technique )
+		{
+			p_technique.Update();
+		} );
+		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
+		{
+			p_scene.Update();
+		} );
 		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();
 	}
@@ -120,7 +132,11 @@ namespace Castor3D
 
 		try
 		{
-			GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+			{
+				p_listener.FireEvents( eEVENT_TYPE_PRE_RENDER );
+			} );
+
 			GetEngine()->GetOverlayCache().UpdateRenderer();
 			GetEngine()->GetTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
@@ -139,19 +155,24 @@ namespace Castor3D
 
 		m_renderSystem->GetMainContext()->EndCurrent();
 		{
-			auto l_lock = make_unique_lock( GetEngine()->GetSceneCache() );
-
-			for ( auto l_it : GetEngine()->GetSceneCache() )
+			GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 			{
-				Castor3D::Render( l_it.second->GetWindowCache(), true );
-			}
+				p_scene.GetWindowCache().ForEach( []( RenderWindow & p_window )
+				{
+					p_window.Render( true );
+				} );
+			} );
 		}
 		m_debugOverlays->EndGpuTask();
 	}
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetEngine()->GetListenerCache().FireEvents( eEVENT_TYPE_POST_RENDER );
+		GetEngine()->GetListenerCache().ForEach( []( FrameListener & p_listener )
+		{
+			p_listener.FireEvents( eEVENT_TYPE_POST_RENDER );
+		} );
+
 		m_debugOverlays->EndCpuTask();
 	}
 

@@ -37,14 +37,14 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< AnimatedObjectGroup, Castor::String >
 	{
-		using ElemPtr = std::shared_ptr< AnimatedObjectGroup >;
+		using ElementPtr = std::shared_ptr< AnimatedObjectGroup >;
 
 		ElementProducer( Scene & p_scene )
 			: m_scene{ p_scene }
 		{
 		}
 
-		ElemPtr operator()( Castor::String const & p_key )
+		ElementPtr operator()( Castor::String const & p_key )
 		{
 			return std::make_shared< AnimatedObjectGroup >( p_key, m_scene );
 		}

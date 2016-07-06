@@ -3,7 +3,7 @@
 #include <MaterialCache.hpp>
 #include <MeshCache.hpp>
 #include <SamplerCache.hpp>
-#include <WindowCache.hpp>
+#include <RenderWindowCache.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Submesh.hpp>

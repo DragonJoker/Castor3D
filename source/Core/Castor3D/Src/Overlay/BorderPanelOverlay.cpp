@@ -90,7 +90,7 @@ namespace Castor3D
 	void BorderPanelOverlay::DoUpdateSize()
 	{
 		OverlayCategory::DoUpdateSize();
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayCache().GetRenderer();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
 
 		if ( l_renderer )
 		{

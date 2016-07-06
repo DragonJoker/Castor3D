@@ -6,7 +6,7 @@
 #include "MaterialCache.hpp"
 #include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Overlay.hpp"

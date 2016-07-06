@@ -1,10 +1,18 @@
-﻿#include "BlendState.hpp"
+#include "BlendState.hpp"
+
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 namespace Castor3D
 {
 	namespace
 	{
 		bool g_creatingCurrent = false;
+	}
+
+	BlendStateProducer::ElementPtr BlendStateProducer::operator()( Castor::String const & p_key )
+	{
+		return m_engine.GetRenderSystem()->CreateBlendState();
 	}
 
 	BlendStateWPtr BlendState::m_wCurrentState;

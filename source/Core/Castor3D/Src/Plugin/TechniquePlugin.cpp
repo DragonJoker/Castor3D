@@ -13,7 +13,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TechniquePlugin::TechniquePlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_TECHNIQUE, p_library, *p_engine )
+		: Plugin( ePLUGIN_TYPE_TECHNIQUE, p_library, *p_engine )
 	{
 		if ( m_pfnOnLoad )
 		{

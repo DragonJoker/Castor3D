@@ -33,7 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< Material >
+	template<>
+	struct CachedObjectNamer< Material >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -46,16 +47,20 @@ namespace Castor3D
 	\~french
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
-	class MaterialCache
-		: public Cache< Material, Castor::String, MaterialProducer >
+	template<>
+	class Cache< Material, Castor::String, MaterialProducer >
+		: public CacheBase< Material, Castor::String, MaterialProducer, ElementInitialiser< Material >, ElementCleaner< Material >, ElementMerger< Material, Castor::String > >
 	{
 	public:
-		using MyCacheType = Cache< Material, Castor::String, MaterialProducer >;
+		using MyCacheType = CacheBase< Material, Castor::String, MaterialProducer, ElementInitialiser< Material >, ElementCleaner< Material >, ElementMerger< Material, Castor::String > >;
+		using Element = typename MyCacheType::Element;
+		using Key = typename MyCacheType::Key;
 		using Collection = typename MyCacheType::Collection;
-		using ElemPtr = typename MyCacheType::ElemPtr;
+		using ElementPtr = typename MyCacheType::ElementPtr;
 		using Producer = typename MyCacheType::Producer;
 		using Initialiser = typename MyCacheType::Initialiser;
 		using Cleaner = typename MyCacheType::Cleaner;
+		using Merger = typename MyCacheType::Merger;
 
 	public:
 		/**
@@ -66,11 +71,12 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		inline MaterialCache( EngineGetter && p_get
-							  , Producer && p_produce
-							  , Initialiser && p_initialise = Initialiser{}
-							  , Cleaner && p_clean = Cleaner{} )
-			: Cache< Material, Castor::String, MaterialProducer >( std::move( p_get ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ) )
+		inline Cache( Engine & p_engine
+					  , Producer && p_produce
+					  , Initialiser && p_initialise = Initialiser{}
+					  , Cleaner && p_clean = Cleaner{}
+					  , Merger && p_merge = Merger{} )
+			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
 		{
 		}
 		/**
@@ -79,7 +85,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~MaterialCache ()
+		inline ~Cache()
 		{
 		}
 		/**
@@ -142,6 +148,8 @@ namespace Castor3D
 		//!\~french		Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
 	};
+	using MaterialCache = Cache< Material, Castor::String, MaterialProducer >;
+	DECLARE_SMART_PTR (MaterialCache);
 	/**
 	 *\~english
 	 *\brief		Creates a Material cache.
@@ -152,10 +160,11 @@ namespace Castor3D
 	 *\param[in]	p_get		Le récupérteur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
-	inline std::unique_ptr< MaterialCache >
-	MakeCache( EngineGetter && p_get, MaterialProducer && p_produce )
+	template<>
+	inline std::unique_ptr< Cache< Material, Castor::String, MaterialProducer > >
+	MakeCache< Material, Castor::String, MaterialProducer >( Engine & p_engine, MaterialProducer && p_produce )
 	{
-		return std::make_unique< MaterialCache >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< Material, Castor::String, MaterialProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

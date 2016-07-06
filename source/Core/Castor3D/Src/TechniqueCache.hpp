@@ -33,7 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< RenderTechnique >
+	template<>
+	struct CachedObjectNamer< RenderTechnique >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -46,33 +47,41 @@ namespace Castor3D
 	\~french
 	\brief		Le cache de techniques de rendu.
 	*/
-	class RenderTechniqueCache
-		: public Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >
+	template<>
+	class Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >
+		: public CacheBase< RenderTechnique, Castor::String, RenderTechniqueProducer, ElementInitialiser< RenderTechnique >, ElementCleaner< RenderTechnique >, ElementMerger< RenderTechnique, Castor::String > >
 	{
-		using CacheType = Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >;
-
 	public:
+		using MyCacheType = CacheBase< RenderTechnique, Castor::String, RenderTechniqueProducer, ElementInitialiser< RenderTechnique >, ElementCleaner< RenderTechnique >, ElementMerger< RenderTechnique, Castor::String > >;
+		using Element = typename MyCacheType::Element;
+		using Key = typename MyCacheType::Key;
+		using Collection = typename MyCacheType::Collection;
+		using ElementPtr = typename MyCacheType::ElementPtr;
+		using Producer = typename MyCacheType::Producer;
+		using Initialiser = typename MyCacheType::Initialiser;
+		using Cleaner = typename MyCacheType::Cleaner;
+		using Merger = typename MyCacheType::Merger;
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		C3D_API RenderTechniqueCache( EngineGetter && p_get, RenderTechniqueProducer && p_produce );
+		C3D_API Cache( Engine & p_engine
+					  , RenderTechniqueProducer && p_produce
+					  , Initialiser && p_initialise = Initialiser{}
+					  , Cleaner && p_clean = Cleaner{}
+					  , Merger && p_merge = Merger{} )
+			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~RenderTechniqueCache();
-		/**
-		 *\~english
-		 *\brief		Updates all techniques.
-		 *\~french
-		 *\brief		Met à jour toutes les techniques.
-		 */
-		C3D_API void Update();
+		C3D_API ~Cache();
 		/**
 		 *\~english
 		 *\return		The RenderTechnique factory.
@@ -94,6 +103,8 @@ namespace Castor3D
 			return m_produce.m_factory;
 		}
 	};
+	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String, RenderTechniqueProducer >;
+	DECLARE_SMART_PTR (RenderTechniqueCache);
 	/**
 	 *\~english
 	 *\brief		Creates a RenderTechnique cache.
@@ -104,10 +115,11 @@ namespace Castor3D
 	 *\param[in]	p_get		Le récupérateur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
-	inline std::unique_ptr< RenderTechniqueCache >
-	MakeCache( EngineGetter && p_get, RenderTechniqueProducer && p_produce )
+	template<>
+	inline std::unique_ptr< Cache< RenderTechnique, Castor::String, RenderTechniqueProducer > >
+	MakeCache< RenderTechnique, Castor::String, RenderTechniqueProducer > ( Engine & p_engine, RenderTechniqueProducer && p_produce )
 	{
-		return std::make_unique< RenderTechniqueCache >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< RenderTechnique, Castor::String, RenderTechniqueProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

@@ -36,9 +36,9 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< Material, Castor::String, Engine >
 	{
-		using ElemPtr = std::shared_ptr< Material >;
+		using ElementPtr = std::shared_ptr< Material >;
 
-		inline ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		inline ElementPtr operator()( Castor::String const & p_key, Engine & p_engine )
 		{
 			return std::make_shared< Material >( p_key, p_engine );
 		}

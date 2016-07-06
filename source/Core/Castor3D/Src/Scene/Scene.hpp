@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "SceneNode.hpp"
+#include "Cache/ObjectCache.hpp"
 
 #include "BillboardList.hpp"
 #include "Camera.hpp"
@@ -27,64 +26,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "SceneNode.hpp"
 #include "Animation/AnimatedObjectGroup.hpp"
 #include "Light/Light.hpp"
+#include "Material/Material.hpp"
 #include "Mesh/Mesh.hpp"
+#include "Overlay/Overlay.hpp"
 #include "Texture/Sampler.hpp"
 #include "Render/RenderWindow.hpp"
 
 #include <Logger.hpp>
 #include <OwnedBy.hpp>
-
-#define DECLARE_CACHE_MEMBER( memberName, className )\
-	public:\
-		inline className##Cache & Get##className##Cache()\
-		{\
-			return *m_##memberName##Cache;\
-		}\
-		inline className##Cache const & Get##className##Cache()const\
-		{\
-			return *m_##memberName##Cache;\
-		}\
-	private:\
-		className##CacheUPtr m_##memberName##Cache
-
-#define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
-	public:\
-		inline CacheView< className, className##Cache, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-		inline CacheView< className, className##Cache, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-	private:\
-		std::unique_ptr< CacheView< className, className##Cache, eventType > > m_##memberName##CacheView
-
-#define DECLARE_CACHE_VIEW_MEMBER_CU( memberName, className, eventType )\
-	public:\
-		inline CacheView< Castor::className, Castor::className##Cache, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-		inline CacheView< Castor::className, Castor::className##Cache, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-	private:\
-		std::unique_ptr< CacheView< Castor::className, Castor::className##Cache, eventType > > m_##memberName##CacheView
-
-#define DECLARE_CACHE_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
-	public:\
-		inline CacheView< className, mgrName##Cache, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-		inline CacheView< className, mgrName##Cache, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##CacheView;\
-		}\
-	private:\
-		std::unique_ptr< CacheView< className, mgrName##Cache, eventType > > m_##memberName##CacheView
 
 namespace Castor3D
 {
@@ -100,9 +49,9 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< Scene, Castor::String, Engine & >
 	{
-		using ElemPtr = std::shared_ptr< Scene >;
+		using ElementPtr = std::shared_ptr< Scene >;
 
-		ElemPtr operator()( Castor::String const & p_key, Engine & p_engine )
+		ElementPtr operator()( Castor::String const & p_key, Engine & p_engine )
 		{
 			return std::make_shared< Scene >( p_key, p_engine );
 		}
@@ -436,13 +385,13 @@ namespace Castor3D
 		DECLARE_CACHE_MEMBER( mesh, Mesh );
 		//!\~english	The billboards cache.
 		//!\~french		Le cache de billboards.
-		DECLARE_CACHE_MEMBER( billboard, Billboard );
+		DECLARE_CACHE_MEMBER( billboard, BillboardList );
 		//!\~english	The animated objects groups cache.
 		//!\~french		Le cache de groupes d'objets animés.
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
 		//!\~english	The render windows cache.
 		//!\~french		Le cache de fenêtres de rendu.
-		DECLARE_CACHE_MEMBER( window, Window );
+		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
 		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );

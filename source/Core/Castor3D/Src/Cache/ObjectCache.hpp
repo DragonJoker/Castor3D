@@ -35,10 +35,10 @@ namespace Castor3D
 	\brief		Structure permettant d'attacher les éléments qui le supportent.
 	\remarks	Spécialisation pour les types d'objet non attachables.
 	*/
-	template< typename Elem >
-	struct ElementAttacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
+	template< typename ElementType >
+	struct ElementAttacher < ElementType, typename std::enable_if < !is_detachable< ElementType >::value >::type >
 	{
-		using ElemPtr = std::shared_ptr< Elem >;
+		using ElementPtr = std::shared_ptr< ElementType >;
 		/**
 		 *\~english
 		 *\brief		Attaches an element to the appropriate parent node.
@@ -55,7 +55,7 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		inline void operator()( ElemPtr p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
+		inline void operator()( ElementPtr p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
 		}
 	};
@@ -70,12 +70,12 @@ namespace Castor3D
 	\brief		Structure permettant de détacher les éléments qui le supportent.
 	\remarks	Spécialisation pour les types d'objet non détachables.
 	*/
-	template< typename Elem >
-	struct ElementDetacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
+	template< typename ElementType >
+	struct ElementDetacher < ElementType, typename std::enable_if < !is_detachable< ElementType >::value >::type >
 	{
-		using ElemPtr = std::shared_ptr< Elem >;
+		using ElementPtr = std::shared_ptr< ElementType >;
 
-		inline void operator()( ElemPtr p_element )
+		inline void operator()( ElementPtr p_element )
 		{
 		}
 	};
@@ -90,12 +90,12 @@ namespace Castor3D
 	\brief		Structure permettant de détacher les éléments qui le supportent.
 	\remarks	Spécialisation pour les types d'objet détachables.
 	*/
-	template< typename Elem >
-	struct ElementDetacher< Elem, typename std::enable_if< is_detachable< Elem >::value >::type >
+	template< typename ElementType >
+	struct ElementDetacher< ElementType, typename std::enable_if< is_detachable< ElementType >::value >::type >
 	{
-		using ElemPtr = std::shared_ptr< Elem >;
+		using ElementPtr = std::shared_ptr< ElementType >;
 
-		inline void operator()( ElemPtr p_element )
+		inline void operator()( ElementPtr p_element )
 		{
 			p_element->Detach();
 		}
@@ -105,28 +105,41 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to retrieve the engine instance.
+	\brief		Helper structure to enable moving elements from a cache to another.
+	\remarks	Specialisation for detachable object types.
 	\~french
-	\brief		Structure permettant de récupérer le moteur.
+	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
+	\remarks	Spécialisation pour les types d'objet détachables.
 	*/
-	struct SceneGetter
+	template< typename ElementType, typename KeyType >
+	struct ElementMerger< ElementType, KeyType, typename std::enable_if< is_detachable< ElementType >::value >::type >
 	{
-		inline SceneGetter( Scene & p_scene )
-			: m_scene{ p_scene }
-		{
-		}
+		using ElementPtr = std::shared_ptr< ElementType >;
 
-		inline Scene * operator()()const
+		template< typename InitialiserType, typename CleanerType, typename MergerType, typename AttacherType, typename DetacherType >
+		inline void operator()( ObjectCache< ElementType, KeyType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType > const & p_source, Castor::Collection< ElementType, KeyType > & p_destination, ElementPtr p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
 		{
-			return &m_scene;
-		}
+			//if ( p_element->GetParent()->GetName() == p_cameraRootNode->GetName() )
+			//{
+			//	p_element->Detach();
+			//	p_element->AttachTo( p_cameraRootNode );
+			//}
+			//else if ( p_element->GetParent()->GetName() == p_objectRootNode->GetName() )
+			//{
+			//	p_element->Detach();
+			//	p_element->AttachTo( p_objectRootNode );
+			//}
 
-		inline Scene * operator()()
-		{
-			return &m_scene;
-		}
+			//Castor::String l_name = p_element->GetName();
 
-		Scene & m_scene;
+			//while ( p_destination.find( l_name ) != p_destination.end() )
+			//{
+			//	l_name = p_source.GetScene()->GetName() + cuT( "_" ) + l_name;
+			//}
+
+			//p_element->SetName( l_name );
+			//p_destination.insert( l_name, p_element );
+		}
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -137,19 +150,29 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un cache d'éléments de scène.
 	*/
-	template< typename Elem, typename Key, typename ProducerType >
-	class ObjectCache
-		: public Cache< Elem, Key, ProducerType >
+	template< typename ElementType
+		, typename KeyType
+		, typename InitialiserType
+		, typename CleanerType
+		, typename MergerType
+		, typename AttacherType
+		, typename DetacherType >
+	class ObjectCacheBase
+		: public CacheBase< ElementType, KeyType, InitialiserType, CleanerType, MergerType >
 	{
 	protected:
-		using MyCacheType = Cache< Elem, Key, ProducerType >;
+		using MyCacheType = CacheBase< ElementType, KeyType, InitialiserType, CleanerType, MergerType >;
+		using MyObjectCacheType = ObjectCacheBase< ElementType, KeyType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType >;
+		using Element = typename MyCacheType::Element;
+		using Key = typename MyCacheType::Key;
+		using Collection = typename MyCacheType::Collection;
+		using ElementPtr = typename MyCacheType::ElementPtr;
 		using Producer = typename MyCacheType::Producer;
-		using ElemPtr = typename MyCacheType::ElemPtr;
 		using Initialiser = typename MyCacheType::Initialiser;
 		using Cleaner = typename MyCacheType::Cleaner;
 		using Merger = typename MyCacheType::Merger;
-		using Attacher = ElementAttacher< Elem >;
-		using Detacher = ElementDetacher< Elem >;
+		using Attacher = AttacherType;
+		using Detacher = DetacherType;
 
 	public:
 		/**
@@ -166,21 +189,26 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		inline ObjectCache( SceneNodeSPtr p_rootNode
-							, SceneNodeSPtr p_rootCameraNode
-							, SceneNodeSPtr p_rootObjectNode
-							, SceneGetter && p_get
-							, Producer && p_produce
-							, Initialiser && p_initialise = Initialiser{}
-							, Cleaner && p_clean = Cleaner{}
-							, Merger && p_merge = Merger{}
-							, Attacher && p_attach = Attacher{}
-							, Detacher && p_detach = Detacher{} )
-			: MyCacheType( EngineGetter{ *p_get()->GetEngine() }, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
+		inline ObjectCacheBase( SceneNodeSPtr p_rootNode
+							   , SceneNodeSPtr p_rootCameraNode
+							   , SceneNodeSPtr p_rootObjectNode
+							   , Engine & p_engine
+							   , SceneGetter && p_scene
+							   , Producer && p_produce
+							   , Initialiser && p_initialise = Initialiser{}
+							   , Cleaner && p_clean = Cleaner{}
+							   , Merger && p_merge = Merger{}
+							   , Attacher && p_attach = Attacher{}
+							   , Detacher && p_detach = Detacher{} )
+			: MyCacheType( p_engine
+						  , std::move( p_produce )
+						  , std::move( p_initialise )
+						  , std::move( p_clean )
+						  , std::move( p_merge ) )
 			, m_rootNode( p_rootNode )
 			, m_rootCameraNode( p_rootCameraNode )
 			, m_rootObjectNode( p_rootObjectNode )
-			, m_scene( std::move( p_get ) )
+			, m_scene( std::move( p_scene ) )
 			, m_attach( std::move( p_attach ) )
 			, m_detach( std::move( p_detach ) )
 		{
@@ -192,7 +220,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~ObjectCache()
+		inline ~ObjectCacheBase()
 		{
 		}
 		/**
@@ -220,7 +248,7 @@ namespace Castor3D
 				m_detach( l_it.second );
 			}
 
-			this->GetScene()->SetChanged();
+			DoUpdateScene();
 		}
 		/**
 		 *\~english
@@ -239,7 +267,6 @@ namespace Castor3D
 				auto l_element = this->m_elements.find( p_name );
 				m_detach( l_element );
 				this->m_elements.erase( p_name );
-				this->GetScene()->SetChanged();
 			}
 		}
 		/**
@@ -250,7 +277,7 @@ namespace Castor3D
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	p_destination		Le cache de destination.
 		 */
-		inline void MergeInto( ObjectCache< Elem, Key, ProducerType > & p_destination )
+		inline void MergeInto( MyObjectCacheType & p_destination )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
 			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
@@ -261,7 +288,7 @@ namespace Castor3D
 			}
 
 			MyCacheType::Clear();
-			p_destination.GetScene()->SetChanged();
+			DoUpdateScene();
 		}
 		/**
 		 *\~english
@@ -276,9 +303,9 @@ namespace Castor3D
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
 		template< typename ... Parameters >
-		inline ElemPtr Add( Key const & p_name, ElemPtr p_element )
+		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
 		{
-			ElemPtr l_return{ p_element };
+			ElementPtr l_return{ p_element };
 
 			if ( p_element )
 			{
@@ -315,20 +342,19 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		template< typename ... Parameters >
-		inline ElemPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr, Parameters && ... p_params )
+		inline ElementPtr Get( Key const & p_name )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
-			ElemPtr l_return;
+			ElementPtr l_return;
 
 			if ( !this->m_elements.has( p_name ) )
 			{
-				l_return = this->m_produce( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
+				l_return = this->m_produce( p_name );
 				this->m_initialise( *this->GetEngine(), l_return );
 				this->m_elements.insert( p_name, l_return );
 				m_attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
-				this->GetScene()->SetChanged();
+				DoUpdateScene();
 			}
 			else
 			{
@@ -350,7 +376,14 @@ namespace Castor3D
 		}
 
 	private:
-		using Cache< Elem, Key, ProducerType >::SetRenderSystem;
+		using MyCacheType::SetRenderSystem;
+		/**
+		 *\~english
+		 *\brief		Sets the scene as changed.
+		 *\~french
+		 *\brief		Dit que la scène a changé.
+		 */
+		C3D_API void DoUpdateScene();
 
 	protected:
 		//!\~english	The object attacher.
@@ -377,38 +410,82 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable moving elements from a cache to another.
-	\remarks	Specialisation for detachable object types.
+	\brief		Base class for a scene element cache.
 	\~french
-	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
-	\remarks	Spécialisation pour les types d'objet détachables.
+	\brief		Classe de base pour un cache d'éléments de scène.
 	*/
-	template< typename Elem, typename Key >
-	struct ElementMerger< Elem, Key, typename std::enable_if< is_detachable< Elem >::value >::type >
+	template< typename ElementType
+		, typename KeyType
+		, typename ProducerType
+		, typename InitialiserType
+		, typename CleanerType
+		, typename MergerType
+		, typename AttacherType
+		, typename DetacherType >
+	class ObjectCache
+		: public ObjectCacheBase< ElementType, KeyType, ProducerType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType >
 	{
-		template< typename ProducerType >
-		inline void operator()( ObjectCache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
+	protected:
+		using MyObjectCacheType = ObjectCacheBase< ElementType, KeyType, ProducerType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType >;
+		using MyCacheType = typename MyObjectCacheType::MyCacheType;
+		using Element = typename MyObjectCacheType::Element;
+		using Key = typename MyObjectCacheType::Key;
+		using Collection = typename MyObjectCacheType::Collection;
+		using ElementPtr = typename MyObjectCacheType::ElementPtr;
+		using Producer = typename MyObjectCacheType::Producer;
+		using Initialiser = typename MyObjectCacheType::Initialiser;
+		using Cleaner = typename MyObjectCacheType::Cleaner;
+		using Merger = typename MyObjectCacheType::Merger;
+		using Attacher = typename MyObjectCacheType::Attacher;
+		using Detacher = typename MyObjectCacheType::Detacher;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_owner				The owner.
+		 *\param[in]	p_rootNode			The root node.
+		 *\param[in]	p_rootCameraNode	The cameras root node.
+		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_owner				Le propriétaire.
+		 *\param[in]	p_rootNode			Le noeud racine.
+		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 */
+		inline ObjectCache( SceneNodeSPtr p_rootNode
+						   , SceneNodeSPtr p_rootCameraNode
+						   , SceneNodeSPtr p_rootObjectNode
+						   , Engine & p_engine
+						   , SceneGetter && p_scene
+						   , Producer && p_produce
+						   , Initialiser && p_initialise = Initialiser{}
+						   , Cleaner && p_clean = Cleaner{}
+						   , Merger && p_merge = Merger{}
+						   , Attacher && p_attach = Attacher{}
+						   , Detacher && p_detach = Detacher{} )
+			: MyObjectCacheType( p_rootNode
+								, p_rootCameraNode
+								, p_rootObjectNode
+								, p_engine
+								, std::move( p_scene )
+								, std::move( p_produce )
+								, std::move( p_initialise )
+								, std::move( p_clean )
+								, std::move( p_merge )
+								, std::move( p_attach )
+								, std::move( p_detach ) )
 		{
-			//if ( p_element->GetParent()->GetName() == p_cameraRootNode->GetName() )
-			//{
-			//	p_element->Detach();
-			//	p_element->AttachTo( p_cameraRootNode );
-			//}
-			//else if ( p_element->GetParent()->GetName() == p_objectRootNode->GetName() )
-			//{
-			//	p_element->Detach();
-			//	p_element->AttachTo( p_objectRootNode );
-			//}
-
-			//Castor::String l_name = p_element->GetName();
-
-			//while ( p_destination.find( l_name ) != p_destination.end() )
-			//{
-			//	l_name = p_source.GetScene()->GetName() + cuT( "_" ) + l_name;
-			//}
-
-			//p_element->SetName( l_name );
-			//p_destination.insert( l_name, p_element );
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~ObjectCache()
+		{
 		}
 	};
 	/**
@@ -421,11 +498,18 @@ namespace Castor3D
 	 *\param[in]	p_get		Le récupérteur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
-	template< typename Elem, typename Key, typename ProducerType >
-	inline std::unique_ptr< ObjectCache< Elem, Key, ProducerType > >
-	MakeObjectCache( SceneNodeSPtr p_rootNode , SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, ProducerType && p_produce )
+	template< typename ElementType
+		, typename KeyType
+		, typename ProducerType
+		, typename AttacherType = ElementAttacher< ElementType >
+		, typename DetacherType = ElementDetacher< ElementType >
+		, typename InitialiserType = ElementInitialiser< ElementType >
+		, typename CleanerType = ElementCleaner< ElementType >
+		, typename MergerType = ElementMerger< ElementType, KeyType > >
+	inline std::unique_ptr< ObjectCache< ElementType, KeyType, ProducerType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType > >
+	MakeObjectCache( SceneNodeSPtr p_rootNode , SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, ProducerType && p_produce )
 	{
-		return std::make_unique< ObjectCache< Elem, Key, ProducerType > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< ObjectCache< ElementType, KeyType, ProducerType, InitialiserType, CleanerType, MergerType, AttacherType, DetacherType > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
 	}
 }
 

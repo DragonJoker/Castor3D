@@ -2,7 +2,7 @@
 
 #include "AnimatedObjectGroupCache.hpp"
 #include "CameraCache.hpp"
-#include "BillboardCache.hpp"
+#include "BillboardListCache.hpp"
 #include "Engine.hpp"
 #include "GeometryCache.hpp"
 #include "LightCache.hpp"
@@ -11,7 +11,7 @@
 #include "OverlayCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneNodeCache.hpp"
-#include "WindowCache.hpp"
+#include "RenderWindowCache.hpp"
 
 #include "Skybox.hpp"
 
@@ -275,14 +275,14 @@ namespace Castor3D
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 
-		m_billboardCache = MakeObjectCache< BillboardList, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, BillboardProducer{} );
+		m_billboardCache = MakeObjectCache< BillboardList, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, BillboardListProducer{} );
 		m_cameraCache = MakeObjectCache< Camera, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, CameraProducer{} );
-		m_geometryCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, GeometryProducer{} );
-		m_lightCache = MakeObjectCache( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, LightProducer{} );
+		m_geometryCache = MakeObjectCache< Geometry, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, GeometryProducer{} );
+		m_lightCache = MakeObjectCache< Light, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, LightProducer{} );
 		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( m_rootNode, m_rootCameraNode, m_rootObjectNode, SceneGetter{ *this }, SceneNodeProducer{} );
 		m_animatedObjectGroupCache = MakeCache< AnimatedObjectGroup, String >( EngineGetter{ *GetEngine() }, AnimatedObjectGroupProducer{ *this } );
 		m_meshCache = MakeCache< Mesh, String >( EngineGetter{ *GetEngine() }, MeshProducer{ *this } );
-		m_windowCache = MakeCache < RenderWindow, String >( EngineGetter{ *GetEngine() }, WindowProducer{ *GetEngine() } );
+		m_windowCache = MakeCache < RenderWindow, String >( EngineGetter{ *GetEngine() }, RenderWindowProducer{ *GetEngine() } );
 
 		m_materialCacheView = MakeCacheView< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialCache() );
 		m_samplerCacheView = MakeCacheView< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerCache() );

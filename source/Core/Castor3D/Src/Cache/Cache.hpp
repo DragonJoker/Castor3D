@@ -20,11 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Engine.hpp"
-
-#include "Event/Frame/CleanupEvent.hpp"
-#include "Event/Frame/InitialiseEvent.hpp"
-
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
 #include <Logger.hpp>
@@ -40,199 +35,20 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable initialisation if a type supports it.
-	\remarks	Specialisation for types that support initialisation.
-	\~french
-	\brief		Structure permettant d'initialiser les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui ne supportent pas l'initialisation.
-	*/
-	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-			p_element->Initialise();
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-			p_engine.PostEvent( MakeInitialiseEvent( *p_element ) );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that don't support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui ne supportent le cleanup.
-	*/
-	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-			p_element->Cleanup();
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
-	\remarks	Specialisation for types that support cleanup.
-	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
-	\remarks	Spécialisation pour les types qui supportent le cleanup.
-	*/
-	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
-	{
-		using ElemPtr = std::shared_ptr< Elem >;
-
-		inline void operator()( Engine & p_engine, ElemPtr p_element )
-		{
-			p_engine.PostEvent( MakeCleanupEvent( *p_element ) );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable moving elements from a cache to another.
-	\remarks	Specialisation for non detachable object types.
-	\~french
-	\brief		Structure permettant de déplacer les éléments d'un cache à l'autre.
-	\remarks	Spécialisation pour les types d'objet non détachables.
-	*/
-	template< typename Elem, typename Key >
-	struct ElementMerger < Elem, Key, typename std::enable_if < !is_detachable< Elem >::value >::type >
-	{
-		template< typename ProducerType >
-		inline void operator()( Cache< Elem, Key, ProducerType > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element )
-		{
-			//Castor::String l_name = p_element->GetName();
-
-			//while ( p_destination.find( l_name ) != p_destination.end() )
-			//{
-			//	l_name = p_source.GetScene()->GetName() + cuT( "_" ) + l_name;
-			//}
-
-			//p_element->SetName( l_name );
-			//p_destination.insert( l_name, p_element );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to retrieve the engine instance.
-	\~french
-	\brief		Structure permettant de récupérer le moteur.
-	*/
-	struct EngineGetter
-	{
-		inline EngineGetter( Engine & p_engine )
-			: m_engine{ p_engine }
-		{
-		}
-
-		inline Engine * operator()()const
-		{
-			return &m_engine;
-		}
-
-		inline Engine * operator()()
-		{
-			return &m_engine;
-		}
-
-		Engine & m_engine;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
 	\brief		Base class for an element cache.
 	\~french
 	\brief		Classe de base pour un cache d'éléments.
 	*/
-	template< typename ElemType, typename KeyType, typename ProducerType >
-	class Cache
+	template< typename ElementType, typename KeyType >
+	class CacheBase
 	{
 	public:
-		using Element = ElemType;
+		using MyCacheType = CacheBase< ElementType, KeyType >;
+		using Element = ElementType;
 		using Key = KeyType;
 		using Collection = Castor::Collection< Element, Key >;
-		using ElemPtr = std::shared_ptr< Element >;
-		using Producer = ProducerType;
+		using ElementPtr = std::shared_ptr< Element >;
+		using Producer = ElementProducer< Element, Key >;
 		using Initialiser = ElementInitialiser< Element >;
 		using Cleaner = ElementCleaner< Element >;
 		using Merger = ElementMerger< Element, Key >;
@@ -246,12 +62,12 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		inline Cache( EngineGetter && p_get
-					  , Producer && p_produce
-					  , Initialiser && p_initialise = Initialiser{}
-					  , Cleaner && p_clean = Cleaner{}
-					  , Merger && p_merge = Merger{} )
-			: m_get{ std::move( p_get ) }
+		inline CacheBase( Engine & p_engine
+						 , Producer && p_produce
+						 , Initialiser && p_initialise
+						 , Cleaner && p_clean
+						 , Merger && p_merge )
+			: m_engine{ std::move( p_engine ) }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
 			, m_clean{ std::move( p_clean ) }
@@ -264,7 +80,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~Cache()
+		inline ~CacheBase()
 		{
 		}
 		/**
@@ -312,9 +128,9 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		inline ElemPtr Add( Key const & p_name, ElemPtr p_element )
+		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
 		{
-			ElemPtr l_return{ p_element };
+			ElementPtr l_return{ p_element };
 
 			if ( p_element )
 			{
@@ -349,15 +165,14 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		template< typename ... Parameters >
-		inline ElemPtr Add( Key const & p_name, Parameters && ... p_params )
+		inline ElementPtr Get( Key const & p_name )
 		{
-			ElemPtr l_return;
+			ElementPtr l_return;
 			auto l_lock = Castor::make_unique_lock( m_elements );
 
 			if ( !m_elements.has( p_name ) )
 			{
-				l_return = m_produce( p_name, std::forward< Parameters >( p_params )... );
+				l_return = m_produce( p_name );
 				m_initialise( *GetEngine(), l_return );
 				m_elements.insert( p_name, l_return );
 				Castor::Logger::LogInfo( Castor::StringStream() << INFO_CACHE_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
@@ -378,7 +193,7 @@ namespace Castor3D
 		 *\return		Met les éléments de ce cache dans ceux de celui donné.
 		 *\param[out]	p_destination		Le cache de destination.
 		 */
-		inline void MergeInto( Cache< Element, Key, ProducerType > & p_destination )
+		inline void MergeInto( MyCacheType & p_destination )
 		{
 			auto l_lock = Castor::make_unique_lock( m_elements );
 			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
@@ -389,6 +204,42 @@ namespace Castor3D
 			}
 
 			Clear();
+		}
+		/**
+		 *\~english
+		 *\brief		Applies a function to all the elements of this cache.
+		 *\param[in]	p_func	The function.
+		 *\~french
+		 *\brief		Applique une fonction à tous les éléments de ce cache.
+		 *\param[in]	p_func	La fonction.
+		 */
+		template< typename FuncType >
+		inline void ForEach( FuncType p_func )const
+		{
+			auto l_lock = Castor::make_unique_lock( m_elements );
+
+			for ( auto const & l_element : m_elements )
+			{
+				p_func( *l_element.second );
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Applies a function to all the elements of this cache.
+		 *\param[in]	p_func	The function.
+		 *\~french
+		 *\brief		Applique une fonction à tous les éléments de ce cache.
+		 *\param[in]	p_func	La fonction.
+		 */
+		template< typename FuncType >
+		inline void ForEach( FuncType p_func )
+		{
+			auto l_lock = Castor::make_unique_lock( m_elements );
+
+			for ( auto & l_element : m_elements )
+			{
+				p_func( *l_element.second );
+			}
 		}
 		/**
 		 *\~english
@@ -430,7 +281,7 @@ namespace Castor3D
 		*/
 		inline Engine * GetEngine()const
 		{
-			return m_get();
+			return m_engine;
 		}
 		/**
 		*\~english
@@ -464,7 +315,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline ElemPtr Find( Key const & p_name )const
+		inline ElementPtr Find( Key const & p_name )const
 		{
 			return m_elements.find( p_name );
 		}
@@ -538,15 +389,15 @@ namespace Castor3D
 		}
 
 	protected:
+		//!\~english	The engine.
+		//!\~french		Le moteur.
+		Engine & m_engine;
 		//!\~english	The RenderSystem.
 		//!\~french		Le RenderSystem.
 		RenderSystem * m_renderSystem{ nullptr };
 		//!\~english	The elements collection.
 		//!\~french		La collection d'éléments.
 		mutable Collection m_elements;
-		//!\~english	The engine getter.
-		//!\~french		Le récupérateur de moteur.
-		EngineGetter m_get;
 		//!\~english	The element producer.
 		//!\~french		Le créateur d'éléments.
 		Producer m_produce;
@@ -560,6 +411,55 @@ namespace Castor3D
 		//!\~french		Le fusionneur de collection d'objets.
 		Merger m_merge;
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Base class for an element cache.
+	\~french
+	\brief		Classe de base pour un cache d'éléments.
+	*/
+	template< typename ElementType, typename KeyType >
+	class Cache
+		: public CacheBase< ElementType, KeyType >
+	{
+	public:
+		using MyCacheType = CacheBase< ElementType, KeyType >;
+		using Element = typename MyCacheType::Element;
+		using Key = typename MyCacheType::Key;
+		using Collection = typename MyCacheType::Collection;
+		using ElementPtr = typename MyCacheType::ElementPtr;
+		using Producer = typename MyCacheType::Producer;
+		using Initialiser = typename MyCacheType::Initialiser;
+		using Cleaner = typename MyCacheType::Cleaner;
+		using Merger = typename MyCacheType::Merger;
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_owner	The owner.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_owner	Le propriétaire.
+		 */
+		inline Cache( Engine & p_engine
+					 , Producer && p_produce
+					 , Initialiser && p_initialise = Initialiser{}
+					 , Cleaner && p_clean = Cleaner{}
+					 , Merger && p_merge = Merger{} )
+			: MyCacheType( p_engine, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~Cache()
+		{
+		}
+	};
 	/**
 	 *\~english
 	 *\brief		Creates a cache.
@@ -570,11 +470,15 @@ namespace Castor3D
 	 *\param[in]	p_get		Le récupérteur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
-	template< typename Elem, typename Key, typename ProducerType >
-	inline std::unique_ptr< Cache< Elem, Key, ProducerType > >
-	MakeCache( EngineGetter && p_get, ProducerType && p_produce )
+	template< typename ElementType, typename KeyType >
+	inline std::unique_ptr< Cache< ElementType, KeyType > >
+	MakeCache( Engine & p_engine
+			  , ElementProducer< ElementType, KeyType > && p_produce
+			  , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
+			  , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
+			  , ElementMerger< ElementType, KeyType > && p_merge = []( Cache< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ){} )
 	{
-		return std::make_unique< Cache< Elem, Key, ProducerType > >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< ElementType, KeyType > >( std::move( p_engine ), std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move(p_merge) );
 	}
 }
 

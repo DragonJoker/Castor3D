@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BLEND_STATE_H___
 #define ___C3D_BLEND_STATE_H___
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Colour.hpp>
 #include <OwnedBy.hpp>
@@ -38,17 +37,14 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< BlendState, Castor::String >
 	{
-		using ElemPtr = std::shared_ptr< BlendState >;
+		using ElementPtr = std::shared_ptr< BlendState >;
 
 		ElementProducer( Engine & p_engine )
 			: m_engine{ p_engine }
 		{
 		}
 
-		ElemPtr operator()( Castor::String const & p_key )
-		{
-			return m_engine.GetRenderSystem()->CreateBlendState();
-		}
+		ElementPtr operator()( Castor::String const & p_key );
 
 		Engine & m_engine;
 	};

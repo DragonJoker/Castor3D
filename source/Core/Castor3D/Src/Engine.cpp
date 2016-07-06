@@ -10,10 +10,10 @@
 #include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
-#include "ShaderCache.hpp"
-#include "TargetCache.hpp"
+#include "ShaderProgramCache.hpp"
+#include "RenderTargetCache.hpp"
 #include "TechniqueCache.hpp"
-#include "WindowCache.hpp"
+#include "RenderWindowCache.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
@@ -59,19 +59,32 @@ namespace Castor3D
 		Image::InitialiseImageLib();
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = MakeCache( EngineGetter{ *this }, ListenerProducer{} );
+		m_listenerCache = MakeCache< FrameListener, String >( *this, [this]( String const & p_name )
+		{
+			std::make_shared< FrameListener >( p_name );
+		} );
+		m_defaultListener = m_listenerCache->Add( cuT( "Default" ) );
 
 		m_shaderCache = MakeCache( *this );
-		m_samplerCache = MakeCache< Sampler, String >( EngineGetter{ *this }, SamplerProducer{ *this } );
-		m_depthStencilStateCache = MakeCache< DepthStencilState, String >( EngineGetter{ *this }, DepthStencilStateProducer{ *this } );
-		m_rasteriserStateCache = MakeCache< RasteriserState, String >( EngineGetter{ *this }, RasteriserStateProducer{ *this } );
-		m_blendStateCache = MakeCache< BlendState, String >( EngineGetter{ *this }, BlendStateProducer{ *this } );
-		m_materialCache = MakeCache( EngineGetter{ *this }, MaterialProducer{} );
-		m_pluginCache = MakeCache( EngineGetter{ *this }, PluginProducer{} );
-		m_overlayCache = MakeCache( EngineGetter{ *this }, OverlayProducer{ *this } );
-		m_sceneCache = MakeCache< Scene, String >( EngineGetter{ *this }, SceneProducer{} );
-		m_targetCache = std::make_unique< TargetCache >( *this );
-		m_techniqueCache = MakeCache( EngineGetter{ *this }, RenderTechniqueProducer{} );
+		m_samplerCache = MakeCache< Sampler, String >( *this, [this]( String const & p_name )
+		{
+			GetRenderSystem()->CreateSampler( p_name );
+		} );
+		m_depthStencilStateCache = MakeCache< DepthStencilState, String >( *this, [this]( String const & p_name )
+		{
+			GetRenderSystem()->CreateDepthStencilState();
+		} );
+		m_rasteriserStateCache = MakeCache< RasteriserState, String >( *this, [this]( String const & p_name )
+		{
+			GetRenderSystem()->CreateRasteriserState();
+		} );
+		m_blendStateCache = MakeCache< BlendState, String >( *this, BlendStateProducer{ *this } );
+		m_materialCache = MakeCache< Material, String > ( *this, MaterialProducer{} );
+		m_pluginCache = MakeCache< Plugin, String >( *this, PluginProducer{} );
+		m_overlayCache = MakeCache< Overlay, String >( *this, OverlayProducer{ *this } );
+		m_sceneCache = MakeCache< Scene, String >( *this, SceneProducer{} );
+		m_targetCache = std::make_unique< RenderTargetCache >( *this );
+		m_techniqueCache = MakeCache< RenderTechnique, String >( *this, RenderTechniqueProducer{} );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -162,17 +175,17 @@ namespace Castor3D
 
 		if ( m_defaultBlendState )
 		{
-			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
+			PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
 		}
 
 		if ( m_lightsSampler )
 		{
-			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
+			PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
 		}
 
 		if ( m_defaultSampler )
 		{
-			m_listenerCache->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
+			PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		if ( p_threaded )
@@ -210,17 +223,17 @@ namespace Castor3D
 
 			if ( m_defaultBlendState )
 			{
-				m_listenerCache->PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
+				PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
 			}
 
 			if ( m_lightsSampler )
 			{
-				m_listenerCache->PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
+				PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				m_listenerCache->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
+				PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
 			m_techniqueCache->Cleanup();
@@ -258,7 +271,13 @@ namespace Castor3D
 
 	void Engine::PostEvent( FrameEventSPtr p_event )
 	{
-		m_listenerCache->PostEvent( p_event );
+		auto l_lock = make_unique_lock( *m_listenerCache );
+		FrameListenerSPtr l_listener = m_defaultListener.lock();
+
+		if ( l_listener )
+		{
+			l_listener->PostEvent( p_event );
+		}
 	}
 
 	Path Engine::GetPluginsDirectory()

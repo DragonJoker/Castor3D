@@ -1,7 +1,7 @@
 #include "Skybox.hpp"
 
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"

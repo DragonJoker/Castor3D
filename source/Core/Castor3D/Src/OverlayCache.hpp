@@ -36,7 +36,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< Overlay >
+	template<>
+	struct CachedObjectNamer< Overlay >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -149,10 +150,21 @@ namespace Castor3D
 	\~french
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
-	class OverlayCache
-		: public Cache< Overlay, Castor::String, OverlayProducer >
+	template<>
+	class Cache< Overlay, Castor::String, OverlayProducer >
+		: public CacheBase< Overlay, Castor::String, OverlayProducer, ElementInitialiser< Overlay >, ElementCleaner< Overlay >, ElementMerger< Overlay, Castor::String > >
 	{
 	public:
+		using MyCacheType = CacheBase< Overlay, Castor::String, OverlayProducer, ElementInitialiser< Overlay >, ElementCleaner< Overlay >, ElementMerger< Overlay, Castor::String > >;
+		using Element = typename MyCacheType::Element;
+		using Key = typename MyCacheType::Key;
+		using Collection = typename MyCacheType::Collection;
+		using ElementPtr = typename MyCacheType::ElementPtr;
+		using Producer = typename MyCacheType::Producer;
+		using Initialiser = typename MyCacheType::Initialiser;
+		using Cleaner = typename MyCacheType::Cleaner;
+		using Merger = typename MyCacheType::Merger;
+
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
 		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
@@ -164,14 +176,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API OverlayCache( EngineGetter && p_get, OverlayProducer && p_produce );
+		C3D_API Cache( Engine & p_engine
+					  , Producer && p_produce
+					  , Merger && p_merge = Merger{} );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~OverlayCache();
+		C3D_API ~Cache();
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
@@ -363,22 +377,23 @@ namespace Castor3D
 		//!\~french		Les FontTexutrs, triées par nom de police.
 		FontTextureStrMap m_fontTextures;
 	};
-	typedef OverlayCache::iterator OverlayCacheIt;
-	typedef OverlayCache::const_iterator OverlayCacheConstIt;
+	using OverlayCache = Cache< Overlay, Castor::String, OverlayProducer >;
+	DECLARE_SMART_PTR (OverlayCache);
 	/**
 	 *\~english
-	 *\brief		Creates a Scene cache.
+	 *\brief		Creates a Overlay cache.
 	 *\param[in]	p_get		The engine getter.
 	 *\param[in]	p_produce	The element producer.
 	 *\~french
-	 *\brief		Crée un cache de Scene.
+	 *\brief		Crée un cache de Overlay.
 	 *\param[in]	p_get		Le récupérteur de moteur.
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
-	inline std::unique_ptr< OverlayCache >
-	MakeCache( EngineGetter && p_get, OverlayProducer && p_produce )
+	template<>
+	inline std::unique_ptr< Cache< Overlay, Castor::String, OverlayProducer > >
+	MakeCache< Overlay, Castor::String, OverlayProducer >( Engine & p_engine, OverlayProducer && p_produce )
 	{
-		return std::make_unique< OverlayCache >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< Overlay, Castor::String, OverlayProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

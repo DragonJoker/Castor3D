@@ -34,7 +34,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< DepthStencilState >
+	template<>
+	struct CachedObjectNamer< DepthStencilState >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -50,9 +51,9 @@ namespace Castor3D
 	 */
 	template<>
 	inline std::unique_ptr< Cache< DepthStencilState, Castor::String, DepthStencilStateProducer > >
-	MakeCache< DepthStencilState, Castor::String, DepthStencilStateProducer >( EngineGetter && p_get, DepthStencilStateProducer && p_produce )
+	MakeCache< DepthStencilState, Castor::String, DepthStencilStateProducer >( Engine & p_engine, DepthStencilStateProducer && p_produce )
 	{
-		return std::make_unique< Cache< DepthStencilState, Castor::String, DepthStencilStateProducer > >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< DepthStencilState, Castor::String, DepthStencilStateProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

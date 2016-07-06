@@ -1,4 +1,4 @@
-#include "TargetCache.hpp"
+#include "RenderTargetCache.hpp"
 
 #include "GeometryCache.hpp"
 #include "Render/RenderSystem.hpp"
@@ -10,16 +10,16 @@ namespace Castor3D
 {
 	const String CachedObjectNamer< RenderTarget >::Name = cuT( "RenderTarget" );
 
-	TargetCache::TargetCache( Engine & p_engine )
+	RenderTargetCache::RenderTargetCache( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 	{
 	}
 
-	TargetCache::~TargetCache()
+	RenderTargetCache::~RenderTargetCache()
 	{
 	}
 
-	RenderTargetSPtr TargetCache::Add( eTARGET_TYPE p_type )
+	RenderTargetSPtr RenderTargetCache::Add( eTARGET_TYPE p_type )
 	{
 		auto l_lock = make_unique_lock( *this );
 		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetEngine(), p_type );
@@ -27,7 +27,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void TargetCache::Remove( RenderTargetSPtr p_target )
+	void RenderTargetCache::Remove( RenderTargetSPtr p_target )
 	{
 		auto l_lock = make_unique_lock( *this );
 		auto l_v = m_renderTargets.begin() + p_target->GetTargetType();
@@ -39,7 +39,7 @@ namespace Castor3D
 		}
 	}
 
-	void TargetCache::Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
+	void RenderTargetCache::Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
 		auto l_lock = make_unique_lock( *this );
 
@@ -70,7 +70,7 @@ namespace Castor3D
 		}
 	}
 
-	void TargetCache::Clear()
+	void RenderTargetCache::Clear()
 	{
 		for ( auto & l_array : m_renderTargets )
 		{

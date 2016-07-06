@@ -29,7 +29,7 @@
 #include <GlslSource.hpp>
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
+#include <ShaderProgramCache.hpp>
 #include <Technique/RenderTechnique.hpp>
 
 #include <GL/gl.h>

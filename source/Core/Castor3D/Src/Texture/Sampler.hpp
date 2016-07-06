@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Sampler___
 #define ___C3D_Sampler___
 
-#include "Engine.hpp"
-#include "Render/RenderSystem.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -37,17 +36,14 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< Sampler, Castor::String >
 	{
-		using ElemPtr = std::shared_ptr< Sampler >;
+		using ElementPtr = std::shared_ptr< Sampler >;
 
 		ElementProducer( Engine & p_engine )
 			: m_engine{ p_engine }
 		{
 		}
 
-		ElemPtr operator()( Castor::String const & p_key )
-		{
-			return m_engine.GetRenderSystem()->CreateSampler( p_key );
-		}
+		ElementPtr operator()( Castor::String const & p_key );
 
 		Engine & m_engine;
 	};

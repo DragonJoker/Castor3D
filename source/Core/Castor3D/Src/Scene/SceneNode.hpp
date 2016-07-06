@@ -37,9 +37,9 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< SceneNode, Castor::String, Scene >
 	{
-		using ElemPtr = std::shared_ptr< SceneNode >;
+		using ElementPtr = std::shared_ptr< SceneNode >;
 
-		ElemPtr operator()( Castor::String const & p_key, Scene & p_scene )
+		ElementPtr operator()( Castor::String const & p_key, Scene & p_scene )
 		{
 			return std::make_shared< SceneNode >( p_key, p_scene );
 		}

@@ -7,7 +7,7 @@
 #include <OverlayCache.hpp>
 #include <RasteriserStateCache.hpp>
 #include <SceneCache.hpp>
-#include <TargetCache.hpp>
+#include <RenderTargetCache.hpp>
 
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>

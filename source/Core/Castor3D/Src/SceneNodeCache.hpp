@@ -33,7 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< SceneNode >
+	template<>
+	struct CachedObjectNamer< SceneNode >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -84,27 +85,27 @@ namespace Castor3D
 	\date 		29/01/2016
 	\version	0.8.0
 	\~english
-	\brief		Light cache.
+	\brief		SceneNode cache.
 	\~french
-	\brief		Cache de Light.
+	\brief		Cache de SceneNode.
 	*/
 	template<>
-	class ObjectCache< SceneNode, Castor::String, SceneNodeProducer >
-		: public Cache< SceneNode, Castor::String, SceneNodeProducer >
+	class ObjectCache< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >
+		: public ObjectCacheBase< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >
 	{
-		using MyCacheType = Cache< SceneNode, Castor::String, SceneNodeProducer >;
-		using MyObjectCacheType = ObjectCache< SceneNode, Castor::String, SceneNodeProducer >;
-		using Element = typename MyCacheType::Element;
-		using Key = typename MyCacheType::Key;
-		using Producer = typename MyCacheType::Producer;
-		using ElemPtr = typename MyCacheType::ElemPtr;
-		using Initialiser = typename MyCacheType::Initialiser;
-		using Cleaner = typename MyCacheType::Cleaner;
-		using Merger = typename MyCacheType::Merger;
-		using Attacher = ElementAttacher< Element >;
-		using Detacher = ElementDetacher< Element >;
-
 	public:
+		using MyObjectCacheType = ObjectCacheBase< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >;
+		using MyCacheType = typename MyObjectCacheType::MyCacheType;
+		using Element = typename MyObjectCacheType::Element;
+		using Key = typename MyObjectCacheType::Key;
+		using Collection = typename MyObjectCacheType::Collection;
+		using ElementPtr = typename MyObjectCacheType::ElementPtr;
+		using Producer = typename MyObjectCacheType::Producer;
+		using Initialiser = typename MyObjectCacheType::Initialiser;
+		using Cleaner = typename MyObjectCacheType::Cleaner;
+		using Merger = typename MyObjectCacheType::Merger;
+		using Attacher = typename MyObjectCacheType::Attacher;
+		using Detacher = typename MyObjectCacheType::Detacher;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -120,22 +121,26 @@ namespace Castor3D
 		C3D_API ObjectCache( SceneNodeSPtr p_rootNode
 							, SceneNodeSPtr p_rootCameraNode
 							, SceneNodeSPtr p_rootObjectNode
-							, SceneGetter && p_get
+							, Engine & p_engine
+							, Scene & p_scene
 							, Producer && p_produce
 							, Initialiser && p_initialise = Initialiser{}
 							, Cleaner && p_clean = Cleaner{}
 							, Merger && p_merge = Merger{}
 							, Attacher && p_attach = Attacher{}
 							, Detacher && p_detach = Detacher{} )
-			: MyCacheType( EngineGetter{ *p_get()->GetEngine() }, std::move( p_produce ), std::move( p_initialise ), std::move( p_clean ), std::move( p_merge ) )
-			, m_rootNode( p_rootNode )
-			, m_rootCameraNode( p_rootCameraNode )
-			, m_rootObjectNode( p_rootObjectNode )
-			, m_scene( std::move( p_get ) )
-			, m_attach( std::move( p_attach ) )
-			, m_detach( std::move( p_detach ) )
+			: MyObjectCacheType{ p_rootNode
+								 , p_rootCameraNode
+								 , p_rootObjectNode
+								 , p_engine
+								 , p_scene
+								 , std::move( p_produce )
+								 , std::move( p_initialise )
+								 , std::move( p_clean )
+								 , std::move( p_merge )
+								 , std::move( p_attach )
+								 , std::move( p_detach ) }
 		{
-			this->m_renderSystem = this->m_get()->GetRenderSystem();
 		}
 		/**
 		 *\~english
@@ -145,74 +150,6 @@ namespace Castor3D
 		 */
 		inline ~ObjectCache()
 		{
-		}
-		/**
-		*\~english
-		*\return		The Engine.
-		*\~french
-		*\return		L'Engine.
-		*/
-		inline Scene * GetScene()const
-		{
-			return m_scene();
-		}
-		/**
-		 *\~english
-		 *\brief		Sets all the elements to be cleaned up.
-		 *\~french
-		 *\brief		Met tous les éléments à nettoyer.
-		 */
-		inline void Cleanup()
-		{
-			auto l_lock = Castor::make_unique_lock( this->m_elements );
-
-			for ( auto l_it : this->m_elements )
-			{
-				m_detach( l_it.second );
-			}
-
-			this->GetScene()->SetChanged();
-		}
-		/**
-		 *\~english
-		 *\brief		Removes an object, given a name.
-		 *\param[in]	p_name		The object name.
-		 *\~french
-		 *\brief		Retire un objet à partir d'un nom.
-		 *\param[in]	p_name		Le nom d'objet.
-		 */
-		inline void Remove( Key const & p_name )
-		{
-			auto l_lock = Castor::make_unique_lock( this->m_elements );
-
-			if ( this->m_elements.has( p_name ) )
-			{
-				auto l_element = this->m_elements.find( p_name );
-				m_detach( l_element );
-				this->m_elements.erase( p_name );
-				this->GetScene()->SetChanged();
-			}
-		}
-		/**
-		 *\~english
-		 *\return		Merges this cache's elements to the one given.
-		 *\param[out]	p_destination		The destination cache.
-		 *\~french
-		 *\return		Met les éléments de ce cache dans ceux de celui donné.
-		 *\param[out]	p_destination		Le cache de destination.
-		 */
-		inline void MergeInto( MyObjectCacheType & p_destination )
-		{
-			auto l_lock = Castor::make_unique_lock( this->m_elements );
-			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
-
-			for ( auto l_it : this->m_elements )
-			{
-				m_merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
-			}
-
-			MyCacheType::Clear();
-			p_destination.GetScene()->SetChanged();
 		}
 		/**
 		 *\~english
@@ -229,10 +166,10 @@ namespace Castor3D
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
-		inline ElemPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
+		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent = nullptr )
 		{
 			auto l_lock = Castor::make_unique_lock( this->m_elements );
-			ElemPtr l_return;
+			ElementPtr l_return;
 
 			if ( !this->m_elements.has( p_name ) )
 			{
@@ -251,40 +188,9 @@ namespace Castor3D
 
 			return l_return;
 		}
-		/**
-		 *\~english
-		 *\return		The objects count.
-		 *\~french
-		 *\return		Le nombre d'objets
-		 */
-		inline uint32_t GetObjectCount()const
-		{
-			return uint32_t( this->m_elements.size() );
-		}
-
-	private:
-		using MyCacheType::SetRenderSystem;
-
-	protected:
-		//!\~english	The object attacher.
-		//!\~french		L'attacheur d'objet.
-		SceneGetter m_scene;
-		//!\~english	The object attacher.
-		//!\~french		L'attacheur d'objet.
-		Attacher m_attach;
-		//!\~english	The object detacher.
-		//!\~french		Le détacheur d'objet.
-		Detacher m_detach;
-		//!\~english	The root node.
-		//!\~french		Le noeud père de tous les noeuds de la scène.
-		SceneNodeWPtr m_rootNode;
-		//!\~english	The root node used only for cameras.
-		//!\~french		Le noeud père de tous les noeuds de caméra.
-		SceneNodeWPtr m_rootCameraNode;
-		//!\~english	The root node for every object other than camera.
-		//!\~french		Le noeud père de tous les noeuds d'objet.
-		SceneNodeWPtr m_rootObjectNode;
 	};
+	using SceneNodeCache = ObjectCache< SceneNode, Castor::String, SceneNodeProducer, ElementInitialiser< SceneNode >, ElementCleaner< SceneNode >, ElementMerger< SceneNode, Castor::String >, ElementAttacher< SceneNode >, ElementDetacher< SceneNode > >;
+	DECLARE_SMART_PTR( SceneNodeCache );
 	/**
 	 *\~english
 	 *\brief		Creates a SceneNode cache.
@@ -303,9 +209,9 @@ namespace Castor3D
 	 */
 	template<>
 	inline std::unique_ptr< ObjectCache< SceneNode, Castor::String, SceneNodeProducer > >
-	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, SceneNodeProducer && p_produce )
+	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, SceneNodeProducer && p_produce )
 	{
-		return std::make_unique< ObjectCache< SceneNode, Castor::String, SceneNodeProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< ObjectCache< SceneNode, Castor::String, SceneNodeProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
 	}
 }
 

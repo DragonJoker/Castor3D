@@ -1,11 +1,18 @@
 #include "Sampler.hpp"
 
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
+	SamplerProducer::ElementPtr SamplerProducer::operator()( Castor::String const & p_key )
+	{
+		return m_engine.GetRenderSystem()->CreateSampler( p_key );
+	}
+
 	Sampler::TextWriter::TextWriter( String const & p_tabs )
 		: Castor::TextWriter< Sampler >{ p_tabs }
 	{

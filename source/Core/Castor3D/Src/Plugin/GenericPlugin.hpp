@@ -35,10 +35,10 @@ namespace Castor3D
 	\remarks	Permet des spécialisation générales pour Castor3D.
 	*/
 	class GenericPlugin
-		: public PluginBase
+		: public Plugin
 	{
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 		friend class Engine;
 		typedef void AddOptionalParsersFunction( SceneFileParser * p_parser );
 

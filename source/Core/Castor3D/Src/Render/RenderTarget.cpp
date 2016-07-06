@@ -10,7 +10,7 @@
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
 #include "SceneNodeCache.hpp"
-#include "TargetCache.hpp"
+#include "RenderTargetCache.hpp"
 #include "TechniqueCache.hpp"
 
 #include "Context.hpp"

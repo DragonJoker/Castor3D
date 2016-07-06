@@ -25,8 +25,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCache::OverlayCache( EngineGetter && p_get, OverlayProducer && p_produce )
-		: Cache< Overlay, String, OverlayProducer >{ std::move( p_get ), std::move( p_produce ), Initialiser{ m_overlays, m_overlayCountPerLevel }, Cleaner{ m_overlays, m_overlayCountPerLevel } }
+	OverlayCache::Cache( Engine & p_engine, OverlayProducer && p_produce, Merger && p_merge )
+		: Cache< Overlay, String, OverlayProducer >{ p_engine, std::move( p_produce ), Initialiser{ m_overlays, m_overlayCountPerLevel }, Cleaner{ m_overlays, m_overlayCountPerLevel }, std::move( p_merge ) }
 		, m_overlayCountPerLevel{ 1000, 0 }
 		, m_viewport{ *GetEngine() }
 	{

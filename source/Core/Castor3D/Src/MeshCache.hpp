@@ -35,7 +35,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< Mesh >
+	template<>
+	struct CachedObjectNamer< Mesh >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -51,9 +52,9 @@ namespace Castor3D
 	 */
 	template<>
 	inline std::unique_ptr< Cache< Mesh, Castor::String, MeshProducer > >
-	MakeCache( EngineGetter && p_get, MeshProducer && p_produce )
+	MakeCache( Engine & p_engine, MeshProducer && p_produce )
 	{
-		return std::make_unique< Cache< Mesh, Castor::String, MeshProducer > >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< Mesh, Castor::String, MeshProducer > >( p_engine, std::move( p_produce ) );
 	}
 }
 

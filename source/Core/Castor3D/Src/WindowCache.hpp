@@ -33,7 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< RenderWindow >
+	template<>
+	struct CachedObjectNamer< RenderWindow >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -48,20 +49,11 @@ namespace Castor3D
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
 	template<>
-	inline std::unique_ptr< Cache< RenderWindow, Castor::String, WindowProducer > >
-	MakeCache< RenderWindow, Castor::String, WindowProducer >( EngineGetter && p_get, WindowProducer && p_produce )
+	inline std::unique_ptr< Cache< RenderWindow, Castor::String, RenderWindowProducer > >
+	MakeCache< RenderWindow, Castor::String, RenderWindowProducer >( Engine & p_engine, RenderWindowProducer && p_produce )
 	{
-		return std::make_unique< Cache< RenderWindow, Castor::String, WindowProducer > >( std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< Cache< RenderWindow, Castor::String, RenderWindowProducer > >( p_engine, std::move( p_produce ) );
 	}
-	/**
-	 *\~english
-	 *\brief		Renders one frame for each window.
-	 *\param[in]	p_force		Forces the rendering.
-	 *\~english
-	 *\brief		Dessine une image de chaque fenêtre.
-	 *\param[in]	p_force		Dit si on force le rendu.
-	 */
-	C3D_API void Render( Cache< RenderWindow, Castor::String, WindowProducer > & p_cache, bool p_force );
 }
 
 #endif

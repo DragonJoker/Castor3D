@@ -3,7 +3,7 @@
 #include "BlendStateCache.hpp"
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "Pipeline.hpp"
 #include "RenderWindow.hpp"

@@ -1,7 +1,7 @@
 #include "RenderSystem.hpp"
 
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "Pipeline.hpp"
 #include "Viewport.hpp"

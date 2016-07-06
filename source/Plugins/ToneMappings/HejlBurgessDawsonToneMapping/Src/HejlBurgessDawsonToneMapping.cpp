@@ -1,7 +1,7 @@
 #include "HejlBurgessDawsonToneMapping.hpp"
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
+#include <ShaderProgramCache.hpp>
 
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>

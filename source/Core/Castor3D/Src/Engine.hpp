@@ -18,31 +18,69 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ENGINE_H___
 #define ___C3D_ENGINE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Cache/Cache.hpp"
 
-#include "Technique/TechniqueFactory.hpp"
+#include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
+#include "Material/Material.hpp"
 #include "Miscellaneous/Version.hpp"
+#include "Overlay/Overlay.hpp"
+#include "Plugin/Plugin.hpp"
+#include "Scene/Scene.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Texture/Sampler.hpp"
 
 #include <FileParser.hpp>
 #include <FontCache.hpp>
 #include <ImageCache.hpp>
 #include <Unique.hpp>
 
-#define DECLARE_CACHE_MEMBER( memberName, className )\
-	public:\
-		inline className##Cache & Get##className##Cache()\
-		{\
-			return *m_##memberName##Cache;\
-		}\
-		inline className##Cache const & Get##className##Cache()const\
-		{\
-			return *m_##memberName##Cache;\
-		}\
-	private:\
-		className##CacheUPtr m_##memberName##Cache
-
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui supportent le cleanup.
+	*/
+	template< typename ElementType >
+	struct ElementInitialiser < ElementType, typename std::enable_if < is_initialisable< ElementType >::value && !is_instant< ElementType >::value >::type >
+	{
+		using ElementPtr = std::shared_ptr< ElementType >;
+
+		inline void operator()( Engine & p_engine, ElementPtr p_element )
+		{
+			p_engine.PostEvent( MakeInitialiseEvent( *p_element ) );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui supportent le cleanup.
+	*/
+	template< typename ElementType >
+	struct ElementCleaner < ElementType, typename std::enable_if < is_cleanable< ElementType >::value && !is_instant< ElementType >::value >::type >
+	{
+		using ElementPtr = std::shared_ptr< ElementType >;
+
+		inline void operator()( Engine & p_engine, ElementPtr p_element )
+		{
+			p_engine.PostEvent( MakeCleanupEvent( *p_element ) );
+		}
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -461,7 +499,7 @@ namespace Castor3D
 		SamplerSPtr m_lightsSampler;
 		//!\~english	The shaders collection.
 		//!\~french		La collection de shaders.
-		DECLARE_CACHE_MEMBER( shader, Shader );
+		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
 		//!\~english	The sampler states collection.
 		//!\~french		La collection de sampler states.
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
@@ -488,10 +526,10 @@ namespace Castor3D
 		DECLARE_CACHE_MEMBER( scene, Scene );
 		//!\~english	The frame listeners cache.
 		//!\~french		Le cache de frame listeners.
-		DECLARE_CACHE_MEMBER( listener, Listener );
+		DECLARE_CACHE_MEMBER( listener, FrameListener );
 		//!\~english	The render targets cache.
 		//!\~french		Le cache de cibles de rendu.
-		DECLARE_CACHE_MEMBER( target, Target );
+		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
 		//!\~english	The render technique cache.
 		//!\~french		Le cache de techniques de rendu.
 		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
@@ -510,9 +548,10 @@ namespace Castor3D
 		//!\~english	The map holding the sections, sorted plug-in name.
 		//!\~french		La map de sections, triées par nom de plug-in.
 		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
+		//!\~english	The default frame listener.
+		//!\~french		Le frame listener par défaut.
+		FrameListenerWPtr m_defaultListener;
 	};
 }
-
-#undef DECLARE_CACHE_MEMBER
 
 #endif

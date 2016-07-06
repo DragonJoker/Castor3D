@@ -507,30 +507,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay cache
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le cache d'incrustations
-		 *\return		La valeur
-		 */
-		inline OverlayCache const & GetOverlayCache()const
-		{
-			return m_cache;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay cache
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le cache d'incrustations
-		 *\return		La valeur
-		 */
-		inline OverlayCache & GetOverlayCache()
-		{
-			return m_cache;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the visibility status
 		 *\param[in]	val	The new value
 		 *\~french
@@ -629,8 +605,6 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The overlay cache	\~french Le cache d'inscrustations
-		OverlayCache & m_cache;
 		//!\~english The overlay name	\~french Le nom de l'incrustation
 		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
@@ -656,14 +630,14 @@ namespace Castor3D
 	template<>
 	struct ElementProducer< Overlay, Castor::String, eOVERLAY_TYPE, OverlaySPtr, SceneSPtr >
 	{
-		using ElemPtr = std::shared_ptr< Overlay >;
+		using ElementPtr = std::shared_ptr< Overlay >;
 
 		inline ElementProducer( Engine & p_engine )
 			: m_engine{ p_engine }
 		{
 		}
 
-		inline ElemPtr operator()( Castor::String const & p_key, eOVERLAY_TYPE p_type, OverlaySPtr p_parent = nullptr, SceneSPtr p_scene = nullptr )
+		inline ElementPtr operator()( Castor::String const & p_key, eOVERLAY_TYPE p_type, OverlaySPtr p_parent = nullptr, SceneSPtr p_scene = nullptr )
 		{
 			auto l_return = std::make_shared< Overlay >( m_engine, p_type, p_scene, p_parent );
 			l_return->SetName( p_key );

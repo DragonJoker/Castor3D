@@ -1,7 +1,7 @@
 #include "RenderTechnique.hpp"
 
 #include "AnimatedObjectGroupCache.hpp"
-#include "BillboardCache.hpp"
+#include "BillboardListCache.hpp"
 #include "CameraCache.hpp"
 #include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
@@ -10,7 +10,7 @@
 #include "OverlayCache.hpp"
 #include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"

@@ -1,7 +1,7 @@
 #include "SceneFileParser_Parsers.hpp"
 
 #include "AnimatedObjectGroupCache.hpp"
-#include "BillboardCache.hpp"
+#include "BillboardListCache.hpp"
 #include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
 #include "Engine.hpp"
@@ -14,10 +14,10 @@
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
 #include "SceneNodeCache.hpp"
-#include "ShaderCache.hpp"
-#include "TargetCache.hpp"
+#include "ShaderProgramCache.hpp"
+#include "RenderTargetCache.hpp"
 #include "TechniqueCache.hpp"
-#include "WindowCache.hpp"
+#include "RenderWindowCache.hpp"
 
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Animation.hpp"
@@ -901,7 +901,7 @@ namespace Castor3D
 
 			for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 			{
-				l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+				l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
 
 				if ( !l_pImporter && l_pPlugin )
 				{
@@ -1656,7 +1656,7 @@ namespace Castor3D
 
 				for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 				{
-					l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+					l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
 
 					if ( !l_importer && l_pPlugin )
 					{
@@ -1743,7 +1743,7 @@ namespace Castor3D
 
 				for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 				{
-					l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+					l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
 
 					if ( !l_importer && l_pPlugin )
 					{
@@ -1826,7 +1826,7 @@ namespace Castor3D
 
 			for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 			{
-				l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it.second );
+				l_pPlugin = std::static_pointer_cast< DividerPlugin, Plugin >( l_it.second );
 
 				if ( !l_pDivider && string::lower_case( l_pPlugin->GetDividerType() ) == string::lower_case( l_name ) )
 				{

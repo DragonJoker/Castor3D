@@ -35,7 +35,8 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< RenderTarget >
+	template<>
+	struct CachedObjectNamer< RenderTarget >
 	{
 		C3D_API static const Castor::String Name;
 	};
@@ -48,7 +49,7 @@ namespace Castor3D
 	\~french
 	\brief		Cache de RenderTarget.
 	*/
-	class TargetCache
+	class RenderTargetCache
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
@@ -60,14 +61,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API TargetCache( Engine & p_engine );
+		C3D_API RenderTargetCache( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API ~TargetCache();
+		C3D_API ~RenderTargetCache();
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type

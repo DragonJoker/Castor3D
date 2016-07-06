@@ -9,9 +9,9 @@
 #include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
-#include <TargetCache.hpp>
-#include <WindowCache.hpp>
+#include <ShaderProgramCache.hpp>
+#include <RenderTargetCache.hpp>
+#include <RenderWindowCache.hpp>
 #include <Material/Pass.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/RenderSystem.hpp>

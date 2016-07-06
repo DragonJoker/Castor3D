@@ -15,19 +15,19 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CachedObjectNamer< PluginBase >::Name = cuT( "Plugin" );
+	const String CachedObjectNamer< Plugin >::Name = cuT( "Plugin" );
 
 #if defined( _MSC_VER)
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );
 #elif defined( __GNUG__)
 	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 #endif
-	PluginCache ::PluginCache( EngineGetter && p_getter )
-		: Cache< PluginBase, String, PluginProducer >{ std::move( p_getter ), PluginProducer{} }
+	PluginCache::Cache( EngineGetter && p_getter, Producer && p_produce )
+		: MyCacheType{ std::move( p_getter ), std::move( p_produce ), Initialiser{}, Cleaner{}, Merger{} }
 	{
 	}
 	
-	PluginCache::~PluginCache()
+	PluginCache::~Cache()
 	{
 	}
 
@@ -56,10 +56,10 @@ namespace Castor3D
 		m_mutexLoadedPlugins.unlock();
 	}
 
-	PluginBaseSPtr PluginCache::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
+	PluginSPtr PluginCache::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
 		Path l_strFilePath{ CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT };
-		PluginBaseSPtr l_return;
+		PluginSPtr l_return;
 
 		try
 		{
@@ -92,9 +92,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PluginBaseSPtr PluginCache::LoadPlugin( Path const & p_fileFullPath )throw( )
+	PluginSPtr PluginCache::LoadPlugin( Path const & p_fileFullPath )throw( )
 	{
-		PluginBaseSPtr l_return;
+		PluginSPtr l_return;
 
 		try
 		{
@@ -165,7 +165,7 @@ namespace Castor3D
 		}
 	}
 
-	PluginBaseSPtr PluginCache::LoadRendererPlugin( DynamicLibrarySPtr p_library )
+	PluginSPtr PluginCache::LoadRendererPlugin( DynamicLibrarySPtr p_library )
 	{
 		RendererPluginSPtr l_renderer = std::make_shared< RendererPlugin >( p_library, GetEngine() );
 		String l_rendererType = l_renderer->GetRendererType();
@@ -184,9 +184,9 @@ namespace Castor3D
 		return l_renderer;
 	}
 
-	PluginBaseSPtr PluginCache::InternalLoadPlugin( Path const & p_pathFile )
+	PluginSPtr PluginCache::InternalLoadPlugin( Path const & p_pathFile )
 	{
-		PluginBaseSPtr l_return;
+		PluginSPtr l_return;
 		m_mutexLoadedPluginTypes.lock();
 		auto l_it = m_loadedPluginTypes.find( p_pathFile );
 
@@ -203,7 +203,7 @@ namespace Castor3D
 					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
 				}
 
-				PluginBase::PGetTypeFunction l_pfnGetType;
+				Plugin::PGetTypeFunction l_pfnGetType;
 
 				if ( !l_library->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
 				{

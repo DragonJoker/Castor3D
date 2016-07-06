@@ -32,10 +32,10 @@ namespace Castor3D
 	\brief		Classe de plug-in de mappage de tons.
 	*/
 	class ToneMappingPlugin
-		: public PluginBase
+		: public Plugin
 	{
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 
 	public:
 		/**

@@ -3,7 +3,7 @@
 #include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
-#include <ShaderCache.hpp>
+#include <ShaderProgramCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>

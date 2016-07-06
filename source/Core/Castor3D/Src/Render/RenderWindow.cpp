@@ -6,9 +6,9 @@
 #include "Engine.hpp"
 #include "ListenerCache.hpp"
 #include "RasteriserStateCache.hpp"
-#include "TargetCache.hpp"
+#include "RenderTargetCache.hpp"
 #include "SceneCache.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "Context.hpp"
 #include "Pipeline.hpp"

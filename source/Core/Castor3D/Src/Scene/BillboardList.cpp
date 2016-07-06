@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "ShaderCache.hpp"
+#include "ShaderProgramCache.hpp"
 
 #include "Scene.hpp"
 #include "SceneNode.hpp"

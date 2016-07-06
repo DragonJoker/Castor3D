@@ -33,51 +33,10 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de récupérer le nom du type d'un objet.
 	*/
-	template<> struct CachedObjectNamer< Camera >
+	template<>
+	struct CachedObjectNamer< Camera >
 	{
 		C3D_API static const Castor::String Name;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		29/01/2016
-	\version	0.8.0
-	\~english
-	\brief		Helper structure to enable attaching if a type supports it.
-	\remarks	Specialisation for Camera.
-	\~french
-	\brief		Structure permettant d'attacher les éléments qui le supportent.
-	\remarks	Spécialisation pour Camera.
-	*/
-	template<>
-	struct ElementAttacher< Camera >
-	{
-		/**
-		 *\~english
-		 *\brief		Attaches an element to the appropriate parent node.
-		 *\param[in]	p_element			The scene node.
-		 *\param[in]	p_parent			The parent scene node.
-		 *\param[in]	p_rootNode			The root node.
-		 *\param[in]	p_rootCameraNode	The cameras root node.
-		 *\param[in]	p_rootObjectNode	The objects root node.
-		 *\~french
-		 *\brief		Attache un élément au parent approprié.
-		 *\param[in]	p_element			Le noeud de scène.
-		 *\param[in]	p_parent			Le noeud de scène parent.
-		 *\param[in]	p_rootNode			Le noeud racine.
-		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
-		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
-		 */
-		inline void operator()( std::shared_ptr< Camera > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		{
-			if ( p_parent )
-			{
-				p_parent->AttachObject( p_element );
-			}
-			else
-			{
-				p_rootCameraNode->AttachObject( p_element );
-			}
-		}
 	};
 	/**
 	 *\~english
@@ -90,10 +49,11 @@ namespace Castor3D
 	 *\param[in]	p_produce	Le créateur d'objet.
 	 */
 	template<>
-	inline std::unique_ptr< ObjectCache< Camera, Castor::String, CameraProducer > >
-	MakeObjectCache( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, SceneGetter && p_get, CameraProducer && p_produce )
+	inline std::unique_ptr< CameraCache >
+	MakeObjectCache< Camera, Castor::String, CameraProducer, MovableAttacher, MovableDetacher, ElementInitialiser< Camera >, ElementCleaner< Camera >, ElementMerger< Camera, Castor::String > >
+		( SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode , SceneNodeSPtr p_rootObjectNode, Engine & p_engine, Scene & p_scene, CameraProducer && p_produce )
 	{
-		return std::make_unique< ObjectCache< Camera, Castor::String, CameraProducer > >( p_rootNode, p_rootCameraNode, p_rootObjectNode, std::move( p_get ), std::move( p_produce ) );
+		return std::make_unique< CameraCache >( p_rootNode, p_rootCameraNode, p_rootObjectNode, p_engine, p_scene, std::move( p_produce ) );
 	}
 }
 
