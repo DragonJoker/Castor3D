@@ -40,7 +40,7 @@ namespace Castor3D
 
 	ShaderProgramSPtr ShaderProgramCache::GetNewProgram()
 	{
-		ShaderProgramSPtr l_return = m_renderSystem->CreateShaderProgram();
+		ShaderProgramSPtr l_return = GetEngine()->GetRenderSystem()->CreateShaderProgram();
 
 		if ( l_return )
 		{
@@ -113,7 +113,7 @@ namespace Castor3D
 
 	FrameVariableBufferSPtr ShaderProgramCache::CreateMatrixBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
 	{
-		auto l_buffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		auto l_buffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferMatrix );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Mat4x4r, Pipeline::MtxProjection, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Mat4x4r, Pipeline::MtxModel, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Mat4x4r, Pipeline::MtxView, 1 );
@@ -130,7 +130,7 @@ namespace Castor3D
 
 	FrameVariableBufferSPtr ShaderProgramCache::CreateSceneBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
 	{
-		auto l_buffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgram::BufferScene );
+		auto l_buffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferScene );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4f, ShaderProgram::AmbientLight, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4f, ShaderProgram::BackgroundColour, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4i, ShaderProgram::LightsCount, 1 );
@@ -141,7 +141,7 @@ namespace Castor3D
 
 	FrameVariableBufferSPtr ShaderProgramCache::CreatePassBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
 	{
-		auto l_buffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgram::BufferPass );
+		auto l_buffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferPass );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4f, ShaderProgram::MatAmbient, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4f, ShaderProgram::MatDiffuse, 1 );
 		l_buffer->CreateVariable( p_shader, FrameVariableType::Vec4f, ShaderProgram::MatEmissive, 1 );
@@ -159,7 +159,7 @@ namespace Castor3D
 		if ( CheckFlag( p_programFlags, ProgramFlag::Skinning )
 			|| CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
 		{
-			l_buffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgram::BufferAnimation );
+			l_buffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferAnimation );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
 			{

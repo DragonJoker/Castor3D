@@ -665,7 +665,9 @@ namespace Castor3D
 	template<> struct is_detachable< Geometry > : std::true_type {};
 	template<> struct is_detachable< Light > : std::true_type {};
 	template<> struct is_detachable< BillboardList > : std::true_type {};
-	template<> struct is_detachable< SceneNode > : std::true_type {};
+	template<> struct is_detachable< SceneNode >: std::true_type
+	{
+	};
 
 	//@}
 
@@ -712,6 +714,7 @@ namespace Castor3D
 			return *m_##memberName##Cache;\
 		}\
 	private:\
+		uint32_t m_on##className##Changed;\
 		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\

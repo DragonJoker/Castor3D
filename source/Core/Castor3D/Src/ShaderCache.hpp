@@ -206,18 +206,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the RenderSystem
-		 *\param[in]	p_renderSystem	The new value
-		 *\~french
-		 *\brief		Définit le RenderSystem
-		 *\param[in]	p_renderSystem	La nouvelle valeur
-		 */
-		inline void SetRenderSystem( RenderSystem * const & p_renderSystem )
-		{
-			m_renderSystem = p_renderSystem;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves an iterator to the beginning of the shaders list.
 		 *\return		The iterator
 		 *\~french
@@ -276,8 +264,6 @@ namespace Castor3D
 		ShaderProgramWPtrUInt64Map m_mapBillboards;
 		//!\~english The maximal number of vertices the geometry shader can output	\~french Nombre maximale de vertex qu'un shader géométrique peut sortir
 		int m_nbVerticesOut{ 0 };
-		//!\~english The RenderSystem used to create programs	\~french Le RenderSystem utilisé pour la création des programmes
-		RenderSystem * m_renderSystem{ nullptr };
 	};
 	/**
 	 *\~english

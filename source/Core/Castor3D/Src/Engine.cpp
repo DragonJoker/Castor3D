@@ -54,70 +54,128 @@ namespace Castor3D
 		, m_perObjectLighting( true )
 		, m_threaded( false )
 	{
+		auto l_dummy = []( auto p_element )
+		{
+		};
+		auto l_eventInit = [this]( auto p_element )
+		{
+			PostEvent( MakeInitialiseEvent( *p_element ) );
+		};
+		auto l_eventClean = [this]( auto p_element )
+		{
+			PostEvent( MakeCleanupEvent( *p_element ) );
+		};
+		auto l_instantInit = [this]( auto p_element )
+		{
+			p_element->Initialise();
+		};
+		auto l_instantClean = [this]( auto p_element )
+		{
+			p_element->Cleanup();
+		};
+		auto l_listenerClean = [this]( auto p_element )
+		{
+			p_element->Flush();
+		};
+		auto l_mergeResource = []( auto const & p_source
+								  , auto & p_destination
+								  , auto p_element )
+		{
+		};
 		std::locale::global( std::locale() );
 		Image::InitialiseImageLib();
 
 		// m_listenerCache *MUST* be the first created.
-		m_listenerCache = MakeCache< FrameListener, String >( *this, []( String const & p_name )
-		{
-			return std::make_shared< FrameListener >( p_name );
-		}, []( FrameListenerSPtr )
-		{
-		}, []( FrameListenerSPtr p_element )
-		{
-			p_element->Flush();
-		} );
+		m_listenerCache = MakeCache< FrameListener, String >(	*this
+																, []( String const & p_name )
+																{
+																	return std::make_shared< FrameListener >( p_name );
+																}
+																, l_dummy
+																, l_listenerClean
+																, l_mergeResource );
 		m_defaultListener = m_listenerCache->Add( cuT( "Default" ) );
 
 		m_shaderCache = MakeCache( *this );
-		m_samplerCache = MakeCache< Sampler, String >( *this, [this]( String const & p_name )
-		{
-			return GetRenderSystem()->CreateSampler( p_name );
-		} );
-		m_depthStencilStateCache = MakeCache< DepthStencilState, String >( *this, [this]( String const & p_name )
-		{
-			return GetRenderSystem()->CreateDepthStencilState();
-		} );
-		m_rasteriserStateCache = MakeCache< RasteriserState, String >( *this, [this]( String const & p_name )
-		{
-			return GetRenderSystem()->CreateRasteriserState();
-		} );
-		m_blendStateCache = MakeCache< BlendState, String >( *this, [this]( String const & p_name )
-		{
-			return GetRenderSystem()->CreateBlendState();
-		} );
-		m_materialCache = MakeCache< Material, String >( *this, [this]( String const & p_name )
-		{
-			return std::make_shared< Material >( p_name, *this );
-		} );
-		m_pluginCache = MakeCache< Plugin, String >( *this, []( String const & p_name, ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library )
-		{
-			return nullptr;
-		} );
-		m_overlayCache = MakeCache< Overlay, String >( *this, [this]( String const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
-		{
-			auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
-			l_return->SetName( p_name );
-			return l_return;
-		} );
-		m_sceneCache = MakeCache< Scene, String >( *this, [this]( Castor::String const & p_name )
-		{
-			return std::make_shared< Scene >( p_name, *this );
-		} );
+		m_samplerCache = MakeCache< Sampler, String >(	*this
+														, [this]( String const & p_name )
+														{
+															return GetRenderSystem()->CreateSampler( p_name );
+														}
+														, l_eventInit
+														, l_eventClean
+														, l_mergeResource );
+		m_depthStencilStateCache = MakeCache< DepthStencilState, String >(	*this
+																			, [this]( String const & p_name )
+																			{
+																				return GetRenderSystem()->CreateDepthStencilState();
+																			}
+																			, l_eventInit
+																			, l_eventClean
+																			, l_mergeResource );
+		m_rasteriserStateCache = MakeCache< RasteriserState, String >(	*this
+																		, [this]( String const & p_name )
+																		{
+																			return GetRenderSystem()->CreateRasteriserState();
+																		}
+																		, l_eventInit
+																		, l_eventClean
+																		, l_mergeResource );
+		m_blendStateCache = MakeCache< BlendState, String >( *this
+															, [this]( String const & p_name )
+															{
+																return GetRenderSystem()->CreateBlendState();
+															}
+															, l_eventInit
+															, l_eventClean
+															, l_mergeResource );
+		m_materialCache = MakeCache< Material, String >( *this
+														, [this]( String const & p_name )
+														{
+															return std::make_shared< Material >( p_name, *this );
+														}
+														, l_eventInit
+														, l_eventClean
+														, l_mergeResource );
+		m_pluginCache = MakeCache< Plugin, String >( *this
+													, []( String const & p_name, ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library )
+													{
+														return nullptr;
+													} );
+		m_overlayCache = MakeCache< Overlay, String >(	*this
+														, [this]( String const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+														{
+															auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
+															l_return->SetName( p_name );
+															return l_return;
+														}
+														, l_dummy
+														, l_dummy
+														, l_mergeResource );
+		m_sceneCache = MakeCache< Scene, String >(	*this
+													, [this]( Castor::String const & p_name )
+													{
+														return std::make_shared< Scene >( p_name, *this );
+													}
+													, l_instantInit
+													, l_instantClean
+													, l_mergeResource );
 		m_targetCache = std::make_unique< RenderTargetCache >( *this );
-		m_techniqueCache = MakeCache< RenderTechnique, String >( *this, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
-		{
-			return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
-		} );
+		m_techniqueCache = MakeCache< RenderTechnique, String >( *this
+																, [this]( String const & p_name, String const & p_type, RenderTarget & p_renderTarget, Parameters const & p_parameters )
+																{
+																	return m_techniqueFactory.Create( p_type, p_renderTarget, *GetRenderSystem(), p_parameters );
+																}
+																, l_dummy
+																, l_dummy
+																, l_mergeResource );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
 			File::DirectoryCreate( GetEngineDirectory() );
 		}
 
-		Version l_version;
-		String l_strVersion;
-		Logger::LogInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << l_version );
+		Logger::LogInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} );
 	}
 
 	Engine::~Engine()
