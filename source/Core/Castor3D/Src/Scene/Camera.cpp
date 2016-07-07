@@ -9,6 +9,9 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/PointFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 #include <TransformationMatrix.hpp>
 
@@ -280,5 +283,17 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	void Camera::FillShader( FrameVariableBuffer & p_sceneBuffer )
+	{
+		Point3r l_position = GetParent()->GetDerivedPosition();
+		Point3rFrameVariableSPtr l_cameraPos;
+		p_sceneBuffer.GetVariable( ShaderProgram::CameraPos, l_cameraPos );
+
+		if ( l_cameraPos )
+		{
+			l_cameraPos->SetValue( l_position );
+		}
 	}
 }

@@ -419,7 +419,7 @@ namespace Castor3D
 	class DebugOverlays;
 	class Engine;
 	class RendererServer;
-	class PluginBase;
+	class Plugin;
 	class RendererPlugin;
 	class ImporterPlugin;
 	class DividerPlugin;
@@ -449,7 +449,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( Engine );
 	DECLARE_SMART_PTR( RendererServer );
-	DECLARE_SMART_PTR( PluginBase );
+	DECLARE_SMART_PTR( Plugin );
 	DECLARE_SMART_PTR( RendererPlugin );
 	DECLARE_SMART_PTR( ImporterPlugin );
 	DECLARE_SMART_PTR( DividerPlugin );
@@ -462,51 +462,119 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
 
-	class OverlayManager;
-	class ShaderManager;
-	class MaterialManager;
-	class WindowManager;
-	class MeshManager;
-	class PluginManager;
-	class SceneManager;
-	class SamplerManager;
-	class DepthStencilStateManager;
-	class RasteriserStateManager;
-	class BlendStateManager;
-	class AnimationManager;
-	class TargetManager;
-	class ListenerManager;
-	class GeometryManager;
-	class CameraManager;
-	class LightManager;
-	class AnimatedObjectGroupManager;
-	class SceneNodeManager;
-	class BillboardManager;
-	class RenderTechniqueManager;
-	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
-	class ManagerView;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to specialise a cache behaviour.
+	*\remarks	Must hold:
+				<ul>
+				<li>Name: The element type name.</li>
+				<li>Producer: The element creation function prototype.</li>
+				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+				</ul>
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks	doit contenir:
+				<ul>
+				<li>Name: Le nom du type d'élément.</li>
+				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+				</ul>
+	*/
+	template< typename ElementType, typename KeyType >
+	struct CacheTraits;
 
-	DECLARE_SMART_PTR( OverlayManager );
-	DECLARE_SMART_PTR( ShaderManager );
-	DECLARE_SMART_PTR( MaterialManager );
-	DECLARE_SMART_PTR( WindowManager );
-	DECLARE_SMART_PTR( MeshManager );
-	DECLARE_SMART_PTR( PluginManager );
-	DECLARE_SMART_PTR( SceneManager );
-	DECLARE_SMART_PTR( SamplerManager );
-	DECLARE_SMART_PTR( DepthStencilStateManager );
-	DECLARE_SMART_PTR( RasteriserStateManager );
-	DECLARE_SMART_PTR( BlendStateManager );
-	DECLARE_SMART_PTR( AnimationManager );
-	DECLARE_SMART_PTR( TargetManager );
-	DECLARE_SMART_PTR( ListenerManager );
-	DECLARE_SMART_PTR( GeometryManager );
-	DECLARE_SMART_PTR( CameraManager );
-	DECLARE_SMART_PTR( LightManager );
-	DECLARE_SMART_PTR( AnimatedObjectGroupManager );
-	DECLARE_SMART_PTR( SceneNodeManager );
-	DECLARE_SMART_PTR( BillboardManager );
-	DECLARE_SMART_PTR( RenderTechniqueManager );
+	template< typename ElementType, typename KeyType >
+	class CacheBase;
+
+	template< typename ElementType, typename KeyType >
+	class Cache;
+
+	template< typename ElementType, typename KeyType >
+	struct ElementProducer;
+
+	template< typename ElementType >
+	using ElementInitialiser = std::function< void( std::shared_ptr< ElementType > ) >;
+
+	template< typename ElementType >
+	using ElementCleaner = std::function< void( std::shared_ptr< ElementType > ) >;
+
+	template< typename ElementType, typename KeyType >
+	using ElementMerger = std::function< void( CacheBase< ElementType, KeyType > const &, Castor::Collection< ElementType, KeyType > &, std::shared_ptr< ElementType > ) >;
+
+	class ShaderProgramCache;
+	class RenderTargetCache;
+
+	using BlendStateCache = Cache< BlendState, Castor::String >;
+	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String >;
+	using ListenerCache = Cache< FrameListener, Castor::String >;
+	using MeshCache = Cache< Mesh, Castor::String >;
+	using RasteriserStateCache = Cache< RasteriserState, Castor::String >;
+	using SamplerCache = Cache< Sampler, Castor::String >;
+	using SceneCache = Cache< Scene, Castor::String >;
+	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String >;
+	using RenderWindowCache = Cache< RenderWindow, Castor::String >;
+
+	DECLARE_SMART_PTR( BlendStateCache );
+	DECLARE_SMART_PTR( DepthStencilStateCache );
+	DECLARE_SMART_PTR( ListenerCache );
+	DECLARE_SMART_PTR( MeshCache );
+	DECLARE_SMART_PTR( RasteriserStateCache );
+	DECLARE_SMART_PTR( SceneCache );
+	DECLARE_SMART_PTR( SamplerCache );
+	DECLARE_SMART_PTR( ShaderProgramCache );
+	DECLARE_SMART_PTR( RenderTargetCache );
+	DECLARE_SMART_PTR( RenderTechniqueCache );
+	DECLARE_SMART_PTR( RenderWindowCache );
+
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to specialise a cache behaviour.
+	*\remarks	Must hold:
+				<ul>
+				<li>Name: The element type name.</li>
+				<li>Producer: The element creation function prototype.</li>
+				<li>Merger: The prototype of the function use to merge a cache element into another cache.</li>
+				</ul>
+	\~french
+	\brief		Structure permettant de spécialiser le comportement d'un cache.
+	*\remarks	doit contenir:
+				<ul>
+				<li>Name: Le nom du type d'élément.</li>
+				<li>Producer: Le prototype de la fonction de création d'un élément.</li>
+				<li>Merger: Le prototype de la fonction pour fusionner un élément d'un cache dans un autre cache.</li>
+				</ul>
+	*/
+	template< typename ElementType, typename KeyType >
+	struct ObjectCacheTraits;
+
+	template< typename ElementType >
+	using ElementAttacher = std::function< void( std::shared_ptr< ElementType >, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr, SceneNodeSPtr ) >;
+
+	template< typename ElementType >
+	using ElementDetacher = std::function< void( std::shared_ptr< ElementType > ) >;
+
+	template< typename ElementType, typename KeyType >
+	class ObjectCacheBase;
+
+	template< typename ElementType, typename KeyType >
+	class ObjectCache;
+
+	using AnimatedObjectGroupCache = Cache< AnimatedObjectGroup, Castor::String >;
+	using BillboardListCache = ObjectCache< BillboardList, Castor::String >;
+	using CameraCache = ObjectCache< Camera, Castor::String >;
+
+	DECLARE_SMART_PTR( AnimatedObjectGroupCache );
+	DECLARE_SMART_PTR( BillboardListCache );
+	DECLARE_SMART_PTR( CameraCache );
+
+	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
+	class CacheView;
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );
@@ -524,7 +592,7 @@ namespace Castor3D
 	//! RenderWindow pointer map, sorted by index
 	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
-	DECLARE_MAP( Castor::String, PluginBaseSPtr, PluginStr );
+	DECLARE_MAP( Castor::String, PluginSPtr, PluginStr );
 	DECLARE_MAP( int, Castor::String, StrInt );
 	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
@@ -597,9 +665,96 @@ namespace Castor3D
 	template<> struct is_detachable< Geometry > : std::true_type {};
 	template<> struct is_detachable< Light > : std::true_type {};
 	template<> struct is_detachable< BillboardList > : std::true_type {};
-	template<> struct is_detachable< SceneNode > : std::true_type {};
+	template<> struct is_detachable< SceneNode >: std::true_type
+	{
+	};
 
 	//@}
+
+#define MAKE_CACHE_NAME( className )\
+	Cache< className, Castor::String >
+
+#define DECLARE_CACHE_MEMBER( memberName, className )\
+	public:\
+		inline MAKE_CACHE_NAME( className ) & Get##className##Cache()\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+		inline MAKE_CACHE_NAME( className ) const & Get##className##Cache()const\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+	private:\
+		std::unique_ptr< MAKE_CACHE_NAME( className ) > m_##memberName##Cache
+
+#define DECLARE_NAMED_CACHE_MEMBER( memberName, className )\
+	public:\
+		inline className##Cache & Get##className##Cache()\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+		inline className##Cache const & Get##className##Cache()const\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+	private:\
+		std::unique_ptr< className##Cache > m_##memberName##Cache
+
+#define MAKE_OBJECT_CACHE_NAME( className )\
+	ObjectCache< className, Castor::String >
+
+#define DECLARE_OBJECT_CACHE_MEMBER( memberName, className )\
+	public:\
+		inline MAKE_OBJECT_CACHE_NAME( className ) & Get##className##Cache()\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+		inline MAKE_OBJECT_CACHE_NAME( className ) const & Get##className##Cache()const\
+		{\
+			return *m_##memberName##Cache;\
+		}\
+	private:\
+		uint32_t m_on##className##Changed;\
+		std::unique_ptr< MAKE_OBJECT_CACHE_NAME( className ) > m_##memberName##Cache
+
+#define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
+	public:\
+		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > & Get##className##View()\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+		inline CacheView< className, MAKE_CACHE_NAME( className ), eventType > const & Get##className##View()const\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+	private:\
+		std::unique_ptr< CacheView< className, MAKE_CACHE_NAME( className ), eventType > > m_##memberName##CacheView
+
+#define DECLARE_CACHE_VIEW_MEMBER_CU( memberName, className, eventType )\
+	public:\
+		inline CacheView< Castor::className, Castor::className##Cache, eventType > & Get##className##View()\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+		inline CacheView< Castor::className, Castor::className##Cache, eventType > const & Get##className##View()const\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+	private:\
+		std::unique_ptr< CacheView< Castor::className, Castor::className##Cache, eventType > > m_##memberName##CacheView
+
+#define DECLARE_CACHE_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
+	public:\
+		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > & Get##className##View()\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+		inline CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > const & Get##className##View()const\
+		{\
+			return *m_##memberName##CacheView;\
+		}\
+	private:\
+		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 }
 
 namespace Castor

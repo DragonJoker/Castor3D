@@ -1,4 +1,7 @@
-﻿#include "DepthStencilState.hpp"
+#include "DepthStencilState.hpp"
+
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 using namespace Castor;
 
@@ -8,7 +11,7 @@ namespace Castor3D
 	{
 		bool g_creatingCurrent = false;
 	}
-
+	
 	DepthStencilStateWPtr DepthStencilState::m_wCurrentState;
 
 	DepthStencilState::DepthStencilState( Engine & p_engine )

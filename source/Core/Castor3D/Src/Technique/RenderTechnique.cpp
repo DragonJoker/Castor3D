@@ -1,16 +1,16 @@
 #include "RenderTechnique.hpp"
 
-#include "AnimatedObjectGroupManager.hpp"
-#include "BillboardManager.hpp"
-#include "CameraManager.hpp"
-#include "DepthStencilStateManager.hpp"
+#include "AnimatedObjectGroupCache.hpp"
+#include "BillboardCache.hpp"
+#include "CameraCache.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "GeometryManager.hpp"
-#include "LightManager.hpp"
-#include "OverlayManager.hpp"
-#include "RasteriserStateManager.hpp"
-#include "SamplerManager.hpp"
-#include "ShaderManager.hpp"
+#include "GeometryCache.hpp"
+#include "LightCache.hpp"
+#include "OverlayCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
@@ -29,12 +29,19 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
+#include "Scene/BillboardList.hpp"
+#include "Scene/Camera.hpp"
+#include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
+#include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
@@ -91,10 +98,10 @@ namespace Castor3D
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
 		{
 			AnimatedObjectSPtr l_return;
-			auto & l_manager = p_scene.GetAnimatedObjectGroupManager();
-			auto l_lock = make_unique_lock( l_manager );
+			auto & l_cache = p_scene.GetAnimatedObjectGroupCache();
+			auto l_lock = make_unique_lock( l_cache );
 
-			for ( auto l_group : l_manager )
+			for ( auto l_group : l_cache )
 			{
 				if ( !l_return )
 				{
@@ -125,9 +132,9 @@ namespace Castor3D
 			p_animated.m_renderNodes.clear();
 			p_animated.m_opaqueRenderNodes.clear();
 			p_animated.m_transparentRenderNodes.clear();
-			auto l_lock = make_unique_lock( p_scene.GetGeometryManager() );
+			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
 
-			for ( auto l_primitive : p_scene.GetGeometryManager() )
+			for ( auto l_primitive : p_scene.GetGeometryCache() )
 			{
 				MeshSPtr l_mesh = l_primitive.second->GetMesh();
 				SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
@@ -167,7 +174,7 @@ namespace Castor3D
 								}
 
 								l_pass->PrepareTextures();
-								l_program = p_scene.GetEngine()->GetShaderManager().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
+								l_program = p_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
 
 								auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 								auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
@@ -258,9 +265,9 @@ namespace Castor3D
 			p_nodes.m_renderNodes.clear();
 			p_nodes.m_opaqueRenderNodes.clear();
 			p_nodes.m_transparentRenderNodes.clear();
-			auto l_lock = make_unique_lock( p_scene.GetBillboardManager() );
+			auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
 
-			for ( auto l_billboard : p_scene.GetBillboardManager() )
+			for ( auto l_billboard : p_scene.GetBillboardListCache() )
 			{
 				SceneNodeSPtr l_sceneNode = l_billboard.second->GetParent();
 
@@ -273,12 +280,12 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderManager().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderProgramCache().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 
 							if ( !l_program )
 							{
 								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
-								p_scene.GetEngine()->GetShaderManager().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+								p_scene.GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
 							}
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
@@ -425,10 +432,10 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 	{
-		auto l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
+		auto l_rsState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
 		l_rsState->SetCulledFaces( eFACE_FRONT );
 		m_wpFrontRasteriserState = l_rsState;
-		l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
+		l_rsState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
 		l_rsState->SetCulledFaces( eFACE_BACK );
 		m_wpBackRasteriserState = l_rsState;
 	}
@@ -555,8 +562,8 @@ namespace Castor3D
 	{
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			p_scene.GetCameraManager().BindCamera( p_node.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -572,7 +579,7 @@ namespace Castor3D
 
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
 		}
 	}
 
@@ -580,8 +587,8 @@ namespace Castor3D
 	{
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			p_scene.GetCameraManager().BindCamera( p_node.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -632,7 +639,7 @@ namespace Castor3D
 
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
 		}
 	}
 
@@ -640,8 +647,8 @@ namespace Castor3D
 	{
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
-			p_scene.GetCameraManager().BindCamera( p_node.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
+			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( p_node.m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -659,7 +666,7 @@ namespace Castor3D
 
 		if ( GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightManager().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
+			p_scene.GetLightCache().UnbindLights( p_renderNode.m_scene.m_node.m_program, p_renderNode.m_scene.m_sceneUbo );
 		}
 	}
 

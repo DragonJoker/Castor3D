@@ -11,16 +11,17 @@
 
 #include <Font.hpp>
 
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SamplerManager.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 #include <Scene/SceneFileParser.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -311,7 +312,7 @@ namespace GuiCommon
 					// Since techniques depend on renderers, we load these first
 					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
+						if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
 						{
 							l_arrayFailed.push_back( l_file );
 						}
@@ -326,7 +327,7 @@ namespace GuiCommon
 			// Then we load other plug-ins
 			for ( auto l_file : l_otherPlugins )
 			{
-				if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
+				if ( !p_engine.GetPluginCache().LoadPlugin( l_file ) )
 				{
 					l_arrayFailed.push_back( l_file );
 				}
@@ -379,8 +380,8 @@ namespace GuiCommon
 	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
 	{
 		String l_name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
-		FontManager & l_manager = p_engine->GetFontManager();
-		FontSPtr l_font = l_manager.Find( l_name );
+		auto & l_cache = p_engine->GetFontCache();
+		FontSPtr l_font = l_cache.Find( l_name );
 
 		if ( !l_font )
 		{
@@ -389,7 +390,7 @@ namespace GuiCommon
 				//l_font = std::make_shared< Castor::Font >( l_name, p_font.GetPointSize() );
 				//l_font->SetGlyphLoader( std::make_unique< wxWidgetsFontImpl >( p_font ) );
 				//Font::BinaryLoader()( *l_font, String( p_font.GetFaceName() ), uint32_t( std::abs( p_font.GetPointSize() ) ) );
-				//l_manager.insert( l_name, l_font );
+				//l_cache.insert( l_name, l_font );
 			}
 		}
 

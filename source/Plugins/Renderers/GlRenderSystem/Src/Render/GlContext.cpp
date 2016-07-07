@@ -9,7 +9,7 @@
 #include "Render/GlPipeline.hpp"
 #include "Render/GlRenderSystem.hpp"
 
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
@@ -63,7 +63,7 @@ namespace GlRender
 			{
 				GetImpl().SetCurrent();
 				l_renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
-				l_engine->GetMaterialManager().Initialise();
+				l_engine->GetMaterialCache().Initialise();
 
 #if !defined( NDEBUG )
 

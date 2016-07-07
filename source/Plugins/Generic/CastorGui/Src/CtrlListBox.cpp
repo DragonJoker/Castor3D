@@ -3,16 +3,14 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <OverlayManager.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 #include <Texture/TextureUnit.hpp>
-
-#include <Engine.hpp>
-#include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
 
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Material/Pass.hpp>
@@ -272,14 +270,14 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "DarkBlue" ) ) );
+			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "DarkBlue" ) ) );
 		}
 
 		l_material = GetSelectedItemForegroundMaterial();
 
 		if ( !l_material )
 		{
-			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
+			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		}
 
 		l_material = GetHighlightedItemBackgroundMaterial();

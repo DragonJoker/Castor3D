@@ -1,10 +1,12 @@
 #include "BorderPanelOverlay.hpp"
 
 #include "Overlay.hpp"
-#include "OverlayManager.hpp"
+#include "OverlayCache.hpp"
 #include "OverlayRenderer.hpp"
-#include "MaterialManager.hpp"
+#include "MaterialCache.hpp"
 #include "Engine.hpp"
+
+#include "Material/Material.hpp"
 
 using namespace Castor;
 
@@ -90,7 +92,7 @@ namespace Castor3D
 	void BorderPanelOverlay::DoUpdateSize()
 	{
 		OverlayCategory::DoUpdateSize();
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
 
 		if ( l_renderer )
 		{

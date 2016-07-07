@@ -12,15 +12,15 @@
 #undef min
 #undef abs
 
-#include <BlendStateManager.hpp>
-#include <DepthStencilStateManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <RasteriserStateManager.hpp>
-#include <SamplerManager.hpp>
-#include <SceneManager.hpp>
-#include <WindowManager.hpp>
+#include <BlendStateCache.hpp>
+#include <DepthStencilStateCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <RasteriserStateCache.hpp>
+#include <SamplerCache.hpp>
+#include <SceneCache.hpp>
+#include <WindowCache.hpp>
 
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
@@ -171,7 +171,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneManager().Create( FromBstr( name ), *m_internal ) );
+					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneCache().Add( FromBstr( name ), *m_internal ) );
 				}
 			}
 		}
@@ -189,7 +189,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetSceneManager().Clear();
+			m_internal->GetSceneCache().Clear();
 			hr = S_OK;
 		}
 		else
@@ -200,13 +200,13 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ eRENDERER_TYPE type )
+	STDMETHODIMP CEngine::LoadRenderer( /* [in] */ BSTR type )
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			m_internal->LoadRenderer( Castor3D::eRENDERER_TYPE( type ) );
+			m_internal->LoadRenderer( FromBstr( type ) );
 			hr = S_OK;
 		}
 		else
@@ -240,36 +240,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetPluginManager().LoadPlugin( FromBstr( path ) );
+			m_internal->GetPluginCache().LoadPlugin( Castor::Path{ FromBstr( path ) } );
 			hr = S_OK;
 		}
 		else
 		{
 			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateMesh( /* [in] */ eMESH_TYPE type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CMesh::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshManager().Create( FromBstr( name ), Castor3D::eMESH_TYPE( type ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -286,30 +262,6 @@ namespace CastorCom
 		else
 		{
 			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
-		}
-
-		return hr;
-	}
-
-	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
-	{
-		HRESULT hr = E_POINTER;
-
-		if ( m_internal )
-		{
-			if ( pVal )
-			{
-				hr = CRenderWindow::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowManager().Create( FromBstr( name ) ) );
-				}
-			}
-		}
-		else
-		{
-			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -343,7 +295,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->GetSamplerManager().Create( FromBstr( name ) ) );
+					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->GetSamplerCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -367,7 +319,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateManager().Create( FromBstr( name ) ) );
+					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -391,7 +343,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateManager().Create( FromBstr( name ) ) );
+					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -415,7 +367,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateManager().Create( FromBstr( name ) ) );
+					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -433,7 +385,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetSceneManager().Remove( FromBstr( name ) );
+			m_internal->GetSceneCache().Remove( FromBstr( name ) );
 		}
 		else
 		{
@@ -451,7 +403,7 @@ namespace CastorCom
 		{
 			if ( window )
 			{
-				Castor::Path fileName = FromBstr( name );
+				Castor::Path fileName{ FromBstr( name ) };
 				Castor3D::RenderWindowSPtr l_return;
 
 				if ( Castor::File::FileExists( fileName ) )

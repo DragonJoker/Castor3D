@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
 #define ___C3D_DEBUG_OVERLAYS_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "OverlayCache.hpp"
 
 #include <PreciseTimer.hpp>
 #include <OwnedBy.hpp>
@@ -60,13 +60,13 @@ namespace Castor3D
 		~DebugOverlays();
 		/**
 		 *\~english
-		 *\brief		Initialisation function, retrieves the overlays from the given overlay manager.
-		 *\param[in]	p_manager	The overlay manager.
+		 *\brief		Initialisation function, retrieves the overlays from the given overlay cache.
+		 *\param[in]	p_cache	The overlay cache.
 		 *\~french
-		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du gestionnaire d'incrustations donné.
-		 *\param[in]	p_manager	Le gestionnaire d'incrustations.
+		 *\brief		Fonction d'initialisation, récupère les incrustations à partir du cache d'incrustations donné.
+		 *\param[in]	p_cache	Le cache d'incrustations.
 		 */
-		void Initialise( OverlayManager & p_manager );
+		void Initialise( OverlayCache & p_cache );
 		/**
 		 *\~english
 		 *\brief		Clean up function.

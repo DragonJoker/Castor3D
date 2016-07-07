@@ -4,14 +4,14 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -38,13 +38,13 @@ SMaxImporter::SMaxImporter( Engine & p_pEngine )
 
 SceneSPtr SMaxImporter::DoImportScene()
 {
-	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_3DS" ) );
 	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
-		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 		l_geometry->AttachTo( l_node );
 
 		for ( auto l_submesh: *l_mesh )
@@ -71,7 +71,7 @@ MeshSPtr SMaxImporter::DoImportMesh( Scene & p_scene )
 
 	if ( m_pFile->IsOk() )
 	{
-		l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
@@ -311,12 +311,12 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 
 	if ( !l_strMatName.empty() )
 	{
-		auto & l_mtlManager = p_scene.GetMaterialView();
-		l_pMaterial = l_mtlManager.Find( l_strMatName );
+		auto & l_cache = p_scene.GetMaterialView();
+		l_pMaterial = l_cache.Find( l_strMatName );
 
 		if ( ! l_pMaterial )
 		{
-			l_pMaterial = l_mtlManager.Create( l_strMatName, *GetEngine() );
+			l_pMaterial = l_cache.Add( l_strMatName );
 			l_pMaterial->CreatePass();
 		}
 
@@ -720,8 +720,8 @@ void SMaxImporter::DoReadObjectMaterial( Scene & p_scene, SMaxChunk * p_pChunk, 
 	String l_materialName;
 	MaterialSPtr l_pMaterial;
 	p_pChunk->m_ulBytesRead += DoGetString( l_materialName );
-	auto & l_mtlManager = p_scene.GetMaterialView();
-	l_pMaterial = l_mtlManager.Find( l_materialName );
+	auto & l_cache = p_scene.GetMaterialView();
+	l_pMaterial = l_cache.Find( l_materialName );
 
 	if ( l_pMaterial && !p_pSubmesh->GetDefaultMaterial() )
 	{

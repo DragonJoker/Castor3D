@@ -4,7 +4,12 @@
 #	include <Windows.h>
 #	include <tchar.h>
 #	include <codecvt>
+#	undef min
+#	undef max
+#	undef abs
 #endif
+
+#include <iomanip>
 
 #include "LoggerConsole.hpp"
 #include "StringUtils.hpp"
@@ -23,7 +28,7 @@ namespace Castor
 
 			if ( m_screenBuffer == INVALID_HANDLE_VALUE )
 			{
-				m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
+				m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, FILE_SHARE_READ, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
 			}
 
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
@@ -54,8 +59,30 @@ namespace Castor
 					m_oldInfos = nullptr;
 				}
 
-				COORD l_coord = { 160, 9999 };
-				::SetConsoleScreenBufferSize( m_screenBuffer, l_coord );
+				SHORT minX{ SHORT( ::GetSystemMetrics( SM_CXMIN ) ) };
+				SHORT minY{ SHORT( ::GetSystemMetrics( SM_CYMIN ) ) };
+				COORD l_coord = { std::max< SHORT >( 210, minX ), std::max< SHORT >( minX, 32766 ) };
+				
+				if ( ::SetConsoleScreenBufferSize( m_screenBuffer, l_coord ) )
+				{
+					COORD l_size = ::GetLargestConsoleWindowSize( m_screenBuffer );
+					SMALL_RECT l_windowRect = { 0 };
+					l_windowRect.Right = std::min( l_size.X, l_coord.X ) - 1;
+					l_windowRect.Bottom = std::min( l_size.Y, l_coord.Y ) - 1;
+
+					if ( !::SetConsoleWindowInfo( m_screenBuffer, TRUE, &l_windowRect ) )
+					{
+						StringStream text;
+						text << cuT( "Couldn't set console window size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
+						WriteText( text.str(), true );
+					}
+				}
+				else
+				{
+					StringStream text;
+					text << cuT( "Couldn't set console screenbuffer size (0x" ) << std::hex << std::setw( 8 ) << std::right << std::setfill( '0' ) << ::GetLastError() << ")";
+					WriteText( text.str(), true );
+				}
 			}
 
 			m_oldCodePage = ::GetConsoleOutputCP();

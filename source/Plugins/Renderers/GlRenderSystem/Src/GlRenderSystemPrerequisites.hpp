@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <cstddef>
 
 #include <CastorUtils.hpp>
-#include <Castor3DPrerequisites.hpp>
+#include <Engine.hpp>
 
 #ifdef _WIN32
 #	ifdef GlRenderSystem_EXPORTS

@@ -14,7 +14,7 @@
 
 #include <Logger.hpp>
 
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>

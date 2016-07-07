@@ -38,7 +38,7 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PluginBase::PluginBase( ePLUGIN_TYPE p_type, DynamicLibrarySPtr p_library, Engine & p_engine )
+	Plugin::Plugin( ePLUGIN_TYPE p_type, DynamicLibrarySPtr p_library, Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
 		, m_pfnGetRequiredVersion( 0 )
 		, m_pfnGetName( 0 )
@@ -62,11 +62,11 @@ namespace Castor3D
 		p_library->GetFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName );
 	}
 
-	PluginBase::~PluginBase()
+	Plugin::~Plugin()
 	{
 	}
 
-	void PluginBase::GetRequiredVersion( Version & p_version )const
+	void Plugin::GetRequiredVersion( Version & p_version )const
 	{
 		if ( m_pfnGetRequiredVersion )
 		{
@@ -74,7 +74,7 @@ namespace Castor3D
 		}
 	}
 
-	String PluginBase::GetName()const
+	String Plugin::GetName()const
 	{
 		String l_strReturn;
 

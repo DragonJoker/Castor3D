@@ -1,8 +1,8 @@
 #include "TextOverlay.hpp"
 
 #include "Engine.hpp"
-#include "OverlayManager.hpp"
-#include "SamplerManager.hpp"
+#include "OverlayCache.hpp"
+#include "SamplerCache.hpp"
 
 #include "FontTexture.hpp"
 #include "OverlayRenderer.hpp"
@@ -142,16 +142,16 @@ namespace Castor3D
 	{
 		// Récupération / Création de la police
 		Engine * l_engine = m_pOverlay->GetEngine();
-		FontManager & l_fontManager = l_engine->GetFontManager();
-		FontSPtr l_pFont = l_fontManager.Find( p_strFont );
+		auto & l_fontCache = l_engine->GetFontCache();
+		FontSPtr l_pFont = l_fontCache.Find( p_strFont );
 
 		if ( l_pFont )
 		{
-			FontTextureSPtr l_fontTexture = l_engine->GetOverlayManager().GetFontTexture( l_pFont->GetName() );
+			FontTextureSPtr l_fontTexture = l_engine->GetOverlayCache().GetFontTexture( l_pFont->GetName() );
 
 			if ( !l_fontTexture )
 			{
-				l_fontTexture = l_engine->GetOverlayManager().CreateFontTexture( l_pFont );
+				l_fontTexture = l_engine->GetOverlayCache().CreateFontTexture( l_pFont );
 				l_fontTexture->Update();
 			}
 

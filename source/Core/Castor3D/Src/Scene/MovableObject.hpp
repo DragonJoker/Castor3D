@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MOVABLE_OBJECT_H___
 #define ___C3D_MOVABLE_OBJECT_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "SceneNode.hpp"
 
 #include "Animation/Animable.hpp"
 

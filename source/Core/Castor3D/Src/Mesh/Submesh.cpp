@@ -1,8 +1,8 @@
 #include "Submesh.hpp"
 
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "ShaderManager.hpp"
+#include "MaterialCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Face.hpp"
 
@@ -15,6 +15,7 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Vertex.hpp"
 
 #include <BlockTracker.hpp>
@@ -202,7 +203,7 @@ namespace Castor3D
 
 	Submesh::Submesh( Scene & p_scene, Mesh & p_mesh, uint32_t p_id )
 		: OwnedBy< Scene >( p_scene )
-		, m_defaultMaterial( p_scene.GetEngine()->GetMaterialManager().GetDefaultMaterial() )
+		, m_defaultMaterial( p_scene.GetEngine()->GetMaterialCache().GetDefaultMaterial() )
 		, m_id( p_id )
 		, m_parentMesh( p_mesh )
 		, m_layout( {

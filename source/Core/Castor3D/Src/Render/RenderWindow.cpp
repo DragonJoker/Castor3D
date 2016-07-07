@@ -1,14 +1,14 @@
 #include "RenderWindow.hpp"
 
-#include "BlendStateManager.hpp"
-#include "CameraManager.hpp"
-#include "DepthStencilStateManager.hpp"
+#include "BlendStateCache.hpp"
+#include "CameraCache.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "ListenerManager.hpp"
-#include "RasteriserStateManager.hpp"
-#include "TargetManager.hpp"
-#include "SceneManager.hpp"
-#include "ShaderManager.hpp"
+#include "ListenerCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "TargetCache.hpp"
+#include "SceneCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "Context.hpp"
 #include "Pipeline.hpp"
@@ -16,13 +16,18 @@
 #include "RenderSystem.hpp"
 #include "Viewport.hpp"
 
-#include "FrameBuffer/BackBuffers.hpp"
-#include "Mesh/Vertex.hpp"
-#include "Mesh/Buffer/Buffer.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "FrameBuffer/BackBuffers.hpp"
+#include "Mesh/Vertex.hpp"
+#include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
+#include "Render/RenderTarget.hpp"
+#include "Scene/Scene.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/FrameVariable.hpp"
 
@@ -66,32 +71,32 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( Engine & p_engine, String const & p_name )
+	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
 		, Named( p_name )
 		, m_index( s_nbRenderWindows )
-		, m_wpListener( p_engine.GetListenerManager().Create( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
+		, m_wpListener( p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_initialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		auto l_dsstate = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		auto l_dsstate = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		l_dsstate->SetDepthTest( false );
 		m_wpDepthStencilState = l_dsstate;
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		GetEngine()->GetFrameListenerCache().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 		auto l_target = m_renderTarget.lock();
 
 		if ( l_target )
 		{
-			GetEngine()->GetTargetManager().Remove( l_target );
+			GetEngine()->GetRenderTargetCache().Remove( l_target );
 		}
 	}
 

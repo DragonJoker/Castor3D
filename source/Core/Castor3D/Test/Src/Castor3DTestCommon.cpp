@@ -1,10 +1,10 @@
 #include "Castor3DTestCommon.hpp"
 
-#include <AnimatedObjectGroupManager.hpp>
-#include <CameraManager.hpp>
-#include <GeometryManager.hpp>
-#include <LightManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <AnimatedObjectGroupCache.hpp>
+#include <CameraCache.hpp>
+#include <GeometryCache.hpp>
+#include <LightCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Animation/Animable.hpp>
 #include <Animation/Animation.hpp>
@@ -34,12 +34,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetSceneNodeManager() );
-			auto l_lockB = make_unique_lock( p_b.GetSceneNodeManager() );
-			auto l_itA = p_a.GetSceneNodeManager().begin();
-			auto l_endItA =  p_a.GetSceneNodeManager().end();
-			auto l_itB = p_b.GetSceneNodeManager().begin();
-			auto l_endItB = p_b.GetSceneNodeManager().end();
+			auto l_lockA = make_unique_lock( p_a.GetSceneNodeCache() );
+			auto l_lockB = make_unique_lock( p_b.GetSceneNodeCache() );
+			auto l_itA = p_a.GetSceneNodeCache().begin();
+			auto l_endItA =  p_a.GetSceneNodeCache().end();
+			auto l_itB = p_b.GetSceneNodeCache().begin();
+			auto l_endItB = p_b.GetSceneNodeCache().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -58,12 +58,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetGeometryManager() );
-			auto l_lockB = make_unique_lock( p_b.GetGeometryManager() );
-			auto l_itA = p_a.GetGeometryManager().begin();
-			auto l_endItA =  p_a.GetGeometryManager().end();
-			auto l_itB = p_b.GetGeometryManager().begin();
-			auto l_endItB = p_b.GetGeometryManager().end();
+			auto l_lockA = make_unique_lock( p_a.GetGeometryCache() );
+			auto l_lockB = make_unique_lock( p_b.GetGeometryCache() );
+			auto l_itA = p_a.GetGeometryCache().begin();
+			auto l_endItA =  p_a.GetGeometryCache().end();
+			auto l_itB = p_b.GetGeometryCache().begin();
+			auto l_endItB = p_b.GetGeometryCache().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -76,12 +76,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetLightManager() );
-			auto l_lockB = make_unique_lock( p_b.GetLightManager() );
-			auto l_itA = p_a.GetLightManager().begin();
-			auto l_endItA =  p_a.GetLightManager().end();
-			auto l_itB = p_b.GetLightManager().begin();
-			auto l_endItB = p_b.GetLightManager().end();
+			auto l_lockA = make_unique_lock( p_a.GetLightCache() );
+			auto l_lockB = make_unique_lock( p_b.GetLightCache() );
+			auto l_itA = p_a.GetLightCache().begin();
+			auto l_endItA =  p_a.GetLightCache().end();
+			auto l_itB = p_b.GetLightCache().begin();
+			auto l_endItB = p_b.GetLightCache().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -94,12 +94,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetCameraManager() );
-			auto l_lockB = make_unique_lock( p_b.GetCameraManager() );
-			auto l_itA = p_a.GetCameraManager().begin();
-			auto l_endItA =  p_a.GetCameraManager().end();
-			auto l_itB = p_b.GetCameraManager().begin();
-			auto l_endItB = p_b.GetCameraManager().end();
+			auto l_lockA = make_unique_lock( p_a.GetCameraCache() );
+			auto l_lockB = make_unique_lock( p_b.GetCameraCache() );
+			auto l_itA = p_a.GetCameraCache().begin();
+			auto l_endItA =  p_a.GetCameraCache().end();
+			auto l_itB = p_b.GetCameraCache().begin();
+			auto l_endItB = p_b.GetCameraCache().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{
@@ -118,12 +118,12 @@ namespace Testing
 
 		if ( l_return )
 		{
-			auto l_lockA = make_unique_lock( p_a.GetAnimatedObjectGroupManager() );
-			auto l_lockB = make_unique_lock( p_b.GetAnimatedObjectGroupManager() );
-			auto l_itA = p_a.GetAnimatedObjectGroupManager().begin();
-			auto l_endItA =  p_a.GetAnimatedObjectGroupManager().end();
-			auto l_itB = p_b.GetAnimatedObjectGroupManager().begin();
-			auto l_endItB = p_b.GetAnimatedObjectGroupManager().end();
+			auto l_lockA = make_unique_lock( p_a.GetAnimatedObjectGroupCache() );
+			auto l_lockB = make_unique_lock( p_b.GetAnimatedObjectGroupCache() );
+			auto l_itA = p_a.GetAnimatedObjectGroupCache().begin();
+			auto l_endItA =  p_a.GetAnimatedObjectGroupCache().end();
+			auto l_itB = p_b.GetAnimatedObjectGroupCache().begin();
+			auto l_endItB = p_b.GetAnimatedObjectGroupCache().end();
 
 			while ( l_return && l_itA != l_endItA && l_itB != l_endItB )
 			{

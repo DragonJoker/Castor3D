@@ -245,7 +245,7 @@ namespace GuiCommon
 
 			bool Open( wxString const & p_name )
 			{
-#if LIBAVFORMAT_VERSION_MAJOR >= 57 && LIBAVFORMAT_VERSION_MINOR >=37
+#if LIBAVFORMAT_VERSION_MAJOR >= 57 && LIBAVFORMAT_VERSION_MINOR >= 34
 				libffmpeg::CheckError( avcodec_parameters_from_context( m_stream->codecpar, m_codecContext )
 									   , "Setting codec parameters from context" );
 #else

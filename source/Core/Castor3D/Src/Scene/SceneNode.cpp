@@ -1,7 +1,7 @@
 #include "SceneNode.hpp"
 
 #include "Engine.hpp"
-#include "SceneNodeManager.hpp"
+#include "SceneNodeCache.hpp"
 
 #include "Geometry.hpp"
 #include "MovableObject.hpp"

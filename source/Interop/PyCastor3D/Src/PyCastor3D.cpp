@@ -36,12 +36,6 @@ void ExportCastor3D()
 	// Set the current scope to the new sub-module
 	py::scope l_scope = l_module;
 
-	/**@group_name eRENDERER_TYPE */
-	//@{
-	py::enum_< eRENDERER_TYPE >( "RendererType" )
-	.value( "OPENGL", eRENDERER_TYPE_OPENGL )
-	;
-	//@}
 	/**@group_name eMESH_TYPE */
 	//@{
 	py::enum_< eMESH_TYPE >( "MeshType" )
@@ -106,16 +100,17 @@ void ExportCastor3D()
 	//@}
 	/**@group_name eTEXTURE_CHANNEL */
 	//@{
-	py::enum_< eTEXTURE_CHANNEL >( "TextureChannel" )
-	.value( "COLOUR", eTEXTURE_CHANNEL_COLOUR )
-	.value( "DIFFUSE", eTEXTURE_CHANNEL_DIFFUSE )
-	.value( "NOTMAL", eTEXTURE_CHANNEL_NORMAL )
-	.value( "OPACITY", eTEXTURE_CHANNEL_OPACITY )
-	.value( "SPECULAR", eTEXTURE_CHANNEL_SPECULAR )
-	.value( "HEIGHT", eTEXTURE_CHANNEL_HEIGHT )
-	.value( "AMBIENT", eTEXTURE_CHANNEL_AMBIENT )
-	.value( "GLOSS", eTEXTURE_CHANNEL_GLOSS )
-	.value( "ALL", eTEXTURE_CHANNEL_ALL )
+	py::enum_< TextureChannel >( "TextureChannel" )
+	.value( "COLOUR", TextureChannel::Colour )
+	.value( "DIFFUSE", TextureChannel::Diffuse )
+	.value( "NORMAL", TextureChannel::Normal )
+	.value( "OPACITY", TextureChannel::Opacity )
+	.value( "SPECULAR", TextureChannel::Specular )
+	.value( "HEIGHT", TextureChannel::Height )
+	.value( "AMBIENT", TextureChannel::Ambient )
+	.value( "EMISSIVE", TextureChannel::Emissive )
+	.value( "GLOSS", TextureChannel::Gloss )
+	.value( "ALL", TextureChannel::All )
 	;
 	//@}
 	/**@group_name eRGB_BLEND_FUNC */
@@ -575,14 +570,14 @@ void ExportCastor3D()
 	.def( "find", &SceneNodeManager::Find, "Finds a SceneNode" )
 	;
 	//@}
-	/**@group_name CameraManager */
+	/**@group_name CameraCache */
 	//@{
-	CameraSPtr( CameraManager::*cameraCreator )( Castor::String const &, SceneNodeSPtr, Viewport const & ) = &CameraManager::Create;
-	py::class_< CameraManager, boost::noncopyable >( "CameraManager", py::no_init )
+	CameraSPtr( CameraCache::*cameraCreator )( Castor::String const &, SceneNodeSPtr, Viewport const & ) = &CameraCache::Create;
+	py::class_< CameraCache, boost::noncopyable >( "CameraCache", py::no_init )
 	.def( "create", cameraCreator, "Creates a Camera" )
-	.def( "remove", &CameraManager::Remove, "Finds a Camera" )
-	.def( "has", &CameraManager::Has, "Tells if the manager has a Camera" )
-	.def( "find", &CameraManager::Find, "Finds a Camera" )
+	.def( "remove", &CameraCache::Remove, "Finds a Camera" )
+	.def( "has", &CameraCache::Has, "Tells if the manager has a Camera" )
+	.def( "find", &CameraCache::Find, "Finds a Camera" )
 	;
 	//@}
 	/**@group_name GeometryManager */
@@ -595,14 +590,14 @@ void ExportCastor3D()
 	.def( "find", &GeometryManager::Find, "Finds a Geometry" )
 	;
 	//@}
-	/**@group_name LightManager */
+	/**@group_name LightCache */
 	//@{
-	LightSPtr( LightManager::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightManager::Create;
-	py::class_< LightManager, boost::noncopyable >( "LightManager", py::no_init )
+	LightSPtr( LightCache::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightCache::Create;
+	py::class_< LightCache, boost::noncopyable >( "LightCache", py::no_init )
 	.def( "create", lightCreator, "Creates a Light" )
-	.def( "remove", &LightManager::Remove, "Finds a Light" )
-	.def( "has", &LightManager::Has, "Tells if the manager has a Light" )
-	.def( "find", &LightManager::Find, "Finds a Light" )
+	.def( "remove", &LightCache::Remove, "Finds a Light" )
+	.def( "has", &LightCache::Has, "Tells if the manager has a Light" )
+	.def( "find", &LightCache::Find, "Finds a Light" )
 	;
 	//@}
 	/**@group_name Scene */
@@ -820,14 +815,14 @@ void ExportCastor3D()
 	.def( "find", &MeshManager::Find )
 	;
 	//@}
-	/**@group_name WindowManager */
+	/**@group_name WindowCache */
 	//@{
-	RenderWindowSPtr( WindowManager::*wndmgrCreate )( Castor::String const & ) = &WindowManager::Create;
-	py::class_< WindowManager, boost::noncopyable >( "WindowManager", py::no_init )
+	RenderWindowSPtr( WindowCache::*wndmgrCreate )( Castor::String const & ) = &WindowCache::Create;
+	py::class_< WindowCache, boost::noncopyable >( "WindowCache", py::no_init )
 	.def( "create", wndmgrCreate )
-	//.def( "remove", &WindowManager::Remove )
-	//.def( "has", &WindowManager::Has )
-	//.def( "find", &WindowManager::Find )
+	//.def( "remove", &WindowCache::Remove )
+	//.def( "has", &WindowCache::Has )
+	//.def( "find", &WindowCache::Find )
 	;
 	//@}
 	/**@group_name MaterialManager */
@@ -850,13 +845,13 @@ void ExportCastor3D()
 	.def( "find", &SceneManager::Find )
 	;
 	//@}
-	/**@group_name OverlayManager */
+	/**@group_name OverlayCache */
 	//@{
-	py::class_< OverlayManager, boost::noncopyable >( "OverlayManager", py::no_init )
-	.def( "create", &OverlayManager::Create )
-	.def( "remove", &OverlayManager::Remove )
-	.def( "has", &OverlayManager::Has )
-	.def( "find", &OverlayManager::Find )
+	py::class_< OverlayCache, boost::noncopyable >( "OverlayCache", py::no_init )
+	.def( "create", &OverlayCache::Create )
+	.def( "remove", &OverlayCache::Remove )
+	.def( "has", &OverlayCache::Has )
+	.def( "find", &OverlayCache::Find )
 	;
 	//@}
 	/**@group_name PluginManager */

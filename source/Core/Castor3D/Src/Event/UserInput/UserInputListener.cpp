@@ -1,7 +1,7 @@
 #include "UserInputListener.hpp"
 
 #include "Engine.hpp"
-#include "ListenerManager.hpp"
+#include "ListenerCache.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/FunctorEvent.hpp"
@@ -12,7 +12,7 @@ namespace Castor3D
 {
 	UserInputListener::UserInputListener( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >{ p_engine }
-		, m_frameListener{ p_engine.GetListenerManager().Create( p_name ) }
+		, m_frameListener{ p_engine.GetFrameListenerCache().Add( p_name ) }
 	{
 		m_mouse.m_buttons[eMOUSE_BUTTON_LEFT] = false;
 		m_mouse.m_buttons[eMOUSE_BUTTON_MIDDLE] = false;

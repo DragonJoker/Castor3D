@@ -1,7 +1,7 @@
 #include "RenderSystem.hpp"
 
 #include "Engine.hpp"
-#include "ShaderManager.hpp"
+#include "ShaderCache.hpp"
 
 #include "Pipeline.hpp"
 #include "Viewport.hpp"
@@ -15,6 +15,7 @@
 #include "Shader/PointFrameVariable.hpp"
 #include "Shader/ShaderObject.hpp"
 #include "Shader/FrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 
 #include <GlslSource.hpp>
@@ -236,12 +237,12 @@ namespace Castor3D
 		eTOPOLOGY l_output = eTOPOLOGY_TRIANGLE_STRIPS;
 		uint32_t l_count = 4;
 
-		ShaderManager & l_manager = GetEngine()->GetShaderManager();
-		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
-		l_manager.CreateTextureVariables( *l_program, p_flags );
+		auto & l_cache = GetEngine()->GetShaderProgramCache();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreateTextureVariables( *l_program, p_flags );
 		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );

@@ -18,63 +18,22 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "SceneNode.hpp"
+#include "Cache/ObjectCache.hpp"
+
+#include "BillboardCache.hpp"
+#include "CameraCache.hpp"
+#include "GeometryCache.hpp"
+#include "SceneNodeCache.hpp"
+#include "AnimatedObjectGroupCache.hpp"
+#include "LightCache.hpp"
+#include "MaterialCache.hpp"
+#include "MeshCache.hpp"
+#include "OverlayCache.hpp"
+#include "SamplerCache.hpp"
+#include "WindowCache.hpp"
 
 #include <Logger.hpp>
 #include <OwnedBy.hpp>
-
-#define DECLARE_MANAGER_MEMBER( memberName, className )\
-	public:\
-		inline className##Manager & Get##className##Manager()\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-		inline className##Manager const & Get##className##Manager()const\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-	private:\
-		className##ManagerUPtr m_##memberName##Manager
-
-#define DECLARE_MANAGER_VIEW_MEMBER( memberName, className, eventType )\
-	public:\
-		inline ManagerView< className, className##Manager, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-		inline ManagerView< className, className##Manager, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-	private:\
-		std::unique_ptr< ManagerView< className, className##Manager, eventType > > m_##memberName##ManagerView
-
-#define DECLARE_MANAGER_VIEW_MEMBER_CU( memberName, className, eventType )\
-	public:\
-		inline ManagerView< Castor::className, Castor::className##Manager, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-		inline ManagerView< Castor::className, Castor::className##Manager, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-	private:\
-		std::unique_ptr< ManagerView< Castor::className, Castor::className##Manager, eventType > > m_##memberName##ManagerView
-
-#define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
-	public:\
-		inline ManagerView< className, mgrName##Manager, eventType > & Get##className##View()\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-		inline ManagerView< className, mgrName##Manager, eventType > const & Get##className##View()const\
-		{\
-			return *m_##memberName##ManagerView;\
-		}\
-	private:\
-		std::unique_ptr< ManagerView< className, mgrName##Manager, eventType > > m_##memberName##ManagerView
 
 namespace Castor3D
 {
@@ -390,42 +349,42 @@ namespace Castor3D
 		//!\~english	The root node for every object other than camera (used to ease the use of cameras)
 		//!\~french		Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
-		//!\~english	The scene nodes manager.
-		//!\~french		Le gestionnaire de noeuds de scène.
-		DECLARE_MANAGER_MEMBER( sceneNode, SceneNode );
-		//!\~english	The camera manager.
-		//!\~french		Le gestionnaire de caméras.
-		DECLARE_MANAGER_MEMBER( camera, Camera );
-		//!\~english	The lights manager.
-		//!\~french		Le gestionnaire de lumières.
-		DECLARE_MANAGER_MEMBER( light, Light );
-		//!\~english	The geometies manager.
-		//!\~french		Le gestionnaire de géométries.
-		DECLARE_MANAGER_MEMBER( geometry, Geometry );
-		//!\~english	The meshes manager.
-		//!\~french		Le gestionnaire de maillages.
-		DECLARE_MANAGER_MEMBER( mesh, Mesh );
-		//!\~english	The billboards manager.
-		//!\~french		Le gestionnaire de billboards.
-		DECLARE_MANAGER_MEMBER( billboard, Billboard );
-		//!\~english	The animated objects groups manager.
-		//!\~french		Le gestionnaire de groupes d'objets animés.
-		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english	The render windows manager.
-		//!\~french		Le gestionnaire de fenêtres de rendu.
-		DECLARE_MANAGER_MEMBER( window, Window );
+		//!\~english	The scene nodes cache.
+		//!\~french		Le cache de noeuds de scène.
+		DECLARE_OBJECT_CACHE_MEMBER( sceneNode, SceneNode );
+		//!\~english	The camera cache.
+		//!\~french		Le cache de caméras.
+		DECLARE_OBJECT_CACHE_MEMBER( camera, Camera );
+		//!\~english	The lights cache.
+		//!\~french		Le cache de lumières.
+		DECLARE_OBJECT_CACHE_MEMBER( light, Light );
+		//!\~english	The geometies cache.
+		//!\~french		Le cache de géométries.
+		DECLARE_OBJECT_CACHE_MEMBER( geometry, Geometry );
+		//!\~english	The billboards cache.
+		//!\~french		Le cache de billboards.
+		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
+		//!\~english	The meshes cache.
+		//!\~french		Le cache de maillages.
+		DECLARE_CACHE_MEMBER( mesh, Mesh );
+		//!\~english	The animated objects groups cache.
+		//!\~french		Le cache de groupes d'objets animés.
+		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
+		//!\~english	The render windows cache.
+		//!\~french		Le cache de fenêtres de rendu.
+		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene materials view.
 		//!\~french		La vue sur les matériaux de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene samplers view.
 		//!\~french		La vue sur les échantillonneurs de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	The scene fonts view.
 		//!\~french		La vue sur les polices de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
+		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, eEVENT_TYPE_PRE_RENDER );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
@@ -447,6 +406,9 @@ namespace Castor3D
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxSPtr m_skybox;
+		//!\~english	The LightCategory factory.
+		//!\~french		La fabrique de LightCategory.
+		LightFactory m_lightFactory;
 
 	public:
 		//!\~english	The cameras root node name.
@@ -460,7 +422,5 @@ namespace Castor3D
 		static Castor::String RootNode;
 	};
 }
-
-#undef DECLARE_MANAGER_MEMBER
 
 #endif

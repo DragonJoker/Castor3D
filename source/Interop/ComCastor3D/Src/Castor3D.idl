@@ -1190,6 +1190,31 @@ interface IMesh
 	[id( 6 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
 };
 
+// IRenderWindow
+[
+	uuid( 37C075FA-038D-468B-AFF8-386E852AC5A2 ),
+	helpstring( "Castor3D RenderWindow interface" ),
+	dual,
+	oleautomation
+]
+interface IRenderWindow
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
+	[propput, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * camera );
+	[propget, id( 2 ), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[id( 3 ), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] ISize * size, [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
+	[id( 4 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
+	[id( 5 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
+	[id( 6 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos );
+	[id( 7 ), helpstring( "MouseMouseLButtonDown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos );
+	[id( 8 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos );
+	[id( 9 ), helpstring( "MouseMouseMButtonDown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos );
+	[id( 10 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos );
+	[id( 11 ), helpstring( "MouseMouseRButtonDown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos );
+	[id( 12 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
+};
+
 // IScene
 [
 	uuid( 6684A9C0-CC49-41F3-B78D-9C34F294AF62 ),
@@ -1223,32 +1248,9 @@ interface IScene
 	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
 	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
 	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
+	[id( 25 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
+	[id( 26 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [in] BSTR name, [out, retval] IRenderWindow ** pVal );
 	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureLayout ** pVal );
-};
-
-// IRenderWindow
-[
-	uuid( 37C075FA-038D-468B-AFF8-386E852AC5A2 ),
-	helpstring( "Castor3D RenderWindow interface" ),
-	dual,
-	oleautomation
-]
-interface IRenderWindow
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
-	[propput, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * camera );
-	[propget, id( 2 ), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[id( 3 ), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] ISize * size, [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
-	[id( 4 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
-	[id( 5 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
-	[id( 6 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos );
-	[id( 7 ), helpstring( "MouseMouseLButtonDown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos );
-	[id( 8 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos );
-	[id( 9 ), helpstring( "MouseMouseMButtonDown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos );
-	[id( 10 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos );
-	[id( 11 ), helpstring( "MouseMouseRButtonDown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos );
-	[id( 12 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
 };
 
 // IAnimation
@@ -1615,12 +1617,10 @@ interface IEngine
 	[id( 14 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
 	[id( 15 ), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
 	[id( 16 ), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
-	[id( 17 ), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] eRENDERER_TYPE type );
+	[id( 17 ), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] BSTR type );
 	[id( 18 ), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
 	[id( 19 ), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
-	[id( 20 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
 	[id( 21 ), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
-	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [in] BSTR name, [out, retval] IRenderWindow ** pVal );
 	[id( 23 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
 	[id( 24 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
 	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );

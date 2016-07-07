@@ -1,5 +1,7 @@
 #include "Sampler.hpp"
 
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
 using namespace Castor;

@@ -1,6 +1,7 @@
 #include "SubmeshTreeItemProperty.hpp"
 
-#include <MaterialManager.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
@@ -193,8 +194,8 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_geometry, l_submesh]()
 		{
-			MaterialManager & l_manager = l_submesh->GetScene()->GetEngine()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.Find( p_name );
+			auto & l_cache = l_submesh->GetScene()->GetEngine()->GetMaterialCache();
+			MaterialSPtr l_material = l_cache.Find( p_name );
 
 			if ( l_material )
 			{

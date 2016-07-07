@@ -78,14 +78,14 @@ namespace Castor3D
 				{
 					String l_name{ p_relative.GetFileName() };
 
-					if ( Engine::GetInstance().GetImageManager().has( l_name ) )
+					if ( Engine::GetInstance().GetImageCache().has( l_name ) )
 					{
-						auto l_image = Engine::GetInstance().GetImageManager().find( l_name );
+						auto l_image = Engine::GetInstance().GetImageCache().find( l_name );
 						m_buffer = l_image->GetPixels();
 					}
 					else
 					{
-						auto l_image = Engine::GetInstance().GetImageManager().create( l_name, p_folder / p_relative );
+						auto l_image = Engine::GetInstance().GetImageCache().Add( l_name, p_folder / p_relative );
 						auto l_buffer = l_image->GetPixels();
 						Size l_size{ l_buffer->dimensions() };
 						uint32_t l_depth{ 1u };

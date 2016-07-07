@@ -4,14 +4,14 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -53,13 +53,13 @@ Md3Importer::Md3Importer( Engine & p_pEngine )
 
 SceneSPtr Md3Importer::DoImportScene()
 {
-	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD3" ) );
 	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
-		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 
 		for ( auto l_submesh : *l_mesh )
 		{
@@ -75,14 +75,14 @@ SceneSPtr Md3Importer::DoImportScene()
 MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 {
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
-	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD3" ) );
 	UIntArray l_faces;
 	RealArray l_sizes;
 	MaterialSPtr l_material;
 	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName = m_fileName.GetFileName();
-	MeshSPtr l_mesh = p_scene.GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -95,7 +95,7 @@ MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 
 		if ( !l_material )
 		{
-			l_material = p_scene.GetMaterialView().Create( l_materialName, *GetEngine() );
+			l_material = p_scene.GetMaterialView().Add( l_materialName );
 			l_material->CreatePass();
 		}
 
@@ -297,7 +297,7 @@ bool Md3Importer::DoLoadSkin( Scene & p_scene, Path const & p_strSkin )
 
 				if ( ! l_material )
 				{
-					l_material = p_scene.GetMaterialView().Create( l_strSection, *GetEngine() );
+					l_material = p_scene.GetMaterialView().Add( l_strSection );
 					l_material->CreatePass();
 				}
 
@@ -342,7 +342,7 @@ bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, Path const & 
 
 			if ( ! l_material )
 			{
-				l_material = p_scene.GetMaterialView().Create( l_strMatName.str(), *GetEngine() );
+				l_material = p_scene.GetMaterialView().Add( l_strMatName.str() );
 				l_material->CreatePass();
 			}
 

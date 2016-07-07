@@ -6,14 +6,15 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Manager/ManagerView.hpp>
+#include <Cache/CacheView.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
@@ -22,6 +23,8 @@
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -32,28 +35,27 @@ namespace Obj
 {
 	ObjImporter::ObjImporter( Engine & p_pEngine )
 		: Importer( p_pEngine )
-		, m_collImages( p_pEngine.GetImageManager() )
+		, m_collImages( p_pEngine.GetImageCache() )
 		, m_pFile( nullptr )
 	{
 	}
 
 	SceneSPtr ObjImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_OBJ" ) );
 		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
-			l_geometry->AttachTo( l_node );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 
 			for ( auto l_submesh : *l_mesh )
 			{
 				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
-			l_geometry->SetMesh( l_mesh );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, l_mesh );
+			l_geometry->AttachTo( l_node );
 		}
 
 		m_arrayLoadedMaterials.clear();
@@ -240,7 +242,7 @@ namespace Obj
 		auto l_facesit = l_faces.end();
 		uint32_t i{ 0u };
 		std::string l_mtlname;
-		MeshSPtr l_return = p_scene.GetMeshManager().Create( m_fileName.GetFileName(), eMESH_TYPE_CUSTOM );
+		MeshSPtr l_return = p_scene.GetMeshCache().Add( m_fileName.GetFileName(), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 
 		while ( std::getline( l_file, l_line ) )
 		{
@@ -534,7 +536,7 @@ namespace Obj
 
 						if ( !l_material )
 						{
-							l_material = p_scene.GetMaterialView().Create( l_value, *GetEngine() );
+							l_material = p_scene.GetMaterialView().Add( l_value );
 							l_pPass = l_material->CreatePass();
 							m_arrayLoadedMaterials.push_back( l_material );
 						}

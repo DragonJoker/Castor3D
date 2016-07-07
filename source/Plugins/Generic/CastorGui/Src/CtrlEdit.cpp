@@ -2,7 +2,8 @@
 
 #include "ControlsManager.hpp"
 
-#include <OverlayManager.hpp>
+#include <Engine.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/PanelOverlay.hpp>
@@ -61,7 +62,7 @@ namespace CastorGui
 			OnDeactivate( p_event );
 		} );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetVAlign( eVALIGN_BOTTOM );
 		l_text->SetVisible( DoIsVisible() );

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Classe de base des plug-ins
 	\remark		Gère les fonctions de base d'un plug-in, permet aux plug-ins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
-	class PluginBase
+	class Plugin
 		: public Castor::OwnedBy< Engine >
 	{
 	private:
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
+		C3D_API Plugin( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
 
 	public:
 		/**
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~PluginBase() = 0;
+		C3D_API virtual ~Plugin() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the required version for the plug-in to work correctly

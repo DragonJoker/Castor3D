@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor3D
 	\date		03/03/2010
 	\~english
 	\brief		User event synchronisation class
-	\remark		The manager of the frame events. It can add frame events and applies them at the wanted times
+	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times
 	\~french
 	\brief		Classe de synchronisation des évènements
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)

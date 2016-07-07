@@ -1,18 +1,19 @@
 #include "OverlayRenderer.hpp"
 
-#include "BlendStateManager.hpp"
-#include "DepthStencilStateManager.hpp"
+#include "BlendStateCache.hpp"
+#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "RasteriserStateManager.hpp"
-#include "SamplerManager.hpp"
-#include "ShaderManager.hpp"
+#include "MaterialCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "ShaderCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
 
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Render/Pipeline.hpp"
@@ -21,8 +22,13 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 #include "Shader/OneFrameVariable.hpp"
-#include "Texture/TextureLayout.hpp"
 #include "Shader/PointFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/RasteriserState.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Font.hpp>
 
@@ -73,9 +79,9 @@ namespace Castor3D
 			}
 		} }
 	{
-		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
-		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
-		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateManager().Create( cuT( "OVERLAY_RS" ) );
+		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OVERLAY_BLEND" ) );
+		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "OVERLAY_DS" ) );
+		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateCache().Add( cuT( "OVERLAY_RS" ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -555,10 +561,10 @@ namespace Castor3D
 		using namespace GLSL;
 
 		// Shader program
-		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
-		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
-		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 
 		// Vertex shader
 		String l_strVs;

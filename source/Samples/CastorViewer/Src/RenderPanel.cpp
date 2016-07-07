@@ -9,14 +9,15 @@
 
 #include <wx/display.h>
 
-#include <ListenerManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <Engine.hpp>
+#include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Math.hpp>
 #include <Utils.hpp>
@@ -142,9 +143,9 @@ namespace CastorViewer
 				{
 					m_cameraNode = p_window->GetCamera()->GetParent();
 
-					if ( l_scene->GetSceneNodeManager().Has( cuT( "PointLightsNode" ) ) )
+					if ( l_scene->GetSceneNodeCache().Has( cuT( "PointLightsNode" ) ) )
 					{
-						m_lightsNode = l_scene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
+						m_lightsNode = l_scene->GetSceneNodeCache().Find( cuT( "PointLightsNode" ) );
 					}
 
 					if ( m_cameraNode )

@@ -32,10 +32,10 @@ namespace Castor3D
 	\brief		Classe de plug-in de techniques de rendu
 	*/
 	class TechniquePlugin
-		: public PluginBase
+		: public Plugin
 	{
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 
 	public:
 		/**

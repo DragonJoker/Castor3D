@@ -41,26 +41,26 @@ file( GLOB ${PROJECT_NAME}_Prerequisites_SOURCE_FILES
 source_group( "Header Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_HEADER_FILES} )
 source_group( "Source Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_SOURCE_FILES} )
 
-file( GLOB ${PROJECT_NAME}_Manager_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.inl
+file( GLOB ${PROJECT_NAME}_Cache_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.inl
 )
-file( GLOB ${PROJECT_NAME}_Manager_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.cpp
+file( GLOB ${PROJECT_NAME}_Cache_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Cache*.cpp
 )
-source_group( "Header Files\\Managers" FILES ${${PROJECT_NAME}_Manager_HEADER_FILES} )
-source_group( "Source Files\\Managers" FILES ${${PROJECT_NAME}_Manager_SOURCE_FILES} )
+source_group( "Header Files\\Cache" FILES ${${PROJECT_NAME}_Cache_HEADER_FILES} )
+source_group( "Source Files\\Cache" FILES ${${PROJECT_NAME}_Cache_SOURCE_FILES} )
 
 parse_subdir_files( Animation "Animation" )
 parse_subdir_files( Animation/Skeleton "Animation\\\\Skeleton" )
 parse_subdir_files( Animation/Mesh "Animation\\\\Mesh" )
 parse_subdir_files( Binary "Binary" )
+parse_subdir_files( Cache "Cache" )
 parse_subdir_files( Event "Event" )
 parse_subdir_files( Event/Frame "Event\\\\Frame" )
 parse_subdir_files( Event/UserInput "Event\\\\UserInput" )
 parse_subdir_files( FrameBuffer "FrameBuffer" )
 parse_subdir_files( HDR "HDR" )
-parse_subdir_files( Manager "Managers" )
 parse_subdir_files( Material "Material" )
 parse_subdir_files( Mesh "Mesh" )
 parse_subdir_files( Mesh/Generator "Mesh\\\\Generator" )

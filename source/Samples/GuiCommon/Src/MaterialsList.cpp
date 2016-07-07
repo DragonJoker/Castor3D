@@ -8,7 +8,7 @@
 #include "TextureTreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialManager.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -85,9 +85,9 @@ namespace GuiCommon
 		m_engine = p_engine;
 		m_scene = &p_scene;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialManager() );
+		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialCache() );
 
-		for ( auto l_pair : m_engine->GetMaterialManager() )
+		for ( auto l_pair : m_engine->GetMaterialCache() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
@@ -164,7 +164,7 @@ namespace GuiCommon
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
-	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialManager().find( p_strMaterialName );
+	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialCache().find( p_strMaterialName );
 	//	int l_iIndex = m_pListImages->GetImageCount();
 	//	wxListItem l_item;
 	//	l_item.SetColumn( 0 );

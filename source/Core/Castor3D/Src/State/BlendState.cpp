@@ -1,4 +1,7 @@
-﻿#include "BlendState.hpp"
+#include "BlendState.hpp"
+
+#include "Engine.hpp"
+#include "Render/RenderSystem.hpp"
 
 namespace Castor3D
 {

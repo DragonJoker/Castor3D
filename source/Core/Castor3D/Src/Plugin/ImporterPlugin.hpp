@@ -32,14 +32,14 @@ namespace Castor3D
 	\brief		Classe de plug-in d'import
 	*/
 	class ImporterPlugin
-		: public PluginBase
+		: public Plugin
 	{
 	public:
 		typedef std::pair< Castor::String, Castor::String > Extension;
 		DECLARE_VECTOR( Extension, Extension );
 
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 		friend class Engine;
 		typedef void CreateImporterFunction( Engine * p_engine, ImporterPlugin * p_pPlugin );
 		typedef void DestroyImporterFunction( ImporterPlugin * p_pPlugin );

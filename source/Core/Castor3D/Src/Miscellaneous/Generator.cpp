@@ -208,7 +208,7 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageSPtr l_pImage = m_engine->GetImageManager().create( p_strImagePath, Path{ p_strImagePath } );
+	ImageSPtr l_pImage = m_engine->GetImageCache().Add( p_strImagePath, Path{ p_strImagePath } );
 	return Point2i( l_pImage->GetWidth(), l_pImage->GetHeight() );
 }
 

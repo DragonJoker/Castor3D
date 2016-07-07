@@ -1,13 +1,15 @@
 #include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
-#include "MaterialManager.hpp"
-#include "OverlayManager.hpp"
+#include "MaterialCache.hpp"
+#include "OverlayCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
+
+#include "Material/Material.hpp"
 
 using namespace Castor;
 
@@ -73,7 +75,7 @@ namespace Castor3D
 
 	void OverlayCategory::Update()
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
 
 		if ( l_renderer )
 		{
@@ -91,7 +93,7 @@ namespace Castor3D
 
 	void OverlayCategory::Render()
 	{
-		DoRender( GetOverlay().GetOverlayManager().GetRenderer() );
+		DoRender( GetOverlay().GetEngine()->GetOverlayCache().GetRenderer() );
 	}
 
 	void OverlayCategory::SetMaterial( MaterialSPtr p_pMaterial )
@@ -181,7 +183,7 @@ namespace Castor3D
 	Point2d OverlayCategory::DoGetTotalSize()const
 	{
 		OverlaySPtr l_parent = GetOverlay().GetParent();
-		Size l_renderSize = GetOverlay().GetOverlayManager().GetRenderer()->GetSize();
+		Size l_renderSize = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer()->GetSize();
 		Point2d l_totalSize( l_renderSize.width(), l_renderSize.height() );
 
 		if ( l_parent )
@@ -196,7 +198,7 @@ namespace Castor3D
 
 	void OverlayCategory::DoUpdatePosition()
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
 
 		if ( l_renderer )
 		{
@@ -229,7 +231,7 @@ namespace Castor3D
 
 	void OverlayCategory::DoUpdateSize()
 	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetEngine()->GetOverlayCache().GetRenderer();
 
 		if ( l_renderer )
 		{

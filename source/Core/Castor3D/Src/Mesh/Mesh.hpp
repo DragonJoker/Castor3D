@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Animation/Animable.hpp"
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
+#include "Mesh/MeshFactory.hpp"
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>

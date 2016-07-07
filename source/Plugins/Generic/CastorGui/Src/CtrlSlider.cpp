@@ -3,8 +3,9 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 
@@ -143,12 +144,12 @@ namespace CastorGui
 	void SliderCtrl::DoCreate()
 	{
 		StaticCtrlSPtr l_line = m_line.lock();
-		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "Gray" ) ) );
+		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Gray" ) ) );
 		l_line->SetForegroundMaterial( GetForegroundMaterial() );
 		GetControlsManager()->Create( l_line );
 
 		StaticCtrlSPtr l_tick = m_tick.lock();
-		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
+		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		l_tick->SetForegroundMaterial( GetForegroundMaterial() );
 		GetControlsManager()->Create( l_tick );
 		DoUpdateLineAndTick();

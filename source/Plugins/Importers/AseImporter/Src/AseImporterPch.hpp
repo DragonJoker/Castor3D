@@ -24,12 +24,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Castor3DPrerequisites.hpp>
 
 #	include <Engine.hpp>
-#	include <MaterialManager.hpp>
-#	include <MeshManager.hpp>
-#	include <SceneManager.hpp>
-#	include <SceneNodeManager.hpp>
+#	include <MaterialCache.hpp>
+#	include <MeshCache.hpp>
+#	include <SceneCache.hpp>
+#	include <SceneNodeCache.hpp>
 
-#	include <Manager/ManagerView.hpp>
+#	include <Cache/CacheView.hpp>
 #	include <Material/Pass.hpp>
 #	include <Mesh/Submesh.hpp>
 #	include <Mesh/Face.hpp>
@@ -44,7 +44,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Scene/Geometry.hpp>
 #	include <Texture/TextureLayout.hpp>
 #	include <Texture/TextureUnit.hpp>
-#	include <Manager/ManagerView.hpp>
 #endif
 
 #endif

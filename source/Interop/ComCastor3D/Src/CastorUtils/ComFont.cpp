@@ -26,7 +26,7 @@ namespace CastorCom
 			CEngine * l_engn = static_cast< CEngine * >( engine );
 			Castor3D::Engine * l_engine = l_engn->GetInternal();
 			Castor::String l_name = FromBstr( name );
-			Castor::Path l_path = FromBstr( path );
+			Castor::Path l_path{ FromBstr( path ) };
 			Castor::Path l_pathFont = l_path;
 
 			if ( !Castor::File::FileExists( l_pathFont ) )
@@ -34,7 +34,7 @@ namespace CastorCom
 				l_pathFont = l_engine->GetDataDirectory() / l_path;
 			}
 
-			m_font = l_engine->GetFontManager().create( l_pathFont, l_name, height );
+			m_font = l_engine->GetFontCache().Add( l_name, height, l_pathFont );
 
 			if ( !m_font )
 			{

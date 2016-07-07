@@ -18,28 +18,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ENGINE_H___
 #define ___C3D_ENGINE_H___
 
-#include "Castor3DPrerequisites.hpp"
-
-#include "Technique/TechniqueFactory.hpp"
+#include "Cache/Cache.hpp"
 #include "Miscellaneous/Version.hpp"
 
-#include <FileParser.hpp>
-#include <FontManager.hpp>
-#include <ImageManager.hpp>
-#include <Unique.hpp>
+#include "BlendStateCache.hpp"
+#include "DepthStencilStateCache.hpp"
+#include "ListenerCache.hpp"
+#include "MaterialCache.hpp"
+#include "OverlayCache.hpp"
+#include "PluginCache.hpp"
+#include "RasteriserStateCache.hpp"
+#include "SamplerCache.hpp"
+#include "SceneCache.hpp"
+#include "ShaderCache.hpp"
+#include "TargetCache.hpp"
+#include "TechniqueCache.hpp"
 
-#define DECLARE_MANAGER_MEMBER( memberName, className )\
-	public:\
-		inline className##Manager & Get##className##Manager()\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-		inline className##Manager const & Get##className##Manager()const\
-		{\
-			return *m_##memberName##Manager;\
-		}\
-	private:\
-		className##ManagerUPtr m_##memberName##Manager
+#include "Mesh/MeshFactory.hpp"
+#include "Technique/TechniqueFactory.hpp"
+
+#include <FileParser.hpp>
+#include <FontCache.hpp>
+#include <ImageCache.hpp>
+#include <Unique.hpp>
 
 namespace Castor3D
 {
@@ -218,9 +219,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager const & GetImageManager()const
+		inline Castor::ImageCache const & GetImageCache()const
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -230,9 +231,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline Castor::ImageManager & GetImageManager()
+		inline Castor::ImageCache & GetImageCache()
 		{
-			return m_imageManager;
+			return m_imageCache;
 		}
 		/**
 		 *\~english
@@ -242,9 +243,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager const & GetFontManager()const
+		inline Castor::FontCache const & GetFontCache()const
 		{
-			return m_fontManager;
+			return m_fontCache;
 		}
 		/**
 		 *\~english
@@ -254,9 +255,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline Castor::FontManager & GetFontManager()
+		inline Castor::FontCache & GetFontCache()
 		{
-			return m_fontManager;
+			return m_fontCache;
 		}
 		/**
 		 *\~english
@@ -424,6 +425,46 @@ namespace Castor3D
 		{
 			return m_threaded;
 		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory const & GetMeshFactory()const
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The MeshGenerator factory.
+		 *\~french
+		 *\return		La fabrique de MeshGenerator.
+		 */
+		inline MeshFactory & GetMeshFactory()
+		{
+			return m_meshFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory const & GetTechniqueFactory()const
+		{
+			return m_techniqueFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderTechnique factory.
+		 *\~french
+		 *\return		La fabrique de RenderTechnique.
+		 */
+		inline TechniqueFactory & GetTechniqueFactory()
+		{
+			return m_techniqueFactory;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -461,46 +502,46 @@ namespace Castor3D
 		SamplerSPtr m_lightsSampler;
 		//!\~english	The shaders collection.
 		//!\~french		La collection de shaders.
-		DECLARE_MANAGER_MEMBER( shader, Shader );
+		DECLARE_NAMED_CACHE_MEMBER( shader, ShaderProgram );
 		//!\~english	The sampler states collection.
 		//!\~french		La collection de sampler states.
-		DECLARE_MANAGER_MEMBER( sampler, Sampler );
+		DECLARE_CACHE_MEMBER( sampler, Sampler );
 		//!\~english	The DepthStencilState collection.
 		//!\~french		La collection de DepthStencilState.
-		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
+		DECLARE_CACHE_MEMBER( depthStencilState, DepthStencilState );
 		//!\~english	The RasteriserState collection.
 		//!\~french		La collection de RasteriserState.
-		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
+		DECLARE_CACHE_MEMBER( rasteriserState, RasteriserState );
 		//!\~english	The BlendState collection.
 		//!\~french		La collection de BlendState.
-		DECLARE_MANAGER_MEMBER( blendState, BlendState );
-		//!\~english	The materials manager.
-		//!\~french		Le gestionnaire de matériaux.
-		DECLARE_MANAGER_MEMBER( material, Material );
-		//!\~english	The plug-ins manager.
-		//!\~french		Le gestionnaire de plug-ins.
-		DECLARE_MANAGER_MEMBER( plugin, Plugin );
-		//!\~english	The overlays collection.
-		//!\~french		La collection d'overlays.
-		DECLARE_MANAGER_MEMBER( overlay, Overlay );
-		//!\~english	The scenes collection.
-		//!\~french		La collection de scènes.
-		DECLARE_MANAGER_MEMBER( scene, Scene );
-		//!\~english	The frame listeners array.
-		//!\~french		Le tableau de frame listeners.
-		DECLARE_MANAGER_MEMBER( listener, Listener );
-		//!\~english	The render targets map.
-		//!\~french		La map des cibles de rendu.
-		DECLARE_MANAGER_MEMBER( target, Target );
-		//!\~english	The render technique manager.
-		//!\~french		Le gestionnaire de techniques de rendu.
-		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
-		//!\~english	The fonts collection.
-		//!\~french		La collection de polices.
-		Castor::FontManager m_fontManager;
-		//!\~english	The images collection.
-		//!\~french		La collection d'images.
-		Castor::ImageManager m_imageManager;
+		DECLARE_CACHE_MEMBER( blendState, BlendState );
+		//!\~english	The materials cache.
+		//!\~french		Le cache de matériaux.
+		DECLARE_CACHE_MEMBER( material, Material );
+		//!\~english	The plug-ins cache.
+		//!\~french		Le cache de plug-ins.
+		DECLARE_CACHE_MEMBER( plugin, Plugin );
+		//!\~english	The overlays cache.
+		//!\~french		La cache d'overlays.
+		DECLARE_CACHE_MEMBER( overlay, Overlay );
+		//!\~english	The scenes cache.
+		//!\~french		La cache de scènes.
+		DECLARE_CACHE_MEMBER( scene, Scene );
+		//!\~english	The frame listeners cache.
+		//!\~french		Le cache de frame listeners.
+		DECLARE_CACHE_MEMBER( listener, FrameListener );
+		//!\~english	The render targets cache.
+		//!\~french		Le cache de cibles de rendu.
+		DECLARE_NAMED_CACHE_MEMBER( target, RenderTarget );
+		//!\~english	The render technique cache.
+		//!\~french		Le cache de techniques de rendu.
+		DECLARE_CACHE_MEMBER( technique, RenderTechnique );
+		//!\~english	The fonts cache.
+		//!\~french		La cache de polices.
+		Castor::FontCache m_fontCache;
+		//!\~english	The images cache.
+		//!\~french		La cache d'images.
+		Castor::ImageCache m_imageCache;
 		//!\~english	The user input listener.
 		//!\~french		Le listener d'entrées utilisateur.
 		UserInputListenerSPtr m_userInputListener;
@@ -510,9 +551,16 @@ namespace Castor3D
 		//!\~english	The map holding the sections, sorted plug-in name.
 		//!\~french		La map de sections, triées par nom de plug-in.
 		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
+		//!\~english	The default frame listener.
+		//!\~french		Le frame listener par défaut.
+		FrameListenerWPtr m_defaultListener;
+		//!\~english	The MeshGenerator factory.
+		//!\~french		La fabrique de MeshGenerator.
+		MeshFactory m_meshFactory;
+		//!\~english	The RenderTechnique factory.
+		//!\~french		La fabrique de RenderTechnique.
+		TechniqueFactory m_techniqueFactory;
 	};
 }
-
-#undef DECLARE_MANAGER_MEMBER
 
 #endif

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_VERSION_EXCEPTION_H___
 #define ___C3D_VERSION_EXCEPTION_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Version.hpp"
 
 #include <Exception.hpp>
 

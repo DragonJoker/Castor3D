@@ -32,10 +32,10 @@ namespace Castor3D
 	\brief		Classe de plug-in d'effets post rendu
 	*/
 	class PostFxPlugin
-		: public PluginBase
+		: public Plugin
 	{
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 
 	public:
 		/**

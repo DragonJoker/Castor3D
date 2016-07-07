@@ -11,10 +11,10 @@
 
 #include <PixelBufferBase.hpp>
 
-#include <MaterialManager.hpp>
-#include <SceneManager.hpp>
+#include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
@@ -27,6 +27,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 #include <Scene/SceneFileParser.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -152,7 +153,7 @@ namespace CastorViewer
 			m_pSceneNode.reset();
 			l_scene->Cleanup();
 			wxGetApp().GetCastor()->GetRenderLoop().Cleanup();
-			wxGetApp().GetCastor()->GetSceneManager().Remove( l_scene->GetName() );
+			wxGetApp().GetCastor()->GetSceneCache().Remove( l_scene->GetName() );
 			Logger::LogDebug( cuT( "MainFrame::DoCleanupScene - Scene related objects unloaded." ) );
 			l_scene.reset();
 		}

@@ -32,10 +32,10 @@ namespace Castor3D
 	\brief		Classe de plug-in de rendu
 	*/
 	class RendererPlugin
-		: public PluginBase
+		: public Plugin
 	{
 	private:
-		friend class PluginBase;
+		friend class Plugin;
 		friend class Engine;
 
 		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_engine );

@@ -46,7 +46,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetFile( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ), FromBstr( val ) );
+			m_internal->SetFile( Castor3D::eSHADER_TYPE( target ), Castor3D::eSHADER_MODEL( model ), Castor::Path{ FromBstr( val ) } );
 			hr = S_OK;
 		}
 		else

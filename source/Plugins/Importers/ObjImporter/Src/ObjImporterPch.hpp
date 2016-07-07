@@ -22,11 +22,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if CASTOR_USE_PCH
 #	include <Engine.hpp>
-#	include <GeometryManager.hpp>
-#	include <MaterialManager.hpp>
-#	include <MeshManager.hpp>
-#	include <SceneManager.hpp>
-#	include <SceneNodeManager.hpp>
+#	include <GeometryCache.hpp>
+#	include <MaterialCache.hpp>
+#	include <MeshCache.hpp>
+#	include <SceneCache.hpp>
+#	include <SceneNodeCache.hpp>
 
 #	include <Material/Pass.hpp>
 #	include <Mesh/Face.hpp>

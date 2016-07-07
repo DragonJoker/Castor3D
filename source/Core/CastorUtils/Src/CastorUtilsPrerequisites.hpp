@@ -201,10 +201,10 @@ namespace Castor
 	class FileParser;
 	class FileParserContext;
 	class Font;
-	class FontManager;
+	class FontCache;
 	class Glyph;
 	class Image;
-	class ImageManager;
+	class ImageCache;
 	class Colour;
 	template< typename T >
 	class Line2D;
