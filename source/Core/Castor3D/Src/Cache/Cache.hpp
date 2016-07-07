@@ -68,7 +68,7 @@ namespace Castor3D
 						 , Initialiser && p_initialise
 						 , Cleaner && p_clean
 						 , Merger && p_merge )
-			: m_engine{ std::move( p_engine ) }
+			: m_engine{ p_engine }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
 			, m_clean{ std::move( p_clean ) }

@@ -17,7 +17,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
+	template<> const String ObjectCacheTraits< Light, String >::Name = cuT( "Light" );
 
 	namespace
 	{

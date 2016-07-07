@@ -2,7 +2,8 @@
 
 #include "ControlsManager.hpp"
 
-#include <OverlayCache.hpp>
+#include <Engine.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/PanelOverlay.hpp>

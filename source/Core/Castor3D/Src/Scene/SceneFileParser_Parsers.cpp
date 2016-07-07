@@ -951,7 +951,7 @@ namespace Castor3D
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			l_parsingContext->pBillboards = l_parsingContext->pScene->GetBillboardListCache().Add( l_name, nullptr );
+			l_parsingContext->pBillboards = l_parsingContext->pScene->GetBillboardListCache().Add( l_name, SceneNodeSPtr{} );
 		}
 	}
 	END_ATTRIBUTE_PUSH( eSECTION_BILLBOARD )

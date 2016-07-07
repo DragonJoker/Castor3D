@@ -59,11 +59,11 @@ namespace Castor3D
 		};
 		auto l_eventInit = [this]( auto p_element )
 		{
-			PostEvent( MakeInitialiseEvent( *p_element ) );
+			this->PostEvent( MakeInitialiseEvent( *p_element ) );
 		};
 		auto l_eventClean = [this]( auto p_element )
 		{
-			PostEvent( MakeCleanupEvent( *p_element ) );
+			this->PostEvent( MakeCleanupEvent( *p_element ) );
 		};
 		auto l_instantInit = [this]( auto p_element )
 		{

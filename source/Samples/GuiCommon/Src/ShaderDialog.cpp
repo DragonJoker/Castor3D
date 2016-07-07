@@ -9,13 +9,13 @@
 #include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
-#include <TargetCache.hpp>
-#include <WindowCache.hpp>
 #include <Material/Pass.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

@@ -3,8 +3,8 @@
 #include "ControlsManager.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
-#include <OverlayCache.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>

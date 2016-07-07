@@ -15,7 +15,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< Material, String >::Name = cuT( "Material" );
+	template<> const String CacheTraits< Material, String >::Name = cuT( "Material" );
 
 	void MaterialCache::Initialise()
 	{

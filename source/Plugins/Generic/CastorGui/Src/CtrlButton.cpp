@@ -2,8 +2,9 @@
 
 #include "ControlsManager.hpp"
 
-#include <MaterialCache.hpp>
-#include <OverlayCache.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Pass.hpp>

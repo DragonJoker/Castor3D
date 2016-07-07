@@ -5,7 +5,7 @@
 #include "CtrlListBox.hpp"
 
 #include <Engine.hpp>
-#include <OverlayCache.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>

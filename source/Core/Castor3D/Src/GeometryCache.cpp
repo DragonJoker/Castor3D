@@ -9,7 +9,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ObjectCacheTraits< Geometry, String >::Name = cuT( "Geometry" );
+	template<> const String ObjectCacheTraits< Geometry, String >::Name = cuT( "Geometry" );
 
 	namespace
 	{

@@ -22,17 +22,17 @@
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
-#include <AnimatedObjectGroupCache.hpp>
-#include <BillboardCache.hpp>
-#include <CameraCache.hpp>
-#include <GeometryCache.hpp>
 #include <Engine.hpp>
-#include <LightCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <OverlayCache.hpp>
-#include <SceneCache.hpp>
-#include <WindowCache.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/BillboardList.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Light/Light.hpp>
 
 #include <Scene/BillboardList.hpp>
 

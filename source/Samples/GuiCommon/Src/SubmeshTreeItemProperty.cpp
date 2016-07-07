@@ -1,6 +1,7 @@
 #include "SubmeshTreeItemProperty.hpp"
 
-#include <MaterialCache.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>

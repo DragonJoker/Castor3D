@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< DepthStencilState, String >::Name = cuT( "DepthStencilState" );
+	template<> const String CacheTraits< DepthStencilState, String >::Name = cuT( "DepthStencilState" );
 }

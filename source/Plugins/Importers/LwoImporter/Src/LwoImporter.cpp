@@ -6,11 +6,11 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -44,13 +44,13 @@ namespace Lwo
 
 	SceneSPtr LwoImporter::DoImportScene()
 	{
-		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_LWO" ), *GetEngine() );
+		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_LWO" ) );
 		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 
 			for ( auto l_submesh : *l_mesh )
 			{
@@ -1035,7 +1035,7 @@ namespace Lwo
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
 			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
 			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
-			l_pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ), *GetEngine() );
+			l_pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ) );
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 

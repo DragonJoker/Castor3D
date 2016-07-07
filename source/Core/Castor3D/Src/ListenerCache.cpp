@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< FrameListener, String >::Name = cuT( "FrameListener" );
+	template<> const String CacheTraits< FrameListener, String >::Name = cuT( "FrameListener" );
 }

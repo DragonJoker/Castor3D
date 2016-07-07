@@ -295,7 +295,7 @@ namespace Castor3D
 
 			while ( p_destination.has( l_name ) )
 			{
-				l_name = GetName() + cuT( "_" ) + l_name;
+				l_name = this->GetName() + cuT( "_" ) + l_name;
 			}
 
 			p_element->SetName( l_name );
@@ -309,7 +309,7 @@ namespace Castor3D
 
 			if ( !p_destination.has( l_name ) )
 			{
-				l_name = GetName() + cuT( "_" ) + l_name;
+				l_name = this->GetName() + cuT( "_" ) + l_name;
 			}
 
 			p_element->SetName( l_name );

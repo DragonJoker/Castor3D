@@ -1,7 +1,7 @@
 #include "OverlayTreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
+#include <Material/Material.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/Overlay.hpp>

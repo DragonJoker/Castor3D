@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
+	template<> const String ObjectCacheTraits< BillboardList, String >::Name = cuT( "BillboardList" );
 }

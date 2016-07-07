@@ -1,17 +1,18 @@
 #include "SceneExporter.hpp"
 
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SamplerCache.hpp>
-#include <WindowCache.hpp>
+#include <Engine.hpp>
 #include <Cache/CacheView.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Render/RenderWindow.hpp>
 #include <Scene/Scene.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 

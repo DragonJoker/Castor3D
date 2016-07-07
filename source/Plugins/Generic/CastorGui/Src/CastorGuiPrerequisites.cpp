@@ -1,7 +1,7 @@
 #include "CastorGuiPrerequisites.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
+#include <Material/Material.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Pass.hpp>

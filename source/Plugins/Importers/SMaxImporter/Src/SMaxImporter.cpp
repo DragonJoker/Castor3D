@@ -4,11 +4,11 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -38,13 +38,13 @@ SMaxImporter::SMaxImporter( Engine & p_pEngine )
 
 SceneSPtr SMaxImporter::DoImportScene()
 {
-	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_3DS" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_3DS" ) );
 	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
+		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 		l_geometry->AttachTo( l_node );
 
 		for ( auto l_submesh: *l_mesh )
@@ -316,7 +316,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pC
 
 		if ( ! l_pMaterial )
 		{
-			l_pMaterial = l_cache.Add( l_strMatName, *GetEngine() );
+			l_pMaterial = l_cache.Add( l_strMatName );
 			l_pMaterial->CreatePass();
 		}
 

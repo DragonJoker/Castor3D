@@ -11,16 +11,17 @@
 
 #include <Font.hpp>
 
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SamplerCache.hpp>
-#include <SceneCache.hpp>
-#include <WindowCache.hpp>
+#include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Scene.hpp>
 #include <Scene/SceneFileParser.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 

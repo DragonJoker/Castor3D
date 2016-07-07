@@ -8,7 +8,7 @@
 #include "TextureTreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>

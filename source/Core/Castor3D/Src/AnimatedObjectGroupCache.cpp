@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< AnimatedObjectGroup, String >::Name = cuT( "AnimatedObjectGroup" );
+	template<> const String CacheTraits< AnimatedObjectGroup, String >::Name = cuT( "AnimatedObjectGroup" );
 }

@@ -4,5 +4,5 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< RasteriserState, String >::Name = cuT( "RasteriserState" );
+	template<> const String CacheTraits< RasteriserState, String >::Name = cuT( "RasteriserState" );
 }

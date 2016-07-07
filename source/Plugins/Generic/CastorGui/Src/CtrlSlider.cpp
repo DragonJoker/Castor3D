@@ -3,8 +3,9 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <MaterialCache.hpp>
-#include <OverlayCache.hpp>
+#include <Engine.hpp>
+#include <Material/Material.hpp>
+#include <Overlay/Overlay.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 

@@ -4,11 +4,11 @@
 #include <Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Material/Material.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
@@ -42,13 +42,13 @@ Md2Importer::Md2Importer( Engine & p_pEngine, String const & p_textureName )
 
 SceneSPtr Md2Importer::DoImportScene()
 {
-	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD2" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD2" ) );
 	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node );
+		GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 		l_geometry->AttachTo( l_node );
 
 		for ( auto l_submesh : *l_mesh )
@@ -90,7 +90,7 @@ MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
 
 		if ( !l_material )
 		{
-			l_material = p_scene.GetMaterialView().Add( l_materialName, *GetEngine() );
+			l_material = p_scene.GetMaterialView().Add( l_materialName );
 			l_material->CreatePass();
 		}
 

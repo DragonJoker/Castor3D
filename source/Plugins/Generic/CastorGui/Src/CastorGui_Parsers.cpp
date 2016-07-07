@@ -8,8 +8,9 @@
 #include "CtrlSlider.hpp"
 #include "CtrlStatic.hpp"
 
-#include <ListenerCache.hpp>
-#include <MaterialCache.hpp>
+#include <Engine.hpp>
+#include <Event/Frame/FrameListener.hpp>
+#include <Material/Material.hpp>
 
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Scene/SceneFileParser.hpp>

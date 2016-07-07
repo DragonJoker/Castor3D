@@ -17,7 +17,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
+	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 
 #if defined( _MSC_VER)
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );

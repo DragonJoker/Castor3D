@@ -23,7 +23,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String CacheTraits< Overlay, String >::Name = cuT( "Overlay" );
+	template<> const String CacheTraits< Overlay, String >::Name = cuT( "Overlay" );
 
 	namespace
 	{
