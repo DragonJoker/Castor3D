@@ -61,7 +61,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -86,7 +86,7 @@ namespace Testing
 		Path l_path{ l_name + cuT( ".cmsh" ) };
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_src = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 		{
 			BinaryFile l_file{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
@@ -102,7 +102,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -147,7 +147,7 @@ namespace Testing
 		}
 
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
-		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM );
+		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
