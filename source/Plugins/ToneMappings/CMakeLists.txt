@@ -11,20 +11,20 @@ function( ToneMappingsInit )
 endfunction( ToneMappingsInit )
 
 function( ToneMappingsBuild )
+	set( ToneMappingLibraries ${CastorMinLibraries} )
+
+	set( ToneMappingIncludes
+		${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
+		${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
+		${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
+		${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+	)
+
+	set( Build ${Linear} )
+	add_subdirectory( Plugins/ToneMappings/LinearToneMapping )
+	set( Linear ${Build} PARENT_SCOPE )
+
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
-		set( ToneMappingLibraries ${CastorMinLibraries} )
-
-		set( ToneMappingIncludes
-			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
-			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
-			${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
-		)
-
-		set( Build ${Linear} )
-		add_subdirectory( Plugins/ToneMappings/LinearToneMapping )
-		set( Linear ${Build} PARENT_SCOPE )
-
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			set( Build ${Haarm} )
 			add_subdirectory( Plugins/ToneMappings/HaarmPieterDuikerToneMapping )
@@ -42,23 +42,24 @@ function( ToneMappingsBuild )
 			add_subdirectory( Plugins/ToneMappings/ReinhardToneMapping )
 			set( Reinhard ${Build} PARENT_SCOPE )
 		endif()
-
-		set( CastorMinLibraries
-			${CastorMinLibraries}
-			PARENT_SCOPE
-		)
-
-		set( CastorBinsDependencies
-			${CastorBinsDependencies}
-			PARENT_SCOPE
-		)
 	endif ()
+
+	set( CastorMinLibraries
+		${CastorMinLibraries}
+		PARENT_SCOPE
+	)
+
+	set( CastorBinsDependencies
+		${CastorBinsDependencies}
+		PARENT_SCOPE
+	)
 endfunction( ToneMappingsBuild )
 
 function( ToneMappingsSummary msg )
+	set( msg_tmp "\n\nToneMappings :" )
+	set( msg_tmp "${msg_tmp}\n    Linear              ${Linear}" )
+
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
-		set( msg_tmp "\n\nToneMappings :" )
-			set( msg_tmp "${msg_tmp}\n    Linear              ${Linear}" )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			set( msg_tmp "${msg_tmp}\n    Haarm Pieter Duiker ${Haarm}" )
 		endif ()
@@ -68,31 +69,32 @@ function( ToneMappingsSummary msg )
 		if( ${CASTOR_BUILD_TONEMAP_REINHARD} )
 			set( msg_tmp "${msg_tmp}\n    Reinhard            ${Reinhard}" )
 		endif ()
-		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
+
+	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( ToneMappingsSummary )
 
 function( ToneMappingsSetup )
+	cpack_add_component_group( ToneMappings
+		DISPLAY_NAME "ToneMappings"
+		DESCRIPTION "Tone mappings plugins usable in Castor3D."
+		PARENT_GROUP Plugins
+	)
+	cpack_add_component( LinearToneMapping
+		DISPLAY_NAME "Linear ToneMapping"
+		DESCRIPTION "Allows Linear Tone mapping."
+		GROUP Plugins
+		DEPENDS Castor3D
+		INSTALL_TYPES Minimal, Full
+	)
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
-		cpack_add_component_group( ToneMappings
-			DISPLAY_NAME "ToneMappings"
-			DESCRIPTION "Tone mappings plugins usable in Castor3D."
-			PARENT_GROUP Plugins
-		)
-		cpack_add_component( LinearToneMapping
-			DISPLAY_NAME "Linear ToneMapping"
-			DESCRIPTION "Allows Linear Tone mapping."
-			GROUP Plugins
-			DEPENDS Castor3D
-			INSTALL_TYPES Full
-		)
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
 			cpack_add_component( HaarmPeterDuikerToneMapping
 				DISPLAY_NAME "Haarm Pieter Duiker ToneMapping"
 				DESCRIPTION "Allows Haarm Pieter Duiker Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer, Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_HEJL} )
@@ -101,7 +103,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Haarm Peter Duiker Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer, Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_REINHARD} )
@@ -110,7 +112,7 @@ function( ToneMappingsSetup )
 				DESCRIPTION "Allows Reinhard Tone mapping."
 				GROUP Plugins
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer, Full
 			)
 		endif()
 	endif ()
