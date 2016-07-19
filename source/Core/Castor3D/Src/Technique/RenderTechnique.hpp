@@ -270,90 +270,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of TextureChannel
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de TextureChannel
-		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
-		/**
-		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoCreate() = 0;
-		/**
-		 *\~english
-		 *\brief		Destruction function
-		 *\~french
-		 *\brief		Fonction de destruction
-		 */
-		C3D_API virtual void DoDestroy() = 0;
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_index	The base texture index
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_index	L'index de texture de base
-		 *\return		\p true if ok
-		 */
-		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Render begin function.
-		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
-		 *\param[in]	p_scene		The scene to render
-		 *\return		\p true if ok.
-		 *\~french
-		 *\brief		Fonction de début de rendu.
-		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
-		 *\param[in]	p_scene		La scène à dessiner
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool DoBeginRender( Scene & p_scene ) = 0;
-		/**
-		 *\~english
-		 *\brief		Render function
-		 *\param[in]	p_nodes		The nodes to render.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_nodes		Les noeuds à dessiner.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime ) = 0;
-		/**
-		 *\~english
-		 *\brief		Render end function
-		 *\remarks		At the end of this method, no frame buffer must be bound.
-		 *\param[in]	p_scene		The scene to render
-		 *\~french
-		 *\brief		Fonction de fin de rendu
-		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
-		 *\param[in]	p_scene		La scène à dessiner
-		 */
-		C3D_API virtual void DoEndRender( Scene & p_scene ) = 0;
-
-	protected:
-		/**
-		 *\~english
 		 *\brief			Sorts scene render nodes.
 		 *\param[in,out]	p_nodes	The nodes.
 		 *\~french
@@ -590,18 +506,124 @@ namespace Castor3D
 		 *\param[in]	p_nodes		The scene render nodes.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
-		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_size		Les dimensions de la cible de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
-		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime );
+		/**
+		 *\~english
+		 *\brief		Renders opaque render nodes.
+		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The rendering pipeline.
+		 *\~french
+		 *\brief		Dessine les noeuds de rendu opaques.
+		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void DoRenderOpaqueNodes( stSCENE_RENDER_NODES & p_nodes, Pipeline & p_pipeline, Camera & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders transparent render nodes.
+		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The rendering pipeline.
+		 *\~french
+		 *\brief		Dessine les noeuds de rendu transparents.
+		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void DoRenderTransparentNodes( stSCENE_RENDER_NODES & p_nodes, Pipeline & p_pipeline, Camera & p_camera );
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_flags	A combination of TextureChannel
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_flags	Une combinaison de TextureChannel
+		 */
+		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
+		/**
+		 *\~english
+		 *\brief		Creation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API virtual bool DoCreate() = 0;
+		/**
+		 *\~english
+		 *\brief		Destruction function
+		 *\~french
+		 *\brief		Fonction de destruction
+		 */
+		C3D_API virtual void DoDestroy() = 0;
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\param[in]	p_index	The base texture index
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_index	L'index de texture de base
+		 *\return		\p true if ok
+		 */
+		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function
+		 *\~french
+		 *\brief		Fonction de nettoyage
+		 */
+		C3D_API virtual void DoCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Render begin function.
+		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\param[in]	p_scene		The scene to render
+		 *\return		\p true if ok.
+		 *\~french
+		 *\brief		Fonction de début de rendu.
+		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoBeginRender( Scene & p_scene ) = 0;
+		/**
+		 *\~english
+		 *\brief		Render function
+		 *\param[in]	p_nodes		The nodes to render.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Fonction de rendu
+		 *\param[in]	p_nodes		Les noeuds à dessiner.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime ) = 0;
+		/**
+		 *\~english
+		 *\brief		Render end function
+		 *\remarks		At the end of this method, no frame buffer must be bound.
+		 *\param[in]	p_scene		The scene to render
+		 *\~french
+		 *\brief		Fonction de fin de rendu
+		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
+		 */
+		C3D_API virtual void DoEndRender( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.

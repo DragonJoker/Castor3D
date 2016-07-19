@@ -1,9 +1,6 @@
 #include "GrayScalePostEffect.hpp"
 
-#include <BlendStateManager.hpp>
 #include <Engine.hpp>
-#include <SamplerManager.hpp>
-#include <ShaderManager.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
@@ -22,6 +19,9 @@
 #include <Render/Viewport.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <State/BlendState.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -91,9 +91,9 @@ namespace GrayScale
 	{
 		String l_name = cuT( "GrayScaleSampler" );
 
-		if ( !m_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
+		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
+			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache ().Add( l_name );
 			m_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
 			m_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
 			m_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
@@ -102,7 +102,7 @@ namespace GrayScale
 		}
 		else
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( l_name );
+			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache ().Find( l_name );
 		}
 	}
 
@@ -118,7 +118,7 @@ namespace GrayScale
 	bool GrayScalePostEffect::Initialise()
 	{
 		bool l_return = false;
-		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 
@@ -127,9 +127,9 @@ namespace GrayScale
 
 		if ( !l_vertex.empty() && !l_fragment.empty() )
 		{
-			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
-			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_fragment );
 			l_program->Initialise();

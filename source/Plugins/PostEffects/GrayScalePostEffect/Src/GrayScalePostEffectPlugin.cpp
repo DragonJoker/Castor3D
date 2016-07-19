@@ -1,10 +1,10 @@
 #include <Logger.hpp>
 
 #include <Engine.hpp>
-#include <TargetManager.hpp>
 
 #include <Plugin/PostFxPlugin.hpp>
 #include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
 
 #include "GrayScalePostEffect.hpp"
 
@@ -37,10 +37,10 @@ C3D_GrayScale_API Castor::String GetName()
 
 C3D_GrayScale_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetPostEffectFactory().Register( GrayScalePostEffect::Type, &GrayScalePostEffect::Create );
+	p_engine->GetRenderTargetCache().GetPostEffectFactory().Register( GrayScalePostEffect::Type, &GrayScalePostEffect::Create );
 }
 
 C3D_GrayScale_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTargetManager().GetPostEffectFactory().Unregister( GrayScalePostEffect::Type );
+	p_engine->GetRenderTargetCache ().GetPostEffectFactory().Unregister( GrayScalePostEffect::Type );
 }

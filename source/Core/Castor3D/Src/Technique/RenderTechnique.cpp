@@ -863,14 +863,18 @@ namespace Castor3D
 
 	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		ContextRPtr l_context = l_renderSystem->GetCurrentContext();
-		Pipeline & l_pipeline = l_context->GetPipeline();
-		auto l_rsFront = m_wpFrontRasteriserState.lock();
-		auto l_rsBack = m_wpBackRasteriserState.lock();
-
+		auto & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 		p_camera.GetViewport().Resize( p_size );
 		p_camera.Render( l_pipeline );
+		DoRenderOpaqueNodes( p_nodes, l_pipeline, p_camera );
+		p_nodes.m_scene.RenderForeground( p_size, p_camera, l_pipeline );
+		DoRenderTransparentNodes( p_nodes, l_pipeline, p_camera );
+		p_camera.EndRender();
+	}
+
+	void RenderTechnique::DoRenderOpaqueNodes( stSCENE_RENDER_NODES & p_nodes, Pipeline & p_pipeline, Camera & p_camera )
+	{
+		auto l_rsBack = m_wpBackRasteriserState.lock();
 
 		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty()
 			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty()
@@ -881,115 +885,97 @@ namespace Castor3D
 
 			if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_staticGeometries.m_opaqueRenderNodes );
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_staticGeometries.m_opaqueRenderNodes );
 			}
 
 			if ( !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
 			{
 				if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 				{
-					DoRenderSubmeshesInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderSubmeshesInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 				else
 				{
-					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 			}
 
 			if ( !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_animatedGeometries.m_opaqueRenderNodes );
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_animatedGeometries.m_opaqueRenderNodes );
 			}
 
 			if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
+				DoRenderBillboards( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
 			}
 		}
 
-		p_nodes.m_scene.RenderForeground( p_size, p_camera, GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
+	}
 
-		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodes.empty() )
+	void RenderTechnique::DoRenderTransparentNodes( stSCENE_RENDER_NODES & p_nodes, Pipeline & p_pipeline, Camera & p_camera )
+	{
+		auto l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
+		auto l_rsFront = m_wpFrontRasteriserState.lock();
+		auto l_rsBack = m_wpBackRasteriserState.lock();
+
+		auto l_render = [&]( auto & p_allNodes, auto & p_distanceSorted )
 		{
-			if ( l_context->IsMultiSampling() )
+			if ( !p_allNodes.empty() )
 			{
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_staticGeometries.m_transparentRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_staticGeometries.m_transparentRenderNodes );
+				if ( l_context->IsMultiSampling() )
+				{
+					l_rsFront->Apply();
+					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_allNodes );
+					l_rsBack->Apply();
+					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_allNodes );
+				}
+				else
+				{
+					DoResortAlpha( p_allNodes, p_camera, p_distanceSorted );
+					l_context->GetNoDepthWriteState()->Apply();
+					l_rsFront->Apply();
+					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_distanceSorted );
+					l_rsBack->Apply();
+					DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_pipeline, p_distanceSorted );
+				}
 			}
-			else
-			{
-				l_context->GetNoDepthWriteState()->Apply();
-				DoResortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodes, p_camera, p_nodes.m_staticGeometries.m_distanceSortedRenderNodes );
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_staticGeometries.m_distanceSortedRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_staticGeometries.m_distanceSortedRenderNodes );
-			}
-		}
+		};
 
-		if ( !p_nodes.m_instancedGeometries.m_transparentRenderNodes.empty() )
+		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodes.empty()
+			|| !p_nodes.m_instancedGeometries.m_transparentRenderNodes.empty()
+			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodes.empty()
+			|| !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
 		{
-			if ( l_context->IsMultiSampling() )
+			l_render( p_nodes.m_staticGeometries.m_transparentRenderNodes, p_nodes.m_staticGeometries.m_distanceSortedRenderNodes );
+			l_render( p_nodes.m_instancedGeometries.m_transparentRenderNodes, p_nodes.m_instancedGeometries.m_distanceSortedRenderNodes );
+			l_render( p_nodes.m_animatedGeometries.m_transparentRenderNodes, p_nodes.m_animatedGeometries.m_distanceSortedRenderNodes );
+
+			if ( !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
 			{
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_transparentRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_transparentRenderNodes );
-			}
-			else
-			{
-				l_context->GetNoDepthWriteState()->Apply();
-				DoResortAlpha( p_nodes.m_instancedGeometries.m_transparentRenderNodes, p_camera, p_nodes.m_instancedGeometries.m_distanceSortedRenderNodes );
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_distanceSortedRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_instancedGeometries.m_distanceSortedRenderNodes );
+				if ( l_context->IsMultiSampling() )
+				{
+					l_rsFront->Apply();
+					DoRenderBillboards( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
+					l_rsBack->Apply();
+					DoRenderBillboards( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
+				}
+				else
+				{
+					l_context->GetNoDepthWriteState()->Apply();
+					DoResortAlpha( p_nodes.m_billboards.m_transparentRenderNodes, p_camera, p_nodes.m_billboards.m_distanceSortedRenderNodes );
+					l_rsFront->Apply();
+					DoRenderBillboards( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
+					l_rsBack->Apply();
+					DoRenderBillboards( p_nodes.m_scene, p_camera, p_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
+				}
 			}
 		}
-
-		if ( !p_nodes.m_animatedGeometries.m_transparentRenderNodes.empty() )
+		else
 		{
-			if ( l_context->IsMultiSampling() )
-			{
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_animatedGeometries.m_transparentRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_animatedGeometries.m_transparentRenderNodes );
-			}
-			else
-			{
-				l_context->GetNoDepthWriteState()->Apply();
-				DoResortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodes, p_camera, p_nodes.m_animatedGeometries.m_distanceSortedRenderNodes );
-				l_rsFront->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_animatedGeometries.m_distanceSortedRenderNodes );
-				l_rsBack->Apply();
-				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_animatedGeometries.m_distanceSortedRenderNodes );
-			}
+			// Since Skybox culls front faces, it is necessary to switch back to back face culling when no mesh has transparency.
+			l_rsBack->Apply();
 		}
-
-		if ( !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
-		{
-			if ( l_context->IsMultiSampling() )
-			{
-				l_rsFront->Apply();
-				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
-				l_rsBack->Apply();
-				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
-			}
-			else
-			{
-				l_context->GetNoDepthWriteState()->Apply();
-				DoResortAlpha( p_nodes.m_billboards.m_transparentRenderNodes, p_camera, p_nodes.m_billboards.m_distanceSortedRenderNodes );
-				l_rsFront->Apply();
-				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
-				l_rsBack->Apply();
-				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
-			}
-		}
-
-		p_camera.EndRender();
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
