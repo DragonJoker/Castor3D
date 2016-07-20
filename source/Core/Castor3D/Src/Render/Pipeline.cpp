@@ -81,34 +81,34 @@ namespace Castor3D
 		return true;
 	}
 
-	void Pipeline::ApplyProjection( FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxProjection, MtxProjection, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyModel( FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxModel, MtxModel, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyView( FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::ApplyView( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxView, MtxView, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyNormal( FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::ApplyNormal( FrameVariableBuffer const & p_matrixBuffer )
 	{
 		m_mtxNormal = Matrix4x4r{ ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose() };
 		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matrices )
+	void Pipeline::ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matrices )
 	{
 		if ( p_matrices & MASK_MTXMODE_PROJECTION )
 		{
@@ -139,7 +139,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		Matrix4x4rFrameVariableSPtr l_variable;
 		p_matrixBuffer.GetVariable( p_name, l_variable );

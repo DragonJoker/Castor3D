@@ -67,7 +67,7 @@ namespace Castor3D
 #endif
 	}
 
-	void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer )
+	void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer const & p_variableBuffer )
 	{
 		Point4fFrameVariableSPtr l_variable;
 		p_variableBuffer.GetVariable( ShaderProgram::AmbientLight, l_variable );

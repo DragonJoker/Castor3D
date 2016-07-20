@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_SsaoPostEffect___
-#define ___C3D_SsaoPostEffect___
+#ifndef ___C3D_BloomPostEffect___
+#define ___C3D_BloomPostEffect___
 
 #include <Mesh/Buffer/BufferDeclaration.hpp>
 #include <PostEffect/PostEffect.hpp>
@@ -41,19 +41,7 @@ namespace Bloom
 	class BloomPostEffect
 		: public Castor3D::PostEffect
 	{
-		struct BloomPostEffectSurface
-		{
-			BloomPostEffectSurface( Castor3D::Engine & p_engine );
-			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
-			void Cleanup();
-
-			Castor3D::FrameBufferSPtr m_fbo;
-			Castor3D::TextureUnit m_colourTexture;
-			Castor3D::TextureAttachmentSPtr m_colourAttach;
-			Castor::Size m_size;
-		};
-
-		using SurfaceArray = std::array< BloomPostEffectSurface, FILTER_COUNT >;
+		using SurfaceArray = std::array< PostEffectSurface, FILTER_COUNT >;
 
 	public:
 		BloomPostEffect( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_param );

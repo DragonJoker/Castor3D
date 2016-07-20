@@ -36,6 +36,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
 #include <Point.hpp>
+#include <Size.hpp>
 #include <Quaternion.hpp>
 #include <SquareMatrix.hpp>
 #include <StringUtils.hpp>

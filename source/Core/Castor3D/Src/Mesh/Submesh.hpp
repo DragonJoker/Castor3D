@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
 		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
-		C3D_API void SortFaces( Castor::Point3r const & p_cameraPosition );
+		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Increments instance count

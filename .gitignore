@@ -12,6 +12,7 @@
 /source/Core/Castor3D/Test/Data/Billboards
 /source/Core/Castor3D/Test/Data/Bloom
 /source/Core/Castor3D/Test/Data/Formats
+/source/Core/Castor3D/Test/Data/GrayScale
 /source/Core/Castor3D/Test/Data/Gui
 /source/Core/Castor3D/Test/Data/HaarmPeterDuikerToneMapping
 /source/Core/Castor3D/Test/Data/HeijlBurgessDawsonToneMapping
@@ -20,6 +21,7 @@
 /source/Core/Castor3D/Test/Data/Morphing
 /source/Core/Castor3D/Test/Data/Overlay
 /source/Core/Castor3D/Test/Data/Parc
+/source/Core/Castor3D/Test/Data/Ply
 /source/Core/Castor3D/Test/Data/Ply
 /source/Core/Castor3D/Test/Data/ReinhardToneMapping
 /source/Core/Castor3D/Test/Data/Sampler

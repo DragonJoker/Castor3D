@@ -346,7 +346,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::FillShaderVariables( RenderNode & p_node )
+	void Pass::FillShaderVariables( RenderNode & p_node )const
 	{
 		for ( auto l_pair : p_node.m_textures )
 		{
@@ -528,7 +528,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Pass::DoRender()
+	void Pass::DoRender()const
 	{
 		for ( auto l_it : m_arrayTextureUnits )
 		{
@@ -536,7 +536,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::DoEndRender()
+	void Pass::DoEndRender()const
 	{
 		for ( auto l_rit = m_arrayTextureUnits.rbegin(); l_rit != m_arrayTextureUnits.rend(); ++l_rit )
 		{

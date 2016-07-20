@@ -772,7 +772,7 @@ namespace Castor3D
 		} );
 	}
 
-	void Submesh::SortFaces( Point3r const & p_ptCameraPosition )
+	void Submesh::SortByDistance( Point3r const & p_ptCameraPosition )
 	{
 		ENSURE( m_initialised );
 		try

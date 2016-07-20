@@ -116,7 +116,7 @@ namespace Castor3D
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::BindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer )
+	void LightCache::BindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const
 	{
 		GetEngine()->GetRenderSystem()->RenderAmbientLight( GetScene()->GetAmbientLight(), p_sceneBuffer );
 		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
@@ -158,7 +158,7 @@ namespace Castor3D
 		}
 	}
 
-	void LightCache::UnbindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer )
+	void LightCache::UnbindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const
 	{
 		Point4iFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );

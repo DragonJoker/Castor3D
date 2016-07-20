@@ -1,8 +1,10 @@
 option( CASTOR_BUILDGRP_POSTFX "Build Castor3D PostEffect plugins" TRUE )
 option( CASTOR_BUILD_POSTFX_BLOOM "Build Bloom PostEffect plugin" TRUE )
+option( CASTOR_BUILD_POSTFX_GRAYSCALE "Build GrayScale PostEffect plugin" TRUE )
 
 function( PostEffectsInit )
 	set( Bloom "no (Not wanted)" PARENT_SCOPE )
+	set( Grscl "no (Not wanted)" PARENT_SCOPE )
 endfunction( PostEffectsInit )
 
 function( PostEffectsBuild )
@@ -20,6 +22,12 @@ function( PostEffectsBuild )
 			set( Build ${Bloom} )
 			add_subdirectory( Plugins/PostEffects/BloomPostEffect )
 			set( Bloom ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
+			set( Build ${Grscl} )
+			add_subdirectory( Plugins/PostEffects/GrayScalePostEffect )
+			set( Grscl ${Build} PARENT_SCOPE )
 		endif()
 
 		set( CastorMinLibraries
@@ -40,6 +48,9 @@ function( PostEffectsSummary msg )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( msg_tmp "${msg_tmp}\n    Bloom               ${Bloom}" )
 		endif ()
+		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
+			set( msg_tmp "${msg_tmp}\n    GrayScale           ${Grscl}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( PostEffectsSummary )
@@ -55,6 +66,15 @@ function( PostEffectsSetup )
 			cpack_add_component( BloomPostEffect
 				DISPLAY_NAME "BloomPostEffect"
 				DESCRIPTION "Allows HDR Bloom post effect."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
+			cpack_add_component( GrayScalePostEffect
+				DISPLAY_NAME "GrayScalePostEffect"
+				DESCRIPTION "Allows GrayScale post effect."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full

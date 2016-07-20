@@ -149,7 +149,7 @@ namespace Castor3D
 		m_dimensions = p_dimensions;
 	}
 
-	void BillboardList::SortPoints( Point3r const & p_cameraPosition )
+	void BillboardList::SortByDistance( Point3r const & p_cameraPosition )
 	{
 		try
 		{
