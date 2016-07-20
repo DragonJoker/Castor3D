@@ -99,6 +99,40 @@ namespace Castor3D
 	*/
 	struct StaticGeometryRenderNode
 	{
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 */
+		C3D_API void UnbindPass( Scene const & p_scene )const;
+
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
 		SceneRenderNode m_scene;
@@ -110,7 +144,7 @@ namespace Castor3D
 		GeometryBuffers & m_buffers;
 		//!\~english	The submesh.
 		//!\~french		Le sous-maillage.
-		Submesh & m_submesh;
+		Submesh & m_data;
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;
@@ -125,6 +159,40 @@ namespace Castor3D
 	*/
 	struct AnimatedGeometryRenderNode
 	{
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 */
+		C3D_API void UnbindPass( Scene const & p_scene )const;
+
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
 		SceneRenderNode m_scene;
@@ -136,7 +204,7 @@ namespace Castor3D
 		GeometryBuffers & m_buffers;
 		//!\~english	The submesh.
 		//!\~french		Le sous-maillage.
-		Submesh & m_submesh;
+		Submesh & m_data;
 		//!\~english	The parent scene node.
 		//!\~french		Le scene node parent.
 		SceneNode & m_sceneNode;
@@ -160,12 +228,46 @@ namespace Castor3D
 	*/
 	struct BillboardRenderNode
 	{
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 */
+		C3D_API void UnbindPass( Scene const & p_scene )const;
+
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
 		SceneRenderNode m_scene;
 		//!\~english	The billboard.
 		//!\~french		Le billboard.
-		BillboardList & m_billboard;
+		BillboardList & m_data;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;

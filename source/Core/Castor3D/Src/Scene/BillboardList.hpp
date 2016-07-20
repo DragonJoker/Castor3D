@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
 		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
 		 */
-		C3D_API void SortPoints( Castor::Point3r const & p_cameraPosition );
+		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GeometryBuffers for given program.

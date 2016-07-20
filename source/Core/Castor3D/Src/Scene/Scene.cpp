@@ -397,7 +397,7 @@ namespace Castor3D
 																p_element->Detach();
 															} );
 		m_geometryCache = MakeObjectCache< Geometry, String >(	p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
-																, [this]( String const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh = nullptr )
+																, [this]( String const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
 																{
 																	return std::make_shared< Geometry >( p_name, *this, p_parent, p_mesh );
 																}

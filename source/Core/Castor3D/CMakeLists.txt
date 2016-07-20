@@ -96,7 +96,7 @@ add_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 file(
 	GLOB
 		CoreZipFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/Data/*.zip
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.zip
 )
 copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
 
@@ -104,7 +104,7 @@ copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
 file(
 	GLOB
 		ShaderLanguagesFiles
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/Languages/*.lang
+		${CMAKE_CURRENT_SOURCE_DIR}/Languages/*.lang
 )
 copy_target_files( ${PROJECT_NAME} "" ${ShaderLanguagesFiles} )
 
@@ -112,9 +112,10 @@ copy_target_files( ${PROJECT_NAME} "" ${ShaderLanguagesFiles} )
 file(
 	GLOB
 		SampleSceneFiles
-		${CMAKE_SOURCE_DIR}/../data/Scene/*.cscn
-		${CMAKE_SOURCE_DIR}/../data/Scene/*.cmtl
-		${CMAKE_SOURCE_DIR}/../data/Scene/*.zip
+		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cscn
+		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cmtl
+		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.cmsh
+		${CMAKE_CURRENT_SOURCE_DIR}/Test/Data/Scene/*.zip
 )
 install(
 	FILES ${SampleSceneFiles}

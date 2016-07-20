@@ -285,7 +285,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Camera::FillShader( FrameVariableBuffer & p_sceneBuffer )
+	void Camera::FillShader( FrameVariableBuffer const & p_sceneBuffer )const
 	{
 		Point3r l_position = GetParent()->GetDerivedPosition();
 		Point3rFrameVariableSPtr l_cameraPos;

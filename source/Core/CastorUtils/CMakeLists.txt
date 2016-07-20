@@ -398,191 +398,22 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 
 		if ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
 			if ( ZLIB_LIBRARY_RELEASE )
-				get_filename_component( ZlibPath ${ZLIB_LIBRARY_RELEASE} PATH)
-				string( FIND ${ZlibPath} "Release" _FOUND )
-
-				if ( ${_FOUND} EQUAL -1 )
-					get_filename_component( ZlibPath ${ZlibPath} PATH)
-				endif ()
-
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlib1.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlib1.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlibwapi.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlibwapi.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				endif ()
+				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_RELEASE} Release )
 			endif ()
 			if ( ZLIB_LIBRARY_DEBUG )
-				get_filename_component( ZlibPath ${ZLIB_LIBRARY_DEBUG} PATH)
-				string( FIND ${ZlibPath} "Release" _FOUND )
-
-				if ( ${_FOUND} EQUAL -1 )
-					get_filename_component( ZlibPath ${ZlibPath} PATH)
-				endif ()
-
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlib1.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlib1.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${ZlibPath}/bin/zlibwapi.dll
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					install(
-						FILES ${ZlibPath}/bin/zlibwapi.dll
-						DESTINATION bin
-						COMPONENT ${PROJECT_NAME}
-					)
-				endif ()
+				copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} Debug )
 			endif ()
 		else ()
-			get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
-			string( FIND ${ZlibPath} "Release" _FOUND )
-
-			if ( NOT ${_FOUND} EQUAL -1 )
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-			endif ()
-
-			string( FIND ${ZlibPath} "Debug" _FOUND )
-
-			if ( NOT ${_FOUND} EQUAL -1 )
-				get_filename_component( ZlibPath ${ZlibPath} PATH)
-			endif ()
-
-			get_filename_component( ZlibPath ${ZlibPath} PATH)
-
-			if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlib1.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlib1.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			elseif ( EXISTS ${ZlibPath}/bin/zlib.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlib.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlib.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${ZlibPath}/bin/zlibwapi.dll
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				install(
-					FILES ${ZlibPath}/bin/zlibwapi.dll
-					DESTINATION bin
-					COMPONENT ${PROJECT_NAME}
-				)
-			endif ()
+			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} Release )
+			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} Debug )
 		endif ()
 
-		add_custom_command(
-			TARGET ${PROJECT_NAME}
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${LibZipPath}/bin/zip.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${FreeImage_LIBRARY_DIR}/FreeImage.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
-		install(
-			FILES
-				${FreeImage_LIBRARY_DIR}/FreeImage.dll
-				${LibZipPath}/bin/zip.dll
-			DESTINATION bin
-			COMPONENT ${PROJECT_NAME}
-		)
-
-		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
-			add_custom_command(
-				TARGET ${PROJECT_NAME}
-				POST_BUILD
-				COMMAND
-					${CMAKE_COMMAND} -E
-						copy_if_different
-						${FreeTypePath}/bin/freetype6.dll
-						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			)
-			install(
-				FILES ${FreeTypePath}/bin/freetype6.dll
-				DESTINATION bin
-				COMPONENT ${PROJECT_NAME}
-			)
-		endif ()
+		copy_dll( ${PROJECT_NAME} ${LIBZIP_LIBRARY} Release )
+		copy_dll( ${PROJECT_NAME} ${LIBZIP_LIBRARY} Debug )
+		copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} Release 6 )
+		copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} Debug 6 )
+		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} Release )
+		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} Debug )
 	endif ()
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )

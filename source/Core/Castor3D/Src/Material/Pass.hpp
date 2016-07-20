@@ -219,7 +219,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader.
 		 */
-		C3D_API void FillShaderVariables( RenderNode & p_node );
+		C3D_API void FillShaderVariables( RenderNode & p_node )const;
 		/**
 		 *\~english
 		 *\brief		Reduces the textures.
@@ -684,14 +684,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique la passe
 		 */
-		C3D_API void DoRender();
+		C3D_API void DoRender()const;
 		/**
 		 *\~english
 		 *\brief		Unapplies the pass.
 		 *\~french
 		 *\brief		Désapplique la passe.
 		 */
-		C3D_API void DoEndRender();
+		C3D_API void DoEndRender()const;
 		/**
 		 *\~english
 		 *\brief		Updates the texture flags depending on the texture units.

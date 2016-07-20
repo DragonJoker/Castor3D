@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de projection dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyProjection( FrameVariableBuffer & p_matrixBuffer );
+		C3D_API void ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current model matrix into the given frame variables buffer.
@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de modèle dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyModel( FrameVariableBuffer & p_matrixBuffer );
+		C3D_API void ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current vieww matrix into the given frame variables buffer.
@@ -122,7 +122,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de vue dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyView( FrameVariableBuffer & p_matrixBuffer );
+		C3D_API void ApplyView( FrameVariableBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts the current normals matrix into the given frame variables buffer.
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\brief		Met la matrice de normales dans le buffer de variables donné.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyNormal( FrameVariableBuffer & p_matrixBuffer );
+		C3D_API void ApplyNormal( FrameVariableBuffer const & p_matrixBuffer );
 		/**
 		 *\~english
 		 *\brief		Puts the current texture 0 matrix into the given frame variables buffer.
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_index			L'indice de la texture.
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 */
-		C3D_API void ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer );
+		C3D_API void ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const;
 		/**
 		 *\~english
 		 *\brief		Puts all the matrices in the given frame variables buffer.
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
 		 *\param[in]	p_matricesMask	Une combinaison en OU binaire de MASK_MTXMODE, pour filtrer les matrices à appliquer.
 		 */
-		C3D_API void ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matricesMask );
+		C3D_API void ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matricesMask );
 		/**
 		 *\~english
 		 *\brief		Sets the model matrix.
@@ -258,7 +258,7 @@ namespace Castor3D
 		}
 
 	private:
-		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );
+		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const;
 
 	public:
 		C3D_API static const Castor::String MtxProjection;
