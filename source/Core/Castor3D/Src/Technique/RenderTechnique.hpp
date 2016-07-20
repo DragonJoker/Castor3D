@@ -63,26 +63,23 @@ namespace Castor3D
 		\~french
 		\brief		Les noeuds de rendu pour une scène spécifique.
 		*/
-		template< typename MapT, typename NodeT >
+		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		struct stRENDER_NODES
 		{
-			using DistanceSortedNodeMap = std::multimap< double, NodeT >;
+			using DistanceSortedNodeMap = std::multimap< double, NodeType >;
 
 			//!\~english	The function used to render transparent nodes.
 			//!\~french		La fonction utilisée pour dessiner les noeuds transparents.
-			std::function< void( Scene &, Pipeline &, MapT & ) > m_renderTransparent;
+			std::function< void( Scene &, Pipeline &, TransparentMapType & ) > m_renderTransparent;
 			//!\~english	The function used to render distance sorted nodes.
 			//!\~french		La fonction utilisée pour dessiner les noeuds triés par distance.
 			std::function< void( Scene &, Pipeline &, DistanceSortedNodeMap & ) > m_distanceRender;
-			//!\~english	The render nodes, sorted by shader program.
-			//!\~french		Les noeuds de rendu, triés par programme shader.
-			MapT m_renderNodes;
 			//!\~english	The geometries without alpha blending, sorted by shader program.
 			//!\~french		Les géométries sans alpha blending, triées par programme shader.
-			MapT m_opaqueRenderNodes;
+			OpaqueMapType m_opaqueRenderNodes;
 			//!\~english	The geometries with alpha blending, sorted by shader program.
 			//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
-			MapT m_transparentRenderNodes;
+			TransparentMapType m_transparentRenderNodes;
 			//!\~english	The geometries with alpha blending, sorted by distance to the camera.
 			//!\~french		Les géométries avec de l'alpha blend, triées par distance à la caméra.
 			DistanceSortedNodeMap m_distanceSortedRenderNodes;
@@ -104,16 +101,16 @@ namespace Castor3D
 			Scene & m_scene;
 			//!\~english	The static render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu statiques, triés par programme shader.
-			stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > m_staticGeometries;
+			stRENDER_NODES< StaticGeometryRenderNode, StaticGeometryRenderNodesByProgramMap > m_staticGeometries;
 			//!\~english	The instanced render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-			stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > m_instancedGeometries;
+			stRENDER_NODES< StaticGeometryRenderNode, SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNodesByProgramMap > m_instancedGeometries;
 			//!\~english	The animated render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu animés, triés par programme shader.
-			stRENDER_NODES< SubmeshAnimatedRenderNodesByProgramMap, AnimatedGeometryRenderNode > m_animatedGeometries;
+			stRENDER_NODES< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByProgramMap > m_animatedGeometries;
 			//!\~english	The billboards render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
-			stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > m_billboards;
+			stRENDER_NODES< BillboardRenderNode, BillboardRenderNodesByProgramMap > m_billboards;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -302,7 +299,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, StaticGeometryRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -315,7 +312,20 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshAnimatedRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, AnimatedGeometryRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -328,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
+		C3D_API void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders distance sorted submeshes.

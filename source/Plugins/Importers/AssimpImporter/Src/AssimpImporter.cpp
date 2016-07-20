@@ -359,6 +359,13 @@ namespace C3dAssimp
 				m_mesh.reset();
 			}
 		}
+		else
+		{
+			for ( auto l_submesh : *m_mesh )
+			{
+				l_submesh->Ref( l_submesh->GetDefaultMaterial() );
+			}
+		}
 
 		MeshSPtr l_return( m_mesh );
 		m_mesh.reset();
