@@ -22,9 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Mesh/Buffer/BufferElementGroup.hpp"
 
-#include <TextLoader.hpp>
-#include <Coords.hpp>
-#include <Point.hpp>
+#include <Data/TextLoader.hpp>
+#include <Math/Coords.hpp>
+#include <Math/Point.hpp>
 
 namespace Castor3D
 {

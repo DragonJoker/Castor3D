@@ -1,8 +1,8 @@
 #include "LightCategory.hpp"
 #include "Light.hpp"
 
-#include <Logger.hpp>
-#include <PixelBuffer.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/PixelBuffer.hpp>
 
 using namespace Castor;
 

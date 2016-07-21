@@ -18,18 +18,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3DPY_PREREQUISITES_H___
 #define ___C3DPY_PREREQUISITES_H___
 
-#include <Logger.hpp>
-#include <Angle.hpp>
+#include <Log/Logger.hpp>
+#include <Math/Angle.hpp>
 #include <Glyph.hpp>
-#include <Font.hpp>
-#include <Quaternion.hpp>
+#include <Graphics/Font.hpp>
+#include <Math/Quaternion.hpp>
 #include <Position.hpp>
 #include <Size.hpp>
-#include <Rectangle.hpp>
-#include <Image.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Image.hpp>
 #include <PixelBufferBase.hpp>
 #include <SquareMatrix.hpp>
-#include <Quaternion.hpp>
+#include <Math/Quaternion.hpp>
 
 #include <AnimatedObjectGroupCache.hpp>
 #include <BillboardCache.hpp>

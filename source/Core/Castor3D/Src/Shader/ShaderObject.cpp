@@ -10,7 +10,7 @@
 #	include <sys/stat.h>
 #endif
 
-#include <StreamPrefixManipulators.hpp>
+#include <Stream/StreamPrefixManipulators.hpp>
 
 using namespace Castor;
 

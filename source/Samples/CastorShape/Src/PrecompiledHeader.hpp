@@ -74,16 +74,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <CastorUtils.hpp>
 #	include <StringUtils.hpp>
 #	include <Templates.hpp>
-#	include <Logger.hpp>
-#	include <PreciseTimer.hpp>
+#	include <Log/Logger.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
 #	include <File.hpp>
-#	include <Point.hpp>
-#	include <Quaternion.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
 #	include <Named.hpp>
 #	include <Path.hpp>
-#	include <Math.hpp>
+#	include <Math/Math.hpp>
 #	include <Colour.hpp>
-#	include <Angle.hpp>
+#	include <Math/Angle.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>

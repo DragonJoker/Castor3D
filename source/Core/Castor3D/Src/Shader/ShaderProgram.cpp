@@ -6,9 +6,9 @@
 
 #include "Render/RenderSystem.hpp"
 
-#include <Logger.hpp>
-#include <TransformationMatrix.hpp>
-#include <StreamPrefixManipulators.hpp>
+#include <Log/Logger.hpp>
+#include <Math/TransformationMatrix.hpp>
+#include <Stream/StreamPrefixManipulators.hpp>
 
 using namespace Castor;
 

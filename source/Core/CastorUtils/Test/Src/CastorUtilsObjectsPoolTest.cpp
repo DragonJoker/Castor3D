@@ -3,7 +3,7 @@
 #include "TestObjectPool.hpp"
 
 #include <PoolManagedObject.hpp>
-#include <ObjectPool.hpp>
+#include <Pool/ObjectPool.hpp>
 
 #include <algorithm>
 

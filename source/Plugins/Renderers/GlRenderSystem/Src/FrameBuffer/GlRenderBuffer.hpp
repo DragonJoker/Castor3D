@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Common/GlBindable.hpp"
 
-#include <Size.hpp>
+#include <Graphics/Size.hpp>
 
 namespace GlRender
 {

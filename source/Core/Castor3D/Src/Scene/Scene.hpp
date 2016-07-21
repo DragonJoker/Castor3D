@@ -32,8 +32,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "SamplerCache.hpp"
 #include "WindowCache.hpp"
 
-#include <Logger.hpp>
-#include <OwnedBy.hpp>
+#include <Log/Logger.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

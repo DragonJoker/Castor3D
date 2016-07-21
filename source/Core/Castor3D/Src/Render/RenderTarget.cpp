@@ -34,8 +34,8 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Logger.hpp>
-#include <Image.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

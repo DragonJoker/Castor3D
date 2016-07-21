@@ -21,13 +21,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Logger.hpp>
-#	include <Pixel.hpp>
+#	include <Log/Logger.hpp>
+#	include <Graphics/Pixel.hpp>
 
 #	include "GlslWriterPrerequisites.hpp"
 
 #endif
 
-#include <StringUtils.hpp>
+#include <Miscellaneous/StringUtils.hpp>
 
 #endif

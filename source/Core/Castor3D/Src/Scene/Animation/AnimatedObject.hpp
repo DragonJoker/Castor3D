@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Named.hpp>
+#include <Design/Named.hpp>
 
 namespace Castor3D
 {

@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <FileParser.hpp>
+#include <FileParser/FileParser.hpp>
 
 #include <Engine.hpp>
 

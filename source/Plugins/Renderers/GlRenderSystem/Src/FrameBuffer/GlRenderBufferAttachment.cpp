@@ -5,7 +5,7 @@
 #include "FrameBuffer/GlColourRenderBuffer.hpp"
 #include "FrameBuffer/GlDepthStencilRenderBuffer.hpp"
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

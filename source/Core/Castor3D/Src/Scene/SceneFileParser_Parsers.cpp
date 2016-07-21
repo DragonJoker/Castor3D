@@ -73,8 +73,8 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Font.hpp>
-#include <Logger.hpp>
+#include <Graphics/Font.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

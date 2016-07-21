@@ -22,9 +22,9 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Font.hpp>
-#include <Image.hpp>
-#include <Logger.hpp>
+#include <Graphics/Font.hpp>
+#include <Graphics/Image.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

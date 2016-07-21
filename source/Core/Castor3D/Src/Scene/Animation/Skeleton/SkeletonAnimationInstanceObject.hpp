@@ -22,8 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Binary/BinaryWriter.hpp"
 #include "Animation/Interpolator.hpp"
 
-#include <SquareMatrix.hpp>
-#include <Quaternion.hpp>
+#include <Math/SquareMatrix.hpp>
+#include <Math/Quaternion.hpp>
 
 namespace Castor3D
 {

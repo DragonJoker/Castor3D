@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "OverlayCategory.hpp"
 
-#include <Rectangle.hpp>
+#include <Graphics/Rectangle.hpp>
 
 namespace Castor3D
 {

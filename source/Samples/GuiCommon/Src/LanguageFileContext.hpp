@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "StcContext.hpp"
 
-#include <FileParser.hpp>
-#include <FileParserContext.hpp>
+#include <FileParser/FileParser.hpp>
+#include <FileParser/FileParserContext.hpp>
 
 namespace GuiCommon
 {

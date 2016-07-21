@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 namespace CastorCom
 {

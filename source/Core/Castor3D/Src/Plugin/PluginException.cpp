@@ -1,6 +1,6 @@
 ﻿#include "PluginException.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

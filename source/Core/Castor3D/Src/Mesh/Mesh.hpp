@@ -26,9 +26,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Binary/BinaryWriter.hpp"
 #include "Mesh/MeshFactory.hpp"
 
-#include <CubeBox.hpp>
-#include <SphereBox.hpp>
-#include <OwnedBy.hpp>
+#include <Graphics/CubeBox.hpp>
+#include <Graphics/SphereBox.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Design/Resource.hpp>
 
 namespace Castor3D
 {

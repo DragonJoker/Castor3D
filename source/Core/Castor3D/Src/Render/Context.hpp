@@ -23,8 +23,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
-#include <Colour.hpp>
-#include <OwnedBy.hpp>
+#include <Graphics/Colour.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

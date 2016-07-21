@@ -18,14 +18,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CHUNK_DATA_H___
 #define ___C3D_CHUNK_DATA_H___
 
-#include <Colour.hpp>
-#include <Coords.hpp>
-#include <Matrix.hpp>
-#include <Point.hpp>
-#include <Position.hpp>
-#include <Quaternion.hpp>
-#include <Size.hpp>
-#include <SquareMatrix.hpp>
+#include <Graphics/Colour.hpp>
+#include <Math/Coords.hpp>
+#include <Math/Matrix.hpp>
+#include <Math/Point.hpp>
+#include <Graphics/Position.hpp>
+#include <Math/Quaternion.hpp>
+#include <Graphics/Size.hpp>
+#include <Math/SquareMatrix.hpp>
 
 #include "Mesh/VertexGroup.hpp"
 #include "Mesh/FaceIndices.hpp"

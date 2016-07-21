@@ -3,8 +3,8 @@
 #include "LoopVertex.hpp"
 #include "LoopFaceEdges.hpp"
 
-#include <Point.hpp>
-#include <Angle.hpp>
+#include <Math/Point.hpp>
+#include <Math/Angle.hpp>
 
 using namespace Castor;
 

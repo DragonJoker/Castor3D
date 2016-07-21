@@ -37,10 +37,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Mesh/MeshFactory.hpp"
 #include "Technique/TechniqueFactory.hpp"
 
-#include <FileParser.hpp>
-#include <FontCache.hpp>
-#include <ImageCache.hpp>
-#include <Unique.hpp>
+#include <FileParser/FileParser.hpp>
+#include <Graphics/FontCache.hpp>
+#include <Graphics/ImageCache.hpp>
+#include <Design/Unique.hpp>
 
 namespace Castor3D
 {

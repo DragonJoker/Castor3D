@@ -11,8 +11,8 @@
 #include <PluginCache.hpp>
 #include <Plugin/RendererPlugin.hpp>
 
-#include <File.hpp>
-#include <Exception.hpp>
+#include <Data/File.hpp>
+#include <Exception/Exception.hpp>
 
 #include "xpms/animated_object_group.xpm"
 #include "xpms/animated_object_group_sel.xpm"

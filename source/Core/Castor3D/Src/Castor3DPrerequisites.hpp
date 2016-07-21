@@ -33,13 +33,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #endif
 
 #include <CastorUtilsPrerequisites.hpp>
-#include <Collection.hpp>
-#include <OwnedBy.hpp>
-#include <Point.hpp>
-#include <Size.hpp>
-#include <Quaternion.hpp>
-#include <SquareMatrix.hpp>
-#include <StringUtils.hpp>
+#include <Design/Collection.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Math/Point.hpp>
+#include <Graphics/Size.hpp>
+#include <Math/Quaternion.hpp>
+#include <Math/SquareMatrix.hpp>
+#include <Miscellaneous/StringUtils.hpp>
 
 #include <GlslWriterPrerequisites.hpp>
 
@@ -758,11 +758,8 @@ namespace Castor3D
 		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 }
 
-namespace Castor
-{
-	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine );
-	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem, RenderSystem );
-	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Scene, Scene );
-}
+DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )
+DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem, RenderSystem )
+DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Scene, Scene )
 
 #endif

@@ -1,7 +1,7 @@
 #include "PnTrianglesDivider.hpp"
 
 #include <Engine.hpp>
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 using namespace PnTriangles;

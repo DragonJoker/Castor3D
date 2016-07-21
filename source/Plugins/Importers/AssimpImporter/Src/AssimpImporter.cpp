@@ -21,7 +21,7 @@
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <assimp/version.h>
 

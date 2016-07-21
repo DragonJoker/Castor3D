@@ -26,8 +26,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #endif
 
 #include <StringUtils.hpp>
-#include <Logger.hpp>
-#include <PreciseTimer.hpp>
+#include <Log/Logger.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace Testing
 {

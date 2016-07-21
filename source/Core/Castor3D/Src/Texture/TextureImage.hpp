@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "TextureStorage.hpp"
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 namespace Castor3D
 {

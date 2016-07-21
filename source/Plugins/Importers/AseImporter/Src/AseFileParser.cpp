@@ -24,7 +24,7 @@
 #include <Scene/SceneNode.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Image.hpp>
+#include <Graphics/Image.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

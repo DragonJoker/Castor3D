@@ -3,8 +3,8 @@
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <Point.hpp>
-#include <Quaternion.hpp>
+#include <Math/Point.hpp>
+#include <Math/Quaternion.hpp>
 
 #include <wx/frame.h>
 #include <wx/panel.h>

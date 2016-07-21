@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlslWriterPrerequisites.hpp"
 
-#include <StreamIndentManipulators.hpp>
+#include <Stream/StreamIndentManipulators.hpp>
 
 #ifdef max
 #	undef max

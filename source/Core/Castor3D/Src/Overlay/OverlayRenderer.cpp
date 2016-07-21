@@ -30,7 +30,7 @@
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 #include <GlslSource.hpp>
 

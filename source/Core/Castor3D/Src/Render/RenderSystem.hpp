@@ -22,8 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <stack>
 
-#include <Colour.hpp>
-#include <OwnedBy.hpp>
+#include <Graphics/Colour.hpp>
+#include <Design/OwnedBy.hpp>
 
 #ifndef C3D_TRACE_OBJECTS
 #	define C3D_TRACE_OBJECTS 1

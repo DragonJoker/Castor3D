@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "UserInputEvent.hpp"
 
-#include <Position.hpp>
+#include <Graphics/Position.hpp>
 
 namespace Castor3D
 {

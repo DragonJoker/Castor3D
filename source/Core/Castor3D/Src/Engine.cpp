@@ -28,15 +28,15 @@
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 
-#include <DynamicLibrary.hpp>
-#include <Factory.hpp>
-#include <File.hpp>
-#include <Image.hpp>
-#include <Logger.hpp>
-#include <PreciseTimer.hpp>
-#include <Templates.hpp>
-#include <UniqueObjectPool.hpp>
-#include <Utils.hpp>
+#include <Miscellaneous/DynamicLibrary.hpp>
+#include <Design/Factory.hpp>
+#include <Data/File.hpp>
+#include <Graphics/Image.hpp>
+#include <Log/Logger.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
+#include <Design/Templates.hpp>
+#include <Pool/UniqueObjectPool.hpp>
+#include <Miscellaneous/Utils.hpp>
 
 using namespace Castor;
 

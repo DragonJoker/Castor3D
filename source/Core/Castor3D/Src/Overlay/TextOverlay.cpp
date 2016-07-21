@@ -12,8 +12,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Texture/TextureLayout.hpp"
 
-#include <Font.hpp>
-#include <Image.hpp>
+#include <Graphics/Font.hpp>
+#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

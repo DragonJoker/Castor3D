@@ -3,7 +3,7 @@
 #include "LwoSubChunk.hpp"
 
 #include <Colour.hpp>
-#include <Image.hpp>
+#include <Graphics/Image.hpp>
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>

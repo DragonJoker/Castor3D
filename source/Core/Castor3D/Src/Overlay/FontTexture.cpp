@@ -9,8 +9,8 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
-#include <Font.hpp>
-#include <Image.hpp>
+#include <Graphics/Font.hpp>
+#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

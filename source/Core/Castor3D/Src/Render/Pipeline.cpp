@@ -8,7 +8,7 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 
-#include <TransformationMatrix.hpp>
+#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

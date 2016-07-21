@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "OverlayCache.hpp"
 
-#include <PreciseTimer.hpp>
-#include <OwnedBy.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

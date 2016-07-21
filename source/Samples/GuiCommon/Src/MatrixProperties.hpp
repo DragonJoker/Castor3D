@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <SquareMatrix.hpp>
+#include <Math/SquareMatrix.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );

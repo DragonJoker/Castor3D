@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___ASE_IMPORTER_PREREQUISITES_H___
 
 #include <Mesh/Importer.hpp>
-#include <FileParser.hpp>
+#include <FileParser/FileParser.hpp>
 
 #ifndef _WIN32
 #	define C3D_Ase_API

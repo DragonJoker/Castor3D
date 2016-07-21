@@ -31,8 +31,8 @@
 #include <Texture/TextureLayout.hpp>
 
 #include <Assertion.hpp>
-#include <Image.hpp>
-#include <TransformationMatrix.hpp>
+#include <Graphics/Image.hpp>
+#include <Math/TransformationMatrix.hpp>
 
 #if defined( min )
 #	undef min

@@ -10,8 +10,8 @@
 #include <wx/aui/auibar.h>
 
 #include <SceneObjectsList.hpp>
-#include <Logger.hpp>
-#include <Path.hpp>
+#include <Log/Logger.hpp>
+#include <Data/Path.hpp>
 
 #include <Recorder.hpp>
 

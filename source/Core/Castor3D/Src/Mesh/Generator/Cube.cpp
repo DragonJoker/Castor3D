@@ -3,7 +3,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

@@ -28,7 +28,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Subdivider.hpp>
 
-#include <PlaneEquation.hpp>
+#include <Math/PlaneEquation.hpp>
 
 #pragma warning( pop )
 

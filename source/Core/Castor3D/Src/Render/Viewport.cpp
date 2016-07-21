@@ -4,7 +4,7 @@
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
 
-#include <TransformationMatrix.hpp>
+#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

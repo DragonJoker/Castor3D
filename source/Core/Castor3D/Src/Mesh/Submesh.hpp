@@ -28,7 +28,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Mesh/Skeleton/VertexBoneData.hpp"
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

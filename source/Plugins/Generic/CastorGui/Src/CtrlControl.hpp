@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Pixel.hpp>
 #include <Position.hpp>
-#include <Rectangle.hpp>
+#include <Graphics/Rectangle.hpp>
 #include <Size.hpp>
 
 namespace CastorGui

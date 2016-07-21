@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,6 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_POST_EFFECT_H___
 
 #include "Texture/TextureUnit.hpp"
+
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

@@ -9,7 +9,7 @@
 #	include <gtk/gtk.h>
 #endif
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 #include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
@@ -25,7 +25,7 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 #include <wx/window.h>
 #include <wx/rawbmp.h>

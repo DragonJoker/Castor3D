@@ -1,6 +1,6 @@
 #include "Benchmark.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 #include <File.hpp>
 
 #include "BenchManager.hpp"

@@ -1,6 +1,6 @@
 #include "Castor3DTestPrerequisites.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 #include <File.hpp>
 
 #include <Engine.hpp>

@@ -12,7 +12,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 
-#include <Factory.hpp>
+#include <Design/Factory.hpp>
 
 using namespace Castor;
 

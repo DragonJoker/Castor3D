@@ -19,8 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_UTILS_H___
 
 #include "CastorUtilsPrerequisites.hpp"
-#include "StringUtils.hpp"
-#include "Templates.hpp"
+#include "Miscellaneous/StringUtils.hpp"
+#include "Design/Templates.hpp"
 
 #include <cstdarg>
 

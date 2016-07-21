@@ -29,7 +29,7 @@
 #include <Scene/Light/SpotLight.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 #include <wx/propgrid/advprops.h>
 

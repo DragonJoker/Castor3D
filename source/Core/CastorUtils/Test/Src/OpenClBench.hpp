@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <TransformationMatrix.hpp>
+#include <Math/TransformationMatrix.hpp>
 
 #define CL_HPP_ENABLE_EXCEPTIONS
 #define CL_HPP_MINIMUM_OPENCL_VERSION 120

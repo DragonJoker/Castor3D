@@ -2,8 +2,8 @@
 
 #include "ObjGroup.hpp"
 
-#include <Colour.hpp>
-#include <Image.hpp>
+#include <Graphics/Colour.hpp>
+#include <Graphics/Image.hpp>
 
 #include <Engine.hpp>
 #include <GeometryCache.hpp>

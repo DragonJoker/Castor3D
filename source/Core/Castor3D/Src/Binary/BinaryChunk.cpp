@@ -2,7 +2,7 @@
 
 #include <numeric>
 
-#include <BinaryFile.hpp>
+#include <Data/BinaryFile.hpp>
 
 using namespace Castor;
 

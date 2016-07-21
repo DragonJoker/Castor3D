@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlslOptionalArray.hpp"
 
-#include <Factory.hpp>
-#include <OwnedBy.hpp>
+#include <Design/Factory.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace GLSL
 {

@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <SquareMatrix.hpp>
-#include <OwnedBy.hpp>
+#include <Math/SquareMatrix.hpp>
+#include <Design/OwnedBy.hpp>
 
 #include <stack>
 

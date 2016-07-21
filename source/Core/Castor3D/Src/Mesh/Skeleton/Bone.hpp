@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
-#include <SquareMatrix.hpp>
+#include <Math/SquareMatrix.hpp>
 
 namespace Castor3D
 {

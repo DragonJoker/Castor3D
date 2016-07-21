@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorGuiPrerequisites.hpp"
 
-#include <FileParser.hpp>
+#include <FileParser/FileParser.hpp>
 #include <FileParserContext.hpp>
 
 namespace CastorGui

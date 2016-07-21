@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Mesh/MeshGenerator.hpp"
 
-#include <Point.hpp>
+#include <Math/Point.hpp>
 
 namespace Castor3D
 {

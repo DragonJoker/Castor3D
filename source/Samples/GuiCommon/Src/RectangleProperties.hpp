@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <Rectangle.hpp>
+#include <Graphics/Rectangle.hpp>
 
 namespace GuiCommon
 {

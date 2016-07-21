@@ -5,7 +5,7 @@
 #include "Texture/GlTexture.hpp"
 #include "Texture/GlUploadPixelBuffer.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

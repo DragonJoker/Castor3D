@@ -13,7 +13,7 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 

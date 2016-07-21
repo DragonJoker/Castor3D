@@ -22,8 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Render/RenderNode.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Rectangle.hpp>
-#include <OwnedBy.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Design/OwnedBy.hpp>
 
 #if !defined( NDEBUG )
 #	define DEBUG_BUFFERS 0

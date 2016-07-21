@@ -21,9 +21,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Logger.hpp>
+#	include <Log/Logger.hpp>
 #	include <Pixel.hpp>
-#	include <Font.hpp>
+#	include <Graphics/Font.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>

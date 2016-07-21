@@ -7,8 +7,8 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
 
-#include <Factory.hpp>
-#include <Logger.hpp>
+#include <Design/Factory.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

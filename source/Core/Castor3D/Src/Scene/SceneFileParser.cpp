@@ -11,8 +11,8 @@
 #include "Scene/SceneFileParser_Parsers.hpp"
 #include "Scene/SceneNode.hpp"
 
-#include <Logger.hpp>
-#include <ZipArchive.hpp>
+#include <Log/Logger.hpp>
+#include <Data/ZipArchive.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

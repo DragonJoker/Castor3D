@@ -22,8 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Event/Frame/FrameListener.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
 
-#include <OwnedBy.hpp>
-#include <Size.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Graphics/Size.hpp>
 
 namespace Castor3D
 {

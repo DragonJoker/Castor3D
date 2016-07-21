@@ -20,12 +20,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <FileParser.hpp>
-#include <FileParserContext.hpp>
+#include <FileParser/FileParser.hpp>
+#include <FileParser/FileParserContext.hpp>
 
 #include "Mesh/Submesh.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

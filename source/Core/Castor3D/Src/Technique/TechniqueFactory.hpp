@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "RenderTechnique.hpp"
 
-#include <Factory.hpp>
+#include <Design/Factory.hpp>
 
 namespace Castor3D
 {

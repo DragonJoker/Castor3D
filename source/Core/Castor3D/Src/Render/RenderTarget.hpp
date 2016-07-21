@@ -22,9 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Miscellaneous/Parameter.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <OwnedBy.hpp>
-#include <Size.hpp>
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Graphics/Size.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

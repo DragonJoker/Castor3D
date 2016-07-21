@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <Quaternion.hpp>
+#include <Math/Quaternion.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
 

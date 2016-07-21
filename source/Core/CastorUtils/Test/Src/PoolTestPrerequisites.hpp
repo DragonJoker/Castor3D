@@ -20,10 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <FixedSizeMemoryData.hpp>
-#include <FixedSizeMarkedMemoryData.hpp>
-#include <FixedGrowingSizeMemoryData.hpp>
-#include <FixedGrowingSizeMarkedMemoryData.hpp>
+#include <Pool/FixedSizeMemoryData.hpp>
+#include <Pool/FixedSizeMarkedMemoryData.hpp>
+#include <Pool/FixedGrowingSizeMemoryData.hpp>
+#include <Pool/FixedGrowingSizeMarkedMemoryData.hpp>
 
 #include <cstdint>
 #include <chrono>

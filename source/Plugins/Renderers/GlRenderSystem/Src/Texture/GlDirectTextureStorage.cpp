@@ -3,8 +3,8 @@
 #include "Common/OpenGl.hpp"
 #include "Texture/GlTexture.hpp"
 
-#include <Logger.hpp>
-#include <PixelBufferBase.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 #include <Texture/TextureImage.hpp>
 

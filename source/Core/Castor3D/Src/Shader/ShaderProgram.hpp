@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "FrameVariableTyper.hpp"
 #include "ProgramInputLayout.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

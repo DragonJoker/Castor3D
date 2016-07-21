@@ -3,7 +3,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
 
-#include <Angle.hpp>
+#include <Math/Angle.hpp>
 
 using namespace Castor;
 
