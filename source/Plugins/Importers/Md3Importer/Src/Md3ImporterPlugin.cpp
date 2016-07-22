@@ -2,6 +2,7 @@
 
 #include "Md3Importer.hpp"
 
+#include <Engine.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 
 using namespace Castor3D;

@@ -4,6 +4,7 @@
 #	include <vld.h>
 #endif
 
+#include <Engine.hpp>
 #include <PluginCache.hpp>
 
 #include <Plugin/ImporterPlugin.hpp>

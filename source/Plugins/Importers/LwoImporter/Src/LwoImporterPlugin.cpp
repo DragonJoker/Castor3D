@@ -1,5 +1,6 @@
 #include "LwoImporter.hpp"
 
+#include <Engine.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Miscellaneous/Version.hpp>
 

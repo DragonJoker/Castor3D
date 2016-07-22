@@ -4,8 +4,7 @@
 #	include <vld.h>
 #endif
 
-#include <PluginCache.hpp>
-
+#include <Engine.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 
 #ifndef _WIN32
