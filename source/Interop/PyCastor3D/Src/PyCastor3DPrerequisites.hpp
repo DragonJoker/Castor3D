@@ -50,6 +50,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <WindowCache.hpp>
 
 #include <Animation/Animable.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Mesh/MeshAnimation.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Mesh.hpp>
@@ -69,6 +71,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Scene/Animation/AnimatedSkeleton.hpp>
 #include <Scene/Animation/AnimatedMesh.hpp>
 #include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Animation/AnimationInstance.hpp>
+#include <Scene/Animation/Mesh/MeshAnimationInstance.hpp>
+#include <Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Scene/Light/Light.hpp>
 #include <Scene/Light/PointLight.hpp>

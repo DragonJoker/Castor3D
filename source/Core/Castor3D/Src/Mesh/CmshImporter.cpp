@@ -7,6 +7,8 @@
 #include "Mesh/Mesh.hpp"
 #include "Scene/Scene.hpp"
 
+#include <Data/BinaryFile.hpp>
+
 using namespace Castor;
 
 namespace Castor3D

@@ -5,6 +5,7 @@
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Scene/Scene.hpp>
+#include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <GradientButton.hpp>

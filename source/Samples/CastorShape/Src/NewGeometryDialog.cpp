@@ -5,6 +5,8 @@
 #include <GradientButton.hpp>
 #include <PropertiesHolder.hpp>
 #include <MaterialCache.hpp>
+#include <Material/Material.hpp>
+#include <Scene/Scene.hpp>
 
 #include <wx/propgrid/propgrid.h>
 

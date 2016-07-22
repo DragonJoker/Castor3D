@@ -117,7 +117,7 @@ namespace Castor
 		owner * OwnedBy< owner >::Get##name()const\
 		{\
 			return &m_owner;\
-		};\
+		}\
 	}
 }
 
