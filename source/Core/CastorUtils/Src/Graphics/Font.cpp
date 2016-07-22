@@ -1,5 +1,5 @@
-#include "Graphics/Font.hpp"
-#include "Graphics/Image.hpp"
+#include "Font.hpp"
+#include "Image.hpp"
 
 #include <ft2build.h>
 

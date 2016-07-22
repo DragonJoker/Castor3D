@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_CUBE_BOX_H___
 #define ___CASTOR_CUBE_BOX_H___
 
-#include "Graphics/ContainerBox.hpp"
+#include "ContainerBox.hpp"
 
 namespace Castor
 {

@@ -1,7 +1,7 @@
-#include "Miscellaneous/DynamicLibrary.hpp"
+#include "DynamicLibrary.hpp"
 #include "Exception/Assertion.hpp"
 #include "Log/Logger.hpp"
-#include "Miscellaneous/Utils.hpp"
+#include "Utils.hpp"
 
 #if defined( _WIN32 )
 #	include <windows.h>

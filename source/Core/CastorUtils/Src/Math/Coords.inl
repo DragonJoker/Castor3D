@@ -1,4 +1,4 @@
-#include "Math/PointOperators.hpp"
+#include "PointOperators.hpp"
 #include <cstring>
 #include <numeric>
 

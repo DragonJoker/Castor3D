@@ -1,5 +1,5 @@
-#include "FileParser/FileParser.hpp"
-#include "FileParser/FileParserContext.hpp"
+#include "FileParser.hpp"
+#include "FileParserContext.hpp"
 #include "Graphics/Colour.hpp"
 #include "Graphics/Pixel.hpp"
 #include "Log/Logger.hpp"

@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-#include "Stream/StreamIndentBuffer.hpp"
-#include "Stream/StreamIndentBufferManager.hpp"
+#include "StreamIndentBuffer.hpp"
+#include "StreamIndentBufferManager.hpp"
 
 namespace Castor
 {

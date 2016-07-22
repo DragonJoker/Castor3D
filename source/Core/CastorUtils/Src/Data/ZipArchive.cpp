@@ -1,8 +1,8 @@
-#include "Data/ZipArchive.hpp"
+#include "ZipArchive.hpp"
 
 #include "Exception/Assertion.hpp"
 #include "Log/Logger.hpp"
-#include "Data/BinaryFile.hpp"
+#include "BinaryFile.hpp"
 
 #include <zip.h>
 #include <limits>

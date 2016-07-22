@@ -1,4 +1,4 @@
-#include "Miscellaneous/CpuInformations.hpp"
+#include "CpuInformations.hpp"
 
 #include "Exception/Assertion.hpp"
 

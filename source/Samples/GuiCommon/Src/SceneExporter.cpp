@@ -16,6 +16,8 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
+#include <Data/BinaryFile.hpp>
+
 #include <iomanip>
 
 using namespace Castor3D;

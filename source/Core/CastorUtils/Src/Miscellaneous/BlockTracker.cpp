@@ -1,6 +1,6 @@
-#include "Miscellaneous/BlockTracker.hpp"
+#include "BlockTracker.hpp"
 #include "Log/Logger.hpp"
-#include "Miscellaneous/StringUtils.hpp"
+#include "StringUtils.hpp"
 
 namespace Castor
 {

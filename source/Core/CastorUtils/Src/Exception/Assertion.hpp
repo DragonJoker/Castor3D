@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtils.hpp"
 
-#include "Exception/Exception.hpp"
+#include "Exception.hpp"
 #include "Log/Logger.hpp"
 
 #ifndef CASTOR_USE_ASSERT

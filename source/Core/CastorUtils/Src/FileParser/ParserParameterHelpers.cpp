@@ -1,4 +1,4 @@
-﻿#include "FileParser/ParserParameterHelpers.hpp"
+#include "ParserParameterHelpers.hpp"
 
 namespace Castor
 {

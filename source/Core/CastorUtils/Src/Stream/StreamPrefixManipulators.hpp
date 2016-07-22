@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-#include "Stream/StreamPrefixBuffer.hpp"
-#include "Stream/StreamPrefixBufferManager.hpp"
+#include "StreamPrefixBuffer.hpp"
+#include "StreamPrefixBufferManager.hpp"
 
 namespace Castor
 {

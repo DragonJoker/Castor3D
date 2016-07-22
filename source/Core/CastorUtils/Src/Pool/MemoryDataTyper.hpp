@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_MEMORY_DATA_TYPER_H___
 #define ___CU_MEMORY_DATA_TYPER_H___
 
-#include "Pool/PoolException.hpp"
+#include "PoolException.hpp"
 #include "Align/AlignedMemoryAllocator.hpp"
 #include "Align/NonAlignedMemoryAllocator.hpp"
 

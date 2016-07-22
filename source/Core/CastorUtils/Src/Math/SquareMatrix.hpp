@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_SQUARE_MATRIX_H___
 #define ___CASTOR_SQUARE_MATRIX_H___
 
-#include "Math/Matrix.hpp"
+#include "Matrix.hpp"
 
 namespace Castor
 {

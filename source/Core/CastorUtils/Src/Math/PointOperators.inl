@@ -1,5 +1,5 @@
-﻿#include "Math/Point.hpp"
-#include "Math/Coords.hpp"
+#include "Point.hpp"
+#include "Coords.hpp"
 #include "Design/Templates.hpp"
 
 #include <cstring>

@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_BINARY_LOADER_H___
 #define ___CASTOR_BINARY_LOADER_H___
 
-#include "Data/Loader.hpp"
-#include "Data/BinaryFile.hpp"
+#include "Loader.hpp"
+#include "BinaryFile.hpp"
 
 namespace Castor
 {

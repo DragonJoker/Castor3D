@@ -1,4 +1,4 @@
-﻿#include "Graphics/CubeBox.hpp"
+#include "CubeBox.hpp"
 
 namespace Castor
 {

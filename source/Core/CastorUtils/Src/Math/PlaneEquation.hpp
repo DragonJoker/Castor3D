@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_PLANE_EQUATION_H___
 #define ___CASTOR_PLANE_EQUATION_H___
 
-#include "Math/Line3D.hpp"
+#include "Line3D.hpp"
 
 namespace Castor
 {

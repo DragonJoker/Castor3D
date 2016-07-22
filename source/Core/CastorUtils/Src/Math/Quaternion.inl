@@ -1,4 +1,4 @@
-#include "Math/TransformationMatrix.hpp"
+#include "TransformationMatrix.hpp"
 
 namespace Castor
 {

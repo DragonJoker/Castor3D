@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_BLOCK_TIMER___
 #define ___CASTOR_BLOCK_TIMER___
 
-#include "Miscellaneous/PreciseTimer.hpp"
+#include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
 namespace Castor

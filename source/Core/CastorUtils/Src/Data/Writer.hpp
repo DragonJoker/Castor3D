@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_WRITER_H___
 #define ___CASTOR_WRITER_H___
 
-#include "Data/File.hpp"
-#include "Data/LoaderException.hpp"
+#include "File.hpp"
+#include "LoaderException.hpp"
 
 namespace Castor
 {

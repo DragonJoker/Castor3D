@@ -1,5 +1,5 @@
-﻿#include "Graphics/PixelFormat.hpp"
-#include "Graphics/PixelBuffer.hpp"
+#include "PixelFormat.hpp"
+#include "PixelBuffer.hpp"
 
 namespace Castor
 {

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_PARSER_PARAMETER_H___
 #define ___CASTOR_PARSER_PARAMETER_H___
 
-#include "FileParser/ParserParameterHelpers.hpp"
+#include "ParserParameterHelpers.hpp"
 
 #include "Graphics/Colour.hpp"
 #include "Data/Path.hpp"

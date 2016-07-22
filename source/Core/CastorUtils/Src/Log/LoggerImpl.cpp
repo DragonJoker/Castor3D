@@ -1,7 +1,7 @@
-#include "Log/LoggerImpl.hpp"
+#include "LoggerImpl.hpp"
 
-#include "Log/LoggerConsole.hpp"
-#include "Log/Logger.hpp"
+#include "LoggerConsole.hpp"
+#include "Logger.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Data/TextFile.hpp"
 #include "Miscellaneous/Utils.hpp"

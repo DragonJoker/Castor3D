@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_PIXEL_BUFFER_BASE_H___
 #define ___CASTOR_PIXEL_BUFFER_BASE_H___
 
-#include "Graphics/Pixel.hpp"
-#include "Graphics/Size.hpp"
-#include "Graphics/Position.hpp"
+#include "Pixel.hpp"
+#include "Size.hpp"
+#include "Position.hpp"
 
 namespace Castor
 {

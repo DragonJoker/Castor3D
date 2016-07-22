@@ -1,6 +1,6 @@
-﻿#include "FileParser/ParserParameterTypeException.hpp"
+#include "ParserParameterTypeException.hpp"
 
-#include "FileParser/ParserParameterHelpers.hpp"
+#include "ParserParameterHelpers.hpp"
 
 #include "Miscellaneous/StringUtils.hpp"
 

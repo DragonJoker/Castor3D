@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_FACTORY_H___
 #define ___CASTOR_FACTORY_H___
 
-#include "Design/NonCopyable.hpp"
+#include "NonCopyable.hpp"
 #include "Exception/Exception.hpp"
 
 #include <type_traits>

@@ -1,4 +1,4 @@
-﻿#include "FileParser/FileParserContext.hpp"
+#include "FileParserContext.hpp"
 
 namespace Castor
 {

@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Math/Point.hpp"
 #include "Data/TextLoader.hpp"
 #include "Data/TextWriter.hpp"
-#include "Graphics/ColourComponent.hpp"
+#include "ColourComponent.hpp"
 
 #undef RGB
 

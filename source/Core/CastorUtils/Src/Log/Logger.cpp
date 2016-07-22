@@ -1,9 +1,9 @@
 #include "CastorUtilsPch.hpp"
 
-#include "Log/Logger.hpp"
+#include "Logger.hpp"
 #include "Data/File.hpp"
 
-#include "Log/LoggerImpl.hpp"
+#include "LoggerImpl.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Exception.hpp"
 

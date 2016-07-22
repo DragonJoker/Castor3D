@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PIXEL_H___
 
 #include "Math/Point.hpp"
-#include "Graphics/PixelFormat.hpp"
+#include "PixelFormat.hpp"
 
 namespace Castor
 {

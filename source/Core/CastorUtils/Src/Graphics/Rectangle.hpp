@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Rectangle___
 #define ___Rectangle___
 
-#include "Graphics/Position.hpp"
-#include "Graphics/Size.hpp"
+#include "Position.hpp"
+#include "Size.hpp"
 
 namespace Castor
 {

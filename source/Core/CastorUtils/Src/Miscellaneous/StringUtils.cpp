@@ -1,4 +1,4 @@
-﻿#include "Miscellaneous/StringUtils.hpp"
+#include "StringUtils.hpp"
 
 #include "Exception/Exception.hpp"
 

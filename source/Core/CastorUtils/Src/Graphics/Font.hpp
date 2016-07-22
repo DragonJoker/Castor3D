@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Data/TextWriter.hpp"
 #include "Design/Collection.hpp"
 #include "Math/Point.hpp"
-#include "Graphics/Glyph.hpp"
+#include "Glyph.hpp"
 
 namespace Castor
 {

@@ -21,8 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Design/Resource.hpp"
 #include "Data/BinaryLoader.hpp"
 #include "Data/BinaryWriter.hpp"
-#include "Graphics/Colour.hpp"
-#include "Graphics/PixelBuffer.hpp"
+#include "Colour.hpp"
+#include "PixelBuffer.hpp"
 
 namespace Castor
 {

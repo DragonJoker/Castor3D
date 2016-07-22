@@ -18,11 +18,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_OBJECT_POOL_H___
 #define ___CU_OBJECT_POOL_H___
 
-#include "Pool/MemoryDataTyper.hpp"
-#include "Pool/FixedGrowingSizeMarkedMemoryData.hpp"
-#include "Pool/FixedGrowingSizeMemoryData.hpp"
-#include "Pool/FixedSizeMarkedMemoryData.hpp"
-#include "Pool/FixedSizeMemoryData.hpp"
+#include "MemoryDataTyper.hpp"
+#include "FixedGrowingSizeMarkedMemoryData.hpp"
+#include "FixedGrowingSizeMemoryData.hpp"
+#include "FixedSizeMarkedMemoryData.hpp"
+#include "FixedSizeMemoryData.hpp"
 
 namespace Castor
 {

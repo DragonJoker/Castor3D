@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtils.hpp"
 #include "Exception/Assertion.hpp"
-#include "Math/Point.hpp"
+#include "Point.hpp"
 
 namespace Castor
 {

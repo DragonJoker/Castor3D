@@ -1,6 +1,6 @@
-#include "Graphics/ImageCache.hpp"
+#include "ImageCache.hpp"
 
-#include "Graphics/Image.hpp"
+#include "Image.hpp"
 #include "Log/Logger.hpp"
 
 #if defined( CreateFont )

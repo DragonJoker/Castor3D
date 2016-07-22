@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,8 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_GLYPH_H___
 
 #include "Design/Resource.hpp"
-#include "Graphics/Position.hpp"
-#include "Graphics/Size.hpp"
+#include "Position.hpp"
+#include "Size.hpp"
 
 namespace Castor
 {

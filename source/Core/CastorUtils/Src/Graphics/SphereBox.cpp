@@ -1,5 +1,5 @@
-﻿#include "Graphics/SphereBox.hpp"
-#include "Graphics/CubeBox.hpp"
+#include "SphereBox.hpp"
+#include "CubeBox.hpp"
 
 namespace Castor
 {

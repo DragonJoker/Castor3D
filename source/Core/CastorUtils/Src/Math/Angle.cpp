@@ -1,4 +1,4 @@
-﻿#include "Math/Angle.hpp"
+#include "Angle.hpp"
 
 #include <cmath>
 

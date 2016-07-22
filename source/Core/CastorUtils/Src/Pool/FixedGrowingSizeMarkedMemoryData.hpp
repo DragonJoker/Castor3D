@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_FIXED_GROWING_SIZE_MARKED_MEMORY_DATA_H___
 #define ___CU_FIXED_GROWING_SIZE_MARKED_MEMORY_DATA_H___
 
-#include "Pool/MemoryDataTyper.hpp"
+#include "MemoryDataTyper.hpp"
 
 #include <algorithm>
 #include <cstddef>

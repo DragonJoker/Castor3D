@@ -1,6 +1,6 @@
-﻿#include "Graphics/Image.hpp"
+#include "Image.hpp"
 #include "Data/Path.hpp"
-#include "Graphics/Rectangle.hpp"
+#include "Rectangle.hpp"
 #include "Log/Logger.hpp"
 
 extern "C"

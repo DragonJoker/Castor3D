@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_UNIQUE_OBJECT_POOL_H___
 #define ___CU_UNIQUE_OBJECT_POOL_H___
 
-#include "Pool/ObjectPool.hpp"
+#include "ObjectPool.hpp"
 
 namespace Castor
 {

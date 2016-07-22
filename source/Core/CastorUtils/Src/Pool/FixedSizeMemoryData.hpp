@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_FIXED_SIZE_MEMORY_DATA_H___
 #define ___CU_FIXED_SIZE_MEMORY_DATA_H___
 
-#include "Pool/MemoryDataTyper.hpp"
+#include "MemoryDataTyper.hpp"
 
 #include <cstddef>
 

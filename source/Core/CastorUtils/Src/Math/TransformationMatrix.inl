@@ -1,4 +1,4 @@
-#include "Math/Quaternion.hpp"
+#include "Quaternion.hpp"
 
 namespace Castor
 {

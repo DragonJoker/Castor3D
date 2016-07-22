@@ -1,6 +1,6 @@
-#include "Miscellaneous/Debug.hpp"
+#include "Debug.hpp"
 
-#include "Miscellaneous/StringUtils.hpp"
+#include "StringUtils.hpp"
 
 #if !defined( NDEBUG )
 #	if !defined( _WIN32 )

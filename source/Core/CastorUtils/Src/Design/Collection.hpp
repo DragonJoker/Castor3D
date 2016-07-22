@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Config/MultiThreadConfig.hpp"
 #include "Config/SmartPtr.hpp"
-#include "Design/Templates.hpp"
-#include "Design/NonCopyable.hpp"
+#include "Templates.hpp"
+#include "NonCopyable.hpp"
 #include "Exception/Assertion.hpp"
 
 namespace Castor

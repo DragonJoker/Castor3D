@@ -1,4 +1,4 @@
-﻿#include "Graphics/Colour.hpp"
+#include "Colour.hpp"
 #include "Data/BinaryFile.hpp"
 #include "Data/TextFile.hpp"
 #include "Math/Math.hpp"

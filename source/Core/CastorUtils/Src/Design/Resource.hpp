@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_RESOURCE_H___
 #define ___CASTOR_RESOURCE_H___
 
-#include "Design/Collection.hpp"
-#include "Design/Named.hpp"
+#include "Collection.hpp"
+#include "Named.hpp"
 
 namespace Castor
 {

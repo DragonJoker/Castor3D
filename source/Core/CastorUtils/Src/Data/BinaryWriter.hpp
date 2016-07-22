@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_BINARY_WRITER_H___
 #define ___CASTOR_BINARY_WRITER_H___
 
-#include "Data/Writer.hpp"
-#include "Data/BinaryFile.hpp"
+#include "Writer.hpp"
+#include "BinaryFile.hpp"
 
 namespace Castor
 {

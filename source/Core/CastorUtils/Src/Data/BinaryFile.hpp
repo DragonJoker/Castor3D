@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_BINARY_FILE___
 #define ___CASTOR_BINARY_FILE___
 
-#include "Data/File.hpp"
+#include "File.hpp"
 
 namespace Castor
 {

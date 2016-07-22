@@ -20,8 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsPrerequisites.hpp"
 
-#include <ctime>
-
 namespace Castor
 {
 	/*!

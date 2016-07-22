@@ -1,6 +1,6 @@
-#include "Graphics/FontCache.hpp"
+#include "FontCache.hpp"
 
-#include "Graphics/Font.hpp"
+#include "Font.hpp"
 #include "Log/Logger.hpp"
 
 #if defined( CreateFont )

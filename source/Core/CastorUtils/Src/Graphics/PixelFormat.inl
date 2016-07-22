@@ -1,6 +1,6 @@
 #include <emmintrin.h>
 #include <cstring>
-#include "Graphics/UnsupportedFormatException.hpp"
+#include "UnsupportedFormatException.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 
 #if defined( max )

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_TEXT_WRITER_H___
 #define ___CASTOR_TEXT_WRITER_H___
 
-#include "Data/Writer.hpp"
-#include "Data/TextFile.hpp"
+#include "Writer.hpp"
+#include "TextFile.hpp"
 
 namespace Castor
 {

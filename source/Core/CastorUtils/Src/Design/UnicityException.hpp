@@ -19,9 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_UNICITY_EXCEPTION___
 
 #include "Exception/Exception.hpp"
-#include "Design/Resource.hpp"
-#include "Data/TextFile.hpp"
-#include "Data/BinaryFile.hpp"
 
 namespace Castor
 {

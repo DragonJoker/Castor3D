@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
 #define ___CU_ALIGNED_MEMORY_ALLOCATOR_H___
 
-#include "Align/Aligned.hpp"
+#include "Aligned.hpp"
 
 namespace Castor
 {

@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_UNIQUE_H___
 #define ___CASTOR_UNIQUE_H___
 
-#include "Design/UnicityException.hpp"
-#include "Design/NonCopyable.hpp"
+#include "UnicityException.hpp"
+#include "NonCopyable.hpp"
 
 namespace Castor
 {

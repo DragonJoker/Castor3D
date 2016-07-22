@@ -1,8 +1,8 @@
 #include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
 #include "Graphics/PixelFormat.hpp"
-#include "FileParser/FileParserContext.hpp"
-#include "FileParser/ParserParameterTypeException.hpp"
+#include "FileParserContext.hpp"
+#include "ParserParameterTypeException.hpp"
 
 namespace Castor
 {

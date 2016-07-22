@@ -11,7 +11,7 @@
 
 #include <iomanip>
 
-#include "Log/LoggerConsole.hpp"
+#include "LoggerConsole.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 
 namespace Castor

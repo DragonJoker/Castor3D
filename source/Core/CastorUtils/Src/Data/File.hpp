@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <fstream>
 #include "CastorUtils.hpp"
-#include "Data/Path.hpp"
+#include "Path.hpp"
 #include "Exception/Exception.hpp"
 #include "Exception/Assertion.hpp"
 

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_MULTITHREAD_CONFIG_H___
 #define ___CASTOR_MULTITHREAD_CONFIG_H___
 
-#include "Config/Macros.hpp"
+#include "Macros.hpp"
 
 #include <thread>
 #include <mutex>
