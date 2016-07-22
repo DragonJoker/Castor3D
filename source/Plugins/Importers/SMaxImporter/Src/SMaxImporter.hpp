@@ -32,7 +32,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 #endif
 
-namespace SMax
+namespace C3dSMax
 {
 	typedef enum eSMAX_CHUNK
 	{
@@ -658,18 +658,13 @@ namespace SMax
 			unsigned long m_ulBytesRead;
 		};
 
-	private:
-		Castor::BinaryFile * m_pFile;
-		std::vector< float > m_arrayTexVerts;
-		int m_iNumOfMaterials;
-		std::size_t m_uiNbVertex;
-		bool m_bIndicesFound;
-
 	public:
 		/**
 		 * Constructor
 		 */
-		SMaxImporter( Castor3D::Engine & p_pEngine );
+		SMaxImporter( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr	DoImportScene();
@@ -688,6 +683,13 @@ namespace SMax
 		void DoReadObjectMaterial( Castor3D::Scene & p_scene, SMaxChunk * p_pChunk, Castor3D::SubmeshSPtr p_pSubmesh );
 		void DoDiscardChunk( SMaxChunk * p_pChunk );
 		bool DoIsValidChunk( SMaxChunk * p_pChunk, SMaxChunk * p_pParent );
+
+	private:
+		Castor::BinaryFile * m_pFile;
+		std::vector< float > m_arrayTexVerts;
+		int m_iNumOfMaterials;
+		std::size_t m_uiNbVertex;
+		bool m_bIndicesFound;
 	};
 }
 

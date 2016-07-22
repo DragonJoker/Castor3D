@@ -40,22 +40,23 @@ C3D_Ogre_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::E
 	return l_extensions;
 }
 
-C3D_Ogre_API void Create( Castor3D::Engine * p_engine, Castor3D::ImporterPlugin * p_plugin )
-{
-	Castor3D::ImporterSPtr l_pImporter = std::make_shared< C3dOgre::OgreImporter >( *p_engine );
-	p_plugin->AttachImporter( l_pImporter );
-}
-
-C3D_Ogre_API void Destroy( Castor3D::ImporterPlugin * p_plugin )
-{
-	p_plugin->DetachImporter();
-}
-
 C3D_Ogre_API void OnLoad( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &C3dOgre::OgreImporter::Create );
+	}
 }
 
 C3D_Ogre_API void OnUnload( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+	}
 }
 

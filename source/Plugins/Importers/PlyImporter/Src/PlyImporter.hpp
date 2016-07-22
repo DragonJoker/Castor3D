@@ -30,16 +30,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #pragma warning( pop )
 
-#ifndef _WIN32
-#	define C3D_Ply_API
-#else
-#	ifdef PlyImporter_EXPORTS
-#		define C3D_Ply_API __declspec(dllexport)
-#	else
-#		define C3D_Ply_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace C3dPly
 {
 	//! PLY file importer
@@ -55,7 +45,9 @@ namespace C3dPly
 		/**
 		 * Constructor
 		 */
-		PlyImporter( Castor3D::Engine & p_pEngine );
+		PlyImporter( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

@@ -577,9 +577,6 @@ namespace Castor3D
 	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
 	class CacheView;
 
-	class TechniqueFactory;
-	DECLARE_SMART_PTR( TechniqueFactory );
-
 	//! real array
 	DECLARE_VECTOR( real, Real );
 	//! RenderWindow pointer array

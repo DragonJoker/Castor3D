@@ -12,8 +12,8 @@ namespace Castor3D
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
 	static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 
-	RenderLoopSync::RenderLoopSync( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
-		: RenderLoop( p_engine, p_renderSystem, p_wantedFPS )
+	RenderLoopSync::RenderLoopSync( Engine & p_engine, uint32_t p_wantedFPS )
+		: RenderLoop( p_engine, p_wantedFPS )
 		, m_active( true )
 	{
 	}
@@ -21,7 +21,7 @@ namespace Castor3D
 	RenderLoopSync::~RenderLoopSync()
 	{
 		Cleanup();
-		m_renderSystem->Cleanup();
+		m_renderSystem.Cleanup();
 	}
 
 	void RenderLoopSync::DoStartRendering()
@@ -76,7 +76,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			m_renderSystem->SetMainContext( l_return );
+			m_renderSystem.SetMainContext( l_return );
 		}
 
 		return l_return;

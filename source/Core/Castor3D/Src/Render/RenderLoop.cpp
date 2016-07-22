@@ -25,11 +25,11 @@ namespace Castor3D
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 	static const char * C3D_UNKNOWN_EXCEPTION = "Unknown exception";
 
-	RenderLoop::RenderLoop( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
+	RenderLoop::RenderLoop( Engine & p_engine, uint32_t p_wantedFPS )
 		: OwnedBy< Engine >( p_engine )
 		, m_wantedFPS( p_wantedFPS )
 		, m_frameTime( 1000 / p_wantedFPS )
-		, m_renderSystem( p_renderSystem )
+		, m_renderSystem( *p_engine.GetRenderSystem() )
 		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
 	{
 		m_debugOverlays->Initialise( GetEngine()->GetOverlayCache() );
@@ -42,15 +42,15 @@ namespace Castor3D
 
 	void RenderLoop::Cleanup()
 	{
-		if (m_renderSystem->GetMainContext ())
+		if ( m_renderSystem.GetMainContext() )
 		{
-			m_renderSystem->GetMainContext()->SetCurrent ();
+			m_renderSystem.GetMainContext()->SetCurrent();
 			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
 				p_listener.FireEvents( eEVENT_TYPE_PRE_RENDER );
 			} );
 			GetEngine()->GetOverlayCache().UpdateRenderer();
-			m_renderSystem->GetMainContext()->EndCurrent();
+			m_renderSystem.GetMainContext()->EndCurrent();
 		}
 
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
@@ -96,7 +96,7 @@ namespace Castor3D
 
 	void RenderLoop::CreateContext( RenderWindow & p_window )
 	{
-		if ( !m_renderSystem->GetMainContext() )
+		if ( !m_renderSystem.GetMainContext() )
 		{
 			DoCreateMainContext( p_window );
 		}
@@ -131,7 +131,7 @@ namespace Castor3D
 
 	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
-		m_renderSystem->GetMainContext()->SetCurrent();
+		m_renderSystem.GetMainContext()->SetCurrent();
 
 		try
 		{
@@ -156,7 +156,7 @@ namespace Castor3D
 			Logger::LogError( C3D_UNKNOWN_EXCEPTION );
 		}
 
-		m_renderSystem->GetMainContext()->EndCurrent();
+		m_renderSystem.GetMainContext()->EndCurrent();
 		{
 			GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 			{
@@ -181,7 +181,7 @@ namespace Castor3D
 
 	void RenderLoop::DoRenderFrame()
 	{
-		if ( m_renderSystem->GetMainContext() )
+		if ( m_renderSystem.GetMainContext() )
 		{
 			uint32_t l_vertices = 0;
 			uint32_t l_faces = 0;
@@ -196,7 +196,7 @@ namespace Castor3D
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_context = m_renderSystem->CreateContext();
+		ContextSPtr l_context = m_renderSystem.CreateContext();
 
 		if ( l_context && l_context->Initialise( &p_window ) )
 		{

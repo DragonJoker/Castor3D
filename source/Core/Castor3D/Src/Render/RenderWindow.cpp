@@ -182,15 +182,15 @@ namespace Castor3D
 	{
 		if ( m_initialised )
 		{
-			Engine * l_pEngine = GetEngine();
+			Engine * l_engine = GetEngine();
 			RenderTargetSPtr l_target = GetRenderTarget();
 			m_context->SetCurrent();
 
 			if ( l_target && l_target->IsInitialised() )
 			{
-				l_pEngine->GetDefaultBlendState()->Apply();
+				l_engine->GetDefaultBlendState()->Apply();
 
-				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_pEngine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
+				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
 					DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
 					DoRender( eBUFFER_BACK_RIGHT, l_target->GetTextureREye() );

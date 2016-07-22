@@ -18,29 +18,15 @@ C3D_PnTriangles_API Castor3D::ePLUGIN_TYPE GetType()
 
 C3D_PnTriangles_API String GetName()
 {
-	return cuT( "PN-Triangles Divider" );
-}
-
-C3D_PnTriangles_API Castor3D::Subdivider * CreateDivider()
-{
-	Castor3D::Subdivider * l_return( new Subdivider() );
-	return l_return;
-}
-
-C3D_PnTriangles_API void DestroyDivider( Castor3D::Subdivider * p_pDivider )
-{
-	delete p_pDivider;
-}
-
-C3D_PnTriangles_API String GetDividerType()
-{
-	return cuT( "pn_tri" );
+	return Subdivider::Name;
 }
 
 C3D_PnTriangles_API void OnLoad( Castor3D::Engine * p_engine )
 {
+	p_engine->GetSubdividerFactory().Register( Subdivider::Type, &Subdivider::Create );
 }
 
 C3D_PnTriangles_API void OnUnload( Castor3D::Engine * p_engine )
 {
+	p_engine->GetSubdividerFactory().Unregister( Subdivider::Type );
 }

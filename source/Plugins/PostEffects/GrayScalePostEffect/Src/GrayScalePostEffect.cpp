@@ -1,6 +1,9 @@
 #include "GrayScalePostEffect.hpp"
 
+#include <BlendStateCache.hpp>
 #include <Engine.hpp>
+#include <SamplerCache.hpp>
+#include <ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>
@@ -93,7 +96,7 @@ namespace GrayScale
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache ().Add( l_name );
+			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Add( l_name );
 			m_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
 			m_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
 			m_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToBorder );
@@ -102,7 +105,7 @@ namespace GrayScale
 		}
 		else
 		{
-			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache ().Find( l_name );
+			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 	}
 

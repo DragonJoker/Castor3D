@@ -508,7 +508,7 @@ namespace Castor3D
 		Castor::Colour m_clrBlend;
 		//!\~english	The matrix mode in use berfore this unit's transformations are applied.
 		//!\~french		Le mode de matrice en cours avant l'application des transformations de cette unité.
-		eMTXMODE m_ePrevMtxMode;
+		MatrixMode m_ePrevMtxMode;
 		//!\~english	Tells mipmaps must be regenerated after each texture data change.
 		//!\~french		Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture.
 		bool m_bAutoMipmaps;

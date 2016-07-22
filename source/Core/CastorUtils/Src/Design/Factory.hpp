@@ -54,21 +54,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Factory() {}
+		Factory() = default;
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Factory() {}
-		/**
-		 *\~english
-		 *\brief		Registers all objects types
-		 *\~french
-		 *\brief		Enregistre tous les types d'objets
-		 */
-		virtual void Initialise() = 0;
+		~Factory() = default;
 		/**
 		 *\~english
 		 *\brief		Registers an object type
@@ -81,7 +74,7 @@ namespace Castor
 		 */
 		void Register( Key const & p_key, Creator p_creator )
 		{
-			m_registered.insert( std::make_pair( p_key, p_creator ) );
+			m_registered[p_key] = p_creator;
 		}
 		/**
 		 *\~english
@@ -113,6 +106,24 @@ namespace Castor
 		bool IsRegistered( Key const & p_key )
 		{
 			return m_registered.find( p_key ) != m_registered.end();
+		}
+		/**
+		 *\~english
+		 *\return		Retrieves the registered types list.
+		 *\~french
+		 *\return		La liste des types enregistrés.
+		 */
+		std::vector< Key > ListRegisteredTypes()
+		{
+			std::vector< Key > l_return;
+			l_return.reserve( m_registered.size() );
+
+			for ( auto const & l_it : m_registered )
+			{
+				l_return.push_back( l_it.first );
+			}
+
+			return l_return;
 		}
 		/**
 		 *\~english

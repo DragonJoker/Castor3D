@@ -1,6 +1,7 @@
 #include "Render/TestRenderSystem.hpp"
 
 #include <Engine.hpp>
+#include <Render/RenderSystemFactory.hpp>
 
 using namespace TestRender;
 using namespace Castor3D;
@@ -26,20 +27,12 @@ C3D_Test_API String GetName()
 	return cuT( "Test Renderer" );
 }
 
-C3D_Test_API RenderSystem * CreateRenderSystem( Engine * p_engine )
-{
-	return new TestRenderSystem( *p_engine );
-}
-
-C3D_Test_API void DestroyRenderSystem( RenderSystem * p_renderSystem )
-{
-	delete p_renderSystem;
-}
-
 C3D_Test_API void OnLoad( Castor3D::Engine * p_engine )
 {
+	p_engine->GetRenderSystemFactory().Register( TestRenderSystem::Name, TestRenderSystem::Create );
 }
 
 C3D_Test_API void OnUnload( Castor3D::Engine * p_engine )
 {
+	p_engine->GetRenderSystemFactory().Unregister( TestRenderSystem::Name );
 }

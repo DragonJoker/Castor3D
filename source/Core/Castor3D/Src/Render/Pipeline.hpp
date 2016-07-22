@@ -27,7 +27,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 10;
+	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 16;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0

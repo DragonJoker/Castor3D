@@ -27,7 +27,6 @@
 #include "Cache/CacheView.hpp"
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
-#include "Mesh/CmshImporter.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
@@ -901,40 +900,17 @@ namespace Castor3D
 		Path l_path;
 		Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
 
-		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+		auto l_extension = string::lower_case( l_pathFile.GetExtension() );
+
+		if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 		{
-			BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
-			//Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file );
+			PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 		}
 		else
 		{
-			Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
-			ImporterPluginSPtr l_pPlugin;
-			ImporterSPtr l_pImporter;
-			ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-			for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-			{
-				l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
-
-				if ( !l_pImporter && l_pPlugin )
-				{
-					l_arrayExtensions = l_pPlugin->GetExtensions();
-
-					for ( auto l_itExt : l_arrayExtensions )
-					{
-						if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
-						{
-							l_pImporter = l_pPlugin->GetImporter();
-						}
-					}
-				}
-			}
-
-			if ( l_pImporter )
-			{
-				l_parsingContext->pScene->ImportExternal( l_pathFile, *l_pImporter );
-			}
+			auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
+			l_parsingContext->pScene->ImportExternal( l_pathFile, *l_importer );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1656,44 +1632,17 @@ namespace Castor3D
 				}
 			}
 
-			Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
-			ImporterSPtr l_importer;
+			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+			auto l_extension = string::lower_case( l_pathFile.GetExtension() );
 
-			if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+			if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 			{
-				l_importer = std::make_shared< CmshImporter >( *l_pEngine );
+				PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				ImporterPluginSPtr l_pPlugin;
-				ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-				for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-				{
-					l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
-
-					if ( !l_importer && l_pPlugin )
-					{
-						l_arrayExtensions = l_pPlugin->GetExtensions();
-
-						for ( auto l_itExt : l_arrayExtensions )
-						{
-							if ( !l_importer && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
-							{
-								l_importer = l_pPlugin->GetImporter();
-							}
-						}
-					}
-				}
-			}
-
-			if ( l_importer )
-			{
+				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
 				l_parsingContext->pMesh = l_importer->ImportMesh( *l_parsingContext->pScene, l_pathFile, l_parameters, true );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
 			}
 		}
 	}
@@ -1743,39 +1692,16 @@ namespace Castor3D
 				}
 			}
 
-			Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
-			ImporterSPtr l_importer;
+			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+			auto l_extension = string::lower_case( l_pathFile.GetExtension() );
 
-			if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+			if ( !l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 			{
-				l_importer = std::make_shared< CmshImporter >( *l_pEngine );
+				PARSING_ERROR( cuT( "Importer for [" ) + l_extension + cuT( "] files is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
-				ImporterPluginSPtr l_pPlugin;
-				ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-				for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-				{
-					l_pPlugin = std::static_pointer_cast< ImporterPlugin, Plugin >( l_it.second );
-
-					if ( !l_importer && l_pPlugin )
-					{
-						l_arrayExtensions = l_pPlugin->GetExtensions();
-
-						for ( auto l_itExt : l_arrayExtensions )
-						{
-							if ( !l_importer && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
-							{
-								l_importer = l_pPlugin->GetImporter();
-							}
-						}
-					}
-				}
-			}
-
-			if ( l_importer )
-			{
+				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
 				Scene l_scene{ cuT( "MorphImport" ), *l_importer->GetEngine() };
 				MeshSPtr l_mesh = l_importer->ImportMesh( l_scene, l_pathFile, l_parameters, false );
 
@@ -1812,10 +1738,6 @@ namespace Castor3D
 					l_animation.UpdateLength();
 				}
 			}
-			else
-			{
-				PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
-			}
 		}
 	}
 	END_ATTRIBUTE()
@@ -1823,9 +1745,7 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshDivide )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
-		DividerPluginSPtr l_pPlugin;
-		Subdivider * l_pDivider = nullptr;
+		Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
 
 		if ( !l_parsingContext->pMesh )
 		{
@@ -1838,31 +1758,20 @@ namespace Castor3D
 			p_params[0]->Get( l_name );
 			p_params[1]->Get( l_count );
 
-			for ( auto l_it : l_pEngine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
+			if ( !l_engine->GetSubdividerFactory().IsRegistered( string::lower_case( l_name ) ) )
 			{
-				l_pPlugin = std::static_pointer_cast< DividerPlugin, Plugin >( l_it.second );
-
-				if ( !l_pDivider && string::lower_case( l_pPlugin->GetDividerType() ) == string::lower_case( l_name ) )
-				{
-					l_pDivider = l_pPlugin->CreateDivider();
-				}
-			}
-
-			if ( !l_pDivider )
-			{
-				PARSING_ERROR( cuT( "Divider [" ) + l_name + cuT( "] not found, make sure the corresponding plug-in is installed" ) );
+				PARSING_ERROR( cuT( "Subdivider [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			}
 			else
 			{
+				auto l_divider = l_engine->GetSubdividerFactory().Create( l_name );
 				l_parsingContext->pMesh->ComputeContainers();
 				Point3r l_ptCenter = l_parsingContext->pMesh->GetCollisionBox().GetCenter();
 
 				for ( auto l_submesh : *l_parsingContext->pMesh )
 				{
-					l_pDivider->Subdivide( l_submesh, l_count, false );
+					l_divider->Subdivide( l_submesh, l_count, false );
 				}
-
-				l_pPlugin->DestroyDivider( l_pDivider );
 			}
 		}
 	}

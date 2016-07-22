@@ -16,7 +16,7 @@
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <Ogre.h>
 #include <OgreMeshSerializer.h>
@@ -37,22 +37,26 @@ namespace C3dOgre
 	{
 	}
 
+	ImporterUPtr OgreImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< OgreImporter >( p_engine );
+	}
+
 	SceneSPtr OgreImporter::DoImportScene()
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_OGRE" ) );
 		DoImportMesh( *l_scene );
 
 		if ( m_mesh )
 		{
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node );
 
 			for ( auto && l_submesh : *m_mesh )
 			{
 				m_mesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
-			l_geometry->SetMesh( m_mesh );
+			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node, m_mesh );
 			m_mesh.reset();
 		}
 

@@ -22,6 +22,9 @@ namespace Phong
 	{
 	}
 
+	String const Subdivider::Name = cuT( "Phong Divider" );
+	String const Subdivider::Type = cuT( "phong" );
+
 	Subdivider::Subdivider()
 		: Castor3D::Subdivider()
 		, m_occurences( 1 )
@@ -31,6 +34,11 @@ namespace Phong
 	Subdivider::~Subdivider()
 	{
 		Cleanup();
+	}
+
+	SubdividerUPtr Subdivider::Create()
+	{
+		return std::make_unique< Subdivider >();
 	}
 
 	void Subdivider::Cleanup()

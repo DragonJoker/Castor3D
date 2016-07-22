@@ -33,25 +33,13 @@ namespace Lwo
 	\remark		Importe les données à partir de fichiers LWO (LightWave Object)
 	*/
 	class LwoImporter
-		:	public Castor3D::Importer
+		: public Castor3D::Importer
 	{
 	public:
-		Castor::BinaryFile * m_pFile;
-		std::vector< Castor::Point3f > m_arrayPoints;
-		bool m_bHasUv;
-		std::vector< Castor::Point2f > m_arrayUvs;
-		std::vector< std::string > m_arrayTags;
-		std::vector< SubmeshPtrStrPair > m_arraySubmeshByMatName;
-		Castor3D::SubmeshSPtr m_pSubmesh;
-		ImageVxMap m_mapImages;
-		std::string m_strName;
-		std::string m_strSource;
-		std::map< std::string, Castor3D::TextureUnitSPtr > m_mapTextures;
-		bool m_bIgnored;
-
-	public:
-		LwoImporter( Castor3D::Engine & p_pEngine );
+		LwoImporter( Castor3D::Engine & p_engine );
 		virtual ~LwoImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr	DoImportScene();
@@ -84,6 +72,20 @@ namespace Lwo
 		void DoParseVMap( stLWO_CHUNK * p_pChunk );
 		void DoParsePols( stLWO_CHUNK * p_pChunk );
 		void DoParseLayr( stLWO_CHUNK * p_pChunk );
+
+	public:
+		Castor::BinaryFile * m_pFile;
+		std::vector< Castor::Point3f > m_arrayPoints;
+		bool m_bHasUv;
+		std::vector< Castor::Point2f > m_arrayUvs;
+		std::vector< std::string > m_arrayTags;
+		std::vector< SubmeshPtrStrPair > m_arraySubmeshByMatName;
+		Castor3D::SubmeshSPtr m_pSubmesh;
+		ImageVxMap m_mapImages;
+		std::string m_strName;
+		std::string m_strSource;
+		std::map< std::string, Castor3D::TextureUnitSPtr > m_mapTextures;
+		bool m_bIgnored;
 	};
 }
 

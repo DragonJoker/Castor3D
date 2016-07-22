@@ -33,11 +33,16 @@ using namespace Castor;
 
 namespace Obj
 {
-	ObjImporter::ObjImporter( Engine & p_pEngine )
-		: Importer( p_pEngine )
-		, m_collImages( p_pEngine.GetImageCache() )
+	ObjImporter::ObjImporter( Engine & p_engine )
+		: Importer( p_engine )
+		, m_collImages( p_engine.GetImageCache() )
 		, m_pFile( nullptr )
 	{
+	}
+
+	ImporterUPtr ObjImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< ObjImporter >( p_engine );
 	}
 
 	SceneSPtr ObjImporter::DoImportScene()

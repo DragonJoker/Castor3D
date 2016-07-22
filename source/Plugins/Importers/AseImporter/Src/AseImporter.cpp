@@ -13,13 +13,18 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseImporter::AseImporter( Engine & p_pEngine )
-		:	Importer( p_pEngine )
+	AseImporter::AseImporter( Engine & p_engine )
+		: Importer( p_engine )
 	{
 	}
 
 	AseImporter::~AseImporter()
 	{
+	}
+
+	ImporterUPtr AseImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< AseImporter >( p_engine );
 	}
 
 	SceneSPtr AseImporter::DoImportScene()

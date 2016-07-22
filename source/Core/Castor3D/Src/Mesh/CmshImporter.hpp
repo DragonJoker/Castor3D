@@ -29,7 +29,7 @@ namespace Castor3D
 	\~english
 	\brief		Used to import meshes from cmsh files.
 	\~french
-	\brief		Utilisé pour importer les mqillqges depuis des fichiers cmsh.
+	\brief		Utilisé pour importer les maillages depuis des fichiers cmsh.
 	*/
 	class CmshImporter
 		: public Importer
@@ -44,6 +44,15 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur.
 		 */
 		C3D_API explicit CmshImporter( Engine & p_engine );
+		/**
+		 *\~english
+		 *\brief		Creator function.
+		 *\param[in]	p_engine	The core engine.
+		 *\~french
+		 *\brief		Fonction de création.
+		 *\param[in]	p_engine	Le moteur.
+		 */
+		static ImporterUPtr Create( Engine & p_engine );
 
 	protected:
 		/**
@@ -54,6 +63,9 @@ namespace Castor3D
 		 *\copydoc		Castor::Importer::DoImportMesh
 		 */
 		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene );
+
+	public:
+		static Castor::String const Type;
 	};
 }
 

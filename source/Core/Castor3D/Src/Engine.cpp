@@ -198,23 +198,13 @@ namespace Castor3D
 		m_listenerCache->Clear();
 		m_techniqueCache->Clear();
 
-		// Destroy the RenderSystem
+		// Destroy the RenderSystem.
 		if ( m_renderSystem )
 		{
-			auto const & l_renderers = m_pluginCache->GetRenderersList();
-			auto l_it = l_renderers.find( m_renderSystem->GetRendererType() );
-
-			if ( l_it != l_renderers.end() )
-			{
-				l_it->second->DestroyRenderSystem( m_renderSystem );
-				m_renderSystem = nullptr;
-			}
-			else
-			{
-				Logger::LogError( cuT( "RenderSystem still exists while it's plug-in doesn't exist anymore" ) );
-			}
+			m_renderSystem.reset();
 		}
 
+		// and eventually the  plug-ins.
 		m_pluginCache->Clear();
 		Image::CleanupImageLib();
 	}
@@ -259,11 +249,11 @@ namespace Castor3D
 
 		if ( p_threaded )
 		{
-			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, m_renderSystem, p_wanted );
+			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, p_wanted );
 		}
 		else
 		{
-			m_renderLoop = std::make_unique< RenderLoopSync >( *this, m_renderSystem, p_wanted );
+			m_renderLoop = std::make_unique< RenderLoopSync >( *this, p_wanted );
 		}
 
 		m_cleaned = false;
@@ -327,15 +317,8 @@ namespace Castor3D
 
 	bool Engine::LoadRenderer( String const & p_type )
 	{
-		bool l_return = false;
-		m_renderSystem = m_pluginCache->LoadRenderer( p_type );
-
-		if ( m_renderSystem )
-		{
-			l_return = true;
-		}
-
-		return l_return;
+		m_renderSystem = m_renderSystemFactory.Create( p_type, *this );
+		return m_renderSystem != nullptr;
 	}
 
 	void Engine::PostEvent( FrameEventSPtr p_event )

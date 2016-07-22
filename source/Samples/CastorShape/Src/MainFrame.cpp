@@ -243,47 +243,22 @@ namespace CastorShape
 			}
 
 			SceneSPtr l_scene;
+			auto l_engine = wxGetApp().GetCastor();
+			auto l_extension = string::lower_case( m_strFilePath.GetExtension() );
 
-			if ( string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cscn" ) || string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cbsn" ) )
+			if ( l_extension == cuT( "cscn" ) )
 			{
-				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, false );
+				RenderWindowSPtr l_window = GuiCommon::LoadScene( *l_engine, m_strFilePath, CASTOR_WANTED_FPS, false );
 
 				if ( l_window )
 				{
 					l_scene = l_window->GetScene();
 				}
 			}
-			else
+			else if ( l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 			{
-				ImporterSPtr l_pImporter;
-				ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-				for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-				{
-					if ( !l_pImporter )
-					{
-						ImporterPluginSPtr l_plugin = std::static_pointer_cast< ImporterPlugin >( l_it.second );
-
-						if ( l_plugin )
-						{
-							l_arrayExtensions = l_plugin->GetExtensions();
-
-							for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
-							{
-								if ( string::lower_case( m_strFilePath.GetExtension() ) == string::lower_case( l_itExt->first ) )
-								{
-									l_pImporter = l_plugin->GetImporter();
-								}
-							}
-						}
-					}
-				}
-
-				if ( l_pImporter )
-				{
-					bool l_return = true;
-					l_scene = l_pImporter->ImportScene( m_strFilePath, Parameters() );
-				}
+				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
+				l_scene = l_importer->ImportScene( m_strFilePath, Parameters() );
 			}
 
 			if ( l_scene )
@@ -614,6 +589,22 @@ namespace CastorShape
 			m_2dFrameHD->SetActionType( p_type );
 			m_2dFrameBG->SetActionType( p_type );
 			m_2dFrameBD->SetActionType( p_type );
+		}
+	}
+
+	void MainFrame::DoSubdivideAll( String const & p_name )
+	{
+		if ( m_selectedGeometry )
+		{
+			if ( wxGetApp().GetCastor()->GetSubdividerFactory().IsRegistered( p_name ) )
+			{
+				auto l_divider = wxGetApp().GetCastor()->GetSubdividerFactory().Create( p_name );
+
+				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
+				{
+					l_divider->Subdivide( l_submesh, 1, true );
+				}
+			}
 		}
 	}
 
@@ -1289,69 +1280,13 @@ namespace CastorShape
 
 	void MainFrame::OnSubdivideAllPNTriangles( wxCommandEvent & p_event )
 	{
-		if ( m_selectedGeometry )
-		{
-			Subdivider * l_divider = NULL;
-			DividerPluginSPtr l_plugin;
-
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
-			{
-				if ( !l_divider )
-				{
-					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
-
-					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
-					{
-						l_divider = l_plugin->CreateDivider();
-					}
-				}
-			}
-
-			if ( l_divider )
-			{
-				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
-				{
-					l_divider->Subdivide( l_submesh, 1, true );
-				}
-
-				l_plugin->DestroyDivider( l_divider );
-			}
-		}
-
+		DoSubdivideAll( cuT( "loop" ) );
 		p_event.Skip();
 	}
 
 	void MainFrame::OnSubdivideAllLoop( wxCommandEvent & p_event )
 	{
-		if ( m_selectedGeometry )
-		{
-			Subdivider * l_divider = NULL;
-			DividerPluginSPtr l_plugin;
-
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
-			{
-				if ( !l_divider )
-				{
-					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
-
-					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
-					{
-						l_divider = l_plugin->CreateDivider();
-					}
-				}
-			}
-
-			if ( l_divider )
-			{
-				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
-				{
-					l_divider->Subdivide( l_submesh, 1, true );
-				}
-
-				l_plugin->DestroyDivider( l_divider );
-			}
-		}
-
+		DoSubdivideAll( cuT( "pn_tri" ) );
 		p_event.Skip();
 	}
 

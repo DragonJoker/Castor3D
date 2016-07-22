@@ -76,13 +76,28 @@ namespace PnTriangles
 	public:
 		Subdivider();
 		virtual ~Subdivider();
-		virtual void Cleanup();
-		virtual void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
+
+		static Castor3D::SubdividerUPtr Create();
+		/**
+		 *\copydoc		Castor3D::Subdivider::Cleanup
+		 */
+		void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::Subdivider::Subdivide
+		 */
+		void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
 
 	private:
-		virtual void DoSubdivide();
+		/**
+		 *\copydoc		Castor3D::Subdivider::DoSubdivide
+		 */
+		void DoSubdivide()override;
 		void DoComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
 		Castor3D::BufferElementGroupSPtr DoComputePoint( double u, double v, Patch const & p_patch );
+
+	public:
+		static Castor::String const Name;
+		static Castor::String const Type;
 
 	private:
 		int m_occurences;

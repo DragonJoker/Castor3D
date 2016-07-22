@@ -7,7 +7,8 @@ namespace GLSL
 {
 	//*****************************************************************************************
 
-	void LightingModelFactory::Initialise()
+	LightingModelFactory::LightingModelFactory()
+		: Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >{}
 	{
 		Register( PhongLightingModel::Name, &PhongLightingModel::Create );
 	}
@@ -104,7 +105,6 @@ namespace GLSL
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
-		m_lightingFactory.Initialise();
 		*this << GLSL::Version() << Endl();
 	}
 
@@ -116,7 +116,6 @@ namespace GLSL
 		, m_config( p_rhs.m_config )
 	{
 		m_stream << p_rhs.m_stream.str();
-		m_lightingFactory.Initialise();
 	}
 
 	GlslWriter & GlslWriter::operator=( GlslWriter const & p_rhs )

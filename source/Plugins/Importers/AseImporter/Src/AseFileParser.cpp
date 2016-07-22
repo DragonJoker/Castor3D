@@ -36,9 +36,9 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseFileParser::AseFileParser( Engine * p_pEngine, AseImporter & p_importer, Castor3D::Scene & p_scene )
+	AseFileParser::AseFileParser( Engine * p_engine, AseImporter & p_importer, Castor3D::Scene & p_scene )
 		: FileParser( eASE_SECTION_ROOT )
-		, m_engine( p_pEngine )
+		, m_engine( p_engine )
 		, m_importer( p_importer )
 		, m_scene( p_scene )
 	{

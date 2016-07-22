@@ -32,79 +32,75 @@ namespace GlRender
 	public:
 		GlRenderSystem( Castor3D::Engine & p_engine );
 		virtual ~GlRenderSystem();
+
+		static Castor3D::RenderSystemUPtr Create( Castor3D::Engine & p_engine );
+
 		//!< Initialize OpenGL Extensions
 		bool InitOpenGlExtensions();
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateContext
 		 */
-		virtual Castor3D::ContextSPtr CreateContext();
+		Castor3D::ContextSPtr CreateContext()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program );
+		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
 		 */
-		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();
+		Castor3D::DepthStencilStateSPtr CreateDepthStencilState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateRasteriserState
 		 */
-		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
+		Castor3D::RasteriserStateSPtr CreateRasteriserState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateBlendState
 		 */
-		virtual Castor3D::BlendStateSPtr CreateBlendState();
+		Castor3D::BlendStateSPtr CreateBlendState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
-		virtual Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name );
+		Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
 		 */
-		virtual Castor3D::ShaderProgramSPtr CreateShaderProgram();
+		Castor3D::ShaderProgramSPtr CreateShaderProgram()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
 		 */
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_buffer );
+		std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer< uint32_t > * p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateVertexBuffer
 		 */
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer );
+		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		virtual Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
-		virtual Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
 		 */
-		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
+		Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
 		 */
-		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer();
+		Castor3D::FrameBufferSPtr CreateFrameBuffer()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateBackBuffers
 		 */
-		virtual Castor3D::BackBuffersSPtr CreateBackBuffers();
+		Castor3D::BackBuffersSPtr CreateBackBuffers()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateQuery
 		 */
-		virtual Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type );
+		Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateViewport
 		 */
-		virtual Castor3D::IViewportImplUPtr CreateViewport( Castor3D::Viewport & p_viewport );
-		/**
-		 *\copydoc		Castor3D::RenderSystem::UseVertexBufferObjects
-		 */
-		inline bool UseVertexBufferObjects()
-		{
-			return m_useVertexBufferObjects;
-		}
+		Castor3D::IViewportImplUPtr CreateViewport( Castor3D::Viewport & p_viewport )override;
 
 		inline bool IsExtensionInit()
 		{
@@ -136,11 +132,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::DoInitialise
 		 */
-		virtual void DoInitialise();
+		void DoInitialise()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 
 	public:
 		static Castor::String Name;

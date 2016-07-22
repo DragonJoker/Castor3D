@@ -33,32 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique d'eefets post rendu.
 	*/
-	class PostEffectFactory
-		: public Castor::Factory< PostEffect, Castor::String, std::shared_ptr< PostEffect >, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		C3D_API PostEffectFactory();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API ~PostEffectFactory();
-		/**
-		 *\~english
-		 *\brief		Registers all objects types
-		 *\~french
-		 *\brief		Enregistre tous les types d'objets
-		 */
-		C3D_API void Initialise()override;
-	};
+	using PostEffectFactory = Castor::Factory< PostEffect, Castor::String, std::shared_ptr< PostEffect >, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 }
 
 #endif

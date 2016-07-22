@@ -49,16 +49,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <fbxsdk.h>
 
-#ifndef _WIN32
-#	define C3D_Fbx_API
-#else
-#	ifdef FbxImporter_EXPORTS
-#		define C3D_Fbx_API __declspec(dllexport)
-#	else
-#		define C3D_Fbx_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace C3dFbx
 {
 	/*!
@@ -75,6 +65,8 @@ namespace C3dFbx
 	public:
 		FbxSdkImporter( Castor3D::Engine & p_engine );
 		~FbxSdkImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

@@ -20,6 +20,9 @@ namespace Loop
 		}
 	}
 
+	String const Subdivider::Name = cuT( "Loop Divider" );
+	String const Subdivider::Type = cuT( "loop" );
+
 	Subdivider::Subdivider()
 		:	Castor3D::Subdivider()
 	{
@@ -28,6 +31,11 @@ namespace Loop
 	Subdivider::~Subdivider()
 	{
 		Cleanup();
+	}
+
+	Castor3D::SubdividerUPtr Subdivider::Create()
+	{
+		return std::make_unique< Subdivider >();
 	}
 
 	void Subdivider::DoInitialise()

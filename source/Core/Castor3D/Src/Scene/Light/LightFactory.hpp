@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		La fabrique de sources lumineuse
 	*/
 	class LightFactory
-		:	public Castor::Factory< LightCategory, eLIGHT_TYPE >
+		: public Castor::Factory< LightCategory, eLIGHT_TYPE >
 	{
 	public:
 		/**
@@ -50,14 +50,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~LightFactory();
-		/**
-		 *\~english
-		 *\brief		Registers all objects types
-		 *\~french
-		 *\brief		Enregistre tous les types d'objets
-		 */
-		C3D_API virtual void Initialise();
+		C3D_API ~LightFactory();
 	};
 }
 

@@ -25,51 +25,6 @@
 using namespace Castor3D;
 using namespace Castor;
 
-//*************************************************************************************************
-
-C3D_Fbx_API void GetRequiredVersion( Version & p_version )
-{
-	p_version = Version();
-}
-
-C3D_Fbx_API ePLUGIN_TYPE GetType()
-{
-	return ePLUGIN_TYPE_IMPORTER;
-}
-
-C3D_Fbx_API String GetName()
-{
-	return cuT( "FBX Importer" );
-}
-
-C3D_Fbx_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
-{
-	ImporterPlugin::ExtensionArray l_extensions;
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "FBX" ), cuT( "Autodesk FBX" ) ) );
-	return l_extensions;
-}
-
-C3D_Fbx_API void Create( Engine * p_engine, ImporterPlugin * p_plugin )
-{
-	ImporterSPtr l_pImporter = std::make_shared< C3dFbx::FbxSdkImporter >( *p_engine );
-	p_plugin->AttachImporter( l_pImporter );
-}
-
-C3D_Fbx_API void Destroy( ImporterPlugin * p_plugin )
-{
-	p_plugin->DetachImporter();
-}
-
-C3D_Fbx_API void OnLoad( Castor3D::Engine * p_engine )
-{
-}
-
-C3D_Fbx_API void OnUnload( Castor3D::Engine * p_engine )
-{
-}
-
-//*************************************************************************************************
-
 namespace C3dFbx
 {
 	namespace
@@ -400,6 +355,11 @@ namespace C3dFbx
 
 	FbxSdkImporter::~FbxSdkImporter()
 	{
+	}
+
+	ImporterUPtr FbxSdkImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< FbxSdkImporter >( p_engine );
 	}
 
 	SceneSPtr FbxSdkImporter::DoImportScene()

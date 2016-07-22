@@ -41,12 +41,8 @@ namespace Castor3D
 	private:
 		friend class Plugin;
 		friend class Engine;
-		typedef void CreateImporterFunction( Engine * p_engine, ImporterPlugin * p_pPlugin );
-		typedef void DestroyImporterFunction( ImporterPlugin * p_pPlugin );
 		typedef ExtensionArray GetExtensionFunction( Engine * p_engine );
 
-		typedef CreateImporterFunction * PCreateImporterFunction;
-		typedef DestroyImporterFunction * PDestroyImporterFunction;
 		typedef GetExtensionFunction * PGetExtensionFunction;
 
 	public:
@@ -70,42 +66,6 @@ namespace Castor3D
 		C3D_API virtual ~ImporterPlugin();
 		/**
 		 *\~english
-		 *\brief		Attaches the plug-in to the given Importer
-		 *\param[in]	p_pImporter	The Importer
-		 *\~french
-		 *\brief		Attache le plug-in à l'Importer donné
-		 *\param[in]	p_pImporter	L'Importer
-		 */
-		inline void AttachImporter( ImporterSPtr p_pImporter )
-		{
-			m_pImporter = p_pImporter;
-		}
-		/**
-		 *\~english
-		 *\brief		Detaches the plug-in from the attached Importer
-		 *\return		The attached Importer
-		 *\~french
-		 *\brief		Detache le plug-in de l'Importer attaché
-		 *\return		L'Importer attaché
-		 */
-		inline void DetachImporter()
-		{
-			m_pImporter.reset();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the attached Importer
-		 *\return		The attached Importer
-		 *\~french
-		 *\brief		Récupère l'Importer attaché
-		 *\return		L'Importer attaché
-		 */
-		inline ImporterSPtr GetImporter()
-		{
-			return m_pImporter;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the supported file extensions array
 		 *\return		The supported extensions array
 		 *\~french
@@ -115,10 +75,7 @@ namespace Castor3D
 		C3D_API ExtensionArray GetExtensions();
 
 	private:
-		PCreateImporterFunction m_pfnCreateImporter;
-		PDestroyImporterFunction m_pfnDestroyImporter;
 		PGetExtensionFunction m_pfnGetExtension;
-		ImporterSPtr m_pImporter;
 	};
 }
 

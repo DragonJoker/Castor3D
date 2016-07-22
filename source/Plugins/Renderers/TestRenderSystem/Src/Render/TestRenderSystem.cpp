@@ -38,6 +38,11 @@ namespace TestRender
 	{
 	}
 
+	RenderSystemUPtr TestRenderSystem::Create( Engine & p_engine )
+	{
+		return std::make_unique< TestRenderSystem >( p_engine );
+	}
+
 	ContextSPtr TestRenderSystem::CreateContext()
 	{
 		return std::make_shared< TestContext >( *this );
@@ -116,11 +121,6 @@ namespace TestRender
 	IViewportImplUPtr TestRenderSystem::CreateViewport( Viewport & p_viewport )
 	{
 		return std::make_unique< TestViewport >( *this, p_viewport );
-	}
-
-	bool TestRenderSystem::UseVertexBufferObjects()
-	{
-		return false;
 	}
 
 	void TestRenderSystem::DoInitialise()

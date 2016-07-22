@@ -30,8 +30,8 @@ using namespace Castor;
 
 namespace Lwo
 {
-	LwoImporter::LwoImporter( Castor3D::Engine & p_pEngine )
-		: Importer( p_pEngine )
+	LwoImporter::LwoImporter( Castor3D::Engine & p_engine )
+		: Importer( p_engine )
 		, m_pFile( NULL )
 		, m_bIgnored( false )
 		, m_bHasUv( false )
@@ -40,6 +40,11 @@ namespace Lwo
 
 	LwoImporter::~LwoImporter()
 	{
+	}
+
+	ImporterUPtr LwoImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< LwoImporter >( p_engine );
 	}
 
 	SceneSPtr LwoImporter::DoImportScene()
