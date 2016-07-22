@@ -1,8 +1,8 @@
 #include "CastorUtilsZipTest.hpp"
 
-#include <ZipArchive.hpp>
-#include <BinaryFile.hpp>
-#include <TextFile.hpp>
+#include <Data/ZipArchive.hpp>
+#include <Data/BinaryFile.hpp>
+#include <Data/TextFile.hpp>
 
 #include <cstring>
 

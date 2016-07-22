@@ -8,7 +8,7 @@
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 #include "PositionProperties.hpp"
 #include "SizeProperties.hpp"

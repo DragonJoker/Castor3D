@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <Size.hpp>
+#include <Graphics/Size.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
 

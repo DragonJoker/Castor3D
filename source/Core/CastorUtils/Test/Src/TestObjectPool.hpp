@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "PoolTestPrerequisites.hpp"
 
-#include <PoolManagedObject.hpp>
+#include <Pool/PoolManagedObject.hpp>
 
 #include <random>
 

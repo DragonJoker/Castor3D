@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <Point.hpp>
+#include <Math/Point.hpp>
 
 namespace CastorCom
 {

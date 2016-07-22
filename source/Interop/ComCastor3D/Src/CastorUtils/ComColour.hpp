@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <Colour.hpp>
+#include <Graphics/Colour.hpp>
 
 namespace CastorCom
 {

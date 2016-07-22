@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "LightCategory.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

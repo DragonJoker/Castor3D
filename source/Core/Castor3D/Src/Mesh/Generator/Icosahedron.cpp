@@ -4,8 +4,8 @@
 #include "Mesh/Vertex.hpp"
 #include "Mesh/Face.hpp"
 
-#include <Angle.hpp>
-#include <SphericalVertex.hpp>
+#include <Math/Angle.hpp>
+#include <Math/SphericalVertex.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

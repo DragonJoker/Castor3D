@@ -20,8 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <OwnedBy.hpp>
-#include <Signal.hpp>
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Design/Signal.hpp>
 
 namespace Castor3D
 {

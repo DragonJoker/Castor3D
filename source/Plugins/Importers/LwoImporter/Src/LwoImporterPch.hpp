@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Colour.hpp>
+#	include <Graphics/Colour.hpp>
 
 #	include <Engine.hpp>
 #	include <MeshCache.hpp>

@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComCastor3DPrerequisites.hpp"
 
 #include "ComAtlObject.hpp"
-#include <SquareMatrix.hpp>
+#include <Math/SquareMatrix.hpp>
 
 namespace CastorCom
 {

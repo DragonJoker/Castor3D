@@ -6,9 +6,9 @@
 #include "Render/GlContext.hpp"
 #include "Render/GlRenderSystem.hpp"
 
-#include <Logger.hpp>
-#include <PixelFormat.hpp>
-#include <Utils.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/PixelFormat.hpp>
+#include <Miscellaneous/Utils.hpp>
 
 #include <MaterialCache.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>

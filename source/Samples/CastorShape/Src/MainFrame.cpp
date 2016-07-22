@@ -22,21 +22,27 @@
 #include <SplashScreen.hpp>
 #include <SceneExporter.hpp>
 
-#include <GeometryManager.hpp>
-#include <LightManager.hpp>
-#include <MaterialManager.hpp>
-#include <MeshManager.hpp>
-#include <PluginManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
+#include <GeometryCache.hpp>
+#include <LightCache.hpp>
+#include <MaterialCache.hpp>
+#include <MeshCache.hpp>
+#include <PluginCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Importer.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Mesh/Subdivider.hpp>
-#include <Scene/Light/DirectionalLight.hpp>
 #include <Plugin/DividerPlugin.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Scene/Light/Light.hpp>
 
 #include <xpms/castor_dark.xpm>
 
@@ -221,7 +227,7 @@ namespace CastorShape
 	{
 		if ( ! p_strFileName.empty() )
 		{
-			m_strFilePath = ( wxChar const * )p_strFileName.c_str();
+			m_strFilePath = Path{ ( wxChar const * )p_strFileName.c_str() };
 		}
 
 		if ( ! m_strFilePath.empty() )
@@ -252,11 +258,11 @@ namespace CastorShape
 				ImporterSPtr l_pImporter;
 				ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-				for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+				for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 				{
 					if ( !l_pImporter )
 					{
-						ImporterPluginSPtr l_plugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+						ImporterPluginSPtr l_plugin = std::static_pointer_cast< ImporterPlugin >( l_it.second );
 
 						if ( l_plugin )
 						{
@@ -287,7 +293,7 @@ namespace CastorShape
 			}
 
 			m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_mainScene );
-			m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+			m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_mainScene );
 		}
 	}
 
@@ -375,7 +381,7 @@ namespace CastorShape
 			if ( wxGetApp().GetCastor() )
 			{
 				m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), l_scene );
-				m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+				m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *l_scene );
 			}
 
 			if ( m_timer == NULL )
@@ -401,7 +407,7 @@ namespace CastorShape
 
 			if ( l_return )
 			{
-				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneManager().Create( cuT( "MainScene" ), *wxGetApp().GetCastor() );
+				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneCache().Add( cuT( "MainScene" ) );
 				m_mainScene = l_scene;
 				l_scene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
@@ -413,10 +419,10 @@ namespace CastorShape
 
 				if ( m_materialsList )
 				{
-					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+					m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *m_mainScene.lock() );
 				}
 
-				LightSPtr l_light1 = l_scene->GetLightManager().Create( cuT( "Light1" ), l_scene->GetSceneNodeManager().Create( cuT( "Light1Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light1 = l_scene->GetLightCache().Add( cuT( "Light1" ), l_scene->GetSceneNodeCache().Add( cuT( "Light1Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light1 )
 				{
@@ -426,7 +432,7 @@ namespace CastorShape
 					l_light1->SetEnabled( true );
 				}
 
-				LightSPtr l_light2 = l_scene->GetLightManager().Create( cuT( "Light2" ), l_scene->GetSceneNodeManager().Create( cuT( "Light2Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light2 = l_scene->GetLightCache().Add( cuT( "Light2" ), l_scene->GetSceneNodeCache().Add( cuT( "Light2Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light2 )
 				{
@@ -436,7 +442,7 @@ namespace CastorShape
 					l_light2->SetEnabled( true );
 				}
 
-				LightSPtr l_light3 = l_scene->GetLightManager().Create( cuT( "Light3" ), l_scene->GetSceneNodeManager().Create( cuT( "Light3Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light3 = l_scene->GetLightCache().Add( cuT( "Light3" ), l_scene->GetSceneNodeCache().Add( cuT( "Light3Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light3 )
 				{
@@ -557,7 +563,7 @@ namespace CastorShape
 			p_name << m_iNbGeometries;
 		}
 
-		SceneNodeSPtr l_sceneNode = p_scene->GetSceneNodeManager().Create( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
+		SceneNodeSPtr l_sceneNode = p_scene->GetSceneNodeCache().Add( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
 
 		if ( l_sceneNode )
 		{
@@ -570,7 +576,7 @@ namespace CastorShape
 			l_dimensions.push_back( c );
 			StringStream l_stream;
 			l_stream << GuiCommon::make_String( p_baseName ) << cuT( "_" ) << p_meshStrVars.rdbuf();
-			GeometrySPtr l_geometry = p_scene->GetGeometryManager().Create( p_name, l_sceneNode, p_scene->GetEngine()->GetMeshManager().Create( l_stream.str(), p_meshType, l_faces, l_dimensions ) );
+			GeometrySPtr l_geometry = p_scene->GetGeometryCache().Add( p_name, l_sceneNode, p_scene->GetMeshCache().Add( l_stream.str(), p_meshType, l_faces, l_dimensions ) );
 
 			if ( l_geometry )
 			{
@@ -579,7 +585,7 @@ namespace CastorShape
 
 				for ( auto l_submesh : *l_mesh )
 				{
-					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().Find( l_materialName ) );
+					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialCache().Find( l_materialName ) );
 				}
 
 				l_sceneNode->SetVisible( true );
@@ -905,7 +911,7 @@ namespace CastorShape
 		if ( l_fileDialog->ShowModal() == wxID_OK )
 		{
 			CscnSceneExporter l_exporter;
-			l_exporter.ExportScene( *m_mainScene.lock(), make_String( l_fileDialog->GetPath() ) );
+			l_exporter.ExportScene( *m_mainScene.lock(), make_Path( l_fileDialog->GetPath() ) );
 		}
 
 		p_event.Skip();
@@ -921,7 +927,7 @@ namespace CastorShape
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );
 
-		for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+		for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 		{
 			for ( auto l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it.second )->GetExtensions() )
 			{
@@ -934,7 +940,7 @@ namespace CastorShape
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )
 		{
-			m_strFilePath = ( wxChar const * )l_fileDialog.GetPath().c_str();
+			m_strFilePath = Path{ ( wxChar const * )l_fileDialog.GetPath().c_str() };
 			LoadScene( m_strFilePath );
 		}
 
@@ -944,7 +950,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCone( wxCommandEvent & p_event )
 	{
-		NewConeDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewConeDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -970,7 +976,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCube( wxCommandEvent & p_event )
 	{
-		NewCubeDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewCubeDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -996,7 +1002,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewCylinder( wxCommandEvent & p_event )
 	{
-		NewCylinderDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewCylinderDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1022,7 +1028,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewIcosahedron( wxCommandEvent & p_event )
 	{
-		NewIcosahedronDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewIcosahedronDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1047,7 +1053,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewPlane( wxCommandEvent & p_event )
 	{
-		NewPlaneDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewPlaneDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1074,7 +1080,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewSphere( wxCommandEvent & p_event )
 	{
-		NewSphereDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewSphereDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1099,7 +1105,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewTorus( wxCommandEvent & p_event )
 	{
-		NewTorusDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewTorusDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1126,7 +1132,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewProjection( wxCommandEvent & p_event )
 	{
-		NewSphereDialog l_dialog( wxGetApp().GetCastor(), this, wxID_ANY );
+		NewSphereDialog l_dialog( *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1151,7 +1157,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewMaterial( wxCommandEvent & p_event )
 	{
-		NewMaterialDialog l_dialog( PropertiesHolder::GetButtonEditor(), wxGetApp().GetCastor(), this, wxID_ANY );
+		NewMaterialDialog l_dialog( PropertiesHolder::GetButtonEditor(), *m_mainScene.lock(), this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
@@ -1288,7 +1294,7 @@ namespace CastorShape
 			Subdivider * l_divider = NULL;
 			DividerPluginSPtr l_plugin;
 
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
+			for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 			{
 				if ( !l_divider )
 				{
@@ -1322,7 +1328,7 @@ namespace CastorShape
 			Subdivider * l_divider = NULL;
 			DividerPluginSPtr l_plugin;
 
-			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
+			for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 			{
 				if ( !l_divider )
 				{

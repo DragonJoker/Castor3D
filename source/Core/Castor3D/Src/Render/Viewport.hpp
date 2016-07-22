@@ -20,10 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Angle.hpp>
-#include <PlaneEquation.hpp>
-#include <OwnedBy.hpp>
-#include <Size.hpp>
+#include <Math/Angle.hpp>
+#include <Math/PlaneEquation.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Graphics/Size.hpp>
 
 namespace Castor3D
 {

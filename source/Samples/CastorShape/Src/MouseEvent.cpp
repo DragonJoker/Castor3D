@@ -3,7 +3,7 @@
 #include <Event/Frame/FrameListener.hpp>
 #include <Scene/SceneNode.hpp>
 
-#include <Angle.hpp>
+#include <Math/Angle.hpp>
 
 using namespace CastorShape;
 using namespace Castor3D;

@@ -11,7 +11,7 @@
 #include "Plugin/ToneMappingPlugin.hpp"
 #include "Miscellaneous/VersionException.hpp"
 
-#include <DynamicLibrary.hpp>
+#include <Miscellaneous/DynamicLibrary.hpp>
 
 using namespace Castor;
 

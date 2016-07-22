@@ -21,8 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "MovableObject.hpp"
 #include "Render/Viewport.hpp"
 
-#include <PlaneEquation.hpp>
-#include <OwnedBy.hpp>
+#include <Math/PlaneEquation.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

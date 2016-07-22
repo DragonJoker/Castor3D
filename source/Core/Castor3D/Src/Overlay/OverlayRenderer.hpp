@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "TextOverlay.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 #ifdef DrawText
 #	undef DrawText

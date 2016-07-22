@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComCastor3DPrerequisites.hpp"
 #include "ComUtils.hpp"
 
-#include <ColourComponent.hpp>
+#include <Graphics/ColourComponent.hpp>
 
 namespace CastorCom
 {

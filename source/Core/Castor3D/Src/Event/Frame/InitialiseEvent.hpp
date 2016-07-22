@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "FrameEvent.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 namespace Castor3D
 {

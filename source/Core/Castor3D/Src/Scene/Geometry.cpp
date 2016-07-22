@@ -14,7 +14,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Mesh/Submesh.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

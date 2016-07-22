@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <Point.hpp>
+#include <Math/Point.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2b );
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3b );

@@ -171,7 +171,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneCache().Add( FromBstr( name ), *m_internal ) );
+					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}

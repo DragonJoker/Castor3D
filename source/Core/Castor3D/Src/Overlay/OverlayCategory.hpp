@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Position.hpp>
-#include <Size.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Size.hpp>
 
 namespace Castor3D
 {

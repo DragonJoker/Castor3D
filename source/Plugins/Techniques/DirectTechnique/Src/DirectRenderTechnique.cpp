@@ -22,8 +22,8 @@
 #include <Shader/PointFrameVariable.hpp>
 #include <State/DepthStencilState.hpp>
 
-#include <FontCache.hpp>
-#include <Logger.hpp>
+#include <Graphics/FontCache.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

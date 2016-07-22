@@ -256,7 +256,7 @@ void ExportCastorUtils()
 	/**@group_name Font	*/
 	//@{
 	typedef Font::GlyphArray::iterator( Font::*GlyphsItFunc )();
-	py::class_< Font, boost::noncopyable >( "Font", py::init< Path const &, String const &, uint32_t >() )
+	py::class_< Font, boost::noncopyable >( "Font", py::init< String const &, uint32_t, Path const & >() )
 	.add_property( "height", &Font::GetHeight, "The font height" )
 	.add_property( "max_height", &Font::GetMaxHeight, "The glyphs maximum height" )
 	.add_property( "max_width", &Font::GetMaxWidth, "The glyphs maximum width" )

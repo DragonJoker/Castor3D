@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -44,43 +44,43 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <RequiredVersion.hpp>
 
 #	include <CastorUtils.hpp>
-#	include <Angle.hpp>
-#	include <BlockTimer.hpp>
-#	include <Collection.hpp>
-#	include <Colour.hpp>
-#	include <CubeBox.hpp>
-#	include <SphereBox.hpp>
-#	include <DynamicLibrary.hpp>
-#	include <Factory.hpp>
-#	include <TextFile.hpp>
-#	include <BinaryFile.hpp>
-#	include <Font.hpp>
-#	include <Image.hpp>
-#	include <Line2D.hpp>
-#	include <Line3D.hpp>
-#	include <BinaryLoader.hpp>
-#	include <TextLoader.hpp>
-#	include <Logger.hpp>
-#	include <Math.hpp>
-#	include <Matrix.hpp>
-#	include <SquareMatrix.hpp>
-#	include <MultiThreadConfig.hpp>
-#	include <Named.hpp>
-#	include <NonCopyable.hpp>
-#	include <Path.hpp>
-#	include <Pixel.hpp>
-#	include <PlaneEquation.hpp>
-#	include <Point.hpp>
-#	include <PreciseTimer.hpp>
-#	include <Quaternion.hpp>
-#	include <Resource.hpp>
-#	include <SphericalVertex.hpp>
-#	include <StringUtils.hpp>
-#	include <Templates.hpp>
-#	include <TransformationMatrix.hpp>
-#	include <Utils.hpp>
-#	include <Unique.hpp>
-#	include <Rectangle.hpp>
+#	include <Config/MultiThreadConfig.hpp>
+#	include <Data/BinaryFile.hpp>
+#	include <Data/BinaryLoader.hpp>
+#	include <Data/Path.hpp>
+#	include <Data/TextFile.hpp>
+#	include <Data/TextLoader.hpp>
+#	include <Design/Collection.hpp>
+#	include <Design/Factory.hpp>
+#	include <Design/Named.hpp>
+#	include <Design/NonCopyable.hpp>
+#	include <Design/Resource.hpp>
+#	include <Design/Templates.hpp>
+#	include <Design/Unique.hpp>
+#	include <Graphics/Colour.hpp>
+#	include <Graphics/CubeBox.hpp>
+#	include <Graphics/Font.hpp>
+#	include <Graphics/Image.hpp>
+#	include <Graphics/Pixel.hpp>
+#	include <Graphics/Rectangle.hpp>
+#	include <Graphics/SphereBox.hpp>
+#	include <Log/Logger.hpp>
+#	include <Math/Angle.hpp>
+#	include <Math/Line2D.hpp>
+#	include <Math/Line3D.hpp>
+#	include <Math/Math.hpp>
+#	include <Math/Matrix.hpp>
+#	include <Math/PlaneEquation.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
+#	include <Math/SphericalVertex.hpp>
+#	include <Math/SquareMatrix.hpp>
+#	include <Math/TransformationMatrix.hpp>
+#	include <Miscellaneous/BlockTimer.hpp>
+#	include <Miscellaneous/DynamicLibrary.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
+#	include <Miscellaneous/StringUtils.hpp>
+#	include <Miscellaneous/Utils.hpp>
 #endif
 
 #endif

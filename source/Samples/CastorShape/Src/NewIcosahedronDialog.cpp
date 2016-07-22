@@ -13,8 +13,8 @@ namespace CastorShape
 		static wxString ICOSAHEDRON_SUBDIVISIONS = _( "Subdivisions count" );
 	}
 
-	NewIcosahedronDialog::NewIcosahedronDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_engine, parent, p_id, _( "New icosaedron" ) )
+	NewIcosahedronDialog::NewIcosahedronDialog( Scene & p_scene, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_scene, parent, p_id, _( "New icosaedron" ) )
 	{
 		ICOSAHEDRON_RADIUS = _( "Radius" );
 		ICOSAHEDRON_SUBDIVISIONS = _( "Subdivisions count" );

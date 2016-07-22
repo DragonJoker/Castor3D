@@ -116,7 +116,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryCache().Add( FromBstr( name ) ) );
+					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryCache().Add( FromBstr( name ), nullptr, nullptr ) );
 				}
 			}
 		}
@@ -210,7 +210,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshCache().Add( FromBstr( name ), Castor3D::eMESH_TYPE( type ) ) );
+					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshCache().Add( FromBstr( name ), Castor3D::eMESH_TYPE( type ), Castor3D::UIntArray{}, Castor3D::RealArray{} ) );
 				}
 			}
 		}
@@ -234,7 +234,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowCache().Add( FromBstr( name ) ) );
+					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetRenderWindowCache().Add( FromBstr( name ) ) );
 				}
 			}
 		}

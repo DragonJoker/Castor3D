@@ -1,7 +1,7 @@
 #include "Benchmark.hpp"
 
-#include <Logger.hpp>
-#include <File.hpp>
+#include <Log/Logger.hpp>
+#include <Data/File.hpp>
 
 #include "BenchManager.hpp"
 #include "OpenClBench.hpp"

@@ -1,7 +1,7 @@
 #include "LoopDivider.hpp"
 
 #include <Engine.hpp>
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 C3D_Loop_API void GetRequiredVersion( Castor3D::Version & p_version )
 {

@@ -9,7 +9,7 @@
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 #include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>

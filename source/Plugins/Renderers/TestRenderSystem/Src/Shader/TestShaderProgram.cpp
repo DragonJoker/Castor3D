@@ -7,7 +7,7 @@
 #include "Shader/TestMatrixFrameVariable.hpp"
 #include "Shader/TestShaderObject.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

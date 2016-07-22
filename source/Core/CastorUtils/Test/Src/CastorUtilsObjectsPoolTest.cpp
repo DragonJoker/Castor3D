@@ -2,8 +2,8 @@
 
 #include "TestObjectPool.hpp"
 
-#include <PoolManagedObject.hpp>
-#include <ObjectPool.hpp>
+#include <Pool/PoolManagedObject.hpp>
+#include <Pool/ObjectPool.hpp>
 
 #include <algorithm>
 

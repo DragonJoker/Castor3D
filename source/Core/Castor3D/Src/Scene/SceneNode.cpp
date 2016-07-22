@@ -13,8 +13,8 @@
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
 
-#include <Logger.hpp>
-#include <TransformationMatrix.hpp>
+#include <Log/Logger.hpp>
+#include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
 

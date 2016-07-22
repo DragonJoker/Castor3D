@@ -10,7 +10,7 @@
 #include <Overlay/TextOverlay.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

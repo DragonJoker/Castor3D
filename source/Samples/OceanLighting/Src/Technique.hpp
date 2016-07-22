@@ -2,7 +2,7 @@
 #define ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 
 #include <Engine.hpp>
-#include <ShaderManager.hpp>
+#include <ShaderCache.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>
@@ -11,6 +11,7 @@
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Render/Viewport.hpp>
+#include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <Technique/RenderTechnique.hpp>
 #include <Texture/Sampler.hpp>
@@ -31,7 +32,7 @@ namespace OceanLighting
 	protected:
 		friend class Castor3D::TechniqueFactory;
 
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		virtual ~RenderTechnique();
@@ -49,7 +50,7 @@ namespace OceanLighting
 		 *\param[in]	p_params		Les param�tres de la technique
 		 *\return		Un cl�ne de cet objet
 		 */
-		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{

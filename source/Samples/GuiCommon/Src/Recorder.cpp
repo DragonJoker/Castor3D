@@ -45,7 +45,7 @@ namespace libffmpeg
 #	endif
 #endif
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

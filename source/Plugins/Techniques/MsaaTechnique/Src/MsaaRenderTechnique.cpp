@@ -26,8 +26,8 @@
 #include <State/RasteriserState.hpp>
 #include <Texture/TextureLayout.hpp>
 
-#include <FontCache.hpp>
-#include <Logger.hpp>
+#include <Graphics/FontCache.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

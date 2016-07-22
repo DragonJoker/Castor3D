@@ -25,9 +25,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <unistd.h>
 #endif
 
-#include <StringUtils.hpp>
-#include <Logger.hpp>
-#include <PreciseTimer.hpp>
+#include <Miscellaneous/StringUtils.hpp>
+#include <Log/Logger.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace Testing
 {

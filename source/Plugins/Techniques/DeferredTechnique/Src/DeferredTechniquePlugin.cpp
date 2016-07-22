@@ -1,6 +1,6 @@
 #include "DeferredRenderTechnique.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <Engine.hpp>
 #include <TechniqueCache.hpp>

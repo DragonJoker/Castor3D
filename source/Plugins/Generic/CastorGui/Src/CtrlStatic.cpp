@@ -8,7 +8,7 @@
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 
-#include <Font.hpp>
+#include <Graphics/Font.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

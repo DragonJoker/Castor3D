@@ -21,6 +21,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Binary/BinaryParser.hpp"
 #include "Binary/BinaryWriter.hpp"
 
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!

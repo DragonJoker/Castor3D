@@ -13,7 +13,7 @@
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <wx/imaglist.h>
 

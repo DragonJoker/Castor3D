@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Pixel.hpp>
-#include <PixelBuffer.hpp>
+#include <Graphics/Pixel.hpp>
+#include <Graphics/PixelBuffer.hpp>
 
 namespace Castor3D
 {

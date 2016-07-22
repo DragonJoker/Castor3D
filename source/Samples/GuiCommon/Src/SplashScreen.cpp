@@ -1,7 +1,7 @@
 #include "SplashScreen.hpp"
 
 #include <RequiredVersion.hpp>
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include "xpms/splash.xpm"
 

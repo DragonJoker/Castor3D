@@ -12,7 +12,7 @@
 #include <cstring>
 #include <cstdio>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <MaterialCache.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>

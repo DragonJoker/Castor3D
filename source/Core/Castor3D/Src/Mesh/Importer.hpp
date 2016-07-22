@@ -21,8 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "Miscellaneous/Parameter.hpp"
 
-#include <Path.hpp>
-#include <OwnedBy.hpp>
+#include <Data/Path.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

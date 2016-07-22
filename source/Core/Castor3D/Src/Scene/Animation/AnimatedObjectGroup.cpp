@@ -10,7 +10,7 @@
 #include "Mesh/Skeleton/Skeleton.hpp"
 #include "Scene/Animation/AnimationInstance.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

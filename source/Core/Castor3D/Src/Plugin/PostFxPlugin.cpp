@@ -6,7 +6,7 @@
 #	include <dlfcn.h>
 #endif
 
-#include <DynamicLibrary.hpp>
+#include <Miscellaneous/DynamicLibrary.hpp>
 
 using namespace Castor;
 

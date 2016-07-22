@@ -14,7 +14,7 @@
 #include "Scene/Scene.hpp"
 #include "Technique/RenderTechnique.hpp"
 
-#include <Image.hpp>
+#include <Graphics/Image.hpp>
 
 using namespace Castor;
 

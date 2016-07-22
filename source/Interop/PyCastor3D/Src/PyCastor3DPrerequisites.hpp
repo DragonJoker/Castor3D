@@ -18,18 +18,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3DPY_PREREQUISITES_H___
 #define ___C3DPY_PREREQUISITES_H___
 
-#include <Logger.hpp>
-#include <Angle.hpp>
-#include <Glyph.hpp>
-#include <Font.hpp>
-#include <Quaternion.hpp>
-#include <Position.hpp>
-#include <Size.hpp>
-#include <Rectangle.hpp>
-#include <Image.hpp>
-#include <PixelBufferBase.hpp>
-#include <SquareMatrix.hpp>
-#include <Quaternion.hpp>
+#include <Log/Logger.hpp>
+#include <Math/Angle.hpp>
+#include <Graphics/Glyph.hpp>
+#include <Graphics/Font.hpp>
+#include <Math/Quaternion.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Size.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Image.hpp>
+#include <Graphics/PixelBuffer.hpp>
+#include <Math/SquareMatrix.hpp>
+#include <Math/Quaternion.hpp>
 
 #include <AnimatedObjectGroupCache.hpp>
 #include <BillboardCache.hpp>
@@ -50,16 +50,39 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <WindowCache.hpp>
 
 #include <Animation/Animable.hpp>
+#include <Animation/Skeleton/SkeletonAnimation.hpp>
+#include <Animation/Mesh/MeshAnimation.hpp>
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
-#include <Overlay/PanelOverlay.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/BillboardList.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 #include <Scene/Animation/AnimatedObject.hpp>
+#include <Scene/Animation/AnimatedSkeleton.hpp>
+#include <Scene/Animation/AnimatedMesh.hpp>
+#include <Scene/Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Animation/AnimationInstance.hpp>
+#include <Scene/Animation/Mesh/MeshAnimationInstance.hpp>
+#include <Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
-#include <Scene/Light/SpotLight.hpp>
+#include <Scene/Light/Light.hpp>
 #include <Scene/Light/PointLight.hpp>
+#include <Scene/Light/SpotLight.hpp>
 #include <Shader/ShaderProgram.hpp>
+#include <State/BlendState.hpp>
+#include <State/DepthStencilState.hpp>
+#include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureImage.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -306,6 +329,38 @@ namespace cpy
 		}
 	};
 
+	struct GeometryCacheElementProducer
+	{
+		Castor3D::GeometrySPtr operator()( Castor3D::GeometryCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::MeshSPtr p_mesh )
+		{
+			return p_cache->Add( p_key, p_node, p_mesh );
+		}
+	};
+
+	struct LightCacheElementProducer
+	{
+		Castor3D::LightSPtr operator()( Castor3D::LightCache * p_cache, Castor::String const & p_key, Castor3D::SceneNodeSPtr p_node, Castor3D::eLIGHT_TYPE p_type )
+		{
+			return p_cache->Add( p_key, p_node, p_type );
+		}
+	};
+
+	struct MeshCacheElementProducer
+	{
+		Castor3D::MeshSPtr operator()( Castor3D::MeshCache * p_cache, Castor::String const & p_key, Castor3D::eMESH_TYPE p_type, Castor3D::UIntArray const & p_faces, Castor3D::RealArray const & p_dimensions )
+		{
+			return p_cache->Add( p_key, p_type, p_faces, p_dimensions );
+		}
+	};
+
+	struct OverlayCacheElementProducer
+	{
+		Castor3D::OverlaySPtr operator()( Castor3D::OverlayCache * p_cache, Castor::String const & p_key, Castor3D::eOVERLAY_TYPE p_type, Castor3D::SceneSPtr p_scene, Castor3D::OverlaySPtr p_parent )
+		{
+			return p_cache->Add( p_key, p_type, p_scene, p_parent );
+		}
+	};
+
 	template< typename Blend >
 	struct BlendSetter
 	{
@@ -436,10 +491,10 @@ namespace boost
 			{
 				return boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::ePIXEL_FORMAT >();
 			}
-			inline boost::mpl::vector< Castor3D::PluginBaseSPtr, Castor3D::Engine *, Castor::Path const & >
-			get_signature( Castor3D::PluginBaseSPtr( Castor3D::Engine::* )( Castor::Path const & ), void * = 0 )
+			inline boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >
+			get_signature( Castor3D::PluginSPtr ( Castor3D::Engine::* )( Castor::Path const & ), void * = 0 )
 			{
-				return boost::mpl::vector< Castor3D::PluginBaseSPtr, Castor3D::Engine *, Castor::Path const & >();
+				return boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >();
 			}
 			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const & >
 			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const & ), void * = 0 )
@@ -512,6 +567,26 @@ namespace boost
 			get_signature( cpy::BlendSetter< Blend >, void * = 0 )
 			{
 				return boost::mpl::vector< void, Castor3D::BlendState *, Blend >();
+			}
+			inline boost::mpl::vector< Castor3D::GeometrySPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::MeshSPtr >
+			get_signature( cpy::GeometryCacheElementProducer, void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::GeometrySPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::MeshSPtr >();
+			}
+			inline boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::eLIGHT_TYPE >
+			get_signature( cpy::LightCacheElementProducer, void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::LightSPtr, Castor::String const &, Castor3D::SceneNodeSPtr, Castor3D::eLIGHT_TYPE >();
+			}
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor3D::eMESH_TYPE, Castor3D::UIntArray, Castor3D::RealArray >
+			get_signature( cpy::MeshCacheElementProducer, void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor::String const &, Castor3D::eMESH_TYPE, Castor3D::UIntArray, Castor3D::RealArray >();
+			}
+			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::eOVERLAY_TYPE, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >
+			get_signature( cpy::OverlayCacheElementProducer, void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor::String const &, Castor3D::eOVERLAY_TYPE, Castor3D::SceneSPtr, Castor3D::OverlaySPtr >();
 			}
 		}
 	}

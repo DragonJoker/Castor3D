@@ -22,6 +22,8 @@
 #include <Render/RenderLoop.hpp>
 #include <Scene/SceneFileParser.hpp>
 
+#include <Data/BinaryFile.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 

@@ -8,8 +8,8 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Scene/Scene.hpp"
 
-#include <Line3D.hpp>
-#include <PlaneEquation.hpp>
+#include <Math/Line3D.hpp>
+#include <Math/PlaneEquation.hpp>
 
 using namespace Castor;
 

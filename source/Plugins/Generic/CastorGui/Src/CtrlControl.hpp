@@ -22,10 +22,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Event/UserInput/EventHandler.hpp>
 
-#include <Pixel.hpp>
-#include <Position.hpp>
-#include <Rectangle.hpp>
-#include <Size.hpp>
+#include <Graphics/Pixel.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Size.hpp>
 
 namespace CastorGui
 {

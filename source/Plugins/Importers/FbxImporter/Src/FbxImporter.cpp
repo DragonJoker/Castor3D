@@ -20,7 +20,7 @@
 #include <Plugin/ImporterPlugin.hpp>
 #include <Texture/Sampler.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

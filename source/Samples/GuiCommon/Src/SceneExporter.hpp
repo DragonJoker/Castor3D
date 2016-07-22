@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GuiCommonPrerequisites.hpp"
 
-#include <Path.hpp>
+#include <Data/Path.hpp>
 
 namespace GuiCommon
 {

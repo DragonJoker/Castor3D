@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Position.hpp>
+#include <Graphics/Position.hpp>
 
 #include "EventHandler.hpp"
 

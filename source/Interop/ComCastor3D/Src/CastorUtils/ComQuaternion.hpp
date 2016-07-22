@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 #include "ComMatrix4x4.hpp"
-#include <Quaternion.hpp>
+#include <Math/Quaternion.hpp>
 
 namespace CastorCom
 {

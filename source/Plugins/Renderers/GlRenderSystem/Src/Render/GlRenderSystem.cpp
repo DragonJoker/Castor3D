@@ -24,7 +24,7 @@
 #include "Texture/GlGpuOnlyTextureStorage.hpp"
 #include "Texture/GlTexture.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include <GlslSource.hpp>
 

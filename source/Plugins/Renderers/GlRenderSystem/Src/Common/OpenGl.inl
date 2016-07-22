@@ -1,8 +1,8 @@
-#include <Logger.hpp>
-#include <Position.hpp>
-#include <Rectangle.hpp>
-#include <Size.hpp>
-#include <Utils.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Size.hpp>
+#include <Miscellaneous/Utils.hpp>
 
 namespace GlRender
 {

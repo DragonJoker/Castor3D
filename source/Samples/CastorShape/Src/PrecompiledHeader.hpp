@@ -72,25 +72,25 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <wx/treectrl.h>
 
 #	include <CastorUtils.hpp>
-#	include <StringUtils.hpp>
-#	include <Templates.hpp>
-#	include <Logger.hpp>
-#	include <PreciseTimer.hpp>
-#	include <File.hpp>
-#	include <Point.hpp>
-#	include <Quaternion.hpp>
-#	include <Named.hpp>
-#	include <Path.hpp>
-#	include <Math.hpp>
-#	include <Colour.hpp>
-#	include <Angle.hpp>
+#	include <Data/File.hpp>
+#	include <Data/Path.hpp>
+#	include <Design/Named.hpp>
+#	include <Design/Templates.hpp>
+#	include <Graphics/Colour.hpp>
+#	include <Log/Logger.hpp>
+#	include <Math/Angle.hpp>
+#	include <Math/Math.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
+#	include <Miscellaneous/StringUtils.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
-#	include <ShaderManager.hpp>
+#	include <ShaderCache.hpp>
 #	include <Animation/Animation.hpp>
 #	include <Animation/KeyFrame.hpp>
-#	include <Animation/AnimatedObjectGroup.hpp>
+#	include <Scene/Animation/AnimatedObjectGroup.hpp>
 #	include <Event/Frame/FrameListener.hpp>
 #	include <Material/Material.hpp>
 #	include <Material/Pass.hpp>
@@ -114,6 +114,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Scene/Light/PointLight.hpp>
 #	include <Scene/Light/SpotLight.hpp>
 #	include <Shader/FrameVariable.hpp>
+#	include <Shader/ShaderProgram.hpp>
 #	include <Texture/TextureUnit.hpp>
 
 #	include <iostream>

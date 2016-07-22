@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_FRAME_BUFFER_ATTACHMENT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include <Rectangle.hpp>
+#include <Graphics/Rectangle.hpp>
 
 namespace Castor3D
 {

@@ -2,9 +2,9 @@
 
 #include "Render/GlRenderSystem.hpp"
 
-#include <Rectangle.hpp>
-#include <Logger.hpp>
-#include <Utils.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Log/Logger.hpp>
+#include <Miscellaneous/Utils.hpp>
 
 #include <GlslWriter.hpp>
 

@@ -35,7 +35,7 @@ namespace CastorShape
 		};
 
 	public:
-		NewGeometryDialog( Castor3D::Engine * p_engine, wxWindow * p_parent, wxWindowID p_id, wxString const & p_name = cuT( "New Geometry" ), wxPoint const & p_pos = wxDefaultPosition, wxSize const & p_size = wxSize( 400, 200 ), long p_style = wxDEFAULT_DIALOG_STYLE );
+		NewGeometryDialog( Castor3D::Scene & p_scene, wxWindow * p_parent, wxWindowID p_id, wxString const & p_name = cuT( "New Geometry" ), wxPoint const & p_pos = wxDefaultPosition, wxSize const & p_size = wxSize( 400, 200 ), long p_style = wxDEFAULT_DIALOG_STYLE );
 		~NewGeometryDialog();
 
 		Castor::String GetGeometryName()const;
@@ -51,7 +51,7 @@ namespace CastorShape
 
 	protected:
 		wxPropertyGrid * m_properties;
-		Castor3D::Engine * m_engine;
+		Castor3D::Scene & m_scene;
 	};
 }
 

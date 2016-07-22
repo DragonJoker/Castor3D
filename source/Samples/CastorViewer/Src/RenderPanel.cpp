@@ -19,8 +19,8 @@
 #include <Scene/Scene.hpp>
 #include <Scene/SceneNode.hpp>
 
-#include <Math.hpp>
-#include <Utils.hpp>
+#include <Math/Math.hpp>
+#include <Miscellaneous/Utils.hpp>
 
 #define ID_NEW_WINDOW 10000
 

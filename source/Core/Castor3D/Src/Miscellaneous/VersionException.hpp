@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Version.hpp"
 
-#include <Exception.hpp>
+#include <Exception/Exception.hpp>
 
 namespace Castor3D
 {

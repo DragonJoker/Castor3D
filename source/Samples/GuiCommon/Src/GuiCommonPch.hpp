@@ -75,19 +75,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <wx/aui/framemanager.h>
 
 #	include <CastorUtils.hpp>
-#	include <StringUtils.hpp>
-#	include <Templates.hpp>
-#	include <FileParser.hpp>
-#	include <Logger.hpp>
-#	include <PreciseTimer.hpp>
-#	include <File.hpp>
-#	include <Point.hpp>
-#	include <Quaternion.hpp>
-#	include <Named.hpp>
-#	include <Path.hpp>
-#	include <Math.hpp>
-#	include <Colour.hpp>
-#	include <Angle.hpp>
+#	include <Miscellaneous/StringUtils.hpp>
+#	include <Design/Templates.hpp>
+#	include <FileParser/FileParser.hpp>
+#	include <Log/Logger.hpp>
+#	include <Miscellaneous/PreciseTimer.hpp>
+#	include <Data/File.hpp>
+#	include <Math/Point.hpp>
+#	include <Math/Quaternion.hpp>
+#	include <Design/Named.hpp>
+#	include <Data/Path.hpp>
+#	include <Math/Math.hpp>
+#	include <Graphics/Colour.hpp>
+#	include <Math/Angle.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>

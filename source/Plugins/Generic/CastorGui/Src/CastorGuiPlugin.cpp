@@ -4,7 +4,7 @@
 #include <Render/RenderSystem.hpp>
 #include <Scene/SceneFileParser.hpp>
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 #include "ControlsManager.hpp"
 #include "CastorGui_Parsers.hpp"

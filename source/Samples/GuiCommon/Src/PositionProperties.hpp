@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AdditionalProperties.hpp"
 
-#include <Position.hpp>
+#include <Graphics/Position.hpp>
 
 GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
 

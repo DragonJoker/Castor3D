@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PLUGIN_EXCEPTION_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Exception.hpp"
+#include "Exception/Exception.hpp"
 
 namespace Castor3D
 {

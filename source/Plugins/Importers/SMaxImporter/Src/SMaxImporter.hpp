@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Mesh/Importer.hpp>
 
-#include <Colour.hpp>
+#include <Graphics/Colour.hpp>
 
 #ifndef _WIN32
 #	define C3D_SMax_API

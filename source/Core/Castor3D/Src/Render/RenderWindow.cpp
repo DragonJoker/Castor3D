@@ -31,7 +31,7 @@
 #include "Texture/TextureLayout.hpp"
 #include "Shader/FrameVariable.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 

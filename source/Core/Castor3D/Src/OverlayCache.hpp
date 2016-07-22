@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Overlay/OverlayFactory.hpp"
 #include "Render/Viewport.hpp"
 
-#include <OwnedBy.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {

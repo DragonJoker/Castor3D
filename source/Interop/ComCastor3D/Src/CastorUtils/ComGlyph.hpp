@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComSize.hpp"
 #include "ComPosition.hpp"
-#include <Glyph.hpp>
+#include <Graphics/Glyph.hpp>
 
 namespace CastorCom
 {

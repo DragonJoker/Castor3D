@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_UTILS_PREREQUISITES_H___
 #define ___CASTOR_UTILS_PREREQUISITES_H___
 
-#include "Macros.hpp"
-
 #include <array>
 #include <cstdint>
 #include <functional>
@@ -35,8 +33,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <sstream>
 #include <vector>
 
-#include "SmartPtr.hpp"
-#include "ELogType.hpp"
+#include "Config/SmartPtr.hpp"
+#include "Log/ELogType.hpp"
 
 #if defined( min )
 #	undef min
@@ -441,6 +439,6 @@ constexpr Castor::real operator "" _r( long double p_value )
 	return Castor::real( p_value );
 }
 
-#include "Debug.hpp"
+#include "Miscellaneous/Debug.hpp"
 
 #endif

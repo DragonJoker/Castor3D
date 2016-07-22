@@ -3,8 +3,8 @@
 
 #include <wx/cmdline.h>
 
-#include <File.hpp>
-#include <Exception.hpp>
+#include <Data/File.hpp>
+#include <Exception/Exception.hpp>
 
 #include <ImagesLoader.hpp>
 #include <RendererSelector.hpp>

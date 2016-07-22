@@ -20,9 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Colour.hpp>
-#include <OwnedBy.hpp>
-#include <Rectangle.hpp>
+#include <Graphics/Colour.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Graphics/Rectangle.hpp>
 
 #include <memory>
 

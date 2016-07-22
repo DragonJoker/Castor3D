@@ -43,4 +43,4 @@ set_target_properties( PyCastor3D
 )
 
 add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
-set( Build "yes (version ${PYC_VERSION_MAJOR}.${PYC_VERSION_MINOR}.${PYC_VERSION_BUILD})" PARENT_SCOPE )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

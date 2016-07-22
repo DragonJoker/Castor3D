@@ -20,8 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <Loader.hpp>
-#include <PreciseTimer.hpp>
+#include <Data/Loader.hpp>
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
+#include <Miscellaneous/PreciseTimer.hpp>
 
 namespace Castor3D
 {

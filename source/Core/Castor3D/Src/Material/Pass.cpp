@@ -17,7 +17,7 @@
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
-#include <Logger.hpp>
+#include <Log/Logger.hpp>
 
 using namespace Castor;
 
