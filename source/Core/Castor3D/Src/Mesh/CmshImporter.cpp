@@ -13,9 +13,16 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	String const CmshImporter::Type = cuT( "cmsh" );
+
 	CmshImporter::CmshImporter( Engine & p_engine )
 		: Importer{ p_engine }
 	{
+	}
+
+	ImporterUPtr CmshImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< CmshImporter >( p_engine );
 	}
 
 	SceneSPtr CmshImporter::DoImportScene()

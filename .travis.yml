@@ -12,10 +12,10 @@ addons:
       - libzip-dev
       - zlib1g-dev
       - libglm-dev
-      - g++-5.2
+      - g++-4.9
 before_script:
-  - export CXX="g++-5.2"
-  - export CC="gcc-5.2"
+  - export CXX="g++-4.9"
+  - export CC="gcc-4.9"
 script:
   - mkdir -p build/release
   - cd build/release

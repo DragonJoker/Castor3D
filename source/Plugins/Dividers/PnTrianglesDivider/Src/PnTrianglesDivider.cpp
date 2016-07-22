@@ -30,6 +30,9 @@ namespace PnTriangles
 		b111 = e + ( e - Barycenter( 1 / 3.0, 1 / 3.0, p_p1.GetPoint(), p_p2.GetPoint(), p_p3.GetPoint() ) ) / double( 2.0 );
 	}
 
+	String const Subdivider::Name = cuT( "PN-Triangles Divider" );
+	String const Subdivider::Type = cuT( "pn_tri" );
+
 	Subdivider::Subdivider()
 		: Castor3D::Subdivider()
 		, m_occurences( 1 )
@@ -39,6 +42,11 @@ namespace PnTriangles
 	Subdivider::~Subdivider()
 	{
 		Cleanup();
+	}
+
+	SubdividerUPtr Subdivider::Create()
+	{
+		return std::make_unique< Subdivider >();
 	}
 
 	void Subdivider::Cleanup()

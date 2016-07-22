@@ -40,7 +40,9 @@ namespace Obj
 		/**
 		 * Constructor
 		 */
-		ObjImporter( Castor3D::Engine & p_pEngine );
+		ObjImporter( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

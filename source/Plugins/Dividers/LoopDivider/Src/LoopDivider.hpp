@@ -33,7 +33,12 @@ namespace Loop
 	public:
 		Subdivider();
 		virtual ~Subdivider();
-		virtual void Cleanup();
+
+		static Castor3D::SubdividerUPtr Create();
+		/**
+		 *\copydoc		Castor3D::Subdivider::Cleanup
+		 */
+		void Cleanup()override;
 		/**
 		 * Creates and adds a vertex to my list
 		 *\param[in]	x	The vertex X coordinate
@@ -61,10 +66,20 @@ namespace Loop
 		}
 
 	private:
-		virtual void DoInitialise();
-		virtual void DoSubdivide();
+		/**
+		 *\copydoc		Castor3D::Subdivider::DoInitialise
+		 */
+		void DoInitialise()override;
+		/**
+		 *\copydoc		Castor3D::Subdivider::DoSubdivide
+		 */
+		void DoSubdivide()override;
 		void DoDivide();
 		void DoAverage();
+
+	public:
+		static Castor::String const Name;
+		static Castor::String const Type;
 
 	private:
 		VertexPtrUIntMap m_mapVertex;

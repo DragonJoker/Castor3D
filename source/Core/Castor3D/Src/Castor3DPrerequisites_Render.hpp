@@ -30,81 +30,68 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de matrices
 	*/
-	typedef enum eMTXMODE
+	enum class MatrixMode
 		: uint8_t
 	{
-		//<\~english Eye to Clip transform	\~french Transformations de Vue vers Clip
-		eMTXMODE_PROJECTION,
-		//!\~english Object to World transform	\~french Transformations de Objet vers Monde
-		eMTXMODE_MODEL,
-		//!\~english World to Eye transform	\~french Transformations de Monde vers Vue
-		eMTXMODE_VIEW,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE0,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE1,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE2,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE3,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE4,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE5,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE6,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE7,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE8,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE9,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE10,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE11,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE12,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE13,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE14,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE15,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE16,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE17,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE18,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE19,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE20,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE21,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE22,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE23,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE24,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE25,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE26,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE27,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE28,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE29,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE30,
-		//!\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE31,
-		CASTOR_ENUM_BOUNDS( eMTXMODE, eMTXMODE_PROJECTION )
-	}	eMTXMODE;
+		//!\~english	Eye to Clip transform.
+		//!\~french		Transformations de Vue vers Clip.
+		Projection,
+		//!\~english	Object to World transform.
+		//!\~french		Transformations de Objet vers Monde.
+		Model,
+		//!\~english	World to Eye transform.
+		//!\~french Transformations de Monde vers Vue.
+		View,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture0,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture1,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture2,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture3,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture4,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture5,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture6,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture7,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture8,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture9,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture10,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture11,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture12,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture13,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture14,
+		//!\~english	Texture transforms.
+		//!\~french		Transformations de texture.
+		Texture15,
+		CASTOR_ENUM_CLASS_BOUNDS( Projection )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -112,41 +99,25 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de matrices
 	*/
-	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << eMTXMODE_PROJECTION;
-	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << eMTXMODE_MODEL;
-	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << eMTXMODE_VIEW;
-	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE0;
-	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE1;
-	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE2;
-	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE3;
-	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE4;
-	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE5;
-	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE6;
-	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE7;
-	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE8;
-	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE9;
-	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE10;
-	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE11;
-	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE12;
-	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE13;
-	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE14;
-	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE15;
-	static const uint64_t MASK_MTXMODE_TEXTURE16 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE16;
-	static const uint64_t MASK_MTXMODE_TEXTURE17 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE17;
-	static const uint64_t MASK_MTXMODE_TEXTURE18 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE18;
-	static const uint64_t MASK_MTXMODE_TEXTURE19 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE19;
-	static const uint64_t MASK_MTXMODE_TEXTURE20 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE20;
-	static const uint64_t MASK_MTXMODE_TEXTURE21 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE21;
-	static const uint64_t MASK_MTXMODE_TEXTURE22 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE22;
-	static const uint64_t MASK_MTXMODE_TEXTURE23 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE23;
-	static const uint64_t MASK_MTXMODE_TEXTURE24 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE24;
-	static const uint64_t MASK_MTXMODE_TEXTURE25 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE25;
-	static const uint64_t MASK_MTXMODE_TEXTURE26 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE26;
-	static const uint64_t MASK_MTXMODE_TEXTURE27 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE27;
-	static const uint64_t MASK_MTXMODE_TEXTURE28 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE28;
-	static const uint64_t MASK_MTXMODE_TEXTURE29 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE29;
-	static const uint64_t MASK_MTXMODE_TEXTURE30 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE30;
-	static const uint64_t MASK_MTXMODE_TEXTURE31 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE31;
+	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << int( MatrixMode::Projection );
+	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << int( MatrixMode::Model );
+	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << int( MatrixMode::View );
+	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << int( MatrixMode::Texture0 );
+	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << int( MatrixMode::Texture1 );
+	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << int( MatrixMode::Texture2 );
+	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << int( MatrixMode::Texture3 );
+	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << int( MatrixMode::Texture4 );
+	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << int( MatrixMode::Texture5 );
+	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << int( MatrixMode::Texture6 );
+	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << int( MatrixMode::Texture7 );
+	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << int( MatrixMode::Texture8 );
+	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << int( MatrixMode::Texture9 );
+	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << int( MatrixMode::Texture10 );
+	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << int( MatrixMode::Texture11 );
+	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << int( MatrixMode::Texture12 );
+	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << int( MatrixMode::Texture13 );
+	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << int( MatrixMode::Texture14 );
+	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << int( MatrixMode::Texture15 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -492,9 +463,7 @@ namespace Castor3D
 	class RasteriserState;
 	class BlendState;
 	class ToneMapping;
-	class ToneMappingFactory;
 	class PostEffect;
-	class PostEffectFactory;
 	struct RenderNode;
 	struct SceneRenderNode;
 	struct StaticGeometryRenderNode;
@@ -509,6 +478,7 @@ namespace Castor3D
 	class GeometryBuffers;
 	class TextureBuffer;
 
+	DECLARE_SMART_PTR( RenderSystem );
 	DECLARE_SMART_PTR( GeometryBuffers );
 	DECLARE_SMART_PTR( BufferElementDeclaration );
 	DECLARE_SMART_PTR( BufferDeclaration );

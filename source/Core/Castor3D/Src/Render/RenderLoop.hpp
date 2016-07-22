@@ -39,15 +39,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine		The engine.
-		 *\param[in]	p_renderSystem	The render system.
 		 *\param[in]	p_wantedFPS		The wanted FPS count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_renderSystem	Le système de rendu.
 		 *\param[in]	p_wantedFPS		Le nombre voulu du FPS.
 		 */
-		C3D_API RenderLoop( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS );
+		C3D_API RenderLoop( Engine & p_engine, uint32_t p_wantedFPS );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -238,7 +236,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english  The current RenderSystem.	\~french Le RenderSystem courant.
-		RenderSystem * m_renderSystem;
+		RenderSystem & m_renderSystem;
 		//!\~english The wanted FPS, used in threaded render mode.	\~french Le nombre de FPS souhaité, utilisé en rendu threadé.
 		uint32_t m_wantedFPS;
 		//!\~english The wanted time for a frame.	\~french Le temps voulu pour une frame.

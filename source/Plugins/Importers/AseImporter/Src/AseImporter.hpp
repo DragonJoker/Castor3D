@@ -30,14 +30,17 @@ namespace Ase
 	\~french
 	\brief		Importeur de fichiers ASE
 	*/
-	class AseImporter : public Castor3D::Importer
+	class AseImporter
+		: public Castor3D::Importer
 	{
 	private:
 		AseFileParser * m_pFileParser;
 
 	public:
-		AseImporter( Castor3D::Engine & p_pEngine );
+		AseImporter( Castor3D::Engine & p_engine );
 		~AseImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

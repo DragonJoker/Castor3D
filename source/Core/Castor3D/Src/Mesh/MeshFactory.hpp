@@ -50,14 +50,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MeshFactory();
-		/**
-		 *\~english
-		 *\brief		Registers all objects types
-		 *\~french
-		 *\brief		Enregistre tous les types d'objets
-		 */
-		C3D_API virtual void Initialise();
+		C3D_API ~MeshFactory();
 	};
 }
 

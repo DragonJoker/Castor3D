@@ -51,13 +51,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~OverlayFactory();
-		/**
-		 *\~english
-		 *\brief		Registers all objects types
-		 *\~french
-		 *\brief		Enregistre tous les types d'objets
-		 */
-		C3D_API virtual void Initialise();
 	};
 }
 

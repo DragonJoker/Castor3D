@@ -20,17 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Mesh/Importer.hpp>
 
-#ifndef _WIN32
-#	define C3D_Md3_API
-#else
-#	ifdef Md3Importer_EXPORTS
-#		define C3D_Md3_API __declspec(dllexport)
-#	else
-#		define C3D_Md3_API __declspec(dllimport)
-#	endif
-#endif
-
-namespace Castor3D
+namespace C3DMd3
 {
 	//! MD3 file importer
 	/*!
@@ -39,7 +29,7 @@ namespace Castor3D
 	\date 25/08/2010
 	*/
 	class Md3Importer
-		:	public Importer
+		:	public Castor3D::Importer
 	{
 	private:
 		struct Md3Header
@@ -77,15 +67,15 @@ namespace Castor3D
 		{
 			char m_strName[64];
 			Castor::Point3r m_position;
-			real m_rotation[3][3];
+			Castor3D::real m_rotation[3][3];
 		};
 
 		struct Md3Bone
 		{
-			real m_mins[3];
-			real m_maxs[3];
-			real m_position[3];
-			real m_scale;
+			Castor3D::real m_mins[3];
+			Castor3D::real m_maxs[3];
+			Castor3D::real m_position[3];
+			Castor3D::real m_scale;
 			char m_creator[16];
 		};
 
@@ -103,13 +93,30 @@ namespace Castor3D
 
 		struct Md3TexCoord
 		{
-			real m_textureCoord[2];
+			Castor3D::real m_textureCoord[2];
 		};
 
 		struct Md3Skin
 		{
 			char m_strName[68];
 		};
+
+	public:
+		/**
+		 * Constructor
+		 */
+		Md3Importer( Castor3D::Engine & p_engine );
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
+
+	private:
+		virtual Castor3D::SceneSPtr DoImportScene();
+		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		void DoReadMD3Data( Castor3D::Scene & p_scene, Castor3D::MeshSPtr p_pMesh, Castor3D::PassSPtr p_pPass );
+		void DoConvertDataStructures( Castor3D::MeshSPtr p_pMesh, Md3MeshInfo p_meshHeader );
+		bool DoLoadSkin( Castor3D::Scene & p_scene, Castor::Path const & p_strSkin );
+		bool DoLoadShader( Castor3D::Scene & p_scene, Castor3D::MeshSPtr p_pMesh, Castor::Path const & p_strShader );
+		void DoCleanUp();
 
 	public:
 		Md3Header m_header;
@@ -122,25 +129,10 @@ namespace Castor3D
 
 		Md3Tag * m_tags;
 		int m_numOfTags;
-		MeshSPtr * m_links;
-		SubmeshPtrStrMap m_mapSubmeshesByName;
+		Castor3D::MeshSPtr * m_links;
+		Castor3D::SubmeshPtrStrMap m_mapSubmeshesByName;
 
 		Castor::BinaryFile * m_pFile;
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Md3Importer( Engine & p_pEngine );
-
-	private:
-		virtual SceneSPtr DoImportScene();
-		virtual MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
-		void DoReadMD3Data( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_pPass );
-		void DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshHeader );
-		bool DoLoadSkin( Castor3D::Scene & p_scene, Castor::Path const & p_strSkin );
-		bool DoLoadShader( Castor3D::Scene & p_scene, MeshSPtr p_pMesh, Castor::Path const & p_strShader );
-		void DoCleanUp();
 	};
 }
 

@@ -26,12 +26,6 @@ namespace Castor3D
 		cuT( "c3d_mtxTexture1" ),
 		cuT( "c3d_mtxTexture2" ),
 		cuT( "c3d_mtxTexture3" ),
-		cuT( "c3d_mtxTexture4" ),
-		cuT( "c3d_mtxTexture5" ),
-		cuT( "c3d_mtxTexture6" ),
-		cuT( "c3d_mtxTexture7" ),
-		cuT( "c3d_mtxTexture8" ),
-		cuT( "c3d_mtxTexture9" ),
 	};
 
 	//*************************************************************************************************
@@ -132,7 +126,7 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
 		{
-			if ( p_matrices & ( uint64_t( 0x1 ) << ( eMTXMODE_TEXTURE0 + i ) ) )
+			if ( p_matrices & ( uint64_t( 0x1 ) << ( int( MatrixMode::Texture0 ) + i ) ) )
 			{
 				ApplyTexture( i, p_matrixBuffer );
 			}

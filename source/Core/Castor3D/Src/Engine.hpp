@@ -34,7 +34,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "TargetCache.hpp"
 #include "TechniqueCache.hpp"
 
+#include "Mesh/ImporterFactory.hpp"
 #include "Mesh/MeshFactory.hpp"
+#include "Mesh/SubdividerFactory.hpp"
+#include "Render/RenderSystemFactory.hpp"
 #include "Technique/TechniqueFactory.hpp"
 
 #include <FileParser/FileParser.hpp>
@@ -291,7 +294,7 @@ namespace Castor3D
 		 */
 		inline RenderSystem * GetRenderSystem()const
 		{
-			return m_renderSystem;
+			return m_renderSystem.get();
 		}
 		/**
 		 *\~english
@@ -427,6 +430,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The RenderSystem factory.
+		 *\~french
+		 *\return		La fabrique de RenderSystem.
+		 */
+		inline RenderSystemFactory const & GetRenderSystemFactory()const
+		{
+			return m_renderSystemFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The RenderSystem factory.
+		 *\~french
+		 *\return		La fabrique de RenderSystem.
+		 */
+		inline RenderSystemFactory & GetRenderSystemFactory()
+		{
+			return m_renderSystemFactory;
+		}
+		/**
+		 *\~english
 		 *\return		The MeshGenerator factory.
 		 *\~french
 		 *\return		La fabrique de MeshGenerator.
@@ -465,6 +488,46 @@ namespace Castor3D
 		{
 			return m_techniqueFactory;
 		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline SubdividerFactory const & GetSubdividerFactory()const
+		{
+			return m_subdividerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline SubdividerFactory & GetSubdividerFactory()
+		{
+			return m_subdividerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Importer factory.
+		 *\~french
+		 *\return		La fabrique de Importer.
+		 */
+		inline ImporterFactory const & GetImporterFactory()const
+		{
+			return m_importerFactory;
+		}
+		/**
+		 *\~english
+		 *\return		The Subdivider factory.
+		 *\~french
+		 *\return		La fabrique de Subdivider.
+		 */
+		inline ImporterFactory & GetImporterFactory()
+		{
+			return m_importerFactory;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -481,7 +544,7 @@ namespace Castor3D
 		Version m_version;
 		//!\~english	The current RenderSystem.
 		//!\~french		Le RenderSystem courant.
-		RenderSystem * m_renderSystem;
+		RenderSystemUPtr m_renderSystem;
 		//!\~english	Tells if engine is cleaned up.
 		//!\~french		Dit si le moteur est nettoyé.
 		bool m_cleaned;
@@ -554,12 +617,21 @@ namespace Castor3D
 		//!\~english	The default frame listener.
 		//!\~french		Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
+		//!\~english	The RenderSystem factory.
+		//!\~french		La fabrique de RenderSystem.
+		RenderSystemFactory m_renderSystemFactory;
 		//!\~english	The MeshGenerator factory.
 		//!\~french		La fabrique de MeshGenerator.
 		MeshFactory m_meshFactory;
 		//!\~english	The RenderTechnique factory.
 		//!\~french		La fabrique de RenderTechnique.
 		TechniqueFactory m_techniqueFactory;
+		//!\~english	The subdivider factory.
+		//!\~french		La fabrique de subdiviseurs.
+		SubdividerFactory m_subdividerFactory;
+		//!\~english	The importer factory.
+		//!\~french		La fabrique d'importeurs.
+		ImporterFactory m_importerFactory;
 	};
 }
 

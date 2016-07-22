@@ -1,5 +1,6 @@
 #include "LwoImporter.hpp"
 
+#include <Engine.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Miscellaneous/Version.hpp>
 
@@ -25,20 +26,22 @@ C3D_Lwo_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::En
 	return l_arrayReturn;
 }
 
-C3D_Lwo_API void Create( Castor3D::Engine * p_pEngine, Castor3D::ImporterPlugin * p_pPlugin )
-{
-	p_pPlugin->AttachImporter( std::make_shared< Lwo::LwoImporter >( *p_pEngine ) );
-}
-
-C3D_Lwo_API void Destroy( Castor3D::ImporterPlugin * p_pPlugin )
-{
-	p_pPlugin->DetachImporter();
-}
-
 C3D_Lwo_API void OnLoad( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Register( Castor::string::lower_case( l_extension.first ), &Lwo::LwoImporter::Create );
+	}
 }
 
 C3D_Lwo_API void OnUnload( Castor3D::Engine * p_engine )
 {
+	auto l_extensions = GetExtensions( p_engine );
+
+	for ( auto const & l_extension : l_extensions )
+	{
+		p_engine->GetImporterFactory().Unregister( Castor::string::lower_case( l_extension.first ) );
+	}
 }

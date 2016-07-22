@@ -202,6 +202,11 @@ namespace C3dAssimp
 	{
 	}
 
+	ImporterUPtr AssimpImporter::Create( Engine & p_engine )
+	{
+		return std::make_unique< AssimpImporter >( p_engine );
+	}
+
 	SceneSPtr AssimpImporter::DoImportScene()
 	{
 		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ) );

@@ -1,6 +1,7 @@
 #include <Log/Logger.hpp>
 
 #include <Engine.hpp>
+#include <TargetCache.hpp>
 
 #include <Plugin/PostFxPlugin.hpp>
 #include <Render/RenderSystem.hpp>
@@ -42,5 +43,5 @@ C3D_GrayScale_API void OnLoad( Castor3D::Engine * p_engine )
 
 C3D_GrayScale_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetRenderTargetCache ().GetPostEffectFactory().Unregister( GrayScalePostEffect::Type );
+	p_engine->GetRenderTargetCache().GetPostEffectFactory().Unregister( GrayScalePostEffect::Type );
 }

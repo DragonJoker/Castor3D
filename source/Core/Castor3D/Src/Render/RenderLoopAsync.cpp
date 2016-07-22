@@ -16,8 +16,8 @@ namespace Castor3D
 	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
 	static const char * RLA_UNKNOWN_EXCEPTION = "Unknown exception";
 
-	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
-		: RenderLoop( p_engine, p_renderSystem, p_wantedFPS )
+	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, uint32_t p_wantedFPS )
+		: RenderLoop( p_engine, p_wantedFPS )
 		, m_mainLoopThread( nullptr )
 		, m_paused( false )
 		, m_ended( false )
@@ -154,7 +154,7 @@ namespace Castor3D
 
 			m_createContext = false;
 			DoSetWindow( nullptr );
-			l_return = m_renderSystem->GetMainContext();
+			l_return = m_renderSystem.GetMainContext();
 		}
 
 		return l_return;
@@ -183,7 +183,7 @@ namespace Castor3D
 
 					if ( l_context )
 					{
-						m_renderSystem->SetMainContext( l_context );
+						m_renderSystem.SetMainContext( l_context );
 						m_created = true;
 					}
 				}
@@ -222,19 +222,19 @@ namespace Castor3D
 		{
 			Logger::LogError( cuT( "RenderLoop - " ) + p_exc.GetFullDescription() );
 			Cleanup();
-			m_renderSystem->Cleanup();
+			m_renderSystem.Cleanup();
 			throw;
 		}
 		catch ( std::exception & p_exc )
 		{
 			Logger::LogError( std::string( "RenderLoop - " ) + p_exc.what() );
 			Cleanup();
-			m_renderSystem->Cleanup();
+			m_renderSystem.Cleanup();
 			throw;
 		}
 
 		Cleanup();
-		m_renderSystem->Cleanup();
+		m_renderSystem.Cleanup();
 	}
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )

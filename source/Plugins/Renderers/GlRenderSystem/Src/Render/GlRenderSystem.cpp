@@ -98,6 +98,11 @@ namespace GlRender
 	{
 	}
 
+	RenderSystemUPtr GlRenderSystem::Create( Engine & p_engine )
+	{
+		return std::make_unique< GlRenderSystem >( p_engine );
+	}
+
 	bool GlRenderSystem::InitOpenGlExtensions()
 	{
 		if ( !m_extensionsInit )

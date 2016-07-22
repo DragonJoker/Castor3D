@@ -14,16 +14,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MeshFactory::MeshFactory()
-		:	Factory< MeshGenerator, eMESH_TYPE >()
-	{
-		Initialise();
-	}
-
-	MeshFactory::~MeshFactory()
-	{
-	}
-
-	void MeshFactory::Initialise()
+		: Factory< MeshGenerator, eMESH_TYPE >()
 	{
 		Register( eMESH_TYPE_CONE, Cone::Create );
 		Register( eMESH_TYPE_CUBE, Cube::Create );
@@ -34,5 +25,9 @@ namespace Castor3D
 		Register( eMESH_TYPE_PROJECTION, Projection::Create );
 		Register( eMESH_TYPE_SPHERE, Sphere::Create );
 		Register( eMESH_TYPE_TORUS, Torus::Create );
+	}
+
+	MeshFactory::~MeshFactory()
+	{
 	}
 }

@@ -129,17 +129,6 @@ namespace Castor3D
 		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
 		/**
 		 *\~english
-		 *\brief		Loads a renderer plug-in, given the renderer type
-		 *\param[in]	p_type	The renderer type
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Charge un plug-in de rendu, selon le type de rendu
-		 *\param[in]	p_type	Le type de rendu
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API RenderSystem * LoadRenderer( Castor::String const & p_type );
-		/**
-		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder
 		 *\param[in]	p_folder	The plug-ins' folder
 		 *\~french
@@ -147,47 +136,11 @@ namespace Castor3D
 		 *\param[in]	p_folder	Le dossier
 		 */
 		C3D_API void LoadAllPlugins( Castor::Path const & p_folder );
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the renderer plug-ins array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le tableau des plug-ins de rendu
-		 *\return		L'itérateur
-		 */
-		inline RendererPtrMap const & GetRenderersList()const
-		{
-			return m_renderers;
-		}
-		/**
-		*\~english
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*\~french
-		*\param[in]	p_renderSystem	Le RenderSystem.
-		*/
-		inline void SetRenderSystem( RenderSystem * p_renderSystem )
-		{
-			m_renderSystem = p_renderSystem;
-		}
-		/**
-		*\~english
-		*\return		The RenderSystem.
-		*\~french
-		*\return		Le RenderSystem.
-		*/
-		inline RenderSystem * SetRenderSystem()const
-		{
-			return m_renderSystem;
-		}
 
 	private:
-		PluginSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_library );
-		PluginSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
+		PluginSPtr DoLoadPlugin( Castor::Path const & p_pathFile );
 
 	private:
-		//!\~english	The RenderSystem.
-		//!\~french		Le RenderSystem.
-		RenderSystem * m_renderSystem{ nullptr };
 		//!\~english	The loaded shared libraries map.
 		//!\~french		La map des shared libraries chargées.
 		DynamicLibraryPtrPathMapArray m_libraries;
@@ -206,12 +159,6 @@ namespace Castor3D
 		//!\~english	The mutex protecting the loaded plug-ins map sorted by type.
 		//!\~french		Le mutex protégeant la map de plug-ins chargés triés par type.
 		std::recursive_mutex m_mutexLoadedPluginTypes;
-		//!\~english	The renderer plug-ins array.
-		//!\~french		Le tableau des plug-ins de rendu.
-		RendererPtrMap m_renderers;
-		//!\~english	The mutex protecting the renderer plug-ins array.
-		//!\~french		Le mutex protégeant le tableau des plug-ins de rendu.
-		std::recursive_mutex m_mutexRenderers;
 	};
 	using PluginCache = Cache< Plugin, Castor::String >;
 	DECLARE_SMART_PTR( PluginCache );

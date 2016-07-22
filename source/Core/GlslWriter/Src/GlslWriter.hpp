@@ -40,7 +40,7 @@ namespace GLSL
 		: public Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >
 	{
 	public:
-		GlslWriter_API virtual void Initialise();
+		GlslWriter_API LightingModelFactory();
 	};
 
 	struct Endl {};

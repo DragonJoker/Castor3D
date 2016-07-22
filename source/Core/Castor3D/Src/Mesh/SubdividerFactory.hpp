@@ -15,50 +15,25 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_GENERATOR_PLUGIN_H___
-#define ___C3D_GENERATOR_PLUGIN_H___
+#ifndef ___C3D_SUBDIVIDER_FACTORY_H___
+#define ___C3D_SUBDIVIDER_FACTORY_H___
 
-#include "Plugin.hpp"
+#include "Subdivider.hpp"
+
+#include <Design/Factory.hpp>
 
 namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
+	\version	0.9.0
+	\date		22/07/2016
 	\~english
-	\brief		Generator Plugin class
+	\brief		The subdivider factory.
 	\~french
-	\brief		Classe de plug-in de générateur procédural
+	\brief		La fabrique de subdiviseurs.
 	*/
-	class GeneratorPlugin
-		: public Plugin
-	{
-	private:
-		friend class Plugin;
-		friend class Engine;
-
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_library	The shared library holding the plug-in
-		 *\param[in]	p_engine	The engine
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
-		 *\param[in]	p_engine	Le moteur
-		 */
-		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~GeneratorPlugin();
-	};
+	using SubdividerFactory = Castor::Factory< Subdivider, Castor::String, SubdividerUPtr >;
 }
 
 #endif
-

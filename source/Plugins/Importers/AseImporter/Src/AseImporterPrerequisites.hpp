@@ -21,16 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Mesh/Importer.hpp>
 #include <FileParser/FileParser.hpp>
 
-#ifndef _WIN32
-#	define C3D_Ase_API
-#else
-#	ifdef AseImporter_EXPORTS
-#		define C3D_Ase_API __declspec(dllexport)
-#	else
-#		define C3D_Ase_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace Ase
 {
 	class AseFileContext;

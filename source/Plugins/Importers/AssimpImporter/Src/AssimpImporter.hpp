@@ -51,16 +51,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <assimp/scene.h> // Output data structure
 #include <assimp/postprocess.h> // Post processing flags
 
-#ifndef _WIN32
-#	define C3D_Assimp_API
-#else
-#	ifdef AssimpImporter_EXPORTS
-#		define C3D_Assimp_API __declspec(dllexport)
-#	else
-#		define C3D_Assimp_API __declspec(dllimport)
-#	endif
-#endif
-
 namespace C3dAssimp
 {
 	/*!
@@ -77,6 +67,8 @@ namespace C3dAssimp
 	public:
 		AssimpImporter( Castor3D::Engine & p_engine );
 		~AssimpImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

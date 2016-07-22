@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <FileParser.hpp>
+#include <FileParser/FileParser.hpp>
 
 #include <Engine.hpp>
 
@@ -63,6 +63,8 @@ namespace C3dOgre
 	public:
 		OgreImporter( Castor3D::Engine & p_engine );
 		~OgreImporter();
+
+		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

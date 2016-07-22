@@ -10,19 +10,14 @@ using namespace Castor;
 namespace Castor3D
 {
 	LightFactory::LightFactory()
-		:	Factory< LightCategory, eLIGHT_TYPE >()
-	{
-		Initialise();
-	}
-
-	LightFactory::~LightFactory()
-	{
-	}
-
-	void LightFactory::Initialise()
+		: Factory< LightCategory, eLIGHT_TYPE >()
 	{
 		Register( eLIGHT_TYPE_DIRECTIONAL, DirectionalLight::Create );
 		Register( eLIGHT_TYPE_POINT, PointLight::Create );
 		Register( eLIGHT_TYPE_SPOT, SpotLight::Create );
+	}
+
+	LightFactory::~LightFactory()
+	{
 	}
 }

@@ -43,7 +43,7 @@ namespace GuiCommon
 		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, l_strCancel );
 		l_pTitle->SetFont( l_font );
 
-		for ( auto l_it : m_engine->GetPluginCache().GetRenderersList() )
+		for ( auto l_it : m_engine->GetPluginCache().GetPlugins( ePLUGIN_TYPE_RENDERER ) )
 		{
 			if ( l_it.second )
 			{
