@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if CASTOR_USE_PCH
 #	include <Log/Logger.hpp>
-#	include <Pixel.hpp>
+#	include <Graphics/Pixel.hpp>
 #	include <Graphics/Font.hpp>
 
 #	include <Castor3DPrerequisites.hpp>
@@ -71,6 +71,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #endif
 
-#include <StringUtils.hpp>
+#include <Miscellaneous/StringUtils.hpp>
 
 #endif

@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Graphics/Colour.hpp>
 #include <Design/OwnedBy.hpp>
+#include <Design/Named.hpp>
 
 #ifndef C3D_TRACE_OBJECTS
 #	define C3D_TRACE_OBJECTS 1

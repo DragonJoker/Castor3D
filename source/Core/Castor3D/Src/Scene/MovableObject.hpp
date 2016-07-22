@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Animation/Animable.hpp"
 
+#include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
 namespace Castor3D

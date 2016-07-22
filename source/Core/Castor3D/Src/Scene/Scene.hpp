@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_H___
 #define ___C3D_SCENE_H___
 
+#include "Cache/CacheView.hpp"
 #include "Cache/ObjectCache.hpp"
 
 #include "BillboardCache.hpp"
@@ -33,6 +34,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "WindowCache.hpp"
 
 #include <Log/Logger.hpp>
+#include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 
 namespace Castor3D

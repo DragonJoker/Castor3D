@@ -4,7 +4,7 @@
 
 #include <GradientButton.hpp>
 #include <PropertiesHolder.hpp>
-#include <MaterialManager.hpp>
+#include <MaterialCache.hpp>
 
 #include <wx/propgrid/propgrid.h>
 
@@ -21,9 +21,9 @@ namespace CastorShape
 		static wxString GEOMETRY_MATERIAL = _( "Material" );
 	}
 
-	NewGeometryDialog::NewGeometryDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
+	NewGeometryDialog::NewGeometryDialog( Scene & p_scene, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
 		: wxDialog( parent, p_id, p_name, pos, size, style, p_name )
-		, m_engine( p_engine )
+		, m_scene( p_scene )
 		, m_properties( NULL )
 	{
 		GEOMETRY_NAME = _( "Name" );
@@ -63,7 +63,7 @@ namespace CastorShape
 
 		while ( l_res == _( "New..." ) )
 		{
-			l_dialog = new NewMaterialDialog( PropertiesHolder::GetButtonEditor(), m_engine, NULL, wxID_ANY );
+			l_dialog = new NewMaterialDialog( PropertiesHolder::GetButtonEditor(), m_scene, NULL, wxID_ANY );
 
 			if ( l_dialog->ShowModal() == wxID_OK )
 			{
@@ -83,12 +83,12 @@ namespace CastorShape
 
 	void NewGeometryDialog::DoInitialise()
 	{
-		StringArray l_choices1;
-		m_engine->GetMaterialManager().GetNames( l_choices1 );
+		StringArray l_materials;
+		m_scene.GetEngine()->GetMaterialCache().GetNames( l_materials );
 		wxPGChoices l_choices;
 		l_choices.Add( wxCOMBO_NEW );
 
-		for ( auto l_choice : l_choices1 )
+		for ( auto l_choice : l_materials )
 		{
 			l_choices.Add( make_wxString( l_choice ) );
 		}

@@ -1,6 +1,6 @@
 #include "Md2Importer.hpp"
 
-#include <Colour.hpp>
+#include <Graphics/Colour.hpp>
 #include <Graphics/Image.hpp>
 
 #include <Engine.hpp>

@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 #include "ComSize.hpp"
-#include <PixelBuffer.hpp>
+#include <Graphics/PixelBuffer.hpp>
 
 namespace CastorCom
 {

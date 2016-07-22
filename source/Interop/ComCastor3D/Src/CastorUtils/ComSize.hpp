@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComCastor3DPrerequisites.hpp"
 
 #include "ComAtlObject.hpp"
-#include <Size.hpp>
+#include <Graphics/Size.hpp>
 
 namespace CastorCom
 {

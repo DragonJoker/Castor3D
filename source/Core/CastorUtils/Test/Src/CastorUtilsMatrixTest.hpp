@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtilsTestPrerequisites.hpp"
 
-#include <SquareMatrix.hpp>
+#include <Math/SquareMatrix.hpp>
 #if defined( CASTOR_USE_GLM )
 #	include <glm/glm.hpp>
 #endif

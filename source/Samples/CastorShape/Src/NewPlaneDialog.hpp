@@ -26,7 +26,7 @@ namespace CastorShape
 		: public NewGeometryDialog
 	{
 	public:
-		NewPlaneDialog( Castor3D::Engine * p_engine, wxWindow * parent, wxWindowID p_id );
+		NewPlaneDialog( Castor3D::Scene & p_scene, wxWindow * parent, wxWindowID p_id );
 		~NewPlaneDialog();
 
 		Castor::real GetWidth()const;

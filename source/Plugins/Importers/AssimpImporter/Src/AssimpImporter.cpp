@@ -1,6 +1,6 @@
 #include "AssimpImporter.hpp"
 
-#include <ArrayView.hpp>
+#include <Design/ArrayView.hpp>
 
 #include <GeometryCache.hpp>
 #include <MaterialCache.hpp>

@@ -19,13 +19,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "PyCastor3DPrerequisites.hpp"
 
+#include <LightCache.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
-#define RESOURCE_MANAGER( name )\
-	name##Manager & ( Engine::*engGet##name##Manager )() = &Engine::Get##name##Manager
-#define OBJECT_MANAGER( name )\
-	name##Manager & ( Scene::*scnGet##name##Manager )() = &Scene::Get##name##Manager
+#define CACHE_GETTER( owner, name )\
+	name##Cache & ( owner::*resGet##name##Cache )() = &owner::Get##name##Cache
 
 void ExportCastor3D()
 {
@@ -98,7 +98,7 @@ void ExportCastor3D()
 	.value( "POLYGON", eTOPOLOGY_POLYGON )
 	;
 	//@}
-	/**@group_name eTEXTURE_CHANNEL */
+	/**@group_name TextureChannel */
 	//@{
 	py::enum_< TextureChannel >( "TextureChannel" )
 	.value( "COLOUR", TextureChannel::Colour )
@@ -113,116 +113,119 @@ void ExportCastor3D()
 	.value( "ALL", TextureChannel::All )
 	;
 	//@}
-	/**@group_name eRGB_BLEND_FUNC */
+	/**@group_name RgbBlendFunc */
 	//@{
-	py::enum_< eRGB_BLEND_FUNC >( "RgbBlendFunc" )
-	.value( "NONE", eRGB_BLEND_FUNC_NONE )
-	.value( "FIRST_ARG", eRGB_BLEND_FUNC_FIRST_ARG )
-	.value( "ADD", eRGB_BLEND_FUNC_ADD )
-	.value( "ADD_SIGNED", eRGB_BLEND_FUNC_ADD_SIGNED )
-	.value( "MODULATE", eRGB_BLEND_FUNC_MODULATE )
-	.value( "INTERPOLATE", eRGB_BLEND_FUNC_INTERPOLATE )
-	.value( "SUBTRACT", eRGB_BLEND_FUNC_SUBTRACT )
-	.value( "DOT3_RGB", eRGB_BLEND_FUNC_DOT3_RGB )
-	.value( "DOT3_RGBA", eRGB_BLEND_FUNC_DOT3_RGBA )
+	py::enum_< RGBBlendFunc >( "RgbBlendFunc" )
+	.value( "NONE", RGBBlendFunc::NoBlend )
+	.value( "FIRST_ARG", RGBBlendFunc::FirstArg )
+	.value( "ADD", RGBBlendFunc::Add )
+	.value( "ADD_SIGNED", RGBBlendFunc::AddSigned )
+	.value( "MODULATE", RGBBlendFunc::Modulate )
+	.value( "INTERPOLATE", RGBBlendFunc::Interpolate )
+	.value( "SUBTRACT", RGBBlendFunc::Subtract )
+	.value( "DOT3_RGB", RGBBlendFunc::Dot3RGB )
+	.value( "DOT3_RGBA", RGBBlendFunc::Dot3RGBA )
 	;
 	//@}
-	/**@group_name eALPHA_BLEND_FUNC */
+	/**@group_name AlphaBlendFunc */
 	//@{
-	py::enum_< eALPHA_BLEND_FUNC >( "AlphaBlendFunc" )
-	.value( "NONE", eALPHA_BLEND_FUNC_NONE )
-	.value( "FIRST_ARG", eALPHA_BLEND_FUNC_FIRST_ARG )
-	.value( "ADD", eALPHA_BLEND_FUNC_ADD )
-	.value( "ADD_SIGNED", eALPHA_BLEND_FUNC_ADD_SIGNED )
-	.value( "MODULATE", eALPHA_BLEND_FUNC_MODULATE )
-	.value( "INTERPOLATE", eALPHA_BLEND_FUNC_INTERPOLATE )
-	.value( "SUBSTRACT", eALPHA_BLEND_FUNC_SUBSTRACT )
+	py::enum_< AlphaBlendFunc >( "AlphaBlendFunc" )
+	.value( "NONE", AlphaBlendFunc::NoBlend )
+	.value( "FIRST_ARG", AlphaBlendFunc::FirstArg )
+	.value( "ADD", AlphaBlendFunc::Add )
+	.value( "ADD_SIGNED", AlphaBlendFunc::AddSigned )
+	.value( "MODULATE", AlphaBlendFunc::Modulate )
+	.value( "INTERPOLATE", AlphaBlendFunc::Interpolate )
+	.value( "SUBTRACT", AlphaBlendFunc::Subtract )
 	;
 	//@}
-	/**@group_name eBLEND_SOURCE */
+	/**@group_name BlendSource */
 	//@{
-	py::enum_< eBLEND_SOURCE >( "BlendSource" )
-	.value( "TEXTURE", eBLEND_SOURCE_TEXTURE )
-	.value( "TEXTURE0", eBLEND_SOURCE_TEXTURE0 )
-	.value( "TEXTURE1", eBLEND_SOURCE_TEXTURE1 )
-	.value( "TEXTURE2,", eBLEND_SOURCE_TEXTURE2 )
-	.value( "TEXTURE3", eBLEND_SOURCE_TEXTURE3 )
-	.value( "CONSTANT", eBLEND_SOURCE_CONSTANT )
-	.value( "DIFFUSE", eBLEND_SOURCE_DIFFUSE )
-	.value( "PREVIOUS", eBLEND_SOURCE_PREVIOUS )
+	py::enum_< BlendSource >( "BlendSource" )
+	.value( "TEXTURE", BlendSource::Texture )
+	.value( "TEXTURE0", BlendSource::Texture0 )
+	.value( "TEXTURE1", BlendSource::Texture1 )
+	.value( "TEXTURE2,", BlendSource::Texture2 )
+	.value( "TEXTURE3", BlendSource::Texture3 )
+	.value( "CONSTANT", BlendSource::Constant )
+	.value( "DIFFUSE", BlendSource::Diffuse )
+	.value( "PREVIOUS", BlendSource::Previous )
 	;
 	//@}
-	/**@group_name eALPHA_FUNC */
+	/**@group_name AlphaFunc */
 	//@{
-	py::enum_< eALPHA_FUNC >( "AlphaFunc" )
-	.value( "ALWAYS", eALPHA_FUNC_ALWAYS )
-	.value( "LESS", eALPHA_FUNC_LESS )
-	.value( "LESS_OR_EQUAL", eALPHA_FUNC_LESS_OR_EQUAL )
-	.value( "EQUAL", eALPHA_FUNC_EQUAL )
-	.value( "NOT_EQUAL", eALPHA_FUNC_NOT_EQUAL )
-	.value( "GREATER_OR_EQUAL", eALPHA_FUNC_GREATER_OR_EQUAL )
-	.value( "GREATER", eALPHA_FUNC_GREATER )
-	.value( "NEVER", eALPHA_FUNC_NEVER )
+	py::enum_< AlphaFunc >( "AlphaFunc" )
+	.value( "ALWAYS", AlphaFunc::Always )
+	.value( "LESS", AlphaFunc::Less )
+	.value( "LESS_OR_EQUAL", AlphaFunc::LEqual )
+	.value( "EQUAL", AlphaFunc::Equal )
+	.value( "NOT_EQUAL", AlphaFunc::NEqual )
+	.value( "GREATER_OR_EQUAL", AlphaFunc::GEqual )
+	.value( "GREATER", AlphaFunc::Greater )
+	.value( "NEVER", AlphaFunc::Never )
 	;
 	//@}
-	/**@group_name eTEXTURE_DIMENSION */
+	/**@group_name TextureType */
 	//@{
-	py::enum_< eTEXTURE_TYPE >( "TextureDimension" )
-	.value( "1D", eTEXTURE_TYPE_1D )
-	.value( "1DARRAY", eTEXTURE_TYPE_1DARRAY )
-	.value( "2D", eTEXTURE_TYPE_2D )
-	.value( "2DARRAY", eTEXTURE_TYPE_2DARRAY )
-	.value( "2DMS", eTEXTURE_TYPE_2DMS )
-	.value( "2DMSARRAY", eTEXTURE_TYPE_2DMSARRAY )
-	.value( "3D", eTEXTURE_TYPE_3D )
+	py::enum_< TextureType >( "TextureType" )
+	.value( "1D", TextureType::OneDimension )
+	.value( "1DARRAY", TextureType::OneDimensionArray )
+	.value( "2D", TextureType::TwoDimensions )
+	.value( "2DARRAY", TextureType::TwoDimensionsArray )
+	.value( "2DMS", TextureType::TwoDimensionsMS )
+	.value( "2DMSARRAY", TextureType::TwoDimensionsMSArray )
+	.value( "3D", TextureType::ThreeDimensions )
+	.value( "BUFFER", TextureType::Buffer )
+	.value( "CUBE", TextureType::Cube )
+	.value( "CUBEARRAY", TextureType::CubeArray )
 	;
 	//@}
-	/**@group_name eINTERPOLATION_MODE */
+	/**@group_name InterpolationMode */
 	//@{
-	py::enum_< eINTERPOLATION_MODE >( "InterpolationMode" )
-	.value( "NEAREST", eINTERPOLATION_MODE_NEAREST )
-	.value( "LINEAR", eINTERPOLATION_MODE_LINEAR )
+	py::enum_< InterpolationMode >( "InterpolationMode" )
+	.value( "NEAREST", InterpolationMode::Nearest )
+	.value( "LINEAR", InterpolationMode::Linear )
 	;
 	//@}
-	/**@group_name eWRAP_MODE */
+	/**@group_name WrapMode */
 	//@{
-	py::enum_< eWRAP_MODE >( "WrapMode" )
-	.value( "REPEAT", eWRAP_MODE_REPEAT )
-	.value( "MIRRORED_REPEAT", eWRAP_MODE_MIRRORED_REPEAT )
-	.value( "CLAMP_TO_BORDER", eWRAP_MODE_CLAMP_TO_BORDER )
-	.value( "CLAMP_TO_EDGE", eWRAP_MODE_CLAMP_TO_EDGE )
+	py::enum_< WrapMode >( "WrapMode" )
+	.value( "REPEAT", WrapMode::Repeat )
+	.value( "MIRRORED_REPEAT", WrapMode::MirroredRepeat )
+	.value( "CLAMP_TO_BORDER", WrapMode::ClampToBorder )
+	.value( "CLAMP_TO_EDGE", WrapMode::ClampToEdge )
 	;
 	//@}
-	/**@group_name eBLEND_OP */
+	/**@group_name BlendOperation */
 	//@{
-	py::enum_< eBLEND_OP >( "BlendOp" )
-	.value( "ADD", eBLEND_OP_ADD )
-	.value( "SUBSTRACT", eBLEND_OP_SUBSTRACT )
-	.value( "REV_SUBSTRACT", eBLEND_OP_REV_SUBSTRACT )
-	.value( "MIN", eBLEND_OP_MIN )
-	.value( "MAX", eBLEND_OP_MAX )
+	py::enum_< BlendOperation >( "BlendOperation" )
+	.value( "ADD", BlendOperation::Add )
+	.value( "SUBTRACT", BlendOperation::Subtract )
+	.value( "REV_SUBTRACT", BlendOperation::RevSubtract )
+	.value( "MIN", BlendOperation::Min )
+	.value( "MAX", BlendOperation::Max )
 	;
 	//@}
-	/**@group_name eBLEND */
+	/**@group_name BlendOperand */
 	//@{
-	py::enum_< eBLEND >( "Blend" )
-	.value( "ZERO", eBLEND_ZERO )
-	.value( "ONE", eBLEND_ONE )
-	.value( "SRC_COLOUR", eBLEND_SRC_COLOUR )
-	.value( "INV_SRC_COLOUR", eBLEND_INV_SRC_COLOUR )
-	.value( "DST_COLOUR", eBLEND_DST_COLOUR )
-	.value( "INV_DST_COLOUR", eBLEND_INV_DST_COLOUR )
-	.value( "SRC_ALPHA", eBLEND_SRC_ALPHA )
-	.value( "INV_SRC_ALPHA", eBLEND_INV_SRC_ALPHA )
-	.value( "DST_ALPHA", eBLEND_DST_ALPHA )
-	.value( "INV_DST_ALPHA", eBLEND_INV_DST_ALPHA )
-	.value( "CONSTANT", eBLEND_CONSTANT )
-	.value( "INV_CONSTANT", eBLEND_INV_CONSTANT )
-	.value( "SRC_ALPHA_SATURATE", eBLEND_SRC_ALPHA_SATURATE )
-	.value( "SRC1_COLOUR", eBLEND_SRC1_COLOUR )
-	.value( "INV_SRC1_COLOUR", eBLEND_INV_SRC1_COLOUR )
-	.value( "SRC1_ALPHA", eBLEND_SRC1_ALPHA )
-	.value( "INV_SRC1_ALPHA", eBLEND_INV_SRC1_ALPHA )
+	py::enum_< BlendOperand >( "BlendOperand" )
+	.value( "ZERO", BlendOperand::Zero )
+	.value( "ONE", BlendOperand::One )
+	.value( "SRC_COLOUR", BlendOperand::Src1Colour )
+	.value( "INV_SRC_COLOUR", BlendOperand::InvSrcColour )
+	.value( "DST_COLOUR", BlendOperand::DstColour )
+	.value( "INV_DST_COLOUR", BlendOperand::InvDstColour )
+	.value( "SRC_ALPHA", BlendOperand::SrcAlpha )
+	.value( "INV_SRC_ALPHA", BlendOperand::InvSrcAlpha )
+	.value( "DST_ALPHA", BlendOperand::DstAlpha )
+	.value( "INV_DST_ALPHA", BlendOperand::InvDstAlpha )
+	.value( "CONSTANT", BlendOperand::Constant )
+	.value( "INV_CONSTANT", BlendOperand::InvConstant )
+	.value( "SRC_ALPHA_SATURATE", BlendOperand::SrcAlphaSaturate )
+	.value( "SRC1_COLOUR", BlendOperand::Src1Colour )
+	.value( "INV_SRC1_COLOUR", BlendOperand::InvSrc1Colour )
+	.value( "SRC1_ALPHA", BlendOperand::Src1Alpha )
+	.value( "INV_SRC1_ALPHA", BlendOperand::InvSrc1Alpha )
 	;
 	//@}
 	/**@group_name eDEPTH_FUNC */
@@ -428,12 +431,12 @@ void ExportCastor3D()
 	//@{
 	py::class_< Sampler, boost::noncopyable >( "Sampler", py::no_init )
 	.add_property( "name", py::make_function( &Sampler::GetName, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &Sampler::SetName ), "The sampler name" )
-	.add_property( "min_filter", cpy::make_getter( &Sampler::GetInterpolationMode, eINTERPOLATION_FILTER_MIN ), cpy::make_setter( &Sampler::SetInterpolationMode, eINTERPOLATION_FILTER_MIN ), "The sampler min filter" )
-	.add_property( "mag_filter", cpy::make_getter( &Sampler::GetInterpolationMode, eINTERPOLATION_FILTER_MAG ), cpy::make_setter( &Sampler::SetInterpolationMode, eINTERPOLATION_FILTER_MAG ), "The sampler mag filter" )
-	.add_property( "mip_filter", cpy::make_getter( &Sampler::GetInterpolationMode, eINTERPOLATION_FILTER_MIP ), cpy::make_setter( &Sampler::SetInterpolationMode, eINTERPOLATION_FILTER_MIP ), "The sampler mip filter" )
-	.add_property( "u_wrap", cpy::make_getter( &Sampler::GetWrappingMode, eTEXTURE_UVW_U ), cpy::make_setter( &Sampler::SetWrappingMode, eTEXTURE_UVW_U ), "The sampler U wrap mode" )
-	.add_property( "v_wrap", cpy::make_getter( &Sampler::GetWrappingMode, eTEXTURE_UVW_V ), cpy::make_setter( &Sampler::SetWrappingMode, eTEXTURE_UVW_V ), "The sampler V wrap mode" )
-	.add_property( "w_wrap", cpy::make_getter( &Sampler::GetWrappingMode, eTEXTURE_UVW_W ), cpy::make_setter( &Sampler::SetWrappingMode, eTEXTURE_UVW_W ), "The sampler W wrap mode" )
+	.add_property( "min_filter", cpy::make_getter( &Sampler::GetInterpolationMode, InterpolationFilter::Min ), cpy::make_setter( &Sampler::SetInterpolationMode, InterpolationFilter::Min ), "The sampler min filter" )
+	.add_property( "mag_filter", cpy::make_getter( &Sampler::GetInterpolationMode, InterpolationFilter::Mag ), cpy::make_setter( &Sampler::SetInterpolationMode, InterpolationFilter::Mag ), "The sampler mag filter" )
+	.add_property( "mip_filter", cpy::make_getter( &Sampler::GetInterpolationMode, InterpolationFilter::Mip ), cpy::make_setter( &Sampler::SetInterpolationMode, InterpolationFilter::Mip ), "The sampler mip filter" )
+	.add_property( "u_wrap", cpy::make_getter( &Sampler::GetWrappingMode, TextureUVW::U ), cpy::make_setter( &Sampler::SetWrappingMode, TextureUVW::U ), "The sampler U wrap mode" )
+	.add_property( "v_wrap", cpy::make_getter( &Sampler::GetWrappingMode, TextureUVW::V ), cpy::make_setter( &Sampler::SetWrappingMode, TextureUVW::V ), "The sampler V wrap mode" )
+	.add_property( "w_wrap", cpy::make_getter( &Sampler::GetWrappingMode, TextureUVW::W ), cpy::make_setter( &Sampler::SetWrappingMode, TextureUVW::W ), "The sampler W wrap mode" )
 	.add_property( "max_anisotropy", &Sampler::GetMaxAnisotropy, &Sampler::SetMaxAnisotropy, "The sampler max anisotropy" )
 	.add_property( "min_lod", &Sampler::GetMinLod, &Sampler::SetMinLod, "The sampler min LOD" )
 	.add_property( "max_lod", &Sampler::GetMaxLod, &Sampler::SetMaxLod, "The sampler max LOD" )
@@ -480,16 +483,16 @@ void ExportCastor3D()
 	.add_property( "alpha_test_func", &TextureUnit::GetAlphaFunc, &TextureUnit::SetAlphaFunc, "The Alpha Test function" )
 	.add_property( "alpha_test_value", &TextureUnit::GetAlphaValue, &TextureUnit::SetAlphaValue, "The Alpha Test reference value" )
 	.add_property( "alpha_blend_func", &TextureUnit::GetAlpFunction, &TextureUnit::SetAlpFunction, "The Alpha Blending function" )
-	.add_property( "alpha_blend_arg_0", cpy::make_getter( &TextureUnit::GetAlpArgument, eBLEND_SRC_INDEX_0 ), cpy::make_setter( &TextureUnit::SetAlpArgument, eBLEND_SRC_INDEX_0 ), "The Alpha Blending argument for index 0" )
-	.add_property( "alpha_blend_arg_1", cpy::make_getter( &TextureUnit::GetAlpArgument, eBLEND_SRC_INDEX_1 ), cpy::make_setter( &TextureUnit::SetAlpArgument, eBLEND_SRC_INDEX_1 ), "The Alpha Blending argument for index 1" )
-	.add_property( "alpha_blend_arg_2", cpy::make_getter( &TextureUnit::GetAlpArgument, eBLEND_SRC_INDEX_2 ), cpy::make_setter( &TextureUnit::SetAlpArgument, eBLEND_SRC_INDEX_2 ), "The Alpha Blending argument for index 2" )
+	.add_property( "alpha_blend_arg_0", cpy::make_getter( &TextureUnit::GetAlpArgument, BlendSrcIndex::Index0 ), cpy::make_setter( &TextureUnit::SetAlpArgument, BlendSrcIndex::Index0 ), "The Alpha Blending argument for index 0" )
+	.add_property( "alpha_blend_arg_1", cpy::make_getter( &TextureUnit::GetAlpArgument, BlendSrcIndex::Index1 ), cpy::make_setter( &TextureUnit::SetAlpArgument, BlendSrcIndex::Index1 ), "The Alpha Blending argument for index 1" )
+	.add_property( "alpha_blend_arg_2", cpy::make_getter( &TextureUnit::GetAlpArgument, BlendSrcIndex::Index2 ), cpy::make_setter( &TextureUnit::SetAlpArgument, BlendSrcIndex::Index2 ), "The Alpha Blending argument for index 2" )
 	.add_property( "rgb_blend_func", &TextureUnit::GetRgbFunction, &TextureUnit::SetRgbFunction, "The RGB Blending function" )
-	.add_property( "rgb_blend_arg_0", cpy::make_getter( &TextureUnit::GetRgbArgument, eBLEND_SRC_INDEX_0 ), cpy::make_setter( &TextureUnit::SetRgbArgument, eBLEND_SRC_INDEX_0 ), "The RGB Blending argument for index 0" )
-	.add_property( "rgb_blend_arg_1", cpy::make_getter( &TextureUnit::GetRgbArgument, eBLEND_SRC_INDEX_1 ), cpy::make_setter( &TextureUnit::SetRgbArgument, eBLEND_SRC_INDEX_1 ), "The RGB Blending argument for index 1" )
-	.add_property( "rgb_blend_arg_2", cpy::make_getter( &TextureUnit::GetRgbArgument, eBLEND_SRC_INDEX_2 ), cpy::make_setter( &TextureUnit::SetRgbArgument, eBLEND_SRC_INDEX_2 ), "The RGB Blending argument for index 2" )
+	.add_property( "rgb_blend_arg_0", cpy::make_getter( &TextureUnit::GetRgbArgument, BlendSrcIndex::Index0 ), cpy::make_setter( &TextureUnit::SetRgbArgument, BlendSrcIndex::Index0 ), "The RGB Blending argument for index 0" )
+	.add_property( "rgb_blend_arg_1", cpy::make_getter( &TextureUnit::GetRgbArgument, BlendSrcIndex::Index1 ), cpy::make_setter( &TextureUnit::SetRgbArgument, BlendSrcIndex::Index1 ), "The RGB Blending argument for index 1" )
+	.add_property( "rgb_blend_arg_2", cpy::make_getter( &TextureUnit::GetRgbArgument, BlendSrcIndex::Index2 ), cpy::make_setter( &TextureUnit::SetRgbArgument, BlendSrcIndex::Index2 ), "The RGB Blending argument for index 2" )
 	.add_property( "channel", &TextureUnit::GetChannel, &TextureUnit::SetChannel, "The texture channel" )
 	.add_property( "blend_colour", py::make_function( &TextureUnit::GetBlendColour, py::return_value_policy< py::copy_const_reference >() ), &TextureUnit::SetBlendColour, "The texture blend colour" )
-	.def( "load_texture", &TextureUnit::LoadTexture )
+	.def( "set_texture", &TextureUnit::SetTexture )
 	;
 	//@}
 	/**@group_name ShaderProgram */
@@ -507,7 +510,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name Pass */
 	//@{
-	TextureUnitSPtr( Pass::*passChannelTextureUnitGetter )( eTEXTURE_CHANNEL ) = &Pass::GetTextureUnit;
+	TextureUnitSPtr( Pass::*passChannelTextureUnitGetter )( TextureChannel ) = &Pass::GetTextureUnit;
 	typedef TextureUnitPtrArrayIt( Pass::*TextureUnitPtrArrayItFunc )( );
 	py::class_< Pass, boost::noncopyable >( "Pass", py::no_init )
 	.add_property( "ambient", cpy::make_getter( &Pass::GetAmbient, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &Pass::SetAmbient ), "The pass ambient colour" )
@@ -547,7 +550,8 @@ void ExportCastor3D()
 	//@}
 	/**@group_name Mesh */
 	//@{
-	typedef SubmeshPtrArrayIt( Mesh::*SubmeshPtrArrayItFunc )( );
+	typedef SubmeshPtrArrayIt( Mesh::*SubmeshPtrArrayItFunc )();
+	Animation & ( Mesh::*meshAnimationGetter )( Castor::String const & ) = &Mesh::GetAnimation;
 	py::class_< Mesh, boost::noncopyable >( "Mesh", py::no_init )
 	.add_property( "submesh_count", &Mesh::GetSubmeshCount, "The total mesh's submeshes count" )
 	.add_property( "faces_count", &Mesh::GetFaceCount, "The total mesh's faces count" )
@@ -556,56 +560,113 @@ void ExportCastor3D()
 	.def( "create_submesh", &Mesh::CreateSubmesh )
 	.def( "delete_submesh", &Mesh::DeleteSubmesh )
 	.def( "animations", cpy::make_map_wrapper< AnimationPtrStrMap >( "Animations", &Mesh::GetAnimations ) )
-	.def( "create_animation", &Mesh::CreateAnimation )
-	.def( "get_animation", &Mesh::GetAnimation )
+	.def( "create_animation", py::make_function (&Mesh::CreateAnimation, py::return_value_policy< py::copy_non_const_reference >() ) )
+	.def( "get_animation", py::make_function( meshAnimationGetter, py::return_value_policy< py::copy_non_const_reference >() ) )
 	;
 	//@}
-	/**@group_name SceneNodeManager */
+	/**@group_name SceneNodeCache */
 	//@{
-	SceneNodeSPtr( SceneNodeManager::*sceneNodeCreator )( Castor::String const &, SceneNodeSPtr ) = &SceneNodeManager::Create;
-	py::class_< SceneNodeManager, boost::noncopyable >( "SceneNodeManager", py::no_init )
-	.def( "create", sceneNodeCreator, "Creates a SceneNode" )
-	.def( "remove", &SceneNodeManager::Remove, "Finds a SceneNode" )
-	.def( "has", &SceneNodeManager::Has, "Tells if the manager has a SceneNode" )
-	.def( "find", &SceneNodeManager::Find, "Finds a SceneNode" )
+	SceneNodeSPtr( SceneNodeCache::*sceneNodeCreator )( Castor::String const &, SceneNodeSPtr ) = &SceneNodeCache::Add;
+	py::class_< SceneNodeCache, boost::noncopyable >( "SceneNodeCache", py::no_init )
+	.def( "add", sceneNodeCreator, "Adds a SceneNode to the cache" )
+	.def( "remove", &SceneNodeCache::Remove, "Finds a SceneNode" )
+	.def( "has", &SceneNodeCache::Has, "Tells if the cache has a SceneNode" )
+	.def( "find", &SceneNodeCache::Find, "Finds a SceneNode in the cache" )
 	;
 	//@}
 	/**@group_name CameraCache */
 	//@{
-	CameraSPtr( CameraCache::*cameraCreator )( Castor::String const &, SceneNodeSPtr, Viewport const & ) = &CameraCache::Create;
+	CameraSPtr( CameraCache::*cameraCreator )( Castor::String const &, SceneNodeSPtr, Viewport const & ) = &CameraCache::Add;
 	py::class_< CameraCache, boost::noncopyable >( "CameraCache", py::no_init )
-	.def( "create", cameraCreator, "Creates a Camera" )
+	.def( "add", cameraCreator, "Adds a Camera to the cache" )
 	.def( "remove", &CameraCache::Remove, "Finds a Camera" )
-	.def( "has", &CameraCache::Has, "Tells if the manager has a Camera" )
-	.def( "find", &CameraCache::Find, "Finds a Camera" )
+	.def( "has", &CameraCache::Has, "Tells if the cache has a Camera" )
+	.def( "find", &CameraCache::Find, "Finds a Camera in the cache" )
 	;
 	//@}
-	/**@group_name GeometryManager */
+	/**@group_name GeometryCache */
 	//@{
-	GeometrySPtr( GeometryManager::*geometryCreator )( Castor::String const &, SceneNodeSPtr ) = &GeometryManager::Create;
-	py::class_< GeometryManager, boost::noncopyable >( "GeometryManager", py::no_init )
-	.def( "create", geometryCreator, "Creates a Geometry" )
-	.def( "remove", &GeometryManager::Remove, "Finds a Geometry" )
-	.def( "has", &GeometryManager::Has, "Tells if the manager has a Geometry" )
-	.def( "find", &GeometryManager::Find, "Finds a Geometry" )
+	GeometrySPtr( GeometryCache::*geometryCreator )( Castor::String const &, SceneNodeSPtr, MeshSPtr ) = &GeometryCache::Add;
+	py::class_< GeometryCache, boost::noncopyable >( "GeometryCache", py::no_init )
+	//.def( "add", cpy::GeometryCacheElementProducer{}, "Adds a Geometry to the cache" )
+	.def( "remove", &GeometryCache::Remove, "Finds a Geometry" )
+	.def( "has", &GeometryCache::Has, "Tells if the cache has a Geometry" )
+	.def( "find", &GeometryCache::Find, "Finds a Geometry in the cache" )
 	;
 	//@}
 	/**@group_name LightCache */
 	//@{
-	LightSPtr( LightCache::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightCache::Create;
 	py::class_< LightCache, boost::noncopyable >( "LightCache", py::no_init )
-	.def( "create", lightCreator, "Creates a Light" )
-	.def( "remove", &LightCache::Remove, "Finds a Light" )
-	.def( "has", &LightCache::Has, "Tells if the manager has a Light" )
-	.def( "find", &LightCache::Find, "Finds a Light" )
+	//.def( "add", cpy::LightCacheElementProducer{}, "Adds a Light to the cache" )
+	.def( "remove", &LightCache::Remove, "Removes a Light from the cache" )
+	.def( "has", &LightCache::Has, "Tells if the cache has a Light" )
+	.def( "find", &LightCache::Find, "Finds a Light in the cache" )
+	;
+	/**@group_name MeshCache */
+	//@{
+	py::class_< MeshCache, boost::noncopyable >( "MeshCache", py::no_init )
+	//.def( "add", cpy::MeshCacheElementProducer{}, "Adds a Mesh to the cache" )
+	.def( "remove", &MeshCache::Remove, "Removes a Mesh from the cache" )
+	.def( "has", &MeshCache::Has, "Tells if the cache has a Mesh" )
+	.def( "find", &MeshCache::Find, "Finds a Mesh in the cache" )
+	;
+	//@}
+	/**@group_name RenderWindowCache */
+	//@{
+	RenderWindowSPtr( RenderWindowCache::*wndmgrCreate )( Castor::String const & ) = &RenderWindowCache::Add;
+	py::class_< RenderWindowCache, boost::noncopyable >( "RenderWindowCache", py::no_init )
+	.def( "add", wndmgrCreate, "Adds a RenderWindow to the cache" )
+	.def( "remove", &RenderWindowCache::Remove, "Removes a RenderWindow from the cache" )
+	.def( "has", &RenderWindowCache::Has, "Tells if the cache has a RenderWindow" )
+	.def( "find", &RenderWindowCache::Find, "Finds a RenderWindow in the cache" )
+	;
+	//@}
+	/**@group_name MaterialCache */
+	//@{
+	MaterialSPtr( MaterialCache::*mtlmgrCreate )( Castor::String const & ) = &MaterialCache::Add;
+	py::class_< MaterialCache, boost::noncopyable >( "MaterialCache", py::no_init )
+	.def( "add", mtlmgrCreate, "Adds a Material to the cache" )
+	.def( "remove", &MaterialCache::Remove, "Removes a Material from the cache" )
+	.def( "has", &MaterialCache::Has, "Tells if the cache has a Material" )
+	.def( "find", &MaterialCache::Find, "Finds a Material in the cache" )
+	;
+	//@}
+	/**@group_name SceneCache */
+	//@{
+	SceneSPtr( SceneCache::*scnmgrCreate )( Castor::String const & ) = &SceneCache::Add;
+	py::class_< SceneCache, boost::noncopyable >( "SceneCache", py::no_init )
+	.def( "add", scnmgrCreate, "Adds a Scene to the cache" )
+	.def( "remove", &SceneCache::Remove, "Removes a Scene from the cache" )
+	.def( "has", &SceneCache::Has, "Tells if the cache has a Scene" )
+	.def( "find", &SceneCache::Find, "Finds a Scene in the cache" )
+	;
+	//@}
+	/**@group_name OverlayCache */
+	//@{
+	py::class_< OverlayCache, boost::noncopyable >( "OverlayCache", py::no_init )
+	//.def( "add", cpy::OverlayCacheElementProducer{}, "Adds an Overlay to the cache" )
+	.def( "remove", &OverlayCache::Remove, "Removes a Overlay from the cache" )
+	.def( "has", &OverlayCache::Has, "Tells if the cache has a Overlay" )
+	.def( "find", &OverlayCache::Find, "Finds a Overlay in the cache" )
+	;
+	//@}
+	/**@group_name PluginCache */
+	//@{
+	PluginSPtr( PluginCache::*pluginLoader )( Castor::Path const & ) = &PluginCache::LoadPlugin;
+	py::class_< PluginCache, boost::noncopyable >( "PluginCache", py::no_init )
+	.def( "load_plugin", pluginLoader )
+	.def( "load_plugins", &PluginCache::LoadAllPlugins )
+	.def( "get_plugins", &PluginCache::GetPlugins )
 	;
 	//@}
 	/**@group_name Scene */
 	//@{
-	OBJECT_MANAGER( SceneNode );
-	OBJECT_MANAGER( Camera );
-	OBJECT_MANAGER( Geometry );
-	OBJECT_MANAGER( Light );
+	CACHE_GETTER( Scene, SceneNode );
+	CACHE_GETTER( Scene, Camera );
+	CACHE_GETTER( Scene, Geometry );
+	CACHE_GETTER( Scene, Light );
+	CACHE_GETTER( Scene, Mesh );
+	CACHE_GETTER( Scene, RenderWindow );
 	py::class_< Scene, boost::noncopyable >( "Scene", py::no_init )
 	.add_property( "background_colour", py::make_function( &Scene::GetBackgroundColour, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetBackgroundColour, "The background colour" )
 	.add_property( "name", py::make_function( &Scene::GetName, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetName, "The scene name" )
@@ -614,12 +675,14 @@ void ExportCastor3D()
 	.add_property( "root_object_node", &Scene::GetObjectRootNode, "The objects root scene node" )
 	.add_property( "root_camera_node", &Scene::GetCameraRootNode, "The cameras root scene node" )
 	.def( "cleanup", &Scene::Cleanup )
-	.def( "nodes", py::make_function( scnGetSceneNodeManager, py::return_value_policy< py::copy_non_const_reference >() ), "The SceneNodes manager" )
-	.def( "geometries", py::make_function( scnGetGeometryManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Geometries manager" )
-	.def( "cameras", py::make_function( scnGetCameraManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Cameras manager" )
-	.def( "lights", py::make_function( scnGetLightManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Lights manager" )
+	.def( "nodes", py::make_function( resGetSceneNodeCache, py::return_value_policy< py::copy_non_const_reference >() ), "The SceneNodes cache" )
+	.def( "geometries", py::make_function( resGetGeometryCache, py::return_value_policy< py::copy_non_const_reference >() ), "The Geometries cache" )
+	.def( "cameras", py::make_function( resGetCameraCache, py::return_value_policy< py::copy_non_const_reference >() ), "The Cameras cache" )
+	.def( "lights", py::make_function( resGetLightCache, py::return_value_policy< py::copy_non_const_reference >() ), "The Lights cache" )
+	.def( "meshes", py::make_function( resGetMeshCache, py::return_value_policy< py::copy_non_const_reference >() ), "The Meshs cache" )
+	.def( "render_windows", py::make_function( resGetRenderWindowCache, py::return_value_policy< py::copy_non_const_reference >() ), "The RenderWindows cache" )
 	.def( "get_background_image", &Scene::GetBackgroundImage )
-	.def( "set_background_image", &Scene::SetBackgroundImage )
+	.def( "set_background_image", &Scene::SetBackground )
 	;
 	//@}
 	//@}
@@ -757,7 +820,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name Overlay */
 	//@{
-	uint32_t( Overlay::*ovGetChildsCount )( )const = &Overlay::GetChildsCount;
+	uint32_t( Overlay::*ovGetChildsCount )( )const = &Overlay::GetChildrenCount;
 	typedef Overlay::iterator( Overlay::*OverlayPtrIntMapItFunc )( );
 	py::class_< Overlay, boost::noncopyable >( "Overlay", py::no_init )
 	.add_property( "panel", &Overlay::GetPanelOverlay, "The panel overlay category" )
@@ -769,20 +832,30 @@ void ExportCastor3D()
 	.def( "add_child", &Overlay::AddChild )
 	;
 	//@}
-	/**@group_name AnimatedObject */
+	/**@group_name AnimatedSkeleton */
 	//@{
-	typedef AnimationPtrStrMapIt( AnimatedObject::*AnimatedObjectAnimationsItFunc )( );
-	py::class_< AnimatedObject >( "AnimatedObject", py::init< Castor::String >() )
-	.add_property( "geometry", &AnimatedObject::GetGeometry, &AnimatedObject::SetGeometry )
-	.add_property( "mesh", &AnimatedObject::GetMesh, &AnimatedObject::SetMesh )
-	.add_property( "skeleton", &AnimatedObject::GetSkeleton, &AnimatedObject::SetSkeleton )
-	.def( "start_all_animations", &AnimatedObject::StartAllAnimations )
-	.def( "stop_all_animations", &AnimatedObject::StopAllAnimations )
-	.def( "pause_all_animations", &AnimatedObject::PauseAllAnimations )
-	.def( "start_animation", &AnimatedObject::StartAnimation )
-	.def( "stop_animation", &AnimatedObject::StopAnimation )
-	.def( "pause_animation", &AnimatedObject::StopAnimation )
-	.def( "get_animation", &AnimatedObject::GetAnimation )
+	typedef AnimationPtrStrMapIt( AnimatedSkeleton::*AnimatedSkeletonAnimationsItFunc )();
+	py::class_< AnimatedSkeleton, boost::noncopyable >( "AnimatedSkeleton", py::no_init )
+	.def( "start_all_animations", &AnimatedSkeleton::StartAllAnimations )
+	.def( "stop_all_animations", &AnimatedSkeleton::StopAllAnimations )
+	.def( "pause_all_animations", &AnimatedSkeleton::PauseAllAnimations )
+	.def( "start_animation", &AnimatedSkeleton::StartAnimation )
+	.def( "stop_animation", &AnimatedSkeleton::StopAnimation )
+	.def( "pause_animation", &AnimatedSkeleton::StopAnimation )
+	.def( "get_animation", py::make_function( &AnimatedSkeleton::GetAnimation, py::return_value_policy< py::copy_non_const_reference >{} ) )
+	;
+	//@}
+	/**@group_name AnimatedMesh */
+	//@{
+	typedef AnimationPtrStrMapIt( AnimatedMesh::*AnimatedMeshAnimationsItFunc )();
+	py::class_< AnimatedMesh, boost::noncopyable >( "AnimatedMesh", py::no_init )
+	.def( "start_all_animations", &AnimatedMesh::StartAllAnimations )
+	.def( "stop_all_animations", &AnimatedMesh::StopAllAnimations )
+	.def( "pause_all_animations", &AnimatedMesh::PauseAllAnimations )
+	.def( "start_animation", &AnimatedMesh::StartAnimation )
+	.def( "stop_animation", &AnimatedMesh::StopAnimation )
+	.def( "pause_animation", &AnimatedMesh::StopAnimation )
+	.def( "get_animation", py::make_function( &AnimatedMesh::GetAnimation, py::return_value_policy< py::copy_non_const_reference >{} ) )
 	;
 	//@}
 	/**@group_name AnimatedObjectGroup */
@@ -801,86 +874,21 @@ void ExportCastor3D()
 	.def( "add_animation", &AnimatedObjectGroup::AddAnimation )
 	.def( "set_animation_looped", &AnimatedObjectGroup::SetAnimationLooped )
 	;
-	/**@group_name MeshManager */
-	//@{
-	MeshSPtr( MeshManager::*meshCreator1 )( Castor::String const &, eMESH_TYPE ) = &MeshManager::Create;
-	MeshSPtr( MeshManager::*meshCreator2 )( Castor::String const &, eMESH_TYPE, UIntArray const & ) = &MeshManager::Create;
-	MeshSPtr( MeshManager::*meshCreator3 )( Castor::String const &, eMESH_TYPE, UIntArray const &, RealArray const & ) = &MeshManager::Create;
-	py::class_< MeshManager, boost::noncopyable >( "MeshManager", py::no_init )
-	.def( "create", meshCreator1 )
-	.def( "create", meshCreator2 )
-	.def( "create", meshCreator3 )
-	.def( "remove", &MeshManager::Remove )
-	.def( "has", &MeshManager::Has )
-	.def( "find", &MeshManager::Find )
-	;
-	//@}
-	/**@group_name WindowCache */
-	//@{
-	RenderWindowSPtr( WindowCache::*wndmgrCreate )( Castor::String const & ) = &WindowCache::Create;
-	py::class_< WindowCache, boost::noncopyable >( "WindowCache", py::no_init )
-	.def( "create", wndmgrCreate )
-	//.def( "remove", &WindowCache::Remove )
-	//.def( "has", &WindowCache::Has )
-	//.def( "find", &WindowCache::Find )
-	;
-	//@}
-	/**@group_name MaterialManager */
-	//@{
-	MaterialSPtr( MaterialManager::*mtlmgrCreate )( Castor::String const &, Engine & ) = &MaterialManager::Create;
-	py::class_< MaterialManager, boost::noncopyable >( "MaterialManager", py::no_init )
-	.def( "create", mtlmgrCreate )
-	.def( "remove", &MaterialManager::Remove )
-	.def( "has", &MaterialManager::Has )
-	.def( "find", &MaterialManager::Find )
-	;
-	//@}
-	/**@group_name SceneManager */
-	//@{
-	SceneSPtr( SceneManager::*scnmgrCreate )( Castor::String const &, Engine & ) = &SceneManager::Create;
-	py::class_< SceneManager, boost::noncopyable >( "SceneManager", py::no_init )
-	.def( "create", scnmgrCreate )
-	.def( "remove", &SceneManager::Remove )
-	.def( "has", &SceneManager::Has )
-	.def( "find", &SceneManager::Find )
-	;
-	//@}
-	/**@group_name OverlayCache */
-	//@{
-	py::class_< OverlayCache, boost::noncopyable >( "OverlayCache", py::no_init )
-	.def( "create", &OverlayCache::Create )
-	.def( "remove", &OverlayCache::Remove )
-	.def( "has", &OverlayCache::Has )
-	.def( "find", &OverlayCache::Find )
-	;
-	//@}
-	/**@group_name PluginManager */
-	//@{
-	PluginBaseSPtr( PluginManager::*pluginLoader )( Castor::Path const & ) = &PluginManager::LoadPlugin;
-	py::class_< PluginManager, boost::noncopyable >( "PluginManager", py::no_init )
-	.def( "load_plugin", pluginLoader )
-	.def( "load_plugins", &PluginManager::LoadAllPlugins )
-	.def( "get_plugins", &PluginManager::GetPlugins )
-	;
 	//@}
 	/**@group_name Engine */
 	//@{
-	RESOURCE_MANAGER( Scene );
-	RESOURCE_MANAGER( Plugin );
-	RESOURCE_MANAGER( Material );
-	RESOURCE_MANAGER( Mesh );
-	RESOURCE_MANAGER( Overlay );
-	RESOURCE_MANAGER( Window );
+	CACHE_GETTER( Engine, Scene );
+	CACHE_GETTER( Engine, Plugin );
+	CACHE_GETTER( Engine, Material );
+	CACHE_GETTER( Engine, Overlay );
 	py::class_< Engine, boost::noncopyable >( "Engine", py::init<>() )
 	.def( "initialise", &Engine::Initialise )
 	.def( "cleanup", &Engine::Cleanup )
 	.def( "load_renderer", &Engine::LoadRenderer )
-	.def( "scenes", py::make_function( engGetSceneManager, py::return_value_policy< py::copy_non_const_reference >() ) )
-	.def( "plugins", py::make_function( engGetPluginManager, py::return_value_policy< py::copy_non_const_reference >() ) )
-	.def( "materials", py::make_function( engGetMaterialManager, py::return_value_policy< py::copy_non_const_reference >() ) )
-	.def( "meshes", py::make_function( engGetMeshManager, py::return_value_policy< py::copy_non_const_reference >() ) )
-	.def( "overlays", py::make_function( engGetOverlayManager, py::return_value_policy< py::copy_non_const_reference >() ) )
-	.def( "windows", py::make_function( engGetWindowManager, py::return_value_policy< py::copy_non_const_reference >() ) )
+	.def( "scenes", py::make_function( resGetSceneCache, py::return_value_policy< py::copy_non_const_reference >() ) )
+	.def( "plugins", py::make_function( resGetPluginCache, py::return_value_policy< py::copy_non_const_reference >() ) )
+	.def( "materials", py::make_function( resGetMaterialCache, py::return_value_policy< py::copy_non_const_reference >() ) )
+	.def( "overlays", py::make_function( resGetOverlayCache, py::return_value_policy< py::copy_non_const_reference >() ) )
 	;
 	//@}
 }

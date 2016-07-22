@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUIPY_PREREQUISITES_H___
 #define ___GUIPY_PREREQUISITES_H___
 
-#include <RenderWindow.hpp>
+#include <Render/RenderWindow.hpp>
 #include <GuiCommonPrerequisites.hpp>
 
 namespace cpy

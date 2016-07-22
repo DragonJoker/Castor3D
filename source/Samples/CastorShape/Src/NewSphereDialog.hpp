@@ -26,7 +26,7 @@ namespace CastorShape
 		: public NewGeometryDialog
 	{
 	public:
-		NewSphereDialog( Castor3D::Engine * p_engine, wxWindow * parent, wxWindowID p_id );
+		NewSphereDialog( Castor3D::Scene & p_scene, wxWindow * parent, wxWindowID p_id );
 		~NewSphereDialog();
 
 		Castor::real GetRadius()const;

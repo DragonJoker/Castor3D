@@ -16,8 +16,8 @@
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
-#	include <ShaderManager.hpp>
-#	include <SceneManager.hpp>
+#	include <ShaderCache.hpp>
+#	include <SceneCache.hpp>
 #	include <FrameBuffer/FrameBuffer.hpp>
 #	include <Mesh/Vertex.hpp>
 #	include <Mesh/Buffer/Buffer.hpp>
@@ -30,6 +30,8 @@
 #	include <Render/Pipeline.hpp>
 #	include <Render/RenderTarget.hpp>
 #	include <Render/RenderWindow.hpp>
+#	include <Scene/Scene.hpp>
+#	include <Shader/ShaderProgram.hpp>
 #	include <Technique/RenderTechnique.hpp>
 #	include <Texture/Sampler.hpp>
 #	include <Texture/TextureLayout.hpp>

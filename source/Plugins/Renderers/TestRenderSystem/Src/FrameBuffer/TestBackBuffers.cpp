@@ -1,6 +1,6 @@
 #include "FrameBuffer/TestBackBuffers.hpp"
 
-#include <PixelBufferBase.hpp>
+#include <Graphics/PixelBuffer.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

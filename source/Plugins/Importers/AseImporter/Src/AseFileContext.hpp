@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "AseImporterPrerequisites.hpp"
 
-#include <FileParserContext.hpp>
+#include <FileParser/FileParserContext.hpp>
 
 namespace Ase
 {

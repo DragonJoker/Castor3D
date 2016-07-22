@@ -182,9 +182,9 @@ if ( MSVC )
 
 		register_target( ${PROJECT_NAME} )
 
-		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop/ComCastor3D" )
+		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
-		set( Build "yes (version ${CMC_VERSION_MAJOR}.${CMC_VERSION_MINOR}.${CMC_VERSION_BUILD})" PARENT_SCOPE )
+		set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 
 		if( ${CASTOR_BUILDGRP_TEST} )
 			add_subdirectory( Test )

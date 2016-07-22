@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "CastorGuiPrerequisites.hpp"
 
 #include <FileParser/FileParser.hpp>
-#include <FileParserContext.hpp>
+#include <FileParser/FileParserContext.hpp>
 
 namespace CastorGui
 {

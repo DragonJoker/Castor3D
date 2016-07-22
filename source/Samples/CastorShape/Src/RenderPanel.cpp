@@ -13,12 +13,18 @@
 #	include <Windows.h>
 #endif
 
-#include <CameraManager.hpp>
-#include <GeometryManager.hpp>
-#include <SceneManager.hpp>
-#include <SceneNodeManager.hpp>
-#include <TargetManager.hpp>
-#include <WindowManager.hpp>
+#include <CameraCache.hpp>
+#include <GeometryCache.hpp>
+#include <SceneCache.hpp>
+#include <SceneNodeCache.hpp>
+#include <TargetCache.hpp>
+#include <WindowCache.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 
 using namespace Castor3D;
@@ -78,21 +84,22 @@ void RenderPanel::InitialiseRenderWindow()
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_node;
-	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create( cuT( "CastorShape" ) );
-	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
+	RenderWindowSPtr l_pRenderWindow = m_mainScene->GetRenderWindowCache().Add( cuT( "CastorShape" ) );
+	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetRenderTargetCache().Add( eTARGET_TYPE_WINDOW );
+	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
 	if ( m_renderType == eVIEWPORT_TYPE_PERSPECTIVE )
 	{
-		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
-		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
-		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
+		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
+		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
+		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
 		l_node = l_pCamRollNode;
 	}
 
-	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_node );
+	CameraSPtr l_pCamera = m_mainScene->GetCameraCache().Add( l_streamName.str() + cuT( "_Camera" ), l_node, Viewport{ *wxGetApp().GetCastor() } );
 	l_pCamera->GetViewport().Resize( Size( GetClientSize().x, GetClientSize().y ) );
+	l_pCamera->GetViewport().SetPerspective( Angle::from_degrees( 45.0 ), 1, 0.1_r, 1000.0_r );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );

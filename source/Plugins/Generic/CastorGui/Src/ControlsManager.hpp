@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorGuiPrerequisites.hpp"
 
-#include <Position.hpp>
+#include <Graphics/Position.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
 
 #include <Event/UserInput/EventHandler.hpp>

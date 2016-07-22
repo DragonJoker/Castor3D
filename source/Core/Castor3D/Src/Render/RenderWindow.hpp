@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Event/Frame/FrameListener.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
 
+#include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Size.hpp>
 

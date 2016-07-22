@@ -145,7 +145,6 @@ namespace Castor3D
 		 *\param[in]	p_value	L'objet.
 		 *\return		L'objet ajouté, ou celui existant.
 		 */
-		template< typename ... Parameters >
 		inline ElementPtr Add( Key const & p_name, ElementPtr p_element )
 		{
 			ElementPtr l_return{ p_element };
