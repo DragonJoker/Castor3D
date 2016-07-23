@@ -724,36 +724,21 @@ namespace Castor3D
 	{
 		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
-			auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
-
-			if ( l_count > 1 && p_submesh.HasMatrixBuffer()
-				 && !CheckFlag( p_submesh.GetProgramFlags(), ProgramFlag::Skinning ) )
+			if ( !p_renderNodes.empty() )
 			{
+				auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );
 
-				if ( !p_renderNodes.empty() )
+				for ( auto const & l_renderNode : p_renderNodes )
 				{
-					for ( auto const & l_renderNode : p_renderNodes )
-					{
-						std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
-						l_buffer += l_size;
-					}
+					std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
+					l_buffer += l_size;
+				}
 
-					p_renderNodes[0].BindPass( p_scene, p_pipeline, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( p_scene );
-				}
-			}
-			else
-			{
-				for ( auto & l_renderNode : p_renderNodes )
-				{
-					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
-					{
-						l_renderNode.Render( p_scene, p_pipeline );
-					}
-				}
+				p_renderNodes[0].BindPass( p_scene, p_pipeline, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_scene );
 			}
 		} );
 	}
