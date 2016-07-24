@@ -1,19 +1,24 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef __C3DCOM_COM_ERROR_H__
 #define __C3DCOM_COM_ERROR_H__
@@ -43,9 +48,9 @@ namespace CastorCom
 		 *\param[in]	dwHelpContext	This is the context in the help file.
 		 *\param[in]	szHelpFileName	This is the name of the file containing help text.
 		 *\~english
-		 *\brief		Lance une exception correspondant au code d'erreur Win32 donné.
-		 *\param[in]	dwError			Représente l'erreur.
-		 *\param[in]	clsid			Le GUID de l'élément d'où provient l'erreur.
+		 *\brief		Lance une exception correspondant au code d'erreur Win32 donnï¿½.
+		 *\param[in]	dwError			Reprï¿½sente l'erreur.
+		 *\param[in]	clsid			Le GUID de l'ï¿½lï¿½ment d'oï¿½ provient l'erreur.
 		 *\param[in]	szSource		Le titre.
 		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.
 		 *\param[in]	szHelpFileName	Le nom du fichier contenant l'aide.
@@ -63,10 +68,10 @@ namespace CastorCom
 		 *\param[in]	dwHelpContext	This is the context in the help file.
 		 *\param[in]	szHelpFileName	This is the name of the file containing help text.
 		 *\~english
-		 *\brief		Lance une exception contenant le code d'erreur ainsi que le message associé.
-		 *\remarks		Si le code est un code standard et qu'aucun message n'est donné, le message est alors récupéré à partir du système.
-		 *\param[in]	hError			Représente l'erreur.
-		 *\param[in]	clsid			Le GUID de l'élément d'où provient l'erreur.
+		 *\brief		Lance une exception contenant le code d'erreur ainsi que le message associï¿½.
+		 *\remarks		Si le code est un code standard et qu'aucun message n'est donnï¿½, le message est alors rï¿½cupï¿½rï¿½ ï¿½ partir du systï¿½me.
+		 *\param[in]	hError			Reprï¿½sente l'erreur.
+		 *\param[in]	clsid			Le GUID de l'ï¿½lï¿½ment d'oï¿½ provient l'erreur.
 		 *\param[in]	szSource		Le titre.
 		 *\param[in]	szDescription	La description.
 		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.

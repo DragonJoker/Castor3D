@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GL_SHADER_OBJECT_H___
 #define ___GL_SHADER_OBJECT_H___
@@ -68,9 +73,9 @@ namespace GlRender
 		 *\param[in]	p_name	The parameter name
 		 *\return		\p true if the parameter was found
 		 *\~french
-		 *\brief		Dit si le shader compilé a le paramètre donné
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\return		\p true si le paramètre a été trouvé
+		 *\brief		Dit si le shader compilï¿½ a le paramï¿½tre donnï¿½
+		 *\param[in]	p_name	Le nom du paramï¿½tre
+		 *\return		\p true si le paramï¿½tre a ï¿½tï¿½ trouvï¿½
 		 */
 		virtual bool HasParameter( Castor::String const & p_name );
 		/**
@@ -79,9 +84,9 @@ namespace GlRender
 		 *\param[in]	p_name	The parameter name
 		 *\return		\p nullptr if not found or if shader isn't compiled
 		 *\~french
-		 *\brief		Récupère le paramètre à partir du shader compilé
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\return		\p nullptr si le paramètre n'a pas été trouvé ou si le shader n'est pas compilé
+		 *\brief		Rï¿½cupï¿½re le paramï¿½tre ï¿½ partir du shader compilï¿½
+		 *\param[in]	p_name	Le nom du paramï¿½tre
+		 *\return		\p nullptr si le paramï¿½tre n'a pas ï¿½tï¿½ trouvï¿½ ou si le shader n'est pas compilï¿½
 		 */
 		uint32_t GetParameter( Castor::String const & p_name );
 		/**
@@ -90,9 +95,9 @@ namespace GlRender
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
 		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
+		 *\brief		Dï¿½finit la valeur du paramï¿½tre
+		 *\param[in]	p_name	Le nom du paramï¿½tre
+		 *\param[in]	p_value	La valeur du paramï¿½tre
 		 */
 		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value );
 		/**
@@ -101,9 +106,9 @@ namespace GlRender
 		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_value	The parameter value
 		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
+		 *\brief		Dï¿½finit la valeur du paramï¿½tre
+		 *\param[in]	p_name	Le nom du paramï¿½tre
+		 *\param[in]	p_value	La valeur du paramï¿½tre
 		 */
 		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value );
 
