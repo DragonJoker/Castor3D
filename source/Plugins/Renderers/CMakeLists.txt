@@ -57,7 +57,7 @@ function( RenderersSetup )
 			DISPLAY_NAME "GlRenderSystem SDK"
 			DESCRIPTION "Development files for GlRenderSystem."
 			GROUP Development
-			DEPENDS Castor3D CastorUtils_dev Castor3D Castor3D_dev
+			DEPENDS GlRenderSystem CastorUtils_dev Castor3D_dev
 			INSTALL_TYPES Developer Full
 		)
 	endif ()
@@ -65,10 +65,16 @@ function( RenderersSetup )
 		cpack_add_component( TestRenderSystem
 			DISPLAY_NAME "TestRenderSystem"
 			DESCRIPTION "Enables Test rendering API in Castor3D."
-			REQUIRED
-			GROUP Renderers
+			GROUP Test
 			DEPENDS Castor3D
 			INSTALL_TYPES Test Full
+		)
+		cpack_add_component( TestRenderSystem_dev
+			DISPLAY_NAME "TestRenderSystem SDK"
+			DESCRIPTION "Development files for TestRenderSystem."
+			GROUP Test
+			DEPENDS TestRenderSystem CastorUtils_dev Castor3D_dev
+			INSTALL_TYPES Developer Test Full
 		)
 	endif ()
 endfunction( RenderersSetup )
