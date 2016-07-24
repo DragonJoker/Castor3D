@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
 #define ___GUICOMMON_TREE_ITEM_PROPERTY_DATA_H___
@@ -31,7 +36,7 @@ namespace GuiCommon
 	 *\param[in]	p_values	The array.
 	 *\return		The wxArrayString.
 	 *\~french
-	 *\brief		Construit un wxArrayString à partir d'un array de wxString.
+	 *\brief		Construit un wxArrayString ï¿½ partir d'un array de wxString.
 	*\param[in]		p_values	L'array.
 	 *\return		Le wxArrayString.
 	 */
@@ -46,7 +51,7 @@ namespace GuiCommon
 	 *\param[in]	p_values	The array.
 	 *\return		The make_wxArrayInt.
 	 *\~french
-	 *\brief		Construit un make_wxArrayInt à partir d'un array d'int.
+	 *\brief		Construit un make_wxArrayInt ï¿½ partir d'un array d'int.
 	*\param[in]		p_values	L'array.
 	 *\return		Le make_wxArrayInt.
 	 */
@@ -64,7 +69,7 @@ namespace GuiCommon
 	\~english
 	\brief		The supported object types, for display, and properties
 	\~french
-	\brief		Les type d'objets supportés, dans les propriétés, et à l'affichage
+	\brief		Les type d'objets supportï¿½s, dans les propriï¿½tï¿½s, et ï¿½ l'affichage
 	*/
 	typedef enum ePROPERTY_DATA_TYPE
 	{
@@ -93,7 +98,7 @@ namespace GuiCommon
 	\~english
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scï¿½ne, ou la liste de matï¿½riaux, et PropertiesHolder
 	*/
 	class TreeItemProperty
 		: public wxTreeItemData
@@ -107,8 +112,8 @@ namespace GuiCommon
 		 *\param[in]	p_type		The object type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements.
-		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_engine	Le moteur, auquel on va poster les ï¿½vï¿½nements.
+		 *\param[in]	p_editable	Dit si les propriï¿½tï¿½s sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
 		TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type );
@@ -125,9 +130,9 @@ namespace GuiCommon
 		 *\param[in]	p_window	The wxWindow that displays the menu
 		 *\param[in]	x, y		The coordinates
 		 *\~french
-		 *\brief		Affiche le menu de l'objet du wxTree, aux coordonnées données
+		 *\brief		Affiche le menu de l'objet du wxTree, aux coordonnï¿½es donnï¿½es
 		*\param[in]		p_window	Le wxWindow qui affiche le menu
-		 *\param[in]	x, y		Les coordonnées
+		 *\param[in]	x, y		Les coordonnï¿½es
 		 */
 		void DisplayTreeItemMenu( wxWindow * p_window, wxCoord x, wxCoord y );
 		/**
@@ -136,8 +141,8 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donnée
-		 *\param[in]	p_editor	L'éditeur bouton, pour les propriétés en ayant besoin
+		 *\brief		Construit et remplit les propriï¿½tï¿½s de l'objet, dans la wxPropertyGrid donnï¿½e
+		 *\param[in]	p_editor	L'ï¿½diteur bouton, pour les propriï¿½tï¿½s en ayant besoin
 		 *\param[in]	p_grid		La wxPropertyGrid cible
 		 */
 		void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
@@ -146,8 +151,8 @@ namespace GuiCommon
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	p_event	The event
 		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
+		 *\brief		Appelï¿½e lorsqu'une propriï¿½tï¿½ est changï¿½e
+		 *\param[in]	p_event	L'ï¿½vï¿½nement
 		 */
 		void OnPropertyChange( wxPropertyGridEvent & p_event );
 		/**
@@ -155,7 +160,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the object type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type d'objet
+		 *\brief		Rï¿½cupï¿½re le type d'objet
 		 *\return		La valeur
 		 */
 		inline ePROPERTY_DATA_TYPE GetType()const
@@ -167,7 +172,7 @@ namespace GuiCommon
 		 *\brief		Retrieves the editable status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut de modifiabilité
+		 *\brief		Rï¿½cupï¿½re le statut de modifiabilitï¿½
 		 *\return		La valeur
 		 */
 		inline bool IsEditable()const
@@ -183,10 +188,10 @@ namespace GuiCommon
 		 *\param[in]	p_engine	The engine, to retrieve the materials
 		 *\return		The created property
 		 *\~french
-		 *\brief		Crée une propriété de sélection de matériau
-		 *\param[in]	p_name		Le nom de la propriété
-		 *\param[in]	p_engine	Le moteur, pour récupérer les matériaux
-		 *\return		La propriété créée.
+		 *\brief		Crï¿½e une propriï¿½tï¿½ de sï¿½lection de matï¿½riau
+		 *\param[in]	p_name		Le nom de la propriï¿½tï¿½
+		 *\param[in]	p_engine	Le moteur, pour rï¿½cupï¿½rer les matï¿½riaux
+		 *\return		La propriï¿½tï¿½ crï¿½ï¿½e.
 		 */
 		wxEnumProperty * DoCreateMaterialProperty( wxString const & p_name );
 		/**
@@ -195,23 +200,23 @@ namespace GuiCommon
 		 *\param[in]	p_engine	The engine, to retrieve the materials
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
-		 *\brief		Poste un évènement functeur au moteur
-		 *\param[in]	p_engine	Le moteur, pour récupérer les matériaux
-		 *\param[in]	p_functor	La fonction à exécuter
+		 *\brief		Poste un ï¿½vï¿½nement functeur au moteur
+		 *\param[in]	p_engine	Le moteur, pour rï¿½cupï¿½rer les matï¿½riaux
+		 *\param[in]	p_functor	La fonction ï¿½ exï¿½cuter
 		 */
 		void DoApplyChange( std::function< void() > p_functor );
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
 		 *\~french
-		 *\brief		Crée le menu affiché pour l'objet du wxTree, disponible si m_editable est à true
+		 *\brief		Crï¿½e le menu affichï¿½ pour l'objet du wxTree, disponible si m_editable est ï¿½ true
 		 */
 		void CreateTreeItemMenu();
 		/**
 		 *\~english
 		 *\brief		Creates the menu displayed for the wxTree item, available if m_editable is true
 		 *\~french
-		 *\brief		Crée le menu affiché pour l'objet du wxTree, disponible si m_editable est à true
+		 *\brief		Crï¿½e le menu affichï¿½ pour l'objet du wxTree, disponible si m_editable est ï¿½ true
 		 */
 		virtual void DoCreateTreeItemMenu();
 		/**
@@ -220,7 +225,7 @@ namespace GuiCommon
 		 *\param[in]	p_editor	The button editor, for properties that need it
 		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
+		 *\brief		Construit et remplit les propriï¿½tï¿½s de l'incrustation, dans la wxPropertyGrid donnï¿½e
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
 		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
@@ -229,8 +234,8 @@ namespace GuiCommon
 		 *\brief		Call when a property grid property is changed
 		 *\param[in]	p_event	The event
 		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
+		 *\brief		Appelï¿½e lorsqu'une propriï¿½tï¿½ est changï¿½e
+		 *\param[in]	p_event	L'ï¿½vï¿½nement
 		 */
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event ) = 0;
 
