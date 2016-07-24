@@ -56,6 +56,7 @@ namespace Castor
 		}
 
 		bool l_return = p_file.Print( 1024, cuT( "%s%s" ), this->m_tabs.c_str(), l_streamWord.str().c_str() ) > 0;
+		Castor::TextWriter< Coords< T, Count > >::CheckError( l_return, "Coords value" );
 		return l_return;
 	}
 

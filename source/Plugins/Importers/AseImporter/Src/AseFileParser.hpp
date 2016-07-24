@@ -66,16 +66,27 @@ namespace Ase
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The Castor3D engine.
 		 *\param[in]	p_importer	The importer.
-		 *\param[in]	p_scene		The scene.
+		 *\param[out]	p_scene		The scene receiving the data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_importer	L'importeur.
-		 *\param[in]	p_scene		La scène.
+		 *\param[out]	p_scene		La scène recevant les données.
 		 */
-		AseFileParser( Castor3D::Engine * p_engine, AseImporter & p_importer, Castor3D::Scene & p_scene );
+		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_importer	The importer.
+		 *\param[out]	p_scene		The scene receiving the scene data.
+		 *\param[out]	p_mesh		The mesh receiving the data.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_importer	L'importeur.
+		 *\param[out]	p_scene		La scène recevant les données de scène.
+		 *\param[out]	p_mesh		Le maillage recevant les données.
+		 */
+		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -83,59 +94,22 @@ namespace Ase
 		 *\brief		Destructeur
 		 */
 		~AseFileParser();
-		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in,out]	p_file	The file
-		 *\return	the parsed scene
-		 */
-		bool ParseFile( Castor::TextFile & p_file );
-		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in]	p_pathFile	The file path
-		 *\return	true if successful, false if not
-		 */
-		bool ParseFile( Castor::Path const & p_pathFile );
-		/**
-		 *\~english
-		 *\brief		Retrieves the Castor3D engine
-		 *\return		The Castor3D engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
-		 */
-		inline Castor3D::Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the read mesh
-		 *\return		The read mesh
-		 *\~french
-		 *\brief		Récupère le mesh lu
-		 *\return		Le mesh lu
-		 */
-		inline Castor3D::MeshSPtr GetMesh()const
-		{
-			return m_pMesh;
-		}
 
 	private:
-		virtual void DoInitialiseParser( Castor::TextFile & p_file );
-		virtual void DoCleanupParser();
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		void DoInitialiseParser( Castor::TextFile & p_file )override;
+		void DoCleanupParser()override;
+		bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )override
 		{
 			return false;
 		}
-		virtual bool DoDiscardParser( Castor::String const & p_strLine );
-		virtual void DoValidate();
-		virtual Castor::String DoGetSectionName( uint32_t p_section );
+		bool DoDiscardParser( Castor::String const & p_strLine )override;
+		void DoValidate()override;
+		Castor::String DoGetSectionName( uint32_t p_section )override;
 
 	private:
-		Castor3D::MeshSPtr m_pMesh;
-		Castor3D::Engine * m_engine;
 		AseImporter & m_importer;
 		Castor3D::Scene & m_scene;
+		Castor3D::Mesh * m_mesh;
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat )

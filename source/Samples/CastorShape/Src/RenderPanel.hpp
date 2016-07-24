@@ -103,8 +103,8 @@ namespace CastorShape
 		Castor3D::SceneSPtr m_mainScene;
 		Castor3D::FrameListenerSPtr m_listener;
 
-		std::shared_ptr< CameraRotateEvent > m_pRotateCamEvent;
-		std::shared_ptr< CameraTranslateEvent > m_pTranslateCamEvent;
+		std::unique_ptr< CameraRotateEvent > m_pRotateCamEvent;
+		std::unique_ptr< CameraTranslateEvent > m_pTranslateCamEvent;
 
 		ActionType m_actionType;
 		SelectionType m_selectionType;

@@ -89,12 +89,14 @@ namespace Castor3D
 		if ( p_scene.GetEngine()->GetRenderLoop().GetShowDebugOverlays() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "debug_overlays true\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene debug overlays" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene name" );
 		}
 
 		if ( l_return )
@@ -147,6 +149,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene background colour" );
 		}
 
 		if ( l_return && p_scene.GetBackgroundImage() )
@@ -154,6 +157,7 @@ namespace Castor3D
 			Logger::LogInfo( cuT( "Scene::Write - Background image" ) );
 			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_scene.GetBackgroundImage()->GetImage().ToString() }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tbackground_image \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene background image" );
 		}
 
 		if ( l_return )
@@ -162,6 +166,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene ambient light" );
 		}
 
 		if ( l_return && p_scene.GetSkybox() )
@@ -315,6 +320,10 @@ namespace Castor3D
 			p_element->SetName( l_name );
 			p_destination.insert( l_name, p_element );
 		};
+		auto l_eventClean = [this]( auto p_element )
+		{
+			GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
+		};
 		auto l_attachObject = []( auto p_element
 								 , SceneNodeSPtr p_parent
 								 , SceneNodeSPtr p_rootNode
@@ -444,17 +453,12 @@ namespace Castor3D
 																				, l_dummy
 																				, l_mergeResource );
 		m_meshCache = MakeCache< Mesh, String >( p_engine
-												, [this]( Castor::String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
+												, [this]( Castor::String const & p_name )
 												{
-													auto l_return = std::make_shared< Mesh >( p_name, *this );
-													GetEngine()->GetMeshFactory().Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
-													return l_return;
+													return std::make_shared< Mesh >( p_name, *this );
 												}
 												, l_dummy
-												, [this]( MeshSPtr p_element )
-												{
-													GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
-												}
+												, l_eventClean
 												, l_mergeResource );
 		m_windowCache = MakeCache < RenderWindow, String >(	p_engine
 															, [this]( Castor::String const & p_name )
@@ -462,10 +466,7 @@ namespace Castor3D
 																return std::make_shared< RenderWindow >( p_name, *GetEngine() );
 															}
 															, l_dummy
-															, [this]( RenderWindowSPtr p_element )
-															{
-																GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
-															}
+															, l_eventClean
 															, l_mergeResource );
 
 		m_materialCacheView = MakeCacheView< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialCache() );
@@ -663,17 +664,8 @@ namespace Castor3D
 	bool Scene::ImportExternal( Path const & p_fileName, Importer & p_importer )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
-		bool l_return = true;
-		SceneSPtr l_scene = p_importer.ImportScene( p_fileName, Parameters() );
-
-		if ( l_scene )
-		{
-			Merge( l_scene );
-			m_changed = true;
-			l_return = true;
-		}
-
-		return l_return;
+		m_changed = true;
+		return p_importer.ImportScene( *this, p_fileName, Parameters() );
 	}
 
 	uint32_t Scene::GetVertexCount()const

@@ -25,17 +25,20 @@ namespace Castor3D
 		bool l_return = p_file.WriteText( m_tabs + cuT( "\tposition " ) ) > 0
 			&& Point2d::TextWriter{ String{} }( p_overlay.GetPosition(), p_file )
 			&& p_file.WriteText( cuT( "\n" ) ) > 0;
+		Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory position" );
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tsize " ) ) > 0
 				&& Point2d::TextWriter{ String{} }( p_overlay.GetSize(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory size" );
 		}
 
 		if ( l_return && p_overlay.GetMaterial() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_overlay.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< OverlayCategory >::CheckError( l_return, "OverlayCategory material" );
 		}
 
 		for ( auto l_overlay : p_overlay.GetOverlay() )

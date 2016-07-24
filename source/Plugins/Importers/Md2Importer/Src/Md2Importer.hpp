@@ -106,11 +106,17 @@ namespace C3DMd2
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		void DoReadMD2Data( Castor3D::PassSPtr p_pPass );
-		void DoConvertDataStructures( Castor3D::MeshSPtr p_pMesh );
+		void DoReadMD2Data( Castor3D::Pass & p_pass );
+		void DoConvertDataStructures( Castor3D::Mesh & p_mesh );
 		void DoCleanUp();
 
 	private:

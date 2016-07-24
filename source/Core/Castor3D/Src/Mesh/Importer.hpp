@@ -50,34 +50,36 @@ namespace Castor3D
 		C3D_API explicit Importer( Engine & p_engine );
 		/**
 		 *\~english
-		 *\brief		Scene import Function
-		 *\param[in]	p_pathFile		The location of the file to import
-		 *\param[in]	p_parameters	Import configuration parameters
-		 *\return		The imported Scene
+		 *\brief		Scene import Function.
+		 *\param[out]	p_scene			Receives the imported data.
+		 *\param[in]	p_pathFile		The location of the file to import.
+		 *\param[in]	p_parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene
-		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer
-		 *\param[in]	p_parameters	Paramètres de configuration de l'import
-		 *\return		La Scene importée
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	p_scene			Reçoit les données importées.
+		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API bool ImportScene( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
-		 *\param[in]	p_scene			The scene into which the Mesh is loaded.
+		 *\param[out]	p_mesh			Receives the imported data.
 		 *\param[in]	p_pathFile		The location of the file to import.
 		 *\param[in]	p_parameters	Import configuration parameters.
 		 *\param[in]	p_initialise	Tells if the imported mesh must be initialised.
-		 *\return		The imported Mesh.
+		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Mesh.
-		 *\param[in]	p_scene			La scène dans laquelle le maillage est chargé.
+		 *\param[out]	p_mesh			Reçoit les données importées.
 		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer.
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
 		 *\param[in]	p_initialise	Dit si le mesh importé doit être initialisé.
-		 *\return		Le Mesh importé.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API MeshSPtr ImportMesh( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
+		C3D_API bool ImportMesh( Mesh & p_mesh, Castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
@@ -97,24 +99,26 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Scene import Function
-		 *\return		The imported Scene
+		 *\brief		Scene import Function.
+		 *\param[out]	p_scene	Receives the imported data.
+		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene
-		 *\return		La Scene importée
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	p_mesh	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual SceneSPtr DoImportScene() = 0;
+		C3D_API virtual bool DoImportScene( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
-		 *\param[in]	p_scene	The scene into which the Mesh is loaded.
-		 *\return		The imported Mesh
+		 *\param[out]	p_mesh	Receives the imported data.
+		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de maillage.
-		 *\param[in]	p_scene	La scène dans laquelle le maillage est chargé
-		 *\return		Le maillage importé.
+		 *\param[out]	p_mesh	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene ) = 0;
+		C3D_API virtual bool DoImportMesh( Mesh & p_mesh ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier

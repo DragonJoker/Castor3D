@@ -69,7 +69,7 @@ namespace Phong
 		/**
 		 *\copydoc		Castor3D::Subdivider::Subdivide
 		 */
-		void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
+		void Subdivide( Castor3D::SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false )override;
 
 	private:
 		/**

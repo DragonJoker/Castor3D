@@ -122,9 +122,9 @@ namespace Castor3D
 	 *\param[in]	p_object	L'objet à nettoyer
 	 */
 	template< typename T >
-	std::shared_ptr< CleanupEvent< T > > MakeCleanupEvent( T & p_object )
+	std::unique_ptr< CleanupEvent< T > > MakeCleanupEvent( T & p_object )
 	{
-		return std::make_shared< CleanupEvent< T > >( p_object );
+		return std::make_unique< CleanupEvent< T > >( p_object );
 	}
 }
 

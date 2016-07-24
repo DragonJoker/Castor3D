@@ -25,6 +25,7 @@ namespace Castor3D
 		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "light \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory name" );
 
 		if ( l_return )
 		{
@@ -34,6 +35,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + l_type[p_light.GetLightType()] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory type" );
 		}
 
 		if ( l_return )
@@ -41,6 +43,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0
 				&& Point3f::TextWriter( String{} )( p_light.GetColour(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory colour" );
 		}
 
 		if ( l_return )
@@ -48,6 +51,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0
 				&& Point3f::TextWriter( String{} )( p_light.GetIntensity(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
 		}
 
 		return l_return;

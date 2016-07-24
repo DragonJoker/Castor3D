@@ -34,10 +34,10 @@ namespace GuiCommon
 		static wxString PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
 	}
 
-	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_pSubmesh )
-		: TreeItemProperty( p_pSubmesh->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
+	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_submesh )
+		: TreeItemProperty( p_submesh->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_pGeometry( p_pGeometry )
-		, m_pSubmesh( p_pSubmesh )
+		, m_pSubmesh( p_submesh )
 	{
 		PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		PROPERTY_SUBMESH_MATERIAL = _( "Material" );

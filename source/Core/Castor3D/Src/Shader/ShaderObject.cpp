@@ -73,6 +73,7 @@ namespace Castor3D
 					File::CopyFile( l_file, l_pathFile );
 					l_file = Path{ Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension() };
 					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_file + cuT( "\"\n" ) ) > 0;
+					Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
 				}
 			}
 		}

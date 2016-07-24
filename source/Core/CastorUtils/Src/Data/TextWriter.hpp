@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Writer.hpp"
 #include "TextFile.hpp"
+#include "Log/Logger.hpp"
 
 namespace Castor
 {
@@ -82,6 +83,19 @@ namespace Castor
 
 			File::CopyFile( p_path, p_folder / p_subfolder );
 			return l_relative;
+		}
+		/**
+		 *\~english
+		 *\brief		Reports eventual error.
+		 *\~french
+		 *\brief		Rapporte une erreur éventuelle.
+		 */
+		void CheckError( bool p_error, char const * const p_action )
+		{
+			if ( !p_error )
+			{
+				Logger::LogError( std::stringstream{} << p_action << " writing failed." );
+			}
 		}
 
 	protected:

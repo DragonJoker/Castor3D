@@ -35,50 +35,60 @@ namespace Castor3D
 
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+			Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler name" );
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Min ) != InterpolationMode::Undefined )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Min )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler min filter" );
 			}
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Mag ) != InterpolationMode::Undefined )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mag )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler mag filter" );
 			}
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Mip ) != InterpolationMode::Undefined )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + MapInterpolationModes[p_sampler.GetInterpolationMode( InterpolationFilter::Mip )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler mip filter" );
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::U ) != WrapMode::Count )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::U )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler U wrap mode" );
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::V ) != WrapMode::Count )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::V )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler V wrap mode" );
 			}
 
 			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::W ) != WrapMode::Count )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::W )] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler W wrap mode" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tmin_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMinLod() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler min lod" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tmax_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxLod() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler max lod" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tlod_bias %.2f\n" ), m_tabs.c_str(), p_sampler.GetLodBias() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler lod bias" );
 			}
 
 			if ( l_return )
@@ -86,11 +96,13 @@ namespace Castor3D
 				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
 					&& Colour::TextWriter( String() )( p_sampler.GetBorderColour(), p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler border colour" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tmax_anisotropy %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxAnisotropy() ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler max anisotropy" );
 			}
 
 			if ( l_return )

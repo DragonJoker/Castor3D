@@ -207,16 +207,19 @@ namespace Castor
 		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< Font >::CheckError( l_return, "Font name" );
 
 		if ( l_return )
 		{
 			Path l_relative = CopyFile( p_object.GetFilePath(), p_file.GetFilePath(), Path{} );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tfile \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< Font >::CheckError( l_return, "Font file" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\theight " ) + string::to_string( p_object.GetHeight() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Font >::CheckError( l_return, "Font height" );
 		}
 
 		if ( l_return )

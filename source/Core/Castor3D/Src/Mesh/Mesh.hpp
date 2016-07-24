@@ -149,12 +149,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
-		 *\param[in]	p_pSubmesh	The submesh to delete
+		 *\param[in]	p_submesh	The submesh to delete
 		 *\~french
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
-		 *\param[in]	p_pSubmesh	Le submesh à supprimer
+		 *\param[in]	p_submesh	Le submesh à supprimer
 		 */
-		C3D_API void DeleteSubmesh( SubmeshSPtr & p_pSubmesh );
+		C3D_API void DeleteSubmesh( SubmeshSPtr & p_submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents

@@ -69,25 +69,30 @@ namespace C3dFbx
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		void DoLoadMeshes( Castor3D::Scene & p_scene, FbxNode * p_node );
-		void DoLoadSkeleton( FbxNode * p_fbxScene );
+		void DoLoadMeshes( Castor3D::Mesh & p_mesh, Castor3D::Scene & p_scene, FbxNode * p_fbxNode );
+		void DoLoadSkeleton( Castor3D::Mesh & p_mesh, FbxNode * p_fbxScene );
 		void DoLoadMaterials( Castor3D::Scene & p_scene, FbxScene * p_fbxScene );
-		void DoLoadAnimations( FbxScene * p_fbxScene );
-		void DoProcessBones( FbxNode * p_node, Castor3D::Skeleton & p_skeleton, Castor3D::BoneSPtr p_parent );
-		void DoProcessBonesWeights( FbxNode * p_node, Castor3D::Skeleton const & p_skeleton, std::vector< Castor3D::VertexBoneData > & p_boneData );
-		void DoProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_node, FbxSkin * p_skin, Castor3D::Skeleton & p_skeleton );
-		Castor3D::SubmeshSPtr DoProcessMesh( FbxMesh * p_mesh );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxFileTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxLayeredTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
-		Castor3D::TextureUnitSPtr DoLoadTexture( FbxProceduralTexture * p_texture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		void DoLoadAnimations( Castor3D::Mesh & p_mesh, FbxScene * p_fbxScene );
+		void DoProcessBones( FbxNode * p_fbxNode, Castor3D::Skeleton & p_skeleton, Castor3D::BoneSPtr p_parent );
+		void DoProcessBonesWeights( FbxNode * p_fbxNode, Castor3D::Skeleton const & p_skeleton, std::vector< Castor3D::VertexBoneData > & p_boneData );
+		void DoProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_fbxNode, FbxSkin * p_fbxSkin, Castor3D::Skeleton & p_skeleton );
+		Castor3D::SubmeshSPtr DoProcessMesh( Castor3D::Mesh & p_mesh, FbxMesh * p_fbxMesh );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxFileTexture * p_fbxTexture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxLayeredTexture * p_fbxTexture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		Castor3D::TextureUnitSPtr DoLoadTexture( FbxProceduralTexture * p_fbxTexture, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 		Castor3D::TextureUnitSPtr DoLoadTexture( Castor3D::Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 
 	private:
 		int m_anonymous;
-		Castor3D::MeshSPtr m_mesh;
 		std::map< Castor::String, uint32_t > m_mapBoneByID;
 		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 	};

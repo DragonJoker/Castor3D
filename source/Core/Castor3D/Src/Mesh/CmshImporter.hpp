@@ -58,11 +58,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor::Importer::DoImportScene
 		 */
-		C3D_API virtual SceneSPtr DoImportScene();
+		C3D_API bool DoImportScene( Scene & p_scene )override;
 		/**
 		 *\copydoc		Castor::Importer::DoImportMesh
 		 */
-		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene );
+		C3D_API bool DoImportMesh( Mesh & p_mesh )override;
 
 	public:
 		static Castor::String const Type;

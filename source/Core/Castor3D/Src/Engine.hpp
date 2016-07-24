@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	p_pEvent	L'évènement
 		 */
-		C3D_API void PostEvent( FrameEventSPtr p_pEvent );
+		C3D_API void PostEvent( FrameEventUPtr && p_pEvent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status

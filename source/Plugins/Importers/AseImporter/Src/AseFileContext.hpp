@@ -41,7 +41,7 @@ namespace Ase
 		/**
 		 * Constructor
 		 */
-		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, Castor::TextFile * p_pFile, Castor3D::Scene & p_scene );
+		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, Castor::TextFile * p_pFile, Castor3D::Scene & p_scene, Castor3D::Mesh * p_mesh );
 		/**
 		 * Initialises all members
 		 */
@@ -51,11 +51,12 @@ namespace Ase
 		AseImporter & m_importer;
 		AseFileParser * m_pParser;
 		Castor3D::Scene & scene;
+		Castor3D::Mesh * mesh;
 		Castor3D::LightSPtr pLight;
 		Castor3D::CameraSPtr pCamera;
 		Castor3D::SceneNodeSPtr pSceneNode;
 		Castor3D::GeometrySPtr pGeometry;
-		Castor3D::MeshSPtr pMesh;
+		Castor3D::Mesh * pMesh{ nullptr };
 		Castor3D::SubmeshSPtr pSubmesh;
 		Castor3D::MaterialSPtr pMaterial;
 		Castor3D::PassSPtr pPass;

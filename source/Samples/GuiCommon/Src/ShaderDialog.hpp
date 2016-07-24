@@ -29,7 +29,7 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( Castor3D::Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, Castor3D::PassSPtr p_pPass, wxPoint const & p_position = wxDefaultPosition, const wxSize p_size = wxSize( 800, 600 ) );
+		ShaderDialog( Castor3D::Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, Castor3D::PassSPtr p_pass, wxPoint const & p_position = wxDefaultPosition, const wxSize p_size = wxSize( 800, 600 ) );
 		~ShaderDialog();
 
 	private:

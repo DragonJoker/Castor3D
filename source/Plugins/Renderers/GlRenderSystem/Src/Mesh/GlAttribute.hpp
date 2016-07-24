@@ -26,7 +26,7 @@ namespace GlRender
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
-	\brief		Derivated from GlAttribsBase, allows to specify attribute type and count
+	\brief		Derived from GlAttribsBase, allows to specify attribute type and count
 	*/
 	template< typename T, uint32_t Count >
 	class GlAttribute
@@ -40,7 +40,7 @@ namespace GlRender
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		03/01/2011
-	\brief		Derivated from GlAttribsBase, allows to specify attribute type and count
+	\brief		Derived from GlAttribsBase, allows to specify attribute type and count
 	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class GlMatAttribute

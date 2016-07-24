@@ -584,7 +584,7 @@ namespace Castor3D
 	//! RenderBuffer pointer array
 	DECLARE_VECTOR( RenderBufferSPtr, RenderBufferPtr );
 	//! FrameEvent pointer array
-	DECLARE_VECTOR( FrameEventSPtr, FrameEventPtr );
+	DECLARE_VECTOR( FrameEventUPtr, FrameEventPtr );
 	//! FrameListener pointer map, sorted by name
 	DECLARE_MAP( Castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	//! RenderWindow pointer map, sorted by index

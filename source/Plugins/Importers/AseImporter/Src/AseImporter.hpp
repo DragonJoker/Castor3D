@@ -33,9 +33,6 @@ namespace Ase
 	class AseImporter
 		: public Castor3D::Importer
 	{
-	private:
-		AseFileParser * m_pFileParser;
-
 	public:
 		AseImporter( Castor3D::Engine & p_engine );
 		~AseImporter();
@@ -43,8 +40,14 @@ namespace Ase
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 	};
 }
 

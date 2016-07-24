@@ -108,7 +108,6 @@ namespace CastorViewer
 		Castor::real m_y;
 		Castor::real m_oldX;
 		Castor::real m_oldY;
-		Castor::real m_rZoom;
 		Castor::Point3r m_ptOriginalPosition;
 		Castor::Quaternion m_qOriginalOrientation;
 		bool m_mouseLeftDown;	//!< The left mouse button status
@@ -127,8 +126,8 @@ namespace CastorViewer
 		Castor3D::SceneNodeSPtr m_currentNode;
 		FirstPersonCameraRotateEventSPtr m_pFpRotateCamEvent;
 		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
-		KeyboardEventSPtr m_pKeyboardEvent;
-		Castor::real m_rFpCamSpeed;
+		KeyboardEventUPtr m_pKeyboardEvent;
+		Castor::real m_camSpeed;
 	};
 }
 

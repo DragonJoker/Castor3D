@@ -37,7 +37,7 @@ namespace Castor3D
 	struct CacheTraits< Mesh, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Mesh >( KeyType const &, eMESH_TYPE, UIntArray const &, RealArray const & ) >;
+		using Producer = std::function< std::shared_ptr< Mesh >( KeyType const & ) >;
 		using Merger = std::function< void( CacheBase< Mesh, KeyType > const &
 											, Castor::Collection< Mesh, KeyType > &
 											, std::shared_ptr< Mesh > ) >;

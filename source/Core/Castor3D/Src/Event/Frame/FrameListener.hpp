@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type
 		 *\param[in]	p_event	L'évènement à ajouter
 		 */
-		C3D_API void PostEvent( FrameEventSPtr p_event );
+		C3D_API void PostEvent( FrameEventUPtr && p_event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them

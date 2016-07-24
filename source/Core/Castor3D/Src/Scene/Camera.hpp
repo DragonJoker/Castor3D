@@ -274,7 +274,7 @@ namespace Castor3D
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
 		Viewport m_viewport;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
-		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
+		std::array< Castor::PlaneEquation< real >, eFRUSTUM_PLANE_COUNT > m_planes;
 		//!\~english The view matrix	\~french La matrice vue
 		Castor::Matrix4x4r m_view;
 	};

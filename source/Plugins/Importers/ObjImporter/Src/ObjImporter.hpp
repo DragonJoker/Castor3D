@@ -32,7 +32,7 @@ namespace Obj
 		,	private Castor::NonCopyable
 	{
 	private:
-		DECLARE_MAP( Castor3D::PassSPtr, Castor::Point3f, FloatPass );
+		DECLARE_MAP( Castor3D::PassRPtr, Castor::Point3f, FloatPass );
 		DECLARE_VECTOR( Castor3D::TextureLayoutSPtr, Texture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
@@ -45,16 +45,22 @@ namespace Obj
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		Castor3D::MeshSPtr DoReadObjFile( Castor3D::Scene & p_scene );
-		void DoCreateSubmesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< Castor3D::FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex );
+		void DoReadObjFile( Castor3D::Mesh & p_mesh );
+		void DoCreateSubmesh( Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< Castor3D::FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex );
 		void DoParseTexParams( Castor::String & p_strValue, float * p_offset, float * p_scale, float * p_turb );
 		void DoParseTexParam( Castor::String const & p_strParam, float * p_values );
-		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_uiIndex );
-		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::TextureChannel p_channel );
-		void DoReadMaterials( Castor3D::Scene & p_scene, Castor::Path const & p_pathMatFile );
+		bool DoIsValidValue( Castor::String const & p_strParam, Castor::String const & p_strSrc, uint32_t p_index );
+		void DoAddTexture( Castor::String const & p_strValue, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
+		void DoReadMaterials( Castor3D::Mesh & p_mesh, Castor::Path const & p_pathMatFile );
 
 	private:
 		Castor::ImageCache & m_collImages;

@@ -291,16 +291,16 @@ namespace C3dFbx
 			return l_return;
 		}
 
-		FbxAMatrix DoGetGeometryTransformation( FbxNode * p_node )
+		FbxAMatrix DoGetGeometryTransformation( FbxNode * p_fbxNode )
 		{
-			if ( !p_node )
+			if ( !p_fbxNode )
 			{
 				CASTOR_EXCEPTION( "Null for mesh geometry" );
 			}
 
-			const FbxVector4 l_translate = p_node->GetGeometricTranslation( FbxNode::eSourcePivot );
-			const FbxVector4 l_rotate = p_node->GetGeometricRotation( FbxNode::eSourcePivot );
-			const FbxVector4 l_scale = p_node->GetGeometricScaling( FbxNode::eSourcePivot );
+			const FbxVector4 l_translate = p_fbxNode->GetGeometricTranslation( FbxNode::eSourcePivot );
+			const FbxVector4 l_rotate = p_fbxNode->GetGeometricRotation( FbxNode::eSourcePivot );
+			const FbxVector4 l_scale = p_fbxNode->GetGeometricScaling( FbxNode::eSourcePivot );
 
 			return FbxAMatrix( l_translate, l_rotate, l_scale );
 		}
@@ -327,21 +327,21 @@ namespace C3dFbx
 		}
 
 		template< typename FbxType >
-		void DoTraverseDepthFirst( FbxNode * p_node, FbxNodeAttribute::EType p_type, std::function< void( FbxNode *, FbxType * ) > p_function )
+		void DoTraverseDepthFirst( FbxNode * p_fbxNode, FbxNodeAttribute::EType p_type, std::function< void( FbxNode *, FbxType * ) > p_function )
 		{
-			if ( p_node )
+			if ( p_fbxNode )
 			{
-				if ( p_node->GetNodeAttribute() )
+				if ( p_fbxNode->GetNodeAttribute() )
 				{
-					if ( p_node->GetNodeAttribute()->GetAttributeType() == p_type )
+					if ( p_fbxNode->GetNodeAttribute()->GetAttributeType() == p_type )
 					{
-						p_function( p_node, reinterpret_cast< FbxType * >( p_node->GetNodeAttribute() ) );
+						p_function( p_fbxNode, reinterpret_cast< FbxType * >( p_fbxNode->GetNodeAttribute() ) );
 					}
 				}
 
-				for ( int i = 0; i < p_node->GetChildCount(); ++i )
+				for ( int i = 0; i < p_fbxNode->GetChildCount(); ++i )
 				{
-					DoTraverseDepthFirst( p_node->GetChild( i ), p_type, p_function );
+					DoTraverseDepthFirst( p_fbxNode->GetChild( i ), p_type, p_function );
 				}
 			}
 		}
@@ -362,7 +362,7 @@ namespace C3dFbx
 		return std::make_unique< FbxSdkImporter >( p_engine );
 	}
 
-	SceneSPtr FbxSdkImporter::DoImportScene()
+	bool FbxSdkImporter::DoImportScene( Scene & p_scene )
 	{
 		FbxManager * l_fbxManager = nullptr;
 		FbxScene * l_fbxScene = nullptr;
@@ -370,120 +370,93 @@ namespace C3dFbx
 		// Prepare the FBX SDK.
 		DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
 
-		auto l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_FBX" ) );
+		// TODO
 
 		DoDestroySdkObjects( l_fbxManager );
 
-		return l_scene;
+		return false;
 	}
 
-	MeshSPtr FbxSdkImporter::DoImportMesh( Scene & p_scene )
+	bool FbxSdkImporter::DoImportMesh( Mesh & p_mesh )
 	{
+		bool l_return{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
-		String l_name = m_fileName.GetFileName();
-		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
+		FbxManager * l_fbxManager = nullptr;
+		FbxScene * l_fbxScene = nullptr;
 
-		if ( p_scene.GetMeshCache().Has( l_meshName ) )
+		// Prepare the FBX SDK.
+		DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
+
+		if ( l_fbxScene )
 		{
-			m_mesh = p_scene.GetMeshCache().Find( l_meshName );
-		}
-		else
-		{
-			m_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
-		}
-
-		if ( !m_mesh->GetSubmeshCount() )
-		{
-			FbxManager * l_fbxManager = nullptr;
-			FbxScene * l_fbxScene = nullptr;
-
-			// Prepare the FBX SDK.
-			DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
-
-			if ( l_fbxScene )
+			if ( DoLoadScene( l_fbxManager, l_fbxScene, m_fileName ) )
 			{
-				if ( DoLoadScene( l_fbxManager, l_fbxScene, m_fileName ) )
+				FbxGeometryConverter l_converter( l_fbxManager );
+				l_converter.SplitMeshesPerMaterial( l_fbxScene, true );
+
+				if ( l_converter.Triangulate( l_fbxScene, true ) )
 				{
-					FbxGeometryConverter l_converter( l_fbxManager );
-					l_converter.SplitMeshesPerMaterial( l_fbxScene, true );
+					DoLoadMaterials( *p_mesh.GetScene(), l_fbxScene );
+					DoLoadSkeleton( p_mesh, l_fbxScene->GetRootNode() );
+					DoLoadMeshes( p_mesh, *p_mesh.GetScene(), l_fbxScene->GetRootNode() );
 
-					if ( l_converter.Triangulate( l_fbxScene, true ) )
+					if ( p_mesh.GetSkeleton() )
 					{
-						DoLoadMaterials( p_scene, l_fbxScene );
-						DoLoadSkeleton( l_fbxScene->GetRootNode() );
-						DoLoadMeshes( p_scene, l_fbxScene->GetRootNode() );
-
-						if ( m_mesh->GetSkeleton() )
-						{
-							DoLoadAnimations( l_fbxScene );
-						}
+						DoLoadAnimations( p_mesh, l_fbxScene );
 					}
+
+					l_return = true;
 				}
 			}
-			else
-			{
-				// The import failed.
-				p_scene.GetMeshCache().Remove( l_meshName );
-				m_mesh.reset();
-			}
-
-			DoDestroySdkObjects( l_fbxManager );
-		}
-		else
-		{
-			// The import failed.
-			p_scene.GetMeshCache().Remove( l_meshName );
-			m_mesh.reset();
 		}
 
-		MeshSPtr l_return( m_mesh );
-		m_mesh.reset();
+		DoDestroySdkObjects( l_fbxManager );
 		return l_return;
 	}
 
-	void FbxSdkImporter::DoLoadMeshes( Scene & p_scene, FbxNode * p_node )
+	void FbxSdkImporter::DoLoadMeshes( Mesh & p_mesh, Scene & p_scene, FbxNode * p_fbxNode )
 	{
-		DoTraverseDepthFirst< FbxMesh >( p_node, FbxNodeAttribute::eMesh, [this, &p_scene]( FbxNode * p_node, FbxMesh * p_mesh )
+		DoTraverseDepthFirst< FbxMesh >( p_fbxNode, FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
 		{
-			SubmeshSPtr l_submesh = DoProcessMesh( p_mesh );
-			auto l_material = p_node->GetMaterial( 0 );
+			SubmeshSPtr l_submesh = DoProcessMesh( p_mesh, p_fbxMesh );
+			auto l_material = p_fbxNode->GetMaterial( 0 );
 
 			if ( l_material )
 			{
 				l_submesh->SetDefaultMaterial( p_scene.GetMaterialView().Find( l_material->GetName() ) );
 			}
 
-			if ( m_mesh->GetSkeleton() )
+			if ( p_mesh.GetSkeleton() )
 			{
-				FbxMesh * l_mesh = p_node->GetMesh();
+				FbxMesh * l_mesh = p_fbxNode->GetMesh();
 				std::vector< VertexBoneData > l_boneData{ l_submesh->GetPointsCount() };
-				DoProcessBonesWeights( p_node, *m_mesh->GetSkeleton(), l_boneData );
+				DoProcessBonesWeights( p_fbxNode, *p_mesh.GetSkeleton(), l_boneData );
 				l_submesh->AddBoneDatas( l_boneData );
 			}
 		} );
 	}
 
-	void FbxSdkImporter::DoLoadSkeleton( FbxNode * p_node )
+	void FbxSdkImporter::DoLoadSkeleton( Mesh & p_mesh, FbxNode * p_fbxNode )
 	{
-		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *m_mesh->GetScene() );
+		SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *p_mesh.GetScene() );
 
-		for ( int i = 0; i < p_node->GetChildCount(); ++i )
+		for ( int i = 0; i < p_fbxNode->GetChildCount(); ++i )
 		{
-			DoProcessBones( p_node->GetChild( i ), *l_skeleton, nullptr );
+			DoProcessBones( p_fbxNode->GetChild( i ), *l_skeleton, nullptr );
 		}
 
 		if ( std::distance( l_skeleton->begin(), l_skeleton->end() ) > 0 )
 		{
-			m_mesh->SetSkeleton( l_skeleton );
+			p_mesh.SetSkeleton( l_skeleton );
 		}
 	}
 
-	void FbxSdkImporter::DoLoadAnimations( FbxScene * p_scene )
+	void FbxSdkImporter::DoLoadAnimations( Mesh & p_mesh, FbxScene * p_scene )
 	{
-		DoTraverseDepthFirst< FbxMesh >( p_scene->GetRootNode(), FbxNodeAttribute::eMesh, [this, &p_scene]( FbxNode * p_node, FbxMesh * p_mesh )
+		DoTraverseDepthFirst< FbxMesh >( p_scene->GetRootNode(), FbxNodeAttribute::eMesh, [this, &p_scene, &p_mesh]( FbxNode * p_fbxNode, FbxMesh * p_fbxMesh )
 		{
-			FbxMesh * l_mesh = p_node->GetMesh();
+			FbxMesh * l_mesh = p_fbxNode->GetMesh();
 			uint32_t l_deformersCount = l_mesh->GetDeformerCount();
 
 			for ( uint32_t l_deformerIndex = 0; l_deformerIndex < l_deformersCount; ++l_deformerIndex )
@@ -492,37 +465,37 @@ namespace C3dFbx
 
 				if ( l_skin )
 				{
-					DoProcessSkeletonAnimations( p_scene, p_node, l_skin, *m_mesh->GetSkeleton() );
+					DoProcessSkeletonAnimations( p_scene, p_fbxNode, l_skin, *p_mesh.GetSkeleton() );
 				}
 			}
 		} );
 
-		for ( auto const & l_it : m_mesh->GetSkeleton()->GetAnimations() )
+		for ( auto const & l_it : p_mesh.GetSkeleton()->GetAnimations() )
 		{
 			Logger::LogDebug( StringStream() << cuT( "Found Animation: " ) << l_it.first );
 		}
 	}
 
-	void FbxSdkImporter::DoProcessSkeletonAnimations( FbxScene * p_scene, FbxNode * p_node, FbxSkin * p_skin, Skeleton & p_skeleton )
+	void FbxSdkImporter::DoProcessSkeletonAnimations( FbxScene * p_fbxScene, FbxNode * p_fbxNode, FbxSkin * p_fbxSkin, Skeleton & p_skeleton )
 	{
-		uint32_t l_clustersCount = p_skin->GetClusterCount();
-		const Point3r l_geoTranslate{ p_node->GetGeometricTranslation( FbxNode::eSourcePivot ).Buffer() };
-		const Quaternion l_geoRotate{ p_node->GetGeometricRotation( FbxNode::eSourcePivot ).Buffer() };
-		const Point3r l_geoScale{ p_node->GetGeometricScaling( FbxNode::eSourcePivot ).Buffer() };
+		uint32_t l_clustersCount = p_fbxSkin->GetClusterCount();
+		const Point3r l_geoTranslate{ p_fbxNode->GetGeometricTranslation( FbxNode::eSourcePivot ).Buffer() };
+		const Quaternion l_geoRotate{ p_fbxNode->GetGeometricRotation( FbxNode::eSourcePivot ).Buffer() };
+		const Point3r l_geoScale{ p_fbxNode->GetGeometricScaling( FbxNode::eSourcePivot ).Buffer() };
 
 		for ( uint32_t l_clusterIndex = 0; l_clusterIndex < l_clustersCount; ++l_clusterIndex )
 		{
-			FbxCluster * l_cluster = p_skin->GetCluster( l_clusterIndex );
+			FbxCluster * l_cluster = p_fbxSkin->GetCluster( l_clusterIndex );
 			auto l_link = l_cluster->GetLink();
-			uint32_t l_animationsCount = p_scene->GetSrcObjectCount( FbxCriteria::ObjectType( FbxAnimStack::ClassId ) );
+			uint32_t l_animationsCount = p_fbxScene->GetSrcObjectCount( FbxCriteria::ObjectType( FbxAnimStack::ClassId ) );
 			auto l_bone = *( p_skeleton.begin() + DoFindBoneIndex( string::string_cast< xchar >( l_link->GetName() ), p_skeleton ) );
 
 			for ( uint32_t l_animationIndex = 0; l_animationIndex < l_animationsCount; ++l_animationIndex )
 			{
-				FbxAnimStack * l_animStack = p_scene->GetSrcObject< FbxAnimStack >( l_animationIndex );
+				FbxAnimStack * l_animStack = p_fbxScene->GetSrcObject< FbxAnimStack >( l_animationIndex );
 				auto l_name = l_animStack->GetName();
 				auto & l_animation = p_skeleton.CreateAnimation( string::string_cast< xchar >( l_name ) );
-				FbxTakeInfo * l_takeInfo = p_scene->GetTakeInfo( l_name );
+				FbxTakeInfo * l_takeInfo = p_fbxScene->GetTakeInfo( l_name );
 				uint64_t l_start = l_takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_finish = l_takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_animationLength = l_finish - l_start + 1;
@@ -547,13 +520,13 @@ namespace C3dFbx
 						FbxTime l_time;
 						l_time.SetFrame( i, FbxTime::eFrames24 );
 						Point3r l_translate = l_geoTranslate
-											  + Point3r{ ( p_node->EvaluateLocalTranslation( l_time ) ).Buffer() }
+											  + Point3r{ ( p_fbxNode->EvaluateLocalTranslation( l_time ) ).Buffer() }
 											  + Point3r{ ( l_link->EvaluateLocalTranslation( l_time ) ).Buffer() };
 						Quaternion l_rotate = l_geoRotate
-											  * Quaternion{ ( p_node->EvaluateLocalRotation( l_time ) ).Buffer() }
+											  * Quaternion{ ( p_fbxNode->EvaluateLocalRotation( l_time ) ).Buffer() }
 											  * Quaternion{ ( l_link->EvaluateLocalRotation( l_time ) ).Buffer() };
 						Point3r l_scale = l_geoScale
-										  * Point3r{ ( p_node->EvaluateLocalScaling( l_time ) ).Buffer() }
+										  * Point3r{ ( p_fbxNode->EvaluateLocalScaling( l_time ) ).Buffer() }
 										  * Point3r{ ( l_link->EvaluateLocalScaling( l_time ) ).Buffer() };
 						l_object->AddKeyFrame( real( l_from ), l_translate, l_rotate, l_scale );
 						l_from += l_inc;
@@ -565,13 +538,13 @@ namespace C3dFbx
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBones( FbxNode * p_node, Skeleton & p_skeleton, BoneSPtr p_parent )
+	void FbxSdkImporter::DoProcessBones( FbxNode * p_fbxNode, Skeleton & p_skeleton, BoneSPtr p_parent )
 	{
 		auto l_bone = p_parent;
 
-		if ( p_node->GetNodeAttribute() && p_node->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton )
+		if ( p_fbxNode->GetNodeAttribute() && p_fbxNode->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton )
 		{
-			FbxSkeleton * l_skeleton = reinterpret_cast< FbxSkeleton * >( p_node );
+			FbxSkeleton * l_skeleton = reinterpret_cast< FbxSkeleton * >( p_fbxNode );
 			String l_name = string::string_cast< xchar >( l_skeleton->GetName() );
 
 			if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
@@ -593,17 +566,17 @@ namespace C3dFbx
 			}
 		}
 
-		for ( int i = 0; i < p_node->GetChildCount(); i++ )
+		for ( int i = 0; i < p_fbxNode->GetChildCount(); i++ )
 		{
-			DoProcessBones( p_node->GetChild( i ), p_skeleton, l_bone );
+			DoProcessBones( p_fbxNode->GetChild( i ), p_skeleton, l_bone );
 		}
 	}
 
-	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_node, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
+	void FbxSdkImporter::DoProcessBonesWeights( FbxNode * p_fbxNode, Skeleton const & p_skeleton, std::vector< VertexBoneData > & p_boneData )
 	{
-		FbxMesh * l_mesh = p_node->GetMesh();
+		FbxMesh * l_mesh = p_fbxNode->GetMesh();
 		uint32_t l_deformersCount = l_mesh->GetDeformerCount();
-		FbxAMatrix l_geometryTransform = DoGetGeometryTransformation( p_node );
+		FbxAMatrix l_geometryTransform = DoGetGeometryTransformation( p_fbxNode );
 
 		for ( uint32_t l_deformerIndex = 0; l_deformerIndex < l_deformersCount; ++l_deformerIndex )
 		{
@@ -694,19 +667,19 @@ namespace C3dFbx
 		}
 	}
 
-	SubmeshSPtr FbxSdkImporter::DoProcessMesh( FbxMesh * p_mesh )
+	SubmeshSPtr FbxSdkImporter::DoProcessMesh( Mesh & p_mesh, FbxMesh * p_fbxMesh )
 	{
-		p_mesh->GenerateNormals();
-		auto l_submesh = m_mesh->CreateSubmesh();
+		p_fbxMesh->GenerateNormals();
+		auto l_submesh = p_mesh.CreateSubmesh();
 		l_submesh->SetDefaultMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
 		bool l_tangentSpace = false;
 
-		Logger::LogDebug( StringStream() << "Mesh: " << p_mesh->GetName() );
-		Logger::LogDebug( StringStream() << "    Points: " << p_mesh->GetControlPointsCount() );
-		Logger::LogDebug( StringStream() << "    Polygons: " << p_mesh->GetPolygonCount() );
+		Logger::LogDebug( StringStream() << "Mesh: " << p_fbxMesh->GetName() );
+		Logger::LogDebug( StringStream() << "    Points: " << p_fbxMesh->GetControlPointsCount() );
+		Logger::LogDebug( StringStream() << "    Polygons: " << p_fbxMesh->GetPolygonCount() );
 
 		// Vertex
-		uint32_t l_pointsCount = p_mesh->GetControlPointsCount();
+		uint32_t l_pointsCount = p_fbxMesh->GetControlPointsCount();
 		std::vector< real > l_vtx( l_pointsCount * 3 );
 		std::vector< real > l_nml( l_pointsCount * 3 );
 		std::vector< real > l_tan( l_pointsCount * 3 );
@@ -718,16 +691,16 @@ namespace C3dFbx
 		// Positions
 		for ( auto & l_vertex : l_vertices )
 		{
-			FbxVector4 l_fbxVertex = p_mesh->GetControlPointAt( l_index++ );
+			FbxVector4 l_fbxVertex = p_fbxMesh->GetControlPointAt( l_index++ );
 			l_vertex.m_pos[0] = real( l_fbxVertex[0] );
 			l_vertex.m_pos[1] = real( l_fbxVertex[1] );
 			l_vertex.m_pos[2] = real( l_fbxVertex[2] );
 		}
 
 		// Normals
-		auto l_normals = p_mesh->GetLayer( 0 )->GetNormals();
+		auto l_normals = p_fbxMesh->GetLayer( 0 )->GetNormals();
 
-		if ( DoRetrieveMeshValues( cuT( "Normals" ), p_mesh, l_normals, l_nml ) )
+		if ( DoRetrieveMeshValues( cuT( "Normals" ), p_fbxMesh, l_normals, l_nml ) )
 		{
 			l_index = 0u;
 			real * l_buffer{ l_nml.data() };
@@ -740,9 +713,9 @@ namespace C3dFbx
 		}
 
 		// Texture UVs
-		auto l_uvs = p_mesh->GetLayer( 0 )->GetUVs();
+		auto l_uvs = p_fbxMesh->GetLayer( 0 )->GetUVs();
 
-		if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_mesh, l_uvs, l_tex ) )
+		if ( DoRetrieveMeshValues( cuT( "Texture UVs" ), p_fbxMesh, l_uvs, l_tex ) )
 		{
 			l_index = 0u;
 			real * l_buffer{ l_tex.data() };
@@ -756,12 +729,12 @@ namespace C3dFbx
 
 		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
 		{
-			p_mesh->GenerateTangentsData( 0 );
+			p_fbxMesh->GenerateTangentsData( 0 );
 
 			// Tangents
-			auto l_tangents = p_mesh->GetLayer( 0 )->GetTangents();
+			auto l_tangents = p_fbxMesh->GetLayer( 0 )->GetTangents();
 
-			if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_mesh, l_tangents, l_tan ) )
+			if ( DoRetrieveMeshValues( cuT( "Tangents" ), p_fbxMesh, l_tangents, l_tan ) )
 			{
 				l_index = 0u;
 				real * l_buffer{ l_tan.data() };
@@ -774,9 +747,9 @@ namespace C3dFbx
 			}
 
 			// Bitangents
-			auto l_bitangents = p_mesh->GetLayer( 0 )->GetBinormals();
+			auto l_bitangents = p_fbxMesh->GetLayer( 0 )->GetBinormals();
 
-			if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_mesh, l_bitangents, l_bit ) )
+			if ( DoRetrieveMeshValues( cuT( "Bitangents" ), p_fbxMesh, l_bitangents, l_bit ) )
 			{
 				l_index = 0u;
 				real * l_buffer{ l_bit.data() };
@@ -790,13 +763,13 @@ namespace C3dFbx
 		}
 
 		// Faces
-		uint32_t l_polyCount = p_mesh->GetPolygonCount();
+		uint32_t l_polyCount = p_fbxMesh->GetPolygonCount();
 		std::vector< FaceIndices > l_faces;
 		l_faces.reserve( l_polyCount );
 
 		for ( auto l_poly = 0u; l_poly < l_polyCount; ++l_poly )
 		{
-			l_faces.push_back( DoGetFace( p_mesh, l_poly, 0, 1, 2 ) );
+			l_faces.push_back( DoGetFace( p_fbxMesh, l_poly, 0, 1, 2 ) );
 		}
 
 		l_submesh->AddPoints( l_vertices );

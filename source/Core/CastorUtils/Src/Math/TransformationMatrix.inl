@@ -14,25 +14,35 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 		{
-			p_matrix[0][0] = T( 1.0 - 2.0f * p_quat.quat.y * p_quat.quat.y - 2.0 * p_quat.quat.z * p_quat.quat.z );
-			p_matrix[0][1] = T( 2.0 * p_quat.quat.x * p_quat.quat.y - 2.0 * p_quat.quat.z * p_quat.quat.w );
-			p_matrix[0][2] = T( 2.0 * p_quat.quat.x * p_quat.quat.z + 2.0 * p_quat.quat.y * p_quat.quat.w );
-			p_matrix[0][3] = T( 0.0 );
+			auto const qxx( p_quat.quat.x * p_quat.quat.x );
+			auto const qyy( p_quat.quat.y * p_quat.quat.y );
+			auto const qzz( p_quat.quat.z * p_quat.quat.z );
+			auto const qxz( p_quat.quat.x * p_quat.quat.z );
+			auto const qxy( p_quat.quat.x * p_quat.quat.y );
+			auto const qyz( p_quat.quat.y * p_quat.quat.z );
+			auto const qwx( p_quat.quat.w * p_quat.quat.x );
+			auto const qwy( p_quat.quat.w * p_quat.quat.y );
+			auto const qwz( p_quat.quat.w * p_quat.quat.z );
 
-			p_matrix[1][0] = T( 2.0 * p_quat.quat.x * p_quat.quat.y + 2.0 * p_quat.quat.z * p_quat.quat.w );
-			p_matrix[1][1] = T( 1.0 - 2.0f * p_quat.quat.x * p_quat.quat.x - 2.0 * p_quat.quat.z * p_quat.quat.z );
-			p_matrix[1][2] = T( 2.0 * p_quat.quat.y * p_quat.quat.z - 2.0 * p_quat.quat.x * p_quat.quat.w );
-			p_matrix[1][3] = T( 0.0 );
+			p_matrix[0][0] = T( 1 - 2 * ( qyy + qzz ) );
+			p_matrix[0][1] = T( 2 * ( qxy - qwz ) );
+			p_matrix[0][2] = T( 2 * ( qxz + qwy ) );
+			p_matrix[0][3] = T( 0 );
 
-			p_matrix[2][0] = T( 2.0 * p_quat.quat.x * p_quat.quat.z - 2.0 * p_quat.quat.y * p_quat.quat.w );
-			p_matrix[2][1] = T( 2.0 * p_quat.quat.y * p_quat.quat.z + 2.0 * p_quat.quat.x * p_quat.quat.w );
-			p_matrix[2][2] = T( 1.0 - 2.0 * p_quat.quat.x * p_quat.quat.x - 2.0 * p_quat.quat.y * p_quat.quat.y );
-			p_matrix[3][3] = T( 0.0 );
+			p_matrix[1][0] = T( 2 * ( qxy + qwz ) );
+			p_matrix[1][1] = T( 1 - 2 * ( qxx + qzz ) );
+			p_matrix[1][2] = T( 2 * ( qyz - qwx ) );
+			p_matrix[1][3] = T( 0 );
 
-			p_matrix[3][0] = T( 0.0 );
-			p_matrix[3][1] = T( 0.0 );
-			p_matrix[3][2] = T( 0.0 );
-			p_matrix[3][3] = T( 1.0 );
+			p_matrix[2][0] = T( 2 * ( qxz - qwy ) );
+			p_matrix[2][1] = T( 2 * ( qyz + qwx ) );
+			p_matrix[2][2] = T( 1 - 2 * ( qxx + qyy ) );
+			p_matrix[3][3] = T( 0 );
+
+			p_matrix[3][0] = T( 0 );
+			p_matrix[3][1] = T( 0 );
+			p_matrix[3][2] = T( 0 );
+			p_matrix[3][3] = T( 1 );
 
 			return p_matrix;
 		}

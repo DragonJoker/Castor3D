@@ -91,11 +91,13 @@ namespace Castor3D
 					l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
 						&& Colour::TextWriter( String() )( p_unit.GetBlendColour(), p_file )
 						&& p_file.Print( 256, cuT( "\n" ) ) > 0;
+					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit colour" );
 				}
 
 				if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
 				{
 					l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit sampler" );
 				}
 
 				if ( l_return && p_unit.GetChannel() != TextureChannel::Undefined )
@@ -141,20 +143,24 @@ namespace Castor3D
 					default:
 						break;
 					}
+					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit channel" );
 
 					if ( l_return && p_unit.GetAlphaFunc() != AlphaFunc::Always )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha function" );
 					}
 
 					if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::NoBlend )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit rgb blend" );
 					}
 
 					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::NoBlend )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha blend" );
 					}
 
 					if ( !l_texture->GetImage().IsStaticSource() )
@@ -168,6 +174,7 @@ namespace Castor3D
 					{
 						Path l_relative{ Scene::TextWriter::CopyFile( Path{ l_image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
 						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit image" );
 					}
 
 					if ( l_return )

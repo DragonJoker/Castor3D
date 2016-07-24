@@ -47,36 +47,30 @@ namespace C3DMd2
 		return std::make_unique< Md2Importer >( p_engine );
 	}
 
-	SceneSPtr Md2Importer::DoImportScene()
+	bool Md2Importer::DoImportScene( Scene & p_scene )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_MD2" ) );
-		MeshSPtr l_mesh = DoImportMesh( *l_scene );
+		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_MD2" ) );
+		bool l_return = DoImportMesh( *l_mesh );
 
-		if ( l_mesh )
+		if ( l_return )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
-			l_geometry->AttachTo( l_node );
-
-			for ( auto l_submesh : *l_mesh )
-			{
-				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
+			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
 			l_geometry->SetMesh( l_mesh );
+			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_scene;
+		return l_return;
 	}
 
-	MeshSPtr Md2Importer::DoImportMesh( Scene & p_scene )
+	bool Md2Importer::DoImportMesh( Mesh & p_mesh )
 	{
+		bool l_return{ false };
 		UIntArray l_faces;
 		RealArray l_sizes;
 		SubmeshSPtr l_submesh;
 		MaterialSPtr l_material;
 		PassSPtr l_pass;
-		MeshSPtr l_mesh;
 		String l_meshName;
 		String l_materialName;
 		TextureUnitSPtr l_unit;
@@ -84,7 +78,6 @@ namespace C3DMd2
 		m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 		l_meshName = m_fileName.GetFileName();
 		l_materialName = m_fileName.GetFileName();
-		l_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		m_pFile->Read( m_header );
 
 		if ( m_header.m_version != 8 )
@@ -93,11 +86,11 @@ namespace C3DMd2
 		}
 		else
 		{
-			l_material = p_scene.GetMaterialView().Find( l_materialName );
+			l_material = p_mesh.GetScene()->GetMaterialView().Find( l_materialName );
 
 			if ( !l_material )
 			{
-				l_material = p_scene.GetMaterialView().Add( l_materialName );
+				l_material = p_mesh.GetScene()->GetMaterialView().Add( l_materialName );
 				l_material->CreatePass();
 			}
 
@@ -105,23 +98,24 @@ namespace C3DMd2
 			l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 			l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetShininess( 64.0f );
-			DoReadMD2Data( l_pass );
-			DoConvertDataStructures( l_mesh );
+			DoReadMD2Data( *l_pass );
+			DoConvertDataStructures( p_mesh );
 
-			for ( auto l_submesh : *l_mesh )
+			for ( auto l_submesh : p_mesh )
 			{
 				l_submesh->SetDefaultMaterial( l_material );
 			}
 
-			l_mesh->ComputeNormals();
-			GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+			p_mesh.ComputeNormals();
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_material ) );
+			l_return = true;
 		}
 
 		DoCleanUp();
-		return l_mesh;
+		return l_return;
 	}
 
-	void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
+	void Md2Importer::DoReadMD2Data( Pass & p_pass )
 	{
 		uint64_t l_uiRead;
 		Logger::LogDebug( StringStream() << cuT( "MD2 File - size: " ) << m_pFile->GetLength() );
@@ -140,9 +134,9 @@ namespace C3DMd2
 			{
 				Path l_strValue{ string::string_cast< xchar >( m_skins[i] ) };
 
-				if ( p_pPass && !l_strValue.empty() )
+				if ( !l_strValue.empty() )
 				{
-					l_pTexture = LoadTexture( l_strValue, *p_pPass, TextureChannel::Diffuse );
+					l_pTexture = LoadTexture( l_strValue, p_pass, TextureChannel::Diffuse );
 
 					if ( l_pTexture )
 					{
@@ -193,9 +187,9 @@ namespace C3DMd2
 		}
 	}
 
-	void Md2Importer::DoConvertDataStructures( MeshSPtr p_pMesh )
+	void Md2Importer::DoConvertDataStructures( Mesh & p_mesh )
 	{
-		SubmeshSPtr l_pSubmesh = p_pMesh->CreateSubmesh();
+		SubmeshSPtr l_submesh = p_mesh.CreateSubmesh();
 		std::vector< float > l_arrayNml( m_header.m_numTriangles * 9 );
 		std::vector< FaceIndices > l_arrayFaces( m_header.m_numTriangles );
 		BufferElementGroupSPtr l_pVertex;
@@ -204,17 +198,17 @@ namespace C3DMd2
 		{
 			//for (int i = 0 ; i < m_header.m_numVertices ; i++)
 			//{
-			//	l_pVertex = l_pSubmesh->AddPoint( m_frames[0].m_vertices[i].m_coords );
+			//	l_pVertex = l_submesh->AddPoint( m_frames[0].m_vertices[i].m_coords );
 			//}
 
 			//for (int i = 0 ; i < m_header.m_numTriangles ; i++)
 			//{
 			//	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
 			//	{
-			//		l_pSubmesh->GetPoint( m_triangles[i].m_vertexIndices[0] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
-			//		l_pSubmesh->GetPoint( m_triangles[i].m_vertexIndices[1] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
-			//		l_pSubmesh->GetPoint( m_triangles[i].m_vertexIndices[2] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
-			//		l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2] );
+			//		l_submesh->GetPoint( m_triangles[i].m_vertexIndices[0] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
+			//		l_submesh->GetPoint( m_triangles[i].m_vertexIndices[1] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
+			//		l_submesh->GetPoint( m_triangles[i].m_vertexIndices[2] )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
+			//		l_submesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2] );
 			//	}
 			//}
 
@@ -222,10 +216,10 @@ namespace C3DMd2
 			{
 				if ( m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0 )
 				{
-					Vertex::SetTexCoord( l_pSubmesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[0]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
-					Vertex::SetTexCoord( l_pSubmesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[1]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
-					Vertex::SetTexCoord( l_pSubmesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[2]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
-					l_pSubmesh->AddFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
+					Vertex::SetTexCoord( l_submesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[0]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) / real( m_header.m_skinHeight ) );
+					Vertex::SetTexCoord( l_submesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[1]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) / real( m_header.m_skinHeight ) );
+					Vertex::SetTexCoord( l_submesh->AddPoint( m_frames[0].m_vertices[m_triangles[i].m_vertexIndices[2]].m_coords ), real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ) / real( m_header.m_skinWidth ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) / real( m_header.m_skinHeight ) );
+					l_submesh->AddFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
 				}
 			}
 
@@ -247,10 +241,8 @@ namespace C3DMd2
 			//	}
 			//}
 
-			//l_pSubmesh->AddFaceGroup( &l_arrayFaces[0], m_header.m_numTriangles, NULL, &l_arrayTex[0] );
+			//l_submesh->AddFaceGroup( &l_arrayFaces[0], m_header.m_numTriangles, NULL, &l_arrayTex[0] );
 		}
-
-		p_pMesh->ComputeContainers();
 	}
 
 	void Md2Importer::DoCleanUp()

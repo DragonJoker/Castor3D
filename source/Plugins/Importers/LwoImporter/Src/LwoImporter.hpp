@@ -42,39 +42,45 @@ namespace Lwo
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr	DoImportScene();
-		virtual Castor3D::MeshSPtr	DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		bool DoRead( stLWO_CHUNK *	p_pChunk );
-		void DoProcess( Castor3D::Scene & p_scene, stLWO_CHUNK * p_pChunk, Castor3D::MeshSPtr p_pMesh );
-		void DoDiscard( stLWO_CHUNK * p_pChunk );
-		void DoDiscard( stLWO_SUBCHUNK * p_pChunk );
-		bool DoIsValidChunk( stLWO_CHUNK * p_pChunk, stLWO_CHUNK * p_pParent );
+		bool DoRead( stLWO_CHUNK & p_chunk );
+		void DoProcess( Castor3D::Mesh & p_mesh, stLWO_CHUNK & p_chunk );
+		void DoDiscard( stLWO_CHUNK & p_chunk );
+		void DoDiscard( stLWO_SUBCHUNK & p_chunk );
+		bool DoIsValidChunk( stLWO_CHUNK & p_chunk, stLWO_CHUNK & p_pParent );
 		void DoToStr( char p_szId[5], UI4 p_uiId );
 		bool DoRead( std::string & p_strString );
-		bool DoRead( Castor::String const & p_strTabs, stLWO_SUBCHUNK * p_pSubchunk );
-		UI2 DoReadVX( UI4 & p_uiIndex );
+		bool DoRead( Castor::String const & p_strTabs, stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 DoReadVX( UI4 & p_index );
 		bool DoIsChunk( eID_TAG p_eId );
 		bool DoIsTagId( eID_TAG p_eId );
-		void DoParsePTag( stLWO_CHUNK * p_pChunk );
-		void DoReadBlock( stLWO_SUBCHUNK * p_pSubchunk, Castor3D::PassSPtr p_pPass );
+		void DoParsePTag( stLWO_CHUNK & p_chunk );
+		void DoReadBlock( stLWO_SUBCHUNK & p_pSubchunk, Castor3D::PassSPtr p_pass );
 		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
-		void DoReadShdr( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadGrad( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadProc( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoReadTMap( stLWO_SUBCHUNK * p_pSubchunk );
-		UI2 DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
-		void DoParseTags( stLWO_CHUNK * p_pChunk );
-		void DoParseSurf( stLWO_CHUNK * p_pChunk );
-		void DoParseClip( stLWO_CHUNK * p_pChunk );
-		void DoParsePnts( stLWO_CHUNK * p_pChunk );
-		void DoParseVMap( stLWO_CHUNK * p_pChunk );
-		void DoParsePols( stLWO_CHUNK * p_pChunk );
-		void DoParseLayr( stLWO_CHUNK * p_pChunk );
+		void DoReadShdr( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadGrad( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadProc( stLWO_SUBCHUNK & p_pSubchunk );
+		void DoReadIMap( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void DoReadTMap( stLWO_SUBCHUNK & p_pSubchunk );
+		UI2 DoReadBlockHeader( stLWO_SUBCHUNK & p_pSubchunk, eTEX_CHANNEL & p_channel );
+		void DoParseTags( stLWO_CHUNK & p_chunk );
+		void DoParseSurf( stLWO_CHUNK & p_chunk );
+		void DoParseClip( stLWO_CHUNK & p_chunk );
+		void DoParsePnts( stLWO_CHUNK & p_chunk );
+		void DoParseVMap( stLWO_CHUNK & p_chunk );
+		void DoParsePols( stLWO_CHUNK & p_chunk );
+		void DoParseLayr( stLWO_CHUNK & p_chunk );
 
 	public:
-		Castor::BinaryFile * m_pFile;
+		Castor::BinaryFile * m_file;
 		std::vector< Castor::Point3f > m_arrayPoints;
 		bool m_bHasUv;
 		std::vector< Castor::Point2f > m_arrayUvs;

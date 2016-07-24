@@ -207,172 +207,142 @@ namespace C3dAssimp
 		return std::make_unique< AssimpImporter >( p_engine );
 	}
 
-	SceneSPtr AssimpImporter::DoImportScene()
+	bool AssimpImporter::DoImportScene( Scene & p_scene )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASSIMP" ) );
-		DoImportMesh( *l_scene );
+		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_PLY" ) );
+		bool l_return = DoImportMesh( *l_mesh );
 
-		if ( m_mesh )
+		if ( l_return )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-
-			for ( auto && l_submesh : *m_mesh )
-			{
-				m_mesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
-			l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node, m_mesh );
-			m_mesh.reset();
+			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
+			l_geometry->SetMesh( l_mesh );
+			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_scene;
+		return l_return;
 	}
 
-	MeshSPtr AssimpImporter::DoImportMesh( Scene & p_scene )
+	bool AssimpImporter::DoImportMesh( Mesh & p_mesh )
 	{
+		bool l_return{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
-		String l_name = m_fileName.GetFileName();
-		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
+		SubmeshSPtr l_submesh;
+		Assimp::Importer l_importer;
+		uint32_t l_flags = aiProcess_Triangulate
+			| aiProcess_JoinIdenticalVertices
+			| aiProcess_OptimizeMeshes
+			| aiProcess_OptimizeGraph
+			| aiProcess_FixInfacingNormals
+			| aiProcess_LimitBoneWeights
+			| aiProcess_Debone;
+		bool l_tangentSpace = false;
+		xchar l_buffer[1024] = { 0 };
 
-		if ( p_scene.GetMeshCache().Has( l_meshName ) )
+		if ( m_parameters.Get( cuT( "normals" ), l_buffer ) )
 		{
-			m_mesh = p_scene.GetMeshCache().Find( l_meshName );
-		}
-		else
-		{
-			m_mesh = p_scene.GetMeshCache().Add( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
-		}
+			String l_normals = l_buffer;
 
-		if ( !m_mesh->GetSubmeshCount() )
-		{
-			SubmeshSPtr l_submesh;
-			Assimp::Importer l_importer;
-			uint32_t l_flags = aiProcess_Triangulate
-				| aiProcess_JoinIdenticalVertices
-				| aiProcess_OptimizeMeshes
-				| aiProcess_OptimizeGraph
-				| aiProcess_FixInfacingNormals
-				| aiProcess_LimitBoneWeights
-				| aiProcess_Debone;
-			bool l_tangentSpace = false;
-			xchar l_buffer[1024] = { 0 };
-
-			if ( m_parameters.Get( cuT( "normals" ), l_buffer ) )
+			if ( l_normals == cuT( "smooth" ) )
 			{
-				String l_normals = l_buffer;
+				l_flags |= aiProcess_GenSmoothNormals;
+			}
+		}
 
-				if ( l_normals == cuT( "smooth" ) )
+		if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
+		{
+			l_flags |= aiProcess_CalcTangentSpace;
+		}
+
+		// And have it read the given file with some postprocessing
+		aiScene const * l_aiScene = l_importer.ReadFile( string::string_cast< char >( m_fileName ), l_flags );
+
+		if ( l_aiScene )
+		{
+			SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( *p_mesh.GetScene() );
+			l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+
+			if ( l_aiScene->HasMeshes() )
+			{
+				bool l_create = true;
+
+				for ( uint32_t i = 0; i < l_aiScene->mNumMeshes; ++i )
 				{
-					l_flags |= aiProcess_GenSmoothNormals;
+					if ( l_create )
+					{
+						l_submesh = p_mesh.CreateSubmesh();
+					}
+
+					l_create = DoProcessMesh( *p_mesh.GetScene(), p_mesh, *l_skeleton, *l_aiScene->mMeshes[i], *l_aiScene, *l_submesh );
 				}
-			}
 
-			if ( m_parameters.Get( cuT( "tangent_space" ), l_tangentSpace ) && l_tangentSpace )
-			{
-				l_flags |= aiProcess_CalcTangentSpace;
-			}
-
-			// And have it read the given file with some postprocessing
-			aiScene const * l_aiScene = l_importer.ReadFile( string::string_cast< char >( m_fileName ), l_flags );
-
-			if ( l_aiScene )
-			{
-				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >( p_scene );
-				l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
-
-				if ( l_aiScene->HasMeshes() )
+				if ( m_arrayBones.empty() )
 				{
-					bool l_create = true;
+					l_skeleton.reset();
+				}
+				else
+				{
+					p_mesh.SetSkeleton( l_skeleton );
+				}
 
-					for ( uint32_t i = 0; i < l_aiScene->mNumMeshes; ++i )
+				if ( l_skeleton )
+				{
+					for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 					{
-						if ( l_create )
-						{
-							l_submesh = m_mesh->CreateSubmesh();
-						}
-
-						l_create = DoProcessMesh( p_scene, *l_skeleton, *l_aiScene->mMeshes[i], *l_aiScene, *l_submesh );
+						DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] );
 					}
 
-					if ( m_arrayBones.empty() )
-					{
-						l_skeleton.reset();
-					}
-					else
-					{
-						m_mesh->SetSkeleton( l_skeleton );
-					}
+					l_importer.FreeScene();
 
-					if ( l_skeleton )
+					if ( string::upper_case( m_fileName.GetExtension() ) == cuT( "MD5MESH" ) )
 					{
-						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
+						// Workaround to load multiple animations with MD5 models.
+						PathArray l_files;
+						File::ListDirectoryFiles( m_fileName.GetPath(), l_files );
+
+						for ( auto l_file : l_files )
 						{
-							DoProcessAnimation( m_fileName.GetFileName(), *l_skeleton, *l_aiScene->mRootNode, *l_aiScene->mAnimations[i] );
-						}
-
-						l_importer.FreeScene();
-
-						if ( string::upper_case( m_fileName.GetExtension() ) == cuT( "MD5MESH" ) )
-						{
-							// Workaround to load multiple animations with MD5 models.
-							PathArray l_files;
-							File::ListDirectoryFiles( m_fileName.GetPath(), l_files );
-
-							for ( auto l_file : l_files )
+							if ( string::lower_case( l_file.GetExtension() ) == cuT( "md5anim" ) )
 							{
-								if ( string::lower_case( l_file.GetExtension() ) == cuT( "md5anim" ) )
+								// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
+								if ( l_file.GetFileName() != m_fileName.GetFileName() )
 								{
-									// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
-									if ( l_file.GetFileName() != m_fileName.GetFileName() )
+									auto l_scene = l_importer.ReadFile( l_file, l_flags );
+
+									for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
 									{
-										auto l_scene = l_importer.ReadFile( l_file, l_flags );
-
-										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
-										{
-											DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] );
-										}
-
-										l_importer.FreeScene();
+										DoProcessAnimation( l_file.GetFileName(), *l_skeleton, *l_scene->mRootNode, *l_scene->mAnimations[i] );
 									}
+
+									l_importer.FreeScene();
 								}
 							}
 						}
 					}
-					else
-					{
-						l_importer.FreeScene();
-					}
 				}
 				else
 				{
-					p_scene.GetMeshCache().Remove( l_meshName );
-					m_mesh.reset();
 					l_importer.FreeScene();
 				}
+
+				l_return = true;
 			}
 			else
 			{
-				// The import failed, report it
-				Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
-				p_scene.GetMeshCache().Remove( l_meshName );
-				m_mesh.reset();
+				l_importer.FreeScene();
 			}
 		}
 		else
 		{
-			for ( auto l_submesh : *m_mesh )
-			{
-				l_submesh->Ref( l_submesh->GetDefaultMaterial() );
-			}
+			// The import failed, report it
+			Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
 		}
 
-		MeshSPtr l_return( m_mesh );
-		m_mesh.reset();
 		return l_return;
 	}
 
-	bool AssimpImporter::DoProcessMesh( Scene & p_scene, Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Submesh & p_submesh )
+	bool AssimpImporter::DoProcessMesh( Scene & p_scene, Mesh & p_mesh, Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Submesh & p_submesh )
 	{
 		bool l_return = false;
 		MaterialSPtr l_material;
@@ -417,7 +387,7 @@ namespace C3dAssimp
 
 			if ( p_aiScene.HasAnimations() )
 			{
-				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh, &p_submesh]( aiAnimation const * p_aiAnimation )
+				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh,&p_mesh, &p_submesh]( aiAnimation const * p_aiAnimation )
 				{
 					auto l_it = std::find_if( p_aiAnimation->mMeshChannels, p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels, [this, &p_aiMesh, &p_submesh]( aiMeshAnim const * p_aiMeshAnim )
 					{
@@ -426,7 +396,7 @@ namespace C3dAssimp
 
 					if ( l_it != p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels )
 					{
-						DoProcessAnimationMeshes( p_submesh, p_aiMesh, *( *l_it ) );
+						DoProcessAnimationMeshes( p_mesh, p_submesh, p_aiMesh, *( *l_it ) );
 					}
 				} );
 			}
@@ -437,13 +407,13 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessAnimationMeshes( Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim )
+	void AssimpImporter::DoProcessAnimationMeshes( Mesh & p_mesh, Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim )
 	{
 		if ( p_aiMeshAnim.mNumKeys )
 		{
 			String l_name{ string::string_cast< xchar >( p_aiMeshAnim.mName.C_Str() ) };
 			Logger::LogDebug( cuT( "Mesh animation found: " ) + l_name );
-			auto & l_animation = m_mesh->CreateAnimation( l_name );
+			auto & l_animation = p_mesh.CreateAnimation( l_name );
 			MeshAnimationSubmesh l_animSubmesh{ l_animation, p_submesh };
 
 			std::for_each( p_aiMeshAnim.mKeys, p_aiMeshAnim.mKeys + p_aiMeshAnim.mNumKeys, [&l_animSubmesh, &p_aiMesh]( aiMeshKey const & p_aiKey )

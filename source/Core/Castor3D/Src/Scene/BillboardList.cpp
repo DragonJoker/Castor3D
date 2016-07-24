@@ -30,6 +30,7 @@ namespace Castor3D
 	{
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		MovableObject::TextWriter::CheckError( l_return, "BillboardList name" );
 
 		if ( l_return )
 		{
@@ -39,21 +40,25 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "BillboardList material" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "BillboardList dimensions" );
 		}
 
 		if ( l_return && p_obj.GetCount() )
 		{
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
 				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "BillboardList positions" );
 
 			for ( auto const & l_point : p_obj )
 			{
 				l_return &= p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
+				MovableObject::TextWriter::CheckError( l_return, "BillboardList position" );
 			}
 
 			l_return &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;

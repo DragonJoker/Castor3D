@@ -14,7 +14,7 @@ using namespace Castor;
 namespace Ase
 {
 	AseImporter::AseImporter( Engine & p_engine )
-		: Importer( p_engine )
+		: Importer{ p_engine }
 	{
 	}
 
@@ -27,43 +27,13 @@ namespace Ase
 		return std::make_unique< AseImporter >( p_engine );
 	}
 
-	SceneSPtr AseImporter::DoImportScene()
+	bool AseImporter::DoImportScene( Scene & p_scene )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_ASE" ) );
-		m_pFileParser = new AseFileParser( GetEngine(), *this, *l_scene );
-		m_pFileParser->ParseFile( m_fileName );
-		MeshSPtr l_mesh;
-
-		for ( auto l_it : m_geometries )
-		{
-			l_mesh = l_it.second->GetMesh();
-			l_mesh->ComputeContainers();
-
-			for ( auto l_submesh : *l_mesh )
-			{
-				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
-			l_mesh->ComputeNormals();
-		}
-
-		delete m_pFileParser;
-		return l_scene;
+		return AseFileParser{ *this, p_scene }.ParseFile( m_fileName );
 	}
 
-	MeshSPtr AseImporter::DoImportMesh( Castor3D::Scene & p_scene )
+	bool AseImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		m_pFileParser = new AseFileParser( GetEngine(), *this, p_scene );
-		m_pFileParser->ParseFile( m_fileName );
-		MeshSPtr l_mesh = m_pFileParser->GetMesh();
-
-		if ( l_mesh )
-		{
-			l_mesh->ComputeContainers();
-			l_mesh->ComputeNormals();
-		}
-
-		delete m_pFileParser;
-		return l_mesh;
+		return AseFileParser{ *this, *p_mesh.GetScene(), p_mesh }.ParseFile( m_fileName );
 	}
 }

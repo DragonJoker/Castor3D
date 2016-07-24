@@ -23,17 +23,20 @@ namespace Castor3D
 		Logger::LogInfo( m_tabs + cuT( "Writing BorderPanelOverlay " ) + p_overlay.GetOverlayName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "border_panel_overlay \"" ) + p_overlay.GetOverlay().GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		OverlayCategory::TextWriter::CheckError( l_return, "BorderPanelOverlay name" );
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_size " ) ) > 0
 				&& Point4d::TextWriter{ String{} }( p_overlay.GetBorderSize(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "BorderPanelOverlay borders size" );
 		}
 
 		if ( l_return && p_overlay.GetBorderMaterial() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tborder_material \"" ) + p_overlay.GetBorderMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "BorderPanelOverlay borders material" );
 		}
 
 		if ( l_return )

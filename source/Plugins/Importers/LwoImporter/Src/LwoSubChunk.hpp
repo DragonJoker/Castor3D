@@ -32,14 +32,14 @@ namespace Lwo
 	*/
 	struct stLWO_SUBCHUNK
 	{
-		eID_TAG m_eId;
-		UI2 m_usSize;
-		UI2 m_usRead;
+		eID_TAG m_id;
+		UI2 m_size;
+		UI2 m_read;
 
 		stLWO_SUBCHUNK()
-			:	m_eId( eID_TAG( 0 ) )
-			,	m_usSize( 0 )
-			,	m_usRead( 0 )
+			: m_id{ eID_TAG( 0 ) }
+			, m_size{ 0 }
+			, m_read{ 0 }
 		{
 		}
 	};

@@ -104,16 +104,19 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< FrameVariable >::CheckError( l_return, "FrameVariable type" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< FrameVariable >::CheckError( l_return, "FrameVariable name" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< FrameVariable >::CheckError( l_return, "FrameVariable value" );
 		}
 
 		if ( l_return )

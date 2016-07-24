@@ -32,14 +32,14 @@ namespace Lwo
 	*/
 	struct stLWO_CHUNK
 	{
-		eID_TAG m_eId;
-		UI4 m_uiSize;
-		UI4 m_uiRead;
+		eID_TAG m_id;
+		UI4 m_size;
+		UI4 m_read;
 
 		stLWO_CHUNK()
-			:	m_eId( eID_TAG( 0 ) )
-			,	m_uiSize( 0 )
-			,	m_uiRead( 0 )
+			: m_id{ eID_TAG( 0 ) }
+			, m_size{ 0 }
+			, m_read{ 0 }
 		{
 		}
 	};

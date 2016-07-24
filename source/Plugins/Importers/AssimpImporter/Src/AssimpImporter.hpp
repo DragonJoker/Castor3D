@@ -71,20 +71,25 @@ namespace C3dAssimp
 		static Castor3D::ImporterUPtr Create( Castor3D::Engine & p_engine );
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportScene
+		 */
+		bool DoImportScene( Castor3D::Scene & p_scene )override;
+		/**
+		 *\copydoc		Castor3D::Importer::DoImportMesh
+		 */
+		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
+		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
 		void DoLoadTexture( aiString const & p_name, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
 		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
 		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );
 		void DoProcessAnimationNodes( Castor3D::SkeletonAnimation & p_animation, Castor::real p_ticksPerSecond, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, Castor3D::SkeletonAnimationObjectSPtr p_object );
-		void DoProcessAnimationMeshes( Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
+		void DoProcessAnimationMeshes( Castor3D::Mesh & p_mesh, Castor3D::Submesh & p_submesh, aiMesh const & p_aiMesh, aiMeshAnim const & p_aiMeshAnim );
 
 	private:
 		int m_anonymous;
-		Castor3D::MeshSPtr m_mesh;
 		std::map< Castor::String, uint32_t > m_mapBoneByID;
 		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 	};

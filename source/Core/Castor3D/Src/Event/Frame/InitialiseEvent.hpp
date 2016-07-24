@@ -122,9 +122,9 @@ namespace Castor3D
 	 *\param[in]	p_object	L'objet à initialiser
 	 */
 	template< typename T >
-	std::shared_ptr< InitialiseEvent< T > > MakeInitialiseEvent( T & p_object )
+	std::unique_ptr< InitialiseEvent< T > > MakeInitialiseEvent( T & p_object )
 	{
-		return std::make_shared< InitialiseEvent< T > >( p_object );
+		return std::make_unique< InitialiseEvent< T > >( p_object );
 	}
 }
 

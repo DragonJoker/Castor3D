@@ -40,14 +40,14 @@ namespace GuiCommon
 		 *\brief		Constructor
 		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_pGeometry	The parent geometry
-		 *\param[in]	p_pSubmesh	The target submesh
+		 *\param[in]	p_submesh	The target submesh
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_pGeometry	La géométrie parente
-		 *\param[in]	p_pSubmesh	Le maillage cible
+		 *\param[in]	p_submesh	Le maillage cible
 		 */
-		SubmeshTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_pSubmesh );
+		SubmeshTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_submesh );
 		/**
 		 *\~english
 		 *\brief		Destructor

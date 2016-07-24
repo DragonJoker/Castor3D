@@ -104,7 +104,7 @@ namespace Castor3D
 			stRENDER_NODES< StaticGeometryRenderNode, StaticGeometryRenderNodesByProgramMap > m_staticGeometries;
 			//!\~english	The instanced render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-			stRENDER_NODES< StaticGeometryRenderNode, SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNodesByProgramMap > m_instancedGeometries;
+			stRENDER_NODES< StaticGeometryRenderNode, SubmeshStaticRenderNodesByProgramMap, SubmeshStaticRenderNodesByProgramMap > m_instancedGeometries;
 			//!\~english	The animated render nodes, sorted by shader program.
 			//!\~french		Les noeuds de rendu animés, triés par programme shader.
 			stRENDER_NODES< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByProgramMap > m_animatedGeometries;
@@ -152,18 +152,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name
-		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_renderSystem	The render system
-		 *\param[in]	p_params		The technique parameters
+		 *\param[in]	p_name			The technique name.
+		 *\param[in]	p_renderTarget	The render target for this technique.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_params		The technique parameters.
+		 *\param[in]	p_multisampling	The multisampling status
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique
-		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_renderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_name			Le nom de la technique.
+		 *\param[in]	p_renderTarget	La render target pour cette technique.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_params		Les paramètres de la technique.
+		 *\param[in]	p_multisampling	Le statut de multiéchantillonnage.
 		 */
-		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params );
+		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params, bool p_multisampling = false );
 
 	public:
 		/**
@@ -275,6 +277,16 @@ namespace Castor3D
 		inline TextureLayout const & GetResult()const
 		{
 			return *m_frameBuffer.m_colourTexture;
+		}
+		/**
+		 *\~english
+		 *\return		The multsampling status.
+		 *\~french
+		 *\return		Le statut d'échantillonnage.
+		 */
+		inline bool IsMultisampling()const
+		{
+			return m_multisampling;
 		}
 
 	protected:
@@ -554,6 +566,9 @@ namespace Castor3D
 		//!\~english	The rasteriser state to cull back faces.
 		//!\~french		L'état de rastérisation pour masquer les faces arrière.
 		RasteriserStateWPtr m_wpBackRasteriserState;
+		//!\~english	Tells if the technique uses multisampling.
+		//!\~french		Dit si la technique utilise le multiéchantillonnage.
+		bool m_multisampling{ false };
 	};
 }
 

@@ -68,24 +68,24 @@ namespace GlRender
 	{
 		bool l_return = true;
 		uint32_t l_offset = m_offset;
-		const uint32_t l_off = Columns * sizeof( T );
+		const uint32_t l_off = Rows * sizeof( T );
 
 		if ( m_glType == eGL_TYPE_INT )
 		{
-			for ( int i = 0; i < Rows && l_return; ++i )
+			for ( int i = 0; i < Columns && l_return; ++i )
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
-				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
+				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Rows, m_glType, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
 				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
 				l_offset += l_off;
 			}
 		}
 		else
 		{
-			for ( int i = 0; i < Rows && l_return; ++i )
+			for ( int i = 0; i < Columns && l_return; ++i )
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
-				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, p_bNormalised, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
+				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Rows, m_glType, p_bNormalised, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
 				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
 				l_offset += l_off;
 			}
