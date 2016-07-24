@@ -734,7 +734,7 @@ namespace Castor3D
 
 				for ( auto const & l_renderNode : p_renderNodes )
 				{
-					std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
+					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_size );
 					l_buffer += l_size;
 				}
 
@@ -836,11 +836,6 @@ namespace Castor3D
 				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_animatedGeometries, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
 				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_billboards, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
 			}
-		}
-		else
-		{
-			// Since Skybox culls front faces, it is necessary to switch back to back face culling when no mesh has transparency.
-			l_rsBack->Apply();
 		}
 	}
 

@@ -67,6 +67,7 @@ namespace GrayScale
 		Castor3D::ShaderProgramWPtr m_program;
 		Castor3D::OneIntFrameVariableSPtr m_mapDiffuse;
 		Castor3D::SamplerSPtr m_sampler;
+		Castor3D::RasteriserStateSPtr m_rasteriser;
 		PostEffectSurface m_surface;
 	};
 }

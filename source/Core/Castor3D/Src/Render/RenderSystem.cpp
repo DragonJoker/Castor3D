@@ -151,7 +151,6 @@ namespace Castor3D
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Texture, texture );
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
-			bool l_set = false;
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
 			{
@@ -163,8 +162,17 @@ namespace Castor3D
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
-				l_mtxModel = l_mtxBoneTransform;
-				l_set = true;
+				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxModel * c3d_mtxView ) ) );
+			}
+			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
+			{
+				l_mtxModel = transform;
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxModel * c3d_mtxView ) ) );
+			}
+			else
+			{
+				l_mtxModel = c3d_mtxModel;
 			}
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
@@ -177,31 +185,6 @@ namespace Castor3D
 				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
-			{
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
-
-				if ( l_set )
-				{
-					l_mtxModel = l_mtxMV * l_mtxModel;
-				}
-				else
-				{
-					l_mtxModel = l_mtxMV;
-				}
-			}
-			else
-			{
-				if ( l_set )
-				{
-					l_mtxModel = c3d_mtxModel * l_mtxModel;
-				}
-				else
-				{
-					l_mtxModel = c3d_mtxModel;
-				}
-			}
 
 			vtx_texture = l_v3Texture;
 			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).SWIZZLE_XYZ;

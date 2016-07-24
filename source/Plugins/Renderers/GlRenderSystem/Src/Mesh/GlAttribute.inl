@@ -76,7 +76,7 @@ namespace GlRender
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
 				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Rows, m_glType, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
-				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
+				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, m_divisor );
 				l_offset += l_off;
 			}
 		}
@@ -86,7 +86,7 @@ namespace GlRender
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
 				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Rows, m_glType, p_bNormalised, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
-				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
+				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, m_divisor );
 				l_offset += l_off;
 			}
 		}
