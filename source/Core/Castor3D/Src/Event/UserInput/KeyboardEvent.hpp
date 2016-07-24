@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_KEYBOARD_EVENT_H___
 #define ___C3D_KEYBOARD_EVENT_H___
@@ -29,15 +34,15 @@ namespace Castor3D
 	*\~english
 	*\brief		Structure holding mouse state.
 	*\~french
-	*\brief		Structure contenant l'état du clavier.
+	*\brief		Structure contenant l'ï¿½tat du clavier.
 	*/
 	struct KeyboardState
 	{
-		//!\~english The control key state.	\~french L'état de la touche Ctrl.
+		//!\~english The control key state.	\~french L'ï¿½tat de la touche Ctrl.
 		bool m_ctrl;
-		//!\~english The alt key state.	\~french L'état de la touche Alt.
+		//!\~english The alt key state.	\~french L'ï¿½tat de la touche Alt.
 		bool m_alt;
-		//!\~english The shift key state.	\~french L'état de la touche Shift.
+		//!\~english The shift key state.	\~french L'ï¿½tat de la touche Shift.
 		bool m_shift;
 	};
 	/*!
@@ -47,7 +52,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of a keyboard event.
 	*\~french
-	*\brief		Description d'un évènement clavier.
+	*\brief		Description d'un ï¿½vï¿½nement clavier.
 	*/
 	class KeyboardEvent
 		: public UserInputEvent
@@ -63,11 +68,11 @@ namespace Castor3D
 		 *\param[in]	p_shift	Tells if the Shift key is down.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'évènement clavier.
+		 *\param[in]	p_type	Le type d'ï¿½vï¿½nement clavier.
 		 *\param[in]	p_key	Le code de la touche.
-		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncée.
-		 *\param[in]	p_alt	Dit si la touche Alt est enfoncée.
-		 *\param[in]	p_shift	Dit si la touche Shift est enfoncée.
+		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncï¿½e.
+		 *\param[in]	p_alt	Dit si la touche Alt est enfoncï¿½e.
+		 *\param[in]	p_shift	Dit si la touche Shift est enfoncï¿½e.
 		 */
 		KeyboardEvent( eKEYBOARD_EVENT p_type, eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
 			: UserInputEvent{ eUSER_INPUT_EVENT_TYPE_KEYBOARD }
@@ -90,12 +95,12 @@ namespace Castor3D
 		 *\param[in]	p_shift	Tells if the Shift key is down.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'évènement clavier.
+		 *\param[in]	p_type	Le type d'ï¿½vï¿½nement clavier.
 		 *\param[in]	p_key	Le code de la touche.
-		 *\param[in]	p_char	Le caractère correspondant qu code de la touche.
-		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncée.
-		 *\param[in]	p_alt	Dit si la touche Alt est enfoncée.
-		 *\param[in]	p_shift	Dit si la touche Shift est enfoncée.
+		 *\param[in]	p_char	Le caractï¿½re correspondant qu code de la touche.
+		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfoncï¿½e.
+		 *\param[in]	p_alt	Dit si la touche Alt est enfoncï¿½e.
+		 *\param[in]	p_shift	Dit si la touche Shift est enfoncï¿½e.
 		 */
 		KeyboardEvent( eKEYBOARD_EVENT p_type, eKEYBOARD_KEY p_key, Castor::String const & p_char, bool p_ctrl, bool p_alt, bool p_shift )
 			: UserInputEvent{ eUSER_INPUT_EVENT_TYPE_KEYBOARD }
@@ -120,7 +125,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The keyboard event type.
 		*\~french
-		*\~return		Le type d'évènement clavier.
+		*\~return		Le type d'ï¿½vï¿½nement clavier.
 		 */
 		inline eKEYBOARD_EVENT GetKeyboardEventType()const
 		{
@@ -140,7 +145,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The character corresponding to the key code.
 		*\~french
-		*\~return		Le caractère correspondant à la touche.
+		*\~return		Le caractï¿½re correspondant ï¿½ la touche.
 		 */
 		inline Castor::String const & GetChar()const
 		{
@@ -150,7 +155,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Ctrl key down status.
 		*\~french
-		*\~return		L'état de la touche Ctrl.
+		*\~return		L'ï¿½tat de la touche Ctrl.
 		 */
 		inline bool IsCtrlDown()const
 		{
@@ -160,7 +165,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Alt key down status.
 		*\~french
-		*\~return		L'état de la touche Alt.
+		*\~return		L'ï¿½tat de la touche Alt.
 		 */
 		inline bool IsAltDown()const
 		{
@@ -170,7 +175,7 @@ namespace Castor3D
 		*\~english
 		 *\return		The Shift key down status.
 		*\~french
-		*\~return		L'état de la touche Shift.
+		*\~return		L'ï¿½tat de la touche Shift.
 		 */
 		inline bool IsShiftDown()const
 		{
@@ -178,17 +183,17 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The keyboard event type.	\~french Le type d'évènement clavier.
+		//!\~english The keyboard event type.	\~french Le type d'ï¿½vï¿½nement clavier.
 		eKEYBOARD_EVENT const m_keyboardEventType;
 		//!\~english The key code.	\~french Le code de la touche.
 		eKEYBOARD_KEY const m_key;
-		//!\~english The character.	\~french Le caractère représenté par la touche.
+		//!\~english The character.	\~french Le caractï¿½re reprï¿½sentï¿½ par la touche.
 		Castor::String const m_char;
-		//!\~english Tells if the Ctrl key is down.	\~french Dit si la touche Ctrl est enfoncée.
+		//!\~english Tells if the Ctrl key is down.	\~french Dit si la touche Ctrl est enfoncï¿½e.
 		bool const m_ctrl;
-		//!\~english Tells if the Alt key is down.	\~french Dit si la touche Alt est enfoncée.
+		//!\~english Tells if the Alt key is down.	\~french Dit si la touche Alt est enfoncï¿½e.
 		bool const m_alt;
-		//!\~english Tells if the Shift key is down.	\~french Dit si la touche Shift est enfoncée.
+		//!\~english Tells if the Shift key is down.	\~french Dit si la touche Shift est enfoncï¿½e.
 		bool const m_shift;
 	};
 }

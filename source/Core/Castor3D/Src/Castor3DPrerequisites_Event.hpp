@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_CASTOR_GUI_PREREQUISITES_H___
 #define ___C3D_CASTOR_GUI_PREREQUISITES_H___
@@ -29,15 +34,15 @@ namespace Castor3D
 	*\~english
 	*\brief		Supported events types enumeration.
 	*\~french
-	*\brief		Enumération des types évènements supportés.
+	*\brief		Enumï¿½ration des types ï¿½vï¿½nements supportï¿½s.
 	*/
 	typedef enum eUSER_INPUT_EVENT_TYPE
 	{
-		//!\~english Mouse event type.	\~french Type d'évènement de souris.
+		//!\~english Mouse event type.	\~french Type d'ï¿½vï¿½nement de souris.
 		eUSER_INPUT_EVENT_TYPE_MOUSE,
-		//!\~english Keyboard event type.	\~french Type d'évènement de clavier.
+		//!\~english Keyboard event type.	\~french Type d'ï¿½vï¿½nement de clavier.
 		eUSER_INPUT_EVENT_TYPE_KEYBOARD,
-		//!\~english Keyboard event type.	\~french Type d'évènement de clavier.
+		//!\~english Keyboard event type.	\~french Type d'ï¿½vï¿½nement de clavier.
 		eEVENT_TYPE_HANDLER,
 		CASTOR_ENUM_BOUNDS( eUSER_INPUT_EVENT_TYPE, eUSER_INPUT_EVENT_TYPE_MOUSE )
 	}	eUSER_INPUT_EVENT_TYPE;
@@ -48,24 +53,24 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported mouse events.
 	*\~english
-	*\brief		Enumération des évènement de souris supportés.
+	*\brief		Enumï¿½ration des ï¿½vï¿½nement de souris supportï¿½s.
 	*/
 	typedef enum eMOUSE_EVENT
 		: uint8_t
 	{
-		//!\~english The mouse moves.	\~french La souris se déplace.
+		//!\~english The mouse moves.	\~french La souris se dï¿½place.
 		eMOUSE_EVENT_MOVE,
 		//!\~english The mouse enters an handler's zone.	\~french La souris entre dans la zone d'action d'un gestionnaire.
 		eMOUSE_EVENT_ENTER,
-		//!\~english The mouse remains still in an handler's zone during hover time.	\~french La souris reste immobile pendant un temps déterminé, dans la zone d'action d'un gestionnaire.
+		//!\~english The mouse remains still in an handler's zone during hover time.	\~french La souris reste immobile pendant un temps dï¿½terminï¿½, dans la zone d'action d'un gestionnaire.
 		eMOUSE_EVENT_HOVER,
 		//!\~english The mouse leaves an handler's zone.	\~french La souris quitte la zone d'action d'un gestionnaire.
 		eMOUSE_EVENT_LEAVE,
-		//!\~english One mouse button is pushed.	\~french Un bouton appuyé.
+		//!\~english One mouse button is pushed.	\~french Un bouton appuyï¿½.
 		eMOUSE_EVENT_BUTTON_PUSHED,
-		//!\~english One mouse button is released.	\~french Un bouton relâché.
+		//!\~english One mouse button is released.	\~french Un bouton relï¿½chï¿½.
 		eMOUSE_EVENT_BUTTON_RELEASED,
-		//!\~english One mouse wheel is rolled.	\~french Une roulette de la souris est tournée.
+		//!\~english One mouse wheel is rolled.	\~french Une roulette de la souris est tournï¿½e.
 		eMOUSE_EVENT_WHEEL,
 		CASTOR_ENUM_BOUNDS( eMOUSE_EVENT, eMOUSE_EVENT_MOVE )
 	}	eMOUSE_EVENT;
@@ -76,16 +81,16 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported keyboard events.
 	*\~english
-	*\brief		Enumération des évènement clavier supportés.
+	*\brief		Enumï¿½ration des ï¿½vï¿½nement clavier supportï¿½s.
 	*/
 	typedef enum eKEYBOARD_EVENT
 		: uint8_t
 	{
-		//!\~english A key is pushed.	\~french Une touche est appuyée.
+		//!\~english A key is pushed.	\~french Une touche est appuyï¿½e.
 		eKEYBOARD_EVENT_KEY_PUSHED,
-		//!\~english A key is released.	\~french Une touche est relâchée.
+		//!\~english A key is released.	\~french Une touche est relï¿½chï¿½e.
 		eKEYBOARD_EVENT_KEY_RELEASED,
-		//!\~english A displayable char key is stroked.	\~french Une touche de caractère imprimable est tapée.
+		//!\~english A displayable char key is stroked.	\~french Une touche de caractï¿½re imprimable est tapï¿½e.
 		eKEYBOARD_EVENT_CHAR,
 		CASTOR_ENUM_BOUNDS( eKEYBOARD_EVENT, eKEYBOARD_EVENT_KEY_PUSHED )
 	}	eKEYBOARD_EVENT;
@@ -96,14 +101,14 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported handler events.
 	*\~english
-	*\brief		Enumération des évènements de gestionnaire supportées.
+	*\brief		Enumï¿½ration des ï¿½vï¿½nements de gestionnaire supportï¿½es.
 	*/
 	typedef enum eHANDLER_EVENT
 		: uint8_t
 	{
-		//!\~english Handler activated.	\~french Gestionnaire activé.
+		//!\~english Handler activated.	\~french Gestionnaire activï¿½.
 		eHANDLER_EVENT_ACTIVATE,
-		//!\~english Handler deactivated.	\~french Gestionnaire désactivé.
+		//!\~english Handler deactivated.	\~french Gestionnaire dï¿½sactivï¿½.
 		eHANDLER_EVENT_DEACTIVATE,
 		CASTOR_ENUM_BOUNDS( eHANDLER_EVENT, eHANDLER_EVENT_ACTIVATE )
 	}	eHANDLER_EVENT;
@@ -114,7 +119,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Mouse buttons enumeration.
 	*\~french
-	*\brief		Enumération des boutons de la souris.
+	*\brief		Enumï¿½ration des boutons de la souris.
 	*/
 	typedef enum eMOUSE_BUTTON
 	{
@@ -133,7 +138,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Keyboard keys enumeration.
 	*\~french
-	*\brief		Enumération des touches du clavier.
+	*\brief		Enumï¿½ration des touches du clavier.
 	*/
 	typedef enum eKEYBOARD_KEY
 	{
