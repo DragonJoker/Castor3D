@@ -36,7 +36,7 @@ namespace GlRender
 	\~english
 	\brief 		Class implementing OpenGL VBO.
 	\~french
-	\brief 		Classe implàmentant les VBO OpenGL.
+	\brief 		Classe implémentant les VBO OpenGL.
 	*/
 	template< typename T >
 	class GlBuffer
@@ -44,13 +44,47 @@ namespace GlRender
 		, public Holder
 	{
 	protected:
-		typedef typename Castor3D::GpuBuffer< T >::HardwareBufferPtr HardwareBufferPtr;
+		using HardwareBufferPtr = typename Castor3D::GpuBuffer< T >::HardwareBufferPtr;
 
 	public:
 		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer );
 		virtual ~GlBuffer();
-
-		virtual bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Create
+		 */
+		bool Create()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Destroy
+		 */
+		void Destroy()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Initialise
+		 */
+		bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Cleanup
+		 */
+		void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
+		 */
+		bool Bind()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
+		 */
+		void Unbind()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Fill
+		 */
+		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
+		 */
+		T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
+		 */
+		void Unlock()override;
 
 		inline uint32_t GetGlName()const
 		{
@@ -60,18 +94,6 @@ namespace GlRender
 		{
 			return m_buffer;
 		}
-
-	protected:
-		virtual bool DoCreate();
-		virtual void DoDestroy();
-		virtual bool DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
-		virtual void DoCleanup();
-		virtual bool DoBind();
-		virtual void DoUnbind();
-		virtual bool DoFill( T * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
-		virtual T * DoLock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
-		virtual T * DoLock( eGL_LOCK p_access );
-		virtual void DoUnlock();
 
 	protected:
 		GlBufferBase< T > m_glBuffer;

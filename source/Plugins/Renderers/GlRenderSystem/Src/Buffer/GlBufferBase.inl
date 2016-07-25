@@ -4,7 +4,7 @@ namespace GlRender
 {
 	template< typename T >
 	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target )
-		: BindableType( p_gl,
+		: BindableType{ p_gl,
 						"GlBufferBase",
 						std::bind( &OpenGl::GenBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 						std::bind( &OpenGl::DeleteBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -12,8 +12,8 @@ namespace GlRender
 						[&p_gl, p_target]( uint32_t p_glName )
 						{
 							return p_gl.BindBuffer( p_target, p_glName );
-						} )
-		, m_target( p_target )
+						} }
+		, m_target{ p_target }
 	{
 	}
 

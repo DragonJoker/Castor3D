@@ -2,10 +2,11 @@
 
 #include "Common/OpenGl.hpp"
 #include "Mesh/GlAttribute.hpp"
-#include "Mesh/GlIndexBuffer.hpp"
-#include "Mesh/GlVertexBuffer.hpp"
 #include "Render/GlRenderSystem.hpp"
 #include "Shader/GlShaderProgram.hpp"
+
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
