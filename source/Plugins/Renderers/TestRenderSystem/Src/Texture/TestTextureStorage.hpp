@@ -70,16 +70,10 @@ namespace TestRender
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
 		virtual void Unlock( bool p_modified );
-
-	protected:
 		/**
 		 *\copydoc		Castor3D::TextureStorage::DoFill
 		 */
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		 *\brief		Uploads the image pixels to the current storage (PBO or direct texture).
-		 */
-		void DoUploadImage( uint32_t p_width, uint32_t p_height, Castor::ePIXEL_FORMAT p_format, uint8_t const * p_buffer );
+		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 	};
 }
 

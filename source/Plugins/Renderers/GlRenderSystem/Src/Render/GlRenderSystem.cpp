@@ -1,10 +1,9 @@
 #include "Render/GlRenderSystem.hpp"
 
+#include "Buffer/GlBuffer.hpp"
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlBackBuffers.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
-#include "Mesh/GlVertexBuffer.hpp"
-#include "Mesh/GlIndexBuffer.hpp"
 #include "Mesh/GlGeometryBuffers.hpp"
 #include "Miscellaneous/GlQuery.hpp"
 #include "Render/GlContext.hpp"
@@ -379,12 +378,12 @@ namespace GlRender
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
 	{
-		return std::make_shared< GlIndexBufferObject >( *this, GetOpenGl(), p_buffer );
+		return std::make_shared< GlBuffer< uint32_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ELEMENT_ARRAY, p_buffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer )
 	{
-		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_buffer );
+		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ARRAY, p_buffer );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
@@ -398,7 +397,7 @@ namespace GlRender
 
 		if ( p_type == TextureStorageType::Buffer )
 		{
-			l_return = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			l_return = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 		}
 
 		if ( !l_return )
@@ -414,20 +413,20 @@ namespace GlRender
 					 && p_type != TextureStorageType::CubeMapNegativeZ
 					 && !p_cpuAccess )
 				{
-					l_return = std::make_unique< GlImmutableTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 				else
 				{
-					l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_return = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
 			else if ( p_cpuAccess )
 			{
-				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				l_return = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlGpuOnlyTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_gpuAccess );
+				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, 0, p_gpuAccess );
 			}
 		}
 

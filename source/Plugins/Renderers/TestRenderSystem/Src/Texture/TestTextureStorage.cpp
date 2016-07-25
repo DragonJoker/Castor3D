@@ -36,11 +36,7 @@ namespace TestRender
 	{
 	}
 
-	void TestTextureStorage::DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
-	{
-	}
-
-	void TestTextureStorage::DoUploadImage( uint32_t p_width, uint32_t p_height, ePIXEL_FORMAT p_format, uint8_t const * p_buffer )
+	void TestTextureStorage::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 	{
 	}
 }

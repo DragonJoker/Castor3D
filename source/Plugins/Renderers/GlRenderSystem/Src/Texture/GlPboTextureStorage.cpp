@@ -3,24 +3,26 @@
 #include "Common/OpenGl.hpp"
 #include "Texture/GlDownloadPixelBuffer.hpp"
 #include "Texture/GlTexture.hpp"
+#include "Texture/GlTextureStorage.hpp"
 #include "Texture/GlUploadPixelBuffer.hpp"
 
-#include <Log/Logger.hpp>
+#include <Graphics/PixelBufferBase.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
 
 namespace GlRender
 {
-	GlPboTextureStorage::GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
-		: GlTextureStorage{ p_gl, p_renderSystem, p_type, p_image, p_cpuAccess, p_gpuAccess }
+	GlPboTextureStorageTraits::GlPboTextureStorageTraits( TextureStorage & p_storage )
+		: m_storage{ p_storage }
 	{
 		bool l_return = true;
-		auto l_pxbuffer = GetOwner()->GetBuffer();
+		auto l_pxbuffer = p_storage.GetOwner()->GetBuffer();
+		auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
 
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_WRITE ) )
 		{
-			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
 			l_return = m_uploadBuffer->Create();
 
 			if ( l_return && m_uploadBuffer )
@@ -29,9 +31,9 @@ namespace GlRender
 			}
 		}
 
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_READ ) )
 		{
-			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
 			l_return = m_downloadBuffer->Create();
 
 			if ( l_return && m_downloadBuffer )
@@ -42,13 +44,13 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			DoFill( l_pxbuffer->const_ptr(), l_pxbuffer->dimensions(), l_pxbuffer->format() );
+			Fill( p_storage, l_pxbuffer->const_ptr(), l_pxbuffer->dimensions(), l_pxbuffer->format() );
 		}
 	}
 
-	GlPboTextureStorage::~GlPboTextureStorage()
+	GlPboTextureStorageTraits::~GlPboTextureStorageTraits()
 	{
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
+		if ( CheckFlag( m_storage.GetCPUAccess(), eACCESS_TYPE_WRITE ) )
 		{
 			if ( m_uploadBuffer )
 			{
@@ -58,7 +60,7 @@ namespace GlRender
 			}
 		}
 
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
+		if ( CheckFlag( m_storage.GetCPUAccess(), eACCESS_TYPE_READ ) )
 		{
 			if ( m_downloadBuffer )
 			{
@@ -69,78 +71,111 @@ namespace GlRender
 		}
 	}
 
-	bool GlPboTextureStorage::Bind( uint32_t p_index )const
+	bool GlPboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		return true;
 	}
 
-	void GlPboTextureStorage::Unbind( uint32_t p_index )const
+	void GlPboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 	}
 
-	uint8_t * GlPboTextureStorage::Lock( uint32_t p_lock )
+	uint8_t * GlPboTextureStorageTraits::Lock( TextureStorage & p_storage, uint32_t p_lock )
 	{
 		uint8_t * l_return = nullptr;
 
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_READ )
 			 && CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ ) )
 		{
-			DoDownloadAsync();
+			DoDownloadAsync( p_storage );
 		}
 
 		if ( CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ )
 			 || CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_WRITE ) )
 		{
-			l_return = GetOwner()->GetBuffer()->ptr();
+			l_return = p_storage.GetOwner()->GetBuffer()->ptr();
 		}
 
 		return l_return;
 	}
 
-	void GlPboTextureStorage::Unlock( bool p_modified )
+	void GlPboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified )
 	{
 		if ( p_modified )
 		{
-			DoUploadAsync();
+			DoUploadAsync( p_storage );
 		}
 	}
 
-	void GlPboTextureStorage::DoUploadAsync()
+	void GlPboTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 	{
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
+		auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
+		OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( p_format );
+
+		switch ( l_storage.GetGlType() )
 		{
-			auto l_buffer = GetOwner()->GetBuffer();
+		case eGL_TEXTURE_STORAGE_1D:
+			l_storage.GetOpenGl().TexImage1D( l_storage.GetGlType(), 0, l_glPixelFmt.Internal, p_size.width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_2D:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ:
+			l_storage.GetOpenGl().TexImage2D( l_storage.GetGlType(), 0, l_glPixelFmt.Internal, p_size, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_2DMS:
+			l_storage.GetOpenGl().TexImage2DMultisample( l_storage.GetGlType(), 0, l_glPixelFmt.Internal, p_size, true );
+			break;
+
+		case eGL_TEXTURE_STORAGE_3D:
+		case eGL_TEXTURE_STORAGE_2DARRAY:
+			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+		}
+	}
+
+	void GlPboTextureStorageTraits::DoUploadAsync( TextureStorage & p_storage )
+	{
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_WRITE ) )
+		{
+			auto l_buffer = p_storage.GetOwner()->GetBuffer();
 
 			if ( m_uploadBuffer->Fill( l_buffer->ptr(), l_buffer->size() ) )
 			{
 				if ( m_uploadBuffer->Bind() )
 				{
-					DoUploadImage( l_buffer->width(), l_buffer->height(), l_buffer->format(), nullptr );
+					DoUploadImage( p_storage, l_buffer->width(), l_buffer->height(), l_buffer->format(), nullptr );
 					m_uploadBuffer->Unbind();
 				}
 			}
 		}
 	}
 
-	void GlPboTextureStorage::DoUploadSync()
+	void GlPboTextureStorageTraits::DoUploadSync( TextureStorage & p_storage )
 	{
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_WRITE ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_WRITE ) )
 		{
-			auto l_buffer = GetOwner()->GetBuffer();
-			DoUploadImage( l_buffer->width(), l_buffer->height(), l_buffer->format(), l_buffer->const_ptr() );
+			auto l_buffer = p_storage.GetOwner()->GetBuffer();
+			DoUploadImage( p_storage, l_buffer->width(), l_buffer->height(), l_buffer->format(), l_buffer->const_ptr() );
 		}
 	}
 
-	void GlPboTextureStorage::DoDownloadAsync()
+	void GlPboTextureStorageTraits::DoDownloadAsync( TextureStorage & p_storage )
 	{
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_READ ) )
 		{
-			auto l_buffer = GetOwner()->GetBuffer();
-			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
+			auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
+			auto l_buffer = p_storage.GetOwner()->GetBuffer();
+			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );
 
 			if ( m_downloadBuffer->Bind() )
 			{
-				GetOpenGl().GetTexImage( m_glType, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
+				l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
 				uint8_t * l_data = m_downloadBuffer->Lock( eGL_LOCK_READ_ONLY );
 
 				if ( l_data )
@@ -154,13 +189,46 @@ namespace GlRender
 		}
 	}
 
-	void GlPboTextureStorage::DoDownloadSync()
+	void GlPboTextureStorageTraits::DoDownloadSync( TextureStorage & p_storage )
 	{
-		if ( CheckFlag( m_cpuAccess, eACCESS_TYPE_READ ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_READ ) )
 		{
-			auto l_buffer = GetOwner()->GetBuffer();
-			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
-			GetOpenGl().GetTexImage( m_glType, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+			auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
+			auto l_buffer = p_storage.GetOwner()->GetBuffer();
+			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );
+			l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+		}
+	}
+
+	void GlPboTextureStorageTraits::DoUploadImage( TextureStorage & p_storage, uint32_t p_width, uint32_t p_height, Castor::ePIXEL_FORMAT p_format, uint8_t const * p_buffer )
+	{
+		auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
+		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_format );
+
+		switch ( l_storage.GetGlType() )
+		{
+		case eGL_TEXTURE_STORAGE_1D:
+			l_storage.GetOpenGl().TexSubImage1D( l_storage.GetGlType(), 0, 0, p_width, l_format.Format, l_format.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_2D:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ:
+			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, p_width, p_height, l_format.Format, l_format.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_2DMS:
+			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, p_width, p_height, l_format.Format, l_format.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_3D:
+		case eGL_TEXTURE_STORAGE_2DARRAY:
+			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, 0, p_width, p_height / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth(), l_format.Format, l_format.Type, p_buffer );
+			break;
 		}
 	}
 }

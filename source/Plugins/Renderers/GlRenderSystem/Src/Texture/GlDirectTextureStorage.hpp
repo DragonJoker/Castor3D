@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___GL_DIRECT_TEXTURE_STORAGE_H___
 #define ___GL_DIRECT_TEXTURE_STORAGE_H___
 
-#include "Texture/GlTextureStorage.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
 
 namespace GlRender
 {
@@ -33,39 +33,37 @@ namespace GlRender
 	\date		12/10/2015
 	\brief		Class used to handle texture storage buffer, using directly the texture (for static textures).
 	*/
-	class GlDirectTextureStorage
-		: public GlTextureStorage
+	class GlDirectTextureStorageTraits
 	{
 	public:
 		/**
 		 *\brief		Constructor.
-		 *\param[in]	p_gl			The OpenGL APIs.
-		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_image			The parent image.
-		 *\param[in]	p_cpuAccess		The required CPU access.
-		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlDirectTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlDirectTextureStorageTraits( Castor3D::TextureStorage & p_storage );
 		/**
 		 *\brief		Destructor.
 		 */
-		~GlDirectTextureStorage();
+		~GlDirectTextureStorageTraits();
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Bind
 		 */
-		virtual bool Bind( uint32_t p_index )const;
+		bool Bind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unbind
 		 */
-		virtual void Unbind( uint32_t p_index )const;
+		void Unbind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		virtual uint8_t * Lock( uint32_t p_lock );
+		uint8_t * Lock( Castor3D::TextureStorage & p_storage, uint32_t p_lock );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
-		virtual void Unlock( bool p_modified );
+		void Unlock( Castor3D::TextureStorage & p_storage, bool p_modified );
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Fill
+		 */
+		void Fill( Castor3D::TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 	};
 }
 

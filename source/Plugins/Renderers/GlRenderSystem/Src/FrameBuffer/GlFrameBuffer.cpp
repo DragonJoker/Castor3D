@@ -1,6 +1,5 @@
 #include "FrameBuffer/GlFrameBuffer.hpp"
 
-#include "Buffer/GlBuffer.hpp"
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlColourRenderBuffer.hpp"
 #include "FrameBuffer/GlDepthStencilRenderBuffer.hpp"

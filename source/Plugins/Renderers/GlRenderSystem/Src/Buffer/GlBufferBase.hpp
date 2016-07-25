@@ -52,8 +52,8 @@ namespace GlRender
 		bool Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
 		void Cleanup();
 		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
-		T  * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
-		T  * Lock( eGL_LOCK p_access );
+		T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
+		T * Lock( eGL_LOCK p_access );
 		bool Unlock();
 
 	private:

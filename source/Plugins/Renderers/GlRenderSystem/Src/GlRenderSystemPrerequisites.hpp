@@ -1366,13 +1366,11 @@ namespace GlRender
 	DECLARE_SMART_PTR( GlContext );
 
 	class GlTexture;
+	template< typename Traits >
 	class GlTextureStorage;
-	class GlTexturePboStorage;
-	class GlTextureTboStorage;
 	class GlGpuIoBuffer;
 	class GlDownloadPixelBuffer;
 	class GlUploadPixelBuffer;
-	DECLARE_SMART_PTR( GlTextureStorage );
 	DECLARE_SMART_PTR( GlGpuIoBuffer );
 	DECLARE_SMART_PTR( GlDownloadPixelBuffer );
 	DECLARE_SMART_PTR( GlUploadPixelBuffer );
