@@ -1,33 +1,12 @@
-#
-#   **-----------------------------------------------------------------------**
-#   **                               Castor3D                                **
-#   **-----------------------------------------------------------------------**
-#   **                Multi-OS and Multi-Renderer 3D engine                  **
-#   **-----------------------------------------------------------------------**
-#   **              First version of this file: may 10th 2012                **
-#   **-----------------------------------------------------------------------**
-#
-
-Overview :
-I.   Description 
-II.  Building Castor3D
-III. Options
-IV.  Running Castor3D
-V.   General Questions
-
-
-#   **-----------------------------------------------------------------------**
-#   **                          I. Description                               **
-#   **-----------------------------------------------------------------------**
+Castor3D
+========
 
 Castor3D is a 3D engine written in C++.
 It works on Windows and also on GNU/Linux.
 It uses OpenGL (with GLSL).
 
-
-#   **-----------------------------------------------------------------------**
-#   **                       II. Building Castor3D                           **
-#   **-----------------------------------------------------------------------**
+Building Castor3D
+-----------------
 
 Castor3D uses CMake to build project files.
 You just need to launch CMake to build your preferential project file.
@@ -80,10 +59,8 @@ Two additional projects are also generated:
 
 Documentation for CastorUtils and Castor3D can be generated using Doxygen.
 
-
-#   **-----------------------------------------------------------------------**
-#   **                           III. Options                                **
-#   **-----------------------------------------------------------------------**
+Options
+-------
 
 On GNU/Linux the default install directory is in /usr/local.
 You can change this directory by changing the CMAKE_INSTALL_PREFIX value.
@@ -186,17 +163,14 @@ The build is configurable through CMake using the following options:
 - CASTOR_USE_SSE2:
     Enables use of SSE2 instructions for Point4f and Matrix4x4f operations.
 
-#   **-----------------------------------------------------------------------**
-#   **                        IV. Running Castor3D                           **
-#   **-----------------------------------------------------------------------**
+Running Castor3D
+----------------
 
 To run Castor Viewer, just type 'CastorViewer' in your favourite command-line
 tool.
 
-
-#   **-----------------------------------------------------------------------**
-#   **                        V. General Questions                           **
-#   **-----------------------------------------------------------------------**
+General Questions
+-----------------
 
 1. I need a feature that Castor3D do not implement, what should I do ?
 
@@ -217,4 +191,4 @@ Thus, it can take time... There are few basic rules to write contributions:
 
 3. How can I ask the author ?
 
-Just send a mail to dragonjoker59@hotmail.com !
+Just send a mail to <dragonjoker59@hotmail.com> !
