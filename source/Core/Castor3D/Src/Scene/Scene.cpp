@@ -322,7 +322,7 @@ namespace Castor3D
 		};
 		auto l_eventClean = [this]( auto p_element )
 		{
-			GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
+			this->GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
 		};
 		auto l_attachObject = []( auto p_element
 								 , SceneNodeSPtr p_parent
