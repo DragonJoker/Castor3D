@@ -13,6 +13,7 @@
 #include "Shader/PointFrameVariable.hpp"
 #include "Shader/ShaderProgram.hpp"
 
+#include <Graphics/CubeBox.hpp>
 #include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
