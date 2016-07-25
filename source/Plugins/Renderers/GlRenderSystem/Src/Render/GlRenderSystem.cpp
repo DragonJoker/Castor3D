@@ -397,7 +397,7 @@ namespace GlRender
 
 		if ( p_type == TextureStorageType::Buffer )
 		{
-			l_return = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			l_return = std::make_unique< GlTextureStorage< GlTboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 		}
 
 		if ( !l_return )
@@ -413,20 +413,20 @@ namespace GlRender
 					 && p_type != TextureStorageType::CubeMapNegativeZ
 					 && !p_cpuAccess )
 				{
-					l_return = std::make_unique< GlImmutableTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 				else
 				{
-					l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+					l_return = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
 			else if ( p_cpuAccess )
 			{
-				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				l_return = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlGpuOnlyTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_gpuAccess );
+				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, 0, p_gpuAccess );
 			}
 		}
 

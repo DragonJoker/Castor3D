@@ -35,6 +35,7 @@ namespace GlRender
 	\brief		Class used to handle texture storage buffer.
 	\remarks	Will use texture buffer objects if available, or pixel buffer objects if not.
 	*/
+	template< typename Traits >
 	class GlTextureStorage
 		: public Castor3D::TextureStorage
 		, public Holder
@@ -54,23 +55,47 @@ namespace GlRender
 		 *\brief		Destructor.
 		 */
 		~GlTextureStorage();
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Bind
+		 */
+		bool Bind( uint32_t p_index )const override;
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Unbind
+		 */
+		void Unbind( uint32_t p_index )const override;
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Lock
+		 */
+		uint8_t * Lock( uint32_t p_lock )override;
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Unlock
+		 */
+		void Unlock( bool p_modified )override;
+		/**
+		 *\copydoc		Castor3D::TextureStorage::Fill
+		 */
+		void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )override;
 
-	protected:
-		/**
-		 *\copydoc		Castor3D::TextureStorage::DoFill
-		 */
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		 *\brief		Uploads the image pixels to the current storage (PBO or direct texture).
-		 */
-		void DoUploadImage( uint32_t p_width, uint32_t p_height, Castor::ePIXEL_FORMAT p_format, uint8_t const * p_buffer );
+		inline eGL_TEXTURE_STORAGE GetGlType()const
+		{
+			return m_glType;
+		}
+
+		inline GlRenderSystem * GetGlRenderSystem()const
+		{
+			return m_glRenderSystem;
+		}
 
 	protected:
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
 		//! The storage type.
 		eGL_TEXTURE_STORAGE m_glType;
+		//! The storage implementation
+		Traits m_impl;
 	};
 }
+
+#include "GlTextureStorage.inl"
 
 #endif

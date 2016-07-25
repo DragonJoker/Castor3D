@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format des données.
 		 */
-		C3D_API void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -151,21 +151,6 @@ namespace Castor3D
 		{
 			return m_type;
 		}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Initialises the texture initial storage data.
-		 *\param[in]	p_buffer	The texture pixel buffer.
-		 *\param[in]	p_size		The pixel buffer dimensions.
-		 *\param[in]	p_format	The pixel buffer format.
-		 *\~french
-		 *\brief		Charge sur le GPU les données initiales.
-		 *\param[in]	p_buffer	Le tampon de données.
-		 *\param[in]	p_size		La taille du tampon.
-		 *\param[in]	p_format	Le format des données.
-		 */
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
 	protected:
 		//!\~english	The required CPU access (combination of eACCESS_TYPE).
