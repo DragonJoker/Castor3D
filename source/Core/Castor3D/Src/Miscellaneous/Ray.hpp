@@ -43,10 +43,10 @@ namespace Castor3D
 	public:
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
-		 *\param[in]	p_ptPoint	The mouse coordinates
+		 *\param[in]	p_point	The mouse coordinates
 		 *\param[in]	p_camera	The camera from which to retrieve the ray
 		 */
-		C3D_API Ray( Castor::Point2i const & p_ptPoint, Camera const & p_camera );
+		C3D_API Ray( Castor::Point2i const & p_point, Camera const & p_camera );
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
 		 *\param[in]	p_x	The mouse x

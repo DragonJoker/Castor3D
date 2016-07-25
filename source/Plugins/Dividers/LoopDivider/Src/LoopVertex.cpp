@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Loop
 {
-	Vertex::Vertex( Castor3D::BufferElementGroupSPtr p_ptPoint )
-		:	m_ptPoint( p_ptPoint	)
+	Vertex::Vertex( Castor3D::BufferElementGroupSPtr p_point )
+		:	m_ptPoint( p_point	)
 	{
 	}
 

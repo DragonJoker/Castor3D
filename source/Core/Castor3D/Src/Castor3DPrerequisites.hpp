@@ -295,23 +295,22 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des plans du frustum de vue
 	*/
-	typedef enum eFRUSTUM_PLANE
-		: uint8_t
+	enum class FrustumPlane
 	{
 		//!\~english Near plane	\~french Plan éloigné
-		eFRUSTUM_PLANE_NEAR,
+		Near,
 		//!\~english Far plane	\~french Plan proche
-		eFRUSTUM_PLANE_FAR,
+		Far,
 		//!\~english Left plane	\~french Plan gauche
-		eFRUSTUM_PLANE_LEFT,
+		Left,
 		//!\~english Right plane	\~french Plan droit
-		eFRUSTUM_PLANE_RIGHT,
+		Right,
 		//!\~english Top plane	\~french Plan haut
-		eFRUSTUM_PLANE_TOP,
+		Top,
 		//!\~english Bottom plane	\~french Plan bas
-		eFRUSTUM_PLANE_BOTTOM,
-		CASTOR_ENUM_BOUNDS( eFRUSTUM_PLANE, eFRUSTUM_PLANE_NEAR )
-	}	eFRUSTUM_PLANE;
+		Bottom,
+		CASTOR_ENUM_CLASS_BOUNDS( Near )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english

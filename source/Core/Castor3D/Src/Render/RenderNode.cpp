@@ -28,7 +28,7 @@ namespace Castor3D
 		void DoRender( Scene const & p_scene, Pipeline & p_pipeline, NodeType & p_node )
 		{
 			if ( p_node.m_sceneNode.IsDisplayable() && p_node.m_sceneNode.IsVisible()
-				 && p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->IsVisible( p_node.m_data.GetCubeBox(), p_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
+				 && p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->IsVisible( p_node.m_data.GetSphere(), p_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
 			{
 				p_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
 				p_node.BindPass( p_scene, p_pipeline, 0 );

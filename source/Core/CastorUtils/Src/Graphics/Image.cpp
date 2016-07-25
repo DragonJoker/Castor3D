@@ -514,7 +514,7 @@ namespace Castor
 	Image Image::SubImage( Rectangle const & l_rcRect )const
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( Rectangle( 0, 0 , GetWidth(), GetHeight() ).intersects( l_rcRect ) == eINTERSECTION_IN );
+		REQUIRE( Rectangle( 0, 0 , GetWidth(), GetHeight() ).intersects( l_rcRect ) == Intersection::In );
 		Size l_ptSize( l_rcRect.width(), l_rcRect.height() );
 		// Création de la sous-image à remplir
 		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );

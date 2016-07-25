@@ -53,15 +53,15 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor from 2 points
-		 *\param[in]	p_ptPoint	A point on the line
+		 *\param[in]	p_point	A point on the line
 		 *\param[in]	p_ptSlope	The line slope
 		 *\~french
 		 *\brief		Constructeur à partir de 2 points
 		 *\param[in]	p_ptA	Un point de la droite
 		 *\param[in]	p_ptB	La pente de la droite
 		 */
-		Line3D( Point< T, 3 > const & p_ptPoint, Point< T, 3 > const & p_ptSlope )
-			:	m_origin( p_ptPoint	)
+		Line3D( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
+			:	m_origin( p_point	)
 			,	m_slope( p_ptSlope	)
 		{
 		}
@@ -70,16 +70,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor from 2 points
-		 *\param[in]	p_ptPoint	A point on the line
+		 *\param[in]	p_point	A point on the line
 		 *\param[in]	p_ptSlope	The line slope
 		 *\~french
 		 *\brief		Constructeur à partir de 2 points
-		 *\param[in]	p_ptPoint	Un point de la droite
+		 *\param[in]	p_point	Un point de la droite
 		 *\param[in]	p_ptSlope	La pente de la droite
 		 */
-		static Line3D< T > FromPointAndSlope( Point< T, 3 > const & p_ptPoint, Point< T, 3 > const & p_ptSlope )
+		static Line3D< T > FromPointAndSlope( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
 		{
-			return Line3D< T >( p_ptPoint, p_ptSlope );
+			return Line3D< T >( p_point, p_ptSlope );
 		}
 		/**
 		 *\~english

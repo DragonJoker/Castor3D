@@ -2,20 +2,23 @@
 {
 	template< typename T >
 	PlaneEquation< T >::PlaneEquation()
+		: m_d{ 0 }
 	{
 	}
 
 	template< typename T >
 	PlaneEquation< T >::PlaneEquation( Point< T, 3 > const & p_p1, Point< T, 3 > const & p_p2, Point< T, 3 > const & p_p3 )
+		: m_d{ 0 }
 	{
 		Set( p_p1, p_p2, p_p3 );
 	}
 
 	template< typename T >
-	PlaneEquation< T >::PlaneEquation( Point< T, 3 > const & p_ptNormal, Point< T, 3 > const & p_ptPoint )
-		: m_normal( p_ptNormal	)
+	PlaneEquation< T >::PlaneEquation( Point< T, 3 > const & p_normal, Point< T, 3 > const & p_point )
+		: m_normal{ p_normal }
+		, m_d{ 0 }
 	{
-		Set( p_ptNormal, p_ptPoint );
+		Set( p_normal, p_point );
 	}
 
 	template< typename T >
@@ -30,13 +33,15 @@
 		Point< T, 3 > l_w( p_p3 - p_p1 );
 		m_normal = Castor::point::get_normalised( l_w ^ l_v );
 		m_point = ( p_p1 + p_p2 + p_p3 ) / T( 3 );
+		m_d = -Castor::point::dot( m_point, m_normal );
 	}
 
 	template< typename T >
-	void PlaneEquation< T >::Set( Point< T, 3 > const & p_ptNormal, Point< T, 3 > const & p_ptPoint )
+	void PlaneEquation< T >::Set( Point< T, 3 > const & p_normal, Point< T, 3 > const & p_point )
 	{
-		m_normal = Castor::point::get_normalised( p_ptNormal );
-		m_point = p_ptPoint;
+		m_normal = Castor::point::get_normalised( p_normal );
+		m_point = p_point;
+		m_d = -Castor::point::dot( m_point, m_normal );
 	}
 
 	template< typename T >
@@ -45,19 +50,20 @@
 		T l_ratioA = m_normal[0] / p_plane.m_normal[0];
 		T l_ratioB = m_normal[1] / p_plane.m_normal[1];
 		T l_ratioC = m_normal[2] / p_plane.m_normal[2];
-		return ( policy::equals( l_ratioA, l_ratioB ) && policy::equals( l_ratioA, l_ratioC ) );
+		return policy::equals( l_ratioA, l_ratioB )
+			&& policy::equals( l_ratioA, l_ratioC );
 	}
 
 	template< typename T >
 	T PlaneEquation< T >::Distance( Point< T, 3 > const & p_point )const
 	{
-		return Castor::point::dot( m_normal, p_point ) + Castor::point::dot( m_normal, m_point );
+		return Castor::point::dot( m_normal, p_point ) + m_d;
 	}
 
 	template< typename T >
 	Point< T, 3 > PlaneEquation< T >::Project( Point< T, 3 > const & p_point )const
 	{
-		return ( p_point - GetNormal() * Castor::point::dot( ( p_point - GetPoint() ), GetNormal() ) );
+		return p_point - ( m_normal * Distance( p_point ) );
 	}
 
 	template< typename T >
@@ -68,15 +74,16 @@
 		if ( ! IsParallel( p_plane ) )
 		{
 			Point< T, 3 > l_normal( m_normal ^ p_plane.m_normal );
+			T default{};
 			T b1 = m_normal[1];
 			T c1 = m_normal[2];
-			T d1 = Castor::point::dot( m_normal, m_point );
+			T d1 = m_d;
 			T b2 = p_plane.m_normal[1];
 			T c2 = p_plane.m_normal[2];
-			T d2 = Castor::point::dot( m_normal, m_point );
+			T d2 = m_d;
 			T div = ( b1 * c2 ) - ( b2 * c1 );
 
-			if ( !policy::equals( b1, T() ) && !policy::equals( div, T() ) )
+			if ( !policy::equals( b1, default ) && !policy::equals( div, default ) )
 			{
 				Point< T, 3 > l_point;
 				l_point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
@@ -101,9 +108,9 @@
 			T a1 = m_normal[0], a2 = p_plane1.m_normal[0], a3 = p_plane2.m_normal[0];
 			T b1 = m_normal[1], b2 = p_plane1.m_normal[1], b3 = p_plane2.m_normal[1];
 			T c1 = m_normal[2], c2 = p_plane1.m_normal[2], c3 = p_plane2.m_normal[2];
-			T l_d = Castor::point::dot( m_normal, m_point );
-			T l_d1 = Castor::point::dot( p_plane1.m_normal, p_plane1.m_point );
-			T l_d2 = Castor::point::dot( p_plane2.m_normal, p_plane2.m_point );
+			T l_d = m_d;
+			T l_d1 = p_plane1.m_d;
+			T l_d2 = p_plane2.m_d;
 			T alpha, beta;
 			alpha = ( a3 - ( a2 * ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) ) ) ) / a1;
 			beta = ( b3 - ( a3 / a1 ) ) / ( b2 - ( a2 / a1 ) );
@@ -130,7 +137,7 @@
 	template< typename T >
 	bool PlaneEquation< T >::LineOn( Line3D< T > const & p_line )const
 	{
-		return std::abs( p_line[0] * m_normal[0] + p_line[1] * m_normal[1] + p_line[2] * m_normal[2] + point::dot( m_normal, m_point ) ) < std::numeric_limits< T >::epsilon();
+		return std::abs( p_line[0] * m_normal[0] + p_line[1] * m_normal[1] + p_line[2] * m_normal[2] + m_d ) < std::numeric_limits< T >::epsilon();
 	}
 
 	template< typename T >
@@ -141,7 +148,7 @@
 		if ( p_a.IsParallel( p_b ) )
 		{
 			T l_ratioA = p_a.m_normal[0] / p_b.m_normal[0];
-			T l_ratioD = point::dot( p_a.m_normal, p_a.m_point ) / point::dot( p_b.m_normal, p_b.m_point );
+			T l_ratioD = p_a.m_d / p_b.m_d;
 			l_return = PlaneEquation< T >::policy::equals( l_ratioA, l_ratioD );
 		}
 

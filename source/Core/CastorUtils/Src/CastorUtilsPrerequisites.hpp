@@ -163,6 +163,31 @@ namespace Castor
 		ePIXEL_FORMAT_STENCIL8,
 		CASTOR_ENUM_BOUNDS( ePIXEL_FORMAT, ePIXEL_FORMAT_L8 )
 	}	ePIXEL_FORMAT;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\~english
+	\brief		Intersection types
+	\remark		Enumerates the different intersection types.
+	\~french
+	\brief		Types d'intersection
+	\remark		Enumère les différents types d'intersection.
+	*/
+	enum class Intersection
+		: uint8_t
+	{
+		//!\~english	Completely inside.
+		//!\~french		Complètement à l'intérieur.
+		In,
+		//!\~english	Completely outside.
+		//!\~french		Complètement à l'extérieur.
+		Out,
+		//!\~english	Intersection.
+		//!\~french		Intersection
+		Intersect,
+		CASTOR_ENUM_CLASS_BOUNDS( In )
+	};
 
 #if CASTOR_USE_DOUBLE
 	typedef double real;

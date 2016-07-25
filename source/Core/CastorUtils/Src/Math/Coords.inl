@@ -425,22 +425,22 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		inline void negate( Coords< T, Count > & p_ptPoint )
+		inline void negate( Coords< T, Count > & p_point )
 		{
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				p_ptPoint[i] = -p_ptPoint[i];
+				p_point[i] = -p_point[i];
 			}
 		}
 
 		template< typename T, uint32_t Count >
-		void normalise( Coords< T, Count > & p_ptPoint )
+		void normalise( Coords< T, Count > & p_point )
 		{
-			T l_tLength = T( distance( p_ptPoint ) );
+			T l_tLength = T( distance( p_point ) );
 
 			if ( !Policy< T >::is_null( l_tLength ) )
 			{
-				std::transform( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, p_ptPoint.ptr(), [l_tLength]( T const & p_value )
+				std::transform( p_point.const_ptr(), p_point.const_ptr() + Count, p_point.ptr(), [l_tLength]( T const & p_value )
 				{
 					return p_value / l_tLength;
 				} );
@@ -448,41 +448,41 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_squared( Coords< T, Count > const & p_ptPoint )
+		double distance_squared( Coords< T, Count > const & p_point )
 		{
-			return std::accumulate( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, 0.0, []( double a, T const & b )
+			return std::accumulate( p_point.const_ptr(), p_point.const_ptr() + Count, 0.0, []( double a, T const & b )
 			{
 				return a + double( b * b );
 			} );
 		}
 
 		template< typename T, uint32_t Count >
-		double distance( Coords< T, Count > const & p_ptPoint )
+		double distance( Coords< T, Count > const & p_point )
 		{
-			return sqrt( distance_squared( p_ptPoint ) );
+			return sqrt( distance_squared( p_point ) );
 		}
 
 		template< typename T, uint32_t Count >
-		inline double distance_manhattan( Coords< T, Count > const & p_ptPoint )
+		inline double distance_manhattan( Coords< T, Count > const & p_point )
 		{
 			double l_dReturn = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += abs( p_ptPoint[i] );
+				l_dReturn += abs( p_point[i] );
 			}
 
 			return l_dReturn;
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_minkowski( Coords< T, Count > const & p_ptPoint, double p_dOrder )
+		double distance_minkowski( Coords< T, Count > const & p_point, double p_dOrder )
 		{
 			double l_dReturn = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn += pow( double( abs( p_ptPoint[i] ) ), p_dOrder );
+				l_dReturn += pow( double( abs( p_point[i] ) ), p_dOrder );
 			}
 
 			l_dReturn = pow( l_dReturn, 1.0 / p_dOrder );
@@ -490,13 +490,13 @@ namespace Castor
 		}
 
 		template< typename T, uint32_t Count >
-		double distance_chebychev( Coords< T, Count > const & p_ptPoint )
+		double distance_chebychev( Coords< T, Count > const & p_point )
 		{
 			double l_dReturn = 0.0;
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_dReturn = std::max( l_dReturn, double( abs( p_ptPoint[i] ) ) );
+				l_dReturn = std::max( l_dReturn, double( abs( p_point[i] ) ) );
 			}
 
 			return l_dReturn;

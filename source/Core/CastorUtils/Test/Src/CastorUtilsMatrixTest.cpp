@@ -252,10 +252,11 @@ namespace Testing
 		DoRegisterTest( "TransformationMatrixComparison", std::bind( &CastorUtilsMatrixTest::TransformationMatrixComparison, this ) );
 		DoRegisterTest( "ProjectionMatrixComparison", std::bind( &CastorUtilsMatrixTest::ProjectionMatrixComparison, this ) );
 
-#if GLM_VERSION >= 95
+#	if GLM_VERSION >= 95
 
 		DoRegisterTest( "QuaternionComparison", std::bind( &CastorUtilsMatrixTest::QuaternionComparison, this ) );
-#endif
+
+#	endif
 
 #endif
 	}
@@ -556,6 +557,44 @@ namespace Testing
 			{
 				Quaternion l_quaternion = l_quaternionSrc.slerp( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::slerp( l_quatSrc, l_quatDst, float( r / 100 ) );
+			}
+		}
+
+		Logger::LogInfo( cuT( "	LookAt" ) );
+		{
+			for ( double x = 0; x < 360; x += 1 )
+			{
+				for ( double y = 0; y < 360; y += 1 )
+				{
+					for ( double z = 0; z < 360; z += 1 )
+					{
+						Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( y ), Angle::from_degrees( z ) );
+						Point3r l_right, l_up, l_lookat;
+						l_quaternion.to_axes( l_right, l_up, l_lookat );
+						Castor::point::normalise( l_up );
+						Castor::point::normalise( l_right );
+						Castor::point::normalise( l_lookat );
+						Matrix4x4r l_rotate{ 1.0_r };
+						auto & l_col0 = l_rotate[0];
+						auto & l_col1 = l_rotate[1];
+						auto & l_col2 = l_rotate[2];
+						l_col0[0] = l_right[0];
+						l_col0[1] = l_up[0];
+						l_col0[2] = l_lookat[0];
+						l_col0[3] = 0.0_r;
+						l_col1[0] = l_right[1];
+						l_col1[1] = l_up[1];
+						l_col1[2] = l_lookat[1];
+						l_col1[3] = 0.0_r;
+						l_col2[0] = l_right[2];
+						l_col2[1] = l_up[2];
+						l_col2[2] = l_lookat[2];
+						l_col2[3] = 0.0_r;
+						Matrix4x4r l_orientation;
+						l_quaternion.to_matrix( l_orientation );
+						CT_EQUAL( l_rotate, l_orientation );
+					}
+				}
 			}
 		}
 	}
