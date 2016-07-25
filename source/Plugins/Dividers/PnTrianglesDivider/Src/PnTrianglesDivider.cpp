@@ -54,10 +54,10 @@ namespace PnTriangles
 		Castor3D::Subdivider::Cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
+	void Subdivider::Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
 	{
 		m_occurences = p_occurences;
-		m_submesh = p_pSubmesh;
+		m_submesh = p_submesh;
 		m_bGenerateBuffers = p_generateBuffers;
 		m_submesh->ComputeContainers();
 

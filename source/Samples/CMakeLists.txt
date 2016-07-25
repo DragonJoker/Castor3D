@@ -231,11 +231,18 @@ endfunction( SamplesSummary )
 function( SamplesSetup )
 	if( ${CASTOR_BUILDGRP_SAMPLE} )
 		if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} )
+			cpack_add_component( GuiCommon
+				DISPLAY_NAME "GuiCommon"
+				DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
+				GROUP Samples
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
 			cpack_add_component( GuiCommon_dev
 				DISPLAY_NAME "GuiCommon SDK"
-				DESCRIPTION "Common classes and functions for CastorWiewer and CastorShape."
+				DESCRIPTION "Common classes and functions for CastorViewer and CastorShape."
 				GROUP Development
-				DEPENDS Castor3D
+				DEPENDS GuiCommon
 				INSTALL_TYPES Developer Full
 			)
 			if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
@@ -243,7 +250,7 @@ function( SamplesSetup )
 					DISPLAY_NAME "CastorViewer"
 					DESCRIPTION "A simple scene viewer using Castor3D."
 					GROUP Samples
-					DEPENDS Castor3D
+					DEPENDS GuiCommon
 					INSTALL_TYPES Full
 				)
 			endif ()
@@ -252,7 +259,7 @@ function( SamplesSetup )
 					DISPLAY_NAME "CastorShape"
 					DESCRIPTION "A little modeler, using Castor3D."
 					GROUP Samples
-					DEPENDS Castor3D
+					DEPENDS GuiCommon
 					INSTALL_TYPES Full
 				)
 			endif ()

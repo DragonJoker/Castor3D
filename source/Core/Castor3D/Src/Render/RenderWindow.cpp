@@ -47,15 +47,18 @@ namespace Castor3D
 		Logger::LogInfo( m_tabs + cuT( "Writing Window " ) + p_window.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow name" );
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tvsync %s\n" ), m_tabs.c_str(), p_window.GetVSync() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow vsync" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tfullscreen %s\n" ), m_tabs.c_str(), p_window.IsFullscreen() ? cuT( "true" ) : cuT( "false" ) ) > 0;
+			Castor::TextWriter< RenderWindow >::CheckError( l_return, "RenderWindow fullscreen" );
 		}
 
 		if ( l_return && p_window.GetRenderTarget() )

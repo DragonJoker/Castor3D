@@ -42,29 +42,25 @@ namespace C3dOgre
 		return std::make_unique< OgreImporter >( p_engine );
 	}
 
-	SceneSPtr OgreImporter::DoImportScene()
+	bool OgreImporter::DoImportScene( Scene & p_scene )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_OGRE" ) );
-		DoImportMesh( *l_scene );
+		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_OGRE" ) );
+		bool l_return = DoImportMesh( *l_mesh );
 
-		if ( m_mesh )
+		if ( l_return )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-
-			for ( auto && l_submesh : *m_mesh )
-			{
-				m_mesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( m_mesh->GetName(), l_node, m_mesh );
-			m_mesh.reset();
+			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
+			l_geometry->SetMesh( l_mesh );
+			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
-		return l_scene;
+		return l_return;
 	}
 
-	MeshSPtr OgreImporter::DoImportMesh( Scene & p_scene )
+	bool OgreImporter::DoImportMesh( Mesh & p_mesh )
 	{
+		bool l_return{ false };
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
 
@@ -95,10 +91,6 @@ namespace C3dOgre
 
 
 		meshMgr->remove( "import" );
-
-		MeshSPtr l_return( m_mesh );
-		m_mesh.reset();
-
 		Ogre::Pass::processPendingPassUpdates(); // make sure passes are cleaned up
 
 		return l_return;

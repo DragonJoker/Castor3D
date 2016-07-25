@@ -20,7 +20,7 @@ namespace CastorViewer
 	{
 	}
 
-	void MouseNodeEvent::Add( MouseNodeEventSPtr p_event, FrameListenerSPtr p_listener, real p_dx, real p_dy, real p_dz )
+	void MouseNodeEvent::Add( MouseNodeEventUPtr && p_event, FrameListenerSPtr p_listener, real p_dx, real p_dy, real p_dz )
 	{
 		bool l_add = p_event->m_dx == 0 && p_event->m_dy == 0 && p_event->m_dz == 0;
 		p_event->m_dx += p_dx;
@@ -29,7 +29,7 @@ namespace CastorViewer
 
 		if ( l_add )
 		{
-			p_listener->PostEvent( p_event );
+			p_listener->PostEvent( std::move( p_event ) );
 		}
 	}
 }

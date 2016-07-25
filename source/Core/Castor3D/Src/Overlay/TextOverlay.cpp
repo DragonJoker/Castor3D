@@ -68,40 +68,48 @@ namespace Castor3D
 		Logger::LogInfo( m_tabs + cuT( "Writing TextOverlay " ) + p_overlay.GetOverlayName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "text_overlay \"" ) + p_overlay.GetOverlayName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay name" );
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tfont \"" ) + p_overlay.GetFontTexture()->GetFontName() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay font" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttext \"" ) + p_overlay.GetCaption() + cuT( "\"\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[p_overlay.GetTextWrappingMode()] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text wrapping" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[p_overlay.GetVAlign()] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text vertical align" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[p_overlay.GetHAlign()] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text horizontal align" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[p_overlay.GetTexturingMode()] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text texturing mode" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[p_overlay.GetLineSpacingMode()] + cuT( "\n" ) ) > 0;
+			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay line spacing mode" );
 		}
 
 		if ( l_return )

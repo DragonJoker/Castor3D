@@ -1538,7 +1538,8 @@ namespace Castor3D
 
 			if ( l_parsingContext->pScene )
 			{
-				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2 );
+				l_parsingContext->pScene->GetEngine()->GetMeshFactory().Create( l_type )->Generate( *l_parsingContext->pMesh, l_arrayFaces, l_arraySizes );
 			}
 			else
 			{
@@ -1641,8 +1642,13 @@ namespace Castor3D
 			}
 			else
 			{
+				l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshCache().Add( l_parsingContext->strName2 );
 				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
-				l_parsingContext->pMesh = l_importer->ImportMesh( *l_parsingContext->pScene, l_pathFile, l_parameters, true );
+
+				if ( !l_importer->ImportMesh( *l_parsingContext->pMesh, l_pathFile, l_parameters, true ) )
+				{
+					PARSING_ERROR( cuT( "Mesh Import failed" ) );
+				}
 			}
 		}
 	}
@@ -1702,10 +1708,13 @@ namespace Castor3D
 			else
 			{
 				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
-				Scene l_scene{ cuT( "MorphImport" ), *l_importer->GetEngine() };
-				MeshSPtr l_mesh = l_importer->ImportMesh( l_scene, l_pathFile, l_parameters, false );
+				Mesh l_mesh{ cuT( "MorphImport" ), *l_parsingContext->pScene };
 
-				if ( l_mesh && l_mesh->GetSubmeshCount() == l_parsingContext->pMesh->GetSubmeshCount() )
+				if ( !l_importer->ImportMesh( l_mesh, l_pathFile, l_parameters, false ) )
+				{
+					PARSING_ERROR( cuT( "Mesh Import failed" ) );
+				}
+				else if ( l_mesh.GetSubmeshCount() == l_parsingContext->pMesh->GetSubmeshCount() )
 				{
 					String l_animName{ "Morph" };
 
@@ -1723,7 +1732,7 @@ namespace Castor3D
 					MeshAnimation & l_animation{ static_cast< MeshAnimation & >( l_parsingContext->pMesh->GetAnimation( l_animName ) ) };
 					uint32_t l_index = 0u;
 
-					for ( auto l_submesh : *l_mesh )
+					for ( auto l_submesh : l_mesh )
 					{
 						auto & l_submeshAnim = l_animation.GetSubmesh( l_index );
 
@@ -1736,6 +1745,10 @@ namespace Castor3D
 					}
 
 					l_animation.UpdateLength();
+				}
+				else
+				{
+					PARSING_ERROR( cuT( "The new mesh doesn't match the original mesh" ) );
 				}
 			}
 		}
@@ -2341,13 +2354,13 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			PassSPtr l_pPass = l_parsingContext->pPass;
+			PassSPtr l_pass = l_parsingContext->pPass;
 			uint32_t l_uiSrcBlend;
 			uint32_t l_uiDstBlend;
 			p_params[0]->Get( l_uiSrcBlend );
 			p_params[1]->Get( l_uiDstBlend );
-			l_pPass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
-			l_pPass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
+			l_pass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
+			l_pass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
 		}
 	}
 	END_ATTRIBUTE()

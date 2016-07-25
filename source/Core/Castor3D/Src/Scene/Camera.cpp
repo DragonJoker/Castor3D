@@ -13,6 +13,7 @@
 #include "Shader/PointFrameVariable.hpp"
 #include "Shader/ShaderProgram.hpp"
 
+#include <Graphics/CubeBox.hpp>
 #include <Math/TransformationMatrix.hpp>
 
 using namespace Castor;
@@ -29,6 +30,7 @@ namespace Castor3D
 		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
 			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< Camera >::CheckError( l_return, "Camera name" );
 
 		if ( l_return )
 		{
@@ -179,12 +181,12 @@ namespace Castor3D
 				l_col3[3] = 1.0_r;
 
 				m_view = l_rotate * l_translate;
-				//m_view = l_node->GetDerivedTransformationMatrix();
+				//matrix::set_transform( m_view, -l_position, l_scale, l_orientation );
 
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
 				{
-					m_planes[i].Set( m_view * m_viewport.GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_node->GetDerivedPosition() );
+					m_planes[i].Set( m_viewport.GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal() * l_rotate, l_node->GetDerivedPosition() );
 				}
 			}
 
@@ -231,53 +233,51 @@ namespace Castor3D
 
 	bool Camera::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
 	{
-		bool l_return = true;
-		//Point3r l_ptCorners[8];
-		//l_ptCorners[0] = p_box.GetMin();
-		//l_ptCorners[1] = p_box.GetMax();
+		bool l_return = false;
+		Point3r l_ptCorners[8];
+		l_ptCorners[0] = p_box.GetMin();
+		l_ptCorners[1] = p_box.GetMax();
 
-		//// Express object box in world coordinates
-		//l_ptCorners[2] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-		//l_ptCorners[3] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-		//l_ptCorners[4] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] );
-		//l_ptCorners[5] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] );
-		//l_ptCorners[6] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-		//l_ptCorners[7] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-		//l_ptCorners[0] = p_transformations * l_ptCorners[0];
-		//l_ptCorners[1] = p_transformations * l_ptCorners[1];
+		// Express object box in world coordinates
+		l_ptCorners[2] = Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] ) * p_transformations;
+		l_ptCorners[3] = Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] ) * p_transformations;
+		l_ptCorners[4] = Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] ) * p_transformations;
+		l_ptCorners[5] = Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] ) * p_transformations;
+		l_ptCorners[6] = Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] ) * p_transformations;
+		l_ptCorners[7] = Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] ) * p_transformations;
+		l_ptCorners[0] = l_ptCorners[0] * p_transformations;
+		l_ptCorners[1] = l_ptCorners[1] * p_transformations;
 
-		//// Retrieve axis aligned box boundaries
-		//Point3r l_ptMin( l_ptCorners[0] );
-		//Point3r l_ptMax( l_ptCorners[1] );
+		// Retrieve axis aligned box boundaries
+		Point3r l_ptMin( l_ptCorners[0] );
+		Point3r l_ptMax( l_ptCorners[1] );
 
-		//for( int j = 0; j < 8; ++j )
-		//{
-		//	l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
-		//	l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
-		//	l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
+		for( int j = 0; j < 8; ++j )
+		{
+			l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
+			l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
+			l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
 
-		//	l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
-		//	l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
-		//	l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
-		//}
+			l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
+			l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
+			l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
+		}
 
-		//// Test positive vertex from the axis aligned box to be inside the frustum view.
-		//for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_return; ++i )
-		//{
-		//	if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
-		//	{
-		//		l_return = false;
-		//	}
-		//}
+
+		// Test positive vertex from the axis aligned box to be inside the frustum view.
+		for( int i = 0; i < eFRUSTUM_PLANE_COUNT && !l_return; ++i )
+		{
+			l_return = m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) >= 0;
+		}
 
 		return l_return;
 	}
 
 	bool Camera::IsVisible( Point3r const & p_point )const
 	{
-		bool l_return = true;
+		bool l_return = false;
 
-		for ( int i = 0; i < 6 && l_return; i++ )
+		for ( int i = 0; i < eFRUSTUM_PLANE_COUNT && !l_return; ++i )
 		{
 			l_return = m_planes[i].Distance( p_point ) >= 0;
 		}

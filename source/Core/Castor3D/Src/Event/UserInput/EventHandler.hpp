@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_EVENT_HANDLER_H___
 #define ___C3D_EVENT_HANDLER_H___
@@ -36,7 +41,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of an event handler, class that can receive event.
 	*\~french
-	*\brief		Description d'un gestionnaire d'évènements, classe pouvant recevoir des évènements.
+	*\brief		Description d'un gestionnaire d'ï¿½vï¿½nements, classe pouvant recevoir des ï¿½vï¿½nements.
 	*/
 	class EventHandler
 	{
@@ -45,11 +50,11 @@ namespace Castor3D
 		using EventQueue = std::deque< std::pair< UserInputEventSPtr, EventHandlerFunction > >;
 
 	public:
-		//!\~english Catcher definition for mouse events.	\~french Définition d'une fonction de traitement d'évènement de souris.
+		//!\~english Catcher definition for mouse events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement de souris.
 		using ClientMouseFunction = std::function< void( MouseEvent const & ) >;
-		//!\~english Catcher definition for keyboard events.	\~french Définition d'une fonction de traitement d'évènement de clavier.
+		//!\~english Catcher definition for keyboard events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement de clavier.
 		using ClientKeyboardFunction = std::function< void( KeyboardEvent const & ) >;
-		//!\~english Catcher definition for handler events.	\~french Définition d'une fonction de traitement d'évènement de gestionnaire.
+		//!\~english Catcher definition for handler events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement de gestionnaire.
 		using ClientHandlerFunction = std::function< void( HandlerEvent const & ) >;
 
 		/**@name General */
@@ -61,7 +66,7 @@ namespace Castor3D
 		 *\param[in]	p_catchMouseEvents	Defines if the event handler catches mouse event.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
+		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'ï¿½vï¿½nements rï¿½cupï¿½re les ï¿½vï¿½nements souris.
 		 */
 		explicit EventHandler( bool p_catchMouseEvents )
 			: m_enabled{ true }
@@ -84,7 +89,7 @@ namespace Castor3D
 		 *\~english
 		 *\~brief		Processes all queued events.
 		 *\~french
-		 *\~brief		Traite tous les évènement dans la file.
+		 *\~brief		Traite tous les ï¿½vï¿½nement dans la file.
 		 */
 		void ProcessEvents()
 		{
@@ -105,8 +110,8 @@ namespace Castor3D
 		 *\~brief		Adds a mouse event to the events queue.
 		 *\param[in]	p_event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de souris à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Ajoute un ï¿½vï¿½nement de souris ï¿½ la file.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		void PushEvent( MouseEvent const & p_event )
 		{
@@ -120,8 +125,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement souris.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement souris.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void Connect( eMOUSE_EVENT p_event, ClientMouseFunction p_function )
@@ -138,8 +143,8 @@ namespace Castor3D
 		 *\~brief		Adds a keyboard event to the events queue.
 		 *\param[in]	p_event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de clavier à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Ajoute un ï¿½vï¿½nement de clavier ï¿½ la file.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		void PushEvent( KeyboardEvent const & p_event )
 		{
@@ -153,8 +158,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement clavier.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement clavier.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void Connect( eKEYBOARD_EVENT p_event, ClientKeyboardFunction p_function )
@@ -190,8 +195,8 @@ namespace Castor3D
 		 *\~brief		Adds a handler event to the events queue.
 		 *\param[in]	p_event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de gestionnaire à la file.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Ajoute un ï¿½vï¿½nement de gestionnaire ï¿½ la file.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		void PushEvent( HandlerEvent const & p_event )
 		{
@@ -205,8 +210,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement gestionnaire.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement gestionnaire.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void Connect( eHANDLER_EVENT p_event, ClientHandlerFunction p_function )
@@ -242,8 +247,8 @@ namespace Castor3D
 		 *\~brief		Mouse event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement souris.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement souris.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		inline void ProcessMouseEvent( MouseEventSPtr p_event )
 		{
@@ -255,8 +260,8 @@ namespace Castor3D
 		 *\~brief		Keyboard event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement clavier.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement clavier.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		inline void ProcessKeyboardEvent( KeyboardEventSPtr p_event )
 		{
@@ -268,8 +273,8 @@ namespace Castor3D
 		 *\~brief		Handler event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement de gestionnaire.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement de gestionnaire.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		inline void ProcessHandlerEvent( HandlerEventSPtr p_event )
 		{
@@ -299,8 +304,8 @@ namespace Castor3D
 		 *\~brief		Mouse event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement souris.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement souris.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		C3D_API virtual void DoProcessMouseEvent( MouseEventSPtr p_event ) = 0;
 		/**
@@ -308,8 +313,8 @@ namespace Castor3D
 		 *\~brief		Keyboard event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement clavier.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement clavier.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		C3D_API virtual void DoProcessKeyboardEvent( KeyboardEventSPtr p_event ) = 0;
 		/**
@@ -317,8 +322,8 @@ namespace Castor3D
 		 *\~brief		Handler event processing function.
 		 *\param[in]	p_event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement gestionnaire.
-		 *\param[in]	p_event	L'évènement.
+		 *\~brief		Fonction de traitement d'un ï¿½vï¿½nement gestionnaire.
+		 *\param[in]	p_event	L'ï¿½vï¿½nement.
 		 */
 		C3D_API virtual void DoProcessHandlerEvent( HandlerEventSPtr p_event ) = 0;
 		/**
@@ -344,19 +349,19 @@ namespace Castor3D
 		C3D_API virtual bool DoCatchesReturnKey()const = 0;
 
 	protected:
-		//!\~english The mouse events slots.	\~french Les slots d'évènements souris.
+		//!\~english The mouse events slots.	\~french Les slots d'ï¿½vï¿½nements souris.
 		Castor::Signal< ClientMouseFunction > m_mouseSlots[eMOUSE_EVENT_COUNT];
-		//!\~english The keyboard events slots.	\~french Les slots d'évènements clavier.
+		//!\~english The keyboard events slots.	\~french Les slots d'ï¿½vï¿½nements clavier.
 		Castor::Signal< ClientKeyboardFunction > m_keyboardSlots[eKEYBOARD_EVENT_COUNT];
-		//!\~english The handler events slots.	\~french Les slots d'évènements de gestionnaire.
+		//!\~english The handler events slots.	\~french Les slots d'ï¿½vï¿½nements de gestionnaire.
 		Castor::Signal< ClientHandlerFunction > m_handlerSlots[eHANDLER_EVENT_COUNT];
 
 	private:
 		//!\~english Activation status.	\~french Le statu d'activation
 		bool m_enabled;
-		//!\~english The mutex used to protect the events queue.	\~french Le mutex utilisé pour protéger la file d'évènements.
+		//!\~english The mutex used to protect the events queue.	\~french Le mutex utilisï¿½ pour protï¿½ger la file d'ï¿½vï¿½nements.
 		std::mutex m_mutex;
-		//!\~english The events queue.	\~french La file d'évènements.
+		//!\~english The events queue.	\~french La file d'ï¿½vï¿½nements.
 		EventQueue m_queue;
 		//!\~english Tells if the control catches mouse events.
 		bool m_catchMouseEvents;
@@ -372,7 +377,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of an event handler, class that can receive event.
 	*\~french
-	*\brief		Description d'un gestionnaire d'évènements, classe pouvant recevoir des évènements.
+	*\brief		Description d'un gestionnaire d'ï¿½vï¿½nements, classe pouvant recevoir des ï¿½vï¿½nements.
 	*/
 	template< class Derived >
 	class NonClientEventHandler
@@ -388,11 +393,11 @@ namespace Castor3D
 		using ClientMouseFunction = EventHandler::ClientMouseFunction;
 		using ClientKeyboardFunction = EventHandler::ClientKeyboardFunction;
 		using ClientHandlerFunction = EventHandler::ClientHandlerFunction;
-		//!\~english Catcher definition for non client mouse events.	\~french Définition d'une fonction de traitement d'évènement non client de souris.
+		//!\~english Catcher definition for non client mouse events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement non client de souris.
 		using NonClientMouseFunction = std::function< void( DerivedSPtr, MouseEvent const & ) >;
-		//!\~english Catcher definition for non client keyboard events.	\~french Définition d'une fonction de traitement d'évènement non client de clavier.
+		//!\~english Catcher definition for non client keyboard events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement non client de clavier.
 		using NonClientKeyboardFunction = std::function< void( DerivedSPtr, KeyboardEvent const & ) >;
-		//!\~english Catcher definition for non client handler events.	\~french Définition d'une fonction de traitement d'évènement non client de gestionnaire.
+		//!\~english Catcher definition for non client handler events.	\~french Dï¿½finition d'une fonction de traitement d'ï¿½vï¿½nement non client de gestionnaire.
 		using NonClientHandlerFunction = std::function< void( DerivedSPtr, HandlerEvent const & ) >;
 
 	public:
@@ -402,7 +407,7 @@ namespace Castor3D
 		 *\param[in]	p_catchMouseEvents	Defines if the event handler catches mouse event.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
+		 *\param[in]	p_catchMouseEvents	Dit si le gestionnaire d'ï¿½vï¿½nements rï¿½cupï¿½re les ï¿½vï¿½nements souris.
 		 */
 		explicit NonClientEventHandler( bool p_catchMouseEvents )
 			: EventHandler{ p_catchMouseEvents }
@@ -414,8 +419,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement souris non client.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement souris non client.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void ConnectNC( eMOUSE_EVENT p_event, NonClientMouseFunction p_function )
@@ -428,8 +433,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement clavier non client.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement clavier non client.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void ConnectNC( eKEYBOARD_EVENT p_event, NonClientKeyboardFunction p_function )
@@ -442,8 +447,8 @@ namespace Castor3D
 		 *\param[in]	p_event		The event type.
 		 *\param[in]	p_function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement gestionnaire non client.
-		 *\param[in]	p_event		Le type d'évènement.
+		 *\~brief		Connecte un fonction ï¿½ un ï¿½vï¿½nement gestionnaire non client.
+		 *\param[in]	p_event		Le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_function	La fonction.
 		 */
 		void ConnectNC( eHANDLER_EVENT p_event, NonClientHandlerFunction p_function )
@@ -477,11 +482,11 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The non client mouse events slots.	\~french Les slots d'évènements souris non clients.
+		//!\~english The non client mouse events slots.	\~french Les slots d'ï¿½vï¿½nements souris non clients.
 		Castor::Signal< NonClientMouseFunction > m_ncMouseSlots[eMOUSE_EVENT_COUNT];
-		//!\~english The non client keyboard events slots.	\~french Les slots d'évènements clavier non clients.
+		//!\~english The non client keyboard events slots.	\~french Les slots d'ï¿½vï¿½nements clavier non clients.
 		Castor::Signal< NonClientKeyboardFunction > m_ncKeyboardSlots[eKEYBOARD_EVENT_COUNT];
-		//!\~english The non client handler events slots.	\~french Les slots d'évènements de gestionnaire non clients.
+		//!\~english The non client handler events slots.	\~french Les slots d'ï¿½vï¿½nements de gestionnaire non clients.
 		Castor::Signal< NonClientHandlerFunction > m_ncHandlerSlots[eHANDLER_EVENT_COUNT];
 	};
 }

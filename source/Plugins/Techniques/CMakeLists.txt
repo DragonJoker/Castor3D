@@ -73,7 +73,7 @@ function( TechniquesSetup )
 		DESCRIPTION "Default direct rendering technique"
 		GROUP Techniques
 		DEPENDS Castor3D
-		INSTALL_TYPES Full
+		INSTALL_TYPES Minimal Full
 	)
 
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
@@ -83,7 +83,7 @@ function( TechniquesSetup )
 				DESCRIPTION "Allows rendering with Deferred Lighting technique."
 				GROUP Techniques
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_MSAA} )
@@ -92,7 +92,7 @@ function( TechniquesSetup )
 				DESCRIPTION "Allows rendering with MSAA technique."
 				GROUP Techniques
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

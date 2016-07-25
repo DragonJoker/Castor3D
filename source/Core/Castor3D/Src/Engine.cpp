@@ -321,14 +321,14 @@ namespace Castor3D
 		return m_renderSystem != nullptr;
 	}
 
-	void Engine::PostEvent( FrameEventSPtr p_event )
+	void Engine::PostEvent( FrameEventUPtr && p_event )
 	{
 		auto l_lock = make_unique_lock( *m_listenerCache );
 		FrameListenerSPtr l_listener = m_defaultListener.lock();
 
 		if ( l_listener )
 		{
-			l_listener->PostEvent( p_event );
+			l_listener->PostEvent( std::move( p_event ) );
 		}
 	}
 

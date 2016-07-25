@@ -51,7 +51,8 @@ namespace Testing
 		Path l_path{ l_name + cuT( ".cmsh" ) };
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = l_scene.GetMeshCache().Add( l_name, eMESH_TYPE_CUBE, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
+		auto l_src = l_scene.GetMeshCache().Add( l_name );
+		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src,  UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 
 		for ( auto l_submesh : *l_src )
 		{
@@ -63,7 +64,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -88,7 +89,8 @@ namespace Testing
 		Path l_path{ l_name + cuT( ".cmsh" ) };
 		Scene l_scene{ cuT( "TestScene" ), m_engine };
 
-		auto l_src = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
+		auto l_src = l_scene.GetMeshCache().Add( l_name );
+		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 		{
 			BinaryFile l_file{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
@@ -104,7 +106,7 @@ namespace Testing
 			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
 		}
 
-		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
+		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
@@ -149,7 +151,7 @@ namespace Testing
 		}
 
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
-		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
+		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );

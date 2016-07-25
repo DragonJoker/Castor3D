@@ -208,11 +208,11 @@ namespace GuiCommon
 	//	return new wxImage( l_bmpReturn.ConvertToImage() );
 	//}
 	//
-	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_width, uint32_t p_height )
+	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pass, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxImage * l_return = nullptr;
 	//
-	//	if ( p_pPass )
+	//	if ( p_pass )
 	//	{
 	//		wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//		wxMemoryDC l_dcReturn( l_bmpReturn );
@@ -242,20 +242,20 @@ namespace GuiCommon
 	//		double l_dStep = l_dMidRadius1;
 	//		double l_dX, l_dY;
 	//		double l_dRadius = 0;
-	//		p_pPass->GetAmbient().red().convert_to( l_byRe );
-	//		p_pPass->GetAmbient().green().convert_to( l_byGe );
-	//		p_pPass->GetAmbient().blue().convert_to( l_byBe );
-	//		p_pPass->GetDiffuse().red().convert_to( l_byRm );
-	//		p_pPass->GetDiffuse().green().convert_to( l_byGm );
-	//		p_pPass->GetDiffuse().blue().convert_to( l_byBm );
-	//		p_pPass->GetSpecular().red().convert_to( l_byRc );
-	//		p_pPass->GetSpecular().green().convert_to( l_byGc );
-	//		p_pPass->GetSpecular().blue().convert_to( l_byBc );
+	//		p_pass->GetAmbient().red().convert_to( l_byRe );
+	//		p_pass->GetAmbient().green().convert_to( l_byGe );
+	//		p_pass->GetAmbient().blue().convert_to( l_byBe );
+	//		p_pass->GetDiffuse().red().convert_to( l_byRm );
+	//		p_pass->GetDiffuse().green().convert_to( l_byGm );
+	//		p_pass->GetDiffuse().blue().convert_to( l_byBm );
+	//		p_pass->GetSpecular().red().convert_to( l_byRc );
+	//		p_pass->GetSpecular().green().convert_to( l_byGc );
+	//		p_pass->GetSpecular().blue().convert_to( l_byBc );
 	//
-	//		if ( p_pPass->GetTextureUnitsCount() )
+	//		if ( p_pass->GetTextureUnitsCount() )
 	//		{
 	//			l_byA = 127;
-	//			wxImage * l_pImage = CreateTextureUnitImage( p_pPass->GetTextureUnit( TextureChannel::Diffuse ), p_width, p_height );
+	//			wxImage * l_pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::Diffuse ), p_width, p_height );
 	//
 	//			if ( l_pImage )
 	//			{

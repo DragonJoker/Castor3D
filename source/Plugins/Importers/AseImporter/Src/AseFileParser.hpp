@@ -1,19 +1,24 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___ASE_FILE_PARSER_H___
 #define ___ASE_FILE_PARSER_H___
@@ -66,16 +71,27 @@ namespace Ase
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The Castor3D engine.
 		 *\param[in]	p_importer	The importer.
-		 *\param[in]	p_scene		The scene.
+		 *\param[out]	p_scene		The scene receiving the data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_importer	L'importeur.
-		 *\param[in]	p_scene		La scène.
+		 *\param[out]	p_scene		La scène recevant les données.
 		 */
-		AseFileParser( Castor3D::Engine * p_engine, AseImporter & p_importer, Castor3D::Scene & p_scene );
+		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_importer	The importer.
+		 *\param[out]	p_scene		The scene receiving the scene data.
+		 *\param[out]	p_mesh		The mesh receiving the data.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_importer	L'importeur.
+		 *\param[out]	p_scene		La scène recevant les données de scène.
+		 *\param[out]	p_mesh		Le maillage recevant les données.
+		 */
+		AseFileParser( AseImporter & p_importer, Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -83,59 +99,22 @@ namespace Ase
 		 *\brief		Destructeur
 		 */
 		~AseFileParser();
-		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in,out]	p_file	The file
-		 *\return	the parsed scene
-		 */
-		bool ParseFile( Castor::TextFile & p_file );
-		/**
-		 * Parses the given file (expecting it to be in ESCN file format)
-		 *\param[in]	p_pathFile	The file path
-		 *\return	true if successful, false if not
-		 */
-		bool ParseFile( Castor::Path const & p_pathFile );
-		/**
-		 *\~english
-		 *\brief		Retrieves the Castor3D engine
-		 *\return		The Castor3D engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
-		 */
-		inline Castor3D::Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the read mesh
-		 *\return		The read mesh
-		 *\~french
-		 *\brief		Récupère le mesh lu
-		 *\return		Le mesh lu
-		 */
-		inline Castor3D::MeshSPtr GetMesh()const
-		{
-			return m_pMesh;
-		}
 
 	private:
-		virtual void DoInitialiseParser( Castor::TextFile & p_file );
-		virtual void DoCleanupParser();
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		void DoInitialiseParser( Castor::TextFile & p_file )override;
+		void DoCleanupParser()override;
+		bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )override
 		{
 			return false;
 		}
-		virtual bool DoDiscardParser( Castor::String const & p_strLine );
-		virtual void DoValidate();
-		virtual Castor::String DoGetSectionName( uint32_t p_section );
+		bool DoDiscardParser( Castor::String const & p_strLine )override;
+		void DoValidate()override;
+		Castor::String DoGetSectionName( uint32_t p_section )override;
 
 	private:
-		Castor3D::MeshSPtr m_pMesh;
-		Castor3D::Engine * m_engine;
 		AseImporter & m_importer;
 		Castor3D::Scene & m_scene;
+		Castor3D::Mesh * m_mesh;
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat )

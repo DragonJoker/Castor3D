@@ -35,7 +35,7 @@ using namespace Castor3D;
 namespace Msaa
 {
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
-		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params )
+		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, true )
 		, m_samplesCount( 0 )
 	{
 		String l_count;

@@ -66,18 +66,18 @@ function( PostEffectsSetup )
 			cpack_add_component( BloomPostEffect
 				DISPLAY_NAME "BloomPostEffect"
 				DESCRIPTION "Allows HDR Bloom post effect."
-				GROUP Plugins
+				GROUP PostEffects
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_POSTFX_GRAYSCALE} )
 			cpack_add_component( GrayScalePostEffect
 				DISPLAY_NAME "GrayScalePostEffect"
 				DESCRIPTION "Allows GrayScale post effect."
-				GROUP Plugins
+				GROUP PostEffects
 				DEPENDS Castor3D
-				INSTALL_TYPES Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

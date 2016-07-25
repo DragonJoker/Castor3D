@@ -36,26 +36,70 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseFileParser::AseFileParser( Engine * p_engine, AseImporter & p_importer, Castor3D::Scene & p_scene )
-		: FileParser( eASE_SECTION_ROOT )
-		, m_engine( p_engine )
-		, m_importer( p_importer )
-		, m_scene( p_scene )
+	namespace
+	{
+		void RetrieveVertex( uint32_t & p_index, float * p_position, String p_strLine )
+		{
+			StringStream l_stream( p_strLine );
+			l_stream >> p_index >> p_position[0] >> p_position[1] >> p_position[2];
+		}
+
+		void RetrieveFace( int * p_indices, String p_strLine )
+		{
+			int l_index = 0;
+			sscanf( string::string_cast< char >( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", &l_index, &p_indices[0], &p_indices[1], &p_indices[2] );
+		}
+
+		template< size_t Count, typename Type >
+		void ReadNValues( Type * p_colour, String p_strLine )
+		{
+			StringStream l_stream( p_strLine );
+
+			for ( size_t i = 0; i < Count; ++i )
+			{
+				l_stream >> p_colour[i];
+			}
+		}
+
+		void Read3Floats( float * p_colour, String p_strLine )
+		{
+			ReadNValues< 3 >( p_colour, p_strLine );
+		}
+
+		void Read4Floats( float * p_colour, String p_strLine )
+		{
+			ReadNValues< 4 >( p_colour, p_strLine );
+		}
+
+		void Read3Ints( int * p_colour, String p_strLine )
+		{
+			ReadNValues< 3 >( p_colour, p_strLine );
+		}
+
+		void Read4Ints( int * p_colour, String p_strLine )
+		{
+			ReadNValues< 4 >( p_colour, p_strLine );
+		}
+	}
+
+	AseFileParser::AseFileParser( AseImporter & p_importer, Scene & p_scene )
+		: FileParser{ eASE_SECTION_ROOT }
+		, m_importer{ p_importer }
+		, m_scene{ p_scene }
+		, m_mesh{ nullptr }
+	{
+	}
+
+	AseFileParser::AseFileParser( AseImporter & p_importer, Scene & p_scene, Mesh & p_mesh )
+		: FileParser{ eASE_SECTION_ROOT }
+		, m_importer{ p_importer }
+		, m_scene{ p_scene }
+		, m_mesh{ &p_mesh }
 	{
 	}
 
 	AseFileParser::~AseFileParser()
 	{
-	}
-
-	bool AseFileParser::ParseFile( TextFile & p_file )
-	{
-		return FileParser::ParseFile( p_file );
-	}
-
-	bool AseFileParser::ParseFile( Path const & p_pathFile )
-	{
-		return FileParser::ParseFile( p_pathFile );
 	}
 
 	void AseFileParser::DoInitialiseParser( TextFile & p_file )
@@ -181,7 +225,7 @@ namespace Ase
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_FACENORMAL" ), AseParser_NormalsListFaceNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_VERTEXNORMAL" ), AseParser_NormalsListVertexNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "}" ), AseParser_NormalsListEnd );
-		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file, m_scene );
+		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file, m_scene, m_mesh );
 		m_context = std::static_pointer_cast< FileParserContext >( l_pContext );
 		l_pContext->Initialise();
 		l_pContext->strName.clear();
@@ -200,8 +244,6 @@ namespace Ase
 
 	void AseFileParser::DoValidate()
 	{
-		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( m_context );
-		m_pMesh = l_pContext->pMesh;
 	}
 
 	String AseFileParser::DoGetSectionName( uint32_t p_section )
@@ -281,49 +323,6 @@ namespace Ase
 		return l_return;
 	}
 
-	void RetrieveVertex( uint32_t & p_uiIndex, float * p_position, String p_strLine )
-	{
-		StringStream l_stream( p_strLine );
-		l_stream >> p_uiIndex >> p_position[0] >> p_position[1] >> p_position[2];
-	}
-
-	void RetrieveFace( int * p_indices, String p_strLine )
-	{
-		int l_index = 0;
-		sscanf( string::string_cast< char >( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2] );
-	}
-
-	template< size_t Count, typename Type >
-	void ReadNValues( Type * p_colour, String p_strLine )
-	{
-		StringStream l_stream( p_strLine );
-
-		for ( size_t i = 0; i < Count; ++i )
-		{
-			l_stream >> p_colour[i];
-		}
-	}
-
-	void Read3Floats( float * p_colour, String p_strLine )
-	{
-		ReadNValues< 3 >( p_colour, p_strLine );
-	}
-
-	void Read4Floats( float * p_colour, String p_strLine )
-	{
-		ReadNValues< 4 >( p_colour, p_strLine );
-	}
-
-	void Read3Ints( int * p_colour, String p_strLine )
-	{
-		ReadNValues< 3 >( p_colour, p_strLine );
-	}
-
-	void Read4Ints( int * p_colour, String p_strLine )
-	{
-		ReadNValues< 4 >( p_colour, p_strLine );
-	}
-
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_RootFormat )
 	{
 	}
@@ -348,7 +347,7 @@ namespace Ase
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
-		if ( ( l_pContext->pMesh ) )
+		if ( l_pContext->pMesh )
 		{
 			p_parser->Ignore();
 			PARSING_WARNING( cuT( "No scene initialised." ) );
@@ -428,7 +427,7 @@ namespace Ase
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialName )
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+		Engine * l_pEngine = l_pContext->scene.GetEngine();
 		auto & l_cache = l_pContext->scene.GetMaterialView();
 		String l_strName;
 		p_params[0]->Get( l_strName );
@@ -666,9 +665,17 @@ namespace Ase
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_GeometryNodeName )
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+		Engine * l_pEngine = l_pContext->scene.GetEngine();
 		p_params[0]->Get( l_pContext->strName );
-		l_pContext->pMesh = l_pContext->scene.GetMeshCache().Add( l_pContext->strName, eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
+
+		if ( l_pContext->mesh )
+		{
+			l_pContext->pMesh = l_pContext->mesh;
+		}
+		else
+		{
+			l_pContext->pMesh = l_pContext->scene.GetMeshCache().Add( l_pContext->strName ).get();
+		}
 	}
 	END_ATTRIBUTE()
 
@@ -722,6 +729,7 @@ namespace Ase
 
 		for ( auto l_submesh : *l_pContext->pMesh )
 		{
+			l_submesh->ComputeNormals();
 			l_pContext->pMesh->GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
 	}

@@ -33,10 +33,9 @@ Castor3D uses CMake to build project files.
 You just need to launch CMake to build your preferential project file.
 
 Tested compilers are:
-- Visual Studio 2013
 - Visual Studio 2015
-- gcc 4.9
 - gcc 5.3
+- gcc 6.1
 
 CastorUtils depends on FreeImage and FreeType, Zlib and libzip.
 Castor3D is based on CastorUtils.
@@ -62,14 +61,22 @@ Techniques:
 
 PostEffects:
 - Bloom.
+- GrayScale.
 
 Generic:
 - CastorGUI: to build GUIs inside Castor3D scenes.
+
+ToneMappings:
+- LinearToneMapping: Default tone mapping.
+- HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
+- HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
+- ReinhardToneMapping: Reinhard tone mapping.
 
 Two additional projects are also generated:
 - ImgConverter : Allows you to convert any image file type to XPM or ICO.
 - CastorUtilsTest : Allows you to run unit and performance tests for
     CastorUtils.
+- Castor3DTest : Allows you to run unit tests for Castor3D.
 
 Documentation for CastorUtils and Castor3D can be generated using Doxygen.
 
@@ -132,11 +139,15 @@ The build is configurable through CMake using the following options:
     Allows you to build setup projects.
 
 - CASTOR_BUILDGRP_TECHNIQUE:
-    Allows you to build Technique plu-ins (note that DirectRenderTechnique is
+    Allows you to build Technique plug-ins (note that DirectRenderTechnique is
     always built).
 
 - CASTOR_BUILDGRP_TEST:
     Allows you to build test applications.
+
+- CASTOR_BUILDGRP_TONEMAPS:
+    Allows you to build ToneMapping plug-ins (note that LinearToneMapping is
+    always built).
 
 - CASTOR_BUILDGRP_TOOL:
     Enables the build of tools ()applications and tests).
@@ -165,6 +176,9 @@ The build is configurable through CMake using the following options:
 - CASTOR_BUILD_TECHNIQUE_<NAME>:
     Enables the build of <Name> technique plug-in.
 
+- CASTOR_BUILD_TONEMAP_<NAME>:
+    Enables the build of <Name> tone mapping plug-in.
+
 - CASTOR_FORCE_ALL_IMPORTERS:
     Forces the build of every importer plug-in, even though AssimpImporter is
     built.
@@ -187,7 +201,7 @@ tool.
 1. I need a feature that Castor3D do not implement, what should I do ?
 
 There are two ways.
-First, Castor3D is a LGPL software and library, so you are welcome to improve
+First, Castor3D is a free software and library, so you are welcome to improve
 it yourself ;-) !
 Second, just ask the author :-) ! 
 

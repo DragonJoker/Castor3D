@@ -83,36 +83,36 @@ function( ToneMappingsSetup )
 	cpack_add_component( LinearToneMapping
 		DISPLAY_NAME "Linear ToneMapping"
 		DESCRIPTION "Allows Linear Tone mapping."
-		GROUP Plugins
+		GROUP ToneMappings
 		DEPENDS Castor3D
-		INSTALL_TYPES Minimal, Full
+		INSTALL_TYPES Minimal Developer Full
 	)
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
-			cpack_add_component( HaarmPeterDuikerToneMapping
+			cpack_add_component( HaarmPieterDuikerToneMapping
 				DISPLAY_NAME "Haarm Pieter Duiker ToneMapping"
 				DESCRIPTION "Allows Haarm Pieter Duiker Tone mapping."
-				GROUP Plugins
+				GROUP ToneMappings
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer, Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_HEJL} )
 			cpack_add_component( HejlBurgessDawsonToneMapping
 				DISPLAY_NAME "Hejl Burgess Dawson ToneMapping"
 				DESCRIPTION "Allows Haarm Peter Duiker Tone mapping."
-				GROUP Plugins
+				GROUP ToneMappings
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer, Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TONEMAP_REINHARD} )
 			cpack_add_component( ReinhardToneMapping
 				DISPLAY_NAME "Reinhard ToneMapping"
 				DESCRIPTION "Allows Reinhard Tone mapping."
-				GROUP Plugins
+				GROUP ToneMappings
 				DEPENDS Castor3D
-				INSTALL_TYPES Developer, Full
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

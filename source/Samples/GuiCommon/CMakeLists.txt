@@ -126,141 +126,19 @@ if ( WIN32 )
 		# Preparing FFMPEG dlls installation
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVCODEC} Debug -${FFMPEG_AVCODEC_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVCODEC} Release -${FFMPEG_AVCODEC_VERSION_MAJOR} )
+		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVCODEC} RelWithDebInfo -${FFMPEG_AVCODEC_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVFORMAT} Debug -${FFMPEG_AVFORMAT_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVFORMAT} Release -${FFMPEG_AVFORMAT_VERSION_MAJOR} )
+		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVFORMAT} RelWithDebInfo -${FFMPEG_AVFORMAT_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVUTIL} Debug -${FFMPEG_AVUTIL_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVUTIL} Release -${FFMPEG_AVUTIL_VERSION_MAJOR} )
+		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBAVUTIL} RelWithDebInfo -${FFMPEG_AVUTIL_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWSCALE} Debug -${FFMPEG_SWSCALE_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWSCALE} Release -${FFMPEG_SWSCALE_VERSION_MAJOR} )
+		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWSCALE} RelWithDebInfo -${FFMPEG_SWSCALE_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWRESAMPLE} Debug -${FFMPEG_SWRESAMPLE_VERSION_MAJOR} )
 		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWRESAMPLE} Release -${FFMPEG_SWRESAMPLE_VERSION_MAJOR} )
-	elseif( OPENCV_FOUND OR OpenCV_FOUND )
-		# Preparing OpenCV dlls installation
-		set( OpenCV_DLLS )
-		set( OpenCVd_DLLS )
-		get_filename_component( OpenCvLibPath "${OpenCV_LIB_DIR_OPT}" PATH )
-		string( REPLACE "." "" Version "${OpenCV_VERSION}" )
-		foreach ( LIB ${OpenCV_LIBS} )
-			get_filename_component( OpenCvLibName ${LIB} NAME_WE )
-			set( OpenCvLibPathName ${OpenCvLibPath}/bin/${OpenCvLibName}${Version}.dll )
-			if ( EXISTS ${OpenCvLibPathName} )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND if 1==$<CONFIG:Release>
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${OpenCvLibPathName}
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				set( OpenCV_DLLS
-					${OpenCV_DLLS}
-					${OpenCvLibPathName}
-				)
-			else ()
-				set( OpenCvLibPathName ${OpenCV_CONFIG_PATH}/bin${OpenCV_LIB_DIR_OPT}/${OpenCvLibName}${Version}.dll )
-				if ( EXISTS ${OpenCvLibPathName} )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND if 1==$<CONFIG:Release>
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${OpenCvLibPathName}
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					set( OpenCV_DLLS
-						${OpenCV_DLLS}
-						${OpenCvLibPathName}
-					)
-				else ()
-					if ( ${OpenCvLibName} STREQUAL "debug" )
-						set( OpenCV_CONFIG "Debug" )
-					elseif ( ${OpenCvLibName} STREQUAL "optimized" )
-						set( OpenCV_CONFIG "Release" )
-					elseif ( ${OpenCV_CONFIG} STREQUAL "Debug" )
-						set( OpenCvLibPathName ${OpenCvLibPath}/bin/Debug/${OpenCvLibName}.dll )
-						if ( EXISTS ${OpenCvLibPathName} )
-							add_custom_command(
-								TARGET ${PROJECT_NAME}
-								POST_BUILD
-								COMMAND if 1==$<CONFIG:Debug>
-									${CMAKE_COMMAND} -E
-										copy_if_different
-										${OpenCvLibPathName}
-										${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-							)
-							set( OpenCVd_DLLS
-								${OpenCVd_DLLS}
-								${OpenCvLibPathName}
-							)
-						endif ()
-					elseif ( ${OpenCV_CONFIG} STREQUAL "Release" )
-						set( OpenCvLibPathName ${OpenCvLibPath}/bin/Release/${OpenCvLibName}.dll )
-						if ( EXISTS ${OpenCvLibPathName} )
-							add_custom_command(
-								TARGET ${PROJECT_NAME}
-								POST_BUILD
-								COMMAND if 1==$<CONFIG:Release>
-									${CMAKE_COMMAND} -E
-										copy_if_different
-										${OpenCvLibPathName}
-										${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-							)
-							set( OpenCV_DLLS
-								${OpenCV_DLLS}
-								${OpenCvLibPathName}
-							)
-						endif ()
-					endif ()
-				endif ()
-			endif ()
-			set( OpenCvLibPathNamed ${OpenCvLibPath}/bin/${OpenCvLibName}${Version}d.dll )
-			if ( EXISTS ${OpenCvLibPathNamed} )
-				add_custom_command(
-					TARGET ${PROJECT_NAME}
-					POST_BUILD
-					COMMAND if 1==$<CONFIG:Debug>
-						${CMAKE_COMMAND} -E
-							copy_if_different
-							${OpenCvLibPathNamed}
-							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-				)
-				set( OpenCVd_DLLS
-					${OpenCVd_DLLS}
-					${OpenCvLibPathNamed}
-				)
-			else ()
-				set( OpenCvLibPathNamed ${OpenCV_CONFIG_PATH}/bin${OpenCV_LIB_DIR_DBG}/${OpenCvLibName}${Version}d.dll )
-				if ( EXISTS ${OpenCvLibPathNamed} )
-					add_custom_command(
-						TARGET ${PROJECT_NAME}
-						POST_BUILD
-						COMMAND if 1==$<CONFIG:Debug>
-							${CMAKE_COMMAND} -E
-								copy_if_different
-								${OpenCvLibPathNamed}
-								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-					)
-					set( OpenCV_DLLS
-						${OpenCV_DLLS}
-						${OpenCvLibPathNamed}
-					)
-				endif ()
-			endif ()
-		endforeach ()
-		install(
-			FILES ${OpenCV_DLLS}
-			DESTINATION bin
-			CONFIGURATIONS Release
-			COMPONENT ${PROJECT_NAME}
-		)
-		install(
-			FILES ${OpenCVd_DLLS}
-			DESTINATION bin
-			CONFIGURATIONS Debug
-			COMPONENT ${PROJECT_NAME}
-		)
+		copy_dll( ${PROJECT_NAME} ${FFMPEG_LIBSWRESAMPLE} RelWithDebInfo -${FFMPEG_SWRESAMPLE_VERSION_MAJOR} )
 	endif ()
 endif ()
 

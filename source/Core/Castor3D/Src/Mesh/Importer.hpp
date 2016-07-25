@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (at your option) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_IMPORTER_H___
 #define ___C3D_IMPORTER_H___
@@ -50,34 +55,36 @@ namespace Castor3D
 		C3D_API explicit Importer( Engine & p_engine );
 		/**
 		 *\~english
-		 *\brief		Scene import Function
-		 *\param[in]	p_pathFile		The location of the file to import
-		 *\param[in]	p_parameters	Import configuration parameters
-		 *\return		The imported Scene
+		 *\brief		Scene import Function.
+		 *\param[out]	p_scene			Receives the imported data.
+		 *\param[in]	p_pathFile		The location of the file to import.
+		 *\param[in]	p_parameters	Import configuration parameters.
+		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene
-		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer
-		 *\param[in]	p_parameters	Paramètres de configuration de l'import
-		 *\return		La Scene importée
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	p_scene			Reçoit les données importées.
+		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer.
+		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API bool ImportScene( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
-		 *\param[in]	p_scene			The scene into which the Mesh is loaded.
+		 *\param[out]	p_mesh			Receives the imported data.
 		 *\param[in]	p_pathFile		The location of the file to import.
 		 *\param[in]	p_parameters	Import configuration parameters.
 		 *\param[in]	p_initialise	Tells if the imported mesh must be initialised.
-		 *\return		The imported Mesh.
+		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Mesh.
-		 *\param[in]	p_scene			La scène dans laquelle le maillage est chargé.
+		 *\param[out]	p_mesh			Reçoit les données importées.
 		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer.
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
 		 *\param[in]	p_initialise	Dit si le mesh importé doit être initialisé.
-		 *\return		Le Mesh importé.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API MeshSPtr ImportMesh( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
+		C3D_API bool ImportMesh( Mesh & p_mesh, Castor::Path const & p_pathFile, Parameters const & p_parameters, bool p_initialise );
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
@@ -97,24 +104,26 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Scene import Function
-		 *\return		The imported Scene
+		 *\brief		Scene import Function.
+		 *\param[out]	p_scene	Receives the imported data.
+		 *\return		\p false if any problem occured.
 		 *\~french
-		 *\brief		Fonction d'import de Scene
-		 *\return		La Scene importée
+		 *\brief		Fonction d'import de Scene.
+		 *\param[out]	p_mesh	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual SceneSPtr DoImportScene() = 0;
+		C3D_API virtual bool DoImportScene( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function.
-		 *\param[in]	p_scene	The scene into which the Mesh is loaded.
-		 *\return		The imported Mesh
+		 *\param[out]	p_mesh	Receives the imported data.
+		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de maillage.
-		 *\param[in]	p_scene	La scène dans laquelle le maillage est chargé
-		 *\return		Le maillage importé.
+		 *\param[out]	p_mesh	Reçoit les données importées.
+		 *\return		\p false si un problème quelconque est survenu.
 		 */
-		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene ) = 0;
+		C3D_API virtual bool DoImportMesh( Mesh & p_mesh ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier

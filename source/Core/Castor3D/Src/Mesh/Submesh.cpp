@@ -1059,10 +1059,11 @@ namespace Castor3D
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
 		uint32_t l_count = 0;
-		l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
+
+		for ( auto l_it : m_instanceCount )
 		{
-			return p_count + p_pair.second;
-		} );
+			l_count = std::max( l_count, l_it.second );
+		}
 
 		if ( l_count > 1 )
 		{

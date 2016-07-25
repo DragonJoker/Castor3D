@@ -80,22 +80,28 @@ function( CoreSetup )
 		cpack_add_component( CastorTest
 			DISPLAY_NAME "Castor test library"
 			DESCRIPTION "Test library for tests."
-			REQUIRED
 			GROUP Test
+			INSTALL_TYPES Minimal Full
+		)
+		cpack_add_component( CastorTest_dev
+			DISPLAY_NAME "Castor test SDK"
+			DESCRIPTION "Development files for CastorTest."
+			GROUP Test
+			DEPENDS CastorTest
 			INSTALL_TYPES Minimal Full
 		)
 		cpack_add_component( CastorUtilsTest
 			DISPLAY_NAME "CastorUtils test"
 			DESCRIPTION "Test application for CastorUtils."
-			REQUIRED
 			GROUP Test
+			DEPENDS CastorTest
 			INSTALL_TYPES Minimal Full
 		)
 		cpack_add_component( Castor3DTest
 			DISPLAY_NAME "Castor3D test"
 			DESCRIPTION "Test application for Castor3D."
-			REQUIRED
 			GROUP Test
+			DEPENDS CastorTest
 			INSTALL_TYPES Minimal Full
 		)
 	endif ()
@@ -105,9 +111,9 @@ function( CoreSetup )
 			DISPLAY_NAME "GlslWriter"
 			DESCRIPTION "Enables GLSL code writing from C++."
 			REQUIRED
-			GROUP Plugins
+			GROUP Core
 			DEPENDS Castor3D
-			INSTALL_TYPES Developer Full
+			INSTALL_TYPES Minimal Developer Full
 		)
 		cpack_add_component( GlslWriter_dev
 			DISPLAY_NAME "GlslWriter SDK"
@@ -123,7 +129,7 @@ function( CoreSetup )
 			REQUIRED
 			GROUP Core
 			DEPENDS CastorUtils
-			INSTALL_TYPES Minimal Full
+			INSTALL_TYPES Minimal Developer Full
 		)
 		cpack_add_component( Castor3D_dev
 			DISPLAY_NAME "Castor3D SDK"

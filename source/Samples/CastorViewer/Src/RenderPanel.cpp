@@ -31,7 +31,8 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const real MAX_CAM_SPEED = 2.0_r;
+		static const real MAX_CAM_SPEED = 10.0_r;
+		static const real DEF_CAM_SPEED = 2.0_r;
 		static const real MIN_CAM_SPEED = 0.1_r;
 		static const real CAM_SPEED_INC = 0.9_r;
 	}
@@ -77,13 +78,12 @@ namespace CastorViewer
 		, m_mouseLeftDown( false )
 		, m_mouseRightDown( false )
 		, m_mouseMiddleDown( false )
-		, m_rZoom( 1.0_r )
 		, m_x( 0.0_r )
 		, m_y( 0.0_r )
 		, m_oldX( 0.0_r )
 		, m_oldY( 0.0_r )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
-		, m_rFpCamSpeed( MAX_CAM_SPEED )
+		, m_camSpeed( DEF_CAM_SPEED )
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -156,7 +156,7 @@ namespace CastorViewer
 					}
 
 					m_pRenderWindow = p_window;
-					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
+					m_pKeyboardEvent = std::make_unique< KeyboardEvent >( p_window );
 				}
 			}
 		}
@@ -165,7 +165,7 @@ namespace CastorViewer
 	void RenderPanel::DoResetTimers()
 	{
 		DoStopTimer( eTIMER_ID_COUNT );
-		m_rZoom = 1.0_r;
+		m_camSpeed = DEF_CAM_SPEED;
 		m_x = 0.0_r;
 		m_y = 0.0_r;
 		m_oldX = 0.0_r;
@@ -204,6 +204,7 @@ namespace CastorViewer
 			{
 				m_cameraNode->SetOrientation( m_qOriginalOrientation );
 				m_cameraNode->SetPosition( m_ptOriginalPosition );
+				m_camSpeed = DEF_CAM_SPEED;
 			}
 		}
 	}
@@ -298,37 +299,37 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_rFpCamSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_rFpCamSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, -m_rFpCamSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, m_rFpCamSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, m_rFpCamSpeed, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, m_camSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_rFpCamSpeed, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_camSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
@@ -524,7 +525,7 @@ namespace CastorViewer
 	{
 		if ( m_pListener )
 		{
-			m_pListener->PostEvent( m_pKeyboardEvent );
+			m_pListener->PostEvent( std::make_unique< KeyboardEvent >( *m_pKeyboardEvent ) );
 			RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
 			if ( l_window )
@@ -641,8 +642,8 @@ namespace CastorViewer
 
 			if ( l_window )
 			{
-				real l_deltaX = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
-				real l_deltaY = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+				real l_deltaX = ( m_camSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+				real l_deltaY = ( m_camSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
 
 				if ( p_event.ControlDown() )
 				{
@@ -655,11 +656,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, -l_deltaX, l_deltaY, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )
@@ -691,14 +692,14 @@ namespace CastorViewer
 		{
 			if ( l_wheelRotation < 0 )
 			{
-				m_rFpCamSpeed *= CAM_SPEED_INC;
+				m_camSpeed *= CAM_SPEED_INC;
 			}
 			else
 			{
-				m_rFpCamSpeed /= CAM_SPEED_INC;
+				m_camSpeed /= CAM_SPEED_INC;
 			}
 
-			clamp( m_rFpCamSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
+			clamp( m_camSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
 		}
 
 		p_event.Skip();

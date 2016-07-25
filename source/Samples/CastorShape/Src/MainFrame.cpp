@@ -258,7 +258,8 @@ namespace CastorShape
 			else if ( l_engine->GetImporterFactory().IsRegistered( l_extension ) )
 			{
 				auto l_importer = l_engine->GetImporterFactory().Create( l_extension, *l_engine );
-				l_scene = l_importer->ImportScene( m_strFilePath, Parameters() );
+				l_scene = l_engine->GetSceneCache().Add( m_strFilePath.GetFileName() );
+				l_importer->ImportScene( *l_scene, m_strFilePath, Parameters() );
 			}
 
 			if ( l_scene )
@@ -551,7 +552,9 @@ namespace CastorShape
 			l_dimensions.push_back( c );
 			StringStream l_stream;
 			l_stream << GuiCommon::make_String( p_baseName ) << cuT( "_" ) << p_meshStrVars.rdbuf();
-			GeometrySPtr l_geometry = p_scene->GetGeometryCache().Add( p_name, l_sceneNode, p_scene->GetMeshCache().Add( l_stream.str(), p_meshType, l_faces, l_dimensions ) );
+			auto l_mesh = p_scene->GetMeshCache().Add( l_stream.str() );
+			p_scene->GetEngine()->GetMeshFactory().Create( p_meshType )->Generate( *l_mesh, l_faces, l_dimensions );
+			GeometrySPtr l_geometry = p_scene->GetGeometryCache().Add( p_name, l_sceneNode, l_mesh );
 
 			if ( l_geometry )
 			{

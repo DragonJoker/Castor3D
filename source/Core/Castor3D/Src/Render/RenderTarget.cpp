@@ -50,30 +50,36 @@ namespace Castor3D
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing RenderTarget" ) );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget name" );
 
 		if ( l_return && p_target.GetScene() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tscene \"" ) + p_target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget scene" );
 		}
 
 		if ( l_return && p_target.GetCamera() )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tcamera \"" ) + p_target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget camera" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), p_target.GetSize().width(), p_target.GetSize().height() ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget size" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget format" );
 		}
 
 		if ( l_return && p_target.IsUsingStereo() )
 		{
 			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget stereo configuration" );
 		}
 
 		if ( l_return )
@@ -81,6 +87,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
 				&& p_target.m_toneMapping->WriteInto( p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget tone mapping" );
 		}
 
 		if ( l_return && p_target.m_renderTechnique )
@@ -88,6 +95,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
 				&& p_target.m_renderTechnique->WriteInto( p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget technique" );
 		}
 
 		if ( l_return )
@@ -97,6 +105,7 @@ namespace Castor3D
 				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
 					&& l_effect->WriteInto( p_file )
 					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+				Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget post effect" );
 			}
 		}
 

@@ -27,7 +27,8 @@ namespace Castor3D
 		template< typename NodeType >
 		void DoRender( Scene const & p_scene, Pipeline & p_pipeline, NodeType & p_node )
 		{
-			if ( p_node.m_sceneNode.IsDisplayable() && p_node.m_sceneNode.IsVisible() )
+			if ( p_node.m_sceneNode.IsDisplayable() && p_node.m_sceneNode.IsVisible()
+				 && p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->IsVisible( p_node.m_data.GetCubeBox(), p_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
 			{
 				p_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
 				p_node.BindPass( p_scene, p_pipeline, 0 );
@@ -134,7 +135,13 @@ namespace Castor3D
 
 	void BillboardRenderNode::Render( Scene const & p_scene, Pipeline & p_pipeline )
 	{
-		DoRender( p_scene, p_pipeline, *this );
+		if ( m_sceneNode.IsDisplayable() && m_sceneNode.IsVisible() )
+		{
+			p_pipeline.SetModelMatrix( m_sceneNode.GetDerivedTransformationMatrix() );
+			BindPass( p_scene, p_pipeline, 0 );
+			m_data.Draw( m_buffers );
+			UnbindPass( p_scene );
+		}
 	}
 
 	void BillboardRenderNode::BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )

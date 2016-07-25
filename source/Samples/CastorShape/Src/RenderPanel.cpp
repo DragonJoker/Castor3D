@@ -110,8 +110,8 @@ void RenderPanel::InitialiseRenderWindow()
 	if ( l_pRenderWindow->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 	{
 		m_listener = l_pRenderWindow->GetListener();
-		m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetScene()->GetObjectRootNode(), real( 0 ), real( 0 ), real( 0 ) );
-		m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_pRenderWindow->GetCamera()->GetParent(), real( 0 ), real( 0 ), real( 0 ) );
+		m_pRotateCamEvent = std::make_unique< CameraRotateEvent >( l_pRenderWindow->GetScene()->GetObjectRootNode(), real( 0 ), real( 0 ), real( 0 ) );
+		m_pTranslateCamEvent = std::make_unique< CameraTranslateEvent >( l_pRenderWindow->GetCamera()->GetParent(), real( 0 ), real( 0 ), real( 0 ) );
 		m_pRenderWindow = l_pRenderWindow;
 		//m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
 		//m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
@@ -300,16 +300,16 @@ void RenderPanel::OnMouseMove( wxMouseEvent & event )
 		{
 			if ( l_pRenderWindow->GetViewportType() == eVIEWPORT_TYPE_PERSPECTIVE )
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX, m_deltaY, 0 );
+				MouseCameraEvent::Add( std::make_unique< CameraRotateEvent >( *m_pRotateCamEvent ), m_listener, m_deltaX, m_deltaY, 0 );
 			}
 			else
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX );
+				MouseCameraEvent::Add( std::make_unique< CameraRotateEvent >( *m_pRotateCamEvent ), m_listener, 0, 0, m_deltaX );
 			}
 		}
 		else if ( m_mouseRightDown )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, -m_rZoom * m_deltaX / real( 40 ), m_rZoom * m_deltaY / real( 40 ), 0 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, -m_rZoom * m_deltaX / real( 40 ), m_rZoom * m_deltaY / real( 40 ), 0 );
 		}
 	}
 }
@@ -324,12 +324,12 @@ void RenderPanel::OnMouseWheel( wxMouseEvent & event )
 
 		if ( l_wheelRotation < 0 )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, ( l_cameraPos[2] - real( 1 ) ) / 10 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, 0, 0, ( l_cameraPos[2] - real( 1 ) ) / 10 );
 			m_rZoom /= real( 0.9 );
 		}
 		else if ( l_wheelRotation > 0 )
 		{
-			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, ( real( 1 ) - l_cameraPos[2] ) / 10 );
+			MouseCameraEvent::Add( std::make_unique< CameraTranslateEvent >( *m_pTranslateCamEvent ), m_listener, 0, 0, ( real( 1 ) - l_cameraPos[2] ) / 10 );
 			m_rZoom *= real( 0.9 );
 		}
 

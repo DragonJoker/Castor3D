@@ -12,24 +12,26 @@ namespace Castor
 {
 	dummy_dtor g_dummyDtor;
 
-	Point3r operator * ( Matrix4x4r const & p_mtx, Point3r const & p_pt )
+	Point3r operator*( Matrix4x4r const & p_mtx, Point3r const & p_pt )
 	{
-		real const * l_pMtx = p_mtx.const_ptr();
-		Point3r l_return;
-		l_return[0] = l_pMtx[0] * p_pt[0] + l_pMtx[ 1] * p_pt[1] + l_pMtx[ 2] * p_pt[2];// + l_pMtx[ 3];
-		l_return[1] = l_pMtx[4] * p_pt[0] + l_pMtx[ 5] * p_pt[1] + l_pMtx[ 6] * p_pt[2];// + l_pMtx[ 7];
-		l_return[2] = l_pMtx[8] * p_pt[0] + l_pMtx[ 9] * p_pt[1] + l_pMtx[10] * p_pt[2];// + l_pMtx[11];
-		return l_return;
+		real const * l_mtx = p_mtx.const_ptr();
+		return Point3r
+		{
+			l_mtx[0] * p_pt[0] + l_mtx[4] * p_pt[1] + l_mtx[ 8] * p_pt[2] + l_mtx[12],
+			l_mtx[1] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 9] * p_pt[2] + l_mtx[13],
+			l_mtx[2] * p_pt[0] + l_mtx[6] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[14]
+		};
 	}
 
-	Point3r operator * ( Point3r const & p_pt, Matrix4x4r const & p_mtx )
+	Point3r operator*( Point3r const & p_pt, Matrix4x4r const & p_mtx )
 	{
-		real const * l_pMtx = p_mtx.const_ptr();
-		Point3r l_return;
-		l_return[0] = l_pMtx[0] * p_pt[0] + l_pMtx[ 4] * p_pt[1] + l_pMtx[ 8] * p_pt[2];
-		l_return[1] = l_pMtx[1] * p_pt[0] + l_pMtx[ 5] * p_pt[1] + l_pMtx[ 9] * p_pt[2];
-		l_return[2] = l_pMtx[2] * p_pt[0] + l_pMtx[ 6] * p_pt[1] + l_pMtx[10] * p_pt[2];
-		return l_return;
+		real const * l_mtx = p_mtx.const_ptr();
+		return Point3r
+		{
+			l_mtx[0] * p_pt[0] + l_mtx[1] * p_pt[1] + l_mtx[ 2] * p_pt[2] + l_mtx[ 3],
+			l_mtx[4] * p_pt[0] + l_mtx[5] * p_pt[1] + l_mtx[ 6] * p_pt[2] + l_mtx[ 7],
+			l_mtx[8] * p_pt[0] + l_mtx[9] * p_pt[1] + l_mtx[10] * p_pt[2] + l_mtx[11]
+		};
 	}
 
 	uint32_t GetNext2Pow( uint32_t p_value )

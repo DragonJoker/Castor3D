@@ -56,8 +56,8 @@ namespace Castor3D
 {
 	namespace
 	{
-		template< typename MapT, typename FuncT >
-		void DoTraverseNodes( MapT & p_nodes, FuncT p_function )
+		template< typename MapType, typename FuncType >
+		void DoTraverseNodes( MapType & p_nodes, FuncType p_function )
 		{
 			for ( auto l_itPrograms : p_nodes )
 			{
@@ -71,32 +71,44 @@ namespace Castor3D
 			}
 		}
 
-		template< typename MapT, typename NodeT, typename ObjT >
-		void DoAddRenderNode( PassSPtr p_pass, ShaderProgramSPtr p_program, std::shared_ptr< ObjT > p_object, NodeT const & p_node, RenderTechnique::stRENDER_NODES< MapT, NodeT > & p_nodes )
+		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
+		void DoAddRenderNode( PassSPtr p_pass, ShaderProgramSPtr p_program, NodeType const & p_node, RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes )
 		{
-			typedef typename MapT::mapped_type ObjectRenderNodesByProgramMap;
-			typedef typename ObjectRenderNodesByProgramMap::mapped_type ObjectRenderNodesByPassMap;
-			typedef typename ObjectRenderNodesByPassMap::mapped_type ObjectRenderNodesArray;
+			if ( p_pass->HasAlphaBlending() )
+			{
+				using ObjectRenderNodesArray = typename TransparentMapType::mapped_type;
+				auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { p_program, ObjectRenderNodesArray() } ).first;
+				l_itProgram->second.push_back( p_node );
+			}
+			else
+			{
+				using ObjectRenderNodesArray = typename OpaqueMapType::mapped_type;
+				auto l_itProgram = p_nodes.m_opaqueRenderNodes.insert( { p_program, ObjectRenderNodesArray() } ).first;
+				l_itProgram->second.push_back( p_node );
+			}
+		}
+
+		template< typename NodeType >
+		void DoAddRenderNode( PassSPtr p_pass, ShaderProgramSPtr p_program, NodeType const & p_node, SubmeshSPtr p_object, RenderTechnique::stRENDER_NODES< NodeType, SubmeshStaticRenderNodesByProgramMap, SubmeshStaticRenderNodesByProgramMap > & p_nodes )
+		{
+			using ObjectRenderNodesByProgramMap = SubmeshStaticRenderNodesByProgramMap::mapped_type;
+			using ObjectRenderNodesByPassMap = ObjectRenderNodesByProgramMap::mapped_type;
+			using ObjectRenderNodesArray = ObjectRenderNodesByPassMap::mapped_type;
 
 			if ( p_pass->HasAlphaBlending() )
 			{
 				auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
-				auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
-				auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
+				auto l_itPass = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
+				auto l_itObject = l_itPass->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 				l_itObject->second.push_back( p_node );
 			}
 			else
 			{
 				auto l_itProgram = p_nodes.m_opaqueRenderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
-				auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
-				auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
+				auto l_itPass = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
+				auto l_itObject = l_itPass->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 				l_itObject->second.push_back( p_node );
 			}
-
-			auto l_itProgram = p_nodes.m_renderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
-			auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
-			auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
-			l_itObject->second.push_back( p_node );
 		}
 
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
@@ -123,17 +135,14 @@ namespace Castor3D
 
 		void DoSortRenderNodes( RenderTechnique const & p_technique,
 								Scene & p_scene,
-								RenderTechnique::stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > & p_static,
-								RenderTechnique::stRENDER_NODES< SubmeshStaticRenderNodesByProgramMap, StaticGeometryRenderNode > & p_instanced,
-								RenderTechnique::stRENDER_NODES< SubmeshAnimatedRenderNodesByProgramMap, AnimatedGeometryRenderNode > & p_animated )
+								RenderTechnique::stRENDER_NODES< StaticGeometryRenderNode, StaticGeometryRenderNodesByProgramMap > & p_static,
+								RenderTechnique::stRENDER_NODES< StaticGeometryRenderNode, SubmeshStaticRenderNodesByProgramMap, SubmeshStaticRenderNodesByProgramMap > & p_instanced,
+								RenderTechnique::stRENDER_NODES< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByProgramMap > & p_animated )
 		{
-			p_static.m_renderNodes.clear();
 			p_static.m_opaqueRenderNodes.clear();
 			p_static.m_transparentRenderNodes.clear();
-			p_instanced.m_renderNodes.clear();
 			p_instanced.m_opaqueRenderNodes.clear();
 			p_instanced.m_transparentRenderNodes.clear();
-			p_animated.m_renderNodes.clear();
 			p_animated.m_opaqueRenderNodes.clear();
 			p_animated.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
@@ -172,7 +181,9 @@ namespace Castor3D
 
 								if ( l_submesh->GetRefCount( l_material ) > 1
 									 && !l_mesh
-									 && !l_skeleton )
+									 && !l_skeleton
+									 && ( !l_material->HasAlphaBlending()
+										  || p_technique.IsMultisampling() ) )
 								{
 									AddFlag( l_programFlags, ProgramFlag::Instantiation );
 								}
@@ -218,7 +229,7 @@ namespace Castor3D
 									};
 
 									l_pass->BindToNode( l_renderNode.m_scene );
-									DoAddRenderNode( l_pass, l_program, l_submesh, l_renderNode, p_animated );
+									DoAddRenderNode( l_pass, l_program, l_renderNode, p_animated );
 								}
 								else
 								{
@@ -250,11 +261,11 @@ namespace Castor3D
 
 									if ( CheckFlag( l_programFlags, ProgramFlag::Instantiation ) )
 									{
-										DoAddRenderNode( l_pass, l_program, l_submesh, l_renderNode, p_instanced );
+										DoAddRenderNode( l_pass, l_program, l_renderNode, l_submesh, p_instanced );
 									}
 									else
 									{
-										DoAddRenderNode( l_pass, l_program, l_submesh, l_renderNode, p_static );
+										DoAddRenderNode( l_pass, l_program, l_renderNode, p_static );
 									}
 								}
 							}
@@ -264,9 +275,8 @@ namespace Castor3D
 			}
 		}
 
-		void DoSortRenderNodes( RenderTechnique const & p_technique, Scene & p_scene, RenderTechnique::stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > & p_nodes )
+		void DoSortRenderNodes( RenderTechnique const & p_technique, Scene & p_scene, RenderTechnique::stRENDER_NODES< BillboardRenderNode, BillboardRenderNodesByProgramMap > & p_nodes )
 		{
-			p_nodes.m_renderNodes.clear();
 			p_nodes.m_opaqueRenderNodes.clear();
 			p_nodes.m_transparentRenderNodes.clear();
 			auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
@@ -326,7 +336,7 @@ namespace Castor3D
 							};
 
 							l_pass->BindToNode( l_renderNode.m_scene );
-							DoAddRenderNode( l_pass, l_program, l_billboard.second, l_renderNode, p_nodes );
+							DoAddRenderNode( l_pass, l_program, l_renderNode, p_nodes );
 						}
 					}
 				}
@@ -337,8 +347,30 @@ namespace Castor3D
 		void DoResortAlpha( MapType p_input, Camera const & p_camera, std::multimap< double, NodeType > & p_output )
 		{
 			p_output.clear();
+			
+			for ( auto l_itPrograms : p_input )
+			{
+				for ( auto & l_renderNode : l_itPrograms.second )
+				{
+					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
+					{
+						Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
+						Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
+						Point3r l_ptCameraLocal = l_mtxMeshGlobal * l_position;
+						l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
+						l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
+						p_output.insert( std::make_pair( point::distance_squared( l_ptCameraLocal ), l_renderNode ) );
+					}
+				}
+			}
+		}
 
-			DoTraverseNodes( p_input, [&p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, auto & p_billboard, auto & p_renderNodes )
+		template< typename NodeType >
+		void DoResortAlpha( SubmeshStaticRenderNodesByProgramMap p_input, Camera const & p_camera, std::multimap< double, NodeType > & p_output )
+		{
+			p_output.clear();
+			
+			DoTraverseNodes( p_input, [&p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 			{
 				for ( auto & l_renderNode : p_renderNodes )
 				{
@@ -355,9 +387,9 @@ namespace Castor3D
 			} );
 		}
 
-		template< typename MapType, typename NodeType >
+		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		void DoRenderAlphaNodes( Scene & p_scene
-								, RenderTechnique::stRENDER_NODES< MapType, NodeType > & p_nodes
+								, RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
 								, Pipeline & p_pipeline
 								, Camera & p_camera
 								, RasteriserStateSPtr p_frontRS
@@ -375,9 +407,9 @@ namespace Castor3D
 			}
 		}
 
-		template< typename MapType, typename NodeType >
+		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		void DoRenderAlphaNodesMS( Scene & p_scene
-								  , RenderTechnique::stRENDER_NODES< MapType, NodeType > & p_nodes
+								  , RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
 								  , Pipeline & p_pipeline
 								  , RasteriserStateSPtr p_frontRS
 								  , RasteriserStateSPtr p_backRS )
@@ -396,15 +428,9 @@ namespace Castor3D
 		{
 			for ( auto l_itPrograms : p_nodes )
 			{
-				for ( auto l_itPass : l_itPrograms.second )
+				for ( auto & l_renderNode : l_itPrograms.second )
 				{
-					for ( auto l_itSubmeshes : l_itPass.second )
-					{
-						for ( auto & l_renderNode : l_itSubmeshes.second )
-						{
-							l_renderNode.Render( p_scene, p_pipeline );
-						}
-					}
+					l_renderNode.Render( p_scene, p_pipeline );
 				}
 			}
 		}
@@ -513,13 +539,14 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
+	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ), bool p_multisampling )
 		: OwnedBy< Engine >{ *p_renderSystem.GetEngine() }
 		, Named{ p_name }
 		, m_renderTarget{ p_renderTarget }
 		, m_renderSystem{ p_renderSystem }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
+		, m_multisampling{ p_multisampling }
 	{
 		auto l_rsState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
 		l_rsState->SetCulledFaces( eFACE_FRONT );
@@ -601,8 +628,8 @@ namespace Castor3D
 						std::bind( &RenderTechnique::DoRenderStaticSubmeshesByDistance, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ),
 					},
 					{
-						std::bind( &RenderTechnique::DoRenderStaticSubmeshesNonInstanced, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ),
-						std::bind( &RenderTechnique::DoRenderStaticSubmeshesByDistance, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ),
+						std::bind( &RenderTechnique::DoRenderInstancedSubmeshesInstanced, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ),
+						[]( Scene &, Pipeline &, std::multimap< double, StaticGeometryRenderNode > & ){},
 					},
 					{
 						std::bind( &RenderTechnique::DoRenderAnimatedSubmeshesNonInstanced, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3 ),
@@ -639,7 +666,7 @@ namespace Castor3D
 
 			if ( DoBeginRender( p_scene ) )
 			{
-				p_scene.RenderBackground( GetSize(), GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
+				p_scene.RenderBackground( GetSize(), m_renderSystem.GetCurrentContext()->GetPipeline() );
 				DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
 				DoEndRender( p_scene );
 			}
@@ -669,12 +696,12 @@ namespace Castor3D
 		Castor3D::DoSortRenderNodes( *this, p_nodes.m_scene, p_nodes.m_billboards );
 	}
 
-	void RenderTechnique::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes )
+	void RenderTechnique::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, StaticGeometryRenderNodesByProgramMap & p_nodes )
 	{
 		DoRenderNonInstanced( p_scene, p_pipeline, p_nodes );
 	}
 
-	void RenderTechnique::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshAnimatedRenderNodesByProgramMap & p_nodes )
+	void RenderTechnique::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, AnimatedGeometryRenderNodesByProgramMap & p_nodes )
 	{
 		DoRenderNonInstanced( p_scene, p_pipeline, p_nodes );
 	}
@@ -684,37 +711,36 @@ namespace Castor3D
 		DoRenderNonInstanced( p_scene, p_pipeline, p_nodes );
 	}
 
-	void RenderTechnique::DoRenderStaticSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes )
+	void RenderTechnique::DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes )
 	{
 		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
-			auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
-
-			if ( l_count > 1 && p_submesh.HasMatrixBuffer()
-				 && !CheckFlag( p_submesh.GetProgramFlags(), ProgramFlag::Skinning ) )
+			for ( auto & l_renderNode : p_renderNodes )
 			{
+				l_renderNode.Render( p_scene, p_pipeline );
+			}
+		} );
+	}
+
+	void RenderTechnique::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes )
+	{
+		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			if ( !p_renderNodes.empty() )
+			{
+				auto l_count = p_submesh.GetRefCount( p_pass.GetParent() );
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
 				const uint32_t l_size = 16 * sizeof( real );
 
 				for ( auto const & l_renderNode : p_renderNodes )
 				{
-					std::memcpy( l_buffer, ( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
+					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_size );
 					l_buffer += l_size;
 				}
 
 				p_renderNodes[0].BindPass( p_scene, p_pipeline, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
 				p_renderNodes[0].UnbindPass( p_scene );
-			}
-			else
-			{
-				for ( auto & l_renderNode : p_renderNodes )
-				{
-					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
-					{
-						l_renderNode.Render( p_scene, p_pipeline );
-					}
-				}
 			}
 		} );
 	}
@@ -736,7 +762,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
-		auto & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
+		auto & l_pipeline = m_renderSystem.GetCurrentContext()->GetPipeline();
 		p_camera.GetViewport().Resize( p_size );
 		p_camera.Render( l_pipeline );
 		DoRenderOpaqueNodes( p_nodes, l_pipeline, p_camera );
@@ -763,13 +789,13 @@ namespace Castor3D
 
 			if ( !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
 			{
-				if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
+				if ( m_renderSystem.GetGpuInformations().HasInstancing() )
 				{
-					DoRenderStaticSubmeshesInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 				else
 				{
-					DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderInstancedSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 			}
 
@@ -790,11 +816,10 @@ namespace Castor3D
 		auto l_rsBack = m_wpBackRasteriserState.lock();
 
 		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodes.empty()
-			|| !p_nodes.m_instancedGeometries.m_transparentRenderNodes.empty()
 			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodes.empty()
 			|| !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
 		{
-			auto l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
+			auto l_context = m_renderSystem.GetCurrentContext();
 			auto l_rsFront = m_wpFrontRasteriserState.lock();
 			auto l_dsNoDepthWrite = l_context->GetNoDepthWriteState ();
 
@@ -808,22 +833,16 @@ namespace Castor3D
 			else
 			{
 				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_staticGeometries, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
-				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_instancedGeometries, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
 				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_animatedGeometries, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
 				DoRenderAlphaNodes( p_nodes.m_scene, p_nodes.m_billboards, p_pipeline, p_camera, l_rsFront, l_rsBack, l_dsNoDepthWrite );
 			}
-		}
-		else
-		{
-			// Since Skybox culls front faces, it is necessary to switch back to back face culling when no mesh has transparency.
-			l_rsBack->Apply();
 		}
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
 		using namespace GLSL;
-		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
 		// UBOs
 		UBO_MATRIX( l_writer );

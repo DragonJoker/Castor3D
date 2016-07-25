@@ -45,32 +45,27 @@ namespace Obj
 		return std::make_unique< ObjImporter >( p_engine );
 	}
 
-	SceneSPtr ObjImporter::DoImportScene()
+	bool ObjImporter::DoImportScene( Scene & p_scene )
 	{
-		SceneSPtr l_scene = GetEngine()->GetSceneCache().Add( cuT( "Scene_OBJ" ) );
-		MeshSPtr l_mesh = DoImportMesh( *l_scene );
+		auto l_mesh = p_scene.GetMeshCache().Add( cuT( "Mesh_OBJ" ) );
+		bool l_return = DoImportMesh( *l_mesh );
 
-		if ( l_mesh )
+		if ( l_return )
 		{
-			SceneNodeSPtr l_node = l_scene->GetSceneNodeCache().Add( l_mesh->GetName(), l_scene->GetObjectRootNode() );
-
-			for ( auto l_submesh : *l_mesh )
-			{
-				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
-			}
-
-			GeometrySPtr l_geometry = l_scene->GetGeometryCache().Add( l_mesh->GetName(), l_node, l_mesh );
-			l_geometry->AttachTo( l_node );
+			SceneNodeSPtr l_node = p_scene.GetSceneNodeCache().Add( l_mesh->GetName(), p_scene.GetObjectRootNode() );
+			GeometrySPtr l_geometry = p_scene.GetGeometryCache().Add( l_mesh->GetName(), l_node, nullptr );
+			l_geometry->SetMesh( l_mesh );
+			m_geometries.insert( { l_geometry->GetName(), l_geometry } );
 		}
 
 		m_arrayLoadedMaterials.clear();
 		m_arrayTextures.clear();
-		return l_scene;
+		return l_return;
 	}
 
-	MeshSPtr ObjImporter::DoImportMesh( Scene & p_scene )
+	bool ObjImporter::DoImportMesh( Mesh & p_mesh )
 	{
-		MeshSPtr l_return;
+		bool l_return{ false };
 
 		try
 		{
@@ -79,7 +74,7 @@ namespace Obj
 			if ( l_file.IsOk() )
 			{
 				m_pFile = &l_file;
-				l_return = DoReadObjFile( p_scene );
+				DoReadObjFile( p_mesh );
 				m_arrayLoadedMaterials.clear();
 				m_arrayTextures.clear();
 			}
@@ -89,6 +84,8 @@ namespace Obj
 				m_pThread->join();
 				m_pThread.reset();
 			}
+
+			l_return = true;
 		}
 		catch ( std::exception & exc )
 		{
@@ -98,7 +95,7 @@ namespace Obj
 		return l_return;
 	}
 
-	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, TextureChannel p_channel )
+	void ObjImporter::DoAddTexture( String const & p_strValue, Pass & p_pass, TextureChannel p_channel )
 	{
 		Point3f l_offset( 0, 0, 0 );
 		Point3f l_scale( 1, 1, 1 );
@@ -106,9 +103,9 @@ namespace Obj
 		ImageSPtr l_pImage;
 		String l_value( p_strValue );
 		DoParseTexParams( l_value, l_offset.ptr(), l_scale.ptr(), l_turbulence.ptr() );
-		m_mapOffsets[p_pPass] = l_offset;
-		m_mapScales[p_pPass] = l_scale;
-		m_mapTurbulences[p_pPass] = l_turbulence;
+		m_mapOffsets[&p_pass] = l_offset;
+		m_mapScales[&p_pass] = l_scale;
+		m_mapTurbulences[&p_pass] = l_turbulence;
 		Logger::LogDebug( StringStream() << cuT( "-	Texture :    " ) + l_value );
 		Logger::LogDebug( StringStream() << cuT( "-	Offset :     " ) << l_offset );
 		Logger::LogDebug( StringStream() << cuT( "-	Scale :      " ) << l_scale );
@@ -116,7 +113,7 @@ namespace Obj
 
 		if ( !l_value.empty() )
 		{
-			auto l_texture = LoadTexture( Path{ l_value }, *p_pPass, p_channel );
+			auto l_texture = LoadTexture( Path{ l_value }, p_pass, p_channel );
 
 			if ( l_texture )
 			{
@@ -125,7 +122,7 @@ namespace Obj
 		}
 	}
 
-	MeshSPtr ObjImporter::DoReadObjFile( Scene & p_scene )
+	void ObjImporter::DoReadObjFile( Mesh & p_mesh )
 	{
 		std::ifstream l_file( m_fileName.c_str() );
 		std::string l_line;
@@ -191,7 +188,7 @@ namespace Obj
 		// Material description file
 		if ( File::FileExists( m_filePath / l_mtlfile ) )
 		{
-			DoReadMaterials( p_scene, m_filePath / l_mtlfile );
+			DoReadMaterials( p_mesh, m_filePath / l_mtlfile );
 		}
 		else
 		{
@@ -247,7 +244,6 @@ namespace Obj
 		auto l_facesit = l_faces.end();
 		uint32_t i{ 0u };
 		std::string l_mtlname;
-		MeshSPtr l_return = p_scene.GetMeshCache().Add( m_fileName.GetFileName(), eMESH_TYPE_CUSTOM, UIntArray{}, RealArray{} );
 
 		while ( std::getline( l_file, l_line ) )
 		{
@@ -264,7 +260,7 @@ namespace Obj
 				}
 				else
 				{
-					DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+					DoCreateSubmesh( p_mesh, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
 					l_vit = l_vertex.begin();
 					l_fit = l_index.begin();
 					i = 0u;
@@ -277,7 +273,7 @@ namespace Obj
 			{
 				if ( l_vertex.begin() != l_vit )
 				{
-					DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+					DoCreateSubmesh( p_mesh, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
 					l_vit = l_vertex.begin();
 					l_fit = l_index.begin();
 					i = 0u;
@@ -335,16 +331,14 @@ namespace Obj
 		if ( l_vit != l_vertex.begin()
 			 && l_fit != l_index.begin() )
 		{
-			DoCreateSubmesh( p_scene, *l_return, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+			DoCreateSubmesh( p_mesh, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
 		}
-
-		return l_return;
 	}
 
-	void ObjImporter::DoCreateSubmesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex )
+	void ObjImporter::DoCreateSubmesh( Castor3D::Mesh & p_mesh, Castor::String const & p_mtlName, std::vector< FaceIndices > && p_faces, Castor3D::InterleavedVertexArray && p_vertex )
 	{
 		auto l_submesh = p_mesh.CreateSubmesh();
-		l_submesh->SetDefaultMaterial( p_scene.GetMaterialView().Find( p_mtlName ) );
+		l_submesh->SetDefaultMaterial( p_mesh.GetScene()->GetMaterialView().Find( p_mtlName ) );
 		l_submesh->AddPoints( p_vertex );
 		l_submesh->AddFaceGroup( p_faces );
 		l_submesh->ComputeTangentsFromNormals();
@@ -438,14 +432,14 @@ namespace Obj
 		}
 	}
 
-	bool ObjImporter::DoIsValidValue( String const & p_strParam, String const & p_strSrc, uint32_t p_uiIndex )
+	bool ObjImporter::DoIsValidValue( String const & p_strParam, String const & p_strSrc, uint32_t p_index )
 	{
 		bool l_bReturn = false;
 		StringArray l_arraySplitted;
 
-		if ( p_uiIndex < p_strSrc.size() )
+		if ( p_index < p_strSrc.size() )
 		{
-			l_arraySplitted = string::split( p_strSrc.substr( p_uiIndex ), cuT( " " ), 2 );
+			l_arraySplitted = string::split( p_strSrc.substr( p_index ), cuT( " " ), 2 );
 
 			if ( l_arraySplitted.size() > 1 )
 			{
@@ -479,13 +473,13 @@ namespace Obj
 		return l_bReturn;
 	}
 
-	void ObjImporter::DoReadMaterials( Scene & p_scene, Path const & p_pathMatFile )
+	void ObjImporter::DoReadMaterials( Mesh & p_mesh, Path const & p_pathMatFile )
 	{
 		String l_strLine;
 		String l_section;
 		String l_value;
 		StringArray l_arraySplitted;
-		PassSPtr l_pPass;
+		PassSPtr l_pass;
 		MaterialSPtr l_material;
 		float l_components[3];
 		float l_fAlpha = 1.0f;
@@ -519,20 +513,20 @@ namespace Obj
 					if ( l_section == cuT( "newmtl" ) )
 					{
 						// New material description
-						if ( l_pPass )
+						if ( l_pass )
 						{
 							if ( l_fAlpha < 1.0 )
 							{
-								l_pPass->SetAlpha( l_fAlpha );
+								l_pass->SetAlpha( l_fAlpha );
 							}
 
 							l_fAlpha = 1.0f;
 						}
 
-						if ( p_scene.GetMaterialView().Has( l_value ) )
+						if ( p_mesh.GetScene()->GetMaterialView().Has( l_value ) )
 						{
-							l_material = p_scene.GetMaterialView().Find( l_value );
-							l_pPass = l_material->GetPass( 0 );
+							l_material = p_mesh.GetScene()->GetMaterialView().Find( l_value );
+							l_pass = l_material->GetPass( 0 );
 						}
 						else
 						{
@@ -541,12 +535,12 @@ namespace Obj
 
 						if ( !l_material )
 						{
-							l_material = p_scene.GetMaterialView().Add( l_value );
-							l_pPass = l_material->CreatePass();
+							l_material = p_mesh.GetScene()->GetMaterialView().Add( l_value );
+							l_pass = l_material->CreatePass();
 							m_arrayLoadedMaterials.push_back( l_material );
 						}
 
-						l_pPass->SetTwoSided( true );
+						l_pass->SetTwoSided( true );
 						l_bOpaFound = false;
 						l_fAlpha = 1.0f;
 						Logger::LogDebug( cuT( "Material : " ) + l_value );
@@ -560,21 +554,21 @@ namespace Obj
 						// Ambient colour
 						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
-						l_pPass->SetAmbient( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
+						l_pass->SetAmbient( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
 					else if ( l_section == cuT( "kd" ) )
 					{
 						// Diffuse colour
 						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
-						l_pPass->SetDiffuse( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
+						l_pass->SetDiffuse( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
 					else if ( l_section == cuT( "ks" ) )
 					{
 						// Specular colour
 						StringStream l_stream( l_value );
 						l_stream >> l_components[0] >> l_components[1] >> l_components[2];
-						l_pPass->SetSpecular( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
+						l_pass->SetSpecular( Castor::Colour::from_components( l_components[0], l_components[1], l_components[2], real( 1.0 ) ) );
 					}
 					else if ( l_section == cuT( "tr" ) || l_section == cuT( "d" ) )
 					{
@@ -588,22 +582,22 @@ namespace Obj
 					else if ( l_section == cuT( "ns" ) )
 					{
 						// Shininess
-						l_pPass->SetShininess( string::to_float( l_value ) );
+						l_pass->SetShininess( string::to_float( l_value ) );
 					}
 					else if ( l_section == cuT( "map_kd" ) )
 					{
 						// Diffuse map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Diffuse );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Diffuse );
 					}
 					else if ( l_section == cuT( "bump" ) || l_section == cuT( "map_bump" ) )
 					{
 						// Normal map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Normal );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Normal );
 					}
 					else if ( l_section == cuT( "map_d" ) || l_section == cuT( "map_opacity" ) )
 					{
 						// Opacity map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Opacity );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Opacity );
 					}
 					else if ( l_section == cuT( "refl" ) )
 					{
@@ -612,25 +606,25 @@ namespace Obj
 					else if ( l_section == cuT( "map_ks" ) )
 					{
 						// Specular map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Specular );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Specular );
 					}
 					else if ( l_section == cuT( "map_ka" ) )
 					{
 						// Ambient map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Ambient );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Ambient );
 					}
 					else if ( l_section == cuT( "map_ns" ) )
 					{
 						// Gloss/Shininess map
-						DoAddTexture( l_value, l_pPass, TextureChannel::Gloss );
+						DoAddTexture( l_value, *l_pass, TextureChannel::Gloss );
 					}
 				}
 			}
 		}
 
-		if ( l_pPass && l_bOpaFound )
+		if ( l_pass && l_bOpaFound )
 		{
-			l_pPass->SetAlpha( l_fAlpha );
+			l_pass->SetAlpha( l_fAlpha );
 		}
 	}
 }

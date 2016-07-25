@@ -1,19 +1,24 @@
 /*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
+Copyright (c) 2016 dragonjoker59@hotmail.com
 
-This program is free software; you can redistribute it and/or modify it under
-the terms of the GNU Lesser General Public License as published by the Free Software
-Foundation; either version 2 of the License, or (At your option ) any later
-version.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
+of the Software, and to permit persons to whom the Software is furnished to do
+so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-You should have received a copy of the GNU Lesser General Public License along with
-the program; if not, write to the Free Software Foundation, Inc., 59 Temple
-Place - Suite 330, Boston, MA 02111-1307, USA, or go to
-http://www.gnu.org/copyleft/lesser.txt.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 */
 #ifndef ___C3D_MOUSE_EVENT_H___
 #define ___C3D_MOUSE_EVENT_H___
@@ -31,7 +36,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Structure holding mouse state.
 	*\~french
-	*\brief		Structure contenant l'état de la souris.
+	*\brief		Structure contenant l'ï¿½tat de la souris.
 	*/
 	struct MouseState
 	{
@@ -39,9 +44,9 @@ namespace Castor3D
 		Castor::Position m_position;
 		//!\~english The wheel position.	\~french La position de la molette.
 		Castor::Position m_wheel;
-		//!\~english The buttons state (true = down).	\~french L'état des boutons (true = enfoncé).
+		//!\~english The buttons state (true = down).	\~french L'ï¿½tat des boutons (true = enfoncï¿½).
 		std::array< bool, eMOUSE_BUTTON_COUNT > m_buttons;
-		//!\~english The button which had the last change.	\~french Le bouton ayant reçu le dernier changement.
+		//!\~english The button which had the last change.	\~french Le bouton ayant reï¿½u le dernier changement.
 		eMOUSE_BUTTON m_changed;
 	};
 	/*!
@@ -51,7 +56,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of a mouse event.
 	*\~french
-	*\brief		Description d'un évènement de souris.
+	*\brief		Description d'un ï¿½vï¿½nement de souris.
 	*/
 	class MouseEvent
 		: public UserInputEvent
@@ -65,8 +70,8 @@ namespace Castor3D
 		 *\param[in]	p_button	The mouse button.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type		Le type d'évènement de souris.
-		 *\param[in]	p_position	La position, de la souris ou de la molette, selon le type d'évènement.
+		 *\param[in]	p_type		Le type d'ï¿½vï¿½nement de souris.
+		 *\param[in]	p_position	La position, de la souris ou de la molette, selon le type d'ï¿½vï¿½nement.
 		 *\param[in]	p_button	Le bouton de la souris.
 		 */
 		MouseEvent( eMOUSE_EVENT p_type, Castor::Position const & p_position, eMOUSE_BUTTON p_button = eMOUSE_BUTTON_COUNT )
@@ -89,7 +94,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The mouse event type.
 		 *\~french
-		 *\return		Le type d'évènement de souris.
+		 *\return		Le type d'ï¿½vï¿½nement de souris.
 		 */
 		inline eMOUSE_EVENT GetMouseEventType()const
 		{
@@ -109,7 +114,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The position (wheel or mouse, depending on mouse event type).
 		 *\~french
-		 *\return		La position, de la souris ou de la molette, selon le type d'évènement.
+		 *\return		La position, de la souris ou de la molette, selon le type d'ï¿½vï¿½nement.
 		 */
 		inline Castor::Position const & GetPosition()const
 		{
@@ -117,11 +122,11 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The mouse event type.	\~french Le type d'évènement souris.
+		//!\~english The mouse event type.	\~french Le type d'ï¿½vï¿½nement souris.
 		eMOUSE_EVENT const m_mouseEventType;
 		//!\~english The mouse button.	\~french Le bouton de la souris
 		eMOUSE_BUTTON const m_button;
-		//!\~english The position, (wheel or mouse, depending on mouse event type).	\~french La position (de la souris ou de la molette, selon le type d'évènement).
+		//!\~english The position, (wheel or mouse, depending on mouse event type).	\~french La position (de la souris ou de la molette, selon le type d'ï¿½vï¿½nement).
 		Castor::Position const m_position;
 	};
 }

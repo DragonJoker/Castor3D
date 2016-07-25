@@ -35,9 +35,9 @@ namespace GuiCommon
 		eID_MENU_PREFS,
 	}	eID;
 
-	ShaderDialog::ShaderDialog( Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_position, const wxSize p_size )
+	ShaderDialog::ShaderDialog( Scene & p_scene, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pass, wxPoint const & p_position, const wxSize p_size )
 		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_position, p_size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
-		, m_pPass( p_pPass )
+		, m_pPass( p_pass )
 		, m_bCompiled( true )
 		, m_bOwnShader( true )
 		, m_pStcContext( std::make_unique< StcContext >() )

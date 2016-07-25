@@ -24,6 +24,7 @@
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
+#include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
@@ -92,7 +93,7 @@ namespace GrayScale
 		: PostEffect{ GrayScalePostEffect::Type, p_renderTarget, p_renderSystem, p_param }
 		, m_surface{ *p_renderSystem.GetEngine() }
 	{
-		String l_name = cuT( "GrayScaleSampler" );
+		String l_name = cuT( "GrayScale" );
 
 		if ( !m_renderTarget.GetEngine()->GetSamplerCache().Has( l_name ) )
 		{
@@ -106,6 +107,16 @@ namespace GrayScale
 		else
 		{
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
+		}
+
+		if ( !m_renderTarget.GetEngine()->GetRasteriserStateCache().Has( l_name ) )
+		{
+			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Add( l_name );
+			m_rasteriser->SetCulledFaces( eFACE_BACK );
+		}
+		else
+		{
+			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Find( l_name );
 		}
 	}
 
@@ -154,6 +165,7 @@ namespace GrayScale
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
+			m_rasteriser->Apply();
 			bool l_return = m_surface.m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 

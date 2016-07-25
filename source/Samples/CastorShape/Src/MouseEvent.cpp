@@ -12,11 +12,11 @@ using namespace Castor;
 //********************************************************************************************
 
 MouseCameraEvent::MouseCameraEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	FrameEvent( eEVENT_TYPE_PRE_RENDER )
-	,	m_pNode( p_node )
-	,	m_rDeltaX( p_rDeltaX )
-	,	m_rDeltaY( p_rDeltaY )
-	,	m_rDeltaZ( p_rDeltaZ )
+	: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+	, m_pNode( p_node )
+	, m_rDeltaX( p_rDeltaX )
+	, m_rDeltaY( p_rDeltaY )
+	, m_rDeltaZ( p_rDeltaZ )
 {
 }
 
@@ -24,17 +24,17 @@ MouseCameraEvent::~MouseCameraEvent()
 {
 }
 
-void MouseCameraEvent::Add( FrameEventSPtr p_pThis, FrameListenerSPtr p_pListener, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+void MouseCameraEvent::Add( FrameEventUPtr && p_pThis, FrameListenerSPtr p_pListener, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 {
-	std::shared_ptr<MouseCameraEvent> l_pThis = std::static_pointer_cast<MouseCameraEvent, FrameEvent>( p_pThis );
-	bool l_bToAdd = l_pThis->m_rDeltaX == 0 && l_pThis->m_rDeltaY == 0 && l_pThis->m_rDeltaZ == 0;
-	l_pThis->m_rDeltaX += p_rDeltaX;
-	l_pThis->m_rDeltaY += p_rDeltaY;
-	l_pThis->m_rDeltaZ += p_rDeltaZ;
+	MouseCameraEvent & l_pThis = static_cast< MouseCameraEvent & >( *p_pThis );
+	bool l_bToAdd = l_pThis.m_rDeltaX == 0 && l_pThis.m_rDeltaY == 0 && l_pThis.m_rDeltaZ == 0;
+	l_pThis.m_rDeltaX += p_rDeltaX;
+	l_pThis.m_rDeltaY += p_rDeltaY;
+	l_pThis.m_rDeltaZ += p_rDeltaZ;
 
 	if ( l_bToAdd )
 	{
-		p_pListener->PostEvent( p_pThis );
+		p_pListener->PostEvent( std::move( p_pThis ) );
 	}
 }
 

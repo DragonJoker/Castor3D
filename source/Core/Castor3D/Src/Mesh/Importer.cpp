@@ -7,6 +7,7 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Scene/Geometry.hpp"
 #include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
@@ -21,39 +22,65 @@ namespace Castor3D
 	{
 	}
 
-	SceneSPtr Importer::ImportScene( Path const & p_fileName, Parameters const & p_parameters )
+	bool Importer::ImportScene( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
 	{
 		m_fileName = p_fileName;
 		m_filePath = m_fileName.GetPath();
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		return DoImportScene();
-	}
+		bool l_return = DoImportScene( p_scene );
 
-	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
-	{
-		m_fileName = p_fileName;
-		m_filePath = m_fileName.GetPath();
-		m_parameters = p_parameters;
-		m_nodes.clear();
-		m_geometries.clear();
-		MeshSPtr l_mesh = DoImportMesh( p_scene );
-
-		if ( !l_mesh )
+		if ( l_return )
 		{
-			CASTOR_EXCEPTION( cuT( "The import failed." ) );
-		}
-
-		if ( p_initialise )
-		{
-			for ( auto l_submesh : *l_mesh )
+			for ( auto l_it : m_geometries )
 			{
-				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+				auto l_mesh = l_it.second->GetMesh();
+				l_mesh->ComputeContainers();
+				l_mesh->ComputeNormals();
+
+				for ( auto l_submesh : *l_mesh )
+				{
+					GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+				}
 			}
 		}
 
-		return l_mesh;
+		return l_return;
+	}
+
+	bool Importer::ImportMesh( Mesh & p_mesh, Path const & p_fileName, Parameters const & p_parameters, bool p_initialise )
+	{
+		m_fileName = p_fileName;
+		m_filePath = m_fileName.GetPath();
+		m_parameters = p_parameters;
+		m_nodes.clear();
+		m_geometries.clear();
+		bool l_return = true;
+
+		if ( !p_mesh.GetSubmeshCount() )
+		{
+			l_return = DoImportMesh( p_mesh );
+
+			if ( l_return && p_initialise )
+			{
+				p_mesh.ComputeContainers();
+
+				for ( auto l_submesh : p_mesh )
+				{
+					GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+				}
+			}
+		}
+		else
+		{
+			for ( auto l_submesh : p_mesh )
+			{
+				l_submesh->Ref( l_submesh->GetDefaultMaterial() );
+			}
+		}
+
+		return l_return;
 	}
 
 	TextureUnitSPtr Importer::LoadTexture( Path const & p_path, Pass & p_pass, TextureChannel p_channel )

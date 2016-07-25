@@ -73,6 +73,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\tambient " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetAmbient(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass ambient colour" );
 		}
 
 		if ( l_return )
@@ -80,6 +81,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass diffuse colour" );
 		}
 
 		if ( l_return )
@@ -87,6 +89,7 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass emissive colour" );
 		}
 
 		if ( l_return )
@@ -94,26 +97,31 @@ namespace Castor3D
 			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
 				&& Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
 				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass specular colour" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tshininess " ) + string::to_string( p_pass.GetShininess() ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass shininess" );
 		}
 
 		if ( l_return && p_pass.GetAlpha() < 1 )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\talpha %f\n" ), m_tabs.c_str(), p_pass.GetAlpha() ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass opacity" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass sidedness" );
 		}
 
 		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != BlendOperand::One || p_pass.GetBlendState()->GetAlphaDstBlend() != BlendOperand::Zero ) )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tblend_func " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaSrcBlend() )] + cuT( " " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaDstBlend() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass blend function" );
 		}
 
 		if ( l_return )

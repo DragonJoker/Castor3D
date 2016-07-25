@@ -23,6 +23,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport type" );
 		}
 
 		if ( l_return )
@@ -43,6 +44,7 @@ namespace Castor3D
 					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
 					&& p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
+			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport values" );
 		}
 
 		if ( l_return )
