@@ -148,7 +148,7 @@ namespace Testing
 
 	void SceneExportTest::DoTestScene( String const & p_name )
 	{
-		SceneSPtr l_src{ DoParseScene( TEST_DATA_FOLDER / p_name ) };
+		SceneSPtr l_src{ DoParseScene( m_testDataFolder / p_name ) };
 		Path l_path{ cuT( "TestScene.cscn" ) };
 		CT_CHECK( ExportScene( *l_src, l_path ) );
 		auto l_name = l_src->GetName();

@@ -28,6 +28,14 @@ using namespace Castor3D;
 
 namespace Testing
 {
+	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
+		: TestCase{ p_name }
+		, m_engine{ p_engine }
+		, m_testDataFolder{ Engine::GetDataDirectory () / cuT ("Castor3DTest") / cuT ("data") }
+	{
+	}
+
+
 	bool C3DTestCase::compare( Scene const & p_a, Scene const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };

@@ -107,6 +107,8 @@ namespace Castor
 	xchar const * const RegexFormat< long double >::Value = cuT( "(-?[0-9]{1,9}\\.[0-9]{1,13}"
 			"|-?[0-9]{1,9}"
 			"|-?\\.[0-9]{1,13})" );
+	xchar const * const RegexFormat< Colour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
+			"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 
 	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_TEXT >::StringType = cuT( "text" );
 	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_NAME >::StringType = cuT( "name" );

@@ -92,7 +92,7 @@ namespace Testing
 		auto l_src = l_scene.GetMeshCache().Add( l_name );
 		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 		{
-			BinaryFile l_file{ TEST_DATA_FOLDER / l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ Engine::GetDataDirectory() / l_path, File::eOPEN_MODE_READ };
 			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
 		}
 
@@ -130,7 +130,7 @@ namespace Testing
 	{
 		SceneSPtr l_scene;
 		SceneFileParser l_parser{ m_engine };
-		CT_REQUIRE( l_parser.ParseFile( TEST_DATA_FOLDER / cuT( "Anim.zip" ) ) );
+		CT_REQUIRE( l_parser.ParseFile( m_testDataFolder / cuT( "Anim.zip" ) ) );
 		CT_REQUIRE( l_parser.ScenesBegin() != l_parser.ScenesEnd() );
 		l_scene = l_parser.ScenesBegin()->second;
 		l_scene->GetMeshCache().lock();

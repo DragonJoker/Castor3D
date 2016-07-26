@@ -299,13 +299,13 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
 		p_event.Skip();
 	}
 

@@ -30,8 +30,8 @@ namespace GuiCommon
 		AddParser( eSECTION_LANGUAGE, cuT( "section" ), Language_Section );
 		AddParser( eSECTION_LANGUAGE, cuT( "style" ), Language_Style );
 		AddParser( eSECTION_STYLE, cuT( "type" ), Style_Type, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT>( l_pContext->mapTypes ) } );
-		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 		AddParser( eSECTION_STYLE, cuT( "font_name" ), Style_FontName, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 		AddParser( eSECTION_STYLE, cuT( "font_style" ), Style_FontStyle, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 		AddParser( eSECTION_STYLE, cuT( "font_size" ), Style_FontSize, { MakeParameter< ePARAMETER_TYPE_INT32 >() } );

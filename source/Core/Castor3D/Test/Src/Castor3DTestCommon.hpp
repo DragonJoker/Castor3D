@@ -264,11 +264,7 @@ namespace Testing
 		: public TestCase
 	{
 	public:
-		inline C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
-			: TestCase{ p_name }
-			, m_engine{ p_engine }
-		{
-		}
+		C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine );
 
 	protected:
 		template< typename T >
@@ -304,6 +300,7 @@ namespace Testing
 
 	protected:
 		Castor3D::Engine & m_engine;
+		Castor::Path m_testDataFolder;
 	};
 
 	//************************************************************************************************

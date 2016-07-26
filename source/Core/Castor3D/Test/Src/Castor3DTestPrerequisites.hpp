@@ -29,21 +29,10 @@ SOFTWARE.
 #include <Render/TestRenderSystem.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 
-#include "Castor3DTestUtils.hpp"
 #include "Castor3DTestCommon.hpp"
 
 namespace Testing
 {
-#if !defined( NDEBUG )
-
-	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_DEBUG };
-
-#else
-
-	static Castor::Path const TEST_DATA_FOLDER{ DATA_FOLDER_RELEASE };
-
-#endif
-
 	class TestWindowHandle
 		: public Castor3D::IWindowHandle
 	{
