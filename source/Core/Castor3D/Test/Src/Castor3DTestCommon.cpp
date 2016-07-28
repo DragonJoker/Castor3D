@@ -35,7 +35,6 @@ namespace Testing
 	{
 	}
 
-
 	bool C3DTestCase::compare( Scene const & p_a, Scene const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };

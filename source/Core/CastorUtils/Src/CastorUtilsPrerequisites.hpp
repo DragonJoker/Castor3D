@@ -214,7 +214,8 @@ namespace Castor
 	*/
 	struct NoInit {};
 
-	class Angle;
+	template< typename Type >
+	class AngleT;
 	class BinaryFile;
 	template< class T >
 	class BinaryLoader;
@@ -300,7 +301,8 @@ namespace Castor
 	template< typename T > using Coords3 = Coords< T, 3 >;
 	template< typename T > using Coords4 = Coords< T, 4 >;
 
-	using Quaternion = QuaternionT< double >;
+	using Angle = AngleT< real >;
+	using Quaternion = QuaternionT< real >;
 
 	DECLARE_POINT( bool,		4, b	);
 	DECLARE_POINT( bool,		3, b	);

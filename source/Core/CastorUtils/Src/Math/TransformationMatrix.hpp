@@ -52,8 +52,8 @@ namespace Castor
 		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
 		 *\param[in]	p_quat		Le quaternion contenant la rotation
 		 */
-		template< typename T >
-		static SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat );
+		template< typename T, typename U >
+		static SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -64,8 +64,8 @@ namespace Castor
 		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
 		 *\param[in]	p_quat		Le quaternion contenant la rotation
 		 */
-		template< typename T >
-		static SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat );
+		template< typename T, typename U >
+		static SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, QuaternionT< U > const & p_quat );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -76,8 +76,8 @@ namespace Castor
 		 *\param[in]	p_matrix	La matrice qui contient les transformations
 		 *\param[out]	p_quat		Reçoit la rotation
 		 */
-		template< typename T >
-		static void get_rotate( SquareMatrix< T, 4 > const & p_matrix, Quaternion & p_quat );
+		template< typename T, typename U >
+		static void get_rotate( SquareMatrix< T, 4 > const & p_matrix, QuaternionT< U > & p_quat );
 		/**
 		 *\~english
 		 *\brief		Rotation function, around Y axis. Builds a rotation matrix from the angle in parameter.
@@ -224,8 +224,8 @@ namespace Castor
 		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
-		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		template< typename T, typename U, typename V >
+		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::QuaternionT< V > const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
@@ -240,8 +240,8 @@ namespace Castor
 		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
-		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		template< typename T, typename U, typename V >
+		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::QuaternionT< V > const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Transforms the position/scale through a transformation matrix.
@@ -268,7 +268,7 @@ namespace Castor
 		 *\param[in]	p_value		L'orientation.
 		 *\return		La position transformée.
 		 */
-		template< typename T >
+		template< typename T, typename U >
 		static Quaternion get_transformed( Castor::SquareMatrix< T, 4 > const & p_matrix, Castor::Quaternion const & p_value );
 		/**
 		 *\~english
