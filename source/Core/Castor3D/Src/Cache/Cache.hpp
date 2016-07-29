@@ -69,10 +69,10 @@ namespace Castor3D
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
 		inline CacheBase( Engine & p_engine
-						 , Producer && p_produce
-						 , Initialiser && p_initialise
-						 , Cleaner && p_clean
-						 , Merger && p_merge )
+						  , Producer && p_produce
+						  , Initialiser && p_initialise
+						  , Cleaner && p_clean
+						  , Merger && p_merge )
 			: m_engine{ p_engine }
 			, m_produce{ std::move( p_produce ) }
 			, m_initialise{ std::move( p_initialise ) }
@@ -438,10 +438,10 @@ namespace Castor3D
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
 		inline Cache( Engine & p_engine
-					 , Producer && p_produce
-					 , Initialiser && p_initialise = Initialiser{}
-					 , Cleaner && p_clean = Cleaner{}
-					 , Merger && p_merge = Merger{} )
+					  , Producer && p_produce
+					  , Initialiser && p_initialise = Initialiser{}
+					  , Cleaner && p_clean = Cleaner{}
+					  , Merger && p_merge = Merger{} )
 			: MyCacheType( p_engine
 						   , std::move( p_produce )
 						   , std::move( p_initialise )
@@ -472,12 +472,12 @@ namespace Castor3D
 	template< typename ElementType, typename KeyType >
 	inline std::unique_ptr< Cache< ElementType, KeyType > >
 	MakeCache( Engine & p_engine
-			  , typename CacheTraits< ElementType, KeyType >::Producer && p_produce
-			  , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
-			  , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
-			  , typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
-																					  , Castor::Collection< ElementType, KeyType > &
-																					  , std::shared_ptr< ElementType > ){} )
+			   , typename CacheTraits< ElementType, KeyType >::Producer && p_produce
+			   , ElementInitialiser< ElementType > && p_initialise = []( std::shared_ptr< ElementType > ){}
+			   , ElementCleaner< ElementType > && p_clean = []( std::shared_ptr< ElementType > ){}
+			   , typename CacheTraits< ElementType, KeyType >::Merger && p_merge = []( CacheBase< ElementType, KeyType > const &
+																					   , Castor::Collection< ElementType, KeyType > &
+																					   , std::shared_ptr< ElementType > ){} )
 	{
 		return std::make_unique< Cache< ElementType, KeyType > >( p_engine
 																  , std::move( p_produce )

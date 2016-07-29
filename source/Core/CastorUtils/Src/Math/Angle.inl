@@ -54,7 +54,7 @@ namespace Castor
 	template< typename Type >
 	void AngleT< Type >::radians( double p_rAngle )
 	{
-		m_radians = Type (p_rAngle );
+		m_radians = Type( p_rAngle );
 	}
 
 	template< typename Type >

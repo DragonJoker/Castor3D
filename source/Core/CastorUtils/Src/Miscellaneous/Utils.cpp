@@ -173,7 +173,7 @@ namespace Castor
 				{
 					pclose( m_file );
 				}
-				operator FILE *()const
+				operator FILE * ()const
 				{
 					return m_file;
 				}

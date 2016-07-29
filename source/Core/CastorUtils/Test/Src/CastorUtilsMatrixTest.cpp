@@ -123,6 +123,9 @@ namespace Testing
 			glm::mat4 l_glmD( l_glmB * l_glmA );
 			CT_EQUAL( l_mtxC, l_glmC );
 			CT_EQUAL( l_mtxD, l_glmD );
+			l_mtxA *= l_mtxB;
+			l_glmA *= l_glmB;
+			CT_EQUAL( l_mtxA, l_glmA );
 		}
 	}
 
@@ -153,7 +156,6 @@ namespace Testing
 			l_mat = glm::scale( l_mat, l_vec );
 			CT_EQUAL( l_mtx, l_mat );
 		}
-
 	}
 
 	void CastorUtilsMatrixTest::ProjectionMatrixComparison()

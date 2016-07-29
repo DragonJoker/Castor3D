@@ -56,10 +56,10 @@ namespace Castor3D
 		{
 			BinaryChunk l_header;
 			bool l_return = l_header.Read( p_file );
-			
+
 			if ( l_header.GetChunkType() != eCHUNK_TYPE_CMSH_FILE )
 			{
-			  Castor::Logger::LogError( cuT( "Not a valid CMSH file." ) );
+				Castor::Logger::LogError( cuT( "Not a valid CMSH file." ) );
 				l_return = false;
 			}
 

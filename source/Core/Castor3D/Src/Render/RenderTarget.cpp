@@ -85,16 +85,16 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
-				&& p_target.m_toneMapping->WriteInto( p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && p_target.m_toneMapping->WriteInto( p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget tone mapping" );
 		}
 
 		if ( l_return && p_target.m_renderTechnique )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
-				&& p_target.m_renderTechnique->WriteInto( p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && p_target.m_renderTechnique->WriteInto( p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget technique" );
 		}
 
@@ -103,8 +103,8 @@ namespace Castor3D
 			for ( auto const & l_effect : p_target.m_postEffects )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
-					&& l_effect->WriteInto( p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && l_effect->WriteInto( p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget post effect" );
 			}
 		}

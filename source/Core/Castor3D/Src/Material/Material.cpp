@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 		Castor::TextWriter< Material >::CheckError( l_return, "Material name" );
 
 		bool l_first{ true };

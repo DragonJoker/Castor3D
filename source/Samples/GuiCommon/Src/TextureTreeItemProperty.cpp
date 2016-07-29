@@ -199,7 +199,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_unit]()
 		{
-			if ( File::FileExists( Path{ p_value }  ) )
+			if ( File::FileExists( Path{ p_value } ) )
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );

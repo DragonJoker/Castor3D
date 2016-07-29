@@ -20,6 +20,11 @@ add_target(
     "CastorUtils;Castor3D;CastorTest;TestRenderSystem;${CastorMinLibraries}"
 )
 
+if ( MSVC )
+	set_property( TARGET ${PROJECT_NAME}
+		PROPERTY COMPILE_FLAGS "${CMAKE_CXX_FLAGS} /bigobj" )
+endif ()
+
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 add_target_test( ${PROJECT_NAME} )

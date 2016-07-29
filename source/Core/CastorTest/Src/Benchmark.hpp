@@ -64,9 +64,10 @@ namespace Testing
 		void DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
 
 	private:
+		using clock = std::chrono::high_resolution_clock;
+		clock::time_point m_saved;
 		std::string m_name;
 		double m_dCumulativeTimes;
-		Castor::PreciseTimer m_preciseTimer;
 		uint64_t m_uiTotalExecutions;
 		std::string m_strSummary;
 	};

@@ -18,6 +18,7 @@ namespace Castor3D
 		bool l_return = true;
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Sampler " ) + p_sampler.GetName() );
+
 		if ( p_sampler.GetName() != cuT( "LightsSampler" ) && p_sampler.GetName() != RenderTarget::DefaultSamplerName )
 		{
 			static std::map< InterpolationMode, String > MapInterpolationModes
@@ -34,7 +35,7 @@ namespace Castor3D
 			};
 
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler name" );
 
 			if ( l_return && p_sampler.GetInterpolationMode( InterpolationFilter::Min ) != InterpolationMode::Undefined )
@@ -94,8 +95,8 @@ namespace Castor3D
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
-					&& Colour::TextWriter( String() )( p_sampler.GetBorderColour(), p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && Colour::TextWriter( String() )( p_sampler.GetBorderColour(), p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler border colour" );
 			}
 

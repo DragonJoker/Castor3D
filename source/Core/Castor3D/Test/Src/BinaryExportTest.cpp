@@ -172,7 +172,7 @@ namespace Testing
 		{
 			l_submesh->Initialise();
 		}
-		
+
 		auto & l_lhs = *l_src;
 		auto & l_rhs = *l_dst;
 		CT_EQUAL( l_lhs, l_rhs );

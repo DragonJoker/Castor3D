@@ -60,7 +60,7 @@ namespace Castor3D
 		{
 			ShaderObjectSPtr l_object;
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
 			{
@@ -127,8 +127,8 @@ namespace Castor3D
 	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
 	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
 	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
-	const String ShaderProgram::Time = cuT ("c3d_fTime");
-	const String ShaderProgram::Bones = cuT ("c3d_mtxBones");
+	const String ShaderProgram::Time = cuT( "c3d_fTime" );
+	const String ShaderProgram::Bones = cuT( "c3d_mtxBones" );
 	const String ShaderProgram::Dimensions = cuT( "c3d_v2iDimensions" );
 	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
 	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
@@ -143,7 +143,7 @@ namespace Castor3D
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
-	const String ShaderProgram::BufferPass = cuT ("Pass");
+	const String ShaderProgram::BufferPass = cuT( "Pass" );
 	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
 	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
 

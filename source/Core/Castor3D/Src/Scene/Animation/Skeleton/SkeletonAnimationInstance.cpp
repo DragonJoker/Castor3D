@@ -62,12 +62,12 @@ namespace Castor3D
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::GetObject( Bone const & p_bone )const
 	{
-		return GetObject(SkeletonAnimationObjectType::Bone, p_bone.GetName() );
+		return GetObject( SkeletonAnimationObjectType::Bone, p_bone.GetName() );
 	}
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::GetObject( Castor::String const & p_name )const
 	{
-		return GetObject(SkeletonAnimationObjectType::Node, p_name );
+		return GetObject( SkeletonAnimationObjectType::Node, p_name );
 	}
 
 	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const

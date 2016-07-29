@@ -39,7 +39,7 @@ namespace Castor3D
 	bool Skybox::TextWriter::operator()( Skybox const & p_obj, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "skybox\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		Path l_subfolder{ cuT( "Textures" ) };
 
@@ -209,8 +209,8 @@ namespace Castor3D
 	{
 		REQUIRE( m_texture );
 		return DoInitialiseShader()
-			&& DoInitialiseTexture()
-			&& DoInitialiseVertexBuffer();
+			   && DoInitialiseTexture()
+			   && DoInitialiseVertexBuffer();
 	}
 
 	void Skybox::Cleanup()
@@ -314,12 +314,12 @@ namespace Castor3D
 		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_program.lock() );
 
 		return m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW )
-			&& m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			   && m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 	}
 
 	bool Skybox::DoInitialiseTexture()
 	{
 		return m_texture->Create()
-			&& m_texture->Initialise();
+			   && m_texture->Initialise();
 	}
 }

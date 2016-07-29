@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
- 		 *\brief		Récupère une animation
+		 *\brief		Récupère une animation
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
- 		 *\brief		Récupère une animation
+		 *\brief		Récupère une animation
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
- 		 *\brief		Récupère une animation
+		 *\brief		Récupère une animation
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
- 		 *\brief		Récupère une animation
+		 *\brief		Récupère une animation
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */

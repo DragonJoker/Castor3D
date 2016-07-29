@@ -114,9 +114,9 @@ namespace Castor
 		template< typename T, typename U >
 		SquareMatrix< T, 4 > & scale( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 		{
-			p_matrix[0][0] = T( p_matrix[0][0] * x );
-			p_matrix[1][1] = T( p_matrix[1][1] * y );
-			p_matrix[2][2] = T( p_matrix[2][2] * z );
+			p_matrix[0] *= T( x );
+			p_matrix[1] *= T( y );
+			p_matrix[2] *= T( z );
 			return p_matrix;
 		}
 
@@ -146,9 +146,7 @@ namespace Castor
 		template< typename T, typename U >
 		SquareMatrix< T, 4 > & translate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 		{
-			p_matrix[3][0] += T( x );
-			p_matrix[3][1] += T( y );
-			p_matrix[3][2] += T( z );
+			p_matrix[3] = p_matrix[0] * x + p_matrix[1] * y + p_matrix[2] * z + p_matrix[3];
 			return p_matrix;
 		}
 
@@ -162,7 +160,7 @@ namespace Castor
 		SquareMatrix< T, 4 > & set_translate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 		{
 			std::memset( p_matrix.ptr(), 0, sizeof( T ) * 4 * 4 );
-			T l_unit( 1 );
+			constexpr T const l_unit( 1 );
 			p_matrix[0][0] = l_unit;
 			p_matrix[1][1] = l_unit;
 			p_matrix[2][2] = l_unit;
@@ -180,36 +178,22 @@ namespace Castor
 		}
 
 		template< typename T, typename U, typename V >
-		SquareMatrix< T, 4 > & set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_ptScale, QuaternionT< V > const & p_qOrientation )
+		SquareMatrix< T, 4 > & set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_scale, QuaternionT< V > const & p_orientation )
 		{
 			// Ordering:
 			//    1. Scale
 			//    2. Rotate
 			//    3. Translate
-			p_qOrientation.to_matrix( p_matrix );
-
-			// Set up final matrix with scale, rotation and translation
-			p_matrix[0][0] *= T( p_ptScale[0] );
-			p_matrix[0][1] *= T( p_ptScale[0] );
-			p_matrix[0][2] *= T( p_ptScale[0] );
-			p_matrix[1][0] *= T( p_ptScale[1] );
-			p_matrix[1][1] *= T( p_ptScale[1] );
-			p_matrix[1][2] *= T( p_ptScale[1] );
-			p_matrix[2][0] *= T( p_ptScale[2] );
-			p_matrix[2][1] *= T( p_ptScale[2] );
-			p_matrix[2][2] *= T( p_ptScale[2] );
-
-			p_matrix[3][0] = T( p_position[0] );
-			p_matrix[3][1] = T( p_position[1] );
-			p_matrix[3][2] = T( p_position[2] );
-			return p_matrix;
+			set_translate( p_matrix, p_position );
+			rotate( p_matrix, p_orientation );
+			return scale( p_matrix, p_scale );
 		}
 
 		template< typename T, typename U, typename V >
-		SquareMatrix< T, 4 > & transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_ptScale, QuaternionT< V > const & p_qOrientation )
+		SquareMatrix< T, 4 > & transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_scale, QuaternionT< V > const & p_orientation )
 		{
 			SquareMatrix< T, 4 > l_transform;
-			set_transform( l_transform, p_position, p_ptScale, p_qOrientation );
+			set_transform( l_transform, p_position, p_scale, p_orientation );
 			p_matrix *= l_transform;
 			return p_matrix;
 		}

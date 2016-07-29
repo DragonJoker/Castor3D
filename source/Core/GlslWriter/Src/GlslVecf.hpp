@@ -90,7 +90,7 @@ namespace GLSL
 	};
 
 	struct Vec4
-		 : public Type
+		: public Type
 	{
 		inline Vec4();
 		inline Vec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

@@ -3777,7 +3777,7 @@ namespace Castor3D
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		bool l_value;
 		p_params[0]->Get( l_value );
-	
+
 		if ( l_parsingContext->pAnimGroup )
 		{
 			l_parsingContext->pAnimGroup->SetAnimationLooped( l_parsingContext->strName2, l_value );
@@ -3794,7 +3794,7 @@ namespace Castor3D
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		float l_value;
 		p_params[0]->Get( l_value );
-	
+
 		if ( l_parsingContext->pAnimGroup )
 		{
 			l_parsingContext->pAnimGroup->SetAnimationScale( l_parsingContext->strName2, l_value );

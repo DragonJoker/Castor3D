@@ -100,7 +100,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void Clear ();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\return		The ToneMapping factory.

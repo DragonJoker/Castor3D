@@ -31,7 +31,7 @@ namespace Testing
 	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
 		: TestCase{ p_name }
 		, m_engine{ p_engine }
-		, m_testDataFolder{ Engine::GetDataDirectory () / cuT ("Castor3DTest") / cuT ("data") }
+		, m_testDataFolder{ Engine::GetDataDirectory() / cuT( "Castor3DTest" ) / cuT( "data" ) }
 	{
 	}
 
@@ -218,7 +218,7 @@ namespace Testing
 		bool l_return{ CT_EQUAL( p_a.GetIntensity(), p_b.GetIntensity() ) };
 		l_return &= CT_EQUAL( p_a.GetColour(), p_b.GetColour() );
 
-		switch( p_a.GetLightType() )
+		switch ( p_a.GetLightType() )
 		{
 		case eLIGHT_TYPE_DIRECTIONAL:
 			l_return &= CT_EQUAL( static_cast< DirectionalLight const & >( p_a ), static_cast< DirectionalLight const & >( p_b ) );

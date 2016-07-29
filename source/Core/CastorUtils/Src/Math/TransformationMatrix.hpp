@@ -215,33 +215,33 @@ namespace Castor
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
 		 *\param[out]	p_matrix		Receives the transformation
 		 *\param[in]	p_position	The translation value
-		 *\param[in]	p_ptScale		The scaling value
-		 *\param[in]	p_qOrientation	The rotation value
+		 *\param[in]	p_scale		The scaling value
+		 *\param[in]	p_orientation	The rotation value
 		 *\~french
 		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
 		 *\param[out]	p_matrix		Reçoit la transformation
 		 *\param[in]	p_position	La valeur de translation
-		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
-		 *\param[in]	p_qOrientation	La valeur de rotation
+		 *\param[in]	p_scale		La valeur de mise à l'échelle
+		 *\param[in]	p_orientation	La valeur de rotation
 		 */
 		template< typename T, typename U, typename V >
-		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::QuaternionT< V > const & p_qOrientation );
+		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_scale, Castor::QuaternionT< V > const & p_orientation );
 		/**
 		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
 		 *\param[out]	p_matrix		Receives the transformation
 		 *\param[in]	p_position	The translation value
-		 *\param[in]	p_ptScale		The scaling value
-		 *\param[in]	p_qOrientation	The rotation value
+		 *\param[in]	p_scale		The scaling value
+		 *\param[in]	p_orientation	The rotation value
 		 *\~french
 		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
 		 *\param[out]	p_matrix		Reçoit la transformation
 		 *\param[in]	p_position	La valeur de translation
-		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
-		 *\param[in]	p_qOrientation	La valeur de rotation
+		 *\param[in]	p_scale		La valeur de mise à l'échelle
+		 *\param[in]	p_orientation	La valeur de rotation
 		 */
 		template< typename T, typename U, typename V >
-		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::QuaternionT< V > const & p_qOrientation );
+		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_scale, Castor::QuaternionT< V > const & p_orientation );
 		/**
 		 *\~english
 		 *\brief		Transforms the position/scale through a transformation matrix.

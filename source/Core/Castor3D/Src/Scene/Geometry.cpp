@@ -33,7 +33,7 @@ namespace Castor3D
 		{
 			Logger::LogInfo( m_tabs + cuT( "Writing Geometry " ) + p_geometry.GetName() );
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry name" );
 
 			if ( l_return )
@@ -44,16 +44,16 @@ namespace Castor3D
 			if ( l_return )
 			{
 				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\t\timport \"Meshes/" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry mesh" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tmaterials\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+						   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
 				Castor::TextWriter< Geometry >::CheckError( l_return, "Geometry materials" );
 			}
 

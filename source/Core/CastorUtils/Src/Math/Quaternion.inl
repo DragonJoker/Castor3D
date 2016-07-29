@@ -328,7 +328,7 @@ namespace Castor
 	void QuaternionT< T >::from_axis_angle( Point3f const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5f;
-		Point3f l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
+		auto l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		quat.x = T( l_norm[0] );
 		quat.y = T( l_norm[1] );
 		quat.z = T( l_norm[2] );
@@ -340,7 +340,7 @@ namespace Castor
 	void QuaternionT< T >::from_axis_angle( Point3d const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5;
-		Point3d l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
+		auto l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		quat.x = T( l_norm[0] );
 		quat.y = T( l_norm[1] );
 		quat.z = T( l_norm[2] );

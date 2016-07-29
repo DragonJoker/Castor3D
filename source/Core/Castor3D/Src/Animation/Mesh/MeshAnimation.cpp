@@ -62,6 +62,7 @@ namespace Castor3D
 						p_obj.AddChild( std::move( l_submeshAnim ) );
 					}
 				}
+
 				break;
 			}
 		}
