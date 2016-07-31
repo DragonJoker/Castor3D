@@ -347,7 +347,7 @@ namespace Castor3D
 		void DoResortAlpha( MapType p_input, Camera const & p_camera, std::multimap< double, NodeType > & p_output )
 		{
 			p_output.clear();
-			
+
 			for ( auto l_itPrograms : p_input )
 			{
 				for ( auto & l_renderNode : l_itPrograms.second )
@@ -369,7 +369,7 @@ namespace Castor3D
 		void DoResortAlpha( SubmeshStaticRenderNodesByProgramMap p_input, Camera const & p_camera, std::multimap< double, NodeType > & p_output )
 		{
 			p_output.clear();
-			
+
 			DoTraverseNodes( p_input, [&p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 			{
 				for ( auto & l_renderNode : p_renderNodes )
@@ -389,12 +389,12 @@ namespace Castor3D
 
 		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		void DoRenderAlphaNodes( Scene & p_scene
-								, RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
-								, Pipeline & p_pipeline
-								, Camera & p_camera
-								, RasteriserStateSPtr p_frontRS
-								, RasteriserStateSPtr p_backRS
-								, DepthStencilStateSPtr p_noDepthWriteDS )
+								 , RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
+								 , Pipeline & p_pipeline
+								 , Camera & p_camera
+								 , RasteriserStateSPtr p_frontRS
+								 , RasteriserStateSPtr p_backRS
+								 , DepthStencilStateSPtr p_noDepthWriteDS )
 		{
 			if ( !p_nodes.m_transparentRenderNodes.empty() )
 			{
@@ -409,10 +409,10 @@ namespace Castor3D
 
 		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		void DoRenderAlphaNodesMS( Scene & p_scene
-								  , RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
-								  , Pipeline & p_pipeline
-								  , RasteriserStateSPtr p_frontRS
-								  , RasteriserStateSPtr p_backRS )
+								   , RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
+								   , Pipeline & p_pipeline
+								   , RasteriserStateSPtr p_frontRS
+								   , RasteriserStateSPtr p_backRS )
 		{
 			if ( !p_nodes.m_transparentRenderNodes.empty() )
 			{
@@ -684,7 +684,7 @@ namespace Castor3D
 	{
 		return DoGetPixelShaderSource( p_flags );
 	}
-	
+
 	bool RenderTechnique::WriteInto( Castor::TextFile & p_file )
 	{
 		return DoWriteInto( p_file );
@@ -821,7 +821,7 @@ namespace Castor3D
 		{
 			auto l_context = m_renderSystem.GetCurrentContext();
 			auto l_rsFront = m_wpFrontRasteriserState.lock();
-			auto l_dsNoDepthWrite = l_context->GetNoDepthWriteState ();
+			auto l_dsNoDepthWrite = l_context->GetNoDepthWriteState();
 
 			if ( l_context->IsMultiSampling() )
 			{

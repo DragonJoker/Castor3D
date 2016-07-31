@@ -230,6 +230,7 @@ namespace C3dPly
 
 			l_return = true;
 		}
+
 		l_submesh->ComputeContainers();
 
 		if ( l_iNbProperties < 6 )

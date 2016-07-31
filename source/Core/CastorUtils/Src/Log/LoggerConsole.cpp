@@ -62,7 +62,7 @@ namespace Castor
 				SHORT minX{ SHORT( ::GetSystemMetrics( SM_CXMIN ) ) };
 				SHORT minY{ SHORT( ::GetSystemMetrics( SM_CYMIN ) ) };
 				COORD l_coord = { std::max< SHORT >( 210, minX ), std::max< SHORT >( minX, 32766 ) };
-				
+
 				if ( ::SetConsoleScreenBufferSize( m_screenBuffer, l_coord ) )
 				{
 					COORD l_size = ::GetLargestConsoleWindowSize( m_screenBuffer );

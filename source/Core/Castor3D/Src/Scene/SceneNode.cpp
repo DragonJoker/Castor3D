@@ -28,8 +28,8 @@ namespace Castor3D
 	bool SceneNode::TextWriter::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_return = p_node.GetName() == cuT( "RootNode" )
-			|| p_node.GetName() == cuT( "ObjectRootNode" )
-			|| p_node.GetName() == cuT( "CameraRootNode" );
+						|| p_node.GetName() == cuT( "ObjectRootNode" )
+						|| p_node.GetName() == cuT( "CameraRootNode" );
 
 		if ( p_node.GetName() != cuT( "RootNode" )
 			 && p_node.GetName() != cuT( "ObjectRootNode" )
@@ -37,7 +37,7 @@ namespace Castor3D
 		{
 			Logger::LogInfo( m_tabs + cuT( "Writing Node " ) + p_node.GetName() );
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			Castor::TextWriter< SceneNode >::CheckError( l_return, "Node name" );
 
 			if ( l_return && p_node.GetParent() )
@@ -52,24 +52,24 @@ namespace Castor3D
 				Angle l_angle;
 				p_node.GetOrientation().to_axis_angle( l_axis, l_angle );
 				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
-					&& Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && Quaternion::TextWriter( String() )( p_node.GetOrientation(), p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node orientation" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
-					&& Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && Point3r::TextWriter( String() )( p_node.GetPosition(), p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node position" );
 			}
 
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
-					&& Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && Point3r::TextWriter( String() )( p_node.GetScale(), p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< SceneNode >::CheckError( l_return, "Node scale" );
 			}
 

@@ -21,7 +21,7 @@ using namespace Reinhard;
 
 C3D_ReinhardToneMapping_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
-	p_version = Castor3D::Version ();
+	p_version = Castor3D::Version();
 }
 
 C3D_ReinhardToneMapping_API Castor3D::ePLUGIN_TYPE GetType()

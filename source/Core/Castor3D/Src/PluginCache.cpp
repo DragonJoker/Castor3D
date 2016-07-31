@@ -36,7 +36,7 @@ namespace Castor3D
 					   , std::move( p_merge ) )
 	{
 	}
-	
+
 	PluginCache::~Cache()
 	{
 	}

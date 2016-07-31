@@ -85,7 +85,7 @@ namespace Castor3D
 		inline bool Write( TWritten const & p_obj, BinaryChunk & p_chunk )
 		{
 			bool l_return{ DoWrite( p_obj ) };
-			
+
 			if ( l_return )
 			{
 				m_chunk.Finalise();

@@ -66,7 +66,7 @@ namespace Castor
 	\brief		Parmètre de parseur spécifié.
 	*/
 	template< ePARAMETER_TYPE Type >
-	class ParserParameter< Type, typename std::enable_if< !has_base_parameter_type< Type >::value >::type >
+	class ParserParameter < Type, typename std::enable_if < !has_base_parameter_type< Type >::value >::type >
 		: public ParserParameterBase
 	{
 	public:

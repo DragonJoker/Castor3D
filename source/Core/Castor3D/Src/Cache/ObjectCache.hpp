@@ -69,16 +69,16 @@ namespace Castor3D
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
 		inline ObjectCacheBase( Engine & p_engine
-							   , Scene & p_scene
-							   , SceneNodeSPtr p_rootNode
-							   , SceneNodeSPtr p_rootCameraNode
-							   , SceneNodeSPtr p_rootObjectNode
-							   , Producer && p_produce
-							   , Initialiser && p_initialise = Initialiser{}
-							   , Cleaner && p_clean = Cleaner{}
-							   , Merger && p_merge = Merger{}
-							   , Attacher && p_attach = Attacher{}
-							   , Detacher && p_detach = Detacher{} )
+								, Scene & p_scene
+								, SceneNodeSPtr p_rootNode
+								, SceneNodeSPtr p_rootCameraNode
+								, SceneNodeSPtr p_rootObjectNode
+								, Producer && p_produce
+								, Initialiser && p_initialise = Initialiser{}
+								, Cleaner && p_clean = Cleaner{}
+								, Merger && p_merge = Merger{}
+								, Attacher && p_attach = Attacher{}
+								, Detacher && p_detach = Detacher{} )
 			: m_engine( p_engine )
 			, m_scene( p_scene )
 			, m_rootNode( p_rootNode )
@@ -510,27 +510,27 @@ namespace Castor3D
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
 		inline ObjectCache( Engine & p_engine
-						   , Scene & p_scene
-						   , SceneNodeSPtr p_rootNode
-						   , SceneNodeSPtr p_rootCameraNode
-						   , SceneNodeSPtr p_rootObjectNode
-						   , Producer && p_produce
-						   , Initialiser && p_initialise = Initialiser{}
-						   , Cleaner && p_clean = Cleaner{}
-						   , Merger && p_merge = Merger{}
-						   , Attacher && p_attach = Attacher{}
-						   , Detacher && p_detach = Detacher{} )
+							, Scene & p_scene
+							, SceneNodeSPtr p_rootNode
+							, SceneNodeSPtr p_rootCameraNode
+							, SceneNodeSPtr p_rootObjectNode
+							, Producer && p_produce
+							, Initialiser && p_initialise = Initialiser{}
+							, Cleaner && p_clean = Cleaner{}
+							, Merger && p_merge = Merger{}
+							, Attacher && p_attach = Attacher{}
+							, Detacher && p_detach = Detacher{} )
 			: MyObjectCacheType( p_engine
-								, p_scene
-								, p_rootNode
-								, p_rootCameraNode
-								, p_rootObjectNode
-								, std::move( p_produce )
-								, std::move( p_initialise )
-								, std::move( p_clean )
-								, std::move( p_merge )
-								, std::move( p_attach )
-								, std::move( p_detach ) )
+								 , p_scene
+								 , p_rootNode
+								 , p_rootCameraNode
+								 , p_rootObjectNode
+								 , std::move( p_produce )
+								 , std::move( p_initialise )
+								 , std::move( p_clean )
+								 , std::move( p_merge )
+								 , std::move( p_attach )
+								 , std::move( p_detach ) )
 		{
 		}
 		/**

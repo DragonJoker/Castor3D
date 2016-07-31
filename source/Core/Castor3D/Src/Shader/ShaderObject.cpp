@@ -51,7 +51,7 @@ namespace Castor3D
 			cuT( "sm_5" ),
 		};
 
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + p_shaderObject.GetStrType()+ cuT( "\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0;
 
 		if ( l_return )
 		{

@@ -328,7 +328,7 @@ namespace Castor
 	void QuaternionT< T >::from_axis_angle( Point3f const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5f;
-		Point3f l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
+		auto l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		quat.x = T( l_norm[0] );
 		quat.y = T( l_norm[1] );
 		quat.z = T( l_norm[2] );
@@ -340,7 +340,7 @@ namespace Castor
 	void QuaternionT< T >::from_axis_angle( Point3d const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5;
-		Point3d l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
+		auto l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		quat.x = T( l_norm[0] );
 		quat.y = T( l_norm[1] );
 		quat.z = T( l_norm[2] );
@@ -473,17 +473,16 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::from_euler( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll )
 	{
-		T l_c2 = cos( T( p_yaw.radians() * 0.5 ) );
-		T l_s2 = sin( T( p_yaw.radians() * 0.5 ) );
-		T l_c3 = cos( T( p_roll.radians() * 0.5 ) );
-		T l_s3 = sin( T( p_roll.radians() * 0.5 ) );
-		T l_c1 = cos( T( p_pitch.radians() * 0.5 ) );
-		T l_s1 = sin( T( p_pitch.radians() * 0.5 ) );
-		quat.x = T( l_s2 * l_s3 * l_c1 ) + T( l_c2 * l_c3 * l_s1 );
-		quat.y = T( l_s2 * l_c3 * l_c1 ) + T( l_c2 * l_s3 * l_s1 );
-		quat.z = T( l_c2 * l_s3 * l_c1 ) - T( l_s2 * l_c3 * l_s1 );
-		quat.w = T( l_c2 * l_c3 * l_c1 ) - T( l_s2 * l_s3 * l_s1 );
-		point::normalise( *this );
+		T l_cx = cos( T( p_pitch.radians() * 0.5 ) );
+		T l_sx = sin( T( p_pitch.radians() * 0.5 ) );
+		T l_cy = cos( T( p_yaw.radians() * 0.5 ) );
+		T l_sy = sin( T( p_yaw.radians() * 0.5 ) );
+		T l_cz = cos( T( p_roll.radians() * 0.5 ) );
+		T l_sz = sin( T( p_roll.radians() * 0.5 ) );
+		quat.w = T( l_cx * l_cy * l_cz ) + T( l_sx * l_sy * l_sz );
+		quat.x = T( l_sx * l_cy * l_cz ) - T( l_cx * l_sy * l_sz );
+		quat.y = T( l_cx * l_sy * l_cz ) + T( l_sx * l_cy * l_sz );
+		quat.z = T( l_cx * l_cy * l_sz ) - T( l_sx * l_sy * l_cz );
 	}
 
 	template< typename T >
@@ -497,7 +496,8 @@ namespace Castor
 	template< typename T >
 	Angle QuaternionT< T >::get_yaw()const
 	{
-		return Angle::from_radians( 2 * acos(quat.w ) );
+		//return Angle::from_radians( 2 * acos( quat.w ) );
+		return Angle::from_radians( asin( T( -2 ) * ( quat.x * quat.z - quat.w * quat.y ) ) );
 	}
 
 	template< typename T >
@@ -630,14 +630,14 @@ namespace Castor
 			T l_omega, l_sinom;
 			l_omega = acos( l_cosTheta ); // extract theta from dot product's cos theta
 			l_sinom = sin( l_omega );
-			l_sclp = sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom;
-			l_sclq = sin( p_factor * l_omega ) / l_sinom;
+			l_sclp = T( sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom );
+			l_sclq = T( sin( p_factor * l_omega ) / l_sinom );
 		}
 		else
 		{
 			// Very close, do linear interp (because it's faster)
-			l_sclp = T( 1.0 ) - p_factor;
-			l_sclq = p_factor;
+			l_sclp = T( 1.0 - p_factor );
+			l_sclq = T( p_factor );
 		}
 
 		l_target.quat.x = l_sclp * quat.x + l_sclq * l_target.quat.x;
@@ -673,14 +673,14 @@ namespace Castor
 			T l_omega, l_sinom;
 			l_omega = acos( l_cosTheta ); // extract theta from dot product's cos theta
 			l_sinom = sin( l_omega );
-			l_sclp = sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom;
-			l_sclq = sin( p_factor * l_omega ) / l_sinom;
+			l_sclp = T( sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom );
+			l_sclq = T( sin( p_factor * l_omega ) / l_sinom );
 		}
 		else
 		{
 			// Very close, do linear interp (because it's faster)
-			l_sclp = T( 1.0 ) - p_factor;
-			l_sclq = p_factor;
+			l_sclp = T( 1.0 - p_factor );
+			l_sclq = T( p_factor );
 		}
 
 		l_target.quat.x = l_sclp * quat.x + l_sclq * l_target.quat.x;

@@ -12,6 +12,7 @@
 #include "CastorUtilsZipTest.hpp"
 #include "CastorUtilsUniqueTest.hpp"
 #include "CastorUtilsObjectsPoolTest.hpp"
+#include "CastorUtilsQuaternionTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -33,15 +34,16 @@ int main( int argc, char const * argv[] )
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_shared< Testing::OpenCLBench >() );
 #endif
-	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringBench >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsArrayViewTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsUniqueTest >() );
-	//Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsZipTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsObjectsPoolTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsQuaternionTest >() );
 	BENCHLOOP( l_iCount, l_iReturn );
 	Castor::Logger::Cleanup();
 	return l_iReturn;

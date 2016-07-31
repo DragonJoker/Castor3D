@@ -159,7 +159,7 @@ namespace GuiCommon
 
 				// Allocate the encoded raw picture.
 				libffmpeg::CheckError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
-							, "Encoded picture buffer allocation" );
+									   , "Encoded picture buffer allocation" );
 			}
 
 		protected:
@@ -251,6 +251,7 @@ namespace GuiCommon
 #else
 				m_stream->codec = m_codecContext;
 #endif
+
 				if ( m_formatContext->oformat->flags & AVFMT_GLOBALHEADER )
 				{
 					m_codecContext->flags |= CODEC_FLAG_GLOBAL_HEADER;
@@ -369,7 +370,7 @@ namespace GuiCommon
 			void AllocateContext( libffmpeg::AVCodec * p_codec, libffmpeg::AVCodecID p_id )
 			{
 			}
-			
+
 			virtual bool IsRecording()
 			{
 				return IsValid() && m_frame;

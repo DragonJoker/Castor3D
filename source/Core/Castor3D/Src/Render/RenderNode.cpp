@@ -28,7 +28,7 @@ namespace Castor3D
 		void DoRender( Scene const & p_scene, Pipeline & p_pipeline, NodeType & p_node )
 		{
 			if ( p_node.m_sceneNode.IsDisplayable() && p_node.m_sceneNode.IsVisible()
-				 && p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->IsVisible( p_node.m_data.GetSphere(), p_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
+					&& p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->IsVisible( p_node.m_data.GetSphere(), p_node.m_sceneNode.GetDerivedTransformationMatrix() ) )
 			{
 				p_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
 				p_node.BindPass( p_scene, p_pipeline, 0 );
@@ -146,7 +146,7 @@ namespace Castor3D
 
 	void BillboardRenderNode::BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
 	{
-		if (p_scene.GetEngine()->GetPerObjectLighting() )
+		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
 			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( m_scene.m_sceneUbo );

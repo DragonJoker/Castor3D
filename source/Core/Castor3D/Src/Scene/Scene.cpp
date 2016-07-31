@@ -95,13 +95,14 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene name" );
 		}
 
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Fonts" ) );
+
 			for ( auto const & l_name : p_scene.GetFontView() )
 			{
 				auto l_font = p_scene.GetFontView().Find( l_name );
@@ -112,6 +113,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Samplers" ) );
+
 			for ( auto const & l_name : p_scene.GetSamplerView() )
 			{
 				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
@@ -122,6 +124,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Materials" ) );
+
 			for ( auto const & l_name : p_scene.GetMaterialView() )
 			{
 				auto l_material = p_scene.GetMaterialView().Find( l_name );
@@ -132,6 +135,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Overlays" ) );
+
 			for ( auto const & l_name : p_scene.GetOverlayView() )
 			{
 				auto l_overlay = p_scene.GetOverlayView().Find( l_name );
@@ -147,8 +151,8 @@ namespace Castor3D
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
 			l_return = p_file.Print( 256, cuT( "\n%s\tbackground_colour " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_scene.GetBackgroundColour(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene background colour" );
 		}
 
@@ -164,8 +168,8 @@ namespace Castor3D
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
 			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene ambient light" );
 		}
 
@@ -178,6 +182,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
+
 			for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
 			{
 				if ( l_return
@@ -192,6 +197,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
+
 			for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
 			{
 				l_return &= SceneNode::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
@@ -280,10 +286,10 @@ namespace Castor3D
 		, m_changed( false )
 	{
 		auto l_mergeObject = [this]( auto const & p_source
-									, auto & p_destination
-									, auto p_element
-									, SceneNodeSPtr p_rootCameraNode
-									, SceneNodeSPtr p_rootObjectNode )
+									 , auto & p_destination
+									 , auto p_element
+									 , SceneNodeSPtr p_rootCameraNode
+									 , SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_element->GetParent()->GetName() == p_rootCameraNode->GetName() )
 			{
@@ -307,8 +313,8 @@ namespace Castor3D
 			p_destination.insert( l_name, p_element );
 		};
 		auto l_mergeResource = [this]( auto const & p_source
-								  , auto & p_destination
-								  , auto p_element )
+									   , auto & p_destination
+									   , auto p_element )
 		{
 			String l_name = p_element->GetName();
 
@@ -325,10 +331,10 @@ namespace Castor3D
 			this->GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
 		};
 		auto l_attachObject = []( auto p_element
-								 , SceneNodeSPtr p_parent
-								 , SceneNodeSPtr p_rootNode
-								 , SceneNodeSPtr p_rootCameraNode
-								 , SceneNodeSPtr p_rootObjectNode )
+								  , SceneNodeSPtr p_parent
+								  , SceneNodeSPtr p_rootNode
+								  , SceneNodeSPtr p_rootCameraNode
+								  , SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_parent )
 			{
@@ -340,10 +346,10 @@ namespace Castor3D
 			}
 		};
 		auto l_attachCamera = []( auto p_element
-								 , SceneNodeSPtr p_parent
-								 , SceneNodeSPtr p_rootNode
-								 , SceneNodeSPtr p_rootCameraNode
-								 , SceneNodeSPtr p_rootObjectNode )
+								  , SceneNodeSPtr p_parent
+								  , SceneNodeSPtr p_rootNode
+								  , SceneNodeSPtr p_rootCameraNode
+								  , SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_parent )
 			{
@@ -355,10 +361,10 @@ namespace Castor3D
 			}
 		};
 		auto l_attachNode = []( auto p_element
-							   , SceneNodeSPtr p_parent
-							   , SceneNodeSPtr p_rootNode
-							   , SceneNodeSPtr p_rootCameraNode
-							   , SceneNodeSPtr p_rootObjectNode )
+								, SceneNodeSPtr p_parent
+								, SceneNodeSPtr p_rootNode
+								, SceneNodeSPtr p_rootCameraNode
+								, SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_parent )
 			{

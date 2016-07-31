@@ -83,14 +83,14 @@ namespace Castor3D
 				if ( l_return )
 				{
 					l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "texture_unit\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+							   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 				}
 
 				if ( l_return )
 				{
 					l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
-						&& Colour::TextWriter( String() )( p_unit.GetBlendColour(), p_file )
-						&& p_file.Print( 256, cuT( "\n" ) ) > 0;
+							   && Colour::TextWriter( String() )( p_unit.GetBlendColour(), p_file )
+							   && p_file.Print( 256, cuT( "\n" ) ) > 0;
 					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit colour" );
 				}
 
@@ -143,6 +143,7 @@ namespace Castor3D
 					default:
 						break;
 					}
+
 					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit channel" );
 
 					if ( l_return && p_unit.GetAlphaFunc() != AlphaFunc::Always )

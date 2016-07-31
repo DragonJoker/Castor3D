@@ -206,7 +206,7 @@ namespace Castor
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Font " ) + p_object.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "font \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		Castor::TextWriter< Font >::CheckError( l_return, "Font name" );
 
 		if ( l_return )

@@ -29,7 +29,7 @@ namespace Castor3D
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing Camera " ) + p_camera.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "camera \"" ) + p_camera.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		Castor::TextWriter< Camera >::CheckError( l_return, "Camera name" );
 
 		if ( l_return )
@@ -290,7 +290,7 @@ namespace Castor3D
 		Point3r l_min( l_corners[0] );
 		Point3r l_max( l_corners[1] );
 
-		for( int j = 0; j < 8; ++j )
+		for ( int j = 0; j < 8; ++j )
 		{
 			l_min[0] = std::min( l_corners[j][0], l_min[0] );
 			l_min[1] = std::min( l_corners[j][1], l_min[1] );
@@ -317,7 +317,7 @@ namespace Castor3D
 			}
 		}
 
-		return true;// l_return != Intersection::Out;
+		return l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
@@ -339,7 +339,7 @@ namespace Castor3D
 			}
 		}
 
-		return true;//l_return != Intersection::Out;
+		return l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Point3r const & p_point )const
@@ -350,7 +350,7 @@ namespace Castor3D
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return true;//l_it == m_planes.end();
+		return l_it == m_planes.end();
 	}
 
 	void Camera::FillShader( FrameVariableBuffer const & p_sceneBuffer )const

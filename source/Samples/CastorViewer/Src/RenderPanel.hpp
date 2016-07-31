@@ -82,7 +82,7 @@ namespace CastorViewer
 
 		inline Castor3D::RenderWindowSPtr GetRenderWindow()const
 		{
-			return m_pRenderWindow.lock();
+			return m_renderWindow.lock();
 		}
 
 	private:
@@ -137,7 +137,7 @@ namespace CastorViewer
 		bool m_mouseMiddleDown;	//!< The middle mouse button status
 		eCAMERA_MODE m_eCameraMode;
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
-		Castor3D::RenderWindowWPtr m_pRenderWindow;
+		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::FrameListenerSPtr m_pListener;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;

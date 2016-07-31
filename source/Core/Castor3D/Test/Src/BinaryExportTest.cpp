@@ -61,13 +61,15 @@ namespace Testing
 
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
+			BinaryWriter< Mesh > l_writer;
+			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
 
 		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
-			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
+			BinaryParser< Mesh > l_parser;
+			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}
 
 		for ( auto l_submesh : *l_dst )
@@ -75,7 +77,9 @@ namespace Testing
 			l_submesh->Initialise();
 		}
 
-		CT_EQUAL( *l_src, *l_dst );
+		auto & l_lhs = *l_src;
+		auto & l_rhs = *l_dst;
+		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
@@ -93,7 +97,8 @@ namespace Testing
 		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 		{
 			BinaryFile l_file{ Engine::GetDataDirectory() / l_path, File::eOPEN_MODE_READ };
-			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_src, l_file ) );
+			BinaryParser< Mesh > l_parser;
+			CT_CHECK( l_parser.Parse( *l_src, l_file ) );
 		}
 
 		for ( auto l_submesh : *l_src )
@@ -103,13 +108,15 @@ namespace Testing
 
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
+			BinaryWriter< Mesh > l_writer;
+			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
 
 		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
-			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
+			BinaryParser< Mesh > l_parser;
+			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}
 
 		for ( auto l_submesh : *l_dst )
@@ -117,7 +124,9 @@ namespace Testing
 			l_submesh->Initialise();
 		}
 
-		CT_EQUAL( *l_src, *l_dst );
+		auto & l_lhs = *l_src;
+		auto & l_rhs = *l_dst;
+		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
 		l_src.reset();
 		l_dst.reset();
@@ -147,14 +156,16 @@ namespace Testing
 		Path l_path{ cuT( "TestMesh.cmsh" ) };
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-			CT_CHECK( BinaryWriter< Mesh >{}.Write( *l_src, l_file ) );
+			BinaryWriter< Mesh > l_writer;
+			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
 
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
 		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
 			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
-			CT_CHECK( BinaryParser< Mesh >{}.Parse( *l_dst, l_file ) );
+			BinaryParser< Mesh > l_parser;
+			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}
 
 		for ( auto l_submesh : *l_dst )
@@ -162,7 +173,9 @@ namespace Testing
 			l_submesh->Initialise();
 		}
 
-		CT_EQUAL( *l_src, *l_dst );
+		auto & l_lhs = *l_src;
+		auto & l_rhs = *l_dst;
+		CT_EQUAL( l_lhs, l_rhs );
 		File::DeleteFile( l_path );
 		l_dst.reset();
 		l_sceneDst.GetMeshCache().Remove( l_name + cuT( "_imp" ) );

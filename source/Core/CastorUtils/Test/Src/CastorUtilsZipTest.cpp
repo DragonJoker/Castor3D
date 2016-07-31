@@ -29,11 +29,11 @@ namespace Testing
 		Path l_folder1{ cuT( "test1" ) };
 		Path l_folder2{ l_folder1 / cuT( "test2" ) };
 
-		Logger::LogInfo( "	First folder creation" );
+		std::cout << "	First folder creation" <<std::endl;
 
 		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )
 		{
-			Logger::LogInfo( "	Second folder creation" );
+			std::cout << "	Second folder creation" << std::endl;
 
 			if ( File::DirectoryExists( l_folder2 ) || File::DirectoryCreate( l_folder2 ) )
 			{
@@ -46,20 +46,20 @@ namespace Testing
 
 				if ( !File::FileExists( l_binName ) )
 				{
-					Logger::LogInfo( "	Binary file creation" );
+					std::cout << "	Binary file creation" << std::endl;
 					BinaryFile l_binary( l_binName, File::eOPEN_MODE_WRITE );
 					l_binary.WriteArray( l_inBinData.data(), l_inBinData.size() );
 				}
 
 				if ( !File::FileExists( l_txtName ) )
 				{
-					Logger::LogInfo( "	Text file creation" );
+					std::cout << "	Text file creation" << std::endl;
 					TextFile l_text( l_txtName, File::eOPEN_MODE_WRITE );
 					l_text.WriteText( l_inTxtData );
 				}
 
 				{
-					Logger::LogInfo( "	Deflate the archive" );
+					std::cout << "	Deflate the archive" << std::endl;
 					ZipArchive l_def( l_zipName, File::eOPEN_MODE_WRITE );
 					l_def.AddFile( l_binName );
 					l_def.AddFile( l_txtName );
@@ -67,7 +67,7 @@ namespace Testing
 				}
 
 				{
-					Logger::LogInfo( "	Inflate the archive" );
+					std::cout << "	Inflate the archive" << std::endl;
 					Path l_folder( cuT( "inflated" ) );
 
 					if ( File::DirectoryExists( l_folder ) || File::DirectoryCreate( l_folder ) )
@@ -78,7 +78,7 @@ namespace Testing
 						String l_outTxtData;
 
 						{
-							Logger::LogInfo( "	Check binary file content" );
+							std::cout << "	Check binary file content" << std::endl;
 							BinaryFile l_binary( l_folder / l_binName, File::eOPEN_MODE_READ );
 							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
 							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
@@ -87,7 +87,7 @@ namespace Testing
 						}
 
 						{
-							Logger::LogInfo( "	Check text file content" );
+							std::cout << "	Check text file content" << std::endl;
 							TextFile l_text( l_folder / l_txtName, File::eOPEN_MODE_READ );
 							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * sizeof( xchar ) );
 							CT_EQUAL( l_outTxtData, l_inTxtData );
@@ -113,12 +113,12 @@ namespace Testing
 			}
 			else
 			{
-				Logger::LogError( "	Couldn't create second folder" );
+				std::cout << "	Couldn't create second folder" << std::endl;
 			}
 		}
 		else
 		{
-			Logger::LogError( "	Couldn't create first folder" );
+			std::cout << "	Couldn't create first folder" << std::endl;
 		}
 	}
 }

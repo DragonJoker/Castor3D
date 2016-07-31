@@ -131,10 +131,12 @@ namespace Testing
 		RenderWindowSPtr l_window;
 
 		l_windows.lock();
+
 		if ( l_windows.begin() != l_windows.end() )
 		{
 			l_window = l_windows.begin()->second;
 		}
+
 		l_windows.unlock();
 
 		if ( l_window )

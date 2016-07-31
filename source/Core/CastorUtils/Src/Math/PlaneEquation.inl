@@ -51,7 +51,7 @@
 		T l_ratioB = m_normal[1] / p_plane.m_normal[1];
 		T l_ratioC = m_normal[2] / p_plane.m_normal[2];
 		return policy::equals( l_ratioA, l_ratioB )
-			&& policy::equals( l_ratioA, l_ratioC );
+			   && policy::equals( l_ratioA, l_ratioC );
 	}
 
 	template< typename T >

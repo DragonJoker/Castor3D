@@ -20,44 +20,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___CastorTest_TestPrerequisites___
-#define ___CastorTest_TestPrerequisites___
+#ifndef ___CUT_CastorUtilsQuaternionTest___
+#define ___CUT_CastorUtilsQuaternionTest___
 
-#if defined( _WIN32 )
-#	include <process.h>
-#else
-#	include <sys/types.h>
-#	include <unistd.h>
+#include "CastorUtilsTestPrerequisites.hpp"
+
+#include <Math/Quaternion.hpp>
+#if defined( CASTOR_USE_GLM )
+#	include <glm/glm.hpp>
 #endif
-
-#include <iostream>
-#include <sstream>
-#include <memory>
-#include <chrono>
-#include <vector>
-#include <functional>
 
 namespace Testing
 {
-#if defined( NDEBUG )
-	static const uint32_t NB_TESTS = 10000000;
-#else
-	static const uint32_t NB_TESTS = 1000000;
+	class CastorUtilsQuaternionTest
+		: public TestCase
+	{
+	public:
+		CastorUtilsQuaternionTest();
+		virtual ~CastorUtilsQuaternionTest();
+
+	private:
+		void DoRegisterTests() override;
+
+	private:
+
+#if defined( CASTOR_USE_GLM )
+
+		void TransformationMatrixComparison();
+
+#	if GLM_VERSION >= 95
+
+		void QuaternionComparison();
+
+#	endif
+
 #endif
-	static const uint32_t BENCH_TITLE_WIDTH = 60;
-	static const uint32_t TEST_TITLE_WIDTH = 60;
 
-	class BenchCase;
-	class TestCase;
-	class BenchManager;
-
-	using BenchCaseSPtr = std::shared_ptr< BenchCase >;
-	using BenchCaseWPtr = std::weak_ptr< BenchCase >;
-	using BenchCaseUPtr = std::unique_ptr< BenchCase >;
-
-	using TestCaseSPtr = std::shared_ptr< TestCase >;
-	using TestCaseWPtr = std::weak_ptr< TestCase >;
-	using TestCaseUPtr = std::unique_ptr< TestCase >;
+	};
 }
 
 #endif

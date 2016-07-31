@@ -187,7 +187,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type entiers signés.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -215,7 +215,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type points.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -552,6 +552,7 @@ namespace Castor
 								l_stream >> std::hex >> l_value;
 							}
 						}
+
 						p_value = Colour::from_argb( l_value );
 					}
 					else

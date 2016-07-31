@@ -78,8 +78,8 @@ namespace Castor3D
 			p_element->Flush();
 		};
 		auto l_mergeResource = []( auto const & p_source
-								  , auto & p_destination
-								  , auto p_element )
+								   , auto & p_destination
+								   , auto p_element )
 		{
 		};
 		std::locale::global( std::locale() );
