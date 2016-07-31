@@ -541,7 +541,14 @@ namespace Castor
 
 							if ( l_match.matched )
 							{
-								std::basic_istringstream< xchar > l_stream{ l_match };
+								String l_text = l_match;
+
+								if ( l_text.size() == 6 )
+								{
+									l_text = "FF" + l_text;
+								}
+
+								std::basic_istringstream< xchar > l_stream{ l_text };
 								l_stream >> std::hex >> l_value;
 							}
 						}
