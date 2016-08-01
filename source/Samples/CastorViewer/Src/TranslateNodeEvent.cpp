@@ -23,8 +23,9 @@ namespace CastorViewer
 		if ( l_node )
 		{
 			Quaternion l_orientation = l_node->GetOrientation();
-			Point3r l_translation( m_dx, m_dy, m_dz );
-			l_node->Translate( l_orientation.transform( l_translation, l_translation ) );
+			Point3r l_right, l_up, l_front;
+			l_orientation.to_axes( l_right, l_up, l_front );
+			l_node->Translate( ( l_right * m_dx ) + ( l_up * m_dy ) + ( l_front * m_dz ) );
 		}
 
 		m_dx = 0;

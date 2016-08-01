@@ -269,9 +269,8 @@ namespace Castor
 		{
 			// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
 			Point< T, 3 > l_f( point::get_normalised( p_center - p_eye ) );
-			Point< T, 3 > l_u( point::get_normalised( p_up ) );
-			Point< T, 3 > l_s( point::get_normalised( l_f ^ l_u ) );
-			l_u = l_s ^ l_f;
+			Point< T, 3 > l_s( point::get_normalised( l_f ^ p_up ) );
+			Point< T, 3 > l_u( l_s ^ l_f );
 			p_matrix.set_identity();
 			p_matrix[0][0] = l_s[0];
 			p_matrix[0][1] = l_u[0];
@@ -282,9 +281,9 @@ namespace Castor
 			p_matrix[2][0] = l_s[2];
 			p_matrix[2][1] = l_u[2];
 			p_matrix[2][2] = -l_f[2];
-			p_matrix[3][0] = 0;
-			p_matrix[3][1] = 0;
-			p_matrix[3][2] = 0;
+			p_matrix[3][0] = -point::dot( l_s, p_eye );
+			p_matrix[3][1] = -point::dot( l_u, p_eye );
+			p_matrix[3][2] =  point::dot( l_f, p_eye );
 			return p_matrix;
 		}
 

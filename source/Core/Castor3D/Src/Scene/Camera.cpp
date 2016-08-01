@@ -199,33 +199,7 @@ namespace Castor3D
 				m_planes[size_t( FrustumPlane::Bottom )].Set( l_nbr, l_fbr, l_fbl );
 
 				// Update view matrix
-				// Rotation
-				Matrix4x4r l_rotate { 1.0_r };
-				auto & l_col0 = l_rotate[0];
-				auto & l_col1 = l_rotate[1];
-				auto & l_col2 = l_rotate[2];
-				l_col0[0] = l_right[0];
-				l_col0[1] = l_up[0];
-				l_col0[2] = l_lookat[0];
-				l_col0[3] = 0.0_r;
-				l_col1[0] = l_right[1];
-				l_col1[1] = l_up[1];
-				l_col1[2] = l_lookat[1];
-				l_col1[3] = 0.0_r;
-				l_col2[0] = l_right[2];
-				l_col2[1] = l_up[2];
-				l_col2[2] = l_lookat[2];
-				l_col2[3] = 0.0_r;
-
-				// Translation
-				Matrix4x4r l_translate { 1.0_r };
-				auto & l_col3 = l_translate[3];
-				l_col3[0] = l_position[0];
-				l_col3[1] = l_position[1];
-				l_col3[2] = l_position[2];
-				l_col3[3] = 1.0_r;
-
-				m_view = l_rotate * l_translate;
+				matrix::look_at( m_view, l_position, l_lookat, l_up );
 			}
 
 			p_pipeline.SetViewMatrix( m_view );
@@ -317,7 +291,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return != Intersection::Out;
+		return true;// l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
@@ -339,7 +313,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_return != Intersection::Out;
+		return true;// l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Point3r const & p_point )const
@@ -350,7 +324,7 @@ namespace Castor3D
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return l_it == m_planes.end();
+		return true;// l_it == m_planes.end();
 	}
 
 	void Camera::FillShader( FrameVariableBuffer const & p_sceneBuffer )const

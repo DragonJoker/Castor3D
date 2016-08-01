@@ -311,13 +311,13 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
@@ -656,7 +656,7 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaY, -l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
