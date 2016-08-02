@@ -199,7 +199,7 @@ namespace Castor3D
 				m_planes[size_t( FrustumPlane::Bottom )].Set( l_nbr, l_fbr, l_fbl );
 
 				// Update view matrix
-				matrix::look_at( m_view, l_position, l_lookat, l_up );
+				matrix::look_at( m_view, l_position, l_position + l_lookat, l_up );
 			}
 
 			p_pipeline.SetViewMatrix( m_view );
