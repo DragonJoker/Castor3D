@@ -194,18 +194,30 @@ namespace CastorViewer
 
 	void RenderPanel::DoResetCamera()
 	{
-		RenderWindowSPtr l_window = m_renderWindow.lock();
+		DoResetTimers();
 
-		if ( l_window )
+		if ( m_cameraNode )
 		{
-			DoResetTimers();
-
-			if ( m_cameraNode )
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_cameraNode->SetOrientation( m_qOriginalOrientation );
 				m_cameraNode->SetPosition( m_ptOriginalPosition );
-				m_camSpeed = DEF_CAM_SPEED;
-			}
+			} ) );
+			m_camSpeed = DEF_CAM_SPEED;
+		}
+	}
+	void RenderPanel::DoTurnCamera()
+	{
+		DoResetTimers();
+
+		if ( m_cameraNode )
+		{
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				Quaternion l_orientation{ m_cameraNode->GetOrientation() };
+				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
+				m_cameraNode->SetOrientation( l_orientation );
+			} ) );
 		}
 	}
 
@@ -463,6 +475,10 @@ namespace CastorViewer
 			{
 			case 'R':
 				DoResetCamera();
+				break;
+
+			case 'T':
+				DoTurnCamera();
 				break;
 
 			case WXK_F5:
