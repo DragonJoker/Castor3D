@@ -191,7 +191,7 @@ namespace Castor3D
 			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).SWIZZLE_XYZ );
 			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).SWIZZLE_XYZ );
 			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).SWIZZLE_XYZ );
-			gl_Position = c3d_mtxProjection * c3d_mtxView * l_mtxModel * l_v4Vertex;
+			gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * l_mtxModel ) * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

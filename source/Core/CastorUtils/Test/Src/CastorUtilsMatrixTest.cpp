@@ -192,14 +192,6 @@ namespace Testing
 			l_mat = glm::perspective< real >( l_fov.radians(), l_aspect, l_near, l_far );
 			CT_EQUAL( l_mtx, l_mat );
 		}
-		Logger::LogInfo( cuT( "	Look at" ) );
-		{
-			Matrix4x4r l_mtx( 1 );
-			matrix::look_at( l_mtx, Point3d( 0, 0, 0 ), Point3d( 0, 0, 1 ), Point3d( 0, 1, 0 ) );
-			glm::mat4 l_mat;
-			l_mat = glm::lookAt( glm::vec3( 0, 0, 0 ), glm::vec3( 0, 0, 1 ), glm::vec3( 0, 1, 0 ) );
-			CT_EQUAL( l_mtx, l_mat );
-		}
 	}
 
 #endif

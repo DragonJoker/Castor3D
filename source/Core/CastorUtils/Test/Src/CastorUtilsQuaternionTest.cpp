@@ -190,22 +190,16 @@ namespace Testing
 
 		for ( double x = 0; x < 360; x += 1 )
 		{
-			for ( double y = 0; y < 360; y += 1 )
-			{
-				for ( double z = 0; z < 360; z += 1 )
-				{
-					//Logger::LogDebug( StringStream() << cuT( "Pitch: " ) << x << cuT( ", Yaw: " ) << y << cuT( ", Roll: " ) << z );
-					Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( y ), Angle::from_degrees( z ) );
-					glm::quat l_quat( glm::vec3( glm::radians( float( x ) ), glm::radians( float( y ) ), glm::radians( float( z ) ) ) );
-					CT_EQUAL( l_quaternion.quat.x, l_quat.x );
-					CT_EQUAL( l_quaternion.quat.y, l_quat.y );
-					CT_EQUAL( l_quaternion.quat.z, l_quat.z );
-					CT_EQUAL( l_quaternion.quat.w, l_quat.w );
-					CT_EQUAL( l_quaternion.get_pitch().radians(), glm::pitch( l_quat ) );
-					CT_EQUAL( l_quaternion.get_yaw().radians(), glm::yaw( l_quat ) );
-					CT_EQUAL( l_quaternion.get_roll().radians(), glm::roll( l_quat ) );
-				}
-			}
+			//Logger::LogDebug( StringStream() << cuT( "Pitch: " ) << x << cuT( ", Yaw: " ) << y << cuT( ", Roll: " ) << z );
+			Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( x ), Angle::from_degrees( x ) );
+			glm::quat l_quat( glm::vec3( glm::radians( float( x ) ), glm::radians( float( x ) ), glm::radians( float( x ) ) ) );
+			CT_EQUAL( l_quaternion.quat.x, l_quat.x );
+			CT_EQUAL( l_quaternion.quat.y, l_quat.y );
+			CT_EQUAL( l_quaternion.quat.z, l_quat.z );
+			CT_EQUAL( l_quaternion.quat.w, l_quat.w );
+			CT_EQUAL( l_quaternion.get_pitch().radians(), glm::pitch( l_quat ) );
+			CT_EQUAL( l_quaternion.get_yaw().radians(), glm::yaw( l_quat ) );
+			CT_EQUAL( l_quaternion.get_roll().radians(), glm::roll( l_quat ) );
 		}
 
 		Quaternion l_quaternionSrc( Point3r( 1, 1, 1 ), Angle::from_degrees( 0 ) );
@@ -241,41 +235,53 @@ namespace Testing
 			}
 		}
 
+		Logger::LogInfo( cuT( "	LookAt comparison" ) );
+		{
+			for ( double x = 0; x < 360; x += 1 )
+			{
+				Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( x ), Angle::from_degrees( x ) );
+				Point3r l_right, l_up, l_lookat;
+				l_quaternion.to_axes( l_right, l_up, l_lookat );
+				Castor::point::normalise( l_up );
+				Castor::point::normalise( l_right );
+				Castor::point::normalise( l_lookat );
+				Matrix4x4r l_rotate{ 1.0_r };
+				auto & l_col0 = l_rotate[0];
+				auto & l_col1 = l_rotate[1];
+				auto & l_col2 = l_rotate[2];
+				l_col0[0] = l_right[0];
+				l_col0[1] = l_up[0];
+				l_col0[2] = l_lookat[0];
+				l_col0[3] = 0.0_r;
+				l_col1[0] = l_right[1];
+				l_col1[1] = l_up[1];
+				l_col1[2] = l_lookat[1];
+				l_col1[3] = 0.0_r;
+				l_col2[0] = l_right[2];
+				l_col2[1] = l_up[2];
+				l_col2[2] = l_lookat[2];
+				l_col2[3] = 0.0_r;
+				Matrix4x4r l_orientation;
+				l_quaternion.to_matrix( l_orientation );
+				CT_EQUAL( l_rotate, l_orientation );
+			}
+		}
+
 		Logger::LogInfo( cuT( "	LookAt" ) );
 		{
 			for ( double x = 0; x < 360; x += 1 )
 			{
-				for ( double y = 0; y < 360; y += 1 )
-				{
-					for ( double z = 0; z < 360; z += 1 )
-					{
-						Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( y ), Angle::from_degrees( z ) );
-						Point3r l_right, l_up, l_lookat;
-						l_quaternion.to_axes( l_right, l_up, l_lookat );
-						Castor::point::normalise( l_up );
-						Castor::point::normalise( l_right );
-						Castor::point::normalise( l_lookat );
-						Matrix4x4r l_rotate{ 1.0_r };
-						auto & l_col0 = l_rotate[0];
-						auto & l_col1 = l_rotate[1];
-						auto & l_col2 = l_rotate[2];
-						l_col0[0] = l_right[0];
-						l_col0[1] = l_up[0];
-						l_col0[2] = l_lookat[0];
-						l_col0[3] = 0.0_r;
-						l_col1[0] = l_right[1];
-						l_col1[1] = l_up[1];
-						l_col1[2] = l_lookat[1];
-						l_col1[3] = 0.0_r;
-						l_col2[0] = l_right[2];
-						l_col2[1] = l_up[2];
-						l_col2[2] = l_lookat[2];
-						l_col2[3] = 0.0_r;
-						Matrix4x4r l_orientation;
-						l_quaternion.to_matrix( l_orientation );
-						CT_EQUAL( l_rotate, l_orientation );
-					}
-				}
+				Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( x ), Angle::from_degrees( x ) );
+				Point3r l_right, l_up, l_lookat;
+				l_quaternion.to_axes( l_right, l_up, l_lookat );
+				Castor::point::normalise( l_up );
+				Castor::point::normalise( l_right );
+				Castor::point::normalise( l_lookat );
+				Matrix4x4r l_mtx( 1 );
+				matrix::look_at( l_mtx, Point3r( x, x, x ), l_lookat, l_up );
+				glm::mat4 l_mat;
+				l_mat = glm::lookAt( glm::vec3( x, x, x ), glm::vec3( l_lookat[0], l_lookat[1], l_lookat[2] ), glm::vec3( l_up[0], l_up[1], l_up[2] ) );
+				CT_EQUAL( l_mtx, l_mat );
 			}
 		}
 	}
