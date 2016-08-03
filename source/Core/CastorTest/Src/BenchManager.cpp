@@ -4,8 +4,6 @@
 
 #include <algorithm>
 
-using namespace Castor;
-
 namespace Testing
 {
 	std::vector< BenchCaseSPtr > BenchManager::m_arrayBenchs;
@@ -34,82 +32,89 @@ namespace Testing
 
 	void BenchManager::ExecuteBenchs()
 	{
-		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
-		StringStream l_benchSep;
+		std::cout << "*********************************************************************************************" << std::endl;
+		std::stringstream l_benchSep;
 		l_benchSep.width( BENCH_TITLE_WIDTH );
-		l_benchSep.fill( cuT( '*' ) );
-		l_benchSep << cuT( '*' );
+		l_benchSep.fill( '*' );
+		l_benchSep << '*';
 
 		if ( m_arrayBenchs.size() )
 		{
-			Logger::LogInfo( cuT( "\nBenchmarks - Begin\n" ) );
-			Logger::LogInfo( l_benchSep );
+			std::cout << std::endl;
+			std::cout << "Benchmarks - Begin" << std::endl;
+			std::cout << l_benchSep.str() << std::endl;
 
 			for ( auto l_bench : m_arrayBenchs )
 			{
 				l_bench->Execute();
 			}
 
-			Logger::LogInfo( cuT( "\nBenchmarks - End\n" ) );
+			std::cout << std::endl;
+			std::cout << "Benchmarks - End" << std::endl;
 		}
 		else
 		{
-			Logger::LogInfo( cuT( "\nNo bench\n" ) );
+			std::cout << std::endl;
+			std::cout << "No bench" << std::endl;
 		}
 
-		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
+		std::cout << "*********************************************************************************************" << std::endl;
 	}
 
 	void BenchManager::BenchsSummary()
 	{
-		StringStream l_benchSep;
+		std::stringstream l_benchSep;
 		l_benchSep.width( BENCH_TITLE_WIDTH );
-		l_benchSep.fill( cuT( '*' ) );
-		l_benchSep << cuT( '*' );
-		Logger::LogInfo( l_benchSep );
+		l_benchSep.fill( '*' );
+		l_benchSep << '*';
+		std::cout << l_benchSep.str() << std::endl;
 
 		for ( auto l_bench : m_arrayBenchs )
 		{
-			Logger::LogInfo( l_bench->GetSummary().c_str() );
+			std::cout << l_bench->GetSummary ().c_str () << std::endl;
 		}
 	}
 
 	uint32_t BenchManager::ExecuteTests()
 	{
 		uint32_t l_errCount = 0;
-		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
-		StringStream l_testSep;
+		std::cout << "*********************************************************************************************" << std::endl;
+		std::stringstream l_testSep;
 		l_testSep.width( BENCH_TITLE_WIDTH );
-		l_testSep.fill( cuT( '*' ) );
-		l_testSep << cuT( '*' );
+		l_testSep.fill( '*' );
+		l_testSep << '*';
 
 		if ( m_arrayTests.size() )
 		{
-			Logger::LogInfo( cuT( "\nTests - Begin\n" ) );
-			Logger::LogInfo( l_testSep );
+			std::cout << std::endl;
+			std::cout << "Tests - Begin" << std::endl;
+			std::cout << l_testSep.str() << std::endl;
 			uint32_t l_testCount = 0;
 
 			for ( auto l_testCase : m_arrayTests )
 			{
 				l_testCase->Execute( l_errCount, l_testCount );
-				Logger::LogInfo( l_testSep );
+				std::cout << l_testSep.str() << std::endl;
 			}
 
 			if ( l_errCount )
 			{
-				Logger::LogInfo( StringStream() << ( "\nTests - End, " ) << l_errCount << cuT( " errors detected out of " ) << l_testCount << cuT( " tests\n" ) );
+				std::cout << std::endl;
+				std::cout << "Tests - End, " << l_errCount << " errors detected out of " << l_testCount << " tests" << std::endl;
 			}
 			else
 			{
-				Logger::LogInfo( StringStream() << cuT( "\nTests - End, no error detected out of " ) << l_testCount << cuT( " tests\n" ) );
+				std::cout << std::endl;
+				std::cout << "Tests - End, no error detected out of " << l_testCount << " tests" << std::endl;
 			}
 		}
 		else
 		{
-			Logger::LogInfo( cuT(	"\nNo test\n" ) );
+			std::cout << std::endl;
+			std::cout << "No test" << std::endl;
 		}
 
-		Logger::LogInfo( cuT(	"*********************************************************************************************" ) );
+		std::cout << "*********************************************************************************************" << std::endl;
 		return l_errCount;
 	}
 

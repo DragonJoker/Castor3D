@@ -66,37 +66,37 @@ namespace Castor3D
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Pass " ) );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "pass\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tambient " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.GetAmbient(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_pass.GetAmbient(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass ambient colour" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_pass.GetDiffuse(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass diffuse colour" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass emissive colour" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
-				&& Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Colour::TextWriter( String() )( p_pass.GetSpecular(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass specular colour" );
 		}
 

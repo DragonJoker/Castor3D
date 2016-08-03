@@ -192,6 +192,20 @@ namespace Castor
 		CU_API static xchar const * const Value;
 	};
 	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for Colour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour Colour.
+	*/
+	template<>
+	struct RegexFormat< Colour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0

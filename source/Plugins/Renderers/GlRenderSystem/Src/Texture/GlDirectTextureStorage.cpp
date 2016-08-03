@@ -38,7 +38,7 @@ namespace GlRender
 		auto l_buffer = p_storage.GetOwner()->GetBuffer();
 
 		if ( CheckFlag( p_storage.GetCPUAccess(), eACCESS_TYPE_READ )
-			   && CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ ) )
+			 && CheckFlag( uint8_t( p_lock ), eACCESS_TYPE_READ ) )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
 			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );

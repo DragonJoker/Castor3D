@@ -59,7 +59,7 @@ namespace C3dAssimp
 			{
 				aiMeshAnim const * const l_meshAnim = p_animation.mMeshChannels[i];
 
-				if ( string::string_cast< xchar >(l_meshAnim->mName.data ) == p_meshName)
+				if ( string::string_cast< xchar >( l_meshAnim->mName.data ) == p_meshName )
 				{
 					l_return = l_meshAnim;
 				}
@@ -231,12 +231,12 @@ namespace C3dAssimp
 		SubmeshSPtr l_submesh;
 		Assimp::Importer l_importer;
 		uint32_t l_flags = aiProcess_Triangulate
-			| aiProcess_JoinIdenticalVertices
-			| aiProcess_OptimizeMeshes
-			| aiProcess_OptimizeGraph
-			| aiProcess_FixInfacingNormals
-			| aiProcess_LimitBoneWeights
-			| aiProcess_Debone;
+						   | aiProcess_JoinIdenticalVertices
+						   | aiProcess_OptimizeMeshes
+						   | aiProcess_OptimizeGraph
+						   | aiProcess_FixInfacingNormals
+						   | aiProcess_LimitBoneWeights
+						   | aiProcess_Debone;
 		bool l_tangentSpace = false;
 		xchar l_buffer[1024] = { 0 };
 
@@ -387,7 +387,7 @@ namespace C3dAssimp
 
 			if ( p_aiScene.HasAnimations() )
 			{
-				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh,&p_mesh, &p_submesh]( aiAnimation const * p_aiAnimation )
+				std::for_each( p_aiScene.mAnimations, p_aiScene.mAnimations + p_aiScene.mNumAnimations, [this, &p_aiMesh, &p_mesh, &p_submesh]( aiAnimation const * p_aiAnimation )
 				{
 					auto l_it = std::find_if( p_aiAnimation->mMeshChannels, p_aiAnimation->mMeshChannels + p_aiAnimation->mNumMeshChannels, [this, &p_aiMesh, &p_submesh]( aiMeshAnim const * p_aiMeshAnim )
 					{
@@ -600,7 +600,7 @@ namespace C3dAssimp
 		l_animation.UpdateLength();
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object)
+	void AssimpImporter::DoProcessAnimationNodes( SkeletonAnimation & p_animation, real p_ticksPerSecond, Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation, SkeletonAnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode.mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
@@ -647,7 +647,7 @@ namespace C3dAssimp
 			// And eventually the rotations
 			for ( auto const & l_rot : ArrayView< aiQuatKey >( l_aiNodeAnim->mRotationKeys, l_aiNodeAnim->mNumRotationKeys ) )
 			{
-				l_times.insert( real(l_rot.mTime / p_ticksPerSecond ) );
+				l_times.insert( real( l_rot.mTime / p_ticksPerSecond ) );
 				Quaternion l_rotate;
 				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_rot.mValue.GetMatrix().Transpose().a1 } } );
 				l_rotates[real( l_rot.mTime / p_ticksPerSecond )] = l_rotate;

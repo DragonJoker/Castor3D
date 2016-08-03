@@ -473,7 +473,7 @@ namespace Castor3D
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
-	DECLARE_MAP (eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader);
+	DECLARE_MAP( eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
 
 	//@}
 

@@ -8,168 +8,171 @@ namespace Castor
 {
 	//*************************************************************************************************
 
-	namespace
+	namespace details
 	{
 		static xchar const * const VALUE_SEPARATOR = cuT( "[ \\t]*[ \\t,;][ \\t]*" );
 		static xchar const * const IGNORED_END = cuT( "([^\\r\\n]*)" );
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\param[in]	p_count		The elements count.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\param[in]	p_count		Le nombre d'éléments.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T >
-		inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
+	}
+
+	//*************************************************************************************************
+
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\param[in]	p_count		The elements count.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\param[in]	p_count		Le nombre d'éléments.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T >
+	inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
+	{
+		bool l_return = false;
+
+		try
 		{
-			bool l_return = false;
+			String l_regexString = RegexFormat< T >::Value;
 
-			try
+			for ( size_t i = 1; i < p_count; ++i )
 			{
-				String l_regexString = RegexFormat< T >::Value;
+				l_regexString += String( details::VALUE_SEPARATOR ) + RegexFormat< T >::Value;
+			}
 
-				for ( size_t i = 1; i < p_count; ++i )
+			l_regexString += details::IGNORED_END;
+
+			const Regex l_regex{ l_regexString };
+			auto l_begin = std::begin( p_params );
+			auto l_end = std::end( p_params );
+			const SRegexIterator l_it( l_begin, l_end, l_regex );
+			const SRegexIterator l_endit;
+			String l_result;
+			l_return = l_it != l_endit && l_it->size() >= p_count;
+
+			if ( l_return )
+			{
+				for ( size_t i = 1; i <= p_count; ++i )
 				{
-					l_regexString += String( VALUE_SEPARATOR ) + RegexFormat< T >::Value;
+					std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
+					l_stream >> p_value[i - 1];
 				}
 
-				l_regexString += IGNORED_END;
-
-				const Regex l_regex{ l_regexString };
-				auto l_begin = std::begin( p_params );
-				auto l_end = std::end( p_params );
-				const SRegexIterator l_it( l_begin, l_end, l_regex );
-				const SRegexIterator l_endit;
-				String l_result;
-				l_return = l_it != l_endit && l_it->size() >= p_count;
-
-				if ( l_return )
+				if ( l_it->size() > p_count )
 				{
-					for ( size_t i = 1; i <= p_count; ++i )
-					{
-						std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
-						l_stream >> p_value[i - 1];
-					}
+					String l_params;
 
-					if ( l_it->size() > p_count )
+					for ( size_t i = p_count + 1; i < l_it->size(); ++i )
 					{
-						String l_params;
-
-						for ( size_t i = p_count + 1; i < l_it->size(); ++i )
+						if ( ( *l_it )[i].matched )
 						{
-							if ( ( *l_it )[i].matched )
-							{
-								l_params += ( *l_it )[i];
-							}
+							l_params += ( *l_it )[i];
 						}
-
-						p_params = l_params;
 					}
-				}
-				else
-				{
-					Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
-				}
-			}
-			catch ( std::exception & p_exc )
-			{
-				Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
-			}
 
-			return l_return;
+					p_params = l_params;
+				}
+			}
+			else
+			{
+				Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+			}
 		}
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T, uint32_t Count >
-		inline bool ParseValues( String & p_params, Point< T, Count > & p_value )
+		catch ( std::exception & p_exc )
 		{
-			return ParseValues( p_params, Count, p_value.ptr() );
+			Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 		}
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T, uint32_t Count >
-		inline bool ParseValues( String & p_params, Coords< T, Count > & p_value )
-		{
-			return ParseValues( p_params, Count, p_value.ptr() );
-		}
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T, uint32_t Count >
-		inline bool ParseValues( String & p_params, Size & p_value )
-		{
-			return ParseValues( p_params, Count, p_value.ptr() );
-		}
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T, uint32_t Count >
-		inline bool ParseValues( String & p_params, Position & p_value )
-		{
-			return ParseValues( p_params, Count, p_value.ptr() );
-		}
-		/**
-		 *\~english
-		 *\brief		Parses a vector from a line.
-		 *\param[in]	p_params	The line containing the vector.
-		 *\param[out]	p_value		Receives the result.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Extrait un vecteur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant le vecteur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		template< typename T, uint32_t Count >
-		inline bool ParseValues( String & p_params, Rectangle & p_value )
-		{
-			return ParseValues( p_params, Count, p_value.ptr() );
-		}
+
+		return l_return;
+	}
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T, uint32_t Count >
+	inline bool ParseValues( String & p_params, Point< T, Count > & p_value )
+	{
+		return ParseValues( p_params, Count, p_value.ptr() );
+	}
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T, uint32_t Count >
+	inline bool ParseValues( String & p_params, Coords< T, Count > & p_value )
+	{
+		return ParseValues( p_params, Count, p_value.ptr() );
+	}
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T, uint32_t Count >
+	inline bool ParseValues( String & p_params, Size & p_value )
+	{
+		return ParseValues( p_params, Count, p_value.ptr() );
+	}
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T, uint32_t Count >
+	inline bool ParseValues( String & p_params, Position & p_value )
+	{
+		return ParseValues( p_params, Count, p_value.ptr() );
+	}
+	/**
+		*\~english
+		*\brief		Parses a vector from a line.
+		*\param[in]	p_params	The line containing the vector.
+		*\param[out]	p_value		Receives the result.
+		*\return		\p true if OK.
+		*\~french
+		*\brief		Extrait un vecteur à partir d'une ligne.
+		*\param[in]	p_params	La ligne contenant le vecteur.
+		*\param[out]	p_value		Reçoit le résultat.
+		*\return		\p true si tout s'est bien passé.
+		*/
+	template< typename T, uint32_t Count >
+	inline bool ParseValues( String & p_params, Rectangle & p_value )
+	{
+		return ParseValues( p_params, Count, p_value.ptr() );
 	}
 
 	//*************************************************************************************************
@@ -184,7 +187,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type entiers signés.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -212,7 +215,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type points.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -483,43 +486,86 @@ namespace Castor
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
 			bool l_return = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ) );
+			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
 
 			if ( l_values.size() >= Colour::eCOMPONENT_COUNT )
 			{
-				p_params.clear();
+				Point4f l_value;
+				l_return = ParseValues( p_params, l_value );
 
-				std::for_each( l_values.begin() + Colour::eCOMPONENT_COUNT, l_values.end(), [&]( String const & p_param )
+				if ( l_return )
 				{
-					p_params += p_param + cuT( " " );
-				} );
-
-				string::trim( p_params );
-
-				for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT; i++ )
-				{
-					std::basic_istringstream< xchar > l_stream( l_values[i] );
-					double l_dComponent;
-					l_stream >> l_dComponent;
-					p_value[Colour::eCOMPONENT( i )] = l_dComponent;
+					for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT; i++ )
+					{
+						p_value[Colour::eCOMPONENT( i )] = l_value[i];
+					}
 				}
-
-				l_return = true;
 			}
 			else if ( l_values.size() == 3 )
 			{
-				p_params.clear();
+				Point3f l_value;
+				l_return = ParseValues( p_params, l_value );
 
-				for ( uint8_t i = 0; i < 3; i++ )
+				if ( l_return )
 				{
-					std::basic_istringstream< xchar > l_stream( l_values[i] );
-					double l_dComponent;
-					l_stream >> l_dComponent;
-					p_value[Colour::eCOMPONENT( i )] = l_dComponent;
+					for ( uint8_t i = 0; i < 3; i++ )
+					{
+						p_value[Colour::eCOMPONENT( i )] = l_value[i];
+					}
+
+					p_value[Colour::eCOMPONENT_ALPHA] = 1.0;
+				}
+			}
+			else
+			{
+				try
+				{
+					String l_regexString = RegexFormat< Colour >::Value;
+					l_regexString += details::IGNORED_END;
+
+					const Regex l_regex{ l_regexString };
+					auto l_begin = std::begin( p_params );
+					auto l_end = std::end( p_params );
+					const SRegexIterator l_it( l_begin, l_end, l_regex );
+					const SRegexIterator l_endit;
+					String l_result;
+					l_return = l_it != l_endit && l_it->size() >= 1;
+
+					if ( l_return )
+					{
+						uint32_t l_value{ 0u };
+
+						for ( size_t i = 0; i < l_it->size() && l_value == 0u; ++i )
+						{
+							auto l_match = ( *l_it )[i];
+
+							if ( l_match.matched )
+							{
+								String l_text = l_match;
+
+								if ( l_text.size() == 6 )
+								{
+									l_text = "FF" + l_text;
+								}
+
+								std::basic_istringstream< xchar > l_stream{ l_text };
+								l_stream >> std::hex >> l_value;
+							}
+						}
+
+						p_value = Colour::from_argb( l_value );
+					}
+					else
+					{
+						Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+					}
+				}
+				catch ( std::exception & p_exc )
+				{
+					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 				}
 
-				p_value[Colour::eCOMPONENT_ALPHA] = 1.0;
-				l_return = true;
+				return l_return;
 			}
 
 			return l_return;
@@ -555,7 +601,7 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_params )
 	{
-		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ IGNORED_END } };
+		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
 		auto l_begin = std::begin( p_params );
 		auto l_end = std::end( p_params );
 		SRegexIterator l_it( l_begin, l_end, l_regex );

@@ -18,7 +18,7 @@ namespace Castor3D
 	bool Viewport::TextWriter::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "viewport\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
@@ -31,19 +31,20 @@ namespace Castor3D
 			if ( p_viewport.GetType() == eVIEWPORT_TYPE_ORTHO || p_viewport.GetType() == eVIEWPORT_TYPE_FRUSTUM )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\ttop " ) + string::to_string( p_viewport.GetTop() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tbottom " ) + string::to_string( p_viewport.GetBottom() ) + cuT( "\n" ) ) > 0;
+						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\ttop " ) + string::to_string( p_viewport.GetTop() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\tbottom " ) + string::to_string( p_viewport.GetBottom() ) + cuT( "\n" ) ) > 0;
 			}
 			else
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
+						   && p_file.WriteText( m_tabs + cuT( "\taspect_ratio " ) + string::to_string( p_viewport.GetRatio() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+						   && p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
+
 			Castor::TextWriter< Viewport >::CheckError( l_return, "Viewport values" );
 		}
 
@@ -109,7 +110,6 @@ namespace Castor3D
 		, m_near{ p_rhs.m_near }
 		, m_far{ p_rhs.m_far }
 		, m_modified{ p_rhs.m_modified }
-		, m_planes( p_rhs.m_planes )
 		, m_projection{ p_rhs.m_projection }
 	{
 	}
@@ -127,7 +127,6 @@ namespace Castor3D
 		, m_near{ std::move( p_rhs.m_near ) }
 		, m_far{ std::move( p_rhs.m_far ) }
 		, m_modified{ std::move( p_rhs.m_modified ) }
-		, m_planes( std::move( p_rhs.m_planes ) )
 		, m_projection{ std::move( p_rhs.m_projection ) }
 		, m_impl{ std::move( p_rhs.m_impl ) }
 	{
@@ -146,7 +145,6 @@ namespace Castor3D
 		m_near = p_rhs.m_near;
 		m_far = p_rhs.m_far;
 		m_modified = p_rhs.m_modified;
-		m_planes = p_rhs.m_planes;
 		m_projection = p_rhs.m_projection;
 		return *this;
 	}
@@ -166,7 +164,6 @@ namespace Castor3D
 			m_near = std::move( p_rhs.m_near );
 			m_far = std::move( p_rhs.m_far );
 			m_modified = std::move( p_rhs.m_modified );
-			m_planes = std::move( p_rhs.m_planes );
 			m_projection = std::move( p_rhs.m_projection );
 			m_impl = std::move( p_rhs.m_impl );
 		}
@@ -195,46 +192,6 @@ namespace Castor3D
 
 		if ( IsModified() )
 		{
-			Point3r l_d( 0, 0, 1 );
-			real l_farHeight = 0;
-			real l_farWidth = 0;
-			real l_nearHeight = 0;
-			real l_nearWidth = 0;
-
-			if ( GetType() == eVIEWPORT_TYPE_ORTHO )
-			{
-				l_nearHeight = GetBottom() - GetTop();
-				l_nearWidth = GetRight() - GetLeft();
-				l_farHeight = l_nearHeight;
-				l_farWidth = l_nearWidth;
-			}
-			else
-			{
-				real l_tan = real( tan( GetFovY().radians() / 2 ) );
-				l_nearHeight = 2 * l_tan * GetNear();
-				l_nearWidth = l_nearHeight * GetRatio();
-				l_farHeight = 2 * l_tan * GetFar();
-				l_farWidth = l_farHeight * GetRatio();
-			}
-
-			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-			Point3r l_ptNC( l_d * GetNear() );
-			Point3r l_ptFC( l_d * GetFar() );
-			Point3r l_ptNTL( l_ptNC  + Point3r( real( 0 ), l_nearHeight / 2, real( 0 ) ) - Point3r( l_nearWidth / 2, real( 0 ), real( 0 ) ) );
-			Point3r l_ptNBL( l_ptNTL - Point3r( real( 0 ), l_nearHeight, real( 0 ) ) );
-			Point3r l_ptNTR( l_ptNTL + Point3r( l_nearWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptNBR( l_ptNBL + Point3r( l_nearWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFTL( l_ptFC  + Point3r( real( 0 ), l_farHeight / 2, real( 0 ) ) - Point3r( l_farWidth / 2, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFBL( l_ptFTL - Point3r( real( 0 ), l_farHeight, real( 0 ) ) );
-			Point3r l_ptFTR( l_ptFTL + Point3r( l_farWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFBR( l_ptFBL + Point3r( l_farWidth, real( 0 ), real( 0 ) ) );
-			m_planes[eFRUSTUM_PLANE_NEAR].Set( l_ptNBL, l_ptNTL, l_ptNTR );
-			m_planes[eFRUSTUM_PLANE_FAR].Set( l_ptFBR, l_ptFTR, l_ptFTL );
-			m_planes[eFRUSTUM_PLANE_LEFT].Set( l_ptFBL, l_ptFTL, l_ptNTL );
-			m_planes[eFRUSTUM_PLANE_RIGHT].Set( l_ptNBR, l_ptNTR, l_ptFTR );
-			m_planes[eFRUSTUM_PLANE_TOP].Set( l_ptNTL, l_ptFTL, l_ptFTR );
-			m_planes[eFRUSTUM_PLANE_BOTTOM].Set( l_ptNBR, l_ptFBR, l_ptFBL );
-
 			switch ( m_type )
 			{
 			case Castor3D::eVIEWPORT_TYPE_ORTHO:

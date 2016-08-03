@@ -82,35 +82,35 @@ namespace Direct
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
-		virtual bool DoCreate();
+		bool DoCreate()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
 		 */
-		virtual void DoDestroy();
+		void DoDestroy()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
-		virtual bool DoInitialise( uint32_t & p_index );
+		bool DoInitialise( uint32_t & p_index )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		virtual bool DoBeginRender( Castor3D::Scene & p_scene );
+		bool DoBeginRender( Castor3D::Scene & p_scene )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRender
 		 */
-		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
+		void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		virtual void DoEndRender( Castor3D::Scene & p_scene );
+		void DoEndRender( Castor3D::Scene & p_scene )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
-		virtual bool DoWriteInto( Castor::TextFile & p_file );
+		bool DoWriteInto( Castor::TextFile & p_file )override;
 	};
 }
 

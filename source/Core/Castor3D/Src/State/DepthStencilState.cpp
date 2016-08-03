@@ -11,7 +11,7 @@ namespace Castor3D
 	{
 		bool g_creatingCurrent = false;
 	}
-	
+
 	DepthStencilStateWPtr DepthStencilState::m_wCurrentState;
 
 	DepthStencilState::DepthStencilState( Engine & p_engine )

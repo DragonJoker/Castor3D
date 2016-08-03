@@ -43,11 +43,9 @@ namespace GlRender
 	*/
 	class GlGeometryBuffers
 		: public Castor3D::GeometryBuffers
-		, public Bindable <
-				 std::function< bool( int, uint32_t * ) >,
-				 std::function< bool( int, uint32_t const * ) >,
-				 std::function< bool( uint32_t ) >
-				 >
+		, public Bindable < std::function< bool( int, uint32_t * ) >,
+							std::function< bool( int, uint32_t const * ) >,
+							std::function< bool( uint32_t ) > >
 	{
 		using ObjectType = Bindable< std::function< bool( int, uint32_t * ) >,
 									 std::function< bool( int, uint32_t const * ) >,

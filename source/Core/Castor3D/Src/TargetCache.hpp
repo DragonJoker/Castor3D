@@ -86,21 +86,23 @@ namespace Castor3D
 		 *\param[in,out]	p_vtxCount	Receives the total vertex count.
 		 *\param[in]		p_fceCount	Receives the total faces count.
 		 *\param[in]		p_objCount	Receives the total objects count.
+		 *\param[in]		p_visible	Receives the visible objects count.
 		 *\~french
 		 *\brief			Dessine dans les cibles de rendu.
 		 *\param[in]		p_time		Le temps d dessin actuel.
-		 *\param[in,out]	p_vtxCount	Reçoit le nombre de sommets dessinés.
-		 *\param[in,out]	p_fceCount	Reçoit le nombre de faces dessinées.
-		 *\param[in,out]	p_objCount	Reçoit le nombre d'objets dessinés.
+		 *\param[in,out]	p_vtxCount	Reçoit le nombre total de sommets.
+		 *\param[in,out]	p_fceCount	Reçoit le nombre total de faces.
+		 *\param[in,out]	p_objCount	Reçoit le nombre total d'objets.
+		 *\param[in,out]	p_visible	Reçoit le nombre d'objets visible.
 		 */
-		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible );
 		/**
 		 *\~english
 		 *\brief		Flushes the collection.
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		C3D_API void Clear ();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\return		The ToneMapping factory.

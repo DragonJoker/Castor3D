@@ -38,7 +38,7 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( m_elements );
 		m_defaultMaterial.reset();
-		m_elements.clear ();
+		m_elements.clear();
 	}
 
 	void MaterialCache::GetNames( StringArray & l_names )

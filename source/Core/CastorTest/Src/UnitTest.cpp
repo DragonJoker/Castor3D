@@ -1,7 +1,5 @@
 #include "UnitTest.hpp"
 
-using namespace Castor;
-
 namespace Testing
 {
 	//*************************************************************************************************
@@ -45,7 +43,7 @@ namespace Testing
 			l_begin << "**** ";
 			l_begin.width( TEST_TITLE_WIDTH - 10 );
 			l_begin << std::left << ( "Begin test case " + l_test.first ) << " ****";
-			Logger::LogInfo( l_begin );
+			std::cout << l_begin.str() << std::endl;
 
 			try
 			{
@@ -54,24 +52,24 @@ namespace Testing
 			catch ( TestFailed & exc )
 			{
 				p_errCount++;
-				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " failed (" << exc.what() << ")" );
+				std::cerr << "*	Test " << l_test.first << " failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( std::exception & exc )
 			{
 				p_errCount++;
-				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " execution failed (" << exc.what() << ")" );
+				std::cerr << "*	Test " << l_test.first << " execution failed (" << exc.what() << ")" << std::endl;
 			}
 			catch ( ... )
 			{
 				p_errCount++;
-				Logger::LogWarning( std::stringstream() << "*	Test " << l_test.first << " execution failed (Unknown reason)" );
+				std::cerr << "*	Test " << l_test.first << " execution failed (Unknown reason)" << std::endl;
 			}
 
 			std::stringstream l_end;
 			l_end << "**** ";
 			l_end.width( TEST_TITLE_WIDTH - 10 );
 			l_end << std::left << ( "End test case " + l_test.first ) << " ****";
-			Logger::LogInfo( l_end );
+			std::cout << l_end.str() << std::endl;
 		}
 	}
 

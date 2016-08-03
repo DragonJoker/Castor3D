@@ -16,10 +16,10 @@ namespace Castor3D
 	namespace
 	{
 		inline void DoFind( real p_time,
-					 typename SubmeshAnimationBufferArray::const_iterator const & p_first,
-					 typename SubmeshAnimationBufferArray::const_iterator const & p_last,
-					 typename SubmeshAnimationBufferArray::const_iterator & p_prv,
-					 typename SubmeshAnimationBufferArray::const_iterator & p_cur )
+							typename SubmeshAnimationBufferArray::const_iterator const & p_first,
+							typename SubmeshAnimationBufferArray::const_iterator const & p_last,
+							typename SubmeshAnimationBufferArray::const_iterator & p_prv,
+							typename SubmeshAnimationBufferArray::const_iterator & p_cur )
 		{
 			while ( p_prv != p_first && p_prv->m_timeIndex >= p_time )
 			{

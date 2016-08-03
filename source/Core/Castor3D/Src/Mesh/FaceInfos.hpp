@@ -53,7 +53,7 @@ namespace Castor3D
 			int m_index{ -1 };
 			//!\~english	Vertex normal.
 			//!\~french		Normale du sommet.
-		  std::array< real, 3 > m_fNormal{ { 0.0_r, 0.0_r, 0.0_r } };
+			std::array< real, 3 > m_fNormal{ { 0.0_r, 0.0_r, 0.0_r } };
 			//!\~english	Vertex UV.
 			//!\~french		UV du sommet.
 			std::array< real, 2 > m_fTexCoords{ { 0.0_r, 0.0_r } };

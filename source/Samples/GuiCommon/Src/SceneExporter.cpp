@@ -271,7 +271,7 @@ namespace GuiCommon
 				auto l_mesh = l_it.second;
 				Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
 				BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
-				l_result &= BinaryWriter< Mesh >{}.Write( *l_mesh, l_file );
+				l_result &= BinaryWriter< Mesh > {} .Write( *l_mesh, l_file );
 			}
 		}
 

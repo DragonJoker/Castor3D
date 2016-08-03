@@ -13,19 +13,17 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-set( C3DTEST_UTILS_HEADER ${CMAKE_CURRENT_BINARY_DIR}/Src/Castor3DTestUtils.hpp )
-set( C3DTEST_DATA_FOLDER_DEBUG ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}/data )
-set( C3DTEST_DATA_FOLDER_RELEASE ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}/data )
-configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/Src/Castor3DTestUtils.hpp.in ${C3DTEST_UTILS_HEADER} )
-
 add_target(
     ${PROJECT_NAME}
     bin_dos
     "CastorUtils;Castor3D;CastorTest;TestRenderSystem"
     "CastorUtils;Castor3D;CastorTest;TestRenderSystem;${CastorMinLibraries}"
-    "" "" "" "" ""
-    ${C3DTEST_UTILS_HEADER}
 )
+
+if ( MSVC )
+	set_property( TARGET ${PROJECT_NAME}
+		PROPERTY COMPILE_FLAGS "${CMAKE_CXX_FLAGS} /bigobj" )
+endif ()
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
@@ -35,8 +33,8 @@ add_target_test( ${PROJECT_NAME} )
 file(
 	GLOB
 		DataFiles
-		${CMAKE_SOURCE_DIR}/../data/Scene/*.zip
-		${CMAKE_SOURCE_DIR}/../data/Scene/*.cscn
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.zip
+		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.cscn
 		${CMAKE_CURRENT_SOURCE_DIR}/Data/*.cmsh
 )
 

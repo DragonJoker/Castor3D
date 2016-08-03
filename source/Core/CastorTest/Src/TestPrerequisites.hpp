@@ -30,9 +30,18 @@ SOFTWARE.
 #	include <unistd.h>
 #endif
 
-#include <Miscellaneous/StringUtils.hpp>
-#include <Log/Logger.hpp>
-#include <Miscellaneous/PreciseTimer.hpp>
+#include <algorithm>
+#include <chrono>
+#include <cmath>
+#include <cstdint>
+#include <cstring>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <memory>
+#include <vector>
 
 namespace Testing
 {
@@ -48,8 +57,13 @@ namespace Testing
 	class TestCase;
 	class BenchManager;
 
-	DECLARE_SMART_PTR( BenchCase );
-	DECLARE_SMART_PTR( TestCase );
+	using BenchCaseSPtr = std::shared_ptr< BenchCase >;
+	using BenchCaseWPtr = std::weak_ptr< BenchCase >;
+	using BenchCaseUPtr = std::unique_ptr< BenchCase >;
+
+	using TestCaseSPtr = std::shared_ptr< TestCase >;
+	using TestCaseWPtr = std::weak_ptr< TestCase >;
+	using TestCaseUPtr = std::unique_ptr< TestCase >;
 }
 
 #endif

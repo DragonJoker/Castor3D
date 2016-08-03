@@ -43,9 +43,7 @@ if( ASSIMP_FOUND )
 
 	if ( WIN32 )
 		# Preparing ASSIMP dll installation
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_RELEASE} Release )
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_RELEASE} RelWithDebInfo )
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} Debug )
+		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} ${ASSIMP_LIBRARY_RELEASE} )
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()

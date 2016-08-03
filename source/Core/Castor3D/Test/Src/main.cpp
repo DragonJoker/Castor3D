@@ -112,6 +112,7 @@ namespace
 		{
 			CASTOR_EXCEPTION( "Couldn't load renderer." );
 		}
+
 		return l_return;
 	}
 }

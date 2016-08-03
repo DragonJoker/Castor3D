@@ -264,18 +264,10 @@ namespace Testing
 		: public TestCase
 	{
 	public:
-		inline C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )
-			: TestCase{ p_name }
-			, m_engine{ p_engine }
-		{
-		}
+		C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine );
 
 	protected:
-		template< typename T >
-		inline bool compare( T const & p_a, T const & p_b )
-		{
-			return Testing::compare( p_a, p_b );
-		}
+		using TestCase::compare;
 		bool compare( Castor3D::Scene const & p_a, Castor3D::Scene const & p_b );
 		bool compare( Castor3D::SceneNode const & p_a, Castor3D::SceneNode const & p_b );
 		bool compare( Castor3D::Animable const & p_a, Castor3D::Animable const & p_b );
@@ -304,6 +296,7 @@ namespace Testing
 
 	protected:
 		Castor3D::Engine & m_engine;
+		Castor::Path m_testDataFolder;
 	};
 
 	//************************************************************************************************

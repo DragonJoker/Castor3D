@@ -21,7 +21,7 @@ using namespace Linear;
 
 C3D_LinearToneMapping_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
-	p_version = Castor3D::Version ();
+	p_version = Castor3D::Version();
 }
 
 C3D_LinearToneMapping_API Castor3D::ePLUGIN_TYPE GetType()

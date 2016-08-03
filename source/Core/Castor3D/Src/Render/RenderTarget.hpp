@@ -251,6 +251,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The visible objects count.
+		 *\~french
+		 *\return		Le nombre d'objets visibles.
+		 */
+		inline uint32_t GetVisbleObjectsCount()const
+		{
+			return m_visibleObjectsCount;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the target size
 		 *\return		The size
 		 *\~english
@@ -650,6 +660,8 @@ namespace Castor3D
 		PostEffectPtrArray m_postEffects;
 		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
+		//!\~english The visible objects count.	\~french Le nombre d'objets visibles.
+		uint32_t m_visibleObjectsCount;
 	};
 }
 

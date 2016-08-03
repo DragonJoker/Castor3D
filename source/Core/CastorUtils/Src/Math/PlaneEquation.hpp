@@ -41,8 +41,8 @@ namespace Castor
 	class PlaneEquation
 	{
 	private:
-		typedef Castor::Policy< T > policy;
-		typedef Castor::Point3< T > point;
+		using policy = Castor::Policy< T >;
+		using point = Castor::Point3< T >;
 
 	public:
 		/**
@@ -68,14 +68,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_ptNormal	The plane normal
-		 *\param[in]	p_ptPoint	A point belonging to the plane
+		 *\param[in]	p_normal	The plane normal
+		 *\param[in]	p_point	A point belonging to the plane
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_ptNormal	La normale du plan
-		 *\param[in]	p_ptPoint	Un point appartenant au plan
+		 *\param[in]	p_normal	La normale du plan
+		 *\param[in]	p_point	Un point appartenant au plan
 		 */
-		PlaneEquation( point const & p_ptNormal, point const & p_ptPoint );
+		PlaneEquation( point const & p_normal, point const & p_point );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -99,14 +99,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Defines plane's equation
-		 *\param[in]	p_ptNormal	The plane normal
-		 *\param[in]	p_ptPoint	A point belonging to the plane
+		 *\param[in]	p_normal	The plane normal
+		 *\param[in]	p_point	A point belonging to the plane
 		 *\~french
 		 *\brief		Définit l'équation du plan
-		 *\param[in]	p_ptNormal	La normale du plan
-		 *\param[in]	p_ptPoint	Un point appartenant au plan
+		 *\param[in]	p_normal	La normale du plan
+		 *\param[in]	p_point	Un point appartenant au plan
 		 */
-		void Set( point const & p_ptNormal, point const & p_ptPoint );
+		void Set( point const & p_normal, point const & p_point );
 		/**
 		 *\~english
 		 *\brief		Checks if this plane is parallel to another one, id est if their normals are parallel
@@ -180,11 +180,9 @@ namespace Castor
 		bool LineOn( Line3D< T > const & p_line )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the plane's normal
-		 *\return		The value
+		 *\return		The plane's normal.
 		 *\~french
-		 *\brief		Récupère la normale du plan
-		 *\return		La valeur
+		 *\return		La normale du plan.
 		 */
 		inline point const & GetNormal()const
 		{
@@ -192,11 +190,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the plane's reference point
-		 *\return		The value
+		 *\return		The plane's reference point.
 		 *\~french
-		 *\brief		Récupère le point d'origine du plan
-		 *\return		La valeur
+		 *\return		Le point de référence du plan.
 		 */
 		inline point const & GetPoint()const
 		{
@@ -206,6 +202,7 @@ namespace Castor
 	private:
 		point m_normal;
 		point m_point;
+		T m_d;
 		template< typename U > friend bool operator==( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
 		template< typename U > friend bool operator!=( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
 	};

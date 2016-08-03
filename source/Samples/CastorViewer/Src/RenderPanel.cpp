@@ -123,7 +123,7 @@ namespace CastorViewer
 
 	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
 	{
-		m_pRenderWindow.reset();
+		m_renderWindow.reset();
 
 		if ( p_window )
 		{
@@ -155,7 +155,7 @@ namespace CastorViewer
 						m_currentNode = m_cameraNode;
 					}
 
-					m_pRenderWindow = p_window;
+					m_renderWindow = p_window;
 					m_pKeyboardEvent = std::make_unique< KeyboardEvent >( p_window );
 				}
 			}
@@ -194,18 +194,30 @@ namespace CastorViewer
 
 	void RenderPanel::DoResetCamera()
 	{
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		DoResetTimers();
 
-		if ( l_window )
+		if ( m_cameraNode )
 		{
-			DoResetTimers();
-
-			if ( m_cameraNode )
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_cameraNode->SetOrientation( m_qOriginalOrientation );
 				m_cameraNode->SetPosition( m_ptOriginalPosition );
-				m_camSpeed = DEF_CAM_SPEED;
-			}
+			} ) );
+			m_camSpeed = DEF_CAM_SPEED;
+		}
+	}
+	void RenderPanel::DoTurnCamera()
+	{
+		DoResetTimers();
+
+		if ( m_cameraNode )
+		{
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				Quaternion l_orientation{ m_cameraNode->GetOrientation() };
+				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
+				m_cameraNode->SetOrientation( l_orientation );
+			} ) );
 		}
 	}
 
@@ -218,7 +230,7 @@ namespace CastorViewer
 	real RenderPanel::DoTransformX( int x )
 	{
 		real l_result = real( x );
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( l_window )
 		{
@@ -231,7 +243,7 @@ namespace CastorViewer
 	real RenderPanel::DoTransformY( int y )
 	{
 		real l_result = real( y );
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( l_window )
 		{
@@ -244,7 +256,7 @@ namespace CastorViewer
 	int RenderPanel::DoTransformX( real x )
 	{
 		int l_result = int( x );
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( l_window )
 		{
@@ -257,7 +269,7 @@ namespace CastorViewer
 	int RenderPanel::DoTransformY( real y )
 	{
 		int l_result = int( y );
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( l_window )
 		{
@@ -299,25 +311,25 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
@@ -335,7 +347,7 @@ namespace CastorViewer
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( l_window )
 		{
@@ -354,7 +366,7 @@ namespace CastorViewer
 
 	void RenderPanel::OnMove( wxMoveEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( !l_window )
 		{
@@ -369,7 +381,7 @@ namespace CastorViewer
 
 	void RenderPanel::OnPaint( wxPaintEvent & p_event )
 	{
-		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+		RenderWindowSPtr l_window = m_renderWindow.lock();
 
 		if ( !l_window )
 		{
@@ -465,6 +477,10 @@ namespace CastorViewer
 				DoResetCamera();
 				break;
 
+			case 'T':
+				DoTurnCamera();
+				break;
+
 			case WXK_F5:
 				DoReloadScene();
 				break;
@@ -526,7 +542,7 @@ namespace CastorViewer
 		if ( m_pListener )
 		{
 			m_pListener->PostEvent( std::make_unique< KeyboardEvent >( *m_pKeyboardEvent ) );
-			RenderWindowSPtr l_window = m_pRenderWindow.lock();
+			RenderWindowSPtr l_window = m_renderWindow.lock();
 
 			if ( l_window )
 			{
@@ -638,12 +654,12 @@ namespace CastorViewer
 		}
 		else
 		{
-			RenderWindowSPtr l_window = m_pRenderWindow.lock();
+			RenderWindowSPtr l_window = m_renderWindow.lock();
 
 			if ( l_window )
 			{
-				real l_deltaX = ( m_camSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
-				real l_deltaY = ( m_camSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+				real l_deltaX = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+				real l_deltaY = ( std::min( m_camSpeed, 2.0_r ) / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
 
 				if ( p_event.ControlDown() )
 				{
@@ -656,11 +672,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaX, l_deltaY, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )

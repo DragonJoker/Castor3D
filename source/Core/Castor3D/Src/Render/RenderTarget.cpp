@@ -85,16 +85,16 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
-				&& p_target.m_toneMapping->WriteInto( p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && p_target.m_toneMapping->WriteInto( p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget tone mapping" );
 		}
 
 		if ( l_return && p_target.m_renderTechnique )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttechnique \"" ) + p_target.m_renderTechnique->GetName() + cuT( "\"" ) )
-				&& p_target.m_renderTechnique->WriteInto( p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && p_target.m_renderTechnique->WriteInto( p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget technique" );
 		}
 
@@ -103,8 +103,8 @@ namespace Castor3D
 			for ( auto const & l_effect : p_target.m_postEffects )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tpostfx \"" ) + l_effect->GetName() + cuT( "\"" ) )
-					&& l_effect->WriteInto( p_file )
-					&& p_file.WriteText( cuT( "\n" ) ) > 0;
+						   && l_effect->WriteInto( p_file )
+						   && p_file.WriteText( cuT( "\n" ) ) > 0;
 				Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget post effect" );
 			}
 		}
@@ -421,6 +421,7 @@ namespace Castor3D
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime )
 	{
+		m_visibleObjectsCount = 0u;
 		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
 		m_pCurrentCamera = p_pCamera;
 		SceneSPtr l_scene = GetScene();
@@ -429,7 +430,7 @@ namespace Castor3D
 		if ( l_scene )
 		{
 			// Render the scene through the RenderTechnique.
-			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime );
+			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime, m_visibleObjectsCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
 			if ( p_fb.m_frameBuffer->Bind() )

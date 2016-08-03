@@ -775,6 +775,7 @@ namespace Castor3D
 	void Submesh::SortByDistance( Point3r const & p_ptCameraPosition )
 	{
 		ENSURE( m_initialised );
+
 		try
 		{
 			if ( m_cameraPosition != p_ptCameraPosition )
@@ -961,7 +962,7 @@ namespace Castor3D
 		}
 
 		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::Skinning ) && m_parentMesh.GetSkeleton() )
-			|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
+				|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 		{
 			if ( CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 			{

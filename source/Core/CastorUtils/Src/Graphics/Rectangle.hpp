@@ -28,28 +28,6 @@ SOFTWARE.
 
 namespace Castor
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Intersection types
-	\remark		Enumerates the different intersection types between 2 rectangles
-	\~french
-	\brief		Types d'intersection
-	\remark		Enumère les différents types d'intersection entre 2 rectangles
-	*/
-	typedef enum eINTERSECTION
-		: uint8_t
-	{
-		//!\~english Completely inside	\~french Complètement à l'intérieur
-		eINTERSECTION_IN,
-		//!\~english Completely outside	\~french Complètement à l'extérieur
-		eINTERSECTION_OUT,
-		//!\~english Intersection	\~french Intersection
-		eINTERSECTION_INTERSECT,
-		CASTOR_ENUM_BOUNDS( eINTERSECTION, eINTERSECTION_IN )
-	}	eINTERSECTION;
 	//!
 	/*!
 	\author		Sylvain DOREMUS
@@ -74,7 +52,7 @@ namespace Castor
 				int32_t top;
 				int32_t right;
 				int32_t bottom;
-			}		rect;
+			} rect;
 			int32_t	buffer[4];
 		}	m_data;
 
@@ -122,14 +100,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
-		 *\param[in]	p_ptPoint	The point to test
-		 *\return		\p eINTERSECTION_IN if onto or into, \p eINTERSECTION_OUT if not
+		 *\param[in]	p_point	The point to test
+		 *\return		\p Intersection::In if onto or into, \p Intersection::Out if not
 		 *\~french
 		 *\brief		Teste si le point donné est sur ou dans ce rectangle
-		 *\param[in]	p_ptPoint	Le point à tester
-		 *\return		\p eINTERSECTION_IN si sur ou dedans, \p eINTERSECTION_OUT sinon
+		 *\param[in]	p_point	Le point à tester
+		 *\return		\p Intersection::In si sur ou dedans, \p Intersection::Out sinon
 		 */
-		CU_API eINTERSECTION intersects( Position const & p_ptPoint )const;
+		CU_API Intersection intersects( Position const & p_point )const;
 		/**
 		 *\~english
 		 *\brief		Test if the givent rectangle intersects this rectangle
@@ -140,7 +118,7 @@ namespace Castor
 		 *\param[in]	p_rcRect	Le rectangle à tester
 		 *\return		Le type d'intersection entre les 2 rectangles
 		 */
-		CU_API eINTERSECTION intersects( Rectangle const & p_rcRect )const;
+		CU_API Intersection intersects( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
 		 *\brief		Sets the rectangle values

@@ -19,8 +19,8 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
-				&& Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
-				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+					   && Point3f::TextWriter( String() )( p_light.GetAttenuation(), p_file )
+					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			LightCategory::TextWriter::CheckError( l_return, "PointLight attenuation" );
 		}
 

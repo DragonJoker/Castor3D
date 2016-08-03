@@ -98,7 +98,7 @@ namespace Castor3D
 		{
 			bool l_return{ ChunkParserBase::Parse( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk ) };
 
-			for (uint32_t i = 0; i < p_count; ++i )
+			for ( uint32_t i = 0; i < p_count; ++i )
 			{
 				ChunkDataPreparator< T >::Prepare( *p_values++ );
 			}

@@ -29,7 +29,7 @@ namespace Castor3D
 	{
 		Logger::LogInfo( m_tabs + cuT( "Writing AnimatedObjectGroup " ) + p_group.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "animated_object_group \"" ) + p_group.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup name" );
 
 		StrSet l_written;
@@ -46,13 +46,13 @@ namespace Castor3D
 			{
 				l_name = l_name.substr( 0, l_skel );
 				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
-					&& l_written.find( l_name ) == l_written.end();
+						  && l_written.find( l_name ) == l_written.end();
 			}
 			else if ( l_mesh != String::npos )
 			{
 				l_name = l_name.substr( 0, l_mesh );
 				l_write = p_group.GetObjects().find( l_name ) == p_group.GetObjects().end()
-					&& l_written.find( l_name ) == l_written.end();
+						  && l_written.find( l_name ) == l_written.end();
 			}
 
 			if ( l_write )
@@ -70,10 +70,10 @@ namespace Castor3D
 			for ( auto l_it : p_group.GetAnimations() )
 			{
 				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second.m_scale ) + cuT( "\n" ) ) > 0
-					&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+							&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\tlooped " ) + String{ l_it.second.m_looped ? cuT( "true" ) : cuT( "false" ) } +cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t\tscale " ) + string::to_string( l_it.second.m_scale ) + cuT( "\n" ) ) > 0
+							&& p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 				Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup animation" );
 			}
 		}

@@ -20,15 +20,43 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3DT_Utils_H___
-#define ___C3DT_Utils_H___
+#ifndef ___CUT_CastorUtilsQuaternionTest___
+#define ___CUT_CastorUtilsQuaternionTest___
 
-#include <Castor3DPrerequisites.hpp>
+#include "CastorUtilsTestPrerequisites.hpp"
+
+#include <Math/Quaternion.hpp>
+#if defined( CASTOR_USE_GLM )
+#	include <glm/glm.hpp>
+#endif
 
 namespace Testing
 {
-	static xchar const DATA_FOLDER_DEBUG[] = cuT( "${C3DTEST_DATA_FOLDER_DEBUG}" );
-	static xchar const DATA_FOLDER_RELEASE[] = cuT( "${C3DTEST_DATA_FOLDER_RELEASE}" );
+	class CastorUtilsQuaternionTest
+		: public TestCase
+	{
+	public:
+		CastorUtilsQuaternionTest();
+		virtual ~CastorUtilsQuaternionTest();
+
+	private:
+		void DoRegisterTests() override;
+
+	private:
+
+#if defined( CASTOR_USE_GLM )
+
+		void TransformationMatrixComparison();
+
+#	if GLM_VERSION >= 95
+
+		void QuaternionComparison();
+
+#	endif
+
+#endif
+
+	};
 }
 
 #endif

@@ -21,7 +21,7 @@ using namespace HejlBurgessDawson;
 
 C3D_HejlBurgessDawsonToneMapping_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
-	p_version = Castor3D::Version ();
+	p_version = Castor3D::Version();
 }
 
 C3D_HejlBurgessDawsonToneMapping_API Castor3D::ePLUGIN_TYPE GetType()

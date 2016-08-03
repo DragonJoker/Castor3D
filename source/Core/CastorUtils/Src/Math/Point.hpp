@@ -225,40 +225,40 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_ptPoint	The Point object to copy
+		 *\param[in]	p_point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_ptPoint	L'objet Point à copier
+		 *\param[in]	p_point	L'objet Point à copier
 		 */
 		template< typename U >
-		explicit Point( Point< U, Count > const & p_ptPoint );
+		explicit Point( Point< U, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_ptPoint	The Point object to copy
+		 *\param[in]	p_point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_ptPoint	L'objet Point à copier
+		 *\param[in]	p_point	L'objet Point à copier
 		 */
-		Point( Point< T, Count > const & p_ptPoint );
+		Point( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
-		 *\param[in]	p_ptPoint	The Point object to move
+		 *\param[in]	p_point	The Point object to move
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_ptPoint	L'objet Point à déplacer
+		 *\param[in]	p_point	L'objet Point à déplacer
 		 */
-		Point( Point< T, Count > && p_ptPoint );
+		Point( Point< T, Count > && p_point );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
-		 *\param[in]	p_ptPoint	The Point object to copy
+		 *\param[in]	p_point	The Point object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_ptPoint	L'objet Point à copier
+		 *\param[in]	p_point	L'objet Point à copier
 		 */
-		Point( Coords< T, Count > const & p_ptPoint );
+		Point( Coords< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -987,34 +987,34 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Negates every value of a point's data
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\~french
 		 *\brief		Négative chaque donnée du point donné
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 */
-		template< typename T, uint32_t Count > static void negate( Point< T, Count > & p_ptPoint );
+		template< typename T, uint32_t Count > static void negate( Point< T, Count > & p_point );
 		/**
 		 *\~english
 		 *\brief		Normalises the point
 		 *\remarks		A point is normalised when it's length equals 1.0
 						<br />So each data is divided by the point's length
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\~french
 		 *\brief		Normalise le point
 		 *\remarks		Un point est normalisé quand sa longueur vaut 1.0
 						<br />Chaque donnée est donc divisée par la longueur du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 						*/
-		template< typename T, uint32_t Count > static void normalise( Point< T, Count > & p_ptPoint );
+		template< typename T, uint32_t Count > static void normalise( Point< T, Count > & p_point );
 		/**
 		 *\~english
 		 *\brief		Returns the normalised form of a point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\~french
 		 *\brief		Retourne la forme normalisée d'un point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 */
-		template< typename T, uint32_t Count > static Point< T, Count > get_normalised( Point< T, Count > const & p_ptPoint );
+		template< typename T, uint32_t Count > static Point< T, Count > get_normalised( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points
@@ -1040,60 +1040,60 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Computes the squared Euclidian distance of the point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\return		The squared Euclidian distance
 		 *\~french
 		 *\brief		Calcule le carré de la norme Euclidienne du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 *\return		Le carré de la norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance_squared( Point< T, Count > const & p_ptPoint );
+		template< typename T, uint32_t Count > static double distance_squared( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Euclidian distance of the point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\return		The Euclidian distance
 		 *\~french
 		 *\brief		Calcule la norme Euclidienne du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 *\return		La norme Euclidienne
 		 */
-		template< typename T, uint32_t Count > static double distance( Point< T, Count > const & p_ptPoint );
+		template< typename T, uint32_t Count > static double distance( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Manhattan distance of the point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\return		The Manhattan distance
 		 *\~french
 		 *\brief		Calcule la distance de Manhattan du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 *\return		La distance de Manhattan
 		 */
-		template< typename T, uint32_t Count > static double distance_manhattan( Point< T, Count > const & p_ptPoint );
+		template< typename T, uint32_t Count > static double distance_manhattan( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the Minkowski distance of the point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\param[in]	p_dOrder	The Minkowski order
 		 *\return		The Minkowski distance
 		 *\~french
 		 *\brief		Calcule la distance de Minkowski du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 *\param[in]	p_dOrder	L'ordre Minkownski
 		 *\return		La distance de Minkowski
 		 */
-		template< typename T, uint32_t Count > static double distance_minkowski( Point< T, Count > const & p_ptPoint, double p_dOrder );
+		template< typename T, uint32_t Count > static double distance_minkowski( Point< T, Count > const & p_point, double p_dOrder );
 		/**
 		 *\~english
 		 *\brief		Computes the Chebychev distance of the point
-		 *\param[in]	p_ptPoint	The point
+		 *\param[in]	p_point	The point
 		 *\return		The Chebychev distance
 		 *\~french
 		 *\brief		Calcule la distance de Chebychev du point
-		 *\param[in]	p_ptPoint	Le point
+		 *\param[in]	p_point	Le point
 		 *\return		La distance de Chebychev
 		 */
-		template< typename T, uint32_t Count > static double distance_chebychev( Point< T, Count > const & p_ptPoint );
+		template< typename T, uint32_t Count > static double distance_chebychev( Point< T, Count > const & p_point );
 		/**
 		 *\~english
 		 *\brief		Computes the scalar product of 2 points

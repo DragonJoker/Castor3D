@@ -51,8 +51,6 @@ add_target(
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 add_target_test( ${PROJECT_NAME} )
-
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/Src/mtx_ope.cl DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE} )
-file( COPY ${CMAKE_CURRENT_SOURCE_DIR}/Src/mtx_ope.cl DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG} )
+copy_target_files( ${PROJECT_NAME} "" ${CMAKE_CURRENT_SOURCE_DIR}/Src/mtx_ope.cl )
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

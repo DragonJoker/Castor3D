@@ -219,6 +219,20 @@ namespace Castor3D
 		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
 		/**
 		 *\~english
+		 *\brief		Checks if given SphereBox is in the view frustum
+		 *\param[in]	p_box				The SphereBox
+		 *\param[in]	m_transformations	The SphereBox transformations matrix
+		 *\return		\p false if the SphereBox is completely out of the view frustum
+		 *\~french
+		 *\brief
+		 *\brief		Vérifie si la SphereBox donnée est dans le frustum de vue
+		 *\param[in]	p_box				La SphereBox
+		 *\param[in]	m_transformations	La SphereBox de transformations de la CubeBox
+		 *\return		\p false si la SphereBox est complètement en dehors du frustum de vue
+		 */
+		C3D_API bool IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		/**
+		 *\~english
 		 *\brief		Checks if given point is in the view frustum
 		 *\param[in]	p_point	The point
 		 *\return		\p false if the point out of the view frustum
@@ -279,7 +293,7 @@ namespace Castor3D
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
 		Viewport m_viewport;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
-		std::array< Castor::PlaneEquation< real >, eFRUSTUM_PLANE_COUNT > m_planes;
+		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::Count ) > m_planes;
 		//!\~english The view matrix	\~french La matrice vue
 		Castor::Matrix4x4r m_view;
 	};

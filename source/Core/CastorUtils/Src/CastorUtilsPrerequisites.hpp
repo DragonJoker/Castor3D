@@ -163,6 +163,31 @@ namespace Castor
 		ePIXEL_FORMAT_STENCIL8,
 		CASTOR_ENUM_BOUNDS( ePIXEL_FORMAT, ePIXEL_FORMAT_L8 )
 	}	ePIXEL_FORMAT;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\~english
+	\brief		Intersection types
+	\remark		Enumerates the different intersection types.
+	\~french
+	\brief		Types d'intersection
+	\remark		Enumère les différents types d'intersection.
+	*/
+	enum class Intersection
+		: uint8_t
+	{
+		//!\~english	Completely inside.
+		//!\~french		Complètement à l'intérieur.
+		In,
+		//!\~english	Completely outside.
+		//!\~french		Complètement à l'extérieur.
+		Out,
+		//!\~english	Intersection.
+		//!\~french		Intersection
+		Intersect,
+		CASTOR_ENUM_CLASS_BOUNDS( In )
+	};
 
 #if CASTOR_USE_DOUBLE
 	typedef double real;
@@ -189,7 +214,8 @@ namespace Castor
 	*/
 	struct NoInit {};
 
-	class Angle;
+	template< typename Type >
+	class AngleT;
 	class BinaryFile;
 	template< class T >
 	class BinaryLoader;
@@ -275,7 +301,8 @@ namespace Castor
 	template< typename T > using Coords3 = Coords< T, 3 >;
 	template< typename T > using Coords4 = Coords< T, 4 >;
 
-	using Quaternion = QuaternionT< double >;
+	using Angle = AngleT< real >;
+	using Quaternion = QuaternionT< real >;
 
 	DECLARE_POINT( bool,		4, b	);
 	DECLARE_POINT( bool,		3, b	);

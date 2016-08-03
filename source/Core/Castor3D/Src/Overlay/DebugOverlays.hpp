@@ -90,15 +90,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the overlays texts.
 		 *\param[in]	p_vertices	The vertex count.
-		 *\param[in]	p_faces		The face count.
-		 *\param[in]	p_objects	The object count.
+		 *\param[in]	p_faces		The faces count.
+		 *\param[in]	p_objects	The objects count.
+		 *\param[in]	p_visible	The visible objects count.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
 		 *\param[in]	p_vertices	Le nombre de sommets.
 		 *\param[in]	p_faces		Le nombre de faces.
 		 *\param[in]	p_objects	Le nombre d'objets.
+		 *\param[in]	p_visible	Le nombre d'objets visibles.
 		 */
-		void EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects );
+		void EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible );
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
@@ -155,10 +157,12 @@ namespace Castor3D
 		TextOverlaySPtr m_debugAverageTime;
 		//!\~english The vertex count value overlay.	\~french L'incrustation contenant la valeur du nombre de sommets.
 		TextOverlaySPtr m_debugVertexCount;
-		//!\~english The face count value overlay.	\~french L'incrustation contenant la valeur du nombre de faces.
+		//!\~english The faces count value overlay.	\~french L'incrustation contenant la valeur du nombre de faces.
 		TextOverlaySPtr m_debugFaceCount;
-		//!\~english The object count value overlay.	\~french L'incrustation contenant la valeur du nombre d'objets.
+		//!\~english The objects count value overlay.	\~french L'incrustation contenant la valeur du nombre d'objets.
 		TextOverlaySPtr m_debugObjectCount;
+		//!\~english The visible objects count value overlay.	\~french L'incrustation contenant la valeur du nombre d'objets visibles.
+		TextOverlaySPtr m_debugVisibleObjectCount;
 		//!\~english The times of the 100 last frames.	\~french Les temps des 100 dernières frames.
 		std::array< double, FRAME_SAMPLES_COUNT > m_framesTimes;
 		//!\~english The current frame index in m_framesTimes.	\~french L'index de la frame courante, dans m_framesTimes.

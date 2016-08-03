@@ -427,20 +427,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the wanted frustum view plane
-		 *\param[in]	p_ePlane	The wanted plane index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le plan voulu du frustum de vue
-		 *\param[in]	p_ePlane	L'index du plan voulu
-		 *\return		La valeur
-		 */
-		inline const Castor::PlaneEquation< real > & GetFrustumPlane( eFRUSTUM_PLANE p_ePlane )const
-		{
-			return m_planes[p_ePlane];
-		}
-		/**
-		 *\~english
 		 *\return		The projection matrix
 		 *\~french
 		 *\return		La matrice de projection
@@ -670,8 +656,6 @@ namespace Castor3D
 		real m_ratio;
 		//!\~english Tells the view frustum's planes need to be updated	\~french Dit que les plans du frustum de vue doivent être mis à jour
 		bool m_modified;
-		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
-		std::array< Castor::PlaneEquation< real >, eFRUSTUM_PLANE_COUNT > m_planes;
 		//!\~english The projection matrix.	\~french La matrice de projection.
 		Castor::Matrix4x4r m_projection;
 		//!\~english The render API specific implementation.	\~french L'implémentation spécifique à l'API de rendu.

@@ -29,7 +29,7 @@ namespace Castor3D
 	bool BillboardList::TextWriter::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n" ) ) > 0
-			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		MovableObject::TextWriter::CheckError( l_return, "BillboardList name" );
 
 		if ( l_return )
@@ -52,7 +52,7 @@ namespace Castor3D
 		if ( l_return && p_obj.GetCount() )
 		{
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "\tpositions\n" ) ) > 0
-				&& p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+					   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
 			MovableObject::TextWriter::CheckError( l_return, "BillboardList positions" );
 
 			for ( auto const & l_point : p_obj )
@@ -77,7 +77,10 @@ namespace Castor3D
 	BillboardList::BillboardList( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
 		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
 		, m_needUpdate( false )
-		, m_declaration( { BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) } )
+		, m_declaration{
+		{
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
+		} }
 	{
 	}
 
