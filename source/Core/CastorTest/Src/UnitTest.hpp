@@ -149,6 +149,21 @@ namespace Testing
 		mutable std::shared_ptr< Getter > m_thunk;
 	};
 
+	class TestFailed
+		: public std::exception
+	{
+	public:
+		TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line );
+		virtual ~TestFailed() throw( );
+		const char * what()
+		{
+			return m_what.c_str();
+		}
+
+	private:
+		std::string m_what;
+	};
+
 	class TestCase
 	{
 	public:
@@ -353,21 +368,6 @@ namespace Testing
 		uint32_t * m_testCount{ nullptr };
 		std::string m_name;
 		std::vector< std::pair< std::string, TestFunction > > m_tests;
-	};
-
-	class TestFailed
-		: public std::exception
-	{
-	public:
-		TestFailed( std::string const & p_what, std::string const & p_file, std::string const & p_function, int p_line );
-		virtual ~TestFailed() throw();
-		const char * what()
-		{
-			return m_what.c_str();
-		}
-
-	private:
-		std::string m_what;
 	};
 
 #	define LAZY( E ) Lazy< decltype( ( E ) ) >( std::function< decltype( ( E ) )() >( [&]() -> decltype( ( E ) )\
