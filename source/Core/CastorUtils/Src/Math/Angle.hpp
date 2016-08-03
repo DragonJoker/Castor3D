@@ -382,8 +382,8 @@ namespace Castor
 		//!\~english The angle value	\~french La valeur de l'angle
 		Type m_radians;
 
-		template< typename Type >
-		friend bool operator==( AngleT< Type > const & p_lhs, AngleT< Type > const & p_rhs );
+		template< typename T >
+		friend bool operator==( AngleT< T > const & p_lhs, AngleT< T > const & p_rhs );
 	};
 	/**
 	 *\~english

@@ -11,25 +11,25 @@
 
 namespace Castor
 {
-	const float AngleT< float >::Pi = float( 3.1415926535897932384626433832795028841968 );
-	const float AngleT< float >::PiDiv2 = AngleT< float >::Pi / 2;
-	const float AngleT< float >::PiMult2 = AngleT< float >::Pi * 2;
-	const float AngleT< float >::RadianToDegree = float( 57.295779513082320876798154814105 );
-	const float AngleT< float >::RadianToGrad = 200.0f / AngleT< float >::Pi;
-	const float AngleT< float >::DegreeToRadian = float( 0.01745329251994329576923690768489 );
-	const float AngleT< float >::DegreeToGrad = 200.0f / 180.0f;
-	const float AngleT< float >::GradToRadian = AngleT< float >::Pi / 200.0f;
-	const float AngleT< float >::GradToDegree = 180.0f / 200.0f;
+	template<> const float AngleT< float >::Pi = float( 3.1415926535897932384626433832795028841968 );
+	template<> const float AngleT< float >::PiDiv2 = AngleT< float >::Pi / 2;
+	template<> const float AngleT< float >::PiMult2 = AngleT< float >::Pi * 2;
+	template<> const float AngleT< float >::RadianToDegree = float( 57.295779513082320876798154814105 );
+	template<> const float AngleT< float >::RadianToGrad = 200.0f / AngleT< float >::Pi;
+	template<> const float AngleT< float >::DegreeToRadian = float( 0.01745329251994329576923690768489 );
+	template<> const float AngleT< float >::DegreeToGrad = 200.0f / 180.0f;
+	template<> const float AngleT< float >::GradToRadian = AngleT< float >::Pi / 200.0f;
+	template<> const float AngleT< float >::GradToDegree = 180.0f / 200.0f;
 
-	const double AngleT< double >::Pi = 3.1415926535897932384626433832795028841968;
-	const double AngleT< double >::PiDiv2 = AngleT< double >::Pi / 2;
-	const double AngleT< double >::PiMult2 = AngleT< double >::Pi * 2;
-	const double AngleT< double >::RadianToDegree = 57.295779513082320876798154814105;
-	const double AngleT< double >::RadianToGrad = 200 / AngleT< double >::Pi;
-	const double AngleT< double >::DegreeToRadian = 0.01745329251994329576923690768489;
-	const double AngleT< double >::DegreeToGrad = 200.0 / 180.0;
-	const double AngleT< double >::GradToRadian = AngleT< double >::Pi / 200;
-	const double AngleT< double >::GradToDegree = 180.0 / 200.0;
+	template<> const double AngleT< double >::Pi = 3.1415926535897932384626433832795028841968;
+	template<> const double AngleT< double >::PiDiv2 = AngleT< double >::Pi / 2;
+	template<> const double AngleT< double >::PiMult2 = AngleT< double >::Pi * 2;
+	template<> const double AngleT< double >::RadianToDegree = 57.295779513082320876798154814105;
+	template<> const double AngleT< double >::RadianToGrad = 200 / AngleT< double >::Pi;
+	template<> const double AngleT< double >::DegreeToRadian = 0.01745329251994329576923690768489;
+	template<> const double AngleT< double >::DegreeToGrad = 200.0 / 180.0;
+	template<> const double AngleT< double >::GradToRadian = AngleT< double >::Pi / 200;
+	template<> const double AngleT< double >::GradToDegree = 180.0 / 200.0;
 
 	dummy_dtor g_dummyDtor;
 
