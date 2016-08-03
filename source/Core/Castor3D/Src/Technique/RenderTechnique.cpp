@@ -372,28 +372,6 @@ namespace Castor3D
 			}
 		}
 
-		template< typename NodeType >
-		void DoResortAlpha( SubmeshStaticRenderNodesByProgramMap p_input, Camera const & p_camera, std::multimap< double, NodeType > & p_output )
-		{
-			p_output.clear();
-
-			DoTraverseNodes( p_input, [&p_camera, &p_output]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
-			{
-				for ( auto & l_renderNode : p_renderNodes )
-				{
-					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
-					{
-						Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
-						Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
-						Point3r l_ptCameraLocal = l_mtxMeshGlobal * l_position;
-						l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
-						l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
-						p_output.insert( std::make_pair( point::distance_squared( l_ptCameraLocal ), l_renderNode ) );
-					}
-				}
-			} );
-		}
-
 		template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 		void DoRenderAlphaNodes( Scene & p_scene
 									 , RenderTechnique::stRENDER_NODES< NodeType, OpaqueMapType, TransparentMapType > & p_nodes
