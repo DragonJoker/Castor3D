@@ -25,8 +25,6 @@ SOFTWARE.
 
 #include "TestPrerequisites.hpp"
 
-#include <cmath>
-
 namespace Testing
 {
 	template< typename T >

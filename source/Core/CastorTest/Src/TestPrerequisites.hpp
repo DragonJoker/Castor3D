@@ -30,12 +30,17 @@ SOFTWARE.
 #	include <unistd.h>
 #endif
 
-#include <iostream>
-#include <sstream>
-#include <memory>
+#include <algorithm>
 #include <chrono>
-#include <vector>
+#include <cmath>
+#include <cstdint>
 #include <functional>
+#include <iostream>
+#include <memory>
+#include <sstream>
+#include <string>
+#include <memory>
+#include <vector>
 
 namespace Testing
 {
