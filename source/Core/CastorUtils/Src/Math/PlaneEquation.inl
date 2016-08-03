@@ -74,7 +74,7 @@
 		if ( ! IsParallel( p_plane ) )
 		{
 			Point< T, 3 > l_normal( m_normal ^ p_plane.m_normal );
-			T default{};
+			T l_default{};
 			T b1 = m_normal[1];
 			T c1 = m_normal[2];
 			T d1 = m_d;
@@ -83,7 +83,7 @@
 			T d2 = m_d;
 			T div = ( b1 * c2 ) - ( b2 * c1 );
 
-			if ( !policy::equals( b1, default ) && !policy::equals( div, default ) )
+			if ( !policy::equals( b1, l_default ) && !policy::equals( div, l_default ) )
 			{
 				Point< T, 3 > l_point;
 				l_point[2] = ( ( b2 * d1 ) - ( b1 * d2 ) ) / div;
