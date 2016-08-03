@@ -39,7 +39,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTargetCache::Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
+	void RenderTargetCache::Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible )
 	{
 		auto l_lock = make_unique_lock( *this );
 
@@ -53,6 +53,7 @@ namespace Castor3D
 				p_fceCount += l_scene->GetGeometryCache().GetFaceCount();
 				p_vtxCount += l_scene->GetGeometryCache().GetVertexCount();
 				l_target->Render( p_time );
+				p_visible += l_target->GetVisbleObjectsCount();
 			}
 		}
 
@@ -66,6 +67,7 @@ namespace Castor3D
 				p_fceCount += l_scene->GetGeometryCache().GetFaceCount();
 				p_vtxCount += l_scene->GetGeometryCache().GetVertexCount();
 				l_target->Render( p_time );
+				p_visible += l_target->GetVisbleObjectsCount();
 			}
 		}
 	}

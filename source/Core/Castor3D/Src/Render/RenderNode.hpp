@@ -98,9 +98,35 @@ namespace Castor3D
 	\author 	Sylvain DOREMUS
 	\date
 	\~english
-	\brief		Helper structure used to render submeshes.
+	\brief		Helper structure used to render objects.
 	\~french
-	\brief		Structure d'aide utilisée pour le dessin des sous-maillages.
+	\brief		Structure d'aide utilisée pour le dessin d'objets.
+	*/
+	template< typename DataType >
+	struct ObjectRenderNode
+	{
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		SceneRenderNode m_scene;
+		//!\~english	The geometry buffers.
+		//!\~french		Les tampons de la géométrie.
+		GeometryBuffers & m_buffers;
+		//!\~english	The object's data.
+		//!\~french		Les données de l'objet.
+		DataType & m_data;
+		//!\~english	The parent scene node.
+		//!\~french		Le scene node parent.
+		SceneNode & m_sceneNode;
+	};
+	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
+	using BillboardListRenderNode = ObjectRenderNode< BillboardList >;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date
+	\~english
+	\brief		Helper structure used to render static submeshes.
+	\~french
+	\brief		Structure d'aide utilisée pour le dessin des sous-maillages non animés.
 	*/
 	struct StaticGeometryRenderNode
 	{
@@ -109,12 +135,14 @@ namespace Castor3D
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_pipeline	The render pipeline.
+		 *\return		\p true if the node has been rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\return		\p true si le noeud a été dessiné.
 		 */
-		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -138,21 +166,13 @@ namespace Castor3D
 		 */
 		C3D_API void UnbindPass( Scene const & p_scene )const;
 
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
+		//!\~english	The geometry render node.
+		//!\~french		Le noeud de dessin de géométrie.
+		SubmeshRenderNode m_dataNode;
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de la géométrie.
-		GeometryBuffers & m_buffers;
-		//!\~english	The submesh.
-		//!\~french		Le sous-maillage.
-		Submesh & m_data;
-		//!\~english	The parent scene node.
-		//!\~french		Le scene node parent.
-		SceneNode & m_sceneNode;
+
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -169,12 +189,14 @@ namespace Castor3D
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_pipeline	The render pipeline.
+		 *\return		\p true if the node has been rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\return		\p true si le noeud a été dessiné.
 		 */
-		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -198,21 +220,12 @@ namespace Castor3D
 		 */
 		C3D_API void UnbindPass( Scene const & p_scene )const;
 
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
+		//!\~english	The geometry render node.
+		//!\~french		Le noeud de dessin de géométrie.
+		SubmeshRenderNode m_dataNode;
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de la géométrie.
-		GeometryBuffers & m_buffers;
-		//!\~english	The submesh.
-		//!\~french		Le sous-maillage.
-		Submesh & m_data;
-		//!\~english	The parent scene node.
-		//!\~french		Le scene node parent.
-		SceneNode & m_sceneNode;
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
 		AnimatedSkeleton * m_skeleton;
@@ -238,12 +251,14 @@ namespace Castor3D
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_pipeline	The render pipeline.
+		 *\return		\p true if the node has been rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\return		\p true si le noeud a été dessiné.
 		 */
-		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline );
+		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -269,16 +284,7 @@ namespace Castor3D
 
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
-		//!\~english	The billboard.
-		//!\~french		Le billboard.
-		BillboardList & m_data;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de la géométrie.
-		GeometryBuffers & m_buffers;
-		//!\~english	The parent scene node.
-		//!\~french		Le scene node parent.
-		SceneNode & m_sceneNode;
+		BillboardListRenderNode m_dataNode;
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
 		FrameVariableBuffer & m_billboardUbo;

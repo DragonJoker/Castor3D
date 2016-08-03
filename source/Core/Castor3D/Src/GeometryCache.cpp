@@ -4,6 +4,7 @@
 
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Scene/Geometry.hpp"
+#include "Mesh/Mesh.hpp"
 
 using namespace Castor;
 
@@ -63,5 +64,13 @@ namespace Castor3D
 
 	GeometryCache::~ObjectCache()
 	{
+	}
+
+	uint32_t GeometryCache::GetObjectCount()const
+	{
+		return std::accumulate( m_elements.begin(), m_elements.end(), 0u, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
+		{
+			return p_value + p_pair.second->GetMesh()->GetSubmeshCount();
+		} );
 	}
 }

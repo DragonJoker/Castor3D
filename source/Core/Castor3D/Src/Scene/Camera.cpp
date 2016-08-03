@@ -148,11 +148,15 @@ namespace Castor3D
 			{
 				auto const & l_position = l_node->GetDerivedPosition();
 				auto const & l_orientation = l_node->GetDerivedOrientation();
-				Point3r l_right, l_up, l_lookat;
-				l_orientation.to_axes( l_right, l_up, l_lookat );
+				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
+				Point3r l_up{ 0.0_r, 1.0_r, 0.0_r };
+				Point3r l_front{ 0.0_r, 0.0_r, 1.0_r };
+				l_orientation.transform( l_right, l_right );
+				l_orientation.transform( l_up, l_up );
+				l_orientation.transform( l_front, l_front );
 				point::normalise( l_up );
 				point::normalise( l_right );
-				point::normalise( l_lookat );
+				point::normalise( l_front );
 
 				// Update frustum
 				// Retrieve near and far planes' dimensions
@@ -179,12 +183,12 @@ namespace Castor3D
 
 				// Compute planes' points
 				// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-				Point3r l_nc{ l_position + l_lookat * m_viewport.GetNear() };
+				Point3r l_nc{ l_position + l_front * m_viewport.GetNear() };
 				Point3r l_ntl{ l_nc + ( l_up * l_nearHeight / 2 ) - ( l_right * l_nearWidth / 2 ) };
 				Point3r l_nbl{ l_nc - ( l_up * l_nearHeight / 2 ) - ( l_right * l_nearWidth / 2 ) };
 				Point3r l_ntr{ l_nc + ( l_up * l_nearHeight / 2 ) + ( l_right * l_nearWidth / 2 ) };
 				Point3r l_nbr{ l_nc - ( l_up * l_nearHeight / 2 ) + ( l_right * l_nearWidth / 2 ) };
-				Point3r l_fc{ l_position + l_lookat * m_viewport.GetFar() };
+				Point3r l_fc{ l_position + l_front * m_viewport.GetFar() };
 				Point3r l_ftl{ l_fc + ( l_up * l_farHeight / 2 ) - ( l_right * l_farWidth / 2 ) };
 				Point3r l_fbl{ l_fc - ( l_up * l_farHeight / 2 ) - ( l_right * l_farWidth / 2 ) };
 				Point3r l_ftr{ l_fc + ( l_up * l_farHeight / 2 ) + ( l_right * l_farWidth / 2 ) };
@@ -199,7 +203,7 @@ namespace Castor3D
 				m_planes[size_t( FrustumPlane::Bottom )].Set( l_nbr, l_fbr, l_fbl );
 
 				// Update view matrix
-				matrix::look_at( m_view, l_position, l_position + l_lookat, l_up );
+				matrix::look_at( m_view, l_position, l_position + l_front, l_up );
 			}
 
 			p_pipeline.SetViewMatrix( m_view );
@@ -291,7 +295,7 @@ namespace Castor3D
 			}
 		}
 
-		return true;// l_return != Intersection::Out;
+		return l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Castor::SphereBox const & p_box, Castor::Matrix4x4r const & m_transformations )const
@@ -313,7 +317,7 @@ namespace Castor3D
 			}
 		}
 
-		return true;// l_return != Intersection::Out;
+		return l_return != Intersection::Out;
 	}
 
 	bool Camera::IsVisible( Point3r const & p_point )const
@@ -324,7 +328,7 @@ namespace Castor3D
 			return p_plane.Distance( p_point ) < 0;
 		} );
 
-		return true;// l_it == m_planes.end();
+		return l_it == m_planes.end();
 	}
 
 	void Camera::FillShader( FrameVariableBuffer const & p_sceneBuffer )const

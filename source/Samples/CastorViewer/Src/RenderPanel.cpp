@@ -672,7 +672,7 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaY, -l_deltaX, 0.0_r ) );
+					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{

@@ -567,7 +567,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox const & GetSphere()const
+		inline Castor::SphereBox const & GetSphereBox()const
 		{
 			return m_sphere;
 		}
@@ -577,7 +577,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox & GetSphere()
+		inline Castor::SphereBox & GetSphereBox()
 		{
 			return m_sphere;
 		}

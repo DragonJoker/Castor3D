@@ -106,6 +106,13 @@ namespace Castor3D
 		 */
 		C3D_API ~ObjectCache();
 		/**
+		 *\~english
+		 *\return		The objects count.
+		 *\~french
+		 *\return		Le nombre d'objets
+		 */
+		C3D_API uint32_t GetObjectCount ()const;
+		/**
 		*\~english
 		*\return		The faces count for all objects.
 		*\~french
