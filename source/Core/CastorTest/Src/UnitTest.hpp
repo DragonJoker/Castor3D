@@ -379,7 +379,7 @@ namespace Testing
 	Check( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
 
 #	define CT_EQUAL( x, y )\
-	CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, __LINE__, #x, #y )
+	CheckEqual( [&]( auto const & lhs, auto const & rhs ){ return this->compare( lhs, rhs ); }, LAZY( ( x ) ), LAZY( ( y ) ), __FILE__, __FUNCTION__, __LINE__, #x, #y )
 
 #	define CT_CHECK_THROW( x )\
 	CheckThrow( LAZY( ( x ) ), __FILE__, __FUNCTION__, __LINE__, #x )
