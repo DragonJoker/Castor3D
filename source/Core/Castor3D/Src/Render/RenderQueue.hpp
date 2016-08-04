@@ -187,7 +187,7 @@ namespace Castor3D
 		CameraSceneRenderNodesMap m_nextPreparedRenderNodes;
 		//!\~english	The camera positions at previous frame.
 		//!\~french		La position des caméras à la frame précédente.
-		std::map< Camera const *, Castor::Point3r > m_cameraPositions;
+		std::map< Camera const *, std::pair<  Castor::Point3r, Castor::Quaternion > > m_cameraPositions;
 		//!\~english	The newly added scenes.
 		//!\~french		Les scènes récemment ajoutées.
 		std::vector< SceneRPtr > m_newScenes;

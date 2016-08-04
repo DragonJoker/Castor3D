@@ -343,22 +343,27 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByProgram );
+	DECLARE_MAP( ShaderProgramSPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByProgram );
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByProgram );
+	DECLARE_MAP( ShaderProgramSPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByProgram );
 	//!\~english	Shader program sorted BillboardRenderNodesMap map.
 	//!\~french		Map de BillboardRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramRPtr, BillboardRenderNodeArray, BillboardRenderNodesByProgram );
+	DECLARE_MAP( ShaderProgramSPtr, BillboardRenderNodeArray, BillboardRenderNodesByProgram );
 
 	//!\~english	Submesh sorted StaticGeometryRenderNodeArray (for instantiation).
 	//!\~french		Map StaticGeometryRenderNodeArray, triés par sous-maillage (pour l'instanciation).
-	DECLARE_MAP( SubmeshRPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
+	DECLARE_MAP( SubmeshSPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
 	//!\~english	Pass sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par passe.
 	template< typename T >
 	struct TypeRenderNodesByPassMap
 	{
+	public:
+		using key_type = typename std::map< PassSPtr, T >::key_type;
+		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
+		using value_type = typename std::map< PassSPtr, T >::value_type;
+
 		inline auto begin()const
 		{
 			return m_map.begin();
@@ -379,29 +384,24 @@ namespace Castor3D
 			return m_map.end();
 		}
 
-		inline auto find( PassSPtr p_pass )const
+		inline auto find( key_type p_pass )const
 		{
 			return m_map.find( p_pass );
 		}
 
-		inline auto insert( std::pair< PassRPtr, T > p_pair )
+		inline auto insert( std::pair< key_type, mapped_type > p_pair )
 		{
 			return m_map.insert( p_pair );
 		}
 
-	public:
-		using key_type = typename std::map< PassRPtr, T >::key_type;
-		using mapped_type = typename std::map< PassRPtr, T >::mapped_type;
-		using value_type = typename std::map< PassRPtr, T >::value_type;
-
 	private:
-		std::map< PassRPtr, T > m_map;
+		std::map< key_type, mapped_type > m_map;
 	};
 	using SubmeshStaticRenderNodesByPassMap = TypeRenderNodesByPassMap< SubmeshStaticRenderNodesMap >;
 
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByProgram );
+	DECLARE_MAP( ShaderProgramSPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByProgram );
 
 	//@}
 }

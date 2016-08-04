@@ -340,19 +340,23 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register )
 	{
-		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline, this]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline, &p_register, this]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
 				l_renderNode.Render (p_scene, p_pipeline);
-				m_renderedObjects.push_back( l_renderNode );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
 			}
 		} );
 	}
 
 	void RenderTechnique::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register )
 	{
-		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline, this]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes( p_nodes, [&p_scene, &p_pipeline, &p_register, this]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() )
 			{
@@ -364,7 +368,11 @@ namespace Castor3D
 				{
 					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
 					l_buffer += l_stride;
-					m_renderedObjects.push_back( l_renderNode );
+
+					if ( p_register )
+					{
+						m_renderedObjects.push_back( l_renderNode );
+					}
 				}
 
 				p_renderNodes[0].BindPass( p_scene, p_pipeline, MASK_MTXMODE_MODEL );
