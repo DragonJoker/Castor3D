@@ -102,7 +102,7 @@ namespace Direct
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRender
 		 */
-		void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
+		void DoRender( Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */

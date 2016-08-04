@@ -236,10 +236,13 @@ namespace Castor3D
 			m_renderTechnique->Initialise( l_index );
 
 			SceneSPtr l_scene = GetScene();
+			auto l_camera = m_pCamera.lock();
 
-			if ( l_scene )
+			if ( l_scene && l_camera )
 			{
-				m_renderTechnique->AddScene( *l_scene );
+				m_renderTechnique->AddScene( *l_scene, *l_camera );
+				m_renderTechnique->AddScene( *l_scene, *m_pCameraLEye.lock() );
+				m_renderTechnique->AddScene( *l_scene, *m_pCameraREye.lock() );
 			}
 
 			for ( auto l_effect : m_postEffects )
