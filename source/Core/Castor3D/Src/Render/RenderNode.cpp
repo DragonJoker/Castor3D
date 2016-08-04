@@ -58,11 +58,13 @@ namespace Castor3D
 		DoRender( p_scene, p_pipeline, *this );
 	}
 
+	template<>
 	void SubmeshRenderNode::UnbindPass( Scene const & p_scene )const
 	{
 		DoUnbind( p_scene, *this );
 	}
 
+	template<>
 	void BillboardListRenderNode::Render( Scene const & p_scene, Pipeline & p_pipeline )
 	{
 		DoRender( p_scene, p_pipeline, *this );
