@@ -288,6 +288,7 @@ namespace Castor3D
 	void RenderTechnique::AddScene( Scene & p_scene, Camera & p_camera )
 	{
 		m_scenes.insert( { &p_scene, std::vector< CameraRPtr >{} } ).first->second.push_back( &p_camera );
+		m_renderQueue.AddScene( p_scene );
 	}
 
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime, uint32_t & p_visible )
