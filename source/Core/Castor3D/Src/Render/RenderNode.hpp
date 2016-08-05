@@ -84,6 +84,7 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
+		SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos );
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
 		RenderNode m_node;
@@ -104,7 +105,7 @@ namespace Castor3D
 	*/
 	struct ObjectRenderNodeBase
 	{
-		ObjectRenderNodeBase( SceneRenderNode && p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode );
+		ObjectRenderNodeBase( SceneRenderNode const & p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode );
 		/**
 		 *\~english
 		 *\brief		Render function.

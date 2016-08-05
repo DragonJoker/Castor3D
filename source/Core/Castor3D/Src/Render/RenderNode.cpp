@@ -46,13 +46,21 @@ namespace Castor3D
 		}
 	}
 
-	ObjectRenderNodeBase::ObjectRenderNodeBase( SceneRenderNode && p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode )
-		: m_scene{ std::move( p_scene ) }
+	SceneRenderNode::SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos )
+		: m_node{ p_node }
+		, m_sceneUbo{ p_sceneUbo }
+		, m_cameraPos{ p_cameraPos }
+	{
+	}
+
+	ObjectRenderNodeBase::ObjectRenderNodeBase( SceneRenderNode const & p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode )
+		: m_scene{ p_scene }
 		, m_buffers{ p_buffers }
 		, m_sceneNode{ p_sceneNode }
 	{
 	}
 
+	template<>
 	void SubmeshRenderNode::Render( Scene const & p_scene, Pipeline & p_pipeline )
 	{
 		DoRender( p_scene, p_pipeline, *this );
@@ -70,6 +78,7 @@ namespace Castor3D
 		DoRender( p_scene, p_pipeline, *this );
 	}
 
+	template<>
 	void BillboardListRenderNode::UnbindPass( Scene const & p_scene )const
 	{
 		DoUnbind( p_scene, *this );
