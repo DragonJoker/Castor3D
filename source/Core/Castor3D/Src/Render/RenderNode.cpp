@@ -47,7 +47,17 @@ namespace Castor3D
 	}
 
 	SceneRenderNode::SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos )
-		: m_node{ p_node }
+		: m_node{ p_node.m_pass
+				  , p_node.m_program
+				  , p_node.m_matrixUbo
+				  , p_node.m_passUbo
+				  , p_node.m_ambient
+				  , p_node.m_diffuse
+				  , p_node.m_specular
+				  , p_node.m_emissive
+				  , p_node.m_shininess
+				  , p_node.m_opacity
+				  , p_node.m_textures }
 		, m_sceneUbo{ p_sceneUbo }
 		, m_cameraPos{ p_cameraPos }
 	{
