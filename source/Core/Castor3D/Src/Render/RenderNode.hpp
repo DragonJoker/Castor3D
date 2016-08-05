@@ -84,6 +84,7 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
+		SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos );
 		//!\~english	The base render node.
 		//!\~french		Le noeud de rendu.
 		RenderNode m_node;
@@ -102,47 +103,20 @@ namespace Castor3D
 	\~french
 	\brief		Structure d'aide utilisée pour le dessin d'objets.
 	*/
-	template< typename DataType >
-	struct ObjectRenderNode
+	struct ObjectRenderNodeBase
 	{
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		SceneRenderNode m_scene;
-		//!\~english	The geometry buffers.
-		//!\~french		Les tampons de la géométrie.
-		GeometryBuffers & m_buffers;
-		//!\~english	The object's data.
-		//!\~french		Les données de l'objet.
-		DataType & m_data;
-		//!\~english	The parent scene node.
-		//!\~french		Le scene node parent.
-		SceneNode & m_sceneNode;
-	};
-	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
-	using BillboardListRenderNode = ObjectRenderNode< BillboardList >;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date
-	\~english
-	\brief		Helper structure used to render static submeshes.
-	\~french
-	\brief		Structure d'aide utilisée pour le dessin des sous-maillages non animés.
-	*/
-	struct StaticGeometryRenderNode
-	{
+		ObjectRenderNodeBase( SceneRenderNode const & p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode );
 		/**
 		 *\~english
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\return		\p true if the node has been rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\return		\p true si le noeud a été dessiné.
 		 */
-		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
+		C3D_API virtual void Render( Scene const & p_scene, Pipeline & p_pipeline ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -155,7 +129,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
+		C3D_API virtual void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
@@ -164,11 +138,99 @@ namespace Castor3D
 		 *\brief		Désctive la passe du noeud de rendu.
 		 *\param[in]	p_scene			La scène.
 		 */
-		C3D_API void UnbindPass( Scene const & p_scene )const;
+		C3D_API virtual void UnbindPass( Scene const & p_scene )const = 0;
 
-		//!\~english	The geometry render node.
-		//!\~french		Le noeud de dessin de géométrie.
-		SubmeshRenderNode m_dataNode;
+		//!\~english	The base render node.
+		//!\~french		Le noeud de rendu.
+		SceneRenderNode m_scene;
+		//!\~english	The geometry buffers.
+		//!\~french		Les tampons de la géométrie.
+		GeometryBuffers & m_buffers;
+		//!\~english	The parent scene node.
+		//!\~french		Le scene node parent.
+		SceneNode & m_sceneNode;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date
+	\~english
+	\brief		Helper structure used to render objects.
+	\~french
+	\brief		Structure d'aide utilisée pour le dessin d'objets.
+	*/
+	template< typename DataType >
+	struct ObjectRenderNode
+		: public ObjectRenderNodeBase
+	{
+		ObjectRenderNode( SceneRenderNode && p_scene
+						  , GeometryBuffers & p_buffers
+						  , SceneNode & p_sceneNode
+						  , DataType & p_data )
+			: ObjectRenderNodeBase{ std::move( p_scene ), p_buffers, p_sceneNode }
+			, m_data{ p_data }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 */
+		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline )override;
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 */
+		C3D_API void UnbindPass( Scene const & p_scene )const override;
+
+		//!\~english	The object's data.
+		//!\~french		Les données de l'objet.
+		DataType & m_data;
+	};
+	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
+	using BillboardListRenderNode = ObjectRenderNode< BillboardList >;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date
+	\~english
+	\brief		Helper structure used to render static submeshes.
+	\~french
+	\brief		Structure d'aide utilisée pour le dessin des sous-maillages non animés.
+	*/
+	struct StaticGeometryRenderNode
+		: public SubmeshRenderNode
+	{
+		StaticGeometryRenderNode( SceneRenderNode && p_scene
+								  , GeometryBuffers & p_buffers
+								  , SceneNode & p_sceneNode
+								  , Submesh & p_data
+								  , Geometry & p_geometry )
+			: SubmeshRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			, m_geometry{ p_geometry }
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
@@ -183,20 +245,23 @@ namespace Castor3D
 	\brief		Structure d'aide utilisée pour le dessin des sous-maillages animés.
 	*/
 	struct AnimatedGeometryRenderNode
+		: public SubmeshRenderNode
 	{
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	p_scene		The rendered scene.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\return		\p true if the node has been rendered.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	p_scene		La scène rendue.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\return		\p true si le noeud a été dessiné.
-		 */
-		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
+		AnimatedGeometryRenderNode( SceneRenderNode && p_scene
+									, GeometryBuffers & p_buffers
+									, SceneNode & p_sceneNode
+									, Submesh & p_data
+									, Geometry & p_geometry
+									, AnimatedSkeleton * p_skeleton
+									, AnimatedMesh * p_mesh
+									, FrameVariableBuffer & p_animationUbo )
+			: SubmeshRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			, m_geometry{ p_geometry }
+			, m_skeleton{ p_skeleton }
+			, m_mesh{ p_mesh }
+			, m_animationUbo{ p_animationUbo }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -209,20 +274,8 @@ namespace Castor3D
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
-		/**
-		 *\~english
-		 *\brief		Unbinds the render node's pass.
-		 *\param[in]	p_scene			The scene.
-		 *\~french
-		 *\brief		Désctive la passe du noeud de rendu.
-		 *\param[in]	p_scene			La scène.
-		 */
-		C3D_API void UnbindPass( Scene const & p_scene )const;
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
 
-		//!\~english	The geometry render node.
-		//!\~french		Le noeud de dessin de géométrie.
-		SubmeshRenderNode m_dataNode;
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
 		Geometry & m_geometry;
@@ -245,20 +298,19 @@ namespace Castor3D
 	\brief		Structure d'aide utilisée pour le dessin des billboards.
 	*/
 	struct BillboardRenderNode
+		: public BillboardListRenderNode
 	{
-		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	p_scene		The rendered scene.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\return		\p true if the node has been rendered.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	p_scene		La scène rendue.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\return		\p true si le noeud a été dessiné.
-		 */
-		C3D_API bool Render( Scene const & p_scene, Pipeline & p_pipeline );
+		BillboardRenderNode ( SceneRenderNode && p_scene
+							 , GeometryBuffers & p_buffers
+							 , SceneNode & p_sceneNode
+							 , BillboardList & p_data
+							 , FrameVariableBuffer & p_billboardUbo
+							 , Point2iFrameVariable & p_dimensions )
+			: BillboardListRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			, m_billboardUbo{ p_billboardUbo }
+			, m_dimensions{ p_dimensions }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -271,20 +323,8 @@ namespace Castor3D
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags );
-		/**
-		 *\~english
-		 *\brief		Unbinds the render node's pass.
-		 *\param[in]	p_scene			The scene.
-		 *\~french
-		 *\brief		Désctive la passe du noeud de rendu.
-		 *\param[in]	p_scene			La scène.
-		 */
-		C3D_API void UnbindPass( Scene const & p_scene )const;
+		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
 
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		BillboardListRenderNode m_dataNode;
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
 		FrameVariableBuffer & m_billboardUbo;
@@ -320,6 +360,11 @@ namespace Castor3D
 	template< typename T >
 	struct TypeRenderNodesByPassMap
 	{
+	public:
+		using key_type = typename std::map< PassSPtr, T >::key_type;
+		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
+		using value_type = typename std::map< PassSPtr, T >::value_type;
+
 		inline auto begin()const
 		{
 			return m_map.begin();
@@ -340,23 +385,18 @@ namespace Castor3D
 			return m_map.end();
 		}
 
-		inline auto find( PassSPtr p_pass )const
+		inline auto find( key_type p_pass )const
 		{
 			return m_map.find( p_pass );
 		}
 
-		inline auto insert( std::pair< PassSPtr, T > p_pair )
+		inline auto insert( std::pair< key_type, mapped_type > p_pair )
 		{
 			return m_map.insert( p_pair );
 		}
 
-	public:
-		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
-		using key_type = typename std::map< PassSPtr, T >::key_type;
-		using value_type = typename std::map< PassSPtr, T >::value_type;
-
 	private:
-		std::map< PassSPtr, T > m_map;
+		std::map< key_type, mapped_type > m_map;
 	};
 	using SubmeshStaticRenderNodesByPassMap = TypeRenderNodesByPassMap< SubmeshStaticRenderNodesMap >;
 

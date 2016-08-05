@@ -68,6 +68,8 @@ namespace Castor3D
 
 	uint32_t GeometryCache::GetObjectCount()const
 	{
+		auto l_lock = Castor::make_unique_lock( m_elements );
+
 		return std::accumulate( m_elements.begin(), m_elements.end(), 0u, []( uint32_t p_value, std::pair< String, GeometrySPtr > const & p_pair )
 		{
 			return p_value + p_pair.second->GetMesh()->GetSubmeshCount();

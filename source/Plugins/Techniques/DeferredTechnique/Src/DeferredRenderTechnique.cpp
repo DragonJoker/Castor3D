@@ -290,7 +290,7 @@ namespace Deferred
 		return l_return;
 	}
 
-	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
+	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderTarget.GetDepthStencilState()->Apply();
 		//m_geometryPassDsState->Apply();
