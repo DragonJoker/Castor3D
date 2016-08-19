@@ -54,7 +54,7 @@ namespace GlRender
 		}
 	}
 
-	void GlImmutableTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
+	void GlImmutableTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
 		OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( p_format );
@@ -87,7 +87,7 @@ namespace GlRender
 		DoUploadImage( p_storage, p_size.width(), p_size.height(), p_format, p_buffer );
 	}
 
-	void GlImmutableTextureStorageTraits::DoUploadImage( TextureStorage & p_storage, uint32_t p_width, uint32_t p_height, Castor::ePIXEL_FORMAT p_format, uint8_t const * p_buffer )
+	void GlImmutableTextureStorageTraits::DoUploadImage( TextureStorage & p_storage, uint32_t p_width, uint32_t p_height, Castor::PixelFormat p_format, uint8_t const * p_buffer )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlImmutableTextureStorageTraits > & >( p_storage );
 		OpenGl::PixelFmt l_format = l_storage.GetOpenGl().Get( p_format );

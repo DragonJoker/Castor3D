@@ -272,20 +272,21 @@ namespace Castor3D
 		C3D_API static const Castor::String MtxNormal;
 		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
-	public:
-		//!\~english The identity matrix	\~french La matrice identité
-		Castor::Matrix4x4r m_mtxIdentity;
-
 	protected:
-		//!\~english The model matrix	\~french La matrice modèle
+		//!\~english	The model matrix.
+		//!\~french		La matrice modèle.
 		Castor::Matrix4x4r m_mtxModel;
-		//!\~english The view matrix	\~french La matrice vue
+		//!\~english	The view matrix.
+		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_mtxView;
-		//!\~english The projection matrix	\~french La matrice projection
+		//!\~english	The projection matrix.
+		//!\~french		La matrice projection.
 		Castor::Matrix4x4r m_mtxProjection;
-		//!\~english The normals matrix	\~french La matrice des normales
+		//!\~english	The normals matrix.
+		//!\~french		La matrice des normales.
 		Castor::Matrix4x4r m_mtxNormal;
-		//!\~english The texture matrices	\~french Les matrices de texture
+		//!\~english	The texture matrices.
+		//!\~french		Les matrices de texture.
 		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
 	};
 }

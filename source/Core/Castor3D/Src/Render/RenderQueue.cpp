@@ -10,7 +10,6 @@
 #include "Engine.hpp"
 #include "GeometryCache.hpp"
 #include "LightCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "ShaderCache.hpp"
 

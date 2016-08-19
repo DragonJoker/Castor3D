@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_format	Le format des pixels du tampon.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API bool Initialise( Castor::Size const & p_size, Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.

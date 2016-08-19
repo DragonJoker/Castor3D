@@ -190,7 +190,7 @@ namespace Castor3D
 			: public DynamicTextureSource
 		{
 		public:
-			Dynamic2DTextureSource( Size const & p_dimensions, ePIXEL_FORMAT p_format )
+			Dynamic2DTextureSource( Size const & p_dimensions, PixelFormat p_format )
 			{
 				Size l_size{ p_dimensions };
 				uint32_t l_depth{ 1u };
@@ -215,7 +215,7 @@ namespace Castor3D
 			: public DynamicTextureSource
 		{
 		public:
-			Dynamic3DTextureSource( Point3ui const & p_dimensions, ePIXEL_FORMAT p_format )
+			Dynamic3DTextureSource( Point3ui const & p_dimensions, PixelFormat p_format )
 			{
 				m_depth = p_dimensions[2];
 				Size l_size{ p_dimensions[0], p_dimensions[1] };
@@ -338,12 +338,12 @@ namespace Castor3D
 		m_source = std::make_unique< Static3DTextureSource >( p_dimensions, p_buffer );
 	}
 
-	void TextureImage::SetSource( Size const & p_size, ePIXEL_FORMAT p_format )
+	void TextureImage::SetSource( Size const & p_size, PixelFormat p_format )
 	{
 		m_source = std::make_unique< Dynamic2DTextureSource >( p_size, p_format );
 	}
 
-	void TextureImage::SetSource( Point3ui const & p_size, ePIXEL_FORMAT p_format )
+	void TextureImage::SetSource( Point3ui const & p_size, PixelFormat p_format )
 	{
 		m_source = std::make_unique< Dynamic3DTextureSource >( p_size, p_format );
 	}

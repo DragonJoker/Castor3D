@@ -188,6 +188,111 @@ namespace C3dAssimp
 
 			return l_return;
 		}
+
+		void DoProcessPassBaseComponents( Pass & p_pass, aiMaterial const & p_aiMaterial )
+		{
+			aiColor3D l_ambient( 1, 1, 1 );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
+			aiColor3D l_diffuse( 1, 1, 1 );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
+			aiColor3D l_specular( 1, 1, 1 );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
+			aiColor3D l_emissive( 1, 1, 1 );
+			p_aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
+			float l_opacity = 1;
+			p_aiMaterial.Get( AI_MATKEY_OPACITY, l_opacity );
+			float l_shininess = 0.5f;
+			p_aiMaterial.Get( AI_MATKEY_SHININESS, l_shininess );
+			float l_shininessStrength = 1.0f;
+			p_aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
+			int l_twoSided = 0;
+			p_aiMaterial.Get( AI_MATKEY_TWOSIDED, l_twoSided );
+
+			if ( l_ambient.IsBlack() && l_diffuse.IsBlack() && l_specular.IsBlack() && l_emissive.IsBlack() )
+			{
+				l_diffuse.r = 1.0;
+				l_diffuse.g = 1.0;
+				l_diffuse.b = 1.0;
+			}
+
+			p_pass.SetAlpha( l_opacity );
+			p_pass.SetTwoSided( l_twoSided != 0 );
+			p_pass.SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
+			p_pass.SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
+			p_pass.SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
+			p_pass.SetEmissive( Colour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
+
+			if ( l_shininess > 0 )
+			{
+				p_pass.SetShininess( l_shininess );
+			}
+		}
+
+		void DoLoadTexture( aiString const & p_name, Pass & p_pass, TextureChannel p_channel, Importer const & p_importer )
+		{
+			if ( p_name.length > 0 )
+			{
+				p_importer.LoadTexture( Path{ string::string_cast< xchar >( p_name.C_Str() ) }, p_pass, p_channel );
+			}
+		}
+
+		void DoProcessPassTextures( Pass & p_pass, aiMaterial const & p_aiMaterial, Importer const & p_importer )
+		{
+			aiString l_ambTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
+			aiString l_difTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
+			aiString l_spcTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
+			aiString l_emiTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
+			aiString l_nmlTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
+			aiString l_hgtTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
+			aiString l_opaTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
+			aiString l_shnTexName;
+			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
+
+			if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
+			{
+				// Workaround for Collada textures.
+				String l_strGlob = string::string_cast< xchar >( l_difTexName.C_Str() ) + cuT( ".tga" );
+				string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+				String l_strDiff = l_strGlob;
+				String l_strNorm = l_strGlob;
+				String l_strSpec = l_strGlob;
+				String l_strOpac = l_strGlob;
+				p_importer.LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, p_pass, TextureChannel::Diffuse );
+				p_importer.LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, p_pass, TextureChannel::Normal );
+				p_importer.LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, p_pass, TextureChannel::Specular );
+				p_importer.LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, p_pass, TextureChannel::Opacity );
+			}
+			else
+			{
+				DoLoadTexture( l_ambTexName, p_pass, TextureChannel::Ambient, p_importer );
+				DoLoadTexture( l_difTexName, p_pass, TextureChannel::Diffuse, p_importer );
+				DoLoadTexture( l_spcTexName, p_pass, TextureChannel::Specular, p_importer );
+				DoLoadTexture( l_emiTexName, p_pass, TextureChannel::Emissive, p_importer );
+				DoLoadTexture( l_opaTexName, p_pass, TextureChannel::Opacity, p_importer );
+				DoLoadTexture( l_shnTexName, p_pass, TextureChannel::Gloss, p_importer );
+
+				if ( l_nmlTexName.length > 0 )
+				{
+					DoLoadTexture( l_nmlTexName, p_pass, TextureChannel::Normal, p_importer );
+
+					if ( l_hgtTexName.length > 0 )
+					{
+						DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::Height, p_importer );
+					}
+				}
+				else if ( l_hgtTexName.length > 0 )
+				{
+					DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::Normal, p_importer );
+				}
+			}
+		}
 	}
 
 	//*********************************************************************************************
@@ -425,14 +530,6 @@ namespace C3dAssimp
 		}
 	}
 
-	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, TextureChannel p_channel )
-	{
-		if ( p_name.length > 0 )
-		{
-			LoadTexture( Path{ string::string_cast< xchar >( p_name.C_Str() ) }, p_pass, p_channel );
-		}
-	}
-
 	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const & p_aiMaterial )
 	{
 		MaterialSPtr l_return;
@@ -452,100 +549,12 @@ namespace C3dAssimp
 		}
 		else
 		{
-			aiColor3D l_ambient( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
-			aiColor3D l_diffuse( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
-			aiColor3D l_specular( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
-			aiColor3D l_emissive( 1, 1, 1 );
-			p_aiMaterial.Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
-			float l_opacity = 1;
-			p_aiMaterial.Get( AI_MATKEY_OPACITY, l_opacity );
-			float l_shininess = 0.5f;
-			p_aiMaterial.Get( AI_MATKEY_SHININESS, l_shininess );
-			float l_shininessStrength = 1.0f;
-			p_aiMaterial.Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
-			int l_twoSided = 0;
-			p_aiMaterial.Get( AI_MATKEY_TWOSIDED, l_twoSided );
-
-			aiString l_ambTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
-			aiString l_difTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
-			aiString l_spcTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
-			aiString l_emiTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
-			aiString l_nmlTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
-			aiString l_hgtTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
-			aiString l_opaTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
-			aiString l_shnTexName;
-			p_aiMaterial.Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
-
-			if ( l_ambient.IsBlack() && l_diffuse.IsBlack() && l_specular.IsBlack() && l_emissive.IsBlack() )
-			{
-				l_diffuse.r = 1.0;
-				l_diffuse.g = 1.0;
-				l_diffuse.b = 1.0;
-			}
-
 			l_return = l_cache.Add( l_name );
 			l_return->CreatePass();
 			auto l_pass = l_return->GetPass( 0 );
 
-			l_pass->SetAlpha( l_opacity );
-			l_pass->SetTwoSided( l_twoSided != 0 );
-			l_pass->SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
-			l_pass->SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
-			l_pass->SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
-			l_pass->SetEmissive( Colour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
-
-			if ( l_shininess > 0 )
-			{
-				l_pass->SetShininess( l_shininess );
-			}
-
-			if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
-			{
-				// Workaround for Collada textures.
-				String l_strGlob = string::string_cast< xchar >( l_difTexName.C_Str() ) + cuT( ".tga" );
-				string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
-				String l_strDiff = l_strGlob;
-				String l_strNorm = l_strGlob;
-				String l_strSpec = l_strGlob;
-				String l_strOpac = l_strGlob;
-				LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, *l_pass, TextureChannel::Diffuse );
-				LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, *l_pass, TextureChannel::Normal );
-				LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, *l_pass, TextureChannel::Specular );
-				LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, *l_pass, TextureChannel::Opacity );
-			}
-			else
-			{
-				DoLoadTexture( l_ambTexName, *l_pass, TextureChannel::Ambient );
-				DoLoadTexture( l_difTexName, *l_pass, TextureChannel::Diffuse );
-				DoLoadTexture( l_spcTexName, *l_pass, TextureChannel::Specular );
-				DoLoadTexture( l_emiTexName, *l_pass, TextureChannel::Emissive );
-				DoLoadTexture( l_opaTexName, *l_pass, TextureChannel::Opacity );
-				DoLoadTexture( l_shnTexName, *l_pass, TextureChannel::Gloss );
-
-				if ( l_nmlTexName.length > 0 )
-				{
-					DoLoadTexture( l_nmlTexName, *l_pass, TextureChannel::Normal );
-
-					if ( l_hgtTexName.length > 0 )
-					{
-						DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Height );
-					}
-				}
-				else if ( l_hgtTexName.length > 0 )
-				{
-					DoLoadTexture( l_hgtTexName, *l_pass, TextureChannel::Normal );
-				}
-			}
+			DoProcessPassBaseComponents( *l_pass, p_aiMaterial );
+			DoProcessPassTextures( *l_pass, p_aiMaterial, *this );
 		}
 
 		return l_return;

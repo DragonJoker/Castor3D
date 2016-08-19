@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format des données.
 		 */
-		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
+		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active

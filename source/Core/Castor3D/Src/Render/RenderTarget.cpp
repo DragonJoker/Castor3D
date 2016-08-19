@@ -178,7 +178,7 @@ namespace Castor3D
 	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
-		, m_pixelFormat{ ePIXEL_FORMAT_A8R8G8B8 }
+		, m_pixelFormat{ PixelFormat::A8R8G8B8 }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}

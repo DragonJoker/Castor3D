@@ -1,6 +1,5 @@
 #include "RenderLoop.hpp"
 
-#include "BlendStateCache.hpp"
 #include "Engine.hpp"
 #include "ListenerCache.hpp"
 #include "OverlayCache.hpp"

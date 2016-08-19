@@ -290,7 +290,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la fenêtre
 		 *\return		Le format des pixels de la fenêtre
 		 */
-		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		C3D_API Castor::PixelFormat GetPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format
@@ -299,7 +299,7 @@ namespace Castor3D
 		 *\brief		Définit le format des pixels de la fenêtre
 		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
 		 */
-		C3D_API void SetPixelFormat( Castor::ePIXEL_FORMAT val );
+		C3D_API void SetPixelFormat( Castor::PixelFormat val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window index

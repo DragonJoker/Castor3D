@@ -80,7 +80,7 @@ namespace Castor
 		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_LONGDOUBLE;
 	};
 	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< ePIXEL_FORMAT >
+	template<> struct ParserValueTyper< PixelFormat >
 	{
 		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_PIXELFORMAT;
 	};

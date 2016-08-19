@@ -58,7 +58,7 @@ namespace Castor
 		 *\param[in]	p_size			Dimensions du buffer.
 		 *\param[in]	p_pixelFormat	Format des pixels du buffer.
 		 */
-		CU_API PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_pixelFormat );
+		CU_API PxBufferBase( Size const & p_size, PixelFormat p_pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -104,7 +104,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 */
-		CU_API virtual void init( uint8_t const * p_buffer, ePIXEL_FORMAT p_pixelFormat );
+		CU_API virtual void init( uint8_t const * p_buffer, PixelFormat p_pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -144,7 +144,7 @@ namespace Castor
 		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		CU_API virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_pixelFormat ) = 0;
+		CU_API virtual void assign( std::vector< uint8_t > const & p_buffer, PixelFormat p_pixelFormat ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on constant datas
@@ -218,7 +218,7 @@ namespace Castor
 		 *\brief		Récupère le format ds pixels
 		 *\return		Le format des pixels
 		 */
-		inline ePIXEL_FORMAT format()const
+		inline PixelFormat format()const
 		{
 			return m_pixelFormat;
 		}
@@ -314,10 +314,10 @@ namespace Castor
 		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 *\return		Le buffer créé
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & p_size, ePIXEL_FORMAT p_wantedFormat, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_bufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API static PxBufferBaseSPtr create( Size const & p_size, PixelFormat p_wantedFormat, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::A8R8G8B8 );
 
 	private:
-		ePIXEL_FORMAT m_pixelFormat;
+		PixelFormat m_pixelFormat;
 
 	protected:
 		//!\~english Buffer dimensions	\~french Dimensions du buffer

@@ -86,7 +86,6 @@ namespace C3dAssimp
 		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
 		bool DoProcessMesh( Castor3D::Scene & p_scene, Castor3D::Mesh & p_mesh, Castor3D::Skeleton & p_skeleton, aiMesh const & p_aiMesh, aiScene const & p_aiScene, Castor3D::Submesh & p_submesh );
-		void DoLoadTexture( aiString const & p_name, Castor3D::Pass & p_pass, Castor3D::TextureChannel p_channel );
 		Castor3D::MaterialSPtr DoProcessMaterial( Castor3D::Scene & p_scene, aiMaterial const & p_aiMaterial );
 		void DoProcessBones( Castor3D::Skeleton & p_pSkeleton, aiBone const * const * p_aiBones, uint32_t p_count, std::vector< Castor3D::VertexBoneData > & p_arrayVertices );
 		void DoProcessAnimation( Castor::String const & p_name, Castor3D::Skeleton & p_skeleton, aiNode const & p_aiNode, aiAnimation const & p_aiAnimation );

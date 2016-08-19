@@ -101,12 +101,12 @@ namespace GlRender
 		return l_return;
 	}
 
-	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_format )
+	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< GlColourRenderBuffer >( GetOpenGl(), p_format );
 	}
 
-	DepthStencilRenderBufferSPtr GlFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_format )
+	DepthStencilRenderBufferSPtr GlFrameBuffer::CreateDepthStencilRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< GlDepthStencilRenderBuffer >( GetOpenGl(), p_format );
 	}
@@ -124,6 +124,7 @@ namespace GlRender
 	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )
 	{
 		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
+		GetOpenGl().ClearDepth( 1.0 );
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}
 

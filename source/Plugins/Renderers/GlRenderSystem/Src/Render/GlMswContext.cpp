@@ -188,7 +188,7 @@ namespace GlRender
 		EndCurrent();
 	}
 
-	void GlContextImpl::DoInitialiseOpenGL( ePIXEL_FORMAT p_colour, bool p_stereo )
+	void GlContextImpl::DoInitialiseOpenGL( PixelFormat p_colour, bool p_stereo )
 	{
 		m_hContext = DoCreateDummyContext( p_colour, p_stereo );
 		SetCurrent();
@@ -210,7 +210,7 @@ namespace GlRender
 		m_hContext = nullptr;
 	}
 
-	HGLRC GlContextImpl::DoCreateDummyContext( ePIXEL_FORMAT p_colour, bool p_stereo )
+	HGLRC GlContextImpl::DoCreateDummyContext( PixelFormat p_colour, bool p_stereo )
 	{
 		HGLRC l_hReturn = nullptr;
 
@@ -222,7 +222,7 @@ namespace GlRender
 		return l_hReturn;
 	}
 
-	bool GlContextImpl::DoSelectPixelFormat( ePIXEL_FORMAT p_colour, bool p_stereo )
+	bool GlContextImpl::DoSelectPixelFormat( PixelFormat p_colour, bool p_stereo )
 	{
 		bool l_return = false;
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
@@ -267,7 +267,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlContextImpl::DoSelectStereoPixelFormat( ePIXEL_FORMAT p_colour )
+	bool GlContextImpl::DoSelectStereoPixelFormat( PixelFormat p_colour )
 	{
 		bool l_return = false;
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );

@@ -327,9 +327,9 @@ namespace Castor3D
 		}
 	}
 
-	ePIXEL_FORMAT RenderWindow::GetPixelFormat()const
+	PixelFormat RenderWindow::GetPixelFormat()const
 	{
-		ePIXEL_FORMAT l_return = ePIXEL_FORMAT( -1 );
+		PixelFormat l_return = PixelFormat( -1 );
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
@@ -340,7 +340,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RenderWindow::SetPixelFormat( ePIXEL_FORMAT val )
+	void RenderWindow::SetPixelFormat( PixelFormat val )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 

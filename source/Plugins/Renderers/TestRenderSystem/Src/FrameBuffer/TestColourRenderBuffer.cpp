@@ -5,7 +5,7 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestColourRenderBuffer::TestColourRenderBuffer( ePIXEL_FORMAT p_format )
+	TestColourRenderBuffer::TestColourRenderBuffer( PixelFormat p_format )
 		: ColourRenderBuffer( p_format )
 	{
 	}

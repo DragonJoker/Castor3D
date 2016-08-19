@@ -74,7 +74,7 @@ Generator::Generator( Engine * p_engine, int p_width, int p_height )
 	, m_engine( p_engine )
 {
 	//uint8_t l_tmp[] = { 255, 255, 255, 255 };
-	//m_pxColour.set<ePIXEL_FORMAT_A8R8G8B8>( l_tmp);
+	//m_pxColour.set<PixelFormat::A8R8G8B8>( l_tmp);
 	m_uiThreadCount = System::GetCPUCount() * 2;
 }
 

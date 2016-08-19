@@ -123,7 +123,7 @@ namespace Castor3D
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
 		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_ARGB16F32F );
+		m_colourTexture->GetImage().SetSource( p_size, PixelFormat::ARGB16F32F );
 		p_size = m_colourTexture->GetImage().GetDimensions();
 
 		bool l_return = m_colourTexture->Create();
@@ -141,7 +141,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 			l_return = m_depthBuffer->Create();
 		}
 

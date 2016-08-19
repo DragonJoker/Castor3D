@@ -1,8 +1,8 @@
 ﻿namespace Castor
 {
 	template< TPL_PIXEL_FORMAT FT >
-	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, ePIXEL_FORMAT p_bufferFormat )
-		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ) )
+	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, PixelFormat p_bufferFormat )
+		: PxBufferBase( p_size, PixelFormat( FT ) )
 		, m_column( p_size.width() )
 	{
 		init( p_buffer, p_bufferFormat );
@@ -67,7 +67,7 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_bufferFormat )
+	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, PixelFormat p_bufferFormat )
 	{
 		uint8_t l_size = PF::GetBytesPerPixel( p_bufferFormat );
 		uint32_t l_dstMax = count();

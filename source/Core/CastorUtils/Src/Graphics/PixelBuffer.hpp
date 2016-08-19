@@ -59,7 +59,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 */
-		PxBuffer( Size const & p_size, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_bufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		PxBuffer( Size const & p_size, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -154,7 +154,7 @@ namespace Castor
 		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_bufferFormat );
+		virtual void assign( std::vector< uint8_t > const & p_buffer, PixelFormat p_bufferFormat );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on constant datas

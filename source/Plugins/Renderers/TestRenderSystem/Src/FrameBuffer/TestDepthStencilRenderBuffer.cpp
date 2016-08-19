@@ -5,7 +5,7 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestDepthStencilRenderBuffer::TestDepthStencilRenderBuffer( ePIXEL_FORMAT p_format )
+	TestDepthStencilRenderBuffer::TestDepthStencilRenderBuffer( PixelFormat p_format )
 		: DepthStencilRenderBuffer( p_format )
 	{
 	}

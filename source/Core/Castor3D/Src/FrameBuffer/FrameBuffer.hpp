@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\brief		Crée un tampon de rendu couleur
 		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		C3D_API virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
+		C3D_API virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a depth/stencil render buffer
@@ -328,7 +328,7 @@ namespace Castor3D
 		 *\brief		Crée un tampon de rendu profondeur/stencil
 		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
+		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -395,7 +395,7 @@ namespace Castor3D
 		 *\param[in]	p_index			L'index d'attache.
 		 *\return		Le format des pixels pour l'attache.
 		 */
-		C3D_API Castor::ePIXEL_FORMAT DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
+		C3D_API Castor::PixelFormat DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
 		 *\brief		Clears the given buffers components.

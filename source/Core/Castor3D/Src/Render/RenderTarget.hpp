@@ -531,7 +531,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la fenêtre
 		 *\return		Le format des pixels de la fenêtre
 		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		inline Castor::PixelFormat GetPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -543,7 +543,7 @@ namespace Castor3D
 		 *\brief		Définit le format des pixels de la fenêtre
 		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
 		 */
-		inline void SetPixelFormat( Castor::ePIXEL_FORMAT val )
+		inline void SetPixelFormat( Castor::PixelFormat val )
 		{
 			m_pixelFormat = val;
 		}
@@ -643,7 +643,7 @@ namespace Castor3D
 		//!\~english The currently active camera (useful in stereoscopic rendering)	\~french La caméra actuellement active (utile en rendu stéréoscopique)
 		CameraWPtr m_pCurrentCamera;
 		//!\~english The target display format	\~french Le format des pixels de la cible
-		Castor::ePIXEL_FORMAT m_pixelFormat;
+		Castor::PixelFormat m_pixelFormat;
 		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées
 		static uint32_t sm_uiCount;
 		//!\~english This render target's index	\~french L'index de cette render target

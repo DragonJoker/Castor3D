@@ -32,7 +32,6 @@ namespace Castor3D
 
 	Pipeline::Pipeline( Context & p_context )
 		: OwnedBy< Context >( p_context )
-		, m_mtxIdentity( 1 )
 		, m_mtxView( 1 )
 		, m_mtxModel( 1 )
 		, m_mtxProjection( 1 )

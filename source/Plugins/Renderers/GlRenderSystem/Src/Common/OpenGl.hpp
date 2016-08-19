@@ -342,14 +342,14 @@ namespace GlRender
 		inline eGL_BLEND_FUNC Get( Castor3D::RGBBlendFunc p_mode )const;
 		inline eGL_BLEND_FUNC Get( Castor3D::AlphaBlendFunc p_mode )const;
 		inline eGL_BLEND_FACTOR Get( Castor3D::BlendOperand p_eBlendFactor )const;
-		inline PixelFmt const & Get( Castor::ePIXEL_FORMAT p_pixelFormat )const;
+		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
 		inline eGL_SHADER_TYPE Get( Castor3D::eSHADER_TYPE p_type )const;
-		inline eGL_INTERNAL_FORMAT GetInternal( Castor::ePIXEL_FORMAT p_format )const;
+		inline eGL_INTERNAL_FORMAT GetInternal( Castor::PixelFormat p_format )const;
 		inline uint32_t GetComponents( uint32_t p_components )const;
 		inline eGL_TEXTURE_ATTACHMENT Get( Castor3D::eATTACHMENT_POINT p_eAttachment )const;
 		inline eGL_FRAMEBUFFER_MODE Get( Castor3D::eFRAMEBUFFER_TARGET p_target )const;
 		inline eGL_RENDERBUFFER_ATTACHMENT GetRboAttachment( Castor3D::eATTACHMENT_POINT p_eAttachment )const;
-		inline eGL_RENDERBUFFER_STORAGE GetRboStorage( Castor::ePIXEL_FORMAT p_pixelFormat )const;
+		inline eGL_RENDERBUFFER_STORAGE GetRboStorage( Castor::PixelFormat p_pixelFormat )const;
 		inline eGL_BUFFER Get( Castor3D::eBUFFER p_buffer )const;
 		inline eGL_BUFFER Get( eGL_TEXTURE_ATTACHMENT p_buffer )const;
 		inline eGL_BUFFER Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const;
@@ -380,6 +380,7 @@ namespace GlRender
 		inline uint32_t GetError()const;
 		inline bool ClearColor( float red, float green, float blue, float alpha )const;
 		inline bool ClearColor( Castor::Colour const & p_colour )const;
+		inline bool ClearDepth( double value )const;
 		inline bool ShadeModel( eGL_SHADE_MODEL mode )const;
 		inline bool Clear( uint32_t mask )const;
 		inline bool Enable( eGL_TWEAK mode )const;
@@ -842,13 +843,13 @@ namespace GlRender
 		eGL_BLEND_FUNC RgbBlendFuncs[uint32_t( Castor3D::RGBBlendFunc::Count )];
 		eGL_BLEND_FUNC AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Count )];
 		eGL_BLEND_OP BlendOps[uint32_t( Castor3D::BlendOperation::Count )];
-		PixelFmt PixelFormats[uint32_t( Castor::ePIXEL_FORMAT_COUNT )];
+		PixelFmt PixelFormats[uint32_t( Castor::PixelFormat::Count )];
 		eGL_SHADER_TYPE ShaderTypes[uint32_t( Castor3D::eSHADER_TYPE_COUNT )];
-		eGL_INTERNAL_FORMAT Internals[uint32_t( Castor::ePIXEL_FORMAT_COUNT )];
+		eGL_INTERNAL_FORMAT Internals[uint32_t( Castor::PixelFormat::Count )];
 		eGL_TEXTURE_ATTACHMENT Attachments[uint32_t( Castor3D::eATTACHMENT_POINT_COUNT )];
 		eGL_FRAMEBUFFER_MODE FramebufferModes[uint32_t( Castor3D::eFRAMEBUFFER_MODE_COUNT )];
 		eGL_RENDERBUFFER_ATTACHMENT RboAttachments[uint32_t( Castor3D::eATTACHMENT_POINT_COUNT )];
-		eGL_RENDERBUFFER_STORAGE RboStorages[uint32_t( Castor::ePIXEL_FORMAT_COUNT )];
+		eGL_RENDERBUFFER_STORAGE RboStorages[uint32_t( Castor::PixelFormat::Count )];
 		eGL_BUFFER Buffers[uint32_t( Castor3D::eBUFFER_COUNT )];
 		eGL_FACE Faces[uint32_t( Castor3D::eFACE_COUNT )];
 		eGL_FILL_MODE FillModes[3u];
@@ -896,6 +897,7 @@ namespace GlRender
 
 		std::function< uint32_t() > m_pfnGetError;
 		std::function< void( float red, float green, float blue, float alpha ) > m_pfnClearColor;
+		std::function< void( double value ) > m_pfnClearDepth;
 		std::function< void( uint32_t mode ) > m_pfnShadeModel;
 		std::function< void( uint32_t mask ) > m_pfnClear;
 		std::function< void( uint32_t mode ) > m_pfnEnable;

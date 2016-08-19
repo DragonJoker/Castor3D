@@ -52,7 +52,7 @@ namespace GlRender
 		 *\param[in]	p_gl		L'api OpenGL.
 		 *\param[in]	p_format	Le format des pixels.
 		 */
-		GlColourRenderBuffer( OpenGl & p_gl, Castor::ePIXEL_FORMAT p_format );
+		GlColourRenderBuffer( OpenGl & p_gl, Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor.

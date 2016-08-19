@@ -114,4 +114,22 @@ namespace Castor3D
 			DoUnbind( p_index );
 		}
 	}
+
+	uint8_t * TextureLayout::Lock( uint32_t p_index, uint32_t p_lock )
+	{
+		uint8_t * l_return;
+
+		if ( DoBind( 0u ) )
+		{
+			l_return = m_images[p_index]->Lock( p_lock );
+		}
+
+		return l_return;
+	}
+
+	void TextureLayout::Unlock( uint32_t p_index, bool p_modified )
+	{
+		m_images[p_index]->Unlock( p_modified );
+		DoUnbind( 0u );
+	}
 }

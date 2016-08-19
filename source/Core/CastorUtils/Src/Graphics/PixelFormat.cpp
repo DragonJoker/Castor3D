@@ -7,218 +7,218 @@ namespace Castor
 
 	namespace detail
 	{
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
 
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::amask	= _mm_set1_epi32( 0x000000FF );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
-		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::amask	= _mm_set1_epi32( 0x000000FF );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::vmask	= _mm_set1_epi32( 0xFF000000 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::ymask	= _mm_set1_epi32( 0x00FF00FF );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::uvsub	= _mm_set1_epi32( 0x00800080 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::ysub	= _mm_set1_epi32( 0x00100010 );
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::facy	= _mm_set1_epi32( 0x00400040 );// 1 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::facrv	= _mm_set1_epi32( 0x00710071 );// 1.772 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::facgu	= _mm_set1_epi32( 0x002D002D );// 0.714 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::facgv	= _mm_set1_epi32( 0x00160016 );// 0.344 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
+		const __m128i buffer_converter< PixelFormat::YUY2, PixelFormat::A8R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
 	}
 
 #endif
 
 	namespace PF
 	{
-		ePIXEL_FORMAT GetPFWithoutAlpha( ePIXEL_FORMAT p_ePixelFmt )
+		PixelFormat GetPFWithoutAlpha( PixelFormat p_format )
 		{
-			ePIXEL_FORMAT l_eReturn = ePIXEL_FORMAT_COUNT;
+			PixelFormat l_return = PixelFormat::Count;
 
-			switch ( p_ePixelFmt )
+			switch ( p_format )
 			{
-			case ePIXEL_FORMAT_A8L8:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A8L8 >::NoAlphaPF;
+			case PixelFormat::A8L8:
+				l_return = pixel_definitions< PixelFormat::A8L8 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_AL16F32F >::NoAlphaPF;
+			case PixelFormat::AL16F32F:
+				l_return = pixel_definitions< PixelFormat::AL16F32F >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_AL32F >::NoAlphaPF;
+			case PixelFormat::AL32F:
+				l_return = pixel_definitions< PixelFormat::AL32F >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::NoAlphaPF;
+			case PixelFormat::A1R5G5B5:
+				l_return = pixel_definitions< PixelFormat::A1R5G5B5 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::NoAlphaPF;
+			case PixelFormat::A4R4G4B4:
+				l_return = pixel_definitions< PixelFormat::A4R4G4B4 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::NoAlphaPF;
+			case PixelFormat::A8R8G8B8:
+				l_return = pixel_definitions< PixelFormat::A8R8G8B8 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::NoAlphaPF;
+			case PixelFormat::A8B8G8R8:
+				l_return = pixel_definitions< PixelFormat::A8B8G8R8 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::NoAlphaPF;
+			case PixelFormat::ARGB16F32F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F32F >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_ARGB32F >::NoAlphaPF;
+			case PixelFormat::ARGB32F:
+				l_return = pixel_definitions< PixelFormat::ARGB32F >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_DXTC3 >::NoAlphaPF;
+			case PixelFormat::DXTC3:
+				l_return = pixel_definitions< PixelFormat::DXTC3 >::NoAlphaPF;
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				l_eReturn = pixel_definitions< ePIXEL_FORMAT_DXTC5 >::NoAlphaPF;
+			case PixelFormat::DXTC5:
+				l_return = pixel_definitions< PixelFormat::DXTC5 >::NoAlphaPF;
 				break;
 
 			default:
-				l_eReturn = p_ePixelFmt;
+				l_return = p_format;
 				break;
 			}
 
-			return l_eReturn;
+			return l_return;
 		}
 
-		bool HasAlpha( ePIXEL_FORMAT p_ePixelFmt )
+		bool HasAlpha( PixelFormat p_format )
 		{
 			bool l_return = false;
 
-			switch ( p_ePixelFmt )
+			switch ( p_format )
 			{
-			case ePIXEL_FORMAT_L8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L8 >::Alpha;
+			case PixelFormat::L8:
+				l_return = pixel_definitions< PixelFormat::L8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L16F32F	>::Alpha;
+			case PixelFormat::L16F32F:
+				l_return = pixel_definitions< PixelFormat::L16F32F	>::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L32F >::Alpha;
+			case PixelFormat::L32F:
+				l_return = pixel_definitions< PixelFormat::L32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8L8 >::Alpha;
+			case PixelFormat::A8L8:
+				l_return = pixel_definitions< PixelFormat::A8L8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_AL16F32F >::Alpha;
+			case PixelFormat::AL16F32F:
+				l_return = pixel_definitions< PixelFormat::AL16F32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_AL32F >::Alpha;
+			case PixelFormat::AL32F:
+				l_return = pixel_definitions< PixelFormat::AL32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::Alpha;
+			case PixelFormat::A1R5G5B5:
+				l_return = pixel_definitions< PixelFormat::A1R5G5B5 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::Alpha;
+			case PixelFormat::A4R4G4B4:
+				l_return = pixel_definitions< PixelFormat::A4R4G4B4 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::Alpha;
+			case PixelFormat::R5G6B5:
+				l_return = pixel_definitions< PixelFormat::R5G6B5 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Alpha;
+			case PixelFormat::R8G8B8:
+				l_return = pixel_definitions< PixelFormat::R8G8B8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Alpha;
+			case PixelFormat::B8G8R8:
+				l_return = pixel_definitions< PixelFormat::B8G8R8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Alpha;
+			case PixelFormat::A8R8G8B8:
+				l_return = pixel_definitions< PixelFormat::A8R8G8B8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Alpha;
+			case PixelFormat::A8B8G8R8:
+				l_return = pixel_definitions< PixelFormat::A8B8G8R8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F >::Alpha;
+			case PixelFormat::RGB16F:
+				l_return = pixel_definitions< PixelFormat::RGB16F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::Alpha;
+			case PixelFormat::ARGB16F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::Alpha;
+			case PixelFormat::RGB16F32F:
+				l_return = pixel_definitions< PixelFormat::RGB16F32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::Alpha;
+			case PixelFormat::ARGB16F32F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB32F >::Alpha;
+			case PixelFormat::RGB32F:
+				l_return = pixel_definitions< PixelFormat::RGB32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB32F >::Alpha;
+			case PixelFormat::ARGB32F:
+				l_return = pixel_definitions< PixelFormat::ARGB32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC1 >::Alpha;
+			case PixelFormat::DXTC1:
+				l_return = pixel_definitions< PixelFormat::DXTC1 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC3 >::Alpha;
+			case PixelFormat::DXTC3:
+				l_return = pixel_definitions< PixelFormat::DXTC3 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC5 >::Alpha;
+			case PixelFormat::DXTC5:
+				l_return = pixel_definitions< PixelFormat::DXTC5 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				l_return = pixel_definitions< ePIXEL_FORMAT_YUY2 >::Alpha;
+			case PixelFormat::YUY2:
+				l_return = pixel_definitions< PixelFormat::YUY2 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::Alpha;
+			case PixelFormat::D16:
+				l_return = pixel_definitions< PixelFormat::D16 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::Alpha;
+			case PixelFormat::D24:
+				l_return = pixel_definitions< PixelFormat::D24 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::Alpha;
+			case PixelFormat::D24S8:
+				l_return = pixel_definitions< PixelFormat::D24S8 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Alpha;
+			case PixelFormat::D32:
+				l_return = pixel_definitions< PixelFormat::D32 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Alpha;
+			case PixelFormat::D32F:
+				l_return = pixel_definitions< PixelFormat::D32F >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				l_return = pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::Alpha;
+			case PixelFormat::S1:
+				l_return = pixel_definitions< PixelFormat::S1 >::Alpha;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::Alpha;
+			case PixelFormat::S8:
+				l_return = pixel_definitions< PixelFormat::S8 >::Alpha;
 				break;
 
 			default:
@@ -229,130 +229,130 @@ namespace Castor
 			return l_return;
 		}
 
-		bool IsCompressed( ePIXEL_FORMAT p_ePixelFmt )
+		bool IsCompressed( PixelFormat p_format )
 		{
 			bool l_return = false;
 
-			switch ( p_ePixelFmt )
+			switch ( p_format )
 			{
-			case ePIXEL_FORMAT_L8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L8 >::Compressed;
+			case PixelFormat::L8:
+				l_return = pixel_definitions< PixelFormat::L8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L16F32F >::Compressed;
+			case PixelFormat::L16F32F:
+				l_return = pixel_definitions< PixelFormat::L16F32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_L32F >::Compressed;
+			case PixelFormat::L32F:
+				l_return = pixel_definitions< PixelFormat::L32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8L8 >::Compressed;
+			case PixelFormat::A8L8:
+				l_return = pixel_definitions< PixelFormat::A8L8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_AL16F32F >::Compressed;
+			case PixelFormat::AL16F32F:
+				l_return = pixel_definitions< PixelFormat::AL16F32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_AL32F >::Compressed;
+			case PixelFormat::AL32F:
+				l_return = pixel_definitions< PixelFormat::AL32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::Compressed;
+			case PixelFormat::A1R5G5B5:
+				l_return = pixel_definitions< PixelFormat::A1R5G5B5 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::Compressed;
+			case PixelFormat::A4R4G4B4:
+				l_return = pixel_definitions< PixelFormat::A4R4G4B4 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::Compressed;
+			case PixelFormat::R5G6B5:
+				l_return = pixel_definitions< PixelFormat::R5G6B5 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Compressed;
+			case PixelFormat::R8G8B8:
+				l_return = pixel_definitions< PixelFormat::R8G8B8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Compressed;
+			case PixelFormat::B8G8R8:
+				l_return = pixel_definitions< PixelFormat::B8G8R8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Compressed;
+			case PixelFormat::A8R8G8B8:
+				l_return = pixel_definitions< PixelFormat::A8R8G8B8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Compressed;
+			case PixelFormat::A8B8G8R8:
+				l_return = pixel_definitions< PixelFormat::A8B8G8R8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F >::Compressed;
+			case PixelFormat::RGB16F:
+				l_return = pixel_definitions< PixelFormat::RGB16F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::Compressed;
+			case PixelFormat::ARGB16F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::Compressed;
+			case PixelFormat::RGB16F32F:
+				l_return = pixel_definitions< PixelFormat::RGB16F32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::Compressed;
+			case PixelFormat::ARGB16F32F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_RGB32F >::Compressed;
+			case PixelFormat::RGB32F:
+				l_return = pixel_definitions< PixelFormat::RGB32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB32F >::Compressed;
+			case PixelFormat::ARGB32F:
+				l_return = pixel_definitions< PixelFormat::ARGB32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC1 >::Compressed;
+			case PixelFormat::DXTC1:
+				l_return = pixel_definitions< PixelFormat::DXTC1 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC3 >::Compressed;
+			case PixelFormat::DXTC3:
+				l_return = pixel_definitions< PixelFormat::DXTC3 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DXTC5 >::Compressed;
+			case PixelFormat::DXTC5:
+				l_return = pixel_definitions< PixelFormat::DXTC5 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				l_return = pixel_definitions< ePIXEL_FORMAT_YUY2 >::Compressed;
+			case PixelFormat::YUY2:
+				l_return = pixel_definitions< PixelFormat::YUY2 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::Compressed;
+			case PixelFormat::D16:
+				l_return = pixel_definitions< PixelFormat::D16 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::Compressed;
+			case PixelFormat::D24:
+				l_return = pixel_definitions< PixelFormat::D24 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::Compressed;
+			case PixelFormat::D24S8:
+				l_return = pixel_definitions< PixelFormat::D24S8 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Compressed;
+			case PixelFormat::D32:
+				l_return = pixel_definitions< PixelFormat::D32 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Compressed;
+			case PixelFormat::D32F:
+				l_return = pixel_definitions< PixelFormat::D32F >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				l_return = pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::Compressed;
+			case PixelFormat::S1:
+				l_return = pixel_definitions< PixelFormat::S1 >::Compressed;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				l_return = pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::Compressed;
+			case PixelFormat::S8:
+				l_return = pixel_definitions< PixelFormat::S8 >::Compressed;
 				break;
 
 			default:
@@ -369,7 +369,7 @@ namespace Castor
 
 			if ( HasAlpha( p_pSrc->format() ) )
 			{
-				l_return = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
+				l_return = PxBufferBase::create( p_pSrc->dimensions(), PixelFormat::A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
 				uint8_t * l_pBuffer = l_return->ptr();
 
 				for ( uint32_t i = 0; i < l_return->size(); i += 2 )
@@ -379,7 +379,7 @@ namespace Castor
 					l_pBuffer++;
 				}
 
-				l_return = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_L8, l_return->const_ptr(), l_return->format() );
+				l_return = PxBufferBase::create( p_pSrc->dimensions(), PixelFormat::L8, l_return->const_ptr(), l_return->format() );
 				p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), GetPFWithoutAlpha( p_pSrc->format() ), p_pSrc->const_ptr(), p_pSrc->format() );
 			}
 
@@ -390,9 +390,9 @@ namespace Castor
 		{
 			if ( HasAlpha( p_pSrc->format() ) )
 			{
-				if ( p_pSrc->format() != ePIXEL_FORMAT_A8L8 )
+				if ( p_pSrc->format() != PixelFormat::A8L8 )
 				{
-					p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
+					p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), PixelFormat::A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
 				}
 
 				uint8_t * l_pBuffer = p_pSrc->ptr();
@@ -405,652 +405,652 @@ namespace Castor
 				}
 			}
 
-			p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_L8, p_pSrc->const_ptr(), p_pSrc->format() );
+			p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), PixelFormat::L8, p_pSrc->const_ptr(), p_pSrc->format() );
 		}
 
-		uint8_t GetBytesPerPixel( ePIXEL_FORMAT p_pfFormat )
+		uint8_t GetBytesPerPixel( PixelFormat p_format )
 		{
-			uint8_t l_uiReturn = 0;
+			uint8_t l_return = 0;
 
-			switch ( p_pfFormat )
+			switch ( p_format )
 			{
-			case ePIXEL_FORMAT_L8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_L8 >::Size;
+			case PixelFormat::L8:
+				l_return = pixel_definitions< PixelFormat::L8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_L16F32F >::Size;
+			case PixelFormat::L16F32F:
+				l_return = pixel_definitions<	PixelFormat::L16F32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_L32F >::Size;
+			case PixelFormat::L32F:
+				l_return = pixel_definitions< PixelFormat::L32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8L8 >::Size;
+			case PixelFormat::A8L8:
+				l_return = pixel_definitions< PixelFormat::A8L8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_AL16F32F >::Size;
+			case PixelFormat::AL16F32F:
+				l_return = pixel_definitions<	PixelFormat::AL16F32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_AL32F >::Size;
+			case PixelFormat::AL32F:
+				l_return = pixel_definitions< PixelFormat::AL32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::Size;
+			case PixelFormat::A1R5G5B5:
+				l_return = pixel_definitions< PixelFormat::A1R5G5B5 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::Size;
+			case PixelFormat::A4R4G4B4:
+				l_return = pixel_definitions< PixelFormat::A4R4G4B4 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::Size;
+			case PixelFormat::R5G6B5:
+				l_return = pixel_definitions< PixelFormat::R5G6B5 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Size;
+			case PixelFormat::R8G8B8:
+				l_return = pixel_definitions< PixelFormat::R8G8B8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Size;
+			case PixelFormat::B8G8R8:
+				l_return = pixel_definitions< PixelFormat::B8G8R8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Size;
+			case PixelFormat::A8R8G8B8:
+				l_return = pixel_definitions< PixelFormat::A8R8G8B8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Size;
+			case PixelFormat::A8B8G8R8:
+				l_return = pixel_definitions< PixelFormat::A8B8G8R8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_RGB16F >::Size;
+			case PixelFormat::RGB16F:
+				l_return = pixel_definitions<	PixelFormat::RGB16F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_ARGB16F >::Size;
+			case PixelFormat::ARGB16F:
+				l_return = pixel_definitions<	PixelFormat::ARGB16F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_RGB16F32F >::Size;
+			case PixelFormat::RGB16F32F:
+				l_return = pixel_definitions<	PixelFormat::RGB16F32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_ARGB16F32F >::Size;
+			case PixelFormat::ARGB16F32F:
+				l_return = pixel_definitions<	PixelFormat::ARGB16F32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_RGB32F >::Size;
+			case PixelFormat::RGB32F:
+				l_return = pixel_definitions< PixelFormat::RGB32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_ARGB32F >::Size;
+			case PixelFormat::ARGB32F:
+				l_return = pixel_definitions< PixelFormat::ARGB32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_DXTC1 >::Size;
+			case PixelFormat::DXTC1:
+				l_return = pixel_definitions<	PixelFormat::DXTC1 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_DXTC3 >::Size;
+			case PixelFormat::DXTC3:
+				l_return = pixel_definitions<	PixelFormat::DXTC3 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_DXTC5 >::Size;
+			case PixelFormat::DXTC5:
+				l_return = pixel_definitions<	PixelFormat::DXTC5 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_YUY2 >::Size;
+			case PixelFormat::YUY2:
+				l_return = pixel_definitions<	PixelFormat::YUY2 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::Size;
+			case PixelFormat::D16:
+				l_return = pixel_definitions< PixelFormat::D16 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::Size;
+			case PixelFormat::D24:
+				l_return = pixel_definitions< PixelFormat::D24 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::Size;
+			case PixelFormat::D24S8:
+				l_return = pixel_definitions< PixelFormat::D24S8 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Size;
+			case PixelFormat::D32:
+				l_return = pixel_definitions< PixelFormat::D32 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Size;
+			case PixelFormat::D32F:
+				l_return = pixel_definitions< PixelFormat::D32F >::Size;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_STENCIL1 >::Size;
+			case PixelFormat::S1:
+				l_return = pixel_definitions<	PixelFormat::S1 >::Size;
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::Size;
+			case PixelFormat::S8:
+				l_return = pixel_definitions< PixelFormat::S8 >::Size;
 				break;
 			}
 
-			return l_uiReturn;
+			return l_return;
 		}
 
-		void ConvertPixel( ePIXEL_FORMAT p_eSrcFmt, uint8_t const *& p_pSrc, ePIXEL_FORMAT p_eDestFmt, uint8_t *& p_pDest )
+		void ConvertPixel( PixelFormat p_eSrcFmt, uint8_t const *& p_pSrc, PixelFormat p_eDestFmt, uint8_t *& p_pDest )
 		{
 			switch ( p_eSrcFmt )
 			{
-			case ePIXEL_FORMAT_L8:
-				pixel_definitions< ePIXEL_FORMAT_L8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::L8:
+				pixel_definitions< PixelFormat::L8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				pixel_definitions< ePIXEL_FORMAT_L16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::L16F32F:
+				pixel_definitions< PixelFormat::L16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				pixel_definitions< ePIXEL_FORMAT_L32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::L32F:
+				pixel_definitions< PixelFormat::L32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				pixel_definitions< ePIXEL_FORMAT_A8L8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::A8L8:
+				pixel_definitions< PixelFormat::A8L8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				pixel_definitions< ePIXEL_FORMAT_AL16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::AL16F32F:
+				pixel_definitions< PixelFormat::AL16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				pixel_definitions< ePIXEL_FORMAT_AL32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::AL32F:
+				pixel_definitions< PixelFormat::AL32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::A1R5G5B5:
+				pixel_definitions< PixelFormat::A1R5G5B5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::A4R4G4B4:
+				pixel_definitions< PixelFormat::A4R4G4B4 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::R5G6B5:
+				pixel_definitions< PixelFormat::R5G6B5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::R8G8B8:
+				pixel_definitions< PixelFormat::R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::B8G8R8:
+				pixel_definitions< PixelFormat::B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::A8R8G8B8:
+				pixel_definitions< PixelFormat::A8R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::A8B8G8R8:
+				pixel_definitions< PixelFormat::A8B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				pixel_definitions< ePIXEL_FORMAT_RGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::RGB16F:
+				pixel_definitions< PixelFormat::RGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::ARGB16F:
+				pixel_definitions< PixelFormat::ARGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::RGB16F32F:
+				pixel_definitions< PixelFormat::RGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::ARGB16F32F:
+				pixel_definitions< PixelFormat::ARGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				pixel_definitions< ePIXEL_FORMAT_RGB32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::RGB32F:
+				pixel_definitions< PixelFormat::RGB32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::ARGB32F:
+				pixel_definitions< PixelFormat::ARGB32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				pixel_definitions< ePIXEL_FORMAT_DXTC1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::DXTC1:
+				pixel_definitions< PixelFormat::DXTC1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				pixel_definitions< ePIXEL_FORMAT_DXTC3 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::DXTC3:
+				pixel_definitions< PixelFormat::DXTC3 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				pixel_definitions< ePIXEL_FORMAT_DXTC5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::DXTC5:
+				pixel_definitions< PixelFormat::DXTC5 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				pixel_definitions< ePIXEL_FORMAT_YUY2 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::YUY2:
+				pixel_definitions< PixelFormat::YUY2 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::D16:
+				pixel_definitions< PixelFormat::D16 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::D24:
+				pixel_definitions< PixelFormat::D24 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::D24S8:
+				pixel_definitions< PixelFormat::D24S8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::D32:
+				pixel_definitions< PixelFormat::D32 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::D32F:
+				pixel_definitions< PixelFormat::D32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::S1:
+				pixel_definitions< PixelFormat::S1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+			case PixelFormat::S8:
+				pixel_definitions< PixelFormat::S8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 			}
 		}
 
-		void ConvertBuffer( ePIXEL_FORMAT p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
+		void ConvertBuffer( PixelFormat p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize )
 		{
 			switch ( p_eSrcFormat )
 			{
-			case ePIXEL_FORMAT_L8:
-				pixel_definitions< ePIXEL_FORMAT_L8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::L8:
+				pixel_definitions< PixelFormat::L8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				pixel_definitions< ePIXEL_FORMAT_L16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::L16F32F:
+				pixel_definitions< PixelFormat::L16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				pixel_definitions< ePIXEL_FORMAT_L32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::L32F:
+				pixel_definitions< PixelFormat::L32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				pixel_definitions< ePIXEL_FORMAT_A8L8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::A8L8:
+				pixel_definitions< PixelFormat::A8L8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				pixel_definitions< ePIXEL_FORMAT_AL16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::AL16F32F:
+				pixel_definitions< PixelFormat::AL16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				pixel_definitions< ePIXEL_FORMAT_AL32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::AL32F:
+				pixel_definitions< PixelFormat::AL32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::A1R5G5B5:
+				pixel_definitions< PixelFormat::A1R5G5B5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::A4R4G4B4:
+				pixel_definitions< PixelFormat::A4R4G4B4 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::R5G6B5:
+				pixel_definitions< PixelFormat::R5G6B5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::R8G8B8:
+				pixel_definitions< PixelFormat::R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::B8G8R8:
+				pixel_definitions< PixelFormat::B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::A8R8G8B8:
+				pixel_definitions< PixelFormat::A8R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::A8B8G8R8:
+				pixel_definitions< PixelFormat::A8B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				pixel_definitions< ePIXEL_FORMAT_RGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::RGB16F:
+				pixel_definitions< PixelFormat::RGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::ARGB16F:
+				pixel_definitions< PixelFormat::ARGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::RGB16F32F:
+				pixel_definitions< PixelFormat::RGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::ARGB16F32F:
+				pixel_definitions< PixelFormat::ARGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				pixel_definitions< ePIXEL_FORMAT_RGB32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::RGB32F:
+				pixel_definitions< PixelFormat::RGB32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				pixel_definitions< ePIXEL_FORMAT_ARGB32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::ARGB32F:
+				pixel_definitions< PixelFormat::ARGB32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				pixel_definitions< ePIXEL_FORMAT_DXTC1 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::DXTC1:
+				pixel_definitions< PixelFormat::DXTC1 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				pixel_definitions< ePIXEL_FORMAT_DXTC3 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::DXTC3:
+				pixel_definitions< PixelFormat::DXTC3 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				pixel_definitions< ePIXEL_FORMAT_DXTC5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::DXTC5:
+				pixel_definitions< PixelFormat::DXTC5 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				pixel_definitions< ePIXEL_FORMAT_YUY2 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::YUY2:
+				pixel_definitions< PixelFormat::YUY2 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::D16:
+				pixel_definitions< PixelFormat::D16 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::D24:
+				pixel_definitions< PixelFormat::D24 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::D24S8:
+				pixel_definitions< PixelFormat::D24S8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::D32:
+				pixel_definitions< PixelFormat::D32 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::D32F:
+				pixel_definitions< PixelFormat::D32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::S1:
+				pixel_definitions< PixelFormat::S1 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+			case PixelFormat::S8:
+				pixel_definitions< PixelFormat::S8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 			}
 		}
 
-		ePIXEL_FORMAT GetFormatByName( String const & p_strFormat )
+		PixelFormat GetFormatByName( String const & p_strFormat )
 		{
-			ePIXEL_FORMAT l_eReturn = ePIXEL_FORMAT_COUNT;
+			PixelFormat l_return = PixelFormat::Count;
 
-			for ( int i = 0; i < l_eReturn; ++i )
+			for ( int i = 0; i < int( l_return ); ++i )
 			{
-				switch ( i )
+				switch ( PixelFormat( i ) )
 				{
-				case ePIXEL_FORMAT_L8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_L8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::L8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::L8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_L16F32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_L16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::L16F32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::L16F32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_L32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_L32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::L32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::L32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_A8L8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8L8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::A8L8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::A8L8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_AL16F32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_AL16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::AL16F32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::AL16F32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_AL32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_AL32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::AL32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::AL32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_A1R5G5B5:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::A1R5G5B5:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::A1R5G5B5 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_A4R4G4B4:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::A4R4G4B4:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::A4R4G4B4 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_R5G6B5:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::R5G6B5:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::R5G6B5 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_R8G8B8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::R8G8B8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::R8G8B8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_B8G8R8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::B8G8R8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::B8G8R8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_A8R8G8B8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::A8R8G8B8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::A8R8G8B8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_A8B8G8R8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::A8B8G8R8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::A8B8G8R8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_RGB16F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB16F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::RGB16F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::RGB16F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_ARGB16F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB16F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::ARGB16F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::ARGB16F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_RGB16F32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::RGB16F32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::RGB16F32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_ARGB16F32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::ARGB16F32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::ARGB16F32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_RGB32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::RGB32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::RGB32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_ARGB32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::ARGB32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::ARGB32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DXTC1:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DXTC1 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::DXTC1:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::DXTC1 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DXTC3:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DXTC3 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::DXTC3:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::DXTC3 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DXTC5:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DXTC5 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::DXTC5:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::DXTC5 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_YUY2:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_YUY2 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::YUY2:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::YUY2 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DEPTH16:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::D16:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::D16 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DEPTH24:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::D24:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::D24 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DEPTH24S8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::D24S8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::D24S8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DEPTH32:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::D32:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::D32 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_DEPTH32F:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::D32F:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::D32F >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_STENCIL1:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::S1:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::S1 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 
-				case ePIXEL_FORMAT_STENCIL8:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case PixelFormat::S8:
+					l_return = ( p_strFormat == pixel_definitions< PixelFormat::S8 >::to_str() ? PixelFormat( i ) : PixelFormat::Count );
 					break;
 				}
 			}
 
-			return l_eReturn;
+			return l_return;
 		}
 
-		String GetFormatName( ePIXEL_FORMAT p_format )
+		String GetFormatName( PixelFormat p_format )
 		{
-			String l_strReturn;
+			String l_return;
 
 			switch ( p_format )
 			{
-			case ePIXEL_FORMAT_L8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_L8 >::to_str();
+			case PixelFormat::L8:
+				l_return = pixel_definitions< PixelFormat::L8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_L16F32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_L16F32F >::to_str();
+			case PixelFormat::L16F32F:
+				l_return = pixel_definitions< PixelFormat::L16F32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_L32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_L32F >::to_str();
+			case PixelFormat::L32F:
+				l_return = pixel_definitions< PixelFormat::L32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_A8L8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8L8 >::to_str();
+			case PixelFormat::A8L8:
+				l_return = pixel_definitions< PixelFormat::A8L8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_AL16F32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_AL16F32F >::to_str();
+			case PixelFormat::AL16F32F:
+				l_return = pixel_definitions< PixelFormat::AL16F32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_AL32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_AL32F >::to_str();
+			case PixelFormat::AL32F:
+				l_return = pixel_definitions< PixelFormat::AL32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_A1R5G5B5:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A1R5G5B5 >::to_str();
+			case PixelFormat::A1R5G5B5:
+				l_return = pixel_definitions< PixelFormat::A1R5G5B5 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_A4R4G4B4:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A4R4G4B4 >::to_str();
+			case PixelFormat::A4R4G4B4:
+				l_return = pixel_definitions< PixelFormat::A4R4G4B4 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_R5G6B5:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_R5G6B5 >::to_str();
+			case PixelFormat::R5G6B5:
+				l_return = pixel_definitions< PixelFormat::R5G6B5 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_R8G8B8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::to_str();
+			case PixelFormat::R8G8B8:
+				l_return = pixel_definitions< PixelFormat::R8G8B8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_B8G8R8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::to_str();
+			case PixelFormat::B8G8R8:
+				l_return = pixel_definitions< PixelFormat::B8G8R8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_A8R8G8B8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::to_str();
+			case PixelFormat::A8R8G8B8:
+				l_return = pixel_definitions< PixelFormat::A8R8G8B8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_A8B8G8R8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str();
+			case PixelFormat::A8B8G8R8:
+				l_return = pixel_definitions< PixelFormat::A8B8G8R8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_RGB16F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_RGB16F >::to_str();
+			case PixelFormat::RGB16F:
+				l_return = pixel_definitions< PixelFormat::RGB16F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::to_str();
+			case PixelFormat::ARGB16F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_RGB16F32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::to_str();
+			case PixelFormat::RGB16F32F:
+				l_return = pixel_definitions< PixelFormat::RGB16F32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_ARGB16F32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::to_str();
+			case PixelFormat::ARGB16F32F:
+				l_return = pixel_definitions< PixelFormat::ARGB16F32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_RGB32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_RGB32F >::to_str();
+			case PixelFormat::RGB32F:
+				l_return = pixel_definitions< PixelFormat::RGB32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_ARGB32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_ARGB32F >::to_str();
+			case PixelFormat::ARGB32F:
+				l_return = pixel_definitions< PixelFormat::ARGB32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DXTC1:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DXTC1 >::to_str();
+			case PixelFormat::DXTC1:
+				l_return = pixel_definitions< PixelFormat::DXTC1 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DXTC3:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DXTC3 >::to_str();
+			case PixelFormat::DXTC3:
+				l_return = pixel_definitions< PixelFormat::DXTC3 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DXTC5:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DXTC5 >::to_str();
+			case PixelFormat::DXTC5:
+				l_return = pixel_definitions< PixelFormat::DXTC5 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_YUY2:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_YUY2 >::to_str();
+			case PixelFormat::YUY2:
+				l_return = pixel_definitions< PixelFormat::YUY2 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DEPTH16:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH16 >::to_str();
+			case PixelFormat::D16:
+				l_return = pixel_definitions< PixelFormat::D16 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH24 >::to_str();
+			case PixelFormat::D24:
+				l_return = pixel_definitions< PixelFormat::D24 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DEPTH24S8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH24S8 >::to_str();
+			case PixelFormat::D24S8:
+				l_return = pixel_definitions< PixelFormat::D24S8 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::to_str();
+			case PixelFormat::D32:
+				l_return = pixel_definitions< PixelFormat::D32 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_DEPTH32F:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::to_str();
+			case PixelFormat::D32F:
+				l_return = pixel_definitions< PixelFormat::D32F >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_STENCIL1:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::to_str();
+			case PixelFormat::S1:
+				l_return = pixel_definitions< PixelFormat::S1 >::to_str();
 				break;
 
-			case ePIXEL_FORMAT_STENCIL8:
-				l_strReturn = pixel_definitions< ePIXEL_FORMAT_STENCIL8 >::to_str();
+			case PixelFormat::S8:
+				l_return = pixel_definitions< PixelFormat::S8 >::to_str();
 				break;
 			}
 
-			return l_strReturn;
+			return l_return;
 		}
 	}
 }
