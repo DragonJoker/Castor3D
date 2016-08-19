@@ -497,10 +497,10 @@ namespace Castor3D
 		stFRAME_BUFFER m_frameBuffer;
 		//!\~english	The rasteriser state to cull front faces.
 		//!\~french		L'état de rastérisation pour masquer les faces avant.
-		RasteriserStateWPtr m_wpFrontRasteriserState;
+		RasteriserStateUPtr m_frontRasteriserState;
 		//!\~english	The rasteriser state to cull back faces.
 		//!\~french		L'état de rastérisation pour masquer les faces arrière.
-		RasteriserStateWPtr m_wpBackRasteriserState;
+		RasteriserStateUPtr m_backRasteriserState;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

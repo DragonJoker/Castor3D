@@ -1,6 +1,5 @@
 #include "BloomPostEffect.hpp"
 
-#include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
 #include <ShaderCache.hpp>

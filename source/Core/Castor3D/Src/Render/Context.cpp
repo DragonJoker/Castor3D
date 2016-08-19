@@ -1,7 +1,5 @@
 #include "Context.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
@@ -65,10 +63,10 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_bMultiSampling = p_window->IsMultisampling();
-		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthState" ) );
+		m_dsStateNoDepth = GetRenderSystem()->CreateDepthStencilState();
 		m_dsStateNoDepth->SetDepthTest( false );
 		m_dsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthWriterState" ) );
+		m_dsStateNoDepthWrite = GetRenderSystem()->CreateDepthStencilState();
 		m_dsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 
@@ -91,8 +89,6 @@ namespace Castor3D
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
-			m_dsStateNoDepth->Initialise();
-			m_dsStateNoDepthWrite->Initialise();
 			DoEndCurrent();
 		}
 
@@ -104,8 +100,6 @@ namespace Castor3D
 		m_initialised = false;
 		DoSetCurrent();
 		DoCleanup();
-		m_dsStateNoDepth->Cleanup();
-		m_dsStateNoDepthWrite->Cleanup();
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();

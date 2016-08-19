@@ -11,22 +11,14 @@ namespace TestRender
 		: RasteriserState( *p_renderSystem->GetEngine() )
 		, m_renderSystem( p_renderSystem )
 	{
-		CreateCurrent();
 	}
 
 	TestRasteriserState::~TestRasteriserState()
 	{
-		DestroyCurrent();
 	}
 
-	bool TestRasteriserState::Apply()
+	bool TestRasteriserState::Apply()const
 	{
-		m_changed = false;
 		return true;
-	}
-
-	RasteriserStateSPtr TestRasteriserState::DoCreateCurrent()
-	{
-		return std::make_shared< TestRasteriserState >( m_renderSystem );
 	}
 }

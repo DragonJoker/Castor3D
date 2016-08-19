@@ -1,11 +1,9 @@
 #include "DirectRenderTechnique.hpp"
 
 #include <CameraCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <LightCache.hpp>
 #include <MaterialCache.hpp>
 #include <OverlayCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SceneCache.hpp>
 #include <TargetCache.hpp>
 
@@ -79,7 +77,7 @@ namespace Direct
 
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
-		m_renderTarget.GetDepthStencilState()->Apply();
+		m_renderTarget.GetDepthStencilState().Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 

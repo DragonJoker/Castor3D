@@ -26,13 +26,10 @@ SOFTWARE.
 #include "Cache/Cache.hpp"
 #include "Miscellaneous/Version.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "ListenerCache.hpp"
 #include "MaterialCache.hpp"
 #include "OverlayCache.hpp"
 #include "PluginCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
 #include "ShaderCache.hpp"
@@ -574,15 +571,6 @@ namespace Castor3D
 		//!\~english	The sampler states collection.
 		//!\~french		La collection de sampler states.
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
-		//!\~english	The DepthStencilState collection.
-		//!\~french		La collection de DepthStencilState.
-		DECLARE_CACHE_MEMBER( depthStencilState, DepthStencilState );
-		//!\~english	The RasteriserState collection.
-		//!\~french		La collection de RasteriserState.
-		DECLARE_CACHE_MEMBER( rasteriserState, RasteriserState );
-		//!\~english	The BlendState collection.
-		//!\~french		La collection de BlendState.
-		DECLARE_CACHE_MEMBER( blendState, BlendState );
 		//!\~english	The materials cache.
 		//!\~french		Le cache de matériaux.
 		DECLARE_CACHE_MEMBER( material, Material );

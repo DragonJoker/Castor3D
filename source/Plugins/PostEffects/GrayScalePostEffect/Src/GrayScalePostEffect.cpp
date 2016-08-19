@@ -1,6 +1,5 @@
 #include "GrayScalePostEffect.hpp"
 
-#include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
 #include <ShaderCache.hpp>
@@ -109,15 +108,8 @@ namespace GrayScale
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 
-		if ( !m_renderTarget.GetEngine()->GetRasteriserStateCache().Has( l_name ) )
-		{
-			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Add( l_name );
-			m_rasteriser->SetCulledFaces( eFACE_BACK );
-		}
-		else
-		{
-			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Find( l_name );
-		}
+		m_rasteriser = p_renderSystem.CreateRasteriserState();
+		m_rasteriser->SetCulledFaces( eFACE_BACK );
 	}
 
 	GrayScalePostEffect::~GrayScalePostEffect()

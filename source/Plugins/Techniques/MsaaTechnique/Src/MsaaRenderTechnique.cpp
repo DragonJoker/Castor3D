@@ -1,11 +1,9 @@
 #include "MsaaRenderTechnique.hpp"
 
 #include <CameraCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <LightCache.hpp>
 #include <MaterialCache.hpp>
 #include <OverlayCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SceneCache.hpp>
 #include <TargetCache.hpp>
 
@@ -34,27 +32,36 @@ using namespace Castor3D;
 
 namespace Msaa
 {
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
-		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, true )
-		, m_samplesCount( 0 )
+	int & GetSamplesCountParam( Parameters const & p_params, int & p_count )
 	{
 		String l_count;
 
 		if ( p_params.Get( cuT( "samples_count" ), l_count ) )
 		{
-			m_samplesCount = string::to_int( l_count );
+			p_count = string::to_int( l_count );
 		}
 
+		if ( p_count <= 1 )
+		{
+			p_count = 0;
+		}
+
+		return p_count;
+	}
+
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
+		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
+	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_ARGB16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
+		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::ARGB16F32F );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 
 		if ( m_samplesCount > 1 )
 		{
-			m_wpFrontRasteriserState.lock()->SetMultisample( true );
-			m_wpBackRasteriserState.lock()->SetMultisample( true );
+			m_frontRasteriserState->SetMultisample( true );
+			m_backRasteriserState->SetMultisample( true );
 		}
 		else
 		{

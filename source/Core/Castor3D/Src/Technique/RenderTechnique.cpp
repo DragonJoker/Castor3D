@@ -7,12 +7,10 @@
 #include "AnimatedObjectGroupCache.hpp"
 #include "BillboardCache.hpp"
 #include "CameraCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "GeometryCache.hpp"
 #include "LightCache.hpp"
 #include "OverlayCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "ShaderCache.hpp"
 
@@ -217,12 +215,10 @@ namespace Castor3D
 		, m_multisampling{ p_multisampling }
 		, m_renderQueue{ *this }
 	{
-		auto l_rsState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
-		l_rsState->SetCulledFaces( eFACE_FRONT );
-		m_wpFrontRasteriserState = l_rsState;
-		l_rsState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
-		l_rsState->SetCulledFaces( eFACE_BACK );
-		m_wpBackRasteriserState = l_rsState;
+		m_frontRasteriserState = p_renderSystem.CreateRasteriserState();
+		m_frontRasteriserState->SetCulledFaces( eFACE_FRONT );
+		m_backRasteriserState = p_renderSystem.CreateRasteriserState();
+		m_backRasteriserState->SetCulledFaces( eFACE_BACK );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -250,16 +246,6 @@ namespace Castor3D
 			{
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
-
-			if ( m_initialised )
-			{
-				m_initialised = m_wpFrontRasteriserState.lock()->Initialise();
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = m_wpBackRasteriserState.lock()->Initialise();
-			}
 		}
 
 		return m_initialised;
@@ -268,8 +254,6 @@ namespace Castor3D
 	void RenderTechnique::Cleanup()
 	{
 		m_initialised = false;
-		m_wpBackRasteriserState.lock()->Cleanup();
-		m_wpBackRasteriserState.lock()->Cleanup();
 		m_frameBuffer.Cleanup();
 		DoCleanup();
 	}
@@ -409,14 +393,12 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline )
 	{
-		auto l_rsBack = m_wpBackRasteriserState.lock();
-
 		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty()
 			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty()
 			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty()
 			 || !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
 		{
-			l_rsBack->Apply();
+			m_backRasteriserState->Apply();
 
 			if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
 			{
@@ -449,24 +431,20 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline, Camera const & p_camera )
 	{
-		auto l_rsBack = m_wpBackRasteriserState.lock();
-
 		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodes.empty()
 			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodes.empty()
 			|| !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
 		{
 			auto l_context = m_renderSystem.GetCurrentContext();
-			auto l_rsFront = m_wpFrontRasteriserState.lock();
-			auto l_dsNoDepthWrite = l_context->GetNoDepthWriteState();
 
 			if ( l_context->IsMultiSampling() )
 			{
-				l_rsFront->Apply();
+				m_frontRasteriserState->Apply();
 				DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_transparentRenderNodes, false );
 				DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_staticGeometries.m_transparentRenderNodes, false );
 				DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_animatedGeometries.m_transparentRenderNodes, false );
 				DoRenderBillboards( p_nodes.m_scene, p_pipeline, p_nodes.m_billboards.m_transparentRenderNodes, false );
-				l_rsBack->Apply();
+				m_backRasteriserState->Apply();
 				DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_instancedGeometries.m_transparentRenderNodes, true );
 				DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_staticGeometries.m_transparentRenderNodes, true );
 				DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_pipeline, p_nodes.m_animatedGeometries.m_transparentRenderNodes, true );
@@ -478,10 +456,10 @@ namespace Castor3D
 				DoSortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
 				DoSortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
 				DoSortAlpha( p_nodes.m_billboards.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
-				l_dsNoDepthWrite->Apply();
-				l_rsFront->Apply();
+				l_context->GetNoDepthWriteState().Apply();
+				m_frontRasteriserState->Apply();
 				DoRenderByDistance( p_nodes.m_scene, p_pipeline, l_distanceSortedRenderNodes, false );
-				l_rsBack->Apply();
+				m_backRasteriserState->Apply();
 				DoRenderByDistance( p_nodes.m_scene, p_pipeline, l_distanceSortedRenderNodes, true );
 			}
 		}

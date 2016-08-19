@@ -135,10 +135,10 @@ namespace Castor3D
 	private:
 		//!\~english	The depth stencil state used while rendering the skybox.
 		//!\~french		L'état de profondeur et stencil utilisé pour le rendu de la skybox.
-		DepthStencilStateWPtr m_dss;
+		DepthStencilStateUPtr m_dss;
 		//!\~english	The rasteriser state used while rendering the skybox.
 		//!\~french		L'état de rastérisation utilisé pour le rendu de la skybox.
-		RasteriserStateWPtr m_rs;
+		RasteriserStateUPtr m_rs;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;

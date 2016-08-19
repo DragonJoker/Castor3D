@@ -37,28 +37,12 @@ namespace GlRender
 		GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlRasteriserState();
 		/**
-		 *\copydoc Castor3D::RasteriserState::Initialise
+		 *\~english
+		 *\brief		Applies the states
+		 *\~french
+		 *\brief		Applique les états
 		 */
-		virtual bool Initialise()
-		{
-			return true;
-		}
-		/**
-		 *\copydoc Castor3D::RasteriserState::Cleanup
-		 */
-		virtual void Cleanup()
-		{
-		}
-		/**
-		 *\copydoc Castor3D::RasteriserState::Apply
-		 */
-		virtual bool Apply();
-
-	private:
-		/**
-		 *\copydoc Castor3D::RasteriserState::DoCreateCurrent
-		 */
-		virtual Castor3D::RasteriserStateSPtr DoCreateCurrent();
+		bool Apply()const;
 
 	private:
 		GlRenderSystem * m_renderSystem;

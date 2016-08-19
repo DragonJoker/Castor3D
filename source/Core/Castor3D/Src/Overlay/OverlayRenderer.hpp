@@ -114,9 +114,9 @@ namespace Castor3D
 		C3D_API void EndRender();
 		/**
 		 *\~english
-		 *\brief		Retrieves the current render target size
+		 *\return		The current render target size
 		 *\~french
-		 *\brief		Récupère les dimensions de la cible du rendu courant
+		 *\return		Les dimensions de la cible du rendu courant
 		 */
 		Castor::Size const & GetSize()const
 		{
@@ -124,9 +124,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		true if the render size has changed.
+		 *\return		\p true if the render size has changed.
 		 *\~french
-		 *\return		true si la taille de rendu a changé.
+		 *\return		\p true si la taille de rendu a changé.
 		 */
 		bool IsSizeChanged()const
 		{
@@ -283,52 +283,75 @@ namespace Castor3D
 		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( uint32_t p_flags );
 
 	protected:
-		//!\~english Vertex buffers for panels.	\~french Tampons de sommets pour les panneaux.
+		//!\~english	Vertex buffers for panels.
+		//!\~french		Tampons de sommets pour les panneaux.
 		VertexBufferSPtr m_panelVertexBuffer;
-		//!\~english Vertex buffers for borders.	\~french Tampons de sommets pour les bordures.
+		//!\~english	Vertex buffers for borders.
+		//!\~french		Tampons de sommets pour les bordures.
 		VertexBufferSPtr m_borderVertexBuffer;
-		//!\~english The Vertex buffers used to render texts.	\~french Les tampons de sommets utilisés pour rendre les textes.
+		//!\~english	The Vertex buffers used to render texts.
+		//!\~french		Les tampons de sommets utilisés pour rendre les textes.
 		std::vector< VertexBufferSPtr > m_textsVertexBuffers;
-		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
+		//!\~english	Geometry buffers for panels.
+		//!\~french		Tampons de géometrie pour les panneaux.
 		OverlayGeometryBuffers m_panelGeometryBuffers;
-		//!\~english Geometry buffers for borders	\~french Tampons de géometrie pour les bordures
+		//!\~english	Geometry buffers for borders.
+		//!\~french		Tampons de géometrie pour les bordures.
 		OverlayGeometryBuffers m_borderGeometryBuffers;
-		//!\~english The GeometryBuffers used to render texts	\~french Les GeometryBuffers utilisé pour rendre les textes
+		//!\~english	The GeometryBuffers used to render texts.
+		//!\~french		Les GeometryBuffers utilisé pour rendre les textes.
 		std::vector< OverlayGeometryBuffers > m_textsGeometryBuffers;
-		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
+		//!\~english	The buffer elements declaration.
+		//!\~french		La déclaration des éléments du tampon.
 		BufferDeclaration m_declaration;
-		//!\~english The text overlay buffer elements declaration.	\~french La déclaration des éléments du tampon, pour les textes.
+		//!\~english	The text overlay buffer elements declaration.
+		//!\~french		La déclaration des éléments du tampon, pour les textes.
 		BufferDeclaration m_textDeclaration;
-		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
+		//!\~english	The current render target size.
+		//!\~french		Les dimensions de la cible du rendu courant.
 		Castor::Size m_size;
-		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)
+		//!\~english	The shader programs used to render a panel (used for borders too).
+		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
 		std::map< Pass *, RenderNode > m_mapPanelPrograms;
-		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisés pour rendre les textes
+		//!\~english	The shader programs used to render texts.
+		//!\~french		Les programmes de shader utilisés pour rendre les textes.
 		std::map< Pass *, RenderNode > m_mapTextPrograms;
-		//!\~english The shader programs.	\~french Les programmes de shader.
+		//!\~english	The shader programs.
+		//!\~french		Les programmes de shader.
 		std::map< uint32_t, ShaderProgramSPtr > m_programs;
-		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
+		//!\~english	Text texture sampler.
+		//!\~french		Echantillonneur de la texture de texte.
 		OneIntFrameVariableSPtr m_mapText;
-		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu
+		//!\~english	The previously rendered BorderPanelOverlay z-index.
+		//!\~french		Le z-index du précedent BorderPanelOverlay rendu.
 		int m_previousBorderZIndex{ 0 };
-		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du précedent PanelOverlay rendu
+		//!\~english	The previously rendered PanelOverlay z-index.
+		//!\~french		Le z-index du précedent PanelOverlay rendu.
 		int m_previousPanelZIndex{ 0 };
-		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du précedent TextOverlay rendu
+		//!\~english	The previously rendered TextOverlay z-index.
+		//!\~french		Le z-index du précedent TextOverlay rendu.
 		int m_previousTextZIndex{ 0 };
-		//!\~english The previously rendered text	\~french Le texte rendu précédemment
+		//!\~english	The previously rendered text.
+		//!\~french		Le texte rendu précédemment.
 		Castor::String m_previousCaption;
-		//!\~english Panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations panneau
+		//!\~english	Panel overlays vertex array (quad definition).
+		//!\~french		Tableau de vertex (définition du quad) pour les incrustations panneau.
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
-		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations bordure
+		//!\~english	Border panel overlays vertex array (quad definition).
+		//!\~french		Tableau de vertex (définition du quad) pour les incrustations bordure.
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
-		//!\~english Tells if the render size has changed.	\~french Dit si les dimension du rendu ont changé.
+		//!\~english	Tells if the render size has changed.
+		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
-		//!\~english The overlays blend state.	\~french L'état de mélange pour les incrustations.
-		BlendStateWPtr m_wpBlendState;
-		//!\~english The overlays depth stencil state.	\~french L'état de profoundeur et stencil pour les incrustations.
-		DepthStencilStateWPtr m_wpDepthStencilState;
-		//!\~english The overlays rasteriser state.	\~french L'état de rastérisation pour les incrustations.
-		RasteriserStateWPtr m_wpRasteriserState;
+		//!\~english	The overlays blend state.
+		//!\~french		L'état de mélange pour les incrustations.
+		BlendStateUPtr m_blendState;
+		//!\~english	The overlays depth stencil state.
+		//!\~french		L'état de profoundeur et stencil pour les incrustations.
+		DepthStencilStateUPtr m_depthStencilState;
+		//!\~english	The overlays rasteriser state.
+		//!\~french		L'état de rastérisation pour les incrustations.
+		RasteriserStateUPtr m_rasteriserState;
 	};
 }
 

@@ -37,28 +37,12 @@ namespace GlRender
 		GlBlendState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlBlendState();
 		/**
-		 *\copydoc Castor3D::BlendState::Initialise
+		 *\~english
+		 *\brief		Applies the states
+		 *\~french
+		 *\brief		Applique les états
 		 */
-		virtual bool Initialise()
-		{
-			return true;
-		}
-		/**
-		 *\copydoc Castor3D::BlendState::Cleanup
-		 */
-		virtual void Cleanup()
-		{
-		}
-		/**
-		 *\copydoc Castor3D::BlendState::Apply
-		 */
-		virtual bool Apply();
-
-	private:
-		/**
-		 *\copydoc Castor3D::BlendState::DoCreateCurrent
-		 */
-		virtual Castor3D::BlendStateSPtr DoCreateCurrent();
+		bool Apply()const;
 
 	private:
 		GlRenderSystem * m_renderSystem;

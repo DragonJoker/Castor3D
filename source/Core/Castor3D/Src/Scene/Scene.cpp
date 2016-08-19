@@ -586,7 +586,7 @@ namespace Castor3D
 			if ( m_backgroundImage->IsInitialised() )
 			{
 				ContextRPtr l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
-				l_context->GetNoDepthState()->Apply();
+				l_context->GetNoDepthState().Apply();
 				l_context->RenderTexture( p_size, *m_backgroundImage );
 			}
 		}

@@ -3,9 +3,7 @@
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
@@ -122,27 +120,10 @@ namespace Castor3D
 			m_sampler = l_sampler;
 		}
 
-		if ( GetEngine()->GetDepthStencilStateCache().Has( l_skybox ) )
-		{
-			m_dss = GetEngine()->GetDepthStencilStateCache().Find( l_skybox );
-		}
-		else
-		{
-			auto l_dss = GetEngine()->GetDepthStencilStateCache().Add( l_skybox );
-			l_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
-			m_dss = l_dss;
-		}
-
-		if ( GetEngine()->GetRasteriserStateCache().Has( l_skybox ) )
-		{
-			m_rs = GetEngine()->GetRasteriserStateCache().Find( l_skybox );
-		}
-		else
-		{
-			auto l_rs = GetEngine()->GetRasteriserStateCache().Add( l_skybox );
-			l_rs->SetCulledFaces( eFACE_FRONT );
-			m_rs = l_rs;
-		}
+		m_dss = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		m_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+		m_rs = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		m_rs->SetCulledFaces( eFACE_FRONT );
 
 		m_bufferVertex =
 		{
@@ -239,8 +220,8 @@ namespace Castor3D
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
 			p_pipeline.SetModelMatrix( m_mtxModel );
 			p_pipeline.ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
-			m_dss.lock()->Apply();
-			m_rs.lock()->Apply();
+			m_dss->Apply();
+			m_rs->Apply();
 			l_program->Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );

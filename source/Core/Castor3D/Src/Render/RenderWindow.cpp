@@ -1,11 +1,8 @@
 #include "RenderWindow.hpp"
 
-#include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "ListenerCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "TargetCache.hpp"
 #include "SceneCache.hpp"
 #include "ShaderCache.hpp"
@@ -84,10 +81,9 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		auto l_dsstate = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
-		l_dsstate->SetDepthTest( false );
-		m_wpDepthStencilState = l_dsstate;
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_depthStencilState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		m_depthStencilState->SetDepthTest( false );
+		m_rasteriserState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
 		s_nbRenderWindows++;
 	}
 
@@ -431,8 +427,8 @@ namespace Castor3D
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 			m_backBuffers->Clear();
-			m_wpDepthStencilState.lock()->Apply();
-			m_wpRasteriserState.lock()->Apply();
+			m_depthStencilState->Apply();
+			m_rasteriserState->Apply();
 			m_context->RenderTexture( m_size, *l_texture );
 			m_backBuffers->Unbind();
 		}

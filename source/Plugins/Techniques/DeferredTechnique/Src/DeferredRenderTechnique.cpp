@@ -1,11 +1,8 @@
 #include "DeferredRenderTechnique.hpp"
 
-#include <BlendStateCache.hpp>
 #include <CameraCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <Engine.hpp>
 #include <LightCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SceneCache.hpp>
 #include <SceneNodeCache.hpp>
 #include <ShaderCache.hpp>
@@ -82,7 +79,7 @@ namespace Deferred
 
 		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
-		m_geometryPassDsState = GetEngine()->GetDepthStencilStateCache().Add( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState = p_renderSystem.CreateDepthStencilState();
 		m_geometryPassDsState->SetStencilTest( true );
 		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
@@ -99,7 +96,7 @@ namespace Deferred
 		m_geometryPassDsState->SetDepthTest( true );
 		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_lightPassDsState = GetEngine()->GetDepthStencilStateCache().Add( cuT( "LightPassState" ) );
+		m_lightPassDsState = p_renderSystem.CreateDepthStencilState();
 		m_lightPassDsState->SetStencilTest( true );
 		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_lightPassDsState->SetStencilWriteMask( 0 );
@@ -110,7 +107,7 @@ namespace Deferred
 		m_lightPassDsState->SetDepthTest( true );
 		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
 
-		m_lightPassBlendState = GetEngine()->GetBlendStateCache().Add( cuT( "LightPassState" ) );
+		m_lightPassBlendState = p_renderSystem.CreateBlendState();
 
 		m_declaration = BufferDeclaration(
 		{
@@ -199,14 +196,14 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, ePIXEL_FORMAT_ARGB16F32F );
+			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, PixelFormat::ARGB16F32F );
 			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
 
 		if ( l_return )
 		{
-			m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetTexture()->GetImage().SetSource( m_size, ePIXEL_FORMAT_DEPTH32 );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetTexture()->GetImage().SetSource( m_size, PixelFormat::D32 );
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
 			p_index++;
 		}
@@ -241,10 +238,6 @@ namespace Deferred
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		m_geometryPassDsState->Initialise();
-		m_lightPassDsState->Initialise();
-		m_lightPassBlendState->Initialise();
-
 		m_lightPassShaderProgram->Initialise();
 		m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferScene );
@@ -260,9 +253,6 @@ namespace Deferred
 	{
 		m_geometryBuffers.reset();
 		m_pShaderCamera.reset();
-		m_geometryPassDsState->Cleanup();
-		m_lightPassDsState->Cleanup();
-		m_lightPassBlendState->Cleanup();
 		m_vertexBuffer->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
 		m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );

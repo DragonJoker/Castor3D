@@ -41,30 +41,6 @@ namespace Castor3D
 	class DepthStencilState
 		: public Castor::OwnedBy< Engine >
 	{
-	protected:
-		/*!
-		\author 	Sylvain DOREMUS
-		\version	0.7.0
-		\date 		27/11/2013
-		\~english
-		\brief		Stencil function and operations description
-		\~french
-		\brief		Fonction et opérations de stencil
-		*/
-		struct stSTENCIL
-		{
-			//!\~english The function	\~french La fonction
-			eSTENCIL_FUNC m_eFunc;
-			//!\~english The reference value for the function	\~french La valeur de référence pour la fonction
-			uint32_t m_ref;
-			//!\~english The operation on stencil test fail	\~french Opération faite en cas d'échec du stencil test
-			eSTENCIL_OP m_eFailOp;
-			//!\~english The operation on deph test fail	\~french Opération faite en cas d'échec du test de profondeur
-			eSTENCIL_OP m_eDepthFailOp;
-			//!\~english The operation on depth and stencil tests success	\~french Opération faite en cas de réussite des tests stencil et profondeur
-			eSTENCIL_OP m_ePassOp;
-		};
-
 	public:
 		/**
 		 *\~english
@@ -84,25 +60,11 @@ namespace Castor3D
 		C3D_API virtual ~DepthStencilState();
 		/**
 		 *\~english
-		 *\brief		Initialises the states
-		 *\~french
-		 *\brief		Initialise les états
-		 */
-		C3D_API virtual bool Initialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans the states
-		 *\~french
-		 *\brief		Nettoie les états
-		 */
-		C3D_API virtual void Cleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Applies the states
 		 *\~french
 		 *\brief		Applique les états
 		 */
-		C3D_API virtual bool Apply() = 0;
+		C3D_API virtual bool Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the depth test status
@@ -113,7 +75,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthTest( bool p_enable )
 		{
-			m_changed |= m_bDepthTest != p_enable;
 			m_bDepthTest = p_enable;
 		}
 		/**
@@ -138,7 +99,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthFunc( eDEPTH_FUNC p_func )
 		{
-			m_changed |= m_eDepthFunc != p_func;
 			m_eDepthFunc = p_func;
 		}
 		/**
@@ -165,7 +125,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthRange( double p_near, double p_far )
 		{
-			m_changed |= p_near != m_dDepthNear || p_far != m_dDepthFar;
 			m_dDepthNear = p_near;
 			m_dDepthFar = p_far;
 		}
@@ -203,7 +162,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthMask( eWRITING_MASK p_eMask )
 		{
-			m_changed |= m_eDepthMask != p_eMask;
 			m_eDepthMask = p_eMask;
 		}
 		/**
@@ -228,7 +186,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilTest( bool p_enable )
 		{
-			m_changed = true;
 			m_bStencilTest = p_enable;
 		}
 		/**
@@ -253,7 +210,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilReadMask( uint32_t p_uiMask )
 		{
-			m_changed |= m_uiStencilReadMask != p_uiMask;
 			m_uiStencilReadMask = p_uiMask;
 		}
 		/**
@@ -278,7 +234,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilWriteMask( uint32_t p_uiMask )
 		{
-			m_changed |= m_uiStencilWriteMask != p_uiMask;
 			m_uiStencilWriteMask = p_uiMask;
 		}
 		/**
@@ -303,7 +258,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontRef( uint32_t p_ref )
 		{
-			m_changed |= m_stStencilFront.m_ref != p_ref;
 			m_stStencilFront.m_ref = p_ref;
 		}
 		/**
@@ -328,7 +282,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontFunc( eSTENCIL_FUNC p_func )
 		{
-			m_changed |= m_stStencilFront.m_eFunc != p_func;
 			m_stStencilFront.m_eFunc = p_func;
 		}
 		/**
@@ -353,7 +306,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilFront.m_eFailOp != p_eOp;
 			m_stStencilFront.m_eFailOp = p_eOp;
 		}
 		/**
@@ -378,7 +330,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontDepthFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilFront.m_eDepthFailOp != p_eOp;
 			m_stStencilFront.m_eDepthFailOp = p_eOp;
 		}
 		/**
@@ -403,7 +354,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontPassOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilFront.m_ePassOp != p_eOp;
 			m_stStencilFront.m_ePassOp = p_eOp;
 		}
 		/**
@@ -428,7 +378,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackRef( uint32_t p_ref )
 		{
-			m_changed |= m_stStencilBack.m_ref != p_ref;
 			m_stStencilBack.m_ref = p_ref;
 		}
 		/**
@@ -453,7 +402,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackFunc( eSTENCIL_FUNC p_func )
 		{
-			m_changed |= m_stStencilBack.m_eFunc != p_func;
 			m_stStencilBack.m_eFunc = p_func;
 		}
 		/**
@@ -478,7 +426,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilBack.m_eFailOp != p_eOp;
 			m_stStencilBack.m_eFailOp = p_eOp;
 		}
 		/**
@@ -503,7 +450,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackDepthFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilBack.m_eDepthFailOp != p_eOp;
 			m_stStencilBack.m_eDepthFailOp = p_eOp;
 		}
 		/**
@@ -528,7 +474,6 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackPassOp( eSTENCIL_OP p_eOp )
 		{
-			m_changed |= m_stStencilBack.m_ePassOp != p_eOp;
 			m_stStencilBack.m_ePassOp = p_eOp;
 		}
 		/**
@@ -545,55 +490,65 @@ namespace Castor3D
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void CreateCurrent();
-		/**
-		 *\~english
-		 *\brief		Destroys the state used to save the current state
-		 *\~french
-		 *\brief		Détruit l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void DestroyCurrent();
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API virtual DepthStencilStateSPtr DoCreateCurrent() = 0;
+		/*!
+		\author 	Sylvain DOREMUS
+		\version	0.7.0
+		\date 		27/11/2013
+		\~english
+		\brief		Stencil function and operations description
+		\~french
+		\brief		Fonction et opérations de stencil
+		*/
+		struct StencilConfiguration
+		{
+			//!\~english	The function.
+			//!\~french		La fonction.
+			eSTENCIL_FUNC m_eFunc{ eSTENCIL_FUNC_ALWAYS };
+			//!\~english	The reference value for the function.
+			//!\~french		La valeur de référence pour la fonction.
+			uint32_t m_ref{ 0 };
+			//!\~english	The operation on stencil test fail.
+			//!\~french		Opération faite en cas d'échec du stencil test.
+			eSTENCIL_OP m_eFailOp{ eSTENCIL_OP_KEEP };
+			//!\~english	The operation on deph test fail.
+			//!\~french		Opération faite en cas d'échec du test de profondeur.
+			eSTENCIL_OP m_eDepthFailOp{ eSTENCIL_OP_INCR };
+			//!\~english	The operation on depth and stencil tests success.
+			//!\~french		Opération faite en cas de réussite des tests stencil et profondeur.
+			eSTENCIL_OP m_ePassOp{ eSTENCIL_OP_KEEP };
+		};
 
 	protected:
-		//!\~english Tells it has changed	\~french Dit que l'état a changé
-		bool m_changed;
-		//!\~english Tells whether the depth test is activated or not	\~french Dit si oui on non le test de profondeur est activé
-		bool m_bDepthTest;
-		//!\~english The depth test function	\~french La fonction du test de profondeur
-		eDEPTH_FUNC m_eDepthFunc;
-		//!\~english The near plane for depth test	\~french Le plan proche pour le test de profondeur
-		double m_dDepthNear;
-		//!\~english The far plane for depth test	\~french Le plan lointain pour le test de profondeur
-		double m_dDepthFar;
-		//!\~english Depth writing mask	\~french Masque d'écriture de la profondeur
-		eWRITING_MASK m_eDepthMask;
-		//!\~english Tells whether the stencil test is activated or not	\~french Dit si le test stencil est activé ou non
-		bool m_bStencilTest;
-		//!\~english The stencil read mask	\~french Le masque de lecture du stencil
-		uint32_t m_uiStencilReadMask;
-		//!\~english The stencil write mask	\~french Le masque d'écriture du stencil
-		uint32_t m_uiStencilWriteMask;
-		//!\~english Front buffer stencil function	\~french Fonction stencil du tampon de premier plan
-		stSTENCIL m_stStencilFront;
-		//!\~english Back buffer stencil function	\~french Fonction stencil du tampon d'arrière plan
-		stSTENCIL m_stStencilBack;
-		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
-		static DepthStencilStateWPtr m_wCurrentState;
-		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
-		DepthStencilStateSPtr m_currentState;
+		//!\~english	Tells whether the depth test is activated or not.
+		//!\~french		Dit si oui on non le test de profondeur est activé.
+		bool m_bDepthTest{ true };
+		//!\~english	The depth test function.
+		//!\~french		La fonction du test de profondeur.
+		eDEPTH_FUNC m_eDepthFunc{ eDEPTH_FUNC_LESS };
+		//!\~english	The near plane for depth test.
+		//!\~french		Le plan proche pour le test de profondeur.
+		double m_dDepthNear{ 0.0 };
+		//!\~english	The far plane for depth test.
+		//!\~french		Le plan lointain pour le test de profondeur.
+		double m_dDepthFar{ 1.0 };
+		//!\~english	Depth writing mask.
+		//!\~french		Masque d'écriture de la profondeur.
+		eWRITING_MASK m_eDepthMask{ eWRITING_MASK_ALL };
+		//!\~english	Tells whether the stencil test is activated or not.
+		//!\~french		Dit si le test stencil est activé ou non.
+		bool m_bStencilTest{ true };
+		//!\~english	The stencil read mask.
+		//!\~french		Le masque de lecture du stencil.
+		uint32_t m_uiStencilReadMask{ 0xFFFFFFFF };
+		//!\~english	The stencil write mask.
+		//!\~french		Le masque d'écriture du stencil.
+		uint32_t m_uiStencilWriteMask{ 0xFFFFFFFF };
+		//!\~english	Front buffer stencil function.
+		//!\~french		Fonction stencil du tampon de premier plan.
+		StencilConfiguration m_stStencilFront;
+		//!\~english	Back buffer stencil function.
+		//!\~french		Fonction stencil du tampon d'arrière plan.
+		StencilConfiguration m_stStencilBack;
 	};
 }
 

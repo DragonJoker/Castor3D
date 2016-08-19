@@ -61,25 +61,11 @@ namespace Castor3D
 		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
-		 *\brief		Initialises the states
-		 *\~french
-		 *\brief		Initialise les états
-		 */
-		C3D_API virtual bool Initialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans the states
-		 *\~french
-		 *\brief		Nettoie les états
-		 */
-		C3D_API virtual void Cleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Applies the states
 		 *\~french
 		 *\brief		Applique les états
 		 */
-		C3D_API virtual bool Apply() = 0;
+		C3D_API virtual bool Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha to coverage activation status
@@ -102,7 +88,6 @@ namespace Castor3D
 		 */
 		inline void EnableAlphaToCoverage( bool p_enable )
 		{
-			m_changed |= m_bEnableAlphaToCoverage != p_enable;
 			m_bEnableAlphaToCoverage = p_enable;
 		}
 		/**
@@ -127,7 +112,6 @@ namespace Castor3D
 		 */
 		inline void EnableIndependantBlend( bool p_enable )
 		{
-			m_changed |= m_bIndependantBlend != p_enable;
 			m_bIndependantBlend = p_enable;
 		}
 		/**
@@ -152,7 +136,6 @@ namespace Castor3D
 		 */
 		inline void SetBlendFactors( const Castor::Colour & p_clFactors )
 		{
-			m_changed |= m_blendFactors != p_clFactors;
 			m_blendFactors = p_clFactors;
 		}
 		/**
@@ -177,7 +160,6 @@ namespace Castor3D
 		 */
 		inline void SetSampleCoverageMask( uint32_t p_uiMask )
 		{
-			m_changed |= m_uiSampleMask != p_uiMask;
 			m_uiSampleMask = p_uiMask;
 		}
 		/**
@@ -206,7 +188,6 @@ namespace Castor3D
 		 */
 		inline void EnableBlend( bool p_enable, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_bEnableBlend != p_enable;
 			m_rtStates[p_index].m_bEnableBlend = p_enable;
 		}
 		/**
@@ -235,7 +216,6 @@ namespace Castor3D
 		 */
 		inline void SetRgbSrcBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbSrcBlend = p_eValue;
 		}
 		/**
@@ -264,7 +244,6 @@ namespace Castor3D
 		 */
 		inline void SetRgbDstBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbDstBlend = p_eValue;
 		}
 		/**
@@ -293,7 +272,6 @@ namespace Castor3D
 		 */
 		inline void SetRgbBlendOp( BlendOperation p_eValue, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
 			m_rtStates[p_index].m_eRgbBlendOp = p_eValue;
 		}
 		/**
@@ -322,7 +300,6 @@ namespace Castor3D
 		 */
 		inline void SetAlphaSrcBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaSrcBlend = p_eValue;
 		}
 		/**
@@ -351,7 +328,6 @@ namespace Castor3D
 		 */
 		inline void SetAlphaDstBlend( BlendOperand p_eValue, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaDstBlend = p_eValue;
 		}
 		/**
@@ -380,7 +356,6 @@ namespace Castor3D
 		 */
 		inline void SetAlphaBlendOp( BlendOperation p_value, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_value;
 			m_rtStates[p_index].m_eAlphaBlendOp = p_value;
 		}
 		/**
@@ -409,7 +384,6 @@ namespace Castor3D
 		 */
 		inline void SetWriteMask( uint8_t p_value, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_uiWriteMask != p_value;
 			m_rtStates[p_index].m_uiWriteMask = p_value;
 		}
 		/**
@@ -422,10 +396,6 @@ namespace Castor3D
 		 */
 		inline void SetColourMask( eWRITING_MASK p_r, eWRITING_MASK p_g, eWRITING_MASK p_b, eWRITING_MASK p_a )
 		{
-			m_changed |= m_eColourMask[0] != p_r;
-			m_changed |= m_eColourMask[1] != p_g;
-			m_changed |= m_eColourMask[2] != p_b;
-			m_changed |= m_eColourMask[3] != p_a;
 			m_eColourMask[0] = p_r;
 			m_eColourMask[1] = p_g;
 			m_eColourMask[2] = p_b;
@@ -483,56 +453,35 @@ namespace Castor3D
 	protected:
 		struct C3D_API stRT_BLEND_STATE
 		{
-			bool m_bEnableBlend;
-			BlendOperand m_eRgbSrcBlend;
-			BlendOperand m_eRgbDstBlend;
-			BlendOperation m_eRgbBlendOp;
-			BlendOperand m_eAlphaSrcBlend;
-			BlendOperand m_eAlphaDstBlend;
-			BlendOperation m_eAlphaBlendOp;
-			uint8_t m_uiWriteMask;
+			bool m_bEnableBlend{ false };
+			BlendOperand m_eRgbSrcBlend{ BlendOperand::One };
+			BlendOperand m_eRgbDstBlend{ BlendOperand::Zero };
+			BlendOperation m_eRgbBlendOp{ BlendOperation::Add };
+			BlendOperand m_eAlphaSrcBlend{ BlendOperand::One };
+			BlendOperand m_eAlphaDstBlend{ BlendOperand::Zero };
+			BlendOperation m_eAlphaBlendOp{ BlendOperation::Add };
+			uint8_t m_uiWriteMask{ 0xFF };
 		};
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void CreateCurrent();
-		/**
-		 *\~english
-		 *\brief		Destroys the state used to save the current state
-		 *\~french
-		 *\brief		Détruit l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void DestroyCurrent();
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API virtual BlendStateSPtr DoCreateCurrent() = 0;
 
 	protected:
-		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
-		bool m_changed{ true };
-		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
+		//!\~english 	Tells if the alpha to coverage is enabled.
+		//!\~french		Dit si l'alpha to coverage est activé.
 		bool m_bEnableAlphaToCoverage{ false };
-		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés
+		//!\~english	Tells if the independant blend states are activated.
+		//!\~french		Dit si les états indépendants de mélange sont activés.
 		bool m_bIndependantBlend{ false };
-		//!\~english Le blend colour	\~french La couleur de mélange
+		//!\~english	Le blend colour.
+		//!\~french		La couleur de mélange.
 		Castor::Colour m_blendFactors;
-		//!\~english The sample mask	\~french Le masque d'échantillonage
+		//!\~english	The sample mask.
+		//!\~french		Le masque d'échantillonage.
 		uint32_t m_uiSampleMask{ 0xFFFFFFFF };
-		//!\~english the blend states	\~french Les états de mélange
+		//!\~english	The blend states.
+		//!\~french		Les états de mélange.
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
-		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs
-		eWRITING_MASK m_eColourMask[4];
-		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
-		static BlendStateWPtr m_wCurrentState;
-		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
-		BlendStateSPtr m_currentState;
+		//!\~english	Colours writing mask.
+		//!\~french		Masque d'écriture des couleurs.
+		eWRITING_MASK m_eColourMask[4] = { eWRITING_MASK_ALL, eWRITING_MASK_ALL, eWRITING_MASK_ALL, eWRITING_MASK_ALL };
 	};
 }
 

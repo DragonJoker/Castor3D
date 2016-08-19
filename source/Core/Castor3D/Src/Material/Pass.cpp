@@ -1,6 +1,5 @@
 #include "Pass.hpp"
 
-#include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
@@ -244,8 +243,6 @@ namespace Castor3D
 				}
 			}
 		}
-
-		m_pBlendState->Initialise();
 	}
 
 	void Pass::BindToNode( RenderNode & p_node )
@@ -262,8 +259,6 @@ namespace Castor3D
 
 	void Pass::Cleanup()
 	{
-		m_pBlendState->Cleanup();
-
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			l_unit->Cleanup();

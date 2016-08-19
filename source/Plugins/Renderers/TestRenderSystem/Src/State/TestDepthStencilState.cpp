@@ -11,22 +11,14 @@ namespace TestRender
 		: DepthStencilState( *p_renderSystem->GetEngine() )
 		, m_renderSystem( p_renderSystem )
 	{
-		CreateCurrent();
 	}
 
 	TestDepthStencilState::~TestDepthStencilState()
 	{
-		DestroyCurrent();
 	}
 
-	bool TestDepthStencilState::Apply()
+	bool TestDepthStencilState::Apply()const
 	{
-		m_changed = false;
 		return true;
-	}
-
-	DepthStencilStateSPtr TestDepthStencilState::DoCreateCurrent()
-	{
-		return std::make_shared< TestDepthStencilState >( m_renderSystem );
 	}
 }

@@ -426,19 +426,19 @@ namespace GlRender
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
-	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
+	DepthStencilStateUPtr GlRenderSystem::CreateDepthStencilState()
 	{
-		return std::make_shared< GlDepthStencilState >( this, GetOpenGl() );
+		return std::make_unique< GlDepthStencilState >( this, GetOpenGl() );
 	}
 
-	RasteriserStateSPtr GlRenderSystem::CreateRasteriserState()
+	RasteriserStateUPtr GlRenderSystem::CreateRasteriserState()
 	{
-		return std::make_shared< GlRasteriserState >( this, GetOpenGl() );
+		return std::make_unique< GlRasteriserState >( this, GetOpenGl() );
 	}
 
-	BlendStateSPtr GlRenderSystem::CreateBlendState()
+	BlendStateUPtr GlRenderSystem::CreateBlendState()
 	{
-		return std::make_shared< GlBlendState >( this, GetOpenGl() );
+		return std::make_unique< GlBlendState >( this, GetOpenGl() );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )

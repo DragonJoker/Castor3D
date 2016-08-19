@@ -163,9 +163,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère le DepthStencilState sans test de profondeur ni écriture dans le tampon de profondeur.
 		 */
-		inline DepthStencilStateSPtr GetNoDepthState()const
+		inline DepthStencilState const & GetNoDepthState()const
 		{
-			return m_dsStateNoDepth;
+			return *m_dsStateNoDepth;
 		}
 		/**
 		 *\~english
@@ -173,9 +173,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère le DepthStencilState sans écriture dans le tampon de profondeur.
 		 */
-		inline DepthStencilStateSPtr GetNoDepthWriteState()const
+		inline DepthStencilState const & GetNoDepthWriteState()const
 		{
-			return m_dsStateNoDepthWrite;
+			return *m_dsStateNoDepthWrite;
 		}
 		/**
 		 *\~english
@@ -289,38 +289,53 @@ namespace Castor3D
 		ShaderProgramSPtr DoCreateProgram();
 
 	protected:
-		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
+		//!\~english	RenderWindow associated to this context.
+		//!\~french		RenderWindow associée à ce contexte.
 		RenderWindow * m_window;
-		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
+		//!\~english	Tells if the context is initialised.
+		//!\~french		Dit si le contexte est initialisé.
 		bool m_initialised;
-		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
+		//!\~english	Tells the context is currently set to use multisampling.
+		//!\~french		Dit si le contexte est actuellement configuré pour utiliser le multisampling.
 		bool m_bMultiSampling;
-		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
+		//!\~english	The ShaderProgram used when rendering from a buffer to another one.
+		//!\~french		Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre.
 		ShaderProgramWPtr m_renderTextureProgram;
-		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\~french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
+		//!\~english	The diffuse map frame variable, in the buffer-to-buffer shader program.
+		//!\~french		La frame variable de l'image diffuse, dans le shader buffer-to-buffer.
 		OneIntFrameVariableSPtr m_mapDiffuse;
-		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
+		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
+		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
+		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
-		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
+		//!\~english	Buffer elements declaration.
+		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
-		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
+		//!\~english	Vertex array (quad definition).
+		//!\~french		Tableau de vertex (définition du quad).
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
 		Castor::real m_bufferVertex[24];
-		//!\~english The DepthStencilState without depth write and test.	\~french Le DepthStencilState sans test ni écriture de profondeur.
-		DepthStencilStateSPtr m_dsStateNoDepth;
-		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.
-		DepthStencilStateSPtr m_dsStateNoDepthWrite;
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		//!\~english	The DepthStencilState without depth write and test.
+		//!\~french		Le DepthStencilState sans test ni écriture de profondeur.
+		DepthStencilStateUPtr m_dsStateNoDepth;
+		//!\~english	The DepthStencilState without depth write.
+		//!\~french		Le DepthStencilState sans écriture de profondeur.
+		DepthStencilStateUPtr m_dsStateNoDepthWrite;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
-		//!\~english The GPU time elapsed queries.	\~french Les requêtes GPU de temps écoulé.
+		//!\~english	The GPU time elapsed queries.
+		//!\~french		Les requêtes GPU de temps écoulé.
 		std::array< GpuQuerySPtr, 2 > m_timerQuery;
-		//!\~english The active query index.	\~french L'index de la requête active.
+		//!\~english	The active query index.
+		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;
-		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
-		std::unique_ptr< Pipeline > m_pipeline;
+		//!\~english	The matrix pipeline.
+		//!\~french		Le pipeline contenant les matrices.
+		PipelineUPtr m_pipeline;
 	};
 }
 

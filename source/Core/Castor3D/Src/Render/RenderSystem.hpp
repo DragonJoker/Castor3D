@@ -221,7 +221,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de depth et stencil
 		 *\return		L'objet
 		 */
-		C3D_API virtual DepthStencilStateSPtr CreateDepthStencilState() = 0;
+		C3D_API virtual DepthStencilStateUPtr CreateDepthStencilState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a rasteriser states object
@@ -230,7 +230,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de rasteriser
 		 *\return		L'objet
 		 */
-		C3D_API virtual RasteriserStateSPtr CreateRasteriserState() = 0;
+		C3D_API virtual RasteriserStateUPtr CreateRasteriserState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a blender states object
@@ -239,7 +239,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de blend
 		 *\return		L'objet
 		 */
-		C3D_API virtual BlendStateSPtr CreateBlendState() = 0;
+		C3D_API virtual BlendStateUPtr CreateBlendState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler

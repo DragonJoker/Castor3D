@@ -53,15 +53,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
 		 */
-		Castor3D::DepthStencilStateSPtr CreateDepthStencilState()override;
+		Castor3D::DepthStencilStateUPtr CreateDepthStencilState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateRasteriserState
 		 */
-		Castor3D::RasteriserStateSPtr CreateRasteriserState()override;
+		Castor3D::RasteriserStateUPtr CreateRasteriserState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateBlendState
 		 */
-		Castor3D::BlendStateSPtr CreateBlendState()override;
+		Castor3D::BlendStateUPtr CreateBlendState()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */

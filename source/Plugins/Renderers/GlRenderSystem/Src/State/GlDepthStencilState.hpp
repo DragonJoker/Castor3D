@@ -37,28 +37,12 @@ namespace GlRender
 		GlDepthStencilState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlDepthStencilState();
 		/**
-		 *\copydoc Castor3D::DepthStencilState::Initialise
+		 *\~english
+		 *\brief		Applies the states
+		 *\~french
+		 *\brief		Applique les états
 		 */
-		virtual bool Initialise()
-		{
-			return true;
-		}
-		/**
-		 *\copydoc Castor3D::DepthStencilState::Cleanup
-		 */
-		virtual void Cleanup()
-		{
-		}
-		/**
-		 *\copydoc Castor3D::DepthStencilState::Apply
-		 */
-		virtual bool Apply();
-
-	private:
-		/**
-		 *\copydoc Castor3D::DepthStencilState::DoCreateCurrent
-		 */
-		virtual Castor3D::DepthStencilStateSPtr DoCreateCurrent();
+		bool Apply()const;
 
 	private:
 		GlRenderSystem * m_renderSystem;

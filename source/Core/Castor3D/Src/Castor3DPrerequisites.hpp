@@ -512,21 +512,15 @@ namespace Castor3D
 	class ShaderProgramCache;
 	class RenderTargetCache;
 
-	using BlendStateCache = Cache< BlendState, Castor::String >;
-	using DepthStencilStateCache = Cache< DepthStencilState, Castor::String >;
 	using ListenerCache = Cache< FrameListener, Castor::String >;
 	using MeshCache = Cache< Mesh, Castor::String >;
-	using RasteriserStateCache = Cache< RasteriserState, Castor::String >;
 	using SamplerCache = Cache< Sampler, Castor::String >;
 	using SceneCache = Cache< Scene, Castor::String >;
 	using RenderTechniqueCache = Cache< RenderTechnique, Castor::String >;
 	using RenderWindowCache = Cache< RenderWindow, Castor::String >;
 
-	DECLARE_SMART_PTR( BlendStateCache );
-	DECLARE_SMART_PTR( DepthStencilStateCache );
 	DECLARE_SMART_PTR( ListenerCache );
 	DECLARE_SMART_PTR( MeshCache );
-	DECLARE_SMART_PTR( RasteriserStateCache );
 	DECLARE_SMART_PTR( SceneCache );
 	DECLARE_SMART_PTR( SamplerCache );
 	DECLARE_SMART_PTR( ShaderProgramCache );
@@ -622,9 +616,6 @@ namespace Castor3D
 	template<> struct is_cleanable< RenderWindow > : std::true_type {};
 	template<> struct is_cleanable< Scene > : std::true_type {};
 	template<> struct is_cleanable< Sampler > : std::true_type {};
-	template<> struct is_cleanable< BlendState > : std::true_type {};
-	template<> struct is_cleanable< RasteriserState > : std::true_type {};
-	template<> struct is_cleanable< DepthStencilState > : std::true_type {};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -638,9 +629,6 @@ namespace Castor3D
 	template<> struct is_initialisable< Material > : std::true_type {};
 	template<> struct is_initialisable< Scene > : std::true_type {};
 	template<> struct is_initialisable< Sampler > : std::true_type {};
-	template<> struct is_initialisable< BlendState > : std::true_type {};
-	template<> struct is_initialisable< RasteriserState > : std::true_type {};
-	template<> struct is_initialisable< DepthStencilState > : std::true_type {};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0

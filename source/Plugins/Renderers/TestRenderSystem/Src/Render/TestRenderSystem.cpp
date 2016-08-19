@@ -53,19 +53,19 @@ namespace TestRender
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
-	DepthStencilStateSPtr TestRenderSystem::CreateDepthStencilState()
+	DepthStencilStateUPtr TestRenderSystem::CreateDepthStencilState()
 	{
-		return std::make_shared< TestDepthStencilState >( this );
+		return std::make_unique< TestDepthStencilState >( this );
 	}
 
-	RasteriserStateSPtr TestRenderSystem::CreateRasteriserState()
+	RasteriserStateUPtr TestRenderSystem::CreateRasteriserState()
 	{
-		return std::make_shared< TestRasteriserState >( this );
+		return std::make_unique< TestRasteriserState >( this );
 	}
 
-	BlendStateSPtr TestRenderSystem::CreateBlendState()
+	BlendStateUPtr TestRenderSystem::CreateBlendState()
 	{
-		return std::make_shared< TestBlendState >( this );
+		return std::make_unique< TestBlendState >( this );
 	}
 
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )

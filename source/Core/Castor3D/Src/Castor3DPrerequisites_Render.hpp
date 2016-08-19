@@ -462,7 +462,6 @@ namespace Castor3D
 	class RenderTechnique;
 	class Context;
 	class RenderWindow;
-	class IPipelineImpl;
 	class Pipeline;
 	class DepthStencilState;
 	class RasteriserState;
@@ -494,7 +493,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );
 	DECLARE_SMART_PTR( BlendState );
-	DECLARE_SMART_PTR( IPipelineImpl );
+	DECLARE_SMART_PTR( Pipeline );
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
 

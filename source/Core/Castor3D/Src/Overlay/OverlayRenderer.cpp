@@ -1,10 +1,7 @@
 #include "OverlayRenderer.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "ShaderCache.hpp"
 
@@ -79,9 +76,6 @@ namespace Castor3D
 			}
 		} }
 	{
-		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OVERLAY_BLEND" ) );
-		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "OVERLAY_DS" ) );
-		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateCache().Add( cuT( "OVERLAY_RS" ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -151,35 +145,26 @@ namespace Castor3D
 
 		// Create one text overlays buffer
 		DoCreateTextGeometryBuffers();
+		m_blendState = GetRenderSystem()->CreateBlendState();
+		m_blendState->EnableAlphaToCoverage( false );
+		m_blendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		m_blendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		m_blendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+		m_blendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+		m_blendState->EnableBlend( true );
 
-		auto l_blendState = m_wpBlendState.lock();
-		l_blendState->EnableAlphaToCoverage( false );
-		l_blendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_blendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		l_blendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-		l_blendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-		l_blendState->EnableBlend( true );
-		l_blendState->Initialise();
+		m_depthStencilState = GetRenderSystem()->CreateDepthStencilState();
+		m_depthStencilState->SetDepthTest( false );
 
-		auto l_dsState = m_wpDepthStencilState.lock();
-		l_dsState->SetDepthTest( false );
-		l_dsState->Initialise();
-
-		auto l_rsState = m_wpRasteriserState.lock();
-		l_rsState->SetCulledFaces( eFACE_BACK );
-		l_rsState->Initialise();
+		m_rasteriserState = GetRenderSystem()->CreateRasteriserState();
+		m_rasteriserState->SetCulledFaces( eFACE_BACK );
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
-		auto l_blendState = m_wpBlendState.lock();
-		l_blendState->Cleanup();
-
-		auto l_dsState = m_wpDepthStencilState.lock();
-		l_dsState->Cleanup();
-
-		auto l_rsState = m_wpRasteriserState.lock();
-		l_rsState->Cleanup();
+		m_blendState.reset();
+		m_depthStencilState.reset();
+		m_rasteriserState.reset();
 
 		for ( auto & l_vertex : m_borderVertex )
 		{
@@ -328,9 +313,9 @@ namespace Castor3D
 			m_size = p_size;
 		}
 
-		m_wpBlendState.lock()->Apply();
-		m_wpDepthStencilState.lock()->Apply();
-		m_wpRasteriserState.lock()->Apply();
+		m_blendState->Apply();
+		m_depthStencilState->Apply();
+		m_rasteriserState->Apply();
 	}
 
 	void OverlayRenderer::EndRender()

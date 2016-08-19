@@ -11,22 +11,14 @@ namespace TestRender
 		: BlendState( *p_renderSystem->GetEngine() )
 		, m_renderSystem( p_renderSystem )
 	{
-		CreateCurrent();
 	}
 
 	TestBlendState::~TestBlendState()
 	{
-		DestroyCurrent();
 	}
 
-	bool TestBlendState::Apply()
+	bool TestBlendState::Apply()const
 	{
-		m_changed = false;
 		return true;
-	}
-
-	BlendStateSPtr TestBlendState::DoCreateCurrent()
-	{
-		return std::make_shared< TestBlendState >( m_renderSystem );
 	}
 }

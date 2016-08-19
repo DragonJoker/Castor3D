@@ -60,25 +60,11 @@ namespace Castor3D
 		C3D_API virtual ~RasteriserState();
 		/**
 		 *\~english
-		 *\brief		Initialises the states
-		 *\~french
-		 *\brief		Initialise les états
-		 */
-		C3D_API virtual bool Initialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans the states
-		 *\~french
-		 *\brief		Nettoie les états
-		 */
-		C3D_API virtual void Cleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Applies the states
 		 *\~french
 		 *\brief		Applique les états
 		 */
-		C3D_API virtual bool Apply() = 0;
+		C3D_API virtual bool Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the fill mode
@@ -101,7 +87,6 @@ namespace Castor3D
 		 */
 		inline void SetFillMode( Castor3D::eFILL_MODE p_mode )
 		{
-			m_changed |= m_eFillMode != p_mode;
 			m_eFillMode = p_mode;
 		}
 		/**
@@ -126,7 +111,6 @@ namespace Castor3D
 		 */
 		inline void SetCulledFaces( Castor3D::eFACE p_eFace )
 		{
-			m_changed |= m_eCulledFaces != p_eFace;
 			m_eCulledFaces = p_eFace;
 		}
 		/**
@@ -151,7 +135,6 @@ namespace Castor3D
 		 */
 		inline void SetFrontCCW( bool p_bCCW )
 		{
-			m_changed |= m_bFrontCCW != p_bCCW;
 			m_bFrontCCW = p_bCCW;
 		}
 		/**
@@ -176,7 +159,6 @@ namespace Castor3D
 		 */
 		inline void SetAntialiasedLines( bool p_bAA )
 		{
-			m_changed |= m_bAntialiasedLines != p_bAA;
 			m_bAntialiasedLines = p_bAA;
 		}
 		/**
@@ -201,7 +183,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthBias( float p_fBias )
 		{
-			m_changed |= m_fDepthBias != p_fBias;
 			m_fDepthBias = p_fBias;
 		}
 		/**
@@ -226,7 +207,6 @@ namespace Castor3D
 		 */
 		inline void SetDepthClipping( bool p_enable )
 		{
-			m_changed |= m_bDepthClipping != p_enable;
 			m_bDepthClipping = p_enable;
 		}
 		/**
@@ -251,7 +231,6 @@ namespace Castor3D
 		 */
 		inline void SetMultisample( bool p_enable )
 		{
-			m_changed |= m_bMultisampled != p_enable;
 			m_bMultisampled = p_enable;
 		}
 		/**
@@ -276,56 +255,34 @@ namespace Castor3D
 		 */
 		inline void SetScissor( bool p_enable )
 		{
-			m_changed |= m_bScissor != p_enable;
 			m_bScissor = p_enable;
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void CreateCurrent();
-		/**
-		 *\~english
-		 *\brief		Destroys the state used to save the current state
-		 *\~french
-		 *\brief		Détruit l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API void DestroyCurrent();
-		/**
-		 *\~english
-		 *\brief		Creates the state used to save the current state
-		 *\~french
-		 *\brief		Crée l'état utilisé pour stocker l'état courant
-		 */
-		C3D_API virtual RasteriserStateSPtr DoCreateCurrent() = 0;
-
-	protected:
-		//!\~english Tells it has changed.	\~french Dit que l'état a changé.
-		bool m_changed;
-		//!\~english The fill mode.	\~french Définit le mode de remplissage.
-		eFILL_MODE m_eFillMode;
-		//!\~english The culled faces.	\~french Les faces cachées.
-		eFACE m_eCulledFaces;
-		//!\~english The faces considered front facing.	\~french Les faces considérées comme tournées vers l'avant.
-		bool m_bFrontCCW;
-		//!\~english The antialiased lines status.	\~french Le statut d'antialising des lignes.
-		bool m_bAntialiasedLines;
-		//!\~english The depth bias.	\~french Le depth bias.
-		float m_fDepthBias;
-		//!\~english The scissor test activation status.	\~french Le statut d'acitvation du scissor test.
-		bool m_bScissor;
-		//!\~english The depth clipping status.	\~french Le statut de depth clipping.
-		bool m_bDepthClipping;
-		//!\~english The multisample activation status.	\~french Le statut d'acitvation du multisample.
-		bool m_bMultisampled;
-		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
-		static RasteriserStateWPtr m_wCurrentState;
-		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
-		RasteriserStateSPtr m_currentState;
+		//!\~english	The fill mode.
+		//!\~french		Définit le mode de remplissage.
+		eFILL_MODE m_eFillMode{ eFILL_MODE_SOLID };
+		//!\~english	The culled faces.
+		//!\~french		Les faces cachées.
+		eFACE m_eCulledFaces{ eFACE_BACK };
+		//!\~english	The faces considered front facing.
+		//!\~french		Les faces considérées comme tournées vers l'avant.
+		bool m_bFrontCCW{ true };
+		//!\~english	The antialiased lines status.
+		//!\~french		Le statut d'antialising des lignes.
+		bool m_bAntialiasedLines{ false };
+		//!\~english	The depth bias.
+		//!\~french		Le depth bias.
+		float m_fDepthBias{ 0.0f };
+		//!\~english	The scissor test activation status.
+		//!\~french		Le statut d'acitvation du scissor test.
+		bool m_bScissor{ false };
+		//!\~english	The depth clipping status.
+		//!\~french		Le statut de depth clipping.
+		bool m_bDepthClipping{ true };
+		//!\~english	The multisample activation status.
+		//!\~french		Le statut d'acitvation du multi-échantillonnage.
+		bool m_bMultisampled{ false };
 	};
 }
 
