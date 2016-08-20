@@ -132,12 +132,9 @@ namespace Castor3D
 		bool DoInitialisePipeline();
 
 	private:
-		//!\~english	The depth stencil state used while rendering the skybox.
-		//!\~french		L'état de profondeur et stencil utilisé pour le rendu de la skybox.
-		DepthStencilStateUPtr m_dss;
 		//!\~english	The pipeline used while rendering the skybox.
 		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
-		PipelineSPtr m_pipeline;
+		PipelineUPtr m_pipeline;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;

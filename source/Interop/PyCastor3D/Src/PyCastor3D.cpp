@@ -570,7 +570,7 @@ void ExportCastor3D()
 	//@{
 	GeometrySPtr( GeometryCache::*geometryCreator )( Castor::String const &, SceneNodeSPtr, MeshSPtr ) = &GeometryCache::Add;
 	py::class_< GeometryCache, boost::noncopyable >( "GeometryCache", py::no_init )
-	//.def( "add", cpy::GeometryCacheElementProducer{}, "Adds a Geometry to the cache" )
+	.def( "add", geometryCreator, "Adds a Geometry to the cache" )
 	.def( "remove", &GeometryCache::Remove, "Finds a Geometry" )
 	.def( "has", &GeometryCache::Has, "Tells if the cache has a Geometry" )
 	.def( "find", &GeometryCache::Find, "Finds a Geometry in the cache" )
@@ -578,16 +578,18 @@ void ExportCastor3D()
 	//@}
 	/**@group_name LightCache */
 	//@{
+	LightSPtr( LightCache::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightCache::Add;
 	py::class_< LightCache, boost::noncopyable >( "LightCache", py::no_init )
-	//.def( "add", cpy::LightCacheElementProducer{}, "Adds a Light to the cache" )
+	.def( "add", lightCreator, "Adds a Light to the cache" )
 	.def( "remove", &LightCache::Remove, "Removes a Light from the cache" )
 	.def( "has", &LightCache::Has, "Tells if the cache has a Light" )
 	.def( "find", &LightCache::Find, "Finds a Light in the cache" )
 	;
 	/**@group_name MeshCache */
 	//@{
+	MeshSPtr( MeshCache::*meshCreator )( Castor::String const & ) = &MeshCache::Add;
 	py::class_< MeshCache, boost::noncopyable >( "MeshCache", py::no_init )
-	//.def( "add", cpy::MeshCacheElementProducer{}, "Adds a Mesh to the cache" )
+	.def( "add", meshCreator, "Adds a Mesh to the cache" )
 	.def( "remove", &MeshCache::Remove, "Removes a Mesh from the cache" )
 	.def( "has", &MeshCache::Has, "Tells if the cache has a Mesh" )
 	.def( "find", &MeshCache::Find, "Finds a Mesh in the cache" )
@@ -625,8 +627,9 @@ void ExportCastor3D()
 	//@}
 	/**@group_name OverlayCache */
 	//@{
+	OverlaySPtr( OverlayCache::*ovlCreate )( Castor::String const &, eOVERLAY_TYPE, SceneSPtr, OverlaySPtr ) = &OverlayCache::Add;
 	py::class_< OverlayCache, boost::noncopyable >( "OverlayCache", py::no_init )
-	//.def( "add", cpy::OverlayCacheElementProducer{}, "Adds an Overlay to the cache" )
+	.def( "add", ovlCreate, "Adds an Overlay to the cache" )
 	.def( "remove", &OverlayCache::Remove, "Removes a Overlay from the cache" )
 	.def( "has", &OverlayCache::Has, "Tells if the cache has a Overlay" )
 	.def( "find", &OverlayCache::Find, "Finds a Overlay in the cache" )

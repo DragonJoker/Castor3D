@@ -19,7 +19,7 @@ void ExportCastorUtils()
 
 	/**@group_name ePIXEL_FORMAT	*/
 	//@{
-	py::enum_< ePIXEL_FORMAT >( "PixelFormat" )
+	py::enum_< PixelFormat >( "PixelFormat" )
 	.value( "L8", PixelFormat::L8 )
 	.value( "L16F32F", PixelFormat::L16F32F )
 	.value( "L32F", PixelFormat::L32F )
@@ -32,9 +32,9 @@ void ExportCastorUtils()
 	.value( "R8G8B8", PixelFormat::R8G8B8 )
 	.value( "A8R8G8B8", PixelFormat::A8R8G8B8 )
 	.value( "RGB16F32F", PixelFormat::RGB16F32F )
-	.value( "ARGB16F32F", PixelFormat::ARGB16F32F )
+	.value( "ARGB16F32F", PixelFormat::RGBA16F32F )
 	.value( "RGB32F", PixelFormat::RGB32F )
-	.value( "ARGB32F", PixelFormat::ARGB32F )
+	.value( "ARGB32F", PixelFormat::RGBA32F )
 	.value( "DXTC1", PixelFormat::DXTC1 )
 	.value( "DXTC3", PixelFormat::DXTC3 )
 	.value( "DXTC5", PixelFormat::DXTC5 )
@@ -49,10 +49,10 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name eINTERSECTION	*/
 	//@{
-	py::enum_< eINTERSECTION >( "Intersection" )
-	.value( "IN", eINTERSECTION_IN )
-	.value( "OUT", eINTERSECTION_OUT )
-	.value( "INTERSECT", eINTERSECTION_INTERSECT )
+	py::enum_< Intersection >( "Intersection" )
+	.value( "IN", Intersection::In )
+	.value( "OUT", Intersection::Out )
+	.value( "INTERSECT", Intersection::Intersect )
 	;
 	//@}
 	/**@group_name eLOG_TYPE	*/
@@ -214,8 +214,8 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Rectangle	*/
 	//@{
-	eINTERSECTION( Rectangle::*IntPoint )( Position const & )const = &Rectangle::intersects;
-	eINTERSECTION( Rectangle::*IntRect )( Rectangle const & )const = &Rectangle::intersects;
+	Intersection( Rectangle::*IntPoint )( Position const & )const = &Rectangle::intersects;
+	Intersection( Rectangle::*IntRect )( Rectangle const & )const = &Rectangle::intersects;
 	py::class_< Rectangle >( "Rectangle", py::init< int32_t, int32_t, uint32_t, uint32_t >() )
 	.add_property( "left", cpy::make_getter( &Rectangle::left ), cpy::make_setter( &Rectangle::left ), "The left value for the rectangle" )
 	.add_property( "right", cpy::make_getter( &Rectangle::right ), cpy::make_setter( &Rectangle::right ), "The right value for the rectangle" )

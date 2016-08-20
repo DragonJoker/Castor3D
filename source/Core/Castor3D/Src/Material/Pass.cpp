@@ -186,11 +186,6 @@ namespace Castor3D
 
 		if ( l_hasAlpha )
 		{
-			if ( GetEngine()->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
-			{
-				m_alphaBlendMode = BlendMode::Interpolative;
-			}
-
 			//switch ( m_alphaBlendMode )
 			//{
 			//case BlendMode::NoBlend:

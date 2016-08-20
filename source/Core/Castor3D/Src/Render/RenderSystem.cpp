@@ -29,7 +29,6 @@ namespace Castor3D
 		, m_name{ p_name }
 		, m_initialised{ false }
 		, m_currentContext{ nullptr }
-		, m_pCurrentCamera{ nullptr }
 		, m_gpuInformations{}
 	{
 	}
@@ -94,16 +93,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	Camera * RenderSystem::GetCurrentCamera()const
-	{
-		return m_pCurrentCamera;
-	}
-
-	void RenderSystem::SetCurrentCamera( Camera * p_pCamera )
-	{
-		m_pCurrentCamera = p_pCamera;
 	}
 
 	GLSL::GlslWriter RenderSystem::CreateGlslWriter()

@@ -399,7 +399,20 @@ namespace Castor3D
 	
 	SceneRenderNodes & RenderQueue::GetRenderNodes( Camera const & p_camera, Scene & p_scene )
 	{
-		return m_preparedRenderNodes.find( &p_camera )->second.find( &p_scene )->second;
+		static SceneRenderNodes l_dummy{ p_scene };
+		auto l_itCam = m_preparedRenderNodes.find( &p_camera );
+
+		if ( l_itCam != m_preparedRenderNodes.end() )
+		{
+			auto l_itScene = l_itCam->second.find( &p_scene );
+			
+			if ( l_itScene != l_itCam->second.end() )
+			{
+				return l_itScene->second;
+			}
+		}
+
+		return l_dummy;
 	}
 
 	void RenderQueue::DoPrepareRenderNodes( Camera const & p_camera, SceneRenderNodes const & p_inputNodes, SceneRenderNodes & p_outputNodes )

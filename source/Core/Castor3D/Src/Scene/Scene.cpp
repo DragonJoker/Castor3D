@@ -18,7 +18,6 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
-#include "State/DepthStencilState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -585,9 +584,7 @@ namespace Castor3D
 		{
 			if ( m_backgroundImage->IsInitialised() )
 			{
-				ContextRPtr l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
-				l_context->GetNoDepthState().Apply();
-				l_context->RenderTexture( p_size, *m_backgroundImage );
+				GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, *m_backgroundImage );
 			}
 		}
 	}

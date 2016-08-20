@@ -159,26 +159,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieve the DepthStencilState with no depth write and test.
-		 *\~french
-		 *\brief		Récupère le DepthStencilState sans test de profondeur ni écriture dans le tampon de profondeur.
-		 */
-		inline DepthStencilState const & GetNoDepthState()const
-		{
-			return *m_dsStateNoDepth;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieve the DepthStencilState without depth write.
-		 *\~french
-		 *\brief		Récupère le DepthStencilState sans écriture dans le tampon de profondeur.
-		 */
-		inline DepthStencilState const & GetNoDepthWriteState()const
-		{
-			return *m_dsStateNoDepthWrite;
-		}
-		/**
-		 *\~english
 		 *\return		The render window.
 		 *\~french
 		 *\return		La fenêtre de rendu.
@@ -298,12 +278,6 @@ namespace Castor3D
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
 		Castor::real m_bufferVertex[24];
-		//!\~english	The DepthStencilState without depth write and test.
-		//!\~french		Le DepthStencilState sans test ni écriture de profondeur.
-		DepthStencilStateUPtr m_dsStateNoDepth;
-		//!\~english	The DepthStencilState without depth write.
-		//!\~french		Le DepthStencilState sans écriture de profondeur.
-		DepthStencilStateUPtr m_dsStateNoDepthWrite;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;

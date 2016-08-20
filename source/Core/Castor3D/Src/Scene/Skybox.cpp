@@ -221,7 +221,6 @@ namespace Castor3D
 			m_pipeline->SetViewMatrix( p_camera.GetView() );
 			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
 			m_pipeline->Apply();
-			m_dss->Apply();
 			l_program->Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
@@ -306,16 +305,16 @@ namespace Castor3D
 
 	bool Skybox::DoInitialisePipeline()
 	{
-		m_dss = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		m_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthFunc( eDEPTH_FUNC_LEQUAL );
 
-		auto l_rsstate = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_rsstate->SetCulledFaces( eFACE_FRONT );
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( eFACE_FRONT );
 
-		auto l_blstate = GetEngine()->GetRenderSystem()->CreateBlendState();
-		auto l_msstate = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		BlendState l_blState;
+		MultisampleState l_msState;
 
-		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_rsstate ), std::move(  l_blstate ), std::move( l_msstate ) );
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move(  l_blState ), std::move( l_msState ) );
 		return true;
 	}
 }

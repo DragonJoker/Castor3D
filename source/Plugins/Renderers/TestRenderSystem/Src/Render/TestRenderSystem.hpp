@@ -46,27 +46,12 @@ namespace TestRender
 		 */
 		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
-		 */
-		Castor3D::DepthStencilStateUPtr CreateDepthStencilState()override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateRasteriserState
-		 */
-		Castor3D::RasteriserStateUPtr CreateRasteriserState()override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateBlendState
-		 */
-		Castor3D::BlendStateUPtr CreateBlendState()override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateMultisampleState
-		 */
-		Castor3D::MultisampleStateUPtr CreateMultisampleState()override;
-		/**
 		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
 		 */
-		Castor3D::PipelineSPtr CreatePipeline( Castor3D::RasteriserStateUPtr && p_rsState
-											   , Castor3D::BlendStateUPtr && p_bdState
-											   , Castor3D::MultisampleStateUPtr && p_msState )override;
+		Castor3D::PipelineUPtr CreatePipeline( Castor3D::DepthStencilState && p_dsState
+											   , Castor3D::RasteriserState && p_rsState
+											   , Castor3D::BlendState && p_bdState
+											   , Castor3D::MultisampleState && p_msState )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */

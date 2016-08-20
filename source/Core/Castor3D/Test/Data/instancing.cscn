@@ -489,7 +489,7 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 0.0 900.0
+		position 0.0 0.0 -900.0
 	}
 	camera "MainCamera"
 	{

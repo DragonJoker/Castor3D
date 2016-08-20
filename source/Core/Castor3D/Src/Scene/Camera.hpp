@@ -125,14 +125,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique le viewport, la rotation ...
 		 */
-		C3D_API virtual void Render();
-		/**
-		 *\~english
-		 *\brief		Removes the transformations
-		 *\~french
-		 *\brief		Enlève les transformations
-		 */
-		C3D_API virtual void EndRender();
+		C3D_API virtual void Update();
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport

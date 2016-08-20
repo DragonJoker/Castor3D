@@ -366,9 +366,6 @@ namespace Castor3D
 		//!\~english	The overlays rendering pipeline.
 		//!\~french		Le pipeline de rendu des incrustations.
 		PipelineSPtr m_pipeline;
-		//!\~english	The overlays depth stencil state.
-		//!\~french		L'état de profoundeur et stencil pour les incrustations.
-		DepthStencilStateUPtr m_depthStencilState;
 	};
 }
 

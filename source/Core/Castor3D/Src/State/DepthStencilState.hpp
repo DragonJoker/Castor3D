@@ -39,32 +39,8 @@ namespace Castor3D
 	\brief		Classe de configuration des buffers de profondeur et stencil
 	*/
 	class DepthStencilState
-		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API explicit DepthStencilState( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~DepthStencilState();
-		/**
-		 *\~english
-		 *\brief		Applies the states
-		 *\~french
-		 *\brief		Applique les états
-		 */
-		C3D_API virtual bool Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the depth test status

@@ -124,24 +124,6 @@ namespace Castor3D
 		C3D_API Scene * GetTopScene();
 		/**
 		 *\~english
-		 *\brief		Retrieves the currently active camera
-		 *\return		The camera
-		 *\~french
-		 *\brief		Récupère la caméra actuellement active
-		 *\return		La caméra
-		 */
-		C3D_API Camera * GetCurrentCamera()const;
-		/**
-		 *\~english
-		 *\brief		Defines the currently active camera
-		 *\param[in]	p_pCamera	The camera
-		 *\~french
-		 *\brief		Définit la caméra actuellement active
-		 *\param[in]	p_pCamera	La caméra
-		 */
-		C3D_API void SetCurrentCamera( Camera * p_pCamera );
-		/**
-		 *\~english
 		 *\return		A pre-configured GlslWriter instance.
 		 *\~french
 		 *\brief		Une instance pré-configurée de GlslWriter.
@@ -215,57 +197,24 @@ namespace Castor3D
 		C3D_API virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Create a depth and stencil states object
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée un objet d'états de depth et stencil
-		 *\return		L'objet
-		 */
-		C3D_API virtual DepthStencilStateUPtr CreateDepthStencilState() = 0;
-		/**
-		 *\~english
-		 *\brief		Create a rasteriser states object
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée un objet d'états de rasteriser
-		 *\return		L'objet
-		 */
-		C3D_API virtual RasteriserStateUPtr CreateRasteriserState() = 0;
-		/**
-		 *\~english
-		 *\brief		Create a blender states object
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée un objet d'états de blend
-		 *\return		L'objet
-		 */
-		C3D_API virtual BlendStateUPtr CreateBlendState() = 0;
-		/**
-		 *\~english
-		 *\brief		Create a multisample states object.
-		 *\return		The object.
-		 *\~french
-		 *\brief		Crée un objet d'états de multi-échantillonage.
-		 *\return		L'objet.
-		 */
-		C3D_API virtual MultisampleStateUPtr CreateMultisampleState() = 0;
-		/**
-		 *\~english
 		 *\brief		Create a pipeline.
+		 *\param[in]	p_dsState	The depth stencil state.
 		 *\param[in]	p_rsState	The rateriser state.
 		 *\param[in]	p_bdState	The blend state.
 		 *\param[in]	p_msState	The multisample state.
 		 *\return		The pipeline.
 		 *\~french
 		 *\brief		Crée un pipeline.
+		 *\param[in]	p_dsState	L'état de stencil et profondeur.
 		 *\param[in]	p_rsState	L'état de rastériseur.
 		 *\param[in]	p_bdState	L'état de mélange.
 		 *\param[in]	p_msState	L'état de multi-échantillonnage.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual PipelineUPtr CreatePipeline( RasteriserStateUPtr && p_rsState
-													 , BlendStateUPtr && p_bdState
-													 , MultisampleStateUPtr && p_msState ) = 0;
+		C3D_API virtual PipelineUPtr CreatePipeline( DepthStencilState && p_dsState
+													 , RasteriserState && p_rsState
+													 , BlendState && p_bdState
+													 , MultisampleState && p_msState ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler
@@ -524,8 +473,6 @@ namespace Castor3D
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
 		Castor::String m_name;
-		//!\~english The currently active camera	\~french La caméra actuellement active
-		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
 		std::chrono::milliseconds m_gpuTime;
 

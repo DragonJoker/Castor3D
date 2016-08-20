@@ -48,17 +48,17 @@ namespace Castor3D
 								, Merger && p_merge
 								, Attacher && p_attach
 								, Detacher && p_detach )
-		: MyObjectCacheType( p_engine
-							 , p_scene
-							 , p_rootNode
-							 , p_rootCameraNode
-							 , p_rootCameraNode
-							 , std::move( p_produce )
-							 , std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_engine }, std::placeholders::_1 )
-							 , std::move( p_clean )
-							 , std::move( p_merge )
-							 , std::move( p_attach )
-							 , std::move( p_detach ) )
+		: MyObjectCache( p_engine
+						 , p_scene
+						 , p_rootNode
+						 , p_rootCameraNode
+						 , p_rootCameraNode
+						 , std::move( p_produce )
+						 , std::bind( GeometryInitialiser{ m_faceCount, m_vertexCount, p_engine }, std::placeholders::_1 )
+						 , std::move( p_clean )
+						 , std::move( p_merge )
+						 , std::move( p_attach )
+						 , std::move( p_detach ) )
 	{
 	}
 

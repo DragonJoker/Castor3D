@@ -47,10 +47,12 @@ namespace Castor3D
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex )[i++ * m_declaration.GetStride()] );
 		}
 
-		auto l_rsState = p_renderSystem.CreateRasteriserState();
-		auto l_bdState = p_renderSystem.CreateBlendState();
-		auto l_msState = p_renderSystem.CreateMultisampleState();
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsState ), std::move( l_bdState ), std::move( l_msState ) );
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( false );
+		BlendState l_blState;
+		MultisampleState l_msState;
+		RasteriserState l_rsState;
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
 	}
 
 	Context::~Context()
@@ -68,11 +70,6 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_bMultiSampling = p_window->IsMultisampling();
-		m_dsStateNoDepth = GetRenderSystem()->CreateDepthStencilState();
-		m_dsStateNoDepth->SetDepthTest( false );
-		m_dsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_dsStateNoDepthWrite = GetRenderSystem()->CreateDepthStencilState();
-		m_dsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 
 		if ( l_return )
@@ -121,8 +118,6 @@ namespace Castor3D
 		m_timerQuery[1]->Destroy();
 		DoEndCurrent();
 		DoDestroy();
-		m_dsStateNoDepth.reset();
-		m_dsStateNoDepthWrite.reset();
 		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();

@@ -69,8 +69,8 @@ namespace CastorCom
 		}
 		
 		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &Castor3D::MultisampleState::GetMultisample ), make_putter( m_state.get(), &Castor3D::MultisampleState::SetMultisample ) );
-		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &Castor3D::MultisampleState::IsAlphaToCoverageEnabled ), make_putter_evt( m_state.get(), &Castor3D::MultisampleState::EnableAlphaToCoverage ) );
-		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &Castor3D::MultisampleState::GetSampleCoverageMask ), make_putter_evt( m_state.get(), &Castor3D::MultisampleState::SetSampleCoverageMask ) );
+		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &Castor3D::MultisampleState::IsAlphaToCoverageEnabled ), make_putter( m_state.get(), &Castor3D::MultisampleState::EnableAlphaToCoverage ) );
+		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &Castor3D::MultisampleState::GetSampleCoverageMask ), make_putter( m_state.get(), &Castor3D::MultisampleState::SetSampleCoverageMask ) );
 
 	private:
 		Castor3D::MultisampleStateSPtr m_state;

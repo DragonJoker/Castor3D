@@ -286,11 +286,11 @@ namespace GlRender
 		PixelFormats[uint32_t( PixelFormat::A8R8G8B8 )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[uint32_t( PixelFormat::A8B8G8R8 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[uint32_t( PixelFormat::RGB16F )] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16F, eGL_TYPE_HALF_FLOAT );
-		PixelFormats[uint32_t( PixelFormat::ARGB16F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_HALF_FLOAT );
+		PixelFormats[uint32_t( PixelFormat::RGBA16F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_HALF_FLOAT );
 		PixelFormats[uint32_t( PixelFormat::RGB16F32F )] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( PixelFormat::ARGB16F32F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( PixelFormat::RGBA16F32F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
 		PixelFormats[uint32_t( PixelFormat::RGB32F )] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( PixelFormat::ARGB32F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA32F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( PixelFormat::RGBA32F )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA32F, eGL_TYPE_FLOAT );
 		PixelFormats[uint32_t( PixelFormat::DXTC1 )] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1, eGL_TYPE_DEFAULT );
 		PixelFormats[uint32_t( PixelFormat::DXTC3 )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3, eGL_TYPE_DEFAULT );
 		PixelFormats[uint32_t( PixelFormat::DXTC5 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT5, eGL_TYPE_DEFAULT );
@@ -324,11 +324,11 @@ namespace GlRender
 		Internals[uint32_t( PixelFormat::A8R8G8B8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
 		Internals[uint32_t( PixelFormat::A8B8G8R8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
 		Internals[uint32_t( PixelFormat::RGB16F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( PixelFormat::ARGB16F )] = eGL_INTERNAL_FORMAT_RGBA16F;
+		Internals[uint32_t( PixelFormat::RGBA16F )] = eGL_INTERNAL_FORMAT_RGBA16F;
 		Internals[uint32_t( PixelFormat::RGB16F32F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( PixelFormat::ARGB16F32F )] = eGL_INTERNAL_FORMAT_RGBA16F;
+		Internals[uint32_t( PixelFormat::RGBA16F32F )] = eGL_INTERNAL_FORMAT_RGBA16F;
 		Internals[uint32_t( PixelFormat::RGB32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
-		Internals[uint32_t( PixelFormat::ARGB32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
+		Internals[uint32_t( PixelFormat::RGBA32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
 
 		Attachments[uint32_t( eATTACHMENT_POINT_NONE )] = eGL_TEXTURE_ATTACHMENT_NONE;
 		Attachments[uint32_t( eATTACHMENT_POINT_COLOUR )] = eGL_TEXTURE_ATTACHMENT_COLOR0;
@@ -358,11 +358,11 @@ namespace GlRender
 		RboStorages[uint32_t( PixelFormat::A8R8G8B8 )] = eGL_RENDERBUFFER_STORAGE_RGBA8;
 		RboStorages[uint32_t( PixelFormat::A8B8G8R8 )] = eGL_RENDERBUFFER_STORAGE_RGBA8;
 		RboStorages[uint32_t( PixelFormat::RGB16F )] = eGL_RENDERBUFFER_STORAGE_RGB16F;
-		RboStorages[uint32_t( PixelFormat::ARGB16F )] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
+		RboStorages[uint32_t( PixelFormat::RGBA16F )] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
 		RboStorages[uint32_t( PixelFormat::RGB16F32F )] = eGL_RENDERBUFFER_STORAGE_RGB16F;
-		RboStorages[uint32_t( PixelFormat::ARGB16F32F )] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
+		RboStorages[uint32_t( PixelFormat::RGBA16F32F )] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
 		RboStorages[uint32_t( PixelFormat::RGB32F )] = eGL_RENDERBUFFER_STORAGE_RGB32F;
-		RboStorages[uint32_t( PixelFormat::ARGB32F )] = eGL_RENDERBUFFER_STORAGE_RGBA32F;
+		RboStorages[uint32_t( PixelFormat::RGBA32F )] = eGL_RENDERBUFFER_STORAGE_RGBA32F;
 		RboStorages[uint32_t( PixelFormat::DXTC1 )] = eGL_RENDERBUFFER_STORAGE_DXTC1;
 		RboStorages[uint32_t( PixelFormat::DXTC3 )] = eGL_RENDERBUFFER_STORAGE_DXTC3;
 		RboStorages[uint32_t( PixelFormat::DXTC5 )] = eGL_RENDERBUFFER_STORAGE_DXTC5;

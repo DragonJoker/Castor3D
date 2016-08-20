@@ -503,9 +503,6 @@ namespace Castor3D
 		//!\~english	Tells fullscreen is activated.
 		//!\~french		Dit si le rendu est en plein écran.
 		bool m_bFullscreen;
-		//!\~english	Depth and stencil buffers states.
-		//!\~french		Etats des tampons de profondeur et stencil.
-		DepthStencilStateUPtr m_depthStencilState;
 		//!\~english	The window's back buffers.
 		//!\~french		Les tampons de rendu de la fenêtre.
 		BackBuffersSPtr m_backBuffers;

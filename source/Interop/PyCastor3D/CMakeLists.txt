@@ -2,6 +2,7 @@ project( PyCastor3D )
 
 link_directories( ${BOOST_LIBRARY_DIR} )
 
+set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	9 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
@@ -13,8 +14,8 @@ include_directories( ${Boost_INCLUDE_DIR} )
 include_directories( ${PYTHON_INCLUDE_DIR} )
 
 link_directories( ${Boost_LIBRARY_DIR} )
-#link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
-#link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
+link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
+link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
 
 if (MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")

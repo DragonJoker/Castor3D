@@ -63,7 +63,7 @@ namespace Castor3D
 		: public ObjectCacheBase< Geometry, Castor::String >
 	{
 	public:
-		using MyObjectCacheType = ObjectCacheBase< Geometry, Castor::String >;
+		using MyObjectCache = ObjectCacheBase< Geometry, Castor::String >;
 		using MyObjectCacheTraits = typename MyObjectCacheType::MyObjectCacheTraits;
 		using Element = typename MyObjectCacheType::Element;
 		using Key = typename MyObjectCacheType::Key;
@@ -112,6 +112,24 @@ namespace Castor3D
 		 *\return		Le nombre d'objets
 		 */
 		C3D_API uint32_t GetObjectCount ()const;
+		/**
+		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_parent	The parent scene node.
+		 *\param[in]	p_params	The other constructor parameters.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\return		L'objet créé.
+		 */
+		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, MeshSPtr p_mesh )
+		{
+			return MyObjectCache::Add( p_name, p_parent, p_mesh );
+		}
 		/**
 		*\~english
 		*\return		The faces count for all objects.

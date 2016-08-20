@@ -18,7 +18,7 @@ scene "TextureScene"
 
 	camera_node "TextureCameraNode"
 	{
-		position 0.0 0.0 550.0
+		position 0.0 0.0 -550.0
 	}
 
 	scene_node "TextureGeometryNode"
@@ -150,7 +150,7 @@ scene "FinalScene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 0.0 100.0
+		position 0.0 0.0 -100.0
 	}
 	camera "MainCamera"
 	{

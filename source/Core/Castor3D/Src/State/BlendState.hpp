@@ -40,25 +40,8 @@ namespace Castor3D
 	\brief		Classe regroupant les configurations de blend
 	*/
 	class BlendState
-		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API explicit BlendState( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
 		 *\brief		Retrieves the independant blending activation status

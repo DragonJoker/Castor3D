@@ -153,24 +153,24 @@ namespace Castor
 			l_return = std::make_shared< PxBuffer< PixelFormat::RGB16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::ARGB16F:
-			l_return = std::make_shared< PxBuffer< PixelFormat::ARGB16F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA16F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::RGB16F32F:
 			l_return = std::make_shared< PxBuffer< PixelFormat::RGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::ARGB16F32F:
-			l_return = std::make_shared< PxBuffer< PixelFormat::ARGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA16F32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::RGB32F:
 			l_return = std::make_shared< PxBuffer< PixelFormat::RGB32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case PixelFormat::ARGB32F:
-			l_return = std::make_shared< PxBuffer< PixelFormat::ARGB32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case PixelFormat::DXTC1:

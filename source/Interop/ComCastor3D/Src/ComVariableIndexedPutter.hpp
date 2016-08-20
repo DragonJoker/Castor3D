@@ -61,12 +61,51 @@ namespace CastorCom
 		Class * m_instance;
 		Function m_function;
 	};
-
+	
 	template< typename Class, typename Value, typename Index, typename _Class >
 	IndexedVariablePutter< Class, Value, Index >
 	make_indexed_putter( _Class * instance, void ( Class::*function )( Index, Value ) )
 	{
 		return IndexedVariablePutter< Class, Value, Index >( ( Class * )instance, function );
+	}
+
+	template< typename Class, typename Value, typename Index >
+	struct IndexedVariablePutterRev
+	{
+		typedef void ( Class::*Function )( Value, Index );
+		IndexedVariablePutterRev( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Index, typename _Value >
+		HRESULT operator()( _Index index, _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				( m_instance->*m_function )( parameter_cast< Value >( value ), parameter_cast< Index >( index ) );
+				hr = S_OK;
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return S_OK;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class, typename Value, typename Index, typename _Class >
+	IndexedVariablePutterRev< Class, Value, Index >
+	make_indexed_putter_rev( _Class * instance, void ( Class::*function )( Value, Index ) )
+	{
+		return IndexedVariablePutterRev< Class, Value, Index >( ( Class * )instance, function );
 	}
 
 	template< typename Class, typename Value, typename Index >

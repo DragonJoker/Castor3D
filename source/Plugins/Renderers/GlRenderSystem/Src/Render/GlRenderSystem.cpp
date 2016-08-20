@@ -12,10 +12,6 @@
 #include "Shader/GlFrameVariableBuffer.hpp"
 #include "Shader/GlShaderObject.hpp"
 #include "Shader/GlShaderProgram.hpp"
-#include "State/GlBlendState.hpp"
-#include "State/GlDepthStencilState.hpp"
-#include "State/GlMultisampleState.hpp"
-#include "State/GlRasteriserState.hpp"
 #include "Texture/GlDirectTextureStorage.hpp"
 #include "Texture/GlPboTextureStorage.hpp"
 #include "Texture/GlSampler.hpp"
@@ -427,31 +423,12 @@ namespace GlRender
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
-	DepthStencilStateUPtr GlRenderSystem::CreateDepthStencilState()
+	PipelineUPtr GlRenderSystem::CreatePipeline( DepthStencilState && p_dsState
+												 , RasteriserState && p_rsState
+												 , BlendState && p_bdState
+												 , MultisampleState && p_msState )
 	{
-		return std::make_unique< GlDepthStencilState >( this, GetOpenGl() );
-	}
-
-	RasteriserStateUPtr GlRenderSystem::CreateRasteriserState()
-	{
-		return std::make_unique< GlRasteriserState >( this, GetOpenGl() );
-	}
-
-	BlendStateUPtr GlRenderSystem::CreateBlendState()
-	{
-		return std::make_unique< GlBlendState >( this, GetOpenGl() );
-	}
-
-	MultisampleStateUPtr GlRenderSystem::CreateMultisampleState()
-	{
-		return std::make_unique< GlMultisampleState >( this, GetOpenGl() );
-	}
-
-	PipelineUPtr GlRenderSystem::CreatePipeline( RasteriserStateUPtr && p_rsState
-												 , BlendStateUPtr && p_bdState
-												 , MultisampleStateUPtr && p_msState )
-	{
-		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
+		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )

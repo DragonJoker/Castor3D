@@ -102,7 +102,7 @@ namespace Castor3D
 	void LightCache::Initialise()
 	{
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
-		l_texture->GetImage().SetSource( Size( 1000, 1 ), PixelFormat::ARGB32F );
+		l_texture->GetImage().SetSource( Size( 1000, 1 ), PixelFormat::RGBA32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
 		m_lightsTexture->SetSampler( l_sampler );

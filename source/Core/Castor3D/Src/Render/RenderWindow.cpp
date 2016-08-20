@@ -82,8 +82,6 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		m_depthStencilState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		m_depthStencilState->SetDepthTest( false );
 		s_nbRenderWindows++;
 	}
 
@@ -425,7 +423,6 @@ namespace Castor3D
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 			m_backBuffers->Clear();
-			m_depthStencilState->Apply();
 			m_context->RenderTexture( m_size, *l_texture );
 			m_backBuffers->Unbind();
 		}

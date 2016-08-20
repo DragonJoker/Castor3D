@@ -158,9 +158,8 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		Context * l_context = l_renderSystem->GetCurrentContext();
 
-		if ( l_context && m_pRenderer )
+		if ( m_pRenderer )
 		{
 			m_viewport.Resize( p_size );
 			m_viewport.UpdateRight( real( p_size.width() ) );

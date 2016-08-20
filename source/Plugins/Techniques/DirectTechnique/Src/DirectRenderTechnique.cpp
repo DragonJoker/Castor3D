@@ -12,6 +12,7 @@
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
+#include <Render/Pipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>
@@ -19,7 +20,6 @@
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
-#include <State/DepthStencilState.hpp>
 
 #include <Graphics/FontCache.hpp>
 #include <Graphics/Image.hpp>
@@ -79,7 +79,6 @@ namespace Direct
 
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
-		m_renderTarget.GetDepthStencilState().Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 

@@ -108,11 +108,12 @@ namespace GrayScale
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 
-		auto l_rsstate = p_renderSystem.CreateRasteriserState();
-		l_rsstate->SetCulledFaces( eFACE_BACK );
-		auto l_blstate = p_renderSystem.CreateBlendState();
-		auto l_msstate = p_renderSystem.CreateMultisampleState();
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		RasteriserState l_rsstate;
+		l_rsstate.SetCulledFaces( eFACE_BACK );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{} );
 	}
 
 	GrayScalePostEffect::~GrayScalePostEffect()

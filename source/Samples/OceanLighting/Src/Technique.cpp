@@ -761,69 +761,36 @@ namespace OceanLighting
 #else
 		m_pTexWave->Create();
 #endif
-		auto l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_dsState->SetDepthTest( false );
-		auto l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_rsState->SetCulledFaces( eFACE_NONE );
-		auto l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		auto l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( false );
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( eFACE_NONE );
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
 
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_rsState->SetCulledFaces( eFACE_NONE );
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_renderPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		l_rsState = RasteriserState{};
+		l_rsState.SetCulledFaces( eFACE_NONE );
+		m_renderPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{} );
 		
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_blState->EnableBlend( true );
-		l_blState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_blState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_cloudsPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		BlendState l_blState;
+		l_blState.EnableBlend( true );
+		l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		m_cloudsPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, std::move( l_blState ), MultisampleState{} );
 		
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_skyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		m_skyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
 		
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_dsState->SetDepthTest( false );
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_rsState->SetCulledFaces( eFACE_NONE );
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_skymapPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		l_dsState = DepthStencilState{};
+		l_dsState.SetDepthTest( false );
+		l_rsState = RasteriserState{};
+		l_rsState.SetCulledFaces( eFACE_NONE );
+		m_skymapPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
 
 #if ENABLE_FFT
 
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_initPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
-
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_variancesPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
-
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_fftxPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
-
-		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
-		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-		m_fftyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		m_initPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_variancesPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_fftxPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_fftyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
 
 #endif
 
@@ -947,15 +914,15 @@ namespace OceanLighting
 		m_pTexNoise->Bind( NOISE_UNIT );
 		m_pTexNoise->GenerateMipmaps();
 		m_pTexNoise->Unbind( NOISE_UNIT );
-		m_pTexSky->GetImage().SetSource( Size( m_skyTexSize, m_skyTexSize ), PixelFormat::ARGB16F32F );
+		m_pTexSky->GetImage().SetSource( Size( m_skyTexSize, m_skyTexSize ), PixelFormat::RGBA16F32F );
 		m_pTexSky->Initialise();
 		m_pTexSky->Bind( SKY_UNIT );
 		m_pTexSky->GenerateMipmaps();
 		m_pTexSky->Unbind( SKY_UNIT );
 #if ENABLE_FFT
-		m_pTexSpectrum_1_2->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::ARGB32F );
+		m_pTexSpectrum_1_2->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::RGBA32F );
 		m_pTexSpectrum_1_2->Initialise();
-		m_pTexSpectrum_3_4->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::ARGB32F );
+		m_pTexSpectrum_3_4->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::RGBA32F );
 		m_pTexSpectrum_3_4->Initialise();
 		m_pTexSlopeVariance->GetImage().SetSource( Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ), PixelFormat::AL16F32F );
 		m_pTexSlopeVariance->Initialise();
@@ -969,7 +936,7 @@ namespace OceanLighting
 		m_pTexFFTB->Bind( FFT_B_UNIT );
 		m_pTexFFTB->GenerateMipmaps();
 		m_pTexFFTB->Unbind( FFT_B_UNIT );
-		m_pTexButterfly->GetImage().SetSource( Size( m_FFT_SIZE, m_PASSES ), PixelFormat::ARGB32F );
+		m_pTexButterfly->GetImage().SetSource( Size( m_FFT_SIZE, m_PASSES ), PixelFormat::RGBA32F );
 		std::memcpy( m_pTexButterfly->GetImage().GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
 		m_pTexButterfly->Initialise();
 		generateWavesSpectrum();

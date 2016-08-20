@@ -1714,8 +1714,9 @@ interface IEngine
 	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
 	[id( 26 ), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
 	[id( 27 ), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
-	[id( 28 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
-	[id( 29 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
+	[id( 28 ), helpstring( "Creates a multisample state" )] HRESULT CreateMultisampleState( [in] BSTR name, [out, retval] IMultisampleState ** pVal );
+	[id( 29 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
+	[id( 30 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
 };
 
 // Castor3DLib

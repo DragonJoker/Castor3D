@@ -15,7 +15,7 @@ namespace GlRender
 					  std::bind( &OpenGl::GenSamplers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::DeleteSamplers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsSampler, std::ref( p_gl ), std::placeholders::_1 )
-					)
+				 )
 	{
 	}
 

@@ -145,19 +145,19 @@ namespace Castor
 		RGB16F,
 		//!\~english	Half float ARGB.
 		//!\~french		Half float ARGB.
-		ARGB16F,
+		RGBA16F,
 		//!\~english	Half float RGB on VRAM, Float RGB on RAM.
 		//!\~french		RGB en half float en VRAM, et en float en RAM.
 		RGB16F32F,
 		//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
 		//!\~french		ARGB en half float en VRAM, et en float en RAM.
-		ARGB16F32F,
+		RGBA16F32F,
 		//!\~english	32 bits float RGB.
 		//!\~french		RGB en flottants 32 bits.
 		RGB32F,
 		//!\~english	32 bits float ARGB.
 		//!\~french		ARGB en flottants 32 bits.
-		ARGB32F,
+		RGBA32F,
 		//!\~english	DXT1 8 bits compressed format.
 		//!\~french		Format compressé DXT1 8 bits.
 		DXTC1,
@@ -334,102 +334,102 @@ namespace Castor
 	using Angle = AngleT< real >;
 	using Quaternion = QuaternionT< real >;
 
-	DECLARE_POINT( bool,		4, b	);
-	DECLARE_POINT( bool,		3, b	);
-	DECLARE_POINT( bool,		2, b	);
-	DECLARE_POINT( int8_t,		4, c	);
-	DECLARE_POINT( int8_t,		3, c	);
-	DECLARE_POINT( int8_t,		2, c	);
-	DECLARE_POINT( uint8_t,		4, ub	);
-	DECLARE_POINT( uint8_t,		3, ub	);
-	DECLARE_POINT( uint8_t,		2, ub	);
-	DECLARE_POINT( int16_t,		4, s	);
-	DECLARE_POINT( int16_t,		3, s	);
-	DECLARE_POINT( int16_t,		2, s	);
-	DECLARE_POINT( uint16_t,	4, us	);
-	DECLARE_POINT( uint16_t,	3, us	);
-	DECLARE_POINT( uint16_t,	2, us	);
-	DECLARE_POINT( int32_t,		4, i	);
-	DECLARE_POINT( int32_t,		3, i	);
-	DECLARE_POINT( int32_t,		2, i	);
-	DECLARE_POINT( uint32_t,	4, ui	);
-	DECLARE_POINT( uint32_t,	3, ui	);
-	DECLARE_POINT( uint32_t,	2, ui	);
-	DECLARE_POINT( real,		4, r	);
-	DECLARE_POINT( real,		3, r	);
-	DECLARE_POINT( real,		2, r	);
-	DECLARE_POINT( float,		4, f	);
-	DECLARE_POINT( float,		3, f	);
-	DECLARE_POINT( float,		2, f	);
-	DECLARE_POINT( double,		4, d	);
-	DECLARE_POINT( double,		3, d	);
-	DECLARE_POINT( double,		2, d	);
+	DECLARE_POINT( bool,		4, b );
+	DECLARE_POINT( bool,		3, b );
+	DECLARE_POINT( bool,		2, b );
+	DECLARE_POINT( int8_t,		4, c );
+	DECLARE_POINT( int8_t,		3, c );
+	DECLARE_POINT( int8_t,		2, c );
+	DECLARE_POINT( uint8_t,		4, ub );
+	DECLARE_POINT( uint8_t,		3, ub );
+	DECLARE_POINT( uint8_t,		2, ub );
+	DECLARE_POINT( int16_t,		4, s );
+	DECLARE_POINT( int16_t,		3, s );
+	DECLARE_POINT( int16_t,		2, s );
+	DECLARE_POINT( uint16_t,	4, us );
+	DECLARE_POINT( uint16_t,	3, us );
+	DECLARE_POINT( uint16_t,	2, us );
+	DECLARE_POINT( int32_t,		4, i );
+	DECLARE_POINT( int32_t,		3, i );
+	DECLARE_POINT( int32_t,		2, i );
+	DECLARE_POINT( uint32_t,	4, ui );
+	DECLARE_POINT( uint32_t,	3, ui );
+	DECLARE_POINT( uint32_t,	2, ui );
+	DECLARE_POINT( real,		4, r );
+	DECLARE_POINT( real,		3, r );
+	DECLARE_POINT( real,		2, r );
+	DECLARE_POINT( float,		4, f );
+	DECLARE_POINT( float,		3, f );
+	DECLARE_POINT( float,		2, f );
+	DECLARE_POINT( double,		4, d );
+	DECLARE_POINT( double,		3, d );
+	DECLARE_POINT( double,		2, d );
 
-	DECLARE_COORD( bool,		4, b	);
-	DECLARE_COORD( bool,		3, b	);
-	DECLARE_COORD( bool,		2, b	);
-	DECLARE_COORD( int8_t,		4, c	);
-	DECLARE_COORD( int8_t,		3, c	);
-	DECLARE_COORD( int8_t,		2, c	);
-	DECLARE_COORD( uint8_t,		4, ub	);
-	DECLARE_COORD( uint8_t,		3, ub	);
-	DECLARE_COORD( uint8_t,		2, ub	);
-	DECLARE_COORD( int16_t,		4, s	);
-	DECLARE_COORD( int16_t,		3, s	);
-	DECLARE_COORD( int16_t,		2, s	);
-	DECLARE_COORD( uint16_t,	4, us	);
-	DECLARE_COORD( uint16_t,	3, us	);
-	DECLARE_COORD( uint16_t,	2, us	);
-	DECLARE_COORD( int32_t,		4, i	);
-	DECLARE_COORD( int32_t,		3, i	);
-	DECLARE_COORD( int32_t,		2, i	);
-	DECLARE_COORD( uint32_t,	4, ui	);
-	DECLARE_COORD( uint32_t,	3, ui	);
-	DECLARE_COORD( uint32_t,	2, ui	);
-	DECLARE_COORD( int,			4, i	);
-	DECLARE_COORD( int,			3, i	);
-	DECLARE_COORD( int,			2, i	);
-	DECLARE_COORD( real,		4, r	);
-	DECLARE_COORD( real,		3, r	);
-	DECLARE_COORD( real,		2, r	);
-	DECLARE_COORD( float,		4, f	);
-	DECLARE_COORD( float,		3, f	);
-	DECLARE_COORD( float,		2, f	);
-	DECLARE_COORD( double,		4, d	);
-	DECLARE_COORD( double,		3, d	);
-	DECLARE_COORD( double,		2, d	);
-	DECLARE_COORD( uint8_t,		4, ub	);
-	DECLARE_COORD( uint8_t,		3, ub	);
-	DECLARE_COORD( uint8_t,		2, ub	);
+	DECLARE_COORD( bool,		4, b );
+	DECLARE_COORD( bool,		3, b );
+	DECLARE_COORD( bool,		2, b );
+	DECLARE_COORD( int8_t,		4, c );
+	DECLARE_COORD( int8_t,		3, c );
+	DECLARE_COORD( int8_t,		2, c );
+	DECLARE_COORD( uint8_t,		4, ub );
+	DECLARE_COORD( uint8_t,		3, ub );
+	DECLARE_COORD( uint8_t,		2, ub );
+	DECLARE_COORD( int16_t,		4, s );
+	DECLARE_COORD( int16_t,		3, s );
+	DECLARE_COORD( int16_t,		2, s );
+	DECLARE_COORD( uint16_t,	4, us );
+	DECLARE_COORD( uint16_t,	3, us );
+	DECLARE_COORD( uint16_t,	2, us );
+	DECLARE_COORD( int32_t,		4, i );
+	DECLARE_COORD( int32_t,		3, i );
+	DECLARE_COORD( int32_t,		2, i );
+	DECLARE_COORD( uint32_t,	4, ui );
+	DECLARE_COORD( uint32_t,	3, ui );
+	DECLARE_COORD( uint32_t,	2, ui );
+	DECLARE_COORD( int,			4, i );
+	DECLARE_COORD( int,			3, i );
+	DECLARE_COORD( int,			2, i );
+	DECLARE_COORD( real,		4, r );
+	DECLARE_COORD( real,		3, r );
+	DECLARE_COORD( real,		2, r );
+	DECLARE_COORD( float,		4, f );
+	DECLARE_COORD( float,		3, f );
+	DECLARE_COORD( float,		2, f );
+	DECLARE_COORD( double,		4, d );
+	DECLARE_COORD( double,		3, d );
+	DECLARE_COORD( double,		2, d );
+	DECLARE_COORD( uint8_t,		4, ub );
+	DECLARE_COORD( uint8_t,		3, ub );
+	DECLARE_COORD( uint8_t,		2, ub );
 
-	DECLARE_SQMTX( real,	4, r	);
-	DECLARE_SQMTX( real,	3, r	);
-	DECLARE_SQMTX( real,	2, r	);
-	DECLARE_SQMTX( float,	4, f	);
-	DECLARE_SQMTX( float,	3, f	);
-	DECLARE_SQMTX( float,	2, f	);
-	DECLARE_SQMTX( double,	4, d	);
-	DECLARE_SQMTX( double,	3, d	);
-	DECLARE_SQMTX( double,	2, d	);
+	DECLARE_SQMTX( real,	4, r );
+	DECLARE_SQMTX( real,	3, r );
+	DECLARE_SQMTX( real,	2, r );
+	DECLARE_SQMTX( float,	4, f );
+	DECLARE_SQMTX( float,	3, f );
+	DECLARE_SQMTX( float,	2, f );
+	DECLARE_SQMTX( double,	4, d );
+	DECLARE_SQMTX( double,	3, d );
+	DECLARE_SQMTX( double,	2, d );
 
-	DECLARE_MTX( real,		2, 3, r	);
-	DECLARE_MTX( real,		2, 4, r	);
-	DECLARE_MTX( real,		3, 2, r	);
-	DECLARE_MTX( real,		3, 4, r	);
-	DECLARE_MTX( real,		4, 2, r	);
-	DECLARE_MTX( real,		4, 3, r	);
-	DECLARE_MTX( float,		2, 3, f	);
-	DECLARE_MTX( float,		2, 4, f	);
-	DECLARE_MTX( float,		3, 2, f	);
-	DECLARE_MTX( float,		3, 4, f	);
-	DECLARE_MTX( float,		4, 2, f	);
-	DECLARE_MTX( float,		4, 3, f	);
-	DECLARE_MTX( double,	2, 3, d	);
-	DECLARE_MTX( double,	2, 4, d	);
-	DECLARE_MTX( double,	3, 2, d	);
-	DECLARE_MTX( double,	3, 4, d	);
-	DECLARE_MTX( double,	4, 2, d	);
-	DECLARE_MTX( double,	4, 3, d	);
+	DECLARE_MTX( real,		2, 3, r );
+	DECLARE_MTX( real,		2, 4, r );
+	DECLARE_MTX( real,		3, 2, r );
+	DECLARE_MTX( real,		3, 4, r );
+	DECLARE_MTX( real,		4, 2, r );
+	DECLARE_MTX( real,		4, 3, r );
+	DECLARE_MTX( float,		2, 3, f );
+	DECLARE_MTX( float,		2, 4, f );
+	DECLARE_MTX( float,		3, 2, f );
+	DECLARE_MTX( float,		3, 4, f );
+	DECLARE_MTX( float,		4, 2, f );
+	DECLARE_MTX( float,		4, 3, f );
+	DECLARE_MTX( double,	2, 3, d );
+	DECLARE_MTX( double,	2, 4, d );
+	DECLARE_MTX( double,	3, 2, d );
+	DECLARE_MTX( double,	3, 4, d );
+	DECLARE_MTX( double,	4, 2, d );
+	DECLARE_MTX( double,	4, 3, d );
 
 	DECLARE_SMART_PTR( Quaternion );
 	DECLARE_SMART_PTR( SphericalVertex );

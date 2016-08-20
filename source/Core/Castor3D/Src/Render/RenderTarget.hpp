@@ -273,16 +273,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The DepthStencilState.
-		 *\~french
-		 *\return		Le DepthStencilState.
-		 */
-		inline DepthStencilState const & GetDepthStencilState()const
-		{
-			return *m_depthStencilState;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the RenderTechnique
 		 *\return		The RenderTechnique
 		 *\~french
@@ -659,9 +649,6 @@ namespace Castor3D
 		//!\~english	The render technique parameters.
 		//!\~french		Les paramètres de la technique de rendu.
 		Parameters m_techniqueParameters;
-		//!\~english	Depth and stencil buffers states.
-		//!\~french		Etats des buffers de profondeur et stencil.
-		DepthStencilStateUPtr m_depthStencilState;
 		//!\~english	The post effects.
 		//!\~french		Les effets post rendu.
 		PostEffectPtrArray m_postEffects;

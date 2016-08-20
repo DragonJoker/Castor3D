@@ -38,7 +38,7 @@ namespace Castor
 	}
 
 	Path::Path( Path && p_data )
-		:	String( std::move( p_data )	)
+		:	String( std::move( p_data ) )
 	{
 	}
 
@@ -51,7 +51,7 @@ namespace Castor
 
 	Path & Path::operator=( Path && p_data )
 	{
-		String::operator=( std::move( p_data )	);
+		String::operator=( std::move( p_data ) );
 		return *this;
 	}
 

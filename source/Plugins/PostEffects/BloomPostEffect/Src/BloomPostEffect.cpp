@@ -226,10 +226,10 @@ namespace Bloom
 		m_linearSampler = DoCreateSampler( true );
 		m_nearestSampler = DoCreateSampler( false );
 
-		auto l_rsstate = p_renderSystem.CreateRasteriserState();
-		auto l_blstate = p_renderSystem.CreateBlendState();
-		auto l_msstate = p_renderSystem.CreateMultisampleState();
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 	}
 
 	BloomPostEffect::~BloomPostEffect()

@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 
@@ -60,20 +61,23 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	p_dsState		The depth stencil state.
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_blState		The blend state.
 		 *\param[in]	p_msState		The multisample state.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	p_dsState		L'état de stencil et profondeur.
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_blState		L'état de mélange.
 		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 */
 		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
-								   , RasteriserStateUPtr && p_rsState
-								   , BlendStateUPtr && p_blState
-								   , MultisampleStateUPtr && p_msState );
+								   , DepthStencilState && p_dsState
+								   , RasteriserState && p_rsState
+								   , BlendState && p_blState
+								   , MultisampleState && p_msState );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -305,15 +309,18 @@ namespace Castor3D
 		//!\~english	The texture matrices.
 		//!\~french		Les matrices de texture.
 		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		//!\~english	The depth stencil state.
+		//!\~french		L'état de stencil et profondeur.
+		DepthStencilState m_dsState;
 		//!\~english	The rateriser state.
 		//!\~french		L'état de rastériseur.
-		RasteriserStateUPtr m_rsState;
+		RasteriserState m_rsState;
 		//!\~english	The blend state.
 		//!\~french		L'état de mélange.
-		BlendStateUPtr m_blState;
+		BlendState m_blState;
 		//!\~english	The muultisampling state.
 		//!\~french		L'état de multi-échantillonnage.
-		MultisampleStateUPtr m_msState;
+		MultisampleState m_msState;
 	};
 }
 

@@ -40,25 +40,8 @@ namespace Castor3D
 	\brief		Classe regroupant les configurations de multi-échantillonnage.
 	*/
 	class MultisampleState
-		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API explicit MultisampleState( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~MultisampleState();
 		/**
 		 *\~english
 		 *\brief		Retrieves the multisample activation status

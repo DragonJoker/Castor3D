@@ -39,25 +39,8 @@ namespace Castor3D
 	\brief		Classe de configuration du rasteriser
 	*/
 	class RasteriserState
-		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API explicit RasteriserState( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~RasteriserState();
 		/**
 		 *\~english
 		 *\brief		Retrieves the fill mode

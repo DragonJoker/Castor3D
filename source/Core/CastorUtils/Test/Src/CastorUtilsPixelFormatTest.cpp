@@ -234,7 +234,7 @@ namespace
 			ConvertPixel< PixelFormat::R8G8B8 >( l_source );
 			ConvertPixel< PixelFormat::A8R8G8B8 >( l_source );
 			ConvertPixel< PixelFormat::RGB32F >( l_source );
-			ConvertPixel< PixelFormat::ARGB32F >( l_source );
+			ConvertPixel< PixelFormat::RGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -331,7 +331,7 @@ namespace
 			ConvertBuffer< PixelFormat::R8G8B8 >( l_source );
 			ConvertBuffer< PixelFormat::A8R8G8B8 >( l_source );
 			ConvertBuffer< PixelFormat::RGB32F >( l_source );
-			ConvertBuffer< PixelFormat::ARGB32F >( l_source );
+			ConvertBuffer< PixelFormat::RGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -473,7 +473,7 @@ namespace Testing
 		CheckPixelConversions< PixelFormat::R8G8B8 >();
 		CheckPixelConversions< PixelFormat::A8R8G8B8 >();
 		CheckPixelConversions< PixelFormat::RGB32F >();
-		CheckPixelConversions< PixelFormat::ARGB32F >();
+		CheckPixelConversions< PixelFormat::RGBA32F >();
 		CheckPixelConversions< PixelFormat::D16 >();
 		CheckPixelConversions< PixelFormat::D24 >();
 		CheckPixelConversions< PixelFormat::D32 >();
@@ -493,7 +493,7 @@ namespace Testing
 		CheckBufferConversions< PixelFormat::R8G8B8 >();
 		CheckBufferConversions< PixelFormat::A8R8G8B8 >();
 		CheckBufferConversions< PixelFormat::RGB32F >();
-		CheckBufferConversions< PixelFormat::ARGB32F >();
+		CheckBufferConversions< PixelFormat::RGBA32F >();
 		CheckBufferConversions< PixelFormat::D16 >();
 		CheckBufferConversions< PixelFormat::D24 >();
 		CheckBufferConversions< PixelFormat::D32 >();

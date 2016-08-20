@@ -77,23 +77,23 @@ namespace Castor3D
 			}
 		} }
 	{
-		auto l_blState = GetRenderSystem()->CreateBlendState();
-		l_blState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_blState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		l_blState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-		l_blState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-		l_blState->EnableBlend( true );
+		BlendState l_blState;
+		l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		l_blState.SetRgbSrcBlend( BlendOperand::SrcAlpha );
+		l_blState.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+		l_blState.EnableBlend( true );
 
-		auto l_msState = GetRenderSystem()->CreateMultisampleState();
-		l_msState->EnableAlphaToCoverage( false );
+		MultisampleState l_msState;
+		l_msState.EnableAlphaToCoverage( false );
 
-		auto l_dsState = GetRenderSystem()->CreateDepthStencilState();
-		l_dsState->SetDepthTest( false );
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( false );
 
-		auto l_rsState = GetRenderSystem()->CreateRasteriserState();
-		l_rsState->SetCulledFaces( eFACE_BACK );
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( eFACE_BACK );
 
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -163,15 +163,10 @@ namespace Castor3D
 
 		// Create one text overlays buffer
 		DoCreateTextGeometryBuffers();
-
-		m_depthStencilState = GetRenderSystem()->CreateDepthStencilState();
-		m_depthStencilState->SetDepthTest( false );
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
-		m_depthStencilState.reset();
-
 		for ( auto & l_vertex : m_borderVertex )
 		{
 			l_vertex.reset();
@@ -320,7 +315,6 @@ namespace Castor3D
 		}
 
 		m_pipeline->Apply();
-		m_depthStencilState->Apply();
 	}
 
 	void OverlayRenderer::EndRender()

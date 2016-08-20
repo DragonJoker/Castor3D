@@ -32,7 +32,7 @@
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
-#include <State/MultisampleStencilState.hpp>
+#include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -80,39 +80,18 @@ namespace Deferred
 
 		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
-		m_geometryPassDsState = p_renderSystem.CreateDepthStencilState();
-		m_geometryPassDsState->SetStencilTest( true );
-		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
-		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
-		m_geometryPassDsState->SetStencilFrontRef( 1 );
-		m_geometryPassDsState->SetStencilBackRef( 1 );
-		m_geometryPassDsState->SetStencilFrontFunc( eSTENCIL_FUNC_NEVER );
-		m_geometryPassDsState->SetStencilBackFunc( eSTENCIL_FUNC_NEVER );
-		m_geometryPassDsState->SetStencilFrontFailOp( eSTENCIL_OP_REPLACE );
-		m_geometryPassDsState->SetStencilBackFailOp( eSTENCIL_OP_REPLACE );
-		m_geometryPassDsState->SetStencilFrontDepthFailOp( eSTENCIL_OP_KEEP );
-		m_geometryPassDsState->SetStencilBackDepthFailOp( eSTENCIL_OP_KEEP );
-		m_geometryPassDsState->SetStencilFrontPassOp( eSTENCIL_OP_KEEP );
-		m_geometryPassDsState->SetStencilBackPassOp( eSTENCIL_OP_KEEP );
-		m_geometryPassDsState->SetDepthTest( true );
-		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
+		DepthStencilState l_dsstate;
+		l_dsstate.SetStencilTest( true );
+		l_dsstate.SetStencilReadMask( 0xFFFFFFFF );
+		l_dsstate.SetStencilWriteMask( 0 );
+		l_dsstate.SetStencilFrontRef( 1 );
+		l_dsstate.SetStencilBackRef( 1 );
+		l_dsstate.SetStencilFrontFunc( eSTENCIL_FUNC_EQUAL );
+		l_dsstate.SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
+		l_dsstate.SetDepthTest( true );
+		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
 
-		m_lightPassDsState = p_renderSystem.CreateDepthStencilState();
-		m_lightPassDsState->SetStencilTest( true );
-		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
-		m_lightPassDsState->SetStencilWriteMask( 0 );
-		m_lightPassDsState->SetStencilFrontRef( 1 );
-		m_lightPassDsState->SetStencilBackRef( 1 );
-		m_lightPassDsState->SetStencilFrontFunc( eSTENCIL_FUNC_EQUAL );
-		m_lightPassDsState->SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
-		m_lightPassDsState->SetDepthTest( true );
-		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
-
-		auto l_rsstate = p_renderSystem.CreateRasteriserState();
-		auto l_blstate = p_renderSystem.CreateBlendState();
-		auto l_msstate = p_renderSystem.CreateMultisampleState();
-
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 
 		m_declaration = BufferDeclaration(
 		{
@@ -201,7 +180,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, PixelFormat::ARGB16F32F );
+			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, PixelFormat::RGBA16F32F );
 			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
@@ -288,7 +267,7 @@ namespace Deferred
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		// Render the geometry pass.
-		m_renderTarget.GetDepthStencilState()->Apply();
+		m_camera = &p_camera;
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
@@ -322,7 +301,6 @@ namespace Deferred
 			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 
-			m_renderTarget.GetDepthStencilState()->Apply();
 			m_pipeline->Apply();
 
 			m_viewport.Resize( m_size );
@@ -337,7 +315,7 @@ namespace Deferred
 				m_pipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
 				p_scene.GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
-				GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( l_sceneBuffer );
+				m_camera->FillShader( l_sceneBuffer );
 				m_lightPassShaderProgram->Bind();
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
@@ -363,6 +341,8 @@ namespace Deferred
 		m_frameBuffer.m_frameBuffer->Unbind();
 
 #endif
+
+		m_camera = nullptr;
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const

@@ -198,15 +198,12 @@ namespace Deferred
 		//!\~english	The shader variable containing the camera position.
 		//!\~french		La variable de shader contenant la position de la caméra.
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
-		//!\~english	The depth stencil state used by the geometric pass.
-		//!\~french		Le DepthStencilState utilisé par la passe géométrique.
-		Castor3D::DepthStencilStateUPtr m_geometryPassDsState;
-		//!\~english	The depth stencil state used by the lights pass.
-		//!\~french		Le DepthStencilState utilisé par la passe lumières.
-		Castor3D::DepthStencilStateUPtr m_lightPassDsState;
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
 		Castor3D::PipelineSPtr m_pipeline;
+		//!\~english	The current camera.
+		//!\~french		La caméra actuelle.
+		Castor3D::Camera * m_camera{ nullptr };
 	};
 }
 

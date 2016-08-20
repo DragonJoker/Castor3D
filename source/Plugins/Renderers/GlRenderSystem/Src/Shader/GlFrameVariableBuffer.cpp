@@ -924,8 +924,8 @@ namespace GlRender
 
 						if ( l_index != eGL_INVALID_INDEX )
 						{
-							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_OFFSET, &l_offset	);
-							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_SIZE, &l_size	);
+							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_OFFSET, &l_offset );
+							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_SIZE, &l_size );
 
 							if ( l_size == 1 )
 							{
