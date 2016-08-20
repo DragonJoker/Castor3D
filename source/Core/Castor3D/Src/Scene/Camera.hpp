@@ -122,12 +122,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the viewport, the rotation ...
-		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Applique le viewport, la rotation ...
-		 *\param[in]	p_pipeline	Le pipeline de rendu
 		 */
-		C3D_API virtual void Render( Pipeline & p_pipeline );
+		C3D_API virtual void Render();
 		/**
 		 *\~english
 		 *\brief		Removes the transformations

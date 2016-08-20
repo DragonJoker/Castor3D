@@ -329,7 +329,8 @@ namespace Deferred
 			m_lightPassBlendState->Apply();
 
 			m_viewport.Resize( m_size );
-			m_viewport.Render( l_pipeline );
+			m_viewport.Update();
+			l_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 			if ( m_pShaderCamera )
 			{

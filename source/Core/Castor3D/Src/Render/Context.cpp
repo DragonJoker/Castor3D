@@ -166,7 +166,8 @@ namespace Castor3D
 	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program )
 	{
 		m_viewport.Resize( p_size );
-		m_viewport.Render( GetPipeline() );
+		m_viewport.Update();
+		GetPipeline().SetProjectionMatrix( m_viewport.GetProjection() );
 
 		if ( p_program.GetStatus() == ePROGRAM_STATUS_LINKED )
 		{

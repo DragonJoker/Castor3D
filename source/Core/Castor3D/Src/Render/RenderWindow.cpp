@@ -189,8 +189,6 @@ namespace Castor3D
 
 			if ( l_target && l_target->IsInitialised() )
 			{
-				l_engine->GetDefaultBlendState()->Apply();
-
 				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
 					DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
@@ -429,6 +427,7 @@ namespace Castor3D
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 			m_backBuffers->Clear();
+			GetEngine()->GetDefaultBlendState()->Apply();
 			m_depthStencilState->Apply();
 			m_rasteriserState->Apply();
 			m_multisampleState->Apply();

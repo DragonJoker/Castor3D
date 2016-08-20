@@ -387,7 +387,9 @@ namespace Castor3D
 		m_renderedObjects.clear();
 		auto & l_pipeline = m_renderSystem.GetCurrentContext()->GetPipeline();
 		p_camera.GetViewport().Resize( p_size );
-		p_camera.Render( l_pipeline );
+		p_camera.Render();
+		l_pipeline.SetViewMatrix( p_camera.GetView() );
+		l_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		m_multisampleState->Apply();
 		DoRenderOpaqueNodes( p_nodes, l_pipeline );
 		p_nodes.m_scene.RenderForeground( p_size, p_camera, l_pipeline );

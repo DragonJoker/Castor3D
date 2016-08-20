@@ -455,7 +455,8 @@ namespace Bloom
 			{
 				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
 				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
-				m_viewport.Render( l_pipeline );
+				m_viewport.Update();
+				l_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 				auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;

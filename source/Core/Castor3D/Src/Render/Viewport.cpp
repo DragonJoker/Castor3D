@@ -186,7 +186,7 @@ namespace Castor3D
 		m_impl.reset();
 	}
 
-	bool Viewport::Render( Pipeline & p_pipeline )
+	bool Viewport::Update()
 	{
 		bool l_return = false;
 
@@ -214,7 +214,6 @@ namespace Castor3D
 			l_return = true;
 		}
 
-		p_pipeline.SetProjectionMatrix( m_projection );
 		m_impl->Apply();
 		return l_return;
 	}
