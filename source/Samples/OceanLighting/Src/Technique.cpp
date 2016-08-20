@@ -16,9 +16,6 @@
 
 #include "Technique.hpp"
 
-#include <BlendStateCache.hpp>
-#include <DepthStencilStateCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SamplerCache.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
@@ -178,7 +175,7 @@ namespace OceanLighting
 		m_vboBuffer[3] = 0.0f;
 		m_frameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_pColorBuffer = m_renderSystem.CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
+		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D24S8 );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 		BufferDeclaration l_skymapDeclaration
@@ -306,21 +303,12 @@ namespace OceanLighting
 		std::memcpy( m_skyVtxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 		std::memcpy( m_skymapIdxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 		std::memcpy( m_cloudsIdxBuffer->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
-		RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRenderSystem()->GetEngine()->GetRasteriserStateCache().Add( cuT( "OceanLighting" ) );
-		l_pRasteriser->SetCulledFaces( eFACE_NONE );
-		l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
-		m_pRasteriserState = l_pRasteriser;
-		DepthStencilStateSPtr l_pDepthStencil = GetEngine()->GetRenderSystem()->GetEngine()->GetDepthStencilStateCache ().Add( cuT( "OceanLighting" ) );
-		l_pDepthStencil->SetDepthTest( false );
-		m_pDepthStencilState = l_pDepthStencil;
-		l_pRasteriser = GetEngine()->GetRenderSystem()->GetEngine()->GetRasteriserStateCache ().Add( cuT( "OceanLighting_Render" ) );
-		l_pRasteriser->SetCulledFaces( eFACE_NONE );
-		l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
-		m_renderRasteriserState = l_pRasteriser;
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
+		m_renderPipeline.reset();
+		m_pipeline.reset();
 		m_renderGBuffers.reset();
 		m_cloudsGBuffers.reset();
 		m_skyGBuffers.reset();
@@ -773,20 +761,72 @@ namespace OceanLighting
 #else
 		m_pTexWave->Create();
 #endif
-		BlendStateSPtr l_pBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Clouds" ) );
-		l_pBlendState->EnableBlend( true );
-		l_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		m_cloudsBlendState = l_pBlendState;
-		m_renderBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Render" ) );
-		m_skyBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Sky" ) );
-		m_skymapBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Skymap" ) );
+		auto l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_dsState->SetDepthTest( false );
+		auto l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_rsState->SetCulledFaces( eFACE_NONE );
+		auto l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		auto l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_rsState->SetCulledFaces( eFACE_NONE );
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_renderPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_blState->EnableBlend( true );
+		l_blState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_blState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_cloudsPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_skyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_dsState->SetDepthTest( false );
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_rsState->SetCulledFaces( eFACE_NONE );
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_skymapPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
 #if ENABLE_FFT
-		m_initBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Init" ) );
-		m_variancesBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Variances" ) );
-		m_fftxBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Fftx" ) );
-		m_fftyBlendState = GetEngine()->GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OL_Ffty" ) );
+
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_initPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_variancesPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_fftxPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
+		l_dsState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		l_rsState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_blState = GetEngine()->GetRenderSystem()->CreateBlendState();
+		l_msState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+		m_fftyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+
 #endif
+
 		return true;
 	}
 
@@ -844,7 +884,7 @@ namespace OceanLighting
 		m_pSamplerAnisotropicClamp->Initialise();
 		m_pSamplerAnisotropicRepeat->Initialise();
 
-		m_pColorBuffer->GetImage().SetSource( m_renderTarget.GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
+		m_pColorBuffer->GetImage().SetSource( m_renderTarget.GetSize(), PixelFormat::A8R8G8B8 );
 		m_pDepthBuffer->Initialise( m_renderTarget.GetSize() );
 		m_frameBuffer->Initialise( m_renderTarget.GetSize() );
 		bool l_bReturn = m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
@@ -857,7 +897,7 @@ namespace OceanLighting
 		}
 
 		FILE * f = NULL;
-		PxBufferBaseSPtr buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
+		PxBufferBaseSPtr buffer = PxBufferBase::create( Size( 64, 16 ), PixelFormat::RGB16F32F );
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 		{
@@ -872,7 +912,7 @@ namespace OceanLighting
 		int nv = res * 2;
 		int nb = res / 2;
 		int na = 8;
-		buffer = PxBufferBase::create( Size( na * nb, nv * nr ), ePIXEL_FORMAT_RGB16F32F );
+		buffer = PxBufferBase::create( Size( na * nb, nv * nr ), PixelFormat::RGB16F32F );
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
 		{
@@ -882,7 +922,7 @@ namespace OceanLighting
 
 		m_pTexInscatter->GetImage().SetSource( Point3ui( na * nb, nv, nr ), buffer );
 		m_pTexInscatter->Initialise();
-		buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
+		buffer = PxBufferBase::create( Size( 256, 64 ), PixelFormat::RGB16F32F );
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
 		{
@@ -892,7 +932,7 @@ namespace OceanLighting
 
 		m_pTexTransmittance->GetImage().SetSource( buffer );
 		m_pTexTransmittance->Initialise();
-		m_pTexNoise->GetImage().SetSource( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
+		m_pTexNoise->GetImage().SetSource( Size( 512, 512 ), PixelFormat::L8 );
 
 		if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 		{
@@ -907,29 +947,29 @@ namespace OceanLighting
 		m_pTexNoise->Bind( NOISE_UNIT );
 		m_pTexNoise->GenerateMipmaps();
 		m_pTexNoise->Unbind( NOISE_UNIT );
-		m_pTexSky->GetImage().SetSource( Size( m_skyTexSize, m_skyTexSize ), ePIXEL_FORMAT_ARGB16F32F );
+		m_pTexSky->GetImage().SetSource( Size( m_skyTexSize, m_skyTexSize ), PixelFormat::ARGB16F32F );
 		m_pTexSky->Initialise();
 		m_pTexSky->Bind( SKY_UNIT );
 		m_pTexSky->GenerateMipmaps();
 		m_pTexSky->Unbind( SKY_UNIT );
 #if ENABLE_FFT
-		m_pTexSpectrum_1_2->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
+		m_pTexSpectrum_1_2->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::ARGB32F );
 		m_pTexSpectrum_1_2->Initialise();
-		m_pTexSpectrum_3_4->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
+		m_pTexSpectrum_3_4->GetImage().SetSource( Size( m_FFT_SIZE, m_FFT_SIZE ), PixelFormat::ARGB32F );
 		m_pTexSpectrum_3_4->Initialise();
-		m_pTexSlopeVariance->GetImage().SetSource( Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ), ePIXEL_FORMAT_AL16F32F );
+		m_pTexSlopeVariance->GetImage().SetSource( Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ), PixelFormat::AL16F32F );
 		m_pTexSlopeVariance->Initialise();
-		m_pTexFFTA->GetImage().SetSource( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
+		m_pTexFFTA->GetImage().SetSource( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), PixelFormat::RGB32F );
 		m_pTexFFTA->Initialise();
 		m_pTexFFTA->Bind( FFT_A_UNIT );
 		m_pTexFFTA->GenerateMipmaps();
 		m_pTexFFTA->Unbind( FFT_A_UNIT );
-		m_pTexFFTB->GetImage().SetSource( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
+		m_pTexFFTB->GetImage().SetSource( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), PixelFormat::RGB32F );
 		m_pTexFFTB->Initialise();
 		m_pTexFFTB->Bind( FFT_B_UNIT );
 		m_pTexFFTB->GenerateMipmaps();
 		m_pTexFFTB->Unbind( FFT_B_UNIT );
-		m_pTexButterfly->GetImage().SetSource( Size( m_FFT_SIZE, m_PASSES ), ePIXEL_FORMAT_ARGB32F );
+		m_pTexButterfly->GetImage().SetSource( Size( m_FFT_SIZE, m_PASSES ), PixelFormat::ARGB32F );
 		std::memcpy( m_pTexButterfly->GetImage().GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
 		m_pTexButterfly->Initialise();
 		generateWavesSpectrum();
@@ -954,7 +994,7 @@ namespace OceanLighting
 		m_fftFbo2->Unbind();
 #else
 		m_pTexWave->SetType( TextureType::OneDimension );
-		m_pTexWave->GetImage().SetSource( Size( m_nbWaves, 1 ), ePIXEL_FORMAT_ARGB32F );
+		m_pTexWave->GetImage().SetSource( Size( m_nbWaves, 1 ), PixelFormat::ARGB32F );
 		m_pTexWave->Initialise( WAVE_UNIT );
 		m_pTexWave->SetSampler( m_pSamplerNearestClamp );
 #endif
@@ -1123,15 +1163,12 @@ namespace OceanLighting
 		return true;
 	}
 
-	void RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), uint32_t CU_PARAM_UNUSED( p_frameTime ) )
+	void RenderTechnique::DoRender( SceneRenderNodes & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), uint32_t CU_PARAM_UNUSED( p_frameTime ) )
 	{
-		Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 		m_fbo->Bind();
-		m_pDepthStencilState.lock()->Apply();
-		m_pRasteriserState.lock()->Apply();
 		m_viewport.Resize( Size( m_skyTexSize, m_skyTexSize ) );
-		m_viewport.Render( l_pipeline );
+		m_viewport.Update();
 		m_skymapSunDir->SetValue( sun );
 		m_skymapOctaves->SetValue( m_octaves );
 		m_skymapLacunarity->SetValue( m_lacunarity );
@@ -1140,7 +1177,8 @@ namespace OceanLighting
 		m_skymapClamp1->SetValue( m_clamp1 );
 		m_skymapClamp2->SetValue( m_clamp2 );
 		m_skymapCloudsColor->SetValue( bgra_float( m_cloudColor ) );
-		m_skymapBlendState.lock()->Apply();
+		m_skymapPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_skymapPipeline->Apply();
 		m_skymap->Bind();
 		m_skymapGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
 		m_skymap->Unbind();
@@ -1155,7 +1193,6 @@ namespace OceanLighting
 
 	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
-		Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 #if ENABLE_FFT
 		static double m_lastTime = 0.0;
@@ -1164,10 +1201,8 @@ namespace OceanLighting
 		m_lastTime = t;
 #endif
 		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_renderTarget.GetDepthStencilState()->Apply();
-		m_renderTarget.GetRasteriserState()->Apply();
 		m_viewport.Resize( Size( m_width, m_height ) );
-		m_viewport.Render( l_pipeline );
+		m_viewport.Update();
 #if ENABLE_FFT
 		float ch = m_cameraHeight;
 #else
@@ -1201,7 +1236,8 @@ namespace OceanLighting
 		m_skyWorldCamera->SetValue( Point3f( 0.0f, 0.0f, ch ) );
 		m_skyWorldSunDir->SetValue( sun );
 		m_skyHdrExposure->SetValue( m_hdrExposure );
-		m_skyBlendState.lock()->Apply();
+		m_skyPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_skyPipeline->Apply();
 		m_sky->Bind();
 		m_skyGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
 		m_sky->Unbind();
@@ -1256,21 +1292,19 @@ namespace OceanLighting
 
 #endif
 
-		if ( m_grid )
-		{
-			m_renderRasteriserState.lock()->SetFillMode( eFILL_MODE_LINE );
-		}
-		else
-		{
-			m_renderRasteriserState.lock()->SetFillMode( eFILL_MODE_SOLID );
-		}
+		//if ( m_grid )
+		//{
+		//	m_renderRasteriserState.lock()->SetFillMode( eFILL_MODE_LINE );
+		//}
+		//else
+		//{
+		//	m_renderRasteriserState.lock()->SetFillMode( eFILL_MODE_SOLID );
+		//}
 
-		m_renderRasteriserState.lock()->Apply();
-		m_renderBlendState.lock()->Apply();
+		m_renderPipeline->Apply();
 		m_render->Bind();
 		m_renderGBuffers->Draw( m_renderIdxBuffer->GetSize(), 0 );
 		m_render->Unbind();
-		m_renderTarget.GetRasteriserState()->Apply();
 
 		if ( m_cloudLayer && ch > 3000.0 )
 		{
@@ -1545,7 +1579,8 @@ namespace OceanLighting
 		m_cloudsClamp1->SetValue( m_clamp1 );
 		m_cloudsClamp2->SetValue( m_clamp2 );
 		m_cloudsCloudsColor->SetValue( bgra_float( m_cloudColor ) );
-		m_cloudsBlendState.lock()->Apply();
+		m_cloudsPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_cloudsPipeline->Apply();
 		m_clouds->Bind();
 		m_cloudsGBuffers->Draw( m_cloudsIdxBuffer->GetSize(), 0 );
 		m_clouds->Unbind();
@@ -1710,10 +1745,11 @@ namespace OceanLighting
 
 		m_variancesFbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
 		m_viewport.Resize( Size( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ) );
-		m_viewport.Render( GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
+		m_viewport.Update();
 		m_variancesGridSizes->SetValue( Point4f( m_GRID1_SIZE, m_GRID2_SIZE, m_GRID3_SIZE, m_GRID4_SIZE ) );
 		m_variancesSlopeVarianceDelta->SetValue( float( 0.5 * ( theoreticSlopeVariance - totalSlopeVariance ) ) );
-		m_variancesBlendState.lock()->Apply();
+		m_variancesPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_variancesPipeline->Apply();
 
 		for ( int layer = 0; layer < m_N_SLOPE_VARIANCE; ++layer )
 		{
@@ -1808,16 +1844,16 @@ namespace OceanLighting
 	void RenderTechnique::simulateFFTWaves( float t )
 	{
 		RenderSystem * l_pRS = GetEngine()->GetRenderSystem();
-		Pipeline & l_pipeline = l_pRS->GetCurrentContext()->GetPipeline();
 		// init
 		m_fftFbo1->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
 		m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
 		m_viewport.Resize( Size( m_FFT_SIZE, m_FFT_SIZE ) );
-		m_viewport.Render( l_pipeline );
+		m_viewport.Update();
 		m_initFftSize->SetValue( float( m_FFT_SIZE ) );
 		m_initInverseGridSizes->SetValue( Point4f( 2.0 * M_PI * m_FFT_SIZE / m_GRID1_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID2_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID3_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID4_SIZE ) );
 		m_initT->SetValue( t );
-		m_initBlendState.lock()->Apply();
+		m_initPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_initPipeline->Apply();
 		m_init->Bind();
 		drawQuadInit();
 		m_init->Unbind();
@@ -1825,7 +1861,8 @@ namespace OceanLighting
 		// fft passes
 		m_fftFbo2->Bind( eFRAMEBUFFER_MODE_MANUAL );
 		m_fftxNLayers->SetValue( m_choppy ? 5 : 3 );
-		m_fftxBlendState.lock()->Apply();
+		m_fftxPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_fftxPipeline->Apply();
 
 		for ( int i = 0; i < m_PASSES; ++i )
 		{
@@ -1849,7 +1886,9 @@ namespace OceanLighting
 		}
 
 		m_fftyNLayers->SetValue( m_choppy ? 5 : 3 );
-		m_fftyBlendState.lock()->Apply();
+
+		m_fftyPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_fftyPipeline->Apply();
 
 		for ( int i = m_PASSES; i < 2 * m_PASSES; ++i )
 		{

@@ -73,11 +73,7 @@ namespace CastorCom
 		COM_PROPERTY( AntialiasedLines, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetAntialiasedLines ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetAntialiasedLines ) );
 		COM_PROPERTY( DepthBias, float, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthBias ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthBias ) );
 		COM_PROPERTY( DepthClipping, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetDepthClipping ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetDepthClipping ) );
-		COM_PROPERTY( Multisample, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetMultisample ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetMultisample ) );
 		COM_PROPERTY( Scissor, boolean, make_getter( m_state.get(), &Castor3D::RasteriserState::GetScissor ), make_putter( m_state.get(), &Castor3D::RasteriserState::SetScissor ) );
-
-		STDMETHOD( Initialise )();
-		STDMETHOD( Cleanup )();
 
 	private:
 		Castor3D::RasteriserStateSPtr m_state;

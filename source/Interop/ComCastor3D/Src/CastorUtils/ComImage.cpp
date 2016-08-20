@@ -73,7 +73,7 @@ namespace CastorCom
 			if ( !m_image )
 			{
 				hr = S_OK;
-				m_image = l_engine->GetImageCache().Add( l_name, *static_cast< CSize * >( size ), Castor::ePIXEL_FORMAT( fmt ) );
+				m_image = l_engine->GetImageCache().Add( l_name, *static_cast< CSize * >( size ), Castor::PixelFormat( fmt ) );
 			}
 			else
 			{

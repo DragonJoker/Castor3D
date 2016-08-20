@@ -86,8 +86,6 @@ namespace CastorCom
 		COM_PROPERTY_GET( DepthFar, double, make_getter( m_state.get(), &Castor3D::DepthStencilState::GetDepthFar ) );
 
 		STDMETHOD( SetDepthRange )( /* [in] */ double dnear, /* [in] */ double dfar );
-		STDMETHOD( Initialise )();
-		STDMETHOD( Cleanup )();
 
 	private:
 		Castor3D::DepthStencilStateSPtr m_state;

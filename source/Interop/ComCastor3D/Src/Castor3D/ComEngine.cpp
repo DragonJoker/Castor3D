@@ -12,12 +12,9 @@
 #undef min
 #undef abs
 
-#include <BlendStateCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <MaterialCache.hpp>
 #include <MeshCache.hpp>
 #include <PluginCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SamplerCache.hpp>
 #include <SceneCache.hpp>
 #include <WindowCache.hpp>
@@ -319,7 +316,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateCache().Add( FromBstr( name ) ) );
+					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetRenderSystem()->CreateBlendState() );
 				}
 			}
 		}
@@ -343,7 +340,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateCache().Add( FromBstr( name ) ) );
+					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetRenderSystem()->CreateDepthStencilState() );
 				}
 			}
 		}
@@ -367,7 +364,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateCache().Add( FromBstr( name ) ) );
+					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRenderSystem()->CreateRasteriserState() );
 				}
 			}
 		}
