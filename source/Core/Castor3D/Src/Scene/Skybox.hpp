@@ -108,14 +108,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the skybox.
-		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_camera	The scene's camera.
 		 *\~french
 		 *\brief		Dessine la skybox.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_camera	La caméra de la scène.
 		 */
-		C3D_API void Render( Camera const & p_camera, Pipeline & p_pipeline );
+		C3D_API void Render( Camera const & p_camera );
 		/**
 		 *\~english
 		 *\return		The skybox's texture.
@@ -131,17 +129,15 @@ namespace Castor3D
 		bool DoInitialiseShader();
 		bool DoInitialiseVertexBuffer();
 		bool DoInitialiseTexture();
+		bool DoInitialisePipeline();
 
 	private:
 		//!\~english	The depth stencil state used while rendering the skybox.
 		//!\~french		L'état de profondeur et stencil utilisé pour le rendu de la skybox.
 		DepthStencilStateUPtr m_dss;
-		//!\~english	The rasteriser state used while rendering the skybox.
-		//!\~french		L'état de rastérisation utilisé pour le rendu de la skybox.
-		RasteriserStateUPtr m_rs;
-		//!\~english	The multisample state used while rendering the skybox.
-		//!\~french		L'état de multi-échantillonnage utilisé pour le rendu de la skybox.
-		MultisampleStateUPtr m_ms;
+		//!\~english	The pipeline used while rendering the skybox.
+		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
+		PipelineSPtr m_pipeline;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;

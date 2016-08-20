@@ -447,6 +447,13 @@ namespace GlRender
 		return std::make_unique< GlMultisampleState >( this, GetOpenGl() );
 	}
 
+	PipelineUPtr GlRenderSystem::CreatePipeline( RasteriserStateUPtr && p_rsState
+												 , BlendStateUPtr && p_bdState
+												 , MultisampleStateUPtr && p_msState )
+	{
+		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
+	}
+
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
 		return std::make_shared< GlFrameVariableBuffer >( GetOpenGl(), p_name, *this );

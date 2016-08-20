@@ -225,6 +225,11 @@ namespace Bloom
 
 		m_linearSampler = DoCreateSampler( true );
 		m_nearestSampler = DoCreateSampler( false );
+
+		auto l_rsstate = p_renderSystem.CreateRasteriserState();
+		auto l_blstate = p_renderSystem.CreateBlendState();
+		auto l_msstate = p_renderSystem.CreateMultisampleState();
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
 	}
 
 	BloomPostEffect::~BloomPostEffect()
@@ -453,10 +458,10 @@ namespace Bloom
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
-				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
 				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
 				m_viewport.Update();
-				l_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
+				m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+				m_pipeline->Apply();
 
 				auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
@@ -466,7 +471,7 @@ namespace Bloom
 
 				if ( l_matrices )
 				{
-					l_pipeline.ApplyProjection( *l_matrices );
+					m_pipeline->ApplyProjection( *l_matrices );
 				}
 
 				l_program->Bind();

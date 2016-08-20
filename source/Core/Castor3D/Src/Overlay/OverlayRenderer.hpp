@@ -124,6 +124,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The overlays rendering pipeline.
+		 *\~french
+		 *\return		Le pipeline de rendu des incrustations.
+		 */
+		Pipeline const & GetPipeline()const
+		{
+			return *m_pipeline;
+		}
+		/**
+		 *\~english
+		 *\return		The overlays rendering pipeline.
+		 *\~french
+		 *\return		Le pipeline de rendu des incrustations.
+		 */
+		Pipeline & GetPipeline()
+		{
+			return *m_pipeline;
+		}
+		/**
+		 *\~english
 		 *\return		\p true if the render size has changed.
 		 *\~french
 		 *\return		\p true si la taille de rendu a changé.
@@ -343,18 +363,12 @@ namespace Castor3D
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
-		//!\~english	The overlays blend state.
-		//!\~french		L'état de mélange pour les incrustations.
-		BlendStateUPtr m_blendState;
-		//!\~english	The overlays multisample state.
-		//!\~french		L'état de multi-échantillonnage pour les incrustations.
-		MultisampleStateUPtr m_multisampleState;
+		//!\~english	The overlays rendering pipeline.
+		//!\~french		Le pipeline de rendu des incrustations.
+		PipelineSPtr m_pipeline;
 		//!\~english	The overlays depth stencil state.
 		//!\~french		L'état de profoundeur et stencil pour les incrustations.
 		DepthStencilStateUPtr m_depthStencilState;
-		//!\~english	The overlays rasteriser state.
-		//!\~french		L'état de rastérisation pour les incrustations.
-		RasteriserStateUPtr m_rasteriserState;
 	};
 }
 

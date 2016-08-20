@@ -60,13 +60,6 @@ namespace Castor3D
 		C3D_API virtual ~RasteriserState();
 		/**
 		 *\~english
-		 *\brief		Applies the states
-		 *\~french
-		 *\brief		Applique les états
-		 */
-		C3D_API virtual bool Apply()const = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves the fill mode
 		 *\return		The value
 		 *\~french

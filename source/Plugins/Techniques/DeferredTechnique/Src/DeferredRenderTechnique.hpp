@@ -204,12 +204,9 @@ namespace Deferred
 		//!\~english	The depth stencil state used by the lights pass.
 		//!\~french		Le DepthStencilState utilisé par la passe lumières.
 		Castor3D::DepthStencilStateUPtr m_lightPassDsState;
-		//!\~english	The blend state used by the lights pass.
-		//!\~french		Le BlendState utilisé par la passe lumières.
-		Castor3D::BlendStateUPtr m_lightPassBlendState;
-		//!\~english	The multisample state.
-		//!\~french		L'état de multi-échantillonnage.
-		Castor3D::MultisampleStateUPtr m_multisampleState;
+		//!\~english	The pipeline used by the light pass.
+		//!\~french		Le pipeline utilisé par la passe lumières.
+		Castor3D::PipelineSPtr m_pipeline;
 	};
 }
 

@@ -9,6 +9,7 @@
 
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 #include <Render/RenderSystem.hpp>
@@ -21,6 +22,7 @@
 #include <State/DepthStencilState.hpp>
 
 #include <Graphics/FontCache.hpp>
+#include <Graphics/Image.hpp>
 #include <Log/Logger.hpp>
 
 using namespace Castor;
@@ -84,6 +86,25 @@ namespace Direct
 	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
+
+#if DEBUG_BUFFERS
+
+		uint8_t * l_buffer = m_frameBuffer.m_colourTexture->Lock( 0u, eACCESS_TYPE_READ );
+
+		if ( l_buffer )
+		{
+			Path l_name{ Engine::GetEngineDirectory() };
+			l_name /= cuT( "ColourBuffer_Technique_Unbind.png" );
+			Image::BinaryWriter()( Image{ cuT( "tmp" )
+										  , m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
+										  , PixelFormat::R8G8B8
+										  , l_buffer
+										  , m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
+								   , l_name );
+			m_frameBuffer.m_colourTexture->Unlock( 0u, false );
+		}
+
+#endif
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )

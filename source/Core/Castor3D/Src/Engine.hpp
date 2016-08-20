@@ -300,18 +300,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the default BlendState (no blend)
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le BlendState par défault (pas de blend)
-		 *\return		La valeur
-		 */
-		inline BlendStateSPtr GetDefaultBlendState()const
-		{
-			return m_defaultBlendState;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the default Sampler
 		 *\return		The Sampler
 		 *\~french
@@ -556,9 +544,6 @@ namespace Castor3D
 		//!\~english	The need for per object lighting.
 		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
-		//!\~english	Default blend states (no blend).
-		//!\~french		Etats de blend par défaut (pas de blend).
-		BlendStateSPtr m_defaultBlendState;
 		//!\~english	Default sampler.
 		//!\~french		Le sampler par défaut.
 		SamplerSPtr m_defaultSampler;

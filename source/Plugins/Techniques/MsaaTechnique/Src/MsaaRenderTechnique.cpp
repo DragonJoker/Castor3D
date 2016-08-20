@@ -21,7 +21,6 @@
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
 #include <State/DepthStencilState.hpp>
-#include <State/RasteriserState.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Graphics/FontCache.hpp>
@@ -57,15 +56,6 @@ namespace Msaa
 		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
-
-		if ( m_samplesCount > 1 )
-		{
-			m_multisampleState->SetMultisample( true );
-		}
-		else
-		{
-			m_samplesCount = 0;
-		}
 
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}

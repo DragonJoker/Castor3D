@@ -283,26 +283,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The RasteriserState.
-		 *\~french
-		 *\return		Le RasteriserState.
-		 */
-		inline RasteriserState const & GetRasteriserState()const
-		{
-			return *m_rasteriserState;
-		}
-		/**
-		 *\~english
-		 *\return		The MultisampleState.
-		 *\~french
-		 *\return		Le MultisampleState.
-		 */
-		inline MultisampleState const & GetMultisampleState()const
-		{
-			return *m_multisampleState;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the RenderTechnique
 		 *\return		The RenderTechnique
 		 *\~french
@@ -682,12 +662,6 @@ namespace Castor3D
 		//!\~english	Depth and stencil buffers states.
 		//!\~french		Etats des buffers de profondeur et stencil.
 		DepthStencilStateUPtr m_depthStencilState;
-		//!\~english	Rasteriser states.
-		//!\~french		Etats du rasteriser.
-		RasteriserStateUPtr m_rasteriserState;
-		//!\~english	Multisample states.
-		//!\~french		Etats de multi-échantillonnage.
-		MultisampleStateUPtr m_multisampleState;
 		//!\~english	The post effects.
 		//!\~french		Les effets post rendu.
 		PostEffectPtrArray m_postEffects;

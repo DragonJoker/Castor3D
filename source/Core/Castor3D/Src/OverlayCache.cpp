@@ -166,7 +166,7 @@ namespace Castor3D
 			m_viewport.UpdateRight( real( p_size.width() ) );
 			m_viewport.UpdateBottom( real( p_size.height() ) );
 			m_viewport.Update();
-			l_context->GetPipeline().SetProjectionMatrix( m_viewport.GetProjection() );
+			m_pRenderer->GetPipeline().SetProjectionMatrix( m_viewport.GetProjection() );
 			m_pRenderer->BeginRender( p_size );
 
 			for ( auto l_category : m_overlays )

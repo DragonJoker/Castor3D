@@ -251,6 +251,23 @@ namespace Castor3D
 		C3D_API virtual MultisampleStateUPtr CreateMultisampleState() = 0;
 		/**
 		 *\~english
+		 *\brief		Create a pipeline.
+		 *\param[in]	p_rsState	The rateriser state.
+		 *\param[in]	p_bdState	The blend state.
+		 *\param[in]	p_msState	The multisample state.
+		 *\return		The pipeline.
+		 *\~french
+		 *\brief		Crée un pipeline.
+		 *\param[in]	p_rsState	L'état de rastériseur.
+		 *\param[in]	p_bdState	L'état de mélange.
+		 *\param[in]	p_msState	L'état de multi-échantillonnage.
+		 *\return		Le pipeline.
+		 */
+		C3D_API virtual PipelineUPtr CreatePipeline( RasteriserStateUPtr && p_rsState
+													 , BlendStateUPtr && p_bdState
+													 , MultisampleStateUPtr && p_msState ) = 0;
+		/**
+		 *\~english
 		 *\brief		Create a sampler
 		 *\param[in]	p_name	The sampler name
 		 *\return		The object

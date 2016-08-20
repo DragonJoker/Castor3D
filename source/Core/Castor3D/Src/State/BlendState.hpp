@@ -61,13 +61,6 @@ namespace Castor3D
 		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
-		 *\brief		Applies the states
-		 *\~french
-		 *\brief		Applique les états
-		 */
-		C3D_API virtual bool Apply()const = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves the independant blending activation status
 		 *\return		The value
 		 *\~french

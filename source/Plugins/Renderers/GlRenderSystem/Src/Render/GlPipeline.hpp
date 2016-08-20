@@ -46,14 +46,23 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_gl		The OpenGL api.
-		 *\param[in]	p_pipeline	The parent pipeline.
+		 *\param[in]	p_gl			The OpenGL api.
+		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	p_rsState		The rateriser state.
+		 *\param[in]	p_bdState		The blend state.
+		 *\param[in]	p_msState		The multisample state.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_gl		L'api OpenGL.
-		 *\param[in]	p_pipeline	Le pipeline parent.
+		 *\param[in]	p_gl			L'api OpenGL.
+		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	p_rsState		L'état de rastériseur.
+		 *\param[in]	p_bdState		L'état de mélange.
+		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 */
-		GlPipeline( OpenGl & p_gl, Castor3D::Context & p_context );
+		GlPipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem
+					, Castor3D::RasteriserStateUPtr && p_rsState
+					, Castor3D::BlendStateUPtr && p_bdState
+					, Castor3D::MultisampleStateUPtr && p_msState );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,6 +70,13 @@ namespace GlRender
 		 *\brief		Destructeur.
 		 */
 		virtual ~GlPipeline();
+		/**
+		 *\~english
+		 *\brief		Applies the pipeline.
+		 *\~french
+		 *\brief		Applique le pipeline.
+		 */
+		void Apply()const override;
 		/**
 		 *\copydoc		Castor3D::Context::ApplyViewport
 		 */

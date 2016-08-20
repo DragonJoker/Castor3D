@@ -84,8 +84,6 @@ namespace Castor3D
 	{
 		m_depthStencilState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
 		m_depthStencilState->SetDepthTest( false );
-		m_rasteriserState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		m_multisampleState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
 		s_nbRenderWindows++;
 	}
 
@@ -427,10 +425,7 @@ namespace Castor3D
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 			m_backBuffers->Clear();
-			GetEngine()->GetDefaultBlendState()->Apply();
 			m_depthStencilState->Apply();
-			m_rasteriserState->Apply();
-			m_multisampleState->Apply();
 			m_context->RenderTexture( m_size, *l_texture );
 			m_backBuffers->Unbind();
 		}

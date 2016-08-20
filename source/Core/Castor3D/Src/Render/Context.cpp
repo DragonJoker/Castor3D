@@ -46,6 +46,11 @@ namespace Castor3D
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex )[i++ * m_declaration.GetStride()] );
 		}
+
+		auto l_rsState = p_renderSystem.CreateRasteriserState();
+		auto l_bdState = p_renderSystem.CreateBlendState();
+		auto l_msState = p_renderSystem.CreateMultisampleState();
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsState ), std::move( l_bdState ), std::move( l_msState ) );
 	}
 
 	Context::~Context()
@@ -167,15 +172,16 @@ namespace Castor3D
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
-		GetPipeline().SetProjectionMatrix( m_viewport.GetProjection() );
-
+		m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		
 		if ( p_program.GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
+			m_pipeline->Apply();
 			FrameVariableBufferSPtr l_matrices = p_program.FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 			if ( l_matrices )
 			{
-				GetPipeline().ApplyProjection( *l_matrices );
+				m_pipeline->ApplyProjection( *l_matrices );
 			}
 
 			p_program.Bind();

@@ -74,6 +74,13 @@ namespace TestRender
 		return std::make_unique< TestMultisampleState >( this );
 	}
 
+	PipelineSPtr TestRenderSystem::CreatePipeline( RasteriserStateUPtr && p_rsState
+												   , BlendStateUPtr && p_bdState
+												   , MultisampleStateUPtr && p_msState )
+	{
+		return std::make_shared< TestPipeline >( *this, std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
+	}
+
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )
 	{
 		return std::make_shared< TestSampler >( this, p_name );

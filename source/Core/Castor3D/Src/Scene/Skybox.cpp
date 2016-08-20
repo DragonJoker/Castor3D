@@ -121,12 +121,6 @@ namespace Castor3D
 			m_sampler = l_sampler;
 		}
 
-		m_dss = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
-		m_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
-		m_rs = GetEngine()->GetRenderSystem()->CreateRasteriserState();
-		m_rs->SetCulledFaces( eFACE_FRONT );
-		m_ms = GetEngine()->GetRenderSystem()->CreateMultisampleState();
-
 		m_bufferVertex =
 		{
 			-1.0_r, 1.0_r, -1.0_r,
@@ -193,12 +187,14 @@ namespace Castor3D
 		REQUIRE( m_texture );
 		return DoInitialiseShader()
 			   && DoInitialiseTexture()
-			   && DoInitialiseVertexBuffer();
+			   && DoInitialiseVertexBuffer()
+			   && DoInitialisePipeline();
 	}
 
 	void Skybox::Cleanup()
 	{
 		REQUIRE( m_texture );
+		m_pipeline.reset();
 		m_texture->Cleanup();
 		m_texture->Destroy();
 		m_texture.reset();
@@ -209,7 +205,7 @@ namespace Castor3D
 		m_vertexBuffer.reset();
 	}
 
-	void Skybox::Render( Camera const & p_camera, Pipeline & p_pipeline )
+	void Skybox::Render( Camera const & p_camera )
 	{
 		REQUIRE( m_texture );
 		REQUIRE( !m_program.expired() );
@@ -220,11 +216,12 @@ namespace Castor3D
 		{
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
-			p_pipeline.SetModelMatrix( m_mtxModel );
-			p_pipeline.ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_pipeline->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+			m_pipeline->SetModelMatrix( m_mtxModel );
+			m_pipeline->SetViewMatrix( p_camera.GetView() );
+			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_pipeline->Apply();
 			m_dss->Apply();
-			m_rs->Apply();
-			m_ms->Apply();
 			l_program->Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
@@ -305,5 +302,20 @@ namespace Castor3D
 	{
 		return m_texture->Create()
 			   && m_texture->Initialise();
+	}
+
+	bool Skybox::DoInitialisePipeline()
+	{
+		m_dss = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
+		m_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+
+		auto l_rsstate = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		l_rsstate->SetCulledFaces( eFACE_FRONT );
+
+		auto l_blstate = GetEngine()->GetRenderSystem()->CreateBlendState();
+		auto l_msstate = GetEngine()->GetRenderSystem()->CreateMultisampleState();
+
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_rsstate ), std::move(  l_blstate ), std::move( l_msstate ) );
+		return true;
 	}
 }

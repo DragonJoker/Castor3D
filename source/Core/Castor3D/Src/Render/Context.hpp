@@ -197,26 +197,6 @@ namespace Castor3D
 		{
 			return *m_window;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline
-		 *\~french
-		 *\brief		Récupère le pipeline
-		 */
-		inline Pipeline const & GetPipeline()const
-		{
-			return *m_pipeline;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline
-		 *\~french
-		 *\brief		Récupère le pipeline
-		 */
-		inline Pipeline & GetPipeline()
-		{
-			return *m_pipeline;
-		}
 
 	protected:
 		/**
@@ -333,8 +313,8 @@ namespace Castor3D
 		//!\~english	The active query index.
 		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;
-		//!\~english	The matrix pipeline.
-		//!\~french		Le pipeline contenant les matrices.
+		//!\~english	The pipeline used for render to texture.
+		//!\~french		Le pipeline utilisé pour le rendu en texture.
 		PipelineUPtr m_pipeline;
 	};
 }

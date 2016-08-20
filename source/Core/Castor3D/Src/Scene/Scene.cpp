@@ -579,7 +579,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::RenderBackground( Size const & p_size, Pipeline & p_pipeline )
+	void Scene::RenderBackground( Size const & p_size )
 	{
 		if ( m_backgroundImage )
 		{
@@ -592,11 +592,11 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera, Pipeline & p_pipeline )
+	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera )
 	{
 		if ( m_skybox )
 		{
-			m_skybox->Render( p_camera, p_pipeline );
+			m_skybox->Render( p_camera );
 		}
 	}
 

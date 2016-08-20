@@ -42,25 +42,14 @@ namespace Castor3D
 
 	bool Pass::TextWriter::operator()( Pass const & p_pass, TextFile & p_file )
 	{
-		static const String StrBlendFactors[uint32_t( BlendOperand::Count )] =
+		static const String StrBlendModes[uint32_t( BlendMode::Count )] =
 		{
-			cuT( "zero" ),
-			cuT( "one" ),
-			cuT( "src_colour" ),
-			cuT( "inv_src_colour" ),
-			cuT( "dst_colour" ),
-			cuT( "inv_dst_colour" ),
-			cuT( "src_alpha" ),
-			cuT( "inv_src_alpha" ),
-			cuT( "dst_alpha" ),
-			cuT( "inv_dst_alpha" ),
-			cuT( "constant" ),
-			cuT( "inv_constant" ),
-			cuT( "src_alpha_sat" ),
-			cuT( "src1_colour" ),
-			cuT( "inv_src1_colour" ),
-			cuT( "src1_alpha" ),
-			cuT( "inv_src1_alpha" ),
+			cuT( "no_blend" ),
+			cuT( "additive" ),
+			cuT( "multiplicative" ),
+			cuT( "interpolative" ),
+			cuT( "a_buffer" ),
+			cuT( "depth_peeling" ),
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Pass " ) );
@@ -117,10 +106,16 @@ namespace Castor3D
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass sidedness" );
 		}
 
-		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != BlendOperand::One || p_pass.GetBlendState()->GetAlphaDstBlend() != BlendOperand::Zero ) )
+		if ( l_return && ( p_pass.GetColourBlendMode() != BlendMode::Interpolative ) )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tblend_func " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaSrcBlend() )] + cuT( " " ) + StrBlendFactors[uint32_t( p_pass.GetBlendState()->GetAlphaDstBlend() )] + cuT( "\n" ) ) > 0;
-			Castor::TextWriter< Pass >::CheckError( l_return, "Pass blend function" );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetColourBlendMode() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass colour blend mode" );
+		}
+
+		if ( l_return && ( p_pass.GetAlphaBlendMode() != BlendMode::Interpolative ) )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend_mode " ) + StrBlendModes[uint32_t( p_pass.GetAlphaBlendMode() )] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Pass >::CheckError( l_return, "Pass alpha blend mode" );
 		}
 
 		if ( l_return )
@@ -166,7 +161,6 @@ namespace Castor3D
 		, m_clrSpecular{ Colour::from_rgba( 0xFFFFFFFF ) }
 		, m_clrEmissive{ Colour::from_rgba( 0x000000FF ) }
 		, m_fAlpha{ 1.0f }
-		, m_pBlendState{ p_engine.GetRenderSystem()->CreateBlendState() }
 		, m_textureFlags{ 0 }
 		, m_bAutomaticShader{ true }
 		, m_alphaBlendMode{ BlendMode::Interpolative }
@@ -183,64 +177,57 @@ namespace Castor3D
 	void Pass::Initialise()
 	{
 		PrepareTextures();
-		bool l_bHasAlpha = m_fAlpha < 1 || GetTextureUnit( TextureChannel::Opacity );
+		bool l_hasAlpha = m_fAlpha < 1 || GetTextureUnit( TextureChannel::Opacity );
 
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			l_unit->Initialise();
 		}
 
-		if ( l_bHasAlpha && !m_pBlendState->IsBlendEnabled() )
+		if ( l_hasAlpha )
 		{
-			m_pBlendState->EnableBlend( true );
-
 			if ( GetEngine()->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
 			{
-				m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-				m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-				m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-				m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				m_alphaBlendMode = BlendMode::Interpolative;
 			}
-			else
-			{
-				switch ( m_alphaBlendMode )
-				{
-				case BlendMode::NoBlend:
-					m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
-					m_pBlendState->SetAlphaDstBlend( BlendOperand::Zero );
-					m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
-					m_pBlendState->SetRgbDstBlend( BlendOperand::Zero );
-					break;
 
-				case BlendMode::Additive:
-					m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
-					m_pBlendState->SetAlphaDstBlend( BlendOperand::One );
-					m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
-					m_pBlendState->SetRgbDstBlend( BlendOperand::One );
-					break;
+			//switch ( m_alphaBlendMode )
+			//{
+			//case BlendMode::NoBlend:
+			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
+			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::Zero );
+			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
+			//	m_pBlendState->SetRgbDstBlend( BlendOperand::Zero );
+			//	break;
 
-				case BlendMode::Multiplicative:
-					m_pBlendState->SetAlphaSrcBlend( BlendOperand::Zero );
-					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-					m_pBlendState->SetRgbSrcBlend( BlendOperand::Zero );
-					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-					break;
+			//case BlendMode::Additive:
+			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
+			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::One );
+			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
+			//	m_pBlendState->SetRgbDstBlend( BlendOperand::One );
+			//	break;
 
-				case BlendMode::Interpolative:
-					m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-					m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-					break;
+			//case BlendMode::Multiplicative:
+			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::Zero );
+			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::Zero );
+			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+			//	break;
 
-				default:
-					m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-					m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-					m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-					m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-					break;
-				}
-			}
+			//case BlendMode::Interpolative:
+			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+			//	break;
+
+			//default:
+			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
+			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+			//	break;
+			//}
 		}
 	}
 
@@ -268,7 +255,6 @@ namespace Castor3D
 
 	void Pass::Render()
 	{
-		m_pBlendState->Apply();
 		DoRender();
 	}
 
@@ -335,8 +321,8 @@ namespace Castor3D
 
 	bool Pass::HasAlphaBlending()const
 	{
-		return m_pBlendState->IsBlendEnabled()
-			   || CheckFlag( m_textureFlags, TextureChannel::Opacity )
+		return /*m_pBlendState->IsBlendEnabled()
+			   || */CheckFlag( m_textureFlags, TextureChannel::Opacity )
 			   || m_fAlpha < 1.0f;
 	}
 

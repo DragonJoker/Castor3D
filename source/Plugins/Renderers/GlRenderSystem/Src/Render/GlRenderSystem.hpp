@@ -67,6 +67,12 @@ namespace GlRender
 		 */
 		Castor3D::MultisampleStateUPtr CreateMultisampleState()override;
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
+		 */
+		Castor3D::PipelineUPtr CreatePipeline( Castor3D::RasteriserStateUPtr && p_rsState
+											   , Castor3D::BlendStateUPtr && p_bdState
+											   , Castor3D::MultisampleStateUPtr && p_msState )override;
+		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
 		Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name )override;

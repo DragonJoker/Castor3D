@@ -340,26 +340,24 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders opaque render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
-		 *\param[in]	p_pipeline	The rendering pipeline.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu opaques.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline );
+		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders transparent render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\param[in]	p_pipeline	The rendering pipeline.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu transparents.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline, Camera const & p_camera );
+		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 
 	private:
 		/**
@@ -495,15 +493,15 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english	The multisample state.
-		//!\~french		L'état de multi-échantillonnage.
-		MultisampleStateUPtr m_multisampleState;
-		//!\~english	The rasteriser state to cull front faces.
-		//!\~french		L'état de rastérisation pour masquer les faces avant.
-		RasteriserStateUPtr m_frontRasteriserState;
-		//!\~english	The rasteriser state to cull back faces.
-		//!\~french		L'état de rastérisation pour masquer les faces arrière.
-		RasteriserStateUPtr m_backRasteriserState;
+		//!\~english	The pipeline used to render opaque nodes.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les noeuds opaques.
+		PipelineSPtr m_opaquePipeline;
+		//!\~english	The pipeline used to render transparent nodes' back faces.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
+		PipelineSPtr m_frontTransparentPipeline;
+		//!\~english	The pipeline used to render transparent nodes' front faces.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces avant des noeuds transparents.
+		PipelineSPtr m_backTransparentPipeline;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

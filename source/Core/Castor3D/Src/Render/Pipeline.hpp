@@ -25,6 +25,10 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include "State/BlendState.hpp"
+#include "State/MultisampleState.hpp"
+#include "State/RasteriserState.hpp"
+
 #include <Math/SquareMatrix.hpp>
 #include <Design/OwnedBy.hpp>
 
@@ -45,11 +49,8 @@ namespace Castor3D
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
 	class Pipeline
-		: public Castor::OwnedBy< Context >
+		: public Castor::OwnedBy< RenderSystem >
 	{
-	protected:
-		friend class IPipelineImpl;
-
 	private:
 		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
 		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
@@ -58,12 +59,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The parent context.
+		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	p_rsState		The rateriser state.
+		 *\param[in]	p_blState		The blend state.
+		 *\param[in]	p_msState		The multisample state.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le contexte parent.
+		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	p_rsState		L'état de rastériseur.
+		 *\param[in]	p_blState		L'état de mélange.
+		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 */
-		C3D_API explicit Pipeline( Context & p_context );
+		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
+								   , RasteriserStateUPtr && p_rsState
+								   , BlendStateUPtr && p_blState
+								   , MultisampleStateUPtr && p_msState );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -71,6 +81,13 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Pipeline();
+		/**
+		 *\~english
+		 *\brief		Applies the pipeline.
+		 *\~french
+		 *\brief		Applique le pipeline.
+		 */
+		C3D_API virtual void Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point.
@@ -288,6 +305,15 @@ namespace Castor3D
 		//!\~english	The texture matrices.
 		//!\~french		Les matrices de texture.
 		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		//!\~english	The rateriser state.
+		//!\~french		L'état de rastériseur.
+		RasteriserStateUPtr m_rsState;
+		//!\~english	The blend state.
+		//!\~french		L'état de mélange.
+		BlendStateUPtr m_blState;
+		//!\~english	The muultisampling state.
+		//!\~french		L'état de multi-échantillonnage.
+		MultisampleStateUPtr m_msState;
 	};
 }
 

@@ -264,7 +264,6 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 			auto l_return = m_pTexture->Bind( m_index );
 
 			if ( l_return && m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::Buffer )
@@ -277,8 +276,6 @@ namespace Castor3D
 			{
 				l_return = GetSampler()->Bind( m_index );
 			}
-
-			l_pipeline.SetTextureMatrix( m_index, m_mtxTransformations );
 		}
 	}
 

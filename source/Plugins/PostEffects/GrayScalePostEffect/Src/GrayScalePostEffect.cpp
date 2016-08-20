@@ -108,8 +108,11 @@ namespace GrayScale
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 
-		m_rasteriser = p_renderSystem.CreateRasteriserState();
-		m_rasteriser->SetCulledFaces( eFACE_BACK );
+		auto l_rsstate = p_renderSystem.CreateRasteriserState();
+		l_rsstate->SetCulledFaces( eFACE_BACK );
+		auto l_blstate = p_renderSystem.CreateBlendState();
+		auto l_msstate = p_renderSystem.CreateMultisampleState();
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
 	}
 
 	GrayScalePostEffect::~GrayScalePostEffect()
@@ -157,7 +160,7 @@ namespace GrayScale
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
-			m_rasteriser->Apply();
+			m_pipeline->Apply();
 			bool l_return = m_surface.m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 

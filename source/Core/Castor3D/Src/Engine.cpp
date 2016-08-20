@@ -22,7 +22,6 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/BlendState.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -185,7 +184,6 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			m_defaultBlendState = m_renderSystem->CreateBlendState();
 			m_defaultSampler = m_samplerCache->Add( cuT( "Default" ) );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
@@ -265,7 +263,6 @@ namespace Castor3D
 			m_imageCache.clear();
 			m_shaderCache->Clear();
 			m_techniqueCache->Clear();
-			m_defaultBlendState.reset();
 		}
 	}
 

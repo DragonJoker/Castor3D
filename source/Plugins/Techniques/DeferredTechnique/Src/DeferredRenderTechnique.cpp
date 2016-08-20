@@ -108,9 +108,11 @@ namespace Deferred
 		m_lightPassDsState->SetDepthTest( true );
 		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
 
-		m_lightPassBlendState = p_renderSystem.CreateBlendState();
+		auto l_rsstate = p_renderSystem.CreateRasteriserState();
+		auto l_blstate = p_renderSystem.CreateBlendState();
+		auto l_msstate = p_renderSystem.CreateMultisampleState();
 
-		m_multisampleState = p_renderSystem.CreateMultisampleState();
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_rsstate ), std::move( l_blstate ), std::move( l_msstate ) );
 
 		m_declaration = BufferDeclaration(
 		{
@@ -285,9 +287,8 @@ namespace Deferred
 
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
+		// Render the geometry pass.
 		m_renderTarget.GetDepthStencilState()->Apply();
-		//m_geometryPassDsState->Apply();
-		m_multisampleState->Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
@@ -318,26 +319,22 @@ namespace Deferred
 
 		if ( m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			Pipeline & l_pipeline = m_renderSystem.GetCurrentContext()->GetPipeline();
-
 			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 
 			m_renderTarget.GetDepthStencilState()->Apply();
-			m_renderTarget.GetRasteriserState()->Apply();
-			m_multisampleState->Apply();
-			m_lightPassBlendState->Apply();
+			m_pipeline->Apply();
 
 			m_viewport.Resize( m_size );
 			m_viewport.Update();
-			l_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
+			m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
 
 			if ( m_pShaderCamera )
 			{
 				bool l_return = true;
 				//Point3r l_position = m_renderTarget.GetCamera()->GetParent()->GetDerivedPosition();
 				//m_pShaderCamera->SetValue( l_position );
-				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+				m_pipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
 				p_scene.GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
 				GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( l_sceneBuffer );
