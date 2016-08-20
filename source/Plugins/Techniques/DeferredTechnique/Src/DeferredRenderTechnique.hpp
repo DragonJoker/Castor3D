@@ -207,6 +207,9 @@ namespace Deferred
 		//!\~english	The blend state used by the lights pass.
 		//!\~french		Le BlendState utilisé par la passe lumières.
 		Castor3D::BlendStateUPtr m_lightPassBlendState;
+		//!\~english	The multisample state.
+		//!\~french		L'état de multi-échantillonnage.
+		Castor3D::MultisampleStateUPtr m_multisampleState;
 	};
 }
 

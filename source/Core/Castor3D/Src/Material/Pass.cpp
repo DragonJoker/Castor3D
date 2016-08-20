@@ -196,7 +196,6 @@ namespace Castor3D
 
 			if ( GetEngine()->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
 			{
-				m_pBlendState->EnableAlphaToCoverage( true );
 				m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
 				m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
 				m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );

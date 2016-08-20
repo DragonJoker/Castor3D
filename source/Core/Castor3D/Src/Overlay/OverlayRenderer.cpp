@@ -23,6 +23,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -146,12 +147,14 @@ namespace Castor3D
 		// Create one text overlays buffer
 		DoCreateTextGeometryBuffers();
 		m_blendState = GetRenderSystem()->CreateBlendState();
-		m_blendState->EnableAlphaToCoverage( false );
 		m_blendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
 		m_blendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
 		m_blendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
 		m_blendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
 		m_blendState->EnableBlend( true );
+
+		m_multisampleState = GetRenderSystem()->CreateMultisampleState();
+		m_multisampleState->EnableAlphaToCoverage( false );
 
 		m_depthStencilState = GetRenderSystem()->CreateDepthStencilState();
 		m_depthStencilState->SetDepthTest( false );
@@ -163,6 +166,7 @@ namespace Castor3D
 	void OverlayRenderer::Cleanup()
 	{
 		m_blendState.reset();
+		m_multisampleState.reset();
 		m_depthStencilState.reset();
 		m_rasteriserState.reset();
 
@@ -314,6 +318,7 @@ namespace Castor3D
 		}
 
 		m_blendState->Apply();
+		m_multisampleState->Apply();
 		m_depthStencilState->Apply();
 		m_rasteriserState->Apply();
 	}

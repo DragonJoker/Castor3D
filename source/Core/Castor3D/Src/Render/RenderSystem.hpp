@@ -242,6 +242,15 @@ namespace Castor3D
 		C3D_API virtual BlendStateUPtr CreateBlendState() = 0;
 		/**
 		 *\~english
+		 *\brief		Create a multisample states object.
+		 *\return		The object.
+		 *\~french
+		 *\brief		Crée un objet d'états de multi-échantillonage.
+		 *\return		L'objet.
+		 */
+		C3D_API virtual MultisampleStateUPtr CreateMultisampleState() = 0;
+		/**
+		 *\~english
 		 *\brief		Create a sampler
 		 *\param[in]	p_name	The sampler name
 		 *\return		The object

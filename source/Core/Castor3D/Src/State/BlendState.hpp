@@ -68,30 +68,6 @@ namespace Castor3D
 		C3D_API virtual bool Apply()const = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the alpha to coverage activation status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut d'activation de l'alpha to coverage
-		 *\return		La valeur
-		 */
-		inline bool IsAlphaToCoverageEnabled()const
-		{
-			return m_bEnableAlphaToCoverage;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the alpha to coverage activation status
-		 *\param[in]	p_enable	The new value
-		 *\~french
-		 *\brief		Définit le statut d'activation de l'alpha to coverage
-		 *\param[in]	p_enable	La nouvelle valeur
-		 */
-		inline void EnableAlphaToCoverage( bool p_enable )
-		{
-			m_bEnableAlphaToCoverage = p_enable;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the independant blending activation status
 		 *\return		The value
 		 *\~french
@@ -137,30 +113,6 @@ namespace Castor3D
 		inline void SetBlendFactors( const Castor::Colour & p_clFactors )
 		{
 			m_blendFactors = p_clFactors;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the sample coverage mask
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le masque de couverture de samples
-		 *\return		La valeur
-		 */
-		inline uint32_t GetSampleCoverageMask()const
-		{
-			return m_uiSampleMask;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the sample coverage mask
-		 *\param[in]	p_uiMask	The new value
-		 *\~french
-		 *\brief		Définit le masque de couverture de samples
-		 *\param[in]	p_uiMask	La nouvelle valeur
-		 */
-		inline void SetSampleCoverageMask( uint32_t p_uiMask )
-		{
-			m_uiSampleMask = p_uiMask;
 		}
 		/**
 		 *\~english
@@ -464,18 +416,12 @@ namespace Castor3D
 		};
 
 	protected:
-		//!\~english 	Tells if the alpha to coverage is enabled.
-		//!\~french		Dit si l'alpha to coverage est activé.
-		bool m_bEnableAlphaToCoverage{ false };
 		//!\~english	Tells if the independant blend states are activated.
 		//!\~french		Dit si les états indépendants de mélange sont activés.
 		bool m_bIndependantBlend{ false };
 		//!\~english	Le blend colour.
 		//!\~french		La couleur de mélange.
 		Castor::Colour m_blendFactors;
-		//!\~english	The sample mask.
-		//!\~french		Le masque d'échantillonage.
-		uint32_t m_uiSampleMask{ 0xFFFFFFFF };
 		//!\~english	The blend states.
 		//!\~french		Les états de mélange.
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;

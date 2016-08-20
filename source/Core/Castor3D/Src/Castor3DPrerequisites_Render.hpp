@@ -466,6 +466,7 @@ namespace Castor3D
 	class DepthStencilState;
 	class RasteriserState;
 	class BlendState;
+	class MultisampleState;
 	class ToneMapping;
 	class PostEffect;
 	struct RenderNode;
@@ -493,6 +494,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );
 	DECLARE_SMART_PTR( BlendState );
+	DECLARE_SMART_PTR( MultisampleState );
 	DECLARE_SMART_PTR( Pipeline );
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );

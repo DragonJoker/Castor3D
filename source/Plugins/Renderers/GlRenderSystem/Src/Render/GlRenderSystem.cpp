@@ -14,6 +14,7 @@
 #include "Shader/GlShaderProgram.hpp"
 #include "State/GlBlendState.hpp"
 #include "State/GlDepthStencilState.hpp"
+#include "State/GlMultisampleState.hpp"
 #include "State/GlRasteriserState.hpp"
 #include "Texture/GlDirectTextureStorage.hpp"
 #include "Texture/GlPboTextureStorage.hpp"
@@ -439,6 +440,11 @@ namespace GlRender
 	BlendStateUPtr GlRenderSystem::CreateBlendState()
 	{
 		return std::make_unique< GlBlendState >( this, GetOpenGl() );
+	}
+
+	MultisampleStateUPtr GlRenderSystem::CreateMultisampleState()
+	{
+		return std::make_unique< GlMultisampleState >( this, GetOpenGl() );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )

@@ -27,6 +27,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -191,6 +192,7 @@ namespace Castor3D
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		m_depthStencilState = GetEngine()->GetRenderSystem()->CreateDepthStencilState();
 		m_rasteriserState = GetEngine()->GetRenderSystem()->CreateRasteriserState();
+		m_multisampleState = GetEngine()->GetRenderSystem()->CreateMultisampleState();
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
@@ -438,6 +440,7 @@ namespace Castor3D
 				p_fb.m_frameBuffer->Clear();
 				m_depthStencilState->Apply();
 				m_rasteriserState->Apply();
+				m_multisampleState->Apply();
 				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
 				// We also render overlays.
 				GetEngine()->GetOverlayCache().Render( *l_scene, m_size );

@@ -32,6 +32,7 @@
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
+#include <State/MultisampleStencilState.hpp>
 #include <State/RasteriserState.hpp>
 #include <Texture/TextureLayout.hpp>
 
@@ -108,6 +109,8 @@ namespace Deferred
 		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
 
 		m_lightPassBlendState = p_renderSystem.CreateBlendState();
+
+		m_multisampleState = p_renderSystem.CreateMultisampleState();
 
 		m_declaration = BufferDeclaration(
 		{
@@ -284,12 +287,14 @@ namespace Deferred
 	{
 		m_renderTarget.GetDepthStencilState()->Apply();
 		//m_geometryPassDsState->Apply();
+		m_multisampleState->Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
 	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
 		m_geometryPassFrameBuffer->Unbind();
+		// Render the light pass.
 
 #if DEBUG_BUFFERS
 
@@ -320,6 +325,7 @@ namespace Deferred
 
 			m_renderTarget.GetDepthStencilState()->Apply();
 			m_renderTarget.GetRasteriserState()->Apply();
+			m_multisampleState->Apply();
 			m_lightPassBlendState->Apply();
 
 			m_viewport.Resize( m_size );

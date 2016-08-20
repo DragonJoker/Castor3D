@@ -17,6 +17,7 @@
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -124,6 +125,7 @@ namespace Castor3D
 		m_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
 		m_rs = GetEngine()->GetRenderSystem()->CreateRasteriserState();
 		m_rs->SetCulledFaces( eFACE_FRONT );
+		m_ms = GetEngine()->GetRenderSystem()->CreateMultisampleState();
 
 		m_bufferVertex =
 		{
@@ -222,6 +224,7 @@ namespace Castor3D
 			p_pipeline.ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
 			m_dss->Apply();
 			m_rs->Apply();
+			m_ms->Apply();
 			l_program->Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );

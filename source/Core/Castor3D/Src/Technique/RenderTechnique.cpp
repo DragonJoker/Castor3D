@@ -43,6 +43,7 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -219,6 +220,8 @@ namespace Castor3D
 		m_frontRasteriserState->SetCulledFaces( eFACE_FRONT );
 		m_backRasteriserState = p_renderSystem.CreateRasteriserState();
 		m_backRasteriserState->SetCulledFaces( eFACE_BACK );
+		m_multisampleState = p_renderSystem.CreateMultisampleState();
+		m_multisampleState->EnableAlphaToCoverage( m_multisampling );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -385,6 +388,7 @@ namespace Castor3D
 		auto & l_pipeline = m_renderSystem.GetCurrentContext()->GetPipeline();
 		p_camera.GetViewport().Resize( p_size );
 		p_camera.Render( l_pipeline );
+		m_multisampleState->Apply();
 		DoRenderOpaqueNodes( p_nodes, l_pipeline );
 		p_nodes.m_scene.RenderForeground( p_size, p_camera, l_pipeline );
 		DoRenderTransparentNodes( p_nodes, l_pipeline, p_camera );

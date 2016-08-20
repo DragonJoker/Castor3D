@@ -211,30 +211,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the multisample activation status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut d'acitvation du multisample
-		 *\return		La valeur
-		 */
-		inline bool GetMultisample()const
-		{
-			return m_bMultisampled;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the multisample activation status
-		 *\param[in]	p_enable	The new value
-		 *\~french
-		 *\brief		Définit le statut d'acitvation du multisample
-		 *\param[in]	p_enable	La nouvelle valeur
-		 */
-		inline void SetMultisample( bool p_enable )
-		{
-			m_bMultisampled = p_enable;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the scissor test activation status
 		 *\return		The value
 		 *\~french
@@ -280,9 +256,6 @@ namespace Castor3D
 		//!\~english	The depth clipping status.
 		//!\~french		Le statut de depth clipping.
 		bool m_bDepthClipping{ true };
-		//!\~english	The multisample activation status.
-		//!\~french		Le statut d'acitvation du multi-échantillonnage.
-		bool m_bMultisampled{ false };
 	};
 }
 

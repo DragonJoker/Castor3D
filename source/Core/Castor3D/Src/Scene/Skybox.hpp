@@ -139,6 +139,9 @@ namespace Castor3D
 		//!\~english	The rasteriser state used while rendering the skybox.
 		//!\~french		L'état de rastérisation utilisé pour le rendu de la skybox.
 		RasteriserStateUPtr m_rs;
+		//!\~english	The multisample state used while rendering the skybox.
+		//!\~french		L'état de multi-échantillonnage utilisé pour le rendu de la skybox.
+		MultisampleStateUPtr m_ms;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;

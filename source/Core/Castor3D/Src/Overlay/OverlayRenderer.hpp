@@ -346,6 +346,9 @@ namespace Castor3D
 		//!\~english	The overlays blend state.
 		//!\~french		L'état de mélange pour les incrustations.
 		BlendStateUPtr m_blendState;
+		//!\~english	The overlays multisample state.
+		//!\~french		L'état de multi-échantillonnage pour les incrustations.
+		MultisampleStateUPtr m_multisampleState;
 		//!\~english	The overlays depth stencil state.
 		//!\~french		L'état de profoundeur et stencil pour les incrustations.
 		DepthStencilStateUPtr m_depthStencilState;

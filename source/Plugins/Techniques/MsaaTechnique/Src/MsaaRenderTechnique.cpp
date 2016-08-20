@@ -60,8 +60,7 @@ namespace Msaa
 
 		if ( m_samplesCount > 1 )
 		{
-			m_frontRasteriserState->SetMultisample( true );
-			m_backRasteriserState->SetMultisample( true );
+			m_multisampleState->SetMultisample( true );
 		}
 		else
 		{

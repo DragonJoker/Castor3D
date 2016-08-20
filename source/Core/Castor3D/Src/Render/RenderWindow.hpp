@@ -509,6 +509,9 @@ namespace Castor3D
 		//!\~english	Rasteriser states.
 		//!\~french		Etats du rasteriser.
 		RasteriserStateUPtr m_rasteriserState;
+		//!\~english	Multisample states.
+		//!\~french		Etats de multi-échantillonnage.
+		MultisampleStateUPtr m_multisampleState;
 		//!\~english	The window's back buffers.
 		//!\~french		Les tampons de rendu de la fenêtre.
 		BackBuffersSPtr m_backBuffers;

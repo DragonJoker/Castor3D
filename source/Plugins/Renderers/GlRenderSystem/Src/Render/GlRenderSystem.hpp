@@ -63,6 +63,10 @@ namespace GlRender
 		 */
 		Castor3D::BlendStateUPtr CreateBlendState()override;
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateMultisampleState
+		 */
+		Castor3D::MultisampleStateUPtr CreateMultisampleState()override;
+		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
 		Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name )override;

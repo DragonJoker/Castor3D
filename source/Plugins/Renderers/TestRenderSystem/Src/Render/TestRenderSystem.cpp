@@ -14,6 +14,7 @@
 #include "Shader/TestShaderProgram.hpp"
 #include "State/TestBlendState.hpp"
 #include "State/TestDepthStencilState.hpp"
+#include "State/TestMultisampleState.hpp"
 #include "State/TestRasteriserState.hpp"
 #include "Texture/TestSampler.hpp"
 #include "Texture/TestTextureStorage.hpp"
@@ -66,6 +67,11 @@ namespace TestRender
 	BlendStateUPtr TestRenderSystem::CreateBlendState()
 	{
 		return std::make_unique< TestBlendState >( this );
+	}
+
+	MultisampleStateUPtr TestRenderSystem::CreateMultisampleState()
+	{
+		return std::make_unique< TestMultisampleState >( this );
 	}
 
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )

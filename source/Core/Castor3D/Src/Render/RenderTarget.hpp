@@ -293,6 +293,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The MultisampleState.
+		 *\~french
+		 *\return		Le MultisampleState.
+		 */
+		inline MultisampleState const & GetMultisampleState()const
+		{
+			return *m_multisampleState;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the RenderTechnique
 		 *\return		The RenderTechnique
 		 *\~french
@@ -675,6 +685,9 @@ namespace Castor3D
 		//!\~english	Rasteriser states.
 		//!\~french		Etats du rasteriser.
 		RasteriserStateUPtr m_rasteriserState;
+		//!\~english	Multisample states.
+		//!\~french		Etats de multi-échantillonnage.
+		MultisampleStateUPtr m_multisampleState;
 		//!\~english	The post effects.
 		//!\~french		Les effets post rendu.
 		PostEffectPtrArray m_postEffects;

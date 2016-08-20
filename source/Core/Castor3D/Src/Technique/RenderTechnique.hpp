@@ -495,6 +495,9 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english	The multisample state.
+		//!\~french		L'état de multi-échantillonnage.
+		MultisampleStateUPtr m_multisampleState;
 		//!\~english	The rasteriser state to cull front faces.
 		//!\~french		L'état de rastérisation pour masquer les faces avant.
 		RasteriserStateUPtr m_frontRasteriserState;
