@@ -511,10 +511,10 @@ namespace Castor3D
 		PipelineSPtr m_opaquePipeline;
 		//!\~english	The pipeline used to render transparent nodes' back faces.
 		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
-		PipelineSPtr m_frontTransparentPipeline;
+		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_frontTransparentPipeline;
 		//!\~english	The pipeline used to render transparent nodes' front faces.
 		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces avant des noeuds transparents.
-		PipelineSPtr m_backTransparentPipeline;
+		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_backTransparentPipeline;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

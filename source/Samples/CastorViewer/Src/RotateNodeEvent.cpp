@@ -21,9 +21,9 @@ namespace CastorViewer
 	{
 		SceneNodeSPtr l_node = m_node.lock();
 
-		if ( l_node )
+		if ( l_node && ( m_dx || m_dy || m_dz ) )
 		{
-			l_node->Rotate( Quaternion( Angle::from_degrees( m_dx ), Angle::from_degrees( m_dy ), Angle::from_degrees( m_dz ) ) );
+			l_node->Rotate( Quaternion{ Angle::from_degrees( m_dx ), Angle::from_degrees( m_dy ), Angle::from_degrees( m_dz ) } );
 		}
 
 		m_dx = 0;

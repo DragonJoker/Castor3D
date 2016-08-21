@@ -177,52 +177,10 @@ namespace Castor3D
 	void Pass::Initialise()
 	{
 		PrepareTextures();
-		bool l_hasAlpha = m_fAlpha < 1 || GetTextureUnit( TextureChannel::Opacity );
 
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			l_unit->Initialise();
-		}
-
-		if ( l_hasAlpha )
-		{
-			//switch ( m_alphaBlendMode )
-			//{
-			//case BlendMode::NoBlend:
-			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
-			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::Zero );
-			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
-			//	m_pBlendState->SetRgbDstBlend( BlendOperand::Zero );
-			//	break;
-
-			//case BlendMode::Additive:
-			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::One );
-			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::One );
-			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::One );
-			//	m_pBlendState->SetRgbDstBlend( BlendOperand::One );
-			//	break;
-
-			//case BlendMode::Multiplicative:
-			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::Zero );
-			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::Zero );
-			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-			//	break;
-
-			//case BlendMode::Interpolative:
-			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-			//	break;
-
-			//default:
-			//	m_pBlendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-			//	m_pBlendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-			//	m_pBlendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-			//	m_pBlendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-			//	break;
-			//}
 		}
 	}
 

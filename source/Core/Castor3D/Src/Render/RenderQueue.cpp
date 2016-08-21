@@ -75,7 +75,7 @@ namespace Castor3D
 		{
 			if ( p_pass->HasAlphaBlending() )
 			{
-				DoAddRenderNode( p_program, p_node, p_nodes.m_transparentRenderNodes );
+				DoAddRenderNode( p_program, p_node, p_nodes.m_transparentRenderNodes[size_t( p_pass->GetAlphaBlendMode() )] );
 			}
 			else
 			{
@@ -96,7 +96,7 @@ namespace Castor3D
 
 			if ( p_pass->HasAlphaBlending() )
 			{
-				auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
+				auto l_itProgram = p_nodes.m_transparentRenderNodes[size_t( p_pass->GetAlphaBlendMode() )].insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
 				auto l_itPass = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
 				auto l_itObject = l_itPass->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 				l_itObject->second.push_back( p_node );
@@ -139,11 +139,16 @@ namespace Castor3D
 								, RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByProgramMap > & p_animated )
 		{
 			p_static.m_opaqueRenderNodes.clear();
-			p_static.m_transparentRenderNodes.clear();
 			p_instanced.m_opaqueRenderNodes.clear();
-			p_instanced.m_transparentRenderNodes.clear();
 			p_animated.m_opaqueRenderNodes.clear();
-			p_animated.m_transparentRenderNodes.clear();
+
+			for ( size_t i = 0; i < p_static.m_transparentRenderNodes.size(); ++i )
+			{
+				p_static.m_transparentRenderNodes[i].clear();
+				p_instanced.m_transparentRenderNodes[i].clear();
+				p_animated.m_transparentRenderNodes[i].clear();
+			}
+
 			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
 
 			for ( auto l_primitive : p_scene.GetGeometryCache() )
@@ -279,7 +284,12 @@ namespace Castor3D
 								, RenderNodesT< BillboardRenderNode, BillboardRenderNodesByProgramMap > & p_nodes )
 		{
 			p_nodes.m_opaqueRenderNodes.clear();
-			p_nodes.m_transparentRenderNodes.clear();
+
+			for ( size_t i = 0; i < p_nodes.m_transparentRenderNodes.size(); ++i )
+			{
+				p_nodes.m_transparentRenderNodes[i].clear();
+			}
+
 			auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
 
 			for ( auto l_billboard : p_scene.GetBillboardListCache() )
@@ -418,13 +428,17 @@ namespace Castor3D
 	void RenderQueue::DoPrepareRenderNodes( Camera const & p_camera, SceneRenderNodes const & p_inputNodes, SceneRenderNodes & p_outputNodes )
 	{
 		p_outputNodes.m_instancedGeometries.m_opaqueRenderNodes.clear();
-		p_outputNodes.m_instancedGeometries.m_transparentRenderNodes.clear();
 		p_outputNodes.m_staticGeometries.m_opaqueRenderNodes.clear();
-		p_outputNodes.m_staticGeometries.m_transparentRenderNodes.clear();
 		p_outputNodes.m_animatedGeometries.m_opaqueRenderNodes.clear();
-		p_outputNodes.m_animatedGeometries.m_transparentRenderNodes.clear();
 		p_outputNodes.m_billboards.m_opaqueRenderNodes.clear();
-		p_outputNodes.m_billboards.m_transparentRenderNodes.clear();
+
+		for ( size_t i = 0u; i < p_outputNodes.m_instancedGeometries.m_transparentRenderNodes.size(); ++i )
+		{
+			p_outputNodes.m_instancedGeometries.m_transparentRenderNodes[i].clear();
+			p_outputNodes.m_staticGeometries.m_transparentRenderNodes[i].clear();
+			p_outputNodes.m_animatedGeometries.m_transparentRenderNodes[i].clear();
+			p_outputNodes.m_billboards.m_transparentRenderNodes[i].clear();
+		}
 
 		auto l_checkVisible = [&p_camera]( SceneNode & p_node, auto const & p_data )
 		{
@@ -448,20 +462,25 @@ namespace Castor3D
 			}
 		} );
 
-		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_transparentRenderNodes
-						 , [&p_camera, &p_outputNodes, &l_checkVisible]( ShaderProgramSPtr p_program
-																		 , PassSPtr p_pass
-																		 , SubmeshSPtr p_submesh
-																		 , StaticGeometryRenderNodeArray & p_renderNodes )
+		size_t l_index = 0u;
+
+		for ( auto & l_blendModes : p_inputNodes.m_instancedGeometries.m_transparentRenderNodes )
 		{
-			for ( auto const & l_node : p_renderNodes )
+			DoTraverseNodes( l_blendModes
+							 , [&p_camera, &p_outputNodes, &l_checkVisible]( ShaderProgramSPtr p_program
+																			 , PassSPtr p_pass
+																			 , SubmeshSPtr p_submesh
+																			 , StaticGeometryRenderNodeArray & p_renderNodes )
 			{
-				if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+				for ( auto const & l_node : p_renderNodes )
 				{
-					DoAddRenderNode( p_pass, p_program, l_node, p_submesh, p_outputNodes.m_instancedGeometries );
+					if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+					{
+						DoAddRenderNode( p_pass, p_program, l_node, p_submesh, p_outputNodes.m_instancedGeometries );
+					}
 				}
-			}
-		} );
+			} );
+		}
 
 		for ( auto & l_programs : p_inputNodes.m_staticGeometries.m_opaqueRenderNodes )
 		{
@@ -474,15 +493,22 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto & l_programs : p_inputNodes.m_staticGeometries.m_transparentRenderNodes )
+		l_index = 0;
+
+		for ( auto & l_blendModes : p_inputNodes.m_staticGeometries.m_transparentRenderNodes )
 		{
-			for ( auto const & l_node : l_programs.second )
+			for ( auto & l_programs : l_blendModes )
 			{
-				if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+				for ( auto const & l_node : l_programs.second )
 				{
-					DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_staticGeometries.m_transparentRenderNodes );
+					if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+					{
+						DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_staticGeometries.m_transparentRenderNodes[l_index] );
+					}
 				}
 			}
+
+			++l_index;
 		}
 
 		for ( auto & l_programs : p_inputNodes.m_animatedGeometries.m_opaqueRenderNodes )
@@ -496,15 +522,22 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto & l_programs : p_inputNodes.m_animatedGeometries.m_transparentRenderNodes )
+		l_index = 0;
+
+		for ( auto & l_blendModes : p_inputNodes.m_animatedGeometries.m_transparentRenderNodes )
 		{
-			for ( auto const & l_node : l_programs.second )
+			for ( auto & l_programs : l_blendModes )
 			{
-				if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+				for ( auto const & l_node : l_programs.second )
 				{
-					DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_animatedGeometries.m_transparentRenderNodes );
+					if ( l_checkVisible( l_node.m_sceneNode, l_node.m_data ) )
+					{
+						DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_animatedGeometries.m_transparentRenderNodes[l_index] );
+					}
 				}
 			}
+
+			++l_index;
 		}
 
 		for ( auto & l_programs : p_inputNodes.m_billboards.m_opaqueRenderNodes )
@@ -519,16 +552,23 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto & l_programs : p_inputNodes.m_billboards.m_transparentRenderNodes )
+		l_index = 0;
+
+		for ( auto & l_blendModes : p_inputNodes.m_billboards.m_transparentRenderNodes )
 		{
-			for ( auto const & l_node : l_programs.second )
+			for ( auto & l_programs : l_blendModes )
 			{
-				if ( l_node.m_sceneNode.IsDisplayable()
-					 && l_node.m_sceneNode.IsVisible() )
+				for ( auto const & l_node : l_programs.second )
 				{
-					DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_billboards.m_transparentRenderNodes );
+					if ( l_node.m_sceneNode.IsDisplayable()
+						 && l_node.m_sceneNode.IsVisible() )
+					{
+						DoAddRenderNode( l_programs.first, l_node, p_outputNodes.m_billboards.m_transparentRenderNodes[l_index] );
+					}
 				}
 			}
+
+			++l_index;
 		}
 	}
 
