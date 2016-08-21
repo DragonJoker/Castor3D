@@ -48,15 +48,11 @@ namespace CastorViewer
 	class MouseNodeEvent;
 	class RotateNodeEvent;
 	class TranslateNodeEvent;
-	class FirstPersonCameraRotateEvent;
-	class FirstPersonCameraTranslateEvent;
 	class KeyboardEvent;
 
 	DECLARE_SMART_PTR( MouseNodeEvent );
 	DECLARE_SMART_PTR( RotateNodeEvent );
 	DECLARE_SMART_PTR( TranslateNodeEvent );
-	DECLARE_SMART_PTR( FirstPersonCameraRotateEvent );
-	DECLARE_SMART_PTR( FirstPersonCameraTranslateEvent );
 	DECLARE_SMART_PTR( KeyboardEvent );
 
 	typedef enum eCAMERA_MODE
@@ -147,9 +143,7 @@ namespace CastorViewer
 		Castor3D::SceneNodeSPtr m_cameraNode;
 		Castor3D::SceneNodeSPtr m_lightsNode;
 		Castor3D::SceneNodeSPtr m_currentNode;
-		FirstPersonCameraRotateEventSPtr m_pFpRotateCamEvent;
-		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
-		KeyboardEventUPtr m_pKeyboardEvent;
+		KeyboardEventUPtr m_keyboardEvent;
 		Castor::real m_camSpeed;
 	};
 }

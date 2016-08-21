@@ -25,10 +25,10 @@ namespace Castor3D
 	namespace
 	{
 		template< typename NodeType >
-		void DoRender( Scene const & p_scene, Pipeline & p_pipeline, NodeType & p_node )
+		void DoRender( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, NodeType & p_node )
 		{
 			p_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
-			p_node.BindPass( p_scene, p_pipeline, 0 );
+			p_node.BindPass( p_scene, p_camera, p_pipeline, 0 );
 			p_node.m_data.Draw( p_node.m_buffers );
 			p_node.UnbindPass( p_scene );
 		}
@@ -71,9 +71,9 @@ namespace Castor3D
 	}
 
 	template<>
-	void SubmeshRenderNode::Render( Scene const & p_scene, Pipeline & p_pipeline )
+	void SubmeshRenderNode::Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )
 	{
-		DoRender( p_scene, p_pipeline, *this );
+		DoRender( p_scene, p_camera, p_pipeline, *this );
 	}
 
 	template<>
@@ -83,9 +83,9 @@ namespace Castor3D
 	}
 
 	template<>
-	void BillboardListRenderNode::Render( Scene const & p_scene, Pipeline & p_pipeline )
+	void BillboardListRenderNode::Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )
 	{
-		DoRender( p_scene, p_pipeline, *this );
+		DoRender( p_scene, p_camera, p_pipeline, *this );
 	}
 
 	template<>
@@ -94,12 +94,12 @@ namespace Castor3D
 		DoUnbind( p_scene, *this );
 	}
 
-	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
-			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( m_scene.m_sceneUbo );
+			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -108,12 +108,12 @@ namespace Castor3D
 		m_scene.m_node.m_pass.Render();
 	}
 
-	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
-			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( m_scene.m_sceneUbo );
+			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
@@ -157,12 +157,12 @@ namespace Castor3D
 		m_scene.m_node.m_pass.Render();
 	}
 
-	void BillboardRenderNode::BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void BillboardRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
 			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
-			p_scene.GetEngine()->GetRenderSystem()->GetCurrentCamera()->FillShader( m_scene.m_sceneUbo );
+			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
 		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );

@@ -57,7 +57,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le format des pixels.
 		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		inline Castor::PixelFormat GetPixelFormat()const
 		{
 			return m_buffer->format();
 		}
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format du tampon.
 		 */
-		C3D_API void SetSource( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API void SetSource( Castor::Size const & p_size, Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Defines the 3D texture buffer.
@@ -251,7 +251,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format du tampon.
 		 */
-		C3D_API void SetSource( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API void SetSource( Castor::Point3ui const & p_size, Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -380,7 +380,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la texture
 		 *\return		Le format des pixels
 		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		inline Castor::PixelFormat GetPixelFormat()const
 		{
 			return m_source->GetPixelFormat();
 		}

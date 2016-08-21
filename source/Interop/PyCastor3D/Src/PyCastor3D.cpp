@@ -299,10 +299,8 @@ void ExportCastor3D()
 	/**@group_name BlendState */
 	//@{
 	py::class_< BlendState, boost::noncopyable >( "BlendState", py::no_init )
-	.add_property( "alpha_to_coverage", &BlendState::IsAlphaToCoverageEnabled, &BlendState::EnableAlphaToCoverage, "The alpha to coverage enabled status" )
 	.add_property( "independant_blend", &BlendState::IsIndependantBlendEnabled, &BlendState::EnableIndependantBlend, "The independant blend enabled status" )
 	.add_property( "blend_factors", py::make_function( &BlendState::GetBlendFactors, py::return_value_policy< py::copy_const_reference >() ), &BlendState::SetBlendFactors, "The blend factors" )
-	.add_property( "sample_coverage_mask", py::make_function( &BlendState::GetSampleCoverageMask ), &BlendState::SetSampleCoverageMask, "The sample coverage mask" )
 	.add_property( "blend_enabled", cpy::make_getter( &BlendState::IsBlendEnabled, 0 ), cpy::make_blend_setter( &BlendState::EnableBlend, 0 ), "The blend enabled status" )
 	.add_property( "rgb_src_blend", cpy::make_getter( &BlendState::GetRgbSrcBlend, 0 ), cpy::make_blend_setter( &BlendState::SetRgbSrcBlend, 0 ), "The source source RGB blend value" )
 	.add_property( "rgb_dst_blend", cpy::make_getter( &BlendState::GetRgbDstBlend, 0 ), cpy::make_blend_setter( &BlendState::SetRgbDstBlend, 0 ), "The source destination RGB blend value" )
@@ -367,8 +365,6 @@ void ExportCastor3D()
 	.add_property( "alpha_dst_blend_8", cpy::make_getter( &BlendState::GetAlphaDstBlend, 7 ), cpy::make_blend_setter( &BlendState::SetAlphaDstBlend, 7 ), "The source destination Alpha blend value, for 8th unit" )
 	.add_property( "alpha_blend_8_op", cpy::make_getter( &BlendState::GetAlphaBlendOp, 7 ), cpy::make_blend_setter( &BlendState::SetAlphaBlendOp, 7 ), "The Alpha blend operator, for 8th unit" )
 	.add_property( "write_mask_8", cpy::make_getter( &BlendState::GetWriteMask, 7 ), cpy::make_blend_setter( &BlendState::SetWriteMask, 7 ), "The render target write mask, for 8th unit" )
-	.def( "initialise", &BlendState::Initialise )
-	.def( "cleanup", &BlendState::Cleanup )
 	;
 	//@}
 	/**@group_name DepthStencilState */
@@ -391,8 +387,14 @@ void ExportCastor3D()
 	.add_property( "stencil_back_depth fail_op", &DepthStencilState::GetStencilBackDepthFailOp, &DepthStencilState::SetStencilBackDepthFailOp, "The stencil test, depth test failed operation, for the back faces" )
 	.add_property( "stencil_back_pass_op", &DepthStencilState::GetStencilBackPassOp, &DepthStencilState::SetStencilBackPassOp, "The stencil test passed operation, for the back faces" )
 	.def( "set_depth_range", &DepthStencilState::SetDepthRange )
-	.def( "initialise", &DepthStencilState::Initialise )
-	.def( "cleanup", &DepthStencilState::Cleanup )
+	;
+	//@}
+	/**@group_name MultisampleState */
+	//@{
+	py::class_< MultisampleState, boost::noncopyable >( "MultisampleState", py::no_init )
+	.add_property( "multisample", &MultisampleState::GetMultisample, &MultisampleState::SetMultisample, "The multisample enabled status" )
+	.add_property( "alpha_to_coverage", &MultisampleState::IsAlphaToCoverageEnabled, &MultisampleState::EnableAlphaToCoverage, "The alpha to coverage enabled status" )
+	.add_property( "sample_coverage_mask", py::make_function( &MultisampleState::GetSampleCoverageMask ), &MultisampleState::SetSampleCoverageMask, "The sample coverage mask" )
 	;
 	//@}
 	/**@group_name RasteriserState */
@@ -404,10 +406,7 @@ void ExportCastor3D()
 	.add_property( "antialiased_lines", &RasteriserState::GetAntialiasedLines, &RasteriserState::SetAntialiasedLines, "The antialiased lines status" )
 	.add_property( "depth_bias", &RasteriserState::GetDepthBias, &RasteriserState::SetDepthBias, "The depth bias" )
 	.add_property( "depth_clipping", &RasteriserState::GetDepthClipping, &RasteriserState::SetDepthClipping, "The depth clipping enabled status" )
-	.add_property( "multisample", &RasteriserState::GetMultisample, &RasteriserState::SetMultisample, "The multisample enabled status" )
 	.add_property( "scissor_test", &RasteriserState::GetScissor, &RasteriserState::SetScissor, "The scissor test enabled status" )
-	.def( "initialise", &RasteriserState::Initialise )
-	.def( "cleanup", &RasteriserState::Cleanup )
 	;
 	//@}
 	/**@group_name Sampler */
@@ -433,8 +432,8 @@ void ExportCastor3D()
 	//@{
 	void ( TextureImage::*staticTexture2DImageSetter )( PxBufferBaseSPtr ) = &TextureImage::SetSource;
 	void ( TextureImage::*staticTexture3DImageSetter )( Point3ui const &, PxBufferBaseSPtr ) = &TextureImage::SetSource;
-	void ( TextureImage::*dynamicTexture2DImageSetter )( Size const &, ePIXEL_FORMAT ) = &TextureImage::SetSource;
-	void ( TextureImage::*dynamicTexture3DImageSetter )( Point3ui const &, ePIXEL_FORMAT ) = &TextureImage::SetSource;
+	void ( TextureImage::*dynamicTexture2DImageSetter )( Size const &, PixelFormat ) = &TextureImage::SetSource;
+	void ( TextureImage::*dynamicTexture3DImageSetter )( Point3ui const &, PixelFormat ) = &TextureImage::SetSource;
 	void ( TextureImage::*resizer2d )( Size const & ) = &TextureImage::Resize;
 	void ( TextureImage::*resizer3d )( Point3ui const & ) = &TextureImage::Resize;
 	py::class_< TextureImage, boost::noncopyable >( "TextureImage", py::no_init )
@@ -571,7 +570,7 @@ void ExportCastor3D()
 	//@{
 	GeometrySPtr( GeometryCache::*geometryCreator )( Castor::String const &, SceneNodeSPtr, MeshSPtr ) = &GeometryCache::Add;
 	py::class_< GeometryCache, boost::noncopyable >( "GeometryCache", py::no_init )
-	//.def( "add", cpy::GeometryCacheElementProducer{}, "Adds a Geometry to the cache" )
+	.def( "add", geometryCreator, "Adds a Geometry to the cache" )
 	.def( "remove", &GeometryCache::Remove, "Finds a Geometry" )
 	.def( "has", &GeometryCache::Has, "Tells if the cache has a Geometry" )
 	.def( "find", &GeometryCache::Find, "Finds a Geometry in the cache" )
@@ -579,16 +578,18 @@ void ExportCastor3D()
 	//@}
 	/**@group_name LightCache */
 	//@{
+	LightSPtr( LightCache::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightCache::Add;
 	py::class_< LightCache, boost::noncopyable >( "LightCache", py::no_init )
-	//.def( "add", cpy::LightCacheElementProducer{}, "Adds a Light to the cache" )
+	.def( "add", lightCreator, "Adds a Light to the cache" )
 	.def( "remove", &LightCache::Remove, "Removes a Light from the cache" )
 	.def( "has", &LightCache::Has, "Tells if the cache has a Light" )
 	.def( "find", &LightCache::Find, "Finds a Light in the cache" )
 	;
 	/**@group_name MeshCache */
 	//@{
+	MeshSPtr( MeshCache::*meshCreator )( Castor::String const & ) = &MeshCache::Add;
 	py::class_< MeshCache, boost::noncopyable >( "MeshCache", py::no_init )
-	//.def( "add", cpy::MeshCacheElementProducer{}, "Adds a Mesh to the cache" )
+	.def( "add", meshCreator, "Adds a Mesh to the cache" )
 	.def( "remove", &MeshCache::Remove, "Removes a Mesh from the cache" )
 	.def( "has", &MeshCache::Has, "Tells if the cache has a Mesh" )
 	.def( "find", &MeshCache::Find, "Finds a Mesh in the cache" )
@@ -626,8 +627,9 @@ void ExportCastor3D()
 	//@}
 	/**@group_name OverlayCache */
 	//@{
+	OverlaySPtr( OverlayCache::*ovlCreate )( Castor::String const &, eOVERLAY_TYPE, SceneSPtr, OverlaySPtr ) = &OverlayCache::Add;
 	py::class_< OverlayCache, boost::noncopyable >( "OverlayCache", py::no_init )
-	//.def( "add", cpy::OverlayCacheElementProducer{}, "Adds an Overlay to the cache" )
+	.def( "add", ovlCreate, "Adds an Overlay to the cache" )
 	.def( "remove", &OverlayCache::Remove, "Removes a Overlay from the cache" )
 	.def( "has", &OverlayCache::Has, "Tells if the cache has a Overlay" )
 	.def( "find", &OverlayCache::Find, "Finds a Overlay in the cache" )

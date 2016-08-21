@@ -1,10 +1,7 @@
 #include "OverlayRenderer.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "ShaderCache.hpp"
 
@@ -26,6 +23,7 @@
 #include "Shader/ShaderProgram.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -79,9 +77,23 @@ namespace Castor3D
 			}
 		} }
 	{
-		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateCache().Add( cuT( "OVERLAY_BLEND" ) );
-		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "OVERLAY_DS" ) );
-		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateCache().Add( cuT( "OVERLAY_RS" ) );
+		BlendState l_blState;
+		l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+		l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+		l_blState.SetRgbSrcBlend( BlendOperand::SrcAlpha );
+		l_blState.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+		l_blState.EnableBlend( true );
+
+		MultisampleState l_msState;
+		l_msState.EnableAlphaToCoverage( false );
+
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( false );
+
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( eFACE_BACK );
+
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -151,36 +163,10 @@ namespace Castor3D
 
 		// Create one text overlays buffer
 		DoCreateTextGeometryBuffers();
-
-		auto l_blendState = m_wpBlendState.lock();
-		l_blendState->EnableAlphaToCoverage( false );
-		l_blendState->SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_blendState->SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		l_blendState->SetRgbSrcBlend( BlendOperand::SrcAlpha );
-		l_blendState->SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-		l_blendState->EnableBlend( true );
-		l_blendState->Initialise();
-
-		auto l_dsState = m_wpDepthStencilState.lock();
-		l_dsState->SetDepthTest( false );
-		l_dsState->Initialise();
-
-		auto l_rsState = m_wpRasteriserState.lock();
-		l_rsState->SetCulledFaces( eFACE_BACK );
-		l_rsState->Initialise();
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
-		auto l_blendState = m_wpBlendState.lock();
-		l_blendState->Cleanup();
-
-		auto l_dsState = m_wpDepthStencilState.lock();
-		l_dsState->Cleanup();
-
-		auto l_rsState = m_wpRasteriserState.lock();
-		l_rsState->Cleanup();
-
 		for ( auto & l_vertex : m_borderVertex )
 		{
 			l_vertex.reset();
@@ -328,9 +314,7 @@ namespace Castor3D
 			m_size = p_size;
 		}
 
-		m_wpBlendState.lock()->Apply();
-		m_wpDepthStencilState.lock()->Apply();
-		m_wpRasteriserState.lock()->Apply();
+		m_pipeline->Apply();
 	}
 
 	void OverlayRenderer::EndRender()
@@ -481,7 +465,7 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
 		RenderNode & l_node = DoGetPanelProgram( p_pass );
-		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		m_pipeline->ApplyProjection( l_node.m_matrixUbo );
 		p_pass.FillShaderVariables( l_node );
 		l_node.m_program.Bind();
 		p_pass.Render2D();
@@ -493,7 +477,7 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
 	{
 		RenderNode & l_node = DoGetTextProgram( p_pass );
-		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		m_pipeline->ApplyProjection( l_node.m_matrixUbo );
 
 		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 

@@ -73,7 +73,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::DoFill
 		 */
-		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format );
 	};
 }
 

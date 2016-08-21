@@ -74,7 +74,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Fill
 		 */
-		void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )override;
+		void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )override;
 
 		inline eGL_TEXTURE_STORAGE GetGlType()const
 		{

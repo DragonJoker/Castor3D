@@ -61,8 +61,8 @@ namespace Castor
 		 *\param[in]	p_ptB	La pente de la droite
 		 */
 		Line3D( Point< T, 3 > const & p_point, Point< T, 3 > const & p_ptSlope )
-			:	m_origin( p_point	)
-			,	m_slope( p_ptSlope	)
+			:	m_origin( p_point )
+			,	m_slope( p_ptSlope )
 		{
 		}
 
@@ -102,8 +102,8 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à copier
 		 */
 		Line3D( Line3D const & p_line )
-			:	m_origin( p_line.m_origin	)
-			,	m_slope( p_line.m_slope	)
+			:	m_origin( p_line.m_origin )
+			,	m_slope( p_line.m_slope )
 		{
 		}
 		/**
@@ -115,8 +115,8 @@ namespace Castor
 		 *\param[in]	p_line	L'objet Line3D à déplacer
 		 */
 		Line3D( Line3D && p_line )
-			:	m_origin( std::move( p_line.m_origin	) )
-			,	m_slope( std::move( p_line.m_slope	) )
+			:	m_origin( std::move( p_line.m_origin ) )
+			,	m_slope( std::move( p_line.m_slope ) )
 		{
 			p_line.m_origin	= Point< T, 3 >();
 			p_line.m_slope	= Point< T, 3 >();
@@ -151,8 +151,8 @@ namespace Castor
 		{
 			if ( this != &p_line )
 			{
-				m_origin	= std::move( p_line.m_origin	);
-				m_slope		= std::move( p_line.m_slope	);
+				m_origin	= std::move( p_line.m_origin );
+				m_slope		= std::move( p_line.m_slope );
 				p_line.m_origin	= Point< T, 3 >();
 				p_line.m_slope	= Point< T, 3 >();
 			}

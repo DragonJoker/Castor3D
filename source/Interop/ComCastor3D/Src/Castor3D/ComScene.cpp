@@ -210,7 +210,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshCache().Add( FromBstr( name ), Castor3D::eMESH_TYPE( type ), Castor3D::UIntArray{}, Castor3D::RealArray{} ) );
+					auto l_mesh = m_internal->GetMeshCache().Add( FromBstr( name ) );
+					m_internal->GetEngine()->GetMeshFactory().Create( Castor3D::eMESH_TYPE( type ) )->Generate( *l_mesh, Castor3D::UIntArray{}, Castor3D::RealArray{} );
+					static_cast< CMesh * >( *pVal )->SetInternal( l_mesh );
 				}
 			}
 		}

@@ -4,6 +4,7 @@
 #include "ComSampler.hpp"
 #include "ComBlendState.hpp"
 #include "ComDepthStencilState.hpp"
+#include "ComMultisampleState.hpp"
 #include "ComRasteriserState.hpp"
 #include "ComRenderWindow.hpp"
 #include "ComScene.hpp"
@@ -12,12 +13,9 @@
 #undef min
 #undef abs
 
-#include <BlendStateCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <MaterialCache.hpp>
 #include <MeshCache.hpp>
 #include <PluginCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SamplerCache.hpp>
 #include <SceneCache.hpp>
 #include <WindowCache.hpp>
@@ -316,11 +314,6 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CBlendState::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateCache().Add( FromBstr( name ) ) );
-				}
 			}
 		}
 		else
@@ -340,11 +333,6 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CDepthStencilState::CreateInstance( pVal );
-
-				if ( hr == S_OK )
-				{
-					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateCache().Add( FromBstr( name ) ) );
-				}
 			}
 		}
 		else
@@ -364,11 +352,25 @@ namespace CastorCom
 			if ( pVal )
 			{
 				hr = CRasteriserState::CreateInstance( pVal );
+			}
+		}
+		else
+		{
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
+		}
 
-				if ( hr == S_OK )
-				{
-					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateCache().Add( FromBstr( name ) ) );
-				}
+		return hr;
+	}
+
+	STDMETHODIMP CEngine::CreateMultisampleState( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( m_internal )
+		{
+			if ( pVal )
+			{
+				hr = CMultisampleState::CreateInstance( pVal );
 			}
 		}
 		else

@@ -52,7 +52,7 @@ namespace TestRender
 		 *\param[in]	p_gl		L'api OpenGL.
 		 *\param[in]	p_format	Le format des pixels.
 		 */
-		TestDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format );
+		TestDepthStencilRenderBuffer( Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor.

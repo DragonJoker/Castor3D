@@ -12,9 +12,6 @@
 #include "Shader/TestFrameVariableBuffer.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
-#include "State/TestBlendState.hpp"
-#include "State/TestDepthStencilState.hpp"
-#include "State/TestRasteriserState.hpp"
 #include "Texture/TestSampler.hpp"
 #include "Texture/TestTextureStorage.hpp"
 #include "Texture/TestTexture.hpp"
@@ -53,19 +50,12 @@ namespace TestRender
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
-	DepthStencilStateSPtr TestRenderSystem::CreateDepthStencilState()
+	PipelineUPtr TestRenderSystem::CreatePipeline( DepthStencilState && p_dsState
+												   , RasteriserState && p_rsState
+												   , BlendState && p_bdState
+												   , MultisampleState && p_msState )
 	{
-		return std::make_shared< TestDepthStencilState >( this );
-	}
-
-	RasteriserStateSPtr TestRenderSystem::CreateRasteriserState()
-	{
-		return std::make_shared< TestRasteriserState >( this );
-	}
-
-	BlendStateSPtr TestRenderSystem::CreateBlendState()
-	{
-		return std::make_shared< TestBlendState >( this );
+		return std::make_unique< TestPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
 	}
 
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )

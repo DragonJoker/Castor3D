@@ -45,14 +45,24 @@ namespace TestRender
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_gl		The OpenGL api.
-		 *\param[in]	p_pipeline	The parent pipeline.
+		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	p_dsState		The depth stencil state.
+		 *\param[in]	p_rsState		The rateriser state.
+		 *\param[in]	p_bdState		The blend state.
+		 *\param[in]	p_msState		The multisample state.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_gl		L'api OpenGL.
-		 *\param[in]	p_pipeline	Le pipeline parent.
+		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	p_dsState		L'état de stencil et profondeur.
+		 *\param[in]	p_rsState		L'état de rastériseur.
+		 *\param[in]	p_bdState		L'état de mélange.
+		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 */
-		TestPipeline( Castor3D::Context & p_context );
+		TestPipeline( TestRenderSystem & p_renderSystem
+					  , Castor3D::DepthStencilState && p_dsState
+					  , Castor3D::RasteriserState && p_rsState
+					  , Castor3D::BlendState && p_bdState
+					  , Castor3D::MultisampleState && p_msState );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -60,6 +70,13 @@ namespace TestRender
 		 *\brief		Destructeur.
 		 */
 		virtual ~TestPipeline();
+		/**
+		 *\~english
+		 *\brief		Applies the pipeline.
+		 *\~french
+		 *\brief		Applique le pipeline.
+		 */
+		void Apply()const override;
 		/**
 		 *\copydoc		Castor3D::Context::ApplyViewport
 		 */

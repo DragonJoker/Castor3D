@@ -97,6 +97,7 @@ namespace Bloom
 		Castor3D::ShaderProgramWPtr m_combineProgram;
 
 		Castor3D::Viewport m_viewport;
+		Castor3D::PipelineSPtr m_pipeline;
 		Castor3D::BufferDeclaration m_declaration;
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
 		Castor3D::VertexBufferSPtr m_vertexBuffer;

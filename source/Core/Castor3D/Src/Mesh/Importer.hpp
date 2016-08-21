@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_channel	Le canal affecté à l'image.
 		 *\return		\p false en cas d'erreur.
 		 */
-		C3D_API TextureUnitSPtr LoadTexture( Castor::Path const & p_path, Pass & p_pass, TextureChannel p_channel );
+		C3D_API TextureUnitSPtr LoadTexture( Castor::Path const & p_path, Pass & p_pass, TextureChannel p_channel )const;
 
 	protected:
 		/**

@@ -84,7 +84,7 @@ namespace Castor
 		 *\param[in]	p_size		Les dimensions voulues pour l'image.
 		 *\param[in]	p_format	Le format de pixel voulu pour l'image.
 		 */
-		CU_API ImageSPtr Add( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format );
+		CU_API ImageSPtr Add( String const & p_name, Size const & p_size, PixelFormat p_format );
 
 	public:
 		using Collection< Image, String >::begin;

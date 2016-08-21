@@ -83,6 +83,34 @@ namespace Castor3D
 		C3D_API void Unbind( uint32_t p_index )const;
 		/**
 		 *\~english
+		 *\brief		Locks image buffer from GPU, allowing modifications into it.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_index	The texture index.
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE.
+		 *\return		The image buffer.
+		 *\~french
+		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_index	L'index de texture.
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE.
+		 *\return		Le buffer de l'image.
+		 */
+		C3D_API uint8_t * Lock( uint32_t p_index, uint32_t p_lock );
+		/**
+		 *\~english
+		 *\brief		Unlocks image buffer from GPU.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_index		The texture index.
+		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
+		 *\~french
+		 *\brief		Délocke le buffer de l'image à partir du GPU.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_index		L'index de texture.
+		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
+		 */
+		C3D_API void Unlock( uint32_t p_index, bool p_modified );
+		/**
+		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french

@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_type			La composante du tampon
 		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_format );
+		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels du tampon
 		 *\return		Le format des pixels
 		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		inline Castor::PixelFormat GetPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -215,7 +215,7 @@ namespace Castor3D
 		//!\~english The component to which this buffer is bound	\~french La composante à laquelle ce tampon est associé
 		eBUFFER_COMPONENT m_eComponent;
 		//!\~english The buffer pixel format	\~french Le format des pixels du tampon
-		Castor::ePIXEL_FORMAT m_pixelFormat;
+		Castor::PixelFormat m_pixelFormat;
 		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'échantillons, en cas de multisampling
 		int m_samplesCount;
 	};

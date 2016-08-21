@@ -63,7 +63,7 @@ namespace Castor
 		return l_return;
 	}
 
-	ImageSPtr ImageCache::Add( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format )
+	ImageSPtr ImageCache::Add( String const & p_name, Size const & p_size, PixelFormat p_format )
 	{
 		auto l_lock = make_unique_lock( *this );
 		ImageSPtr l_return;

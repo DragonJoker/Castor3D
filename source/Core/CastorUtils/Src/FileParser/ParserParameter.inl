@@ -410,7 +410,7 @@ namespace Castor
 			if ( l_values.size() )
 			{
 				p_value = PF::GetFormatByName( l_values[0] );
-				l_return = p_value != ePIXEL_FORMAT_COUNT;
+				l_return = p_value != PixelFormat::Count;
 
 				if ( l_values.size() > 1 )
 				{

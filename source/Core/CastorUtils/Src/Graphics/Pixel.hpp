@@ -34,10 +34,10 @@ namespace Castor
 	\date		29/08/2011
 	\~english
 	\brief		Pixel definition
-	\remark		Takes a ePIXEL_FORMAT as a template argument to determine size anf format
+	\remark		Takes a PixelFormat as a template argument to determine size anf format
 	\~french
 	\brief		Définition d'un pixel
-	\remark		L'argument template ePIXEL_FORMAT sert a déterminer la taille et le format du pixel
+	\remark		L'argument template PixelFormat sert a déterminer la taille et le format du pixel
 	*/
 	template< TPL_PIXEL_FORMAT FT >
 	class Pixel
@@ -454,9 +454,9 @@ namespace Castor
 		 *\brief		Récupère le format du pixel
 		 *\return		Le format du pixel
 		 */
-		static ePIXEL_FORMAT get_format()
+		static PixelFormat get_format()
 		{
-			return ePIXEL_FORMAT( FT );
+			return PixelFormat( FT );
 		}
 		/**
 		 *\~english
@@ -585,7 +585,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un pixel au format A8R8G8B8
 	*/
-	typedef Pixel< ePIXEL_FORMAT_A8R8G8B8 > UbPixel;
+	typedef Pixel< PixelFormat::A8R8G8B8 > UbPixel;
 }
 
 #include "Pixel.inl"

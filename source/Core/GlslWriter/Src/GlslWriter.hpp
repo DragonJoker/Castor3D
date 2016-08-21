@@ -228,20 +228,20 @@ namespace GLSL
 		( Writer ).For( std::move( Name ), Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]()
 
 #define ROF\
-		);\
+	 );\
 	}
 
 #define IF( Writer, Condition )\
 	( Writer ).If( Expr( &( Writer ), Castor::String( Condition ) ), [&]()
 
 #define ELSE\
-	).Else( [&]()
+ ).Else( [&]()
 
 #define ELSEIF()\
-	).ElseIf( [&]()
+ ).ElseIf( [&]()
 
 #define FI\
-	);
+ );
 
 #define LOCALE_ASSIGN( Writer, Type, Name, Assign )\
 	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )

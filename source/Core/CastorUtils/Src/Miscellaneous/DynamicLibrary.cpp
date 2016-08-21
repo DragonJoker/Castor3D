@@ -12,14 +12,14 @@
 namespace Castor
 {
 	DynamicLibrary::DynamicLibrary()throw()
-		:	m_pLibrary( nullptr	)
-		,	m_pathLibrary(	)
+		:	m_pLibrary( nullptr )
+		,	m_pathLibrary( )
 	{
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary const & p_lib )throw()
-		:	m_pLibrary( nullptr	)
-		,	m_pathLibrary(	)
+		:	m_pLibrary( nullptr )
+		,	m_pathLibrary( )
 	{
 		if ( p_lib.m_pLibrary )
 		{
@@ -28,8 +28,8 @@ namespace Castor
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary && p_lib )throw()
-		:	m_pLibrary( std::move( p_lib.m_pLibrary )	)
-		,	m_pathLibrary( std::move( p_lib.m_pathLibrary )	)
+		:	m_pLibrary( std::move( p_lib.m_pLibrary ) )
+		,	m_pathLibrary( std::move( p_lib.m_pathLibrary ) )
 	{
 		p_lib.m_pLibrary = nullptr;
 		p_lib.m_pathLibrary.clear();

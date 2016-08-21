@@ -235,7 +235,7 @@ namespace Castor3D
 		 *\remarks		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
-		C3D_API bool Render( Pipeline & p_pipeline );
+		C3D_API bool Update();
 		/**
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.

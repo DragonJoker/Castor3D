@@ -124,6 +124,24 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_parent	The parent scene node.
+		 *\param[in]	p_params	The other constructor parameters.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\return		L'objet créé.
+		 */
+		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_type )
+		{
+			return MyObjectCache::Add( p_name, p_parent, p_type );
+		}
+		/**
+		 *\~english
 		 *\brief		Binds the scene lights.
 		 *\param[in]	p_program		The shader program.
 		 *\param[in]	p_sceneBuffer	The constants buffer.

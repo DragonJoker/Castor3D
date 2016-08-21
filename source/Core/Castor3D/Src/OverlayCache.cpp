@@ -158,14 +158,14 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		Context * l_context = l_renderSystem->GetCurrentContext();
 
-		if ( l_context && m_pRenderer )
+		if ( m_pRenderer )
 		{
 			m_viewport.Resize( p_size );
 			m_viewport.UpdateRight( real( p_size.width() ) );
 			m_viewport.UpdateBottom( real( p_size.height() ) );
-			m_viewport.Render( l_context->GetPipeline() );
+			m_viewport.Update();
+			m_pRenderer->GetPipeline().SetProjectionMatrix( m_viewport.GetProjection() );
 			m_pRenderer->BeginRender( p_size );
 
 			for ( auto l_category : m_overlays )

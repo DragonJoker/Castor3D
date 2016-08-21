@@ -54,33 +54,96 @@ typedef enum
 ]
 typedef enum
 {
-	ePIXEL_FORMAT_L8,			//!< 8 bits luminosity
-	ePIXEL_FORMAT_L16F32F,		//!< Half floats luminosity on GPU, floats luminosity on CPU
-	ePIXEL_FORMAT_L32F,			//!< Floats luminosity on CPU
-	ePIXEL_FORMAT_A8L8,			//!< 16 bits alpha and luminosity
-	ePIXEL_FORMAT_AL16F32F,		//!< Half floats alpha and luminosity on GPU, floats alpha and luminosity on CPU
-	ePIXEL_FORMAT_AL32F,		//!< Floats alpha and luminosity on CPU
-	ePIXEL_FORMAT_A1R5G5B5,		//!< 16 bits 5551 ARGB
-	ePIXEL_FORMAT_A4R4G4B4,		//!< 16 bits 4444 ARGB
-	ePIXEL_FORMAT_R5G6B5,		//!< 16 bits 565 RGB
-	ePIXEL_FORMAT_R8G8B8,		//!< 24 bits 888 RGB
-	ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
-	ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
-	ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
-	ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
-	ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
-	ePIXEL_FORMAT_RGB32F,		//!< Float RGB
-	ePIXEL_FORMAT_ARGB32F,		//!< Float ARGB
-	ePIXEL_FORMAT_DXTC1,		//!< DXT1 8 bits compressed format
-	ePIXEL_FORMAT_DXTC3,		//!< DXT3 16 bits compressed format
-	ePIXEL_FORMAT_DXTC5,		//!< DXT5 16 bits compressed format
-	ePIXEL_FORMAT_YUY2,			//!< YUY2 16 bits compressed format
-	ePIXEL_FORMAT_DEPTH16,		//!< Depth 16 bits
-	ePIXEL_FORMAT_DEPTH24,		//!< Depth 24 bits
-	ePIXEL_FORMAT_DEPTH24S8,	//!< Depth 24 bits, Stencil 8 bits
-	ePIXEL_FORMAT_DEPTH32,		//!< Depth 32 bits
-	ePIXEL_FORMAT_STENCIL1,		//!< Stencil 1 bit
-	ePIXEL_FORMAT_STENCIL8,		//!< Stencil 8 bits
+	//!\~english	8 bits luminosity.
+	//!\~french		Luminosit� 8 bits.
+	ePIXEL_FORMAT_L8,
+	//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
+	//!\~french		Luminosit� en half float en VRAM, et en float en RAM.
+	ePIXEL_FORMAT_L16F32F,
+	//!\~english	32 bits loats luminosity.
+	//!\~french		Luminosit� en float 32 bits.
+	ePIXEL_FORMAT_L32F,
+	//!\~english	16 bits alpha and luminosity.
+	//!\~french		Alpha et luminosit� 16 bits.
+	ePIXEL_FORMAT_A8L8,
+	//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
+	//!\~french		Luminosit� et alpha en half float en VRAM, et en float en RAM.
+	ePIXEL_FORMAT_AL16F32F,
+	//!\~english	32 bits floats alpha and luminosity.
+	//!\~french		Luminosit� et alpha en float 32 bits.
+	ePIXEL_FORMAT_AL32F,
+	//!\~english	16 bits 5551 ARGB.
+	//!\~french		16 bits 5551 ARGB.
+	ePIXEL_FORMAT_A1R5G5B5,
+	//!\~english	16 bits 4444 ARGB.
+	//!\~french		16 bits 4444 ARGB.
+	ePIXEL_FORMAT_A4R4G4B4,
+	//!\~english	16 bits 565 RGB.
+	//!\~french		16 bits 565 RGB.
+	ePIXEL_FORMAT_R5G6B5,
+	//!\~english	24 bits 888 RGB.
+	//!\~french		24 bits 888 RGB.
+	ePIXEL_FORMAT_R8G8B8,
+	//!\~english	24 bits 888 BGR.
+	//!\~french		24 bits 888 BGR.
+	ePIXEL_FORMAT_B8G8R8,
+	//!\~english	32 bits 8888 ARGB.
+	//!\~french		32 bits 8888 ARGB.
+	ePIXEL_FORMAT_A8R8G8B8,
+	//!\~english	32 bits 8888 ABGR.
+	//!\~french		32 bits 8888 ABGR.
+	ePIXEL_FORMAT_A8B8G8R8,
+	//!\~english	Half float RGB.
+	//!\~french		Half float RGB.
+	ePIXEL_FORMAT_RGB16F,
+	//!\~english	Half float ARGB.
+	//!\~french		Half float ARGB.
+	ePIXEL_FORMAT_ARGB16F,
+	//!\~english	Half float RGB on VRAM, Float RGB on RAM.
+	//!\~french		RGB en half float en VRAM, et en float en RAM.
+	ePIXEL_FORMAT_RGB16F32F,
+	//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
+	//!\~french		ARGB en half float en VRAM, et en float en RAM.
+	ePIXEL_FORMAT_ARGB16F32F,
+	//!\~english	32 bits float RGB.
+	//!\~french		RGB en flottants 32 bits.
+	ePIXEL_FORMAT_RGB32F,
+	//!\~english	32 bits float ARGB.
+	//!\~french		ARGB en flottants 32 bits.
+	ePIXEL_FORMAT_ARGB32F,
+	//!\~english	DXT1 8 bits compressed format.
+	//!\~french		Format compress� DXT1 8 bits.
+	ePIXEL_FORMAT_DXTC1,
+	//!\~english	DXT3 16 bits compressed format.
+	//!\~french		Format compress� DXT3 16 bits.
+	ePIXEL_FORMAT_DXTC3,
+	//!\~english	DXT5 16 bits compressed format.
+	//!\~french		Format compress� DXT5 16 bits.
+	ePIXEL_FORMAT_DXTC5,
+	//!\~english	YUY2 16 bits compressed format.
+	//!\~french		Format compress� YUY2 16 bits.
+	ePIXEL_FORMAT_YUY2,
+	//!\~english	Depth 16 bits.
+	//!\~french		Profondeur 16 bits.
+	ePIXEL_FORMAT_D16,
+	//!\~english	Depth 24 bits.
+	//!\~french		Profondeur 24 bits.
+	ePIXEL_FORMAT_D24,
+	//!\~english	Depth 24 bits, Stencil 8 bits.
+	//!\~french		Profondeur 24 bits, Stencil 8 bits.
+	ePIXEL_FORMAT_D24S8,
+	//!\~english	Depth 32 bits.
+	//!\~french		Profondeur 32 bits.
+	ePIXEL_FORMAT_D32,
+	//!\~english	Depth 32 bits floating point.
+	//!\~french		Profondeur en float 32 bits.
+	ePIXEL_FORMAT_D32F,
+	//!\~english	Stencil 1 bit.
+	//!\~french		Stencil 1 bit.
+	ePIXEL_FORMAT_S1,
+	//!\~english	Stencil 8 bits.
+	//!\~french		Stencil 8 bits.
+	ePIXEL_FORMAT_S8,
 	ePIXEL_FORMAT_COUNT,
 }	ePIXEL_FORMAT;
 
@@ -867,33 +930,27 @@ interface ILogger
 interface IBlendState
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [out, retval] boolean * pVal );
-	[propput, id( 1 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [in] boolean val );
-	[propget, id( 2 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [out, retval] boolean * pVal );
-	[propput, id( 2 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [in] boolean val );
-	[propget, id( 3 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [out, retval] IColour ** pVal );
-	[propput, id( 3 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [in] IColour * val );
-	[propget, id( 4 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [out, retval] unsigned int * pVal );
-	[propput, id( 4 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [in] unsigned int val );
-	[propget, id( 5 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [out, retval] boolean * pVal );
-	[propput, id( 5 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [in] boolean val );
-	[propget, id( 6 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 6 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 7 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 7 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 8 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id( 8 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id( 9 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 9 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 10 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 10 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 11 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id( 11 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id( 12 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [out, retval] byte * pVal );
-	[propput, id( 12 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [in] byte val );
-	[id( 13 ), helpstring( "Initialises the blend state" )] HRESULT Initialise();
-	[id( 14 ), helpstring( "Cleans the blend state up" )] HRESULT Cleanup();
-	[id( 15 ), helpstring( "The colour test mask" )] HRESULT SetColourMask( [in] eWRITING_MASK red, [in] eWRITING_MASK green, [in] eWRITING_MASK blue, [in] eWRITING_MASK alpha );
+	[propget, id( 1 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [out, retval] boolean * pVal );
+	[propput, id( 1 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [in] boolean val );
+	[propget, id( 2 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [out, retval] IColour ** pVal );
+	[propput, id( 2 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [in] IColour * val );
+	[propget, id( 3 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [out, retval] boolean * pVal );
+	[propput, id( 3 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [in] boolean val );
+	[propget, id( 4 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 4 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 5 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 5 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 6 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
+	[propput, id( 6 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
+	[propget, id( 7 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 7 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 8 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 8 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 9 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
+	[propput, id( 9 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
+	[propget, id( 10 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [out, retval] byte * pVal );
+	[propput, id( 10 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [in] byte val );
+	[id( 11 ), helpstring( "The colour test mask" )] HRESULT SetColourMask( [in] eWRITING_MASK red, [in] eWRITING_MASK green, [in] eWRITING_MASK blue, [in] eWRITING_MASK alpha );
 };
 
 // IDepthStencilState
@@ -937,8 +994,24 @@ interface IDepthStencilState
 	[propget, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [out, retval] eSTENCIL_OP * pVal );
 	[propput, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [in] eSTENCIL_OP val );
 	[id( 17 ), helpstring( "Sets the depth test range" )] HRESULT SetDepthRange( [in] double dnear, [in] double dfar );
-	[id( 18 ), helpstring( "Initialises the depth stencil state" )] HRESULT Initialise();
-	[id( 19 ), helpstring( "Cleans the depth stencil state up" )] HRESULT Cleanup();
+};
+
+// IMultisampleState
+[
+	uuid( 0845AF8D-C498-45B6-9E7A-6853F0C0A73A ),
+	helpstring( "Castor3D MultisampleState interface" ),
+	dual,
+	oleautomation
+]
+interface IMultisampleState
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [out, retval] boolean * pVal );
+	[propput, id( 1 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [in] boolean val );
+	[propget, id( 2 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [out, retval] boolean * pVal );
+	[propput, id( 2 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [in] boolean val );
+	[propget, id( 3 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [out, retval] unsigned int * pVal );
+	[propput, id( 3 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [in] unsigned int val );
 };
 
 // IRasteriserState
@@ -963,12 +1036,8 @@ interface IRasteriserState
 	[propput, id( 5 ), helpstring( "The depth bias" )] HRESULT DepthBias( [in] float val );
 	[propget, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
 	[propput, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
-	[propget, id( 7 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [out, retval] boolean * pVal );
-	[propput, id( 7 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [in] boolean val );
 	[propget, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [out, retval] boolean * pVal );
 	[propput, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [in] boolean val );
-	[id( 9 ), helpstring( "Initialises the rasteriser state" )] HRESULT Initialise();
-	[id( 10 ), helpstring( "Cleans the rasteriser state up" )] HRESULT Cleanup();
 };
 
 // IRenderTarget
@@ -1645,8 +1714,9 @@ interface IEngine
 	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
 	[id( 26 ), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
 	[id( 27 ), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
-	[id( 28 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
-	[id( 29 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
+	[id( 28 ), helpstring( "Creates a multisample state" )] HRESULT CreateMultisampleState( [in] BSTR name, [out, retval] IMultisampleState ** pVal );
+	[id( 29 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
+	[id( 30 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
 };
 
 // Castor3DLib
@@ -1802,6 +1872,15 @@ library Castor3D
 	coclass DepthStencilState
 	{
 		[default] interface IDepthStencilState;
+	}
+
+	// MultisampleState
+	[
+		uuid( 3720BBC7-6B1D-454B-A062-677C4E2B365E )
+	]
+	coclass MultisampleState
+	{
+		[default] interface IMultisampleState;
 	}
 
 	// RasteriserState

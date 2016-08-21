@@ -3,9 +3,7 @@
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
@@ -19,6 +17,7 @@
 #include "Scene/SceneNode.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
@@ -122,28 +121,6 @@ namespace Castor3D
 			m_sampler = l_sampler;
 		}
 
-		if ( GetEngine()->GetDepthStencilStateCache().Has( l_skybox ) )
-		{
-			m_dss = GetEngine()->GetDepthStencilStateCache().Find( l_skybox );
-		}
-		else
-		{
-			auto l_dss = GetEngine()->GetDepthStencilStateCache().Add( l_skybox );
-			l_dss->SetDepthFunc( eDEPTH_FUNC_LEQUAL );
-			m_dss = l_dss;
-		}
-
-		if ( GetEngine()->GetRasteriserStateCache().Has( l_skybox ) )
-		{
-			m_rs = GetEngine()->GetRasteriserStateCache().Find( l_skybox );
-		}
-		else
-		{
-			auto l_rs = GetEngine()->GetRasteriserStateCache().Add( l_skybox );
-			l_rs->SetCulledFaces( eFACE_FRONT );
-			m_rs = l_rs;
-		}
-
 		m_bufferVertex =
 		{
 			-1.0_r, 1.0_r, -1.0_r,
@@ -210,12 +187,14 @@ namespace Castor3D
 		REQUIRE( m_texture );
 		return DoInitialiseShader()
 			   && DoInitialiseTexture()
-			   && DoInitialiseVertexBuffer();
+			   && DoInitialiseVertexBuffer()
+			   && DoInitialisePipeline();
 	}
 
 	void Skybox::Cleanup()
 	{
 		REQUIRE( m_texture );
+		m_pipeline.reset();
 		m_texture->Cleanup();
 		m_texture->Destroy();
 		m_texture.reset();
@@ -226,7 +205,7 @@ namespace Castor3D
 		m_vertexBuffer.reset();
 	}
 
-	void Skybox::Render( Camera const & p_camera, Pipeline & p_pipeline )
+	void Skybox::Render( Camera const & p_camera )
 	{
 		REQUIRE( m_texture );
 		REQUIRE( !m_program.expired() );
@@ -237,10 +216,11 @@ namespace Castor3D
 		{
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
-			p_pipeline.SetModelMatrix( m_mtxModel );
-			p_pipeline.ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
-			m_dss.lock()->Apply();
-			m_rs.lock()->Apply();
+			m_pipeline->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+			m_pipeline->SetModelMatrix( m_mtxModel );
+			m_pipeline->SetViewMatrix( p_camera.GetView() );
+			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
+			m_pipeline->Apply();
 			l_program->Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
@@ -321,5 +301,20 @@ namespace Castor3D
 	{
 		return m_texture->Create()
 			   && m_texture->Initialise();
+	}
+
+	bool Skybox::DoInitialisePipeline()
+	{
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( eFACE_FRONT );
+
+		BlendState l_blState;
+		MultisampleState l_msState;
+
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move(  l_blState ), std::move( l_msState ) );
+		return true;
 	}
 }

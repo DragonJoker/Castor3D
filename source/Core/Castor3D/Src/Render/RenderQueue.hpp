@@ -46,12 +46,13 @@ namespace Castor3D
 	template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 	struct RenderNodesT
 	{
+		using TransparentNodesMapByMode = std::array< TransparentMapType, size_t( BlendMode::Count ) - 1 >;
 		//!\~english	The geometries without alpha blending, sorted by shader program.
 		//!\~french		Les géométries sans alpha blending, triées par programme shader.
 		OpaqueMapType m_opaqueRenderNodes;
 		//!\~english	The geometries with alpha blending, sorted by shader program.
 		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
-		TransparentMapType m_transparentRenderNodes;
+		TransparentNodesMapByMode m_transparentRenderNodes;
 	};
 	/*!
 	\author		Sylvain DOREMUS

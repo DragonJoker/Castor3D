@@ -136,7 +136,7 @@
 	template< TPL_PIXEL_FORMAT FT >
 	Pixel< FT >::Pixel( Pixel && p_pxl )
 	{
-		m_pComponents = std::move( p_pxl.m_pComponents	);
+		m_pComponents = std::move( p_pxl.m_pComponents );
 		p_pxl.m_pComponents.reset();
 	}
 
@@ -188,7 +188,7 @@
 		if ( this != &p_pxl )
 		{
 			clear();
-			m_pComponents = std::move( p_pxl.m_pComponents	);
+			m_pComponents = std::move( p_pxl.m_pComponents );
 			p_pxl.m_pComponents.reset();
 		}
 

@@ -18,7 +18,6 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
-#include "State/DepthStencilState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -579,24 +578,22 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::RenderBackground( Size const & p_size, Pipeline & p_pipeline )
+	void Scene::RenderBackground( Size const & p_size )
 	{
 		if ( m_backgroundImage )
 		{
 			if ( m_backgroundImage->IsInitialised() )
 			{
-				ContextRPtr l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
-				l_context->GetNoDepthState()->Apply();
-				l_context->RenderTexture( p_size, *m_backgroundImage );
+				GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, *m_backgroundImage );
 			}
 		}
 	}
 
-	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera, Pipeline & p_pipeline )
+	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera )
 	{
 		if ( m_skybox )
 		{
-			m_skybox->Render( p_camera, p_pipeline );
+			m_skybox->Render( p_camera );
 		}
 	}
 

@@ -290,7 +290,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la fenêtre
 		 *\return		Le format des pixels de la fenêtre
 		 */
-		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		C3D_API Castor::PixelFormat GetPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Sets the window pixel format
@@ -299,7 +299,7 @@ namespace Castor3D
 		 *\brief		Définit le format des pixels de la fenêtre
 		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
 		 */
-		C3D_API void SetPixelFormat( Castor::ePIXEL_FORMAT val );
+		C3D_API void SetPixelFormat( Castor::PixelFormat val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window index
@@ -476,35 +476,44 @@ namespace Castor3D
 		void DoUpdateSize();
 
 	private:
-		//!\~english Total number of render windows	\~french Nombre total de fenêtres de rendu
+		//!\~english	Total number of render windows.
+		//!\~french		Nombre total de fenêtres de rendu.
 		static uint32_t s_nbRenderWindows;
-		//!\~english This window's index	\~french Index de la fenêtre
+		//!\~english	This window's index.
+		//!\~french		Index de la fenêtre.
 		uint32_t m_index;
-		//!\~english The handle of the display window	\~french Handle de la fenêtre sustème
+		//!\~english	The handle of the display window.
+		//!\~french		Handle de la fenêtre sustème.
 		WindowHandle m_handle;
-		//!\~english The render target, which receives the main render	\~french La render target, recevant le rendu principal
+		//!\~english	The render target, which receives the main render.
+		//!\~french		La render target, recevant le rendu principal.
 		RenderTargetWPtr m_renderTarget;
-		//!\~english The events listener	\~french Gestionnaire d'évènements
+		//!\~english	The events listener.
+		//!\~french		Gestionnaire d'évènements.
 		FrameListenerWPtr m_wpListener;
-		//!\~english Tells if the window is initalised	\~french Dit si la fenêtre est initialisée
+		//!\~english	Tells if the window is initalised.
+		//!\~french		Dit si la fenêtre est initialisée.
 		bool m_initialised;
-		//!\~english The rendering context	\~french Le contexte de rendu
+		//!\~english	The rendering context.
+		//!\~french		Le contexte de rendu.
 		ContextSPtr m_context;
-		//!\~english Tells VSync is activated	\~french Dit si la VSync est activée
+		//!\~english	Tells VSync is activated.
+		//!\~french		Dit si la VSync est activée.
 		bool m_bVSync;
-		//!\~english Tells fullscreen is activated	\~french Dit si le rendu est en plein écran
+		//!\~english	Tells fullscreen is activated.
+		//!\~french		Dit si le rendu est en plein écran.
 		bool m_bFullscreen;
-		//!\~english Depth and stencil buffers states	\~french Etats des tampons de profondeur et stencil
-		DepthStencilStateWPtr m_wpDepthStencilState;
-		//!\~english Rasteriser states	\~french Etats du rasteriser
-		RasteriserStateWPtr m_wpRasteriserState;
-		//!\~english The window 's back buffers.	\~french Les tampons de rendu de la fenêtre.
+		//!\~english	The window's back buffers.
+		//!\~french		Les tampons de rendu de la fenêtre.
 		BackBuffersSPtr m_backBuffers;
-		//!\~english The window size.	\~french Les dimensions de la fenêtre.
+		//!\~english	The window size.
+		//!\~french		Les dimensions de la fenêtre.
 		Castor::Size m_size;
-		//!\~english  Tells we need to save a frame.	\~english Dit si l'on veut sauvegarder une immage.
+		//!\~english	Tells we need to save a frame.
+		//!\~french		Dit si l'on veut sauvegarder une immage.
 		bool m_toSave = false;
-		//!\~english  The pixel buffer holding the saved image.	\~english Le tampon de pixels contenant l'image sauvegardée.
+		//!\~english	The pixel buffer holding the saved image.
+		//!\~french		Le tampon de pixels contenant l'image sauvegardée.
 		Castor::PxBufferBaseSPtr m_saveBuffer;
 	};
 }

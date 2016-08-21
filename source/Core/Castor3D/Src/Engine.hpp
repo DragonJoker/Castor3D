@@ -26,13 +26,10 @@ SOFTWARE.
 #include "Cache/Cache.hpp"
 #include "Miscellaneous/Version.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "ListenerCache.hpp"
 #include "MaterialCache.hpp"
 #include "OverlayCache.hpp"
 #include "PluginCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
 #include "ShaderCache.hpp"
@@ -303,18 +300,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the default BlendState (no blend)
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le BlendState par défault (pas de blend)
-		 *\return		La valeur
-		 */
-		inline BlendStateSPtr GetDefaultBlendState()const
-		{
-			return m_defaultBlendState;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the default Sampler
 		 *\return		The Sampler
 		 *\~french
@@ -559,9 +544,6 @@ namespace Castor3D
 		//!\~english	The need for per object lighting.
 		//!\~french		Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
-		//!\~english	Default blend states (no blend).
-		//!\~french		Etats de blend par défaut (pas de blend).
-		BlendStateSPtr m_defaultBlendState;
 		//!\~english	Default sampler.
 		//!\~french		Le sampler par défaut.
 		SamplerSPtr m_defaultSampler;
@@ -574,15 +556,6 @@ namespace Castor3D
 		//!\~english	The sampler states collection.
 		//!\~french		La collection de sampler states.
 		DECLARE_CACHE_MEMBER( sampler, Sampler );
-		//!\~english	The DepthStencilState collection.
-		//!\~french		La collection de DepthStencilState.
-		DECLARE_CACHE_MEMBER( depthStencilState, DepthStencilState );
-		//!\~english	The RasteriserState collection.
-		//!\~french		La collection de RasteriserState.
-		DECLARE_CACHE_MEMBER( rasteriserState, RasteriserState );
-		//!\~english	The BlendState collection.
-		//!\~french		La collection de BlendState.
-		DECLARE_CACHE_MEMBER( blendState, BlendState );
 		//!\~english	The materials cache.
 		//!\~french		Le cache de matériaux.
 		DECLARE_CACHE_MEMBER( material, Material );

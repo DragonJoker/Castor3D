@@ -63,7 +63,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Fill
 		 */
-		void Fill( Castor3D::TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		void Fill( Castor3D::TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format );
 	};
 }
 

@@ -4,7 +4,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	DepthStencilRenderBuffer::DepthStencilRenderBuffer( ePIXEL_FORMAT p_format )
+	DepthStencilRenderBuffer::DepthStencilRenderBuffer( PixelFormat p_format )
 		:	RenderBuffer( eBUFFER_COMPONENT_DEPTH, p_format )
 	{
 	}

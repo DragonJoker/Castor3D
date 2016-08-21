@@ -132,24 +132,20 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders the scene background.
 		 *\param[in]	p_size		The target dimensions.
-		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Rend le fond de la scène.
 		 *\param[in]	p_size		Les dimensions de la cible.
-		 *\param[in]	p_pipeline	Le pipeline de rend.
 		 */
-		C3D_API void RenderBackground( Castor::Size const & p_size, Pipeline & p_pipeline );
+		C3D_API void RenderBackground( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Renders the scene foreground (skybox).
 		 *\param[in]	p_size		The target dimensions.
-		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Rend le devant de la scène (skybox).
 		 *\param[in]	p_size		Les dimensions de la cible.
-		 *\param[in]	p_pipeline	Le pipeline de rend.
 		 */
-		C3D_API void RenderForeground( Castor::Size const & p_size, Camera const & p_camera, Pipeline & p_pipeline );
+		C3D_API void RenderForeground( Castor::Size const & p_size, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Updates the scene before render.

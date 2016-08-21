@@ -2,7 +2,6 @@
 
 #include "AnimatedObjectGroupCache.hpp"
 #include "BillboardCache.hpp"
-#include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
 #include "Engine.hpp"
 #include "GeometryCache.hpp"
@@ -318,10 +317,10 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			ePIXEL_FORMAT l_ePF;
+			PixelFormat l_ePF;
 			p_params[0]->Get( l_ePF );
 
-			if ( l_ePF < ePIXEL_FORMAT_DEPTH16 )
+			if ( l_ePF < PixelFormat::D16 )
 			{
 				l_parsingContext->pRenderTarget->SetPixelFormat( l_ePF );
 			}
@@ -2359,8 +2358,8 @@ namespace Castor3D
 			uint32_t l_uiDstBlend;
 			p_params[0]->Get( l_uiSrcBlend );
 			p_params[1]->Get( l_uiDstBlend );
-			l_pass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
-			l_pass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
+			//l_pass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
+			//l_pass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
 		}
 	}
 	END_ATTRIBUTE()

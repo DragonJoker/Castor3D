@@ -1,7 +1,5 @@
 #include "Context.hpp"
 
-#include "BlendStateCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
@@ -48,6 +46,13 @@ namespace Castor3D
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex )[i++ * m_declaration.GetStride()] );
 		}
+
+		DepthStencilState l_dsState;
+		l_dsState.SetDepthTest( false );
+		BlendState l_blState;
+		MultisampleState l_msState;
+		RasteriserState l_rsState;
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
 	}
 
 	Context::~Context()
@@ -65,11 +70,6 @@ namespace Castor3D
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_bMultiSampling = p_window->IsMultisampling();
-		m_dsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthState" ) );
-		m_dsStateNoDepth->SetDepthTest( false );
-		m_dsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_dsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateCache().Add( cuT( "NoDepthWriterState" ) );
-		m_dsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 
 		if ( l_return )
@@ -91,8 +91,6 @@ namespace Castor3D
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
-			m_dsStateNoDepth->Initialise();
-			m_dsStateNoDepthWrite->Initialise();
 			DoEndCurrent();
 		}
 
@@ -104,8 +102,6 @@ namespace Castor3D
 		m_initialised = false;
 		DoSetCurrent();
 		DoCleanup();
-		m_dsStateNoDepth->Cleanup();
-		m_dsStateNoDepthWrite->Cleanup();
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
@@ -122,8 +118,6 @@ namespace Castor3D
 		m_timerQuery[1]->Destroy();
 		DoEndCurrent();
 		DoDestroy();
-		m_dsStateNoDepth.reset();
-		m_dsStateNoDepthWrite.reset();
 		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();
@@ -172,15 +166,17 @@ namespace Castor3D
 	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program )
 	{
 		m_viewport.Resize( p_size );
-		m_viewport.Render( GetPipeline() );
-
+		m_viewport.Update();
+		m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		
 		if ( p_program.GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
+			m_pipeline->Apply();
 			FrameVariableBufferSPtr l_matrices = p_program.FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 			if ( l_matrices )
 			{
-				GetPipeline().ApplyProjection( *l_matrices );
+				m_pipeline->ApplyProjection( *l_matrices );
 			}
 
 			p_program.Bind();

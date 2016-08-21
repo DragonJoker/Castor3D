@@ -273,30 +273,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the DepthStencilState
-		 *\return		The DepthStencilState
-		 *\~french
-		 *\brief		Récupère le DepthStencilState
-		 *\return		Le DepthStencilState
-		 */
-		inline DepthStencilStateSPtr GetDepthStencilState()const
-		{
-			return m_wpDepthStencilState.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RasteriserState
-		 *\return		The RasteriserState
-		 *\~french
-		 *\brief		Récupère le RasteriserState
-		 *\return		Le RasteriserState
-		 */
-		inline RasteriserStateSPtr GetRasteriserState()const
-		{
-			return m_wpRasteriserState.lock();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the RenderTechnique
 		 *\return		The RenderTechnique
 		 *\~french
@@ -531,7 +507,7 @@ namespace Castor3D
 		 *\brief		Récupère le format des pixels de la fenêtre
 		 *\return		Le format des pixels de la fenêtre
 		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		inline Castor::PixelFormat GetPixelFormat()const
 		{
 			return m_pixelFormat;
 		}
@@ -543,7 +519,7 @@ namespace Castor3D
 		 *\brief		Définit le format des pixels de la fenêtre
 		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
 		 */
-		inline void SetPixelFormat( Castor::ePIXEL_FORMAT val )
+		inline void SetPixelFormat( Castor::PixelFormat val )
 		{
 			m_pixelFormat = val;
 		}
@@ -610,57 +586,77 @@ namespace Castor3D
 		C3D_API static const Castor::String DefaultSamplerName;
 
 	protected:
-		//!\~english The render target type	\~french Type de RenderTarget
+		//!\~english	The render target type.
+		//!\~french		Type de RenderTarget.
 		eTARGET_TYPE m_eTargetType;
-		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée
+		//!\~english	Tells if the target is initalised.
+		//!\~french		Dit si la cible est initialisée.
 		bool m_initialised;
-		//!\~english The target size	\~french Les dimensions de la cible
+		//!\~english	The target size.
+		//!\~french		Les dimensions de la cible.
 		Castor::Size m_size;
-		//!\~english The technique used to render this target	\~french La technique utilisée pour rendre cette cible
+		//!\~english	The technique used to render this target.
+		//!\~french		La technique utilisée pour rendre cette cible.
 		RenderTechniqueSPtr m_renderTechnique;
-		//!\~english Tells whether or not to use multisampling	\~french Dit si on utilise le multisampling ou pas
+		//!\~english	Tells whether or not to use multisampling.
+		//!\~french		Dit si on utilise le multisampling ou pas.
 		bool m_bMultisampling;
-		//!\~english Defines the samples count if multisampling is activated	\~french Le nombre de samples utilisés pour le multisampling
+		//!\~english	Defines the samples count if multisampling is activated.
+		//!\~french		Le nombre de samples utilisés pour le multisampling.
 		int32_t m_samplesCount;
-		//!\~english The scene rendered in this render target	\~french La scène rendue par cette RenderTarget
+		//!\~english	The scene rendered in this render target.
+		//!\~french		La scène rendue par cette RenderTarget.
 		SceneWPtr m_pScene;
-		//!\~english The camera used to render the scene	\~french La caméra utilisée pour rendre la scène
+		//!\~english	The camera used to render the scene.
+		//!\~french		La caméra utilisée pour rendre la scène.
 		CameraWPtr m_pCamera;
-		//!\~english The left eye camera used to render the stereo scene	\~french La caméra de l'oeil gauche utilisée pour rendre la scène en stéréo
+		//!\~english	The left eye camera used to render the stereo scene.
+		//!\~french		La caméra de l'oeil gauche utilisée pour rendre la scène en stéréo.
 		CameraWPtr m_pCameraLEye;
-		//!\~english The right eye camera used to render the stereo scene	\~french La caméra de l'oeil droit utilisée pour rendre la scène en stéréo
+		//!\~english	The right eye camera used to render the stereo scene.
+		//!\~french		La caméra de l'oeil droit utilisée pour rendre la scène en stéréo.
 		CameraWPtr m_pCameraREye;
-		//!\~english Tells the window uses stereoscopic rendering	\~french Dit si la fenêtre utilise un rendu stéréoscopique
+		//!\~english	Tells the window uses stereoscopic rendering.
+		//!\~french		Dit si la fenêtre utilise un rendu stéréoscopique.
 		bool m_bStereo;
-		//!\~english Intra ocular distance used in stereoscopic rendering	\~french Distance inter oculaire en rendu stéréoscopique
+		//!\~english	Intra ocular distance used in stereoscopic rendering.
+		//!\~french		Distance inter oculaire en rendu stéréoscopique.
 		real m_rIntraOcularDistance;
-		//!\~english Frame buffer for left/middle eye	\~french tampon d'image pour l'oeil gauche/milieu
+		//!\~english	Frame buffer for left/middle eye.
+		//!\~french		tampon d'image pour l'oeil gauche/milieu.
 		stFRAME_BUFFER m_fbLeftEye;
-		//!\~english Frame buffer for right eye	\~french Le tampon d'image pour l'oeil droit
+		//!\~english	Frame buffer for right eye.
+		//!\~french		Le tampon d'image pour l'oeil droit.
 		stFRAME_BUFFER m_fbRightEye;
-		//!\~english The currently active frame buffer (useful in stereoscopic rendering)	\~french Le tampon d'image actuellement actif (utile en rendu stéréoscopique)
+		//!\~english	The currently active frame buffer (useful in stereoscopic rendering).
+		//!\~french		Le tampon d'image actuellement actif (utile en rendu stéréoscopique).
 		FrameBufferWPtr m_pCurrentFrameBuffer;
-		//!\~english The currently active camera (useful in stereoscopic rendering)	\~french La caméra actuellement active (utile en rendu stéréoscopique)
+		//!\~english	The currently active camera (useful in stereoscopic rendering).
+		//!\~french		La caméra actuellement active (utile en rendu stéréoscopique).
 		CameraWPtr m_pCurrentCamera;
-		//!\~english The target display format	\~french Le format des pixels de la cible
-		Castor::ePIXEL_FORMAT m_pixelFormat;
-		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées
+		//!\~english	The target display format.
+		//!\~french		Le format des pixels de la cible.
+		Castor::PixelFormat m_pixelFormat;
+		//!\~english	The number of actually created render targets.
+		//!\~french		Le compte de render target actuellement créées.
 		static uint32_t sm_uiCount;
-		//!\~english This render target's index	\~french L'index de cette render target
+		//!\~english	This render target's index.
+		//!\~french		L'index de cette render target.
 		uint32_t m_index;
-		//!\~english The render technique name.	\~french Le nom de la technique de rendu.
+		//!\~english	The render technique name.
+		//!\~french		Le nom de la technique de rendu.
 		Castor::String m_techniqueName;
-		//!\~english The render technique parameters.	\~french Les paramètres de la technique de rendu.
+		//!\~english	The render technique parameters.
+		//!\~french		Les paramètres de la technique de rendu.
 		Parameters m_techniqueParameters;
-		//!\~english Depth and stencil buffers states	\~french Etats des buffers de profondeur et stencil
-		DepthStencilStateWPtr m_wpDepthStencilState;
-		//!\~english Rasteriser states	\~french Etats du rasteriser
-		RasteriserStateWPtr m_wpRasteriserState;
-		//!\~english The post effects.	\~french Les effets post rendu.
+		//!\~english	The post effects.
+		//!\~french		Les effets post rendu.
 		PostEffectPtrArray m_postEffects;
-		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
+		//!\~english	The tone mapping implementation.
+		//!\~french		L'implémentation de mappage de ton.
 		ToneMappingSPtr m_toneMapping;
-		//!\~english The visible objects count.	\~french Le nombre d'objets visibles.
+		//!\~english	The visible objects count.
+		//!\~french		Le nombre d'objets visibles.
 		uint32_t m_visibleObjectsCount;
 	};
 }

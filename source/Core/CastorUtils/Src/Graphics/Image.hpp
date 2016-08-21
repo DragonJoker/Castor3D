@@ -129,7 +129,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat );
+		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format, ByteArray const & p_buffer, PixelFormat p_eBufferFormat );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -146,7 +146,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format = PixelFormat::A8R8G8B8, uint8_t const * p_buffer = nullptr, PixelFormat p_eBufferFormat = PixelFormat::A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -172,7 +172,7 @@ namespace Castor
 		 *\param[in]	p_size		Les dimensions voulues pour l'image
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 */
-		template< ePIXEL_FORMAT PFSrc, ePIXEL_FORMAT PFDst >
+		template< PixelFormat PFSrc, PixelFormat PFDst >
 		Image( String const & p_name, Size const & p_size, uint8_t const * p_buffer = nullptr )
 			: Resource< Image > ( p_name )
 			, m_buffer( std::make_shared< PxBuffer< PFDst > >( p_size, p_buffer, PFSrc ) )
@@ -297,7 +297,7 @@ namespace Castor
 		 *\param[in]	p_pixel	Le pixel
 		 *\return		La référence de l'image
 		 */
-		template< ePIXEL_FORMAT PF > Image & SetPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
+		template< PixelFormat PF > Image & SetPixel( uint32_t x, uint32_t y, Pixel< PF > const & p_pixel )
 		{
 			CHECK_INVARIANTS();
 			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
@@ -315,7 +315,7 @@ namespace Castor
 		 *\param[in]	x,y		Les coordonnées du pixel
 		 *\param[out]	p_pixel	Reçoit le pixel
 		 */
-		template< ePIXEL_FORMAT PF > void GetPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
+		template< PixelFormat PF > void GetPixel( uint32_t x, uint32_t y, Pixel< PF > & p_pixel )const
 		{
 			CHECK_INVARIANTS();
 			REQUIRE( x < m_buffer->width() && y < m_buffer->height() );
@@ -334,7 +334,7 @@ namespace Castor
 		 *\param[out]	p_pPixel	Reçoit le pixel dans le format donné
 		 *\param[in]	p_format	Le format voulu pour le buffer
 		 */
-		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_format )const;
+		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, PixelFormat p_format )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel colour
@@ -516,7 +516,7 @@ namespace Castor
 		 *\brief		Récupère le format des pixels de l'image
 		 *\return		Le format des pixels de l'image
 		 */
-		inline ePIXEL_FORMAT GetPixelFormat()const
+		inline PixelFormat GetPixelFormat()const
 		{
 			return m_buffer->format();
 		}

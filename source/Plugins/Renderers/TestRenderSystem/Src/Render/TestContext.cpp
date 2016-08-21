@@ -11,7 +11,6 @@ namespace TestRender
 	TestContext::TestContext( TestRenderSystem & p_renderSystem )
 		: Context{ p_renderSystem }
 	{
-		m_pipeline = std::make_unique< TestPipeline >( *this );
 	}
 
 	TestContext::~TestContext()

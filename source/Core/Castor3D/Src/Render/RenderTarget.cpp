@@ -1,12 +1,9 @@
 #include "RenderTarget.hpp"
 
-#include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "MaterialCache.hpp"
 #include "OverlayCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "SamplerCache.hpp"
 #include "SceneCache.hpp"
 #include "SceneNodeCache.hpp"
@@ -29,8 +26,6 @@
 #include "Render/RenderTarget.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Scene.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -178,7 +173,7 @@ namespace Castor3D
 	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
-		, m_pixelFormat{ ePIXEL_FORMAT_A8R8G8B8 }
+		, m_pixelFormat{ PixelFormat::A8R8G8B8 }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -192,8 +187,6 @@ namespace Castor3D
 		, m_fbRightEye{ *this }
 	{
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
-		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
@@ -439,8 +432,6 @@ namespace Castor3D
 			if ( p_fb.m_frameBuffer->Bind() )
 			{
 				p_fb.m_frameBuffer->Clear();
-				GetDepthStencilState()->Apply();
-				GetRasteriserState()->Apply();
 				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
 				// We also render overlays.
 				GetEngine()->GetOverlayCache().Render( *l_scene, m_size );

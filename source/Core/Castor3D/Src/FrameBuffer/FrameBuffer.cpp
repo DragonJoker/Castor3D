@@ -7,8 +7,6 @@
 
 #include "Render/RenderSystem.hpp"
 #include "Render/Context.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
@@ -47,17 +45,19 @@ namespace Castor3D
 
 		for ( auto l_attach : m_attaches )
 		{
-			if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+			switch ( l_attach->GetAttachmentPoint() )
 			{
+			case eATTACHMENT_POINT_COLOUR:
 				l_targets |= eBUFFER_COMPONENT_COLOUR;
-			}
-			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_DEPTH )
-			{
+				break;
+
+			case eATTACHMENT_POINT_DEPTH:
 				l_targets |= eBUFFER_COMPONENT_DEPTH;
-			}
-			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_STENCIL )
-			{
+				break;
+
+			case eATTACHMENT_POINT_STENCIL:
 				l_targets |= eBUFFER_COMPONENT_STENCIL;
+				break;
 			}
 		}
 
@@ -222,9 +222,9 @@ namespace Castor3D
 		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
-	ePIXEL_FORMAT FrameBuffer::DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index )
+	PixelFormat FrameBuffer::DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index )
 	{
-		ePIXEL_FORMAT l_return = ePIXEL_FORMAT_COUNT;
+		PixelFormat l_return = PixelFormat::Count;
 
 		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
 		{

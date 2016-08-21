@@ -642,7 +642,7 @@ namespace GlRender
 		return BlendFactors[uint32_t( p_eBlendFactor )];
 	}
 
-	inline OpenGl::PixelFmt const & OpenGl::Get( Castor::ePIXEL_FORMAT p_pixelFormat )const
+	inline OpenGl::PixelFmt const & OpenGl::Get( Castor::PixelFormat p_pixelFormat )const
 	{
 		return PixelFormats[uint32_t( p_pixelFormat )];
 	}
@@ -652,7 +652,7 @@ namespace GlRender
 		return ShaderTypes[uint32_t( p_type )];
 	}
 
-	inline eGL_INTERNAL_FORMAT OpenGl::GetInternal( Castor::ePIXEL_FORMAT p_format )const
+	inline eGL_INTERNAL_FORMAT OpenGl::GetInternal( Castor::PixelFormat p_format )const
 	{
 		return Internals[uint32_t( p_format )];
 	}
@@ -677,7 +677,7 @@ namespace GlRender
 		return RboAttachments[uint32_t( p_eAttachment )];
 	}
 
-	inline eGL_RENDERBUFFER_STORAGE OpenGl::GetRboStorage( Castor::ePIXEL_FORMAT p_pixelFormat )const
+	inline eGL_RENDERBUFFER_STORAGE OpenGl::GetRboStorage( Castor::PixelFormat p_pixelFormat )const
 	{
 		return RboStorages[uint32_t( p_pixelFormat )];
 	}
@@ -923,6 +923,12 @@ namespace GlRender
 	{
 		m_pfnClearColor( p_colour.red().value(), p_colour.green().value(), p_colour.blue().value(), p_colour.alpha().value() );
 		return glCheckError( *this, "glClearColor" );
+	}
+
+	bool OpenGl::ClearDepth( double value )const
+	{
+		m_pfnClearDepth( value );
+		return glCheckError( *this, "glClearDepth" );
 	}
 
 	bool OpenGl::ShadeModel( eGL_SHADE_MODEL mode )const

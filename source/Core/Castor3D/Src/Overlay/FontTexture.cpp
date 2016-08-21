@@ -53,7 +53,7 @@ namespace Castor3D
 			uint32_t const l_uiMaxHeight = l_font->GetMaxHeight();
 			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
 			auto & l_image = m_texture->GetImage();
-			l_image.SetSource( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 ) );
+			l_image.SetSource( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), PixelFormat::L8 ) );
 
 			auto l_it = l_font->begin();
 			Size const & l_sizeImg = l_image.GetDimensions();

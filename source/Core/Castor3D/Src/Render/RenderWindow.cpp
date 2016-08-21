@@ -1,11 +1,8 @@
 #include "RenderWindow.hpp"
 
-#include "BlendStateCache.hpp"
 #include "CameraCache.hpp"
-#include "DepthStencilStateCache.hpp"
 #include "Engine.hpp"
 #include "ListenerCache.hpp"
-#include "RasteriserStateCache.hpp"
 #include "TargetCache.hpp"
 #include "SceneCache.hpp"
 #include "ShaderCache.hpp"
@@ -27,6 +24,7 @@
 #include "Scene/Scene.hpp"
 #include "State/BlendState.hpp"
 #include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Shader/FrameVariable.hpp"
@@ -84,10 +82,6 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		auto l_dsstate = GetEngine()->GetDepthStencilStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
-		l_dsstate->SetDepthTest( false );
-		m_wpDepthStencilState = l_dsstate;
-		m_wpRasteriserState = GetEngine()->GetRasteriserStateCache().Add( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
@@ -191,8 +185,6 @@ namespace Castor3D
 
 			if ( l_target && l_target->IsInitialised() )
 			{
-				l_engine->GetDefaultBlendState()->Apply();
-
 				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
 					DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
@@ -327,9 +319,9 @@ namespace Castor3D
 		}
 	}
 
-	ePIXEL_FORMAT RenderWindow::GetPixelFormat()const
+	PixelFormat RenderWindow::GetPixelFormat()const
 	{
-		ePIXEL_FORMAT l_return = ePIXEL_FORMAT( -1 );
+		PixelFormat l_return = PixelFormat( -1 );
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
@@ -340,7 +332,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RenderWindow::SetPixelFormat( ePIXEL_FORMAT val )
+	void RenderWindow::SetPixelFormat( PixelFormat val )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -431,8 +423,6 @@ namespace Castor3D
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 			m_backBuffers->Clear();
-			m_wpDepthStencilState.lock()->Apply();
-			m_wpRasteriserState.lock()->Apply();
 			m_context->RenderTexture( m_size, *l_texture );
 			m_backBuffers->Unbind();
 		}

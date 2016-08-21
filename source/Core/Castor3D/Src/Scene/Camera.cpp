@@ -138,9 +138,9 @@ namespace Castor3D
 		}
 	}
 
-	void Camera::Render( Pipeline & p_pipeline )
+	void Camera::Update()
 	{
-		bool l_modified = m_viewport.Render( p_pipeline );
+		bool l_modified = m_viewport.Update();
 		SceneNodeSPtr l_node = GetParent();
 
 		if ( l_node )
@@ -206,16 +206,7 @@ namespace Castor3D
 				// Update view matrix
 				matrix::look_at( m_view, l_position, l_position + l_front, l_up );
 			}
-
-			p_pipeline.SetViewMatrix( m_view );
 		}
-
-		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( this );
-	}
-
-	void Camera::EndRender()
-	{
-		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( nullptr );
 	}
 
 	void Camera::Resize( uint32_t p_width, uint32_t p_height )

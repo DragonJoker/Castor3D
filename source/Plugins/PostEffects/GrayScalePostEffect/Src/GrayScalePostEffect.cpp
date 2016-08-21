@@ -1,6 +1,5 @@
 #include "GrayScalePostEffect.hpp"
 
-#include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
 #include <ShaderCache.hpp>
@@ -109,15 +108,12 @@ namespace GrayScale
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
 
-		if ( !m_renderTarget.GetEngine()->GetRasteriserStateCache().Has( l_name ) )
-		{
-			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Add( l_name );
-			m_rasteriser->SetCulledFaces( eFACE_BACK );
-		}
-		else
-		{
-			m_rasteriser = m_renderTarget.GetEngine()->GetRasteriserStateCache().Find( l_name );
-		}
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		RasteriserState l_rsstate;
+		l_rsstate.SetCulledFaces( eFACE_BACK );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{} );
 	}
 
 	GrayScalePostEffect::~GrayScalePostEffect()
@@ -165,7 +161,7 @@ namespace GrayScale
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
-			m_rasteriser->Apply();
+			m_pipeline->Apply();
 			bool l_return = m_surface.m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 

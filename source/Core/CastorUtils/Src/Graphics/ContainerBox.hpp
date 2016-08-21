@@ -65,7 +65,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 */
 		ContainerBox( ContainerBox const & p_container )
-			:	m_ptCenter( p_container.m_ptCenter	)
+			:	m_ptCenter( p_container.m_ptCenter )
 		{
 		}
 		/**
@@ -77,7 +77,7 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à déplacer
 		 */
 		ContainerBox( ContainerBox && p_container )
-			:	m_ptCenter( std::move( p_container.m_ptCenter )	)
+			:	m_ptCenter( std::move( p_container.m_ptCenter ) )
 		{
 			p_container.m_ptCenter = Point< real, Dimension >();
 		}
@@ -90,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_ptCenter	Le centre
 		 */
 		ContainerBox( Point< real, Dimension > const & p_ptCenter )
-			:	m_ptCenter( p_ptCenter	)
+			:	m_ptCenter( p_ptCenter )
 		{
 		}
 		/**

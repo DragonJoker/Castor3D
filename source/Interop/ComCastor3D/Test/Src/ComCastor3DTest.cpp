@@ -1,7 +1,5 @@
 #include "ComCastor3DTestPrerequisites.hpp"
 
-#import <Castor3D.tlb>
-
 #include <tchar.h>
 #include <iostream>
 

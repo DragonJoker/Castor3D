@@ -110,26 +110,30 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera used to render the scene.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra utilisée pour dessiner la scène.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void Render( Scene const & p_scene, Pipeline & p_pipeline ) = 0;
+		C3D_API virtual void Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
 		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_camera			The camera used to render the scene.
 		 *\param[in]	p_pipeline			The render pipeline.
 		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
 		 *\~french
 		 *\brief		Active la passe donnée pour le noeud de rendu.
 		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_camera			La caméra utilisée pour dessiner la scène.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API virtual void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags ) = 0;
+		C3D_API virtual void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
@@ -171,23 +175,11 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\~english
-		 *\brief		Render function.
-		 *\param[in]	p_scene		The rendered scene.
-		 *\param[in]	p_pipeline	The render pipeline.
-		 *\~french
-		 *\brief		Fonction de rendu.
-		 *\param[in]	p_scene		La scène rendue.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
 		 */
-		C3D_API void Render( Scene const & p_scene, Pipeline & p_pipeline )override;
+		C3D_API void Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )override;
 		/**
-		 *\~english
-		 *\brief		Unbinds the render node's pass.
-		 *\param[in]	p_scene			The scene.
-		 *\~french
-		 *\brief		Désctive la passe du noeud de rendu.
-		 *\param[in]	p_scene			La scène.
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
 		 */
 		C3D_API void UnbindPass( Scene const & p_scene )const override;
 
@@ -218,18 +210,9 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\~english
-		 *\brief		Binds the given pass to the render node.
-		 *\param[in]	p_scene				The rendered scene.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
-		 *\~french
-		 *\brief		Active la passe donnée pour le noeud de rendu.
-		 *\param[in]	p_scene				La scène rendue.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -263,18 +246,9 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\~english
-		 *\brief		Binds the given pass to the render node.
-		 *\param[in]	p_scene				The rendered scene.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
-		 *\~french
-		 *\brief		Active la passe donnée pour le noeud de rendu.
-		 *\param[in]	p_scene				La scène rendue.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -312,18 +286,9 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\~english
-		 *\brief		Binds the given pass to the render node.
-		 *\param[in]	p_scene				The rendered scene.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
-		 *\~french
-		 *\brief		Active la passe donnée pour le noeud de rendu.
-		 *\param[in]	p_scene				La scène rendue.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.

@@ -29,7 +29,7 @@ namespace Castor3D
 		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture.SetSampler( p_sampler );
-		l_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_A8R8G8B8 );
+		l_colourTexture->GetImage().SetSource( p_size, PixelFormat::A8R8G8B8 );
 		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
 
 		m_fbo->Create();

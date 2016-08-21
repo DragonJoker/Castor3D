@@ -16,7 +16,7 @@ if( OPENGL_FOUND )
 		${CastorBinsDependencies}
 		${PROJECT_NAME}
 		PARENT_SCOPE
-	)
+ )
 	
 	set( ${PROJECT_NAME}_DESCRIPTION "OpenGL Renderer" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
@@ -36,7 +36,7 @@ if( OPENGL_FOUND )
 		"${CastorMinLibraries};${OpenGlLibraries}"
 		"GlRenderSystemPch.hpp"
 		"GlRenderSystemPch.cpp"
-	)
+ )
 
 	parse_subdir_files( Buffer Buffer )
 	parse_subdir_files( Common Common  )

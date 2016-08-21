@@ -156,7 +156,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( Castor::Size{ w, h }, Castor::ePIXEL_FORMAT( format ) );
+			m_internal->SetSource( Castor::Size{ w, h }, Castor::PixelFormat( format ) );
 			hr = S_OK;
 		}
 		else
@@ -179,7 +179,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->SetSource( Castor::Point3ui{ w, h, d }, Castor::ePIXEL_FORMAT( format ) );
+			m_internal->SetSource( Castor::Point3ui{ w, h, d }, Castor::PixelFormat( format ) );
 			hr = S_OK;
 		}
 		else

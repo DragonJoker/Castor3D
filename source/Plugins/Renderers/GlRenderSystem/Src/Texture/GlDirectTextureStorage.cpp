@@ -90,7 +90,7 @@ namespace GlRender
 		}
 	}
 
-	void GlDirectTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
+	void GlDirectTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
 		OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( p_format );

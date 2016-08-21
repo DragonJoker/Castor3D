@@ -30,13 +30,20 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Pipeline::Pipeline( Context & p_context )
-		: OwnedBy< Context >( p_context )
-		, m_mtxIdentity( 1 )
-		, m_mtxView( 1 )
-		, m_mtxModel( 1 )
-		, m_mtxProjection( 1 )
-		, m_mtxNormal( 1 )
+	Pipeline::Pipeline( RenderSystem & p_renderSystem
+					    , DepthStencilState && p_dsState
+					    , RasteriserState && p_rsState
+					    , BlendState && p_blState
+					    , MultisampleState && p_msState )
+		: OwnedBy< RenderSystem >{ p_renderSystem }
+		, m_mtxView{ 1 }
+		, m_mtxModel{ 1 }
+		, m_mtxProjection{ 1 }
+		, m_mtxNormal{ 1 }
+		, m_dsState{ std::move( p_dsState ) }
+		, m_rsState{ std::move( p_rsState ) }
+		, m_blState{ std::move( p_blState ) }
+		, m_msState{ std::move( p_msState ) }
 	{
 	}
 

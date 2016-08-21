@@ -103,7 +103,7 @@ void RenderPanel::InitialiseRenderWindow()
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );
-	l_pRenderTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
+	l_pRenderTarget->SetPixelFormat( PixelFormat::A8R8G8B8 );
 	l_pRenderWindow->SetRenderTarget( l_pRenderTarget );
 	Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 

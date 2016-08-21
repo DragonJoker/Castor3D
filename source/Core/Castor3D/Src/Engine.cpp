@@ -22,9 +22,6 @@
 #include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/BlendState.hpp"
-#include "State/DepthStencilState.hpp"
-#include "State/RasteriserState.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Texture/Sampler.hpp"
 
@@ -105,30 +102,6 @@ namespace Castor3D
 														, l_eventInit
 														, l_eventClean
 														, l_mergeResource );
-		m_depthStencilStateCache = MakeCache< DepthStencilState, String >(	*this
-																			, [this]( String const & p_name )
-																			{
-																				return GetRenderSystem()->CreateDepthStencilState();
-																			}
-																			, l_eventInit
-																			, l_eventClean
-																			, l_mergeResource );
-		m_rasteriserStateCache = MakeCache< RasteriserState, String >(	*this
-																		, [this]( String const & p_name )
-																		{
-																			return GetRenderSystem()->CreateRasteriserState();
-																		}
-																		, l_eventInit
-																		, l_eventClean
-																		, l_mergeResource );
-		m_blendStateCache = MakeCache< BlendState, String >( *this
-															, [this]( String const & p_name )
-															{
-																return GetRenderSystem()->CreateBlendState();
-															}
-															, l_eventInit
-															, l_eventClean
-															, l_mergeResource );
 		m_materialCache = MakeCache< Material, String >( *this
 														, [this]( String const & p_name )
 														{
@@ -180,16 +153,12 @@ namespace Castor3D
 
 	Engine::~Engine()
 	{
-		m_defaultBlendState.reset();
 		m_lightsSampler.reset();
 		m_defaultSampler.reset();
 
 		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
 		m_samplerCache->Clear();
 		m_shaderCache->Clear();
-		m_depthStencilStateCache->Clear();
-		m_rasteriserStateCache->Clear();
-		m_blendStateCache->Clear();
 		m_overlayCache->Clear();
 		m_fontCache.Clear();
 		m_imageCache.clear();
@@ -215,7 +184,6 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			m_defaultBlendState = m_blendStateCache->Add( cuT( "Default" ) );
 			m_defaultSampler = m_samplerCache->Add( cuT( "Default" ) );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
@@ -230,11 +198,6 @@ namespace Castor3D
 		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
-		}
-
-		if ( m_defaultBlendState )
-		{
-			PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
 		}
 
 		if ( m_lightsSampler )
@@ -272,18 +235,10 @@ namespace Castor3D
 
 			m_listenerCache->Cleanup();
 			m_sceneCache->Cleanup();
-			m_depthStencilStateCache->Cleanup();
-			m_rasteriserStateCache->Cleanup();
-			m_blendStateCache->Cleanup();
 			m_samplerCache->Cleanup();
 			m_overlayCache->Cleanup();
 			m_materialCache->Cleanup();
 			m_shaderCache->Cleanup();
-
-			if ( m_defaultBlendState )
-			{
-				PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
-			}
 
 			if ( m_lightsSampler )
 			{
@@ -304,13 +259,9 @@ namespace Castor3D
 			m_overlayCache->Clear();
 			m_materialCache->Clear();
 			m_sceneCache->Clear();
-			m_blendStateCache->Clear();
 			m_fontCache.Clear();
 			m_imageCache.clear();
 			m_shaderCache->Clear();
-			m_depthStencilStateCache->Clear();
-			m_rasteriserStateCache->Clear();
-			m_blendStateCache->Clear();
 			m_techniqueCache->Clear();
 		}
 	}

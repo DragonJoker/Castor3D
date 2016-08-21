@@ -80,6 +80,7 @@ namespace CastorCom
 		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( CreateBlendState )( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal );
 		STDMETHOD( CreateDepthStencilState )( /* [in] */ BSTR name, /* [out, retval] */ IDepthStencilState ** pVal );
+		STDMETHOD( CreateMultisampleState )( /* [in] */ BSTR name, /* [out, retval] */ IMultisampleState ** pVal );
 		STDMETHOD( CreateRasteriserState )( /* [in] */ BSTR name, /* [out, retval] */ IRasteriserState ** pVal );
 		STDMETHOD( RemoveScene )( /* [in] */ BSTR name );
 		STDMETHOD( LoadScene )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window );

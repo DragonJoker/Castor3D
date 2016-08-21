@@ -162,36 +162,48 @@ namespace Deferred
 		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
 
 	protected:
-		//!\~english The various textures	\~french Les diverses textures
+		//!\~english	The various textures.
+		//!\~french		Les diverses textures.
 		Castor3D::TextureUnitSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
-		//!\~english The deferred shading frame buffer	\~french Le tampon d'image pour le deferred shading
+		//!\~english	The deferred shading frame buffer.
+		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
-		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading
+		//!\~english	The attachments between textures and deferred shading frame buffer.
+		//!\~french		Les attaches entre les texture et le tampon deferred shading.
 		Castor3D::TextureAttachmentSPtr m_geometryPassTexAttachs[eDS_TEXTURE_COUNT];
-		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
+		//!\~english	The shader program used to render lights.
+		//!\~french		Le shader utilisé pour rendre les lumières.
 		Castor3D::ShaderProgramSPtr m_lightPassShaderProgram;
-		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
+		//!\~english	The framve variable buffer used to apply matrices.
+		//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
 		Castor3D::FrameVariableBufferWPtr m_lightPassMatrices;
-		//!\~english The framve variable buffer used to transmit scene values	\~french Le tampon de variables shader utilisé pour transmettre les variables de scène
+		//!\~english	The framve variable buffer used to transmit scene values.
+		//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
 		Castor3D::FrameVariableBufferWPtr m_lightPassScene;
-		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
+		//!\~english	Buffer elements declaration.
+		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
-		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
+		//!\~english	Vertex array (quad definition).
+		//!\~french		Tableau de vertex (définition du quad).
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;
-		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
+		//!\~english	Geometry buffers holder.
+		//!\~french		Conteneur de buffers de géométries.
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
+		//!\~english	The viewport used when rendering is done.
+		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
-		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
+		//!\~english	The shader variable containing the camera position.
+		//!\~french		La variable de shader contenant la position de la caméra.
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
-		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique
-		Castor3D::DepthStencilStateSPtr m_geometryPassDsState;
-		//!\~english The depth stencil state used by the lights pass	\~french Le DepthStencilState utilisé par la passe lumières
-		Castor3D::DepthStencilStateSPtr m_lightPassDsState;
-		//!\~english The blend state used by the lights pass	\~french Le BlendState utilisé par la passe lumières
-		Castor3D::BlendStateSPtr m_lightPassBlendState;
+		//!\~english	The pipeline used by the light pass.
+		//!\~french		Le pipeline utilisé par la passe lumières.
+		Castor3D::PipelineSPtr m_pipeline;
+		//!\~english	The current camera.
+		//!\~french		La caméra actuelle.
+		Castor3D::Camera * m_camera{ nullptr };
 	};
 }
 

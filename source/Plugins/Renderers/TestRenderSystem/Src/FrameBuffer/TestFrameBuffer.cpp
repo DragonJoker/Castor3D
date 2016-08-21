@@ -46,12 +46,12 @@ namespace TestRender
 		return true;
 	}
 
-	ColourRenderBufferSPtr TestFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_format )
+	ColourRenderBufferSPtr TestFrameBuffer::CreateColourRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< TestColourRenderBuffer >( p_format );
 	}
 
-	DepthStencilRenderBufferSPtr TestFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_format )
+	DepthStencilRenderBufferSPtr TestFrameBuffer::CreateDepthStencilRenderBuffer( PixelFormat p_format )
 	{
 		return std::make_shared< TestDepthStencilRenderBuffer >( p_format );
 	}

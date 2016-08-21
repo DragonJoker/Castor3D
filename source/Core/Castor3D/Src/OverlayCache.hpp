@@ -205,6 +205,22 @@ namespace Castor3D
 		C3D_API FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
 		/**
 		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	p_name		The object name.
+		 *\param[in]	p_params	The other constructor parameters.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	p_name		Le nom d'objet.
+		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\return		L'objet créé.
+		 */
+		inline ElementPtr Add( Key const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		{
+			return MyCacheType::Add( p_name, p_type, p_scene, p_parent );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french

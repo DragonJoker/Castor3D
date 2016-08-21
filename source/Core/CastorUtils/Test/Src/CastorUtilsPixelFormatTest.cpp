@@ -224,17 +224,17 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
 			Logger::LogDebug( l_stream );
-			ConvertPixel< ePIXEL_FORMAT_L8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_L32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A8L8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_AL32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A1R5G5B5 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A4R4G4B4 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_R5G6B5 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_R8G8B8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_RGB32F >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_ARGB32F >( l_source );
+			ConvertPixel< PixelFormat::L8 >( l_source );
+			ConvertPixel< PixelFormat::L32F >( l_source );
+			ConvertPixel< PixelFormat::A8L8 >( l_source );
+			ConvertPixel< PixelFormat::AL32F >( l_source );
+			ConvertPixel< PixelFormat::A1R5G5B5 >( l_source );
+			ConvertPixel< PixelFormat::A4R4G4B4 >( l_source );
+			ConvertPixel< PixelFormat::R5G6B5 >( l_source );
+			ConvertPixel< PixelFormat::R8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::A8R8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::RGB32F >( l_source );
+			ConvertPixel< PixelFormat::RGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -251,11 +251,11 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
 			Logger::LogDebug( l_stream );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertPixel< ePIXEL_FORMAT_STENCIL8 >( l_source );
+			ConvertPixel< PixelFormat::D16 >( l_source );
+			ConvertPixel< PixelFormat::D24 >( l_source );
+			ConvertPixel< PixelFormat::D32 >( l_source );
+			ConvertPixel< PixelFormat::D24S8 >( l_source );
+			ConvertPixel< PixelFormat::S8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -271,7 +271,7 @@ namespace
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 		{
-			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), ePIXEL_FORMAT( PFDst ), p_source->ptr(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), PixelFormat( PFDst ), p_source->ptr(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Converted buffer : " << *l_dest;
@@ -316,28 +316,28 @@ namespace
 				PF::SetByteBlue( l_pixel, l_value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_L8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_L32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A8L8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_AL32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A1R5G5B5 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A4R4G4B4 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_R5G6B5 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_R8G8B8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_RGB32F >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_ARGB32F >( l_source );
+			ConvertBuffer< PixelFormat::L8 >( l_source );
+			ConvertBuffer< PixelFormat::L32F >( l_source );
+			ConvertBuffer< PixelFormat::A8L8 >( l_source );
+			ConvertBuffer< PixelFormat::AL32F >( l_source );
+			ConvertBuffer< PixelFormat::A1R5G5B5 >( l_source );
+			ConvertBuffer< PixelFormat::A4R4G4B4 >( l_source );
+			ConvertBuffer< PixelFormat::R5G6B5 >( l_source );
+			ConvertBuffer< PixelFormat::R8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::A8R8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::RGB32F >( l_source );
+			ConvertBuffer< PixelFormat::RGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != PixelFormat::D24S8 >::type >
 	{
 		void operator()()
 		{
@@ -358,21 +358,21 @@ namespace
 				l_stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
+			ConvertBuffer< PixelFormat::D16 >( l_source );
+			ConvertBuffer< PixelFormat::D24 >( l_source );
+			ConvertBuffer< PixelFormat::D32 >( l_source );
+			ConvertBuffer< PixelFormat::D24S8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == ePIXEL_FORMAT_DEPTH24S8 >::type >
+	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == PixelFormat::D24S8 >::type >
 	{
 		void operator()()
 		{
@@ -393,22 +393,22 @@ namespace
 				l_stencil++;
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
+			ConvertBuffer< PixelFormat::D16 >( l_source );
+			ConvertBuffer< PixelFormat::D24 >( l_source );
+			ConvertBuffer< PixelFormat::D32 >( l_source );
+			ConvertBuffer< PixelFormat::D24S8 >( l_source );
+			ConvertBuffer< PixelFormat::S8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != PixelFormat::D24S8 >::type >
 	{
 		void operator()()
 		{
@@ -426,13 +426,13 @@ namespace
 				PF::SetByteStencil( l_pixel, l_value++ );
 			}
 
-			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
+			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, PixelFormat( PFSrc ), l_buffer.data(), PixelFormat( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
+			ConvertBuffer< PixelFormat::D24S8 >( l_source );
+			ConvertBuffer< PixelFormat::S8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -463,41 +463,41 @@ namespace Testing
 
 	void CastorUtilsPixelFormatTest::TestPixelConversions()
 	{
-		CheckPixelConversions< ePIXEL_FORMAT_L8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_L32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_A8L8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_AL32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_A1R5G5B5 >();
-		CheckPixelConversions< ePIXEL_FORMAT_A4R4G4B4 >();
-		CheckPixelConversions< ePIXEL_FORMAT_R5G6B5 >();
-		CheckPixelConversions< ePIXEL_FORMAT_R8G8B8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_A8R8G8B8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_RGB32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_ARGB32F >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH16 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH24 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH32 >();
-		CheckPixelConversions< ePIXEL_FORMAT_DEPTH24S8 >();
-		CheckPixelConversions< ePIXEL_FORMAT_STENCIL8 >();
+		CheckPixelConversions< PixelFormat::L8 >();
+		CheckPixelConversions< PixelFormat::L32F >();
+		CheckPixelConversions< PixelFormat::A8L8 >();
+		CheckPixelConversions< PixelFormat::AL32F >();
+		CheckPixelConversions< PixelFormat::A1R5G5B5 >();
+		CheckPixelConversions< PixelFormat::A4R4G4B4 >();
+		CheckPixelConversions< PixelFormat::R5G6B5 >();
+		CheckPixelConversions< PixelFormat::R8G8B8 >();
+		CheckPixelConversions< PixelFormat::A8R8G8B8 >();
+		CheckPixelConversions< PixelFormat::RGB32F >();
+		CheckPixelConversions< PixelFormat::RGBA32F >();
+		CheckPixelConversions< PixelFormat::D16 >();
+		CheckPixelConversions< PixelFormat::D24 >();
+		CheckPixelConversions< PixelFormat::D32 >();
+		CheckPixelConversions< PixelFormat::D24S8 >();
+		CheckPixelConversions< PixelFormat::S8 >();
 	}
 
 	void CastorUtilsPixelFormatTest::TestBufferConversions()
 	{
-		CheckBufferConversions< ePIXEL_FORMAT_L8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_L32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_A8L8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_AL32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_A1R5G5B5 >();
-		CheckBufferConversions< ePIXEL_FORMAT_A4R4G4B4 >();
-		CheckBufferConversions< ePIXEL_FORMAT_R5G6B5 >();
-		CheckBufferConversions< ePIXEL_FORMAT_R8G8B8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_A8R8G8B8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_RGB32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_ARGB32F >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH16 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH24 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH32 >();
-		CheckBufferConversions< ePIXEL_FORMAT_DEPTH24S8 >();
-		CheckBufferConversions< ePIXEL_FORMAT_STENCIL8 >();
+		CheckBufferConversions< PixelFormat::L8 >();
+		CheckBufferConversions< PixelFormat::L32F >();
+		CheckBufferConversions< PixelFormat::A8L8 >();
+		CheckBufferConversions< PixelFormat::AL32F >();
+		CheckBufferConversions< PixelFormat::A1R5G5B5 >();
+		CheckBufferConversions< PixelFormat::A4R4G4B4 >();
+		CheckBufferConversions< PixelFormat::R5G6B5 >();
+		CheckBufferConversions< PixelFormat::R8G8B8 >();
+		CheckBufferConversions< PixelFormat::A8R8G8B8 >();
+		CheckBufferConversions< PixelFormat::RGB32F >();
+		CheckBufferConversions< PixelFormat::RGBA32F >();
+		CheckBufferConversions< PixelFormat::D16 >();
+		CheckBufferConversions< PixelFormat::D24 >();
+		CheckBufferConversions< PixelFormat::D32 >();
+		CheckBufferConversions< PixelFormat::D24S8 >();
+		CheckBufferConversions< PixelFormat::S8 >();
 	}
 }

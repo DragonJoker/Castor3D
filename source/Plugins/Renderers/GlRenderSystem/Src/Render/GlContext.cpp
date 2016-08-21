@@ -29,7 +29,6 @@ namespace GlRender
 		, m_glRenderSystem{ &p_renderSystem }
 		, m_implementation{ std::make_unique< GlContextImpl >( GetOpenGl(), this ) }
 	{
-		m_pipeline = std::make_unique< GlPipeline >( GetOpenGl(), *this );
 	}
 
 	GlContext::~GlContext()

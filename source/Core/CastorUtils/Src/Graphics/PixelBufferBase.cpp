@@ -2,7 +2,7 @@
 
 namespace Castor
 {
-	PxBufferBase::PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_format )
+	PxBufferBase::PxBufferBase( Size const & p_size, PixelFormat p_format )
 		: m_pixelFormat( p_format )
 		, m_size( p_size )
 		, m_buffer( 0 )
@@ -34,7 +34,7 @@ namespace Castor
 		m_buffer.clear();
 	}
 
-	void PxBufferBase::init( uint8_t const * p_buffer, ePIXEL_FORMAT p_bufferFormat )
+	void PxBufferBase::init( uint8_t const * p_buffer, PixelFormat p_bufferFormat )
 	{
 		uint8_t l_bpp = PF::GetBytesPerPixel( format() );
 		uint32_t l_size = count() * l_bpp;
@@ -60,7 +60,7 @@ namespace Castor
 	void PxBufferBase::init( Size const & p_size )
 	{
 		m_size = p_size;
-		init( nullptr, ePIXEL_FORMAT_A8R8G8B8 );
+		init( nullptr, PixelFormat::A8R8G8B8 );
 	}
 
 	void PxBufferBase::swap( PxBufferBase & p_pixelBuffer )
@@ -91,126 +91,126 @@ namespace Castor
 		}
 	}
 
-	PxBufferBaseSPtr PxBufferBase::create( Size const & p_size, ePIXEL_FORMAT p_eWantedFormat, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	PxBufferBaseSPtr PxBufferBase::create( Size const & p_size, PixelFormat p_eWantedFormat, uint8_t const * p_buffer, PixelFormat p_eBufferFormat )
 	{
 		PxBufferBaseSPtr l_return;
 
 		switch ( p_eWantedFormat )
 		{
-		case ePIXEL_FORMAT_L8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_L8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::L8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::L8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_L16F32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_L16F32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::L16F32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::L16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_L32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_L32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::L32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::L32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_A8L8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A8L8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::A8L8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::A8L8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_AL16F32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_AL16F32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::AL16F32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::AL16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_AL32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_AL32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::AL32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::AL32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_A1R5G5B5:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A1R5G5B5 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::A1R5G5B5:
+			l_return = std::make_shared< PxBuffer< PixelFormat::A1R5G5B5 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_A4R4G4B4:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A4R4G4B4 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::A4R4G4B4:
+			l_return = std::make_shared< PxBuffer< PixelFormat::A4R4G4B4 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_R5G6B5:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_R5G6B5 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::R5G6B5:
+			l_return = std::make_shared< PxBuffer< PixelFormat::R5G6B5 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_R8G8B8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_R8G8B8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::R8G8B8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::R8G8B8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_B8G8R8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::B8G8R8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_A8R8G8B8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A8R8G8B8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::A8R8G8B8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::A8R8G8B8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_A8B8G8R8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A8B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::A8B8G8R8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::A8B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_RGB16F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_RGB16F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGB16F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGB16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_ARGB16F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_ARGB16F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA16F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_RGB16F32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_RGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGB16F32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_ARGB16F32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_ARGB16F32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA16F32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA16F32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_RGB32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_RGB32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGB32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGB32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_ARGB32F:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_ARGB32F > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::RGBA32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::RGBA32F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DXTC1:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DXTC1 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::DXTC1:
+			l_return = std::make_shared< PxBuffer< PixelFormat::DXTC1 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DXTC3:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DXTC3 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::DXTC3:
+			l_return = std::make_shared< PxBuffer< PixelFormat::DXTC3 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DXTC5:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DXTC5 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::DXTC5:
+			l_return = std::make_shared< PxBuffer< PixelFormat::DXTC5 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_YUY2:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_YUY2 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::YUY2:
+			l_return = std::make_shared< PxBuffer< PixelFormat::YUY2 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DEPTH16:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DEPTH16 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::D16:
+			l_return = std::make_shared< PxBuffer< PixelFormat::D16 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DEPTH24:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DEPTH24 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::D24:
+			l_return = std::make_shared< PxBuffer< PixelFormat::D24 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DEPTH24S8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DEPTH24S8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::D24S8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::D24S8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_DEPTH32:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_DEPTH32 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::D32:
+			l_return = std::make_shared< PxBuffer< PixelFormat::D32 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_STENCIL1:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_STENCIL1 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::S1:
+			l_return = std::make_shared< PxBuffer< PixelFormat::S1 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
-		case ePIXEL_FORMAT_STENCIL8:
-			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_STENCIL8 > >( p_size, p_buffer, p_eBufferFormat );
+		case PixelFormat::S8:
+			l_return = std::make_shared< PxBuffer< PixelFormat::S8 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 		}
 

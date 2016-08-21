@@ -25,6 +25,11 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include "State/BlendState.hpp"
+#include "State/DepthStencilState.hpp"
+#include "State/MultisampleState.hpp"
+#include "State/RasteriserState.hpp"
+
 #include <Math/SquareMatrix.hpp>
 #include <Design/OwnedBy.hpp>
 
@@ -45,11 +50,8 @@ namespace Castor3D
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
 	class Pipeline
-		: public Castor::OwnedBy< Context >
+		: public Castor::OwnedBy< RenderSystem >
 	{
-	protected:
-		friend class IPipelineImpl;
-
 	private:
 		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
 		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
@@ -58,12 +60,24 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_context	The parent context.
+		 *\param[in]	p_renderSystem	The parent RenderSystem.
+		 *\param[in]	p_dsState		The depth stencil state.
+		 *\param[in]	p_rsState		The rateriser state.
+		 *\param[in]	p_blState		The blend state.
+		 *\param[in]	p_msState		The multisample state.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_context	Le contexte parent.
+		 *\param[in]	p_renderSystem	Le RenderSystem parent.
+		 *\param[in]	p_dsState		L'état de stencil et profondeur.
+		 *\param[in]	p_rsState		L'état de rastériseur.
+		 *\param[in]	p_blState		L'état de mélange.
+		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 */
-		C3D_API explicit Pipeline( Context & p_context );
+		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
+								   , DepthStencilState && p_dsState
+								   , RasteriserState && p_rsState
+								   , BlendState && p_blState
+								   , MultisampleState && p_msState );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -71,6 +85,13 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Pipeline();
+		/**
+		 *\~english
+		 *\brief		Applies the pipeline.
+		 *\~french
+		 *\brief		Applique le pipeline.
+		 */
+		C3D_API virtual void Apply()const = 0;
 		/**
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point.
@@ -272,21 +293,34 @@ namespace Castor3D
 		C3D_API static const Castor::String MtxNormal;
 		C3D_API static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 
-	public:
-		//!\~english The identity matrix	\~french La matrice identité
-		Castor::Matrix4x4r m_mtxIdentity;
-
 	protected:
-		//!\~english The model matrix	\~french La matrice modèle
+		//!\~english	The model matrix.
+		//!\~french		La matrice modèle.
 		Castor::Matrix4x4r m_mtxModel;
-		//!\~english The view matrix	\~french La matrice vue
+		//!\~english	The view matrix.
+		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_mtxView;
-		//!\~english The projection matrix	\~french La matrice projection
+		//!\~english	The projection matrix.
+		//!\~french		La matrice projection.
 		Castor::Matrix4x4r m_mtxProjection;
-		//!\~english The normals matrix	\~french La matrice des normales
+		//!\~english	The normals matrix.
+		//!\~french		La matrice des normales.
 		Castor::Matrix4x4r m_mtxNormal;
-		//!\~english The texture matrices	\~french Les matrices de texture
+		//!\~english	The texture matrices.
+		//!\~french		Les matrices de texture.
 		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		//!\~english	The depth stencil state.
+		//!\~french		L'état de stencil et profondeur.
+		DepthStencilState m_dsState;
+		//!\~english	The rateriser state.
+		//!\~french		L'état de rastériseur.
+		RasteriserState m_rsState;
+		//!\~english	The blend state.
+		//!\~french		L'état de mélange.
+		BlendState m_blState;
+		//!\~english	The muultisampling state.
+		//!\~french		L'état de multi-échantillonnage.
+		MultisampleState m_msState;
 	};
 }
 

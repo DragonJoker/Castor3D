@@ -559,7 +559,7 @@ namespace Castor
 	template<> struct ParserParameterHelper< ePARAMETER_TYPE_PIXELFORMAT >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
-		using ValueType = ePIXEL_FORMAT;
+		using ValueType = PixelFormat;
 		//!~english The parameter type.	\~french Le type de paramètre.
 		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_PIXELFORMAT;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.

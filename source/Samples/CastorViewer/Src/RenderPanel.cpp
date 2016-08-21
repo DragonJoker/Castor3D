@@ -156,7 +156,7 @@ namespace CastorViewer
 					}
 
 					m_renderWindow = p_window;
-					m_pKeyboardEvent = std::make_unique< KeyboardEvent >( p_window );
+					m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
 				}
 			}
 		}
@@ -541,7 +541,7 @@ namespace CastorViewer
 	{
 		if ( m_pListener )
 		{
-			m_pListener->PostEvent( std::make_unique< KeyboardEvent >( *m_pKeyboardEvent ) );
+			m_pListener->PostEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
 			RenderWindowSPtr l_window = m_renderWindow.lock();
 
 			if ( l_window )

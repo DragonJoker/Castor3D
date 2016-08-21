@@ -55,10 +55,10 @@ SOFTWARE.
 #	if ( _MSC_VER < 1900 )
 #		define TPL_PIXEL_FORMAT	uint32_t
 #	else
-#		define TPL_PIXEL_FORMAT	Castor::ePIXEL_FORMAT
+#		define TPL_PIXEL_FORMAT	Castor::PixelFormat
 #	endif
 #else
-#	define TPL_PIXEL_FORMAT	Castor::ePIXEL_FORMAT
+#	define TPL_PIXEL_FORMAT	Castor::PixelFormat
 #endif
 
 namespace Castor
@@ -98,71 +98,101 @@ namespace Castor
 	\~french
 	\brief Enumération des formats de Pixel
 	*/
-	typedef enum ePIXEL_FORMAT
+	typedef enum class PixelFormat
 		: uint8_t
 	{
-		//!\~english 8 bits luminosity	\~french Luminosité 8 bits
-		ePIXEL_FORMAT_L8,
-		//!\~english Half floats luminosity on VRAM, floats luminosity on RAM	\~french Luminosité en half float en VRAM, et en float en RAM
-		ePIXEL_FORMAT_L16F32F,
-		//!\~english Floats luminosity on CPU	\~french Luminosité en float
-		ePIXEL_FORMAT_L32F,
-		//!\~english 16 bits alpha and luminosity	\~french Alpha et luminosité 16 bits
-		ePIXEL_FORMAT_A8L8,
-		//!\~english Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM	\~french Luminosité et alpha en half float en VRAM, et en float en RAM
-		ePIXEL_FORMAT_AL16F32F,
-		//!\~english Floats alpha and luminosity on CPU	\~french Luminosité et alpha en float
-		ePIXEL_FORMAT_AL32F,
-		//!\~english 16 bits 5551 ARGB	\~french 16 bits 5551 ARGB
-		ePIXEL_FORMAT_A1R5G5B5,
-		//!\~english 16 bits 4444 ARGB	\~french 16 bits 4444 ARGB
-		ePIXEL_FORMAT_A4R4G4B4,
-		//!\~english 16 bits 565 RGB	\~french 16 bits 565 RGB
-		ePIXEL_FORMAT_R5G6B5,
-		//!\~english 24 bits 888 RGB	\~french 24 bits 888 RGB
-		ePIXEL_FORMAT_R8G8B8,
-		//!\~english 24 bits 888 BGR	\~french 24 bits 888 BGR
-		ePIXEL_FORMAT_B8G8R8,
-		//!\~english 32 bits 8888 ARGB	\~french 32 bits 8888 ARGB
-		ePIXEL_FORMAT_A8R8G8B8,
-		//!\~english 32 bits 8888 ABGR	\~french 32 bits 8888 ABGR
-		ePIXEL_FORMAT_A8B8G8R8,
-		//!\~english Half float RGB	\~french Half float RGB
-		ePIXEL_FORMAT_RGB16F,
-		//!\~english Half float ARGB	\~french Half float ARGB
-		ePIXEL_FORMAT_ARGB16F,
-		//!\~english Half float RGB on VRAM, Float RGB on RAM	\~french RGB en half float en VRAM, et en float en RAM
-		ePIXEL_FORMAT_RGB16F32F,
-		//!\~english Half float ARGB on VRAM, Float ARGB on RAM	\~french ARGB en half float en VRAM, et en float en RAM
-		ePIXEL_FORMAT_ARGB16F32F,
-		//!\~english Float RGB	\~french RGB en flottants 32 bits
-		ePIXEL_FORMAT_RGB32F,
-		//!\~english Float ARGB	\~french ARGB en flottants 32 bits
-		ePIXEL_FORMAT_ARGB32F,
-		//!\~english DXT1 8 bits compressed format	\~french Format compressé DXT1 8 bits
-		ePIXEL_FORMAT_DXTC1,
-		//!\~english DXT3 16 bits compressed format	\~french Format compressé DXT3 16 bits
-		ePIXEL_FORMAT_DXTC3,
-		//!\~english DXT5 16 bits compressed format	\~french Format compressé DXT5 16 bits
-		ePIXEL_FORMAT_DXTC5,
-		//!\~english YUY2 16 bits compressed format	\~french Format compressé YUY2 16 bits
-		ePIXEL_FORMAT_YUY2,
-		//!\~english Depth 16 bits	\~french Profondeur 16 bits
-		ePIXEL_FORMAT_DEPTH16,
-		//!\~english Depth 24 bits	\~french Profondeur 24 bits
-		ePIXEL_FORMAT_DEPTH24,
-		//!\~english Depth 24 bits, Stencil 8 bits	\~french Profondeur 24 bits, Stencil 8 bits
-		ePIXEL_FORMAT_DEPTH24S8,
-		//!\~english Depth 32 bits	\~french Profondeur 32 bits
-		ePIXEL_FORMAT_DEPTH32,
-		//!\~english Depth 32 bits floating point	\~french Profondeur en float
-		ePIXEL_FORMAT_DEPTH32F,
-		//!\~english Stencil 1 bit	\~french Stencil 1 bit
-		ePIXEL_FORMAT_STENCIL1,
-		//!\~english Stencil 8 bits	\~french Stencil 8 bits
-		ePIXEL_FORMAT_STENCIL8,
-		CASTOR_ENUM_BOUNDS( ePIXEL_FORMAT, ePIXEL_FORMAT_L8 )
-	}	ePIXEL_FORMAT;
+		//!\~english	8 bits luminosity.
+		//!\~french		Luminosité 8 bits.
+		L8,
+		//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
+		//!\~french		Luminosité en half float en VRAM, et en float en RAM.
+		L16F32F,
+		//!\~english	32 bits loats luminosity.
+		//!\~french		Luminosité en float 32 bits.
+		L32F,
+		//!\~english	16 bits alpha and luminosity.
+		//!\~french		Alpha et luminosité 16 bits.
+		A8L8,
+		//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
+		//!\~french		Luminosité et alpha en half float en VRAM, et en float en RAM.
+		AL16F32F,
+		//!\~english	32 bits floats alpha and luminosity.
+		//!\~french		Luminosité et alpha en float 32 bits.
+		AL32F,
+		//!\~english	16 bits 5551 ARGB.
+		//!\~french		16 bits 5551 ARGB.
+		A1R5G5B5,
+		//!\~english	16 bits 4444 ARGB.
+		//!\~french		16 bits 4444 ARGB.
+		A4R4G4B4,
+		//!\~english	16 bits 565 RGB.
+		//!\~french		16 bits 565 RGB.
+		R5G6B5,
+		//!\~english	24 bits 888 RGB.
+		//!\~french		24 bits 888 RGB.
+		R8G8B8,
+		//!\~english	24 bits 888 BGR.
+		//!\~french		24 bits 888 BGR.
+		B8G8R8,
+		//!\~english	32 bits 8888 ARGB.
+		//!\~french		32 bits 8888 ARGB.
+		A8R8G8B8,
+		//!\~english	32 bits 8888 ABGR.
+		//!\~french		32 bits 8888 ABGR.
+		A8B8G8R8,
+		//!\~english	Half float RGB.
+		//!\~french		Half float RGB.
+		RGB16F,
+		//!\~english	Half float ARGB.
+		//!\~french		Half float ARGB.
+		RGBA16F,
+		//!\~english	Half float RGB on VRAM, Float RGB on RAM.
+		//!\~french		RGB en half float en VRAM, et en float en RAM.
+		RGB16F32F,
+		//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
+		//!\~french		ARGB en half float en VRAM, et en float en RAM.
+		RGBA16F32F,
+		//!\~english	32 bits float RGB.
+		//!\~french		RGB en flottants 32 bits.
+		RGB32F,
+		//!\~english	32 bits float ARGB.
+		//!\~french		ARGB en flottants 32 bits.
+		RGBA32F,
+		//!\~english	DXT1 8 bits compressed format.
+		//!\~french		Format compressé DXT1 8 bits.
+		DXTC1,
+		//!\~english	DXT3 16 bits compressed format.
+		//!\~french		Format compressé DXT3 16 bits.
+		DXTC3,
+		//!\~english	DXT5 16 bits compressed format.
+		//!\~french		Format compressé DXT5 16 bits.
+		DXTC5,
+		//!\~english	YUY2 16 bits compressed format.
+		//!\~french		Format compressé YUY2 16 bits.
+		YUY2,
+		//!\~english	Depth 16 bits.
+		//!\~french		Profondeur 16 bits.
+		D16,
+		//!\~english	Depth 24 bits.
+		//!\~french		Profondeur 24 bits.
+		D24,
+		//!\~english	Depth 24 bits, Stencil 8 bits.
+		//!\~french		Profondeur 24 bits, Stencil 8 bits.
+		D24S8,
+		//!\~english	Depth 32 bits.
+		//!\~french		Profondeur 32 bits.
+		D32,
+		//!\~english	Depth 32 bits floating point.
+		//!\~french		Profondeur en float 32 bits.
+		D32F,
+		//!\~english	Stencil 1 bit.
+		//!\~french		Stencil 1 bit.
+		S1,
+		//!\~english	Stencil 8 bits.
+		//!\~french		Stencil 8 bits.
+		S8,
+		CASTOR_ENUM_CLASS_BOUNDS( L8 )
+	}	PixelFormat;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -291,7 +321,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
-	typedef PxBuffer< ePIXEL_FORMAT_A8R8G8B8 > PixelBuffer;
+	typedef PxBuffer< PixelFormat::A8R8G8B8 > PixelBuffer;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
@@ -304,102 +334,102 @@ namespace Castor
 	using Angle = AngleT< real >;
 	using Quaternion = QuaternionT< real >;
 
-	DECLARE_POINT( bool,		4, b	);
-	DECLARE_POINT( bool,		3, b	);
-	DECLARE_POINT( bool,		2, b	);
-	DECLARE_POINT( int8_t,		4, c	);
-	DECLARE_POINT( int8_t,		3, c	);
-	DECLARE_POINT( int8_t,		2, c	);
-	DECLARE_POINT( uint8_t,		4, ub	);
-	DECLARE_POINT( uint8_t,		3, ub	);
-	DECLARE_POINT( uint8_t,		2, ub	);
-	DECLARE_POINT( int16_t,		4, s	);
-	DECLARE_POINT( int16_t,		3, s	);
-	DECLARE_POINT( int16_t,		2, s	);
-	DECLARE_POINT( uint16_t,	4, us	);
-	DECLARE_POINT( uint16_t,	3, us	);
-	DECLARE_POINT( uint16_t,	2, us	);
-	DECLARE_POINT( int32_t,		4, i	);
-	DECLARE_POINT( int32_t,		3, i	);
-	DECLARE_POINT( int32_t,		2, i	);
-	DECLARE_POINT( uint32_t,	4, ui	);
-	DECLARE_POINT( uint32_t,	3, ui	);
-	DECLARE_POINT( uint32_t,	2, ui	);
-	DECLARE_POINT( real,		4, r	);
-	DECLARE_POINT( real,		3, r	);
-	DECLARE_POINT( real,		2, r	);
-	DECLARE_POINT( float,		4, f	);
-	DECLARE_POINT( float,		3, f	);
-	DECLARE_POINT( float,		2, f	);
-	DECLARE_POINT( double,		4, d	);
-	DECLARE_POINT( double,		3, d	);
-	DECLARE_POINT( double,		2, d	);
+	DECLARE_POINT( bool,		4, b );
+	DECLARE_POINT( bool,		3, b );
+	DECLARE_POINT( bool,		2, b );
+	DECLARE_POINT( int8_t,		4, c );
+	DECLARE_POINT( int8_t,		3, c );
+	DECLARE_POINT( int8_t,		2, c );
+	DECLARE_POINT( uint8_t,		4, ub );
+	DECLARE_POINT( uint8_t,		3, ub );
+	DECLARE_POINT( uint8_t,		2, ub );
+	DECLARE_POINT( int16_t,		4, s );
+	DECLARE_POINT( int16_t,		3, s );
+	DECLARE_POINT( int16_t,		2, s );
+	DECLARE_POINT( uint16_t,	4, us );
+	DECLARE_POINT( uint16_t,	3, us );
+	DECLARE_POINT( uint16_t,	2, us );
+	DECLARE_POINT( int32_t,		4, i );
+	DECLARE_POINT( int32_t,		3, i );
+	DECLARE_POINT( int32_t,		2, i );
+	DECLARE_POINT( uint32_t,	4, ui );
+	DECLARE_POINT( uint32_t,	3, ui );
+	DECLARE_POINT( uint32_t,	2, ui );
+	DECLARE_POINT( real,		4, r );
+	DECLARE_POINT( real,		3, r );
+	DECLARE_POINT( real,		2, r );
+	DECLARE_POINT( float,		4, f );
+	DECLARE_POINT( float,		3, f );
+	DECLARE_POINT( float,		2, f );
+	DECLARE_POINT( double,		4, d );
+	DECLARE_POINT( double,		3, d );
+	DECLARE_POINT( double,		2, d );
 
-	DECLARE_COORD( bool,		4, b	);
-	DECLARE_COORD( bool,		3, b	);
-	DECLARE_COORD( bool,		2, b	);
-	DECLARE_COORD( int8_t,		4, c	);
-	DECLARE_COORD( int8_t,		3, c	);
-	DECLARE_COORD( int8_t,		2, c	);
-	DECLARE_COORD( uint8_t,		4, ub	);
-	DECLARE_COORD( uint8_t,		3, ub	);
-	DECLARE_COORD( uint8_t,		2, ub	);
-	DECLARE_COORD( int16_t,		4, s	);
-	DECLARE_COORD( int16_t,		3, s	);
-	DECLARE_COORD( int16_t,		2, s	);
-	DECLARE_COORD( uint16_t,	4, us	);
-	DECLARE_COORD( uint16_t,	3, us	);
-	DECLARE_COORD( uint16_t,	2, us	);
-	DECLARE_COORD( int32_t,		4, i	);
-	DECLARE_COORD( int32_t,		3, i	);
-	DECLARE_COORD( int32_t,		2, i	);
-	DECLARE_COORD( uint32_t,	4, ui	);
-	DECLARE_COORD( uint32_t,	3, ui	);
-	DECLARE_COORD( uint32_t,	2, ui	);
-	DECLARE_COORD( int,			4, i	);
-	DECLARE_COORD( int,			3, i	);
-	DECLARE_COORD( int,			2, i	);
-	DECLARE_COORD( real,		4, r	);
-	DECLARE_COORD( real,		3, r	);
-	DECLARE_COORD( real,		2, r	);
-	DECLARE_COORD( float,		4, f	);
-	DECLARE_COORD( float,		3, f	);
-	DECLARE_COORD( float,		2, f	);
-	DECLARE_COORD( double,		4, d	);
-	DECLARE_COORD( double,		3, d	);
-	DECLARE_COORD( double,		2, d	);
-	DECLARE_COORD( uint8_t,		4, ub	);
-	DECLARE_COORD( uint8_t,		3, ub	);
-	DECLARE_COORD( uint8_t,		2, ub	);
+	DECLARE_COORD( bool,		4, b );
+	DECLARE_COORD( bool,		3, b );
+	DECLARE_COORD( bool,		2, b );
+	DECLARE_COORD( int8_t,		4, c );
+	DECLARE_COORD( int8_t,		3, c );
+	DECLARE_COORD( int8_t,		2, c );
+	DECLARE_COORD( uint8_t,		4, ub );
+	DECLARE_COORD( uint8_t,		3, ub );
+	DECLARE_COORD( uint8_t,		2, ub );
+	DECLARE_COORD( int16_t,		4, s );
+	DECLARE_COORD( int16_t,		3, s );
+	DECLARE_COORD( int16_t,		2, s );
+	DECLARE_COORD( uint16_t,	4, us );
+	DECLARE_COORD( uint16_t,	3, us );
+	DECLARE_COORD( uint16_t,	2, us );
+	DECLARE_COORD( int32_t,		4, i );
+	DECLARE_COORD( int32_t,		3, i );
+	DECLARE_COORD( int32_t,		2, i );
+	DECLARE_COORD( uint32_t,	4, ui );
+	DECLARE_COORD( uint32_t,	3, ui );
+	DECLARE_COORD( uint32_t,	2, ui );
+	DECLARE_COORD( int,			4, i );
+	DECLARE_COORD( int,			3, i );
+	DECLARE_COORD( int,			2, i );
+	DECLARE_COORD( real,		4, r );
+	DECLARE_COORD( real,		3, r );
+	DECLARE_COORD( real,		2, r );
+	DECLARE_COORD( float,		4, f );
+	DECLARE_COORD( float,		3, f );
+	DECLARE_COORD( float,		2, f );
+	DECLARE_COORD( double,		4, d );
+	DECLARE_COORD( double,		3, d );
+	DECLARE_COORD( double,		2, d );
+	DECLARE_COORD( uint8_t,		4, ub );
+	DECLARE_COORD( uint8_t,		3, ub );
+	DECLARE_COORD( uint8_t,		2, ub );
 
-	DECLARE_SQMTX( real,	4, r	);
-	DECLARE_SQMTX( real,	3, r	);
-	DECLARE_SQMTX( real,	2, r	);
-	DECLARE_SQMTX( float,	4, f	);
-	DECLARE_SQMTX( float,	3, f	);
-	DECLARE_SQMTX( float,	2, f	);
-	DECLARE_SQMTX( double,	4, d	);
-	DECLARE_SQMTX( double,	3, d	);
-	DECLARE_SQMTX( double,	2, d	);
+	DECLARE_SQMTX( real,	4, r );
+	DECLARE_SQMTX( real,	3, r );
+	DECLARE_SQMTX( real,	2, r );
+	DECLARE_SQMTX( float,	4, f );
+	DECLARE_SQMTX( float,	3, f );
+	DECLARE_SQMTX( float,	2, f );
+	DECLARE_SQMTX( double,	4, d );
+	DECLARE_SQMTX( double,	3, d );
+	DECLARE_SQMTX( double,	2, d );
 
-	DECLARE_MTX( real,		2, 3, r	);
-	DECLARE_MTX( real,		2, 4, r	);
-	DECLARE_MTX( real,		3, 2, r	);
-	DECLARE_MTX( real,		3, 4, r	);
-	DECLARE_MTX( real,		4, 2, r	);
-	DECLARE_MTX( real,		4, 3, r	);
-	DECLARE_MTX( float,		2, 3, f	);
-	DECLARE_MTX( float,		2, 4, f	);
-	DECLARE_MTX( float,		3, 2, f	);
-	DECLARE_MTX( float,		3, 4, f	);
-	DECLARE_MTX( float,		4, 2, f	);
-	DECLARE_MTX( float,		4, 3, f	);
-	DECLARE_MTX( double,	2, 3, d	);
-	DECLARE_MTX( double,	2, 4, d	);
-	DECLARE_MTX( double,	3, 2, d	);
-	DECLARE_MTX( double,	3, 4, d	);
-	DECLARE_MTX( double,	4, 2, d	);
-	DECLARE_MTX( double,	4, 3, d	);
+	DECLARE_MTX( real,		2, 3, r );
+	DECLARE_MTX( real,		2, 4, r );
+	DECLARE_MTX( real,		3, 2, r );
+	DECLARE_MTX( real,		3, 4, r );
+	DECLARE_MTX( real,		4, 2, r );
+	DECLARE_MTX( real,		4, 3, r );
+	DECLARE_MTX( float,		2, 3, f );
+	DECLARE_MTX( float,		2, 4, f );
+	DECLARE_MTX( float,		3, 2, f );
+	DECLARE_MTX( float,		3, 4, f );
+	DECLARE_MTX( float,		4, 2, f );
+	DECLARE_MTX( float,		4, 3, f );
+	DECLARE_MTX( double,	2, 3, d );
+	DECLARE_MTX( double,	2, 4, d );
+	DECLARE_MTX( double,	3, 2, d );
+	DECLARE_MTX( double,	3, 4, d );
+	DECLARE_MTX( double,	4, 2, d );
+	DECLARE_MTX( double,	4, 3, d );
 
 	DECLARE_SMART_PTR( Quaternion );
 	DECLARE_SMART_PTR( SphericalVertex );

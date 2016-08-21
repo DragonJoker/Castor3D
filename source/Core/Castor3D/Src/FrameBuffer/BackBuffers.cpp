@@ -17,7 +17,7 @@ namespace Castor3D
 	{
 	}
 
-	bool BackBuffers::Initialise( Size const & p_size, ePIXEL_FORMAT p_format )
+	bool BackBuffers::Initialise( Size const & p_size, PixelFormat p_format )
 	{
 		m_buffer = PxBufferBase::create( p_size, p_format );
 		return true;

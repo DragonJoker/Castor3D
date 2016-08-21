@@ -82,12 +82,13 @@ namespace Castor
 	 */
 	template< TPL_PIXEL_FORMAT PF > struct is_colour_format : public std::true_type {};
 
-	template<> struct is_colour_format< ePIXEL_FORMAT_DEPTH16 > : public std::false_type {};
-	template<> struct is_colour_format< ePIXEL_FORMAT_DEPTH24 > : public std::false_type {};
-	template<> struct is_colour_format< ePIXEL_FORMAT_DEPTH24S8 > : public std::false_type {};
-	template<> struct is_colour_format< ePIXEL_FORMAT_DEPTH32 > : public std::false_type {};
-	template<> struct is_colour_format< ePIXEL_FORMAT_DEPTH32F > : public std::false_type {};
-	template<> struct is_colour_format< ePIXEL_FORMAT_STENCIL8 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::D16 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::D24 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::D24S8 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::D32 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::D32F > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::S1 > : public std::false_type {};
+	template<> struct is_colour_format< PixelFormat::S8 > : public std::false_type {};
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a depth pixel
@@ -96,11 +97,11 @@ namespace Castor
 	 */
 	template< TPL_PIXEL_FORMAT PF > struct is_depth_format : public std::false_type {};
 
-	template<> struct is_depth_format< ePIXEL_FORMAT_DEPTH16 > : public std::true_type {};
-	template<> struct is_depth_format< ePIXEL_FORMAT_DEPTH24 > : public std::true_type {};
-	template<> struct is_depth_format< ePIXEL_FORMAT_DEPTH24S8 > : public std::true_type {};
-	template<> struct is_depth_format< ePIXEL_FORMAT_DEPTH32 > : public std::true_type {};
-	template<> struct is_depth_format< ePIXEL_FORMAT_DEPTH32F > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::D16 > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::D24 > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::D24S8 > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::D32 > : public std::true_type {};
+	template<> struct is_depth_format< PixelFormat::D32F > : public std::true_type {};
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a stencil pixel
@@ -109,8 +110,9 @@ namespace Castor
 	 */
 	template< TPL_PIXEL_FORMAT PF > struct is_stencil_format : public std::false_type {};
 
-	template<> struct is_stencil_format< ePIXEL_FORMAT_DEPTH24S8 > : public std::true_type {};
-	template<> struct is_stencil_format< ePIXEL_FORMAT_STENCIL8 > : public std::true_type {};
+	template<> struct is_stencil_format< PixelFormat::D24S8 > : public std::true_type {};
+	template<> struct is_stencil_format< PixelFormat::S1 > : public std::true_type {};
+	template<> struct is_stencil_format< PixelFormat::S8 > : public std::true_type {};
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a depth or stencil pixel
@@ -119,12 +121,13 @@ namespace Castor
 	 */
 	template< TPL_PIXEL_FORMAT PF > struct is_depth_stencil_format : public std::false_type {};
 
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_DEPTH16 > : public std::true_type {};
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_DEPTH24 > : public std::true_type {};
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_DEPTH24S8 > : public std::true_type {};
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_DEPTH32 > : public std::true_type {};
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_DEPTH32F > : public std::true_type {};
-	template<> struct is_depth_stencil_format< ePIXEL_FORMAT_STENCIL8 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::D16 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::D24 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::D24S8 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::D32 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::D32F > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::S1 > : public std::true_type {};
+	template<> struct is_depth_stencil_format< PixelFormat::S8 > : public std::true_type {};
 
 	namespace PF
 	{
@@ -136,7 +139,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
 		 *\param[in]	p_pfFormat	Le format de pixels
 		 */
-		CU_API uint8_t GetBytesPerPixel( ePIXEL_FORMAT p_pfFormat );
+		CU_API uint8_t GetBytesPerPixel( PixelFormat p_pfFormat );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format from a name
@@ -145,7 +148,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation d'un format de pixel par son nom
 		 *\param[in]	p_strFormat	Le nom du format de pixels
 		 */
-		CU_API ePIXEL_FORMAT GetFormatByName( String const & p_strFormat );
+		CU_API PixelFormat GetFormatByName( String const & p_strFormat );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format name
@@ -154,7 +157,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation du nom d'un format de pixel
 		 *\param[in]	p_format	Le format de pixels
 		 */
-		CU_API String GetFormatName( ePIXEL_FORMAT p_format );
+		CU_API String GetFormatName( PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel colour component in float
@@ -819,7 +822,7 @@ namespace Castor
 		 *\param[in]		p_eDestFmt	Le format de la destination
 		 *\param[in,out]	p_pDest		Le pixel destination
 		 */
-		CU_API void ConvertPixel( ePIXEL_FORMAT p_eSrcFmt, uint8_t const *& p_pSrc, ePIXEL_FORMAT p_eDestFmt, uint8_t *& p_pDest );
+		CU_API void ConvertPixel( PixelFormat p_eSrcFmt, uint8_t const *& p_pSrc, PixelFormat p_eDestFmt, uint8_t *& p_pDest );
 		/**
 		 *\~english
 		 *\brief		Function to perform convertion without templates
@@ -838,7 +841,7 @@ namespace Castor
 		 *\param[in]	p_pDstBuffer	Le buffer destination
 		 *\param[in]	p_uiDstSize		La taille de la destination
 		 */
-		CU_API void ConvertBuffer( ePIXEL_FORMAT p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize );
+		CU_API void ConvertBuffer( PixelFormat p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, PixelFormat p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize );
 		/**
 		 *\~english
 		 *\brief		Extracts alpha values from a source buffer holding alpha and puts it in a destination buffer
@@ -853,7 +856,7 @@ namespace Castor
 		 */
 		CU_API PxBufferBaseSPtr ExtractAlpha( PxBufferBaseSPtr & p_pSrc );
 		/**
-		 *\see			ePIXEL_FORMAT
+		 *\see			PixelFormat
 		 *\~english
 		 *\brief		Checks the alpha component support for given pixel format
 		 *\return		\p false if format is depth, stencil or one without alpha
@@ -861,9 +864,9 @@ namespace Castor
 		 *\brief		Vérifie si le format donné possède une composante alpha
 		 *\return		\p false si le format est depth, stencil ou un format sans alpha
 		 */
-		CU_API bool HasAlpha( ePIXEL_FORMAT p_ePf );
+		CU_API bool HasAlpha( PixelFormat p_ePf );
 		/**
-		 *\see			ePIXEL_FORMAT
+		 *\see			PixelFormat
 		 *\~english
 		 *\brief		Checks if the given pixel format is a compressed one
 		 *\return		The value
@@ -871,7 +874,7 @@ namespace Castor
 		 *\brief		Vérifie si le format donné est un format compressé
 		 *\return		La valeur
 		 */
-		CU_API bool IsCompressed( ePIXEL_FORMAT p_ePf );
+		CU_API bool IsCompressed( PixelFormat p_ePf );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel format without alpha that is near from the one given
@@ -882,7 +885,7 @@ namespace Castor
 		 *\param[in]	p_ePixelFmt	Le format de pixel
 		 *\return		Le format de pixels donné si non trouvé
 		 */
-		CU_API ePIXEL_FORMAT GetPFWithoutAlpha( ePIXEL_FORMAT p_ePixelFmt );
+		CU_API PixelFormat GetPFWithoutAlpha( PixelFormat p_ePixelFmt );
 		/**
 		 *\~english
 		 *\brief			Reduces a buffer to it's alpha channel, stored in a L8 format buffer

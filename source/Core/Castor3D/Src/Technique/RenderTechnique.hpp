@@ -247,80 +247,92 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, StaticGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, StaticGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, AnimatedGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, AnimatedGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders objects sorted by distance to camera.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine d'objets triés par distance à la caméra.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderByDistance( Scene & p_scene, Pipeline & p_pipeline, DistanceSortedNodeMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, DistanceSortedNodeMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderBillboards( Scene & p_scene, Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Render function.
@@ -340,26 +352,24 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders opaque render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
-		 *\param[in]	p_pipeline	The rendering pipeline.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu opaques.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline );
+		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders transparent render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\param[in]	p_pipeline	The rendering pipeline.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu transparents.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Pipeline & p_pipeline, Camera const & p_camera );
+		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 
 	private:
 		/**
@@ -455,6 +465,7 @@ namespace Castor3D
 	private:
 		template< typename MapType >
 		void DoRenderNonInstanced( Scene & p_scene
+								   , Camera const & p_camera
 								   , Pipeline & p_pipeline
 								   , MapType & p_nodes
 								   , bool p_register )
@@ -463,7 +474,7 @@ namespace Castor3D
 			{
 				for ( auto & l_renderNode : l_itPrograms.second )
 				{
-					l_renderNode.Render( p_scene, p_pipeline );
+					l_renderNode.Render( p_scene, p_camera, p_pipeline );
 
 					if ( p_register )
 					{
@@ -495,12 +506,15 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english	The rasteriser state to cull front faces.
-		//!\~french		L'état de rastérisation pour masquer les faces avant.
-		RasteriserStateWPtr m_wpFrontRasteriserState;
-		//!\~english	The rasteriser state to cull back faces.
-		//!\~french		L'état de rastérisation pour masquer les faces arrière.
-		RasteriserStateWPtr m_wpBackRasteriserState;
+		//!\~english	The pipeline used to render opaque nodes.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les noeuds opaques.
+		PipelineSPtr m_opaquePipeline;
+		//!\~english	The pipeline used to render transparent nodes' back faces.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
+		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_frontTransparentPipeline;
+		//!\~english	The pipeline used to render transparent nodes' front faces.
+		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces avant des noeuds transparents.
+		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_backTransparentPipeline;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

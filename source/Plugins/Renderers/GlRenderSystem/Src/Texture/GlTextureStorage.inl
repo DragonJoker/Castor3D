@@ -44,7 +44,7 @@ namespace GlRender
 	}
 
 	template< typename Traits >
-	void GlTextureStorage< Traits >::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
+	void GlTextureStorage< Traits >::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
 	{
 		m_impl.Fill( *this, p_buffer, p_size, p_format );
 	}

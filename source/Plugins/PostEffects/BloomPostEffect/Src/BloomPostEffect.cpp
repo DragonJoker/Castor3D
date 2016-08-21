@@ -1,6 +1,5 @@
 #include "BloomPostEffect.hpp"
 
-#include <BlendStateCache.hpp>
 #include <Engine.hpp>
 #include <SamplerCache.hpp>
 #include <ShaderCache.hpp>
@@ -226,6 +225,11 @@ namespace Bloom
 
 		m_linearSampler = DoCreateSampler( true );
 		m_nearestSampler = DoCreateSampler( false );
+
+		DepthStencilState l_dsstate;
+		l_dsstate.SetDepthTest( false );
+		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 	}
 
 	BloomPostEffect::~BloomPostEffect()
@@ -454,9 +458,10 @@ namespace Bloom
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
-				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
 				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
-				m_viewport.Render( l_pipeline );
+				m_viewport.Update();
+				m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+				m_pipeline->Apply();
 
 				auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
@@ -466,7 +471,7 @@ namespace Bloom
 
 				if ( l_matrices )
 				{
-					l_pipeline.ApplyProjection( *l_matrices );
+					m_pipeline->ApplyProjection( *l_matrices );
 				}
 
 				l_program->Bind();

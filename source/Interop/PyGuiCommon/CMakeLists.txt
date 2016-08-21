@@ -1,5 +1,6 @@
 project( PyGuiCommon )
 
+set( ${PROJECT_NAME}_DESCRIPTION "GuiCommon Python binding DLL." )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 9 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
@@ -22,6 +23,10 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 	include_directories( ${PYTHON_INCLUDE_DIR} )
 	include_directories( ${GTK2_INCLUDE_DIRS} )
 	include_directories( ${wxWidgets_INCLUDE_DIR} )
+
+	link_directories( ${Boost_LIBRARY_DIR} )
+	link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
+	link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
 
 	#wxWidgets Libs
 	set( wxWidgetsLibraries "" )

@@ -30,8 +30,6 @@ namespace OceanLighting
 		}
 
 	protected:
-		friend class Castor3D::TechniqueFactory;
-
 		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
@@ -308,49 +306,34 @@ namespace OceanLighting
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
-		virtual bool DoCreate();
+		bool DoCreate()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
 		 */
-		virtual void DoDestroy();
+		void DoDestroy()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
-		virtual bool DoInitialise( uint32_t & p_index );
+		bool DoInitialise( uint32_t & p_index )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCleanup
 		 */
-		virtual void DoCleanup();
+		void DoCleanup()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		virtual bool DoBeginRender( Castor3D::Scene & p_scene );
+		bool DoBeginRender( Castor3D::Scene & p_scene )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRender
 		 */
-		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
+		void DoRender( Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		virtual void DoEndRender( Castor3D::Scene & p_scene );
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetVertexShaderSource
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
-		{
-			return Castor::String();
-		}
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
-		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const
-		{
-			return Castor::String();
-		}
-		/**
+		void DoEndRender( Castor3D::Scene & p_scene )override;		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
-		virtual bool DoWriteInto( Castor::TextFile & p_file )
+		bool DoWriteInto( Castor::TextFile & p_file )override
 		{
 			return true;
 		}
@@ -459,8 +442,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_renderGBuffers;
 		Castor3D::VertexBufferSPtr m_renderVtxBuffer;
 		Castor3D::IndexBufferSPtr m_renderIdxBuffer;
-		Castor3D::BlendStateWPtr m_renderBlendState;
-		Castor3D::RasteriserStateWPtr m_renderRasteriserState;
+		Castor3D::PipelineSPtr m_renderPipeline;
 
 		Castor3D::ShaderProgramSPtr m_sky;
 		Castor3D::OneIntFrameVariableSPtr m_skySkyIrradianceSampler;
@@ -475,7 +457,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_skyGBuffers;
 		Castor3D::VertexBufferSPtr m_skyVtxBuffer;
 		Castor3D::IndexBufferSPtr m_skyIdxBuffer;
-		Castor3D::BlendStateWPtr m_skyBlendState;
+		Castor3D::PipelineSPtr m_skyPipeline;
 
 		Castor3D::ShaderProgramSPtr m_skymap;
 		Castor3D::OneIntFrameVariableSPtr m_skymapSkyIrradianceSampler;
@@ -493,7 +475,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_skymapGBuffers;
 		Castor3D::VertexBufferSPtr m_skymapVtxBuffer;
 		Castor3D::IndexBufferSPtr m_skymapIdxBuffer;
-		Castor3D::BlendStateWPtr m_skymapBlendState;
+		Castor3D::PipelineSPtr m_skymapPipeline;
 
 		Castor3D::ShaderProgramSPtr m_clouds;
 		Castor3D::Matrix4x4fFrameVariableSPtr m_cloudsWorldToScreen;
@@ -514,7 +496,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_cloudsGBuffers;
 		Castor3D::VertexBufferSPtr m_cloudsVtxBuffer;
 		Castor3D::IndexBufferSPtr m_cloudsIdxBuffer;
-		Castor3D::BlendStateWPtr m_cloudsBlendState;
+		Castor3D::PipelineSPtr m_cloudsPipeline;
 
 		uint32_t m_skyTexSize;
 		bool m_cloudLayer;
@@ -588,7 +570,7 @@ namespace OceanLighting
 		Castor3D::VertexBufferSPtr m_initVtxBuffer;
 		Castor3D::IndexBufferSPtr m_initIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_initGBuffers;
-		Castor3D::BlendStateWPtr m_initBlendState;
+		Castor3D::PipelineSPtr m_initPipeline;
 
 		Castor3D::ShaderProgramSPtr m_variances;
 		Castor3D::OneIntFrameVariableSPtr m_variancesSpectrum_1_2_Sampler;
@@ -601,7 +583,7 @@ namespace OceanLighting
 		Castor3D::IndexBufferSPtr m_variancesIdxBuffer;
 		Castor3D::VertexBufferSPtr m_variancesVtxBuffer;
 		Castor3D::GeometryBuffersSPtr m_variancesGBuffers;
-		Castor3D::BlendStateWPtr m_variancesBlendState;
+		Castor3D::PipelineSPtr m_variancesPipeline;
 
 		Castor3D::ShaderProgramSPtr m_fftx;
 		Castor3D::OneIntFrameVariableSPtr m_fftxButterflySampler;
@@ -611,7 +593,7 @@ namespace OceanLighting
 		Castor3D::VertexBufferSPtr m_fftxVtxBuffer;
 		Castor3D::IndexBufferSPtr m_fftxIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_fftxGBuffers;
-		Castor3D::BlendStateWPtr m_fftxBlendState;
+		Castor3D::PipelineSPtr m_fftxPipeline;
 
 		Castor3D::ShaderProgramSPtr m_ffty;
 		Castor3D::OneIntFrameVariableSPtr m_fftyButterflySampler;
@@ -621,7 +603,7 @@ namespace OceanLighting
 		Castor3D::VertexBufferSPtr m_fftyVtxBuffer;
 		Castor3D::IndexBufferSPtr m_fftyIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_fftyGBuffers;
-		Castor3D::BlendStateWPtr m_fftyBlendState;
+		Castor3D::PipelineSPtr m_fftyPipeline;
 
 		Castor3D::TextureLayoutSPtr m_pTexSpectrum_1_2;
 		Castor3D::TextureLayoutSPtr m_pTexSpectrum_3_4;
@@ -670,8 +652,7 @@ namespace OceanLighting
 		bool m_bGenerateMesh;
 		bool m_bGenerateWaves;
 
-		Castor3D::RasteriserStateWPtr m_pRasteriserState;
-		Castor3D::DepthStencilStateWPtr m_pDepthStencilState;
+		Castor3D::PipelineSPtr m_pipeline;
 		Castor3D::Viewport m_viewport;
 	};
 }

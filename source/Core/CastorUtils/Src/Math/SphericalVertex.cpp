@@ -17,13 +17,13 @@ namespace Castor
 	}
 
 	SphericalVertex::SphericalVertex( SphericalVertex && p_sphericalVertex )
-		:	m_rRadius( 0	)
-		,	m_rPhi( 0	)
-		,	m_rTheta( 0	)
+		:	m_rRadius( 0 )
+		,	m_rPhi( 0 )
+		,	m_rTheta( 0 )
 	{
-		m_rRadius	= std::move( p_sphericalVertex.m_rRadius	);
-		m_rPhi		= std::move( p_sphericalVertex.m_rPhi	);
-		m_rTheta	= std::move( p_sphericalVertex.m_rTheta	);
+		m_rRadius	= std::move( p_sphericalVertex.m_rRadius );
+		m_rPhi		= std::move( p_sphericalVertex.m_rPhi );
+		m_rTheta	= std::move( p_sphericalVertex.m_rTheta );
 		p_sphericalVertex.m_rRadius	= 0;
 		p_sphericalVertex.m_rPhi	= 0;
 		p_sphericalVertex.m_rTheta	= 0;
@@ -41,9 +41,9 @@ namespace Castor
 	{
 		if ( this != & p_sphericalVertex )
 		{
-			m_rRadius	= std::move( p_sphericalVertex.m_rRadius	);
-			m_rPhi		= std::move( p_sphericalVertex.m_rPhi	);
-			m_rTheta	= std::move( p_sphericalVertex.m_rTheta	);
+			m_rRadius	= std::move( p_sphericalVertex.m_rRadius );
+			m_rPhi		= std::move( p_sphericalVertex.m_rPhi );
+			m_rTheta	= std::move( p_sphericalVertex.m_rTheta );
 			p_sphericalVertex.m_rRadius	= 0;
 			p_sphericalVertex.m_rPhi	= 0;
 			p_sphericalVertex.m_rTheta	= 0;

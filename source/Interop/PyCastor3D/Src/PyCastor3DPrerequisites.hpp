@@ -38,8 +38,6 @@ SOFTWARE.
 
 #include <AnimatedObjectGroupCache.hpp>
 #include <BillboardCache.hpp>
-#include <BlendStateCache.hpp>
-#include <DepthStencilStateCache.hpp>
 #include <CameraCache.hpp>
 #include <Engine.hpp>
 #include <GeometryCache.hpp>
@@ -48,7 +46,6 @@ SOFTWARE.
 #include <MeshCache.hpp>
 #include <OverlayCache.hpp>
 #include <PluginCache.hpp>
-#include <RasteriserStateCache.hpp>
 #include <SamplerCache.hpp>
 #include <SceneCache.hpp>
 #include <SceneNodeCache.hpp>
@@ -86,6 +83,7 @@ SOFTWARE.
 #include <Shader/ShaderProgram.hpp>
 #include <State/BlendState.hpp>
 #include <State/DepthStencilState.hpp>
+#include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureImage.hpp>
@@ -296,7 +294,7 @@ namespace cpy
 
 	struct PxBufferCreator
 	{
-		Castor::PxBufferBaseSPtr operator()( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
+		Castor::PxBufferBaseSPtr operator()( Castor::Size const & p_size, Castor::PixelFormat p_ePixelFormat )
 		{
 			return Castor::PxBufferBase::create( p_size, p_ePixelFormat );
 		}
@@ -352,9 +350,9 @@ namespace cpy
 
 	struct MeshCacheElementProducer
 	{
-		Castor3D::MeshSPtr operator()( Castor3D::MeshCache * p_cache, Castor::String const & p_key, Castor3D::eMESH_TYPE p_type, Castor3D::UIntArray const & p_faces, Castor3D::RealArray const & p_dimensions )
+		Castor3D::MeshSPtr operator()( Castor3D::MeshCache * p_cache, Castor::String const & p_key )
 		{
-			return p_cache->Add( p_key, p_type, p_faces, p_dimensions );
+			return p_cache->Add( p_key );
 		}
 	};
 
@@ -491,10 +489,10 @@ namespace boost
 			{
 				return boost::mpl::vector< Castor::Point3r, Castor::Point3r const &, Castor::Point3r const & >();
 			}
-			inline boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::ePIXEL_FORMAT >
+			inline boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::PixelFormat >
 			get_signature( cpy::PxBufferCreator, void * = 0 )
 			{
-				return boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::ePIXEL_FORMAT >();
+				return boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::PixelFormat >();
 			}
 			inline boost::mpl::vector< Castor3D::PluginSPtr, Castor3D::Engine *, Castor::Path const & >
 			get_signature( Castor3D::PluginSPtr ( Castor3D::Engine::* )( Castor::Path const & ), void * = 0 )
