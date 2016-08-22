@@ -261,6 +261,7 @@ namespace Castor3D
 
 			m_postEffects.clear();
 			m_initialised = false;
+			GetEngine()->GetRenderTechniqueCache().Remove( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ) );
 			m_renderTechnique->Cleanup();
 			m_fbLeftEye.Cleanup();
 			m_fbRightEye.Cleanup();

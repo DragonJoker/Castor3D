@@ -505,7 +505,7 @@ namespace Castor
 		 *\param[out]	p_pitch	L'angle de rotation autour de l'axe X
 		 *\param[out]	p_roll	L'angle de rotation autour de l'axe Z
 		 */
-		inline void to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll );
+		inline void to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Y axis rotation value

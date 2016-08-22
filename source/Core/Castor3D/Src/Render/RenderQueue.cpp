@@ -368,37 +368,42 @@ namespace Castor3D
 
 	void RenderQueue::Prepare( Camera const & p_camera, Scene & p_scene )
 	{
-		auto const l_position = p_camera.GetParent()->GetDerivedPosition();
-		auto const l_orientation = p_camera.GetParent()->GetDerivedOrientation();
-		auto l_itPosition = m_cameraPositions.insert( { &p_camera
-													  , { l_position + Point3r{ 1.0_r, 1.0_r, 1.0_r }
-														  , l_orientation + Quaternion{ Point4r{ 1.0_r, 1.0_r, 1.0_r, 1.0_r } } } } ).first;
-		auto l_itNodes = m_scenesRenderNodes.insert( { &p_scene, { p_scene } } ).first;
-		auto l_itNew = std::find( m_newScenes.begin(), m_newScenes.end(), &p_scene );
-		bool l_new = false;
+		auto l_node = p_camera.GetParent();
 
-		if ( l_itNew != m_newScenes.end() )
+		if ( l_node )
 		{
-			DoSortRenderNodes( l_itNodes->second );
-			m_newScenes.erase( l_itNew );
-			l_new = true;
-		}
-		else if ( p_scene.HasChanged() )
-		{
-			DoSortRenderNodes( l_itNodes->second );
-		}
+			auto const l_position = l_node->GetDerivedPosition();
+			auto const l_orientation = l_node->GetDerivedOrientation();
+			auto l_itPosition = m_cameraPositions.insert( { &p_camera
+														  , { l_position + Point3r{ 1.0_r, 1.0_r, 1.0_r }
+															  , l_orientation + Quaternion{ Point4r{ 1.0_r, 1.0_r, 1.0_r, 1.0_r } } } } ).first;
+			auto l_itNodes = m_scenesRenderNodes.insert( { &p_scene, { p_scene } } ).first;
+			auto l_itNew = std::find( m_newScenes.begin(), m_newScenes.end(), &p_scene );
+			bool l_new = false;
 
-		if ( p_scene.HasChanged()
-			 || l_new
-			 || l_itPosition->second.first != l_position
-			 || l_itPosition->second.second != l_orientation )
-		{
-			auto l_itCamera = m_preparedRenderNodes.insert( { &p_camera, SceneRenderNodesMap{} } ).first;
-			auto l_itScene = l_itCamera->second.insert( { &p_scene, SceneRenderNodes{ p_scene } } ).first;
+			if ( l_itNew != m_newScenes.end() )
+			{
+				DoSortRenderNodes( l_itNodes->second );
+				m_newScenes.erase( l_itNew );
+				l_new = true;
+			}
+			else if ( p_scene.HasChanged() )
+			{
+				DoSortRenderNodes( l_itNodes->second );
+			}
 
-			DoPrepareRenderNodes( p_camera, l_itNodes->second, l_itScene->second );
-			l_itPosition->second.first = l_position;
-			l_itPosition->second.second = l_orientation;
+			if ( p_scene.HasChanged()
+				 || l_new
+				 || l_itPosition->second.first != l_position
+				 || l_itPosition->second.second != l_orientation )
+			{
+				auto l_itCamera = m_preparedRenderNodes.insert( { &p_camera, SceneRenderNodesMap{} } ).first;
+				auto l_itScene = l_itCamera->second.insert( { &p_scene, SceneRenderNodes{ p_scene } } ).first;
+
+				DoPrepareRenderNodes( p_camera, l_itNodes->second, l_itScene->second );
+				l_itPosition->second.first = l_position;
+				l_itPosition->second.second = l_orientation;
+			}
 		}
 	}
 
