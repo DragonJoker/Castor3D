@@ -532,14 +532,14 @@ namespace Castor3D
 				{
 					m_frontTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 					m_frontTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
-					m_backTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-					m_backTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
-
 					m_frontTransparentPipeline[i]->Apply();
 					DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, *m_frontTransparentPipeline[i], p_nodes.m_instancedGeometries.m_transparentRenderNodes[i], false );
 					DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_frontTransparentPipeline[i], p_nodes.m_staticGeometries.m_transparentRenderNodes[i], false );
 					DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_frontTransparentPipeline[i], p_nodes.m_animatedGeometries.m_transparentRenderNodes[i], false );
 					DoRenderBillboards( p_nodes.m_scene, p_camera, *m_frontTransparentPipeline[i], p_nodes.m_billboards.m_transparentRenderNodes[i], false );
+
+					m_backTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+					m_backTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
 					m_backTransparentPipeline[i]->Apply();
 					DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, *m_backTransparentPipeline[i], p_nodes.m_instancedGeometries.m_transparentRenderNodes[i], true );
 					DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_backTransparentPipeline[i], p_nodes.m_staticGeometries.m_transparentRenderNodes[i], true );
@@ -560,11 +560,11 @@ namespace Castor3D
 					{
 						m_frontTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 						m_frontTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
-						m_backTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-						m_backTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
-
 						m_frontTransparentPipeline[i]->Apply();
 						DoRenderByDistance( p_nodes.m_scene, p_camera, *m_frontTransparentPipeline[i], l_distanceSortedRenderNodes, false );
+
+						m_backTransparentPipeline[i]->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+						m_backTransparentPipeline[i]->SetViewMatrix( p_camera.GetView() );
 						m_backTransparentPipeline[i]->Apply();
 						DoRenderByDistance( p_nodes.m_scene, p_camera, *m_backTransparentPipeline[i], l_distanceSortedRenderNodes, true );
 					}
@@ -616,14 +616,14 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.SWIZZLE_X, vtx_normal.SWIZZLE_Y, vtx_normal.SWIZZLE_Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4AmbientLight.SWIZZLE_XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4AmbientLight.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.SWIZZLE_XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.SWIZZLE_X, c3d_v3CameraPosition.SWIZZLE_Y, c3d_v3CameraPosition.SWIZZLE_Z ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
@@ -631,24 +631,24 @@ namespace Castor3D
 			{
 				if ( CheckFlag( p_flags, TextureChannel::Normal ) )
 				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ );
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 					l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Gloss ) )
 				{
-					l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.SWIZZLE_XY ).SWIZZLE_R;
+					l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Emissive ) )
 				{
-					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 				}
 			}
 
 			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
-			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.SWIZZLE_X );
+			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.x() );
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
@@ -660,7 +660,7 @@ namespace Castor3D
 			ROF;
 
 			l_begin = l_end;
-			l_end += c3d_iLightsCount.SWIZZLE_Y;
+			l_end += c3d_iLightsCount.y();
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
@@ -672,7 +672,7 @@ namespace Castor3D
 			ROF;
 
 			l_begin = l_end;
-			l_end += c3d_iLightsCount.SWIZZLE_Z;
+			l_end += c3d_iLightsCount.z();
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
@@ -685,35 +685,35 @@ namespace Castor3D
 
 			if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
 			{
-				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.SWIZZLE_XY ).SWIZZLE_R * c3d_fMatOpacity;
+				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}
 
 			if ( p_flags && p_flags != uint32_t( TextureChannel::Opacity ) )
 			{
 				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 				{
-					l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Ambient ) )
 				{
-					l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Diffuse ) )
 				{
-					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Specular ) )
 				{
-					l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.SWIZZLE_XYZ ) +
-																l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.SWIZZLE_XYZ ) +
-																l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.SWIZZLE_XYZ ) +
+			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
+															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
+															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 																l_v3Emissive ), l_fAlpha );
 		} );
 

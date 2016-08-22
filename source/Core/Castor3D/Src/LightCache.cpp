@@ -125,6 +125,7 @@ namespace Castor3D
 
 		if ( l_lights && l_lightsCount )
 		{
+			m_lightsTexture->Bind();
 			auto l_layout = m_lightsTexture->GetTexture();
 
 			if ( l_layout )
@@ -153,8 +154,6 @@ namespace Castor3D
 
 				l_layout->GetImage().Unlock( true );
 			}
-
-			m_lightsTexture->Bind();
 		}
 	}
 
