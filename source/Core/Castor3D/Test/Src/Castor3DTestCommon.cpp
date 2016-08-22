@@ -151,7 +151,13 @@ namespace Testing
 	bool C3DTestCase::compare( SceneNode const & p_a, SceneNode const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
-		l_return &= CT_EQUAL( p_a.GetOrientation(), p_b.GetOrientation() );
+		Castor::Angle l_xa, l_ya, l_za;
+		Castor::Angle l_xb, l_yb, l_zb;
+		p_a.GetOrientation().to_euler( l_xa, l_ya, l_za );
+		p_b.GetOrientation().to_euler( l_xb, l_yb, l_zb );
+		CT_EQUAL( l_xa.radians(), l_xb.radians() );
+		CT_EQUAL( l_ya.radians(), l_yb.radians() );
+		CT_EQUAL( l_za.radians(), l_zb.radians() );
 		l_return &= CT_EQUAL( p_a.GetPosition(), p_b.GetPosition() );
 		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
 		l_return &= CT_EQUAL( p_a.GetParent() != nullptr, p_b.GetParent() != nullptr );
@@ -484,9 +490,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( KeyFrame const & p_a, KeyFrame const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetRotate(), p_b.GetRotate() ) };
-		l_return &= CT_EQUAL( p_a.GetTranslate(), p_b.GetTranslate() );
-		l_return &= CT_EQUAL( p_a.GetScale(), p_b.GetScale() );
+		bool l_return{ CT_EQUAL( p_a.GetTransform(), p_b.GetTransform () ) };
 		l_return &= CT_EQUAL( p_a.GetTimeIndex(), p_b.GetTimeIndex() );
 		return l_return;
 	}

@@ -939,9 +939,7 @@ namespace Castor3D
 				p_value = KeyFrame
 				{
 					Castor::SwitchEndianness( p_value.GetTimeIndex() ),
-					Castor::SwitchEndianness( p_value.GetTranslate() ),
-					Castor::SwitchEndianness( p_value.GetRotate() ),
-					Castor::SwitchEndianness( p_value.GetScale() )
+					Castor::SwitchEndianness( p_value.GetTransform() )
 				};
 			}
 		}

@@ -486,7 +486,7 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )
+	void QuaternionT< T >::to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )const
 	{
 		p_yaw = get_yaw();
 		p_pitch = get_pitch();
@@ -519,9 +519,9 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::conjugate()
 	{
-		T l_w = quat.w;
-		point::negate( *this );
-		quat.w = l_w;
+		quat.x = -quat.x;
+		quat.y = -quat.y;
+		quat.z = -quat.z;
 	}
 
 	template< typename T >

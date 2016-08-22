@@ -55,14 +55,18 @@ namespace Castor3D
 		 *\param[in]	p_rotate	La rotation au temps de début.
 		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		KeyFrame( real p_timeIndex = 0, Castor::Point3r const & p_translate = {}, Castor::Quaternion const & p_rotate = {}, Castor::Point3r const & p_scale = {} )
-			: m_timeIndex( p_timeIndex )
-			, m_translate( p_translate )
-			, m_rotate( p_rotate )
-			, m_scale( p_scale )
-		{
-			Castor::matrix::set_transform( m_transform, p_translate, p_scale, p_rotate );
-		}
+		KeyFrame( real p_timeIndex = 0, Castor::Point3r const & p_translate = {}, Castor::Quaternion const & p_rotate = {}, Castor::Point3r const & p_scale = {} );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_timeIndex	When the key frame starts.
+		 *\param[in]	p_transform	The transformation at start time.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_timeIndex	Quand la key frame commence.
+		 *\param[in]	p_transform	La transformation au temps de début.
+		 */
+		KeyFrame( real p_timeIndex, Castor::Matrix4x4r const & p_transform );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -84,36 +88,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The translation.
-		 *\~french
-		 *\return		La translation.
-		 */
-		inline Castor::Point3r const & GetTranslate()const
-		{
-			return m_translate;
-		}
-		/**
-		 *\~english
-		 *\return		The rotation.
-		 *\~french
-		 *\return		La rotation.
-		 */
-		inline Castor::Quaternion const & GetRotate()const
-		{
-			return m_rotate;
-		}
-		/**
-		 *\~english
-		 *\return		The scaling.
-		 *\~french
-		 *\return		L'échelle.
-		 */
-		inline Castor::Point3r const & GetScale()const
-		{
-			return m_scale;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the start time index
 		 *\return		The time index
 		 *\~french
@@ -126,21 +100,12 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english	The transformation matrix at start time.
-		//!\~french		La matrice de transformation à l'index de temps de début.
-		Castor::Matrix4x4r m_transform;
-		//!\~english	The rotation at start time.
-		//!\~french		La rotation à l'index de temps de début.
-		Castor::Quaternion m_rotate;
-		//!\~english	The translation at start time.
-		//!\~french		La translation à l'index de temps de début.
-		Castor::Point3r m_translate;
-		//!\~english	The scaling at start time.
-		//!\~french		L'échelle à l'index de temps de début.
-		Castor::Point3r m_scale;
 		//!\~english	The start time index.
 		//!\~french		L'index de temps de début.
 		real m_timeIndex;
+		//!\~english	The transformation matrix at start time.
+		//!\~french		La matrice de transformation à l'index de temps de début.
+		Castor::Matrix4x4r m_transform{ 1.0_r };
 	};
 }
 

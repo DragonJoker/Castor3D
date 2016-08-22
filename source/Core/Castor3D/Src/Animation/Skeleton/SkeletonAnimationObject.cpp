@@ -13,7 +13,7 @@ namespace Castor3D
 {
 	namespace
 	{
-		using KeyFramed = std::array< double, 11 >;
+		using KeyFramed = std::array< double, 17 >;
 
 		void DoConvert( std::vector< KeyFrame > const & p_in, std::vector< KeyFramed > & p_out )
 		{
@@ -24,17 +24,24 @@ namespace Castor3D
 			{
 				auto & l_out = *l_it;
 				size_t l_index{ 0u };
-				l_out[l_index++] = l_in.GetRotate()[0];
-				l_out[l_index++] = l_in.GetRotate()[1];
-				l_out[l_index++] = l_in.GetRotate()[2];
-				l_out[l_index++] = l_in.GetRotate()[3];
-				l_out[l_index++] = l_in.GetTranslate()[0];
-				l_out[l_index++] = l_in.GetTranslate()[1];
-				l_out[l_index++] = l_in.GetTranslate()[2];
-				l_out[l_index++] = l_in.GetScale()[0];
-				l_out[l_index++] = l_in.GetScale()[1];
-				l_out[l_index++] = l_in.GetScale()[2];
+				auto const & l_transform = l_in.GetTransform();
 				l_out[l_index++] = l_in.GetTimeIndex();
+				l_out[l_index++] = l_transform[0][0];
+				l_out[l_index++] = l_transform[0][1];
+				l_out[l_index++] = l_transform[0][2];
+				l_out[l_index++] = l_transform[0][3];
+				l_out[l_index++] = l_transform[1][0];
+				l_out[l_index++] = l_transform[1][1];
+				l_out[l_index++] = l_transform[1][2];
+				l_out[l_index++] = l_transform[1][3];
+				l_out[l_index++] = l_transform[2][0];
+				l_out[l_index++] = l_transform[2][1];
+				l_out[l_index++] = l_transform[2][2];
+				l_out[l_index++] = l_transform[2][3];
+				l_out[l_index++] = l_transform[3][0];
+				l_out[l_index++] = l_transform[3][1];
+				l_out[l_index++] = l_transform[3][2];
+				l_out[l_index++] = l_transform[3][3];
 				++l_it;
 			}
 		}
@@ -47,12 +54,9 @@ namespace Castor3D
 			for ( auto & l_in : p_in )
 			{
 				size_t l_index{ 0u };
-				Quaternion l_rotate{ &l_in[l_index] };
-				l_index += 4;
-				Point3r l_translate{ l_in[l_index++], l_in[l_index++], l_in[l_index++] };
-				Point3r l_scale{ l_in[l_index++], l_in[l_index++], l_in[l_index++] };
 				real l_timeIndex{ real( l_in[l_index++] ) };
-				( *l_it ) = KeyFrame{ l_timeIndex, l_translate, l_rotate, l_scale };
+				Matrix4x4r l_transform{ &l_in[l_index] };
+				( *l_it ) = KeyFrame{ l_timeIndex, l_transform };
 				++l_it;
 			}
 		}
