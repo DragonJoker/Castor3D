@@ -449,7 +449,7 @@ namespace Castor3D
 		{
 			return p_node.IsDisplayable()
 				   && p_node.IsVisible()
-				   && p_camera.IsVisible( p_data.GetSphereBox(), p_node.GetDerivedTransformationMatrix() );
+				   && p_camera.IsVisible( p_data.GetCollisionSphere(), p_node.GetDerivedTransformationMatrix() );
 		};
 
 		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_opaqueRenderNodes

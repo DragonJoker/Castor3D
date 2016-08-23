@@ -132,12 +132,12 @@ namespace Castor3D
 			m_submeshes[i]->ComputeContainers();
 		}
 
-		Point3r l_min( m_submeshes[0]->GetCubeBox().GetMin() );
-		Point3r l_max( m_submeshes[0]->GetCubeBox().GetMax() );
+		Point3r l_min( m_submeshes[0]->GetCollisionBox().GetMin() );
+		Point3r l_max( m_submeshes[0]->GetCollisionBox().GetMax() );
 
 		for ( auto l_submesh : m_submeshes )
 		{
-			CubeBox const & l_box = l_submesh->GetCubeBox();
+			CubeBox const & l_box = l_submesh->GetCollisionBox();
 
 			if ( l_box.GetMin()[0] < l_min[0] )
 			{

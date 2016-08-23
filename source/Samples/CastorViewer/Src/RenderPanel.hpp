@@ -92,6 +92,7 @@ namespace CastorViewer
 		Castor::real DoTransformY( int y );
 		int DoTransformX( Castor::real x );
 		int DoTransformY( Castor::real y );
+		void DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh );
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );
@@ -136,6 +137,8 @@ namespace CastorViewer
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::FrameListenerSPtr m_pListener;
+		Castor3D::SubmeshWPtr m_selectedSubmesh;
+		Castor3D::MaterialSPtr m_selectedSubmeshMaterial;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;

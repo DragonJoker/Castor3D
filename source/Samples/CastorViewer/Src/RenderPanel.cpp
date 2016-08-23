@@ -13,6 +13,7 @@
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
+#include <Mesh/Submesh.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Camera.hpp>
@@ -277,6 +278,24 @@ namespace CastorViewer
 		}
 
 		return l_result;
+	}
+
+	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh )
+	{
+		auto l_submesh = m_selectedSubmesh.lock();
+
+		if ( l_submesh )
+		{
+			l_submesh->SetDefaultMaterial( m_selectedSubmeshMaterial );
+		}
+
+		if ( p_submesh )
+		{
+			m_selectedSubmeshMaterial = p_submesh->GetDefaultMaterial();
+			p_submesh->SetDefaultMaterial( wxGetApp().GetCastor()->GetMaterialCache().Find( cuT( "Red" ) ) );
+		}
+
+		m_selectedSubmesh = p_submesh;
 	}
 
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -593,6 +612,21 @@ namespace CastorViewer
 
 		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_MIDDLE ) )
 		{
+			auto l_window = GetRenderWindow();
+
+			if ( l_window )
+			{
+				Camera const & l_camera = *l_window->GetCamera();
+				SubmeshSPtr l_submesh;
+				Face l_face{ 0, 0, 0 };
+				real l_distance{ std::numeric_limits< real >::max() };
+				auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ DoTransformX( m_oldX ), DoTransformY( m_oldY ), l_camera }
+																								 , l_camera
+																								 , l_distance
+																								 , l_face
+																								 , l_submesh );
+				DoUpdateSelectedGeometry( l_geometry, l_submesh );
+			}
 		}
 
 		p_event.Skip();

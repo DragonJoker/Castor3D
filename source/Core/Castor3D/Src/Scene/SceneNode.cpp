@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "SceneNodeCache.hpp"
 
+#include "Camera.hpp"
 #include "Geometry.hpp"
 #include "MovableObject.hpp"
 #include "Scene.hpp"
@@ -331,10 +332,10 @@ namespace Castor3D
 		m_mtxChanged = true;
 	}
 
-	GeometrySPtr SceneNode::GetNearestGeometry( Ray * p_ray, real & p_distance, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh )
+	GeometrySPtr SceneNode::GetNearestGeometry( Ray const & p_ray, Camera const & p_camera, real & p_distance, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh )const
 	{
 		GeometrySPtr l_return = nullptr;
-		real l_distance;
+		real l_distance = std::numeric_limits< real >::max();
 
 		for ( auto l_it : m_objects )
 		{
@@ -344,27 +345,29 @@ namespace Castor3D
 			{
 				GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( l_current );
 
-				if ( ( l_distance = p_ray->Intersects( l_geometry, p_nearestFace, p_nearestSubmesh ) ) >= 0.0 && l_distance < p_distance )
+				if ( p_camera.IsVisible( l_geometry->GetMesh()->GetCollisionSphere(), l_geometry->GetParent()->GetDerivedTransformationMatrix() ) )
 				{
-					p_distance = l_distance;
-					l_return = l_geometry;
+					if ( ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) ) != Intersection::Out && l_distance < p_distance )
+					{
+						p_distance = l_distance;
+						l_return = l_geometry;
+					}
 				}
 			}
 		}
 
-		GeometrySPtr l_pTmp;
-
 		for ( auto l_it : m_children )
 		{
-			SceneNodeSPtr l_current = l_it.second.lock();
+			auto l_child = l_it.second.lock();
 
-			if ( l_current )
+			if ( l_child )
 			{
-				l_pTmp = l_current->GetNearestGeometry( p_ray, p_distance, p_nearestFace, p_nearestSubmesh );
+				auto l_geometry = l_child->GetNearestGeometry( p_ray, p_camera, l_distance, p_nearestFace, p_nearestSubmesh );
 
-				if ( l_pTmp )
+				if ( l_geometry && l_distance < p_distance )
 				{
-					l_return = l_pTmp;
+					p_distance = l_distance;
+					l_return = l_geometry;
 				}
 			}
 		}
