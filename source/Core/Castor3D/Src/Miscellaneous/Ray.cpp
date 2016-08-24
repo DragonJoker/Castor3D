@@ -23,7 +23,7 @@ namespace Castor3D
 		Point4r l_screen
 		{
 			( 2.0_r * real( p_point[0] ) / p_camera.GetWidth() ) - 1.0_r,
-			( 2.0_r * real( p_point[1] ) / p_camera.GetHeight() ) - 1.0_r,
+			1.0_r - ( 2.0_r * real( p_point[1] ) / p_camera.GetHeight() ),
 			-1.0_r,
 			1.0_r
 		};
@@ -90,13 +90,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Intersection Ray::Intersects( Face const & p_face, Submesh const & p_submesh, real & p_distance )const
+	Intersection Ray::Intersects( Face const & p_face, Castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const
 	{
 		Point3r l_pt1, l_pt2, l_pt3;
 		auto l_stride = p_submesh.GetVertexBuffer().GetDeclaration().GetStride();
-		return Intersects( Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[0] * l_stride], l_pt1 )
-						   , Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[1] * l_stride], l_pt2 )
-						   , Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[2] * l_stride], l_pt3 )
+		return Intersects( p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[0] * l_stride], l_pt1 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[1] * l_stride], l_pt2 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[2] * l_stride], l_pt3 )
 						   , p_distance );
 	}
 
@@ -268,11 +268,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Intersection Ray::Intersects( GeometrySPtr p_pGeometry, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh, real & p_distance )const
+	Intersection Ray::Intersects( GeometrySPtr p_geometry, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh, real & p_distance )const
 	{
-		MeshSPtr l_mesh = p_pGeometry->GetMesh();
-		Point3r l_center{ p_pGeometry->GetParent()->GetDerivedPosition() };
+		MeshSPtr l_mesh = p_geometry->GetMesh();
+		Point3r l_center{ p_geometry->GetParent()->GetDerivedPosition() };
 		SphereBox l_sphere{ l_center, l_mesh->GetCollisionSphere().GetRadius() };
+		Matrix4x4r const & l_transform{ p_geometry->GetParent()->GetDerivedTransformationMatrix() };
 		auto l_return = Intersection::Out;
 		real l_faceDist = std::numeric_limits< real >::max();
 
@@ -296,7 +297,7 @@ namespace Castor3D
 						};
 						real l_curfaceDist = 0.0_r;
 
-						if ( Intersects( l_face, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
+						if ( Intersects( l_face, l_transform, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
 						{
 							l_return = Intersection::In;
 							p_nearestFace = l_face;

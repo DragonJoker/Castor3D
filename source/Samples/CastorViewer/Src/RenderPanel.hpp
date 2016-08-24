@@ -139,8 +139,8 @@ namespace CastorViewer
 		Castor3D::FrameListenerSPtr m_pListener;
 		Castor3D::GeometryWPtr m_selectedGeometry;
 		Castor3D::SubmeshWPtr m_selectedSubmesh;
-		Castor3D::MaterialSPtr m_selectedSubmeshMaterial;
-		Castor3D::PassSPtr m_selectedPass;
+		Castor3D::MaterialSPtr m_selectedSubmeshMaterialOrig;
+		Castor3D::MaterialSPtr m_selectedSubmeshMaterialClone;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;

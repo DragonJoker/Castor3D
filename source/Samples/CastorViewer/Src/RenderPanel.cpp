@@ -72,6 +72,64 @@ namespace CastorViewer
 
 			return l_return;
 		}
+
+		TextureUnitSPtr DoCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )
+		{
+			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetEngine() );
+
+			l_clone->SetAlpArgument( BlendSrcIndex::Index0, p_source.GetAlpArgument( BlendSrcIndex::Index0 ) );
+			l_clone->SetAlpArgument( BlendSrcIndex::Index1, p_source.GetAlpArgument( BlendSrcIndex::Index1 ) );
+			l_clone->SetAlpArgument( BlendSrcIndex::Index2, p_source.GetAlpArgument( BlendSrcIndex::Index2 ) );
+			l_clone->SetAlpFunction( p_source.GetAlpFunction() );
+			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
+			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
+			l_clone->SetAutoMipmaps( p_source.GetAutoMipmaps() );
+			l_clone->SetBlendColour( p_source.GetBlendColour() );
+			l_clone->SetChannel( p_source.GetChannel() );
+			l_clone->SetIndex( p_source.GetIndex() );
+			l_clone->SetRenderTarget( p_source.GetRenderTarget() );
+			l_clone->SetRgbArgument( BlendSrcIndex::Index0, p_source.GetRgbArgument( BlendSrcIndex::Index0 ) );
+			l_clone->SetRgbArgument( BlendSrcIndex::Index1, p_source.GetRgbArgument( BlendSrcIndex::Index1 ) );
+			l_clone->SetRgbArgument( BlendSrcIndex::Index2, p_source.GetRgbArgument( BlendSrcIndex::Index2 ) );
+			l_clone->SetRgbFunction( p_source.GetRgbFunction() );
+			l_clone->SetSampler( p_source.GetSampler() );
+			l_clone->SetTexture( p_source.GetTexture() );
+
+			return l_clone;
+		}
+
+		PassSPtr DoClonePass( MaterialSPtr p_clone, Pass const & p_source )
+		{
+			PassSPtr l_clone = std::make_shared< Pass >( *p_clone->GetEngine(), p_clone );
+			l_clone->SetAmbient( p_source.GetAmbient() );
+			l_clone->SetDiffuse( p_source.GetDiffuse() );
+			l_clone->SetSpecular( p_source.GetSpecular() );
+			l_clone->SetEmissive( p_source.GetEmissive() );
+			l_clone->SetAlpha( p_source.GetAlpha() );
+			l_clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
+			l_clone->SetColourBlendMode( p_source.GetColourBlendMode() );
+			l_clone->SetShininess( p_source.GetShininess() );
+			l_clone->SetTwoSided( p_source.IsTwoSided() );
+
+			for ( auto const & l_unit : p_source )
+			{
+				l_clone->AddTextureUnit( DoCloneUnit( l_clone, *l_unit ) );
+			}
+
+			return l_clone;
+		}
+
+		MaterialSPtr DoCloneMaterial( Material const & p_source )
+		{
+			MaterialSPtr l_clone = std::make_shared< Material >( p_source.GetName() + cuT( "_Clone" ), *p_source.GetEngine() );
+
+			for ( auto const & l_pass : p_source )
+			{
+				l_clone->AddPass( DoClonePass( l_clone, *l_pass ) );
+			}
+
+			return l_clone;
+		}
 	}
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
@@ -160,15 +218,6 @@ namespace CastorViewer
 					m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
 				}
 			}
-		}
-
-		if ( !m_selectedPass )
-		{
-			m_selectedPass = std::make_shared< Pass >( *wxGetApp().GetCastor() );
-			m_selectedPass->SetColourBlendMode( BlendMode::Interpolative );
-			m_selectedPass->SetAmbient( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
-			m_selectedPass->SetDiffuse( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
-			m_selectedPass->SetSpecular( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
 		}
 	}
 
@@ -294,24 +343,29 @@ namespace CastorViewer
 		auto l_submesh = m_selectedSubmesh.lock();
 		auto l_geometry = m_selectedGeometry.lock();
 
-		if ( p_submesh != l_submesh && p_geometry != l_geometry )
+		if ( p_submesh != l_submesh || p_geometry != l_geometry )
 		{
 			if ( l_submesh && l_geometry )
 			{
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, l_geometry, l_submesh]()
 				{
-					l_geometry->GetMaterial( l_submesh )->RemovePass( m_selectedPass );
+					l_geometry->SetMaterial( l_submesh, m_selectedSubmeshMaterialOrig );
 					l_geometry->GetScene()->SetChanged();
 				} ) );
 			}
 
 			if ( p_submesh && p_geometry )
 			{
-				m_selectedSubmeshMaterial = p_geometry->GetMaterial( p_submesh );
+				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( p_submesh );
+				m_selectedSubmeshMaterialClone = DoCloneMaterial( *m_selectedSubmeshMaterialOrig );
+				auto l_pass = m_selectedSubmeshMaterialClone->GetPass( 0 );
+				l_pass->SetAmbient( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+				l_pass->SetDiffuse( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+				l_pass->SetSpecular( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
 
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, p_geometry, p_submesh]()
 				{
-					p_geometry->GetMaterial( p_submesh )->AddPass( m_selectedPass );
+					p_geometry->SetMaterial( p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();
 				} ) );
 			}

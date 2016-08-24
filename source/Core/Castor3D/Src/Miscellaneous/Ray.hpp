@@ -98,17 +98,19 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Tells if the ray intersects the given face.
 		 *\param[in]	p_face		The face to test.
+		 *\param[in]	p_transform	The face's vertex transformation matrix.
 		 *\param[in]	p_submesh	The submesh holding the face.
 		 *\param[out]	p_distance	Receives the distance.
 		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
 		 *\~french
 		 *\brief		Dit si le rayon croise la face donnée.
 		 *\param[in]	p_face		La face donnée.
+		 *\param[in]	p_transform	La matrice de transformation des sommets de la face.
 		 *\param[in]	p_submesh	Le sous-maillage contenant la face.
 		 *\param[out]	p_distance	Reçoit la distance.
 		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
 		 */
-		C3D_API Castor::Intersection Intersects( Face const & p_face, Submesh const & p_submesh, real & p_distance )const;
+		C3D_API Castor::Intersection Intersects( Face const & p_face, Castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the vertex is on the ray.
