@@ -161,6 +161,15 @@ namespace CastorViewer
 				}
 			}
 		}
+
+		if ( !m_selectedPass )
+		{
+			m_selectedPass = std::make_shared< Pass >( *wxGetApp().GetCastor() );
+			m_selectedPass->SetColourBlendMode( BlendMode::Interpolative );
+			m_selectedPass->SetAmbient( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+			m_selectedPass->SetDiffuse( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+			m_selectedPass->SetSpecular( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+		}
 	}
 
 	void RenderPanel::DoResetTimers()
@@ -283,19 +292,33 @@ namespace CastorViewer
 	void RenderPanel::DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry, Castor3D::SubmeshSPtr p_submesh )
 	{
 		auto l_submesh = m_selectedSubmesh.lock();
+		auto l_geometry = m_selectedGeometry.lock();
 
-		if ( l_submesh )
+		if ( p_submesh != l_submesh && p_geometry != l_geometry )
 		{
-			l_submesh->SetDefaultMaterial( m_selectedSubmeshMaterial );
-		}
+			if ( l_submesh && l_geometry )
+			{
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, l_geometry, l_submesh]()
+				{
+					l_geometry->GetMaterial( l_submesh )->RemovePass( m_selectedPass );
+					l_geometry->GetScene()->SetChanged();
+				} ) );
+			}
 
-		if ( p_submesh )
-		{
-			m_selectedSubmeshMaterial = p_submesh->GetDefaultMaterial();
-			p_submesh->SetDefaultMaterial( wxGetApp().GetCastor()->GetMaterialCache().Find( cuT( "Red" ) ) );
-		}
+			if ( p_submesh && p_geometry )
+			{
+				m_selectedSubmeshMaterial = p_geometry->GetMaterial( p_submesh );
 
-		m_selectedSubmesh = p_submesh;
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, p_geometry, p_submesh]()
+				{
+					p_geometry->GetMaterial( p_submesh )->AddPass( m_selectedPass );
+					p_geometry->GetScene()->SetChanged();
+				} ) );
+			}
+
+			m_selectedSubmesh = p_submesh;
+			m_selectedGeometry = p_geometry;
+		}
 	}
 
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
@@ -620,7 +643,7 @@ namespace CastorViewer
 				SubmeshSPtr l_submesh;
 				Face l_face{ 0, 0, 0 };
 				real l_distance{ std::numeric_limits< real >::max() };
-				auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ DoTransformX( m_oldX ), DoTransformY( m_oldY ), l_camera }
+				auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int ( m_oldY ), l_camera }
 																								 , l_camera
 																								 , l_distance
 																								 , l_face

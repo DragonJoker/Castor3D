@@ -275,47 +275,34 @@ namespace Castor3D
 		SphereBox l_sphere{ l_center, l_mesh->GetCollisionSphere().GetRadius() };
 		auto l_return = Intersection::Out;
 		real l_faceDist = std::numeric_limits< real >::max();
-		real l_vertexDist = std::numeric_limits< real >::max();
-		real l_curfaceDist, l_curvertexDist;
 
 		if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
 		{
-			CubeBox l_cube{ l_center + l_mesh->GetCollisionBox().GetMin(), l_center + l_mesh->GetCollisionBox().GetMax() };
+			p_distance = -1.0f;
 
-			if ( Intersects( l_cube, p_distance ) != Intersection::Out )
+			for ( auto l_submesh : *l_mesh )
 			{
-				p_distance = -1.0f;
+				l_sphere.Load( l_center, l_submesh->GetCollisionSphere().GetRadius() );
 
-				for ( auto l_submesh : *l_mesh )
+				if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
 				{
-					l_sphere.Load( l_center, l_submesh->GetCollisionSphere().GetRadius() );
-
-					if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
+					for ( uint32_t k = 0u; k < l_submesh->GetFaceCount(); k++ )
 					{
-						l_cube.Load( l_center + l_submesh->GetCollisionBox().GetMin(), l_center + l_submesh->GetCollisionBox().GetMax() );
+						Face l_face
+						{
+							l_submesh->GetIndexBuffer().data()[k * 3 + 0],
+							l_submesh->GetIndexBuffer().data()[k * 3 + 1],
+							l_submesh->GetIndexBuffer().data()[k * 3 + 2],
+						};
+						real l_curfaceDist = 0.0_r;
 
-						if ( Intersects( l_cube, p_distance ) != Intersection::Out )
+						if ( Intersects( l_face, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
 						{
 							l_return = Intersection::In;
-
-							for ( uint32_t k = 0u; k < l_submesh->GetFaceCount(); k++ )
-							{
-								Face l_face
-								{
-									l_submesh->GetIndexBuffer().data()[k * 3 + 0],
-									l_submesh->GetIndexBuffer().data()[k * 3 + 1],
-									l_submesh->GetIndexBuffer().data()[k * 3 + 2],
-								};
-
-								if ( Intersects( l_face, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
-								{
-									p_nearestFace = l_face;
-									p_nearestSubmesh = l_submesh;
-									p_distance = l_curfaceDist;
-									l_faceDist = l_curfaceDist;
-									Point3r l_position;
-								}
-							}
+							p_nearestFace = l_face;
+							p_nearestSubmesh = l_submesh;
+							p_distance = l_curfaceDist;
+							l_faceDist = l_curfaceDist;
 						}
 					}
 				}

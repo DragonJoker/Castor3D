@@ -137,8 +137,10 @@ namespace CastorViewer
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::FrameListenerSPtr m_pListener;
+		Castor3D::GeometryWPtr m_selectedGeometry;
 		Castor3D::SubmeshWPtr m_selectedSubmesh;
 		Castor3D::MaterialSPtr m_selectedSubmeshMaterial;
+		Castor3D::PassSPtr m_selectedPass;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;

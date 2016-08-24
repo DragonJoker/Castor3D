@@ -125,6 +125,24 @@ namespace Castor3D
 		C3D_API PassSPtr CreatePass();
 		/**
 		 *\~english
+		 *\brief		Adds an external pass to rhe material.
+		 *\param[in]	p_pass	The pass.
+		 *\~french
+		 *\brief		Ajoute une passe externe.
+		 *\param[in]	p_pass	La passe.
+		 */
+		C3D_API void AddPass( PassSPtr p_pass );
+		/**
+		 *\~english
+		 *\brief		Removes an external pass to rhe material.
+		 *\param[in]	p_pass	The pass.
+		 *\~french
+		 *\brief		Supprime une passe externe.
+		 *\param[in]	p_pass	La passe.
+		 */
+		C3D_API void RemovePass( PassSPtr p_pass );
+		/**
+		 *\~english
 		 *\brief		Retrieves a pass and returns it
 		 *\param[in]	p_index	The index of the wanted pass
 		 *\return		The retrieved pass or nullptr if not found
