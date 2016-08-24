@@ -55,6 +55,28 @@ namespace Castor
 		};
 	}
 
+	Point4r operator*( Matrix4x4r const & p_mtx, Point4r const & p_pt )
+	{
+		return Point4r
+		{
+			point::dot( p_pt, p_mtx.get_row( 0 ) ),
+			point::dot( p_pt, p_mtx.get_row( 1 ) ),
+			point::dot( p_pt, p_mtx.get_row( 2 ) ),
+			point::dot( p_pt, p_mtx.get_row( 3 ) ),
+		};
+	}
+
+	Point4r operator*( Point4r const & p_pt, Matrix4x4r const & p_mtx )
+	{
+		return Point4r
+		{
+			point::dot( p_pt, p_mtx.get_column( 0 ) ),
+			point::dot( p_pt, p_mtx.get_column( 1 ) ),
+			point::dot( p_pt, p_mtx.get_column( 2 ) ),
+			point::dot( p_pt, p_mtx.get_column( 3 ) ),
+		};
+	}
+
 	uint32_t GetNext2Pow( uint32_t p_value )
 	{
 		static std::array< uint32_t, 32 > const TwoPows

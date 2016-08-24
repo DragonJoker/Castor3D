@@ -547,7 +547,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline Castor::CubeBox const & GetCubeBox()const
+		inline Castor::CubeBox const & GetCollisionBox()const
 		{
 			return m_box;
 		}
@@ -557,7 +557,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box cube.
 		 */
-		inline Castor::CubeBox & GetCubeBox()
+		inline Castor::CubeBox & GetCollisionBox()
 		{
 			return m_box;
 		}
@@ -567,7 +567,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox const & GetSphereBox()const
+		inline Castor::SphereBox const & GetCollisionSphere()const
 		{
 			return m_sphere;
 		}
@@ -577,7 +577,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La bounding box sphère.
 		 */
-		inline Castor::SphereBox & GetSphereBox()
+		inline Castor::SphereBox & GetCollisionSphere()
 		{
 			return m_sphere;
 		}

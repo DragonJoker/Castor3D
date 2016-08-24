@@ -76,6 +76,21 @@ namespace Castor3D
 		m_passes.push_back( l_newPass );
 		return l_newPass;
 	}
+	
+	void Material::AddPass( PassSPtr p_pass )
+	{
+		m_passes.push_back( p_pass );
+	}
+
+	void Material::RemovePass( PassSPtr p_pass )
+	{
+		auto l_it = std::find( m_passes.begin(), m_passes.end(), p_pass );
+
+		if ( l_it != m_passes.end() )
+		{
+			m_passes.erase( l_it );
+		}
+	}
 
 	const PassSPtr Material::GetPass( uint32_t p_index )const
 	{

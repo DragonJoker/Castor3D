@@ -33,6 +33,8 @@ namespace Castor
 {
 	CU_API Point3r operator *( Matrix4x4r const & p_mtx, Point3r const & p_pt );
 	CU_API Point3r operator *( Point3r const & p_pt, Matrix4x4r const & p_mtx );
+	CU_API Point4r operator *( Matrix4x4r const & p_mtx, Point4r const & p_pt );
+	CU_API Point4r operator *( Point4r const & p_pt, Matrix4x4r const & p_mtx );
 	CU_API uint32_t GetNext2Pow( uint32_t p_uiDim );
 }
 

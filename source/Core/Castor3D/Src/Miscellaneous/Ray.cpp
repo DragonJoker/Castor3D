@@ -4,312 +4,325 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Vertex.hpp"
+#include "Mesh/Buffer/IndexBuffer.hpp"
+#include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/SceneNode.hpp"
 
-using namespace Castor3D;
 using namespace Castor;
 
-Ray::Ray( Point2i const & p_point, Camera const & p_camera )
+namespace Castor3D
 {
-	Viewport const & l_viewport = p_camera.GetViewport();
-	m_ptOrigin = p_camera.GetParent()->GetPosition();
-	m_ptOrigin[2] += l_viewport.GetNear();
-	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
-	m_ptOrigin *= l_camOrient;
-	//l_viewport.GetDirection( p_point, m_ptDirection );
-	point::normalise( m_ptDirection );
-}
-
-Ray::Ray( int p_x, int p_y, Camera const & p_camera )
-{
-	Viewport const & l_viewport = p_camera.GetViewport();
-	m_ptOrigin = p_camera.GetParent()->GetPosition();
-	m_ptOrigin[2] += l_viewport.GetNear();
-	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
-	m_ptOrigin *= l_camOrient;
-	Point2i l_point( p_x, p_y );
-	//l_viewport.GetDirection( l_point, m_ptDirection );
-	point::normalise( m_ptDirection );
-}
-
-Ray::Ray( Point3r const & p_ptOrigin, Point3r const & p_ptDirection )
-{
-	m_ptOrigin = p_ptOrigin;
-	m_ptDirection = p_ptDirection;
-}
-
-Ray::Ray( Ray const & p_ray )
-	: m_ptOrigin( p_ray.m_ptOrigin )
-	, m_ptDirection( p_ray.m_ptDirection )
-{
-	point::normalise( m_ptDirection );
-}
-
-Ray::Ray( Ray && p_ray )
-	: m_ptOrigin( std::move( p_ray.m_ptOrigin ) )
-	, m_ptDirection( std::move( p_ray.m_ptDirection ) )
-{
-	p_ray.m_ptOrigin	= Point3r();
-	p_ray.m_ptDirection	= Point3r();
-}
-
-Ray::~Ray()
-{
-}
-
-real Ray::Intersects( Point3r const & p_pt1, Point3r const & p_pt2, Point3r const & p_pt3 )
-{
-	real l_fReturn = -1.0f;
-	Point3r e1( p_pt2 - p_pt1 );
-	Point3r e2( p_pt1 - p_pt3 );
-	Point3r e3( p_pt3 - p_pt2 );
-	Point3r h( m_ptDirection ^ e2 );
-	real a = point::dot( e1, h );
-
-	if ( ! policy::is_null( a ) )
+	Ray::Ray( Point2i const & p_point, Camera const & p_camera )
 	{
-		real f = 1.0f / a;
-		Point3r s( m_ptOrigin - p_pt1 );
-		real u = f * point::dot( s, h );
-
-		if ( u >= 0.0 && u <= 1.0 )
+		auto const & l_projection = p_camera.GetViewport().GetProjection();
+		auto const & l_view = p_camera.GetView();
+		auto l_invProjectionView = ( l_projection * l_view ).get_inverse();
+		Point4r l_screen
 		{
-			Point3r q( s ^ e1 );
-			real v = f * point::dot( m_ptDirection, q );
+			( 2.0_r * real( p_point[0] ) / p_camera.GetWidth() ) - 1.0_r,
+			1.0_r - ( 2.0_r * real( p_point[1] ) / p_camera.GetHeight() ),
+			-1.0_r,
+			1.0_r
+		};
+		Point4r l_world = l_invProjectionView * l_screen;
+		l_world /= l_world[3];
+		m_origin[0] = l_world[0];
+		m_origin[1] = l_world[1];
+		m_origin[2] = l_world[2];
 
-			if ( v >= 0.0 && u + v <= 1.0 )
+		l_screen[2] = 1.0_r;
+		l_world = l_invProjectionView * l_screen;
+		l_world /= l_world[3];
+		m_direction[0] = l_world[0];
+		m_direction[1] = l_world[1];
+		m_direction[2] = l_world[2];
+		m_direction -= m_origin;
+		point::normalise( m_direction );
+	}
+
+	Ray::Ray( int p_x, int p_y, Camera const & p_camera )
+		: Ray{ Point2i{ p_x, p_y }, p_camera }
+	{
+	}
+
+	Ray::Ray( Point3r const & p_origin, Point3r const & p_direction )
+		: m_origin{ p_origin }
+		, m_direction{ p_direction }
+	{
+		point::normalise( m_direction );
+	}
+
+	Intersection Ray::Intersects( Point3r const & p_pt1, Point3r const & p_pt2, Point3r const & p_pt3, real & p_distance )const
+	{
+		// see http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
+		Intersection l_return = Intersection::Out;
+		Point3r e1{ p_pt2 - p_pt1 };
+		Point3r e2{ p_pt1 - p_pt3 };
+		Point3r h( m_direction ^ e2 );
+		real a = point::dot( e1, h );
+
+		if ( std::abs( a ) > 0.00001_r )
+		{
+			real f = 1.0f / a;
+			Point3r s( m_origin - p_pt1 );
+			real u = f * point::dot( s, h );
+
+			if ( u >= 0.0 && u <= 1.0 )
 			{
-				real t = f * point::dot( e2, q );
+				Point3r q( s ^ e1 );
+				real v = f * point::dot( m_direction, q );
 
-				if ( ! policy::is_null( t ) )
+				if ( v >= 0.0 && u + v <= 1.0 )
 				{
-					l_fReturn = t;
+					p_distance = f * point::dot( e2, q );
+
+					if ( p_distance > 0.00001_r )
+					{
+						l_return = Intersection::In;
+					}
 				}
 			}
 		}
+
+		return l_return;
 	}
 
-	return l_fReturn;
-}
-
-real Ray::Intersects( Face const & p_face, Submesh const & p_submesh )
-{
-	Point3r l_pt1, l_pt2, l_pt3;
-	return Intersects( Vertex::GetPosition( p_submesh[p_face[0]], l_pt1 ), Vertex::GetPosition( p_submesh[p_face[1]], l_pt2 ), Vertex::GetPosition( p_submesh[p_face[2]], l_pt3 ) );
-}
-
-real Ray::Intersects( Point3r const & p_vertex )
-{
-	Point3r u( m_ptOrigin - p_vertex );
-	Point3r puv;
-
-	if ( ProjectVertex( u, puv ) && point::distance_squared( puv ) < 0.000001 )
+	Intersection Ray::Intersects( Face const & p_face, Castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const
 	{
-		return real( point::distance( puv ) );
+		Point3r l_pt1, l_pt2, l_pt3;
+		auto l_stride = p_submesh.GetVertexBuffer().GetDeclaration().GetStride();
+		return Intersects( p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[0] * l_stride], l_pt1 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[1] * l_stride], l_pt2 )
+						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[2] * l_stride], l_pt3 )
+						   , p_distance );
 	}
 
-	return -1;
-}
-
-real Ray::Intersects( CubeBox const & p_box )
-{
-	Point3r l_v1( p_box.GetMin().const_ptr() );
-	Point3r l_v8( p_box.GetMax().const_ptr() );
-	Point3r l_v2( l_v8[0], l_v1[1], l_v1[2] );
-	Point3r l_v3( l_v1[0], l_v8[1], l_v1[2] );
-	Point3r l_v4( l_v8[0], l_v8[1], l_v1[2] );
-	Point3r l_v5( l_v8[0], l_v1[1], l_v8[2] );
-	Point3r l_v6( l_v1[0], l_v8[1], l_v8[2] );
-	Point3r l_v7( l_v8[0], l_v8[1], l_v8[2] );
-	bool l_foundOne = false;
-	real l_dist, l_min = 1e6f;
-
-	if ( ( l_dist = Intersects( l_v1, l_v2, l_v3 ) ) >= 0 )
+	Intersection Ray::Intersects( Point3r const & p_vertex, real & p_distance )const
 	{
-		l_foundOne = true;
-		l_min = l_dist;
-	}
+		Intersection l_return = Intersection::Out;
+		Point3r u( m_origin - p_vertex );
+		Point3r puv;
 
-	if ( ( l_dist = Intersects( l_v2, l_v4, l_v3 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v2, l_v6, l_v4 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v6, l_v8, l_v4 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v6, l_v5, l_v8 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v5, l_v7, l_v8 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v1, l_v7, l_v5 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v1, l_v3, l_v7 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v2, l_v1, l_v5 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v2, l_v5, l_v6 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v3, l_v4, l_v7 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( ( l_dist = Intersects( l_v4, l_v7, l_v8 ) ) >= 0 )
-	{
-		l_foundOne = true;
-		l_min = std::min<real>( l_min, l_dist );
-	}
-
-	if ( l_foundOne )
-	{
-		return l_min;
-	}
-
-	return -1.0f;
-}
-
-real Ray::Intersects( SphereBox const & p_sphere )
-{
-	real l_fReturn = -1.0f;
-	// intersection rayon/sphere
-	Point3r l_vDist( p_sphere.GetCenter() - m_ptOrigin );
-	real B = point::dot( m_ptDirection, l_vDist );
-	real D = B * B - point::dot( l_vDist, l_vDist ) + p_sphere.GetRadius() * p_sphere.GetRadius();
-
-	if ( D >= 0.0f )
-	{
-		real t0 = B - std::sqrt( D );
-		real t1 = B + std::sqrt( D );
-
-		if ( t0 > 0.1f )
+		if ( ProjectVertex( u, puv ) && point::distance_squared( puv ) < 0.000001 )
 		{
-			l_fReturn = t0;
+			p_distance = real( point::distance( u ) );
+			l_return = Intersection::In;
 		}
 
-		if ( t1 > 0.1f && t1 < l_fReturn )
-		{
-			l_fReturn = t1;
-		}
+		return l_return;
 	}
 
-	return l_fReturn;
-}
-
-real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_nearestFace ), SubmeshSPtr * p_nearestSubmesh )
-{
-	Point3r l_vCenter( p_pGeometry->GetParent()->GetPosition() );
-	MeshSPtr l_mesh = p_pGeometry->GetMesh();
-	SphereBox l_sphere( l_vCenter, l_mesh->GetCollisionSphere().GetRadius() );
-	real l_distance = Intersects( l_sphere );
-	//real l_faceDist = 10e6, l_vertexDist = 10e6;
-	//real l_curfaceDist, l_curvertexDist;
-
-	if ( l_distance >= 0.0f )
+	Intersection Ray::Intersects( CubeBox const & p_box, real & p_distance )const
 	{
-		l_distance = -1.0f;
+		Point3r l_v1( p_box.GetMin().const_ptr() );
+		Point3r l_v8( p_box.GetMax().const_ptr() );
+		Point3r l_v2( l_v8[0], l_v1[1], l_v1[2] );
+		Point3r l_v3( l_v1[0], l_v8[1], l_v1[2] );
+		Point3r l_v4( l_v8[0], l_v8[1], l_v1[2] );
+		Point3r l_v5( l_v8[0], l_v1[1], l_v8[2] );
+		Point3r l_v6( l_v1[0], l_v8[1], l_v8[2] );
+		Point3r l_v7( l_v8[0], l_v8[1], l_v8[2] );
+		auto l_return = Intersection::Out;
+		real l_dist = 0.0_r;
+		real l_min = std::numeric_limits< real >::max();
 
-		for ( auto l_submesh : *l_mesh )
+		if ( ( Intersects( l_v1, l_v2, l_v3, l_dist ) ) != Intersection::Out )
 		{
-			Point3r l_submeshCenter = l_vCenter + l_submesh->GetSphereBox().GetCenter();
-			l_sphere.Load( l_submeshCenter, l_submesh->GetSphereBox().GetRadius() );
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
 
-			if ( p_nearestSubmesh )
+		if ( ( Intersects( l_v2, l_v4, l_v3, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v2, l_v6, l_v4, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v6, l_v8, l_v4, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v6, l_v5, l_v8, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v5, l_v7, l_v8, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v1, l_v7, l_v5, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v1, l_v3, l_v7, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v2, l_v1, l_v5, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v2, l_v5, l_v6, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v3, l_v4, l_v7, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( ( Intersects( l_v4, l_v7, l_v8, l_dist ) ) != Intersection::Out )
+		{
+			l_return = Intersection::In;
+			l_min = std::min( l_min, l_dist );
+		}
+
+		if ( l_return != Intersection::Out )
+		{
+			p_distance = l_min;
+		}
+
+		return l_return;
+	}
+
+	Intersection Ray::Intersects( SphereBox const & p_sphere, real & p_distance )const
+	{
+		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
+		auto l_return = Intersection::Out;
+		Point3r l_v( p_sphere.GetCenter() - m_origin );
+		Point3r l_puv;
+
+		if ( ProjectVertex( l_v, l_puv ) )
+		{
+			// Sphere's center projects on the ray.
+			p_distance = real( point::distance( l_puv - l_v ) );
+
+			if ( p_distance == p_sphere.GetRadius() )
 			{
-				*p_nearestSubmesh = l_submesh;
+				// Single intersection point.
+				l_return = Intersection::Intersect;
 			}
+			else if ( p_distance < p_sphere.GetRadius() )
+			{
+				// Two intersection points, we look for the nearest one.
+				l_return = Intersection::In;
 
-			//if (Intersects( l_sphere) >= 0.0f)
-			//{
-			//	for (uint32_t k = 0; k < l_submesh->GetFaceCount(); k++)
-			//	{
-			//		FaceSPtr l_pFace = l_submesh->GetFace( k );
-
-			//		if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
-			//		{
-			//			if (p_nearestFace)
-			//			{
-			//				*p_nearestFace = l_pFace;
-			//			}
-
-			//			if (p_nearestSubmesh)
-			//			{
-			//				*p_nearestSubmesh = l_submesh;
-			//			}
-
-			//			l_faceDist = l_curfaceDist;
-			//			l_distance = l_curfaceDist;
-
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex1)) >= 0.0 && l_curvertexDist < l_distance)
-			//			{
-			//				l_distance = l_curvertexDist;
-			//			}
-
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_distance)
-			//			{
-			//				l_distance = l_curvertexDist;
-			//			}
-
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_distance)
-			//			{
-			//				l_distance = l_curvertexDist;
-			//			}
-			//		}
-			//	}
-			//}
+				if ( point::distance( l_v ) < p_sphere.GetRadius() )
+				{
+					// The ray origin is inside the sphere.
+					p_distance = real( point::distance( l_puv ) + sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
+				}
+				else
+				{
+					// The ray origin is outside the sphere
+					p_distance = real( point::distance( l_puv ) - sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) );
+				}
+			}
 		}
+		else
+		{
+			p_distance = real( point::distance( l_v ) );
+
+			if ( p_distance == p_sphere.GetRadius() )
+			{
+				// Single intersection point.
+				l_return = Intersection::Intersect;
+			}
+			else if ( point::distance( l_v ) < p_sphere.GetRadius() )
+			{
+				// The sphere's center is behind the ray, and the rays origin is inside the sphere.
+				p_distance = real( point::distance( l_puv - l_v ) );
+				p_distance = real( sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) - point::distance( l_puv ) );
+				l_return = Intersection::In;
+			}
+			else
+			{
+				// No intersection.
+			}
+		}
+
+		return l_return;
 	}
 
-	return l_distance;
-}
-
-bool Ray::ProjectVertex( Point3r const & p_point, Point3r & p_result )
-{
-	bool l_return = false;
-
-	if ( point::dot( m_ptDirection, p_point ) >= 0.0 )
+	Intersection Ray::Intersects( GeometrySPtr p_geometry, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh, real & p_distance )const
 	{
-		p_result = m_ptDirection * real( point::dot( m_ptDirection, p_point ) / point::distance( m_ptDirection ) );
-		l_return = true;
+		MeshSPtr l_mesh = p_geometry->GetMesh();
+		Point3r l_center{ p_geometry->GetParent()->GetDerivedPosition() };
+		SphereBox l_sphere{ l_center, l_mesh->GetCollisionSphere().GetRadius() };
+		Matrix4x4r const & l_transform{ p_geometry->GetParent()->GetDerivedTransformationMatrix() };
+		auto l_return = Intersection::Out;
+		real l_faceDist = std::numeric_limits< real >::max();
+
+		if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
+		{
+			p_distance = -1.0f;
+
+			for ( auto l_submesh : *l_mesh )
+			{
+				l_sphere.Load( l_center, l_submesh->GetCollisionSphere().GetRadius() );
+
+				if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
+				{
+					for ( uint32_t k = 0u; k < l_submesh->GetFaceCount(); k++ )
+					{
+						Face l_face
+						{
+							l_submesh->GetIndexBuffer().data()[k * 3 + 0],
+							l_submesh->GetIndexBuffer().data()[k * 3 + 1],
+							l_submesh->GetIndexBuffer().data()[k * 3 + 2],
+						};
+						real l_curfaceDist = 0.0_r;
+
+						if ( Intersects( l_face, l_transform, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
+						{
+							l_return = Intersection::In;
+							p_nearestFace = l_face;
+							p_nearestSubmesh = l_submesh;
+							p_distance = l_curfaceDist;
+							l_faceDist = l_curfaceDist;
+						}
+					}
+				}
+			}
+		}
+
+		return l_return;
 	}
 
-	return l_return;
+	bool Ray::ProjectVertex( Point3r const & p_point, Point3r & p_result )const
+	{
+		bool l_return = false;
+		p_result = ( m_direction * real( point::dot( m_direction, p_point ) ) );
+
+		if ( point::dot( m_direction, p_point ) >= 0.0 )
+		{
+			l_return = true;
+		}
+
+		return l_return;
+	}
 }

@@ -278,21 +278,23 @@ namespace Castor3D
 		C3D_API void SetScale( Castor::Point3r const & p_scale );
 		/**
 		 *\~english
-		 *\brief		Gets the nearest geometry held by this node or it's children nodes, which is hit by the ray
-		 *\param[in]	p_ray		The ray
-		 *\param[out]	p_distance	Receives the distance of the met geometry
-		 *\param[out]	p_nearestFace	Receives the face of the met geometry
-		 *\param[out]	p_nearestSubmesh	Receives the submesh of the met geometry
-		 *\return		The geometry, nullptr if none
+		 *\brief		Gets the nearest geometry held by this node or it's children nodes, which is hit by the ray.
+		 *\param[in]	p_ray				The ray.
+		 *\param[in]	p_camera			The camera to check for the node visibility.
+		 *\param[out]	p_distance			Receives the distance of the met geometry.
+		 *\param[out]	p_nearestFace		Receives the face of the met geometry.
+		 *\param[out]	p_nearestSubmesh	Receives the submesh of the met geometry.
+		 *\return		The geometry, \p nullptr if none.
 		 *\~french
-		 *\brief		Récupère la géométrie la plus proche de ce noeud et de ses enfants, qui sera touchée par le rayon
-		 *\param[in]	p_ray		Le rayon
-		 *\param[out]	p_distance	Reçoit la distance de la géométrie rencontrée
-		 *\param[out]	p_nearestFace	Reçoit la face dans la géométrie rencontrée
-		 *\param[out]	p_nearestSubmesh	Reçoit le submesh de la géométrie rencontrée
-		 *\return		La géométrie, nullptr si aucune
+		 *\brief		Récupère la géométrie la plus proche de ce noeud et de ses enfants, qui sera touchée par le rayon.
+		 *\param[in]	p_ray				Le rayon.
+		 *\param[in]	p_camera			La caméra, pour vérifier la visibilité du noeud.
+		 *\param[out]	p_distance			Reçoit la distance de la géométrie rencontrée.
+		 *\param[out]	p_nearestFace		Reçoit la face dans la géométrie rencontrée.
+		 *\param[out]	p_nearestSubmesh	Reçoit le submesh de la géométrie rencontrée.
+		 *\return		La géométrie, \p nullptr si aucune.
 		 */
-		C3D_API GeometrySPtr GetNearestGeometry( Ray * p_ray, real & p_distance, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh );
+		C3D_API GeometrySPtr GetNearestGeometry( Ray const & p_ray, Camera const & p_camera, real & p_distance, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
