@@ -23,13 +23,13 @@ namespace Castor3D
 		return true;
 	}
 
-	bool BackBuffers::DoBind( FrameBufferTarget p_target )
+	bool BackBuffers::DoBind( FrameBufferTarget p_target )const
 	{
 		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::Bind( eBUFFER, eFRAME_BUFFER_TARGET )." );
 		return false;
 	}
 
-	void BackBuffers::DoUnbind()
+	void BackBuffers::DoUnbind()const
 	{
 #if DEBUG_BUFFERS
 

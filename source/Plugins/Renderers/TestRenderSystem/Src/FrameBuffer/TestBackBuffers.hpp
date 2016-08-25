@@ -54,74 +54,62 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Create
 		 */
-		virtual bool Create();
+		bool Create()override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Destroy
 		 */
-		virtual void Destroy();
+		void Destroy()override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual void SetDrawBuffers( Castor3D::FrameBuffer::AttachArray const & p_attaches );
+		void SetDrawBuffers( Castor3D::FrameBuffer::AttachArray const & p_attaches )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		virtual bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::BackBuffers::Bind
 		 */
-		virtual bool Bind( Castor3D::eBUFFER p_buffer, Castor3D::FrameBufferTarget p_target );
+		bool Bind( Castor3D::eBUFFER p_buffer, Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual void SetReadBuffer( Castor3D::AttachmentPoint, uint8_t );
+		void SetReadBuffer( Castor3D::AttachmentPoint, uint8_t )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
-		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format )
+		Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format )override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
-		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format )
+		Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format )override
 		{
 			return nullptr;
 		}
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::IsComplete
 		 */
-		virtual bool IsComplete()const
+		bool IsComplete()const override
 		{
 			return true;
 		}
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoInitialise
-		 */
-		virtual bool DoInitialise( Castor::Size const & p_size );
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoCleanup
-		 */
-		virtual void DoCleanup();
-		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
-		virtual void DoClear( uint32_t p_targets );
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoResize
-		 */
-		virtual void DoResize( Castor::Size const & p_size );
+		void DoClear( uint32_t p_targets )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		bool DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
 		 */
-		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation );
+		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation )const override;
 	};
 }
 

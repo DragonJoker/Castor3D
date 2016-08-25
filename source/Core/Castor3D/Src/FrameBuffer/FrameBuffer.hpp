@@ -112,14 +112,14 @@ namespace Castor3D
 		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( FrameBufferMode p_mode = FrameBufferMode::Automatic, FrameBufferTarget p_target = FrameBufferTarget::Both );
+		C3D_API bool Bind( FrameBufferMode p_mode = FrameBufferMode::Automatic, FrameBufferTarget p_target = FrameBufferTarget::Both )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
-		C3D_API void Unbind();
+		C3D_API void Unbind()const;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
@@ -134,7 +134,7 @@ namespace Castor3D
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		C3D_API bool BlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const;
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation );
+		C3D_API bool StretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const;
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
@@ -163,7 +163,7 @@ namespace Castor3D
 		 *\brief		Définit les buffers dans lesquels le dessin doit être effectué
 		 *\remarks		Tous les buffers attachés sont sélectionnés
 		 */
-		C3D_API void SetDrawBuffers();
+		C3D_API void SetDrawBuffers()const;
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer to be drawn into
@@ -172,7 +172,7 @@ namespace Castor3D
 		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
 		 *\param[in]	p_attach	Le tampon de couleur
 		 */
-		C3D_API void SetDrawBuffer( TextureAttachmentSPtr p_attach );
+		C3D_API void SetDrawBuffer( TextureAttachmentSPtr p_attach )const;
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer to be drawn into
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
 		 *\param[in]	p_attach	Le tampon de couleur
 		 */
-		C3D_API void SetDrawBuffer( RenderBufferAttachmentSPtr p_attach );
+		C3D_API void SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )const;
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
@@ -299,7 +299,7 @@ namespace Castor3D
 		 *\brief		Utilise les attaches données pour ce framebuffer, lors du prochain dessin.
 		 *\param[in]	p_attaches	Les attaches.
 		 */
-		C3D_API virtual void SetDrawBuffers( AttachArray const & p_attaches ) = 0;
+		C3D_API virtual void SetDrawBuffers( AttachArray const & p_attaches )const = 0;
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer source for pixels
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\param[in]	p_point	Le tampon de couleur
 		 *\param[in]	p_index	L'index d'attache
 		 */
-		C3D_API virtual void SetReadBuffer( AttachmentPoint p_point, uint8_t p_index ) = 0;
+		C3D_API virtual void SetReadBuffer( AttachmentPoint p_point, uint8_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a colour render buffer
@@ -415,14 +415,14 @@ namespace Castor3D
 		 *\param[in]	p_target	La cible d'activation du tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBind( FrameBufferTarget p_target ) = 0;
+		C3D_API virtual bool DoBind( FrameBufferTarget p_target )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
-		C3D_API virtual void DoUnbind() = 0;
+		C3D_API virtual void DoUnbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
@@ -437,7 +437,7 @@ namespace Castor3D
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components ) = 0;
+		C3D_API virtual bool DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
@@ -458,7 +458,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation ) = 0;
+		C3D_API virtual bool DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const = 0;
 
 	private:
 		C3D_API bool DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );

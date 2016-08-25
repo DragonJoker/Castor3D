@@ -121,8 +121,6 @@ namespace Deferred
 			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 			l_buffer += l_stride;
 		}
-
-		GetEngine()->SetPerObjectLighting( false );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -263,6 +261,7 @@ namespace Deferred
 
 	bool RenderTechnique::DoBeginOpaqueRendering()
 	{
+		GetEngine()->SetPerObjectLighting( false );
 		bool l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
@@ -337,6 +336,7 @@ namespace Deferred
 		}
 
 		m_frameBuffer.m_frameBuffer->Unbind();
+		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, Rectangle{ Position{}, m_size }, uint32_t( BufferComponent::Depth ) );
 
 #endif
 
@@ -344,6 +344,7 @@ namespace Deferred
 
 	bool RenderTechnique::DoBeginTransparentRendering()
 	{
+		GetEngine()->SetPerObjectLighting( true );
 		return m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 	}
 
@@ -373,7 +374,7 @@ namespace Deferred
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
-		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
 
 		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) ) );
 		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
@@ -393,97 +394,63 @@ namespace Deferred
 		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
 
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4MatAmbient.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, c3d_v4MatDiffuse.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, c3d_v4MatSpecular.xyz() );
+			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_vertex );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
 			{
-				l_fAlpha *= texture2D( c3d_mapOpacity, vtx_texture.xy() ).r();
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
+				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
+				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
+				//l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
 			}
 
-			IF( l_writer, cuT( "l_fAlpha > 0" ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_vertex );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vtx_normal ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vtx_bitangent ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, c3d_v4MatDiffuse.xyz() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4MatAmbient.xyz() );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( c3d_v4MatSpecular.xyz(), 0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
-				{
-					l_v3Ambient = texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
-
-					if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
-					{
-						l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-					}
-				}
-				else if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
-				{
-					l_v3Ambient = texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-				}
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
-				{
-					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
-				}
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
-				{
-					l_v3Diffuse = texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
-				}
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
-				{
-					l_v3Normal += normalize( texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() * 2.0f - 1.0f );
-					l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
-					l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
-				}
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
-				{
-					if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
-					{
-						l_v4Specular = vec4( c3d_v4MatSpecular.xyz() * texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz(), texture2D( c3d_mapGloss, vtx_texture.xy() ).x() );
-					}
-					else
-					{
-						l_v4Specular = vec4( c3d_v4MatSpecular.xyz() * texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz(), c3d_fMatShininess );
-					}
-				}
-				else if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
-				{
-					l_v4Specular = vec4( c3d_v4MatSpecular.xyz(), texture2D( c3d_mapGloss, vtx_texture.xy() ).x() );
-				}
-				else
-				{
-					l_v4Specular = vec4( c3d_v4MatSpecular.xyz(), c3d_fMatShininess );
-				}
-
-				if ( CheckFlag( p_textureFlags, TextureChannel::Height ) )
-				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vtx_texture.xy() ).xyz() );
-				}
-
-				out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
-				out_c3dDiffuse = vec4( l_v3Diffuse, l_fAlpha );
-				out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
-				out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
-				out_c3dSpecular = vec4( l_v4Specular );
-				out_c3dEmissive = vec4( l_v3Emissive, 0 );
+				l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
 			}
-			ELSE
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 			{
-				l_writer.Discard();
+				l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 			}
-			FI
-		};
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
+			{
+				l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
+			{
+				l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
+			{
+				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+			}
+
+			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
+			{
+				l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
+			}
+
+			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
+			out_c3dDiffuse = vec4( l_v3Diffuse, 0 );
+			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
+			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
+			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
+			out_c3dEmissive = vec4( l_v3Emissive, 0 );
+		} );
+
 		return l_writer.Finalise();
 	}
 
@@ -549,23 +516,22 @@ namespace Deferred
 		{
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture2D( c3d_mapPosition, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture2D( c3d_mapNormals, vtx_texture ) / 2.0 );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture2D( c3d_mapNormals, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture2D( c3d_mapTangent, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, vec4( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w(), 0.0f ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( cross( l_v4Tangent.xyz(), l_v4Normal.xyz() ), 0.0f ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.w() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapEmissive, l_v4Emissive.xyz() );
+			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.w() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Position.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normal.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangent.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangent.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissive.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_eye, l_v3Position - c3d_v3CameraPosition );
 			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 
 			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
@@ -604,11 +570,10 @@ namespace Deferred
 			}
 			ROF;
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( Int( &l_writer, 1 ) - l_v4Emissive.w() ) *
-													l_writer.Paren( l_writer.Paren( l_v3Diffuse * l_v4Diffuse.xyz() ) +
-																	l_writer.Paren( l_v3Specular * l_v4Specular.xyz() ) +
-																	l_v3Emissive ) ) +
-									l_writer.Paren( l_v4Emissive.w() * l_v4Diffuse.xyz() ), 1 );
+			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
+													l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
+													l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
+													l_v3MapEmissive ), 1.0 );
 		} );
 
 		return l_writer.Finalise();

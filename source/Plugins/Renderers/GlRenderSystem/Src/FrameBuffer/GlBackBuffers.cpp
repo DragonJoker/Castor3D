@@ -28,7 +28,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )
+	bool GlBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )const
 	{
 		bool l_return = true;
 
@@ -52,11 +52,11 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
+	void GlBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )const
 	{
 	}
 
-	void GlBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )
+	void GlBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 		GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( p_eAttach ) ) + p_index ) );
 	}
@@ -85,31 +85,18 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlBackBuffers::DoInitialise( Size const & p_size )
-	{
-		return true;
-	}
-
-	void GlBackBuffers::DoCleanup()
-	{
-	}
-
 	void GlBackBuffers::DoClear( uint32_t p_uiTargets )
 	{
 		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
 		GetOpenGl().Clear( GetOpenGl().GetComponents( uint32_t( BufferComponent::Colour ) | uint32_t( BufferComponent::Depth ) | uint32_t( BufferComponent::Stencil ) ) );
 	}
 
-	void GlBackBuffers::DoResize( Castor::Size const & p_size )
-	{
-	}
-
-	bool GlBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
+	bool GlBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
 		return false;
 	}
 
-	bool GlBackBuffers::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
+	bool GlBackBuffers::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
 		return false;
 	}

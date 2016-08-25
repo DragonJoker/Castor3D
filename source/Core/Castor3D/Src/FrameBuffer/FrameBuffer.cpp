@@ -64,7 +64,7 @@ namespace Castor3D
 		DoClear( l_targets );
 	}
 
-	bool FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )
+	bool FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )const
 	{
 		bool l_return = DoBind( p_target );
 
@@ -76,7 +76,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void FrameBuffer::Unbind()
+	void FrameBuffer::Unbind()const
 	{
 #if DEBUG_BUFFERS
 
@@ -167,9 +167,9 @@ namespace Castor3D
 		}
 	}
 
-	bool FrameBuffer::BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )
+	bool FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )const
 	{
-		bool l_return = p_buffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
+		bool l_return = p_target.Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
@@ -177,19 +177,19 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_components );
+				l_return = DoBlitInto( p_target, p_rectSrcDst, p_components );
 				Unbind();
 			}
 
-			p_buffer->Unbind();
+			p_target.Unbind();
 		}
 
 		return l_return;
 	}
 
-	bool FrameBuffer::StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
+	bool FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
-		bool l_return = p_buffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
+		bool l_return = p_target.Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
@@ -197,27 +197,27 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = DoStretchInto( p_buffer, p_rectSrc, p_rectDst, p_components, p_interpolation );
+				l_return = DoStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
 				Unbind();
 			}
 
-			p_buffer->Unbind();
+			p_target.Unbind();
 		}
 
 		return l_return;
 	}
 
-	void FrameBuffer::SetDrawBuffers()
+	void FrameBuffer::SetDrawBuffers()const
 	{
 		SetDrawBuffers( m_attaches );
 	}
 
-	void FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )
+	void FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )const
 	{
 		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
-	void FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )
+	void FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )const
 	{
 		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}

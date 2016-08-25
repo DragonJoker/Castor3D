@@ -40,7 +40,7 @@ namespace GlRender
 		BindableType::Destroy();
 	}
 
-	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
+	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )const
 	{
 		bool l_return = false;
 
@@ -63,7 +63,7 @@ namespace GlRender
 		}
 	}
 
-	void GlFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )
+	void GlFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
@@ -128,23 +128,23 @@ namespace GlRender
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}
 
-	bool GlFrameBuffer::DoBind( FrameBufferTarget p_target )
+	bool GlFrameBuffer::DoBind( FrameBufferTarget p_target )const
 	{
 		m_bindingMode = GetOpenGl().Get( p_target );
 		return BindableType::Bind();
 	}
 
-	void GlFrameBuffer::DoUnbind()
+	void GlFrameBuffer::DoUnbind()const
 	{
 		BindableType::Unbind();
 	}
 
-	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
+	bool GlFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
 		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), eGL_INTERPOLATION_MODE_NEAREST );
 	}
 
-	bool GlFrameBuffer::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
+	bool GlFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
 		return GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GetOpenGl().GetComponents( p_components ), GetOpenGl().Get( p_interpolation ) );
 	}

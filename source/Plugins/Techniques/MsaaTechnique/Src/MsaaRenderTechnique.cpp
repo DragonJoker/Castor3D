@@ -170,7 +170,7 @@ namespace Msaa
 	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
 	{
 		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
+		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
