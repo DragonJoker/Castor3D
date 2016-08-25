@@ -10,7 +10,7 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestShaderObject::TestShaderObject( TestShaderProgram * p_parent, eSHADER_TYPE p_type )
+	TestShaderObject::TestShaderObject( TestShaderProgram * p_parent, ShaderType p_type )
 		: ShaderObject( p_parent, p_type )
 	{
 	}

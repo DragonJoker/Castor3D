@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\brief		Crée le shader object voulu
 		 *\param[in]	p_type		Le shader object concerné
 		 */
-		C3D_API ShaderObjectSPtr CreateObject( eSHADER_TYPE p_type );
+		C3D_API ShaderObjectSPtr CreateObject( ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Sets all objects file
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	p_target			Le shader object concerné
 		 *\param[in]	p_topology	Le type des primitives en entrée
 		 */
-		C3D_API void SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology );
+		C3D_API void SetInputType( ShaderType p_target, Topology p_topology );
 		/**
 		 *\~english
 		 *\brief		Sets the output primitives type
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in]	p_target			Le shader object concerné
 		 *\param[in]	p_topology	Le type des primitives en sortie
 		 */
-		C3D_API void SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology );
+		C3D_API void SetOutputType( ShaderType p_target, Topology p_topology );
 		/**
 		 *\~english
 		 *\brief		Sets the output vertex count
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_count	Le compte
 		 */
-		C3D_API void SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count );
+		C3D_API void SetOutputVtxCount( ShaderType p_target, uint8_t p_count );
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API void SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( ShaderType p_target, eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader file for given model
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le nom du fichier
 		 */
-		C3D_API Castor::Path GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::Path GetFile( ShaderType p_target, eSHADER_MODEL p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\param[in]	p_target	Le shader object concerné
 		 *\return		\p true si le shader a un fichier source
 		 */
-		C3D_API bool HasFile( eSHADER_TYPE p_target )const;
+		C3D_API bool HasFile( ShaderType p_target )const;
 		/**
 		 *\~english
 		 *\brief		Sets the shader source for given model
@@ -230,7 +230,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
-		C3D_API void SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( ShaderType p_target, eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
@@ -243,7 +243,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le code de la source
 		 */
-		C3D_API Castor::String GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::String GetSource( ShaderType p_target, eSHADER_MODEL p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -254,7 +254,7 @@ namespace Castor3D
 		 *\param[in]	p_target	Le shader object concerné
 		 *\return		\p true si le shader a un code source
 		 */
-		C3D_API bool HasSource( eSHADER_TYPE p_target )const;
+		C3D_API bool HasSource( ShaderType p_target )const;
 		/**
 		 *\~english
 		 *\brief		Tests if the program has an object for given type
@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\param[in]	p_target	Le type du shader object
 		 *\return		\p true si le shader object existe
 		 */
-		C3D_API bool HasObject( eSHADER_TYPE p_target )const;
+		C3D_API bool HasObject( ShaderType p_target )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the given object type status
@@ -274,7 +274,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut du type d'objet donné
 		 *\return		Le statut
 		 */
-		C3D_API eSHADER_STATUS GetObjectStatus( eSHADER_TYPE p_target )const;
+		C3D_API eSHADER_STATUS GetObjectStatus( ShaderType p_target )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable
@@ -291,7 +291,7 @@ namespace Castor3D
 		 *\param[in]	p_nbOcc		Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API FrameVariableSPtr CreateFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader, int p_nbOcc = 1 );
+		C3D_API FrameVariableSPtr CreateFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Creates a variable
@@ -307,7 +307,7 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		template< typename T >
-		inline std::shared_ptr< T > CreateFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_shader, int p_nbOcc = 1 )
+		inline std::shared_ptr< T > CreateFrameVariable( Castor::String const & p_name, ShaderType p_shader, int p_nbOcc = 1 )
 		{
 			return std::static_pointer_cast< T >( CreateFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader, p_nbOcc ) );
 		}
@@ -325,7 +325,7 @@ namespace Castor3D
 		 *\param[in]	p_shader	Le type du shader
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API FrameVariableSPtr FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader )const;
+		C3D_API FrameVariableSPtr FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a variable
@@ -339,7 +339,7 @@ namespace Castor3D
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
 		template< typename T >
-		inline std::shared_ptr< T > FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_shader )const
+		inline std::shared_ptr< T > FindFrameVariable( Castor::String const & p_name, ShaderType p_shader )const
 		{
 			return std::static_pointer_cast< T >( FindFrameVariable( FrameVariableTyper< T >::value, p_name, p_shader ) );
 		}
@@ -362,7 +362,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		C3D_API FrameVariablePtrList & GetFrameVariables( eSHADER_TYPE p_type );
+		C3D_API FrameVariablePtrList & GetFrameVariables( ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to one shader type
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		C3D_API FrameVariablePtrList const & GetFrameVariables( eSHADER_TYPE p_type )const;
+		C3D_API FrameVariablePtrList const & GetFrameVariables( ShaderType p_type )const;
 		/**
 		 *\~english
 		 *\brief		Cleans the program up
@@ -435,9 +435,9 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )
+		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( ShaderType p_type )
 		{
-			return m_frameVariableBuffers[p_type];
+			return m_frameVariableBuffers[size_t( p_type )];
 		}
 		/**
 		 *\~english
@@ -449,9 +449,9 @@ namespace Castor3D
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers( eSHADER_TYPE p_type )const
+		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers( ShaderType p_type )const
 		{
-			return m_frameVariableBuffers[p_type];
+			return m_frameVariableBuffers[size_t( p_type )];
 		}
 		/**
 		 *\~english
@@ -538,7 +538,7 @@ namespace Castor3D
 		 *\brief		Crée le shader object voulu
 		 *\param[in]	p_type		Le shader object concerné
 		 */
-		virtual ShaderObjectSPtr DoCreateObject( eSHADER_TYPE p_type ) = 0;
+		virtual ShaderObjectSPtr DoCreateObject( ShaderType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable
@@ -736,7 +736,7 @@ namespace Castor3D
 		ePROGRAM_STATUS m_status;
 		//!\~english The shaders array.
 		//!\~french		Le tableau de shaders.
-		std::array< ShaderObjectSPtr, eSHADER_TYPE_COUNT > m_pShaders;
+		std::array< ShaderObjectSPtr, size_t( ShaderType::Count ) > m_pShaders;
 		//!\~english The active shaders array.
 		//!\~french		Le tableau de shaders actifs.
 		std::vector< ShaderObjectSPtr > m_activeShaders;
@@ -748,7 +748,7 @@ namespace Castor3D
 		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
 		//!\~english The frame variable buffers map, ordered by shader type.
 		//!\~french		La liste des buffers de variable de frame, triés par type de shader.
-		std::array< FrameVariableBufferPtrList, eSHADER_TYPE_COUNT > m_frameVariableBuffers;
+		std::array< FrameVariableBufferPtrList, size_t( ShaderType::Count ) > m_frameVariableBuffers;
 		//!\~english The frame variable buffers map.
 		//!\~french		La liste des buffer de variables de frame.
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;

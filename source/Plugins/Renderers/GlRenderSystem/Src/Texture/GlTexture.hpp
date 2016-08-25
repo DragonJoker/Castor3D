@@ -47,10 +47,10 @@ namespace GlRender
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 */
-		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */

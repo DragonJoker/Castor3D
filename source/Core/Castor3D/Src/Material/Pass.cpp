@@ -350,7 +350,7 @@ namespace Castor3D
 			}
 			else if ( l_pImageOpa )
 			{
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
 				l_texture->GetImage().SetSource( l_pImageOpa );
 				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
 				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
@@ -395,7 +395,7 @@ namespace Castor3D
 
 		if ( l_unit )
 		{
-			auto l_variable = p_node.m_program.FindFrameVariable< OneIntFrameVariable >( p_name, eSHADER_TYPE_PIXEL );
+			auto l_variable = p_node.m_program.FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::Pixel );
 
 			if ( l_variable )
 			{

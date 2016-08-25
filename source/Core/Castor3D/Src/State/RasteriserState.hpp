@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\brief		Récupère les faces cachées
 		 *\return		La valeur
 		 */
-		inline Castor3D::eFACE GetCulledFaces()const
+		inline Castor3D::Culling GetCulledFaces()const
 		{
 			return m_eCulledFaces;
 		}
@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\brief		Définit les faces cachées
 		 *\param[in]	p_eFace	La nouvelle valeur
 		 */
-		inline void SetCulledFaces( Castor3D::eFACE p_eFace )
+		inline void SetCulledFaces( Castor3D::Culling p_eFace )
 		{
 			m_eCulledFaces = p_eFace;
 		}
@@ -216,7 +216,7 @@ namespace Castor3D
 		eFILL_MODE m_eFillMode{ eFILL_MODE_SOLID };
 		//!\~english	The culled faces.
 		//!\~french		Les faces cachées.
-		eFACE m_eCulledFaces{ eFACE_BACK };
+		Culling m_eCulledFaces{ Culling::Back };
 		//!\~english	The faces considered front facing.
 		//!\~french		Les faces considérées comme tournées vers l'avant.
 		bool m_bFrontCCW{ true };

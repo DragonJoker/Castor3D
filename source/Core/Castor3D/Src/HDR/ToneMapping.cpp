@@ -75,8 +75,8 @@ namespace Castor3D
 			l_configBuffer->GetVariable( Exposure, m_exposureVar );
 			String l_pxl = DoCreate();
 			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			m_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vtx );
-			m_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_pxl );
+			m_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
+			m_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
 			l_return = m_program->Initialise();
 		}
 

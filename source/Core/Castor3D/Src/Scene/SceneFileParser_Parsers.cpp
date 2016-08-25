@@ -199,7 +199,7 @@ namespace Castor3D
 
 		if ( l_parsingContext->pWindow )
 		{
-			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( eTARGET_TYPE_WINDOW );
+			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::Window );
 		}
 		else
 		{
@@ -481,7 +481,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pRenderTarget->GetTargetType() == eTARGET_TYPE_TEXTURE )
+		if ( l_parsingContext->pRenderTarget->GetTargetType() == TargetType::Texture )
 		{
 			l_parsingContext->pTextureUnit->SetRenderTarget( l_parsingContext->pRenderTarget );
 		}
@@ -2400,7 +2400,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		l_parsingContext->pShaderProgram.reset();
-		l_parsingContext->eShaderObject = eSHADER_TYPE_COUNT;
+		l_parsingContext->eShaderObject = ShaderType::Count;
 
 		if ( l_parsingContext->pPass )
 		{
@@ -2474,7 +2474,7 @@ namespace Castor3D
 			if ( !l_relative.empty() )
 			{
 				l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
-				auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read );
 				l_texture->GetImage().SetSource( l_folder, l_relative );
 				l_parsingContext->pTextureUnit->SetTexture( l_texture );
 			}
@@ -2492,7 +2492,7 @@ namespace Castor3D
 		}
 		else
 		{
-			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( eTARGET_TYPE_TEXTURE );
+			l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetRenderTargetCache().Add( TargetType::Texture );
 		}
 	}
 	END_ATTRIBUTE_PUSH( eSECTION_RENDER_TARGET )
@@ -2650,8 +2650,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( eSHADER_TYPE_VERTEX );
-			l_parsingContext->eShaderObject = eSHADER_TYPE_VERTEX;
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::Vertex );
+			l_parsingContext->eShaderObject = ShaderType::Vertex;
 		}
 		else
 		{
@@ -2666,8 +2666,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( eSHADER_TYPE_PIXEL );
-			l_parsingContext->eShaderObject = eSHADER_TYPE_PIXEL;
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::Pixel );
+			l_parsingContext->eShaderObject = ShaderType::Pixel;
 		}
 		else
 		{
@@ -2682,8 +2682,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
-			l_parsingContext->eShaderObject = eSHADER_TYPE_GEOMETRY;
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::Geometry );
+			l_parsingContext->eShaderObject = ShaderType::Geometry;
 		}
 		else
 		{
@@ -2698,8 +2698,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( eSHADER_TYPE_HULL );
-			l_parsingContext->eShaderObject = eSHADER_TYPE_HULL;
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::Hull );
+			l_parsingContext->eShaderObject = ShaderType::Hull;
 		}
 		else
 		{
@@ -2714,8 +2714,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
-			l_parsingContext->pShaderProgram->CreateObject( eSHADER_TYPE_DOMAIN );
-			l_parsingContext->eShaderObject = eSHADER_TYPE_DOMAIN;
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::Domain );
+			l_parsingContext->eShaderObject = ShaderType::Domain;
 		}
 		else
 		{
@@ -2770,7 +2770,7 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
+			if ( l_parsingContext->eShaderObject != ShaderType::Count )
 			{
 				uint32_t l_uiModel;
 				Path l_path;
@@ -2799,7 +2799,7 @@ namespace Castor3D
 			String l_name;
 			p_params[0]->Get( l_name );
 
-			if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
+			if ( l_parsingContext->eShaderObject != ShaderType::Count )
 			{
 				l_parsingContext->pSamplerFrameVariable = l_parsingContext->pShaderProgram->CreateFrameVariable< OneIntFrameVariable >( l_name, l_parsingContext->eShaderObject );
 			}
@@ -2853,11 +2853,11 @@ namespace Castor3D
 			uint32_t l_uiType;
 			p_params[0]->Get( l_uiType );
 
-			if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
+			if ( l_parsingContext->eShaderObject != ShaderType::Count )
 			{
-				if ( l_parsingContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
+				if ( l_parsingContext->eShaderObject == ShaderType::Geometry )
 				{
-					l_parsingContext->pShaderProgram->SetInputType( l_parsingContext->eShaderObject, eTOPOLOGY( l_uiType ) );
+					l_parsingContext->pShaderProgram->SetInputType( l_parsingContext->eShaderObject, Topology( l_uiType ) );
 				}
 				else
 				{
@@ -2885,11 +2885,11 @@ namespace Castor3D
 			uint32_t l_uiType;
 			p_params[0]->Get( l_uiType );
 
-			if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
+			if ( l_parsingContext->eShaderObject != ShaderType::Count )
 			{
-				if ( l_parsingContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
+				if ( l_parsingContext->eShaderObject == ShaderType::Geometry )
 				{
-					l_parsingContext->pShaderProgram->SetOutputType( l_parsingContext->eShaderObject, eTOPOLOGY( l_uiType ) );
+					l_parsingContext->pShaderProgram->SetOutputType( l_parsingContext->eShaderObject, Topology( l_uiType ) );
 				}
 				else
 				{
@@ -2908,9 +2908,9 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->eShaderObject != eSHADER_TYPE_COUNT )
+		if ( l_parsingContext->eShaderObject != ShaderType::Count )
 		{
-			if ( l_parsingContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
+			if ( l_parsingContext->eShaderObject == ShaderType::Geometry )
 			{
 				uint8_t l_count;
 				p_params[0]->Get( l_count );
@@ -3504,7 +3504,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		uint32_t l_uiType;
-		l_parsingContext->ePrimitiveType = eTOPOLOGY( p_params[0]->Get( l_uiType ) );
+		l_parsingContext->ePrimitiveType = Topology( p_params[0]->Get( l_uiType ) );
 	}
 	END_ATTRIBUTE()
 

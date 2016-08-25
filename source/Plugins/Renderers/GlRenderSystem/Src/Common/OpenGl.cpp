@@ -181,16 +181,16 @@ namespace GlRender
 		GlslStrings[l_index++] = cuT( "[e06] Compiler log is not available!" );
 		GlslStrings[l_index] = cuT( "[Empty]" );
 
-		PrimitiveTypes[uint32_t( eTOPOLOGY_POINTS )] = eGL_PRIMITIVE_POINTS;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_LINES )] = eGL_PRIMITIVE_LINES;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_LINE_LOOP )] = eGL_PRIMITIVE_LINE_LOOP;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_LINE_STRIP )] = eGL_PRIMITIVE_LINE_STRIP;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_TRIANGLES )] = eGL_PRIMITIVE_TRIANGLES;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_TRIANGLE_STRIPS )] = eGL_PRIMITIVE_TRIANGLE_STRIP;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_TRIANGLE_FAN )] = eGL_PRIMITIVE_TRIANGLE_FAN;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_QUADS )] = eGL_PRIMITIVE_QUADS;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_QUAD_STRIPS )] = eGL_PRIMITIVE_QUAD_STRIP;
-		PrimitiveTypes[uint32_t( eTOPOLOGY_POLYGON )] = eGL_PRIMITIVE_POLYGON;
+		PrimitiveTypes[uint32_t( Topology::Points )] = eGL_PRIMITIVE_POINTS;
+		PrimitiveTypes[uint32_t( Topology::Lines )] = eGL_PRIMITIVE_LINES;
+		PrimitiveTypes[uint32_t( Topology::LineLoop )] = eGL_PRIMITIVE_LINE_LOOP;
+		PrimitiveTypes[uint32_t( Topology::LineStrip )] = eGL_PRIMITIVE_LINE_STRIP;
+		PrimitiveTypes[uint32_t( Topology::Triangles )] = eGL_PRIMITIVE_TRIANGLES;
+		PrimitiveTypes[uint32_t( Topology::TriangleStrips )] = eGL_PRIMITIVE_TRIANGLE_STRIP;
+		PrimitiveTypes[uint32_t( Topology::TriangleFan )] = eGL_PRIMITIVE_TRIANGLE_FAN;
+		PrimitiveTypes[uint32_t( Topology::Quads )] = eGL_PRIMITIVE_QUADS;
+		PrimitiveTypes[uint32_t( Topology::QuadStrips )] = eGL_PRIMITIVE_QUAD_STRIP;
+		PrimitiveTypes[uint32_t( Topology::Polygon )] = eGL_PRIMITIVE_POLYGON;
 
 		TextureDimensions[uint32_t( TextureType::Buffer )] = eGL_TEXDIM_BUFFER;
 		TextureDimensions[uint32_t( TextureType::OneDimension )] = eGL_TEXDIM_1D;
@@ -303,12 +303,12 @@ namespace GlRender
 		PixelFormats[uint32_t( PixelFormat::S1 )] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX1, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[uint32_t( PixelFormat::S8 )] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX8, eGL_TYPE_UNSIGNED_BYTE );
 
-		ShaderTypes[uint32_t( eSHADER_TYPE_VERTEX )] = eGL_SHADER_TYPE_VERTEX;
-		ShaderTypes[uint32_t( eSHADER_TYPE_HULL )] = eGL_SHADER_TYPE_TESS_CONTROL;
-		ShaderTypes[uint32_t( eSHADER_TYPE_DOMAIN )] = eGL_SHADER_TYPE_TESS_EVALUATION;
-		ShaderTypes[uint32_t( eSHADER_TYPE_GEOMETRY )] = eGL_SHADER_TYPE_GEOMETRY;
-		ShaderTypes[uint32_t( eSHADER_TYPE_PIXEL )] = eGL_SHADER_TYPE_FRAGMENT;
-		ShaderTypes[uint32_t( eSHADER_TYPE_COMPUTE )] = eGL_SHADER_TYPE_COMPUTE;
+		ShaderTypes[uint32_t( ShaderType::Vertex )] = eGL_SHADER_TYPE_VERTEX;
+		ShaderTypes[uint32_t( ShaderType::Hull )] = eGL_SHADER_TYPE_TESS_CONTROL;
+		ShaderTypes[uint32_t( ShaderType::Domain )] = eGL_SHADER_TYPE_TESS_EVALUATION;
+		ShaderTypes[uint32_t( ShaderType::Geometry )] = eGL_SHADER_TYPE_GEOMETRY;
+		ShaderTypes[uint32_t( ShaderType::Pixel )] = eGL_SHADER_TYPE_FRAGMENT;
+		ShaderTypes[uint32_t( ShaderType::Compute )] = eGL_SHADER_TYPE_COMPUTE;
 
 		Internals[uint32_t( PixelFormat::L8 )] = eGL_INTERNAL_FORMAT_R16;
 		Internals[uint32_t( PixelFormat::L16F32F )] = eGL_INTERNAL_FORMAT_R16F;
@@ -330,19 +330,19 @@ namespace GlRender
 		Internals[uint32_t( PixelFormat::RGB32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
 		Internals[uint32_t( PixelFormat::RGBA32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
 
-		Attachments[uint32_t( eATTACHMENT_POINT_NONE )] = eGL_TEXTURE_ATTACHMENT_NONE;
-		Attachments[uint32_t( eATTACHMENT_POINT_COLOUR )] = eGL_TEXTURE_ATTACHMENT_COLOR0;
-		Attachments[uint32_t( eATTACHMENT_POINT_DEPTH )] = eGL_TEXTURE_ATTACHMENT_DEPTH;
-		Attachments[uint32_t( eATTACHMENT_POINT_STENCIL )] = eGL_TEXTURE_ATTACHMENT_STENCIL;
+		Attachments[uint32_t( AttachmentPoint::None )] = eGL_TEXTURE_ATTACHMENT_NONE;
+		Attachments[uint32_t( AttachmentPoint::Colour )] = eGL_TEXTURE_ATTACHMENT_COLOR0;
+		Attachments[uint32_t( AttachmentPoint::Depth )] = eGL_TEXTURE_ATTACHMENT_DEPTH;
+		Attachments[uint32_t( AttachmentPoint::Stencil )] = eGL_TEXTURE_ATTACHMENT_STENCIL;
 
-		FramebufferModes[uint32_t( eFRAMEBUFFER_TARGET_DRAW )] = eGL_FRAMEBUFFER_MODE_DRAW;
-		FramebufferModes[uint32_t( eFRAMEBUFFER_TARGET_READ )] = eGL_FRAMEBUFFER_MODE_READ;
-		FramebufferModes[uint32_t( eFRAMEBUFFER_TARGET_BOTH )] = eGL_FRAMEBUFFER_MODE_DEFAULT;
+		FramebufferModes[uint32_t( FrameBufferTarget::Draw )] = eGL_FRAMEBUFFER_MODE_DRAW;
+		FramebufferModes[uint32_t( FrameBufferTarget::Read )] = eGL_FRAMEBUFFER_MODE_READ;
+		FramebufferModes[uint32_t( FrameBufferTarget::Both )] = eGL_FRAMEBUFFER_MODE_DEFAULT;
 
-		RboAttachments[uint32_t( eATTACHMENT_POINT_NONE )] = eGL_RENDERBUFFER_ATTACHMENT_NONE;
-		RboAttachments[uint32_t( eATTACHMENT_POINT_COLOUR )] = eGL_RENDERBUFFER_ATTACHMENT_COLOR0;
-		RboAttachments[uint32_t( eATTACHMENT_POINT_DEPTH )] = eGL_RENDERBUFFER_ATTACHMENT_DEPTH;
-		RboAttachments[uint32_t( eATTACHMENT_POINT_STENCIL )] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL;
+		RboAttachments[uint32_t( AttachmentPoint::None )] = eGL_RENDERBUFFER_ATTACHMENT_NONE;
+		RboAttachments[uint32_t( AttachmentPoint::Colour )] = eGL_RENDERBUFFER_ATTACHMENT_COLOR0;
+		RboAttachments[uint32_t( AttachmentPoint::Depth )] = eGL_RENDERBUFFER_ATTACHMENT_DEPTH;
+		RboAttachments[uint32_t( AttachmentPoint::Stencil )] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL;
 
 		RboStorages[uint32_t( PixelFormat::L8 )] = eGL_RENDERBUFFER_STORAGE_L8;
 		RboStorages[uint32_t( PixelFormat::L16F32F )] = eGL_RENDERBUFFER_STORAGE_L16F;
@@ -386,10 +386,10 @@ namespace GlRender
 		Buffers[uint32_t( eBUFFER_RIGHT )] = eGL_BUFFER_RIGHT;
 		Buffers[uint32_t( eBUFFER_FRONT_AND_BACK )] = eGL_BUFFER_FRONT_AND_BACK;
 
-		Faces[uint32_t( eFACE_NONE )] = eGL_FACE( 0 );
-		Faces[uint32_t( eFACE_FRONT )] = eGL_FACE_FRONT;
-		Faces[uint32_t( eFACE_BACK )] = eGL_FACE_BACK;
-		Faces[uint32_t( eFACE_FRONT_AND_BACK )] = eGL_FACE_FRONT_AND_BACK;
+		Faces[uint32_t( Culling::None )] = eGL_FACE( 0 );
+		Faces[uint32_t( Culling::Front )] = eGL_FACE_FRONT;
+		Faces[uint32_t( Culling::Back )] = eGL_FACE_BACK;
+		Faces[uint32_t( Culling::FrontAndBack )] = eGL_FACE_FRONT_AND_BACK;
 
 		FillModes[uint32_t( eFILL_MODE_POINT )] = eGL_FILL_MODE_POINT;
 		FillModes[uint32_t( eFILL_MODE_LINE )] = eGL_FILL_MODE_LINE;
@@ -404,17 +404,17 @@ namespace GlRender
 		DepthFuncs[uint32_t( eDEPTH_FUNC_GEQUAL )] = eGL_FUNC_GEQUAL;
 		DepthFuncs[uint32_t( eDEPTH_FUNC_ALWAYS )] = eGL_FUNC_ALWAYS;
 
-		WriteMasks[uint32_t( eWRITING_MASK_ZERO )] = false;
-		WriteMasks[uint32_t( eWRITING_MASK_ALL )] = true;
+		WriteMasks[uint32_t( WritingMask::Zero )] = false;
+		WriteMasks[uint32_t( WritingMask::All )] = true;
 
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_NEVER )] = eGL_FUNC_NEVER;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_LESS )] = eGL_FUNC_LESS;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_EQUAL )] = eGL_FUNC_LEQUAL;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_LEQUAL )] = eGL_FUNC_EQUAL;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_GREATER )] = eGL_FUNC_NOTEQUAL;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_NOTEQUAL )] = eGL_FUNC_GEQUAL;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_GEQUAL )] = eGL_FUNC_GREATER;
-		StencilFuncs[uint32_t( eSTENCIL_FUNC_ALWAYS )] = eGL_FUNC_ALWAYS;
+		StencilFuncs[uint32_t( StencilFunc::Never )] = eGL_FUNC_NEVER;
+		StencilFuncs[uint32_t( StencilFunc::Less )] = eGL_FUNC_LESS;
+		StencilFuncs[uint32_t( StencilFunc::Equal )] = eGL_FUNC_LEQUAL;
+		StencilFuncs[uint32_t( StencilFunc::LEqual )] = eGL_FUNC_EQUAL;
+		StencilFuncs[uint32_t( StencilFunc::Greater )] = eGL_FUNC_NOTEQUAL;
+		StencilFuncs[uint32_t( StencilFunc::NEqual )] = eGL_FUNC_GEQUAL;
+		StencilFuncs[uint32_t( StencilFunc::GEqual )] = eGL_FUNC_GREATER;
+		StencilFuncs[uint32_t( StencilFunc::Always )] = eGL_FUNC_ALWAYS;
 
 		StencilOps[uint32_t( eSTENCIL_OP_KEEP )] = eGL_STENCIL_OP_KEEP;
 		StencilOps[uint32_t( eSTENCIL_OP_ZERO )] = eGL_STENCIL_OP_ZERO;

@@ -14,7 +14,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),

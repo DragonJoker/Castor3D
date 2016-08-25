@@ -203,7 +203,7 @@ namespace GuiCommon
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read );
 				l_texture->GetImage().SetSource( Path{}, Path{ p_value } );
 				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();

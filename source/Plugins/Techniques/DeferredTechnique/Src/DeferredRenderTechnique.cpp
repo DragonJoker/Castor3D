@@ -68,7 +68,7 @@ namespace Deferred
 
 		for ( auto & l_unit : m_lightPassTextures )
 		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, 0u, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write );
 			m_geometryPassTexAttachs[l_index] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			l_unit = std::make_shared< TextureUnit >( *GetEngine() );
 			l_unit->SetIndex( ++l_index );
@@ -87,17 +87,17 @@ namespace Deferred
 		l_dsstate.SetStencilWriteMask( 0 );
 		l_dsstate.SetStencilFrontRef( 1 );
 		l_dsstate.SetStencilBackRef( 1 );
-		l_dsstate.SetStencilFrontFunc( eSTENCIL_FUNC_EQUAL );
-		l_dsstate.SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
+		l_dsstate.SetStencilFrontFunc( StencilFunc::Equal );
+		l_dsstate.SetStencilBackFunc( StencilFunc::Equal );
 		l_dsstate.SetDepthTest( true );
-		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		l_dsstate.SetDepthMask( WritingMask::Zero );
 
 		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec2 ),
+			BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 ),
 		} );
 
 		real l_data[] =
@@ -144,11 +144,11 @@ namespace Deferred
 		if ( l_return )
 		{
 			m_geometryPassDepthBuffer->Create();
-			m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+			m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::Pixel );
 
 			for ( int i = 0; i < int( DsTexture::Count ) && l_return; i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i + 1 );
+				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( DS_TEXTURE_NAME[i], ShaderType::Pixel )->SetValue( i + 1 );
 			}
 
 			m_lightPassMatrices = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -157,8 +157,8 @@ namespace Deferred
 
 			m_vertexBuffer->Create();
 			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
-			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
+			m_lightPassShaderProgram->SetSource( ShaderType::Vertex, l_model, DoGetLightPassVertexShaderSource( 0 ) );
+			m_lightPassShaderProgram->SetSource( ShaderType::Pixel, l_model, DoGetLightPassPixelShaderSource( 0 ) );
 		}
 
 		return l_return;
@@ -200,19 +200,19 @@ namespace Deferred
 
 		if ( l_return )
 		{
-			l_return = m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::Config );
 		}
 
 		if ( l_return )
 		{
 			for ( int i = 0; i < size_t( DsTexture::Count ) && l_return; i++ )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_geometryPassTexAttachs[i], m_lightPassTextures[i]->GetType() );
+				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::Colour, i, m_geometryPassTexAttachs[i], m_lightPassTextures[i]->GetType() );
 			}
 
 			if ( l_return )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_geometryPassDepthAttach );
+				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::Depth, m_geometryPassDepthAttach );
 			}
 
 			if ( l_return )
@@ -228,8 +228,8 @@ namespace Deferred
 		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 		l_scene->GetVariable( ShaderProgram::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
-		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram );
+		m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::Triangles, *m_lightPassShaderProgram );
 		m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 		m_viewport.Initialise();
 		return l_return;
@@ -242,7 +242,7 @@ namespace Deferred
 		m_pShaderCamera.reset();
 		m_vertexBuffer->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
-		m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_geometryPassFrameBuffer->Bind( FrameBufferMode::Config );
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
@@ -254,27 +254,27 @@ namespace Deferred
 		}
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene )
+	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
 	{
-		bool l_return = m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_camera = &p_camera;
+		m_scene = &p_scene;
+		return true;
+	}
+
+	bool RenderTechnique::DoBeginOpaqueRendering()
+	{
+		bool l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
-			m_geometryPassFrameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+			m_geometryPassFrameBuffer->SetClearColour( m_scene->GetBackgroundColour() );
 			m_geometryPassFrameBuffer->Clear();
 		}
 
 		return l_return;
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
-	{
-		// Render the geometry pass.
-		m_camera = &p_camera;
-		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
-	}
-
-	void RenderTechnique::DoEndRender( Scene & p_scene )
+	void RenderTechnique::DoEndOpaqueRendering()
 	{
 		m_geometryPassFrameBuffer->Unbind();
 		// Render the light pass.
@@ -296,9 +296,9 @@ namespace Deferred
 
 #else
 
-		if ( m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+		if ( m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
-			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+			m_frameBuffer.m_frameBuffer->SetClearColour( m_scene->GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 
 			m_pipeline->Apply();
@@ -311,7 +311,7 @@ namespace Deferred
 			{
 				m_pipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
-				p_scene.GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
+				m_scene->GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
 				m_camera->FillShader( l_sceneBuffer );
 
 				m_lightPassTextures[size_t( DsTexture::Position )]->Bind();
@@ -332,7 +332,7 @@ namespace Deferred
 				m_lightPassTextures[size_t( DsTexture::Diffuse )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Position )]->Unbind();
 
-				p_scene.GetLightCache().UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
+				m_scene->GetLightCache().UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
 			}
 		}
 
@@ -340,10 +340,25 @@ namespace Deferred
 
 #endif
 
-		m_camera = nullptr;
 	}
 
-	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
+	bool RenderTechnique::DoBeginTransparentRendering()
+	{
+		return m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
+	}
+
+	void RenderTechnique::DoEndTransparentRendering()
+	{
+		m_frameBuffer.m_frameBuffer->Unbind();
+	}
+
+	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
+	{
+		m_camera = nullptr;
+		m_scene = nullptr;
+	}
+
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -360,15 +375,15 @@ namespace Deferred
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
 		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 
-		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_flags, TextureChannel::Colour ) ) );
-		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_flags, TextureChannel::Ambient ) ) );
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_flags, TextureChannel::Diffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_flags, TextureChannel::Normal ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_flags, TextureChannel::Opacity ) ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_flags, TextureChannel::Specular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_flags, TextureChannel::Emissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_flags, TextureChannel::Height ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_flags, TextureChannel::Gloss ) ) );
+		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) ) );
+		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
+		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::Diffuse ) ) );
+		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::Normal ) ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) ) );
+		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::Specular ) ) );
+		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
+		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
+		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
 
 		uint32_t l_index = 0;
 		auto out_c3dPosition = l_writer.GetFragData< Vec4 >( cuT( "out_c3dPosition" ), l_index++ );
@@ -382,7 +397,7 @@ namespace Deferred
 		{
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 
-			if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 			{
 				l_fAlpha *= texture2D( c3d_mapOpacity, vtx_texture.xy() ).r();
 			}
@@ -398,40 +413,40 @@ namespace Deferred
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( c3d_v4MatSpecular.xyz(), 0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
 
-				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 				{
 					l_v3Ambient = texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
 
-					if ( CheckFlag( p_flags, TextureChannel::Ambient ) )
+					if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 					{
 						l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 					}
 				}
-				else if ( CheckFlag( p_flags, TextureChannel::Ambient ) )
+				else if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 				{
 					l_v3Ambient = texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Emissive ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 				{
 					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Diffuse ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
 				{
 					l_v3Diffuse = texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Normal ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
 				{
 					l_v3Normal += normalize( texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() * 2.0f - 1.0f );
 					l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
 					l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Specular ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
 				{
-					if ( CheckFlag( p_flags, TextureChannel::Gloss ) )
+					if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 					{
 						l_v4Specular = vec4( c3d_v4MatSpecular.xyz() * texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz(), texture2D( c3d_mapGloss, vtx_texture.xy() ).x() );
 					}
@@ -440,7 +455,7 @@ namespace Deferred
 						l_v4Specular = vec4( c3d_v4MatSpecular.xyz() * texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz(), c3d_fMatShininess );
 					}
 				}
-				else if ( CheckFlag( p_flags, TextureChannel::Gloss ) )
+				else if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 				{
 					l_v4Specular = vec4( c3d_v4MatSpecular.xyz(), texture2D( c3d_mapGloss, vtx_texture.xy() ).x() );
 				}
@@ -449,7 +464,7 @@ namespace Deferred
 					l_v4Specular = vec4( c3d_v4MatSpecular.xyz(), c3d_fMatShininess );
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Height ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Height ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vtx_texture.xy() ).xyz() );
 				}

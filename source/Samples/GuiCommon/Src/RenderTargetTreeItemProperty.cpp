@@ -40,7 +40,7 @@ namespace GuiCommon
 				_( "Texture" )
 			};
 
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[l_target->GetTargetType()] ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( l_target->GetTargetType() )] ) );
 		}
 	}
 

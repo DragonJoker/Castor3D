@@ -19,7 +19,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			hr = m_internal->Initialise( Castor3D::TextureType( p_type ), uint8_t( p_cpuAccess ), uint8_t( p_gpuAccess ) ) ? S_OK : E_FAIL;
+			hr = m_internal->Initialise( Castor3D::TextureType( p_type ), Castor3D::AccessType( p_cpuAccess ), Castor3D::AccessType( p_gpuAccess ) ) ? S_OK : E_FAIL;
 		}
 		else
 		{

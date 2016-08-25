@@ -103,7 +103,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport const & p_viewport )
-		: MovableObject{ p_name, p_scene, eMOVABLE_TYPE_CAMERA, p_node }
+		: MovableObject{ p_name, p_scene, MovableType::Camera, p_node }
 		, m_viewport{ p_viewport }
 	{
 		p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );

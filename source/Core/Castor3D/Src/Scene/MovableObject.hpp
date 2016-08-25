@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( Castor::String const & p_name, Scene & p_scene, eMOVABLE_TYPE p_type, SceneNodeSPtr p_sn );
+		C3D_API MovableObject( Castor::String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -136,14 +136,14 @@ namespace Castor3D
 		 *\brief		Récupère le type d'objet
 		 *\return		La valeur
 		 */
-		inline eMOVABLE_TYPE GetType()const
+		inline MovableType GetType()const
 		{
 			return m_type;
 		}
 
 	protected:
 		//!\~english Movable object type	\~french Le type d'objet déplaçable
-		eMOVABLE_TYPE m_type;
+		MovableType m_type;
 		//!\~english The parent node name	\~french Le nom du noeud parent
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent

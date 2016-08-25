@@ -57,17 +57,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name		The associated variable name.
-		 *\param[in]	p_usages	Element possible usages (eELEMENT_USAGE combination).
+		 *\param[in]	p_usages	Element possible usages (ElementUsage combination).
 		 *\param[in]	p_type		Element type.
 		 *\param[in]	p_offset	Offset in the stream.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name		Le nom de la variable associée.
-		 *\param[in]	p_usages	Les utilisations possibles de l'élément (combinaison de eELEMENT_USAGE)
+		 *\param[in]	p_usages	Les utilisations possibles de l'élément (combinaison de ElementUsage)
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		BufferElementDeclaration( Castor::String const & p_name, uint32_t p_usages, eELEMENT_TYPE p_type, uint32_t p_offset = 0 )
+		BufferElementDeclaration( Castor::String const & p_name, uint32_t p_usages, ElementType p_type, uint32_t p_offset = 0 )
 			: m_dataType( p_type )
 			, m_offset( p_offset )
 			, m_name( p_name )
@@ -80,7 +80,7 @@ namespace Castor3D
 		//!\~english Element usage.	\~french Utilisation de l'élément.
 		uint32_t m_usages;
 		//!\~english Element type.	\~french Type de l'élément.
-		eELEMENT_TYPE m_dataType;
+		ElementType m_dataType;
 		//!\~english Offset in buffer.	\~french Offset dans le tampon.
 		uint32_t m_offset;
 	};

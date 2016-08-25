@@ -82,7 +82,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTopologyChange( Castor3D::eTOPOLOGY p_value );
+		void OnTopologyChange( Castor3D::Topology p_value );
 
 	private:
 		Castor3D::CameraWPtr m_camera;

@@ -4,7 +4,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	GeometryBuffers::GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program )
+	GeometryBuffers::GeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 		: m_topology{ p_topology }
 		, m_program{ p_program }
 	{

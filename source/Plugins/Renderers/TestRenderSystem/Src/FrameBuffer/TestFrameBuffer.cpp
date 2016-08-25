@@ -32,7 +32,7 @@ namespace TestRender
 	{
 	}
 
-	void TestFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void TestFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )
 	{
 	}
 
@@ -41,7 +41,7 @@ namespace TestRender
 		return true;
 	}
 
-	bool TestFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	bool TestFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		return true;
 	}
@@ -70,7 +70,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_target )
+	bool TestFrameBuffer::DoBind( FrameBufferTarget p_target )
 	{
 		return true;
 	}

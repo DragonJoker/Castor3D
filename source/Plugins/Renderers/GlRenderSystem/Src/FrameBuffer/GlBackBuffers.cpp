@@ -28,7 +28,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::Bind( eBUFFER p_buffer, eFRAMEBUFFER_TARGET p_target )
+	bool GlBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )
 	{
 		bool l_return = true;
 
@@ -39,11 +39,11 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			if ( p_target == eFRAMEBUFFER_TARGET_DRAW )
+			if ( p_target == FrameBufferTarget::Draw )
 			{
 				l_return = GetOpenGl().DrawBuffer( GetOpenGl().Get( p_buffer ) );
 			}
-			else if ( p_target == eFRAMEBUFFER_TARGET_READ )
+			else if ( p_target == FrameBufferTarget::Read )
 			{
 				l_return = GetOpenGl().ReadBuffer( GetOpenGl().Get( p_buffer ) );
 			}
@@ -56,15 +56,15 @@ namespace GlRender
 	{
 	}
 
-	void GlBackBuffers::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void GlBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )
 	{
 		GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( p_eAttach ) ) + p_index ) );
 	}
 
-	bool GlBackBuffers::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	bool GlBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		bool l_return = GetOpenGl().HasFbo();
-		auto l_mode = GetOpenGl().Get( eFRAMEBUFFER_TARGET_READ );
+		auto l_mode = GetOpenGl().Get( FrameBufferTarget::Read );
 
 		if ( l_return )
 		{
@@ -97,7 +97,7 @@ namespace GlRender
 	void GlBackBuffers::DoClear( uint32_t p_uiTargets )
 	{
 		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
-		GetOpenGl().Clear( GetOpenGl().GetComponents( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL ) );
+		GetOpenGl().Clear( GetOpenGl().GetComponents( uint32_t( BufferComponent::Colour ) | uint32_t( BufferComponent::Depth ) | uint32_t( BufferComponent::Stencil ) ) );
 	}
 
 	void GlBackBuffers::DoResize( Castor::Size const & p_size )

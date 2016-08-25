@@ -195,13 +195,13 @@ namespace Castor3D
 		C3D_API void Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime, uint32_t & p_visible );
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of TextureChannel
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_flags	A combination of ProgramFlag.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader qui correspond aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de TextureChannel
+		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
+		 *\param[in]	p_flags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint32_t p_flags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -374,13 +374,26 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of TextureChannel
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de TextureChannel
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 */
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -419,39 +432,62 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Render begin function.
 		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
-		 *\param[in]	p_scene		The scene to render
+		 *\param[in]	p_scene		The scene to render.
+		 *\param[in]	p_camera	The camera viewing the scene.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction de début de rendu.
 		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
-		 *\param[in]	p_scene		La scène à dessiner
+		 *\param[in]	p_scene		La scène à dessiner.
+		 *\param[in]	p_camera	La caméra regardant la scène.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBeginRender( Scene & p_scene ) = 0;
+		C3D_API virtual bool DoBeginRender( Scene & p_scene, Camera & p_camera ) = 0;
 		/**
 		 *\~english
-		 *\brief		Render function
-		 *\param[in]	p_nodes		The nodes to render.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
+		 *\brief		Opaque objets render begin function.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_nodes		Les noeuds à dessiner.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\brief		Fonction de début de rendu des objets opaques.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual void DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime ) = 0;
+		C3D_API virtual bool DoBeginOpaqueRendering() = 0;
 		/**
 		 *\~english
-		 *\brief		Render end function
+		 *\brief		Opaque objets render end function.
+		 *\~french
+		 *\brief		Fonction de fin de rendu des objets opaques.
+		 */
+		C3D_API virtual void DoEndOpaqueRendering() = 0;
+		/**
+		 *\~english
+		 *\brief		Transparent objets render begin function.
+		 *\return		\p true if ok.
+		 *\~french
+		 *\brief		Fonction de début de rendu des objets transparents.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoBeginTransparentRendering() = 0;
+		/**
+		 *\~english
+		 *\brief		Transparent objets render end function.
+		 *\~french
+		 *\brief		Fonction de fin de rendu des objets transparents.
+		 */
+		C3D_API virtual void DoEndTransparentRendering() = 0;
+		/**
+		 *\~english
+		 *\brief		Render end function.
 		 *\remarks		At the end of this method, no frame buffer must be bound.
-		 *\param[in]	p_scene		The scene to render
+		 *\param[in]	p_scene		The scene to render.
+		 *\param[in]	p_camera	The camera viewing the scene.
 		 *\~french
-		 *\brief		Fonction de fin de rendu
+		 *\brief		Fonction de fin de rendu.
 		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
-		 *\param[in]	p_scene		La scène à dessiner
+		 *\param[in]	p_scene		La scène à dessiner.
+		 *\param[in]	p_camera	La caméra regardant la scène.
 		 */
-		C3D_API virtual void DoEndRender( Scene & p_scene ) = 0;
+		C3D_API virtual void DoEndRender( Scene & p_scene, Camera & p_camera ) = 0;
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.

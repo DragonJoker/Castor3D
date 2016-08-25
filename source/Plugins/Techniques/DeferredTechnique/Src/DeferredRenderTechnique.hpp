@@ -122,19 +122,31 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender( Castor3D::Scene & p_scene )override;
+		bool DoBeginRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoRender
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
-		void DoRender( Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
+		bool DoBeginOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
+		 */
+		void DoEndOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
+		 */
+		bool DoBeginTransparentRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
+		 */
+		void DoEndTransparentRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		void DoEndRender( Castor3D::Scene & p_scene )override;
+		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetPixelShaderSource( uint32_t p_flags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
@@ -207,6 +219,9 @@ namespace Deferred
 		//!\~english	The current camera.
 		//!\~french		La caméra actuelle.
 		Castor3D::Camera * m_camera{ nullptr };
+		//!\~english	The current scene.
+		//!\~french		La scène actuelle.
+		Castor3D::Scene * m_scene{ nullptr };
 	};
 }
 

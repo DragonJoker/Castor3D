@@ -69,15 +69,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		virtual bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\copydoc		Castor3D::BackBuffers::Bind
 		 */
-		virtual bool Bind( Castor3D::eBUFFER p_buffer, Castor3D::eFRAMEBUFFER_TARGET p_target );
+		virtual bool Bind( Castor3D::eBUFFER p_buffer, Castor3D::FrameBufferTarget p_target );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t );
+		virtual void SetReadBuffer( Castor3D::AttachmentPoint, uint8_t );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */

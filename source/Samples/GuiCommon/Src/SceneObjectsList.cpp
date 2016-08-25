@@ -252,19 +252,19 @@ namespace GuiCommon
 
 			switch ( l_object->GetType() )
 			{
-			case eMOVABLE_TYPE_GEOMETRY:
+			case MovableType::Geometry:
 				DoAddGeometry( p_id, l_object );
 				break;
 
-			case eMOVABLE_TYPE_CAMERA:
+			case MovableType::Camera:
 				DoAddCamera( p_id, l_object );
 				break;
 
-			case eMOVABLE_TYPE_LIGHT:
+			case MovableType::Light:
 				DoAddLight( p_id, l_object );
 				break;
 
-			case eMOVABLE_TYPE_BILLBOARD:
+			case MovableType::Billboard:
 				DoAddBillboard( p_id, l_object );
 				break;
 			}

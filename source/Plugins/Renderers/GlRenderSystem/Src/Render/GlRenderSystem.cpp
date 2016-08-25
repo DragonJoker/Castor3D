@@ -124,12 +124,12 @@ namespace GlRender
 				m_openGlMinor = GetOpenGl().GetVersion() % 10;
 
 				Logger::LogInfo( StringStream() << cuT( "Using version " ) << m_openGlMajor << cuT( "." ) << m_openGlMinor << cuT( " core functions" ) );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_COMPUTE, GetOpenGl().HasCSh() );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_HULL, GetOpenGl().HasTSh() );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_DOMAIN, GetOpenGl().HasTSh() );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_GEOMETRY, GetOpenGl().HasGSh() );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_PIXEL, GetOpenGl().HasPSh() );
-				m_gpuInformations.UseShaderType( eSHADER_TYPE_VERTEX, GetOpenGl().HasVSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Compute, GetOpenGl().HasCSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Hull, GetOpenGl().HasTSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Domain, GetOpenGl().HasTSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Geometry, GetOpenGl().HasGSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Pixel, GetOpenGl().HasPSh() );
+				m_gpuInformations.UseShaderType( ShaderType::Vertex, GetOpenGl().HasVSh() );
 
 				std::array< int, 3 > l_value{};
 				GetOpenGl().GetIntegerv( eGL_MIN_MAP_BUFFER_ALIGNMENT, l_value.data() );
@@ -139,7 +139,7 @@ namespace GlRender
 				m_gpuInformations.SetMinValue( GpuMin::ProgramTexelOffset, l_value[0] );
 				l_value = { 0, 0, 0 };
 
-				if ( m_gpuInformations.HasShaderType( eSHADER_TYPE_COMPUTE ) )
+				if ( m_gpuInformations.HasShaderType( ShaderType::Compute ) )
 				{
 					GetOpenGl().GetIntegerv( eGL_MAX_COMPUTE_UNIFORM_BLOCKS, l_value.data() );
 					m_gpuInformations.SetMaxValue( GpuMax::ComputeUniformBlocks, l_value[0] );
@@ -170,7 +170,7 @@ namespace GlRender
 
 				if ( GetOpenGl().HasExtension( ARB_shader_storage_buffer_object ) )
 				{
-					if ( m_gpuInformations.HasShaderType( eSHADER_TYPE_COMPUTE ) )
+					if ( m_gpuInformations.HasShaderType( ShaderType::Compute ) )
 					{
 						GetOpenGl().GetIntegerv( eGL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS, l_value.data() );
 						m_gpuInformations.SetMaxValue( GpuMax::ComputeShaderStorageBlocks, l_value[0] );
@@ -418,7 +418,7 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
@@ -456,12 +456,12 @@ namespace GlRender
 		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ARRAY, p_buffer );
 	}
 
-	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		TextureStorageUPtr l_return;
 
@@ -481,7 +481,7 @@ namespace GlRender
 					 && p_type != TextureStorageType::CubeMapNegativeY
 					 && p_type != TextureStorageType::CubeMapPositiveZ
 					 && p_type != TextureStorageType::CubeMapNegativeZ
-					 && !p_cpuAccess )
+					 && p_cpuAccess == AccessType::None )
 				{
 					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
@@ -490,13 +490,13 @@ namespace GlRender
 					l_return = std::make_unique< GlTextureStorage< GlDirectTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 				}
 			}
-			else if ( p_cpuAccess )
+			else if ( p_cpuAccess != AccessType::None )
 			{
 				l_return = std::make_unique< GlTextureStorage< GlPboTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, 0, p_gpuAccess );
+				l_return = std::make_unique< GlTextureStorage< GlGpuOnlyTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, AccessType::None, p_gpuAccess );
 			}
 		}
 

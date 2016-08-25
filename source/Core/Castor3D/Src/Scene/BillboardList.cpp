@@ -75,11 +75,11 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	BillboardList::BillboardList( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
-		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
+		: MovableObject( p_name, p_scene, MovableType::Billboard, p_parent )
 		, m_needUpdate( false )
 		, m_declaration{
 		{
-			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
+			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3 )
 		} }
 	{
 	}
@@ -102,7 +102,7 @@ namespace Castor3D
 		}
 
 		m_vertexBuffer->Create();
-		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+		m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		return true;
 	}
 
@@ -189,7 +189,7 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_POINTS, p_program );
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Points, p_program );
 
 			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
 			{
@@ -219,7 +219,7 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			m_needUpdate = false;
 		}
 	}

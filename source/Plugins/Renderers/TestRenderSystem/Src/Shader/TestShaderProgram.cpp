@@ -18,8 +18,8 @@ namespace TestRender
 		: ShaderProgram( p_renderSystem )
 		, m_layout( p_renderSystem )
 	{
-		CreateObject( eSHADER_TYPE_VERTEX );
-		CreateObject( eSHADER_TYPE_PIXEL );
+		CreateObject( ShaderType::Vertex );
+		CreateObject( ShaderType::Pixel );
 	}
 
 	TestShaderProgram::~TestShaderProgram()
@@ -58,7 +58,7 @@ namespace TestRender
 	{
 	}
 
-	ShaderObjectSPtr TestShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
+	ShaderObjectSPtr TestShaderProgram::DoCreateObject( ShaderType p_type )
 	{
 		return std::make_shared< TestShaderObject >( this, p_type );
 	}

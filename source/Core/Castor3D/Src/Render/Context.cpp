@@ -35,8 +35,8 @@ namespace Castor3D
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS },
-				BufferElementDeclaration{ ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS }
+				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec2 },
+				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 }
 			}
 		}
 	{
@@ -88,8 +88,8 @@ namespace Castor3D
 			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 			m_vertexBuffer->Create();
-			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			DoEndCurrent();
 		}
@@ -197,7 +197,7 @@ namespace Castor3D
 
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		m_mapDiffuse->SetValue( 0 );
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
@@ -243,8 +243,8 @@ namespace Castor3D
 		}
 
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
+		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
+		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
 		return l_program;
 	}
 }

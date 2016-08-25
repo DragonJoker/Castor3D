@@ -82,18 +82,18 @@ namespace Castor3D
 		C3D_API ShaderProgramSPtr GetNewProgram();
 		/**
 		 *\~english
-		 *\brief		Looks for an automatically generated program corresponding to given flags
-		 *\remarks		If none exists it is created
-		 *\param[in]	p_technique		The technique from witch the program code is retrieved
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel
-		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\return		The found or created program
+		 *\brief		Looks for an automatically generated program corresponding to given flags.
+		 *\remarks		If none exists it is created.
+		 *\param[in]	p_technique		The technique from witch the program code is retrieved.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
+		 *\return		The found or created program.
 		 *\~french
-		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés
-		 *\param[in]	p_technique		La technique a pqrtir de laquelle est recuperee le code du programme
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
-		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG
-		 *\return		Le programme trouvé ou créé
+		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés.
+		 *\param[in]	p_technique		La technique a pqrtir de laquelle est recuperee le code du programme.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
+		 *\return		Le programme trouvé ou créé.
 		 */
 		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**

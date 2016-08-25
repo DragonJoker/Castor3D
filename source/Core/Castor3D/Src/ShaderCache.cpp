@@ -50,7 +50,7 @@ namespace Castor3D
 
 		return l_return;
 	}
-
+	
 	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		ShaderProgramSPtr l_return;
@@ -68,8 +68,8 @@ namespace Castor3D
 			if ( l_return )
 			{
 				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_programFlags ) );
-				l_return->SetSource( eSHADER_TYPE_PIXEL, l_model, p_technique.GetPixelShaderSource( p_textureFlags ) );
+				l_return->SetSource( ShaderType::Vertex, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_textureFlags, p_programFlags ) );
+				l_return->SetSource( ShaderType::Pixel, l_model, p_technique.GetPixelShaderSource( p_textureFlags, p_programFlags ) );
 
 				CreateTextureVariables( *l_return, p_textureFlags );
 				CreateMatrixBuffer( *l_return, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
@@ -179,51 +179,51 @@ namespace Castor3D
 
 	void ShaderProgramCache::CreateTextureVariables( ShaderProgram & p_shader, uint32_t p_uiTextureFlags )
 	{
-		p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+		p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::Pixel );
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Ambient ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapAmbient, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapAmbient, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Colour ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapColour, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Diffuse ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Normal ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapNormal, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapNormal, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Specular ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapSpecular, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapSpecular, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Emissive ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapEmissive, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapEmissive, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Opacity ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Gloss ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapGloss, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapGloss, ShaderType::Pixel );
 		}
 
 		if ( CheckFlag( p_uiTextureFlags, TextureChannel::Height ) )
 		{
-			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapHeight, eSHADER_TYPE_PIXEL );
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapHeight, ShaderType::Pixel );
 		}
 	}
 }

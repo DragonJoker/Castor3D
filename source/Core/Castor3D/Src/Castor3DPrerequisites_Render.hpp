@@ -132,54 +132,86 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types d'accès.
 	*/
-	typedef enum eACCESS_TYPE
+	enum class AccessType
 		: uint8_t
 	{
-		//! Read access type.
-		eACCESS_TYPE_READ = 1 << 0,
-		//! Write access type.
-		eACCESS_TYPE_WRITE = 1 << 1,
-	}	eACCESS_TYPE;
+		//!\~english	No access.
+		//!\~french		Aucun accès.
+		None = 0,
+		//!\~english	Read only access type.
+		//!\~french		Accès lecture seule.
+		Read = 1 << 0,
+		//!\~english	Write only access type.
+		//!\~french		Accèes écriture seule.
+		Write = 1 << 1,
+		//!\~english	Read and write access type.
+		//!\~french		Accès lecture et écriture.
+		ReadWrite = Read | Write,
+	};
+	/**
+	 *\~english
+	 *\brief		Bitwise OR on AccessType.
+	 *\param[in]	p_lhs, p_rhs	The operands.
+	 *\~french
+	 *\brief		OU binaire sur des AccessType.
+	 *\param[in]	p_lhs, p_rhs	Les opérandes.
+	 */
+	inline AccessType operator|( AccessType p_lhs, AccessType p_rhs )
+	{
+		return AccessType( uint8_t( p_lhs ) | uint8_t( p_rhs ) );
+	}
+	/**
+	 *\~english
+	 *\brief		Bitwise AND on AccessType.
+	 *\param[in]	p_lhs, p_rhs	The operands.
+	 *\~french
+	 *\brief		ET binaire sur des AccessType.
+	 *\param[in]	p_lhs, p_rhs	Les opérandes.
+	 */
+	inline AccessType operator&( AccessType p_lhs, AccessType p_rhs )
+	{
+		return AccessType( uint8_t( p_lhs ) & uint8_t( p_rhs ) );
+	}
 	/*!
 	\author 	Sylvain DOREMUS
-	\see		eBUFFER_ACCESS_NATURE
+	\see		BufferAccessNature
 	\~english
 	\brief		Buffer access types enumeration
-	\remark		Made to be combined with eBUFFER_ACCESS_NATURE
+	\remark		Made to be combined with BufferAccessNature
 	\~french
 	\brief		Enumération des types d'accès de tampon
-	\remark		Fait pour être combiné avec eBUFFER_ACCESS_NATURE
+	\remark		Fait pour être combiné avec BufferAccessNature
 	*/
-	typedef enum eBUFFER_ACCESS_TYPE
+	enum class BufferAccessType
 		: uint32_t
 	{
 		//! Modified once and used many times
-		eBUFFER_ACCESS_TYPE_STATIC = 1 << 0,
+		Static = 1 << 0,
 		//! Modified many times and used many times
-		eBUFFER_ACCESS_TYPE_DYNAMIC = 1 << 1,
+		Dynamic = 1 << 1,
 		//! Modified oncce and used at most a few times
-		eBUFFER_ACCESS_TYPE_STREAM = 1 << 2,
-	}	eBUFFER_ACCESS_TYPE;
+		Stream = 1 << 2,
+	};
 	/*!
 	\author 	Sylvain DOREMUS
-	\see		eBUFFER_ACCESS_TYPE
+	\see		BufferAccessType
 	\~english
 	\brief		Buffer access natures enumeration
-	\remark		Made to be combined with eBUFFER_ACCESS_TYPE
+	\remark		Made to be combined with BufferAccessType
 	\~french
 	\brief		Enumération des natures des accès de tampon
-	\remark		Fait pour être combiné avec eBUFFER_ACCESS_TYPE
+	\remark		Fait pour être combiné avec BufferAccessType
 	*/
-	typedef enum eBUFFER_ACCESS_NATURE
+	enum class BufferAccessNature
 		: uint32_t
 	{
 		//! Modified by CPU and used by GPU
-		eBUFFER_ACCESS_NATURE_DRAW = 1 << 4,
+		Draw = 1 << 4,
 		//! Modified by GPU and used by CPU
-		eBUFFER_ACCESS_NATURE_READ = 1 << 5,
+		Read = 1 << 5,
 		//! Modified by GPU and used by GPU
-		eBUFFER_ACCESS_NATURE_COPY = 1 << 6,
-	}	eBUFFER_ACCESS_NATURE;
+		Copy = 1 << 6,
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -187,31 +219,31 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des type de primitive dessinées
 	*/
-	typedef enum eTOPOLOGY
+	enum class Topology
 		: uint8_t
 	{
 		//! Display textured points
-		eTOPOLOGY_POINTS,
+		Points,
 		//! Display textured edges
-		eTOPOLOGY_LINES,
+		Lines,
 		//! Display textured edge loops
-		eTOPOLOGY_LINE_LOOP,
+		LineLoop,
 		//! Display textured edge strips
-		eTOPOLOGY_LINE_STRIP,
+		LineStrip,
 		//! Display textured triangles
-		eTOPOLOGY_TRIANGLES,
+		Triangles,
 		//! Display triangle strips
-		eTOPOLOGY_TRIANGLE_STRIPS,
+		TriangleStrips,
 		//! Display triangle fan
-		eTOPOLOGY_TRIANGLE_FAN,
+		TriangleFan,
 		//! Display quads
-		eTOPOLOGY_QUADS,
+		Quads,
 		//! Display quad strips
-		eTOPOLOGY_QUAD_STRIPS,
+		QuadStrips,
 		//! Display quad strips
-		eTOPOLOGY_POLYGON,
-		CASTOR_ENUM_BOUNDS( eTOPOLOGY, eTOPOLOGY_POINTS )
-	}	eTOPOLOGY;
+		Polygon,
+		CASTOR_ENUM_CLASS_BOUNDS( Points )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -251,15 +283,15 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des masques d'écriture
 	*/
-	typedef enum eWRITING_MASK
+	enum class WritingMask
 		: uint8_t
 	{
 		//! Writing disabled
-		eWRITING_MASK_ZERO,
+		Zero,
 		//! Writing enabled
-		eWRITING_MASK_ALL,
-		CASTOR_ENUM_BOUNDS( eWRITING_MASK, eWRITING_MASK_ZERO )
-	}	eWRITING_MASK;
+		All,
+		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -269,27 +301,27 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des fonctions de stencil
 	*/
-	typedef enum eSTENCIL_FUNC
+	enum class StencilFunc
 		: uint8_t
 	{
 		//! Never passes.
-		eSTENCIL_FUNC_NEVER,
+		Never,
 		//! Passes if the incoming stencil value is less than the stored stencil value.
-		eSTENCIL_FUNC_LESS,
+		Less,
 		//! Passes if the incoming stencil value is equal to the stored stencil value.
-		eSTENCIL_FUNC_EQUAL,
+		Equal,
 		//! Passes if the incoming stencil value is less than or equal to the stored stencil value.
-		eSTENCIL_FUNC_LEQUAL,
+		LEqual,
 		//! Passes if the incoming stencil value is greater than the stored stencil value.
-		eSTENCIL_FUNC_GREATER,
+		Greater,
 		//! Passes if the incoming stencil value is not equal to the stored stencil value.
-		eSTENCIL_FUNC_NOTEQUAL,
+		NEqual,
 		//! Passes if the incoming stencil value is greater than or equal to the stored stencil value.
-		eSTENCIL_FUNC_GEQUAL,
+		GEqual,
 		//! Always passes.
-		eSTENCIL_FUNC_ALWAYS,
-		CASTOR_ENUM_BOUNDS( eSTENCIL_FUNC, eSTENCIL_FUNC_NEVER )
-	}	eSTENCIL_FUNC;
+		Always,
+		CASTOR_ENUM_CLASS_BOUNDS( Never )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -329,34 +361,34 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des utilisations d'éléments de tampon
 	*/
-	typedef enum eELEMENT_USAGE
+	enum class ElementUsage
 		: uint32_t
 	{
 		//! Position coords
-		eELEMENT_USAGE_UNKNOWN = 0x000,
+		Unknown = 0x000,
 		//! Position coords
-		eELEMENT_USAGE_POSITION = 0x001,
+		Position = 0x001,
 		//! Normal coords
-		eELEMENT_USAGE_NORMAL = 0x002,
+		Normal = 0x002,
 		//! Tangent coords
-		eELEMENT_USAGE_TANGENT = 0x004,
+		Tangent = 0x004,
 		//! Bitangent coords
-		eELEMENT_USAGE_BITANGENT = 0x008,
+		Bitangent = 0x008,
 		//! Diffuse colour
-		eELEMENT_USAGE_DIFFUSE = 0x010,
+		Diffuse = 0x010,
 		//! Texture coordinates
-		eELEMENT_USAGE_TEXCOORDS = 0x020,
+		TexCoords = 0x020,
 		//! Bone IDs 0
-		eELEMENT_USAGE_BONE_IDS0 = 0x040,
+		BoneIds0 = 0x040,
 		//! Bone IDs 1
-		eELEMENT_USAGE_BONE_IDS1 = 0x080,
+		BoneIds1 = 0x080,
 		//! Bone weights 0
-		eELEMENT_USAGE_BONE_WEIGHTS0 = 0x100,
+		BoneWeights0 = 0x100,
 		//! Bone weights 1
-		eELEMENT_USAGE_BONE_WEIGHTS1 = 0x200,
+		BoneWeights1 = 0x200,
 		//! Instantiation matrix
-		eELEMENT_USAGE_TRANSFORM = 0x400,
-	}	eELEMENT_USAGE;
+		Transform = 0x400,
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
@@ -366,85 +398,85 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types pour les éléments de tampon
 	*/
-	typedef enum eELEMENT_TYPE
+	enum class ElementType
 		: uint8_t
 	{
 		//! 1 float (GLSL float)
-		eELEMENT_TYPE_1FLOAT,
+		Float,
 		//! 2 floats (GLSL vec2)
-		eELEMENT_TYPE_2FLOATS,
+		Vec2,
 		//! 3 floats (GLSL vec3)
-		eELEMENT_TYPE_3FLOATS,
+		Vec3,
 		//! 4 floats (GLSL vec4)
-		eELEMENT_TYPE_4FLOATS,
+		Vec4,
 		//! colour (uint32_t)
-		eELEMENT_TYPE_COLOUR,
+		Colour,
 		//! 1 int (4 bytes each, GLSL int)
-		eELEMENT_TYPE_1INT,
+		Int,
 		//! 2 ints (4 bytes each, GLSL ivec2)
-		eELEMENT_TYPE_2INTS,
+		IVec2,
 		//! 3 ints (4 bytes each, GLSL ivec3)
-		eELEMENT_TYPE_3INTS,
+		IVec3,
 		//! 4 ints (4 bytes each, GLSL ivec4)
-		eELEMENT_TYPE_4INTS,
+		IVec4,
 		//! 2x2 floats (GLSL mat2)
-		eELEMENT_TYPE_2x2FLOATS,
+		Mat2,
 		//! 3x3 floats (GLSL mat3)
-		eELEMENT_TYPE_3x3FLOATS,
+		Mat3,
 		//! 4x4 floats (GLSL mat4)
-		eELEMENT_TYPE_4x4FLOATS,
-		CASTOR_ENUM_BOUNDS( eELEMENT_TYPE, eELEMENT_TYPE_1FLOAT )
-	}	eELEMENT_TYPE;
+		Mat4,
+		CASTOR_ENUM_CLASS_BOUNDS( Float )
+	};
 
-	inline uint32_t GetSize( eELEMENT_TYPE p_type )
+	inline uint32_t GetSize( ElementType p_type )
 	{
 		switch ( p_type )
 		{
-		case eELEMENT_TYPE_1FLOAT:
+		case ElementType::Float:
 			return uint32_t( 1u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_2FLOATS:
+		case ElementType::Vec2:
 			return uint32_t( 2u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_3FLOATS:
+		case ElementType::Vec3:
 			return uint32_t( 3u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_4FLOATS:
+		case ElementType::Vec4:
 			return uint32_t( 4u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_COLOUR:
+		case ElementType::Colour:
 			return uint32_t( sizeof( uint32_t ) );
 			break;
 
-		case eELEMENT_TYPE_1INT:
+		case ElementType::Int:
 			return uint32_t( 1u * sizeof( int32_t ) );
 			break;
 
-		case eELEMENT_TYPE_2INTS:
+		case ElementType::IVec2:
 			return uint32_t( 2u * sizeof( int32_t ) );
 			break;
 
-		case eELEMENT_TYPE_3INTS:
+		case ElementType::IVec3:
 			return uint32_t( 3u * sizeof( int32_t ) );
 			break;
 
-		case eELEMENT_TYPE_4INTS:
+		case ElementType::IVec4:
 			return uint32_t( 4u * sizeof( int32_t ) );
 			break;
 
-		case eELEMENT_TYPE_2x2FLOATS:
+		case ElementType::Mat2:
 			return uint32_t( 2u * 2u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_3x3FLOATS:
+		case ElementType::Mat3:
 			return uint32_t( 3u * 3u * sizeof( real ) );
 			break;
 
-		case eELEMENT_TYPE_4x4FLOATS:
+		case ElementType::Mat4:
 			return uint32_t( 4u * 4u * sizeof( real ) );
 			break;
 

@@ -60,7 +60,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Initialise
 		 */
-		bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )override;
+		bool Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Cleanup
 		 */
@@ -76,11 +76,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Fill
 		 */
-		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )override;
+		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
 		 */
-		T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )override;
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
 		 */

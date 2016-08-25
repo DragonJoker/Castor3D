@@ -42,7 +42,7 @@ namespace GlRender
 		/**
 		 * Constructor
 		 */
-		GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, Castor3D::eSHADER_TYPE p_type );
+		GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, Castor3D::ShaderType p_type );
 		/**
 		 * Destructor
 		 */

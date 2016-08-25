@@ -40,7 +40,7 @@ namespace TestRender
 		/**
 		 * Constructor
 		 */
-		TestShaderObject( TestShaderProgram * p_parent, Castor3D::eSHADER_TYPE p_type );
+		TestShaderObject( TestShaderProgram * p_parent, Castor3D::ShaderType p_type );
 		/**
 		 * Destructor
 		 */

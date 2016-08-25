@@ -21,7 +21,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovableObject::MovableObject( String const & p_name, Scene & p_scene, eMOVABLE_TYPE p_type, SceneNodeSPtr p_sn )
+	MovableObject::MovableObject( String const & p_name, Scene & p_scene, MovableType p_type, SceneNodeSPtr p_sn )
 		: Animable{ p_scene }
 		, Named( p_name )
 		, m_type( p_type )

@@ -101,7 +101,7 @@ namespace Castor3D
 
 	void LightCache::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, AccessType::Write, AccessType::Read );
 		l_texture->GetImage().SetSource( Size( 1000, 1 ), PixelFormat::RGBA32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
@@ -119,7 +119,7 @@ namespace Castor3D
 	void LightCache::BindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const
 	{
 		GetEngine()->GetRenderSystem()->RenderAmbientLight( GetScene()->GetAmbientLight(), p_sceneBuffer );
-		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
+		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::Pixel );
 		Point4iFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
 
@@ -145,7 +145,7 @@ namespace Castor3D
 					}
 				}
 
-				auto l_locked = l_layout->GetImage().Lock( eACCESS_TYPE_WRITE );
+				auto l_locked = l_layout->GetImage().Lock( AccessType::Write );
 
 				if ( l_locked )
 				{

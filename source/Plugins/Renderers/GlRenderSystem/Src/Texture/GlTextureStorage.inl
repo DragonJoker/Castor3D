@@ -5,7 +5,12 @@
 namespace GlRender
 {
 	template< typename Traits >
-	GlTextureStorage< Traits >::GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	GlTextureStorage< Traits >::GlTextureStorage( OpenGl & p_gl
+												  , GlRenderSystem & p_renderSystem
+												  , Castor3D::TextureStorageType p_type
+												  , Castor3D::TextureImage & p_image
+												  , Castor3D::AccessType p_cpuAccess
+												  , Castor3D::AccessType p_gpuAccess )
 		: Castor3D::TextureStorage{ p_type, p_image, p_cpuAccess, p_gpuAccess }
 		, Holder{ p_gl }
 		, m_glRenderSystem{ &p_renderSystem }
@@ -32,7 +37,7 @@ namespace GlRender
 	}
 
 	template< typename Traits >
-	uint8_t * GlTextureStorage< Traits >::Lock( uint32_t p_lock )
+	uint8_t * GlTextureStorage< Traits >::Lock( Castor3D::AccessType p_lock )
 	{
 		return m_impl.Lock( *this, p_lock );
 	}

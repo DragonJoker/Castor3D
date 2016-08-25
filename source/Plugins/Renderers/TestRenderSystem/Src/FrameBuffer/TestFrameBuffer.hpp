@@ -68,7 +68,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
+		virtual void SetReadBuffer( Castor3D::AttachmentPoint p_eAttach, uint8_t p_index );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::IsComplete
 		 */
@@ -76,7 +76,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		virtual bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
@@ -98,7 +98,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_target );
+		virtual bool DoBind( Castor3D::FrameBufferTarget p_target );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */

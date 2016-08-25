@@ -322,7 +322,7 @@ namespace Castor3D
 		 *\brief		Définit le masque d'écriture des couleurs
 		 *\param[in]	p_r, p_g, p_b, p_a	Le masque pour chaque composante
 		 */
-		inline void SetColourMask( eWRITING_MASK p_r, eWRITING_MASK p_g, eWRITING_MASK p_b, eWRITING_MASK p_a )
+		inline void SetColourMask( WritingMask p_r, WritingMask p_g, WritingMask p_b, WritingMask p_a )
 		{
 			m_eColourMask[0] = p_r;
 			m_eColourMask[1] = p_g;
@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture de la composante rouge
 		 *\return		Le masque
 		 */
-		inline eWRITING_MASK GetColourMaskR()const
+		inline WritingMask GetColourMaskR()const
 		{
 			return m_eColourMask[0];
 		}
@@ -349,7 +349,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture de la composante verte
 		 *\return		Le masque
 		 */
-		inline eWRITING_MASK GetColourMaskG()const
+		inline WritingMask GetColourMaskG()const
 		{
 			return m_eColourMask[1];
 		}
@@ -361,7 +361,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture de la composante bleue
 		 *\return		Le masque
 		 */
-		inline eWRITING_MASK GetColourMaskB()const
+		inline WritingMask GetColourMaskB()const
 		{
 			return m_eColourMask[2];
 		}
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\brief		Récupère le masque d'écriture de la composante alpha
 		 *\return		Le masque
 		 */
-		inline eWRITING_MASK GetColourMaskA()const
+		inline WritingMask GetColourMaskA()const
 		{
 			return m_eColourMask[3];
 		}
@@ -403,7 +403,7 @@ namespace Castor3D
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask.
 		//!\~french		Masque d'écriture des couleurs.
-		eWRITING_MASK m_eColourMask[4] = { eWRITING_MASK_ALL, eWRITING_MASK_ALL, eWRITING_MASK_ALL, eWRITING_MASK_ALL };
+		WritingMask m_eColourMask[4] = { WritingMask::All, WritingMask::All, WritingMask::All, WritingMask::All };
 	};
 }
 

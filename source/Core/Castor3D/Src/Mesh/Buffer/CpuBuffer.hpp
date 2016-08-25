@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
+		inline bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 		{
 			bool l_return = false;
 
@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\param[in]	p_flags	Les flags de lock
 		 *\return		L'adresse du tampon mappé
 		 */
-		inline T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
+		inline T * Lock( uint32_t p_offset, uint32_t p_count, AccessType p_flags )
 		{
 			T * l_return = nullptr;
 
@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		inline bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
+		inline bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 		{
 			bool l_return = false;
 

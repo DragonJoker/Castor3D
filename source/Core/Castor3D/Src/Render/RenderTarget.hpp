@@ -36,7 +36,7 @@ namespace Castor3D
 	template< typename KeyType >
 	struct ElementProducer< RenderTarget, KeyType >
 	{
-		using Type = std::function< std::shared_ptr< RenderTarget >( KeyType const &, eTARGET_TYPE ) >;
+		using Type = std::function< std::shared_ptr< RenderTarget >( KeyType const &, TargetType ) >;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\param[in]	p_pRoot			Le moteur
 		 *\param[in]	p_eTargetType	Le type de render target
 		 */
-		C3D_API RenderTarget( Engine & p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
+		C3D_API RenderTarget( Engine & p_pRoot, TargetType p_eTargetType = TargetType::Window );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -414,7 +414,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de cible
 		 *\return		La valeur
 		 */
-		inline eTARGET_TYPE GetTargetType()const
+		inline TargetType GetTargetType()const
 		{
 			return m_eTargetType;
 		}
@@ -471,7 +471,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The render target type.
 		//!\~french		Type de RenderTarget.
-		eTARGET_TYPE m_eTargetType;
+		TargetType m_eTargetType;
 		//!\~english	Tells if the target is initalised.
 		//!\~french		Dit si la cible est initialisée.
 		bool m_initialised;

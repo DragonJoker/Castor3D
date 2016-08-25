@@ -5,7 +5,7 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestGeometryBuffers::TestGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program )
+	TestGeometryBuffers::TestGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 		: GeometryBuffers( p_topology, p_program )
 	{
 	}

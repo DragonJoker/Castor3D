@@ -51,9 +51,9 @@ namespace GlRender
 
 			for ( auto l_attach : p_attaches )
 			{
-				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
+				AttachmentPoint l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
+				if ( l_eAttach == AttachmentPoint::Colour )
 				{
 					l_arrayAttaches.push_back( GetOpenGl().Get( l_eAttach ) + l_attach->GetAttachmentIndex() );
 				}
@@ -63,7 +63,7 @@ namespace GlRender
 		}
 	}
 
-	void GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void GlFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )
 	{
 		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
@@ -81,9 +81,9 @@ namespace GlRender
 		return GetOpenGl().CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) == eGL_FRAMEBUFFER_COMPLETE;
 	}
 
-	bool GlFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	bool GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		bool l_return = DoBind( eFRAMEBUFFER_TARGET_READ );
+		bool l_return = DoBind( FrameBufferTarget::Read );
 
 		if ( l_return )
 		{
@@ -128,7 +128,7 @@ namespace GlRender
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}
 
-	bool GlFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_target )
+	bool GlFrameBuffer::DoBind( FrameBufferTarget p_target )
 	{
 		m_bindingMode = GetOpenGl().Get( p_target );
 		return BindableType::Bind();

@@ -55,7 +55,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::TextureStorage & p_storage, uint32_t p_lock );
+		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessType p_lock );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
@@ -64,12 +64,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::TextureStorage::Fill
 		 */
 		void Fill( Castor3D::TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format );
-
-	private:
-		/**
-		 *\brief		Uploads the image pixels to the given storage (PBO or direct texture).
-		 */
-		void DoUploadImage( Castor3D::TextureStorage & p_storage, uint32_t p_width, uint32_t p_height, Castor::PixelFormat p_format, uint8_t const * p_buffer );
 	};
 }
 

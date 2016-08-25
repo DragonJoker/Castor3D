@@ -64,9 +64,9 @@ namespace Direct
 	{
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene )
+	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
 	{
-		bool l_return = m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
@@ -77,12 +77,25 @@ namespace Direct
 		return l_return;
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
+	bool RenderTechnique::DoBeginOpaqueRendering()
 	{
-		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
+		return true;
 	}
 
-	void RenderTechnique::DoEndRender( Scene & p_scene )
+	void RenderTechnique::DoEndOpaqueRendering()
+	{
+	}
+
+	bool RenderTechnique::DoBeginTransparentRendering()
+	{
+		return true;
+	}
+
+	void RenderTechnique::DoEndTransparentRendering()
+	{
+	}
+
+	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
 

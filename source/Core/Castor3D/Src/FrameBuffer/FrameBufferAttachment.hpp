@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\param[in]	p_frameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer );
+		C3D_API bool Attach( AttachmentPoint p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\param[in]	p_frameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, FrameBufferSPtr p_frameBuffer );
+		C3D_API bool Attach( AttachmentPoint p_attachment, FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
@@ -135,7 +135,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le point d'attache
 		 */
-		inline eATTACHMENT_POINT GetAttachmentPoint()const
+		inline AttachmentPoint GetAttachmentPoint()const
 		{
 			return m_point;
 		}
@@ -204,7 +204,7 @@ namespace Castor3D
 		//\~english The attachment type.	\~french Le type d'attache.
 		eATTACHMENT_TYPE m_type;
 		//\~english The attachment point.	\~french Le point d'attache.
-		eATTACHMENT_POINT m_point;
+		AttachmentPoint m_point;
 		//\~english The attachment index.	\~french L'index d'attache.
 		uint8_t m_index;
 		//\~english The attached frame buffer.	\~french Le tampon d'image attaché.

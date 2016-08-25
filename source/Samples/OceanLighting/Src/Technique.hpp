@@ -322,15 +322,32 @@ namespace OceanLighting
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender( Castor3D::Scene & p_scene )override;
+		bool DoBeginRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoRender
 		 */
-		void DoRender( Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
+		void DoRender( Castor::Size const & p_size, Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
+		 */
+		bool DoBeginOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
+		 */
+		void DoEndOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
+		 */
+		bool DoBeginTransparentRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
+		 */
+		void DoEndTransparentRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		void DoEndRender( Castor3D::Scene & p_scene )override;		/**
+		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
+		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override

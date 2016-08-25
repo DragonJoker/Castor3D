@@ -62,7 +62,7 @@ namespace GlRender
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program );
+		GlGeometryBuffers( OpenGl & p_gl, Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor

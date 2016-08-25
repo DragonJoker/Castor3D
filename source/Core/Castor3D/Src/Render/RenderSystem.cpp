@@ -100,7 +100,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
+	String RenderSystem::GetVertexShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -187,26 +187,26 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		using namespace GLSL;
 
 		static String PRIMITIVES[] =
 		{
-			cuT( "points" ),//eTOPOLOGY_POINTS
-			cuT( "lines" ),//eTOPOLOGY_LINES
-			cuT( "line_loop" ),//eTOPOLOGY_LINE_LOOP
-			cuT( "line_strip" ),//eTOPOLOGY_LINE_STRIP
-			cuT( "triangles" ),//eTOPOLOGY_TRIANGLES
-			cuT( "triangle_strip" ),//eTOPOLOGY_TRIANGLE_STRIPS
-			cuT( "triangle_fan" ),//eTOPOLOGY_TRIANGLE_FAN
-			cuT( "quads" ),//eTOPOLOGY_QUADS
-			cuT( "quad_strip" ),//eTOPOLOGY_QUAD_STRIPS
-			cuT( "polygon" ),//eTOPOLOGY_POLYGON
+			cuT( "points" ),//Topology::Points
+			cuT( "lines" ),//Topology::Lines
+			cuT( "line_loop" ),//Topology::LineLoop
+			cuT( "line_strip" ),//Topology::LineStrip
+			cuT( "triangles" ),//Topology::Triangles
+			cuT( "triangle_strip" ),//Topology::TriangleStrips
+			cuT( "triangle_fan" ),//Topology::TriangleFan
+			cuT( "quads" ),//Topology::Quads
+			cuT( "quad_strip" ),//Topology::QuadStrips
+			cuT( "polygon" ),//Topology::Polygon
 		};
 
-		eTOPOLOGY l_input = eTOPOLOGY_POINTS;
-		eTOPOLOGY l_output = eTOPOLOGY_TRIANGLE_STRIPS;
+		Topology l_input = Topology::Points;
+		Topology l_output = Topology::TriangleStrips;
 		uint32_t l_count = 4;
 
 		auto & l_cache = GetEngine()->GetShaderProgramCache();
@@ -214,12 +214,12 @@ namespace Castor3D
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
-		l_cache.CreateTextureVariables( *l_program, p_flags );
+		l_cache.CreateTextureVariables( *l_program, p_textureFlags );
 		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
-		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
+		ShaderObjectSPtr l_object = l_program->CreateObject( ShaderType::Geometry );
 		l_object->SetInputType( l_input );
 		l_object->SetOutputType( l_output );
 		l_object->SetOutputVtxCount( l_count );
@@ -246,8 +246,8 @@ namespace Castor3D
 		{
 			auto l_writer = CreateGlslWriter();
 
-			l_writer.InputGeometryLayout( PRIMITIVES[l_input] );
-			l_writer.OutputGeometryLayout( PRIMITIVES[l_output] );
+			l_writer.InputGeometryLayout( PRIMITIVES[size_t( l_input )] );
+			l_writer.OutputGeometryLayout( PRIMITIVES[size_t( l_output )] );
 			l_writer.OutputVertexCount( l_count );
 
 			// Shader inputs
@@ -335,14 +335,13 @@ namespace Castor3D
 			l_strGeoShader = l_writer.Finalise();
 		}
 
-		String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
-
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+		String l_strPxlShader = p_technique.GetPixelShaderSource( p_textureFlags, p_programFlags );
+		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_3, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_3, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_3, l_strPxlShader );
+		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_4, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_4, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_4, l_strPxlShader );
 
 		return l_program;
 	}

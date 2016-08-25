@@ -79,15 +79,15 @@ namespace GlRender
 
 			switch ( GetRenderBuffer()->GetComponent() )
 			{
-			case eBUFFER_COMPONENT_COLOUR:
+			case BufferComponent::Colour:
 				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 
-			case eBUFFER_COMPONENT_DEPTH:
+			case BufferComponent::Depth:
 				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 
-			case eBUFFER_COMPONENT_STENCIL:
+			case BufferComponent::Stencil:
 				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 

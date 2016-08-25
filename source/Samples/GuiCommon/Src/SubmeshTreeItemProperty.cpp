@@ -82,43 +82,43 @@ namespace GuiCommon
 
 			switch ( l_submesh->GetTopology() )
 			{
-			case eTOPOLOGY_POINTS:
+			case Topology::Points:
 				l_selected = PROPERTY_TOPOLOGY_POINTS;
 				break;
 
-			case eTOPOLOGY_LINES:
+			case Topology::Lines:
 				l_selected = PROPERTY_TOPOLOGY_LINES;
 				break;
 
-			case eTOPOLOGY_LINE_LOOP:
+			case Topology::LineLoop:
 				l_selected = PROPERTY_TOPOLOGY_LINE_LOOP;
 				break;
 
-			case eTOPOLOGY_LINE_STRIP:
+			case Topology::LineStrip:
 				l_selected = PROPERTY_TOPOLOGY_LINE_STRIP;
 				break;
 
-			case eTOPOLOGY_TRIANGLES:
+			case Topology::Triangles:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLES;
 				break;
 
-			case eTOPOLOGY_TRIANGLE_STRIPS:
+			case Topology::TriangleStrips:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
 				break;
 
-			case eTOPOLOGY_TRIANGLE_FAN:
+			case Topology::TriangleFan:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
 				break;
 
-			case eTOPOLOGY_QUADS:
+			case Topology::Quads:
 				l_selected = PROPERTY_TOPOLOGY_QUADS;
 				break;
 
-			case eTOPOLOGY_QUAD_STRIPS:
+			case Topology::QuadStrips:
 				l_selected = PROPERTY_TOPOLOGY_QUAD_STRIP;
 				break;
 
-			case eTOPOLOGY_POLYGON:
+			case Topology::Polygon:
 				l_selected = PROPERTY_TOPOLOGY_POLYGON;
 				break;
 			}
@@ -145,43 +145,43 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POINTS )
 				{
-					OnTopologyChange( eTOPOLOGY_POINTS );
+					OnTopologyChange( Topology::Points );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINES )
 				{
-					OnTopologyChange( eTOPOLOGY_LINES );
+					OnTopologyChange( Topology::Lines );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LOOP )
 				{
-					OnTopologyChange( eTOPOLOGY_LINE_LOOP );
+					OnTopologyChange( Topology::LineLoop );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
 				{
-					OnTopologyChange( eTOPOLOGY_LINE_STRIP );
+					OnTopologyChange( Topology::LineStrip );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLES )
 				{
-					OnTopologyChange( eTOPOLOGY_TRIANGLES );
+					OnTopologyChange( Topology::Triangles );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
 				{
-					OnTopologyChange( eTOPOLOGY_TRIANGLE_STRIPS );
+					OnTopologyChange( Topology::TriangleStrips );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
-					OnTopologyChange( eTOPOLOGY_TRIANGLE_FAN );
+					OnTopologyChange( Topology::TriangleFan );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUADS )
 				{
-					OnTopologyChange( eTOPOLOGY_QUADS );
+					OnTopologyChange( Topology::Quads );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUAD_STRIP )
 				{
-					OnTopologyChange( eTOPOLOGY_QUAD_STRIPS );
+					OnTopologyChange( Topology::QuadStrips );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POLYGON )
 				{
-					OnTopologyChange( eTOPOLOGY_POLYGON );
+					OnTopologyChange( Topology::Polygon );
 				}
 			}
 		}
@@ -205,7 +205,7 @@ namespace GuiCommon
 		} );
 	}
 
-	void SubmeshTreeItemProperty::OnTopologyChange( eTOPOLOGY p_value )
+	void SubmeshTreeItemProperty::OnTopologyChange( Topology p_value )
 	{
 		SubmeshSPtr l_submesh = GetSubmesh();
 		GeometrySPtr l_geometry = GetGeometry();

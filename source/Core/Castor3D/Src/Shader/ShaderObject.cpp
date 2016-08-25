@@ -96,7 +96,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, eSHADER_TYPE_COUNT > ShaderObject::string_type =
+	const std::array< String, size_t( ShaderType::Count ) > ShaderObject::string_type =
 	{
 		cuT( "vertex_program" ),
 		cuT( "hull_program" ),
@@ -105,7 +105,7 @@ namespace Castor3D
 		cuT( "pixel_program" ),
 	};
 
-	ShaderObject::ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type )
+	ShaderObject::ShaderObject( ShaderProgram * p_parent, ShaderType p_type )
 		: m_type( p_type )
 		, m_parent( p_parent )
 	{
