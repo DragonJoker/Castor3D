@@ -374,6 +374,20 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
+		 *\brief		Prepares the pipeline for opaque objets render.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets opaques.
+		 */
+		C3D_API virtual void DoPrepareOpaquePipeline();
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for transparent objets render.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets transparents.
+		 */
+		C3D_API virtual void DoPrepareTransparentPipeline();
+		/**
+		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.

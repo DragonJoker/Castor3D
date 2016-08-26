@@ -64,7 +64,7 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -83,11 +83,11 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
+				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 
-				plx_v4FragColor.SWIZZLE_X = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_X > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.SWIZZLE_Y = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Y > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.SWIZZLE_Z = TERNARY( l_writer, Float, plx_v4FragColor.SWIZZLE_Z > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.x() = TERNARY( l_writer, Float, plx_v4FragColor.x() > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.y() = TERNARY( l_writer, Float, plx_v4FragColor.y() > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.z() = TERNARY( l_writer, Float, plx_v4FragColor.z() > 1.0, Float( 1 ), Float( 0 ) );
 			} );
 			return l_writer.Finalise();
 		}

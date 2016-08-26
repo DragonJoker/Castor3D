@@ -269,47 +269,6 @@ namespace Castor3D
 		, m_multisampling{ p_multisampling }
 		, m_renderQueue{ *this }
 	{
-		{
-			DepthStencilState l_dsState;
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Back );
-			MultisampleState l_msState;
-			l_msState.SetMultisample( p_multisampling );
-			m_opaquePipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																			   , std::move( l_rsState )
-																			   , BlendState{}
-																			   , std::move( l_msState ) );
-		}
-
-		for ( uint32_t i = size_t( BlendMode::Additive ); i < uint32_t( BlendMode::Count ); ++i )
-		{
-			{
-				DepthStencilState l_dsState;
-				l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
-				RasteriserState l_rsState;
-				l_rsState.SetCulledFaces( Culling::Front );
-				MultisampleState l_msState;
-				l_msState.SetMultisample( p_multisampling );
-				l_msState.EnableAlphaToCoverage( p_multisampling );
-				m_frontTransparentPipeline[i - 1] = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																									, std::move( l_rsState )
-																									, DoCreateBlendState( BlendMode( i ) )
-																									, std::move( l_msState ) );
-			}
-			{
-				DepthStencilState l_dsState;
-				l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
-				RasteriserState l_rsState;
-				l_rsState.SetCulledFaces( Culling::Back );
-				MultisampleState l_msState;
-				l_msState.SetMultisample( p_multisampling );
-				l_msState.EnableAlphaToCoverage( p_multisampling );
-				m_backTransparentPipeline[i - 1] = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																								   , std::move( l_rsState )
-																								   , DoCreateBlendState( BlendMode( i ) )
-																								   , std::move( l_msState ) );
-			}
-		}
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -318,6 +277,8 @@ namespace Castor3D
 
 	bool RenderTechnique::Create()
 	{
+		DoPrepareOpaquePipeline();
+		DoPrepareTransparentPipeline();
 		return DoCreate();
 	}
 
@@ -587,6 +548,52 @@ namespace Castor3D
 			}
 
 			DoEndTransparentRendering();
+		}
+	}
+
+	void RenderTechnique::DoPrepareOpaquePipeline()
+	{
+		DepthStencilState l_dsState;
+		RasteriserState l_rsState;
+		l_rsState.SetCulledFaces( Culling::Back );
+		MultisampleState l_msState;
+		l_msState.SetMultisample( m_multisampling );
+		m_opaquePipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																		   , std::move( l_rsState )
+																		   , BlendState{}
+																		   , std::move( l_msState ) );
+	}
+
+	void RenderTechnique::DoPrepareTransparentPipeline()
+	{
+		for ( uint32_t i = size_t( BlendMode::Additive ); i < uint32_t( BlendMode::Count ); ++i )
+		{
+			{
+				DepthStencilState l_dsState;
+				l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+				RasteriserState l_rsState;
+				l_rsState.SetCulledFaces( Culling::Front );
+				MultisampleState l_msState;
+				l_msState.SetMultisample( m_multisampling );
+				l_msState.EnableAlphaToCoverage( m_multisampling );
+				m_frontTransparentPipeline[i - 1] = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																									, std::move( l_rsState )
+																									, DoCreateBlendState( BlendMode( i ) )
+																									, std::move( l_msState ) );
+			}
+			{
+				DepthStencilState l_dsState;
+				l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+				RasteriserState l_rsState;
+				l_rsState.SetCulledFaces( Culling::Back );
+				MultisampleState l_msState;
+				l_msState.SetMultisample( m_multisampling );
+				l_msState.EnableAlphaToCoverage( m_multisampling );
+				m_backTransparentPipeline[i - 1] = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																								   , std::move( l_rsState )
+																								   , DoCreateBlendState( BlendMode( i ) )
+																								   , std::move( l_msState ) );
+			}
 		}
 	}
 

@@ -356,9 +356,9 @@ namespace GlRender
 		inline eGL_FACE Get( Castor3D::Culling p_eFace )const;
 		inline eGL_FILL_MODE Get( Castor3D::eFILL_MODE p_mode )const;
 		inline eGL_FUNC Get( Castor3D::StencilFunc p_func )const;
-		inline eGL_STENCIL_OP Get( Castor3D::eSTENCIL_OP p_eOp )const;
+		inline eGL_STENCIL_OP Get( Castor3D::StencilOp p_eOp )const;
 		inline eGL_BLEND_OP Get( Castor3D::BlendOperation p_eOp )const;
-		inline eGL_FUNC Get( Castor3D::eDEPTH_FUNC p_func )const;
+		inline eGL_FUNC Get( Castor3D::DepthFunc p_func )const;
 		inline eGL_QUERY Get( Castor3D::eQUERY_TYPE p_value )const;
 		inline eGL_QUERY_INFO Get( Castor3D::eQUERY_INFO p_value )const;
 		inline eGL_TEXTURE_STORAGE Get( Castor3D::TextureStorageType p_value )const;
@@ -853,13 +853,13 @@ namespace GlRender
 		eGL_BUFFER Buffers[uint32_t( Castor3D::eBUFFER_COUNT )];
 		eGL_FACE Faces[uint32_t( Castor3D::Culling::Count )];
 		eGL_FILL_MODE FillModes[3u];
-		eGL_STENCIL_OP StencilOps[uint32_t( Castor3D::eSTENCIL_OP_COUNT )];
+		eGL_STENCIL_OP StencilOps[uint32_t( Castor3D::StencilOp::Count )];
 		eGL_FUNC StencilFuncs[uint32_t( Castor3D::StencilFunc::Count )];
 		eGL_QUERY Queries[uint32_t( Castor3D::eQUERY_TYPE_COUNT )];
 		eGL_QUERY_INFO QueryInfos[uint32_t( Castor3D::eQUERY_INFO_COUNT )];
 		eGL_TEXTURE_STORAGE TextureStorages[uint32_t( Castor3D::TextureStorageType::Count )];
 		bool WriteMasks[uint32_t( Castor3D::WritingMask::Count )];
-		eGL_FUNC DepthFuncs[uint32_t( Castor3D::eDEPTH_FUNC_COUNT )];
+		eGL_FUNC DepthFuncs[uint32_t( Castor3D::DepthFunc::Count )];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;
 		std::map< eGL_RENDERBUFFER_ATTACHMENT, eGL_BUFFER > BuffersRBA;
 

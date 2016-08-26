@@ -134,7 +134,7 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.SWIZZLE_XYZ, 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.xyz(), 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
@@ -167,19 +167,19 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
 			{
 				LOCALE_ASSIGN( l_writer, Float, l_time, Float( 1.0 ) - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.SWIZZLE_XYZ * l_time + position2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.SWIZZLE_XYZ * l_time + normal2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.SWIZZLE_XYZ * l_time + tangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.SWIZZLE_XYZ * l_time + bitangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
+				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
+				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
+				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
 				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
 
 			vtx_texture = l_v3Texture;
-			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).SWIZZLE_XYZ;
-			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).SWIZZLE_XYZ );
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).SWIZZLE_XYZ );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).SWIZZLE_XYZ );
+			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
+			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * l_mtxModel ) * l_v4Vertex;
 		};
 
@@ -236,7 +236,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = vec4( position.SWIZZLE_XYZ, 1.0 );
+				gl_Position = vec4( position.xyz(), 1.0 );
 			} );
 
 			l_strVtxShader = l_writer.Finalise();
@@ -268,22 +268,22 @@ namespace Castor3D
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxVP, c3d_mtxProjection * c3d_mtxView );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().SWIZZLE_XYZ );
-				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.SWIZZLE_X, c3d_v3CameraPosition.SWIZZLE_Y, c3d_v3CameraPosition.SWIZZLE_Z ) - l_pos ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_left, cross( l_toCamera, l_up ) );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.SWIZZLE_X, 0.0, l_toCamera.SWIZZLE_Z ) ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_up );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_left );
 
-				l_left *= c3d_v2iDimensions.SWIZZLE_X;
-				l_up *= c3d_v2iDimensions.SWIZZLE_Y;
+				l_left *= c3d_v2iDimensions.x();
+				l_up *= c3d_v2iDimensions.y();
 				l_writer << Endl();
 
 				{
 					l_pos -= ( l_left * 0.5 );
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -295,7 +295,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -308,7 +308,7 @@ namespace Castor3D
 				{
 					l_pos -= l_up;
 					l_pos += l_left;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -320,7 +320,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;

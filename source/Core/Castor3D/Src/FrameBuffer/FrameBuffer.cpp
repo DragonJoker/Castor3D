@@ -41,22 +41,23 @@ namespace Castor3D
 
 	void FrameBuffer::Clear()
 	{
-		uint32_t l_targets = 0u;
+		uint8_t l_targets = 0u;
 
 		for ( auto l_attach : m_attaches )
 		{
 			switch ( l_attach->GetAttachmentPoint() )
 			{
 			case AttachmentPoint::Colour:
-				l_targets |= uint32_t( BufferComponent::Colour );
+				AddFlag( l_targets, BufferComponent::Colour );
 				break;
 
 			case AttachmentPoint::Depth:
-				l_targets |= uint32_t( BufferComponent::Depth );
+				AddFlag (l_targets, BufferComponent::Depth );
+				AddFlag (l_targets, BufferComponent::Stencil );
 				break;
 
 			case AttachmentPoint::Stencil:
-				l_targets |= uint32_t( BufferComponent::Stencil );
+				AddFlag (l_targets, BufferComponent::Stencil );
 				break;
 			}
 		}

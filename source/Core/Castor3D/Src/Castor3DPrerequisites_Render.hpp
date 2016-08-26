@@ -253,27 +253,27 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des fonctions de profondeur
 	*/
-	typedef enum eDEPTH_FUNC
+	enum class DepthFunc
 		: uint8_t
 	{
 		//! Never passes.
-		eDEPTH_FUNC_NEVER,
+		Never,
 		//! Passes if the incoming depth value is less than the stored depth value.
-		eDEPTH_FUNC_LESS,
+		Less,
 		//! Passes if the incoming depth value is equal to the stored depth value.
-		eDEPTH_FUNC_EQUAL,
+		Equal,
 		//! Passes if the incoming depth value is less than or equal to the stored depth value.
-		eDEPTH_FUNC_LEQUAL,
+		LEqual,
 		//! Passes if the incoming depth value is greater than the stored depth value.
-		eDEPTH_FUNC_GREATER,
+		Greater,
 		//! Passes if the incoming depth value is not equal to the stored depth value.
-		eDEPTH_FUNC_NOTEQUAL,
+		NEqual,
 		//! Passes if the incoming depth value is greater than or equal to the stored depth value.
-		eDEPTH_FUNC_GEQUAL,
+		GEqual,
 		//! Always passes.
-		eDEPTH_FUNC_ALWAYS,
-		CASTOR_ENUM_BOUNDS( eDEPTH_FUNC, eDEPTH_FUNC_NEVER )
-	}	eDEPTH_FUNC;
+		Always,
+		CASTOR_ENUM_CLASS_BOUNDS( Never )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -331,27 +331,27 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des fonctions de stencil
 	*/
-	typedef enum eSTENCIL_OP
+	enum class StencilOp
 		: uint8_t
 	{
 		//! Keeps the current value.
-		eSTENCIL_OP_KEEP,
+		Keep,
 		//! Sets the stencil buffer value to 0.
-		eSTENCIL_OP_ZERO,
+		Zero,
 		//! Sets the stencil buffer value by the one given
-		eSTENCIL_OP_REPLACE,
+		Replace,
 		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
-		eSTENCIL_OP_INCR,
+		Increment,
 		//! Increments the current stencil buffer value. Wraps stencil buffer value to zero when incrementing the maximum representable unsigned value.
-		eSTENCIL_OP_INCR_WRAP,
+		IncrWrap,
 		//! Decrements the current stencil buffer value. Clamps to 0.
-		eSTENCIL_OP_DECR,
+		Decrement,
 		//! Decrements the current stencil buffer value. Wraps stencil buffer value to the maximum representable unsigned value when decrementing a stencil buffer value of zero.
-		eSTENCIL_OP_DECR_WRAP,
+		DecrWrap,
 		//! Bitwise inverts the current stencil buffer value.
-		eSTENCIL_OP_INVERT,
-		CASTOR_ENUM_BOUNDS( eSTENCIL_OP, eSTENCIL_OP_KEEP )
-	}	eSTENCIL_OP;
+		Invert,
+		CASTOR_ENUM_CLASS_BOUNDS( Keep )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0

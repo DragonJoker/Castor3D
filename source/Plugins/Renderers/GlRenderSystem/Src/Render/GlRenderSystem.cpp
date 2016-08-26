@@ -472,7 +472,7 @@ namespace GlRender
 
 		if ( !l_return )
 		{
-			if ( true )//p_image.IsStaticSource() )
+			if ( p_image.IsStaticSource() )
 			{
 				if ( GetOpenGl().HasExtension( ARB_texture_storage )
 					 && p_type != TextureStorageType::CubeMapPositiveX

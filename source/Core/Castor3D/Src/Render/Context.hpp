@@ -127,6 +127,17 @@ namespace Castor3D
 		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program );
 		/**
 		 *\~english
+		 *\brief		Renders the given depth texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size			The render viewport size.
+		 *\param[in]	p_texture		The texture.
+		 *\~french
+		 *\brief		Rend la texture de profondeur donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_texture		La texture.
+		 */
+		C3D_API void RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture );
+		/**
+		 *\~english
 		 *\brief		Tells the context is initialised
 		 *\~french
 		 *\brief		Dit si le contexte est initialisé
@@ -181,6 +192,32 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
+		 *\brief		Renders the given texture.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	p_program			The program used to render the texture.
+		 *\~french
+		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
+		 */
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers, ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Creates the render to texture shader program.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme shader de dessin de texture.
+		 *\return		Le programme.
+		 */
+		ShaderProgramSPtr DoCreateProgram( bool p_depth );
+		/**
+		 *\~english
 		 *\brief		Initialises this context
 		 *\return		\p true if initialised, false if not
 		 *\~french
@@ -223,30 +260,6 @@ namespace Castor3D
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API virtual void DoSwapBuffers() = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the given texture.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
-		 *\param[in]	p_program			The program used to render the texture.
-		 *\~french
-		 *\brief		Dessine la texture donnée.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
-		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program );
-		/**
-		 *\~english
-		 *\brief		Creates the render to texture shader program.
-		 *\return		The program.
-		 *\~french
-		 *\brief		Crée le programme shader de dessin de texture.
-		 *\return		Le programme.
-		 */
-		ShaderProgramSPtr DoCreateProgram();
 
 	protected:
 		//!\~english	RenderWindow associated to this context.
@@ -261,12 +274,18 @@ namespace Castor3D
 		//!\~english	The ShaderProgram used when rendering from a buffer to another one.
 		//!\~french		Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre.
 		ShaderProgramWPtr m_renderTextureProgram;
+		//!\~english	The ShaderProgram used when rendering depth from a buffer to another one.
+		//!\~french		Le ShaderProgram utilisé lors du rendu de profondeur d'un tampon vers un autre.
+		ShaderProgramWPtr m_renderDepthProgram;
 		//!\~english	The diffuse map frame variable, in the buffer-to-buffer shader program.
 		//!\~french		La frame variable de l'image diffuse, dans le shader buffer-to-buffer.
 		OneIntFrameVariableSPtr m_mapDiffuse;
 		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;
+		//!\~english	The GeometryBuffers used when rendering a depth texture to the current frame buffer.
+		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture de profondeur dans le tampon d'image courant.
+		GeometryBuffersSPtr m_geometryBuffersDepth;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
@@ -281,6 +300,9 @@ namespace Castor3D
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBufferDepth;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
 		std::array< GpuQuerySPtr, 2 > m_timerQuery;
@@ -289,7 +311,10 @@ namespace Castor3D
 		uint32_t m_queryIndex = 0;
 		//!\~english	The pipeline used for render to texture.
 		//!\~french		Le pipeline utilisé pour le rendu en texture.
-		PipelineUPtr m_pipeline;
+		PipelineUPtr m_texturePipeline;
+		//!\~english	The pipeline used for render to depth.
+		//!\~french		Le pipeline utilisé pour le rendu en profondeur.
+		PipelineUPtr m_depthPipeline;
 	};
 }
 

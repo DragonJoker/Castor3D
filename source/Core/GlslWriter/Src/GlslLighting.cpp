@@ -94,7 +94,7 @@ namespace GLSL
 					l_lightReturn.m_v3Colour() = texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_RGB;
 					l_lightReturn.m_v3Intensity() = texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_RGB;
 					LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++ ) );
-					l_lightReturn.m_v3Position() = l_v4Position.SWIZZLE_XYZ;
+					l_lightReturn.m_v3Position() = l_v4Position.xyz();
 					l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.SWIZZLE_W );
 				}
 				else
@@ -104,7 +104,7 @@ namespace GLSL
 					l_lightReturn.m_v3Colour() = texelFetch( c3d_sLights, l_offset++, 0 ).SWIZZLE_RGB;
 					l_lightReturn.m_v3Intensity() = texelFetch( c3d_sLights, l_offset++, 0 ).SWIZZLE_RGB;
 					LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_v3Position() = l_v4Position.SWIZZLE_XYZ;
+					l_lightReturn.m_v3Position() = l_v4Position.xyz();
 					l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.SWIZZLE_W );
 				}
 			}
@@ -120,7 +120,7 @@ namespace GLSL
 				l_lightReturn.m_v3Intensity() = texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ).SWIZZLE_RGB;
 				l_fOffset += l_fMult;
 				LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ) );
-				l_lightReturn.m_v3Position() = l_v4Position.SWIZZLE_XYZ;
+				l_lightReturn.m_v3Position() = l_v4Position.xyz();
 				l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.SWIZZLE_W );
 			}
 
@@ -149,7 +149,7 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) + Int( 3 ) );
-				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_XYZ;
+				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).xyz();
 			}
 			else
 			{
@@ -158,7 +158,7 @@ namespace GLSL
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_decal, Float( 0.0005f ) );
-				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).SWIZZLE_XYZ;
+				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 			}
 
 			m_writer.Return( l_lightReturn );
@@ -176,11 +176,11 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) + Int( 3 ) );
-				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_XYZ;
-				l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_XYZ;
-				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++ ).SWIZZLE_XY );
-				l_lightReturn.m_fExponent() = l_v2Spot.SWIZZLE_X;
-				l_lightReturn.m_fCutOff() = l_v2Spot.SWIZZLE_Y;
+				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).xyz();
+				l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++ ).xyz();
+				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++ ).xy() );
+				l_lightReturn.m_fExponent() = l_v2Spot.x();
+				l_lightReturn.m_fCutOff() = l_v2Spot.y();
 			}
 			else
 			{
@@ -189,13 +189,13 @@ namespace GLSL
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_decal, Float( 0.0005f ) );
-				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).SWIZZLE_XYZ;
+				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 				l_offset += l_mult;
-				l_lightReturn.m_v3Direction() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).SWIZZLE_XYZ;
+				l_lightReturn.m_v3Direction() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 				l_offset += l_mult;
-				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texture1D( c3d_sLights, l_factor + l_offset + l_decal ).SWIZZLE_XY );
-				l_lightReturn.m_fExponent() = l_v2Spot.SWIZZLE_X;
-				l_lightReturn.m_fCutOff() = l_v2Spot.SWIZZLE_Y;
+				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xy() );
+				l_lightReturn.m_fExponent() = l_v2Spot.x();
+				l_lightReturn.m_fCutOff() = l_v2Spot.y();
 			}
 
 			m_writer.Return( l_lightReturn );
@@ -270,7 +270,7 @@ namespace GLSL
 			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
 			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
-			DoComputeLight( p_light, p_worldEye, normalize( p_light.m_v3Position().SWIZZLE_XYZ ), p_shininess, p_fragmentIn, l_output );
+			DoComputeLight( p_light, p_worldEye, normalize( p_light.m_v3Position().xyz() ), p_shininess, p_fragmentIn, l_output );
 			p_output.m_v3Ambient += l_ambient;
 			p_output.m_v3Diffuse += l_diffuse;
 			p_output.m_v3Specular += l_specular;
@@ -290,11 +290,11 @@ namespace GLSL
 			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
 			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
-			LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().SWIZZLE_XYZ );
+			LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
 			LOCALE_ASSIGN( m_writer, Float, l_distance, length( l_lightDirection ) );
 			DoComputeLight( p_light, p_worldEye, normalize( -l_lightDirection ), p_shininess, p_fragmentIn, l_output );
 
-			LOCALE_ASSIGN( m_writer, Float, l_attenuation, p_light.m_v3Attenuation().SWIZZLE_X + p_light.m_v3Attenuation().SWIZZLE_Y * l_distance + p_light.m_v3Attenuation().SWIZZLE_Z * l_distance * l_distance );
+			LOCALE_ASSIGN( m_writer, Float, l_attenuation, p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 			p_output.m_v3Ambient += l_ambient / l_attenuation;
 			p_output.m_v3Diffuse += l_diffuse / l_attenuation;
 			p_output.m_v3Specular += l_specular / l_attenuation;
@@ -314,12 +314,12 @@ namespace GLSL
 			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
 			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
-			LOCALE_ASSIGN( m_writer, Vec3, l_lightToPixel, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().SWIZZLE_XYZ );
+			LOCALE_ASSIGN( m_writer, Vec3, l_lightToPixel, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
 			LOCALE_ASSIGN( m_writer, Float, l_spotFactor, dot( l_lightToPixel, p_light.m_v3Direction() ) );
 
 			IF( m_writer, l_spotFactor > p_light.m_fCutOff() )
 			{
-				LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().SWIZZLE_XYZ );
+				LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
 				LOCALE_ASSIGN( m_writer, Float, l_distance, length( l_lightDirection ) );
 				ComputePointLight( p_light, p_worldEye, p_shininess, p_fragmentIn, l_output );
 
@@ -341,13 +341,13 @@ namespace GLSL
 		m_writer.ImplementFunction< Void >( cuT( "DoComputeLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Vec3 const & p_direction, Float const & p_shininess,
 											FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 		{
-			p_output.m_v3Ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().SWIZZLE_X;
+			p_output.m_v3Ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().x();
 
 			LOCALE_ASSIGN( m_writer, Float, l_diffuseFactor, dot( p_fragmentIn.m_v3Normal, p_direction ) );
 
 			IF( m_writer, l_diffuseFactor > Float( 0 ) )
 			{
-				p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().SWIZZLE_Y * l_diffuseFactor;
+				p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
 
 				LOCALE_ASSIGN( m_writer, Vec3, l_vertexToEye, normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
 				LOCALE_ASSIGN( m_writer, Vec3, l_lightReflect, normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
@@ -356,7 +356,7 @@ namespace GLSL
 				IF( m_writer, l_specularFactor > Float( 0 ) )
 				{
 					l_specularFactor = pow( l_specularFactor, p_shininess );
-					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().SWIZZLE_Z * l_specularFactor;
+					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor;
 				}
 				FI;
 			}

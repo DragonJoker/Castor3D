@@ -342,7 +342,7 @@ namespace GlRender
 		RboAttachments[uint32_t( AttachmentPoint::None )] = eGL_RENDERBUFFER_ATTACHMENT_NONE;
 		RboAttachments[uint32_t( AttachmentPoint::Colour )] = eGL_RENDERBUFFER_ATTACHMENT_COLOR0;
 		RboAttachments[uint32_t( AttachmentPoint::Depth )] = eGL_RENDERBUFFER_ATTACHMENT_DEPTH;
-		RboAttachments[uint32_t( AttachmentPoint::Stencil )] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL;
+		RboAttachments[uint32_t (AttachmentPoint::Stencil)] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL;
 
 		RboStorages[uint32_t( PixelFormat::L8 )] = eGL_RENDERBUFFER_STORAGE_L8;
 		RboStorages[uint32_t( PixelFormat::L16F32F )] = eGL_RENDERBUFFER_STORAGE_L16F;
@@ -395,14 +395,14 @@ namespace GlRender
 		FillModes[uint32_t( eFILL_MODE_LINE )] = eGL_FILL_MODE_LINE;
 		FillModes[uint32_t( eFILL_MODE_SOLID )] = eGL_FILL_MODE_FILL;
 
-		DepthFuncs[uint32_t( eDEPTH_FUNC_NEVER )] = eGL_FUNC_NEVER;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_LESS )] = eGL_FUNC_LESS;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_EQUAL )] = eGL_FUNC_EQUAL;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_LEQUAL )] = eGL_FUNC_LEQUAL;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_GREATER )] = eGL_FUNC_GREATER;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_NOTEQUAL )] = eGL_FUNC_NOTEQUAL;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_GEQUAL )] = eGL_FUNC_GEQUAL;
-		DepthFuncs[uint32_t( eDEPTH_FUNC_ALWAYS )] = eGL_FUNC_ALWAYS;
+		DepthFuncs[uint32_t( DepthFunc::Never )] = eGL_FUNC_NEVER;
+		DepthFuncs[uint32_t( DepthFunc::Less )] = eGL_FUNC_LESS;
+		DepthFuncs[uint32_t( DepthFunc::Equal )] = eGL_FUNC_EQUAL;
+		DepthFuncs[uint32_t( DepthFunc::LEqual )] = eGL_FUNC_LEQUAL;
+		DepthFuncs[uint32_t( DepthFunc::Greater )] = eGL_FUNC_GREATER;
+		DepthFuncs[uint32_t( DepthFunc::NEqual )] = eGL_FUNC_NOTEQUAL;
+		DepthFuncs[uint32_t( DepthFunc::GEqual )] = eGL_FUNC_GEQUAL;
+		DepthFuncs[uint32_t( DepthFunc::Always )] = eGL_FUNC_ALWAYS;
 
 		WriteMasks[uint32_t( WritingMask::Zero )] = false;
 		WriteMasks[uint32_t( WritingMask::All )] = true;
@@ -416,17 +416,19 @@ namespace GlRender
 		StencilFuncs[uint32_t( StencilFunc::GEqual )] = eGL_FUNC_GREATER;
 		StencilFuncs[uint32_t( StencilFunc::Always )] = eGL_FUNC_ALWAYS;
 
-		StencilOps[uint32_t( eSTENCIL_OP_KEEP )] = eGL_STENCIL_OP_KEEP;
-		StencilOps[uint32_t( eSTENCIL_OP_ZERO )] = eGL_STENCIL_OP_ZERO;
-		StencilOps[uint32_t( eSTENCIL_OP_REPLACE )] = eGL_STENCIL_OP_REPLACE;
-		StencilOps[uint32_t( eSTENCIL_OP_INCR )] = eGL_STENCIL_OP_INCR;
-		StencilOps[uint32_t( eSTENCIL_OP_INCR_WRAP )] = eGL_STENCIL_OP_INCR_WRAP;
-		StencilOps[uint32_t( eSTENCIL_OP_DECR )] = eGL_STENCIL_OP_DECR;
-		StencilOps[uint32_t( eSTENCIL_OP_DECR_WRAP )] = eGL_STENCIL_OP_DECR_WRAP;
-		StencilOps[uint32_t( eSTENCIL_OP_INVERT )] = eGL_STENCIL_OP_INVERT;
+		StencilOps[uint32_t( StencilOp::Keep )] = eGL_STENCIL_OP_KEEP;
+		StencilOps[uint32_t( StencilOp::Zero )] = eGL_STENCIL_OP_ZERO;
+		StencilOps[uint32_t( StencilOp::Replace )] = eGL_STENCIL_OP_REPLACE;
+		StencilOps[uint32_t( StencilOp::Increment )] = eGL_STENCIL_OP_INCR;
+		StencilOps[uint32_t( StencilOp::IncrWrap )] = eGL_STENCIL_OP_INCR_WRAP;
+		StencilOps[uint32_t( StencilOp::Decrement )] = eGL_STENCIL_OP_DECR;
+		StencilOps[uint32_t( StencilOp::DecrWrap )] = eGL_STENCIL_OP_DECR_WRAP;
+		StencilOps[uint32_t( StencilOp::Invert )] = eGL_STENCIL_OP_INVERT;
 
 		BuffersTA[eGL_TEXTURE_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
 		BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_DEPTH] = eGL_BUFFER_DEPTH;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_STENCIL] = eGL_BUFFER_STENCIL;
 
 		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
 		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;

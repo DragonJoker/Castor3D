@@ -271,7 +271,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.SWIZZLE_X, -vtx_texture.SWIZZLE_Y, vtx_texture.SWIZZLE_Z ) );
+				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -306,7 +306,7 @@ namespace Castor3D
 	bool Skybox::DoInitialisePipeline()
 	{
 		DepthStencilState l_dsState;
-		l_dsState.SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+		l_dsState.SetDepthFunc( DepthFunc::LEqual );
 
 		RasteriserState l_rsState;
 		l_rsState.SetCulledFaces( Culling::Front );

@@ -714,7 +714,7 @@ namespace GlRender
 		return StencilFuncs[uint32_t( p_func )];
 	}
 
-	inline eGL_STENCIL_OP OpenGl::Get( Castor3D::eSTENCIL_OP p_eOp )const
+	inline eGL_STENCIL_OP OpenGl::Get( Castor3D::StencilOp p_eOp )const
 	{
 		return StencilOps[uint32_t( p_eOp )];
 	}
@@ -724,7 +724,7 @@ namespace GlRender
 		return BlendOps[uint32_t( p_eOp )];
 	}
 
-	inline eGL_FUNC OpenGl::Get( Castor3D::eDEPTH_FUNC p_func )const
+	inline eGL_FUNC OpenGl::Get( Castor3D::DepthFunc p_func )const
 	{
 		return DepthFuncs[uint32_t( p_func )];
 	}

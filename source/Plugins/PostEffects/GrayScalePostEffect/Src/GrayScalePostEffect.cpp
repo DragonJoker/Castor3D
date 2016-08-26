@@ -56,7 +56,7 @@ namespace GrayScale
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -75,7 +75,7 @@ namespace GrayScale
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
 				LOCALE_ASSIGN( l_writer, Float, l_average, Float( 0.2126f ) * l_colour.SWIZZLE_R + 0.7152f * l_colour.SWIZZLE_G + 0.0722f * l_colour.SWIZZLE_B );
 				plx_v4FragColor = vec4( l_average, l_average, l_average, 1.0 );
 			} );

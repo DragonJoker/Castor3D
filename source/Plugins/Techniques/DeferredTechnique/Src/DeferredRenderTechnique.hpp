@@ -144,13 +144,13 @@ namespace Deferred
 		 */
 		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
-		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
-		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
+		 */
+		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -170,21 +170,27 @@ namespace Deferred
 		 */
 		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
 
+	private:
+		static Castor::String RenderTechnique::GetTextureName( DsTexture p_texture );
+		static Castor::PixelFormat RenderTechnique::GetTextureFormat( DsTexture p_texture );
+		static Castor3D::AttachmentPoint RenderTechnique::GetTextureAttachmentPoint( DsTexture p_texture );
+		static uint32_t RenderTechnique::GetTextureAttachmentIndex( DsTexture p_texture );
+
 	protected:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
 		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::Count ) > m_lightPassTextures;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::Count ) > m_geometryPassTexAttachs;
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		Castor3D::RenderBufferSPtr m_geometryPassDepthBuffer;
-		//!\~english	The attachments between depth buffer and deferred shading frame buffer.
-		//!\~french		Les attaches entre le tampon de profondeur et le tampon deferred shading.
+		std::array< Castor3D::TextureAttachmentSPtr, size_t (DsTexture::Count) > m_geometryPassTexAttachs;
+		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
+		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
@@ -215,7 +221,7 @@ namespace Deferred
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::PipelineSPtr m_pipeline;
+		Castor3D::PipelineSPtr m_lightPassPipeline;
 		//!\~english	The current camera.
 		//!\~french		La caméra actuelle.
 		Castor3D::Camera * m_camera{ nullptr };

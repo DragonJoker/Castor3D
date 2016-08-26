@@ -47,16 +47,6 @@ using namespace Castor3D;
 
 namespace Deferred
 {
-	String DS_TEXTURE_NAME[] =
-	{
-		cuT( "c3d_mapPosition" ),
-		cuT( "c3d_mapDiffuse" ),
-		cuT( "c3d_mapNormals" ),
-		cuT( "c3d_mapTangent" ),
-		cuT( "c3d_mapSpecular" ),
-		cuT( "c3d_mapEmissive" ),
-	};
-
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
 		, m_viewport( *p_renderSystem.GetEngine() )
@@ -75,24 +65,16 @@ namespace Deferred
 			l_unit->SetTexture( l_texture );
 			l_unit->SetSampler( GetEngine()->GetLightsSampler() );
 		}
-
-		m_geometryPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
-		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_geometryPassDepthBuffer );
+		
+		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
 		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
 		DepthStencilState l_dsstate;
-		l_dsstate.SetStencilTest( true );
-		l_dsstate.SetStencilReadMask( 0xFFFFFFFF );
-		l_dsstate.SetStencilWriteMask( 0 );
-		l_dsstate.SetStencilFrontRef( 1 );
-		l_dsstate.SetStencilBackRef( 1 );
-		l_dsstate.SetStencilFrontFunc( StencilFunc::Equal );
-		l_dsstate.SetStencilBackFunc( StencilFunc::Equal );
 		l_dsstate.SetDepthTest( true );
 		l_dsstate.SetDepthMask( WritingMask::Zero );
-
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_lightPassPipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 
 		m_declaration = BufferDeclaration(
 		{
@@ -141,12 +123,12 @@ namespace Deferred
 
 		if ( l_return )
 		{
-			m_geometryPassDepthBuffer->Create();
+			m_lightPassDepthBuffer->Create();
 			m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::Pixel );
 
-			for ( int i = 0; i < int( DsTexture::Count ) && l_return; i++ )
+			for ( int i = 0; i < int( DsTexture::Count ); i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( DS_TEXTURE_NAME[i], ShaderType::Pixel )->SetValue( i + 1 );
+				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::Pixel )->SetValue( i + 1 );
 			}
 
 			m_lightPassMatrices = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -170,25 +152,25 @@ namespace Deferred
 		{
 			l_unit->Cleanup();
 		}
-
-		m_geometryPassDepthBuffer->Destroy();
+		
+		m_lightPassDepthBuffer->Destroy();
 		m_geometryPassFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		bool l_return = true;
-
-		for ( auto & l_unit : m_lightPassTextures )
+		
+		for ( size_t i = 0; i < size_t( DsTexture::Count ); i++ )
 		{
-			l_unit->GetTexture()->GetImage().SetSource( m_size, PixelFormat::RGBA16F32F );
-			l_unit->Initialise();
+			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, GetTextureFormat( DsTexture( i ) ) );
+			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
 
 		if ( l_return )
 		{
-			m_geometryPassDepthBuffer->Initialise( m_size );
+			m_lightPassDepthBuffer->Initialise( m_size );
 		}
 
 		if ( l_return )
@@ -205,7 +187,10 @@ namespace Deferred
 		{
 			for ( int i = 0; i < size_t( DsTexture::Count ) && l_return; i++ )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::Colour, i, m_geometryPassTexAttachs[i], m_lightPassTextures[i]->GetType() );
+				l_return = m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
+															  , GetTextureAttachmentIndex( DsTexture( i ) )
+															  , m_geometryPassTexAttachs[i]
+															  , m_lightPassTextures[i]->GetType() );
 			}
 
 			if ( l_return )
@@ -245,7 +230,6 @@ namespace Deferred
 		m_geometryPassFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->Cleanup();
 
-
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
@@ -261,12 +245,13 @@ namespace Deferred
 
 	bool RenderTechnique::DoBeginOpaqueRendering()
 	{
+		static Colour l_colour{ Colour::from_components( 0, 0, 0, 0 ) };
 		GetEngine()->SetPerObjectLighting( false );
 		bool l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
-			m_geometryPassFrameBuffer->SetClearColour( m_scene->GetBackgroundColour() );
+			m_geometryPassFrameBuffer->SetClearColour( l_colour );
 			m_geometryPassFrameBuffer->Clear();
 		}
 
@@ -286,12 +271,12 @@ namespace Deferred
 		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 		int l_thirdHeight = int( l_height / 3.0f );
 		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_thirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
 		m_geometryPassTexAttachs[size_t( DsTexture::Tangent )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), InterpolationMode::Linear );
 
 #else
 
@@ -300,15 +285,15 @@ namespace Deferred
 			m_frameBuffer.m_frameBuffer->SetClearColour( m_scene->GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 
-			m_pipeline->Apply();
+			m_lightPassPipeline->Apply();
 
 			m_viewport.Resize( m_size );
 			m_viewport.Update();
-			m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+			m_lightPassPipeline->SetProjectionMatrix( m_viewport.GetProjection() );
 
 			if ( m_pShaderCamera )
 			{
-				m_pipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+				m_lightPassPipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
 				m_scene->GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
 				m_camera->FillShader( l_sceneBuffer );
@@ -323,7 +308,7 @@ namespace Deferred
 				m_lightPassShaderProgram->Bind();
 				m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				m_lightPassShaderProgram->Unbind();
-
+				
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Tangent )]->Unbind();
@@ -357,6 +342,11 @@ namespace Deferred
 	{
 		m_camera = nullptr;
 		m_scene = nullptr;
+	}
+
+	bool RenderTechnique::DoWriteInto (TextFile & p_file)
+	{
+		return true;
 	}
 
 	String RenderTechnique::DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
@@ -454,11 +444,6 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	bool RenderTechnique::DoWriteInto( TextFile & p_file )
-	{
-		return true;
-	}
-
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		using namespace GLSL;
@@ -500,82 +485,160 @@ namespace Deferred
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( ShaderProgram::Lights );
 		}
 
-		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
-		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
-		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormals" ) );
-		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapTangent" ) );
-		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
-		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapEmissive" ) );
+		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Position ) );
+		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Diffuse ) );
+		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Normals ) );
+		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Tangent ) );
+		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Specular ) );
+		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Emissive ) );
 
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+		auto gl_FragDepth = l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture2D( c3d_mapPosition, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture2D( c3d_mapNormals, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture2D( c3d_mapTangent, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapEmissive, l_v4Emissive.xyz() );
-			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.w() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Position.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normal.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangent.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 
-			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
-			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.x() );
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+			IF (l_writer, l_v3Normal != l_v3Tangent )
 			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-													 l_output );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture2D( c3d_mapPosition, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapEmissive, l_v4Emissive.xyz() );
+				LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.w() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Position.xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+
+				LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
+				LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.x() );
+
+				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+				{
+					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+					l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
+														 FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+														 l_output );
+				}
+				ROF;
+
+				l_begin = l_end;
+				l_end += c3d_iLightsCount.y();
+
+				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+				{
+					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+					l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
+												   FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+												   l_output );
+				}
+				ROF;
+
+				l_begin = l_end;
+				l_end += c3d_iLightsCount.z();
+
+				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+				{
+					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+					l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
+												  FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+												  l_output );
+				}
+				ROF;
+
+				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
+														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
+														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
+														l_v3MapEmissive ), 1.0 );
 			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.y();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+			ELSE
 			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-											   FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-											   l_output );
+				l_writer.Discard();
 			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.z();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-											  FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-											  l_output );
-			}
-			ROF;
-
-			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
-													l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
-													l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
-													l_v3MapEmissive ), 1.0 );
+			FI
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	String RenderTechnique::GetTextureName( DsTexture p_texture )
+	{
+		static std::array< String, size_t( DsTexture::Count ) > Values
+		{
+			{
+				cuT( "c3d_mapPosition" ),
+				cuT( "c3d_mapDiffuse" ),
+				cuT( "c3d_mapNormals" ),
+				cuT( "c3d_mapTangent" ),
+				cuT( "c3d_mapSpecular" ),
+				cuT( "c3d_mapEmissive" ),
+			}
+		};
+
+		return Values[size_t( p_texture )];
+	}
+
+	PixelFormat RenderTechnique::GetTextureFormat( DsTexture p_texture )
+	{
+		static std::array< PixelFormat, size_t( DsTexture::Count ) > Values
+		{
+			{
+				PixelFormat::RGBA16F32F,
+				PixelFormat::RGBA16F32F,
+				PixelFormat::RGBA16F32F,
+				PixelFormat::RGBA16F32F,
+				PixelFormat::RGBA16F32F,
+				PixelFormat::RGBA16F32F,
+			}
+		};
+
+		return Values[size_t( p_texture )];
+	}
+
+	AttachmentPoint RenderTechnique::GetTextureAttachmentPoint( DsTexture p_texture )
+	{
+		static std::array< AttachmentPoint, size_t( DsTexture::Count ) > Values
+		{
+			{
+				AttachmentPoint::Colour,
+				AttachmentPoint::Colour,
+				AttachmentPoint::Colour,
+				AttachmentPoint::Colour,
+				AttachmentPoint::Colour,
+				AttachmentPoint::Colour,
+			}
+		};
+
+		return Values[size_t( p_texture )];
+	}
+
+	uint32_t RenderTechnique::GetTextureAttachmentIndex( DsTexture p_texture )
+	{
+		static std::array< uint32_t, size_t( DsTexture::Count ) > Values
+		{
+			{
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+			}
+		};
+
+		return Values[size_t( p_texture )];
 	}
 }

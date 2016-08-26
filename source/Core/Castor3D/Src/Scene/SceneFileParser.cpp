@@ -289,7 +289,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 		{
 			PathArray l_files;
 
-			if ( File::ListDirectoryFiles( l_path, l_files ) )
+			if ( File::ListDirectoryFiles( l_path, l_files, true ) )
 			{
 				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
