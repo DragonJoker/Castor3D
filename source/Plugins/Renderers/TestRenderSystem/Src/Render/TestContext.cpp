@@ -15,7 +15,6 @@ namespace TestRender
 
 	TestContext::~TestContext()
 	{
-		m_pipeline.reset();
 	}
 
 	bool TestContext::DoInitialise()
