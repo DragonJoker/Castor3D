@@ -38,7 +38,7 @@ namespace Castor3D
 	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times
 	\~french
 	\brief		Classe de synchronisation des évènements
-	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)
+	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur EventType)
 	*/
 	class FrameListener
 		: public Castor::Named
@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type des évènements à traiter
 		 *\return
 		 */
-		C3D_API bool FireEvents( eEVENT_TYPE p_type );
+		C3D_API bool FireEvents( EventType p_type );
 
 	protected:
 		/**
@@ -98,7 +98,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The events arrays	\~french Les tableaux d'évènements
-		std::array< FrameEventPtrArray,	eEVENT_TYPE_COUNT > m_events;
+		std::array< FrameEventPtrArray,	size_t( EventType::Count ) > m_events;
 		//!\~english Mutex to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
 		std::recursive_mutex m_mutex;
 	};

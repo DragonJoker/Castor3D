@@ -12,7 +12,7 @@ using namespace Castor;
 namespace CastorViewer
 {
 	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_window )
-		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+		: FrameEvent( EventType::PreRender )
 		, m_window( p_window )
 	{
 	}

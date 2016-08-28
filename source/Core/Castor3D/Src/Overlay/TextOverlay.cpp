@@ -215,7 +215,7 @@ namespace Castor3D
 
 			l_fontTexture->Update();
 
-			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_fontTexture]()
+			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [l_fontTexture]()
 			{
 				l_fontTexture->Cleanup();
 				l_fontTexture->Initialise();

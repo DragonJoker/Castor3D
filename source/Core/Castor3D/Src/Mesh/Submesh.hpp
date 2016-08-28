@@ -248,11 +248,18 @@ namespace Castor3D
 		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
-		 *\brief		Recreates the Vertex and Index buffers
+		 *\brief		Recreates the buffers.
 		 *\~french
-		 *\brief		Recrée les Vertex et Index buffers
+		 *\brief		Recrée les tampons.
 		 */
 		C3D_API void ResetGpuBuffers();
+		/**
+		 *\~english
+		 *\brief		Recreates the Matrix buffers.
+		 *\~french
+		 *\brief		Recrée le tampon de matrices.
+		 */
+		C3D_API void ResetMatrixBuffers();
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
@@ -345,22 +352,26 @@ namespace Castor3D
 		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
-		 *\brief		Increments instance count
-		 *\param[in]	p_material	The material for which the instance count is incremented
+		 *\brief		Increments instance count.
+		 *\param[in]	p_material	The material for which the instance count is incremented.
+		 *\return		The previous instance count.
 		 *\~french
-		 *\brief		Incrémente le compte d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
+		 *\brief		Incrémente le compte d'instances.
+		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté.
+		 *\return		Le compte précédent.
 		 */
-		C3D_API void Ref( MaterialSPtr p_material );
+		C3D_API uint32_t Ref( MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Decrements instance count
-		 *\param[in]	p_material	The material for which the instance count is decremented
+		 *\brief		Decrements instance count.
+		 *\param[in]	p_material	The material for which the instance count is decremented.
+		 *\return		The previous instance count.
 		 *\~french
-		 *\brief		Décrémente le compte d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
+		 *\brief		Décrémente le compte d'instances.
+		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté.
+		 *\return		Le compte précédent.
 		 */
-		C3D_API void UnRef( MaterialSPtr p_material );
+		C3D_API uint32_t UnRef( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count

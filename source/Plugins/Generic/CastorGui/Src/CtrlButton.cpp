@@ -123,6 +123,11 @@ namespace CastorGui
 			SetBackgroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "Black" ) ) );
 		}
 
+		if ( !GetForegroundMaterial() )
+		{
+			SetForegroundMaterial( GetEngine()->GetMaterialCache().Find( cuT( "White" ) ) );
+		}
+
 		if ( m_textMaterial.expired() )
 		{
 			m_textMaterial = GetForegroundMaterial();

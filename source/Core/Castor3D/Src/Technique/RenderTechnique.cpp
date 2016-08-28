@@ -433,7 +433,7 @@ namespace Castor3D
 	{
 		DoTraverseNodes( p_nodes, [&p_scene, &p_camera, &p_pipeline, &p_register, this]( ShaderProgram & p_program, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
-			if ( !p_renderNodes.empty() )
+			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
 				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
@@ -617,7 +617,7 @@ namespace Castor3D
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.SWIZZLE_X, vtx_normal.SWIZZLE_Y, vtx_normal.SWIZZLE_Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4AmbientLight.SWIZZLE_XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
@@ -692,12 +692,12 @@ namespace Castor3D
 			{
 				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 				{
-					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Ambient ) )
 				{
-					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
+					l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.SWIZZLE_XY ).SWIZZLE_XYZ;
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Diffuse ) )
@@ -711,10 +711,10 @@ namespace Castor3D
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.SWIZZLE_XYZ ) +
-															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.SWIZZLE_XYZ ) +
-															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.SWIZZLE_XYZ ) +
-															   l_v3Emissive ), l_fAlpha );
+			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.SWIZZLE_XYZ ) +
+																l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.SWIZZLE_XYZ ) +
+																l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.SWIZZLE_XYZ ) +
+																l_v3Emissive ), l_fAlpha );
 		} );
 
 		return l_writer.Finalise();

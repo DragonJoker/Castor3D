@@ -191,7 +191,7 @@ namespace Castor3D
 		{
 			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_POINTS, p_program );
 
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 			} ) );

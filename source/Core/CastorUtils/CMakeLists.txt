@@ -193,20 +193,20 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )
-		# Preparing FreeImage and freetype dlls installation
-		get_filename_component( FreeTypePath ${FREETYPE_LIBRARY} PATH)
-		get_filename_component( FreeTypePath ${FreeTypePath} PATH)
-		get_filename_component( LibZipPath ${LIBZIP_LIBRARY} PATH)
-		get_filename_component( LibZipPath ${LibZipPath} PATH)
-
-		if ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
+		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
+			get_filename_component( ZLibLibPath ${ZLIB_LIBRARY} PATH )
+			set( ZLibLibPath ${ZLibLibPath}/zlib1.dll )
+			copy_dll( ${PROJECT_NAME} ${ZLibLibPath} ${ZLibLibPath} )
+		elseif ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY_DEBUG} ${ZLIB_LIBRARY_RELEASE} )
 		else ()
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 		endif ()
 
 		copy_dll( ${PROJECT_NAME} ${LIBZIP_LIBRARY} ${LIBZIP_LIBRARY} )
-		# copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
+		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
+			copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
+		endif ()
 		copy_dll( ${PROJECT_NAME} ${FreeImage_LIBRARIES} ${FreeImage_LIBRARIES} )
 	endif ()
 

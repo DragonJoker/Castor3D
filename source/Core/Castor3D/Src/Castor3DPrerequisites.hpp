@@ -318,15 +318,20 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types d'évènement de frame
 	*/
-	typedef enum eEVENT_TYPE
+	typedef enum class EventType
 		: uint8_t
 	{
-		//!\~english This kind of event happens before any render, device context is active (so be fast !!)	\~french Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		eEVENT_TYPE_PRE_RENDER,
-		//!\~english This kind of event happens after the buffer' swap	\~french Ce type d'évènement est traité après l'échange des tampons
-		eEVENT_TYPE_POST_RENDER,
-		CASTOR_ENUM_BOUNDS( eEVENT_TYPE, eEVENT_TYPE_PRE_RENDER )
-	}	eEVENT_TYPE;
+		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
+		//!\~french		Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
+		PreRender,
+		//!\~english	This kind of event happens after the render, before buffers' swap.
+		//!\~french		Ce type d'évènement est traité après le rendu, avant l'échange des tampons.
+		QueueRender,
+		//!\~english	This kind of event happens after the buffer' swap.
+		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
+		PostRender,
+		CASTOR_ENUM_CLASS_BOUNDS( PreRender )
+	}	EventType;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
@@ -572,7 +577,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( BillboardListCache );
 	DECLARE_SMART_PTR( CameraCache );
 
-	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
+	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView;
 
 	//! real array

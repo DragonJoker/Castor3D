@@ -85,7 +85,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à initialiser
 		 */
 		explicit InitialiseEvent( T & p_object )
-			: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+			: FrameEvent( EventType::PreRender )
 			, m_object( p_object )
 		{
 		}

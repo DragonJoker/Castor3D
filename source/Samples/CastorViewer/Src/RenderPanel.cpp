@@ -257,7 +257,7 @@ namespace CastorViewer
 
 		if ( m_cameraNode )
 		{
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				m_cameraNode->SetOrientation( m_qOriginalOrientation );
 				m_cameraNode->SetPosition( m_ptOriginalPosition );
@@ -271,7 +271,7 @@ namespace CastorViewer
 
 		if ( m_cameraNode )
 		{
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				Quaternion l_orientation{ m_cameraNode->GetOrientation() };
 				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
@@ -347,7 +347,7 @@ namespace CastorViewer
 		{
 			if ( l_submesh && l_geometry )
 			{
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, l_geometry, l_submesh]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry, l_submesh]()
 				{
 					l_geometry->SetMaterial( l_submesh, m_selectedSubmeshMaterialOrig );
 					l_geometry->GetScene()->SetChanged();
@@ -363,7 +363,7 @@ namespace CastorViewer
 				l_pass->SetDiffuse( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
 				l_pass->SetSpecular( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
 
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this, p_geometry, p_submesh]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, p_geometry, p_submesh]()
 				{
 					p_geometry->SetMaterial( p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();

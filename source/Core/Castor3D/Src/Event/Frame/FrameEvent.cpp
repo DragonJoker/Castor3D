@@ -2,7 +2,7 @@
 
 namespace Castor3D
 {
-	FrameEvent::FrameEvent( eEVENT_TYPE p_type )
+	FrameEvent::FrameEvent( EventType p_type )
 		:	m_type( p_type )
 	{
 	}
@@ -28,7 +28,7 @@ namespace Castor3D
 		if ( this != &p_object )
 		{
 			m_type = p_object.m_type;
-			p_object.m_type = eEVENT_TYPE_COUNT;
+			p_object.m_type = EventType::Count;
 		}
 
 		return *this;

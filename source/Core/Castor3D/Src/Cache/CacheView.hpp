@@ -40,7 +40,7 @@ namespace Castor3D
 	\brief		Vue sur un cache de ressources.
 	\remarks	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
 	*/
-	template< typename ResourceType, typename CacheType, eEVENT_TYPE EventType >
+	template< typename ResourceType, typename CacheType, EventType EventType >
 	class CacheView
 		: public Castor::Named
 	{

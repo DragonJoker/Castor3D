@@ -128,6 +128,7 @@ namespace CastorGui
 
 	void Control::SetBackgroundMaterial( MaterialSPtr p_value )
 	{
+		REQUIRE( p_value );
 		m_backgroundMaterial = p_value;
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 

@@ -390,8 +390,8 @@ namespace Castor3D
 
 			if ( l_rIntraOcularDistance > 0 )
 			{
-				l_parsingContext->pRenderTarget->SetStereo( true );
-				l_parsingContext->pRenderTarget->SetIntraOcularDistance( l_rIntraOcularDistance );
+				//l_parsingContext->pRenderTarget->SetStereo( true );
+				//l_parsingContext->pRenderTarget->SetIntraOcularDistance( l_rIntraOcularDistance );
 			}
 		}
 	}
@@ -1392,7 +1392,6 @@ namespace Castor3D
 					{
 						MaterialSPtr l_material = l_cache.Find( l_name );
 						l_parsingContext->pGeometry->SetMaterial( l_submesh, l_material );
-						l_submesh->Ref( l_material );
 					}
 				}
 				else
@@ -1443,7 +1442,6 @@ namespace Castor3D
 					SubmeshSPtr l_submesh = l_parsingContext->pGeometry->GetMesh()->GetSubmesh( l_index );
 					MaterialSPtr l_material = l_cache.Find( l_name );
 					l_parsingContext->pGeometry->SetMaterial( l_submesh, l_material );
-					l_submesh->Ref( l_material );
 				}
 				else
 				{

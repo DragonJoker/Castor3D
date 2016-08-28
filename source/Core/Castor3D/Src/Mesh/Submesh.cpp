@@ -459,7 +459,29 @@ namespace Castor3D
 	void Submesh::ResetGpuBuffers()
 	{
 		DoDestroyBuffers();
-		DoCreateBuffers();
+		DoGenerateBuffers();
+
+		if ( !m_initialised )
+		{
+			Initialise();
+		}
+	}
+
+	void Submesh::ResetMatrixBuffers()
+	{
+		if ( m_matrixBuffer )
+		{
+			m_matrixBuffer->Cleanup();
+			uint32_t l_count = 0;
+
+			for ( auto l_it : m_instanceCount )
+			{
+				l_count = std::max( l_count, l_it.second );
+			}
+
+			DoGenerateMatrixBuffer( l_count );
+			m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+		}
 	}
 
 	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
@@ -851,7 +873,7 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::Ref( MaterialSPtr p_material )
+	uint32_t Submesh::Ref( MaterialSPtr p_material )
 	{
 		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
 
@@ -861,15 +883,18 @@ namespace Castor3D
 			l_it = m_instanceCount.find( p_material );
 		}
 
-		l_it->second++;
+		return l_it->second++;
 	}
 
-	void Submesh::UnRef( MaterialSPtr p_material )
+	uint32_t Submesh::UnRef( MaterialSPtr p_material )
 	{
 		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
+		uint32_t l_return{ 0u };
 
 		if ( l_it == m_instanceCount.end() )
 		{
+			l_return = l_it->second;
+
 			if ( l_it->second )
 			{
 				l_it->second--;
@@ -880,6 +905,8 @@ namespace Castor3D
 				m_instanceCount.erase( l_it );
 			}
 		}
+
+		return l_return;
 	}
 
 	uint32_t Submesh::GetRefCount( MaterialSPtr p_material )const
@@ -926,7 +953,7 @@ namespace Castor3D
 		if ( l_it == m_geometryBuffers.end() )
 		{
 			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
 			} ) );
@@ -1114,8 +1141,8 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				m_points.clear();
-				m_pointsData.clear();
+				//m_points.clear();
+				//m_pointsData.clear();
 			}
 		}
 	}
@@ -1159,7 +1186,7 @@ namespace Castor3D
 					l_indexBuffer.SetElement( l_index++, l_face[2] );
 				}
 
-				m_faces.clear();
+				//m_faces.clear();
 			}
 		}
 	}
