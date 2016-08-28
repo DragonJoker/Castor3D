@@ -1064,7 +1064,7 @@ namespace GlRender
 		bool l_return = true;
 		uint32_t l_errorCode = GetError();
 
-		while ( l_errorCode )
+		if ( l_errorCode )
 		{
 			auto l_it = Errors.find( l_errorCode );
 			StringStream l_error;

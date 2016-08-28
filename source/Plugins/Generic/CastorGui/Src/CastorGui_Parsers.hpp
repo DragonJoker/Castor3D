@@ -95,6 +95,7 @@ namespace CastorGui
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlBorderInnerUv )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlBorderOuterUv )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlCenterUv )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ControlVisible )
 
 }
 

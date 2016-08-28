@@ -30,7 +30,7 @@ namespace Castor3D
 
 	bool UserInputListener::Initialise()
 	{
-		m_frameListener->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, std::bind( &UserInputListener::ProcessEvents, this ) ) );
+		m_frameListener->PostEvent( MakeFunctorEvent( EventType::PostRender, std::bind( &UserInputListener::ProcessEvents, this ) ) );
 		m_enabled = DoInitialise();
 		return m_enabled;
 	}
@@ -64,7 +64,7 @@ namespace Castor3D
 		if ( m_enabled )
 		{
 			// Push this method again, for next frame.
-			m_frameListener->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, std::bind( &UserInputListener::ProcessEvents, this ) ) );
+			m_frameListener->PostEvent( MakeFunctorEvent( EventType::PostRender, std::bind( &UserInputListener::ProcessEvents, this ) ) );
 		}
 	}
 

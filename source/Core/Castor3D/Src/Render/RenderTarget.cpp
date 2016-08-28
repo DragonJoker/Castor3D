@@ -71,12 +71,6 @@ namespace Castor3D
 			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget format" );
 		}
 
-		if ( l_return && p_target.IsUsingStereo() )
-		{
-			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
-			Castor::TextWriter< RenderTarget >::CheckError( l_return, "RenderTarget stereo configuration" );
-		}
-
 		if ( l_return )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttone_mapping \"" ) + p_target.m_toneMapping->GetName() + cuT( "\"" ) )
@@ -179,12 +173,9 @@ namespace Castor3D
 		, m_renderTechnique{}
 		, m_bMultisampling{ false }
 		, m_samplesCount{ 0 }
-		, m_bStereo{ false }
-		, m_rIntraOcularDistance{ 0 }
 		, m_index{ ++sm_uiCount }
 		, m_techniqueName{ cuT( "direct" ) }
-		, m_fbLeftEye{ *this }
-		, m_fbRightEye{ *this }
+		, m_frameBuffer{ *this }
 	{
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
@@ -200,8 +191,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			m_fbLeftEye.Create();
-			m_fbRightEye.Create();
+			m_frameBuffer.Create();
 
 			if ( !m_renderTechnique )
 			{
@@ -221,9 +211,8 @@ namespace Castor3D
 				}
 			}
 
-			m_fbLeftEye.Initialise( p_index, m_size );
-			m_size = m_fbLeftEye.m_colorTexture.GetTexture()->GetImage().GetDimensions();
-			m_fbRightEye.Initialise( p_index, m_size );
+			m_frameBuffer.Initialise( p_index, m_size );
+			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetImage().GetDimensions();
 			m_renderTechnique->Create();
 			uint32_t l_index = p_index;
 			m_renderTechnique->Initialise( l_index );
@@ -234,8 +223,6 @@ namespace Castor3D
 			if ( l_scene && l_camera )
 			{
 				m_renderTechnique->AddScene( *l_scene, *l_camera );
-				m_renderTechnique->AddScene( *l_scene, *m_pCameraLEye.lock() );
-				m_renderTechnique->AddScene( *l_scene, *m_pCameraREye.lock() );
 			}
 
 			for ( auto l_effect : m_postEffects )
@@ -263,11 +250,9 @@ namespace Castor3D
 			m_initialised = false;
 			GetEngine()->GetRenderTechniqueCache().Remove( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ) );
 			m_renderTechnique->Cleanup();
-			m_fbLeftEye.Cleanup();
-			m_fbRightEye.Cleanup();
+			m_frameBuffer.Cleanup();
 			m_renderTechnique->Destroy();
-			m_fbLeftEye.Destroy();
-			m_fbRightEye.Destroy();
+			m_frameBuffer.Destroy();
 			m_renderTechnique.reset();
 		}
 	}
@@ -280,23 +265,11 @@ namespace Castor3D
 		{
 			if ( m_initialised )
 			{
-				if ( m_bStereo
-					 && m_rIntraOcularDistance > 0
-					 && GetEngine()->GetRenderSystem()->GetGpuInformations().IsStereoAvailable()
-					 && GetCameraLEye()
-					 && GetCameraREye() )
-				{
-					DoRender( m_fbLeftEye, GetCameraLEye(), p_frameTime );
-					DoRender( m_fbRightEye, GetCameraREye(), p_frameTime );
-				}
-				else
-				{
-					CameraSPtr l_pCamera = GetCamera();
+				CameraSPtr l_pCamera = GetCamera();
 
-					if ( l_pCamera )
-					{
-						DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
-					}
+				if ( l_pCamera )
+				{
+					DoRender( m_frameBuffer, GetCamera(), p_frameTime );
 				}
 			}
 		}
@@ -317,75 +290,7 @@ namespace Castor3D
 
 	void RenderTarget::SetCamera( CameraSPtr p_pCamera )
 	{
-		SceneNodeSPtr l_pCamNode;
-		SceneNodeSPtr l_pLECamNode;
-		SceneNodeSPtr l_pRECamNode;
-		String l_strLENodeName;
-		String l_strRENodeName;
-		String l_strIndex = cuT( "_RT" ) + string::to_string( m_index );
-		SceneSPtr l_scene = GetScene();
-
-		if ( l_scene )
-		{
-			if ( GetCameraLEye() )
-			{
-				l_scene->GetCameraCache().Remove( GetCameraLEye()->GetName() );
-			}
-
-			if ( GetCameraREye() )
-			{
-				l_scene->GetCameraCache().Remove( GetCameraREye()->GetName() );
-			}
-		}
-
-		if ( GetCamera() )
-		{
-			l_pCamNode = GetCamera()->GetParent();
-			l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-			l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
-			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strLENodeName ) );
-			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strRENodeName ) );
-
-			if ( l_scene )
-			{
-				l_scene->GetSceneNodeCache().Remove( l_strLENodeName );
-				l_scene->GetSceneNodeCache().Remove( l_strRENodeName );
-			}
-		}
-
 		m_pCamera = p_pCamera;
-
-		if ( p_pCamera )
-		{
-			l_pCamNode = p_pCamera->GetParent();
-
-			if ( l_scene && l_pCamNode )
-			{
-				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
-				l_pLECamNode = l_scene->GetSceneNodeCache().Add( l_strLENodeName, l_scene->GetSceneNodeCache().Find( l_pCamNode->GetName() ) );
-				l_pRECamNode = l_scene->GetSceneNodeCache().Add( l_strRENodeName, l_scene->GetSceneNodeCache().Find( l_pCamNode->GetName() ) );
-				l_pLECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
-				l_pRECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
-				m_pCameraLEye = l_scene->GetCameraCache().Add( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
-				m_pCameraREye = l_scene->GetCameraCache().Add( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
-			}
-		}
-	}
-
-	void RenderTarget::SetIntraOcularDistance( real p_rIod )
-	{
-		if ( GetCameraLEye() && GetCameraREye() )
-		{
-			SceneNodeSPtr l_pLECamNode = GetCameraLEye()->GetParent();
-			SceneNodeSPtr l_pRECamNode = GetCameraREye()->GetParent();
-			l_pLECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
-			l_pRECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
-			l_pLECamNode->Translate( Point3r( -p_rIod / 2, 0, 0 ) );
-			l_pRECamNode->Translate( Point3r( p_rIod / 2, 0, 0 ) );
-		}
-
-		m_rIntraOcularDistance = p_rIod;
 	}
 
 	void RenderTarget::SetToneMappingType( String const & p_name, Parameters const & p_parameters )
@@ -395,7 +300,7 @@ namespace Castor3D
 			ToneMappingSPtr l_toneMapping;
 			std::swap( m_toneMapping, l_toneMapping );
 			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_toneMapping]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [l_toneMapping]()
 			{
 				l_toneMapping->Cleanup();
 			} ) );
@@ -419,8 +324,6 @@ namespace Castor3D
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime )
 	{
 		m_visibleObjectsCount = 0u;
-		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
-		m_pCurrentCamera = p_pCamera;
 		SceneSPtr l_scene = GetScene();
 		p_fb.m_frameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 
@@ -439,9 +342,6 @@ namespace Castor3D
 				p_fb.m_frameBuffer->Unbind();
 			}
 		}
-
-		m_pCurrentFrameBuffer.reset();
-		m_pCurrentCamera.reset();
 
 #if DEBUG_BUFFERS
 

@@ -3,6 +3,7 @@ option( CASTOR_BUILD_SAMPLE_GUICOMMON "Build GuiCommon library (needs wxWidgets 
 option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER "Build CastorViewer (needs GuiCommon library)" TRUE )
 option( CASTOR_BUILD_SAMPLE_CASTOR_SHAPE "Build CastorShape (needs GuiCommon library)" FALSE )
 option( CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING "Build Ocean Lighting FFT sample (needs wxWidgets library)" FALSE )
+option( CASTOR_BUILD_SAMPLE_CASTOR_TD "Build Castor Tower Defense (needs GuiCommon library)" FALSE )
 if ( MSVC )
 	option( CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP "Build CastorViewerSharp (needs ComCastor3D library)" FALSE )
 endif ()
@@ -13,6 +14,7 @@ function( SamplesInit )
 	set( CShape "no (Not wanted)" PARENT_SCOPE )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
 	set( Ocean "no (Not wanted)" PARENT_SCOPE )
+	set( CTd "no (Not wanted)" PARENT_SCOPE )
 	if ( MSVC )
 		set( CViewSh "no (Not wanted)" PARENT_SCOPE )
 	else ()
@@ -22,7 +24,11 @@ endfunction( SamplesInit )
 
 function( SamplesBuild )
 	if( ${CASTOR_BUILDGRP_SAMPLE} )
-		if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} OR ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} OR ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} OR ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
+		if( ${CASTOR_BUILD_SAMPLE_GUICOMMON}
+			OR ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER}
+			OR ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE}
+			OR ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING}
+			OR ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
 			if( NOT WIN32 )
 				find_package( GTK2 )
 			else()
@@ -149,10 +155,22 @@ function( SamplesBuild )
 							PARENT_SCOPE )
 						set( CShape ${Build} PARENT_SCOPE )
 					endif()
+
+					if( ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
+						set( Build ${CTd} )
+						add_subdirectory( Samples/CastorDvpTD )
+						set( CPACK_PACKAGE_EXECUTABLES
+							${CPACK_PACKAGE_EXECUTABLES}
+							CastorDvpTD "CastorDvpTD"
+							PARENT_SCOPE )
+						set( CTd ${Build} PARENT_SCOPE )
+					endif()
 				elseif ( ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} )
 					message( WARNING "You need GuiCommon to be able to build CastorShape" )
 				elseif ( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 					message( WARNING "You need GuiCommon to be able to build CastorViewer" )
+				elseif ( ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
+					message( WARNING "You need GuiCommon to be able to build CastorDvpTD" )
 				endif()
 
 				if( ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
@@ -170,11 +188,13 @@ function( SamplesBuild )
 					set( CViewer "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( CShape "no (wxWidgets libraries not found)" PARENT_SCOPE )
 					set( Ocean "no (wxWidgets libraries not found)" PARENT_SCOPE )
+					set( CTd "no (wxWidgets libraries not found)" PARENT_SCOPE )
 				else()
 					set( GuiCmn "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( CViewer "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( CShape "no (GTK2 libraries not found)" PARENT_SCOPE )
 					set( Ocean "no (GTK2 libraries not found)" PARENT_SCOPE )
+					set( CTd "no (GTK2 libraries not found)" PARENT_SCOPE )
 				endif()
 			endif()
 		endif()
@@ -221,6 +241,9 @@ function( SamplesSummary msg )
 		if( ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
 			set( msg_tmp "${msg_tmp}\n    OceanLighting       ${Ocean}" )
 		endif ()
+		if( ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
+			set( msg_tmp "${msg_tmp}\n    Castor TD           ${CTd}" )
+		endif ()
 		if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP} )
 			set( msg_tmp "${msg_tmp}\n    CastorViewerSharp   ${CViewSh}" )
 		endif ()
@@ -258,6 +281,15 @@ function( SamplesSetup )
 				cpack_add_component( CastorShape
 					DISPLAY_NAME "CastorShape"
 					DESCRIPTION "A little modeler, using Castor3D."
+					GROUP Samples
+					DEPENDS GuiCommon
+					INSTALL_TYPES Full
+				)
+			endif ()
+			if( ${CASTOR_BUILD_SAMPLE_CASTOR_TD} )
+				cpack_add_component( CastorDvpTD
+					DISPLAY_NAME "CastorDvpTD"
+					DESCRIPTION "A small Tower Defense game, using Castor3D."
 					GROUP Samples
 					DEPENDS GuiCommon
 					INSTALL_TYPES Full

@@ -85,12 +85,21 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Geometry::Geometry( String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh )
-		:	MovableObject( p_name, p_scene, eMOVABLE_TYPE_GEOMETRY, p_sn )
-		,	m_mesh( p_mesh )
-		,	m_changed( true )
-		,	m_listCreated( false )
-		,	m_visible( true )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_GEOMETRY, p_sn )
+		, m_mesh( p_mesh )
+		, m_changed( true )
+		, m_listCreated( false )
+		, m_visible( true )
 	{
+		if ( p_mesh )
+		{
+			m_strMeshName = p_mesh->GetName();
+
+			for ( auto l_submesh : *p_mesh )
+			{
+				m_submeshesMaterials[l_submesh.get()] = l_submesh->GetDefaultMaterial();
+			}
+		}
 	}
 
 	Geometry::~Geometry()
@@ -142,7 +151,7 @@ namespace Castor3D
 
 			for ( auto l_submesh : *p_mesh )
 			{
-				SetMaterial( l_submesh, l_submesh->GetDefaultMaterial() );
+				m_submeshesMaterials[l_submesh.get()] = l_submesh->GetDefaultMaterial();
 			}
 		}
 		else
@@ -161,7 +170,51 @@ namespace Castor3D
 
 			if ( l_it != l_mesh->end() )
 			{
-				m_submeshesMaterials[p_submesh.get()] = p_material;
+				auto l_pair = m_submeshesMaterials.insert( { p_submesh.get(), p_material } );
+
+				if ( !l_pair.second && l_pair.first->second.lock() != p_submesh->GetDefaultMaterial() )
+				{
+					p_submesh->UnRef( p_material );
+				}
+
+				l_pair.first->second = p_material;
+				auto l_count = p_submesh->Ref( p_material );
+
+				if ( l_count >= 1 )
+				{
+					if ( !p_submesh->HasMatrixBuffer() && l_count == 1 )
+					{
+						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
+						GetScene()->SetChanged();
+
+						if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+						{
+							p_submesh->ResetGpuBuffers();
+						}
+						else
+						{
+							GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
+							{
+								p_submesh->ResetGpuBuffers();
+							} ) );
+						}
+					}
+					else if ( p_submesh->HasMatrixBuffer() && l_count > 1 )
+					{
+						// We need to update the matrix buffers only.
+						if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+						{
+							p_submesh->ResetMatrixBuffers();
+						}
+						else
+						{
+							GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
+							{
+								p_submesh->ResetMatrixBuffers();
+							} ) );
+						}
+					}
+				}
 			}
 			else
 			{

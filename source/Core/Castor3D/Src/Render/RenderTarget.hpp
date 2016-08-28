@@ -219,15 +219,6 @@ namespace Castor3D
 		C3D_API void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
-		 *\brief		Defines the intra ocular distance
-		 *\param[in]	p_rIod	The intra ocular distance
-		 *\~french
-		 *\brief		Définit la distance inter oculaire
-		 *\param[in]	p_rIod	La distance inter oculaire
-		 */
-		C3D_API void SetIntraOcularDistance( real p_rIod );
-		/**
-		 *\~english
 		 *\brief		Sets the tone mapping implementation type.
 		 *\param[in]	p_name			The type.
 		 *\param[in]	p_parameters	The parameters.
@@ -357,30 +348,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the left eye camera
-		 *\return		The camera
-		 *\~french
-		 *\brief		Récupère la camera de l'oeil gauche
-		 *\return		La camera
-		 */
-		inline CameraSPtr GetCameraLEye()const
-		{
-			return m_pCameraLEye.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the right eye camera
-		 *\return		The camera
-		 *\~french
-		 *\brief		Récupère la camera de l'oeil droit
-		 *\return		La camera
-		 */
-		inline CameraSPtr GetCameraREye()const
-		{
-			return m_pCameraREye.lock();
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the Scene
 		 *\param[in]	p_scene	The new Scene
 		 *\~french
@@ -401,7 +368,7 @@ namespace Castor3D
 		 */
 		inline FrameBufferSPtr GetFrameBuffer()const
 		{
-			return m_pCurrentFrameBuffer.lock();
+			return m_frameBuffer.m_frameBuffer;
 		}
 		/**
 		 *\~english
@@ -413,91 +380,7 @@ namespace Castor3D
 		 */
 		inline TextureUnit const & GetTexture()const
 		{
-			return m_fbLeftEye.m_colorTexture;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the left eye frame buffer
-		 *\return		The frame buffer
-		 *\~french
-		 *\brief		Récupère le tampon d'image oeil gauche
-		 *\return		Le tampon d'image
-		 */
-		inline FrameBufferSPtr GetFrameBufferLEye()const
-		{
-			return m_fbLeftEye.m_frameBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the left eye texture
-		 *\return		The texture
-		 *\~french
-		 *\brief		Récupère la texture oeil gauche
-		 *\return		La texture
-		 */
-		inline TextureUnit const & GetTextureLEye()const
-		{
-			return m_fbLeftEye.m_colorTexture;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the right eye frame buffer
-		 *\return		The frame buffer
-		 *\~french
-		 *\brief		Récupère le tampon d'image oeil droit
-		 *\return		Le tampon d'image
-		 */
-		inline FrameBufferSPtr GetFrameBufferREye()const
-		{
-			return m_fbRightEye.m_frameBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the right eye texture
-		 *\return		The texture
-		 *\~french
-		 *\brief		Récupère la texture oeil droit
-		 *\return		La texture
-		 */
-		inline TextureUnit const & GetTextureREye()const
-		{
-			return m_fbRightEye.m_colorTexture;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		inline bool IsUsingStereo()const
-		{
-			return m_bStereo;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the stereo status
-		 *\param[in]	p_bStereo	\p true if stereo is to be used
-		 *\~french
-		 *\brief		Définit le statut d'utilisation stéréo
-		 *\param[in]	p_bStereo	\p true si le rendu stéréo est à utiliser
-		 */
-		inline void SetStereo( bool p_bStereo )
-		{
-			m_bStereo = p_bStereo;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the intra ocular distance
-		 *\return		The intra ocular distance
-		 *\~french
-		 *\brief		Récupère la distance inter oculaire
-		 *\return		La distance inter oculaire
-		 */
-		inline real GetIntraOcularDistance()const
-		{
-			return m_rIntraOcularDistance;
+			return m_frameBuffer.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -610,30 +493,9 @@ namespace Castor3D
 		//!\~english	The camera used to render the scene.
 		//!\~french		La caméra utilisée pour rendre la scène.
 		CameraWPtr m_pCamera;
-		//!\~english	The left eye camera used to render the stereo scene.
-		//!\~french		La caméra de l'oeil gauche utilisée pour rendre la scène en stéréo.
-		CameraWPtr m_pCameraLEye;
-		//!\~english	The right eye camera used to render the stereo scene.
-		//!\~french		La caméra de l'oeil droit utilisée pour rendre la scène en stéréo.
-		CameraWPtr m_pCameraREye;
-		//!\~english	Tells the window uses stereoscopic rendering.
-		//!\~french		Dit si la fenêtre utilise un rendu stéréoscopique.
-		bool m_bStereo;
-		//!\~english	Intra ocular distance used in stereoscopic rendering.
-		//!\~french		Distance inter oculaire en rendu stéréoscopique.
-		real m_rIntraOcularDistance;
-		//!\~english	Frame buffer for left/middle eye.
-		//!\~french		tampon d'image pour l'oeil gauche/milieu.
-		stFRAME_BUFFER m_fbLeftEye;
-		//!\~english	Frame buffer for right eye.
-		//!\~french		Le tampon d'image pour l'oeil droit.
-		stFRAME_BUFFER m_fbRightEye;
-		//!\~english	The currently active frame buffer (useful in stereoscopic rendering).
-		//!\~french		Le tampon d'image actuellement actif (utile en rendu stéréoscopique).
-		FrameBufferWPtr m_pCurrentFrameBuffer;
-		//!\~english	The currently active camera (useful in stereoscopic rendering).
-		//!\~french		La caméra actuellement active (utile en rendu stéréoscopique).
-		CameraWPtr m_pCurrentCamera;
+		//!\~english	Frame buffer.
+		//!\~french		tampon d'image.
+		stFRAME_BUFFER m_frameBuffer;
 		//!\~english	The target display format.
 		//!\~french		Le format des pixels de la cible.
 		Castor::PixelFormat m_pixelFormat;

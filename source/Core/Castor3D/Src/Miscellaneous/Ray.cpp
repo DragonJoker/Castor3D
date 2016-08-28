@@ -279,8 +279,6 @@ namespace Castor3D
 
 		if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
 		{
-			p_distance = -1.0f;
-
 			for ( auto l_submesh : *l_mesh )
 			{
 				l_sphere.Load( l_center, l_submesh->GetCollisionSphere().GetRadius() );

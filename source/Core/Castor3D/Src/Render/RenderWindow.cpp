@@ -187,8 +187,8 @@ namespace Castor3D
 			{
 				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
-					DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
-					DoRender( eBUFFER_BACK_RIGHT, l_target->GetTextureREye() );
+					//DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
+					//DoRender( eBUFFER_BACK_RIGHT, l_target->GetTextureREye() );
 				}
 				else
 				{
@@ -212,7 +212,7 @@ namespace Castor3D
 
 		if ( m_initialised )
 		{
-			m_wpListener.lock()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			m_wpListener.lock()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				DoUpdateSize();
 			} ) );
@@ -359,7 +359,7 @@ namespace Castor3D
 
 		if ( l_target )
 		{
-			l_return = l_target->IsUsingStereo();
+			//l_return = l_target->IsUsingStereo();
 		}
 
 		return l_return;
@@ -371,7 +371,7 @@ namespace Castor3D
 
 		if ( l_target )
 		{
-			l_target->SetStereo( p_bStereo );
+			//l_target->SetStereo( p_bStereo );
 		}
 	}
 
@@ -382,7 +382,7 @@ namespace Castor3D
 
 		if ( l_target )
 		{
-			l_return = l_target->GetIntraOcularDistance();
+			//l_return = l_target->GetIntraOcularDistance();
 		}
 
 		return l_return;
@@ -394,7 +394,7 @@ namespace Castor3D
 
 		if ( l_target )
 		{
-			l_target->SetIntraOcularDistance( p_rIao );
+			//l_target->SetIntraOcularDistance( p_rIao );
 		}
 	}
 

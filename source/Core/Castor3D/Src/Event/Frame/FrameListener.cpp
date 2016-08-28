@@ -31,14 +31,14 @@ namespace Castor3D
 	void FrameListener::PostEvent( FrameEventUPtr && p_event )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
-		m_events[p_event->GetType()].push_back( std::move( p_event ) );
+		m_events[size_t( p_event->GetType() )].push_back( std::move( p_event ) );
 	}
 
-	bool FrameListener::FireEvents( eEVENT_TYPE p_type )
+	bool FrameListener::FireEvents( EventType p_type )
 	{
 		m_mutex.lock();
 		FrameEventPtrArray l_arrayEvents;
-		std::swap( l_arrayEvents, m_events[p_type] );
+		std::swap( l_arrayEvents, m_events[size_t( p_type )] );
 		m_mutex.unlock();
 		bool l_return = true;
 

@@ -63,7 +63,7 @@ namespace GuiCommon
 
 	void TreeItemProperty::DoApplyChange( std::function< void() > p_functor )
 	{
-		m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, p_functor ) );
+		m_engine->PostEvent( MakeFunctorEvent( EventType::PreRender, p_functor ) );
 	}
 
 	void TreeItemProperty::CreateTreeItemMenu()

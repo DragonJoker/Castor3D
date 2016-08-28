@@ -6,11 +6,31 @@
 #include <wx/wx.h>
 #include <wx/windowptr.h>
 
+#include <chrono>
+#include <vector>
+
 namespace castortd
 {
 	class CastorDvpTD;
 	class MainFrame;
 	class RenderPanel;
+
+	struct Cell;
+	class Grid;
+	class Game;
+	class Tower;
+	class Enemy;
+	class Bullet;
+
+	using EnemyPtr = std::shared_ptr< Enemy >;
+	using TowerPtr = std::shared_ptr< Tower >;
+	using TowerWPtr = std::weak_ptr< Tower >;
+
+	using TowerArray = std::vector< TowerPtr >;
+	using EnemyArray = std::vector< EnemyPtr >;
+	using BulletArray = std::vector< Bullet >;
+
+	using Clock = std::chrono::high_resolution_clock;
 
 	wxString const ApplicationName = wxT( "CastorDvpTD" );
 

@@ -28,8 +28,6 @@ namespace castortd
 #endif
 
 		m_mainFrame = new MainFrame;
-		m_mainFrame->Initialise();
-		m_mainFrame->Maximize();
 
 		SetTopWindow( m_mainFrame );
 		return m_mainFrame;

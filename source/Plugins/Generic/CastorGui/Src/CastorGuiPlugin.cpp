@@ -47,6 +47,7 @@ namespace CastorGui
 			AddParser( p_parsers, p_section, cuT( "border_inner_uv" ), &Parser_ControlBorderInnerUv, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 			AddParser( p_parsers, p_section, cuT( "border_outer_uv" ), &Parser_ControlBorderOuterUv, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 			AddParser( p_parsers, p_section, cuT( "center_uv" ), &Parser_ControlCenterUv, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
+			AddParser( p_parsers, p_section, cuT( "visible" ), &Parser_ControlVisible, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 			AddParser( p_parsers, p_section, cuT( "button" ), &Parser_Button, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 			AddParser( p_parsers, p_section, cuT( "static" ), &Parser_Static, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 			AddParser( p_parsers, p_section, cuT( "slider" ), &Parser_Slider, { MakeParameter< ePARAMETER_TYPE_NAME >() } );

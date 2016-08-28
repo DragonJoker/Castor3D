@@ -335,7 +335,6 @@ namespace Castor3D
 	GeometrySPtr SceneNode::GetNearestGeometry( Ray const & p_ray, Camera const & p_camera, real & p_distance, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh )const
 	{
 		GeometrySPtr l_return = nullptr;
-		real l_distance = std::numeric_limits< real >::max();
 
 		for ( auto l_it : m_objects )
 		{
@@ -347,7 +346,9 @@ namespace Castor3D
 
 				if ( p_camera.IsVisible( l_geometry->GetMesh()->GetCollisionSphere(), l_geometry->GetParent()->GetDerivedTransformationMatrix() ) )
 				{
-					if ( ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) ) != Intersection::Out && l_distance < p_distance )
+					real l_distance = std::numeric_limits< real >::max();
+
+					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::Out && l_distance < p_distance )
 					{
 						p_distance = l_distance;
 						l_return = l_geometry;
@@ -362,6 +363,7 @@ namespace Castor3D
 
 			if ( l_child )
 			{
+				real l_distance = std::numeric_limits< real >::max();
 				auto l_geometry = l_child->GetNearestGeometry( p_ray, p_camera, l_distance, p_nearestFace, p_nearestSubmesh );
 
 				if ( l_geometry && l_distance < p_distance )

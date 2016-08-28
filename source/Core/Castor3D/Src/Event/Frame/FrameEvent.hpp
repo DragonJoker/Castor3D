@@ -35,11 +35,11 @@ namespace Castor3D
 	\version	0.1
 	\~english
 	\brief		The interface which represents a frame event.
-	\remark		Basically a frame event has a eEVENT_TYPE to know when it must be applied.
+	\remark		Basically a frame event has a EventType to know when it must be applied.
 				<br />It can be applied, so the function must be implemented by children classes
 	\~french
 	\brief		Interface représentant un évènement de frame
-	\remark		Un évènement a un eEVENT_TYPE pour savoir quand il doit être traité.
+	\remark		Un évènement a un EventType pour savoir quand il doit être traité.
 				<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
 	class FrameEvent
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type	Le type d'évènement
 		 */
-		C3D_API explicit FrameEvent( eEVENT_TYPE p_type );
+		C3D_API explicit FrameEvent( EventType p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -120,14 +120,14 @@ namespace Castor3D
 		 *\brief		Récupère le type de l'évènement
 		 *\return		Le type de l'évènement
 		 */
-		inline eEVENT_TYPE GetType()
+		inline EventType GetType()
 		{
 			return m_type;
 		}
 
 	protected:
 		//!\~english The event type	\~french Le type d'évènement
-		eEVENT_TYPE m_type;
+		EventType m_type;
 	};
 }
 

@@ -2,6 +2,7 @@
 
 #include "RenderPanel.hpp"
 #include "CastorDvpTD.hpp"
+#include "Game.hpp"
 
 #include <wx/sizer.h>
 
@@ -15,7 +16,7 @@ namespace castortd
 {
 	namespace
 	{
-		static const wxSize MainFrameSize{ 800, 600 };
+		static const wxSize MainFrameSize{ 1024, 768 };
 
 #if defined( NDEBUG )
 
@@ -27,6 +28,24 @@ namespace castortd
 
 #endif
 
+		static const bool CASTOR3D_THREADED = false;
+
+		typedef enum eID
+		{
+			eID_RENDER_TIMER,
+		}	eID;
+
+		void DoUpdate( Game & p_game )
+		{
+			if ( !wxGetApp().GetCastor()->IsCleaned() )
+			{
+				p_game.Update();
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [&p_game]()
+				{
+					DoUpdate( p_game );
+				} ) );
+			}
+		}
 	}
 
 	MainFrame::MainFrame()
@@ -37,8 +56,8 @@ namespace castortd
 
 		try
 		{
-			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize );
-
+			wxGetApp().GetCastor()->Initialise( 30, CASTOR3D_THREADED );
+			DoLoadScene();
 			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxVERTICAL } };
 			l_sizer->Add( m_panel.get(), wxSizerFlags{ 1 }.Expand() );
 			l_sizer->SetSizeHints( this );
@@ -54,15 +73,18 @@ namespace castortd
 	{
 	}
 
-	void MainFrame::Initialise()
+	void MainFrame::DoLoadScene()
 	{
-		auto l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor()
-											  , File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "scene.cscn" )
-											  , 60
-											  , true );
+		auto & l_engine = *wxGetApp().GetCastor();
+		auto l_window = GuiCommon::LoadScene( l_engine
+											  , File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
+											  , l_engine.GetRenderLoop().GetWantedFps()
+											  , l_engine.IsThreaded() );
 
 		if ( l_window )
 		{
+			m_game = std::make_unique< Game >( *l_window->GetScene() );
+			m_panel = wxMakeWindowPtr< RenderPanel >( this, MainFrameSize, *m_game );
 			m_panel->SetRenderWindow( l_window );
 
 			if ( l_window->IsInitialised() )
@@ -90,14 +112,26 @@ namespace castortd
 				throw std::runtime_error{ "Impossible d'initialiser la fenêtre de rendu." };
 			}
 
-			wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
-
 #if wxCHECK_VERSION( 2, 9, 0 )
 
 			wxSize l_size = GetClientSize();
 			SetMinClientSize( l_size );
 
 #endif
+
+			if ( CASTOR3D_THREADED )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+				{
+					DoUpdate( *m_game );
+				} ) );
+			}
+			else
+			{
+				m_timer = new wxTimer( this, eID_RENDER_TIMER );
+				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
+			}
 		}
 	}
 
@@ -105,6 +139,7 @@ namespace castortd
 		EVT_PAINT( MainFrame::OnPaint )
 		EVT_CLOSE( MainFrame::OnClose )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
+		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
 	END_EVENT_TABLE()
 
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
@@ -117,15 +152,28 @@ namespace castortd
 	{
 		Hide();
 
+		if ( m_timer )
+		{
+			m_timer->Stop();
+			delete m_timer;
+			m_timer = nullptr;
+		}
+
 		if ( m_panel )
 		{
-			m_panel->Close( true );
-			m_panel = nullptr;
+			m_panel->SetRenderWindow( nullptr );
 		}
 
 		if ( wxGetApp().GetCastor() )
 		{
 			wxGetApp().GetCastor()->Cleanup();
+		}
+
+		if ( m_panel )
+		{
+			m_panel->SetRenderWindow( nullptr );
+			m_panel->Close( true );
+			m_panel = nullptr;
 		}
 
 		DestroyChildren();
@@ -135,5 +183,22 @@ namespace castortd
 	void MainFrame::OnEraseBackground( wxEraseEvent & p_event )
 	{
 		p_event.Skip();
+	}
+
+	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
+	{
+		if ( wxGetApp().GetCastor() )
+		{
+			auto & l_castor = *wxGetApp().GetCastor();
+
+			if ( !l_castor.IsCleaned() )
+			{
+				if ( !l_castor.IsThreaded() )
+				{
+					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+					m_game->Update();
+				}
+			}
+		}
 	}
 }

@@ -14,15 +14,18 @@ namespace castortd
 		MainFrame();
 		~MainFrame();
 
-		void Initialise();
-
 	private:
+		void DoLoadScene();
+
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent  & p_event );
 		void OnClose( wxCloseEvent  & p_event );
 		void OnEraseBackground( wxEraseEvent & p_event );
+		void OnRenderTimer( wxTimerEvent & p_event );
 
 	private:
 		wxWindowPtr< RenderPanel > m_panel;
+		std::unique_ptr< Game > m_game;
+		wxTimer * m_timer{ nullptr };
 	};
 }

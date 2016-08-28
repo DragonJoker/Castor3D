@@ -33,7 +33,7 @@ namespace Castor3D
 
 	namespace
 	{
-		template< typename ResourceType, eEVENT_TYPE EventType, typename CacheType >
+		template< typename ResourceType, EventType EventType, typename CacheType >
 		std::unique_ptr< CacheView< ResourceType, CacheType, EventType > > MakeCacheView( Castor::String const & p_name, CacheType & p_cache )
 		{
 			return std::make_unique< CacheView< ResourceType, CacheType, EventType > >( p_name, p_cache );
@@ -43,7 +43,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Overlay, OverlayCache, eEVENT_TYPE_PRE_RENDER >::Clear()
+	inline void CacheView< Overlay, OverlayCache, EventType::PreRender >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
@@ -59,7 +59,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Font, FontCache, eEVENT_TYPE_PRE_RENDER >::Clear()
+	inline void CacheView< Font, FontCache, EventType::PreRender >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
@@ -474,10 +474,10 @@ namespace Castor3D
 															, l_eventClean
 															, l_mergeResource );
 
-		m_materialCacheView = MakeCacheView< Material, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetMaterialCache() );
-		m_samplerCacheView = MakeCacheView< Sampler, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetSamplerCache() );
-		m_overlayCacheView = MakeCacheView< Overlay, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetOverlayCache() );
-		m_fontCacheView = MakeCacheView< Font, eEVENT_TYPE_PRE_RENDER >( GetName(), GetEngine()->GetFontCache() );
+		m_materialCacheView = MakeCacheView< Material, EventType::PreRender >( GetName(), GetEngine()->GetMaterialCache() );
+		m_samplerCacheView = MakeCacheView< Sampler, EventType::PreRender >( GetName(), GetEngine()->GetSamplerCache() );
+		m_overlayCacheView = MakeCacheView< Overlay, EventType::PreRender >( GetName(), GetEngine()->GetOverlayCache() );
+		m_fontCacheView = MakeCacheView< Font, EventType::PreRender >( GetName(), GetEngine()->GetFontCache() );
 
 		auto l_notify = [this]()
 		{
@@ -562,7 +562,7 @@ namespace Castor3D
 
 		if ( m_backgroundImage )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				m_backgroundImage->Cleanup();
 				m_backgroundImage->Destroy();
@@ -571,7 +571,7 @@ namespace Castor3D
 
 		if ( m_skybox )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				m_skybox->Cleanup();
 			} ) );
@@ -618,7 +618,7 @@ namespace Castor3D
 			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
 			l_texture->GetImage().SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				m_backgroundImage->Create();
 				m_backgroundImage->Initialise();
@@ -639,7 +639,7 @@ namespace Castor3D
 	bool Scene::SetForeground( SkyboxSPtr p_skybox )
 	{
 		m_skybox = p_skybox;
-		GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_skybox]()
+		GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [p_skybox]()
 		{
 			p_skybox->Initialise();
 		} ) );

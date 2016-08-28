@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Le type d'évènement
 		 *\param[in]	p_functor	Le foncteur à exécuter
 		 */
-		inline FunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
+		inline FunctorEvent( EventType p_type, Functor p_functor )
 			: FrameEvent( p_type )
 			, m_functor( p_functor )
 		{
@@ -122,7 +122,7 @@ namespace Castor3D
 	 *\param[in]	p_functor	Le foncteur à exécuter
 	 */
 	template< typename Functor >
-	inline std::unique_ptr< FunctorEvent< Functor > > MakeFunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
+	inline std::unique_ptr< FunctorEvent< Functor > > MakeFunctorEvent( EventType p_type, Functor p_functor )
 	{
 		return std::make_unique< FunctorEvent< Functor > >( p_type, p_functor );
 	}

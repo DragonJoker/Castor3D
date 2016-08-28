@@ -207,8 +207,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetTextMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetTextMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -226,8 +234,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetHighlightedBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetHighlightedBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -245,8 +261,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetHighlightedForegroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetHighlightedForegroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -264,8 +288,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetHighlightedTextMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetHighlightedTextMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -283,8 +315,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetPushedBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetPushedBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -302,8 +342,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetPushedForegroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetPushedForegroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -321,8 +369,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_button->SetPushedTextMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_button->SetPushedTextMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -391,8 +447,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_combo->SetSelectedItemBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_combo->SetSelectedItemBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -410,8 +474,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_combo->SetSelectedItemForegroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_combo->SetSelectedItemForegroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -429,8 +501,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_combo->SetHighlightedItemBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_combo->SetHighlightedItemBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -568,8 +648,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_listbox->SetSelectedItemBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_listbox->SetSelectedItemBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -587,8 +675,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_listbox->SetHighlightedItemBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_listbox->SetHighlightedItemBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -606,8 +702,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_listbox->SetSelectedItemForegroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_listbox->SetSelectedItemForegroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -753,8 +857,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_control->SetBackgroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_control->SetBackgroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -772,8 +884,16 @@ namespace CastorGui
 		{
 			String l_name;
 			p_params[0]->Get( l_name );
-			auto & l_cache = l_context.m_engine->GetMaterialCache();
-			l_control->SetForegroundMaterial( l_cache.Find( l_name ) );
+			auto l_material = l_context.m_engine->GetMaterialCache().Find( l_name );
+
+			if ( l_material )
+			{
+				l_control->SetForegroundMaterial( l_material );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "Material not found: [" + l_name + "]." ) );
+			}
 		}
 		else
 		{
@@ -828,6 +948,24 @@ namespace CastorGui
 			Point4d l_value;
 			p_params[0]->Get( l_value );
 			l_control->GetBackground()->SetUV( l_value );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No control initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ControlVisible )
+	{
+		ParserContext & l_context = GetParserContext( p_context );
+		ControlRPtr l_control = l_context.GetTop();
+
+		if ( l_control )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_control->SetVisible( l_value );
 		}
 		else
 		{
