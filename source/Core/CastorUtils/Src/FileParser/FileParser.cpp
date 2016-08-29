@@ -61,8 +61,14 @@ namespace Castor
 			bool l_bCommented = false;
 			Logger::LogInfo( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 			DoInitialiseParser( p_file );
-			m_context->m_sections.push_back( m_rootSectionId );
-			m_context->m_line = 0;
+			auto l_save = 0ull;
+
+			if ( m_context->m_sections.empty() )
+			{
+				m_context->m_sections.push_back( m_rootSectionId );
+			}
+
+			std::swap( m_context->m_line, l_save );
 			bool l_bReuse = false;
 			String l_strLine;
 			String l_strLine2;
@@ -203,7 +209,15 @@ namespace Castor
 
 			if ( m_context->m_sections.empty() || m_context->m_sections.back() != m_rootSectionId )
 			{
-				ParseError( cuT( "Unexpected end of file" ) );
+				if ( m_context.use_count() == 1 )
+				{
+					ParseError( cuT( "Unexpected end of file" ) );
+				}
+				else
+				{
+					DoValidate();
+					l_return = true;
+				}
 			}
 			else
 			{
@@ -212,6 +226,7 @@ namespace Castor
 			}
 
 			Logger::LogInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
+			std::swap( m_context->m_line, l_save );
 		}
 
 		DoCleanupParser();

@@ -27,6 +27,7 @@
 /source/Core/Castor3D/Test/Data/Sampler
 /source/Core/Castor3D/Test/Data/Skybox
 /source/Core/Castor3D/Test/Data/Texturing
+/source/Samples/CastorDvpTD/Data/Data
 /.gitattributes
 *.csproj
 *.user

@@ -17,18 +17,7 @@ namespace castortd
 	namespace
 	{
 		static const wxSize MainFrameSize{ 1024, 768 };
-
-#if defined( NDEBUG )
-
-		static const ELogType ELogType_DEFAULT = ELogType_INFO;
-
-#else
-
-		static const ELogType ELogType_DEFAULT = ELogType_DEBUG;
-
-#endif
-
-		static const bool CASTOR3D_THREADED = false;
+		static const bool CASTOR3D_THREADED = true;
 
 		typedef enum eID
 		{
@@ -56,7 +45,7 @@ namespace castortd
 
 		try
 		{
-			wxGetApp().GetCastor()->Initialise( 30, CASTOR3D_THREADED );
+			wxGetApp().GetCastor()->Initialise( 120, CASTOR3D_THREADED );
 			DoLoadScene();
 			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxVERTICAL } };
 			l_sizer->Add( m_panel.get(), wxSizerFlags{ 1 }.Expand() );
@@ -130,7 +119,7 @@ namespace castortd
 			else
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
+				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps(), true );
 			}
 		}
 	}
@@ -197,6 +186,7 @@ namespace castortd
 				{
 					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 					m_game->Update();
+					m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps(), true );
 				}
 			}
 		}

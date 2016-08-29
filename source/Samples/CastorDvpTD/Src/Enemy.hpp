@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Ability.hpp"
 #include "Grid.hpp"
 
 namespace castortd
@@ -9,10 +10,16 @@ namespace castortd
 	public:
 		struct Category
 		{
+			inline void Upgrade()
+			{
+				m_life.Upgrade();
+				m_bounty.Upgrade();
+			}
+
 			float m_speed;
-			uint32_t m_life;
 			bool m_flying;
-			uint32_t m_bounty;
+			Ability< uint32_t > m_life;
+			Ability< uint32_t > m_bounty;
 		};
 
 		enum class State
@@ -28,9 +35,9 @@ namespace castortd
 		Enemy( Castor3D::SceneNode & p_node, Game const & p_game, Path const & p_path, Category const & p_category );
 		~Enemy();
 
-		void Load( Game const & p_game, Category const & p_category );
+		void Load( Game const & p_game );
 
-		bool Walk( Game const & p_game, std::chrono::milliseconds const & p_elapsed );
+		bool Accept( Game const & p_game );
 
 		inline void TakeDamage( uint32_t p_damage )
 		{
@@ -63,7 +70,7 @@ namespace castortd
 
 		inline uint32_t GetBounty()const
 		{
-			return m_category.get().m_bounty;
+			return m_category.get().m_bounty.GetValue();
 		}
 
 		inline Castor3D::SceneNode & GetNode()

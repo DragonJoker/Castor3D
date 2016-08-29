@@ -53,35 +53,30 @@ namespace castortd
 
 	Game::Game( Scene & p_scene )
 		: m_scene{ p_scene }
+		, m_hud{ *this, p_scene }
 		, m_path
-	{
-		{ 19,  1 },
-		{ 19,  3 },
-		{ 11,  3 },
-		{ 11,  7 },
-		{ 23,  7 },
-		{ 23, 11 },
-		{ 13, 11 },
-		{ 13, 15 },
-		{ 25, 15 },
-		{ 25, 19 },
-		{ 15, 19 },
-		{ 15, 23 },
-		{ 17, 23 },
-		{ 17, 27 },
-	}
-	, m_enemyCategories
-	{
-		{ 24.0, 20, false }
-	}
-		, m_hud{ *this }
+		{
+			{ 19,  1 },
+			{ 19,  3 },
+			{ 11,  3 },
+			{ 11,  7 },
+			{ 23,  7 },
+			{ 23, 11 },
+			{ 13, 11 },
+			{ 13, 15 },
+			{ 25, 15 },
+			{ 25, 19 },
+			{ 15, 19 },
+			{ 15, 23 },
+			{ 17, 23 },
+			{ 17, 27 },
+		}
 	{
 		m_mapNode = m_scene.GetSceneNodeCache().Find( cuT( "MapBase" ) );
 		m_mapCubeMesh = m_scene.GetMeshCache().Find( cuT( "MapCube" ) );
 		m_mapCubeMaterial = m_scene.GetMaterialView().Find( cuT( "MapCube" ) );
 		m_mapCubeShadowMaterial = m_scene.GetMaterialView().Find( cuT( "MapCubeShadow" ) );
 		m_towerCubeMesh = m_scene.GetMeshCache().Find( cuT( "TowerCube" ) );
-		m_towerCubeMaterial = m_scene.GetMaterialView().Find( cuT( "TowerCube" ) );
 		m_enemyCubeMesh = m_scene.GetMeshCache().Find( cuT( "EnemyCube" ) );
 		m_enemyCubeMaterial = m_scene.GetMaterialView().Find( cuT( "EnemyCube" ) );
 		m_bulletMesh = m_scene.GetMeshCache().Find( cuT( "Bullet" ) );
@@ -92,10 +87,59 @@ namespace castortd
 		m_cellDimensions[2] = m_mapCubeMesh->GetCollisionBox().GetMax()[2] - m_mapCubeMesh->GetCollisionBox().GetMin()[2];
 
 		m_hud.Initialise();
+		Reset();
 	}
 
 	Game::~Game()
 	{
+	}
+
+	void Game::Reset()
+	{
+		Grid l_grid;
+		std::swap( m_grid, l_grid );
+
+		m_totalBullets = 0ull;
+
+#if defined( NDEBUG )
+		m_lives = 5u;
+#else
+		m_lives = 1u;
+#endif
+		m_ore = 750u;
+		m_kills = 0u;
+		m_selectedTower.reset();
+		m_paused = false;
+		m_ended = false;
+
+		for ( auto & l_bullet : m_bullets )
+		{
+			l_bullet.GetNode().SetPosition( Point3r{ 0, -10, 0 } );
+			m_bulletsCache.push_back( l_bullet );
+		}
+
+		m_bullets.clear();
+
+		for ( auto & l_enemy : m_enemies )
+		{
+			l_enemy->GetNode().SetPosition( Point3r{ 0, -10, 0 } );
+			m_spawner.KillEnemy( std::move( l_enemy ) );
+		}
+
+		m_enemies.clear();
+
+		for ( auto & l_tower : m_towers )
+		{
+			l_tower->GetNode().SetPosition( Point3r{ 0, -10, 0 } );
+			//auto l_node = l_tower->GetNode().GetChilds().begin()->second.lock();
+			//m_scene.GetGeometryCache().Remove( l_node->GetName() );
+			//m_scene.GetSceneNodeCache().Remove( l_node->GetName() );
+			//m_scene.GetSceneNodeCache().Remove( l_tower->GetNode().GetName() );
+		}
+
+		m_towers.clear();
+
+		m_spawner.Reset();
 	}
 
 	void Game::Start()
@@ -114,26 +158,41 @@ namespace castortd
 		DoAddTarget( GetCell( l_node.m_x, l_node.m_y ) );
 
 		m_started = true;
-		m_lives = 5u;
-		m_ore = 750u;
-		m_kills = 0;
-		m_spawner.Reset();
 		m_hud.Start();
 		m_saved = Clock::now();
 	}
 
+	void Game::Pause()
+	{
+		m_paused = true;
+		m_hud.Pause();
+	}
+
+	void Game::Resume()
+	{
+		m_paused = false;
+		m_hud.Resume();
+		m_saved = Clock::now();
+	}
+
+	void Game::Help()
+	{
+		m_paused = true;
+		m_hud.Help();
+	}
+
 	void Game::Update()
 	{
-		if ( m_started )
+		if ( m_started && !m_paused )
 		{
 #if !defined( NDEBUG )
-			auto const l_elapsed = std::chrono::milliseconds{ 40 };
+			m_elapsed = std::chrono::milliseconds{ 40 };
 #else
-			auto const l_elapsed = std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - m_saved );
+			m_elapsed = std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - m_saved );
 #endif 
-			DoUpdateBullets( l_elapsed );
-			DoUpdateTowers( l_elapsed );
-			DoUpdateEnemies( l_elapsed );
+			DoUpdateBullets();
+			DoUpdateTowers();
+			DoUpdateEnemies();
 			m_hud.Update();
 			m_saved = Clock::now();
 		}
@@ -190,24 +249,19 @@ namespace castortd
 		return l_dummy;
 	}
 
-	bool Game::CanBuildTower()
-	{
-		return CanAfford( m_towerPrice );
-	}
-
-	bool Game::BuildTower( Castor::Point3r const & p_position )
+	bool Game::BuildTower( Castor::Point3r const & p_position, Tower::CategoryPtr && p_category )
 	{
 		bool l_return = false;
 
-		if ( CanBuildTower() )
+		if ( CanAfford( p_category->GetTowerCost() ) )
 		{
 			Cell & l_cell = GetCell( p_position );
 
 			if ( l_cell.m_state == Cell::State::Empty )
 			{
 				l_cell.m_state = Cell::State::Tower;
-				DoAddTower( l_cell );
-				Spend( m_towerPrice );
+				Spend( p_category->GetTowerCost() );
+				DoAddTower( l_cell, std::move( p_category ) );
 				l_return = true;
 			}
 		}
@@ -228,7 +282,7 @@ namespace castortd
 						, p_position[2] / m_cellDimensions[2] + m_grid.GetHeight() / 2 );
 	}
 
-	void Game::EmitBullet( uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_target )
+	void Game::EmitBullet( float p_speed, uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_target )
 	{
 		if ( m_bulletsCache.empty() )
 		{
@@ -243,12 +297,12 @@ namespace castortd
 				l_geometry->SetMaterial( l_submesh, m_bulletMaterial );
 			}
 
-			m_bullets.emplace_back( p_damage, *l_node, p_target );
+			m_bullets.emplace_back( p_speed, p_damage, *l_node, p_target );
 		}
 		else
 		{
 			auto l_bullet = *m_bulletsCache.begin();
-			l_bullet.Load( p_damage, p_origin, p_target );
+			l_bullet.Load( p_speed, p_damage, p_origin, p_target );
 			m_bullets.insert( m_bullets.end(), l_bullet );
 			m_bulletsCache.erase( m_bulletsCache.begin() );
 		}
@@ -273,7 +327,7 @@ namespace castortd
 
 	void Game::LoseLife( uint32_t p_value )
 	{
-		if ( m_lives >= p_value )
+		if ( m_lives > p_value )
 		{
 			m_lives -= p_value;
 		}
@@ -310,8 +364,8 @@ namespace castortd
 	{
 		if ( CanAfford( p_tower.GetSpeedUpgradeCost() ) )
 		{
-			p_tower.UpgradeSpeed();
 			Spend( p_tower.GetSpeedUpgradeCost() );
+			p_tower.UpgradeSpeed();
 		}
 	}
 
@@ -319,8 +373,8 @@ namespace castortd
 	{
 		if ( CanAfford( p_tower.GetRangeUpgradeCost() ) )
 		{
-			p_tower.UpgradeRange();
 			Spend( p_tower.GetRangeUpgradeCost() );
+			p_tower.UpgradeRange();
 		}
 	}
 
@@ -328,8 +382,8 @@ namespace castortd
 	{
 		if ( CanAfford( p_tower.GetDamageUpgradeCost() ) )
 		{
-			p_tower.UpgradeDamage();
 			Spend( p_tower.GetDamageUpgradeCost() );
+			p_tower.UpgradeDamage();
 		}
 	}
 
@@ -338,33 +392,19 @@ namespace castortd
 		return m_ore >= p_price;
 	}
 
-	void Game::DoUpdateTowers( std::chrono::milliseconds const & p_elapsed )
+	void Game::DoUpdateTowers()
 	{
-		Angle const l_angle{ Angle::from_degrees( p_elapsed.count() * 60 / 1000.0_r ) };
-
 		for ( auto & l_tower : m_towers )
 		{
-			l_tower->Update( p_elapsed, m_enemies );
-
-			switch ( l_tower->GetState() )
-			{
-			case Tower::State::Idle:
-				l_tower->GetNode().Yaw( l_angle );
-				break;
-
-			case Tower::State::Spotted:
-				if ( l_tower->CanShoot() )
-				{
-					l_tower->Shoot( *this );
-				}
-			}
+			l_tower->Accept( *this );
 		}
 	}
 
-	void Game::DoUpdateEnemies( std::chrono::milliseconds const & p_elapsed )
+	void Game::DoUpdateEnemies()
 	{
-		if ( m_enemies.empty() )
+		if ( m_enemies.empty() && m_spawner.IsWaveEnded() )
 		{
+			Gain( m_spawner.GetWave() * 2 );
 #if !defined( NDEBUG )
 			m_spawner.StartWave( 2u );
 #else
@@ -372,12 +412,12 @@ namespace castortd
 #endif
 		}
 
-		if ( m_spawner.CanSpawn( p_elapsed ) )
+		if ( m_spawner.CanSpawn( m_elapsed ) )
 		{
 			m_enemies.push_back( m_spawner.Spawn( *this, m_path ) );
 		}
 
-		Angle const l_angle{ Angle::from_degrees( -p_elapsed.count() * 120 / 1000.0_r ) };
+		Angle const l_angle{ Angle::from_degrees( -m_elapsed.count() * 120 / 1000.0_r ) };
 		auto l_it = m_enemies.begin();
 
 		while ( l_it != m_enemies.end() )
@@ -390,10 +430,10 @@ namespace castortd
 				{
 					l_enemy->GetNode().Yaw( l_angle );
 
-					if ( l_enemy->Walk( *this, p_elapsed ) )
+					if ( l_enemy->Accept( *this ) )
 					{
 						LoseLife( 1u );
-						m_enemiesCache.push_back( l_enemy );
+						m_spawner.KillEnemy( std::move( l_enemy ) );
 						l_it = m_enemies.erase( l_it );
 					}
 					else
@@ -411,7 +451,7 @@ namespace castortd
 			{
 				l_enemy->Die();
 				Gain( l_enemy->GetBounty() );
-				m_enemiesCache.push_back( l_enemy );
+				m_spawner.KillEnemy( std::move( l_enemy ) );
 				l_it = m_enemies.erase( l_it );
 				++m_kills;
 			}
@@ -423,13 +463,13 @@ namespace castortd
 		}
 	}
 
-	void Game::DoUpdateBullets( std::chrono::milliseconds const & p_elapsed )
+	void Game::DoUpdateBullets()
 	{
 		auto l_it = m_bullets.begin();
 
 		while ( l_it != m_bullets.end() )
 		{
-			if ( l_it->Move( p_elapsed ) )
+			if ( l_it->Accept( *this ) )
 			{
 				m_bulletsCache.push_back( *l_it );
 				l_it = m_bullets.erase( l_it );
@@ -497,7 +537,7 @@ namespace castortd
 		p_cell.m_state = Cell::State::Target;
 	}
 
-	void Game::DoAddTower( Cell & p_cell )
+	void Game::DoAddTower( Cell & p_cell, Tower::CategoryPtr && p_category )
 	{
 		String l_name = cuT( "TowerCube_" ) + std::to_string( p_cell.m_x ) + cuT( "x" ) + std::to_string( p_cell.m_y );
 		auto l_baseNode = m_scene.GetSceneNodeCache().Add( l_name + cuT( "_Base" ) );
@@ -508,19 +548,21 @@ namespace castortd
 		l_node->AttachTo( l_baseNode );
 
 		auto l_geometry = m_scene.GetGeometryCache().Add( l_name, l_node, m_towerCubeMesh );
+		auto l_material = m_scene.GetMaterialView().Find( p_category->GetMaterialName() );
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
-			l_geometry->SetMaterial( l_submesh, m_towerCubeMaterial );
+			l_geometry->SetMaterial( l_submesh, l_material );
 		}
 
-		m_towers.push_back( std::make_shared< Tower >( *l_baseNode, p_cell ) );
+		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *l_baseNode, p_cell ) );
 		p_cell.m_state = Cell::State::Tower;
 	}
 
 	void Game::DoGameOver()
 	{
 		m_started = false;
+		m_ended = true;
 		m_hud.GameOver();
 	}
 }

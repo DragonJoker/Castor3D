@@ -366,7 +366,7 @@ namespace Castor3D
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
 		FontSPtr l_font = l_fontTexture->GetFont();
-		StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 ) );
+		StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 ), true );
 		DisplayableLineArray l_return;
 		DisplayableLine l_line;
 
@@ -510,10 +510,17 @@ namespace Castor3D
 				   || p_char.m_position[0] + p_char.m_size[0] < 0;
 		} );
 
-		p_line.m_characters.erase( l_removed, p_line.m_characters.end() );
-
-		// Add the line to the lines array.
 		if ( !p_line.m_characters.empty() )
+		{
+			p_line.m_characters.erase( l_removed, p_line.m_characters.end() );
+
+			// Add the line to the lines array.
+			if ( !p_line.m_characters.empty() )
+			{
+				p_lines.push_back( p_line );
+			}
+		}
+		else
 		{
 			p_lines.push_back( p_line );
 		}

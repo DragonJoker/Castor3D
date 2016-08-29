@@ -703,6 +703,24 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneInclude )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			Path l_path;
+			p_params[0]->Get( l_path );
+			SceneFileParser l_parser{ *l_parsingContext->m_pParser->GetEngine() };
+			l_parser.ParseFile( l_parsingContext->m_file->GetFilePath() / l_path, l_parsingContext );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -3437,6 +3455,7 @@ namespace Castor3D
 
 		if ( l_overlay && l_overlay->GetType() == eOVERLAY_TYPE_TEXT )
 		{
+			string::replace( l_strParams, cuT( "\\n" ), cuT( "\n" ) );
 			l_overlay->GetTextOverlay()->SetCaption( l_strParams );
 		}
 		else

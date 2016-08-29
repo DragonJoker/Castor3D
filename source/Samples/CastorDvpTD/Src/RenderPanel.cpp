@@ -1,4 +1,4 @@
-﻿#include "RenderPanel.hpp"
+#include "RenderPanel.hpp"
 
 #include "CastorDvpTD.hpp"
 #include "TranslateNodeEvent.hpp"
@@ -25,10 +25,11 @@ namespace castortd
 	{
 		typedef enum eMENU_ID
 		{
-			eMENU_ID_NEW_TOWER = 1,
-			eMENU_ID_UPGRADE_SPEED = 2,
-			eMENU_ID_UPGRADE_RANGE = 3,
-			eMENU_ID_UPGRADE_DAMAGE = 4,
+			eMENU_ID_NEW_LR_TOWER = 1,
+			eMENU_ID_NEW_SR_TOWER,
+			eMENU_ID_UPGRADE_SPEED,
+			eMENU_ID_UPGRADE_RANGE,
+			eMENU_ID_UPGRADE_DAMAGE,
 		}	eMENU_ID;
 
 		static const real MAX_CAM_SPEED = 10.0_r;
@@ -194,7 +195,10 @@ namespace castortd
 
 	void RenderPanel::DoStartTimer( int p_iId )
 	{
-		m_timer[p_iId]->Start( 10 );
+		if ( m_game.IsRunning() )
+		{
+			m_timer[p_iId]->Start( 10 );
+		}
 	}
 
 	void RenderPanel::DoStopTimer( int p_iId )
@@ -351,6 +355,39 @@ namespace castortd
 		}
 	}
 
+	void RenderPanel::DoUpgradeTowerDamage()
+	{
+		if ( m_game.IsRunning() && m_selectedTower && m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) )
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+			{
+				m_game.UpgradeTowerDamage( *m_selectedTower );
+			} ) );
+		}
+	}
+
+	void RenderPanel::DoUpgradeTowerSpeed()
+	{
+		if ( m_game.IsRunning() && m_selectedTower && m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) )
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+			{
+				m_game.UpgradeTowerSpeed( *m_selectedTower );
+			} ) );
+		}
+	}
+
+	void RenderPanel::DoUpgradeTowerRange()
+	{
+		if ( m_game.IsRunning() && m_selectedTower && m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) )
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+			{
+				m_game.UpgradeTowerRange( *m_selectedTower );
+			} ) );
+		}
+	}
+
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::OnTimerFwd )
 		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::OnTimerBck )
@@ -370,13 +407,14 @@ namespace castortd
 		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
 		EVT_MOTION( RenderPanel::OnMouseMove )
 		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
-		EVT_MENU( eMENU_ID_NEW_TOWER, RenderPanel::OnNewTower )
+		EVT_MENU( eMENU_ID_NEW_LR_TOWER, RenderPanel::OnNewLongRangeTower )
+		EVT_MENU( eMENU_ID_NEW_SR_TOWER, RenderPanel::OnNewShortRangeTower )
 		EVT_MENU( eMENU_ID_UPGRADE_SPEED, RenderPanel::OnUpgradeTowerSpeed )
 		EVT_MENU( eMENU_ID_UPGRADE_RANGE, RenderPanel::OnUpgradeTowerRange )
 		EVT_MENU( eMENU_ID_UPGRADE_DAMAGE, RenderPanel::OnUpgradeTowerDamage )
-		END_EVENT_TABLE()
+	END_EVENT_TABLE()
 
-		void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
+	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
 		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_node, 0.0_r, 0.0_r, -m_camSpeed ) );
 		p_event.Skip();
@@ -514,11 +552,64 @@ namespace castortd
 				DoStopTimer( eTIMER_ID_BACK );
 				break;
 
-			case WXK_RETURN:
-				if ( !m_game.IsStarted() )
+			case WXK_NUMPAD1:
+			case '&':
+			case '1':
+				DoUpgradeTowerDamage();
+				break;
+
+			case WXK_NUMPAD2:
+			case '�':
+			case '2':
+				DoUpgradeTowerRange();
+				break;
+
+			case WXK_NUMPAD3:
+			case '\"':
+			case '3':
+				DoUpgradeTowerSpeed();
+				break;
+
+			case WXK_F1:
+				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
 				{
-					m_game.Start();
-				}
+					if ( m_game.IsRunning() )
+					{
+						m_game.Help();
+					}
+				} ) );
+				break;
+
+			case WXK_RETURN:
+				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+				{
+					if ( m_game.IsEnded() )
+					{
+						m_game.Reset();
+						m_game.Start();
+					}
+					else if ( !m_game.IsStarted() )
+					{
+						m_game.Start();
+					}
+				} ) );
+				break;
+
+			case WXK_SPACE:
+				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+				{
+					if ( m_game.IsStarted() )
+					{
+						if ( m_game.IsPaused() )
+						{
+							m_game.Resume();
+						}
+						else
+						{
+							m_game.Pause();
+						}
+					}
+				} ) );
 				break;
 			}
 		}
@@ -575,7 +666,7 @@ namespace castortd
 			{
 				SetCursor( *m_cursorArrow );
 
-				if ( m_game.IsStarted() )
+				if ( m_game.IsRunning() )
 				{
 					Camera const & l_camera = *l_window->GetCamera();
 					SubmeshSPtr l_submesh;
@@ -591,7 +682,10 @@ namespace castortd
 						l_geometry.reset();
 					}
 
-					DoUpdateSelectedGeometry( l_geometry );
+					m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry]()
+					{
+						DoUpdateSelectedGeometry( l_geometry );
+					} ) );
 				}
 			}
 		}
@@ -653,22 +747,52 @@ namespace castortd
 			{
 				SetCursor( *m_cursorArrow );
 
-				if ( m_selectedTower )
+				if ( m_game.IsRunning() && m_selectedTower )
 				{
 					wxMenu l_menu;
-					l_menu.Append( eMENU_ID_UPGRADE_SPEED, wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
-					l_menu.Append( eMENU_ID_UPGRADE_RANGE, wxString{ wxT( "Augmenter portée (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
-					l_menu.Append( eMENU_ID_UPGRADE_DAMAGE, wxString{ wxT( "Augmenter dégâts (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_SPEED, m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_RANGE, m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
-					l_menu.Enable( eMENU_ID_UPGRADE_DAMAGE, m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
+
+					if ( m_selectedTower->CanUpgradeSpeed() )
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_SPEED, wxString{ wxT( "Augmenter vitesse (" ) } << m_selectedTower->GetSpeedUpgradeCost() << wxT( ")" ) );
+						l_menu.Enable( eMENU_ID_UPGRADE_SPEED, m_game.CanAfford( m_selectedTower->GetSpeedUpgradeCost() ) );
+					}
+					else
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_SPEED, wxString{ wxT( "Augmenter vitesse (Max)" ) } );
+						l_menu.Enable( eMENU_ID_UPGRADE_SPEED, false );
+					}
+
+					if ( m_selectedTower->CanUpgradeRange() )
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_RANGE, wxString{ wxT( "Augmenter portee (" ) } << m_selectedTower->GetRangeUpgradeCost() << wxT( ")" ) );
+						l_menu.Enable( eMENU_ID_UPGRADE_RANGE, m_game.CanAfford( m_selectedTower->GetRangeUpgradeCost() ) );
+					}
+					else
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_RANGE, wxString{ wxT( "Augmenter portee (Max)" ) } );
+						l_menu.Enable( eMENU_ID_UPGRADE_RANGE, false );
+					}
+
+					if ( m_selectedTower->CanUpgradeDamage() )
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_DAMAGE, wxString{ wxT( "Augmenter degats (" ) } << m_selectedTower->GetDamageUpgradeCost() << wxT( ")" ) );
+						l_menu.Enable( eMENU_ID_UPGRADE_DAMAGE, m_game.CanAfford( m_selectedTower->GetDamageUpgradeCost() ) );
+					}
+					else
+					{
+						l_menu.Append( eMENU_ID_UPGRADE_DAMAGE, wxString{ wxT( "Augmenter degats (Max)" ) } );
+						l_menu.Enable( eMENU_ID_UPGRADE_DAMAGE, false );
+					}
+
 					PopupMenu( &l_menu, p_event.GetPosition() );
 				}
 				else if ( !m_selectedGeometry.expired() )
 				{
 					wxMenu l_menu;
-					l_menu.Append( eMENU_ID_NEW_TOWER, wxString( "Nouvelle Tour (" ) << m_game.GetTowerCost() << wxT( ")" ) );
-					l_menu.Enable( eMENU_ID_NEW_TOWER, m_game.CanBuildTower() );
+					l_menu.Append( eMENU_ID_NEW_LR_TOWER, wxString( "Nouvelle Tour Longue Distance (" ) << m_longRange.GetTowerCost() << wxT( ")" ) );
+					l_menu.Append( eMENU_ID_NEW_SR_TOWER, wxString( "Nouvelle Tour Courte Distance (" ) << m_shortRange.GetTowerCost() << wxT( ")" ) );
+					l_menu.Enable( eMENU_ID_NEW_LR_TOWER, m_game.CanAfford( m_longRange.GetTowerCost() ) );
+					l_menu.Enable( eMENU_ID_NEW_SR_TOWER, m_game.CanAfford( m_shortRange.GetTowerCost() ) );
 					PopupMenu( &l_menu, p_event.GetPosition() );
 				}
 			}
@@ -688,7 +812,7 @@ namespace castortd
 		{
 			p_event.Skip();
 		}
-		else
+		else if ( m_game.IsRunning() )
 		{
 			RenderWindowSPtr l_window = m_renderWindow.lock();
 
@@ -749,38 +873,46 @@ namespace castortd
 		p_event.Skip();
 	}
 
-	void RenderPanel::OnNewTower( wxCommandEvent & p_event )
+	void RenderPanel::OnNewLongRangeTower( wxCommandEvent & p_event )
 	{
-		if ( m_game.IsStarted() )
+		if ( m_game.IsRunning() )
 		{
-			if ( m_game.BuildTower( m_marker->GetPosition() ) )
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
 			{
-				DoUpdateSelectedGeometry( nullptr );
-			}
+				if ( m_game.BuildTower( m_marker->GetPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
+				{
+					DoUpdateSelectedGeometry( nullptr );
+				}
+			} ) );
+		}
+	}
+
+	void RenderPanel::OnNewShortRangeTower( wxCommandEvent & p_event )
+	{
+		if ( m_game.IsRunning() )
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+			{
+				if ( m_game.BuildTower( m_marker->GetPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )
+				{
+					DoUpdateSelectedGeometry( nullptr );
+				}
+			} ) );
 		}
 	}
 
 	void RenderPanel::OnUpgradeTowerSpeed( wxCommandEvent & p_event )
 	{
-		if ( m_game.IsStarted() )
-		{
-			m_game.UpgradeTowerSpeed( *m_selectedTower );
-		}
+		DoUpgradeTowerSpeed();
 	}
 
 	void RenderPanel::OnUpgradeTowerRange( wxCommandEvent & p_event )
 	{
-		if ( m_game.IsStarted() )
-		{
-			m_game.UpgradeTowerRange( *m_selectedTower );
-		}
+		DoUpgradeTowerRange();
 	}
 
 	void RenderPanel::OnUpgradeTowerDamage( wxCommandEvent & p_event )
 	{
-		if ( m_game.IsStarted() )
-		{
-			m_game.UpgradeTowerDamage( *m_selectedTower );
-		}
+		DoUpgradeTowerDamage();
 	}
 }
