@@ -13,7 +13,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, eTOPOLOGY p_topology, ShaderProgram const & p_program )
+	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, Topology p_topology, ShaderProgram const & p_program )
 		: GeometryBuffers( p_topology, p_program )
 		, ObjectType( p_gl,
 					  "GlVertexArrayObjects",
@@ -34,7 +34,7 @@ namespace GlRender
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
-		if ( m_program.HasObject( eSHADER_TYPE_HULL ) )
+		if ( m_program.HasObject( ShaderType::Hull ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
@@ -61,7 +61,7 @@ namespace GlRender
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
-		if ( m_program.HasObject( eSHADER_TYPE_HULL ) )
+		if ( m_program.HasObject( ShaderType::Hull ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
@@ -69,7 +69,7 @@ namespace GlRender
 
 		if ( m_matrixBuffer )
 		{
-			m_matrixBuffer->GetGpuBuffer()->Fill( m_matrixBuffer->data(), m_matrixBuffer->GetSize(), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_matrixBuffer->GetGpuBuffer()->Fill( m_matrixBuffer->data(), m_matrixBuffer->GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		}
 
 		if ( ObjectType::Bind() )
@@ -168,7 +168,7 @@ namespace GlRender
 
 		if ( l_return == p_declaration.end() )
 		{
-			// We try to find an element with the same eELEMENT_USAGE as asked.
+			// We try to find an element with the same ElementUsage as asked.
 			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 			{
 				return l_element.m_usages == p_element.m_usages;
@@ -177,7 +177,7 @@ namespace GlRender
 
 		if ( l_return == p_declaration.end() )
 		{
-			// We try to find an element with an eELEMENT_USAGE approaching the one asked.
+			// We try to find an element with an ElementUsage approaching the one asked.
 			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 			{
 				return ( l_element.m_usages & p_element.m_usages ) != 0;
@@ -195,51 +195,51 @@ namespace GlRender
 
 		switch ( p_element.m_dataType )
 		{
-		case eELEMENT_TYPE_1FLOAT:
+		case ElementType::Float:
 			l_attribute = std::make_shared< GlAttribute1r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_2FLOATS:
+		case ElementType::Vec2:
 			l_attribute = std::make_shared< GlAttribute2r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_3FLOATS:
+		case ElementType::Vec3:
 			l_attribute = std::make_shared< GlAttribute3r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_4FLOATS:
+		case ElementType::Vec4:
 			l_attribute = std::make_shared< GlAttribute4r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_COLOUR:
+		case ElementType::Colour:
 			l_attribute = std::make_shared< GlAttribute1ui >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_1INT:
+		case ElementType::Int:
 			l_attribute = std::make_shared< GlAttribute1i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_2INTS:
+		case ElementType::IVec2:
 			l_attribute = std::make_shared< GlAttribute2i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_3INTS:
+		case ElementType::IVec3:
 			l_attribute = std::make_shared< GlAttribute3i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_4INTS:
+		case ElementType::IVec4:
 			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_2x2FLOATS:
+		case ElementType::Mat2:
 			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_3x3FLOATS:
+		case ElementType::Mat3:
 			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
-		case eELEMENT_TYPE_4x4FLOATS:
+		case ElementType::Mat4:
 			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 

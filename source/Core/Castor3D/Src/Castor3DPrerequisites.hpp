@@ -94,15 +94,15 @@ namespace Castor3D
 	\brief		Enumération des types de MovableObject
 	\remark		Il y a quatre types d'objets déplaçables : caméra, géométrie, lumière et billboard
 	*/
-	typedef enum eMOVABLE_TYPE
+	enum class MovableType
 		: uint8_t
 	{
-		eMOVABLE_TYPE_CAMERA,
-		eMOVABLE_TYPE_GEOMETRY,
-		eMOVABLE_TYPE_LIGHT,
-		eMOVABLE_TYPE_BILLBOARD,
-		CASTOR_ENUM_BOUNDS( eMOVABLE_TYPE, eMOVABLE_TYPE_CAMERA )
-	}	eMOVABLE_TYPE;
+		Camera,
+		Geometry,
+		Light,
+		Billboard,
+		CASTOR_ENUM_CLASS_BOUNDS( Camera )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -112,13 +112,13 @@ namespace Castor3D
 	\~french
 	\brief		Types de RenderTarget supportés
 	*/
-	typedef enum eTARGET_TYPE
+	enum class TargetType
 		: uint8_t
 	{
-		eTARGET_TYPE_WINDOW,
-		eTARGET_TYPE_TEXTURE,
-		CASTOR_ENUM_BOUNDS( eTARGET_TYPE, eTARGET_TYPE_WINDOW )
-	}	eTARGET_TYPE;
+		Window,
+		Texture,
+		CASTOR_ENUM_CLASS_BOUNDS( Window )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
@@ -166,13 +166,38 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des composantes de tampon d'image
 	*/
-	typedef enum eBUFFER_COMPONENT
+	enum class BufferComponent
 		: uint8_t
 	{
-		eBUFFER_COMPONENT_COLOUR = 0x01,
-		eBUFFER_COMPONENT_DEPTH = 0x02,
-		eBUFFER_COMPONENT_STENCIL = 0x04,
-	}	eBUFFER_COMPONENT;
+		None = 0,
+		Colour = 1 << 0,
+		Depth = 1 << 1,
+		Stencil = 1 << 2,
+	};
+	/**
+	 *\~english
+	 *\brief		Bitwise OR on BufferComponent.
+	 *\param[in]	p_lhs, p_rhs	The operands.
+	 *\~french
+	 *\brief		OU binaire sur des BufferComponent.
+	 *\param[in]	p_lhs, p_rhs	Les opérandes.
+	 */
+	inline uint8_t operator|( BufferComponent p_lhs, BufferComponent p_rhs )
+	{
+		return uint8_t( p_lhs ) | uint8_t( p_rhs );
+	}
+	/**
+	 *\~english
+	 *\brief		Bitwise AND on BufferComponent.
+	 *\param[in]	p_lhs, p_rhs	The operands.
+	 *\~french
+	 *\brief		ET binaire sur des BufferComponent.
+	 *\param[in]	p_lhs, p_rhs	Les opérandes.
+	 */
+	inline uint8_t operator&(BufferComponent p_lhs, BufferComponent p_rhs )
+	{
+		return uint8_t( p_lhs ) & uint8_t( p_rhs );
+	}
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -206,17 +231,20 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des cibles d'activation de tampon d'image
 	*/
-	typedef enum eFRAMEBUFFER_TARGET
+	enum class FrameBufferTarget
 		: uint8_t
 	{
-		//!\~english Frame buffer is bound as a target for draws	\~french Le tampon d'image est activé en tant que cible pour les rendus
-		eFRAMEBUFFER_TARGET_DRAW,
-		//!\~english Frame buffer is bound as a target for reads	\~french Le tampon d'image est activé en tant que cible pour les lectures
-		eFRAMEBUFFER_TARGET_READ,
-		//!\~english Frame buffer is bound as a target for reads and draws	\~french Le tampon d'image est activé en tant que cible pour les lectures et les rendus
-		eFRAMEBUFFER_TARGET_BOTH,
-		CASTOR_ENUM_BOUNDS( eFRAMEBUFFER_TARGET, eFRAMEBUFFER_TARGET_DRAW )
-	}	eFRAMEBUFFER_TARGET;
+		//!\~english	Frame buffer is bound as a target for draws.
+		//!\~french		Le tampon d'image est activé en tant que cible pour les rendus.
+		Draw,
+		//!\~english	Frame buffer is bound as a target for reads.
+		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures.
+		Read,
+		//!\~english	Frame buffer is bound as a target for reads and draws.
+		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
+		Both,
+		CASTOR_ENUM_CLASS_BOUNDS( Draw )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -226,17 +254,20 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des modes d'activation de tampon d'image
 	*/
-	typedef enum eFRAMEBUFFER_MODE
+	enum class FrameBufferMode
 		: uint8_t
 	{
-		//!\~english Frame buffer is bound for configuration	\~french Le tampon d'image est activé pour configuration
-		eFRAMEBUFFER_MODE_CONFIG,
-		//!\~english Frame buffer is bound and FrameBuffer::SetDrawBuffers is called automatically	\~french Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement
-		eFRAMEBUFFER_MODE_AUTOMATIC,
-		//!\~english Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants	\~french Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut
-		eFRAMEBUFFER_MODE_MANUAL,
-		CASTOR_ENUM_BOUNDS( eFRAMEBUFFER_MODE, eFRAMEBUFFER_MODE_CONFIG )
-	}	eFRAMEBUFFER_MODE;
+		//!\~english	Frame buffer is bound for configuration.
+		//!\~french		Le tampon d'image est activé pour configuration.
+		Config,
+		//!\~english	Frame buffer is bound and FrameBuffer::SetDrawBuffers is called automatically.
+		//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
+		Automatic,
+		//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
+		//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
+		Manual,
+		CASTOR_ENUM_CLASS_BOUNDS( Config )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -246,15 +277,15 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des points d'attache pour un tampon d'image
 	*/
-	typedef enum eATTACHMENT_POINT
+	enum class AttachmentPoint
 		: uint8_t
 	{
-		eATTACHMENT_POINT_NONE,
-		eATTACHMENT_POINT_COLOUR,
-		eATTACHMENT_POINT_DEPTH,
-		eATTACHMENT_POINT_STENCIL,
-		CASTOR_ENUM_BOUNDS( eATTACHMENT_POINT, eATTACHMENT_POINT_NONE )
-	}	eATTACHMENT_POINT;
+		None,
+		Colour,
+		Depth,
+		Stencil,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0.0
@@ -297,17 +328,23 @@ namespace Castor3D
 	*/
 	enum class FrustumPlane
 	{
-		//!\~english Near plane	\~french Plan éloigné
+		//!\~english	Near plane.
+		//!\~french		Plan éloigné.
 		Near,
-		//!\~english Far plane	\~french Plan proche
+		//!\~english	Far plane.
+		//!\~french		Plan proche.
 		Far,
-		//!\~english Left plane	\~french Plan gauche
+		//!\~english	Left plane.
+		//!\~french		Plan gauche.
 		Left,
-		//!\~english Right plane	\~french Plan droit
+		//!\~english	Right plane.
+		//!\~french		Plan droit.
 		Right,
-		//!\~english Top plane	\~french Plan haut
+		//!\~english	Top plane.
+		//!\~french		Plan haut.
 		Top,
-		//!\~english Bottom plane	\~french Plan bas
+		//!\~english	Bottom plane.
+		//!\~french		Plan bas.
 		Bottom,
 		CASTOR_ENUM_CLASS_BOUNDS( Near )
 	};
@@ -318,7 +355,7 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types d'évènement de frame
 	*/
-	typedef enum class EventType
+	enum class EventType
 		: uint8_t
 	{
 		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
@@ -331,29 +368,33 @@ namespace Castor3D
 		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
 		PostRender,
 		CASTOR_ENUM_CLASS_BOUNDS( PreRender )
-	}	EventType;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
 	\date		23/05/2013
 	\~english
-	\brief		Faces orientations enumeration
+	\brief		Culled faces enumeration.
 	\~french
-	\brief		Enumération des orientations des faces
+	\brief		Enumération des faces supprimées.
 	*/
-	typedef enum eFACE
+	enum class Culling
 		: uint8_t
 	{
-		//!\~english No face	\~french Aucune face
-		eFACE_NONE,
-		//!\~english Front face	\~french Face avant
-		eFACE_FRONT,
-		//!\~english Back face	\~french Face arrière
-		eFACE_BACK,
-		//!\~english Back and front faces	\~french Faces avant et arrière
-		eFACE_FRONT_AND_BACK,
-		CASTOR_ENUM_BOUNDS( eFACE, eFACE_NONE )
-	}   eFACE;
+		//!\~english	No face culled.
+		//!\~french		Aucune face supprimée.
+		None,
+		//!\~english	Front faces are culled.
+		//!\~french		Faces avant supprimées.
+		Front = 1 << 0,
+		//!\~english	Back face are culled.
+		//!\~french		Faces arrière supprimées.
+		Back,
+		//!\~english	Back and front faces are culled.
+		//!\~french		Faces avant et arrière supprimées.
+		FrontAndBack,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
@@ -366,11 +407,14 @@ namespace Castor3D
 	typedef enum eFILL_MODE
 		: uint8_t
 	{
-		//!\~english Polygon vertices that are marked as the start of a boundary edge are drawn as points	\~french Les vertices marquant les arêtes sont dessinés en tant que points
+		//!\~english	Polygon vertices that are marked as the start of a boundary edge are drawn as points.
+		//!\~french		Les vertices marquant les arêtes sont dessinés en tant que points.
 		eFILL_MODE_POINT,
-		//!\~english Boundary edges of the polygon are drawn as line segments	\~french Les arêtes du polygone sont dessinées en tant que segments
+		//!\~english	Boundary edges of the polygon are drawn as line segments.
+		//!\~french		Les arêtes du polygone sont dessinées en tant que segments.
 		eFILL_MODE_LINE,
-		//!\~english The interior of the polygon is filled	\~french L'intérieur du polygone est rempli
+		//!\~english	The interior of the polygon is filled.
+		//!\~french		L'intérieur du polygone est rempli.
 		eFILL_MODE_SOLID,
 		CASTOR_ENUM_BOUNDS( eFILL_MODE, eFILL_MODE_POINT )
 	}   eFILL_MODE;

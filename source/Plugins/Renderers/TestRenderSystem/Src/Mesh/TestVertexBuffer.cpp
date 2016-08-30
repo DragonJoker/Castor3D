@@ -25,7 +25,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
+	bool TestVertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
 	}
@@ -43,7 +43,7 @@ namespace TestRender
 	{
 	}
 
-	uint8_t * TestVertexBuffer::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
+	uint8_t * TestVertexBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessType p_flags )
 	{
 		return nullptr;
 	}
@@ -52,7 +52,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
+	bool TestVertexBuffer::Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		return true;
 	}

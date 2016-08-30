@@ -54,7 +54,7 @@ namespace TestRender
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		TestGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program );
+		TestGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor

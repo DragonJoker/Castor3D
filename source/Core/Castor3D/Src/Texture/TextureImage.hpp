@@ -294,17 +294,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialises the GPU storage.
 		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le stockage GPU.
 		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API bool Initialise( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -316,15 +316,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it.
 		 *\remarks		The parent texture must be bound.
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE.
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of AccessType.
 		 *\return		The image buffer.
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
 		 *\remarks		La texture parente doit être activée.
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE.
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * Lock( uint32_t p_lock );
+		C3D_API uint8_t * Lock( AccessType p_lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -465,17 +465,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialises the GPU storage.
 		 *\param[in]	p_type		The storage type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le stockage GPU.
 		 *\param[in]	p_type		Le type de stockage.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		bool DoCreateStorage( TextureStorageType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoCreateStorage( TextureStorageType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess );
 
 	protected:
 		//!\~english	The texture source.

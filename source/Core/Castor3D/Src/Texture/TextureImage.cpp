@@ -364,7 +364,7 @@ namespace Castor3D
 		}
 	}
 
-	bool TextureImage::Initialise( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	bool TextureImage::Initialise( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		return DoCreateStorage( GetStorageType( p_type, m_index ), p_cpuAccess, p_gpuAccess );
 	}
@@ -386,7 +386,7 @@ namespace Castor3D
 		m_storage->Unbind( p_index );
 	}
 
-	uint8_t * TextureImage::Lock( uint32_t p_lock )
+	uint8_t * TextureImage::Lock( AccessType p_lock )
 	{
 		REQUIRE( m_storage );
 		return m_storage->Lock( p_lock );
@@ -414,7 +414,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool TextureImage::DoCreateStorage( TextureStorageType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	bool TextureImage::DoCreateStorage( TextureStorageType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		bool l_return = false;
 

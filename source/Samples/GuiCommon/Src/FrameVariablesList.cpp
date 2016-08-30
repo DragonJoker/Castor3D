@@ -77,7 +77,7 @@ namespace GuiCommon
 		UnloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( eSHADER_TYPE p_type, ShaderProgramSPtr p_program )
+	void FrameVariablesList::LoadVariables( ShaderType p_type, ShaderProgramSPtr p_program )
 	{
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );
@@ -124,7 +124,7 @@ namespace GuiCommon
 		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
 	}
 
-	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::eSHADER_TYPE p_type )
+	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::ShaderType p_type )
 	{
 		wxString l_displayName = p_variable->GetName();
 

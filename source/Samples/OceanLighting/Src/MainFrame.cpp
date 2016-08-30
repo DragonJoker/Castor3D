@@ -346,7 +346,7 @@ namespace OceanLighting
 			CameraSPtr l_pCamera = l_scene->GetCameraCache().Add( cuT( "DummyCamera" ), l_node, Viewport{ *m_pCastor3D } );
 			l_pCamera->GetViewport().Resize( Size( m_width, m_height ) );
 			l_pCamera->GetViewport().SetPerspective( Angle::from_degrees( 45.0 ), 1, 0.1_r, 1000.0_r );
-			RenderTargetSPtr l_target = m_pCastor3D->GetRenderTargetCache().Add( eTARGET_TYPE_WINDOW );
+			RenderTargetSPtr l_target = m_pCastor3D->GetRenderTargetCache().Add( TargetType::Window );
 			l_target->SetPixelFormat( PixelFormat::A8R8G8B8 );
 			l_target->SetSize( Size( m_width, m_height ) );
 			l_target->SetScene( l_scene );

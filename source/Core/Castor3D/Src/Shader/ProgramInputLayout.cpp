@@ -27,64 +27,64 @@ namespace Castor3D
 	{
 	}
 
-	void ProgramInputLayout::DoAddAttribute( String const & p_name, eELEMENT_TYPE p_type, uint32_t p_offset )
+	void ProgramInputLayout::DoAddAttribute( String const & p_name, ElementType p_type, uint32_t p_offset )
 	{
 		auto l_usage = DoGuessUsages( p_name, p_type );
 		m_layout.push_back( BufferElementDeclaration { p_name, l_usage, p_type, p_offset } );
 	}
 
-	uint32_t ProgramInputLayout::DoGuessUsages( String const & p_name, eELEMENT_TYPE p_type )
+	uint32_t ProgramInputLayout::DoGuessUsages( String const & p_name, ElementType p_type )
 	{
 		uint32_t l_return = 0u;
 
 		if ( IsLike( p_name, ShaderProgram::Position ) )
 		{
-			l_return |= eELEMENT_USAGE_POSITION;
+			l_return |= uint32_t( ElementUsage::Position );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Normal ) )
 		{
-			l_return |= eELEMENT_USAGE_NORMAL;
+			l_return |= uint32_t( ElementUsage::Normal );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Tangent ) )
 		{
-			l_return |= eELEMENT_USAGE_TANGENT;
+			l_return |= uint32_t( ElementUsage::Tangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Bitangent ) )
 		{
-			l_return |= eELEMENT_USAGE_BITANGENT;
+			l_return |= uint32_t( ElementUsage::Bitangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Texture ) )
 		{
-			l_return |= eELEMENT_USAGE_TEXCOORDS;
+			l_return |= uint32_t( ElementUsage::TexCoords );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds0 ) )
 		{
-			l_return |= eELEMENT_USAGE_BONE_IDS0;
+			l_return |= uint32_t( ElementUsage::BoneIds0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds1 ) )
 		{
-			l_return |= eELEMENT_USAGE_BONE_IDS1;
+			l_return |= uint32_t( ElementUsage::BoneIds1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights0 ) )
 		{
-			l_return |= eELEMENT_USAGE_BONE_WEIGHTS0;
+			l_return |= uint32_t( ElementUsage::BoneWeights0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights1 ) )
 		{
-			l_return |= eELEMENT_USAGE_BONE_WEIGHTS1;
+			l_return |= uint32_t( ElementUsage::BoneWeights1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Transform ) )
 		{
-			l_return |= eELEMENT_USAGE_TRANSFORM;
+			l_return |= uint32_t( ElementUsage::Transform );
 		}
 
 		return l_return;

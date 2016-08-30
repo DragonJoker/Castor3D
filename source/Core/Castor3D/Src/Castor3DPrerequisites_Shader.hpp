@@ -93,18 +93,18 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de shader object
 	*/
-	typedef enum eSHADER_TYPE
+	enum class ShaderType
 		: int8_t
 	{
-		eSHADER_TYPE_NONE = -1,
-		eSHADER_TYPE_VERTEX,
-		eSHADER_TYPE_HULL,
-		eSHADER_TYPE_DOMAIN,
-		eSHADER_TYPE_GEOMETRY,
-		eSHADER_TYPE_PIXEL,
-		eSHADER_TYPE_COMPUTE,
-		CASTOR_ENUM_BOUNDS( eSHADER_TYPE, eSHADER_TYPE_NONE )
-	}	eSHADER_TYPE;
+		None = -1,
+		Vertex,
+		Hull,
+		Domain,
+		Geometry,
+		Pixel,
+		Compute,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -112,12 +112,12 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de shader object
 	*/
-	static const uint64_t MASK_SHADER_TYPE_VERTEX = uint64_t( 0x1 ) << eSHADER_TYPE_VERTEX;
-	static const uint64_t MASK_SHADER_TYPE_HULL = uint64_t( 0x1 ) << eSHADER_TYPE_HULL;
-	static const uint64_t MASK_SHADER_TYPE_DOMAIN = uint64_t( 0x1 ) << eSHADER_TYPE_DOMAIN;
-	static const uint64_t MASK_SHADER_TYPE_GEOMETRY = uint64_t( 0x1 ) << eSHADER_TYPE_GEOMETRY;
-	static const uint64_t MASK_SHADER_TYPE_PIXEL = uint64_t( 0x1 ) << eSHADER_TYPE_PIXEL;
-	static const uint64_t MASK_SHADER_TYPE_COMPUTE = uint64_t( 0x1 ) << eSHADER_TYPE_COMPUTE;
+	static const uint64_t MASK_SHADER_TYPE_VERTEX = uint64_t( 0x1 ) << int( ShaderType::Vertex );
+	static const uint64_t MASK_SHADER_TYPE_HULL = uint64_t( 0x1 ) << int( ShaderType::Hull );
+	static const uint64_t MASK_SHADER_TYPE_DOMAIN = uint64_t( 0x1 ) << int( ShaderType::Domain );
+	static const uint64_t MASK_SHADER_TYPE_GEOMETRY = uint64_t( 0x1 ) << int( ShaderType::Geometry );
+	static const uint64_t MASK_SHADER_TYPE_PIXEL = uint64_t( 0x1 ) << int( ShaderType::Pixel );
+	static const uint64_t MASK_SHADER_TYPE_COMPUTE = uint64_t( 0x1 ) << int( ShaderType::Compute );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13
@@ -130,14 +130,21 @@ namespace Castor3D
 	enum class ProgramFlag
 		: uint32_t
 	{
-		//!\~english Program using instanciation.	\~french Programme utilisant l'instanciation.
+		//!\~english	Program using instanciation.
+		//!\~french		Programme utilisant l'instanciation.
 		Instantiation = 0x01,
-		//!\~english Program using skeleton animations.	\~french Programme utilisant les animations par squelette.
+		//!\~english	Program using skeleton animations.
+		//!\~french		Programme utilisant les animations par squelette.
 		Skinning = 0x02,
-		//!\~english Program used by billboards.	\~french Programme utilisé par des billboards.
+		//!\~english	Program used by billboards.
+		//!\~french		Programme utilisé par des billboards.
 		Billboards = 0x04,
-		//!\~english Program using per-vertex animations.	\~french Programme utilisant les animations par sommet.
+		//!\~english	Program using per-vertex animations.
+		//!\~french		Programme utilisant les animations par sommet.
 		Morphing = 0x08,
+		//!\~english	Program used in transparent pipeline.
+		//!\~french		Programme utilisé dans le pipeline des objets transparents.
+		AlphaBlending = 0x10,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -149,35 +156,50 @@ namespace Castor3D
 	enum class VariableType
 		: uint8_t
 	{
-		//!\~english One variable	\~french Une variable
+		//!\~english	One variable.
+		//!\~french		Une variable.
 		One,
-		//!\~english 1 variable array	\~french Tableau de 1 variable
+		//!\~english	1 variable array.
+		//!\~french		Tableau de 1 variable.
 		Vec1,
-		//!\~english 2 variables array	\~french Tableau de 2 variables
+		//!\~english	2 variables array.
+		//!\~french		Tableau de 2 variables.
 		Vec2,
-		//!\~english 3 variables array	\~french Tableau de 3 variables
+		//!\~english	3 variables array.
+		//!\~french		Tableau de 3 variables.
 		Vec3,
-		//!\~english 4 variables array	\~french Tableau de 4 variables
+		//!\~english	4 variables array.
+		//!\~french		Tableau de 4 variables.
 		Vec4,
-		//!\~english 1x1 matrix	\~french Matrice 1x1
+		//!\~english	1x1 matrix.
+		//!\~french		Matrice 1x1.
 		Mat1,
-		//!\~english 2x2 matrix	\~french Matrice 2x2
+		//!\~english	2x2 matrix.
+		//!\~french		Matrice 2x2.
 		Mat2x2,
-		//!\~english 2x3 matrix	\~french Matrice 2x3
+		//!\~english	2x3 matrix.
+		//!\~french		Matrice 2x3.
 		Mat2x3,
-		//!\~english 2x4 matrix	\~french Matrice 2x4
+		//!\~english	2x4 matrix.
+		//!\~french		Matrice 2x4.
 		Mat2x4,
-		//!\~english 3x2 matrix	\~french Matrice 3x2
+		//!\~english	3x2 matrix.
+		//!\~french		Matrice 3x2.
 		Mat3x2,
-		//!\~english 3x3 matrix	\~french Matrice 3x3
+		//!\~english	3x3 matrix.
+		//!\~french		Matrice 3x3.
 		Mat3x3,
-		//!\~english 3x4 matrix	\~french Matrice 3x4
+		//!\~english	3x4 matrix.
+		//!\~french		Matrice 3x4.
 		Mat3x4,
-		//!\~english 4x2 matrix	\~french Matrice 4x2
+		//!\~english	4x2 matrix.
+		//!\~french		Matrice 4x2.
 		Mat4x2,
-		//!\~english 4x3 matrix	\~french Matrice 4x3
+		//!\~english	4x3 matrix.
+		//!\~french		Matrice 4x3
 		Mat4x3,
-		//!\~english 4x4 matrix	\~french Matrice 4x4
+		//!\~english	4x4 matrix.
+		//!\~french		Matrice 4x4.
 		Mat4x4,
 		CASTOR_ENUM_CLASS_BOUNDS( One )
 	};
@@ -473,7 +495,7 @@ namespace Castor3D
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
-	DECLARE_MAP( eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
+	DECLARE_MAP( ShaderType, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
 
 	//@}
 

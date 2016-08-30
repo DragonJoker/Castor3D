@@ -36,13 +36,13 @@ namespace GuiCommon
 		FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~FrameVariablesList();
 
-		void LoadVariables( Castor3D::eSHADER_TYPE p_type, Castor3D::ShaderProgramSPtr p_program );
+		void LoadVariables( Castor3D::ShaderType p_type, Castor3D::ShaderProgramSPtr p_program );
 		void UnloadVariables();
 
 	private:
 		void DoAddBuffer( wxTreeItemId p_id, Castor3D::FrameVariableBufferSPtr p_buffer );
 		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::FrameVariableBufferSPtr p_buffer );
-		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::eSHADER_TYPE p_type );
+		void DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::ShaderType p_type );
 
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );

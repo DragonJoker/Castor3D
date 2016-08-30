@@ -41,13 +41,13 @@ void ExportCastor3D()
 	.value( "SPOT", eLIGHT_TYPE_SPOT )
 	;
 	//@}
-	/**@group_name eMOVABLE_TYPE */
+	/**@group_name MovableType */
 	//@{
-	py::enum_< eMOVABLE_TYPE >( "MovableType" )
-	.value( "CAMERA", eMOVABLE_TYPE_CAMERA )
-	.value( "GEOMETRY", eMOVABLE_TYPE_GEOMETRY )
-	.value( "LIGHT", eMOVABLE_TYPE_LIGHT )
-	.value( "BILLBOARD", eMOVABLE_TYPE_BILLBOARD )
+	py::enum_< MovableType >( "MovableType" )
+	.value( "CAMERA", MovableType::Camera )
+	.value( "GEOMETRY", MovableType::Geometry )
+	.value( "LIGHT", MovableType::Light )
+	.value( "BILLBOARD", MovableType::Billboard )
 	;
 	//@}
 	/**@group_name eOVERLAY_TYPE */
@@ -66,19 +66,19 @@ void ExportCastor3D()
 	.value( "FRUSTUM", eVIEWPORT_TYPE_FRUSTUM )
 	;
 	//@}
-	/**@group_name eTOPOLOGY */
+	/**@group_name Topology */
 	//@{
-	py::enum_< eTOPOLOGY >( "Topology" )
-	.value( "POINTS", eTOPOLOGY_POINTS )
-	.value( "LINES", eTOPOLOGY_LINES )
-	.value( "LINE_LOOP", eTOPOLOGY_LINE_LOOP )
-	.value( "LINE_STRIP", eTOPOLOGY_LINE_STRIP )
-	.value( "TRIANGLES", eTOPOLOGY_TRIANGLES )
-	.value( "TRIANGLE_STRIPS", eTOPOLOGY_TRIANGLE_STRIPS )
-	.value( "TRIANGLE_FAN", eTOPOLOGY_TRIANGLE_FAN )
-	.value( "QUADS", eTOPOLOGY_QUADS )
-	.value( "QUAD_STRIPS", eTOPOLOGY_QUAD_STRIPS )
-	.value( "POLYGON", eTOPOLOGY_POLYGON )
+	py::enum_< Topology >( "Topology" )
+	.value( "POINTS", Topology::Points )
+	.value( "LINES", Topology::Lines )
+	.value( "LINE_LOOP", Topology::LineLoop )
+	.value( "LINE_STRIP", Topology::LineStrip )
+	.value( "TRIANGLES", Topology::Triangles )
+	.value( "TRIANGLE_STRIPS", Topology::TriangleStrips )
+	.value( "TRIANGLE_FAN", Topology::TriangleFan )
+	.value( "QUADS", Topology::Quads )
+	.value( "QUAD_STRIPS", Topology::QuadStrips )
+	.value( "POLYGON", Topology::Polygon )
 	;
 	//@}
 	/**@group_name TextureChannel */
@@ -211,50 +211,50 @@ void ExportCastor3D()
 	.value( "INV_SRC1_ALPHA", BlendOperand::InvSrc1Alpha )
 	;
 	//@}
-	/**@group_name eDEPTH_FUNC */
+	/**@group_name DepthFunc */
 	//@{
-	py::enum_< eDEPTH_FUNC >( "DepthFunc" )
-	.value( "NEVER", eDEPTH_FUNC_NEVER )
-	.value( "LESS", eDEPTH_FUNC_LESS )
-	.value( "EQUAL", eDEPTH_FUNC_EQUAL )
-	.value( "LEQUAL", eDEPTH_FUNC_LEQUAL )
-	.value( "GREATER", eDEPTH_FUNC_GREATER )
-	.value( "NOTEQUAL", eDEPTH_FUNC_NOTEQUAL )
-	.value( "GEQUAL", eDEPTH_FUNC_GEQUAL )
-	.value( "ALWAYS", eDEPTH_FUNC_ALWAYS )
+	py::enum_< DepthFunc >( "DepthFunc" )
+	.value( "NEVER", DepthFunc::Never )
+	.value( "LESS", DepthFunc::Less )
+	.value( "EQUAL", DepthFunc::Equal )
+	.value( "LEQUAL", DepthFunc::LEqual )
+	.value( "GREATER", DepthFunc::Greater )
+	.value( "NOTEQUAL", DepthFunc::NEqual )
+	.value( "GEQUAL", DepthFunc::GEqual )
+	.value( "ALWAYS", DepthFunc::Always )
 	;
 	//@}
-	/**@group_name eDEPTH_MASK */
+	/**@group_name WritingMask */
 	//@{
-	py::enum_< eWRITING_MASK >( "WritingMask" )
-	.value( "ZERO", eWRITING_MASK_ZERO )
-	.value( "ALL", eWRITING_MASK_ALL )
+	py::enum_< WritingMask >( "WritingMask" )
+	.value( "ZERO", WritingMask::Zero )
+	.value( "ALL", WritingMask::All )
 	;
 	//@}
-	/**@group_name eSTENCIL_FUNC */
+	/**@group_name StencilFunc */
 	//@{
-	py::enum_< eSTENCIL_FUNC >( "StencilFunc" )
-	.value( "NEVER", eSTENCIL_FUNC_NEVER )
-	.value( "LESS", eSTENCIL_FUNC_LESS )
-	.value( "EQUAL", eSTENCIL_FUNC_EQUAL )
-	.value( "LEQUAL", eSTENCIL_FUNC_LEQUAL )
-	.value( "GREATER", eSTENCIL_FUNC_GREATER )
-	.value( "NOTEQUAL", eSTENCIL_FUNC_NOTEQUAL )
-	.value( "GEQUAL", eSTENCIL_FUNC_GEQUAL )
-	.value( "ALWAYS", eSTENCIL_FUNC_ALWAYS )
+	py::enum_< StencilFunc >( "StencilFunc" )
+	.value( "NEVER", StencilFunc::Never )
+	.value( "LESS", StencilFunc::Less )
+	.value( "EQUAL", StencilFunc::Equal )
+	.value( "LEQUAL", StencilFunc::LEqual )
+	.value( "GREATER", StencilFunc::Greater )
+	.value( "NOTEQUAL", StencilFunc::NEqual )
+	.value( "GEQUAL", StencilFunc::GEqual )
+	.value( "ALWAYS", StencilFunc::Always )
 	;
 	//@}
-	/**@group_name eSTENCIL_OP */
+	/**@group_name StencilOp */
 	//@{
-	py::enum_< eSTENCIL_OP >( "StencilOp" )
-	.value( "KEEP", eSTENCIL_OP_KEEP )
-	.value( "ZERO", eSTENCIL_OP_ZERO )
-	.value( "REPLACE", eSTENCIL_OP_REPLACE )
-	.value( "INCR", eSTENCIL_OP_INCR )
-	.value( "INCR_WRAP", eSTENCIL_OP_INCR_WRAP )
-	.value( "DECR", eSTENCIL_OP_DECR )
-	.value( "DECR_WRAP", eSTENCIL_OP_DECR_WRAP )
-	.value( "INVERT", eSTENCIL_OP_INVERT )
+	py::enum_< StencilOp >( "StencilOp" )
+	.value( "KEEP", StencilOp::Keep )
+	.value( "ZERO", StencilOp::Zero )
+	.value( "REPLACE", StencilOp::Replace )
+	.value( "INCR", StencilOp::Increment )
+	.value( "INCR_WRAP", StencilOp::IncrWrap )
+	.value( "DECR", StencilOp::Decrement )
+	.value( "DECR_WRAP", StencilOp::DecrWrap )
+	.value( "INVERT", StencilOp::Invert )
 	;
 	//@}
 	/**@group_name eFILL_MODE */
@@ -267,23 +267,23 @@ void ExportCastor3D()
 	//@}
 	/**@group_name eFACE */
 	//@{
-	py::enum_< Castor3D::eFACE >( "Face" )
-	.value( "NONE", eFACE_NONE )
-	.value( "FRONT", eFACE_FRONT )
-	.value( "BACK", eFACE_BACK )
-	.value( "FRONT_AND_BACK", eFACE_FRONT_AND_BACK )
+	py::enum_< Culling >( "Culling" )
+	.value( "NONE", Culling::None )
+	.value( "FRONT", Culling::Front )
+	.value( "BACK", Culling::Back )
+	.value( "FRONT_AND_BACK", Culling::FrontAndBack )
 	;
 	//@}
-	/**@group_name eSHADER_TYPE */
+	/**@group_name ShaderType */
 	//@{
-	py::enum_< Castor3D::eSHADER_TYPE >( "ShaderType" )
-	.value( "NONE", eSHADER_TYPE_NONE )
-	.value( "VERTEX", eSHADER_TYPE_VERTEX )
-	.value( "HULL", eSHADER_TYPE_HULL )
-	.value( "DOMAIN", eSHADER_TYPE_DOMAIN )
-	.value( "GEOMETRY", eSHADER_TYPE_GEOMETRY )
-	.value( "PIXEL", eSHADER_TYPE_PIXEL )
-	.value( "COMPUTE", eSHADER_TYPE_COMPUTE )
+	py::enum_< ShaderType >( "ShaderType" )
+	.value( "NONE", ShaderType::None )
+	.value( "VERTEX", ShaderType::Vertex )
+	.value( "HULL", ShaderType::Hull )
+	.value( "DOMAIN", ShaderType::Domain )
+	.value( "GEOMETRY", ShaderType::Geometry )
+	.value( "PIXEL", ShaderType::Pixel )
+	.value( "COMPUTE", ShaderType::Compute )
 	;
 	//@}
 	/**@group_name eSHADER_MODEL */
@@ -479,7 +479,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name ShaderProgram */
 	//@{
-	void( ShaderProgram::*shaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgram::SetFile;
+	void( ShaderProgram::*shaderProgramFileSetter )( ShaderType, eSHADER_MODEL, Path const & ) = &ShaderProgram::SetFile;
 	py::class_< ShaderProgram, boost::noncopyable >( "ShaderProgram", py::no_init )
 	.def( "get_file", &ShaderProgram::GetFile )
 	.def( "set_file", shaderProgramFileSetter )

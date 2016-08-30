@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		C3D_API RenderTargetSPtr Add( eTARGET_TYPE p_type );
+		C3D_API RenderTargetSPtr Add( TargetType p_type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -166,7 +166,7 @@ namespace Castor3D
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
-		DECLARE_ARRAY( RenderTargetArray, eTARGET_TYPE_COUNT, TargetType );
+		DECLARE_ARRAY( RenderTargetArray, size_t( TargetType::Count ), TargetType );
 		//!\~english	The render targets sorted by target type.
 		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;

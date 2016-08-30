@@ -35,8 +35,8 @@ namespace Castor3D
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS },
-				BufferElementDeclaration{ ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS }
+				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec2 },
+				BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 }
 			}
 		}
 	{
@@ -47,12 +47,17 @@ namespace Castor3D
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex )[i++ * m_declaration.GetStride()] );
 		}
 
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
-		BlendState l_blState;
-		MultisampleState l_msState;
-		RasteriserState l_rsState;
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
+		{
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( false );
+			m_texturePipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{} );
+		}
+		{
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( true );
+			l_dsState.SetDepthMask( WritingMask::All );
+			m_depthPipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{} );
+		}
 	}
 
 	Context::~Context()
@@ -74,23 +79,33 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			ShaderProgramSPtr l_program = DoCreateProgram();
-			m_renderTextureProgram = l_program;
-
 			DoSetCurrent();
 			m_timerQuery[0]->Create();
 			m_timerQuery[1]->Create();
 			m_timerQuery[1 - m_queryIndex]->Begin();
 			m_timerQuery[1 - m_queryIndex]->End();
-			l_program->Initialise();
-
+			
+			ShaderProgramSPtr l_textureProgram = DoCreateProgram( false );
+			m_renderTextureProgram = l_textureProgram;
+			l_textureProgram->Initialise();
 			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 			m_vertexBuffer->Create();
-			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_textureProgram );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			
+			ShaderProgramSPtr l_depthProgram = DoCreateProgram( false );
+			m_renderDepthProgram = l_depthProgram;
+			l_depthProgram->Initialise();
+			m_vertexBufferDepth = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_vertexBufferDepth->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
+			m_vertexBufferDepth->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
+			m_vertexBufferDepth->Create();
+			m_vertexBufferDepth->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+			m_geometryBuffersDepth = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_depthProgram );
+			m_geometryBuffersDepth->Initialise( m_vertexBufferDepth, nullptr, nullptr, nullptr, nullptr );
 			DoEndCurrent();
 		}
 
@@ -152,38 +167,43 @@ namespace Castor3D
 
 	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_size, p_texture, m_geometryBuffers, *m_renderTextureProgram.lock() );
+		DoRenderTexture( p_size, p_texture, *m_texturePipeline, *m_geometryBuffers, *m_renderTextureProgram.lock() );
 	}
 
 	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program )
 	{
 		if ( p_program )
 		{
-			DoRenderTexture( p_size, p_texture, m_geometryBuffers, *p_program );
+			DoRenderTexture( p_size, p_texture, *m_texturePipeline, *m_geometryBuffers, *p_program );
 		}
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program )
+	void Context::RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture )
+	{
+		DoRenderTexture( p_size, p_texture, *m_depthPipeline, *m_geometryBuffersDepth, *m_renderDepthProgram.lock() );
+	}
+
+	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers, ShaderProgram const & p_program )
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
-		m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 		
 		if ( p_program.GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			m_pipeline->Apply();
+			p_pipeline.Apply();
 			FrameVariableBufferSPtr l_matrices = p_program.FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 			if ( l_matrices )
 			{
-				m_pipeline->ApplyProjection( *l_matrices );
+				p_pipeline.ApplyProjection( *l_matrices );
 			}
 
 			p_program.Bind();
 
 			if ( p_texture.Bind( 0 ) )
 			{
-				p_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
+				p_geometryBuffers.Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				p_texture.Unbind( 0 );
 			}
 
@@ -191,13 +211,13 @@ namespace Castor3D
 		}
 	}
 
-	ShaderProgramSPtr Context::DoCreateProgram()
+	ShaderProgramSPtr Context::DoCreateProgram( bool p_depth )
 	{
 		using namespace GLSL;
 
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		m_mapDiffuse->SetValue( 0 );
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
@@ -219,12 +239,31 @@ namespace Castor3D
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_X, position.SWIZZLE_Y, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.x(), position.y(), 0.0, 1.0 );
 			} );
 			l_strVtxShader = l_writer.Finalise();
 		}
 
 		String l_strPxlShader;
+
+		if ( p_depth )
+		{
+			auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+			// Shader inputs
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+
+			// Shader outputs
+			auto gl_FragDepth = l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				gl_FragDepth = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
+			} );
+			l_strPxlShader = l_writer.Finalise();
+		}
+		else
 		{
 			auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
@@ -237,14 +276,14 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ, 1.0 );
+				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 			} );
 			l_strPxlShader = l_writer.Finalise();
 		}
 
 		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
+		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
+		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
 		return l_program;
 	}
 }

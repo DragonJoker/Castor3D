@@ -56,7 +56,7 @@ namespace GrayScale
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				gl_Position = c3d_mtxProjection * vec4( position.SWIZZLE_XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.xy(), 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -75,7 +75,7 @@ namespace GrayScale
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture2D( c3d_mapDiffuse, vec2( vtx_texture.SWIZZLE_X, vtx_texture.SWIZZLE_Y ) ).SWIZZLE_XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
 				LOCALE_ASSIGN( l_writer, Float, l_average, Float( 0.2126f ) * l_colour.SWIZZLE_R + 0.7152f * l_colour.SWIZZLE_G + 0.0722f * l_colour.SWIZZLE_B );
 				plx_v4FragColor = vec4( l_average, l_average, l_average, 1.0 );
 			} );
@@ -110,9 +110,9 @@ namespace GrayScale
 
 		DepthStencilState l_dsstate;
 		l_dsstate.SetDepthTest( false );
-		l_dsstate.SetDepthMask( eWRITING_MASK_ZERO );
+		l_dsstate.SetDepthMask( WritingMask::Zero );
 		RasteriserState l_rsstate;
-		l_rsstate.SetCulledFaces( eFACE_BACK );
+		l_rsstate.SetCulledFaces( Culling::Back );
 		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{} );
 	}
 
@@ -138,10 +138,10 @@ namespace GrayScale
 		if ( !l_vertex.empty() && !l_fragment.empty() )
 		{
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
-			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
-			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_fragment );
+			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
+			l_program->SetSource( ShaderType::Pixel, l_model, l_fragment );
 			l_program->Initialise();
 			m_program = l_program;
 		}
@@ -157,12 +157,12 @@ namespace GrayScale
 
 	bool GrayScalePostEffect::Apply( FrameBuffer & p_framebuffer )
 	{
-		auto l_attach = p_framebuffer.GetAttachment( eATTACHMENT_POINT_COLOUR, 0 );
+		auto l_attach = p_framebuffer.GetAttachment( AttachmentPoint::Colour, 0 );
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
 			m_pipeline->Apply();
-			bool l_return = m_surface.m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+			bool l_return = m_surface.m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 
 			if ( l_return )
@@ -173,7 +173,7 @@ namespace GrayScale
 				m_surface.m_fbo->Unbind();
 			}
 
-			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+			if ( p_framebuffer.Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 			{
 				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetImage().GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
 				p_framebuffer.Unbind();

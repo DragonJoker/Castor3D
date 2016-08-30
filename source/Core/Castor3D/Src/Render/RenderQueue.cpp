@@ -193,6 +193,12 @@ namespace Castor3D
 								}
 
 								l_pass->PrepareTextures();
+
+								if ( l_pass->HasAlphaBlending() )
+								{
+									AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+								}
+
 								l_program = p_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
 
 								auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
@@ -305,12 +311,22 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderProgramCache().GetBillboardProgram( l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+							uint32_t l_programFlags = 0u;
+							AddFlag( l_programFlags, ProgramFlag::Billboards );
+							
+							if ( l_pass->HasAlphaBlending() )
+							{
+								AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+							}
+
+							ShaderProgramSPtr l_program = p_scene.GetEngine()->GetShaderProgramCache().GetBillboardProgram( l_pass->GetTextureFlags(), l_programFlags );
 
 							if ( !l_program )
 							{
-								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
-								p_scene.GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), uint32_t( ProgramFlag::Billboards ) );
+								String l_pxl;
+
+								l_program = p_scene.GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags(), l_programFlags );
+								p_scene.GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, l_pass->GetTextureFlags(), l_programFlags );
 							}
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );

@@ -389,7 +389,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La topologie.
 		 */
-		C3D_API eTOPOLOGY GetTopology()const;
+		C3D_API Topology GetTopology()const;
 		/**
 		 *\~english
 		 *\brief		Sets the topology.
@@ -398,7 +398,7 @@ namespace Castor3D
 		 *\brief		Définit la topologie.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		C3D_API void SetTopology( eTOPOLOGY p_value );
+		C3D_API void SetTopology( Topology p_value );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GeometryBuffers for given program.

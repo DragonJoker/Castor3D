@@ -355,19 +355,19 @@ namespace Castor3D
 		 */
 		inline void UpdateMaxShaderModel()
 		{
-			if ( m_useShader[eSHADER_TYPE_COMPUTE] )
+			if ( m_useShader[size_t( ShaderType::Compute )] )
 			{
 				m_maxShaderModel = eSHADER_MODEL_5;
 			}
-			else if ( m_useShader[eSHADER_TYPE_HULL] )
+			else if ( m_useShader[size_t( ShaderType::Hull )] )
 			{
 				m_maxShaderModel = eSHADER_MODEL_4;
 			}
-			else if ( m_useShader[eSHADER_TYPE_GEOMETRY] )
+			else if ( m_useShader[size_t( ShaderType::Geometry )] )
 			{
 				m_maxShaderModel = eSHADER_MODEL_3;
 			}
-			else if ( m_useShader[eSHADER_TYPE_PIXEL] )
+			else if ( m_useShader[size_t( ShaderType::Pixel )] )
 			{
 				m_maxShaderModel = eSHADER_MODEL_2;
 			}
@@ -384,9 +384,9 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de shader.
 		 *\return		Le statut du support du type de shader.
 		 */
-		inline bool HasShaderType( eSHADER_TYPE p_type )const
+		inline bool HasShaderType( ShaderType p_type )const
 		{
-			return m_useShader[p_type];
+			return m_useShader[size_t( p_type )];
 		}
 		/**
 		 *\~english
@@ -396,9 +396,9 @@ namespace Castor3D
 		 *\brief		Définit le support du type de shader donné.
 		 *\param[in]	p_type	Le type de shader.
 		 */
-		inline void UseShaderType( eSHADER_TYPE p_type, bool p_value )
+		inline void UseShaderType( ShaderType p_type, bool p_value )
 		{
-			m_useShader[p_type] = p_value;
+			m_useShader[size_t( p_type )] = p_value;
 		}
 		/**
 		 *\~english
@@ -559,7 +559,7 @@ namespace Castor3D
 		//!\~english The shader language version.	\~french La version du langage de shader.
 		uint32_t m_shaderLanguageVersion{ 0 };
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		std::array< bool, eSHADER_TYPE_COUNT > m_useShader;
+		std::array< bool, size_t( ShaderType::Count ) > m_useShader;
 		//!\~english The minimum values.	\~french Les valeurs minimales.
 		std::map< GpuMin, int32_t > m_minValues;
 		//!\~english The maximum values.	\~french Les valeurs maximales.

@@ -95,7 +95,7 @@ namespace Castor3D
 		PassSPtr pPass;
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
-		eSHADER_TYPE eShaderObject;
+		ShaderType eShaderObject;
 		FrameVariableBufferSPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;
 		OneIntFrameVariableSPtr pSamplerFrameVariable;
@@ -105,7 +105,7 @@ namespace Castor3D
 		int iFace2;
 		eLIGHT_TYPE eLightType;
 		eMESH_TYPE eMeshType;
-		eTOPOLOGY ePrimitiveType;
+		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
 		Castor::String strName;
 		Castor::String strName2;

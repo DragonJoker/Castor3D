@@ -108,15 +108,15 @@ namespace Msaa
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			l_bReturn = m_msFrameBuffer->Bind( FrameBufferMode::Config );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_msFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
+				l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Colour, m_pMsColorAttach );
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_msFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
+					l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Depth, m_pMsDepthAttach );
 				}
 
 				m_msFrameBuffer->Unbind();
@@ -128,7 +128,7 @@ namespace Msaa
 
 	void RenderTechnique::DoCleanup()
 	{
-		m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_msFrameBuffer->Bind( FrameBufferMode::Config );
 		m_msFrameBuffer->DetachAll();
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->Cleanup();
@@ -136,9 +136,9 @@ namespace Msaa
 		m_pMsDepthBuffer->Cleanup();
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene )
+	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
 	{
-		bool l_return = m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		bool l_return = m_msFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
@@ -149,15 +149,28 @@ namespace Msaa
 		return l_return;
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
+	bool RenderTechnique::DoBeginOpaqueRendering()
 	{
-		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
+		return true;
 	}
 
-	void RenderTechnique::DoEndRender( Scene & p_scene )
+	void RenderTechnique::DoEndOpaqueRendering()
+	{
+	}
+
+	bool RenderTechnique::DoBeginTransparentRendering()
+	{
+		return true;
+	}
+
+	void RenderTechnique::DoEndTransparentRendering()
+	{
+	}
+
+	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
 	{
 		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( m_frameBuffer.m_frameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
+		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )

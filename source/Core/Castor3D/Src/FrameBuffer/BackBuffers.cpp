@@ -23,17 +23,17 @@ namespace Castor3D
 		return true;
 	}
 
-	bool BackBuffers::DoBind( eFRAMEBUFFER_TARGET p_target )
+	bool BackBuffers::DoBind( FrameBufferTarget p_target )const
 	{
 		FAILURE( "BackBuffers instances can't be bound like regular FrameBuffer ones, use BackBuffers::Bind( eBUFFER, eFRAME_BUFFER_TARGET )." );
 		return false;
 	}
 
-	void BackBuffers::DoUnbind()
+	void BackBuffers::DoUnbind()const
 	{
 #if DEBUG_BUFFERS
 
-		if ( m_buffer && DownloadBuffer( eATTACHMENT_POINT_COLOUR, 0, m_buffer ) )
+		if ( m_buffer && DownloadBuffer( AttachmentPoint::Colour, 0, m_buffer ) )
 		{
 			StringStream l_name;
 			l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )m_buffer.get() << cuT( "_BACK.png" );

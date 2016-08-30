@@ -333,7 +333,7 @@ namespace GlRender
 		inline bool HasNonPowerOfTwoTextures()const;
 		inline bool CanBindVboToGpuAddress()const;
 		inline Castor::String const & GetGlslErrorString( int p_index )const;
-		inline eGL_PRIMITIVE Get( Castor3D::eTOPOLOGY p_index )const;
+		inline eGL_PRIMITIVE Get( Castor3D::Topology p_index )const;
 		inline eGL_TEXDIM Get( Castor3D::TextureType p_index )const;
 		inline eGL_FUNC Get( Castor3D::AlphaFunc p_eAlphaFunc )const;
 		inline eGL_WRAP_MODE Get( Castor3D::WrapMode p_eWrapMode )const;
@@ -343,26 +343,26 @@ namespace GlRender
 		inline eGL_BLEND_FUNC Get( Castor3D::AlphaBlendFunc p_mode )const;
 		inline eGL_BLEND_FACTOR Get( Castor3D::BlendOperand p_eBlendFactor )const;
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
-		inline eGL_SHADER_TYPE Get( Castor3D::eSHADER_TYPE p_type )const;
+		inline eGL_SHADER_TYPE Get( Castor3D::ShaderType p_type )const;
 		inline eGL_INTERNAL_FORMAT GetInternal( Castor::PixelFormat p_format )const;
 		inline uint32_t GetComponents( uint32_t p_components )const;
-		inline eGL_TEXTURE_ATTACHMENT Get( Castor3D::eATTACHMENT_POINT p_eAttachment )const;
-		inline eGL_FRAMEBUFFER_MODE Get( Castor3D::eFRAMEBUFFER_TARGET p_target )const;
-		inline eGL_RENDERBUFFER_ATTACHMENT GetRboAttachment( Castor3D::eATTACHMENT_POINT p_eAttachment )const;
+		inline eGL_TEXTURE_ATTACHMENT Get( Castor3D::AttachmentPoint p_eAttachment )const;
+		inline eGL_FRAMEBUFFER_MODE Get( Castor3D::FrameBufferTarget p_target )const;
+		inline eGL_RENDERBUFFER_ATTACHMENT GetRboAttachment( Castor3D::AttachmentPoint p_eAttachment )const;
 		inline eGL_RENDERBUFFER_STORAGE GetRboStorage( Castor::PixelFormat p_pixelFormat )const;
 		inline eGL_BUFFER Get( Castor3D::eBUFFER p_buffer )const;
 		inline eGL_BUFFER Get( eGL_TEXTURE_ATTACHMENT p_buffer )const;
 		inline eGL_BUFFER Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const;
-		inline eGL_FACE Get( Castor3D::eFACE p_eFace )const;
+		inline eGL_FACE Get( Castor3D::Culling p_eFace )const;
 		inline eGL_FILL_MODE Get( Castor3D::eFILL_MODE p_mode )const;
-		inline eGL_FUNC Get( Castor3D::eSTENCIL_FUNC p_func )const;
-		inline eGL_STENCIL_OP Get( Castor3D::eSTENCIL_OP p_eOp )const;
+		inline eGL_FUNC Get( Castor3D::StencilFunc p_func )const;
+		inline eGL_STENCIL_OP Get( Castor3D::StencilOp p_eOp )const;
 		inline eGL_BLEND_OP Get( Castor3D::BlendOperation p_eOp )const;
-		inline eGL_FUNC Get( Castor3D::eDEPTH_FUNC p_func )const;
+		inline eGL_FUNC Get( Castor3D::DepthFunc p_func )const;
 		inline eGL_QUERY Get( Castor3D::eQUERY_TYPE p_value )const;
 		inline eGL_QUERY_INFO Get( Castor3D::eQUERY_INFO p_value )const;
 		inline eGL_TEXTURE_STORAGE Get( Castor3D::TextureStorageType p_value )const;
-		inline bool Get( Castor3D::eWRITING_MASK p_eMask )const;
+		inline bool Get( Castor3D::WritingMask p_eMask )const;
 		inline bool HasDebugOutput()const;
 		inline Castor::String const & GetVendor()const;
 		inline Castor::String const & GetRenderer()const;
@@ -803,9 +803,9 @@ namespace GlRender
 		/**@name Other functions */
 		//@{
 
-		inline eGL_LOCK GetLockFlags( uint32_t p_flags )const;
-		inline uint32_t GetBitfieldFlags( uint32_t p_flags )const;
-		inline Castor3D::eELEMENT_TYPE Get( eGLSL_ATTRIBUTE_TYPE p_type )const;
+		inline eGL_LOCK GetLockFlags( Castor3D::AccessType p_flags )const;
+		inline uint32_t GetBitfieldFlags( Castor3D::AccessType p_flags )const;
+		inline Castor3D::ElementType Get( eGLSL_ATTRIBUTE_TYPE p_type )const;
 
 #if !defined( NDEBUG )
 
@@ -833,7 +833,7 @@ namespace GlRender
 	private:
 		Castor::String GlslStrings[8];
 		Castor::String GlslErrors[8];
-		eGL_PRIMITIVE PrimitiveTypes[uint32_t( Castor3D::eTOPOLOGY_COUNT )];
+		eGL_PRIMITIVE PrimitiveTypes[uint32_t( Castor3D::Topology::Count )];
 		eGL_TEXDIM TextureDimensions[uint32_t( Castor3D::TextureType::Count )];
 		eGL_FUNC AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Count )];
 		eGL_WRAP_MODE TextureWrapMode[uint32_t( Castor3D::WrapMode::Count )];
@@ -844,22 +844,22 @@ namespace GlRender
 		eGL_BLEND_FUNC AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Count )];
 		eGL_BLEND_OP BlendOps[uint32_t( Castor3D::BlendOperation::Count )];
 		PixelFmt PixelFormats[uint32_t( Castor::PixelFormat::Count )];
-		eGL_SHADER_TYPE ShaderTypes[uint32_t( Castor3D::eSHADER_TYPE_COUNT )];
+		eGL_SHADER_TYPE ShaderTypes[uint32_t( Castor3D::ShaderType::Count )];
 		eGL_INTERNAL_FORMAT Internals[uint32_t( Castor::PixelFormat::Count )];
-		eGL_TEXTURE_ATTACHMENT Attachments[uint32_t( Castor3D::eATTACHMENT_POINT_COUNT )];
-		eGL_FRAMEBUFFER_MODE FramebufferModes[uint32_t( Castor3D::eFRAMEBUFFER_MODE_COUNT )];
-		eGL_RENDERBUFFER_ATTACHMENT RboAttachments[uint32_t( Castor3D::eATTACHMENT_POINT_COUNT )];
+		eGL_TEXTURE_ATTACHMENT Attachments[uint32_t( Castor3D::AttachmentPoint::Count )];
+		eGL_FRAMEBUFFER_MODE FramebufferModes[uint32_t( Castor3D::FrameBufferMode::Count )];
+		eGL_RENDERBUFFER_ATTACHMENT RboAttachments[uint32_t( Castor3D::AttachmentPoint::Count )];
 		eGL_RENDERBUFFER_STORAGE RboStorages[uint32_t( Castor::PixelFormat::Count )];
 		eGL_BUFFER Buffers[uint32_t( Castor3D::eBUFFER_COUNT )];
-		eGL_FACE Faces[uint32_t( Castor3D::eFACE_COUNT )];
+		eGL_FACE Faces[uint32_t( Castor3D::Culling::Count )];
 		eGL_FILL_MODE FillModes[3u];
-		eGL_STENCIL_OP StencilOps[uint32_t( Castor3D::eSTENCIL_OP_COUNT )];
-		eGL_FUNC StencilFuncs[uint32_t( Castor3D::eSTENCIL_FUNC_COUNT )];
+		eGL_STENCIL_OP StencilOps[uint32_t( Castor3D::StencilOp::Count )];
+		eGL_FUNC StencilFuncs[uint32_t( Castor3D::StencilFunc::Count )];
 		eGL_QUERY Queries[uint32_t( Castor3D::eQUERY_TYPE_COUNT )];
 		eGL_QUERY_INFO QueryInfos[uint32_t( Castor3D::eQUERY_INFO_COUNT )];
 		eGL_TEXTURE_STORAGE TextureStorages[uint32_t( Castor3D::TextureStorageType::Count )];
-		bool WriteMasks[uint32_t( Castor3D::eWRITING_MASK_COUNT )];
-		eGL_FUNC DepthFuncs[uint32_t( Castor3D::eDEPTH_FUNC_COUNT )];
+		bool WriteMasks[uint32_t( Castor3D::WritingMask::Count )];
+		eGL_FUNC DepthFuncs[uint32_t( Castor3D::DepthFunc::Count )];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;
 		std::map< eGL_RENDERBUFFER_ATTACHMENT, eGL_BUFFER > BuffersRBA;
 

@@ -56,7 +56,7 @@ namespace Castor3D
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program );
+		C3D_API GeometryBuffers( Topology p_topology, ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -134,7 +134,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La topologie des tampons.
 		 */
-		inline eTOPOLOGY GetTopology()const
+		inline Topology GetTopology()const
 		{
 			return m_topology;
 		}
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\brief		Définit la topologie des tampons.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetTopology( eTOPOLOGY p_value )
+		inline void SetTopology( Topology p_value )
 		{
 			m_topology = p_value;
 		}
@@ -190,7 +190,7 @@ namespace Castor3D
 		ShaderProgram const & m_program;
 		//!\~english	The buffers topology.
 		//!\\~french	La topologie des tampons.
-		eTOPOLOGY m_topology;
+		Topology m_topology;
 	};
 }
 

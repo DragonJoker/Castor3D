@@ -32,14 +32,14 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, pPass()
 	, pTextureUnit()
 	, pShaderProgram()
-	, eShaderObject( eSHADER_TYPE_COUNT )
+	, eShaderObject( ShaderType::Count )
 	, pFrameVariable()
 	, pOverlay( nullptr )
 	, iFace1( -1 )
 	, iFace2( -1 )
 	, eLightType( eLIGHT_TYPE_COUNT )
 	, eMeshType( eMESH_TYPE_COUNT )
-	, ePrimitiveType( eTOPOLOGY_COUNT )
+	, ePrimitiveType( Topology::Count )
 	, pViewport( nullptr )
 	, strName()
 	, strName2()
@@ -63,7 +63,7 @@ void SceneFileContext::Initialise()
 	iFace2 = -1;
 	eLightType = eLIGHT_TYPE_COUNT;
 	eMeshType = eMESH_TYPE_COUNT;
-	ePrimitiveType = eTOPOLOGY_COUNT;
+	ePrimitiveType = Topology::Count;
 	uiUInt16 = 0;
 	uiUInt32 = 0;
 	uiUInt64 = 0;
@@ -71,7 +71,7 @@ void SceneFileContext::Initialise()
 	bBool2 = false;
 	m_pGeneralParentMaterial = nullptr;
 	pViewport = nullptr;
-	eShaderObject = eSHADER_TYPE_COUNT;
+	eShaderObject = ShaderType::Count;
 	pWindow.reset();
 	pSceneNode.reset();
 	pGeometry.reset();
@@ -163,38 +163,38 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "gloss" )] = uint32_t( TextureChannel::Gloss );
 	m_mapTextureChannels[cuT( "emissive" )] = uint32_t( TextureChannel::Emissive );
 
-	m_mapNormalModes[cuT( "smooth" )] = eNORMAL_SMOOTH;
-	m_mapNormalModes[cuT( "flat" )] = eNORMAL_FLAT;
+	m_mapNormalModes[cuT( "smooth" )] = uint32_t( eNORMAL_SMOOTH );
+	m_mapNormalModes[cuT( "flat" )] = uint32_t( eNORMAL_FLAT );
 
-	m_mapLightTypes[cuT( "point_light" )] = eLIGHT_TYPE_POINT;
-	m_mapLightTypes[cuT( "spot_light" )] = eLIGHT_TYPE_SPOT;
-	m_mapLightTypes[cuT( "directional" )] = eLIGHT_TYPE_DIRECTIONAL;
+	m_mapLightTypes[cuT( "point_light" )] = uint32_t( eLIGHT_TYPE_POINT );
+	m_mapLightTypes[cuT( "spot_light" )] = uint32_t( eLIGHT_TYPE_SPOT );
+	m_mapLightTypes[cuT( "directional" )] = uint32_t( eLIGHT_TYPE_DIRECTIONAL );
 
-	m_mapPrimitiveTypes[cuT( "points" )] = eTOPOLOGY_POINTS;
-	m_mapPrimitiveTypes[cuT( "lines" )] = eTOPOLOGY_LINES;
-	m_mapPrimitiveTypes[cuT( "line_loop" )] = eTOPOLOGY_LINE_LOOP;
-	m_mapPrimitiveTypes[cuT( "line_strip" )] = eTOPOLOGY_LINE_STRIP;
-	m_mapPrimitiveTypes[cuT( "triangles" )] = eTOPOLOGY_TRIANGLES;
-	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = eTOPOLOGY_TRIANGLE_STRIPS;
-	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = eTOPOLOGY_TRIANGLE_FAN;
-	m_mapPrimitiveTypes[cuT( "quads" )] = eTOPOLOGY_QUADS;
-	m_mapPrimitiveTypes[cuT( "quad_strip" )] = eTOPOLOGY_QUAD_STRIPS;
-	m_mapPrimitiveTypes[cuT( "polygon" )] = eTOPOLOGY_POLYGON;
+	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( Topology::Points );
+	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( Topology::Lines );
+	m_mapPrimitiveTypes[cuT( "line_loop" )] = uint32_t( Topology::LineLoop );
+	m_mapPrimitiveTypes[cuT( "line_strip" )] = uint32_t( Topology::LineStrip );
+	m_mapPrimitiveTypes[cuT( "triangles" )] = uint32_t( Topology::Triangles );
+	m_mapPrimitiveTypes[cuT( "triangle_strip" )] = uint32_t( Topology::TriangleStrips );
+	m_mapPrimitiveTypes[cuT( "triangle_fan" )] = uint32_t( Topology::TriangleFan );
+	m_mapPrimitiveTypes[cuT( "quads" )] = uint32_t( Topology::Quads );
+	m_mapPrimitiveTypes[cuT( "quad_strip" )] = uint32_t( Topology::QuadStrips );
+	m_mapPrimitiveTypes[cuT( "polygon" )] = uint32_t( Topology::Polygon );
 
-	m_mapPrimitiveOutputTypes[cuT( "points" )] = eTOPOLOGY_POINTS;
-	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = eTOPOLOGY_LINE_STRIP;
-	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = eTOPOLOGY_TRIANGLE_STRIPS;
-	m_mapPrimitiveOutputTypes[cuT( "quad_strip" )] = eTOPOLOGY_QUAD_STRIPS;
+	m_mapPrimitiveOutputTypes[cuT( "points" )] = uint32_t( Topology::Points );
+	m_mapPrimitiveOutputTypes[cuT( "line_strip" )] = uint32_t( Topology::LineStrip );
+	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( Topology::TriangleStrips );
+	m_mapPrimitiveOutputTypes[cuT( "quad_strip" )] = uint32_t( Topology::QuadStrips );
 
-	m_mapModels[cuT( "sm_1" )] = eSHADER_MODEL_1;
-	m_mapModels[cuT( "sm_2" )] = eSHADER_MODEL_2;
-	m_mapModels[cuT( "sm_3" )] = eSHADER_MODEL_3;
-	m_mapModels[cuT( "sm_4" )] = eSHADER_MODEL_4;
-	m_mapModels[cuT( "sm_5" )] = eSHADER_MODEL_5;
+	m_mapModels[cuT( "sm_1" )] = uint32_t( eSHADER_MODEL_1 );
+	m_mapModels[cuT( "sm_2" )] = uint32_t( eSHADER_MODEL_2 );
+	m_mapModels[cuT( "sm_3" )] = uint32_t( eSHADER_MODEL_3 );
+	m_mapModels[cuT( "sm_4" )] = uint32_t( eSHADER_MODEL_4 );
+	m_mapModels[cuT( "sm_5" )] = uint32_t( eSHADER_MODEL_5 );
 
-	m_mapViewportModes[cuT( "ortho" )] = eVIEWPORT_TYPE_ORTHO;
-	m_mapViewportModes[cuT( "perspective" )] = eVIEWPORT_TYPE_PERSPECTIVE;
-	m_mapViewportModes[cuT( "frustum" )] = eVIEWPORT_TYPE_FRUSTUM;
+	m_mapViewportModes[cuT( "ortho" )] = uint32_t( eVIEWPORT_TYPE_ORTHO );
+	m_mapViewportModes[cuT( "perspective" )] = uint32_t( eVIEWPORT_TYPE_PERSPECTIVE );
+	m_mapViewportModes[cuT( "frustum" )] = uint32_t( eVIEWPORT_TYPE_FRUSTUM );
 
 	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( InterpolationMode::Nearest );
 	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( InterpolationMode::Linear );
@@ -224,37 +224,37 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( FrameVariableType::Mat3x3f );
 	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( FrameVariableType::Mat4x4f );
 
-	m_mapMovables[cuT( "camera" )] = eMOVABLE_TYPE_CAMERA;
-	m_mapMovables[cuT( "light" )] = eMOVABLE_TYPE_LIGHT;
-	m_mapMovables[cuT( "object" )] = eMOVABLE_TYPE_GEOMETRY;
-	m_mapMovables[cuT( "billboard" )] = eMOVABLE_TYPE_BILLBOARD;
+	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::Camera );
+	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::Light );
+	m_mapMovables[cuT( "object" )] = uint32_t( MovableType::Geometry );
+	m_mapMovables[cuT( "billboard" )] = uint32_t( MovableType::Billboard );
 
-	m_mapTextWrappingModes[cuT( "none" )] = eTEXT_WRAPPING_MODE_NONE;
-	m_mapTextWrappingModes[cuT( "break" )] = eTEXT_WRAPPING_MODE_BREAK;
-	m_mapTextWrappingModes[cuT( "break_words" )] = eTEXT_WRAPPING_MODE_BREAK_WORDS;
+	m_mapTextWrappingModes[cuT( "none" )] = uint32_t( eTEXT_WRAPPING_MODE_NONE );
+	m_mapTextWrappingModes[cuT( "break" )] = uint32_t( eTEXT_WRAPPING_MODE_BREAK );
+	m_mapTextWrappingModes[cuT( "break_words" )] = uint32_t( eTEXT_WRAPPING_MODE_BREAK_WORDS );
 
-	m_mapBorderPositions[cuT( "internal" )] = eBORDER_POSITION_INTERNAL;
-	m_mapBorderPositions[cuT( "middle" )] = eBORDER_POSITION_MIDDLE;
-	m_mapBorderPositions[cuT( "external" )] = eBORDER_POSITION_EXTERNAL;
+	m_mapBorderPositions[cuT( "internal" )] = uint32_t( eBORDER_POSITION_INTERNAL );
+	m_mapBorderPositions[cuT( "middle" )] = uint32_t( eBORDER_POSITION_MIDDLE );
+	m_mapBorderPositions[cuT( "external" )] = uint32_t( eBORDER_POSITION_EXTERNAL );
 
 	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::NoBlend );
 	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::Additive );
 	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::Multiplicative );
 
-	m_mapVerticalAligns[cuT( "top" )] = eVALIGN_TOP;
-	m_mapVerticalAligns[cuT( "center" )] = eVALIGN_CENTER;
-	m_mapVerticalAligns[cuT( "bottom" )] = eVALIGN_BOTTOM;
+	m_mapVerticalAligns[cuT( "top" )] = uint32_t( eVALIGN_TOP );
+	m_mapVerticalAligns[cuT( "center" )] = uint32_t( eVALIGN_CENTER );
+	m_mapVerticalAligns[cuT( "bottom" )] = uint32_t( eVALIGN_BOTTOM );
 
-	m_mapHorizontalAligns[cuT( "left" )] = eHALIGN_LEFT;
-	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
-	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
+	m_mapHorizontalAligns[cuT( "left" )] = uint32_t( eHALIGN_LEFT );
+	m_mapHorizontalAligns[cuT( "center" )] = uint32_t( eHALIGN_CENTER );
+	m_mapHorizontalAligns[cuT( "right" )] = uint32_t( eHALIGN_RIGHT );
 
-	m_mapTextTexturingModes[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
-	m_mapTextTexturingModes[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;
+	m_mapTextTexturingModes[cuT( "letter" )] = uint32_t( eTEXT_TEXTURING_MODE_LETTER );
+	m_mapTextTexturingModes[cuT( "text" )] = uint32_t( eTEXT_TEXTURING_MODE_TEXT );
 
-	m_mapLineSpacingModes[cuT( "own_height" )] = eTEXT_LINE_SPACING_MODE_OWN_HEIGHT;
-	m_mapLineSpacingModes[cuT( "max_lines_height" )] = eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT;
-	m_mapLineSpacingModes[cuT( "max_font_height" )] = eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT;
+	m_mapLineSpacingModes[cuT( "own_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_OWN_HEIGHT );
+	m_mapLineSpacingModes[cuT( "max_lines_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT );
+	m_mapLineSpacingModes[cuT( "max_font_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -289,7 +289,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 		{
 			PathArray l_files;
 
-			if ( File::ListDirectoryFiles( l_path, l_files ) )
+			if ( File::ListDirectoryFiles( l_path, l_files, true ) )
 			{
 				auto l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{

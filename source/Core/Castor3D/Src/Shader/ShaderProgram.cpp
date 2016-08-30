@@ -42,14 +42,14 @@ namespace Castor3D
 	{
 		bool l_return = false;
 		bool l_hasFile = false;
-		int i = 0;
-		int j = 0;
+		uint8_t i = 0;
+		uint8_t j = 0;
 
-		while ( i < eSHADER_TYPE_COUNT && !l_hasFile )
+		while ( i < uint8_t( ShaderType::Count ) && !l_hasFile )
 		{
 			while ( j < eSHADER_MODEL_COUNT && !l_hasFile )
 			{
-				l_hasFile = !p_shaderProgram.GetFile( eSHADER_TYPE( i ), eSHADER_MODEL( j ) ).empty();
+				l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ), eSHADER_MODEL( j ) ).empty();
 				++j;
 			}
 
@@ -62,7 +62,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
+			for (uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_return; i++ )
 			{
 				l_object = p_shaderProgram.m_pShaders[i];
 
@@ -159,22 +159,22 @@ namespace Castor3D
 	{
 	}
 
-	ShaderObjectSPtr ShaderProgram::CreateObject( eSHADER_TYPE p_type )
+	ShaderObjectSPtr ShaderProgram::CreateObject( ShaderType p_type )
 	{
 		ShaderObjectSPtr l_return;
-		REQUIRE( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT );
+		REQUIRE( p_type > ShaderType::None && p_type < ShaderType::Count );
 
-		if ( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT )
+		if ( p_type > ShaderType::None && p_type < ShaderType::Count )
 		{
 			l_return = DoCreateObject( p_type );
-			m_pShaders[p_type] = l_return;
+			m_pShaders[size_t( p_type )] = l_return;
 			int i = eSHADER_MODEL_1;
 
 			for ( auto const & l_file : m_arrayFiles )
 			{
 				if ( !l_file.empty() )
 				{
-					m_pShaders[p_type]->SetFile( eSHADER_MODEL( i++ ), l_file );
+					m_pShaders[size_t( p_type )]->SetFile( eSHADER_MODEL( i++ ), l_file );
 				}
 			}
 		}
@@ -213,11 +213,11 @@ namespace Castor3D
 	void ShaderProgram::SetFile( eSHADER_MODEL p_eModel, Path const & p_path )
 	{
 		m_arrayFiles[p_eModel] = p_path;
-		int i = eSHADER_TYPE_VERTEX;
+		uint8_t i = uint8_t( ShaderType::Vertex );
 
 		for ( auto l_shader : m_pShaders )
 		{
-			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( eSHADER_TYPE( i++ ) ) )
+			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( ShaderType( i++ ) ) )
 			{
 				l_shader->SetFile( p_eModel, p_path );
 			}
@@ -231,80 +231,80 @@ namespace Castor3D
 		m_status = ePROGRAM_STATUS_NOTLINKED;
 	}
 
-	void ShaderProgram::SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
+	void ShaderProgram::SetInputType( ShaderType p_target, Topology p_topology )
 	{
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			m_pShaders[p_target]->SetInputType( p_topology );
+			m_pShaders[size_t( p_target )]->SetInputType( p_topology );
 		}
 	}
 
-	void ShaderProgram::SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
+	void ShaderProgram::SetOutputType( ShaderType p_target, Topology p_topology )
 	{
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			m_pShaders[p_target]->SetOutputType( p_topology );
+			m_pShaders[size_t( p_target )]->SetOutputType( p_topology );
 		}
 	}
 
-	void ShaderProgram::SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count )
+	void ShaderProgram::SetOutputVtxCount( ShaderType p_target, uint8_t p_count )
 	{
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			m_pShaders[p_target]->SetOutputVtxCount( p_count );
+			m_pShaders[size_t( p_target )]->SetOutputVtxCount( p_count );
 		}
 	}
 
-	void ShaderProgram::SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Path const & p_pathFile )
+	void ShaderProgram::SetFile( ShaderType p_target, eSHADER_MODEL p_eModel, Path const & p_pathFile )
 	{
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
 			if ( p_eModel == eSHADER_MODEL_COUNT )
 			{
-				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
+				for ( uint8_t i = 0; i < eSHADER_MODEL_COUNT; ++i )
 				{
 					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( eSHADER_MODEL( i ) ) )
 					{
-						m_pShaders[p_target]->SetFile( eSHADER_MODEL( i ), p_pathFile );
+						m_pShaders[size_t( p_target )]->SetFile( eSHADER_MODEL( i ), p_pathFile );
 					}
 				}
 			}
 			else
 			{
-				m_pShaders[p_target]->SetFile( p_eModel, p_pathFile );
+				m_pShaders[size_t( p_target )]->SetFile( p_eModel, p_pathFile );
 			}
 		}
 
 		ResetToCompile();
 	}
 
-	Path ShaderProgram::GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
+	Path ShaderProgram::GetFile( ShaderType p_target, eSHADER_MODEL p_eModel )const
 	{
 		Path l_pathReturn;
 
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			l_pathReturn = m_pShaders[p_target]->GetFile( p_eModel );
+			l_pathReturn = m_pShaders[size_t( p_target )]->GetFile( p_eModel );
 		}
 
 		return l_pathReturn;
 	}
 
-	bool ShaderProgram::HasFile( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasFile( ShaderType p_target )const
 	{
 		bool l_return = false;
 
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			l_return = m_pShaders[p_target]->HasFile();
+			l_return = m_pShaders[size_t( p_target )]->HasFile();
 		}
 
 		return l_return;
 	}
 
-	void ShaderProgram::SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, String const & p_strSource )
+	void ShaderProgram::SetSource( ShaderType p_target, eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
 			if ( p_eModel == eSHADER_MODEL_COUNT )
 			{
@@ -312,61 +312,61 @@ namespace Castor3D
 				{
 					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( eSHADER_MODEL( i ) ) )
 					{
-						m_pShaders[p_target]->SetSource( eSHADER_MODEL( i ), p_strSource );
+						m_pShaders[size_t( p_target )]->SetSource( eSHADER_MODEL( i ), p_strSource );
 					}
 				}
 			}
 			else
 			{
-				m_pShaders[p_target]->SetSource( p_eModel, p_strSource );
+				m_pShaders[size_t( p_target )]->SetSource( p_eModel, p_strSource );
 			}
 		}
 
 		ResetToCompile();
 	}
 
-	String ShaderProgram::GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
+	String ShaderProgram::GetSource( ShaderType p_target, eSHADER_MODEL p_eModel )const
 	{
 		String l_strReturn;
 
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			l_strReturn = m_pShaders[p_target]->GetSource( p_eModel );
+			l_strReturn = m_pShaders[size_t( p_target )]->GetSource( p_eModel );
 		}
 
 		return l_strReturn;
 	}
 
-	bool ShaderProgram::HasSource( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasSource( ShaderType p_target )const
 	{
 		bool l_return = false;
 
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			l_return = m_pShaders[p_target]->HasSource();
+			l_return = m_pShaders[size_t( p_target )]->HasSource();
 		}
 
 		return l_return;
 	}
 
-	bool ShaderProgram::HasObject( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasObject( ShaderType p_target )const
 	{
-		return m_pShaders[p_target] && m_pShaders[p_target]->HasSource() && m_pShaders[p_target]->GetStatus() == eSHADER_STATUS_COMPILED;
+		return m_pShaders[size_t( p_target )] && m_pShaders[size_t( p_target )]->HasSource() && m_pShaders[size_t( p_target )]->GetStatus() == eSHADER_STATUS_COMPILED;
 	}
 
-	eSHADER_STATUS ShaderProgram::GetObjectStatus( eSHADER_TYPE p_target )const
+	eSHADER_STATUS ShaderProgram::GetObjectStatus( ShaderType p_target )const
 	{
 		eSHADER_STATUS l_return = eSHADER_STATUS_DONTEXIST;
 
-		if ( m_pShaders[p_target] )
+		if ( m_pShaders[size_t( p_target )] )
 		{
-			l_return = m_pShaders[p_target]->GetStatus();
+			l_return = m_pShaders[size_t( p_target )]->GetStatus();
 		}
 
 		return l_return;
 	}
 
-	FrameVariableSPtr ShaderProgram::CreateFrameVariable( FrameVariableType p_type, String const & p_name, eSHADER_TYPE p_shader, int p_iNbOcc )
+	FrameVariableSPtr ShaderProgram::CreateFrameVariable( FrameVariableType p_type, String const & p_name, ShaderType p_shader, int p_iNbOcc )
 	{
 		FrameVariableSPtr l_return = FindFrameVariable( p_type, p_name, p_shader );
 
@@ -375,22 +375,22 @@ namespace Castor3D
 			l_return = DoCreateVariable( p_type, p_iNbOcc );
 			l_return->SetName( p_name );
 
-			if ( m_pShaders[p_shader] )
+			if ( m_pShaders[size_t( p_shader )] )
 			{
-				m_pShaders[p_shader]->AddFrameVariable( l_return );
+				m_pShaders[size_t( p_shader )]->AddFrameVariable( l_return );
 			}
 		}
 
 		return l_return;
 	}
 
-	FrameVariableSPtr ShaderProgram::FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, eSHADER_TYPE p_shader )const
+	FrameVariableSPtr ShaderProgram::FindFrameVariable( FrameVariableType p_type, Castor::String const & p_name, ShaderType p_shader )const
 	{
 		FrameVariableSPtr l_return;
 
-		if ( m_pShaders[p_shader] )
+		if ( m_pShaders[size_t( p_shader )] )
 		{
-			l_return = m_pShaders[p_shader]->FindFrameVariable( p_name );
+			l_return = m_pShaders[size_t( p_shader )]->FindFrameVariable( p_name );
 
 			if ( l_return && l_return->GetFullType() != p_type )
 			{
@@ -411,7 +411,7 @@ namespace Castor3D
 			m_listFrameVariableBuffers.push_back( p_pVariableBuffer );
 			m_frameVariableBuffersByName.insert( std::make_pair( p_pVariableBuffer->GetName(), p_pVariableBuffer ) );
 
-			for ( int i = 0; i < eSHADER_TYPE_COUNT; ++i )
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); ++i )
 			{
 				if ( p_shaderMask & ( uint64_t( 0x1 ) << i ) )
 				{
@@ -434,14 +434,14 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariablePtrList & ShaderProgram::GetFrameVariables( eSHADER_TYPE p_type )
+	FrameVariablePtrList & ShaderProgram::GetFrameVariables( ShaderType p_type )
 	{
-		return m_pShaders[p_type]->GetFrameVariables();
+		return m_pShaders[size_t( p_type )]->GetFrameVariables();
 	}
 
-	FrameVariablePtrList const & ShaderProgram::GetFrameVariables( eSHADER_TYPE p_type )const
+	FrameVariablePtrList const & ShaderProgram::GetFrameVariables( ShaderType p_type )const
 	{
-		return m_pShaders[p_type]->GetFrameVariables();
+		return m_pShaders[size_t( p_type )]->GetFrameVariables();
 	}
 
 	bool ShaderProgram::DoInitialise()

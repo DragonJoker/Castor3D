@@ -49,10 +49,10 @@ namespace GlRender
 		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target );
 		virtual ~GlBufferBase();
 
-		bool Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
+		bool Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 		void Cleanup();
-		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
-		T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
+		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
 		T * Lock( eGL_LOCK p_access );
 		bool Unlock();
 

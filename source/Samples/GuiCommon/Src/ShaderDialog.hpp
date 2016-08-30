@@ -45,8 +45,8 @@ namespace GuiCommon
 		void DoCleanup();
 		void DoLoadShader();
 		void DoOpenShaderFile();
-		void DoFolder( Castor3D::eSHADER_TYPE p_type );
-		void DoSave( Castor3D::eSHADER_TYPE p_type, bool p_createIfNone );
+		void DoFolder( Castor3D::ShaderType p_type );
+		void DoSave( Castor3D::ShaderType p_type, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -62,7 +62,7 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
-		ShaderEditorPage * m_pEditorPages[Castor3D::eSHADER_TYPE_COUNT];
+		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::Count )];
 		Castor3D::ShaderProgramWPtr m_shaderProgram;
 		Castor3D::PassWPtr m_pPass;
 		bool m_bCompiled;

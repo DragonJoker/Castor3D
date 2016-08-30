@@ -25,7 +25,7 @@ namespace Castor3D
 		}
 	}
 
-	TextureLayout::TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureLayout::TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_type{ p_type }
 		, m_images{ GetImagesCount( p_type ) }
@@ -115,7 +115,7 @@ namespace Castor3D
 		}
 	}
 
-	uint8_t * TextureLayout::Lock( uint32_t p_index, uint32_t p_lock )
+	uint8_t * TextureLayout::Lock( uint32_t p_index, AccessType p_lock )
 	{
 		uint8_t * l_return;
 

@@ -110,7 +110,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		C3D_API void DoAddAttribute( Castor::String const & p_name, eELEMENT_TYPE p_type, uint32_t p_offset = 0 );
+		C3D_API void DoAddAttribute( Castor::String const & p_name, ElementType p_type, uint32_t p_offset = 0 );
 		/**
 		 *\~english
 		 *\brief		Tries to guess possible usage for attribute, given its name and type.
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\return		Les utilisations possibles.
 		 */
-		uint32_t DoGuessUsages( Castor::String const & p_name, eELEMENT_TYPE p_type );
+		uint32_t DoGuessUsages( Castor::String const & p_name, ElementType p_type );
 
 	protected:
 		friend C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );

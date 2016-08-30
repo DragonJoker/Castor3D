@@ -96,11 +96,11 @@ namespace Castor3D
 
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, 0, eACCESS_TYPE_READ ) }
+		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::Read ) }
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS }
+				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3 }
 			}
 		}
 	{
@@ -271,7 +271,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.SWIZZLE_X, -vtx_texture.SWIZZLE_Y, vtx_texture.SWIZZLE_Z ) );
+				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
@@ -279,9 +279,9 @@ namespace Castor3D
 		}
 
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vtx );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_pxl );
-		m_matricesBuffer = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, eSHADER_TYPE_VERTEX );
+		l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
+		l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
+		m_matricesBuffer = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, uint32_t( ShaderType::Vertex ) );
 		return l_program->Initialise();
 	}
 
@@ -291,9 +291,9 @@ namespace Castor3D
 		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_vertexBuffer->Create();
-		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_program.lock() );
+		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *m_program.lock() );
 
-		return m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW )
+		return m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw )
 			   && m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 	}
 
@@ -306,10 +306,10 @@ namespace Castor3D
 	bool Skybox::DoInitialisePipeline()
 	{
 		DepthStencilState l_dsState;
-		l_dsState.SetDepthFunc( eDEPTH_FUNC_LEQUAL );
+		l_dsState.SetDepthFunc( DepthFunc::LEqual );
 
 		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( eFACE_FRONT );
+		l_rsState.SetCulledFaces( Culling::Front );
 
 		BlendState l_blState;
 		MultisampleState l_msState;

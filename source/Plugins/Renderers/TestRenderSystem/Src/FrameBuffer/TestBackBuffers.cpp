@@ -25,48 +25,34 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::Bind( eBUFFER p_buffer, eFRAMEBUFFER_TARGET p_target )
+	bool TestBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )const
 	{
 		return true;
 	}
 
-	void TestBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
+	void TestBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )const
 	{
 	}
 
-	void TestBackBuffers::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void TestBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 	}
 
-	bool TestBackBuffers::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	bool TestBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		return true;
-	}
-
-	bool TestBackBuffers::DoInitialise( Size const & p_size )
-	{
-		return true;
-	}
-
-	void TestBackBuffers::DoCleanup()
-	{
 	}
 
 	void TestBackBuffers::DoClear( uint32_t p_uiTargets )
 	{
 	}
 
-	void TestBackBuffers::DoResize( Castor::Size const & p_size )
-	{
-		FAILURE( "BackBuffers can't be resized." );
-	}
-
-	bool TestBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
+	bool TestBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
 		return false;
 	}
 
-	bool TestBackBuffers::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
+	bool TestBackBuffers::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
 		return false;
 	}

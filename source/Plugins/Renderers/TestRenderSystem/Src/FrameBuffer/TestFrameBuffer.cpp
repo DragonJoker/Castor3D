@@ -28,11 +28,11 @@ namespace TestRender
 	{
 	}
 
-	void TestFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
+	void TestFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )const
 	{
 	}
 
-	void TestFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void TestFrameBuffer::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
 	}
 
@@ -41,7 +41,7 @@ namespace TestRender
 		return true;
 	}
 
-	bool TestFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	bool TestFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		return true;
 	}
@@ -70,21 +70,21 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_target )
+	bool TestFrameBuffer::DoBind( FrameBufferTarget p_target )const
 	{
 		return true;
 	}
 
-	void TestFrameBuffer::DoUnbind()
+	void TestFrameBuffer::DoUnbind()const
 	{
 	}
 
-	bool TestFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
+	bool TestFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
 		return true;
 	}
 
-	bool TestFrameBuffer::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )
+	bool TestFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
 		return true;
 	}

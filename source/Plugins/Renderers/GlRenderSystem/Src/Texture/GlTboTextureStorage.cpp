@@ -22,7 +22,7 @@ namespace GlRender
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_storage.GetOwner()->GetBuffer();
 			m_glInternal = l_storage.GetOpenGl().GetInternal( l_buffer->format() );
-			l_return = m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			l_return = m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		}
 	}
 
@@ -44,7 +44,7 @@ namespace GlRender
 		l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
 	}
 
-	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, uint32_t p_lock )
+	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 		m_glBuffer.Bind();
@@ -59,6 +59,6 @@ namespace GlRender
 
 	void GlTboTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
 	{
-		m_glBuffer.Fill( p_buffer, p_size.width() * p_size.height() * PF::GetBytesPerPixel( p_format ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+		m_glBuffer.Fill( p_buffer, p_size.width() * p_size.height() * PF::GetBytesPerPixel( p_format ), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 	}
 }

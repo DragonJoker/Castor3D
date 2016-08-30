@@ -49,20 +49,17 @@ namespace Deferred
 		: public Castor3D::RenderTechnique
 	{
 	protected:
-		typedef enum eDS_TEXTURE
+		enum class DsTexture
 			: uint8_t
 		{
-			eDS_TEXTURE_POSITION,
-			eDS_TEXTURE_AMBIENT,
-			eDS_TEXTURE_DIFFUSE,
-			eDS_TEXTURE_NORMALS,
-			eDS_TEXTURE_TANGENT,
-			eDS_TEXTURE_BITANGENT,
-			eDS_TEXTURE_SPECULAR,
-			eDS_TEXTURE_EMISSIVE,
-			eDS_TEXTURE_DEPTH,
-			eDS_TEXTURE_COUNT,
-		}	eDS_TEXTURE;
+			Position,
+			Diffuse,
+			Normals,
+			Tangent,
+			Specular,
+			Emissive,
+			CASTOR_ENUM_CLASS_BOUNDS( Position ),
+		};
 
 		DECLARE_SMART_PTR( Point3rFrameVariable );
 
@@ -125,23 +122,35 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender( Castor3D::Scene & p_scene )override;
+		bool DoBeginRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoRender
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
-		void DoRender( Castor3D::SceneRenderNodes & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime )override;
+		bool DoBeginOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
+		 */
+		void DoEndOpaqueRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
+		 */
+		bool DoBeginTransparentRendering()override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
+		 */
+		void DoEndTransparentRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		void DoEndRender( Castor3D::Scene & p_scene )override;
-		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
-		 */
-		Castor::String DoGetPixelShaderSource( uint32_t p_flags )const override;
+		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
+		 */
+		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -161,16 +170,28 @@ namespace Deferred
 		 */
 		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
 
+	private:
+		static Castor::String RenderTechnique::GetTextureName( DsTexture p_texture );
+		static Castor::PixelFormat RenderTechnique::GetTextureFormat( DsTexture p_texture );
+		static Castor3D::AttachmentPoint RenderTechnique::GetTextureAttachmentPoint( DsTexture p_texture );
+		static uint32_t RenderTechnique::GetTextureAttachmentIndex( DsTexture p_texture );
+
 	protected:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		Castor3D::TextureUnitSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
+		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::Count ) > m_lightPassTextures;
+		//!\~english	The depth buffer.
+		//!\~french		Le tampon de profondeur.
+		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
 		//!\~english	The deferred shading frame buffer.
 		//!\~french		Le tampon d'image pour le deferred shading.
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
-		//!\~french		Les attaches entre les texture et le tampon deferred shading.
-		Castor3D::TextureAttachmentSPtr m_geometryPassTexAttachs[eDS_TEXTURE_COUNT];
+		//!\~french		Les attaches entre les textures et le tampon deferred shading.
+		std::array< Castor3D::TextureAttachmentSPtr, size_t (DsTexture::Count) > m_geometryPassTexAttachs;
+		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
+		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
+		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
 		Castor3D::ShaderProgramSPtr m_lightPassShaderProgram;
@@ -200,10 +221,13 @@ namespace Deferred
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english	The pipeline used by the light pass.
 		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::PipelineSPtr m_pipeline;
+		Castor3D::PipelineSPtr m_lightPassPipeline;
 		//!\~english	The current camera.
 		//!\~french		La caméra actuelle.
 		Castor3D::Camera * m_camera{ nullptr };
+		//!\~english	The current scene.
+		//!\~french		La scène actuelle.
+		Castor3D::Scene * m_scene{ nullptr };
 	};
 }
 

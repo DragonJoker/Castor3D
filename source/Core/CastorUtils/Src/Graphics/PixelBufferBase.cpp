@@ -205,6 +205,10 @@ namespace Castor
 			l_return = std::make_shared< PxBuffer< PixelFormat::D32 > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
+		case PixelFormat::D32F:
+			l_return = std::make_shared< PxBuffer< PixelFormat::D32F > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
 		case PixelFormat::S1:
 			l_return = std::make_shared< PxBuffer< PixelFormat::S1 > >( p_size, p_buffer, p_eBufferFormat );
 			break;

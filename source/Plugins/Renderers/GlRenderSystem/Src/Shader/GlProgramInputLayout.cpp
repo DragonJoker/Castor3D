@@ -58,12 +58,12 @@ namespace GlRender
 				Logger::LogDebug( StringStream() << cuT( "   Attribute: " ) << string::string_cast< xchar >( l_name ) );
 				GetOpenGl().GetProgramResourceInfos( l_program.GetGlName(), eGLSL_INTERFACE_PROGRAM_INPUT, i, 1, &l_prop, 1, &l_length, &l_value );
 				int l_loc = GetOpenGl().GetAttribLocation( l_program.GetGlName(), l_buffer.data() );
-				eELEMENT_TYPE l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_value ) );
+				ElementType l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_value ) );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == eELEMENT_TYPE_4FLOATS && l_name == string::string_cast< char >( ShaderProgram::Position ) )
+				if ( l_elemType == ElementType::Vec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
-					l_elemType = eELEMENT_TYPE_3FLOATS;
+					l_elemType = ElementType::Vec3;
 				}
 
 				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );
@@ -84,13 +84,13 @@ namespace GlRender
 				GetOpenGl().GetActiveAttrib( l_program.GetGlName(), i, uint32_t( l_buffer.size() ), &l_actualLength, &l_arraySize, &l_type, l_buffer.data() );
 				std::string l_name( l_buffer.data(), l_actualLength );
 				Logger::LogDebug( StringStream() << cuT( "   Attribute: " ) << string::string_cast< xchar >( l_name ) );
-				eELEMENT_TYPE l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_type ) );
+				ElementType l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_type ) );
 				int l_loc = GetOpenGl().GetAttribLocation( l_program.GetGlName(), l_buffer.data() );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == eELEMENT_TYPE_4FLOATS && l_name == string::string_cast< char >( ShaderProgram::Position ) )
+				if ( l_elemType == ElementType::Vec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
-					l_elemType = eELEMENT_TYPE_3FLOATS;
+					l_elemType = ElementType::Vec3;
 				}
 
 				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );

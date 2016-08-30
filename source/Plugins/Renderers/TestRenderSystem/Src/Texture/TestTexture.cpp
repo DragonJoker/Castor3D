@@ -9,7 +9,7 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestTexture::TestTexture( TestRenderSystem & p_renderSystem, TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TestTexture::TestTexture( TestRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess }
 	{
 	}

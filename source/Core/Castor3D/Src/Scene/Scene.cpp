@@ -615,7 +615,7 @@ namespace Castor3D
 
 		try
 		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
+			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
 			l_texture->GetImage().SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()

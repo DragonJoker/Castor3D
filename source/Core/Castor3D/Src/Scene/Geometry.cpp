@@ -85,7 +85,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Geometry::Geometry( String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh )
-		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_GEOMETRY, p_sn )
+		: MovableObject( p_name, p_scene, MovableType::Geometry, p_sn )
 		, m_mesh( p_mesh )
 		, m_changed( true )
 		, m_listCreated( false )

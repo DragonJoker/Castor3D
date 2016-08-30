@@ -19,7 +19,7 @@ namespace CastorCom
 
 		if ( m_state )
 		{
-			m_state->SetColourMask( Castor3D::eWRITING_MASK( red ), Castor3D::eWRITING_MASK( green ), Castor3D::eWRITING_MASK( blue ), Castor3D::eWRITING_MASK( alpha ) );
+			m_state->SetColourMask( Castor3D::WritingMask( red ), Castor3D::WritingMask( green ), Castor3D::WritingMask( blue ), Castor3D::WritingMask( alpha ) );
 			hr = S_OK;
 		}
 		else

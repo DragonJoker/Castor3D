@@ -45,7 +45,7 @@ namespace TestRender
 		return std::make_shared< TestContext >( *this );
 	}
 
-	GeometryBuffersSPtr TestRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
@@ -68,7 +68,7 @@ namespace TestRender
 		return std::make_shared< TestShaderProgram >( *this );
 	}
 
-	std::shared_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateIndexBuffer( CpuBuffer<uint32_t> * p_buffer )
+	std::shared_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
 	{
 		return std::make_shared< TestIndexBuffer >( *this );
 	}
@@ -78,12 +78,12 @@ namespace TestRender
 		return std::make_shared< TestVertexBuffer >( *this );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		return std::make_unique< TestTextureStorage >( *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 	}

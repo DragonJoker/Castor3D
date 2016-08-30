@@ -25,7 +25,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
+	bool TestIndexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
 	}
@@ -48,7 +48,7 @@ namespace TestRender
 	{
 	}
 
-	uint32_t * TestIndexBuffer::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
+	uint32_t * TestIndexBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessType p_flags )
 	{
 		return nullptr;
 	}
@@ -57,7 +57,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
+	bool TestIndexBuffer::Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		return true;
 	}

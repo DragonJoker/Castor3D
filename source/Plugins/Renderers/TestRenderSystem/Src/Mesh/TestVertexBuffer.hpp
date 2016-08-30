@@ -41,13 +41,13 @@ namespace TestRender
 
 		virtual bool Create();
 		virtual void Destroy();
-		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
+		virtual bool Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 		virtual void Cleanup();
-		virtual uint8_t * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
+		virtual uint8_t * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
 		virtual void Unlock();
 		virtual bool Bind();
 		virtual void Unbind();
-		virtual bool Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
+		virtual bool Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 	};
 }
 

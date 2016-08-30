@@ -44,7 +44,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program )override;
+		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
 		 */
@@ -71,11 +71,11 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )override;
+		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
-		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )override;
+		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
 		 */

@@ -49,7 +49,7 @@ namespace TestRender
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		TestTextureStorage( TestRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		TestTextureStorage( TestRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -65,7 +65,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		virtual uint8_t * Lock( uint32_t p_lock );
+		virtual uint8_t * Lock( Castor3D::AccessType p_lock );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */

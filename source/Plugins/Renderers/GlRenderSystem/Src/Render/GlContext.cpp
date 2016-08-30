@@ -33,7 +33,6 @@ namespace GlRender
 
 	GlContext::~GlContext()
 	{
-		m_pipeline.reset();
 		m_implementation.reset();
 	}
 

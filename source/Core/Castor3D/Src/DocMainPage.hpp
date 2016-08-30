@@ -131,7 +131,7 @@
  *<li>Created TechniqueParameters class to be able to pass generic parameters instead of, for example, the samples count.</li>
  *<li>Introducing SamplerState class to group calls to SetSamplerState and all relative stuff.</li>
  *<li>Reviewed sizes a bit : Viewport holds the internal size, RenderTarget and RenderWindow hold external size. Modified  SceneFileParser, added &lt;size&gt; directive for viewport.</li>
- *<li>Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.</li>
+ *<li>Splitted eBUFFER_MODE in BufferAccessType and BufferAccessNature.</li>
  *<li>Modified a bit FrameVariable in order to take care of eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.</li>
  *<li>Modified Submesh::AddPoints so it takes a stVERTEX_GROUP structure as a parameter.</li>
  *<li>Introducing FrameVariableBuffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
@@ -582,7 +582,7 @@
  *<li>Implémentation du MSAA.</li>
  *<li>Implémentation de l'Alpha to Coverage lorsque le MSAA est activé.</li>
  *<li>Revue des tailles : Viewport contient la taille interne, RenderTarget et RenderWindow contiennent la taille externe.</li>
- *<li>Découpe de eBUFFER_MODE en eBUFFER_ACCESS_TYPE et eBUFFER_ACCESS_NATURE.</li>
+ *<li>Découpe de eBUFFER_MODE en BufferAccessType et BufferAccessNature.</li>
  *<li>L'initialisation des objets GPU se passe maintenant avec l'utilisation de deux évènements : InitialiseEvent et CleanupEvent.</li>
  *<li>Fusion de GpuBuffer::Initialise et GpuBuffer::SetShaderProgram afin d'en simplifier l'utilisation.</li>
  *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction TextureLayout::GenerateMipmaps.</li>

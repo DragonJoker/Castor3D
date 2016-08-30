@@ -409,7 +409,7 @@ namespace Castor3D
 
 		if ( m_toSave )
 		{
-			auto l_buffer = l_texture->GetImage().Lock( eACCESS_TYPE_READ );
+			auto l_buffer = l_texture->GetImage().Lock( AccessType::Read );
 
 			if ( l_buffer )
 			{
@@ -420,7 +420,7 @@ namespace Castor3D
 			m_toSave = false;
 		}
 
-		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
+		if ( m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::Draw ) )
 		{
 			m_backBuffers->Clear();
 			m_context->RenderTexture( m_size, *l_texture );

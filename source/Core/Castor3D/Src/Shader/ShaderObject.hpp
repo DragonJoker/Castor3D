@@ -75,7 +75,7 @@ namespace Castor3D
 		};
 
 	private:
-		static const std::array< Castor::String, eSHADER_TYPE_COUNT > string_type;
+		static const std::array< Castor::String, size_t( ShaderType::Count ) > string_type;
 
 	public:
 		/**
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	programme parent
 		 *\param[in]	p_type		Type de shader
 		 */
-		C3D_API ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type );
+		C3D_API ShaderObject( ShaderProgram * p_parent, ShaderType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -318,7 +318,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetStrType()const
 		{
-			return string_type[m_type];
+			return string_type[size_t( m_type )];
 		}
 		/**
 		 *\~english
@@ -328,7 +328,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de cet objet
 		 *\return		Le type
 		 */
-		inline eSHADER_TYPE GetType()const
+		inline ShaderType GetType()const
 		{
 			return m_type;
 		}
@@ -340,7 +340,7 @@ namespace Castor3D
 		 *\brief		Définit le type des primitives en entrée
 		 *\param[in]	p_topology	Le type des primitives en entrée
 		 */
-		inline void SetInputType( eTOPOLOGY p_topology )
+		inline void SetInputType( Topology p_topology )
 		{
 			m_eInputType = p_topology;
 		}
@@ -352,7 +352,7 @@ namespace Castor3D
 		 *\brief		Récupère le type des primitives en entrée
 		 *\return		Le type des primitives
 		 */
-		inline eTOPOLOGY GetInputType()const
+		inline Topology GetInputType()const
 		{
 			return m_eInputType;
 		}
@@ -364,7 +364,7 @@ namespace Castor3D
 		 *\brief		Définit le type des primitives en sortie
 		 *\param[in]	p_topology	Le type des primitives
 		 */
-		inline void SetOutputType( eTOPOLOGY p_topology )
+		inline void SetOutputType( Topology p_topology )
 		{
 			m_eOutputType = p_topology;
 		}
@@ -376,7 +376,7 @@ namespace Castor3D
 		 *\brief		Récupère le type des primitives en sortie
 		 *\return		Le type des primitives
 		 */
-		inline eTOPOLOGY GetOutputType()const
+		inline Topology GetOutputType()const
 		{
 			return m_eOutputType;
 		}
@@ -471,15 +471,15 @@ namespace Castor3D
 
 	protected:
 		//!<\~english The shader type	\~french Le type de shader
-		eSHADER_TYPE m_type;
+		ShaderType m_type;
 		//!\~english The parent shader program	\~french Le programme parent
 		ShaderProgram * m_parent{ nullptr };
 		//!<\~english The shader compile status	\~french Le statut de compilation du shader
 		eSHADER_STATUS m_status{ eSHADER_STATUS_NOTCOMPILED };
 		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
-		eTOPOLOGY m_eInputType{ eTOPOLOGY_TRIANGLES };
+		Topology m_eInputType{ Topology::Triangles };
 		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
-		eTOPOLOGY m_eOutputType{ eTOPOLOGY_TRIANGLES };
+		Topology m_eOutputType{ Topology::Triangles };
 		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
 		uint8_t m_uiOutputVtxCount{ 3 };
 		//!\~english The current shader model	\~french Le modèle de shader actuel

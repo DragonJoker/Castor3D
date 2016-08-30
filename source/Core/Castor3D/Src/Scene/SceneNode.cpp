@@ -340,7 +340,7 @@ namespace Castor3D
 		{
 			MovableObjectSPtr l_current = l_it.lock();
 
-			if ( l_current && l_current->GetType() == eMOVABLE_TYPE_GEOMETRY )
+			if ( l_current && l_current->GetType() == MovableType::Geometry )
 			{
 				GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( l_current );
 

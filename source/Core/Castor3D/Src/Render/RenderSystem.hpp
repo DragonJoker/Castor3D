@@ -132,21 +132,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu de billboards.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags );
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\brief		Retrieves the vertex shader source matching the given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint32_t p_programFlags );
+		C3D_API Castor::String GetVertexShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**
 		 *\~english
 		 *\return		The GPU informations.
@@ -176,7 +182,7 @@ namespace Castor3D
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -230,34 +236,34 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a texture.
 		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created texture, depending of current API.
 		 *\~french
 		 *\brief		Crée une texture.
 		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
 		 *\param[in]	p_type		The storage type.
 		 *\param[in]	p_image		The texture image.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created storage, depending on current API.
 		 *\~french
 		 *\brief		Crée un stockage de texture.
 		 *\param[in]	p_type		Le type de stockage.
 		 *\param[in]	p_image		L'image de la texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer

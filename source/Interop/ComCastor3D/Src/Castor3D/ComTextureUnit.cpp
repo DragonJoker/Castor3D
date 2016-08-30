@@ -21,7 +21,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			auto l_texture = m_internal->GetEngine()->GetRenderSystem()->CreateTexture(Castor3D::TextureType::TwoDimensions, Castor3D::eACCESS_TYPE_READ, Castor3D::eACCESS_TYPE_READ );
+			auto l_texture = m_internal->GetEngine()->GetRenderSystem()->CreateTexture( Castor3D::TextureType::TwoDimensions, Castor3D::AccessType::Read, Castor3D::AccessType::Read );
 			Castor::Path l_path{ FromBstr( path ) };
 			l_texture->GetImage().SetSource(l_path.GetPath(), l_path.GetFileName( true ) );
 			m_internal->SetTexture( l_texture );

@@ -114,7 +114,7 @@ namespace Castor3D
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read | AccessType::Write );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		m_colorTexture.SetTexture( l_colourTexture );
 		m_colorTexture.SetSampler( l_sampler );
@@ -140,9 +140,9 @@ namespace Castor3D
 		m_colorTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );
 
-		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::Config ) )
 		{
-			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
+			m_frameBuffer->Attach( AttachmentPoint::Colour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -152,7 +152,7 @@ namespace Castor3D
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
-		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_frameBuffer->Bind( FrameBufferMode::Config );
 		m_frameBuffer->DetachAll();
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
@@ -164,7 +164,7 @@ namespace Castor3D
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
-	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
+	RenderTarget::RenderTarget( Engine & p_engine, TargetType p_eTargetType )
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
 		, m_pixelFormat{ PixelFormat::A8R8G8B8 }

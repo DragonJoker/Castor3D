@@ -81,7 +81,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
-		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type )override;
+		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */

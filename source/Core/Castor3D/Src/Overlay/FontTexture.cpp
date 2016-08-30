@@ -26,7 +26,7 @@ namespace Castor3D
 		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read );
 	}
 
 	FontTexture::~FontTexture()

@@ -888,7 +888,7 @@ namespace GlRender
 				{
 					GetOpenGl().GetActiveUniformBlockiv( l_program->GetGlName(), m_uniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_uniformBlockSize );
 					m_glBuffer.Create();
-					m_glBuffer.Fill( nullptr, m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
 					m_glBuffer.Bind();
 					GetOpenGl().BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program->GetGlName(), m_uniformBlockIndex, m_index );
@@ -967,7 +967,7 @@ namespace GlRender
 	{
 		if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
 		{
-			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		}
 		else
 		{

@@ -207,11 +207,11 @@ namespace Castor3D
 		, m_id( p_id )
 		, m_parentMesh( p_mesh )
 		, m_layout( {
-						BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
-						BufferElementDeclaration( ShaderProgram::Normal, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
-						BufferElementDeclaration( ShaderProgram::Tangent, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTan() ),
-						BufferElementDeclaration( ShaderProgram::Bitangent, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetBin() ),
-						BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTex() ),
+						BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3, Vertex::GetOffsetPos() ),
+						BufferElementDeclaration( ShaderProgram::Normal, uint32_t( ElementUsage::Normal ), ElementType::Vec3, Vertex::GetOffsetNml() ),
+						BufferElementDeclaration( ShaderProgram::Tangent, uint32_t( ElementUsage::Tangent ), ElementType::Vec3, Vertex::GetOffsetTan() ),
+						BufferElementDeclaration( ShaderProgram::Bitangent, uint32_t( ElementUsage::Bitangent ), ElementType::Vec3, Vertex::GetOffsetBin() ),
+						BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec3, Vertex::GetOffsetTex() ),
 					} )
 	{
 	}
@@ -233,31 +233,31 @@ namespace Castor3D
 			if ( m_vertexBuffer )
 			{
 				m_initialised = m_vertexBuffer->Create();
-				m_initialised &= m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_animBuffer )
 			{
 				m_initialised = m_animBuffer->Create();
-				m_initialised &= m_animBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_animBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_indexBuffer )
 			{
 				m_initialised = m_indexBuffer->Create();
-				m_initialised &= m_indexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_indexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_bonesBuffer )
 			{
 				m_initialised = m_bonesBuffer->Create();
-				m_initialised &= m_bonesBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_bonesBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_matrixBuffer )
 			{
 				m_initialised = m_matrixBuffer->Create();
-				m_initialised &= m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+				m_initialised &= m_matrixBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 		}
 	}
@@ -480,7 +480,7 @@ namespace Castor3D
 			}
 
 			DoGenerateMatrixBuffer( l_count );
-			m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_matrixBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
 		}
 	}
 
@@ -496,11 +496,11 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_vertexBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
 
 			if ( m_animBuffer )
 			{
-				m_animBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_animBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
 			}
 
 			m_dirty = false;
@@ -521,7 +521,7 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_vertexBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
 			m_dirty = false;
 		}
 
@@ -813,7 +813,7 @@ namespace Castor3D
 						{
 							m_cameraPosition = p_ptCameraPosition;
 							uint32_t l_uiIdxSize = l_indices.GetSize();
-							uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eACCESS_TYPE_WRITE | eACCESS_TYPE_READ );
+							uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::Write | AccessType::Read );
 
 							if ( l_pIdx )
 							{
@@ -922,9 +922,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	eTOPOLOGY Submesh::GetTopology()const
+	Topology Submesh::GetTopology()const
 	{
-		eTOPOLOGY l_return = eTOPOLOGY_COUNT;
+		Topology l_return = Topology::Count;
 
 		for ( auto l_buffers : m_geometryBuffers )
 		{
@@ -934,7 +934,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Submesh::SetTopology( eTOPOLOGY p_value )
+	void Submesh::SetTopology( Topology p_value )
 	{
 		for ( auto l_buffers : m_geometryBuffers )
 		{
@@ -952,7 +952,7 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
 			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
@@ -996,11 +996,11 @@ namespace Castor3D
 				m_animBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
-						BufferElementDeclaration( ShaderProgram::Position2, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
-						BufferElementDeclaration( ShaderProgram::Normal2, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
-						BufferElementDeclaration( ShaderProgram::Tangent2, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTan() ),
-						BufferElementDeclaration( ShaderProgram::Bitangent2, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetBin() ),
-						BufferElementDeclaration( ShaderProgram::Texture2, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTex() ),
+						BufferElementDeclaration( ShaderProgram::Position2, uint32_t( ElementUsage::Position ), ElementType::Vec3, Vertex::GetOffsetPos() ),
+						BufferElementDeclaration( ShaderProgram::Normal2, uint32_t( ElementUsage::Normal ), ElementType::Vec3, Vertex::GetOffsetNml() ),
+						BufferElementDeclaration( ShaderProgram::Tangent2, uint32_t( ElementUsage::Tangent ), ElementType::Vec3, Vertex::GetOffsetTan() ),
+						BufferElementDeclaration( ShaderProgram::Bitangent2, uint32_t( ElementUsage::Bitangent ), ElementType::Vec3, Vertex::GetOffsetBin() ),
+						BufferElementDeclaration( ShaderProgram::Texture2, uint32_t( ElementUsage::TexCoords ), ElementType::Vec3, Vertex::GetOffsetTex() ),
 					}
 				} );
 			}
@@ -1009,10 +1009,10 @@ namespace Castor3D
 				m_bonesBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
-						BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
-						BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_4INTS, 16 },
-						BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_4FLOATS, 32 },
-						BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_4FLOATS, 48 },
+						BufferElementDeclaration{ ShaderProgram::BoneIds0, uint32_t( ElementUsage::BoneIds0 ), ElementType::IVec4, 0 },
+						BufferElementDeclaration{ ShaderProgram::BoneIds1, uint32_t( ElementUsage::BoneIds1 ), ElementType::IVec4, 16 },
+						BufferElementDeclaration{ ShaderProgram::Weights0, uint32_t( ElementUsage::BoneWeights0 ), ElementType::Vec4, 32 },
+						BufferElementDeclaration{ ShaderProgram::Weights1, uint32_t( ElementUsage::BoneWeights1 ), ElementType::Vec4, 48 },
 					}
 				} );
 				ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
@@ -1032,7 +1032,7 @@ namespace Castor3D
 				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), BufferDeclaration
 				{
 					{
-						BufferElementDeclaration{ ShaderProgram::Transform, eELEMENT_USAGE_TRANSFORM, eELEMENT_TYPE_4x4FLOATS, 0 },
+						BufferElementDeclaration{ ShaderProgram::Transform, uint32_t( ElementUsage::Transform ), ElementType::Mat4, 0 },
 					}
 				} );
 			}

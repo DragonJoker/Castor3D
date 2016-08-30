@@ -27,8 +27,8 @@ namespace GlRender
 			 )
 		, m_layout( p_gl, p_renderSystem )
 	{
-		CreateObject( eSHADER_TYPE_VERTEX );
-		CreateObject( eSHADER_TYPE_PIXEL );
+		CreateObject( ShaderType::Vertex );
+		CreateObject( ShaderType::Pixel );
 	}
 
 	GlShaderProgram::~GlShaderProgram()
@@ -130,7 +130,7 @@ namespace GlRender
 		return l_iReturn;
 	}
 
-	ShaderObjectSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
+	ShaderObjectSPtr GlShaderProgram::DoCreateObject( ShaderType p_type )
 	{
 		ShaderObjectSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
 		return l_return;

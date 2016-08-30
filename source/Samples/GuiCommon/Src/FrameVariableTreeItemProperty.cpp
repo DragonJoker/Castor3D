@@ -296,7 +296,7 @@ namespace GuiCommon
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
 		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
-		, m_type( eSHADER_TYPE_COUNT )
+		, m_type( ShaderType::Count )
 		, m_buffer( p_buffer )
 	{
 		PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
@@ -343,7 +343,7 @@ namespace GuiCommon
 		CreateTreeItemMenu();
 	}
 
-	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, eSHADER_TYPE p_type )
+	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, ShaderType p_type )
 		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( p_type )

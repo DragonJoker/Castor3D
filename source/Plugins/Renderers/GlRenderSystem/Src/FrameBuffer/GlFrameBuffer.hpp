@@ -65,43 +65,43 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Create
 		 */
-		virtual bool Create();
+		bool Create()override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Destroy
 		 */
-		virtual void Destroy();
+		void Destroy()override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual void SetDrawBuffers( AttachArray const & p_attaches );
+		void SetDrawBuffers( AttachArray const & p_attaches )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
+		void SetReadBuffer( Castor3D::AttachmentPoint p_eAttach, uint8_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::IsComplete
 		 */
-		virtual bool IsComplete()const;
+		bool IsComplete()const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
-		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format );
+		Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::PixelFormat p_format )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
-		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format );
+		Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::PixelFormat p_format )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
-		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_renderBuffer );
+		Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_renderBuffer )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
-		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture );
+		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture )override;
 
 	public:
 		using BindableType::GetGlName;
@@ -112,26 +112,26 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_target );
+		bool DoBind( Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */
-		virtual void DoUnbind();
+		void DoUnbind()const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		bool DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
 		 */
-		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation );
+		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
-		virtual void DoClear( uint32_t p_targets );
+		void DoClear( uint32_t p_targets )override;
 
 	private:
-		eGL_FRAMEBUFFER_MODE m_bindingMode;
+		mutable eGL_FRAMEBUFFER_MODE m_bindingMode;
 	};
 }
 

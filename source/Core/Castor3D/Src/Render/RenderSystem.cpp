@@ -100,7 +100,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
+	String RenderSystem::GetVertexShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -134,7 +134,7 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.SWIZZLE_XYZ, 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.xyz(), 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
@@ -167,19 +167,19 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
 			{
 				LOCALE_ASSIGN( l_writer, Float, l_time, Float( 1.0 ) - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.SWIZZLE_XYZ * l_time + position2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.SWIZZLE_XYZ * l_time + normal2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.SWIZZLE_XYZ * l_time + tangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.SWIZZLE_XYZ * l_time + bitangent2.SWIZZLE_XYZ * c3d_fTime, 1.0 );
+				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
+				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
+				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
+				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
 				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
 
 			vtx_texture = l_v3Texture;
-			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).SWIZZLE_XYZ;
-			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).SWIZZLE_XYZ );
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).SWIZZLE_XYZ );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).SWIZZLE_XYZ );
+			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
+			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * l_mtxModel ) * l_v4Vertex;
 		};
 
@@ -187,26 +187,26 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		using namespace GLSL;
 
 		static String PRIMITIVES[] =
 		{
-			cuT( "points" ),//eTOPOLOGY_POINTS
-			cuT( "lines" ),//eTOPOLOGY_LINES
-			cuT( "line_loop" ),//eTOPOLOGY_LINE_LOOP
-			cuT( "line_strip" ),//eTOPOLOGY_LINE_STRIP
-			cuT( "triangles" ),//eTOPOLOGY_TRIANGLES
-			cuT( "triangle_strip" ),//eTOPOLOGY_TRIANGLE_STRIPS
-			cuT( "triangle_fan" ),//eTOPOLOGY_TRIANGLE_FAN
-			cuT( "quads" ),//eTOPOLOGY_QUADS
-			cuT( "quad_strip" ),//eTOPOLOGY_QUAD_STRIPS
-			cuT( "polygon" ),//eTOPOLOGY_POLYGON
+			cuT( "points" ),//Topology::Points
+			cuT( "lines" ),//Topology::Lines
+			cuT( "line_loop" ),//Topology::LineLoop
+			cuT( "line_strip" ),//Topology::LineStrip
+			cuT( "triangles" ),//Topology::Triangles
+			cuT( "triangle_strip" ),//Topology::TriangleStrips
+			cuT( "triangle_fan" ),//Topology::TriangleFan
+			cuT( "quads" ),//Topology::Quads
+			cuT( "quad_strip" ),//Topology::QuadStrips
+			cuT( "polygon" ),//Topology::Polygon
 		};
 
-		eTOPOLOGY l_input = eTOPOLOGY_POINTS;
-		eTOPOLOGY l_output = eTOPOLOGY_TRIANGLE_STRIPS;
+		Topology l_input = Topology::Points;
+		Topology l_output = Topology::TriangleStrips;
 		uint32_t l_count = 4;
 
 		auto & l_cache = GetEngine()->GetShaderProgramCache();
@@ -214,12 +214,12 @@ namespace Castor3D
 		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
-		l_cache.CreateTextureVariables( *l_program, p_flags );
+		l_cache.CreateTextureVariables( *l_program, p_textureFlags );
 		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
-		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
+		ShaderObjectSPtr l_object = l_program->CreateObject( ShaderType::Geometry );
 		l_object->SetInputType( l_input );
 		l_object->SetOutputType( l_output );
 		l_object->SetOutputVtxCount( l_count );
@@ -236,7 +236,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_Position = vec4( position.SWIZZLE_XYZ, 1.0 );
+				gl_Position = vec4( position.xyz(), 1.0 );
 			} );
 
 			l_strVtxShader = l_writer.Finalise();
@@ -246,8 +246,8 @@ namespace Castor3D
 		{
 			auto l_writer = CreateGlslWriter();
 
-			l_writer.InputGeometryLayout( PRIMITIVES[l_input] );
-			l_writer.OutputGeometryLayout( PRIMITIVES[l_output] );
+			l_writer.InputGeometryLayout( PRIMITIVES[size_t( l_input )] );
+			l_writer.OutputGeometryLayout( PRIMITIVES[size_t( l_output )] );
 			l_writer.OutputVertexCount( l_count );
 
 			// Shader inputs
@@ -268,22 +268,22 @@ namespace Castor3D
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxVP, c3d_mtxProjection * c3d_mtxView );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().SWIZZLE_XYZ );
-				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.SWIZZLE_X, c3d_v3CameraPosition.SWIZZLE_Y, c3d_v3CameraPosition.SWIZZLE_Z ) - l_pos ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_left, cross( l_toCamera, l_up ) );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.SWIZZLE_X, 0.0, l_toCamera.SWIZZLE_Z ) ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_up );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_left );
 
-				l_left *= c3d_v2iDimensions.SWIZZLE_X;
-				l_up *= c3d_v2iDimensions.SWIZZLE_Y;
+				l_left *= c3d_v2iDimensions.x();
+				l_up *= c3d_v2iDimensions.y();
 				l_writer << Endl();
 
 				{
 					l_pos -= ( l_left * 0.5 );
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -295,7 +295,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -308,7 +308,7 @@ namespace Castor3D
 				{
 					l_pos -= l_up;
 					l_pos += l_left;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -320,7 +320,7 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).SWIZZLE_XYZ;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
@@ -335,14 +335,13 @@ namespace Castor3D
 			l_strGeoShader = l_writer.Finalise();
 		}
 
-		String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
-
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+		String l_strPxlShader = p_technique.GetPixelShaderSource( p_textureFlags, p_programFlags );
+		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_3, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_3, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_3, l_strPxlShader );
+		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_4, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_4, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_4, l_strPxlShader );
 
 		return l_program;
 	}
