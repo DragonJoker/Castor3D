@@ -180,6 +180,13 @@ namespace Castor3D
 		 *\return	true if successful, false if not
 		 */
 		C3D_API bool ParseFile( Castor::Path const & p_pathFile );
+		/**
+		 * Parses the given file (expecting it to be in ESCN file format), using an external context
+		 *\param[in]	p_pathFile	The file path.
+		 *\param[in]	p_context	The context.
+		 *\return		true if successful, false if not.
+		 */
+		C3D_API bool ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context );
 
 		inline ScenePtrStrMap::iterator ScenesBegin()
 		{

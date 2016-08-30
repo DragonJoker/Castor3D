@@ -4,7 +4,7 @@
 
 #include <Engine.hpp>
 
-#include "CastorDvpTDPrerequisites.hpp"
+#include "TowerCategory.hpp"
 
 namespace castortd
 {
@@ -40,6 +40,9 @@ namespace castortd
 		int DoTransformX( Castor::real x );
 		int DoTransformY( Castor::real y );
 		void DoUpdateSelectedGeometry( Castor3D::GeometrySPtr p_geometry );
+		void DoUpgradeTowerDamage();
+		void DoUpgradeTowerSpeed();
+		void DoUpgradeTowerRange();
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );
@@ -62,7 +65,8 @@ namespace castortd
 		void OnMouseRUp( wxMouseEvent & p_event );
 		void OnMouseMove( wxMouseEvent & p_event );
 		void OnMouseWheel( wxMouseEvent & p_event );
-		void OnNewTower( wxCommandEvent & p_event );
+		void OnNewLongRangeTower( wxCommandEvent & p_event );
+		void OnNewShortRangeTower( wxCommandEvent & p_event );
 		void OnUpgradeTowerSpeed( wxCommandEvent & p_event );
 		void OnUpgradeTowerRange( wxCommandEvent & p_event );
 		void OnUpgradeTowerDamage( wxCommandEvent & p_event );
@@ -88,5 +92,7 @@ namespace castortd
 		wxCursor * m_cursorNone;
 		Game & m_game;
 		TowerPtr m_selectedTower;
+		LongRangeTower m_longRange;
+		ShortRangeTower m_shortRange;
 	};
 }

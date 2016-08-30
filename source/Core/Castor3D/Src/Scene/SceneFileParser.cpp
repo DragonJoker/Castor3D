@@ -307,10 +307,20 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 	return FileParser::ParseFile( l_path );
 }
 
+bool SceneFileParser::ParseFile( Castor::Path const & p_pathFile, SceneFileContextSPtr p_context )
+{
+	m_context = p_context;
+	return ParseFile( p_pathFile );
+}
+
 void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 {
-	SceneFileContextSPtr l_pContext = std::make_shared< SceneFileContext >( this, &p_file );
-	m_context = l_pContext;
+	if ( !m_context )
+	{
+		SceneFileContextSPtr l_context = std::make_shared< SceneFileContext >( this, &p_file );
+		m_context = l_context;
+	}
+
 	AddParser( eSECTION_ROOT, cuT( "mtl_file" ), Parser_RootMtlFile, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
@@ -347,6 +357,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
+	AddParser( eSECTION_SCENE, cuT( "include" ), Parser_SceneInclude, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SCENE, cuT( "background_image" ), Parser_SceneBkImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SCENE, cuT( "font" ), Parser_SceneFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
@@ -561,15 +572,15 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 void SceneFileParser::DoCleanupParser()
 {
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( m_context );
+	SceneFileContextSPtr l_context = std::static_pointer_cast< SceneFileContext >( m_context );
 	m_context.reset();
 
-	for ( ScenePtrStrMap::iterator l_it = l_pContext->mapScenes.begin(); l_it != l_pContext->mapScenes.end(); ++l_it )
+	for ( ScenePtrStrMap::iterator l_it = l_context->mapScenes.begin(); l_it != l_context->mapScenes.end(); ++l_it )
 	{
 		m_mapScenes.insert( std::make_pair( l_it->first,  l_it->second ) );
 	}
 
-	m_renderWindow = l_pContext->pWindow;
+	m_renderWindow = l_context->pWindow;
 }
 
 bool SceneFileParser::DoDiscardParser( String const & p_line )

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CastorDvpTDPrerequisites.hpp"
+#include "Ability.hpp"
 
 namespace castortd
 {
@@ -11,13 +11,91 @@ namespace castortd
 	public:
 		struct Category
 		{
-			uint32_t m_damage{ 3u };
-			std::chrono::milliseconds m_cooldown{ 1000 };
-			float m_range{ 100.0f };
-			uint32_t m_damageCost{ 500u };
-			uint32_t m_cooldownCost{ 250u };
-			uint32_t m_rangeCost{ 120u };
+			inline void UpgradeDamage()
+			{
+				m_damage.Upgrade();
+			}
+
+			inline void UpgradeRange()
+			{
+				m_range.Upgrade();
+			}
+
+			inline void UpgradeSpeed()
+			{
+				m_cooldown.Upgrade();
+			}
+
+			inline bool CanUpgradeDamage()
+			{
+				return m_damage.CanUpgrade();
+			}
+
+			inline bool CanUpgradeRange()
+			{
+				return m_range.CanUpgrade();
+			}
+
+			inline bool CanUpgradeSpeed()
+			{
+				return m_cooldown.CanUpgrade();
+			}
+
+			inline uint32_t GetDamageUpgradeCost()const
+			{
+				return m_damage.GetCost();
+			}
+
+			inline uint32_t GetRangeUpgradeCost()const
+			{
+				return m_range.GetCost();
+			}
+
+			inline uint32_t GetSpeedUpgradeCost()const
+			{
+				return m_cooldown.GetCost();
+			}
+
+			inline uint32_t GetTowerCost()const
+			{
+				return m_towerCost;
+			}
+
+			inline uint32_t GetDamage()const
+			{
+				return m_damage.GetValue();
+			}
+
+			inline float GetRange()const
+			{
+				return m_range.GetValue();
+			}
+
+			inline std::chrono::milliseconds GetSpeed()const
+			{
+				return m_cooldown.GetValue();
+			}
+
+			inline float GetBulletSpeed()const
+			{
+				return m_bulletSpeed;
+			}
+
+			inline Castor::String const & GetMaterialName()const
+			{
+				return m_material;
+			}
+
+		protected:
+			PaidAbility< uint32_t > m_damage;
+			PaidAbility< std::chrono::milliseconds > m_cooldown;
+			PaidAbility< float > m_range;
+			float m_bulletSpeed{ 0.0f };
+			uint32_t m_towerCost{ 0u };
+			Castor::String m_material;
 		};
+
+		using CategoryPtr = std::unique_ptr< Category >;
 
 		enum class State
 		{
@@ -26,10 +104,10 @@ namespace castortd
 		};
 
 	public:
-		Tower( Castor3D::SceneNode & p_node, Cell const & p_cell );
+		Tower( CategoryPtr && p_category, Castor3D::SceneNode & p_node, Cell const & p_cell );
 		~Tower();
 
-		void Update( std::chrono::milliseconds const & p_elapsed, EnemyArray & p_enemies );
+		void Accept( Game & p_game );
 
 		inline State GetState()const
 		{
@@ -48,32 +126,52 @@ namespace castortd
 
 		inline uint32_t GetDamageUpgradeCost()const
 		{
-			return m_category.m_damageCost;
+			return m_category->GetDamageUpgradeCost();
 		}
 
 		inline uint32_t GetRangeUpgradeCost()const
 		{
-			return m_category.m_rangeCost;
+			return m_category->GetRangeUpgradeCost();
 		}
 
 		inline uint32_t GetSpeedUpgradeCost()const
 		{
-			return m_category.m_cooldownCost;
+			return m_category->GetSpeedUpgradeCost();
+		}
+
+		inline bool CanUpgradeDamage()
+		{
+			return m_category->CanUpgradeDamage();
+		}
+
+		inline bool CanUpgradeRange()
+		{
+			return m_category->CanUpgradeRange();
+		}
+
+		inline bool CanUpgradeSpeed()
+		{
+			return m_category->CanUpgradeSpeed();
+		}
+
+		inline uint32_t GetTowerCost()const
+		{
+			return m_category->GetTowerCost();
 		}
 
 		inline uint32_t GetDamage()const
 		{
-			return m_category.m_damage;
+			return m_category->GetDamage();
 		}
 
 		inline uint32_t GetRange()const
 		{
-			return uint32_t( m_category.m_range );
+			return uint32_t( m_category->GetRange() );
 		}
 
 		inline uint32_t GetSpeed()const
 		{
-			return uint32_t( m_category.m_cooldown.count() );
+			return uint32_t( m_category->GetSpeed().count() );
 		}
 
 	private:
@@ -90,26 +188,17 @@ namespace castortd
 
 		inline void UpgradeDamage()
 		{
-			++m_category.m_damage;
-			m_category.m_damageCost += 10;
+			m_category->UpgradeDamage();
 		}
 
 		inline void UpgradeRange()
 		{
-			m_category.m_range += 20.0f;
-			m_category.m_rangeCost += 10;
+			m_category->UpgradeRange();
 		}
 
 		inline void UpgradeSpeed()
 		{
-			m_category.m_cooldown -= std::chrono::milliseconds{ 40 };
-
-			if ( m_category.m_cooldown < std::chrono::milliseconds{ 40 } )
-			{
-				m_category.m_cooldown = std::chrono::milliseconds{ 40 };
-			}
-
-			m_category.m_cooldownCost += 10;
+			m_category->UpgradeSpeed();
 		}
 
 	private:
@@ -118,6 +207,6 @@ namespace castortd
 		State m_state{ State::Idle };
 		std::chrono::milliseconds m_remaining{ 0 };
 		EnemyPtr m_target{ nullptr };
-		Category m_category;
+		CategoryPtr m_category;
 	};
 }

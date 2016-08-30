@@ -11,7 +11,7 @@ namespace castortd
 		: m_node{ p_node }
 		, m_path{ p_path }
 		, m_category{ p_category }
-		, m_life{ p_category.m_life }
+		, m_life{ p_category.m_life.GetValue() }
 		, m_speed{ p_category.m_speed }
 		, m_cur{ p_path.begin() }
 	{
@@ -22,18 +22,18 @@ namespace castortd
 	{
 	}
 
-	void Enemy::Load( Game const & p_game, Category const & p_category )
+	void Enemy::Load( Game const & p_game )
 	{
-		m_category = p_category;
-		m_life = p_category.m_life;
-		m_speed = p_category.m_speed;
+		m_state = State::Walking;
+		m_life = m_category.get().m_life.GetValue();
+		m_speed = m_category.get().m_speed;
 		m_cur = m_path.get().begin();
 		m_destination = p_game.Convert( Point2i{ m_cur->m_x, m_cur->m_y } ) + Point3r{ 0, p_game.GetCellHeight(), 0 };
 	}
 
-	bool Enemy::Walk( Game const & p_game, std::chrono::milliseconds const & p_elapsed )
+	bool Enemy::Accept( Game const & p_game )
 	{
-		auto l_speed = p_elapsed.count() * m_speed / 1000;
+		auto l_speed = p_game.GetElapsed().count() * m_speed / 1000;
 		Point3r l_result = m_destination;
 		Point3r l_position{ m_node.get().GetPosition() };
 		Point3r l_direction{ l_result - l_position };
@@ -55,7 +55,7 @@ namespace castortd
 				m_destination = p_game.Convert( Point2i{ m_cur->m_x, m_cur->m_y } ) + Point3r{ 0, p_game.GetCellHeight(), 0 };
 				auto l_save = float( l_speed - l_distanceToDst );
 				std::swap( l_speed, l_save );
-				Walk( p_game, p_elapsed );
+				Accept( p_game );
 				std::swap( l_speed, l_save );
 			}
 			else

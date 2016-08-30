@@ -186,33 +186,18 @@ namespace Castor3D
 					{
 						// We need to update the render nodes afterwards (since the submesh's geometry buffers are now invalid).
 						GetScene()->SetChanged();
-
-						if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
 						{
 							p_submesh->ResetGpuBuffers();
-						}
-						else
-						{
-							GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
-							{
-								p_submesh->ResetGpuBuffers();
-							} ) );
-						}
+						} ) );
 					}
 					else if ( p_submesh->HasMatrixBuffer() && l_count > 1 )
 					{
 						// We need to update the matrix buffers only.
-						if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
 						{
 							p_submesh->ResetMatrixBuffers();
-						}
-						else
-						{
-							GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::QueueRender, [this, p_submesh]()
-							{
-								p_submesh->ResetMatrixBuffers();
-							} ) );
-						}
+						} ) );
 					}
 				}
 			}

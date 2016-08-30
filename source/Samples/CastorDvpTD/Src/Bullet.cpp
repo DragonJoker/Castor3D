@@ -7,10 +7,11 @@ using namespace Castor3D;
 
 namespace castortd
 {
-	Bullet::Bullet( uint32_t p_damage, SceneNode & p_node, Enemy & p_enemy )
+	Bullet::Bullet( float p_speed, uint32_t p_damage, SceneNode & p_node, Enemy & p_enemy )
 		: m_node{ p_node }
 		, m_target{ p_enemy }
 		, m_damage{ p_damage }
+		, m_speed{ p_speed }
 	{
 	}
 
@@ -18,20 +19,21 @@ namespace castortd
 	{
 	}
 
-	void Bullet::Load( uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_enemy )
+	void Bullet::Load( float p_speed, uint32_t p_damage, Castor::Point3r const & p_origin, Enemy & p_enemy )
 	{
 		m_damage = p_damage;
 		m_node.get().SetPosition( p_origin );
 		m_target = p_enemy;
+		m_speed = p_speed;
 	}
 
-	bool Bullet::Move( std::chrono::milliseconds const & p_elapsed )
+	bool Bullet::Accept( Game & p_game )
 	{
 		bool l_reachDst{ true };
 
 		if ( m_target.get().IsAlive() )
 		{
-			auto l_speed = p_elapsed.count() * m_speed / 1000;
+			auto l_speed = p_game.GetElapsed().count() * m_speed / 1000;
 			Point3r l_result = m_target.get().GetNode().GetPosition();
 			Point3r l_position{ m_node.get().GetPosition() };
 			Point3r l_direction{ l_result - l_position };
