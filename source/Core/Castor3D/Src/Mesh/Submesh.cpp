@@ -480,7 +480,7 @@ namespace Castor3D
 			}
 
 			DoGenerateMatrixBuffer( l_count );
-			m_matrixBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_matrixBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
 		}
 	}
 

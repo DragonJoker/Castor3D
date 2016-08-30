@@ -368,7 +368,7 @@ namespace Castor3D
 		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
 		PostRender,
 		CASTOR_ENUM_CLASS_BOUNDS( PreRender )
-	}	EventType;
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0

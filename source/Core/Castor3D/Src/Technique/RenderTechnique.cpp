@@ -97,19 +97,16 @@ namespace Castor3D
 						  , Camera const & p_camera
 						  , RenderTechnique::DistanceSortedNodeMap & p_output )
 		{
-			for ( auto & l_itBlend : p_input )
+			for ( auto & l_itPrograms : p_input )
 			{
-				for ( auto & l_itPrograms : l_itBlend )
+				for ( auto & l_renderNode : l_itPrograms.second )
 				{
-					for ( auto & l_renderNode : l_itPrograms.second )
-					{
-						Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
-						Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
-						Point3r l_ptCameraLocal = l_mtxMeshGlobal * l_position;
-						l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
-						l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
-						p_output.insert( { point::distance_squared( l_ptCameraLocal ), l_renderNode } );
-					}
+					Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().get_inverse().transpose();
+					Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
+					Point3r l_ptCameraLocal = l_mtxMeshGlobal * l_position;
+					l_renderNode.m_data.SortByDistance( l_ptCameraLocal );
+					l_ptCameraLocal -= l_renderNode.m_sceneNode.GetPosition();
+					p_output.insert( { point::distance_squared( l_ptCameraLocal ), l_renderNode } );
 				}
 			}
 		}
@@ -528,9 +525,9 @@ namespace Castor3D
 				for ( size_t i = 0; i < m_frontTransparentPipeline.size(); ++i )
 				{
 					DistanceSortedNodeMap l_distanceSortedRenderNodes;
-					DoSortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
-					DoSortAlpha( p_nodes.m_billboards.m_transparentRenderNodes, p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_staticGeometries.m_transparentRenderNodes[i], p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_animatedGeometries.m_transparentRenderNodes[i], p_camera, l_distanceSortedRenderNodes );
+					DoSortAlpha( p_nodes.m_billboards.m_transparentRenderNodes[i], p_camera, l_distanceSortedRenderNodes );
 
 					if ( !l_distanceSortedRenderNodes.empty() )
 					{

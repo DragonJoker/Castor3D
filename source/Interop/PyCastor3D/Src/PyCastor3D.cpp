@@ -211,17 +211,17 @@ void ExportCastor3D()
 	.value( "INV_SRC1_ALPHA", BlendOperand::InvSrc1Alpha )
 	;
 	//@}
-	/**@group_name eDEPTH_FUNC */
+	/**@group_name DepthFunc */
 	//@{
-	py::enum_< eDEPTH_FUNC >( "DepthFunc" )
-	.value( "NEVER", eDEPTH_FUNC_NEVER )
-	.value( "LESS", eDEPTH_FUNC_LESS )
-	.value( "EQUAL", eDEPTH_FUNC_EQUAL )
-	.value( "LEQUAL", eDEPTH_FUNC_LEQUAL )
-	.value( "GREATER", eDEPTH_FUNC_GREATER )
-	.value( "NOTEQUAL", eDEPTH_FUNC_NOTEQUAL )
-	.value( "GEQUAL", eDEPTH_FUNC_GEQUAL )
-	.value( "ALWAYS", eDEPTH_FUNC_ALWAYS )
+	py::enum_< DepthFunc >( "DepthFunc" )
+	.value( "NEVER", DepthFunc::Never )
+	.value( "LESS", DepthFunc::Less )
+	.value( "EQUAL", DepthFunc::Equal )
+	.value( "LEQUAL", DepthFunc::LEqual )
+	.value( "GREATER", DepthFunc::Greater )
+	.value( "NOTEQUAL", DepthFunc::NEqual )
+	.value( "GEQUAL", DepthFunc::GEqual )
+	.value( "ALWAYS", DepthFunc::Always )
 	;
 	//@}
 	/**@group_name WritingMask */
@@ -244,17 +244,17 @@ void ExportCastor3D()
 	.value( "ALWAYS", StencilFunc::Always )
 	;
 	//@}
-	/**@group_name eSTENCIL_OP */
+	/**@group_name StencilOp */
 	//@{
-	py::enum_< eSTENCIL_OP >( "StencilOp" )
-	.value( "KEEP", eSTENCIL_OP_KEEP )
-	.value( "ZERO", eSTENCIL_OP_ZERO )
-	.value( "REPLACE", eSTENCIL_OP_REPLACE )
-	.value( "INCR", eSTENCIL_OP_INCR )
-	.value( "INCR_WRAP", eSTENCIL_OP_INCR_WRAP )
-	.value( "DECR", eSTENCIL_OP_DECR )
-	.value( "DECR_WRAP", eSTENCIL_OP_DECR_WRAP )
-	.value( "INVERT", eSTENCIL_OP_INVERT )
+	py::enum_< StencilOp >( "StencilOp" )
+	.value( "KEEP", StencilOp::Keep )
+	.value( "ZERO", StencilOp::Zero )
+	.value( "REPLACE", StencilOp::Replace )
+	.value( "INCR", StencilOp::Increment )
+	.value( "INCR_WRAP", StencilOp::IncrWrap )
+	.value( "DECR", StencilOp::Decrement )
+	.value( "DECR_WRAP", StencilOp::DecrWrap )
+	.value( "INVERT", StencilOp::Invert )
 	;
 	//@}
 	/**@group_name eFILL_MODE */

@@ -420,7 +420,7 @@ namespace Deferred
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 			{
-				l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
@@ -559,7 +559,7 @@ namespace Deferred
 				}
 				ROF;
 
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
+				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient + l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
