@@ -54,13 +54,13 @@ namespace castortd
 			if ( CanUpgrade() )
 			{
 				Ability< T >::Upgrade();
-				m_cost = m_costIncrement( m_cost, m_level );
+				m_cost = m_costIncrement( m_cost, Ability< T >::m_level );
 			}
 		}
 
 		inline bool CanUpgrade()
 		{
-			return m_level < 15;
+			return Ability< T >::m_level < 15;
 		}
 
 		inline uint32_t const & GetCost()const
