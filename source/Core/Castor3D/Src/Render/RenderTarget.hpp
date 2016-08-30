@@ -25,7 +25,6 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Miscellaneous/Parameter.hpp"
-#include "Miscellaneous/PickingPass.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Design/OwnedBy.hpp>
@@ -521,9 +520,6 @@ namespace Castor3D
 		//!\~english	The visible objects count.
 		//!\~french		Le nombre d'objets visibles.
 		uint32_t m_visibleObjectsCount;
-		//!\~english	The picking pass.
-		//!\~french		La passe de picking.
-		PickingPass m_picking;
 	};
 }
 

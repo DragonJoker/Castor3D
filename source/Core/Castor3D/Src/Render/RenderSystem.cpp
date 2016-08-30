@@ -187,7 +187,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags )
 	{
 		using namespace GLSL;
 
@@ -334,7 +334,7 @@ namespace Castor3D
 			l_strGeoShader = l_writer.Finalise();
 		}
 
-		String l_strPxlShader = p_technique.GetPixelShaderSource( p_textureFlags, p_programFlags );
+		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags );
 		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_3, l_strVtxShader );
 		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_3, l_strGeoShader );
 		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_3, l_strPxlShader );

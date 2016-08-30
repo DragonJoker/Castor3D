@@ -4,6 +4,7 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
 #include "Render/Pipeline.hpp"
+#include "Render/RenderPass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Technique/RenderTechnique.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
@@ -50,8 +51,8 @@ namespace Castor3D
 
 		return l_return;
 	}
-	
-	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags )
+
+	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags )
 	{
 		ShaderProgramSPtr l_return;
 		uint64_t l_key = p_textureFlags | ( uint64_t( p_programFlags ) << 32 );
@@ -69,7 +70,7 @@ namespace Castor3D
 			{
 				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 				l_return->SetSource( ShaderType::Vertex, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_textureFlags, p_programFlags ) );
-				l_return->SetSource( ShaderType::Pixel, l_model, p_technique.GetPixelShaderSource( p_textureFlags, p_programFlags ) );
+				l_return->SetSource( ShaderType::Pixel, l_model, p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags ) );
 
 				CreateTextureVariables( *l_return, p_textureFlags );
 				CreateMatrixBuffer( *l_return, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );

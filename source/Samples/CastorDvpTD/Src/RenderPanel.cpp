@@ -133,6 +133,7 @@ namespace castortd
 		: wxPanel{ p_parent, wxID_ANY, wxDefaultPosition, p_size }
 		, m_camSpeed{ DEF_CAM_SPEED }
 		, m_game{ p_game }
+		, m_picking{ *wxGetApp().GetCastor() }
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -178,8 +179,25 @@ namespace castortd
 
 					m_listener = p_window->GetListener();
 					m_renderWindow = p_window;
+
+					{
+						auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
+						m_picking.AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
+					}
+
+					m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_sizeWnd]()
+					{
+						m_picking.Initialise( l_sizeWnd );
+					} ) );
 				}
 			}
+		}
+		else
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			{
+				m_picking.Cleanup();
+			} ) );
 		}
 	}
 
@@ -669,21 +687,25 @@ namespace castortd
 				if ( m_game.IsRunning() )
 				{
 					Camera const & l_camera = *l_window->GetCamera();
-					SubmeshSPtr l_submesh;
-					Face l_face{ 0, 0, 0 };
-					real l_distance{ std::numeric_limits< real >::max() };
-					auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int( m_oldY ), l_camera }
-																									 , l_camera
-																									 , l_distance
-																									 , l_face
-																									 , l_submesh );
-					if ( l_geometry && l_geometry->GetMesh()->GetName() == cuT( "MapBase" ) )
-					{
-						l_geometry.reset();
-					}
+					//SubmeshSPtr l_submesh;
+					//Face l_face{ 0, 0, 0 };
+					//real l_distance{ std::numeric_limits< real >::max() };
+					//auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int( m_oldY ), l_camera }
+					//																				 , l_camera
+					//																				 , l_distance
+					//																				 , l_face
+					//																				 , l_submesh );
 
-					m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry]()
+					m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_camera]()
 					{
+						m_picking.Update();
+						auto l_geometry = m_picking.Pick( Position{ int32_t( m_oldX ), int32_t( m_oldY ) }, l_camera );
+
+						if ( l_geometry && l_geometry->GetMesh()->GetName() == cuT( "MapBase" ) )
+						{
+							l_geometry.reset();
+						}
+
 						DoUpdateSelectedGeometry( l_geometry );
 					} ) );
 				}

@@ -84,18 +84,18 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.
 		 *\remarks		If none exists it is created.
-		 *\param[in]	p_technique		The technique from witch the program code is retrieved.
+		 *\param[in]	p_renderPass	The pass from which the program code is retrieved.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\return		The found or created program.
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés.
-		 *\param[in]	p_technique		La technique a pqrtir de laquelle est recuperee le code du programme.
+		 *\param[in]	p_renderPass	La passe a partir de laquelle est récupéré le code du programme.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.

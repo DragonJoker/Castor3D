@@ -95,7 +95,7 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderQueue
-		: public Castor::OwnedBy< RenderTechnique >
+		: public Castor::OwnedBy< RenderPass >
 	{
 	public:
 		/**
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_technique	La technique de rendu parente.
 		 */
-		C3D_API RenderQueue( RenderTechnique & p_technique );
+		C3D_API RenderQueue( RenderPass & p_technique );
 		/**
 		 *\~english
 		 *\brief		Destructor

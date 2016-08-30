@@ -491,6 +491,7 @@ namespace Castor3D
 	template< typename T > class CpuBuffer;
 	class GpuInformations;
 	class RenderSystem;
+	class RenderPass;
 	class RenderTechnique;
 	class Context;
 	class RenderWindow;

@@ -3,6 +3,7 @@
 #include <wx/panel.h>
 
 #include <Engine.hpp>
+#include <Miscellaneous/PickingPass.hpp>
 
 #include "TowerCategory.hpp"
 
@@ -80,6 +81,7 @@ namespace castortd
 		bool m_mouseRightDown{ false };
 		bool m_mouseMiddleDown{ false };
 		wxTimer * m_timer[eTIMER_ID_COUNT];
+		Castor3D::PickingPass m_picking;
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::SceneNodeSPtr m_node;
 		Castor3D::FrameListenerSPtr m_listener;
