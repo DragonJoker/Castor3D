@@ -311,10 +311,7 @@ namespace Castor3D
 		RasteriserState l_rsState;
 		l_rsState.SetCulledFaces( Culling::Front );
 
-		BlendState l_blState;
-		MultisampleState l_msState;
-
-		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move(  l_blState ), std::move( l_msState ) );
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
 		return true;
 	}
 }

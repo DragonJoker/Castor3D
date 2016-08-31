@@ -59,17 +59,17 @@ namespace Castor3D
 			{ AlphaFunc::Greater, cuT( "greater" ) },
 			{ AlphaFunc::Never, cuT( "never" ) },
 		};
-		static std::map< RGBBlendFunc, String > l_strTextureRgbFunctions
+		static std::map< ColourBlendFunc, String > l_strTextureRgbFunctions
 		{
-			{ RGBBlendFunc::NoBlend, cuT( "none" ) },
-			{ RGBBlendFunc::FirstArg, cuT( "first_arg" ) },
-			{ RGBBlendFunc::Add, cuT( "add" ) },
-			{ RGBBlendFunc::AddSigned, cuT( "add_signed" ) },
-			{ RGBBlendFunc::Modulate, cuT( "modulate" ) },
-			{ RGBBlendFunc::Interpolate, cuT( "interpolate" ) },
-			{ RGBBlendFunc::Subtract, cuT( "substract" ) },
-			{ RGBBlendFunc::Dot3RGB, cuT( "dot3_rgb" ) },
-			{ RGBBlendFunc::Dot3RGBA, cuT( "dot3_rgba" ) },
+			{ ColourBlendFunc::NoBlend, cuT( "none" ) },
+			{ ColourBlendFunc::FirstArg, cuT( "first_arg" ) },
+			{ ColourBlendFunc::Add, cuT( "add" ) },
+			{ ColourBlendFunc::AddSigned, cuT( "add_signed" ) },
+			{ ColourBlendFunc::Modulate, cuT( "modulate" ) },
+			{ ColourBlendFunc::Interpolate, cuT( "interpolate" ) },
+			{ ColourBlendFunc::Subtract, cuT( "substract" ) },
+			{ ColourBlendFunc::Dot3RGB, cuT( "dot3_rgb" ) },
+			{ ColourBlendFunc::Dot3RGBA, cuT( "dot3_rgba" ) },
 		};
 		bool l_return = true;
 
@@ -152,7 +152,7 @@ namespace Castor3D
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha function" );
 					}
 
-					if ( l_return && p_unit.GetRgbFunction() != RGBBlendFunc::NoBlend )
+					if ( l_return && p_unit.GetRgbFunction() != ColourBlendFunc::NoBlend )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit rgb blend" );
@@ -198,7 +198,7 @@ namespace Castor3D
 		, m_eChannel( TextureChannel::Diffuse )
 		, m_eAlphaFunc( AlphaFunc::Always )
 		, m_fAlphaValue( 0 )
-		, m_eRgbFunction( RGBBlendFunc::NoBlend )
+		, m_eRgbFunction( ColourBlendFunc::NoBlend )
 		, m_eAlpFunction( AlphaBlendFunc::NoBlend )
 		, m_bAutoMipmaps( false )
 		, m_changed( false )

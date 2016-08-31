@@ -10,7 +10,6 @@
 #include <RendererSelector.hpp>
 
 #include <xpms/ajouter.xpm>
-#include <xpms/castor_transparent.xpm>
 #include <xpms/fichier.xpm>
 #include <xpms/mat_blanc.xpm>
 #include <xpms/parametres.xpm>
@@ -36,7 +35,6 @@ namespace CastorShape
 
 	void CastorShapeApp::DoLoadAppImages()
 	{
-		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::AddBitmap( eBMP_FICHIER, fichier_xpm );
 		ImagesLoader::AddBitmap( eBMP_AJOUTER, ajouter_xpm );
 		ImagesLoader::AddBitmap( eBMP_PARAMETRES, parametres_xpm );

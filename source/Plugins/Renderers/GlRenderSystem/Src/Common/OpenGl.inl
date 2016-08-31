@@ -627,7 +627,7 @@ namespace GlRender
 		return TextureArguments[uint32_t( p_eArgument )];
 	}
 
-	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::RGBBlendFunc p_mode )const
+	inline eGL_BLEND_FUNC OpenGl::Get( Castor3D::ColourBlendFunc p_mode )const
 	{
 		return RgbBlendFuncs[uint32_t( p_mode )];
 	}

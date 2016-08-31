@@ -26,6 +26,7 @@
 #include "xpms/border_panel_sel.xpm"
 #include "xpms/camera.xpm"
 #include "xpms/camera_sel.xpm"
+#include "xpms/castor_transparent.xpm"
 #include "xpms/directional.xpm"
 #include "xpms/directional_sel.xpm"
 #include "xpms/frame_variable.xpm"
@@ -309,6 +310,7 @@ namespace GuiCommon
 	{
 		p_splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
+		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
 		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, animated_object_group_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT, animated_object_xpm );

@@ -2533,7 +2533,7 @@ namespace Castor3D
 			p_params[0]->Get( l_uiMode );
 			p_params[1]->Get( l_uiArg1 );
 			p_params[2]->Get( l_uiArg2 );
-			l_parsingContext->pTextureUnit->SetRgbFunction( RGBBlendFunc( l_uiMode ) );
+			l_parsingContext->pTextureUnit->SetRgbFunction( ColourBlendFunc( l_uiMode ) );
 			l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::Index0, BlendSource( l_uiArg1 ) );
 			l_parsingContext->pTextureUnit->SetRgbArgument( BlendSrcIndex::Index1, BlendSource( l_uiArg2 ) );
 		}

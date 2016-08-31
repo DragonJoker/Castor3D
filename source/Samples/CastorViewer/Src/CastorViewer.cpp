@@ -9,7 +9,6 @@
 #include <ImagesLoader.hpp>
 #include <RendererSelector.hpp>
 
-#include <xpms/castor_transparent.xpm>
 #include <xpms/export.xpm>
 #include <xpms/log.xpm>
 #include <xpms/mat_blanc.xpm>
@@ -36,7 +35,6 @@ namespace CastorViewer
 
 	void CastorViewerApp::DoLoadAppImages()
 	{
-		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::AddBitmap( eBMP_SCENES, scene_blanc_xpm );
 		ImagesLoader::AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
 		ImagesLoader::AddBitmap( eBMP_EXPORT, export_xpm );

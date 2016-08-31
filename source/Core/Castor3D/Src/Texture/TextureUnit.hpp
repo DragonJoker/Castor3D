@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\brief		Récupère fonction de mélange RGB
 		 *\return		La valeur
 		 */
-		inline Castor3D::RGBBlendFunc GetRgbFunction()const
+		inline Castor3D::ColourBlendFunc GetRgbFunction()const
 		{
 			return m_eRgbFunction;
 		}
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\brief		Définit fonction de mélange RGB
 		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetRgbFunction( Castor3D::RGBBlendFunc p_func )
+		inline void SetRgbFunction( Castor3D::ColourBlendFunc p_func )
 		{
 			m_eRgbFunction = p_func;
 		}
@@ -492,7 +492,7 @@ namespace Castor3D
 		BlendSource m_eAlpArguments[uint32_t( BlendSrcIndex::Count )];
 		//!\~english	The RGB blending function.
 		//!\~french		La fonction de mélange RGB.
-		RGBBlendFunc m_eRgbFunction;
+		ColourBlendFunc m_eRgbFunction;
 		//!\~english	The Alpha blending function.
 		//!\~french		La fonction de mélange Alpha.
 		AlphaBlendFunc m_eAlpFunction;
