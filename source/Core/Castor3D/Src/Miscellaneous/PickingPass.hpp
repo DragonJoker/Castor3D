@@ -94,13 +94,26 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of TextureChannel
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de TextureChannel
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String DoGetPixelShaderSource( uint32_t p_flags )const override;
+		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 
 	private:
 		//!\~english	The scenes, and cameras used to render them.

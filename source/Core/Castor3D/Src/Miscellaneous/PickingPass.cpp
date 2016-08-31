@@ -34,7 +34,7 @@ namespace Castor3D
 		, m_renderQueue{ *this }
 	{
 		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( eFACE_BACK );
+		l_rsState.SetCulledFaces( Culling::Back );
 		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}
 																	 , std::move( l_rsState )
 																	 , BlendState{}
@@ -47,7 +47,7 @@ namespace Castor3D
 
 	bool PickingPass::Initialise( Size const & p_size )
 	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite );
 		m_colourTexture->GetImage().SetSource( p_size, PixelFormat::A8R8G8B8 );
 		auto l_size = m_colourTexture->GetImage().GetDimensions();
 
@@ -66,7 +66,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_BLACK ) );
+			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
 			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 			l_return = m_depthBuffer->Create();
 		}
@@ -92,10 +92,10 @@ namespace Castor3D
 		{
 			l_return = m_frameBuffer->Initialise( l_size );
 
-			if ( l_return && m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+			if ( l_return && m_frameBuffer->Bind( FrameBufferMode::Config ) )
 			{
-				m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_depthAttach );
+				m_frameBuffer->Attach( AttachmentPoint::Colour, 0, m_colourAttach, m_colourTexture->GetType() );
+				m_frameBuffer->Attach( AttachmentPoint::Depth, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -112,7 +112,7 @@ namespace Castor3D
 	{
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			m_frameBuffer->Bind( FrameBufferMode::Config );
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
@@ -133,7 +133,7 @@ namespace Castor3D
 
 	GeometrySPtr PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
 	{
-		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes( p_camera, *m_scenes.begin()->first );
@@ -181,7 +181,7 @@ namespace Castor3D
 
 			if ( m_colourTexture->Bind( 0 ) )
 			{
-				auto l_data = m_colourTexture->Lock( 0, eACCESS_TYPE_READ );
+				auto l_data = m_colourTexture->Lock( 0, AccessType::Read );
 
 				if ( l_data )
 				{
@@ -202,7 +202,7 @@ namespace Castor3D
 		return nullptr;
 	}
 
-	String PickingPass::DoGetPixelShaderSource( uint32_t p_flags )const
+	String PickingPass::DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -215,7 +215,32 @@ namespace Castor3D
 		// Fragment Intputs
 		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
 		auto c3d_v3Colour( l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Colour" ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_flags, TextureChannel::Opacity ) ) );
+
+		// Fragment Outputs
+		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+		{
+			pxl_v4FragColor = vec4( c3d_v3Colour, 1.0 );
+		} );
+
+		return l_writer.Finalise();
+	}
+
+	String PickingPass::DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
+	{
+		using namespace GLSL;
+		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
+
+		// UBOs
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_PASS( l_writer );
+
+		// Fragment Intputs
+		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
+		auto c3d_v3Colour( l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Colour" ) ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) ) );
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
@@ -224,7 +249,7 @@ namespace Castor3D
 		{
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 
-			if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 			{
 				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}

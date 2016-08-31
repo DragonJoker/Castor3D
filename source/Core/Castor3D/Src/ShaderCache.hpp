@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t & p_textureFlags, uint8_t & p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
