@@ -339,7 +339,7 @@ namespace GlRender
 		inline eGL_WRAP_MODE Get( Castor3D::WrapMode p_eWrapMode )const;
 		inline eGL_INTERPOLATION_MODE Get( Castor3D::InterpolationMode p_interpolation )const;
 		inline int Get( Castor3D::BlendSource p_eArgument )const;
-		inline eGL_BLEND_FUNC Get( Castor3D::RGBBlendFunc p_mode )const;
+		inline eGL_BLEND_FUNC Get( Castor3D::ColourBlendFunc p_mode )const;
 		inline eGL_BLEND_FUNC Get( Castor3D::AlphaBlendFunc p_mode )const;
 		inline eGL_BLEND_FACTOR Get( Castor3D::BlendOperand p_eBlendFactor )const;
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
@@ -840,7 +840,7 @@ namespace GlRender
 		eGL_INTERPOLATION_MODE TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Count )];
 		eGL_BLEND_FACTOR BlendFactors[uint32_t( Castor3D::BlendOperand::Count )];
 		eGL_BLEND_SOURCE TextureArguments[uint32_t( Castor3D::BlendSource::Count )];
-		eGL_BLEND_FUNC RgbBlendFuncs[uint32_t( Castor3D::RGBBlendFunc::Count )];
+		eGL_BLEND_FUNC RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Count )];
 		eGL_BLEND_FUNC AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Count )];
 		eGL_BLEND_OP BlendOps[uint32_t( Castor3D::BlendOperation::Count )];
 		PixelFmt PixelFormats[uint32_t( Castor::PixelFormat::Count )];

@@ -54,6 +54,7 @@ namespace Deferred
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
+		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
 		uint32_t l_index{ 0u };
 
 		for ( auto & l_unit : m_lightPassTextures )
@@ -72,7 +73,7 @@ namespace Deferred
 		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
 		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( true );
+		l_dsstate.SetDepthTest( false );
 		l_dsstate.SetDepthMask( WritingMask::Zero );
 		m_lightPassPipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 
@@ -245,13 +246,11 @@ namespace Deferred
 
 	bool RenderTechnique::DoBeginOpaqueRendering()
 	{
-		static Colour l_colour{ Colour::from_components( 0, 0, 0, 0 ) };
 		GetEngine()->SetPerObjectLighting( false );
 		bool l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
-			m_geometryPassFrameBuffer->SetClearColour( l_colour );
 			m_geometryPassFrameBuffer->Clear();
 		}
 
@@ -322,6 +321,7 @@ namespace Deferred
 
 		m_frameBuffer.m_frameBuffer->Unbind();
 		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, Rectangle{ Position{}, m_size }, uint32_t( BufferComponent::Depth ) );
+		m_frameBuffer.m_frameBuffer->Bind();
 
 #endif
 
@@ -330,7 +330,7 @@ namespace Deferred
 	bool RenderTechnique::DoBeginTransparentRendering()
 	{
 		GetEngine()->SetPerObjectLighting( true );
-		return m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
+		return true;
 	}
 
 	void RenderTechnique::DoEndTransparentRendering()
@@ -370,7 +370,6 @@ namespace Deferred
 		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
 		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::Diffuse ) ) );
 		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::Normal ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) ) );
 		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::Specular ) ) );
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
@@ -400,7 +399,6 @@ namespace Deferred
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
-				//l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
@@ -415,7 +413,7 @@ namespace Deferred
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 			{
-				l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
@@ -494,7 +492,6 @@ namespace Deferred
 
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-		auto gl_FragDepth = l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
@@ -511,7 +508,7 @@ namespace Deferred
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, c3d_v4AmbientLight.xyz() + vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapEmissive, l_v4Emissive.xyz() );

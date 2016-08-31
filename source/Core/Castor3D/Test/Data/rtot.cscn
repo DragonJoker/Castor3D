@@ -1,7 +1,7 @@
 scene "TextureScene"
 {
 	background_colour 0.5 0.0 0.0 1.0
-	ambient_light 0.5 0.5 0.5 1.0
+	ambient_light 0 0 0 1
 
 	material "Gold"
 	{

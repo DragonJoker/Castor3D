@@ -118,65 +118,65 @@ namespace Castor
 		\~french
 		\brief		Enumération de couleurs prédéfinies
 		*/
-		typedef enum ePREDEFINED
+		enum class Predefined
 			: uint32_t
 		{
-			ePREDEFINED_TRANSPARENT_BLACK = 0x00000000,
-			ePREDEFINED_LOWALPHA_BLACK = 0x00000040,
-			ePREDEFINED_MEDALPHA_BLACK = 0x0000007F,
-			ePREDEFINED_HIGHALPHA_BLACK = 0x000000BF,
-			ePREDEFINED_FULLALPHA_BLACK = 0x000000FF,
-			ePREDEFINED_TRANSPARENT_DARKBLUE = 0x00007F00,
-			ePREDEFINED_LOWALPHA_DARKBLUE = 0x00007F40,
-			ePREDEFINED_MEDALPHA_DARKBLUE = 0x00007F7F,
-			ePREDEFINED_HIGHALPHA_DARKBLUE = 0x00007FBF,
-			ePREDEFINED_FULLALPHA_DARKBLUE = 0x00007FFF,
-			ePREDEFINED_TRANSPARENT_BLUE = 0x0000FF00,
-			ePREDEFINED_LOWALPHA_BLUE = 0x0000FF40,
-			ePREDEFINED_MEDALPHA_BLUE = 0x0000FF7F,
-			ePREDEFINED_HIGHALPHA_BLUE = 0x0000FFBF,
-			ePREDEFINED_FULLALPHA_BLUE = 0x0000FFFF,
-			ePREDEFINED_TRANSPARENT_DARKGREEN = 0x007F0000,
-			ePREDEFINED_LOWALPHA_DARKGREEN = 0x007F0040,
-			ePREDEFINED_MEDALPHA_DARKGREEN = 0x007F007F,
-			ePREDEFINED_HIGHALPHA_DARKGREEN = 0x007F00BF,
-			ePREDEFINED_FULLALPHA_DARKGREEN = 0x007F00FF,
-			ePREDEFINED_TRANSPARENT_GREEN = 0x00FF0000,
-			ePREDEFINED_LOWALPHA_GREEN = 0x00FF0040,
-			ePREDEFINED_MEDALPHA_GREEN = 0x00FF007F,
-			ePREDEFINED_HIGHALPHA_GREEN = 0x00FF00BF,
-			ePREDEFINED_FULLALPHA_GREEN = 0x00FF00FF,
-			ePREDEFINED_TRANSPARENT_DARKRED = 0x7F000000,
-			ePREDEFINED_LOWALPHA_DARKRED = 0x7F000040,
-			ePREDEFINED_MEDALPHA_DARKRED = 0x7F00007F,
-			ePREDEFINED_HIGHALPHA_DARKRED = 0x7F0000BF,
-			ePREDEFINED_FULLALPHA_DARKRED = 0x7F0000FF,
-			ePREDEFINED_TRANSPARENT_RED = 0xFF000000,
-			ePREDEFINED_LOWALPHA_RED = 0xFF000040,
-			ePREDEFINED_MEDALPHA_RED = 0xFF00007F,
-			ePREDEFINED_HIGHALPHA_RED = 0xFF0000BF,
-			ePREDEFINED_FULLALPHA_RED = 0xFF0000FF,
-			ePREDEFINED_TRANSPARENT_LIGHTBLUE = 0x7F7FFF00,
-			ePREDEFINED_LOWALPHA_LIGHTBLUE = 0x7F7FFF40,
-			ePREDEFINED_MEDALPHA_LIGHTBLUE = 0x7F7FFF7F,
-			ePREDEFINED_HIGHALPHA_LIGHTBLUE = 0x7F7FFFBF,
-			ePREDEFINED_FULLALPHA_LIGHTBLUE = 0x7F7FFFFF,
-			ePREDEFINED_TRANSPARENT_LIGHTGREEN = 0x7FFF7F00,
-			ePREDEFINED_LOWALPHA_LIGHTGREEN = 0x7FFF7F40,
-			ePREDEFINED_MEDALPHA_LIGHTGREEN = 0x7FFF7F7F,
-			ePREDEFINED_HIGHALPHA_LIGHTGREEN = 0x7FFF7FBF,
-			ePREDEFINED_FULLALPHA_LIGHTGREEN = 0x7FFF7FFF,
-			ePREDEFINED_TRANSPARENT_LIGHTRED = 0xFF7F7F00,
-			ePREDEFINED_LOWALPHA_LIGHTRED = 0xFF7F7F40,
-			ePREDEFINED_MEDALPHA_LIGHTRED = 0xFF7F7F7F,
-			ePREDEFINED_HIGHALPHA_LIGHTRED = 0xFF7F7FBF,
-			ePREDEFINED_FULLALPHA_LIGHTRED = 0xFF7F7FFF,
-			ePREDEFINED_TRANSPARENT_WHITE = 0xFFFFFF00,
-			ePREDEFINED_LOWALPHA_WHITE = 0xFFFFFF40,
-			ePREDEFINED_MEDALPHA_WHITE = 0xFFFFFF7F,
-			ePREDEFINED_HIGHALPHA_WHITE = 0xFFFFFFBF,
-			ePREDEFINED_FULLALPHA_WHITE = 0xFFFFFFFF,
-		}	ePREDEFINED;
+			TransparentBlack = 0x00000000,
+			LowAlphaBlack = 0x00000040,
+			MedAlphaBlack = 0x0000007F,
+			HighAlphaBlack = 0x000000BF,
+			OpaqueBlack = 0x000000FF,
+			TransparentDarkBlue = 0x00007F00,
+			LowAlphaDarkBlue = 0x00007F40,
+			MedAlphaDarkBlue = 0x00007F7F,
+			HighAlphaDarkBlue = 0x00007FBF,
+			OpaqueDarkBlue = 0x00007FFF,
+			TransparentBlue = 0x0000FF00,
+			LowAlphaBlue = 0x0000FF40,
+			MedAlphaBlue = 0x0000FF7F,
+			HighAlphaBlue = 0x0000FFBF,
+			OpaqueBlue = 0x0000FFFF,
+			TransparentDarkGreen = 0x007F0000,
+			LowAlphaDarkGreen = 0x007F0040,
+			MedAlphaDarkGreen = 0x007F007F,
+			HighAlphaDarkGreen = 0x007F00BF,
+			OpaqueDarkGreen = 0x007F00FF,
+			TransparentGreen = 0x00FF0000,
+			LowAlphaGreen = 0x00FF0040,
+			MedAlphaGreen = 0x00FF007F,
+			HighAlphaGreen = 0x00FF00BF,
+			OpaqueGreen = 0x00FF00FF,
+			TransparentDarkRed = 0x7F000000,
+			LowAlphaDarkRed = 0x7F000040,
+			MedAlphaDarkRed = 0x7F00007F,
+			HighAlphaDarkRed = 0x7F0000BF,
+			OpaqueDarkRed = 0x7F0000FF,
+			TransparentRed = 0xFF000000,
+			LowAlphaRed = 0xFF000040,
+			MedAlphaRed = 0xFF00007F,
+			HighAlphaRed = 0xFF0000BF,
+			OpaqueRed = 0xFF0000FF,
+			TransparentLightBlue = 0x7F7FFF00,
+			LowAlphaLightBlue = 0x7F7FFF40,
+			MedAlphaLightBlue = 0x7F7FFF7F,
+			HighAlphaLightBlue = 0x7F7FFFBF,
+			OpaqueLightBlue = 0x7F7FFFFF,
+			TransparentLightGreen = 0x7FFF7F00,
+			LowAlphaLightGreen = 0x7FFF7F40,
+			MedAlphaLightGreen = 0x7FFF7F7F,
+			HighAlphaLightGreen = 0x7FFF7FBF,
+			OpaqueLightGreen = 0x7FFF7FFF,
+			TransparentLightRed = 0xFF7F7F00,
+			LowAlphaLightRed = 0xFF7F7F40,
+			MedAlphaLightRed = 0xFF7F7F7F,
+			HighAlphaLightRed = 0xFF7F7FBF,
+			OpaqueLightRed = 0xFF7F7FFF,
+			TransparentWhite = 0xFFFFFF00,
+			LowAlphaWhite = 0xFFFFFF40,
+			MedAlphaWhite = 0xFFFFFF7F,
+			HighAlphaWhite = 0xFFFFFFBF,
+			OpaqueWhite = 0xFFFFFFFF,
+		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.6.1.0
@@ -283,7 +283,7 @@ namespace Castor
 		 *\param[in]	p_ePredef
 		 *\return		La Colour construite
 		 */
-		static Colour from_predef( ePREDEFINED p_ePredef )
+		static Colour from_predef( Predefined p_ePredef )
 		{
 			return from_rgba( ( uint32_t )p_ePredef );
 		}
@@ -997,7 +997,7 @@ namespace Castor
 		 *\param[in]	p_predefined	La couleur prédéfinie
 		 *\return		Le nom de la couleur
 		 */
-		CU_API static String get_predefined_name( ePREDEFINED p_predefined );
+		CU_API static String get_predefined_name( Predefined p_predefined );
 		/**
 		 *\~english
 		 *\brief		Retrieves predefined colour from a name
@@ -1008,7 +1008,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la couleur prédéfinie
 		 *\return		La couleur prédéfinie
 		 */
-		CU_API static ePREDEFINED get_predefined( String const & p_name );
+		CU_API static Predefined get_predefined( String const & p_name );
 
 	private:
 		ColourComponentArray m_arrayComponents;

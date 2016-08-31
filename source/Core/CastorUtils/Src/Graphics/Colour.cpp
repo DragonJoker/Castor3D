@@ -70,68 +70,68 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	String Colour::get_predefined_name( ePREDEFINED p_predefined )
+	String Colour::get_predefined_name( Predefined p_predefined )
 	{
-		static std::map< ePREDEFINED, String > l_mapNames;
-		typedef std::map< ePREDEFINED, String >::iterator MapIt;
+		static std::map< Predefined, String > l_mapNames;
+		typedef std::map< Predefined, String >::iterator MapIt;
 
 		if ( l_mapNames.empty() )
 		{
-			l_mapNames[	ePREDEFINED_TRANSPARENT_BLACK] = cuT( "transp_black" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_DARKBLUE] = cuT( "transp_darkblue" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_BLUE] = cuT( "transp_blue" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_DARKGREEN] = cuT( "transp_darkgreen" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_GREEN] = cuT( "transp_green" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_DARKRED] = cuT( "transp_darkred" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_RED] = cuT( "transp_red" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_LIGHTBLUE] = cuT( "transp_lightblue" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_LIGHTGREEN] = cuT( "transp_lightgreen" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_LIGHTRED] = cuT( "transp_lightred" );
-			l_mapNames[	ePREDEFINED_TRANSPARENT_WHITE] = cuT( "transp_white" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_BLACK] = cuT( "lowalpha_black" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_DARKBLUE] = cuT( "lowalpha_darkblue" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_BLUE] = cuT( "lowalpha_blue" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_DARKGREEN] = cuT( "lowalpha_darkgreen" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_GREEN] = cuT( "lowalpha_green" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_DARKRED] = cuT( "lowalpha_darkred" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_RED] = cuT( "lowalpha_red" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_LIGHTBLUE] = cuT( "lowalpha_lightblue" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_LIGHTGREEN] = cuT( "lowalpha_lightgreen" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_LIGHTRED] = cuT( "lowalpha_lightred" );
-			l_mapNames[	ePREDEFINED_LOWALPHA_WHITE] = cuT( "lowalpha_white" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_BLACK] = cuT( "medalpha_black" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_DARKBLUE] = cuT( "medalpha_darkblue" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_BLUE] = cuT( "medalpha_blue" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_DARKGREEN] = cuT( "medalpha_darkgreen" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_GREEN] = cuT( "medalpha_green" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_DARKRED] = cuT( "medalpha_darkred" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_RED] = cuT( "medalpha_red" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_LIGHTBLUE] = cuT( "medalpha_lightblue" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_LIGHTGREEN] = cuT( "medalpha_lightgreen" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_LIGHTRED] = cuT( "medalpha_lightred" );
-			l_mapNames[	ePREDEFINED_MEDALPHA_WHITE] = cuT( "medalpha_white" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_BLACK] = cuT( "highalpha_black" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_DARKBLUE] = cuT( "highalpha_darkblue" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_BLUE] = cuT( "highalpha_blue" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_DARKGREEN] = cuT( "highalpha_darkgreen" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_GREEN] = cuT( "highalpha_green" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_DARKRED] = cuT( "highalpha_darkred" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_RED] = cuT( "highalpha_red" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_LIGHTBLUE] = cuT( "highalpha_lightblue" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_LIGHTGREEN] = cuT( "highalpha_lightgreen" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_LIGHTRED] = cuT( "highalpha_lightred" );
-			l_mapNames[	ePREDEFINED_HIGHALPHA_WHITE] = cuT( "highalpha_white" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_BLACK] = cuT( "black" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_DARKBLUE] = cuT( "darkblue" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_BLUE] = cuT( "blue" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_DARKGREEN] = cuT( "darkgreen" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_GREEN] = cuT( "green" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_DARKRED] = cuT( "darkred" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_RED] = cuT( "red" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_LIGHTBLUE] = cuT( "lightblue" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_LIGHTGREEN] = cuT( "lightgreen" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_LIGHTRED] = cuT( "lightred" );
-			l_mapNames[	ePREDEFINED_FULLALPHA_WHITE] = cuT( "white" );
+			l_mapNames[Predefined::TransparentBlack] = cuT( "transp_black" );
+			l_mapNames[Predefined::TransparentDarkBlue] = cuT( "transp_darkblue" );
+			l_mapNames[Predefined::TransparentBlue] = cuT( "transp_blue" );
+			l_mapNames[Predefined::TransparentDarkGreen] = cuT( "transp_darkgreen" );
+			l_mapNames[Predefined::TransparentGreen] = cuT( "transp_green" );
+			l_mapNames[Predefined::TransparentDarkRed] = cuT( "transp_darkred" );
+			l_mapNames[Predefined::TransparentRed] = cuT( "transp_red" );
+			l_mapNames[Predefined::TransparentLightBlue] = cuT( "transp_lightblue" );
+			l_mapNames[Predefined::TransparentLightGreen] = cuT( "transp_lightgreen" );
+			l_mapNames[Predefined::TransparentLightRed] = cuT( "transp_lightred" );
+			l_mapNames[Predefined::TransparentWhite] = cuT( "transp_white" );
+			l_mapNames[Predefined::LowAlphaBlack] = cuT( "lowalpha_black" );
+			l_mapNames[Predefined::LowAlphaDarkBlue] = cuT( "lowalpha_darkblue" );
+			l_mapNames[Predefined::LowAlphaBlue] = cuT( "lowalpha_blue" );
+			l_mapNames[Predefined::LowAlphaDarkGreen] = cuT( "lowalpha_darkgreen" );
+			l_mapNames[Predefined::LowAlphaGreen] = cuT( "lowalpha_green" );
+			l_mapNames[Predefined::LowAlphaDarkRed] = cuT( "lowalpha_darkred" );
+			l_mapNames[Predefined::LowAlphaRed] = cuT( "lowalpha_red" );
+			l_mapNames[Predefined::LowAlphaLightBlue] = cuT( "lowalpha_lightblue" );
+			l_mapNames[Predefined::LowAlphaLightGreen] = cuT( "lowalpha_lightgreen" );
+			l_mapNames[Predefined::LowAlphaLightRed] = cuT( "lowalpha_lightred" );
+			l_mapNames[Predefined::LowAlphaWhite] = cuT( "lowalpha_white" );
+			l_mapNames[Predefined::MedAlphaBlack] = cuT( "medalpha_black" );
+			l_mapNames[Predefined::MedAlphaDarkBlue] = cuT( "medalpha_darkblue" );
+			l_mapNames[Predefined::MedAlphaBlue] = cuT( "medalpha_blue" );
+			l_mapNames[Predefined::MedAlphaDarkGreen] = cuT( "medalpha_darkgreen" );
+			l_mapNames[Predefined::MedAlphaGreen] = cuT( "medalpha_green" );
+			l_mapNames[Predefined::MedAlphaDarkRed] = cuT( "medalpha_darkred" );
+			l_mapNames[Predefined::MedAlphaRed] = cuT( "medalpha_red" );
+			l_mapNames[Predefined::MedAlphaLightBlue] = cuT( "medalpha_lightblue" );
+			l_mapNames[Predefined::MedAlphaLightGreen] = cuT( "medalpha_lightgreen" );
+			l_mapNames[Predefined::MedAlphaLightRed] = cuT( "medalpha_lightred" );
+			l_mapNames[Predefined::MedAlphaWhite] = cuT( "medalpha_white" );
+			l_mapNames[Predefined::HighAlphaBlack] = cuT( "highalpha_black" );
+			l_mapNames[Predefined::HighAlphaDarkBlue] = cuT( "highalpha_darkblue" );
+			l_mapNames[Predefined::HighAlphaBlue] = cuT( "highalpha_blue" );
+			l_mapNames[Predefined::HighAlphaDarkGreen] = cuT( "highalpha_darkgreen" );
+			l_mapNames[Predefined::HighAlphaGreen] = cuT( "highalpha_green" );
+			l_mapNames[Predefined::HighAlphaDarkRed] = cuT( "highalpha_darkred" );
+			l_mapNames[Predefined::HighAlphaRed] = cuT( "highalpha_red" );
+			l_mapNames[Predefined::HighAlphaLightBlue] = cuT( "highalpha_lightblue" );
+			l_mapNames[Predefined::HighAlphaLightGreen] = cuT( "highalpha_lightgreen" );
+			l_mapNames[Predefined::HighAlphaLightRed] = cuT( "highalpha_lightred" );
+			l_mapNames[Predefined::HighAlphaWhite] = cuT( "highalpha_white" );
+			l_mapNames[Predefined::OpaqueBlack] = cuT( "black" );
+			l_mapNames[Predefined::OpaqueDarkBlue] = cuT( "darkblue" );
+			l_mapNames[Predefined::OpaqueBlue] = cuT( "blue" );
+			l_mapNames[Predefined::OpaqueDarkGreen] = cuT( "darkgreen" );
+			l_mapNames[Predefined::OpaqueGreen] = cuT( "green" );
+			l_mapNames[Predefined::OpaqueDarkRed] = cuT( "darkred" );
+			l_mapNames[Predefined::OpaqueRed] = cuT( "red" );
+			l_mapNames[Predefined::OpaqueLightBlue] = cuT( "lightblue" );
+			l_mapNames[Predefined::OpaqueLightGreen] = cuT( "lightgreen" );
+			l_mapNames[Predefined::OpaqueLightRed] = cuT( "lightred" );
+			l_mapNames[Predefined::OpaqueWhite] = cuT( "white" );
 		}
 
 		MapIt l_it = l_mapNames.find( p_predefined );
@@ -145,72 +145,72 @@ namespace Castor
 		return l_return;
 	}
 
-	Colour::ePREDEFINED Colour::get_predefined( String const & p_name )
+	Colour::Predefined Colour::get_predefined( String const & p_name )
 	{
-		static std::map< String, ePREDEFINED > l_mapNames;
-		typedef std::map< String, ePREDEFINED >::iterator MapIt;
+		static std::map< String, Predefined > l_mapNames;
+		typedef std::map< String, Predefined >::iterator MapIt;
 
 		if ( l_mapNames.empty() )
 		{
-			l_mapNames[	cuT( "transp_black" )] = ePREDEFINED_TRANSPARENT_BLACK;
-			l_mapNames[	cuT( "transp_darkblue" )] = ePREDEFINED_TRANSPARENT_DARKBLUE;
-			l_mapNames[	cuT( "transp_blue" )] = ePREDEFINED_TRANSPARENT_BLUE;
-			l_mapNames[	cuT( "transp_darkgreen" )] = ePREDEFINED_TRANSPARENT_DARKGREEN;
-			l_mapNames[	cuT( "transp_green" )] = ePREDEFINED_TRANSPARENT_GREEN;
-			l_mapNames[	cuT( "transp_darkred" )] = ePREDEFINED_TRANSPARENT_DARKRED;
-			l_mapNames[	cuT( "transp_red" )] = ePREDEFINED_TRANSPARENT_RED;
-			l_mapNames[	cuT( "transp_lightblue" )] = ePREDEFINED_TRANSPARENT_LIGHTBLUE;
-			l_mapNames[	cuT( "transp_lightgreen" )] = ePREDEFINED_TRANSPARENT_LIGHTGREEN;
-			l_mapNames[	cuT( "transp_lightred" )] = ePREDEFINED_TRANSPARENT_LIGHTRED;
-			l_mapNames[	cuT( "transp_white" )] = ePREDEFINED_TRANSPARENT_WHITE;
-			l_mapNames[	cuT( "lowalpha_black" )] = ePREDEFINED_LOWALPHA_BLACK;
-			l_mapNames[	cuT( "lowalpha_darkblue" )] = ePREDEFINED_LOWALPHA_DARKBLUE;
-			l_mapNames[	cuT( "lowalpha_blue" )] = ePREDEFINED_LOWALPHA_BLUE;
-			l_mapNames[	cuT( "lowalpha_darkgreen" )] = ePREDEFINED_LOWALPHA_DARKGREEN;
-			l_mapNames[	cuT( "lowalpha_green" )] = ePREDEFINED_LOWALPHA_GREEN;
-			l_mapNames[	cuT( "lowalpha_darkred" )] = ePREDEFINED_LOWALPHA_DARKRED;
-			l_mapNames[	cuT( "lowalpha_red" )] = ePREDEFINED_LOWALPHA_RED;
-			l_mapNames[	cuT( "lowalpha_lightblue" )] = ePREDEFINED_LOWALPHA_LIGHTBLUE;
-			l_mapNames[	cuT( "lowalpha_lightgreen" )] = ePREDEFINED_LOWALPHA_LIGHTGREEN;
-			l_mapNames[	cuT( "lowalpha_lightred" )] = ePREDEFINED_LOWALPHA_LIGHTRED;
-			l_mapNames[	cuT( "lowalpha_white" )] = ePREDEFINED_LOWALPHA_WHITE;
-			l_mapNames[	cuT( "medalpha_black" )] = ePREDEFINED_MEDALPHA_BLACK;
-			l_mapNames[	cuT( "medalpha_darkblue" )] = ePREDEFINED_MEDALPHA_DARKBLUE;
-			l_mapNames[	cuT( "medalpha_blue" )] = ePREDEFINED_MEDALPHA_BLUE;
-			l_mapNames[	cuT( "medalpha_darkgreen" )] = ePREDEFINED_MEDALPHA_DARKGREEN;
-			l_mapNames[	cuT( "medalpha_green" )] = ePREDEFINED_MEDALPHA_GREEN;
-			l_mapNames[	cuT( "medalpha_darkred" )] = ePREDEFINED_MEDALPHA_DARKRED;
-			l_mapNames[	cuT( "medalpha_red" )] = ePREDEFINED_MEDALPHA_RED;
-			l_mapNames[	cuT( "medalpha_lightblue" )] = ePREDEFINED_MEDALPHA_LIGHTBLUE;
-			l_mapNames[	cuT( "medalpha_lightgreen" )] = ePREDEFINED_MEDALPHA_LIGHTGREEN;
-			l_mapNames[	cuT( "medalpha_lightred" )] = ePREDEFINED_MEDALPHA_LIGHTRED;
-			l_mapNames[	cuT( "medalpha_white" )] = ePREDEFINED_MEDALPHA_WHITE;
-			l_mapNames[	cuT( "highalpha_black" )] = ePREDEFINED_HIGHALPHA_BLACK;
-			l_mapNames[	cuT( "highalpha_darkblue" )] = ePREDEFINED_HIGHALPHA_DARKBLUE;
-			l_mapNames[	cuT( "highalpha_blue" )] = ePREDEFINED_HIGHALPHA_BLUE;
-			l_mapNames[	cuT( "highalpha_darkgreen" )] = ePREDEFINED_HIGHALPHA_DARKGREEN;
-			l_mapNames[	cuT( "highalpha_green" )] = ePREDEFINED_HIGHALPHA_GREEN;
-			l_mapNames[	cuT( "highalpha_darkred" )] = ePREDEFINED_HIGHALPHA_DARKRED;
-			l_mapNames[	cuT( "highalpha_red" )] = ePREDEFINED_HIGHALPHA_RED;
-			l_mapNames[	cuT( "highalpha_lightblue" )] = ePREDEFINED_HIGHALPHA_LIGHTBLUE;
-			l_mapNames[	cuT( "highalpha_lightgreen" )] = ePREDEFINED_HIGHALPHA_LIGHTGREEN;
-			l_mapNames[	cuT( "highalpha_lightred" )] = ePREDEFINED_HIGHALPHA_LIGHTRED;
-			l_mapNames[	cuT( "highalpha_white" )] = ePREDEFINED_HIGHALPHA_WHITE;
-			l_mapNames[	cuT( "black" )] = ePREDEFINED_FULLALPHA_BLACK;
-			l_mapNames[	cuT( "darkblue" )] = ePREDEFINED_FULLALPHA_DARKBLUE;
-			l_mapNames[	cuT( "blue" )] = ePREDEFINED_FULLALPHA_BLUE;
-			l_mapNames[	cuT( "darkgreen" )] = ePREDEFINED_FULLALPHA_DARKGREEN;
-			l_mapNames[	cuT( "green" )] = ePREDEFINED_FULLALPHA_GREEN;
-			l_mapNames[	cuT( "darkred" )] = ePREDEFINED_FULLALPHA_DARKRED;
-			l_mapNames[	cuT( "red" )] = ePREDEFINED_FULLALPHA_RED;
-			l_mapNames[	cuT( "lightblue" )] = ePREDEFINED_FULLALPHA_LIGHTBLUE;
-			l_mapNames[	cuT( "lightgreen" )] = ePREDEFINED_FULLALPHA_LIGHTGREEN;
-			l_mapNames[	cuT( "lightred" )] = ePREDEFINED_FULLALPHA_LIGHTRED;
-			l_mapNames[	cuT( "white" )] = ePREDEFINED_FULLALPHA_WHITE;
+			l_mapNames[cuT( "transp_black" )] = Predefined::TransparentBlack;
+			l_mapNames[cuT( "transp_darkblue" )] = Predefined::TransparentDarkBlue;
+			l_mapNames[cuT( "transp_blue" )] = Predefined::TransparentBlue;
+			l_mapNames[cuT( "transp_darkgreen" )] = Predefined::TransparentDarkGreen;
+			l_mapNames[cuT( "transp_green" )] = Predefined::TransparentGreen;
+			l_mapNames[cuT( "transp_darkred" )] = Predefined::TransparentDarkRed;
+			l_mapNames[cuT( "transp_red" )] = Predefined::TransparentRed;
+			l_mapNames[cuT( "transp_lightblue" )] = Predefined::TransparentLightBlue;
+			l_mapNames[cuT( "transp_lightgreen" )] = Predefined::TransparentLightGreen;
+			l_mapNames[cuT( "transp_lightred" )] = Predefined::TransparentLightRed;
+			l_mapNames[cuT( "transp_white" )] = Predefined::TransparentWhite;
+			l_mapNames[cuT( "lowalpha_black" )] = Predefined::LowAlphaBlack;
+			l_mapNames[cuT( "lowalpha_darkblue" )] = Predefined::LowAlphaDarkBlue;
+			l_mapNames[cuT( "lowalpha_blue" )] = Predefined::LowAlphaBlue;
+			l_mapNames[cuT( "lowalpha_darkgreen" )] = Predefined::LowAlphaDarkGreen;
+			l_mapNames[cuT( "lowalpha_green" )] = Predefined::LowAlphaGreen;
+			l_mapNames[cuT( "lowalpha_darkred" )] = Predefined::LowAlphaDarkRed;
+			l_mapNames[cuT( "lowalpha_red" )] = Predefined::LowAlphaRed;
+			l_mapNames[cuT( "lowalpha_lightblue" )] = Predefined::LowAlphaLightBlue;
+			l_mapNames[cuT( "lowalpha_lightgreen" )] = Predefined::LowAlphaLightGreen;
+			l_mapNames[cuT( "lowalpha_lightred" )] = Predefined::LowAlphaLightRed;
+			l_mapNames[cuT( "lowalpha_white" )] = Predefined::LowAlphaWhite;
+			l_mapNames[cuT( "medalpha_black" )] = Predefined::MedAlphaBlack;
+			l_mapNames[cuT( "medalpha_darkblue" )] = Predefined::MedAlphaDarkBlue;
+			l_mapNames[cuT( "medalpha_blue" )] = Predefined::MedAlphaBlue;
+			l_mapNames[cuT( "medalpha_darkgreen" )] = Predefined::MedAlphaDarkGreen;
+			l_mapNames[cuT( "medalpha_green" )] = Predefined::MedAlphaGreen;
+			l_mapNames[cuT( "medalpha_darkred" )] = Predefined::MedAlphaDarkRed;
+			l_mapNames[cuT( "medalpha_red" )] = Predefined::MedAlphaRed;
+			l_mapNames[cuT( "medalpha_lightblue" )] = Predefined::MedAlphaLightBlue;
+			l_mapNames[cuT( "medalpha_lightgreen" )] = Predefined::MedAlphaLightGreen;
+			l_mapNames[cuT( "medalpha_lightred" )] = Predefined::MedAlphaLightRed;
+			l_mapNames[cuT( "medalpha_white" )] = Predefined::MedAlphaWhite;
+			l_mapNames[cuT( "highalpha_black" )] = Predefined::HighAlphaBlack;
+			l_mapNames[cuT( "highalpha_darkblue" )] = Predefined::HighAlphaDarkBlue;
+			l_mapNames[cuT( "highalpha_blue" )] = Predefined::HighAlphaBlue;
+			l_mapNames[cuT( "highalpha_darkgreen" )] = Predefined::HighAlphaDarkGreen;
+			l_mapNames[cuT( "highalpha_green" )] = Predefined::HighAlphaGreen;
+			l_mapNames[cuT( "highalpha_darkred" )] = Predefined::HighAlphaDarkRed;
+			l_mapNames[cuT( "highalpha_red" )] = Predefined::HighAlphaRed;
+			l_mapNames[cuT( "highalpha_lightblue" )] = Predefined::HighAlphaLightBlue;
+			l_mapNames[cuT( "highalpha_lightgreen" )] = Predefined::HighAlphaLightGreen;
+			l_mapNames[cuT( "highalpha_lightred" )] = Predefined::HighAlphaLightRed;
+			l_mapNames[cuT( "highalpha_white" )] = Predefined::HighAlphaWhite;
+			l_mapNames[cuT( "black" )] = Predefined::OpaqueBlack;
+			l_mapNames[cuT( "darkblue" )] = Predefined::OpaqueDarkBlue;
+			l_mapNames[cuT( "blue" )] = Predefined::OpaqueBlue;
+			l_mapNames[cuT( "darkgreen" )] = Predefined::OpaqueDarkGreen;
+			l_mapNames[cuT( "green" )] = Predefined::OpaqueGreen;
+			l_mapNames[cuT( "darkred" )] = Predefined::OpaqueDarkRed;
+			l_mapNames[cuT( "red" )] = Predefined::OpaqueRed;
+			l_mapNames[cuT( "lightblue" )] = Predefined::OpaqueLightBlue;
+			l_mapNames[cuT( "lightgreen" )] = Predefined::OpaqueLightGreen;
+			l_mapNames[cuT( "lightred" )] = Predefined::OpaqueLightRed;
+			l_mapNames[cuT( "white" )] = Predefined::OpaqueWhite;
 		}
 
 		MapIt l_it = l_mapNames.find( p_name );
-		ePREDEFINED l_return = ePREDEFINED_FULLALPHA_BLACK;
+		Predefined l_return = Predefined::OpaqueBlack;
 
 		if ( l_it != l_mapNames.end() )
 		{

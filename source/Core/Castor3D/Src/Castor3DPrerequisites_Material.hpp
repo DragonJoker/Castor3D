@@ -167,7 +167,7 @@ namespace Castor3D
 	\~french
 	\brief		Enumération de fonctions de mélange RGB
 	*/
-	enum class RGBBlendFunc
+	enum class ColourBlendFunc
 		: uint8_t
 	{
 		//!\~english No blend

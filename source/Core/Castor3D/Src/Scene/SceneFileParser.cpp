@@ -135,15 +135,15 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureArguments[cuT( "diffuse" )] = uint32_t( BlendSource::Diffuse );
 	m_mapTextureArguments[cuT( "previous" )] = uint32_t( BlendSource::Previous );
 
-	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( RGBBlendFunc::NoBlend );
-	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( RGBBlendFunc::FirstArg );
-	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( RGBBlendFunc::Add );
-	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( RGBBlendFunc::AddSigned );
-	m_mapTextureRgbFunctions[cuT( "modulate" )] = uint32_t( RGBBlendFunc::Modulate );
-	m_mapTextureRgbFunctions[cuT( "interpolate" )] = uint32_t( RGBBlendFunc::Interpolate );
-	m_mapTextureRgbFunctions[cuT( "subtract" )] = uint32_t( RGBBlendFunc::Subtract );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( RGBBlendFunc::Dot3RGB );
-	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( RGBBlendFunc::Dot3RGBA );
+	m_mapTextureRgbFunctions[cuT( "none" )] = uint32_t( ColourBlendFunc::NoBlend );
+	m_mapTextureRgbFunctions[cuT( "first_arg" )] = uint32_t( ColourBlendFunc::FirstArg );
+	m_mapTextureRgbFunctions[cuT( "add" )] = uint32_t( ColourBlendFunc::Add );
+	m_mapTextureRgbFunctions[cuT( "add_signed" )] = uint32_t( ColourBlendFunc::AddSigned );
+	m_mapTextureRgbFunctions[cuT( "modulate" )] = uint32_t( ColourBlendFunc::Modulate );
+	m_mapTextureRgbFunctions[cuT( "interpolate" )] = uint32_t( ColourBlendFunc::Interpolate );
+	m_mapTextureRgbFunctions[cuT( "subtract" )] = uint32_t( ColourBlendFunc::Subtract );
+	m_mapTextureRgbFunctions[cuT( "dot3_rgb" )] = uint32_t( ColourBlendFunc::Dot3RGB );
+	m_mapTextureRgbFunctions[cuT( "dot3_rgba" )] = uint32_t( ColourBlendFunc::Dot3RGBA );
 
 	m_mapTextureAlphaFunctions[cuT( "none" )] = uint32_t( AlphaBlendFunc::NoBlend );
 	m_mapTextureAlphaFunctions[cuT( "first_arg" )] = uint32_t( AlphaBlendFunc::FirstArg );

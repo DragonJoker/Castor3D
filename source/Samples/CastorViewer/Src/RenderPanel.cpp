@@ -359,9 +359,9 @@ namespace CastorViewer
 				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( p_submesh );
 				m_selectedSubmeshMaterialClone = DoCloneMaterial( *m_selectedSubmeshMaterialOrig );
 				auto l_pass = m_selectedSubmeshMaterialClone->GetPass( 0 );
-				l_pass->SetAmbient( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
-				l_pass->SetDiffuse( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
-				l_pass->SetSpecular( Colour::from_predef( Colour::ePREDEFINED_MEDALPHA_RED ) );
+				l_pass->SetAmbient( Colour::from_predef( Colour::Predefined::MedAlphaRed ) );
+				l_pass->SetDiffuse( Colour::from_predef( Colour::Predefined::MedAlphaRed ) );
+				l_pass->SetSpecular( Colour::from_predef( Colour::Predefined::MedAlphaRed ) );
 
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, p_geometry, p_submesh]()
 				{

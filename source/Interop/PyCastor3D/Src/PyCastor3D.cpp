@@ -98,16 +98,16 @@ void ExportCastor3D()
 	//@}
 	/**@group_name RgbBlendFunc */
 	//@{
-	py::enum_< RGBBlendFunc >( "RgbBlendFunc" )
-	.value( "NONE", RGBBlendFunc::NoBlend )
-	.value( "FIRST_ARG", RGBBlendFunc::FirstArg )
-	.value( "ADD", RGBBlendFunc::Add )
-	.value( "ADD_SIGNED", RGBBlendFunc::AddSigned )
-	.value( "MODULATE", RGBBlendFunc::Modulate )
-	.value( "INTERPOLATE", RGBBlendFunc::Interpolate )
-	.value( "SUBTRACT", RGBBlendFunc::Subtract )
-	.value( "DOT3_RGB", RGBBlendFunc::Dot3RGB )
-	.value( "DOT3_RGBA", RGBBlendFunc::Dot3RGBA )
+	py::enum_< ColourBlendFunc >( "RgbBlendFunc" )
+	.value( "NONE", ColourBlendFunc::NoBlend )
+	.value( "FIRST_ARG", ColourBlendFunc::FirstArg )
+	.value( "ADD", ColourBlendFunc::Add )
+	.value( "ADD_SIGNED", ColourBlendFunc::AddSigned )
+	.value( "MODULATE", ColourBlendFunc::Modulate )
+	.value( "INTERPOLATE", ColourBlendFunc::Interpolate )
+	.value( "SUBTRACT", ColourBlendFunc::Subtract )
+	.value( "DOT3_RGB", ColourBlendFunc::Dot3RGB )
+	.value( "DOT3_RGBA", ColourBlendFunc::Dot3RGBA )
 	;
 	//@}
 	/**@group_name AlphaBlendFunc */

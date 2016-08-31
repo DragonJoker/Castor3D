@@ -12,7 +12,7 @@ using namespace Castor;
 //********************************************************************************************
 
 MouseCameraEvent::MouseCameraEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+	: FrameEvent( EventType::PostRender )
 	, m_pNode( p_node )
 	, m_rDeltaX( p_rDeltaX )
 	, m_rDeltaY( p_rDeltaY )
