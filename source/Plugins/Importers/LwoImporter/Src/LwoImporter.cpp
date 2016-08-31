@@ -919,7 +919,7 @@ namespace Lwo
 						StringStream l_toLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_toLog << l_it->second->GetPath().c_str() );
 						l_unit = std::make_shared< TextureUnit >( *p_pass->GetEngine() );
-						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, 0, eACCESS_TYPE_READ );
+						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
 						l_texture->GetImage().SetSource( l_it->second->GetPixels() );
 						l_unit->SetTexture( l_texture );
 						DoSetChannel( l_unit, l_eChannel );
