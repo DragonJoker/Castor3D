@@ -128,6 +128,7 @@ namespace GLSL
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, int const & p_rhs );
+		GlslWriter_API void WriteAssign( Type const & p_lhs, unsigned int const & p_rhs );
 		GlslWriter_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
 		GlslWriter_API void For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function );
 		GlslWriter_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );

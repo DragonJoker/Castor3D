@@ -100,6 +100,106 @@ namespace GLSL
 		l_return.m_value << Castor::String( *this ) << cuT( "++" );
 		return l_return;
 	}
+	//*****************************************************************************************
+
+	UInt::UInt()
+		: Type( cuT( "uint " ) )
+	{
+	}
+
+	UInt::UInt( UInt && p_value )
+		: Type( std::move( p_value ) )
+	{
+	}
+
+	UInt::UInt( UInt const & p_value )
+		: Type( cuT( "uint " ), p_value.m_writer )
+	{
+		m_value << Castor::String( p_value );
+	}
+
+	UInt::UInt( Type const & p_value )
+		: Type( cuT( "uint " ), p_value.m_writer )
+	{
+		m_value << Castor::String( p_value );
+	}
+
+	UInt::UInt( unsigned int p_value )
+		: Type( cuT( "uint " ) )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( float p_value )
+		: Type( cuT( "uint " ) )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, unsigned int p_value )
+		: Type( cuT( "uint " ), p_writer, Castor::String() )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, float p_value )
+		: Type( cuT( "uint " ), p_writer, Castor::String() )
+	{
+		m_value << p_value;
+	}
+
+	UInt::UInt( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "uint " ), p_writer, p_name )
+	{
+	}
+
+	UInt & UInt::operator=( UInt const & p_rhs )
+	{
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
+	}
+
+	template< typename T >
+	UInt & UInt::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	template< typename T >
+	UInt & UInt::operator=( unsigned int p_rhs )
+	{
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	UInt::operator uint32_t()
+	{
+		return 0u;
+	}
+
+	UInt & UInt::operator++()
+	{
+		m_value << cuT( "++" ) << Castor::String( *this );
+		return *this;
+	}
+
+	UInt UInt::operator++( int )
+	{
+		UInt l_return;
+		l_return.m_value << Castor::String( *this ) << cuT( "++" );
+		return l_return;
+	}
 
 	//*****************************************************************************************
 

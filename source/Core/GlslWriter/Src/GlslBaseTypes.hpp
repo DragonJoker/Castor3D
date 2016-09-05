@@ -47,6 +47,26 @@ namespace GLSL
 		inline Int operator++( int );
 	};
 
+	struct UInt
+		: public Type
+	{
+		inline UInt();
+		inline UInt( UInt && p_value );
+		inline UInt( UInt const & p_value );
+		inline UInt( Type const & p_value );
+		inline UInt( unsigned int p_value );
+		inline UInt( float p_value );
+		inline UInt( GlslWriter * p_writer, unsigned int p_value );
+		inline UInt( GlslWriter * p_writer, float p_value );
+		inline UInt( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline UInt & operator=( UInt const & p_rhs );
+		template< typename T > inline UInt & operator=( T const & p_rhs );
+		template< typename T > inline UInt & operator=( unsigned int p_rhs );
+		inline explicit operator uint32_t();
+		inline UInt & operator++();
+		inline UInt operator++( int );
+	};
+
 	struct Float
 		: public Type
 	{

@@ -86,6 +86,11 @@ namespace castortd
 				return m_material;
 			}
 
+			inline Castor::Colour const & GetColour()const
+			{
+				return m_colour;
+			}
+
 		protected:
 			PaidAbility< uint32_t > m_damage;
 			PaidAbility< std::chrono::milliseconds > m_cooldown;
@@ -93,6 +98,7 @@ namespace castortd
 			float m_bulletSpeed{ 0.0f };
 			uint32_t m_towerCost{ 0u };
 			Castor::String m_material;
+			Castor::Colour m_colour;
 		};
 
 		using CategoryPtr = std::unique_ptr< Category >;

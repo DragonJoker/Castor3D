@@ -171,10 +171,10 @@ namespace Deferred
 		Castor::String DoGetLightPassPixelShaderSource( uint16_t p_textureFlags )const;
 
 	private:
-		static Castor::String RenderTechnique::GetTextureName( DsTexture p_texture );
-		static Castor::PixelFormat RenderTechnique::GetTextureFormat( DsTexture p_texture );
-		static Castor3D::AttachmentPoint RenderTechnique::GetTextureAttachmentPoint( DsTexture p_texture );
-		static uint32_t RenderTechnique::GetTextureAttachmentIndex( DsTexture p_texture );
+		static Castor::String GetTextureName( DsTexture p_texture );
+		static Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
+		static Castor3D::AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture );
+		static uint32_t GetTextureAttachmentIndex( DsTexture p_texture );
 
 	protected:
 		//!\~english	The various textures.

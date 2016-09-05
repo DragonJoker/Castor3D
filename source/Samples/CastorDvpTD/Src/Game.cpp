@@ -5,6 +5,7 @@
 #include <Mesh/Submesh.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
+#include <Scene/Light/PointLight.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -75,7 +76,6 @@ namespace castortd
 		m_mapNode = m_scene.GetSceneNodeCache().Find( cuT( "MapBase" ) );
 		m_mapCubeMesh = m_scene.GetMeshCache().Find( cuT( "MapCube" ) );
 		m_mapCubeMaterial = m_scene.GetMaterialView().Find( cuT( "MapCube" ) );
-		m_mapCubeShadowMaterial = m_scene.GetMaterialView().Find( cuT( "MapCubeShadow" ) );
 		m_towerCubeMesh = m_scene.GetMeshCache().Find( cuT( "TowerCube" ) );
 		m_enemyCubeMesh = m_scene.GetMeshCache().Find( cuT( "EnemyCube" ) );
 		m_enemyCubeMaterial = m_scene.GetMaterialView().Find( cuT( "EnemyCube" ) );
@@ -122,19 +122,14 @@ namespace castortd
 
 		for ( auto & l_enemy : m_enemies )
 		{
-			l_enemy->GetNode().SetPosition( Point3r{ 0, -10, 0 } );
-			m_spawner.KillEnemy( std::move( l_enemy ) );
+			m_spawner.KillEnemy( *this, std::move( l_enemy ) );
 		}
 
 		m_enemies.clear();
 
 		for ( auto & l_tower : m_towers )
 		{
-			l_tower->GetNode().SetPosition( Point3r{ 0, -10, 0 } );
-			//auto l_node = l_tower->GetNode().GetChilds().begin()->second.lock();
-			//m_scene.GetGeometryCache().Remove( l_node->GetName() );
-			//m_scene.GetSceneNodeCache().Remove( l_node->GetName() );
-			//m_scene.GetSceneNodeCache().Remove( l_tower->GetNode().GetName() );
+			l_tower->GetNode().SetPosition( Point3r{ 0, -1000, 0 } );
 		}
 
 		m_towers.clear();
@@ -433,7 +428,7 @@ namespace castortd
 					if ( l_enemy->Accept( *this ) )
 					{
 						LoseLife( 1u );
-						m_spawner.KillEnemy( std::move( l_enemy ) );
+						m_spawner.KillEnemy( *this, std::move( l_enemy ) );
 						l_it = m_enemies.erase( l_it );
 					}
 					else
@@ -451,7 +446,7 @@ namespace castortd
 			{
 				l_enemy->Die();
 				Gain( l_enemy->GetBounty() );
-				m_spawner.KillEnemy( std::move( l_enemy ) );
+				m_spawner.KillEnemy( *this, std::move( l_enemy ) );
 				l_it = m_enemies.erase( l_it );
 				++m_kills;
 			}
@@ -517,15 +512,7 @@ namespace castortd
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
-			if ( l_submesh->GetId() == 1
-				 || l_submesh->GetId() == 2 )
-			{
-				l_geometry->SetMaterial( l_submesh, m_mapCubeShadowMaterial );
-			}
-			else
-			{
-				l_geometry->SetMaterial( l_submesh, m_mapCubeMaterial );
-			}
+			l_geometry->SetMaterial( l_submesh, m_mapCubeMaterial );
 		}
 
 		p_cell.m_state = Cell::State::Empty;
@@ -555,6 +542,10 @@ namespace castortd
 			l_geometry->SetMaterial( l_submesh, l_material );
 		}
 
+		auto l_light = m_scene.GetLightCache().Add( l_name, l_node, eLIGHT_TYPE_POINT );
+		l_light->SetColour( p_category->GetColour() );
+		l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
+		l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
 		m_towers.push_back( std::make_shared< Tower >( std::move( p_category ), *l_baseNode, p_cell ) );
 		p_cell.m_state = Cell::State::Tower;
 	}

@@ -2,6 +2,8 @@
 
 #include "Game.hpp"
 
+#include <Scene/Light/PointLight.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -59,7 +61,6 @@ namespace castortd
 			auto l_node = p_game.GetScene().GetSceneNodeCache().Add( l_name );
 			l_node->SetOrientation( Quaternion{ Point3r{ 1, 0, 1 }, Angle::from_degrees( 45 ) } );
 			l_node->AttachTo( l_baseNode );
-
 			auto l_geometry = p_game.GetScene().GetGeometryCache().Add( l_name, l_node, p_game.GetEnemyMesh() );
 
 			for ( auto l_submesh : *l_geometry->GetMesh() )
@@ -67,6 +68,10 @@ namespace castortd
 				l_geometry->SetMaterial( l_submesh, p_game.GetEnemyMaterial() );
 			}
 
+			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, eLIGHT_TYPE_POINT );
+			l_light->SetColour( Colour::from_predef( Colour::Predefined::OpaqueRed ) );
+			l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
+			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
 			l_return = std::make_shared< Enemy >( *l_baseNode, p_game, p_path, m_category );
 		}
 		else
@@ -80,8 +85,9 @@ namespace castortd
 		return l_return;
 	}
 
-	void EnemySpawner::KillEnemy( EnemyPtr && p_enemy )
+	void EnemySpawner::KillEnemy( Game & p_game, EnemyPtr && p_enemy )
 	{
+		p_enemy->GetNode().SetPosition( Point3r{ 0, -1000, 0 } );
 		m_enemiesCache.push_back( std::move( p_enemy ) );
 	}
 }

@@ -686,28 +686,33 @@ namespace castortd
 
 				if ( m_game.IsRunning() )
 				{
-					Camera const & l_camera = *l_window->GetCamera();
-					//SubmeshSPtr l_submesh;
-					//Face l_face{ 0, 0, 0 };
-					//real l_distance{ std::numeric_limits< real >::max() };
-					//auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int( m_oldY ), l_camera }
-					//																				 , l_camera
-					//																				 , l_distance
-					//																				 , l_face
-					//																				 , l_submesh );
-
-					m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_camera]()
+					m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window]()
 					{
-						m_picking.Update();
-						auto l_geometry = m_picking.Pick( Position{ int32_t( m_oldX ), int32_t( m_oldY ) }, l_camera );
-
-						if ( l_geometry && l_geometry->GetMesh()->GetName() == cuT( "MapBase" ) )
-						{
-							l_geometry.reset();
-						}
-
+						SubmeshSPtr l_submesh;
+						Face l_face{ 0, 0, 0 };
+						real l_distance{ std::numeric_limits< real >::max() };
+						Camera const & l_camera = *l_window->GetCamera();
+						auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int( m_oldY ), l_camera }
+																										 , l_camera
+																										 , l_distance
+																										 , l_face
+																										 , l_submesh );
 						DoUpdateSelectedGeometry( l_geometry );
 					} ) );
+
+					//m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window]()
+					//{
+					//	Camera const & l_camera = *l_window->GetCamera();
+					//	m_picking.Update();
+					//	auto l_geometry = m_picking.Pick( Position{ int32_t( m_oldX ), int32_t( m_oldY ) }, l_camera );
+
+					//	if ( l_geometry && l_geometry->GetMesh()->GetName() == cuT( "MapBase" ) )
+					//	{
+					//		l_geometry.reset();
+					//	}
+
+					//	DoUpdateSelectedGeometry( l_geometry );
+					//} ) );
 				}
 			}
 		}

@@ -214,14 +214,16 @@ namespace Castor3D
 
 		// Fragment Intputs
 		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
-		auto c3d_v3Colour( l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Colour" ) ) );
+		auto c3d_iDrawIndex( l_writer.GetUniform< UInt >( cuT( "c3d_iDrawIndex" ) ) );
+		auto c3d_iObjectIndex( l_writer.GetUniform< UInt >( cuT( "c3d_iObjectIndex" ) ) );
+		auto gl_PrimitiveID( l_writer.GetBuiltin< UInt >( cuT( "gl_PrimitiveID" ) ) );
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			pxl_v4FragColor = vec4( c3d_v3Colour, 1.0 );
+			pxl_v4FragColor = vec4( c3d_iDrawIndex, c3d_iObjectIndex, gl_PrimitiveID, 1.0 );
 		} );
 
 		return l_writer.Finalise();
@@ -229,34 +231,6 @@ namespace Castor3D
 
 	String PickingPass::DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
 	{
-		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
-
-		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
-
-		// Fragment Intputs
-		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
-		auto c3d_v3Colour( l_writer.GetUniform< Vec3 >( cuT( "c3d_v3Colour" ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) ) );
-
-		// Fragment Outputs
-		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
-			{
-				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
-			}
-
-			pxl_v4FragColor = vec4( l_fAlpha * c3d_v3Colour, l_fAlpha );
-		} );
-
-		return l_writer.Finalise();
+		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags );
 	}
 }
