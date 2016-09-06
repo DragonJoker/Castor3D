@@ -192,7 +192,7 @@ namespace castortd
 				}
 			}
 		}
-		else
+		else if ( m_listener )
 		{
 			m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{

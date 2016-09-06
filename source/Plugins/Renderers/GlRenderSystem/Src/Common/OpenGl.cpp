@@ -798,18 +798,39 @@ namespace GlRender
 		if ( HasExtension( ARB_sampler_objects ) )
 		{
 			m_bHasSpl = true;
-			GetFunction( m_pfnGenSamplers, cuT( "glGenSamplers" ), cuT( "" ) );
-			GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "" ) );
-			GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "" ) );
-			GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "" ) );
-			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "" ) );
-			GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "" ) );
-			GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "" ) );
-			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "" ) );
-			GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "" ) );
-			GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "" ) );
-			GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "" ) );
-			GetFunction( m_pfnSamplerParameteriv, cuT( "glSamplerParameteriv" ), cuT( "" ) );
+			GetFunction( m_pfnGenSamplers, cuT( "glGenSamplers" ), cuT( "ARB" ) );
+			GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "ARB" ) );
+			GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "ARB" ) );
+			GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "ARB" ) );
+			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameteriv, cuT( "glSamplerParameteriv" ), cuT( "ARB" ) );
+
+			if ( HasExtension( EXT_texture_filter_anisotropic ) )
+			{
+				m_bHasAnisotropic = true;
+			}
+		}
+		else if ( HasExtension( EXT_sampler_objects ) )
+		{
+			m_bHasSpl = true;
+			GetFunction( m_pfnGenSamplers, cuT( "glGenSamplers" ), cuT( "EXT" ) );
+			GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "EXT" ) );
+			GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "EXT" ) );
+			GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "EXT" ) );
+			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameteriv, cuT( "glSamplerParameteriv" ), cuT( "EXT" ) );
 
 			if ( HasExtension( EXT_texture_filter_anisotropic ) )
 			{
@@ -927,12 +948,22 @@ namespace GlRender
 				if ( HasExtension( ARB_uniform_buffer_object ) )
 				{
 					m_bHasUbo = m_iGlslVersion >= 140;
-					GetFunction( m_pfnGetUniformBlockIndex, cuT( "glGetUniformBlockIndex" ), cuT( "" ) );
+					GetFunction( m_pfnGetUniformBlockIndex, cuT( "glGetUniformBlockIndex" ), cuT( "ARB" ) );
+					GetFunction( m_pfnBindBufferBase, cuT( "glBindBufferBase" ), cuT( "ARB" ) );
+					GetFunction( m_pfnUniformBlockBinding, cuT( "glUniformBlockBinding" ), cuT( "ARB" ) );
+					GetFunction( m_pfnGetUniformIndices, cuT( "glGetUniformIndices" ), cuT( "ARB" ) );
+					GetFunction( m_pfnGetActiveUniformsiv, cuT( "glGetActiveUniformsiv" ), cuT( "ARB" ) );
+					GetFunction( m_pfnGetActiveUniformBlockiv, cuT( "glGetActiveUniformBlockiv" ), cuT( "ARB" ) );
+				}
+				else if ( HasExtension( EXT_uniform_buffer_object ) )
+				{
+					m_bHasUbo = m_iGlslVersion >= 140;
+					GetFunction( m_pfnGetUniformBlockIndex, cuT( "glGetUniformBlockIndex" ), cuT( "EXT" ) );
 					GetFunction( m_pfnBindBufferBase, cuT( "glBindBufferBase" ), cuT( "EXT" ) );
-					GetFunction( m_pfnUniformBlockBinding, cuT( "glUniformBlockBinding" ), cuT( "" ) );
-					GetFunction( m_pfnGetUniformIndices, cuT( "glGetUniformIndices" ), cuT( "" ) );
-					GetFunction( m_pfnGetActiveUniformsiv, cuT( "glGetActiveUniformsiv" ), cuT( "" ) );
-					GetFunction( m_pfnGetActiveUniformBlockiv, cuT( "glGetActiveUniformBlockiv" ), cuT( "" ) );
+					GetFunction( m_pfnUniformBlockBinding, cuT( "glUniformBlockBinding" ), cuT( "EXT" ) );
+					GetFunction( m_pfnGetUniformIndices, cuT( "glGetUniformIndices" ), cuT( "EXT" ) );
+					GetFunction( m_pfnGetActiveUniformsiv, cuT( "glGetActiveUniformsiv" ), cuT( "EXT" ) );
+					GetFunction( m_pfnGetActiveUniformBlockiv, cuT( "glGetActiveUniformBlockiv" ), cuT( "EXT" ) );
 				}
 
 				if ( HasExtension( ARB_geometry_shader4 ) || HasExtension( EXT_geometry_shader4 ) )

@@ -4,6 +4,7 @@
 #include "RenderSystem.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
+#include <Design/ScopeGuard.hpp>
 
 using namespace Castor;
 
@@ -147,7 +148,7 @@ namespace Castor3D
 			DoSetWindow( &p_window );
 			m_createContext = true;
 
-			while ( !IsCreated() )
+			while ( !IsInterrupted() && !IsCreated() )
 			{
 				System::Sleep( 5 );
 			}
@@ -164,6 +165,11 @@ namespace Castor3D
 	{
 		PreciseTimer l_timer;
 		m_frameEnded = true;
+		auto l_scopeGuard{ make_scope_guard( [this]()
+		{
+			Cleanup();
+			m_renderSystem.Cleanup();
+		} ) };
 
 		try
 		{
@@ -185,6 +191,10 @@ namespace Castor3D
 					{
 						m_renderSystem.SetMainContext( l_context );
 						m_created = true;
+					}
+					else
+					{
+						m_interrupted = true;
 					}
 				}
 
@@ -221,20 +231,15 @@ namespace Castor3D
 		catch ( Castor::Exception & p_exc )
 		{
 			Logger::LogError( cuT( "RenderLoop - " ) + p_exc.GetFullDescription() );
-			Cleanup();
-			m_renderSystem.Cleanup();
-			throw;
+			m_frameEnded = true;
+			m_ended = true;
 		}
 		catch ( std::exception & p_exc )
 		{
 			Logger::LogError( std::string( "RenderLoop - " ) + p_exc.what() );
-			Cleanup();
-			m_renderSystem.Cleanup();
-			throw;
+			m_frameEnded = true;
+			m_ended = true;
 		}
-
-		Cleanup();
-		m_renderSystem.Cleanup();
 	}
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )
