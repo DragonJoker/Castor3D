@@ -160,7 +160,6 @@ namespace castortd
 
 		if ( m_panel )
 		{
-			m_panel->SetRenderWindow( nullptr );
 			m_panel->Close( true );
 			m_panel = nullptr;
 		}
