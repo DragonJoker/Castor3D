@@ -29,6 +29,30 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		template< typename MapType >
+		void DoRenderNonInstanced( Scene & p_scene
+								   , Camera const & p_camera
+								   , Pipeline & p_pipeline
+								   , MapType & p_nodes
+								   , bool p_register )
+		{
+			for ( auto l_itPrograms : p_nodes )
+			{
+				for ( auto & l_renderNode : l_itPrograms.second )
+				{
+					l_renderNode.Render( p_scene, p_camera, p_pipeline );
+
+					if ( p_register )
+					{
+						m_renderedObjects.push_back( l_renderNode );
+					}
+				}
+			}
+		}
+	}
+
 	PickingPass::PickingPass( Engine & p_engine )
 		: RenderPass{ cuT( "Picking" ), p_engine }
 		, m_renderQueue{ *this }
@@ -147,32 +171,8 @@ namespace Castor3D
 				m_pipeline->SetViewMatrix( p_camera.GetView() );
 				m_pipeline->Apply();
 
-				if ( !l_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
-				{
-					DoRenderStaticSubmeshesNonInstanced( l_nodes.m_scene, p_camera, *m_pipeline, l_nodes.m_staticGeometries.m_opaqueRenderNodes );
-				}
-
-				if ( !l_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
-				{
-					if ( m_renderSystem.GetGpuInformations().HasInstancing() )
-					{
-						DoRenderInstancedSubmeshesInstanced( l_nodes.m_scene, p_camera, *m_pipeline, l_nodes.m_instancedGeometries.m_opaqueRenderNodes );
-					}
-					else
-					{
-						DoRenderInstancedSubmeshesNonInstanced( l_nodes.m_scene, p_camera, *m_pipeline, l_nodes.m_instancedGeometries.m_opaqueRenderNodes );
-					}
-				}
-
-				if ( !l_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty() )
-				{
-					DoRenderAnimatedSubmeshesNonInstanced( l_nodes.m_scene, p_camera, *m_pipeline, l_nodes.m_animatedGeometries.m_opaqueRenderNodes );
-				}
-
-				if ( !l_nodes.m_billboards.m_opaqueRenderNodes.empty() )
-				{
-					DoRenderBillboards( l_nodes.m_scene, p_camera, *m_pipeline, l_nodes.m_billboards.m_opaqueRenderNodes );
-				}
+				DoRenderOpaqueNodes( l_nodes, p_camera );
+				DoRenderTransparentNodes( l_nodes, p_camera );
 			}
 
 			m_frameBuffer->Unbind();
@@ -200,6 +200,47 @@ namespace Castor3D
 		}
 
 		return nullptr;
+	}
+
+	void PickingPass::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera )
+	{
+		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
+		{
+			DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_staticGeometries.m_opaqueRenderNodes );
+		}
+
+		if ( !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
+		{
+			if ( m_renderSystem.GetGpuInformations().HasInstancing() )
+			{
+				DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+			}
+			else
+			{
+				DoRenderInstancedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+			}
+		}
+
+		if ( !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty() )
+		{
+			DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_animatedGeometries.m_opaqueRenderNodes );
+		}
+
+		if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
+		{
+			DoRenderBillboards( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
+		}
+	}
+
+	void PickingPass::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera )
+	{
+		for ( size_t i = 0; i < p_nodes.m_instancedGeometries.m_transparentRenderNodes.size(); ++i )
+		{
+			DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_instancedGeometries.m_transparentRenderNodes[i], true );
+			DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_staticGeometries.m_transparentRenderNodes[i], true );
+			DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_animatedGeometries.m_transparentRenderNodes[i], true );
+			DoRenderBillboards( p_nodes.m_scene, p_camera, *m_pipeline, p_nodes.m_billboards.m_transparentRenderNodes[i], true );
+		}
 	}
 
 	String PickingPass::DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const

@@ -92,6 +92,10 @@ namespace Castor3D
 		C3D_API GeometrySPtr Pick( Castor::Position const & p_position, Camera const & p_camera );
 
 	private:
+		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+
+	private:
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -102,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -113,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
 
 	private:
 		//!\~english	The scenes, and cameras used to render them.
