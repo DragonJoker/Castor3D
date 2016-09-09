@@ -52,9 +52,22 @@ namespace GLSL
 		inline Castor::String const & GetIn()const;
 		inline Castor::String const & GetOut()const;
 		inline Castor::String const & GetTexture1D()const;
+		inline Castor::String const & GetTexture1DLod()const;
+		inline Castor::String const & GetTexture1DOffset()const;
+		inline Castor::String const & GetTexture1DOffsetLod()const;
+		inline Castor::String const & GetTexture1DLodOffset()const;
 		inline Castor::String const & GetTexture2D()const;
+		inline Castor::String const & GetTexture2DLod()const;
+		inline Castor::String const & GetTexture2DOffset()const;
+		inline Castor::String const & GetTexture2DOffsetLod()const;
+		inline Castor::String const & GetTexture2DLodOffset()const;
 		inline Castor::String const & GetTexture3D()const;
+		inline Castor::String const & GetTexture3DLod()const;
+		inline Castor::String const & GetTexture3DOffset()const;
+		inline Castor::String const & GetTexture3DOffsetLod()const;
+		inline Castor::String const & GetTexture3DLodOffset()const;
 		inline Castor::String const & GetTextureCube()const;
+		inline Castor::String const & GetTextureCubeLod()const;
 		inline Castor::String const & GetTexelFetchBuffer()const;
 		inline Castor::String const & GetTexelFetch1D()const;
 		inline Castor::String const & GetTexelFetch2D()const;
@@ -88,9 +101,22 @@ namespace GLSL
 		Castor::String m_strIn;
 		Castor::String m_strOut;
 		Castor::String m_strTexture1D;
+		Castor::String m_strTexture1DLod;
+		Castor::String m_strTexture1DOffset;
+		Castor::String m_strTexture1DOffsetLod;
+		Castor::String m_strTexture1DLodOffset;
 		Castor::String m_strTexture2D;
+		Castor::String m_strTexture2DLod;
+		Castor::String m_strTexture2DOffset;
+		Castor::String m_strTexture2DOffsetLod;
+		Castor::String m_strTexture2DLodOffset;
 		Castor::String m_strTexture3D;
+		Castor::String m_strTexture3DLod;
+		Castor::String m_strTexture3DOffset;
+		Castor::String m_strTexture3DOffsetLod;
+		Castor::String m_strTexture3DLodOffset;
 		Castor::String m_strTextureCube;
+		Castor::String m_strTextureCubeLod;
 		Castor::String m_strTexelFetchBuffer;
 		Castor::String m_strTexelFetch1D;
 		Castor::String m_strTexelFetch2D;
@@ -112,8 +138,6 @@ namespace GLSL
 		Castor::String m_strGSOutSpecularDecl;
 		Castor::String m_strGSOutEmissiveDecl;
 	};
-
-	template< int Version, class Enable = void > class Keywords;
 
 	//! Language keywords
 	struct Version

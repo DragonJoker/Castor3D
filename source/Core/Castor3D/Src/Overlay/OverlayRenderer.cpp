@@ -609,17 +609,17 @@ namespace Castor3D
 
 				if ( CheckFlag( p_flags, TextureChannel::Text ) )
 				{
-					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).SWIZZLE_R;
+					l_fAlpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).SWIZZLE_R;
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
 				{
-					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
+					l_v4Ambient = texture( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
 				}
 
 				if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
 				{
-					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).SWIZZLE_R;
+					l_fAlpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).SWIZZLE_R;
 				}
 
 				pxl_v4FragColor = vec4( l_v4Ambient.xyz(), l_fAlpha );

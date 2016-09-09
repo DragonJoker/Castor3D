@@ -83,7 +83,7 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 
 				plx_v4FragColor.x() = TERNARY( l_writer, Float, plx_v4FragColor.x() > 1.0, Float( 1 ), Float( 0 ) );
 				plx_v4FragColor.y() = TERNARY( l_writer, Float, plx_v4FragColor.y() > 1.0, Float( 1 ), Float( 0 ) );
@@ -113,12 +113,12 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				LOCALE_ASSIGN( l_writer, Vec2, l_offset, vec2( c3d_fOffsetX, c3d_fOffsetY ) );
-				plx_v4FragColor = c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture );
+				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 0, cuT( "i < 3" ), cuT( "++i" ) )
 				{
-					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture - l_offset );
-					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture + l_offset );
+					plx_v4FragColor += c3d_fCoefficients[i] * texture( c3d_mapDiffuse, vtx_texture - l_offset );
+					plx_v4FragColor += c3d_fCoefficients[i] * texture( c3d_mapDiffuse, vtx_texture + l_offset );
 				}
 				ROF;
 			} );
@@ -143,11 +143,11 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor  = texture2D( c3d_mapPass0, vtx_texture );
-				plx_v4FragColor += texture2D( c3d_mapPass1, vtx_texture );
-				plx_v4FragColor += texture2D( c3d_mapPass2, vtx_texture );
-				plx_v4FragColor += texture2D( c3d_mapPass3, vtx_texture );
-				plx_v4FragColor += texture2D( c3d_mapScene, vtx_texture );
+				plx_v4FragColor  = texture( c3d_mapPass0, vtx_texture );
+				plx_v4FragColor += texture( c3d_mapPass1, vtx_texture );
+				plx_v4FragColor += texture( c3d_mapPass2, vtx_texture );
+				plx_v4FragColor += texture( c3d_mapPass3, vtx_texture );
+				plx_v4FragColor += texture( c3d_mapScene, vtx_texture );
 			} );
 			return l_writer.Finalise();
 		}

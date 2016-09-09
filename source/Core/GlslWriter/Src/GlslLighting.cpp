@@ -115,11 +115,11 @@ namespace GLSL
 				LOCALE_ASSIGN( m_writer, Float, l_fOffset, Float( 0 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_fDecal, Float( 0.0005f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_fMult, Float( 0.001f ) );
-				l_lightReturn.m_v3Colour() = texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ).SWIZZLE_RGB;
+				l_lightReturn.m_v3Colour() = texture( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ).SWIZZLE_RGB;
 				l_fOffset += l_fMult;
-				l_lightReturn.m_v3Intensity() = texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ).SWIZZLE_RGB;
+				l_lightReturn.m_v3Intensity() = texture( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ).SWIZZLE_RGB;
 				l_fOffset += l_fMult;
-				LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ) );
+				LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texture( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ) );
 				l_lightReturn.m_v3Position() = l_v4Position.xyz();
 				l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.SWIZZLE_W );
 			}
@@ -158,7 +158,7 @@ namespace GLSL
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_decal, Float( 0.0005f ) );
-				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
+				l_lightReturn.m_v3Attenuation() = texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 			}
 
 			m_writer.Return( l_lightReturn );
@@ -189,11 +189,11 @@ namespace GLSL
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_decal, Float( 0.0005f ) );
-				l_lightReturn.m_v3Attenuation() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
+				l_lightReturn.m_v3Attenuation() = texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 				l_offset += l_mult;
-				l_lightReturn.m_v3Direction() = texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
+				l_lightReturn.m_v3Direction() = texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 				l_offset += l_mult;
-				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texture1D( c3d_sLights, l_factor + l_offset + l_decal ).xy() );
+				LOCALE_ASSIGN( m_writer, Vec2, l_v2Spot, texture( c3d_sLights, l_factor + l_offset + l_decal ).xy() );
 				l_lightReturn.m_fExponent() = l_v2Spot.x();
 				l_lightReturn.m_fCutOff() = l_v2Spot.y();
 			}

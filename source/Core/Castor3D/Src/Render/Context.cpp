@@ -259,7 +259,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_FragDepth = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
+				gl_FragDepth = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
 			} );
 			l_strPxlShader = l_writer.Finalise();
 		}
@@ -276,7 +276,7 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 			} );
 			l_strPxlShader = l_writer.Finalise();
 		}

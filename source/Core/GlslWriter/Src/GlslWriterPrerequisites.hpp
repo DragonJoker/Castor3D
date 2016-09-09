@@ -39,6 +39,43 @@ namespace GLSL
 {
 	struct GlslWriterConfig;
 	class GlslWriter;
+	class KeywordsBase;
+	template< int Version, class Enable = void >
+	class Keywords;
+	class LightingModel;
+	class PhongLightingModel;
+	struct Light;
+
+	template< typename T >
+	struct Array;
+	template< typename TypeT >
+	struct InParam;
+	template< typename TypeT >
+	struct OutParam;
+	template< typename TypeT >
+	struct InOutParam;
+	template< typename TypeT >
+	struct Optional;
+
+	struct Expr;
+	struct Type;
+	struct Void;
+	struct GlslBool;
+	struct Int;
+	struct Float;
+	struct Vec2;
+	struct Vec3;
+	struct Vec4;
+	struct IVec2;
+	struct IVec3;
+	struct iVec4;
+	struct Mat3;
+	struct Mat4;
+	struct SamplerBuffer;
+	struct Sampler1D;
+	struct Sampler2D;
+	struct Sampler3D;
+	struct SamplerCube;
 }
 
 #endif

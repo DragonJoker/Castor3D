@@ -648,19 +648,19 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 			{
-				l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
+				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 			{
-				l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
+				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 			}
 
 			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
@@ -701,22 +701,22 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 			{
-			l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+			l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 			{
-				l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
 			{
-				l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
+				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 			}
 
 			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
@@ -784,19 +784,19 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 			{
-				l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
+				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 			{
-				l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
+				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 			}
 
 			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
@@ -837,27 +837,27 @@ namespace Castor3D
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 			{
-				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
+				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 			{
-			l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+			l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 			{
-				l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
 			{
-				l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
+				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 			}
 
 			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
