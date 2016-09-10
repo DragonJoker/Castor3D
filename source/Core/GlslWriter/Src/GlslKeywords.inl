@@ -1,3 +1,5 @@
+#include <Exception/Assertion.hpp>
+
 namespace GLSL
 {
 	inline Castor::String KeywordsBase::GetStdLayout( int p_index )const
