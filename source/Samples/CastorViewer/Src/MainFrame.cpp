@@ -480,7 +480,7 @@ namespace CastorViewer
 			wxBitmap l_bitmap;
 			auto & l_castor = *wxGetApp().GetCastor();
 
-			if ( l_castor.IsThreaded() )
+			if ( l_castor.IsThreaded() && !m_recorder.IsRecording() )
 			{
 				l_castor.GetRenderLoop().Pause();
 				m_pRenderPanel->GetRenderWindow()->SaveFrame();
@@ -521,28 +521,29 @@ namespace CastorViewer
 
 	bool MainFrame::DoStartRecord()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pRenderPanel )
 		{
 			try
 			{
-				l_bReturn = m_recorder.StartRecord( m_pRenderPanel->GetRenderWindow()->GetRenderTarget()->GetSize(), m_recordFps );
+				l_return = m_recorder.StartRecord( m_pRenderPanel->GetRenderWindow()->GetRenderTarget()->GetSize(), m_recordFps );
 			}
 			catch ( std::exception & p_exc )
 			{
 				wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
-				l_bReturn = false;
+				l_return = false;
 			}
 		}
 
 #if defined( GUICOMMON_RECORDS )
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			if ( CASTOR3D_THREADED )
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
+				wxGetApp().GetCastor()->GetRenderLoop().Pause();
 			}
 
 			m_timer->Stop();
@@ -550,7 +551,7 @@ namespace CastorViewer
 		}
 
 #endif
-		return l_bReturn;
+		return l_return;
 	}
 
 	void MainFrame::DoRecordFrame()
@@ -558,22 +559,9 @@ namespace CastorViewer
 #if defined( GUICOMMON_RECORDS )
 
 		auto & l_castor = *wxGetApp().GetCastor();
-		PxBufferBaseSPtr l_buffer;
-
-		if ( l_castor.IsThreaded() )
-		{
-			l_castor.GetRenderLoop().Pause();
-			m_pRenderPanel->GetRenderWindow()->SaveFrame();
-			l_castor.GetRenderLoop().RenderSyncFrame();
-			l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
-			l_castor.GetRenderLoop().Resume();
-		}
-		else
-		{
-			m_pRenderPanel->GetRenderWindow()->SaveFrame();
-			l_castor.GetRenderLoop().RenderSyncFrame();
-			l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
-		}
+		m_pRenderPanel->GetRenderWindow()->SaveFrame();
+		l_castor.GetRenderLoop().RenderSyncFrame();
+		auto l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
 
 		try
 		{
@@ -599,6 +587,7 @@ namespace CastorViewer
 
 		if ( !CASTOR3D_THREADED )
 		{
+			wxGetApp().GetCastor()->GetRenderLoop().Resume();
 			m_timer->Stop();
 			m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
 		}

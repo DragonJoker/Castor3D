@@ -1,7 +1,10 @@
+#include <Exception/Assertion.hpp>
+
 namespace GLSL
 {
 	inline Castor::String KeywordsBase::GetStdLayout( int p_index )const
 	{
+		REQUIRE( !m_strIn.empty() );
 		return m_strStdLayout + cuT( "( std" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
 	}
 	inline Castor::String const & KeywordsBase::GetVersion()const
@@ -10,106 +13,197 @@ namespace GLSL
 	}
 	inline Castor::String const & KeywordsBase::GetIn()const
 	{
+		REQUIRE( !m_strIn.empty() );
 		return m_strIn;
 	}
 	inline Castor::String const & KeywordsBase::GetOut()const
 	{
+		REQUIRE( !m_strOut.empty() );
 		return m_strOut;
 	}
 	inline Castor::String const & KeywordsBase::GetTexture1D()const
 	{
+		REQUIRE( !m_strTexture1D.empty() );
 		return m_strTexture1D;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DLod()const
+	{
+		REQUIRE( !m_strTexture1DLod.empty() );
+		return m_strTexture1DLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DOffset()const
+	{
+		REQUIRE( !m_strTexture1DOffset.empty() );
+		return m_strTexture1DOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DOffsetLod()const
+	{
+		REQUIRE( !m_strTexture1DOffsetLod.empty() );
+		return m_strTexture1DOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DLodOffset()const
+	{
+		REQUIRE( !m_strTexture1DLodOffset.empty() );
+		return m_strTexture1DLodOffset;
 	}
 	inline Castor::String const & KeywordsBase::GetTexture2D()const
 	{
+		REQUIRE( !m_strTexture2D.empty() );
 		return m_strTexture2D;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DLod()const
+	{
+		REQUIRE( !m_strTexture2DLod.empty() );
+		return m_strTexture2DLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DOffset()const
+	{
+		REQUIRE( !m_strTexture2DOffset.empty() );
+		return m_strTexture2DOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DOffsetLod()const
+	{
+		REQUIRE( !m_strTexture2DOffsetLod.empty() );
+		return m_strTexture2DOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DLodOffset()const
+	{
+		REQUIRE( !m_strTexture2DLodOffset.empty() );
+		return m_strTexture2DLodOffset;
 	}
 	inline Castor::String const & KeywordsBase::GetTexture3D()const
 	{
+		REQUIRE( !m_strTexture3D.empty() );
 		return m_strTexture3D;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture3DLod()const
+	{
+		REQUIRE( !m_strTexture3DLod.empty() );
+		return m_strTexture3DLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture3DOffset()const
+	{
+		REQUIRE( !m_strTexture3DOffset.empty() );
+		return m_strTexture3DOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture3DOffsetLod()const
+	{
+		REQUIRE( !m_strTexture3DOffsetLod.empty() );
+		return m_strTexture3DOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture3DLodOffset()const
+	{
+		REQUIRE( !m_strTexture3DLodOffset.empty() );
+		return m_strTexture3DLodOffset;
 	}
 	inline Castor::String const & KeywordsBase::GetTextureCube()const
 	{
+		REQUIRE( !m_strTextureCube.empty() );
 		return m_strTextureCube;
+	}
+	inline Castor::String const & KeywordsBase::GetTextureCubeLod()const
+	{
+		REQUIRE( !m_strTextureCubeLod.empty() );
+		return m_strTextureCubeLod;
 	}
 	inline Castor::String const & KeywordsBase::GetTexelFetchBuffer()const
 	{
+		REQUIRE( !m_strTexelFetchBuffer.empty() );
 		return m_strTexelFetchBuffer;
 	}
 	inline Castor::String const & KeywordsBase::GetTexelFetch1D()const
 	{
+		REQUIRE( !m_strTexelFetch1D.empty() );
 		return m_strTexelFetch1D;
 	}
 	inline Castor::String const & KeywordsBase::GetTexelFetch2D()const
 	{
+		REQUIRE( !m_strTexelFetch2D.empty() );
 		return m_strTexelFetch2D;
 	}
 	inline Castor::String const & KeywordsBase::GetTexelFetch3D()const
 	{
+		REQUIRE( !m_strTexelFetch3D.empty() );
 		return m_strTexelFetch3D;
 	}
 	inline Castor::String const & KeywordsBase::GetPixelOut()const
 	{
+		REQUIRE( !m_strPixelOut.empty() );
 		return m_strPixelOut;
 	}
 	inline Castor::String const & KeywordsBase::GetPixelOutputName()const
 	{
+		REQUIRE( !m_strPixelOutputName.empty() );
 		return m_strPixelOutputName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutPositionName()const
 	{
+		REQUIRE( !m_strGSOutPositionName.empty() );
 		return m_strGSOutPositionName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutNormalName()const
 	{
+		REQUIRE( !m_strGSOutNormalName.empty() );
 		return m_strGSOutNormalName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutTangentName()const
 	{
+		REQUIRE( !m_strGSOutTangentName.empty() );
 		return m_strGSOutTangentName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutBitangentName()const
 	{
+		REQUIRE( !m_strGSOutBitangentName.empty() );
 		return m_strGSOutBitangentName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutDiffuseName()const
 	{
+		REQUIRE( !m_strGSOutDiffuseName.empty() );
 		return m_strGSOutDiffuseName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutSpecularName()const
 	{
+		REQUIRE( !m_strGSOutSpecularName.empty() );
 		return m_strGSOutSpecularName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutEmissiveName()const
 	{
+		REQUIRE( !m_strGSOutEmissiveName.empty() );
 		return m_strGSOutEmissiveName;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutPositionDecl()const
 	{
+		REQUIRE( !m_strGSOutPositionDecl.empty() );
 		return m_strGSOutPositionDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutNormalDecl()const
 	{
+		REQUIRE( !m_strGSOutNormalDecl.empty() );
 		return m_strGSOutNormalDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutTangentDecl()const
 	{
+		REQUIRE( !m_strGSOutTangentDecl.empty() );
 		return m_strGSOutTangentDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutBitangentDecl()const
 	{
+		REQUIRE( !m_strGSOutBitangentDecl.empty() );
 		return m_strGSOutBitangentDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutDiffuseDecl()const
 	{
+		REQUIRE( !m_strGSOutDiffuseDecl.empty() );
 		return m_strGSOutDiffuseDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutSpecularDecl()const
 	{
+		REQUIRE( !m_strGSOutSpecularDecl.empty() );
 		return m_strGSOutSpecularDecl;
 	}
 	inline Castor::String const & KeywordsBase::GetGSOutEmissiveDecl()const
 	{
+		REQUIRE( !m_strGSOutEmissiveDecl.empty() );
 		return m_strGSOutEmissiveDecl;
 	}
 
@@ -124,9 +218,13 @@ namespace GLSL
 			m_strIn = cuT( "varying" );
 			m_strOut = cuT( "varying" );
 			m_strTexture1D = cuT( "texture1D" );
+			m_strTexture1DLod = cuT( "texture1DLod" );
 			m_strTexture2D = cuT( "texture2D" );
+			m_strTexture2DLod = cuT( "texture2DLod" );
 			m_strTexture3D = cuT( "texture3D" );
+			m_strTexture3DLod = cuT( "texture3DLod" );
 			m_strTextureCube = cuT( "textureCube" );
+			m_strTextureCubeLod = cuT( "textureCubeLod" );
 			m_strTexelFetch1D = cuT( "texture1D" );
 			m_strTexelFetch2D = cuT( "texture2D" );
 			m_strTexelFetch3D = cuT( "texture3D" );
@@ -170,10 +268,23 @@ namespace GLSL
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
-			m_strTexture1D = cuT( "texture1D" );
-			m_strTexture2D = cuT( "texture2D" );
-			m_strTexture3D = cuT( "texture3D" );
-			m_strTextureCube = cuT( "textureCube" );
+			m_strTexture1D = cuT( "texture" );
+			m_strTexture1DLod = cuT( "texture" );
+			m_strTexture1DOffset = cuT( "textureOffset" );
+			m_strTexture1DOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2D = cuT( "texture" );
+			m_strTexture2DLod = cuT( "texture" );
+			m_strTexture2DOffset = cuT( "textureOffset" );
+			m_strTexture2DOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DLodOffset = cuT( "textureLodOffset" );
+			m_strTexture3D = cuT( "texture" );
+			m_strTexture3DLod = cuT( "texture" );
+			m_strTexture3DOffset = cuT( "textureOffset" );
+			m_strTexture3DOffsetLod = cuT( "textureOffset" );
+			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCube = cuT( "texture" );
+			m_strTextureCubeLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );
@@ -220,9 +331,22 @@ namespace GLSL
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
 			m_strTexture1D = cuT( "texture" );
+			m_strTexture1DLod = cuT( "texture" );
+			m_strTexture1DOffset = cuT( "textureOffset" );
+			m_strTexture1DOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DLodOffset = cuT( "textureLodOffset" );
 			m_strTexture2D = cuT( "texture" );
+			m_strTexture2DLod = cuT( "texture" );
+			m_strTexture2DOffset = cuT( "textureOffset" );
+			m_strTexture2DOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DLodOffset = cuT( "textureLodOffset" );
 			m_strTexture3D = cuT( "texture" );
+			m_strTexture3DLod = cuT( "texture" );
+			m_strTexture3DOffset = cuT( "textureOffset" );
+			m_strTexture3DOffsetLod = cuT( "textureOffset" );
+			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCube = cuT( "texture" );
+			m_strTextureCubeLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );
@@ -274,9 +398,22 @@ namespace GLSL
 			m_strIn = cuT( "in" );
 			m_strOut = cuT( "out" );
 			m_strTexture1D = cuT( "texture" );
+			m_strTexture1DLod = cuT( "texture" );
+			m_strTexture1DOffset = cuT( "textureOffset" );
+			m_strTexture1DOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DLodOffset = cuT( "textureLodOffset" );
 			m_strTexture2D = cuT( "texture" );
+			m_strTexture2DLod = cuT( "texture" );
+			m_strTexture2DOffset = cuT( "textureOffset" );
+			m_strTexture2DOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DLodOffset = cuT( "textureLodOffset" );
 			m_strTexture3D = cuT( "texture" );
+			m_strTexture3DLod = cuT( "texture" );
+			m_strTexture3DOffset = cuT( "textureOffset" );
+			m_strTexture3DOffsetLod = cuT( "textureOffset" );
+			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCube = cuT( "texture" );
+			m_strTextureCubeLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );

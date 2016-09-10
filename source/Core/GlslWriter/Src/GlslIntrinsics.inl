@@ -247,6 +247,12 @@ namespace GLSL
 	}
 
 	template< typename Value >
+	inline Value abs( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "abs" ), p_value );
+	}
+
+	template< typename Value >
 	inline Value neg( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "-" ), p_value );

@@ -27,8 +27,6 @@ SOFTWARE.
 
 namespace GLSL
 {
-	template< typename TypeT > struct Optional;
-
 	template< typename T > struct is_type : public std::false_type {};
 
 	struct Type

@@ -9,21 +9,20 @@
 #pragma warning( pop )
 
 #if defined( GUICOMMON_RECORDS )
-#	if defined( GUICOMMON_FFMPEG )
-#		define GUICOMMON_FFMPEG_USE_STREAMS 1
+
 namespace libffmpeg
 {
 	extern "C"
 	{
-#		include <libavutil/opt.h>
-#		include <libavcodec/avcodec.h>
-#		include <libavformat/avformat.h>
-#		include <libavutil/common.h>
-#		include <libavutil/imgutils.h>
-#		include <libavutil/mathematics.h>
-#		include <libavutil/samplefmt.h>
-#		include <libswscale/swscale.h>
-//#		include <libswresample/swresample.h>
+#	include <libavutil/opt.h>
+#	include <libavcodec/avcodec.h>
+#	include <libavformat/avformat.h>
+#	include <libavutil/common.h>
+#	include <libavutil/imgutils.h>
+#	include <libavutil/mathematics.h>
+#	include <libavutil/samplefmt.h>
+#	include <libswscale/swscale.h>
+//#	include <libswresample/swresample.h>
 	}
 
 	void CheckError( int p_error, char const * const p_action )
@@ -40,9 +39,7 @@ namespace libffmpeg
 		}
 	}
 }
-#	elif defined( GUICOMMON_OCV )
-#		include <opencv2/opencv.hpp>
-#	endif
+
 #endif
 
 #include <Graphics/PixelBufferBase.hpp>
@@ -142,36 +139,7 @@ namespace GuiCommon
 			int m_wantedFPS{ 0 };
 		};
 
-#	if defined( GUICOMMON_FFMPEG )
-
-		class FFmpegWriterBase
-		{
-		protected:
-			void DoAllocateFrame()
-			{
-				// Allocate the encoded frame.
-				m_frame = libffmpeg::av_frame_alloc();
-
-				if ( !m_frame )
-				{
-					throw std::runtime_error( ( char const * )wxString( _( "Could not allocate encoded video frame" ) ).mb_str( wxConvUTF8 ) );
-				}
-
-				// Allocate the encoded raw picture.
-				libffmpeg::CheckError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
-									   , "Encoded picture buffer allocation" );
-			}
-
-		protected:
-			libffmpeg::AVCodec * m_codec{ nullptr };
-			libffmpeg::AVCodecContext * m_codecContext{ nullptr };
-			libffmpeg::AVFrame * m_frame{ nullptr };
-		};
-
-#		if GUICOMMON_FFMPEG_USE_STREAMS
-
 		class FFmpegWriter
-			: public FFmpegWriterBase
 		{
 		public:
 			bool IsValid()
@@ -288,70 +256,30 @@ namespace GuiCommon
 				}
 			}
 
-		private:
+		protected:
+			void DoAllocateFrame()
+			{
+				// Allocate the encoded frame.
+				m_frame = libffmpeg::av_frame_alloc();
+
+				if ( !m_frame )
+				{
+					throw std::runtime_error( ( char const * )wxString( _( "Could not allocate encoded video frame" ) ).mb_str( wxConvUTF8 ) );
+				}
+
+				// Allocate the encoded raw picture.
+				libffmpeg::CheckError( libffmpeg::av_image_alloc( m_frame->data, m_frame->linesize, m_codecContext->width, m_codecContext->height, m_codecContext->pix_fmt, 1 )
+									   , "Encoded picture buffer allocation" );
+			}
+
+		protected:
+			libffmpeg::AVCodec * m_codec{ nullptr };
+			libffmpeg::AVCodecContext * m_codecContext{ nullptr };
+			libffmpeg::AVFrame * m_frame{ nullptr };
 			libffmpeg::AVOutputFormat * m_outputFormat{ nullptr };
 			libffmpeg::AVFormatContext * m_formatContext{ nullptr };
 			libffmpeg::AVStream * m_stream{ nullptr };
 		};
-
-#else
-
-		struct FFmpegWriter
-		{
-			bool IsValid()
-			{
-				return m_codecContext && m_file && m_codec;
-			}
-
-			void FillPacket( libffmpeg::AVPacket & p_packet )
-			{
-			}
-
-			void Write( libffmpeg::AVPacket & p_packet )
-			{
-				fwrite( p_packet.data, 1, p_packet.size, m_file );
-			}
-
-			void GetFormat( wxString const & p_name )
-			{
-				libffmpeg::AVCodecID l_codecID{ libffmpeg::AV_CODEC_ID_H264 };
-				m_codec = libffmpeg::avcodec_find_encoder( l_codecID );
-
-				if ( !m_codec )
-				{
-					throw std::runtime_error( ( char const * )wxString( _( "Could not find H264 codec" ) ).mb_str( wxConvUTF8 ) );
-				}
-			}
-
-			bool Open( wxString const & p_name )
-			{
-				libffmpeg::CheckError( avcodec_open2( m_codecContext, m_codec, nullptr )
-									   , "Codec opening" );
-
-				m_file = fopen( p_name.char_str().data(), "wb" );
-				return m_file != nullptr;
-			}
-
-			void Close( bool p_wasRecording )
-			{
-				if ( p_wasRecording )
-				{
-					uint8_t l_endcode[] = { 0, 0, 1, 0xb7 };
-					fwrite( l_endcode, 1, sizeof( l_endcode ), m_file );
-				}
-
-				if ( m_file )
-				{
-					fclose( m_file );
-					m_file = nullptr;
-				}
-			}
-
-		private:
-			FILE * m_file{ nullptr };
-		};
-
-#endif
 
 		class RecorderImpl
 			: public RecorderImplBase
@@ -525,85 +453,6 @@ namespace GuiCommon
 			std::array< ByteArray, AV_NUM_DATA_POINTERS > m_frameBuffers;
 		};
 
-#	elif defined( GUICOMMON_OCV )
-
-		class RecorderImpl
-			: public RecorderImplBase
-		{
-		public:
-			RecorderImpl()
-				: RecorderImplBase()
-			{
-			}
-
-			virtual ~RecorderImpl()
-			{
-			}
-
-			virtual bool IsRecording()
-			{
-				return m_writer.isOpened();
-			}
-
-			virtual void StopRecord()
-			{
-				m_writer = cv::VideoWriter();
-			}
-
-		private:
-			virtual bool DoUpdateTime( uint64_t p_uiTimeDiff )
-			{
-				return true;
-			}
-
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name )
-			{
-				if ( !m_writer.open( p_name.char_str().data(), MAKEFOURCC( 'X', '2', '6', '4' ), m_iWantedFPS, cv::Size( p_size.width(), p_size.height() ), true ) )
-				{
-					throw std::runtime_error( ( char const * )wxString( _( "Could not open file with OpenCV, encoding: H264" ) ).mb_str( wxConvUTF8 ) );
-				}
-
-				m_size = p_size;
-				return true;
-			}
-
-			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )
-			{
-				cv::Mat l_image( cv::Size( int( p_buffer->dimensions().width() ), int( p_buffer->dimensions().height() ) ), CV_8UC4, p_buffer->ptr() );
-				cv::flip( l_image, l_image, 0 );
-
-				try
-				{
-					m_writer << l_image;
-				}
-				catch ( std::exception & )
-				{
-					throw;
-				}
-				catch ( char * p_exc )
-				{
-					throw std::runtime_error( p_exc );
-				}
-				catch ( wchar_t * p_exc )
-				{
-					throw std::runtime_error( ( char const * )wxString( p_exc, wxMBConvLibc() ).mb_str( wxConvUTF8 ) );
-				}
-				catch ( ... )
-				{
-					throw std::runtime_error( ( char const * )wxString( _( "Unknown error" ) ).mb_str( wxConvUTF8 ) );
-				}
-			}
-
-		private:
-			cv::VideoWriter m_writer;
-			Size m_size;
-		};
-
-#	else
-
-#		error "Neither FFMPEG nor OpenCV, but GuiCommon records? WTF!!!"
-
-#	endif
 #else
 
 		class RecorderImpl

@@ -71,7 +71,7 @@ namespace HaarmPieterDuiker
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
+				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
 				l_hdrColor *= c3d_exposure;
 
 				auto LogColor = l_writer.GetLocale < Vec3 >( cuT( "LogColor" ) );

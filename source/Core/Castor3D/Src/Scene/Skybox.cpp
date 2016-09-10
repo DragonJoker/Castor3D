@@ -271,7 +271,7 @@ namespace Castor3D
 
 			std::function< void() > l_main = [&]()
 			{
-				pxl_FragColor = textureCube( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
+				pxl_FragColor = texture( skybox, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) );
 			};
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

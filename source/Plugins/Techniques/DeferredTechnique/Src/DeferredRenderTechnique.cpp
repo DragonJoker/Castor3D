@@ -396,39 +396,39 @@ namespace Deferred
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
 			{
-				l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
+				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 			{
-				l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.xy() ).xyz();
+				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 			{
-				l_v3Ambient += texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
 			{
-				l_v3Ambient += texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 			}
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
 			{
-				l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
+				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 			}
 
 			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
@@ -497,17 +497,17 @@ namespace Deferred
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture2D( c3d_mapNormals, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture2D( c3d_mapTangent, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture( c3d_mapNormals, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture( c3d_mapTangent, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normal.xyz() );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangent.xyz() );
 
 			IF (l_writer, l_v3Normal != l_v3Tangent )
 			{
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture2D( c3d_mapPosition, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture( c3d_mapPosition, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture( c3d_mapDiffuse, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture( c3d_mapSpecular, vtx_texture ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture( c3d_mapEmissive, vtx_texture ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, c3d_v4AmbientLight.xyz() + vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
