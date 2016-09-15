@@ -35,19 +35,10 @@ function( SamplesBuild )
 				set( GTK2_FOUND TRUE )
 			endif()
 
-			set( OpenCV_STATIC FALSE )
 			find_package( FFMPEG QUIET )
 
 			if( FFMPEG_FOUND )
 				include_directories( ${FFMPEG_INCLUDE_DIR} )
-			else ()
-				find_package( OpenCV )
-
-				if( OPENCV_FOUND OR OpenCV_FOUND )
-					include_directories( ${OpenCV_INCLUDE_DIR} )
-					include_directories( ${OpenCV_INCLUDE_DIRS} )
-					link_directories( ${OpenCV_LINK_DIRECTORIES} )
-				endif()
 			endif ()
 
 			set( GUICOMMON_C_FLAGS "" )
@@ -58,10 +49,6 @@ function( SamplesBuild )
 				set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
 				set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
 				message( STATUS "+ Found FFMPEG" )
-			elseif( OpenCV_FOUND )
-				set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_OCV")
-				set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_OCV")
-				message( STATUS "+ Found OpenCV (version ${OpenCV_VERSION})" )
 			endif()
 
 			#we look for wxWidgets
