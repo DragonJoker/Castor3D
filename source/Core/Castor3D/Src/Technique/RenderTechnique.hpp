@@ -631,31 +631,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
-	private:
-		template< typename MapType >
-		void DoRenderNonInstanced( Scene & p_scene
-								   , Camera const & p_camera
-								   , MapType & p_nodes
-								   , bool p_register )
-		{
-			for ( auto l_itPipelines : p_nodes )
-			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
-				l_itPipelines.first->Apply();
-
-				for ( auto & l_renderNode : l_itPipelines.second )
-				{
-					l_renderNode.Render( p_scene, p_camera );
-
-					if ( p_register )
-					{
-						m_renderedObjects.push_back( l_renderNode );
-					}
-				}
-			}
-		}
-
 	protected:
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.

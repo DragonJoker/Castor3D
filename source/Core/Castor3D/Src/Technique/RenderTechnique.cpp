@@ -197,6 +197,31 @@ namespace Castor3D
 			l_state.EnableBlend( l_blend );
 			return l_state;
 		}
+
+		template< typename MapType >
+		void DoRenderNonInstanced( Scene & p_scene
+								   , Camera const & p_camera
+								   , MapType & p_nodes
+								   , bool p_register
+								   , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_scene, p_camera );
+
+					if ( p_register )
+					{
+						p_renderedObjects.push_back( l_renderNode );
+					}
+				}
+			}
+		}
 	}
 
 	//*************************************************************************************************
@@ -455,17 +480,17 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register );
+		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
 	}
 
 	void RenderTechnique::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register );
+		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
 	}
 
 	void RenderTechnique::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register );
+		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
 	}
 
 	void RenderTechnique::DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
