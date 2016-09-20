@@ -34,8 +34,8 @@ namespace TestRender
 		: public Castor3D::OneFrameVariable< T >
 	{
 	public:
-		TestOneFrameVariable( uint32_t p_occurences, TestShaderProgram * p_program = nullptr );
-		TestOneFrameVariable( Castor3D::OneFrameVariable< T > * p_variable );
+		TestOneFrameVariable( uint32_t p_occurences, TestShaderProgram & p_program );
+		TestOneFrameVariable( Castor3D::OneFrameVariable< T > & p_variable );
 		virtual ~TestOneFrameVariable();
 
 		virtual bool Initialise();

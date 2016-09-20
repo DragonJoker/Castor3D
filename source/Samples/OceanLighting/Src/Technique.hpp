@@ -669,7 +669,6 @@ namespace OceanLighting
 		bool m_bGenerateMesh;
 		bool m_bGenerateWaves;
 
-		Castor3D::PipelineSPtr m_pipeline;
 		Castor3D::Viewport m_viewport;
 	};
 }

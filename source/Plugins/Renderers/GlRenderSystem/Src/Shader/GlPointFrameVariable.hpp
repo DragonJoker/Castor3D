@@ -31,7 +31,7 @@ namespace GlRender
 {
 	template <typename T, uint32_t Count>
 	class GlPointFrameVariable
-		: public Castor3D::PointFrameVariable<T, Count>
+		: public Castor3D::PointFrameVariable< T, Count >
 		, public GlFrameVariableBase
 	{
 	public:

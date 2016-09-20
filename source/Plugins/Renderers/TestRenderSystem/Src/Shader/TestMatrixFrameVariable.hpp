@@ -31,11 +31,11 @@ namespace TestRender
 {
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class TestMatrixFrameVariable
-		: public Castor3D::MatrixFrameVariable<T, Rows, Columns>
+		: public Castor3D::MatrixFrameVariable< T, Rows, Columns >
 	{
 	public:
-		TestMatrixFrameVariable( uint32_t p_occurences, TestShaderProgram * p_program = nullptr );
-		TestMatrixFrameVariable( Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_variable );
+		TestMatrixFrameVariable( uint32_t p_occurences, TestShaderProgram & p_program );
+		TestMatrixFrameVariable( Castor3D::MatrixFrameVariable< T, Rows, Columns > & p_variable );
 		virtual ~TestMatrixFrameVariable();
 
 		virtual bool Initialise();

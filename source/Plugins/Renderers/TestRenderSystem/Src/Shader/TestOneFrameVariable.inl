@@ -1,14 +1,14 @@
 namespace TestRender
 {
 	template< typename T >
-	TestOneFrameVariable< T >::TestOneFrameVariable( uint32_t p_occurences, TestShaderProgram * p_program )
+	TestOneFrameVariable< T >::TestOneFrameVariable( uint32_t p_occurences, TestShaderProgram & p_program )
 		: Castor3D::OneFrameVariable< T >( p_program, p_occurences )
 	{
 	}
 
 	template< typename T >
-	TestOneFrameVariable< T >::TestOneFrameVariable( Castor3D::OneFrameVariable< T > * p_variable )
-		: Castor3D::OneFrameVariable< T >( *p_variable )
+	TestOneFrameVariable< T >::TestOneFrameVariable( Castor3D::OneFrameVariable< T > & p_variable )
+		: Castor3D::OneFrameVariable< T >( p_variable.GetProgram() )
 	{
 	}
 

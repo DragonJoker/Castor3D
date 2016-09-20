@@ -308,7 +308,6 @@ namespace OceanLighting
 	RenderTechnique::~RenderTechnique()
 	{
 		m_renderPipeline.reset();
-		m_pipeline.reset();
 		m_renderGBuffers.reset();
 		m_cloudsGBuffers.reset();
 		m_skyGBuffers.reset();
@@ -367,7 +366,6 @@ namespace OceanLighting
 		DoDeletePrograms( all );
 		String l_strVertex/* = cuT( "#version 130\n#define _VERTEX_\nin vec4 vertex;\n" )*/;
 		String l_strPixel/* = cuT( "#version 130\n#define _FRAGMENT_\n" )*/;
-		FrameVariableBufferSPtr l_pConstants;
 		String l_strAtmF;
 		String l_strAtmV;
 		String l_strOcnF;
@@ -402,44 +400,60 @@ namespace OceanLighting
 		m_render = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_render->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_render->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "render" ) );
-		m_render->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_renderSkyIrradianceSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_renderInscatterSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_renderTransmittanceSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
 		m_renderSkySampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "skySampler" ), ShaderType::Pixel );
-		m_renderScreenToCamera = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Mat4x4f, cuT( "screenToCamera" ) ) );
-		m_renderCameraToWorld = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Mat4x4f, cuT( "cameraToWorld" ) ) );
-		m_renderWorldToScreen = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Mat4x4f, cuT( "worldToScreen" ) ) );
-		m_renderWorldCamera = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec3f, cuT( "worldCamera" ) ) );
-		m_renderWorldSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec3f, cuT( "worldSunDir" ) ) );
-		m_renderHdrExposure = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "hdrExposure" ) ) );
-		m_renderSeaColor = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec3f, cuT( "seaColor" ) ) );
 		m_renderSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
 		m_renderInscatterSampler->SetValue( INSCATTER_UNIT );
 		m_renderTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
 		m_renderSkySampler->SetValue( SKY_UNIT );
+
 #if ENABLE_FFT
+
 		m_renderSpectrum_1_2_Sampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_1_2_Sampler" ), ShaderType::Pixel );
 		m_renderSpectrum_3_4_Sampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_3_4_Sampler" ), ShaderType::Pixel );
 		m_renderFftWavesSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "fftWavesSampler" ), ShaderType::Pixel );
 		m_renderSlopeVarianceSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "slopeVarianceSampler" ), ShaderType::Pixel );
-		m_renderGridSizes = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec4f, cuT( "GRID_SIZES" ) ) );
-		m_renderGridSize = std::static_pointer_cast< Point2fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec2f, cuT( "gridSize" ) ) );
-		m_renderChoppy = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "choppy" ) ) );
+
 #else
+
 		m_renderWavesSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "wavesSampler" ), ShaderType::Pixel );
-		m_renderWorldToWind = std::static_pointer_cast< Matrix2x2fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Mat2x2f, cuT( "worldToWind" ) ) );
-		m_renderWindToWorld = std::static_pointer_cast< Matrix2x2fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Mat2x2f, cuT( "windToWorld" ) ) );
-		m_renderNbWaves = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "nbWaves" ) ) );
-		m_renderHeightOffset = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "heightOffset" ) ) );
-		m_renderSigmaSqTotal = std::static_pointer_cast< Point2fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec2f, cuT( "sigmaSqTotal" ) ) );
-		m_renderTime = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "time" ) ) );
-		m_renderLods = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Vec4f, cuT( "lods" ) ) );
-		m_renderNyquistMin = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "nyquistMin" ) ) );
-		m_renderNyquistMax = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, FrameVariableType::Float, cuT( "nyquistMax" ) ) );
 		m_renderWavesSampler->SetValue( m_pTexWave.get() );
+
 #endif
+
+		{
+			auto & l_constants = m_render->CreateFrameVariableBuffer( cuT( "render" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_renderScreenToCamera = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "screenToCamera" ) );
+			m_renderCameraToWorld = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "cameraToWorld" ) );
+			m_renderWorldToScreen = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "worldToScreen" ) );
+			m_renderWorldCamera = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldCamera" ) );
+			m_renderWorldSunDir = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldSunDir" ) );
+			m_renderHdrExposure = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "hdrExposure" ) );
+			m_renderSeaColor = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "seaColor" ) );
+
+#if ENABLE_FFT
+
+			m_renderGridSizes = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "GRID_SIZES" ) );
+			m_renderGridSize = l_constants.CreateVariable< Point2fFrameVariable >( cuT( "gridSize" ) );
+			m_renderChoppy = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "choppy" ) );
+
+#else
+
+			m_renderWorldToWind = l_constants.CreateVariable< Matrix2x2fFrameVariable >( cuT( "worldToWind" ) );
+			m_renderWindToWorld = l_constants.CreateVariable< Matrix2x2fFrameVariable >( cuT( "windToWorld" ) );
+			m_renderNbWaves = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "nbWaves" ) );
+			m_renderHeightOffset = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "heightOffset" ) );
+			m_renderSigmaSqTotal = l_constants.CreateVariable< Point2fFrameVariable >( cuT( "sigmaSqTotal" ) );
+			m_renderTime = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "time" ) );
+			m_renderLods = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "lods" ) );
+			m_renderNyquistMin = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "nyquistMin" ) );
+			m_renderNyquistMax = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "nyquistMax" ) );
+
+#endif
+
+		}
 		m_render->Initialise();
 
 		if ( !all )
@@ -453,21 +467,22 @@ namespace OceanLighting
 		m_sky = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_sky->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_sky->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "sky" ) );
-		m_sky->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_skySkyIrradianceSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_skyInscatterSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_skyTransmittanceSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
 		m_skySkySampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "skySampler" ), ShaderType::Pixel );
-		m_skyScreenToCamera = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_sky, FrameVariableType::Mat4x4f, cuT( "screenToCamera" ) ) );
-		m_skyCameraToWorld = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_sky, FrameVariableType::Mat4x4f, cuT( "cameraToWorld" ) ) );
-		m_skyWorldCamera = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_sky, FrameVariableType::Vec3f, cuT( "worldCamera" ) ) );
-		m_skyWorldSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_sky, FrameVariableType::Vec3f, cuT( "worldSunDir" ) ) );
-		m_skyHdrExposure = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_sky, FrameVariableType::Float, cuT( "hdrExposure" ) ) );
 		m_skySkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
 		m_skyInscatterSampler->SetValue( INSCATTER_UNIT );
 		m_skyTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
 		m_skySkySampler->SetValue( SKY_UNIT );
+		{
+			auto & l_constants = m_sky->CreateFrameVariableBuffer( cuT( "sky" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_skyScreenToCamera = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "screenToCamera" ) );
+			m_skyCameraToWorld = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "cameraToWorld" ) );
+			m_skyWorldCamera = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldCamera" ) );
+			m_skyWorldSunDir = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldSunDir" ) );
+			m_skyHdrExposure = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "hdrExposure" ) );
+		}
 		m_sky->Initialise();
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strMapV;
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strMapF;
@@ -475,24 +490,25 @@ namespace OceanLighting
 		m_skymap = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_skymap->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_skymap->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "skymap" ) );
-		m_skymap->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_skymapSkyIrradianceSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_skymapInscatterSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_skymapTransmittanceSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
 		m_skymapNoiseSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "noiseSampler" ), ShaderType::Pixel );
-		m_skymapSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Vec3f, cuT( "sunDir" ) ) );
-		m_skymapOctaves = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "octaves" ) ) );
-		m_skymapLacunarity = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "lacunarity" ) ) );
-		m_skymapGain = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "gain" ) ) );
-		m_skymapNorm = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "norm" ) ) );
-		m_skymapClamp1 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "clamp1" ) ) );
-		m_skymapClamp2 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Float, cuT( "clamp2" ) ) );
-		m_skymapCloudsColor = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_skymap, FrameVariableType::Vec4f, cuT( "cloudsColor" ) ) );
 		m_skymapSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
 		m_skymapInscatterSampler->SetValue( INSCATTER_UNIT );
 		m_skymapTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
 		m_skymapNoiseSampler->SetValue( NOISE_UNIT );
+		{
+			auto & l_constants = m_skymap->CreateFrameVariableBuffer( cuT( "skymap" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_skymapSunDir = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "sunDir" ) );
+			m_skymapOctaves = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "octaves" ) );
+			m_skymapLacunarity = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "lacunarity" ) );
+			m_skymapGain = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "gain" ) );
+			m_skymapNorm = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "norm" ) );
+			m_skymapClamp1 = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "clamp1" ) );
+			m_skymapClamp2 = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "clamp2" ) );
+			m_skymapCloudsColor = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "cloudsColor" ) );
+		}
 		m_skymap->Initialise();
 
 		if ( !m_clouds )
@@ -507,27 +523,28 @@ namespace OceanLighting
 			m_clouds = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 			m_clouds->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 			m_clouds->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-			l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "clouds" ) );
-			m_clouds->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 			m_cloudsSkyIrradianceSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 			m_cloudsInscatterSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 			m_cloudsTransmittanceSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
 			m_cloudsNoiseSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "noiseSampler" ), ShaderType::Pixel );
-			m_cloudsWorldToScreen = std::static_pointer_cast< Matrix4x4fFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Mat4x4f, cuT( "worldToScreen" ) ) );
-			m_cloudsWorldCamera = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Vec3f, cuT( "worldCamera" ) ) );
-			m_cloudsWorldSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Vec3f, cuT( "worldSunDir" ) ) );
-			m_cloudsHdrExposure = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "hdrExposure" ) ) );
-			m_cloudsOctaves = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "octaves" ) ) );
-			m_cloudsLacunarity = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "lacunarity" ) ) );
-			m_cloudsGain = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "gain" ) ) );
-			m_cloudsNorm = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "norm" ) ) );
-			m_cloudsClamp1 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "clamp1" ) ) );
-			m_cloudsClamp2 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Float, cuT( "clamp2" ) ) );
-			m_cloudsCloudsColor = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_clouds, FrameVariableType::Vec4f, cuT( "cloudsColor" ) ) );
 			m_cloudsSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
 			m_cloudsInscatterSampler->SetValue( INSCATTER_UNIT );
 			m_cloudsTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
 			m_cloudsNoiseSampler->SetValue( NOISE_UNIT );
+			{
+				auto & l_constants = m_clouds->CreateFrameVariableBuffer( cuT( "clouds" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+				m_cloudsWorldToScreen = l_constants.CreateVariable< Matrix4x4fFrameVariable >( cuT( "worldToScreen" ) );
+				m_cloudsWorldCamera = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldCamera" ) );
+				m_cloudsWorldSunDir = l_constants.CreateVariable< Point3fFrameVariable >( cuT( "worldSunDir" ) );
+				m_cloudsHdrExposure = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "hdrExposure" ) );
+				m_cloudsOctaves = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "octaves" ) );
+				m_cloudsLacunarity = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "lacunarity" ) );
+				m_cloudsGain = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "gain" ) );
+				m_cloudsNorm = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "norm" ) );
+				m_cloudsClamp1 = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "clamp1" ) );
+				m_cloudsClamp2 = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "clamp2" ) );
+				m_cloudsCloudsColor = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "cloudsColor" ) );
+			}
 			m_clouds->Initialise();
 		}
 
@@ -554,15 +571,16 @@ namespace OceanLighting
 		m_init = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_init->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_init->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "init" ) );
-		m_init->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_initSpectrum_1_2_Sampler = m_init->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_1_2_Sampler" ), ShaderType::Pixel );
 		m_initSpectrum_3_4_Sampler = m_init->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_3_4_Sampler" ), ShaderType::Pixel );
-		m_initFftSize = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_init, FrameVariableType::Float, cuT( "FFT_SIZE" ) ) );
-		m_initInverseGridSizes = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_init, FrameVariableType::Vec4f, cuT( "INVERSE_GRID_SIZES" ) ) );
-		m_initT = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_init, FrameVariableType::Float, cuT( "t" ) ) );
 		m_initSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
 		m_initSpectrum_3_4_Sampler->SetValue( SPECTRUM_3_4_UNIT );
+		{
+			auto & l_constants = m_init->CreateFrameVariableBuffer( cuT( "init" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_initFftSize = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "FFT_SIZE" ) );
+			m_initInverseGridSizes = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "INVERSE_GRID_SIZES" ) );
+			m_initT = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "t" ) );
+		}
 		m_init->Initialise();
 		l_strSrcV = l_strVarV;
 		l_strSrcF = l_strVarF;
@@ -570,19 +588,20 @@ namespace OceanLighting
 		m_variances = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_variances->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_variances->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "variances" ) );
-		m_variances->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_variancesSpectrum_1_2_Sampler = m_variances->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_1_2_Sampler" ), ShaderType::Pixel );
 		m_variancesSpectrum_3_4_Sampler = m_variances->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_3_4_Sampler" ), ShaderType::Pixel );
-		m_variancesNSlopeVariance = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_variances, FrameVariableType::Float, cuT( "N_SLOPE_VARIANCE" ) ) );
-		m_variancesFFTSize = std::static_pointer_cast< OneIntFrameVariable >( l_pConstants->CreateVariable( *m_variances, FrameVariableType::Int, cuT( "FFT_SIZE" ) ) );
-		m_variancesGridSizes = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_variances, FrameVariableType::Vec4f, cuT( "GRID_SIZES" ) ) );
-		m_variancesSlopeVarianceDelta = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_variances, FrameVariableType::Float, cuT( "slopeVarianceDelta" ) ) );
-		m_variancesC = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_variances, FrameVariableType::Float, cuT( "c" ) ) );
 		m_variancesSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
 		m_variancesSpectrum_3_4_Sampler->SetValue( SPECTRUM_3_4_UNIT );
-		m_variancesNSlopeVariance->SetValue( float( m_N_SLOPE_VARIANCE ) );
-		m_variancesFFTSize->SetValue( m_FFT_SIZE );
+		{
+			auto & l_constants = m_variances->CreateFrameVariableBuffer( cuT( "variances" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_variancesNSlopeVariance = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "N_SLOPE_VARIANCE" ) );
+			m_variancesFFTSize = l_constants.CreateVariable< OneIntFrameVariable >( cuT( "FFT_SIZE" ) );
+			m_variancesGridSizes = l_constants.CreateVariable< Point4fFrameVariable >( cuT( "GRID_SIZES" ) );
+			m_variancesSlopeVarianceDelta = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "slopeVarianceDelta" ) );
+			m_variancesC = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "c" ) );
+			m_variancesNSlopeVariance->SetValue( float( m_N_SLOPE_VARIANCE ) );
+			m_variancesFFTSize->SetValue( m_FFT_SIZE );
+		}
 		m_variances->Initialise();
 		l_strSrcV = l_strFtxV;
 		l_strSrcF = l_strFtxF;
@@ -590,13 +609,14 @@ namespace OceanLighting
 		m_fftx = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_fftx->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_fftx->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "fftx" ) );
-		m_fftx->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_fftxButterflySampler = m_fftx->CreateFrameVariable< OneIntFrameVariable >( cuT( "butterflySampler" ), ShaderType::Pixel );
 		m_fftxImgSampler = m_fftx->CreateFrameVariable< OneIntFrameVariable >( cuT( "imgSampler" ), ShaderType::Pixel );
-		m_fftxNLayers = std::static_pointer_cast< OneIntFrameVariable >( l_pConstants->CreateVariable( *m_fftx, FrameVariableType::Int, cuT( "nLayers" ) ) );
-		m_fftxPass = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_fftx, FrameVariableType::Float, cuT( "pass" ) ) );
 		m_fftxButterflySampler->SetValue( BUTTERFLY_UNIT );
+		{
+			auto & l_constants = m_fftx->CreateFrameVariableBuffer( cuT( "fftx" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_fftxNLayers = l_constants.CreateVariable< OneIntFrameVariable >( cuT( "nLayers" ) );
+			m_fftxPass = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "pass" ) );
+		}
 		m_fftx->Initialise();
 		l_strSrcV = l_strFtyV;
 		l_strSrcF = l_strFtyF;
@@ -604,13 +624,14 @@ namespace OceanLighting
 		m_ffty = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
 		m_ffty->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_ffty->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "ffty" ) );
-		m_ffty->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_fftyButterflySampler = m_ffty->CreateFrameVariable< OneIntFrameVariable >( cuT( "butterflySampler" ), ShaderType::Pixel );
 		m_fftyImgSampler = m_ffty->CreateFrameVariable< OneIntFrameVariable >( cuT( "imgSampler" ), ShaderType::Pixel );
-		m_fftyNLayers = std::static_pointer_cast< OneIntFrameVariable >( l_pConstants->CreateVariable( *m_ffty, FrameVariableType::Int, cuT( "nLayers" ) ) );
-		m_fftyPass = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_ffty, FrameVariableType::Float, cuT( "pass" ) ) );
 		m_fftyButterflySampler->SetValue( BUTTERFLY_UNIT );
+		{
+			auto & l_constants = m_ffty->CreateFrameVariableBuffer( cuT( "ffty" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_fftyNLayers = l_constants.CreateVariable< OneIntFrameVariable >( cuT( "nLayers" ) );
+			m_fftyPass = l_constants.CreateVariable< OneFloatFrameVariable >( cuT( "pass" ) );
+		}
 		m_ffty->Initialise();
 #endif
 	}
@@ -761,36 +782,31 @@ namespace OceanLighting
 #else
 		m_pTexWave->Create();
 #endif
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
-		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::None );
-		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
 
-		l_rsState = RasteriserState{};
+		auto l_rsState = RasteriserState{};
 		l_rsState.SetCulledFaces( Culling::None );
-		m_renderPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{} );
+		m_renderPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, *m_render );
 		
 		BlendState l_blState;
 		l_blState.EnableBlend( true );
 		l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
 		l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		m_cloudsPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, std::move( l_blState ), MultisampleState{} );
+		m_cloudsPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, std::move( l_blState ), MultisampleState{}, *m_clouds );
 		
-		m_skyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_skyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{}, *m_sky );
 		
-		l_dsState = DepthStencilState{};
+		auto l_dsState = DepthStencilState{};
 		l_dsState.SetDepthTest( false );
 		l_rsState = RasteriserState{};
 		l_rsState.SetCulledFaces( Culling::None );
-		m_skymapPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
+		m_skymapPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, *m_skymap );
 
 #if ENABLE_FFT
 
-		m_initPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
-		m_variancesPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
-		m_fftxPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
-		m_fftyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{} );
+		m_initPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{}, *m_init );
+		m_variancesPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{}, *m_variances );
+		m_fftxPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{}, *m_fftx );
+		m_fftyPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, RasteriserState{}, BlendState{}, MultisampleState{}, *m_ffty );
 
 #endif
 

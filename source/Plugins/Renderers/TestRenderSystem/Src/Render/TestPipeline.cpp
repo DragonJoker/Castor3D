@@ -11,8 +11,9 @@ namespace TestRender
 								, DepthStencilState && p_dsState
 								, RasteriserState && p_rsState
 								, BlendState && p_bdState
-								, MultisampleState && p_msState )
-		: Pipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) }
+								, MultisampleState && p_msState
+								, ShaderProgram & p_program )
+		: Pipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program }
 	{
 	}
 

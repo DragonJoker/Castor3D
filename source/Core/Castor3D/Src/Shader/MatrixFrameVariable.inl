@@ -379,7 +379,7 @@ namespace Castor3D
 	{
 		this->m_values = new T[Rows * Columns * p_occurences];
 		memset( this->m_values, 0, sizeof( T ) * p_occurences * Rows * Columns );
-		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_occurences];
+		m_mtxValue = new Castor::Matrix < T, Rows, Columns >[p_occurences];
 
 		for ( uint32_t i = 0; i < p_occurences; i++ )
 		{

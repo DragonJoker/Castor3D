@@ -83,6 +83,10 @@ namespace TestRender
 		 */
 		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
 		/**
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateFrameVariableBuffer
+		 */
+		Castor3D::FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name )override;
+		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */
 		std::shared_ptr< Castor3D::FrameVariable > DoCreateVariable( Castor3D::FrameVariableType p_type, int p_occurences )override;
