@@ -402,23 +402,26 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgram::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgram::CreateFrameVariableBuffer( Castor::String const & p_name, uint64_t p_shaderMask )
 	{
-		auto l_it = m_frameVariableBuffersByName.find( p_pVariableBuffer->GetName() );
+		auto l_it = m_frameVariableBuffersByName.find( p_name );
 
 		if ( l_it == m_frameVariableBuffersByName.end() )
 		{
-			m_listFrameVariableBuffers.push_back( p_pVariableBuffer );
-			m_frameVariableBuffersByName.insert( std::make_pair( p_pVariableBuffer->GetName(), p_pVariableBuffer ) );
+			auto l_ubo = DoCreateFrameVariableBuffer( p_name );
+			m_listFrameVariableBuffers.push_back( l_ubo );
+			l_it = m_frameVariableBuffersByName.insert( { p_name, l_ubo } ).first;
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); ++i )
 			{
 				if ( p_shaderMask & ( uint64_t( 0x1 ) << i ) )
 				{
-					m_frameVariableBuffers[i].push_back( p_pVariableBuffer );
+					m_frameVariableBuffers[i].push_back( l_ubo );
 				}
 			}
 		}
+
+		return *l_it->second.lock();
 	}
 
 	FrameVariableBufferSPtr ShaderProgram::FindFrameVariableBuffer( Castor::String const & p_name )const
@@ -490,7 +493,7 @@ namespace Castor3D
 			{
 				for ( auto l_buffer : m_listFrameVariableBuffers )
 				{
-					l_buffer->Initialise( *this );
+					l_buffer->Initialise();
 				}
 
 				Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );

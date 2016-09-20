@@ -225,11 +225,6 @@ namespace Bloom
 
 		m_linearSampler = DoCreateSampler( true );
 		m_nearestSampler = DoCreateSampler( false );
-
-		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( false );
-		l_dsstate.SetDepthMask( WritingMask::Zero );
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
 	}
 
 	BloomPostEffect::~BloomPostEffect()
@@ -266,24 +261,31 @@ namespace Bloom
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_hipass );
 			l_program->Initialise();
-			m_hiPassProgram = l_program;
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			m_hiPassPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		if ( !l_vertex.empty() && !l_blur.empty() )
 		{
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_filterMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
-			auto l_filterConfig = GetRenderSystem()->CreateFrameVariableBuffer( FilterConfig );
-			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigCoefficients, KERNEL_SIZE ) );
-			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetX ) );
-			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, FrameVariableType::Float, FilterConfigOffsetY ) );
-			l_program->AddFrameVariableBuffer( l_filterConfig, MASK_SHADER_TYPE_PIXEL );
+			auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
+			m_filterCoefficients = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigCoefficients, KERNEL_SIZE );
+			m_filterOffsetX = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigOffsetX );
+			m_filterOffsetY = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigOffsetY );
 			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_blur );
 			l_program->Initialise();
-			m_filterProgram = l_program;
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			m_filterPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		if ( !l_vertex.empty() && !l_combine.empty() )
@@ -300,7 +302,6 @@ namespace Bloom
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_combine );
 			l_program->Initialise();
-			m_combineProgram = l_program;
 
 			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.GetStride() ) );
@@ -309,6 +310,11 @@ namespace Bloom
 			m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			m_combinePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		uint32_t l_index = 0;
@@ -358,6 +364,15 @@ namespace Bloom
 		}
 
 		m_viewport.Cleanup();
+
+		m_combinePipeline->Cleanup();
+		m_combinePipeline.reset();
+
+		m_filterPipeline->Cleanup();
+		m_filterPipeline.reset();
+
+		m_hiPassPipeline->Cleanup();
+		m_hiPassPipeline.reset();
 	}
 
 	bool BloomPostEffect::Apply( FrameBuffer & p_framebuffer )
@@ -400,7 +415,7 @@ namespace Bloom
 		{
 			l_source->m_fbo->Clear();
 			m_hiPassMapDiffuse->SetValue( 0 );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, p_origin, m_hiPassProgram.lock() );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, p_origin, *m_hiPassPipeline );
 			l_source->m_fbo->Unbind();
 		}
 
@@ -443,7 +458,7 @@ namespace Bloom
 			{
 				l_destination->m_fbo->Clear();
 				p_offset->SetValue( p_offsetValue / l_source->m_size.width() );
-				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture.GetTexture(), m_filterProgram.lock() );
+				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture.GetTexture(), *m_filterPipeline );
 				l_destination->m_fbo->Unbind();
 			}
 		}
@@ -454,46 +469,42 @@ namespace Bloom
 		if ( m_blurSurfaces[0].m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
 			m_blurSurfaces[0].m_fbo->Clear();
-			ShaderProgramSPtr l_program = m_combineProgram.lock();
+			m_viewport.Resize( p_origin.GetImage().GetDimensions() );
+			m_viewport.Update();
+			m_combinePipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+			m_combinePipeline->Apply();
 
-			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
+			auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
+			auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
+			auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
+			auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
+			FrameVariableBufferSPtr l_matrices = m_combinePipeline->GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+
+			if ( l_matrices )
 			{
-				m_viewport.Resize( p_origin.GetImage().GetDimensions() );
-				m_viewport.Update();
-				m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
-				m_pipeline->Apply();
-
-				auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
-				auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
-				auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
-				auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
-				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-
-				if ( l_matrices )
-				{
-					m_pipeline->ApplyProjection( *l_matrices );
-				}
-
-				l_program->Bind();
-
-				l_texture0.Bind();
-				l_texture1.Bind();
-				l_texture2.Bind();
-				l_texture3.Bind();
-				p_origin.Bind( 4 );
-				m_linearSampler->Bind( 4 );
-
-				m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
-
-				l_texture0.Unbind();
-				l_texture1.Unbind();
-				l_texture2.Unbind();
-				l_texture3.Unbind();
-				p_origin.Unbind( 4 );
-				m_linearSampler->Unbind( 4 );
-
-				l_program->Unbind();
+				m_combinePipeline->ApplyProjection( *l_matrices );
 			}
+
+			m_combinePipeline->Apply();
+			m_combinePipeline->GetProgram().Bind();
+
+			l_texture0.Bind();
+			l_texture1.Bind();
+			l_texture2.Bind();
+			l_texture3.Bind();
+			p_origin.Bind( 4 );
+			m_linearSampler->Bind( 4 );
+
+			m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
+
+			l_texture0.Unbind();
+			l_texture1.Unbind();
+			l_texture2.Unbind();
+			l_texture3.Unbind();
+			p_origin.Unbind( 4 );
+			m_linearSampler->Unbind( 4 );
+
+			m_combinePipeline->GetProgram().Unbind();
 
 			m_blurSurfaces[0].m_fbo->Unbind();
 

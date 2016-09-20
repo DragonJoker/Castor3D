@@ -129,7 +129,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::FrameVariable( ShaderProgram * p_program )
+	FrameVariable::FrameVariable( ShaderProgram & p_program )
 		: m_changed( true )
 		, m_occurences( 1 )
 		, m_strValue( 1 )
@@ -137,7 +137,7 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariable::FrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
+	FrameVariable::FrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		: m_changed( true )
 		, m_occurences( p_occurences )
 		, m_strValue( m_occurences )

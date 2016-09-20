@@ -42,15 +42,15 @@ namespace GlRender
 		, public Holder
 	{
 	public:
-		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlRenderSystem & p_renderSystem );
+		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlShaderProgram & p_program, Castor3D::RenderSystem & p_renderSystem );
 		virtual ~GlFrameVariableBuffer();
 
 	private:
-		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgram * p_program, Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
-		virtual bool DoInitialise( Castor3D::ShaderProgram * p_program );
-		virtual void DoCleanup();
-		virtual bool DoBind( uint32_t p_index );
-		virtual void DoUnbind( uint32_t p_index );
+		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
+		bool DoInitialise()override;
+		void DoCleanup()override;
+		bool DoBind( uint32_t p_index )override;
+		void DoUnbind( uint32_t p_index )override;
 
 	private:
 		GlBufferBase< uint8_t > m_glBuffer;

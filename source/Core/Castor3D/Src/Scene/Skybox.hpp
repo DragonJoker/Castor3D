@@ -126,10 +126,10 @@ namespace Castor3D
 		}
 
 	private:
-		bool DoInitialiseShader();
+		ShaderProgram & DoInitialiseShader();
 		bool DoInitialiseVertexBuffer();
 		bool DoInitialiseTexture();
-		bool DoInitialisePipeline();
+		bool DoInitialisePipeline( ShaderProgram & p_program );
 
 	private:
 		//!\~english	The pipeline used while rendering the skybox.
@@ -141,9 +141,6 @@ namespace Castor3D
 		//!\~english	The skybox cube map sampler.
 		//!\~french		L'échantillonneur de la cube map de la skybox.
 		SamplerWPtr m_sampler;
-		//!\~english	The skybox shader.
-		//!\~french		Le shader de la skybox.
-		ShaderProgramWPtr m_program;
 		//!\~english	The shader matrices constants buffer.
 		//!\~french		Le tampon de constantes de shader contenant les matrices.
 		FrameVariableBufferSPtr m_matricesBuffer;

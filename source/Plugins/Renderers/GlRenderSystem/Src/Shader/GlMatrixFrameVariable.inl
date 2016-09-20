@@ -4,16 +4,16 @@
 namespace GlRender
 {
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	GlMatrixFrameVariable<T, Rows, Columns>::GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program )
+	GlMatrixFrameVariable<T, Rows, Columns>::GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program )
 		: Castor3D::MatrixFrameVariable< T, Rows, Columns >( p_program, p_occurences )
-		, GlFrameVariableBase( p_gl, &p_program->GetGlName() )
+		, GlFrameVariableBase( p_gl, p_program )
 	{
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	GlMatrixFrameVariable<T, Rows, Columns>::GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_variable )
-		: Castor3D::MatrixFrameVariable<T, Rows, Columns>( *p_variable )
-		, GlFrameVariableBase( p_gl, &static_cast< GlShaderProgram * >( p_variable->GetProgram() )->GetGlName() )
+	GlMatrixFrameVariable<T, Rows, Columns>::GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable< T, Rows, Columns > & p_variable )
+		: Castor3D::MatrixFrameVariable<T, Rows, Columns>( p_variable )
+		, GlFrameVariableBase( p_gl, static_cast< GlShaderProgram & >( p_variable->GetProgram() ) )
 	{
 	}
 

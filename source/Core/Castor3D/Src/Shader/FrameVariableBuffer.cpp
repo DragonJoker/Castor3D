@@ -8,10 +8,11 @@ namespace Castor3D
 {
 	uint32_t FrameVariableBuffer::sm_uiCount = 0;
 
-	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem & p_renderSystem )
-		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_name( p_name )
-		, m_index( sm_uiCount++ )
+	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, ShaderProgram & p_program, RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >{ p_renderSystem }
+		, m_name{ p_name }
+		, m_index{ sm_uiCount++ }
+		, m_program{ p_program }
 	{
 	}
 
@@ -19,14 +20,14 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgram & p_program, FrameVariableType p_type, String const & p_name, uint32_t p_occurences )
+	FrameVariableSPtr FrameVariableBuffer::CreateVariable( FrameVariableType p_type, String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
-			l_return = DoCreateVariable( &p_program, p_type, p_name, p_occurences );
+			l_return = DoCreateVariable( p_type, p_name, p_occurences );
 
 			if ( l_return )
 			{
@@ -62,11 +63,11 @@ namespace Castor3D
 		}
 	}
 
-	bool FrameVariableBuffer::Initialise( ShaderProgram & p_program )
+	bool FrameVariableBuffer::Initialise()
 	{
 		bool l_return = true;
 
-		if ( !DoInitialise( &p_program ) )
+		if ( !DoInitialise() )
 		{
 			uint32_t l_totalSize = 0;
 

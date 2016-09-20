@@ -98,13 +98,13 @@ namespace Castor3D
 		C3D_API void DrawText( TextOverlay & p_pTextPanelOverlay );
 		/**
 		 *\~english
-		 *\brief		Begins the overlays rendering
-		 *\param[in]	p_size	The render window size
+		 *\brief		Begins the overlays rendering.
+		 *\param[in]	p_viewport	The render window viewport.
 		 *\~french
-		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size	La taille de la fenêtre de rendu
+		 *\brief		Commence le rendu des incrustations.
+		 *\param[in]	p_viewport	Le viewport de la fenêtre de rendu.
 		 */
-		C3D_API void BeginRender( Castor::Size const & p_size );
+		C3D_API void BeginRender( Viewport const & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays rendering
@@ -121,26 +121,6 @@ namespace Castor3D
 		Castor::Size const & GetSize()const
 		{
 			return m_size;
-		}
-		/**
-		 *\~english
-		 *\return		The overlays rendering pipeline.
-		 *\~french
-		 *\return		Le pipeline de rendu des incrustations.
-		 */
-		Pipeline const & GetPipeline()const
-		{
-			return *m_pipeline;
-		}
-		/**
-		 *\~english
-		 *\return		The overlays rendering pipeline.
-		 *\~french
-		 *\return		Le pipeline de rendu des incrustations.
-		 */
-		Pipeline & GetPipeline()
-		{
-			return *m_pipeline;
 		}
 		/**
 		 *\~english
@@ -178,7 +158,7 @@ namespace Castor3D
 		 *\param[in]	p_pass	La passe.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderNode & DoGetPanelProgram( Pass & p_pass );
+		C3D_API RenderNode & DoGetPanelNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
@@ -189,40 +169,40 @@ namespace Castor3D
 		 *\param[in]	p_pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderNode & DoGetTextProgram( Pass & p_pass );
+		C3D_API RenderNode & DoGetTextNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de TextureChannel.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
+		C3D_API Pipeline & DoGetPanelPipeline( uint16_t p_textureFlags );
 		/**
 		 *\~english
-		 *\brief		Retrieves a text program compiled using given texture flags
-		 *\param[in]	p_flags	Bitwise ORed TextureChannel.
+		 *\brief		Retrieves a text program compiled using given texture flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_flags	Combinaison de TextureChannel.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
+		C3D_API Pipeline & DoGetTextPipeline( uint16_t p_textureFlags );
 		/**
 		 *\~english
-		 *\brief			Retrieves a program compiled using given flags.
-		 *\param[in]		p_flags		Bitwise ORed TextureChannel.
-		 *\return			The program
+		 *\brief		Retrieves a program compiled using given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\return		The program
 		 *\~french
-		 *\brief			Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]		p_flags		Combinaison de TextureChannel.
-		 *\return			Le programme
+		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\return		Le programme
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags );
+		C3D_API Pipeline & DoGetPipeline( uint16_t p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -295,12 +275,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for overlays rendering use.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\return		The created program.
 		 *\~french
-		 *\brief		Crée un programme shader pour les rendu d'incrustations
+		 *\brief		Crée un programme shader pour les rendu d'incrustations.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( uint32_t p_flags );
+		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( uint16_t p_textureFlags );
 
 	protected:
 		//!\~english	Vertex buffers for panels.
@@ -332,13 +314,13 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	The shader programs used to render a panel (used for borders too).
 		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
-		std::map< Pass *, RenderNode > m_mapPanelPrograms;
+		std::map< Pass *, RenderNode > m_mapPanelNodes;
 		//!\~english	The shader programs used to render texts.
 		//!\~french		Les programmes de shader utilisés pour rendre les textes.
-		std::map< Pass *, RenderNode > m_mapTextPrograms;
+		std::map< Pass *, RenderNode > m_mapTextNodes;
 		//!\~english	The shader programs.
 		//!\~french		Les programmes de shader.
-		std::map< uint32_t, ShaderProgramSPtr > m_programs;
+		std::map< uint32_t, PipelineUPtr > m_pipelines;
 		//!\~english	Text texture sampler.
 		//!\~french		Echantillonneur de la texture de texte.
 		OneIntFrameVariableSPtr m_mapText;
@@ -363,9 +345,6 @@ namespace Castor3D
 		//!\~english	Tells if the render size has changed.
 		//!\~french		Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged{ true };
-		//!\~english	The overlays rendering pipeline.
-		//!\~french		Le pipeline de rendu des incrustations.
-		PipelineSPtr m_pipeline;
 	};
 }
 

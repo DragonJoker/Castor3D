@@ -4,16 +4,16 @@
 namespace GlRender
 {
 	template< typename T, uint32_t Count >
-	GlPointFrameVariable<T, Count>::GlPointFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program )
+	GlPointFrameVariable<T, Count>::GlPointFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program )
 		: Castor3D::PointFrameVariable< T, Count >( p_program, p_occurences )
-		, GlFrameVariableBase( p_gl, &p_program->GetGlName() )
+		, GlFrameVariableBase( p_gl, p_program )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	GlPointFrameVariable<T, Count>::GlPointFrameVariable( OpenGl & p_gl, Castor3D::PointFrameVariable<T, Count> * p_variable )
-		: Castor3D::PointFrameVariable< T, Count >( *p_variable )
-		, GlFrameVariableBase( p_gl, &static_cast< GlShaderProgram * >( &p_variable->GetProgram() )->GetGlName() )
+	GlPointFrameVariable<T, Count>::GlPointFrameVariable( OpenGl & p_gl, Castor3D::PointFrameVariable< T, Count > & p_variable )
+		: Castor3D::PointFrameVariable< T, Count >( p_variable )
+		, GlFrameVariableBase( p_gl, static_cast< GlShaderProgram & >( p_variable->GetProgram() ) )
 	{
 	}
 

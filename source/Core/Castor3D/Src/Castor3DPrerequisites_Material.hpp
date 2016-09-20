@@ -443,44 +443,44 @@ namespace Castor3D
 	\brief		Enumération des canaux de texture
 	*/
 	enum class TextureChannel
-		: uint32_t
+		: uint16_t
 	{
 		//!\~english Undefined channel.
 		//!\~french Canal indéfini.
-		Undefined = 0x00000000,
+		Undefined = 0x0000,
 		//!\~english Colour map
 		//!\~french Map de couleurs
-		Colour = 0x00000001,
+		Colour = 0x0001,
 		//!\~english Diffuse map
 		//!\~french Map de diffuse
-		Diffuse = 0x00000002,
+		Diffuse = 0x0002,
 		//!\~english Normal map
 		//!\~french Map de normales
-		Normal = 0x00000004,
+		Normal = 0x0004,
 		//!\~english Opacity map
 		//!\~french Map d'opacité
-		Opacity = 0x00000008,
+		Opacity = 0x0008,
 		//!\~english Specular map
 		//!\~french Map de spéculaire
-		Specular = 0x00000010,
+		Specular = 0x0010,
 		//!\~english Height map
 		//!\~french Map de hauteur
-		Height = 0x00000020,
+		Height = 0x0020,
 		//!\~english Ambient map
 		//!\~french Map d'ambiante
-		Ambient = 0x00000040,
+		Ambient = 0x0040,
 		//!\~english Gloss map
 		//!\~french Map de gloss
-		Gloss = 0x00000080,
+		Gloss = 0x0080,
 		//!\~english Emissive map
 		//!\~french Map d'émissive
-		Emissive = 0x00000100,
+		Emissive = 0x0100,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
-		All = 0x0000FFFF,
+		All = 0x0FFF,
 		//!\~english Not really a texture channel (it is out of TextureChannel::All), used to tell we want text overlay shader source
 		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::All), utilisé pour dire que nous voulons un shader d'incrustation texte
-		Text = 0x00010000,
+		Text = 0x1000,
 	};
 
 	class TextureImage;

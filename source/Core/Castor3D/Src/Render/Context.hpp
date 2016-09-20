@@ -115,16 +115,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
-		 *\param[in]	p_size				The render viewport size.
-		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_program			The program used to render the texture.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_pipeline	The pipleline used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
-		 *\param[in]	p_size				La taille du viewport de rendu.
-		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program );
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Renders the given depth texture to the currently draw-bound frame buffer.
@@ -206,7 +206,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers, ShaderProgram const & p_program );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Creates the render to texture shader program.
@@ -271,12 +271,6 @@ namespace Castor3D
 		//!\~english	Tells the context is currently set to use multisampling.
 		//!\~french		Dit si le contexte est actuellement configuré pour utiliser le multisampling.
 		bool m_bMultiSampling;
-		//!\~english	The ShaderProgram used when rendering from a buffer to another one.
-		//!\~french		Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre.
-		ShaderProgramWPtr m_renderTextureProgram;
-		//!\~english	The ShaderProgram used when rendering depth from a buffer to another one.
-		//!\~french		Le ShaderProgram utilisé lors du rendu de profondeur d'un tampon vers un autre.
-		ShaderProgramWPtr m_renderDepthProgram;
 		//!\~english	The diffuse map frame variable, in the buffer-to-buffer shader program.
 		//!\~french		La frame variable de l'image diffuse, dans le shader buffer-to-buffer.
 		OneIntFrameVariableSPtr m_mapDiffuse;

@@ -25,10 +25,10 @@ namespace Castor3D
 	namespace
 	{
 		template< typename NodeType >
-		void DoRender( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, NodeType & p_node )
+		void DoRender( Scene const & p_scene, Camera const & p_camera, NodeType & p_node )
 		{
-			p_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
-			p_node.BindPass( p_scene, p_camera, p_pipeline, 0 );
+			p_node.m_scene.m_node.m_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
+			p_node.BindPass( p_scene, p_camera, 0 );
 			p_node.m_data.Draw( p_node.m_buffers );
 			p_node.UnbindPass( p_scene );
 		}
@@ -37,18 +37,18 @@ namespace Castor3D
 		void DoUnbind( Scene const & p_scene, NodeType & p_node )
 		{
 			p_node.m_scene.m_node.m_pass.EndRender();
-			p_node.m_scene.m_node.m_program.Unbind();
+			p_node.m_scene.m_node.m_pipeline.GetProgram().Unbind();
 
 			if ( p_scene.GetEngine()->GetPerObjectLighting() )
 			{
-				p_scene.GetLightCache().UnbindLights( p_node.m_scene.m_node.m_program, p_node.m_scene.m_sceneUbo );
+				p_scene.GetLightCache().UnbindLights( p_node.m_scene.m_node.m_pipeline.GetProgram(), p_node.m_scene.m_sceneUbo );
 			}
 		}
 	}
 
 	SceneRenderNode::SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos )
 		: m_node{ p_node.m_pass
-				  , p_node.m_program
+				  , p_node.m_pipeline
 				  , p_node.m_matrixUbo
 				  , p_node.m_passUbo
 				  , p_node.m_ambient
@@ -71,9 +71,9 @@ namespace Castor3D
 	}
 
 	template<>
-	void SubmeshRenderNode::Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )
+	void SubmeshRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
 	{
-		DoRender( p_scene, p_camera, p_pipeline, *this );
+		DoRender( p_scene, p_camera, *this );
 	}
 
 	template<>
@@ -83,9 +83,9 @@ namespace Castor3D
 	}
 
 	template<>
-	void BillboardListRenderNode::Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )
+	void BillboardListRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
 	{
-		DoRender( p_scene, p_camera, p_pipeline, *this );
+		DoRender( p_scene, p_camera, *this );
 	}
 
 	template<>
@@ -94,29 +94,29 @@ namespace Castor3D
 		DoUnbind( p_scene, *this );
 	}
 
-	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( m_scene.m_node.m_pipeline.GetProgram(), m_scene.m_sceneUbo );
 			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
-		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
+		m_scene.m_node.m_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_program.Bind();
+		m_scene.m_node.m_pipeline.GetProgram().Bind();
 		m_scene.m_node.m_pass.Render();
 	}
 
-	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( m_scene.m_node.m_pipeline.GetProgram(), m_scene.m_sceneUbo );
 			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
-		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
+		m_scene.m_node.m_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
 
 		if ( m_skeleton )
 		{
@@ -153,23 +153,23 @@ namespace Castor3D
 		}
 
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_program.Bind();
+		m_scene.m_node.m_pipeline.GetProgram().Bind();
 		m_scene.m_node.m_pass.Render();
 	}
 
-	void BillboardRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )
+	void BillboardRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
 	{
 		if ( p_scene.GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights( m_scene.m_node.m_program, m_scene.m_sceneUbo );
+			p_scene.GetLightCache().BindLights( m_scene.m_node.m_pipeline.GetProgram(), m_scene.m_sceneUbo );
 			p_camera.FillShader( m_scene.m_sceneUbo );
 		}
 
-		p_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
+		m_scene.m_node.m_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_program.Bind();
+		m_scene.m_node.m_pipeline.GetProgram().Bind();
 		m_scene.m_node.m_pass.Render();
 	}
 }

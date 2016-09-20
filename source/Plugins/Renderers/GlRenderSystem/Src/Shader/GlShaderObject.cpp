@@ -116,6 +116,7 @@ namespace GlRender
 				else
 				{
 					m_status = eSHADER_STATUS_ERROR;
+					FAILURE( "Shader is not compiled." );
 				}
 
 				l_return = DoCheckErrors();

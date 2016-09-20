@@ -217,7 +217,15 @@ namespace Castor3D
 
 	void AnimatedObjectGroup::Update()
 	{
+#if defined( NDEBUG )
+
 		real l_tslf = real( m_timer.TimeS() );
+
+#else
+
+		real l_tslf = 40 / 1000.0_r;
+
+#endif
 
 		for ( auto l_it : m_objects )
 		{

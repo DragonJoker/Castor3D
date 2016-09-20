@@ -46,18 +46,6 @@ namespace Castor3D
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex )[i++ * m_declaration.GetStride()] );
 		}
-
-		{
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( false );
-			m_texturePipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{} );
-		}
-		{
-			DepthStencilState l_dsState;
-			l_dsState.SetDepthTest( true );
-			l_dsState.SetDepthMask( WritingMask::All );
-			m_depthPipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{} );
-		}
 	}
 
 	Context::~Context()
@@ -86,7 +74,6 @@ namespace Castor3D
 			m_timerQuery[1 - m_queryIndex]->End();
 			
 			ShaderProgramSPtr l_textureProgram = DoCreateProgram( false );
-			m_renderTextureProgram = l_textureProgram;
 			l_textureProgram->Initialise();
 			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
@@ -95,9 +82,12 @@ namespace Castor3D
 			m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_textureProgram );
 			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
-			
+			{
+				DepthStencilState l_dsState;
+				l_dsState.SetDepthTest( false );
+				m_texturePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_textureProgram );
+			}
 			ShaderProgramSPtr l_depthProgram = DoCreateProgram( false );
-			m_renderDepthProgram = l_depthProgram;
 			l_depthProgram->Initialise();
 			m_vertexBufferDepth = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBufferDepth->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
@@ -106,6 +96,12 @@ namespace Castor3D
 			m_vertexBufferDepth->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
 			m_geometryBuffersDepth = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_depthProgram );
 			m_geometryBuffersDepth->Initialise( m_vertexBufferDepth, nullptr, nullptr, nullptr, nullptr );
+			{
+				DepthStencilState l_dsState;
+				l_dsState.SetDepthTest( true );
+				l_dsState.SetDepthMask( WritingMask::All );
+				m_depthPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_depthProgram );
+			}
 			DoEndCurrent();
 		}
 
@@ -117,25 +113,29 @@ namespace Castor3D
 		m_initialised = false;
 		DoSetCurrent();
 		DoCleanup();
+
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
-		ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
+		m_texturePipeline->Cleanup();
+		m_texturePipeline.reset();
 
-		if ( l_program )
-		{
-			l_program->Cleanup();
-		}
+		m_vertexBufferDepth->Cleanup();
+		m_vertexBufferDepth->Destroy();
+		m_vertexBufferDepth.reset();
+		m_geometryBuffersDepth->Cleanup();
+		m_geometryBuffersDepth.reset();
+		m_depthPipeline->Cleanup();
+		m_depthPipeline.reset();
 
 		m_timerQuery[0]->Destroy();
 		m_timerQuery[1]->Destroy();
 		DoEndCurrent();
 		DoDestroy();
-		m_geometryBuffers.reset();
+
 		m_bMultiSampling = false;
-		m_renderTextureProgram.reset();
 		m_timerQuery[0].reset();
 		m_timerQuery[1].reset();
 		m_window = nullptr;
@@ -167,48 +167,42 @@ namespace Castor3D
 
 	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_size, p_texture, *m_texturePipeline, *m_geometryBuffers, *m_renderTextureProgram.lock() );
+		DoRenderTexture( p_size, p_texture, *m_texturePipeline, *m_geometryBuffers );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program )
+	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline )
 	{
-		if ( p_program )
-		{
-			DoRenderTexture( p_size, p_texture, *m_texturePipeline, *m_geometryBuffers, *p_program );
-		}
+		DoRenderTexture( p_size, p_texture, p_pipeline, *m_geometryBuffers );
 	}
 
 	void Context::RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture )
 	{
-		DoRenderTexture( p_size, p_texture, *m_depthPipeline, *m_geometryBuffersDepth, *m_renderDepthProgram.lock() );
+		DoRenderTexture( p_size, p_texture, *m_depthPipeline, *m_geometryBuffersDepth );
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers, ShaderProgram const & p_program )
+	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
-		
-		if ( p_program.GetStatus() == ePROGRAM_STATUS_LINKED )
+
+		p_pipeline.Apply();
+		FrameVariableBufferSPtr l_matrices = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+
+		if ( l_matrices )
 		{
-			p_pipeline.Apply();
-			FrameVariableBufferSPtr l_matrices = p_program.FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-
-			if ( l_matrices )
-			{
-				p_pipeline.ApplyProjection( *l_matrices );
-			}
-
-			p_program.Bind();
-
-			if ( p_texture.Bind( 0 ) )
-			{
-				p_geometryBuffers.Draw( uint32_t( m_arrayVertex.size() ), 0 );
-				p_texture.Unbind( 0 );
-			}
-
-			p_program.Unbind();
+			p_pipeline.ApplyProjection( *l_matrices );
 		}
+
+		p_pipeline.GetProgram().Bind();
+
+		if ( p_texture.Bind( 0 ) )
+		{
+			p_geometryBuffers.Draw( uint32_t( m_arrayVertex.size() ), 0 );
+			p_texture.Unbind( 0 );
+		}
+
+		p_pipeline.GetProgram().Unbind();
 	}
 
 	ShaderProgramSPtr Context::DoCreateProgram( bool p_depth )

@@ -47,12 +47,10 @@ namespace Reinhard
 		return std::make_shared< ToneMapping >( p_engine, p_parameters );
 	}
 
-	String ToneMapping::DoCreate()
+	String ToneMapping::DoCreate( FrameVariableBuffer & p_ubo )
 	{
-		auto l_configBuffer = m_program->FindFrameVariableBuffer( ToneMapping::HdrConfig );
-		REQUIRE( l_configBuffer != nullptr );
-		l_configBuffer->CreateVariable( *m_program, FrameVariableType::Float, Gamma );
-		l_configBuffer->GetVariable( Gamma, m_gammaVar );
+		p_ubo.CreateVariable( FrameVariableType::Float, Gamma );
+		p_ubo.GetVariable( Gamma, m_gammaVar );
 
 		String l_pxl;
 		{

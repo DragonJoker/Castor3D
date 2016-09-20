@@ -128,7 +128,7 @@ namespace Castor3D
 	\brief		Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
 	enum class ProgramFlag
-		: uint32_t
+		: uint8_t
 	{
 		//!\~english	Program using instanciation.
 		//!\~french		Programme utilisant l'instanciation.

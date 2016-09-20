@@ -7,6 +7,7 @@
 #include "Scene/SceneNode.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 #include <Math/TransformationMatrix.hpp>
 
@@ -34,7 +35,8 @@ namespace Castor3D
 					    , DepthStencilState && p_dsState
 					    , RasteriserState && p_rsState
 					    , BlendState && p_blState
-					    , MultisampleState && p_msState )
+					    , MultisampleState && p_msState
+						, ShaderProgram & p_program )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_mtxView{ 1 }
 		, m_mtxModel{ 1 }
@@ -44,11 +46,17 @@ namespace Castor3D
 		, m_rsState{ std::move( p_rsState ) }
 		, m_blState{ std::move( p_blState ) }
 		, m_msState{ std::move( p_msState ) }
+		, m_program{ p_program }
 	{
 	}
 
 	Pipeline::~Pipeline()
 	{
+	}
+
+	void Pipeline::Cleanup()
+	{
+		m_program.Cleanup();
 	}
 
 	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )

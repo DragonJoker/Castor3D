@@ -56,7 +56,8 @@ namespace GlRender
 		Castor3D::PipelineUPtr CreatePipeline( Castor3D::DepthStencilState && p_dsState
 											   , Castor3D::RasteriserState && p_rsState
 											   , Castor3D::BlendState && p_bdState
-											   , Castor3D::MultisampleState && p_msState )override;
+											   , Castor3D::MultisampleState && p_msState
+											   , Castor3D::ShaderProgram & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
@@ -81,10 +82,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
 		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
-		 */
-		Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
 		 */

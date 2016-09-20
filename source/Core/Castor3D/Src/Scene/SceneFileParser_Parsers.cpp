@@ -1685,7 +1685,7 @@ namespace Castor3D
 			Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
 			Parameters l_parameters;
 
-			if ( p_params.size() > 1 )
+			if ( p_params.size() > 2 )
 			{
 				String l_tmp;
 				StringArray l_arrayStrParams = string::split( p_params[2]->Get( l_tmp ), cuT( "-" ), 20, false );
@@ -1750,6 +1750,7 @@ namespace Castor3D
 					for ( auto l_submesh : l_mesh )
 					{
 						auto & l_submeshAnim = l_animation.GetSubmesh( l_index );
+						std::clog << "Source: " << l_submeshAnim.GetSubmesh().GetPointsCount() << " - Anim: " << l_submesh->GetPointsCount() << std::endl;
 
 						if ( l_submesh->GetPointsCount() == l_submeshAnim.GetSubmesh().GetPointsCount() )
 						{
@@ -2734,16 +2735,11 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
+			p_params[0]->Get( l_parsingContext->strName );
 
-			if ( l_name.empty() )
+			if ( l_parsingContext->strName.empty() )
 			{
 				PARSING_ERROR( cuT( "Invalid empty name" ) );
-			}
-			else
-			{
-				l_parsingContext->pFrameVariableBuffer = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( l_name );
 			}
 		}
 	}
@@ -2830,7 +2826,7 @@ namespace Castor3D
 
 			if ( l_value )
 			{
-				l_parsingContext->pShaderProgram->AddFrameVariableBuffer( l_parsingContext->pFrameVariableBuffer, l_value );
+				l_parsingContext->pFrameVariableBuffer = &l_parsingContext->pShaderProgram->CreateFrameVariableBuffer( l_parsingContext->strName, l_value );
 			}
 			else
 			{
@@ -2976,7 +2972,7 @@ namespace Castor3D
 		{
 			if ( !l_parsingContext->pFrameVariable )
 			{
-				l_parsingContext->pFrameVariable = l_parsingContext->pFrameVariableBuffer->CreateVariable( *l_parsingContext->pShaderProgram.get(), FrameVariableType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
+				l_parsingContext->pFrameVariable = l_parsingContext->pFrameVariableBuffer->CreateVariable( FrameVariableType( l_uiType ), l_parsingContext->strName2, l_parsingContext->uiUInt32 );
 			}
 			else
 			{

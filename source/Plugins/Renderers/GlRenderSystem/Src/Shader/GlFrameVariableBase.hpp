@@ -33,7 +33,7 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		GlFrameVariableBase( OpenGl & p_gl, uint32_t * p_programId );
+		GlFrameVariableBase( OpenGl & p_gl, GlShaderProgram const & p_program );
 		virtual ~GlFrameVariableBase();
 		virtual void Bind() = 0;
 
@@ -50,7 +50,7 @@ namespace GlRender
 
 	protected:
 		uint32_t m_glName;
-		uint32_t * m_parentProgramId;
+		GlShaderProgram const & m_program;
 		bool m_presentInProgram;
 	};
 }

@@ -85,19 +85,18 @@ namespace Bloom
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 
-		Castor3D::ShaderProgramWPtr m_hiPassProgram;
+		Castor3D::PipelineUPtr m_hiPassPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;
 
-		Castor3D::ShaderProgramWPtr m_filterProgram;
+		Castor3D::PipelineUPtr m_filterPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_filterMapDiffuse;
 		Castor3D::OneFloatFrameVariableSPtr m_filterCoefficients;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetX;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetY;
 
-		Castor3D::ShaderProgramWPtr m_combineProgram;
+		Castor3D::PipelineUPtr m_combinePipeline;
 
 		Castor3D::Viewport m_viewport;
-		Castor3D::PipelineSPtr m_pipeline;
 		Castor3D::BufferDeclaration m_declaration;
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
 		Castor3D::VertexBufferSPtr m_vertexBuffer;

@@ -102,13 +102,15 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Creates tone mapping shader, and the shader variables.
-		 *\return		The pixel shader program.
+		 *\brief			Creates tone mapping shader, and the shader variables.
+		 *\param[in,out]	The shader program UBO to create variables.
+		 *\return			The pixel shader source.
 		 *\~french
-		 *\brief		Crée le shader de mappage de tons, ainsi que les variables shader.
-		 *\return		Le pixel shader program.
+		 *\brief			Crée le shader de mappage de tons, ainsi que les variables shader.
+		 *\param[in,out]	Le tampon de variables shader, pour créer les variables.
+		 *\return			Le source du pixel shader.
 		 */
-		C3D_API virtual Castor::String DoCreate() = 0;
+		C3D_API virtual Castor::String DoCreate( FrameVariableBuffer & p_ubo ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the tone mapping shader variables.
@@ -135,7 +137,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The Reinhard tone mapping shader program.	\~french Le shader de mappage de ton de Reinhard
-		ShaderProgramSPtr m_program;
+		PipelineUPtr m_pipeline;
 		//!\~english The exposure value.	\~french La valeur d'exposition.
 		float m_exposure;
 		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.

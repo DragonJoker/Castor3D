@@ -77,23 +77,6 @@ namespace Castor3D
 			}
 		} }
 	{
-		BlendState l_blState;
-		l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-		l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-		l_blState.SetRgbSrcBlend( BlendOperand::SrcAlpha );
-		l_blState.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
-		l_blState.EnableBlend( true );
-
-		MultisampleState l_msState;
-		l_msState.EnableAlphaToCoverage( false );
-
-		DepthStencilState l_dsState;
-		l_dsState.SetDepthTest( false );
-
-		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::Back );
-
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -128,12 +111,16 @@ namespace Castor3D
 			m_panelVertexBuffer->Create();
 			m_panelVertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
-			auto l_program = DoGetPanelProgram( 0 );
-			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-			m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
-			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
-			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-			m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			{
+				auto & l_pipeline = DoGetPanelPipeline( 0 );
+				m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+				m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			}
+			{
+				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::Colour ) );
+				m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+				m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			}
 		}
 
 		if ( !m_borderVertexBuffer )
@@ -153,12 +140,16 @@ namespace Castor3D
 			m_borderVertexBuffer->Create();
 			m_borderVertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
-			auto l_program = DoGetPanelProgram( 0 );
-			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-			m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
-			l_program = DoGetPanelProgram( uint32_t( TextureChannel::Colour ) );
-			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-			m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			{
+				auto & l_pipeline = DoGetPanelPipeline( 0 );
+				m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+				m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			}
+			{
+				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::Colour ) );
+				m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+				m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			}
 		}
 
 		// Create one text overlays buffer
@@ -177,14 +168,14 @@ namespace Castor3D
 			l_vertex.reset();
 		}
 
-		for ( auto l_pair : m_programs )
+		for ( auto & l_pair : m_pipelines )
 		{
 			l_pair.second->Cleanup();
 		}
 
-		m_programs.clear();
-		m_mapPanelPrograms.clear();
-		m_mapTextPrograms.clear();
+		m_pipelines.clear();
+		m_mapPanelNodes.clear();
+		m_mapTextNodes.clear();
 
 		if ( m_panelVertexBuffer )
 		{
@@ -306,15 +297,20 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayRenderer::BeginRender( Size const & p_size )
+	void OverlayRenderer::BeginRender( Viewport const & p_viewport )
 	{
-		if ( m_size != p_size )
+		auto l_size = p_viewport.GetSize();
+
+		if ( m_size != l_size )
 		{
 			m_sizeChanged = true;
-			m_size = p_size;
+			m_size = l_size;
 		}
 
-		m_pipeline->Apply();
+		for ( auto & l_it : m_pipelines )
+		{
+			l_it.second->SetProjectionMatrix( p_viewport.GetProjection() );
+		}
 	}
 
 	void OverlayRenderer::EndRender()
@@ -322,24 +318,24 @@ namespace Castor3D
 		m_sizeChanged = false;
 	}
 
-	RenderNode & OverlayRenderer::DoGetPanelProgram( Pass & p_pass )
+	RenderNode & OverlayRenderer::DoGetPanelNode( Pass & p_pass )
 	{
-		auto l_it = m_mapPanelPrograms.find( &p_pass );
+		auto l_it = m_mapPanelNodes.find( &p_pass );
 
-		if ( l_it == m_mapPanelPrograms.end() )
+		if ( l_it == m_mapPanelNodes.end() )
 		{
-			auto l_program = DoGetPanelProgram( p_pass.GetTextureFlags() );
+			auto & l_pipeline = DoGetPanelPipeline( p_pass.GetTextureFlags() );
 
-			auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
-			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
+			auto l_sceneBuffer = l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			auto l_passBuffer = l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferPass );
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
 
-			l_it = m_mapPanelPrograms.insert( { &p_pass, RenderNode
+			l_it = m_mapPanelNodes.insert( { &p_pass, RenderNode
 				{
 					p_pass,
-					*l_program,
-					*l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+					l_pipeline,
+					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
 					*l_passBuffer,
 					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
 					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
@@ -349,30 +345,30 @@ namespace Castor3D
 					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
 				}
 			} ).first;
-			p_pass.BindToNode( l_it->second );
+			p_pass.FillRenderNode( l_it->second );
 		}
 
 		return l_it->second;
 	}
 
-	RenderNode & OverlayRenderer::DoGetTextProgram( Pass & p_pass )
+	RenderNode & OverlayRenderer::DoGetTextNode( Pass & p_pass )
 	{
-		auto l_it = m_mapTextPrograms.find( &p_pass );
+		auto l_it = m_mapTextNodes.find( &p_pass );
 
-		if ( l_it == m_mapTextPrograms.end() )
+		if ( l_it == m_mapTextNodes.end() )
 		{
-			auto l_program = DoGetTextProgram( p_pass.GetTextureFlags() );
+			auto & l_pipeline = DoGetTextPipeline( p_pass.GetTextureFlags() );
 
-			auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
-			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
+			auto l_sceneBuffer = l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			auto l_passBuffer = l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferPass );
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
 
-			l_it = m_mapTextPrograms.insert( { &p_pass, RenderNode
+			l_it = m_mapTextNodes.insert( { &p_pass, RenderNode
 				{
 					p_pass,
-					*l_program,
-					*l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+					l_pipeline,
+					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
 					*l_passBuffer,
 					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
 					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
@@ -382,64 +378,81 @@ namespace Castor3D
 					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
 				}
 			} ).first;
-			p_pass.BindToNode( l_it->second );
+			p_pass.FillRenderNode( l_it->second );
 		}
 
 		return l_it->second;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_flags )
+	Pipeline & OverlayRenderer::DoGetPanelPipeline( uint16_t p_textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_flags, TextureChannel::Ambient );
-		RemFlag( p_flags, TextureChannel::Diffuse );
-		RemFlag( p_flags, TextureChannel::Normal );
-		RemFlag( p_flags, TextureChannel::Specular );
-		RemFlag( p_flags, TextureChannel::Gloss );
-		RemFlag( p_flags, TextureChannel::Height );
-		RemFlag( p_flags, TextureChannel::Emissive );
+		RemFlag( p_textureFlags, TextureChannel::Ambient );
+		RemFlag( p_textureFlags, TextureChannel::Diffuse );
+		RemFlag( p_textureFlags, TextureChannel::Normal );
+		RemFlag( p_textureFlags, TextureChannel::Specular );
+		RemFlag( p_textureFlags, TextureChannel::Gloss );
+		RemFlag( p_textureFlags, TextureChannel::Height );
+		RemFlag( p_textureFlags, TextureChannel::Emissive );
 
 		// Get shader
-		return DoGetProgram( p_flags );
+		return DoGetPipeline( p_textureFlags );
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_flags )
+	Pipeline & OverlayRenderer::DoGetTextPipeline( uint16_t p_textureFlags )
 	{
 		// Remove unwanted flags
-		RemFlag( p_flags, TextureChannel::Ambient );
-		RemFlag( p_flags, TextureChannel::Diffuse );
-		RemFlag( p_flags, TextureChannel::Normal );
-		RemFlag( p_flags, TextureChannel::Specular );
-		RemFlag( p_flags, TextureChannel::Gloss );
-		RemFlag( p_flags, TextureChannel::Height );
-		RemFlag( p_flags, TextureChannel::Emissive );
-		AddFlag( p_flags, TextureChannel::Text );
+		RemFlag( p_textureFlags, TextureChannel::Ambient );
+		RemFlag( p_textureFlags, TextureChannel::Diffuse );
+		RemFlag( p_textureFlags, TextureChannel::Normal );
+		RemFlag( p_textureFlags, TextureChannel::Specular );
+		RemFlag( p_textureFlags, TextureChannel::Gloss );
+		RemFlag( p_textureFlags, TextureChannel::Height );
+		RemFlag( p_textureFlags, TextureChannel::Emissive );
+		AddFlag( p_textureFlags, TextureChannel::Text );
 
 		// Get shader
-		return DoGetProgram( p_flags );
+		return DoGetPipeline( p_textureFlags );
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoGetProgram( uint32_t p_flags )
+	Pipeline & OverlayRenderer::DoGetPipeline( uint16_t p_textureFlags )
 	{
-		auto l_it = m_programs.find( p_flags );
+		auto l_it = m_pipelines.find( p_textureFlags );
 
-		if ( l_it == m_programs.end() )
+		if ( l_it == m_pipelines.end() )
 		{
 			// Since it does not exist yet, create it and initialise it
-			auto l_program = DoCreateOverlayProgram( p_flags );
+			auto l_program = DoCreateOverlayProgram( p_textureFlags );
 
 			if ( l_program )
 			{
 				l_program->Initialise();
-				l_it = m_programs.insert( { p_flags, l_program } ).first;
+				BlendState l_blState;
+				l_blState.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+				l_blState.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+				l_blState.SetRgbSrcBlend( BlendOperand::SrcAlpha );
+				l_blState.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				l_blState.EnableBlend( true );
+
+				MultisampleState l_msState;
+				l_msState.EnableAlphaToCoverage( false );
+
+				DepthStencilState l_dsState;
+				l_dsState.SetDepthTest( false );
+
+				RasteriserState l_rsState;
+				l_rsState.SetCulledFaces( Culling::Back );
+
+				auto l_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program );
+				l_it = m_pipelines.insert( { p_textureFlags, std::move( l_pipeline ) } ).first;
 			}
 			else
 			{
-				CASTOR_EXCEPTION( "Couldn't create an overaly shader program" );
+				CASTOR_EXCEPTION( "Couldn't create an overlay shader program" );
 			}
 		}
 
-		return l_it->second;
+		return *l_it->second;
 	}
 
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
@@ -450,12 +463,16 @@ namespace Castor3D
 		l_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
 		OverlayGeometryBuffers l_geometryBuffers;
-		auto l_program = DoGetTextProgram( 0 );
-		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-		l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
-		l_program = DoGetTextProgram( uint32_t( TextureChannel::Colour ) );
-		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-		l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		{
+			auto & l_pipeline = DoGetTextPipeline( 0 );
+			l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+			l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		}
+		{
+			auto & l_pipeline = DoGetTextPipeline( uint32_t( TextureChannel::Colour ) );
+			l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
+			l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		}
 
 		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
 		m_textsGeometryBuffers.push_back( l_geometryBuffers );
@@ -464,22 +481,23 @@ namespace Castor3D
 
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
-		RenderNode & l_node = DoGetPanelProgram( p_pass );
-		m_pipeline->ApplyProjection( l_node.m_matrixUbo );
+		RenderNode & l_node = DoGetPanelNode( p_pass );
+		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 		p_pass.FillShaderVariables( l_node );
-		l_node.m_program.Bind();
+		l_node.m_pipeline.Apply();
+		l_node.m_pipeline.GetProgram().Bind();
 		p_pass.Render2D();
 		p_geometryBuffers.Draw( p_count, 0 );
 		p_pass.EndRender();
-		l_node.m_program.Unbind();
+		l_node.m_pipeline.GetProgram().Unbind();
 	}
 
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
 	{
-		RenderNode & l_node = DoGetTextProgram( p_pass );
-		m_pipeline->ApplyProjection( l_node.m_matrixUbo );
+		RenderNode & l_node = DoGetTextNode( p_pass );
+		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 
-		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, ShaderType::Pixel );
+		OneIntFrameVariableSPtr l_textureVariable = l_node.m_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, ShaderType::Pixel );
 
 		if ( l_textureVariable )
 		{
@@ -487,7 +505,8 @@ namespace Castor3D
 		}
 
 		p_pass.FillShaderVariables( l_node );
-		l_node.m_program.Bind();
+		l_node.m_pipeline.Apply();
+		l_node.m_pipeline.GetProgram().Bind();
 		p_pass.Render2D();
 		p_texture.Bind( 0 );
 		p_sampler.Bind( 0 );
@@ -496,7 +515,7 @@ namespace Castor3D
 		p_texture.Unbind( 0 );
 
 		p_pass.EndRender();
-		l_node.m_program.Unbind();
+		l_node.m_pipeline.GetProgram().Unbind();
 	}
 
 	void OverlayRenderer::DoDrawItem( Material & p_material, OverlayRenderer::OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count )
@@ -540,7 +559,7 @@ namespace Castor3D
 		return l_geometryBuffers;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( uint32_t p_flags )
+	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( uint16_t p_textureFlags )
 	{
 		using namespace GLSL;
 
@@ -559,22 +578,22 @@ namespace Castor3D
 
 			// Shader inputs
 			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
-			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( p_flags, TextureChannel::Text ) );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_flags, TextureChannel::Colour ) );
+			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CheckFlag( p_textureFlags, TextureChannel::Text ) );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CheckFlag( p_textureFlags, TextureChannel::Colour ) );
 
 			// Shader outputs
-			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_flags, TextureChannel::Text ) );
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_flags, TextureChannel::Colour ) );
+			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::Text ) );
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::Colour ) );
 			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				if ( CheckFlag( p_flags, TextureChannel::Text ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Text ) )
 				{
 					vtx_text = text;
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 				{
 					vtx_texture = texture;
 				}
@@ -593,11 +612,11 @@ namespace Castor3D
 			UBO_PASS( l_writer );
 
 			// Shader inputs
-			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_flags, TextureChannel::Text ) );
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_flags, TextureChannel::Colour ) );
-			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_flags, TextureChannel::Text ) );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_flags, TextureChannel::Colour ) );
-			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_flags, TextureChannel::Opacity ) );
+			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CheckFlag( p_textureFlags, TextureChannel::Text ) );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CheckFlag( p_textureFlags, TextureChannel::Colour ) );
+			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CheckFlag( p_textureFlags, TextureChannel::Text ) );
+			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) );
+			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) );
 
 			// Shader outputs
 			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
@@ -607,17 +626,17 @@ namespace Castor3D
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
 				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 
-				if ( CheckFlag( p_flags, TextureChannel::Text ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Text ) )
 				{
 					l_fAlpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).SWIZZLE_R;
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Colour ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 				{
 					l_v4Ambient = texture( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
 				}
 
-				if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
+				if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 				{
 					l_fAlpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).SWIZZLE_R;
 				}
@@ -628,17 +647,17 @@ namespace Castor3D
 			l_strPs = l_writer.Finalise();
 		}
 
-		if ( CheckFlag( p_flags, TextureChannel::Text ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::Text ) )
 		{
 			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, ShaderType::Pixel );
 		}
 
-		if ( CheckFlag( p_flags, TextureChannel::Colour ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
 		{
 			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapColour, ShaderType::Pixel );
 		}
 
-		if ( CheckFlag( p_flags, TextureChannel::Opacity ) )
+		if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 		{
 			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, ShaderType::Pixel );
 		}

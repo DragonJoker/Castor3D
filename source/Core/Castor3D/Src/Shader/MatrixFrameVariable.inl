@@ -364,7 +364,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram * p_program )
+	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram & p_program )
 		:	TFrameVariable< T >( p_program )
 	{
 		this->m_values = new T[Rows * Columns];
@@ -374,7 +374,7 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
+	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		:	TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[Rows * Columns * p_occurences];

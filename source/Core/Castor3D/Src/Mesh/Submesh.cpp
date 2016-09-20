@@ -408,7 +408,7 @@ namespace Castor3D
 			l_data += l_stride;
 		} );
 
-		m_programFlags |= uint32_t( ProgramFlag::Skinning );
+		AddFlag( m_programFlags, ProgramFlag::Skinning );
 	}
 
 	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
@@ -875,7 +875,7 @@ namespace Castor3D
 
 	uint32_t Submesh::Ref( MaterialSPtr p_material )
 	{
-		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
+		auto l_it = m_instanceCount.find( p_material );
 
 		if ( l_it == m_instanceCount.end() )
 		{
@@ -888,10 +888,10 @@ namespace Castor3D
 
 	uint32_t Submesh::UnRef( MaterialSPtr p_material )
 	{
-		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
+		auto l_it = m_instanceCount.find( p_material );
 		uint32_t l_return{ 0u };
 
-		if ( l_it == m_instanceCount.end() )
+		if ( l_it != m_instanceCount.end() )
 		{
 			l_return = l_it->second;
 
@@ -912,7 +912,7 @@ namespace Castor3D
 	uint32_t Submesh::GetRefCount( MaterialSPtr p_material )const
 	{
 		uint32_t l_return = 0;
-		std::map< MaterialSPtr, uint32_t >::const_iterator l_it = m_instanceCount.find( p_material );
+		auto l_it = m_instanceCount.find( p_material );
 
 		if ( l_it != m_instanceCount.end() )
 		{

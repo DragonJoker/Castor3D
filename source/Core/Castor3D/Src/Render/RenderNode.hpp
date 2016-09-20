@@ -43,9 +43,9 @@ namespace Castor3D
 		//!\~english	The pass.
 		//!\~french		La passe.
 		Pass & m_pass;
-		//!\~english	The shader program.
-		//!\~french		Le programme shader.
-		ShaderProgram & m_program;
+		//!\~english	The rendering pipeline.
+		//!\~french		Le pipeline de rendu.
+		Pipeline & m_pipeline;
 		//!\~english	The matrix UBO.
 		//!\~french		L'UBO de matrices.
 		FrameVariableBuffer & m_matrixUbo;
@@ -111,29 +111,25 @@ namespace Castor3D
 		 *\brief		Render function.
 		 *\param[in]	p_scene		The rendered scene.
 		 *\param[in]	p_camera	The camera used to render the scene.
-		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_scene		La scène rendue.
 		 *\param[in]	p_camera	La caméra utilisée pour dessiner la scène.
-		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline ) = 0;
+		C3D_API virtual void Render( Scene const & p_scene, Camera const & p_camera ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
 		 *\param[in]	p_scene				The rendered scene.
 		 *\param[in]	p_camera			The camera used to render the scene.
-		 *\param[in]	p_pipeline			The render pipeline.
 		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
 		 *\~french
 		 *\brief		Active la passe donnée pour le noeud de rendu.
 		 *\param[in]	p_scene				La scène rendue.
 		 *\param[in]	p_camera			La caméra utilisée pour dessiner la scène.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API virtual void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags ) = 0;
+		C3D_API virtual void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
@@ -177,7 +173,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
 		 */
-		C3D_API void Render( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline )override;
+		C3D_API void Render( Scene const & p_scene, Camera const & p_camera )override;
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
 		 */
@@ -212,7 +208,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -248,7 +244,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -288,7 +284,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, Pipeline & p_pipeline, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
@@ -309,26 +305,27 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramSPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByProgram );
+	DECLARE_MAP( PipelineRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByPipeline );
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramSPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByProgram );
+	DECLARE_MAP( PipelineRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByPipeline );
 	//!\~english	Shader program sorted BillboardRenderNodesMap map.
 	//!\~french		Map de BillboardRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramSPtr, BillboardRenderNodeArray, BillboardRenderNodesByProgram );
+	DECLARE_MAP( PipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
 
 	//!\~english	Submesh sorted StaticGeometryRenderNodeArray (for instantiation).
 	//!\~french		Map StaticGeometryRenderNodeArray, triés par sous-maillage (pour l'instanciation).
-	DECLARE_MAP( SubmeshSPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
+	DECLARE_MAP( SubmeshRPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
 	//!\~english	Pass sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par passe.
 	template< typename T >
 	struct TypeRenderNodesByPassMap
 	{
 	public:
-		using key_type = typename std::map< PassSPtr, T >::key_type;
-		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
-		using value_type = typename std::map< PassSPtr, T >::value_type;
+		using pass_ptr = PassRPtr;
+		using key_type = typename std::map< pass_ptr, T >::key_type;
+		using mapped_type = typename std::map< pass_ptr, T >::mapped_type;
+		using value_type = typename std::map< pass_ptr, T >::value_type;
 
 		inline auto begin()const
 		{
@@ -367,7 +364,7 @@ namespace Castor3D
 
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( ShaderProgramSPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByProgram );
+	DECLARE_MAP( PipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
 
 	//@}
 }

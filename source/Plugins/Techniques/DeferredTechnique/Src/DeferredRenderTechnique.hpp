@@ -150,25 +150,25 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
 		 *\~french
 		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
 		 */
-		Castor::String DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		Castor::String DoGetLightPassVertexShaderSource( uint8_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of TextureChannel
+		 *\param[in]	p_textureFlags	A combination of TextureChannel
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de TextureChannel
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 */
-		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
+		Castor::String DoGetLightPassPixelShaderSource( uint16_t p_textureFlags )const;
 
 	private:
 		static Castor::String RenderTechnique::GetTextureName( DsTexture p_texture );
