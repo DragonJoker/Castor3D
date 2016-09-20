@@ -444,7 +444,7 @@ namespace Castor3D
 				l_rsState.SetCulledFaces( Culling::Back );
 
 				auto l_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program );
-				l_it = m_pipelines.insert( { p_textureFlags, std::move( l_pipeline ) } ).first;
+				l_it = m_pipelines.emplace( p_textureFlags, std::move( l_pipeline ) ).first;
 			}
 			else
 			{
