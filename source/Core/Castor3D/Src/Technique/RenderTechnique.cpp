@@ -662,11 +662,11 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::Back );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_opaquePipelines.insert( { p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																										, std::move( l_rsState )
-																										, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																										, std::move( l_msState )
-																										, p_program ) } ).first;
+			l_it = m_opaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																									   , std::move( l_rsState )
+																									   , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																									   , std::move( l_msState )
+																									   , p_program ) ).first;
 		}
 
 		return *l_it->second;
@@ -685,11 +685,11 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_frontTransparentPipelines.insert( { p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																												  , std::move( l_rsState )
-																												  , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																												  , std::move( l_msState )
-																												  , p_program ) } ).first;
+			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																												 , std::move( l_rsState )
+																												 , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																												 , std::move( l_msState )
+																												 , p_program ) ).first;
 		}
 
 		return *l_it->second;
@@ -708,11 +708,11 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_backTransparentPipelines.insert( { p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																												 , std::move( l_rsState )
-																												 , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																												 , std::move( l_msState )
-																												 , p_program ) } ).first;
+			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																												, std::move( l_rsState )
+																												, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																												, std::move( l_msState )
+																												, p_program ) ).first;
 		}
 
 		return *l_it->second;
