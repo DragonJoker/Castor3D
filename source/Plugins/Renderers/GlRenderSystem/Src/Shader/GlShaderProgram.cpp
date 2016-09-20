@@ -136,207 +136,212 @@ namespace GlRender
 		return l_return;
 	}
 
+	FrameVariableBufferSPtr GlShaderProgram::DoCreateFrameVariableBuffer( Castor::String const & p_name )
+	{
+		return std::make_shared< GlFrameVariableBuffer >( GetOpenGl(), p_name, *this, *GetRenderSystem() );
+	}
+
 	std::shared_ptr< FrameVariable > GlShaderProgram::DoCreateVariable( FrameVariableType p_type, int p_occurences )
 	{
 		switch ( p_type )
 		{
 		case FrameVariableType::Bool:
-			return std::make_shared< GlOneFrameVariable< bool > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< bool > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Int:
-			return std::make_shared< GlOneFrameVariable< int > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< int > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::UInt:
-			return std::make_shared< GlOneFrameVariable< unsigned int > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< unsigned int > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Float:
-			return std::make_shared< GlOneFrameVariable< float > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< float > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Double:
-			return std::make_shared< GlOneFrameVariable< double > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< double > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Sampler:
-			return std::make_shared< GlOneFrameVariable< int > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlOneFrameVariable< int > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec2b:
-			return std::make_shared< GlPointFrameVariable< bool, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< bool, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec3b:
-			return std::make_shared< GlPointFrameVariable< bool, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< bool, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec4b:
-			return std::make_shared< GlPointFrameVariable< bool, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< bool, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec2i:
-			return std::make_shared< GlPointFrameVariable< int, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< int, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec3i:
-			return std::make_shared< GlPointFrameVariable< int, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< int, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec4i:
-			return std::make_shared< GlPointFrameVariable< int, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< int, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec2ui:
-			return std::make_shared< GlPointFrameVariable< unsigned int, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< unsigned int, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec3ui:
-			return std::make_shared< GlPointFrameVariable< unsigned int, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< unsigned int, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec4ui:
-			return std::make_shared< GlPointFrameVariable< unsigned int, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< unsigned int, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec2f:
-			return std::make_shared< GlPointFrameVariable< float, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< float, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec3f:
-			return std::make_shared< GlPointFrameVariable< float, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< float, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec4f:
-			return std::make_shared< GlPointFrameVariable< float, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< float, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec2d:
-			return std::make_shared< GlPointFrameVariable< double, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< double, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec3d:
-			return std::make_shared< GlPointFrameVariable< double, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< double, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Vec4d:
-			return std::make_shared< GlPointFrameVariable< double, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlPointFrameVariable< double, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x2b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 2, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 2, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x3b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 2, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 2, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x4b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 2, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 2, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x2b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 3, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 3, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x3b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 3, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 3, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x4b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 3, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 3, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x2b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 4, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 4, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x3b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 4, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 4, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x4b:
-			return std::make_shared< GlMatrixFrameVariable< bool, 4, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< bool, 4, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x2i:
-			return std::make_shared< GlMatrixFrameVariable< int, 2, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 2, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x3i:
-			return std::make_shared< GlMatrixFrameVariable< int, 2, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 2, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x4i:
-			return std::make_shared< GlMatrixFrameVariable< int, 2, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 2, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x2i:
-			return std::make_shared< GlMatrixFrameVariable< int, 3, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 3, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x3i:
-			return std::make_shared< GlMatrixFrameVariable< int, 3, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 3, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x4i:
-			return std::make_shared< GlMatrixFrameVariable< int, 3, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 3, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x2i:
-			return std::make_shared< GlMatrixFrameVariable< int, 4, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 4, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x3i:
-			return std::make_shared< GlMatrixFrameVariable< int, 4, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 4, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x4i:
-			return std::make_shared< GlMatrixFrameVariable< int, 4, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< int, 4, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x2ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x3ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x4ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 2, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x2ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x3ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x4ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 3, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x2ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x3ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x4ui:
-			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< unsigned int, 4, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x2f:
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x3f:
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x4f:
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x2f:
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x3f:
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x4f:
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x2f:
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x3f:
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x4f:
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x2d:
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x3d:
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat2x4d:
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x2d:
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x3d:
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat3x4d:
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x2d:
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x3d:
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( GetOpenGl(), p_occurences, *this );
 
 		case FrameVariableType::Mat4x4d:
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( GetOpenGl(), p_occurences, this );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( GetOpenGl(), p_occurences, *this );
 
 		default:
 			FAILURE( cuT( "Unsupported frame variable type" ) );

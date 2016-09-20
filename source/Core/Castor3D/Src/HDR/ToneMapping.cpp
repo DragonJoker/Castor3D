@@ -40,8 +40,8 @@ namespace Castor3D
 
 	bool ToneMapping::Initialise()
 	{
-		m_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
-		bool l_return = m_program != nullptr;
+		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
+		bool l_return = l_program != nullptr;
 
 		if ( l_return )
 		{
@@ -68,16 +68,22 @@ namespace Castor3D
 				l_vtx = l_writer.Finalise();
 			}
 
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
-			auto l_configBuffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ToneMapping::HdrConfig );
-			m_program->AddFrameVariableBuffer( l_configBuffer, MASK_SHADER_TYPE_PIXEL );
-			l_configBuffer->CreateVariable( *m_program, FrameVariableType::Float, ToneMapping::Exposure );
-			l_configBuffer->GetVariable( Exposure, m_exposureVar );
-			String l_pxl = DoCreate();
+			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			auto & l_configBuffer = l_program->CreateFrameVariableBuffer( ToneMapping::HdrConfig, MASK_SHADER_TYPE_PIXEL );
+			l_configBuffer.CreateVariable( FrameVariableType::Float, ToneMapping::Exposure );
+			l_configBuffer.GetVariable( Exposure, m_exposureVar );
+			auto l_pxl = DoCreate( l_configBuffer );
 			auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			m_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
-			m_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
-			l_return = m_program->Initialise();
+			l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
+			l_return = l_program->Initialise();
+		}
+
+		if ( l_return )
+		{
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthTest( false );
+			m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		return l_return;
@@ -88,10 +94,10 @@ namespace Castor3D
 		DoDestroy();
 		m_exposureVar.reset();
 
-		if ( m_program )
+		if ( m_pipeline )
 		{
-			m_program->Cleanup();
-			m_program.reset();
+			m_pipeline->Cleanup();
+			m_pipeline.reset();
 		}
 	}
 
@@ -99,7 +105,7 @@ namespace Castor3D
 	{
 		m_exposureVar->SetValue( m_exposure );
 		DoUpdate();
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, m_program );
+		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, *m_pipeline );
 	}
 
 	bool ToneMapping::WriteInto( Castor::TextFile & p_file )

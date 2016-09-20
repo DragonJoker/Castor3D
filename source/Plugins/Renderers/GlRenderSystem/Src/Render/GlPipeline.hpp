@@ -65,7 +65,8 @@ namespace GlRender
 					, Castor3D::DepthStencilState && p_dsState
 					, Castor3D::RasteriserState && p_rsState
 					, Castor3D::BlendState && p_bdState
-					, Castor3D::MultisampleState && p_msState );
+					, Castor3D::MultisampleState && p_msState
+					, Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.

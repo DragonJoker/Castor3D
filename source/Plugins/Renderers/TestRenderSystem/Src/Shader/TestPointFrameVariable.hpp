@@ -31,11 +31,11 @@ namespace TestRender
 {
 	template <typename T, uint32_t Count>
 	class TestPointFrameVariable
-		: public Castor3D::PointFrameVariable<T, Count>
+		: public Castor3D::PointFrameVariable< T, Count >
 	{
 	public:
-		TestPointFrameVariable( uint32_t p_occurences, TestShaderProgram * p_program = nullptr );
-		TestPointFrameVariable( Castor3D::PointFrameVariable<T, Count> * p_variable );
+		TestPointFrameVariable( uint32_t p_occurences, TestShaderProgram & p_program );
+		TestPointFrameVariable( Castor3D::PointFrameVariable< T, Count > & p_variable );
 		virtual ~TestPointFrameVariable();
 
 		virtual bool Initialise();

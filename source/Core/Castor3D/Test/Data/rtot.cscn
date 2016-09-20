@@ -1,7 +1,9 @@
+debug_overlays true
+
 scene "TextureScene"
 {
 	background_colour 0.5 0.0 0.0 1.0
-	ambient_light 0 0 0 1
+	ambient_light 0.5 0 0 1
 
 	material "Gold"
 	{
@@ -21,20 +23,10 @@ scene "TextureScene"
 		position 0.0 0.0 -550.0
 	}
 
-	scene_node "TextureGeometryNode"
-	{
-	}
-
 	scene_node "TextureSunLightNode"
 	{
-		scale 	0.01 0.01 0.01
+		position 0 -1 -1
 	}
-
-	scene_node "TextureSunLightNode2"
-	{
-		position  0.0 1.0 1.0
-	}
-
 	light "TextureSunLight"
 	{
 		parent "TextureSunLightNode"
@@ -43,12 +35,29 @@ scene "TextureScene"
 		intensity 0.0 0.8 1.0
 	}
 
+	scene_node "TextureSunLightNode2"
+	{
+		position  0 1 1
+	}
 	light "TextureSunLight2"
 	{
 		parent "TextureSunLightNode2"
 		type directional
 		colour 1.0 1.0 1.0
 		intensity 0.0 0.8 1.0
+	}
+
+	scene_node "TextureGeometryNode"
+	{
+	}
+	object "TextureGeometry"
+	{
+		parent "TextureGeometryNode"
+		mesh "TextureMesh"
+		{
+			type torus 40 40 30.0 60.0
+		}
+		material "Gold"
 	}
 
 	camera "TextureCamera"
@@ -64,34 +73,24 @@ scene "TextureScene"
 			far 20000
 		}
 	}
-
-	object "TextureGeometry"
-	{
-		parent "TextureGeometryNode"
-		mesh "TextureMesh"
-		{
-			type torus 40 40 30.0 60.0
-		}
-		material "Gold"
-	}
 }
 
 scene "FinalScene"
 {
 	background_colour 0.5 0.5 0.5 1.0
-	ambient_light 0.5 0.5 0.5 1.0
+	ambient_light 0 0 0 1
 
 	sampler "Linear"
 	{
-		min_filter		linear
-		mag_filter		linear
-		min_lod			-500.0
-		max_lod			500.0
-		lod_bias		0.0
-		u_wrap_mode		clamp_to_edge
-		v_wrap_mode		clamp_to_edge
-		w_wrap_mode		clamp_to_edge
-		border_colour	0.0 0.0 0.0 0.0
+		min_filter linear
+		mag_filter linear
+		min_lod -500.0
+		max_lod 500.0
+		lod_bias 0.0
+		u_wrap_mode clamp_to_edge
+		v_wrap_mode clamp_to_edge
+		w_wrap_mode clamp_to_edge
+		border_colour 0.0 0.0 0.0 0.0
 	}
 
 	material "RToTMaterial"
@@ -103,7 +102,6 @@ scene "FinalScene"
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.0 0.0 0.0 1.0
 			shininess 51.2
-			two_sided true
 			
 			texture_unit
 			{
@@ -121,27 +119,38 @@ scene "FinalScene"
 		}
 	}
 
-	scene_node "FinalGeometryNode"
+	scene_node "SunLightNode1"
 	{
+		position  0 1 1
 	}
-
-	scene_node "FinalSunLightNode"
+	light "SunLight1"
 	{
-		position  0.0 1.0 1.0
-	}
-
-	light "FinalSunLight"
-	{
-		parent "FinalSunLightNode"
+		parent "SunLightNode1"
 		type directional
-		colour 1.0 1.0 1.0
+		colour 1 1 1
 		intensity 0.0 0.8 1.0
 	}
 
-	object "FinalGeometry"
+	scene_node "SunLightNode2"
 	{
-		parent "FinalGeometryNode"
-		mesh "FinalMesh"
+		position  -1 -1 0
+	}
+	light "SunLight2"
+	{
+		parent "SunLightNode2"
+		type directional
+		colour 1 1 1
+		intensity 0.0 0.8 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+		position 0.0 0.0 0.0
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "Mesh"
 		{
 			type cube 25 25 25
 		}
@@ -175,5 +184,7 @@ scene "FinalScene"
 			scene "FinalScene"
 			camera "MainCamera"
 		}
+		fullscreen false
+		vsync true
 	}
 }

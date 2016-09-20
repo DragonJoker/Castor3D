@@ -128,15 +128,17 @@ namespace Castor3D
 		C3D_API virtual void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Adds a variable buffer to add
-		 *\param[in]	p_pVariableBuffer	The GPU variables buffer
-		 *\param[in]	p_shaderMask		MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
+		 *\brief		Creates a frame variable buffer.
+		 *\param[in]	p_name			The buffer name.
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound.
+		 *\return		The created or retrieved Frame variable buffer.
 		 *\~french
-		 *\brief		Crée une buffer de variables uniformes à ajouter.
-		 *\param[in]	p_pVariableBuffer	Le tampon de variables GPU
-		 *\param[in]	p_shaderMask		Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
+		 *\brief		Crée un tampon de variables uniformes.
+		 *\param[in]	p_name			Le nom du tampon.
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le tampon de variables créé ou récupéré.
 		 */
-		C3D_API void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask );
+		C3D_API FrameVariableBuffer & CreateFrameVariableBuffer( Castor::String const & p_name, uint64_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
@@ -539,6 +541,17 @@ namespace Castor3D
 		 *\param[in]	p_type		Le shader object concerné
 		 */
 		virtual ShaderObjectSPtr DoCreateObject( ShaderType p_type ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a FrameVariableBuffer.
+		 *\param[in]	p_name	The buffer name.
+		 *\return		The created FrameVariableBuffer.
+		 *\~french
+		 *\brief		Crée un FrameVariableBuffer.
+		 *\param[in]	p_name	Le nom du tampon.
+		 *\return		Le FrameVariableBuffer créé.
+		 */
+		virtual FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable

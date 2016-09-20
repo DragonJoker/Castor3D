@@ -91,7 +91,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
-		virtual Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
+		Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::ShaderType p_type )override;
+		/**
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateFrameVariableBuffer
+		 */
+		Castor3D::FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateVariable
 		 */

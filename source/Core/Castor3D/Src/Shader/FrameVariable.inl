@@ -28,7 +28,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T >
-	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program )
+	TFrameVariable< T >::TFrameVariable( ShaderProgram & p_program )
 		: FrameVariable( p_program )
 		, m_values( nullptr )
 		, m_bOwnBuffer( true )
@@ -37,7 +37,7 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
+	TFrameVariable< T >::TFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		: FrameVariable( p_program, p_occurences )
 		, m_values( nullptr )
 		, m_bOwnBuffer( true )

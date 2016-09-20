@@ -5,6 +5,7 @@
 #include "MaterialCache.hpp"
 #include "ShaderCache.hpp"
 
+#include "Render/Pipeline.hpp"
 #include "Render/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/SceneNode.hpp"
@@ -164,7 +165,7 @@ namespace Castor3D
 		, m_textureFlags{ 0 }
 		, m_bAutomaticShader{ true }
 		, m_alphaBlendMode{ BlendMode::Interpolative }
-		, m_colourBlendMode{ BlendMode::Interpolative }
+		, m_colourBlendMode{ BlendMode::NoBlend }
 		, m_texturesReduced{ false }
 	{
 	}
@@ -184,15 +185,15 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::BindToNode( RenderNode & p_node )
+	void Pass::FillRenderNode( RenderNode & p_node )
 	{
 		DoGetTextures( p_node );
 		DoGetBuffers( p_node );
 	}
 
-	void Pass::BindToNode( SceneRenderNode & p_node )
+	void Pass::FillRenderNode( SceneRenderNode & p_node )
 	{
-		BindToNode( p_node.m_node );
+		FillRenderNode( p_node.m_node );
 		DoGetBuffers( p_node );
 	}
 
@@ -395,7 +396,7 @@ namespace Castor3D
 
 		if ( l_unit )
 		{
-			auto l_variable = p_node.m_program.FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::Pixel );
+			auto l_variable = p_node.m_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( p_name, ShaderType::Pixel );
 
 			if ( l_variable )
 			{

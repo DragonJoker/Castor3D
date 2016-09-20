@@ -53,9 +53,10 @@ namespace TestRender
 	PipelineUPtr TestRenderSystem::CreatePipeline( DepthStencilState && p_dsState
 												   , RasteriserState && p_rsState
 												   , BlendState && p_bdState
-												   , MultisampleState && p_msState )
+												   , MultisampleState && p_msState
+												   , ShaderProgram & p_program )
 	{
-		return std::make_unique< TestPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ) );
+		return std::make_unique< TestPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program );
 	}
 
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -86,11 +87,6 @@ namespace TestRender
 	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		return std::make_unique< TestTextureStorage >( *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
-	}
-
-	FrameVariableBufferSPtr TestRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
-	{
-		return std::make_shared< TestFrameVariableBuffer >( p_name, *this );
 	}
 
 	FrameBufferSPtr TestRenderSystem::CreateFrameBuffer()

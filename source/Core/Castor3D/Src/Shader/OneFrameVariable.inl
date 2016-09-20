@@ -53,7 +53,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( ShaderProgram * p_program )
+	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program )
 		:	TFrameVariable< T >( p_program )
 	{
 		this->m_values = new T[1];
@@ -61,7 +61,7 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
+	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		:	TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences];

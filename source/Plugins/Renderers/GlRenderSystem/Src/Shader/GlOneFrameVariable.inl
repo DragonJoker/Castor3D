@@ -4,16 +4,16 @@
 namespace GlRender
 {
 	template< typename T >
-	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program )
+	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program )
 		: Castor3D::OneFrameVariable< T >( p_program, p_occurences )
-		, GlFrameVariableBase( p_gl, &p_program->GetGlName() )
+		, GlFrameVariableBase( p_gl, p_program )
 	{
 	}
 
 	template< typename T >
-	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > * p_variable )
-		: Castor3D::OneFrameVariable< T >( *p_variable )
-		, GlFrameVariableBase( p_gl, &static_cast< GlShaderProgram * >( &p_variable->GetProgram() )->GetGlName() )
+	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > & p_variable )
+		: Castor3D::OneFrameVariable< T >( p_variable )
+		, GlFrameVariableBase( p_gl, static_cast< GlShaderProgram & >( p_variable->GetProgram() ) )
 	{
 	}
 

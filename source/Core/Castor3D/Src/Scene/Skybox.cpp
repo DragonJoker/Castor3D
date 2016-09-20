@@ -185,16 +185,15 @@ namespace Castor3D
 	bool Skybox::Initialise()
 	{
 		REQUIRE( m_texture );
-		return DoInitialiseShader()
-			   && DoInitialiseTexture()
+		auto & l_program = DoInitialiseShader();
+		return DoInitialiseTexture()
 			   && DoInitialiseVertexBuffer()
-			   && DoInitialisePipeline();
+			   && DoInitialisePipeline( l_program );
 	}
 
 	void Skybox::Cleanup()
 	{
 		REQUIRE( m_texture );
-		m_pipeline.reset();
 		m_texture->Cleanup();
 		m_texture->Destroy();
 		m_texture.reset();
@@ -203,16 +202,16 @@ namespace Castor3D
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
+		m_pipeline->Cleanup();
+		m_pipeline.reset();
 	}
 
 	void Skybox::Render( Camera const & p_camera )
 	{
 		REQUIRE( m_texture );
-		REQUIRE( !m_program.expired() );
-		auto l_program = m_program.lock();
 		auto l_sampler = m_sampler.lock();
 
-		if ( l_program && l_sampler )
+		if ( l_sampler )
 		{
 			auto l_node = p_camera.GetParent();
 			matrix::set_translate( m_mtxModel, l_node->GetDerivedPosition() );
@@ -221,20 +220,19 @@ namespace Castor3D
 			m_pipeline->SetViewMatrix( p_camera.GetView() );
 			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
 			m_pipeline->Apply();
-			l_program->Bind();
+			m_pipeline->GetProgram().Bind();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 			l_sampler->Unbind( 0 );
 			m_texture->Unbind( 0 );
-			l_program->Unbind();
+			m_pipeline->GetProgram().Unbind();
 		}
 	}
 
-	bool Skybox::DoInitialiseShader()
+	ShaderProgram & Skybox::DoInitialiseShader()
 	{
 		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_program = l_program;
 
 		String l_vtx;
 		{
@@ -281,8 +279,10 @@ namespace Castor3D
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
-		m_matricesBuffer = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, uint32_t( ShaderType::Vertex ) );
-		return l_program->Initialise();
+		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, uint32_t( ShaderType::Vertex ) );
+		m_matricesBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		l_program->Initialise();
+		return *l_program;
 	}
 
 	bool Skybox::DoInitialiseVertexBuffer()
@@ -291,10 +291,8 @@ namespace Castor3D
 		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_vertexBuffer->Create();
-		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *m_program.lock() );
 
-		return m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw )
-			   && m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		return m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
 	}
 
 	bool Skybox::DoInitialiseTexture()
@@ -303,7 +301,7 @@ namespace Castor3D
 			   && m_texture->Initialise();
 	}
 
-	bool Skybox::DoInitialisePipeline()
+	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
 	{
 		DepthStencilState l_dsState;
 		l_dsState.SetDepthFunc( DepthFunc::LEqual );
@@ -311,7 +309,8 @@ namespace Castor3D
 		RasteriserState l_rsState;
 		l_rsState.SetCulledFaces( Culling::Front );
 
-		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{} );
-		return true;
+		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program );
+		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, m_pipeline->GetProgram() );
+		return m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
 	}
 }

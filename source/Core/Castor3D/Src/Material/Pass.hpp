@@ -115,24 +115,24 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds this pass to given render node.
+		 *\brief		Fills a render node's values from this pass.
 		 *\param[in]	p_node	The render node.
 		 *\~french
-		 *\brief		Lie cette passe au noeud de rendu donné.
+		 *\brief		Remplit un noeud de rendu avec les informations de cette passe.
 		 *\param[in]	p_node	Le noeud de rendu.
 		 *\return
 		 */
-		C3D_API void BindToNode( RenderNode & p_node );
+		C3D_API void FillRenderNode( RenderNode & p_node );
 		/**
 		 *\~english
-		 *\brief		Binds this pass to given render node.
+		 *\brief		Fills a render node's values from this pass.
 		 *\param[in]	p_node	The render node.
 		 *\~french
-		 *\brief		Lie cette passe au noeud de rendu donné.
+		 *\brief		Remplit un noeud de rendu avec les informations de cette passe.
 		 *\param[in]	p_node	Le noeud de rendu.
 		 *\return
 		 */
-		C3D_API void BindToNode( SceneRenderNode & p_node );
+		C3D_API void FillRenderNode( SceneRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\brief		Récupère la combinaison d'indicateurs de canal de texture
 		 *\return		La valeur
 		 */
-		inline uint32_t GetTextureFlags()const
+		inline uint16_t GetTextureFlags()const
 		{
 			return m_textureFlags;
 		}
@@ -732,7 +732,7 @@ namespace Castor3D
 		//!\~english Blend states	\~french Etats de blend
 		BlendStateSPtr m_pBlendState;
 		//!\~english Bitwise ORed TextureChannel	\~french Combinaison des TextureChannel affectés à une texture pour cette passe
-		uint32_t m_textureFlags;
+		uint16_t m_textureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
 		//!\~english The alpha blend mode \~french Le mode de mélange alpha

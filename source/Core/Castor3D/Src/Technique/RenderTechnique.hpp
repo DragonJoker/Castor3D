@@ -29,6 +29,8 @@ SOFTWARE.
 
 #include <Graphics/Rectangle.hpp>
 
+#include <unordered_map>
+
 #if !defined( NDEBUG )
 #	define DEBUG_BUFFERS 0
 #else
@@ -61,6 +63,36 @@ namespace Castor3D
 		using DistanceSortedNodeMap = std::multimap< double, std::reference_wrapper< ObjectRenderNodeBase > >;
 
 	protected:
+		struct PipelineFlags
+		{
+			uint16_t m_textureFlags;
+			uint8_t m_programFlags;
+			BlendMode m_colourBlendMode;
+			BlendMode m_alphaBlendMode;
+		};
+		struct PipelineFlagsHasher
+		{
+			size_t operator()( PipelineFlags const & p_flags )const
+			{
+				return size_t
+				{
+					( ( size_t( p_flags.m_textureFlags ) << 0 ) & 0x0000FFFF )
+					| ( ( size_t( p_flags.m_programFlags ) << 16 ) & 0x00FF0000 )
+					| ( ( size_t( p_flags.m_colourBlendMode ) << 24 ) & 0x0F000000 )
+					| ( ( size_t( p_flags.m_alphaBlendMode ) << 28 ) & 0xF0000000 )
+				};
+			}
+		};
+		struct PipelineFlagsComparer
+		{
+			size_t operator()( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )const
+			{
+				return p_lhs.m_textureFlags == p_rhs.m_textureFlags
+					&& p_lhs.m_programFlags == p_rhs.m_programFlags
+					&& p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
+					&& p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode;
+			}
+		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
@@ -196,12 +228,72 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_flags	A combination of ProgramFlag.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
-		 *\param[in]	p_flags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline matching the given flags.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\~french
+		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 */
+		C3D_API void PreparePipeline( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		/**
+		 *\~english
+		 *\brief		Retrieves the opaque pipeline matching the given flags.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\~french
+		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 */
+		C3D_API Pipeline & GetOpaquePipeline( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode );
+		/**
+		 *\~english
+		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\~french
+		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces avant supprimées.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 */
+		C3D_API Pipeline & GetTransparentPipelineFront( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		/**
+		 *\~english
+		 *\brief		Retrieves the transparent pipeline matching the given flags, for back face culling.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\~french
+		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 */
+		C3D_API Pipeline & GetTransparentPipelineBack( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.
@@ -257,7 +349,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, StaticGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -272,7 +364,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, AnimatedGeometryRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -287,7 +379,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -302,7 +394,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshStaticRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders objects sorted by distance to camera.
@@ -317,7 +409,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, DistanceSortedNodeMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -332,7 +424,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
-		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes, bool p_register = true );
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Render function.
@@ -374,18 +466,45 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
+		 *\brief		Retrieves the pipeline matching the given flags.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\~french
+		 *\brief		Récupère le pipeline qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 */
+		/**
+		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render.
+		 *\return		The ready to use pipeline.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu des objets opaques.
+		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual void DoPrepareOpaquePipeline();
+		C3D_API virtual Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline for transparent objets render.
+		 *\brief		Prepares the pipeline for transparent objets render, culling front faces.
+		 *\return		The ready to use pipeline.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu des objets transparents.
+		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces avant.
+		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual void DoPrepareTransparentPipeline();
+		C3D_API virtual Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for transparent objets render, culling back faces.
+		 *\return		The ready to use pipeline.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces arrière.
+		 *\return		Le pipeline prêt à l'utilisation.
+		 */
+		C3D_API virtual Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -396,7 +515,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -407,7 +526,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -512,28 +631,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
-	private:
-		template< typename MapType >
-		void DoRenderNonInstanced( Scene & p_scene
-								   , Camera const & p_camera
-								   , Pipeline & p_pipeline
-								   , MapType & p_nodes
-								   , bool p_register )
-		{
-			for ( auto l_itPrograms : p_nodes )
-			{
-				for ( auto & l_renderNode : l_itPrograms.second )
-				{
-					l_renderNode.Render( p_scene, p_camera, p_pipeline );
-
-					if ( p_register )
-					{
-						m_renderedObjects.push_back( l_renderNode );
-					}
-				}
-			}
-		}
-
 	protected:
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
@@ -556,15 +653,15 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english	The pipeline used to render opaque nodes.
-		//!\~french		Le pipeline de rendu utilisé pour dessiner les noeuds opaques.
-		PipelineSPtr m_opaquePipeline;
-		//!\~english	The pipeline used to render transparent nodes' back faces.
-		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
-		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_frontTransparentPipeline;
-		//!\~english	The pipeline used to render transparent nodes' front faces.
-		//!\~french		Le pipeline de rendu utilisé pour dessiner les faces avant des noeuds transparents.
-		std::array< PipelineSPtr, size_t( BlendMode::Count ) - 1 > m_backTransparentPipeline;
+		//!\~english	The pipelines used to render opaque nodes.
+		//!\~french		Les pipelines de rendu utilisés pour dessiner les noeuds opaques.
+		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_opaquePipelines;
+		//!\~english	The pipelines used to render transparent nodes' back faces.
+		//!\~french		Les pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
+		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_frontTransparentPipelines;
+		//!\~english	The pipelines used to render transparent nodes' front faces.
+		//!\~french		Les pipelines de rendu utilisé pour dessiner les faces avant des noeuds transparents.
+		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_backTransparentPipelines;
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

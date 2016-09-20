@@ -107,13 +107,6 @@ namespace GrayScale
 		{
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
-
-		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( false );
-		l_dsstate.SetDepthMask( WritingMask::Zero );
-		RasteriserState l_rsstate;
-		l_rsstate.SetCulledFaces( Culling::Back );
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{} );
 	}
 
 	GrayScalePostEffect::~GrayScalePostEffect()
@@ -143,7 +136,13 @@ namespace GrayScale
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_fragment );
 			l_program->Initialise();
-			m_program = l_program;
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			RasteriserState l_rsstate;
+			l_rsstate.SetCulledFaces( Culling::Back );
+			m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
@@ -161,7 +160,6 @@ namespace GrayScale
 
 		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
-			m_pipeline->Apply();
 			bool l_return = m_surface.m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 
@@ -169,7 +167,7 @@ namespace GrayScale
 			{
 				m_surface.m_fbo->Clear();
 				m_mapDiffuse->SetValue( 0 );
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, m_program.lock() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, *m_pipeline );
 				m_surface.m_fbo->Unbind();
 			}
 

@@ -823,7 +823,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		inline uint32_t GetProgramFlags()const
+		inline uint8_t GetProgramFlags()const
 		{
 			return m_programFlags;
 		}
@@ -880,7 +880,7 @@ namespace Castor3D
 		bool m_hasNormals{ false };
 		//!\~english	The shader program flags.
 		//!\~french		Les indicateurs pour le shader.
-		uint32_t m_programFlags{ 0 };
+		uint8_t m_programFlags{ 0u };
 		//!\~english	Tells the VBOs has been initialised.
 		//!\~french		Dit que les VBOs ont été initialisés.
 		bool m_initialised{ false };

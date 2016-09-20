@@ -294,7 +294,7 @@ namespace GuiCommon
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
-		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_variable->GetProgram().GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( ShaderType::Count )
 		, m_buffer( p_buffer )
@@ -344,7 +344,7 @@ namespace GuiCommon
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, ShaderType p_type )
-		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_variable->GetProgram().GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( p_type )
 	{
@@ -543,7 +543,7 @@ namespace GuiCommon
 			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
 				l_buffer->RemoveVariable( l_variable->GetName() );
-				m_variable = l_buffer->CreateVariable( *l_variable->GetProgram(), p_value, l_variable->GetName(), l_variable->GetOccCount() );
+				m_variable = l_buffer->CreateVariable( p_value, l_variable->GetName(), l_variable->GetOccCount() );
 			} );
 		}
 	}
@@ -558,7 +558,7 @@ namespace GuiCommon
 			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
 				l_buffer->RemoveVariable( l_variable->GetName() );
-				m_variable = l_buffer->CreateVariable( *l_variable->GetProgram(), l_variable->GetFullType(), p_value, l_variable->GetOccCount() );
+				m_variable = l_buffer->CreateVariable( l_variable->GetFullType(), p_value, l_variable->GetOccCount() );
 			} );
 		}
 	}

@@ -124,7 +124,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram * p_program )
+	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram & p_program )
 		:	TFrameVariable< T >( p_program )
 	{
 		this->m_values = new T[Count];
@@ -132,7 +132,7 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
+	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		:	TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences * Count];

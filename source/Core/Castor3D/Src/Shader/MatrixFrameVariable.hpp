@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_program	Le programme
 		 */
-		explicit MatrixFrameVariable( ShaderProgram * p_program );
+		explicit MatrixFrameVariable( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
-		MatrixFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
+		MatrixFrameVariable( ShaderProgram & p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Destructor

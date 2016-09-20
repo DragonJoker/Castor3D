@@ -100,7 +100,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )
+	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -187,7 +187,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags )
 	{
 		using namespace GLSL;
 
@@ -215,9 +215,8 @@ namespace Castor3D
 		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreateTextureVariables( *l_program, p_textureFlags );
-		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards );
-		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), FrameVariableType::Vec2i, ShaderProgram::Dimensions ) );
-		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
+		auto & l_billboardUbo = l_program->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, MASK_SHADER_TYPE_GEOMETRY );
+		l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
 
 		ShaderObjectSPtr l_object = l_program->CreateObject( ShaderType::Geometry );
 		l_object->SetInputType( l_input );

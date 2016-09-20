@@ -96,7 +96,7 @@ namespace Castor3D
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
 		ShaderType eShaderObject;
-		FrameVariableBufferSPtr pFrameVariableBuffer;
+		FrameVariableBufferRPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;
 		OneIntFrameVariableSPtr pSamplerFrameVariable;
 		OverlaySPtr pOverlay;

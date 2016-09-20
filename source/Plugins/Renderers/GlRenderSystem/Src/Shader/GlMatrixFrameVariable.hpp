@@ -31,12 +31,12 @@ namespace GlRender
 {
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class GlMatrixFrameVariable
-		: public Castor3D::MatrixFrameVariable<T, Rows, Columns>
+		: public Castor3D::MatrixFrameVariable< T, Rows, Columns >
 		, public GlFrameVariableBase
 	{
 	public:
-		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program = nullptr );
-		GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_variable );
+		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program );
+		GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable< T, Rows, Columns > & p_variable );
 		virtual ~GlMatrixFrameVariable();
 
 		virtual bool Initialise();

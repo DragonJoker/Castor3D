@@ -72,11 +72,6 @@ namespace Deferred
 
 		m_lightPassShaderProgram = GetEngine()->GetShaderProgramCache().GetNewProgram();
 
-		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( false );
-		l_dsstate.SetDepthMask( WritingMask::Zero );
-		m_lightPassPipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{} );
-
 		m_declaration = BufferDeclaration(
 		{
 			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec2 ),
@@ -132,14 +127,20 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::Pixel )->SetValue( i + 1 );
 			}
 
-			m_lightPassMatrices = GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
-			m_lightPassScene = l_scene;
+			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassScene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 
 			m_vertexBuffer->Create();
 			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( ShaderType::Vertex, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( ShaderType::Pixel, l_model, DoGetLightPassPixelShaderSource( 0 ) );
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			m_lightPassPipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *m_lightPassShaderProgram );
 		}
 
 		return l_return;
@@ -156,6 +157,8 @@ namespace Deferred
 		
 		m_lightPassDepthBuffer->Destroy();
 		m_geometryPassFrameBuffer->Destroy();
+		m_lightPassPipeline->Cleanup();
+		m_lightPassPipeline.reset();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -349,7 +352,7 @@ namespace Deferred
 		return true;
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -442,7 +445,7 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
+	String RenderTechnique::DoGetLightPassVertexShaderSource( uint8_t p_programFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -465,7 +468,7 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_flags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -493,7 +496,7 @@ namespace Deferred
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{

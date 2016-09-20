@@ -141,7 +141,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags );
+		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags );
 		/**
 		 *\~english
 		 *\return		The GPU informations.
@@ -194,20 +194,12 @@ namespace Castor3D
 		C3D_API virtual ContextSPtr CreateContext() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a FrameVariableBuffer
-		 *\return		The created FrameVariableBuffer
-		 *\~french
-		 *\brief		Crée un FrameVariableBuffer
-		 *\return		Le FrameVariableBuffer créé
-		 */
-		C3D_API virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
-		/**
-		 *\~english
 		 *\brief		Create a pipeline.
 		 *\param[in]	p_dsState	The depth stencil state.
 		 *\param[in]	p_rsState	The rateriser state.
 		 *\param[in]	p_bdState	The blend state.
 		 *\param[in]	p_msState	The multisample state.
+		 *\param[in]	p_program	The shader program.
 		 *\return		The pipeline.
 		 *\~french
 		 *\brief		Crée un pipeline.
@@ -215,12 +207,14 @@ namespace Castor3D
 		 *\param[in]	p_rsState	L'état de rastériseur.
 		 *\param[in]	p_bdState	L'état de mélange.
 		 *\param[in]	p_msState	L'état de multi-échantillonnage.
+		 *\param[in]	p_program	Le programme shader.
 		 *\return		Le pipeline.
 		 */
 		C3D_API virtual PipelineUPtr CreatePipeline( DepthStencilState && p_dsState
 													 , RasteriserState && p_rsState
 													 , BlendState && p_bdState
-													 , MultisampleState && p_msState ) = 0;
+													 , MultisampleState && p_msState
+													 , ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler

@@ -198,13 +198,6 @@ namespace Fxaa
 		{
 			m_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( l_name );
 		}
-
-		DepthStencilState l_dsstate;
-		l_dsstate.SetDepthTest( false );
-		l_dsstate.SetDepthMask( WritingMask::Zero );
-		RasteriserState l_rsstate;
-		l_rsstate.SetCulledFaces( Culling::Back );
-		m_pipeline = p_renderSystem.CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{} );
 	}
 
 	FxaaPostEffect::~FxaaPostEffect()
@@ -231,22 +224,28 @@ namespace Fxaa
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
-			auto l_uboFxaa = GetRenderSystem()->CreateFrameVariableBuffer( FxaaUbo );
-			m_uniformSubpixShift = std::static_pointer_cast< OneFloatFrameVariable >( l_uboFxaa->CreateVariable( *l_program, FrameVariableType::Float, SubpixShift ) );
-			m_uniformSpanMax = std::static_pointer_cast< OneFloatFrameVariable >( l_uboFxaa->CreateVariable( *l_program, FrameVariableType::Float, SpanMax ) );
-			m_uniformReduceMul = std::static_pointer_cast< OneFloatFrameVariable >( l_uboFxaa->CreateVariable( *l_program, FrameVariableType::Float, ReduceMul ) );
-			m_uniformRenderTargetWidth = std::static_pointer_cast< OneFloatFrameVariable >( l_uboFxaa->CreateVariable( *l_program, FrameVariableType::Float, RenderTargetWidth ) );
-			m_uniformRenderTargetHeight = std::static_pointer_cast< OneFloatFrameVariable >( l_uboFxaa->CreateVariable( *l_program, FrameVariableType::Float, RenderTargetHeight ) );
-			l_program->AddFrameVariableBuffer( l_uboFxaa, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			auto & l_uboFxaa = l_program->CreateFrameVariableBuffer( FxaaUbo, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+			m_uniformSubpixShift = l_uboFxaa.CreateVariable< OneFloatFrameVariable >( SubpixShift );
+			m_uniformSpanMax = l_uboFxaa.CreateVariable< OneFloatFrameVariable >( SpanMax );
+			m_uniformReduceMul = l_uboFxaa.CreateVariable< OneFloatFrameVariable >( ReduceMul );
+			m_uniformRenderTargetWidth = l_uboFxaa.CreateVariable< OneFloatFrameVariable >( RenderTargetWidth );
+			m_uniformRenderTargetHeight = l_uboFxaa.CreateVariable< OneFloatFrameVariable >( RenderTargetHeight );
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_fragment );
 			l_program->Initialise();
-			m_program = l_program;
+
 			m_uniformSubpixShift->SetValue( m_subpixShift );
 			m_uniformSpanMax->SetValue( m_spanMax );
 			m_uniformReduceMul->SetValue( m_reduceMul );
 			m_uniformRenderTargetWidth->SetValue( float( l_size.width() ) );
 			m_uniformRenderTargetHeight->SetValue( float( l_size.height() ) );
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::Zero );
+			RasteriserState l_rsstate;
+			l_rsstate.SetCulledFaces( Culling::Back );
+			m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );
@@ -272,7 +271,7 @@ namespace Fxaa
 			{
 				m_surface.m_fbo->Clear();
 				m_mapDiffuse->SetValue( 0 );
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, m_program.lock() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, *m_pipeline );
 				m_surface.m_fbo->Unbind();
 			}
 

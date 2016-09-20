@@ -46,13 +46,15 @@ namespace Castor3D
 	template< typename NodeType, typename OpaqueMapType, typename TransparentMapType = OpaqueMapType >
 	struct RenderNodesT
 	{
-		using TransparentNodesMapByMode = std::array< TransparentMapType, size_t( BlendMode::Count ) - 1 >;
 		//!\~english	The geometries without alpha blending, sorted by shader program.
 		//!\~french		Les géométries sans alpha blending, triées par programme shader.
 		OpaqueMapType m_opaqueRenderNodes;
 		//!\~english	The geometries with alpha blending, sorted by shader program.
 		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
-		TransparentNodesMapByMode m_transparentRenderNodes;
+		TransparentMapType m_transparentRenderNodesFront;
+		//!\~english	The geometries with alpha blending, sorted by shader program.
+		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
+		TransparentMapType m_transparentRenderNodesBack;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -70,16 +72,16 @@ namespace Castor3D
 		Scene & m_scene;
 		//!\~english	The static render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu statiques, triés par programme shader.
-		RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByProgramMap > m_staticGeometries;
+		RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > m_staticGeometries;
 		//!\~english	The instanced render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu instanciés, triés par programme shader.
-		RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByProgramMap, SubmeshStaticRenderNodesByProgramMap > m_instancedGeometries;
+		RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesByPipelineMap > m_instancedGeometries;
 		//!\~english	The animated render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu animés, triés par programme shader.
-		RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByProgramMap > m_animatedGeometries;
+		RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > m_animatedGeometries;
 		//!\~english	The billboards render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
-		RenderNodesT< BillboardRenderNode, BillboardRenderNodesByProgramMap > m_billboards;
+		RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > m_billboards;
 	};
 	/*!
 	\author		Sylvain DOREMUS

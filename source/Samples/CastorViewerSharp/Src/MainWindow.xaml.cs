@@ -57,7 +57,7 @@ namespace CastorViewerSharp
 				m_engine.LoadPlugin( file );
 			}
 
-			m_engine.LoadRenderer( eRENDERER_TYPE.eRENDERER_TYPE_OPENGL );
+			m_engine.LoadRenderer( "opengl" );
 		}
 
 		/// <summary>

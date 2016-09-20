@@ -50,6 +50,7 @@ namespace TestRender
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_bdState		The blend state.
 		 *\param[in]	p_msState		The multisample state.
+		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem parent.
@@ -57,12 +58,14 @@ namespace TestRender
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_bdState		L'état de mélange.
 		 *\param[in]	p_msState		L'état de multi-échantillonnage.
+		 *\param[in]	p_program		Le programme shader.
 		 */
 		TestPipeline( TestRenderSystem & p_renderSystem
 					  , Castor3D::DepthStencilState && p_dsState
 					  , Castor3D::RasteriserState && p_rsState
 					  , Castor3D::BlendState && p_bdState
-					  , Castor3D::MultisampleState && p_msState );
+					  , Castor3D::MultisampleState && p_msState
+					  , Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.

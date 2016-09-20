@@ -65,6 +65,7 @@ namespace Castor3D
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_blState		The blend state.
 		 *\param[in]	p_msState		The multisample state.
+		 *\param[in]	p_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem parent.
@@ -72,12 +73,14 @@ namespace Castor3D
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_blState		L'état de mélange.
 		 *\param[in]	p_msState		L'état de multi-échantillonnage.
+		 *\param[in]	p_program		Le programme shader.
 		 */
 		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
 								   , DepthStencilState && p_dsState
 								   , RasteriserState && p_rsState
 								   , BlendState && p_blState
-								   , MultisampleState && p_msState );
+								   , MultisampleState && p_msState
+								   , ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -85,6 +88,13 @@ namespace Castor3D
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Pipeline();
+		/**
+		 *\~english
+		 *\brief		Cleans up the pipeline.
+		 *\~french
+		 *\brief		Nettoie le pipeline.
+		 */
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Applies the pipeline.
@@ -233,11 +243,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the model matrix.
-		 *\return		The matrix.
+		 *\return		The model matrix.
 		 *\~french
-		 *\brief		Récupère la matrice modèle.
-		 *\return		La matrice.
+		 *\return		La matrice de modèle.
 		 */
 		inline Castor::Matrix4x4r const & GetModelMatrix()const
 		{
@@ -245,11 +253,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the view matrix.
-		 *\return		The matrix.
+		 *\return		The view matrix.
 		 *\~french
-		 *\brief		Récupère la matrice vue.
-		 *\return		La matrice.
+		 *\return		La matrice de vue.
 		 */
 		inline Castor::Matrix4x4r const & GetViewMatrix()const
 		{
@@ -257,11 +263,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the projection matrix.
-		 *\return		The matrix.
+		 *\return		The projection matrix.
 		 *\~french
-		 *\brief		Récupère la matrice projection.
-		 *\return		La matrice.
+		 *\return		La matrice de projection.
 		 */
 		inline Castor::Matrix4x4r const & GetProjectionMatrix()const
 		{
@@ -281,6 +285,16 @@ namespace Castor3D
 		{
 			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 			return m_mtxTexture[p_index];
+		}
+		/**
+		 *\~english
+		 *\return		The shader program.
+		 *\~french
+		 *\return		Le programme shader.
+		 */
+		inline ShaderProgram & GetProgram()
+		{
+			return m_program;
 		}
 
 	private:
@@ -321,6 +335,9 @@ namespace Castor3D
 		//!\~english	The muultisampling state.
 		//!\~french		L'état de multi-échantillonnage.
 		MultisampleState m_msState;
+		//!\~english	The shader program.
+		//!\~french		Le programme shader.
+		ShaderProgram & m_program;
 	};
 }
 

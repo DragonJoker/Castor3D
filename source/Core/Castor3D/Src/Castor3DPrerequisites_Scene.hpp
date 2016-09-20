@@ -54,6 +54,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( AnimatedSkeleton );
+	DECLARE_SMART_PTR( AnimatedMesh );
 	DECLARE_SMART_PTR( AnimationInstance );
 	DECLARE_SMART_PTR( SkeletonAnimationInstance );
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceObject );

@@ -35,8 +35,8 @@ namespace GlRender
 		, public GlFrameVariableBase
 	{
 	public:
-		GlOneFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program = nullptr );
-		GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > * p_variable );
+		GlOneFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program );
+		GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > & p_variable );
 		virtual ~GlOneFrameVariable();
 
 		virtual bool Initialise();
