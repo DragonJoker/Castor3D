@@ -307,9 +307,9 @@ namespace Deferred
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Bind();
 
-				m_lightPassShaderProgram->Bind();
+				m_lightPassShaderProgram->BindUbos();
 				m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
-				m_lightPassShaderProgram->Unbind();
+				m_lightPassShaderProgram->UnbindUbos();
 				
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();

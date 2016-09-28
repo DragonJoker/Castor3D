@@ -14,7 +14,7 @@ namespace castortd
 		void StartWave( uint32_t m_count );
 		bool CanSpawn( std::chrono::milliseconds const & p_elapsed );
 		EnemyPtr Spawn( Game const & p_game, Path const & p_path );
-		void KillEnemy( EnemyPtr && p_enemy );
+		void KillEnemy( Game & p_game, EnemyPtr && p_enemy );
 
 		inline uint32_t GetWave()const
 		{

@@ -111,7 +111,7 @@ namespace Castor3D
 														, l_eventClean
 														, l_mergeResource );
 		m_pluginCache = MakeCache< Plugin, String >( *this
-													, []( String const & p_name, ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library )
+													, []( String const & p_name, PluginType p_type, Castor::DynamicLibrarySPtr p_library )
 													{
 														return nullptr;
 													} );

@@ -25,7 +25,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )const
+	bool TestBackBuffers::Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
 	{
 		return true;
 	}

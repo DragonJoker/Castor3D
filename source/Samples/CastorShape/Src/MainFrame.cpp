@@ -321,13 +321,13 @@ namespace CastorShape
 
 		if ( l_scene )
 		{
-			m_3dFrame = new RenderPanel( eVIEWPORT_TYPE_PERSPECTIVE, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+			m_3dFrame = new RenderPanel( ViewportType::Perspective, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
 
 			if ( m_bMultiFrames )
 			{
-				m_2dFrameHD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBG = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameHD = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBG = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBD = new RenderPanel( ViewportType::Ortho, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
 				m_separator1 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator2 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator3 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width - 1, 0 ), wxSize( 2, l_height ) );
@@ -921,7 +921,7 @@ namespace CastorShape
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );
 
-		for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+		for ( auto l_it : wxGetApp().GetCastor()->GetPluginCache().GetPlugins( PluginType::Importer ) )
 		{
 			for ( auto l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it.second )->GetExtensions() )
 			{

@@ -70,7 +70,7 @@ namespace Ase
 		Castor::String strName2;
 		Castor3D::MaterialPtrUIntMap m_mapMaterials;
 		Castor::Point3rPtrArray m_arrayTexCoords;
-		Castor3D::eVIEWPORT_TYPE eViewportType;
+		Castor3D::ViewportType eViewportType;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;
 		uint64_t uiUInt64;

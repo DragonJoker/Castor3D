@@ -3519,7 +3519,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		uint32_t l_uiType;
-		l_parsingContext->pViewport->UpdateType( eVIEWPORT_TYPE( p_params[0]->Get( l_uiType ) ) );
+		l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
 	}
 	END_ATTRIBUTE()
 

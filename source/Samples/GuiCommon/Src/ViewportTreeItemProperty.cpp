@@ -66,15 +66,15 @@ namespace GuiCommon
 
 		switch ( m_viewport.GetType() )
 		{
-		case eVIEWPORT_TYPE_PERSPECTIVE:
+		case ViewportType::Perspective:
 			l_selected = PROPERTY_VIEWPORT_TYPE_PERSPECTIVE;
 			break;
 
-		case eVIEWPORT_TYPE_FRUSTUM:
+		case ViewportType::Frustum:
 			l_selected = PROPERTY_VIEWPORT_TYPE_FRUSTUM;
 			break;
 
-		case eVIEWPORT_TYPE_ORTHO:
+		case ViewportType::Ortho:
 			l_selected = PROPERTY_VIEWPORT_TYPE_ORTHO;
 			break;
 		}
@@ -102,15 +102,15 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_PERSPECTIVE )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_PERSPECTIVE );
+					OnTypeChange( ViewportType::Perspective );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_ORTHO )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_ORTHO );
+					OnTypeChange( ViewportType::Ortho );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_VIEWPORT_TYPE_FRUSTUM )
 				{
-					OnTypeChange( eVIEWPORT_TYPE_FRUSTUM );
+					OnTypeChange( ViewportType::Frustum );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_VIEWPORT_SIZE )
@@ -152,7 +152,7 @@ namespace GuiCommon
 		}
 	}
 
-	void ViewportTreeItemProperty::OnTypeChange( eVIEWPORT_TYPE p_value )
+	void ViewportTreeItemProperty::OnTypeChange( ViewportType p_value )
 	{
 		DoApplyChange( [p_value, this]()
 		{

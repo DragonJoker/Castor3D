@@ -32,8 +32,9 @@ namespace castortd
 		};
 		m_damage.Initialise( 5u
 							 , std::bind( l_uintIncrement, 9u, std::placeholders::_1, std::placeholders::_2 )
-							 , 450u
-							 , std::bind( l_costIncrement, 40u, std::placeholders::_1, std::placeholders::_2 ) );
+							 , 400u
+							 , std::bind( l_costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 )
+							 , 15u );
 
 		m_cooldown.Initialise( std::chrono::milliseconds{ 1000u }
 							   , std::bind( l_decrement, std::chrono::milliseconds{ 40u }, std::placeholders::_1, std::placeholders::_2 )
@@ -45,9 +46,10 @@ namespace castortd
 							, 150u
 							, std::bind( l_costIncrement, 10u, std::placeholders::_1, std::placeholders::_2 ) );
 
-		m_bulletSpeed = 72.0f;
+		m_bulletSpeed = 96.0f;
 		m_towerCost = 250u;
-		m_material = cuT( "TowerCube" );
+		m_material = cuT( "OrangeTowerCube" );
+		m_colour = Colour::from_components( 1.0f, 1.0f, 0.0f, 1.0f );
 	}
 
 	ShortRangeTower::ShortRangeTower()
@@ -77,8 +79,8 @@ namespace castortd
 		};
 		m_damage.Initialise( 3u
 							 , std::bind( l_uintIncrement, 5u, std::placeholders::_1, std::placeholders::_2 )
-							 , 450u
-							 , std::bind( l_costIncrement, 40u, std::placeholders::_1, std::placeholders::_2 ) );
+							 , 400u
+							 , std::bind( l_costIncrement, 30u, std::placeholders::_1, std::placeholders::_2 ) );
 
 		m_cooldown.Initialise( std::chrono::milliseconds{ 500u }
 							   , std::bind( l_decrement, std::chrono::milliseconds{ 30u }, std::placeholders::_1, std::placeholders::_2 )
@@ -93,5 +95,6 @@ namespace castortd
 		m_bulletSpeed = 120.0f;
 		m_towerCost = 170u;
 		m_material = cuT( "BlueTowerCube" );
+		m_colour = Colour::from_components( 0.0f, 0.0f, 1.0f, 1.0f );
 	}
 }

@@ -942,7 +942,7 @@ namespace Castor3D
 		}
 	}
 
-	GeometryBuffers & Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
+	GeometryBuffersSPtr Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
 		GeometryBuffersSPtr l_buffers;
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
@@ -953,18 +953,26 @@ namespace Castor3D
 		if ( l_it == m_geometryBuffers.end() )
 		{
 			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
+			m_geometryBuffers.push_back( l_buffers );
+
+			if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
 			{
 				l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
-			} ) );
-			m_geometryBuffers.push_back( l_buffers );
+			}
+			else
+			{
+				GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
+				{
+					l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
+				} ) );
+			}
 		}
 		else
 		{
 			l_buffers = *l_it;
 		}
 
-		return *l_buffers;
+		return l_buffers;
 	}
 
 	void Submesh::SetAnimated( bool p_animated )

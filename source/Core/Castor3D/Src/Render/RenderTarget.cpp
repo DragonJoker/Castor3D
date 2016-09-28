@@ -275,12 +275,12 @@ namespace Castor3D
 		}
 	}
 
-	eVIEWPORT_TYPE RenderTarget::GetViewportType()const
+	ViewportType RenderTarget::GetViewportType()const
 	{
-		return ( GetCamera() ? GetCamera()->GetViewportType() : eVIEWPORT_TYPE_COUNT );
+		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::Count );
 	}
 
-	void RenderTarget::SetViewportType( eVIEWPORT_TYPE val )
+	void RenderTarget::SetViewportType( ViewportType val )
 	{
 		if ( GetCamera() )
 		{

@@ -70,7 +70,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::BackBuffers::Bind
 		 */
-		bool Bind( Castor3D::eBUFFER p_buffer, Castor3D::FrameBufferTarget p_target )const override;
+		bool Bind( Castor3D::WindowBuffer p_buffer, Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */

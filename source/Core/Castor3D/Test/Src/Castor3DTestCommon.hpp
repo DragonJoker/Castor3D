@@ -258,6 +258,18 @@ namespace Testing
 		return Names[p_value];
 	}
 
+	template<>
+	inline std::string to_string< Castor3D::ViewportType >( Castor3D::ViewportType const & p_value )
+	{
+		static std::map< Castor3D::ViewportType, std::string > Names
+		{
+			{ Castor3D::ViewportType::Ortho, "Ortho" },
+			{ Castor3D::ViewportType::Perspective, "Perspective" },
+			{ Castor3D::ViewportType::Frustum, "Frustum" },
+		};
+		return Names[p_value];
+	}
+
 	//*********************************************************************************************
 
 	class C3DTestCase

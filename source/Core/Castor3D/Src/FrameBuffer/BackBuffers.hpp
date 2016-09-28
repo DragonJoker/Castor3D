@@ -83,7 +83,7 @@ namespace Castor3D
 		 *\param[in]	p_target	La cible d'activation du tampon d'image.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Bind( eBUFFER p_buffer, FrameBufferTarget p_target )const = 0;
+		C3D_API virtual bool Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer

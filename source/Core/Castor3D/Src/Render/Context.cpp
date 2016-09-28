@@ -60,8 +60,8 @@ namespace Castor3D
 	{
 		m_viewport.Initialise();
 		m_window = p_window;
-		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
-		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
+		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::TimeElapsed );
+		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::TimeElapsed );
 		m_bMultiSampling = p_window->IsMultisampling();
 		bool l_return = DoInitialise();
 
@@ -154,7 +154,7 @@ namespace Castor3D
 		m_timerQuery[m_queryIndex]->End();
 		m_queryIndex = 1 - m_queryIndex;
 		uint64_t l_time = 0;
-		m_timerQuery[m_queryIndex]->GetInfos( eQUERY_INFO_RESULT, l_time );
+		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::Result, l_time );
 		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
@@ -194,7 +194,7 @@ namespace Castor3D
 			p_pipeline.ApplyProjection( *l_matrices );
 		}
 
-		p_pipeline.GetProgram().Bind();
+		p_pipeline.GetProgram().BindUbos();
 
 		if ( p_texture.Bind( 0 ) )
 		{
@@ -202,7 +202,7 @@ namespace Castor3D
 			p_texture.Unbind( 0 );
 		}
 
-		p_pipeline.GetProgram().Unbind();
+		p_pipeline.GetProgram().UnbindUbos();
 	}
 
 	ShaderProgramSPtr Context::DoCreateProgram( bool p_depth )

@@ -107,14 +107,14 @@
 	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_buffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
+		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_buffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
+		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >

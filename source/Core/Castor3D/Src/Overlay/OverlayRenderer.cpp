@@ -485,11 +485,11 @@ namespace Castor3D
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 		p_pass.FillShaderVariables( l_node );
 		l_node.m_pipeline.Apply();
-		l_node.m_pipeline.GetProgram().Bind();
 		p_pass.Render2D();
+		l_node.m_pipeline.GetProgram().BindUbos();
 		p_geometryBuffers.Draw( p_count, 0 );
+		l_node.m_pipeline.GetProgram().UnbindUbos();
 		p_pass.EndRender();
-		l_node.m_pipeline.GetProgram().Unbind();
 	}
 
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
@@ -506,7 +506,7 @@ namespace Castor3D
 
 		p_pass.FillShaderVariables( l_node );
 		l_node.m_pipeline.Apply();
-		l_node.m_pipeline.GetProgram().Bind();
+		l_node.m_pipeline.GetProgram().BindUbos();
 		p_pass.Render2D();
 		p_texture.Bind( 0 );
 		p_sampler.Bind( 0 );
@@ -515,7 +515,7 @@ namespace Castor3D
 		p_texture.Unbind( 0 );
 
 		p_pass.EndRender();
-		l_node.m_pipeline.GetProgram().Unbind();
+		l_node.m_pipeline.GetProgram().UnbindUbos();
 	}
 
 	void OverlayRenderer::DoDrawItem( Material & p_material, OverlayRenderer::OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count )

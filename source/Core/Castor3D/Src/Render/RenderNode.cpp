@@ -37,7 +37,7 @@ namespace Castor3D
 		void DoUnbind( Scene const & p_scene, NodeType & p_node )
 		{
 			p_node.m_scene.m_node.m_pass.EndRender();
-			p_node.m_scene.m_node.m_pipeline.GetProgram().Unbind();
+			p_node.m_scene.m_node.m_pipeline.GetProgram().UnbindUbos();
 
 			if ( p_scene.GetEngine()->GetPerObjectLighting() )
 			{
@@ -104,7 +104,7 @@ namespace Castor3D
 
 		m_scene.m_node.m_pipeline.ApplyMatrices( m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_pipeline.GetProgram().Bind();
+		m_scene.m_node.m_pipeline.GetProgram().BindUbos();
 		m_scene.m_node.m_pass.Render();
 	}
 
@@ -153,7 +153,7 @@ namespace Castor3D
 		}
 
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_pipeline.GetProgram().Bind();
+		m_scene.m_node.m_pipeline.GetProgram().BindUbos();
 		m_scene.m_node.m_pass.Render();
 	}
 
@@ -169,7 +169,7 @@ namespace Castor3D
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
 		m_scene.m_node.m_pass.FillShaderVariables( m_scene.m_node );
-		m_scene.m_node.m_pipeline.GetProgram().Bind();
+		m_scene.m_node.m_pipeline.GetProgram().BindUbos();
 		m_scene.m_node.m_pass.Render();
 	}
 }

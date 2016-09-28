@@ -684,7 +684,7 @@ namespace GlRender
 		return RboStorages[uint32_t( p_pixelFormat )];
 	}
 
-	inline eGL_BUFFER OpenGl::Get( Castor3D::eBUFFER p_buffer )const
+	inline eGL_BUFFER OpenGl::Get( Castor3D::WindowBuffer p_buffer )const
 	{
 		return Buffers[uint32_t( p_buffer )];
 	}
@@ -704,7 +704,7 @@ namespace GlRender
 		return Faces[uint32_t( p_eFace )];
 	}
 
-	inline eGL_FILL_MODE OpenGl::Get( Castor3D::eFILL_MODE p_mode )const
+	inline eGL_FILL_MODE OpenGl::Get( Castor3D::FillMode p_mode )const
 	{
 		return FillModes[uint32_t( p_mode )];
 	}
@@ -729,12 +729,12 @@ namespace GlRender
 		return DepthFuncs[uint32_t( p_func )];
 	}
 
-	inline eGL_QUERY OpenGl::Get( Castor3D::eQUERY_TYPE p_value )const
+	inline eGL_QUERY OpenGl::Get( Castor3D::QueryType p_value )const
 	{
 		return Queries[uint32_t( p_value )];
 	}
 
-	inline eGL_QUERY_INFO OpenGl::Get( Castor3D::eQUERY_INFO p_value )const
+	inline eGL_QUERY_INFO OpenGl::Get( Castor3D::QueryInfo p_value )const
 	{
 		return QueryInfos[uint32_t( p_value )];
 	}

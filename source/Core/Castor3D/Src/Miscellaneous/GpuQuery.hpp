@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_query			Le type de requête.
 		 */
-		C3D_API GpuQuery( RenderSystem & p_renderSystem, eQUERY_TYPE p_query );
+		C3D_API GpuQuery( RenderSystem & p_renderSystem, QueryType p_query );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\return		\p true si l'information a été récupérée.
 		 */
 		template< typename T >
-		inline bool GetInfos( eQUERY_INFO p_infos, T & p_param )const
+		inline bool GetInfos( QueryInfo p_infos, T & p_param )const
 		{
 			return DoGetInfos( p_infos, p_param );
 		}
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[out]	p_param	Reçoit le résultat.
 		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, int32_t & p_param )const = 0;
+		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, int32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\param[out]	p_param	Reçoit le résultat.
 		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, uint32_t & p_param )const = 0;
+		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, uint32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -179,7 +179,7 @@ namespace Castor3D
 		 *\param[out]	p_param	Reçoit le résultat.
 		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, int64_t & p_param )const = 0;
+		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, int64_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
@@ -192,13 +192,13 @@ namespace Castor3D
 		 *\param[out]	p_param	Reçoit le résultat.
 		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, uint64_t & p_param )const = 0;
+		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, uint64_t & p_param )const = 0;
 
 	protected:
 		//!\~english Tells if the query is active.	\~french Dit si la requête est active.
 		bool m_active{ false };
 		//!\~english The query type.	\~french Le type de requête.
-		eQUERY_TYPE m_type;
+		QueryType m_type;
 	};
 }
 

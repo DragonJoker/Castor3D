@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\brief		Récupère un GeometryBuffers pour le programme donné.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
@@ -303,6 +303,16 @@ namespace Castor3D
 		{
 			return m_arrayPositions.end();
 		}
+		/**
+		 *\~english
+		 *\return		The initialisation status.
+		 *\~french
+		 *\return		Le statut d'initialisation.
+		 */
+		inline bool	IsInitialised()const
+		{
+			return m_initialised;
+		}
 
 	private:
 		/**
@@ -314,22 +324,33 @@ namespace Castor3D
 		void DoUpdate();
 
 	private:
-		//!\~english The positions list	\~french La liste des positions
+		//!\~english	The positions list.
+		//!\~french		La liste des positions.
 		Castor::Point3rArray m_arrayPositions;
-		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
+		//!\~english	The Vertex buffer's description.
+		//!\~french		La description du tampon de sommets.
 		BufferDeclaration m_declaration;
-		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
+		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
+		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
 		bool m_needUpdate;
-		//!\~english The Material	\~french Le Material
+		//!\~english	The Material.
+		//!\~french		Le Material.
 		MaterialWPtr m_wpMaterial;
-		//!\~english The billboards dimensions	\~french Les dimensions des billboards
+		//!\~english	The billboards dimensions.
+		//!\~french		Les dimensions des billboards.
 		Castor::Size m_dimensions;
-		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
-		//!\~english The GeometryBuffers with which this billboards list is compatible.	\~french Les GeometryBuffers avec lesquel ce billboards list est compatible.
+		//!\~english	The GeometryBuffers with which this billboards list is compatible.
+		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.
+		//!\~english	The transformed camera position at last sort.
+		//!\~french		La position transformée de la caméra au dernier tri.
 		Castor::Point3r m_cameraPosition;
+		//!\~english	Tells if the billboard is initialised.
+		//!\~french		Dit si le billboard est initialisé.
+		bool m_initialised{ false };
 	};
 }
 

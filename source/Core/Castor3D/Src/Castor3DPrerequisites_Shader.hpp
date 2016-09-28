@@ -145,6 +145,9 @@ namespace Castor3D
 		//!\~english	Program used in transparent pipeline.
 		//!\~french		Programme utilisé dans le pipeline des objets transparents.
 		AlphaBlending = 0x10,
+		//!\~english	Picking pass program.
+		//\~french		Programme de passe de picking.
+		Picking = 0x20,
 	};
 	/*!
 	\author 	Sylvain DOREMUS

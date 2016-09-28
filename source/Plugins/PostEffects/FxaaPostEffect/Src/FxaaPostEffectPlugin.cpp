@@ -26,9 +26,9 @@ C3D_Fxaa_API void GetRequiredVersion( Castor3D::Version & p_version )
 	p_version = Castor3D::Version();
 }
 
-C3D_Fxaa_API Castor3D::ePLUGIN_TYPE GetType()
+C3D_Fxaa_API Castor3D::PluginType GetType()
 {
-	return Castor3D::ePLUGIN_TYPE_POSTFX;
+	return Castor3D::PluginType::PostEffect;
 }
 
 C3D_Fxaa_API Castor::String GetName()

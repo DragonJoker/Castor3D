@@ -132,16 +132,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
+		 *\param[in]	p_renderPass	The pass from which the program code is retrieved.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu de billboards.
+		 *\param[in]	p_renderPass	La passe a partir de laquelle est récupéré le code du programme.
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -312,7 +314,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de requête.
 		 *\return		La requête GPU créée.
 		 */
-		C3D_API virtual GpuQuerySPtr CreateQuery( eQUERY_TYPE p_type ) = 0;
+		C3D_API virtual GpuQuerySPtr CreateQuery( QueryType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a viewport render API specific implementation.

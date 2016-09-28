@@ -33,7 +33,7 @@ using namespace Castor;
 
 #define ID_NEW_WINDOW 10000
 
-RenderPanel::RenderPanel( eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
+RenderPanel::RenderPanel( ViewportType p_renderType, SceneSPtr p_scene, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 	: wxPanel( parent, p_id, pos, size, style )
 	, m_renderType( p_renderType )
 	, m_mainScene( p_scene )
@@ -89,7 +89,7 @@ void RenderPanel::InitialiseRenderWindow()
 	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
-	if ( m_renderType == eVIEWPORT_TYPE_PERSPECTIVE )
+	if ( m_renderType == ViewportType::Perspective )
 	{
 		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
 		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeCache().Add( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
@@ -298,7 +298,7 @@ void RenderPanel::OnMouseMove( wxMouseEvent & event )
 
 		if ( m_mouseLeftDown )
 		{
-			if ( l_pRenderWindow->GetViewportType() == eVIEWPORT_TYPE_PERSPECTIVE )
+			if ( l_pRenderWindow->GetViewportType() == ViewportType::Perspective )
 			{
 				MouseCameraEvent::Add( std::make_unique< CameraRotateEvent >( *m_pRotateCamEvent ), m_listener, m_deltaX, m_deltaY, 0 );
 			}

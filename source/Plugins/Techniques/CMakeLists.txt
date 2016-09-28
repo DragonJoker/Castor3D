@@ -1,5 +1,5 @@
 option( CASTOR_BUILDGRP_TECHNIQUE "Build Castor3D RenderTechnique plugins" TRUE )
-option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" FALSE )
+option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" TRUE )
 option( CASTOR_BUILD_TECHNIQUE_MSAA "Build MSAA RenderTechnique plugin" TRUE )
 
 function( TechniquesInit )

@@ -192,9 +192,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapModels[cuT( "sm_4" )] = uint32_t( eSHADER_MODEL_4 );
 	m_mapModels[cuT( "sm_5" )] = uint32_t( eSHADER_MODEL_5 );
 
-	m_mapViewportModes[cuT( "ortho" )] = uint32_t( eVIEWPORT_TYPE_ORTHO );
-	m_mapViewportModes[cuT( "perspective" )] = uint32_t( eVIEWPORT_TYPE_PERSPECTIVE );
-	m_mapViewportModes[cuT( "frustum" )] = uint32_t( eVIEWPORT_TYPE_FRUSTUM );
+	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::Ortho );
+	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::Perspective );
+	m_mapViewportModes[cuT( "frustum" )] = uint32_t( ViewportType::Frustum );
 
 	m_mapInterpolationModes[cuT( "nearest" )] = uint32_t( InterpolationMode::Nearest );
 	m_mapInterpolationModes[cuT( "linear" )] = uint32_t( InterpolationMode::Linear );

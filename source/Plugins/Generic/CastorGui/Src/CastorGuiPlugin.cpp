@@ -132,9 +132,9 @@ C3D_CGui_API void GetRequiredVersion( Version & p_version )
 	p_version = Version();
 }
 
-C3D_CGui_API ePLUGIN_TYPE GetType()
+C3D_CGui_API PluginType GetType()
 {
-	return ePLUGIN_TYPE_GENERIC;
+	return PluginType::Generic;
 }
 
 C3D_CGui_API String GetName()

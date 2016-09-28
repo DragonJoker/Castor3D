@@ -20,7 +20,7 @@ namespace Castor3D
 	template<> const String CacheTraits< Plugin, String >::Name = cuT( "Plugin" );
 
 #if defined( _MSC_VER)
-	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );
+	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4PluginType@Castor3D@@XZ" );
 #elif defined( __GNUG__)
 	static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 #endif
@@ -131,10 +131,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PluginStrMap PluginCache::GetPlugins( ePLUGIN_TYPE p_type )
+	PluginStrMap PluginCache::GetPlugins( PluginType p_type )
 	{
 		auto l_lock = make_unique_lock( m_mutexLoadedPlugins );
-		return m_loadedPlugins[p_type];
+		return m_loadedPlugins[size_t( p_type )];
 	}
 
 	void PluginCache::LoadAllPlugins( Path const & p_folder )
@@ -189,35 +189,35 @@ namespace Castor3D
 				CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 			}
 
-			ePLUGIN_TYPE l_type = l_pfnGetType();
+			PluginType l_type = l_pfnGetType();
 
 			switch ( l_type )
 			{
-			case ePLUGIN_TYPE_DIVIDER:
+			case PluginType::Divider:
 				l_return = std::make_shared< DividerPlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_IMPORTER:
+			case PluginType::Importer:
 				l_return = std::make_shared< ImporterPlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_RENDERER:
+			case PluginType::Renderer:
 				l_return = std::make_shared< RendererPlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_GENERIC:
+			case PluginType::Generic:
 				l_return = std::make_shared< GenericPlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_TECHNIQUE:
+			case PluginType::Technique:
 				l_return = std::make_shared< TechniquePlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_TONEMAPPING:
+			case PluginType::ToneMapping:
 				l_return = std::make_shared< ToneMappingPlugin >( l_library, GetEngine() );
 				break;
 
-			case ePLUGIN_TYPE_POSTFX:
+			case PluginType::PostEffect:
 				l_return = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
 				break;
 
@@ -241,11 +241,11 @@ namespace Castor3D
 				m_loadedPluginTypes.insert( std::make_pair( p_pathFile, l_type ) );
 				{
 					auto l_lockPlugins = make_unique_lock( m_mutexLoadedPlugins );
-					m_loadedPlugins[l_type].insert( std::make_pair( p_pathFile, l_return ) );
+					m_loadedPlugins[size_t( l_type )].insert( std::make_pair( p_pathFile, l_return ) );
 				}
 				{
 					auto l_lockLibraries = make_unique_lock( m_mutexLibraries );
-					m_libraries[l_type].insert( std::make_pair( p_pathFile, l_library ) );
+					m_libraries[size_t( l_type )].insert( std::make_pair( p_pathFile, l_library ) );
 				}
 				l_strToLog = cuT( "Plug-in [" );
 				Logger::LogInfo( l_strToLog + l_return->GetName() + cuT( "] loaded" ) );
@@ -257,9 +257,9 @@ namespace Castor3D
 		}
 		else
 		{
-			ePLUGIN_TYPE l_type = l_it->second;
+			PluginType l_type = l_it->second;
 			auto l_lock = make_unique_lock( m_mutexLoadedPlugins );
-			l_return = m_loadedPlugins[l_type].find( p_pathFile )->second;
+			l_return = m_loadedPlugins[size_t( l_type )].find( p_pathFile )->second;
 		}
 
 		return l_return;

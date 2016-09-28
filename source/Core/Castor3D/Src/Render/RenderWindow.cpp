@@ -187,12 +187,12 @@ namespace Castor3D
 			{
 				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
-					//DoRender( eBUFFER_BACK_LEFT, l_target->GetTextureLEye() );
-					//DoRender( eBUFFER_BACK_RIGHT, l_target->GetTextureREye() );
+					//DoRender( WindowBuffer::BackLeft, l_target->GetTextureLEye() );
+					//DoRender( WindowBuffer::BackRight, l_target->GetTextureREye() );
 				}
 				else
 				{
-					DoRender( eBUFFER_BACK, l_target->GetTexture() );
+					DoRender( WindowBuffer::Back, l_target->GetTexture() );
 				}
 			}
 
@@ -296,9 +296,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	eVIEWPORT_TYPE RenderWindow::GetViewportType()const
+	ViewportType RenderWindow::GetViewportType()const
 	{
-		eVIEWPORT_TYPE l_return = eVIEWPORT_TYPE( -1 );
+		ViewportType l_return = ViewportType( -1 );
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
@@ -309,7 +309,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RenderWindow::SetViewportType( eVIEWPORT_TYPE val )
+	void RenderWindow::SetViewportType( ViewportType val )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -403,7 +403,7 @@ namespace Castor3D
 		return m_size;
 	}
 
-	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture )
+	void RenderWindow::DoRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture )
 	{
 		auto l_texture = p_texture.GetTexture();
 

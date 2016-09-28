@@ -26,6 +26,9 @@
 using namespace Castor;
 using namespace Castor3D;
 
+using Castor::operator<<;
+using Castor3D::operator<<;
+
 namespace Testing
 {
 	C3DTestCase::C3DTestCase( std::string const & p_name, Castor3D::Engine & p_engine )

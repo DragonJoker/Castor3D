@@ -25,9 +25,9 @@ C3D_Ply_API void GetRequiredVersion( Version & p_version )
 	p_version = Version();
 }
 
-C3D_Ply_API ePLUGIN_TYPE GetType()
+C3D_Ply_API PluginType GetType()
 {
-	return ePLUGIN_TYPE_IMPORTER;
+	return PluginType::Importer;
 }
 
 C3D_Ply_API String GetName()

@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\brief		Récupère le mode de remplissage
 		 *\return		La valeur
 		 */
-		inline Castor3D::eFILL_MODE GetFillMode()const
+		inline Castor3D::FillMode GetFillMode()const
 		{
 			return m_eFillMode;
 		}
@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de remplissage
 		 *\param[in]	p_mode	La nouvelle valeur
 		 */
-		inline void SetFillMode( Castor3D::eFILL_MODE p_mode )
+		inline void SetFillMode( Castor3D::FillMode p_mode )
 		{
 			m_eFillMode = p_mode;
 		}
@@ -213,7 +213,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The fill mode.
 		//!\~french		Définit le mode de remplissage.
-		eFILL_MODE m_eFillMode{ eFILL_MODE_SOLID };
+		FillMode m_eFillMode{ FillMode::Solid };
 		//!\~english	The culled faces.
 		//!\~french		Les faces cachées.
 		Culling m_eCulledFaces{ Culling::Back };

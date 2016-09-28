@@ -194,14 +194,29 @@ namespace Castor3D
 
 	ContextSPtr RenderLoop::DoCreateContext( RenderWindow & p_window )
 	{
-		ContextSPtr l_context = m_renderSystem.CreateContext();
+		ContextSPtr l_context;
 
-		if ( l_context && l_context->Initialise( &p_window ) )
+		try
 		{
-			p_window.SetContext( l_context );
+			l_context = m_renderSystem.CreateContext();
+
+			if ( l_context && l_context->Initialise( &p_window ) )
+			{
+				p_window.SetContext( l_context );
+			}
+			else
+			{
+				l_context.reset();
+			}
 		}
-		else
+		catch ( Castor::Exception & p_exc )
 		{
+			Logger::LogError( cuT( "CreateContext - " ) + p_exc.GetFullDescription() );
+			l_context.reset();
+		}
+		catch ( std::exception & p_exc )
+		{
+			Logger::LogError( std::string( "CreateContext - " ) + p_exc.what() );
 			l_context.reset();
 		}
 

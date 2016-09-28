@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include <Castor3DPrerequisites.hpp>
+#include <Miscellaneous/PickingPass.hpp>
 
 #include <Math/Point.hpp>
 #include <Math/Quaternion.hpp>
@@ -136,7 +136,8 @@ namespace CastorViewer
 		eCAMERA_MODE m_eCameraMode;
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
-		Castor3D::FrameListenerSPtr m_pListener;
+		Castor3D::PickingPass m_picking;
+		Castor3D::FrameListenerSPtr m_listener;
 		Castor3D::GeometryWPtr m_selectedGeometry;
 		Castor3D::SubmeshWPtr m_selectedSubmesh;
 		Castor3D::MaterialSPtr m_selectedSubmeshMaterialOrig;

@@ -28,7 +28,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::Bind( eBUFFER p_buffer, FrameBufferTarget p_target )const
+	bool GlBackBuffers::Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
 	{
 		bool l_return = true;
 

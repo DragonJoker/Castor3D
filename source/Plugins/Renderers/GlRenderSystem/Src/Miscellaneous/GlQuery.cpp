@@ -8,7 +8,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlQuery::GlQuery( GlRenderSystem & p_renderSystem, eQUERY_TYPE p_query )
+	GlQuery::GlQuery( GlRenderSystem & p_renderSystem, QueryType p_query )
 		: GpuQuery( p_renderSystem, p_query )
 		, ObjectType( p_renderSystem.GetOpenGl(),
 					  "GlQuery",
@@ -44,22 +44,22 @@ namespace GlRender
 		GetOpenGl().EndQuery( GetOpenGl().Get( m_type ) );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::eQUERY_INFO p_infos, int32_t & p_param )const
+	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const
 	{
 		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::eQUERY_INFO p_infos, uint32_t & p_param )const
+	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const
 	{
 		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::eQUERY_INFO p_infos, int64_t & p_param )const
+	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const
 	{
 		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::eQUERY_INFO p_infos, uint64_t & p_param )const
+	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const
 	{
 		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}

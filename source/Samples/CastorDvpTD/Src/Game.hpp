@@ -154,7 +154,6 @@ namespace castortd
 		Castor3D::SceneNodeSPtr m_targetNode;
 		Castor3D::MeshSPtr m_mapCubeMesh;
 		Castor3D::MaterialSPtr m_mapCubeMaterial;
-		Castor3D::MaterialSPtr m_mapCubeShadowMaterial;
 		Castor3D::MeshSPtr m_towerCubeMesh;
 		Castor3D::MeshSPtr m_enemyCubeMesh;
 		Castor3D::MaterialSPtr m_enemyCubeMaterial;

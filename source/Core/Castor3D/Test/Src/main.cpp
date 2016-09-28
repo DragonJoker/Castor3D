@@ -97,7 +97,7 @@ namespace
 		std::unique_ptr< Engine > l_return = std::make_unique< Engine >();
 		DoLoadPlugins( *l_return );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( ePLUGIN_TYPE_RENDERER );
+		auto l_renderers = l_return->GetPluginCache().GetPlugins( PluginType::Renderer );
 
 		if ( l_renderers.empty() )
 		{

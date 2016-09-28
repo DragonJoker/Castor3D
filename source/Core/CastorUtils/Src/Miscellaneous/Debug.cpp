@@ -1,6 +1,7 @@
 #include "Debug.hpp"
 
 #include "StringUtils.hpp"
+#include "Config/MultiThreadConfig.hpp"
 
 #if !defined( NDEBUG )
 #	if !defined( _WIN32 )
@@ -111,6 +112,8 @@ namespace Castor
 			template< typename CharT >
 			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream, int p_toCapture, int p_toSkip )
 			{
+				static std::mutex l_mutex;
+				auto l_lock = make_unique_lock( l_mutex );
 				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
 

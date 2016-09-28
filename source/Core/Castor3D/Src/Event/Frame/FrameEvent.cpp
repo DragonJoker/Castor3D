@@ -1,37 +1,21 @@
 ﻿#include "FrameEvent.hpp"
 
+#include <Miscellaneous/Debug.hpp>
+
+using namespace Castor;
+
 namespace Castor3D
 {
 	FrameEvent::FrameEvent( EventType p_type )
-		:	m_type( p_type )
+		: m_type( p_type )
 	{
-	}
+#if !defined( NDEBUG )
 
-	FrameEvent::FrameEvent( FrameEvent const & p_object )
-		:	m_type( p_object.m_type )
-	{
-	}
+		StringStream l_stream;
+		l_stream << Debug::Backtrace{};
+		m_stackTrace = l_stream.str();
 
-	FrameEvent::FrameEvent( FrameEvent && p_object )
-		:	m_type( std::move( p_object.m_type ) )
-	{
-	}
-
-	FrameEvent & FrameEvent::operator =( FrameEvent const & p_object )
-	{
-		m_type = p_object.m_type;
-		return *this;
-	}
-
-	FrameEvent & FrameEvent::operator =( FrameEvent && p_object )
-	{
-		if ( this != &p_object )
-		{
-			m_type = p_object.m_type;
-			p_object.m_type = EventType::Count;
-		}
-
-		return *this;
+#endif
 	}
 
 	FrameEvent::~FrameEvent()

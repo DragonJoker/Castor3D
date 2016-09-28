@@ -347,6 +347,11 @@ namespace Castor3D
 			return m_map.end();
 		}
 
+		inline auto size()const
+		{
+			return m_map.size();
+		}
+
 		inline auto find( key_type p_pass )const
 		{
 			return m_map.find( p_pass );

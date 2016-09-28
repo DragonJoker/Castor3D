@@ -41,6 +41,7 @@ SOFTWARE.
 #include <Log/Logger.hpp>
 #include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
+#include <Design/Signal.hpp>
 
 namespace Castor3D
 {
@@ -306,6 +307,7 @@ namespace Castor3D
 		inline void SetChanged()
 		{
 			m_changed = true;
+			m_signalChanged( *this );
 		}
 		/**
 		 *\~english
@@ -339,8 +341,32 @@ namespace Castor3D
 		{
 			return m_skybox;
 		}
-
-		//@}
+		/**
+		 *\~english
+		 *\brief		Connects a client to the changed notification signal.
+		 *\param[in]	p_function	The client function.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Connecte un client au signal de notification de changement.
+		 *\param[in]	p_function	La fonction du client.
+		 *\return		La connexion.
+		 */
+		inline uint32_t Connect( std::function< void( Scene const & ) > p_function )
+		{
+			return m_signalChanged.connect( p_function );
+		}
+		/**
+		 *\~english
+		 *\brief		Disconnects a client from the changed notification signal.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Déconnecte un client du signal de notification de changement.
+		 *\return		La connexion.
+		 */
+		inline void Disconnect( uint32_t p_connection )
+		{
+			m_signalChanged.disconnect( p_connection );
+		}
 
 	private:
 		//!\~english	The root node
@@ -390,13 +416,10 @@ namespace Castor3D
 		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::PreRender );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
-		bool m_changed;
+		bool m_changed{ false };
 		//!\~english	Ambient light color
 		//!\~french		Couleur de la lumière ambiante
 		Castor::Colour m_ambientLight;
-		//!\~english	The mutex, to make the Scene threadsafe
-		//!\~french		Le mutex protégeant les données de la scène
-		mutable std::recursive_mutex m_mutex;
 		//!\~english	The overlays array
 		//!\~french		Le tableau d'overlays
 		OverlayPtrArray m_overlays;
@@ -412,6 +435,9 @@ namespace Castor3D
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
+		//!\~english	The signal raised when the scene has changed.
+		//!\~french		Le signal levé lorsque la scène a changé.
+		Castor::Signal< std::function< void( Scene const & ) > > m_signalChanged;
 
 	public:
 		//!\~english	The cameras root node name.

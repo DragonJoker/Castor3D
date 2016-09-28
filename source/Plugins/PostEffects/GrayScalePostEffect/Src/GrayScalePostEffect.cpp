@@ -158,7 +158,7 @@ namespace GrayScale
 	{
 		auto l_attach = p_framebuffer.GetAttachment( AttachmentPoint::Colour, 0 );
 
-		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::Texture )
 		{
 			bool l_return = m_surface.m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();

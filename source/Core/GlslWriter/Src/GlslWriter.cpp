@@ -5,6 +5,8 @@
 
 namespace GLSL
 {
+	using Castor::operator<<;
+
 	//*****************************************************************************************
 
 	LightingModelFactory::LightingModelFactory()
@@ -146,6 +148,11 @@ namespace GLSL
 	}
 
 	void GlslWriter::WriteAssign( Type const & p_lhs, int const & p_rhs )
+	{
+		m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
+	}
+
+	void GlslWriter::WriteAssign( Type const & p_lhs, unsigned int const & p_rhs )
 	{
 		m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
 	}
