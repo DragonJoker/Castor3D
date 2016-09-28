@@ -27,6 +27,8 @@
 
 #include <GlslSource.hpp>
 
+#include <Graphics/Image.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -131,7 +133,7 @@ namespace Castor3D
 
 				if ( p_program.GetRenderSystem()->GetCurrentContext() )
 				{
-					p_program.Bind( false );154
+					p_program.Bind( false );
 					l_picking.Initialise();
 					p_program.Unbind();
 				}
