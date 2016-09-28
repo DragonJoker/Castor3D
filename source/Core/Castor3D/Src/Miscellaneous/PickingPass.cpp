@@ -131,7 +131,7 @@ namespace Castor3D
 
 				if ( p_program.GetRenderSystem()->GetCurrentContext() )
 				{
-					p_program.Bind( false );
+					p_program.Bind( false );154
 					l_picking.Initialise();
 					p_program.Unbind();
 				}
@@ -141,9 +141,9 @@ namespace Castor3D
 		template< typename MapType >
 		void DoPickFromList( MapType const & p_map, Point3f const & p_index, GeometryWPtr & p_geometry, SubmeshWPtr & p_submesh, uint32_t & p_face )
 		{
-			auto l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
-			auto l_nodeIndex{ uint32_t( p_index[1] ) };
-			auto l_faceIndex{ uint32_t( p_index[3] ) };
+			uint32_t l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
+			uint32_t l_nodeIndex{ uint32_t( p_index[1] ) };
+			uint32_t l_faceIndex{ uint32_t( p_index[3] ) };
 
 			REQUIRE( p_map.size() > l_pipelineIndex );
 			auto l_itPipeline = p_map.begin();
@@ -165,10 +165,10 @@ namespace Castor3D
 		template<>
 		void DoPickFromList< SubmeshStaticRenderNodesByPipelineMap >( SubmeshStaticRenderNodesByPipelineMap const & p_map, Point3f const & p_index, GeometryWPtr & p_geometry, SubmeshWPtr & p_submesh, uint32_t & p_face )
 		{
-			auto l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
-			auto l_nodeIndex{ uint32_t( p_index[1] ) };
-			auto l_instanceIndex{ uint32_t( p_index[2] ) };
-			auto l_faceIndex{ uint32_t( p_index[3] ) };
+			uint32_t l_pipelineIndex{ ( uint32_t( p_index[0] ) >> 8 ) - 1 };
+			uint32_t l_nodeIndex{ uint32_t( p_index[1] ) };
+			uint32_t l_instanceIndex{ uint32_t( p_index[2] ) };
+			uint32_t l_faceIndex{ uint32_t( p_index[3] ) };
 
 			REQUIRE( p_map.size() > l_pipelineIndex );
 			auto l_itPipeline = p_map.begin();

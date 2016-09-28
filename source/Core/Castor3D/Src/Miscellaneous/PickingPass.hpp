@@ -128,7 +128,7 @@ namespace Castor3D
 															   , Submesh & p_submesh
 															   , Geometry & p_primitive
 															   , AnimatedSkeletonSPtr p_skeleton
-															   , AnimatedMeshSPtr p_mesh )override;;
+															   , AnimatedMeshSPtr p_mesh )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::CreateStaticNode
 		 */
