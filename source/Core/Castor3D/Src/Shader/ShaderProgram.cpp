@@ -151,7 +151,6 @@ namespace Castor3D
 
 	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_status( ePROGRAM_STATUS_NOTLINKED )
 	{
 	}
 
@@ -447,6 +446,27 @@ namespace Castor3D
 		return m_pShaders[size_t( p_type )]->GetFrameVariables();
 	}
 
+	void ShaderProgram::BindUbos()const
+	{
+		m_ubosBound = true;
+		uint32_t l_index = 0;
+
+		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+		{
+			l_variableBuffer->Bind( l_index++ );
+		}
+	}
+
+	void ShaderProgram::UnbindUbos()const
+	{
+		uint32_t l_index = 0;
+
+		for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+		{
+			l_variableBuffer->Unbind( l_index++ );
+		}
+	}
+
 	bool ShaderProgram::DoInitialise()
 	{
 		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
@@ -512,14 +532,11 @@ namespace Castor3D
 				l_shader->Bind();
 			}
 
-			if ( p_bindUbo )
-			{
-				uint32_t l_index = 0;
+			m_ubosBound = p_bindUbo;
 
-				for ( auto l_variableBuffer : m_listFrameVariableBuffers )
-				{
-					l_variableBuffer->Bind( l_index++ );
-				}
+			if ( m_ubosBound )
+			{
+				BindUbos();
 			}
 		}
 	}
@@ -528,11 +545,9 @@ namespace Castor3D
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
-			uint32_t l_index = 0;
-
-			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+			if ( m_ubosBound )
 			{
-				l_variableBuffer->Unbind( l_index++ );
+				UnbindUbos();
 			}
 
 			for ( auto l_shader : m_activeShaders )

@@ -22,9 +22,9 @@ C3D_Ase_API void GetRequiredVersion( Version & p_version )
 	p_version = Version();
 }
 
-C3D_Ase_API ePLUGIN_TYPE GetType()
+C3D_Ase_API PluginType GetType()
 {
-	return ePLUGIN_TYPE_IMPORTER;
+	return PluginType::Importer;
 }
 
 C3D_Ase_API String GetName()

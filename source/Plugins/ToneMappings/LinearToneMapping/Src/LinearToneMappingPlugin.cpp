@@ -24,9 +24,9 @@ C3D_LinearToneMapping_API void GetRequiredVersion( Castor3D::Version & p_version
 	p_version = Castor3D::Version();
 }
 
-C3D_LinearToneMapping_API Castor3D::ePLUGIN_TYPE GetType()
+C3D_LinearToneMapping_API Castor3D::PluginType GetType()
 {
-	return Castor3D::ePLUGIN_TYPE_TONEMAPPING;
+	return Castor3D::PluginType::ToneMapping;
 }
 
 C3D_LinearToneMapping_API Castor::String GetName()

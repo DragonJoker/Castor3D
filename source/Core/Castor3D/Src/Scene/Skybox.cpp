@@ -220,13 +220,13 @@ namespace Castor3D
 			m_pipeline->SetViewMatrix( p_camera.GetView() );
 			m_pipeline->ApplyMatrices( *m_matricesBuffer, 0xFFFFFFFFFFFFFFFF );
 			m_pipeline->Apply();
-			m_pipeline->GetProgram().Bind();
+			m_pipeline->GetProgram().BindUbos();
 			m_texture->Bind( 0 );
 			l_sampler->Bind( 0 );
 			m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 			l_sampler->Unbind( 0 );
 			m_texture->Unbind( 0 );
-			m_pipeline->GetProgram().Unbind();
+			m_pipeline->GetProgram().UnbindUbos();
 		}
 	}
 

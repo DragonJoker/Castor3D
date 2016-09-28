@@ -6,7 +6,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameBufferAttachment::FrameBufferAttachment( eATTACHMENT_TYPE p_type )
+	FrameBufferAttachment::FrameBufferAttachment( AttachmentType p_type )
 		: m_type( p_type )
 		, m_point( AttachmentPoint::None )
 		, m_index( 0 )

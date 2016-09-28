@@ -150,7 +150,17 @@ namespace castortd
 
 		if ( m_panel )
 		{
+			if ( wxGetApp().GetCastor()->IsThreaded() )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().Pause();
+			}
+
 			m_panel->SetRenderWindow( nullptr );
+
+			if ( wxGetApp().GetCastor()->IsThreaded() )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().Resume();
+			}
 		}
 
 		if ( wxGetApp().GetCastor() )
@@ -183,9 +193,9 @@ namespace castortd
 			{
 				if ( !l_castor.IsThreaded() )
 				{
-					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+					l_castor.GetRenderLoop().RenderSyncFrame();
 					m_game->Update();
-					m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps(), true );
+					m_timer->Start( 1000 / l_castor.GetRenderLoop().GetWantedFps(), true );
 				}
 			}
 		}

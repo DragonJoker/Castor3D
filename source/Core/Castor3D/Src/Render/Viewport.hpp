@@ -92,7 +92,7 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		C3D_API static const Castor::String string_type[eVIEWPORT_TYPE_COUNT];
+		C3D_API static const std::array< Castor::String, size_t( ViewportType::Count ) > string_type;
 
 		/*!
 		\author		Sylvain DOREMUS
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 
 	public:
 		/**
@@ -311,7 +311,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type de projection du viewport
 		 */
-		inline eVIEWPORT_TYPE GetType()const
+		inline ViewportType GetType()const
 		{
 			return m_type;
 		}
@@ -455,7 +455,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de projection du viewport
 		 *\return		La valeur
 		 */
-		inline void UpdateType( eVIEWPORT_TYPE p_type )
+		inline void UpdateType( ViewportType p_type )
 		{
 			m_modified |= m_type != p_type;
 			m_type = p_type;
@@ -649,7 +649,7 @@ namespace Castor3D
 		//!\~english The viewport vertical FOV 	\~french Angle de vue vezrtical
 		Castor::Angle m_fovY;
 		//!\~english The projection type	\~french Type de projection
-		eVIEWPORT_TYPE m_type;
+		ViewportType m_type;
 		//!\~english The viewport render size	\~french Dimensions du viewport
 		Castor::Size m_size;
 		//!\~english The display window ratio (4:3, 16:9, ...)	\~french Ratio d'affichage

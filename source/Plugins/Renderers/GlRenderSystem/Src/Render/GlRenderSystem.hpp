@@ -93,7 +93,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateQuery
 		 */
-		Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type )override;
+		Castor3D::GpuQuerySPtr CreateQuery( Castor3D::QueryType p_type )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateViewport
 		 */

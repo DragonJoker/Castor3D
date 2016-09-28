@@ -212,22 +212,22 @@ namespace Castor3D
 		C3D_API CameraSPtr GetCamera()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the eVIEWPORT_TYPE
-		 *\return		The eVIEWPORT_TYPE
+		 *\brief		Retrieves the ViewportType
+		 *\return		The ViewportType
 		 *\~french
-		 *\brief		Récupère le eVIEWPORT_TYPE
-		 *\return		Le eVIEWPORT_TYPE
+		 *\brief		Récupère le ViewportType
+		 *\return		Le ViewportType
 		 */
-		C3D_API eVIEWPORT_TYPE GetViewportType()const;
+		C3D_API ViewportType GetViewportType()const;
 		/**
 		 *\~english
-		 *\brief		Sets the eVIEWPORT_TYPE
-		 *\param[in]	val	The new eVIEWPORT_TYPE
+		 *\brief		Sets the ViewportType
+		 *\param[in]	val	The new ViewportType
 		 *\~french
-		 *\brief		Définit le eVIEWPORT_TYPE
-		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
+		 *\brief		Définit le ViewportType
+		 *\param[in]	val	Le nouveau ViewportType
 		 */
-		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
+		C3D_API void SetViewportType( ViewportType val );
 		/**
 		 *\~english
 		 *\brief		Sets the Scene
@@ -472,7 +472,7 @@ namespace Castor3D
 		}
 
 	private:
-		void DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture );
+		void DoRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture );
 		void DoUpdateSize();
 
 	private:

@@ -90,33 +90,43 @@ namespace Castor3D
 
 	bool BillboardList::Initialise()
 	{
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.GetStride();
-		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-		uint8_t * l_buffer = m_vertexBuffer->data();
-
-		for ( auto & l_pos : m_arrayPositions )
+		if ( !m_initialised )
 		{
-			std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-			l_buffer += l_stride;
+			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_declaration );
+			uint32_t l_stride = m_declaration.GetStride();
+			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+			uint8_t * l_buffer = m_vertexBuffer->data();
+
+			for ( auto & l_pos : m_arrayPositions )
+			{
+				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_initialised = true;
 		}
 
-		m_vertexBuffer->Create();
-		m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
-		return true;
+		return m_initialised;
 	}
 
 	void BillboardList::Cleanup()
 	{
-		for ( auto l_buffers : m_geometryBuffers )
+		if ( m_initialised )
 		{
-			l_buffers->Cleanup();
-		}
+			m_initialised = false;
 
-		m_geometryBuffers.clear();
-		m_vertexBuffer->Cleanup();
-		m_vertexBuffer->Destroy();
-		m_vertexBuffer.reset();
+			for ( auto l_buffers : m_geometryBuffers )
+			{
+				l_buffers->Cleanup();
+			}
+
+			m_geometryBuffers.clear();
+			m_vertexBuffer->Cleanup();
+			m_vertexBuffer->Destroy();
+			m_vertexBuffer.reset();
+		}
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )
@@ -179,7 +189,7 @@ namespace Castor3D
 		}
 	}
 
-	GeometryBuffers & BillboardList::GetGeometryBuffers( ShaderProgram const & p_program )
+	GeometryBuffersSPtr BillboardList::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
 		GeometryBuffersSPtr l_buffers;
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
@@ -202,7 +212,7 @@ namespace Castor3D
 			l_buffers = *l_it;
 		}
 
-		return *l_buffers;
+		return l_buffers;
 	}
 
 	void BillboardList::DoUpdate()

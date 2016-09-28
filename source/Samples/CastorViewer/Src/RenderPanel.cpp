@@ -15,6 +15,7 @@
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
+#include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Scene.hpp>
@@ -143,6 +144,7 @@ namespace CastorViewer
 		, m_oldY( 0.0_r )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_camSpeed( DEF_CAM_SPEED )
+		, m_picking{ *wxGetApp().GetCastor() }
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -183,41 +185,55 @@ namespace CastorViewer
 	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
 	{
 		m_renderWindow.reset();
+		Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
-		if ( p_window )
+		if ( p_window && p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 		{
-			Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
+			Castor::Size l_sizeScreen;
+			Castor::System::GetScreenSize( 0, l_sizeScreen );
+			GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
+			l_sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
+			GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
+			m_listener = p_window->GetListener();
+			SceneSPtr l_scene = p_window->GetScene();
 
-			if ( p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+			if ( l_scene )
 			{
-				Castor::Size l_sizeScreen;
-				Castor::System::GetScreenSize( 0, l_sizeScreen );
-				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
-				l_sizeWnd = GuiCommon::make_Size( GetParent()->GetClientSize() );
-				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
-				m_pListener = p_window->GetListener();
-				SceneSPtr l_scene = p_window->GetScene();
+				m_cameraNode = p_window->GetCamera()->GetParent();
 
-				if ( l_scene )
+				if ( l_scene->GetSceneNodeCache().Has( cuT( "PointLightsNode" ) ) )
 				{
-					m_cameraNode = p_window->GetCamera()->GetParent();
-
-					if ( l_scene->GetSceneNodeCache().Has( cuT( "PointLightsNode" ) ) )
-					{
-						m_lightsNode = l_scene->GetSceneNodeCache().Find( cuT( "PointLightsNode" ) );
-					}
-
-					if ( m_cameraNode )
-					{
-						m_ptOriginalPosition = m_cameraNode->GetPosition();
-						m_qOriginalOrientation = m_cameraNode->GetOrientation();
-						m_currentNode = m_cameraNode;
-					}
-
-					m_renderWindow = p_window;
-					m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
+					m_lightsNode = l_scene->GetSceneNodeCache().Find( cuT( "PointLightsNode" ) );
 				}
+
+				if ( m_cameraNode )
+				{
+					m_ptOriginalPosition = m_cameraNode->GetPosition();
+					m_qOriginalOrientation = m_cameraNode->GetOrientation();
+					m_currentNode = m_cameraNode;
+				}
+
+				m_renderWindow = p_window;
+				m_keyboardEvent = std::make_unique< KeyboardEvent >( p_window );
+
+				{
+					auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
+					m_picking.AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
+				}
+
+				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, p_window]()
+				{
+					m_picking.Initialise( p_window->GetRenderTarget()->GetSize() );
+				} ) );
 			}
+		}
+		else if ( m_listener )
+		{
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			{
+				m_picking.Cleanup();
+			} ) );
+			m_listener.reset();
 		}
 	}
 
@@ -347,9 +363,10 @@ namespace CastorViewer
 		{
 			if ( l_submesh && l_geometry )
 			{
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry, l_submesh]()
+				auto l_material = m_selectedSubmeshMaterialOrig;
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry, l_submesh, l_material]()
 				{
-					l_geometry->SetMaterial( l_submesh, m_selectedSubmeshMaterialOrig );
+					l_geometry->SetMaterial( l_submesh, l_material );
 					l_geometry->GetScene()->SetChanged();
 				} ) );
 			}
@@ -407,37 +424,37 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_camSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, -m_camSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, m_camSpeed, 0.0_r ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, m_camSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_camSpeed, 0.0_r ) );
+		m_listener->PostEvent( std::make_unique< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_camSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
@@ -635,9 +652,9 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
 	{
-		if ( m_pListener )
+		if ( m_listener )
 		{
-			m_pListener->PostEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
+			m_listener->PostEvent( std::make_unique< KeyboardEvent >( *m_keyboardEvent ) );
 			RenderWindowSPtr l_window = m_renderWindow.lock();
 
 			if ( l_window )
@@ -693,16 +710,22 @@ namespace CastorViewer
 
 			if ( l_window )
 			{
-				Camera const & l_camera = *l_window->GetCamera();
-				SubmeshSPtr l_submesh;
-				Face l_face{ 0, 0, 0 };
-				real l_distance{ std::numeric_limits< real >::max() };
-				auto l_geometry = l_window->GetScene()->GetObjectRootNode()->GetNearestGeometry( Ray{ int( m_oldX ), int ( m_oldY ), l_camera }
-																								 , l_camera
-																								 , l_distance
-																								 , l_face
-																								 , l_submesh );
-				DoUpdateSelectedGeometry( l_geometry, l_submesh );
+				auto l_x = m_oldX;
+				auto l_y = m_oldY;
+				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window, l_x, l_y]()
+				{
+					Camera & l_camera = *l_window->GetCamera();
+					m_picking.Update();
+					l_camera.Update();
+					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
+					{
+						DoUpdateSelectedGeometry( m_picking.GetPickedGeometry(), m_picking.GetPickedSubmesh() );
+					}
+					else
+					{
+						DoUpdateSelectedGeometry( nullptr, nullptr );
+					}
+				} ) );
 			}
 		}
 
@@ -783,11 +806,11 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaY, l_deltaX, 0.0_r ) );
+					m_listener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, -l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
-					m_pListener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
+					m_listener->PostEvent( std::make_unique< RotateNodeEvent >( m_currentNode, l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )

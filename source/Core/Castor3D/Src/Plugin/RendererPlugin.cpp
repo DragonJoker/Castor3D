@@ -23,7 +23,7 @@ namespace Castor3D
 #endif
 
 	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( ePLUGIN_TYPE_RENDERER, p_library, *p_engine )
+		: Plugin( PluginType::Renderer, p_library, *p_engine )
 	{
 		if ( !p_library->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{

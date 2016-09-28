@@ -175,6 +175,15 @@ namespace Castor3D
 		 *\param[in,out]	p_nodes	Les noeuds.
 		 */
 		void DoSortRenderNodes( SceneRenderNodes & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Notification that a scene has changed.
+		 *\param[in]	p_scene	The changed scene.
+		 *\~french
+		 *\brief		Notification qu'une scène a changé.
+		 *\param[in]	p_scene	La scène changée.
+		 */
+		void OnSceneChanged( Scene const & p_scene );
 
 	protected:
 		using SceneRenderNodesMap = std::map< Scene const *, SceneRenderNodes >;
@@ -194,6 +203,12 @@ namespace Castor3D
 		//!\~english	The newly added scenes.
 		//!\~french		Les scènes récemment ajoutées.
 		std::vector< SceneRPtr > m_newScenes;
+		//!\~english	The changed scenes.
+		//!\~french		Les scènes changées.
+		std::set< Scene const * > m_changedScenes;
+		//!\~english	The connections to the scenes change notification.
+		//!\~french		Les conenctions aux notifications de scènes changées.
+		std::map< Scene *, uint32_t > m_scenes;
 	};
 }
 

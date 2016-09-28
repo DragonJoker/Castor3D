@@ -157,7 +157,7 @@ namespace Castor3D
 	{
 		for ( auto l_attach : m_attaches )
 		{
-			if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+			if ( l_attach->GetAttachmentType() == AttachmentType::Texture )
 			{
 				std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture()->GetImage().Resize( p_size );
 			}
@@ -236,7 +236,7 @@ namespace Castor3D
 
 			if ( l_it != m_attaches.end() )
 			{
-				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+				if ( ( *l_it )->GetAttachmentType() == AttachmentType::Texture )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
 					l_return = l_attach->GetTexture()->GetImage().GetPixelFormat();

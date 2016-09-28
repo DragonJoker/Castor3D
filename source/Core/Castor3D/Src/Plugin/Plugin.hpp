@@ -50,7 +50,7 @@ namespace Castor3D
 		//!< Signature for the plug-in's unloading function
 		typedef void OnUnloadFunction( Engine * );
 		//!< Signature for the plug-in's type retrieval function
-		typedef ePLUGIN_TYPE GetTypeFunction();
+		typedef PluginType GetTypeFunction();
 		//!< Signature for the plug-in's version checking function
 		typedef void GetRequiredVersionFunction( Version & p_version );
 		//!< Signature for the plug-in's name retrieval function
@@ -76,7 +76,7 @@ namespace Castor3D
 		 *\param[in]	p_library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API Plugin( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
+		C3D_API Plugin( PluginType p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
 
 	public:
 		/**
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Récupère le type du plug-in
 		 *\return		Le type
 		 */
-		inline ePLUGIN_TYPE GetType()const
+		inline PluginType GetType()const
 		{
 			return m_type;
 		}
@@ -127,7 +127,7 @@ namespace Castor3D
 		//!\~english The plug-in's unloading function	\~french La fonction de déchargement du plug-in
 		POnUnloadFunction m_pfnOnUnload;
 		//!\~english The plug-in type	\~french Le type du plug-in
-		ePLUGIN_TYPE m_type;
+		PluginType m_type;
 	};
 }
 

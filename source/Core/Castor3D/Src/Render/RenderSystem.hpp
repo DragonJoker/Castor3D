@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de requête.
 		 *\return		La requête GPU créée.
 		 */
-		C3D_API virtual GpuQuerySPtr CreateQuery( eQUERY_TYPE p_type ) = 0;
+		C3D_API virtual GpuQuerySPtr CreateQuery( QueryType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a viewport render API specific implementation.

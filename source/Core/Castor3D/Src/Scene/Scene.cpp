@@ -282,7 +282,6 @@ namespace Castor3D
 		, Named( p_name )
 		, m_rootCameraNode()
 		, m_rootObjectNode()
-		, m_changed( false )
 	{
 		auto l_mergeObject = [this]( auto const & p_source
 									 , auto & p_destination
@@ -481,7 +480,7 @@ namespace Castor3D
 
 		auto l_notify = [this]()
 		{
-			m_changed = true;
+			SetChanged();
 		};
 
 		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
@@ -542,7 +541,6 @@ namespace Castor3D
 
 	void Scene::Cleanup()
 	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_overlays.clear();
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
@@ -649,8 +647,6 @@ namespace Castor3D
 	void Scene::Merge( SceneSPtr p_scene )
 	{
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutex );
-			auto l_lockOther = Castor::make_unique_lock( p_scene->m_mutex );
 			p_scene->GetAnimatedObjectGroupCache().MergeInto( *m_animatedObjectGroupCache );
 			p_scene->GetCameraCache().MergeInto( *m_cameraCache );
 			p_scene->GetBillboardListCache().MergeInto( *m_billboardCache );
@@ -658,7 +654,7 @@ namespace Castor3D
 			p_scene->GetLightCache().MergeInto( *m_lightCache );
 			p_scene->GetSceneNodeCache().MergeInto( *m_sceneNodeCache );
 			m_ambientLight = p_scene->GetAmbientLight();
-			m_changed = true;
+			SetChanged();
 		}
 
 		p_scene->Cleanup();
@@ -666,8 +662,7 @@ namespace Castor3D
 
 	bool Scene::ImportExternal( Path const & p_fileName, Importer & p_importer )
 	{
-		auto l_lock = Castor::make_unique_lock( m_mutex );
-		m_changed = true;
+		SetChanged();
 		return p_importer.ImportScene( *this, p_fileName, Parameters() );
 	}
 

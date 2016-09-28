@@ -378,6 +378,20 @@ namespace Castor3D
 		C3D_API FrameVariablePtrList const & GetFrameVariables( ShaderType p_type )const;
 		/**
 		 *\~english
+		 *\brief		Activates the program's frame variable buffers.
+		 *\~french
+		 *\brief		Active les tampons de variables du programme.
+		 */
+		C3D_API void BindUbos()const;
+		/**
+		 *\~english
+		 *\brief		Deactivates the program's frame variable buffers.
+		 *\~french
+		 *\brief		Désactive les tampons de variables du programme.
+		 */
+		C3D_API void UnbindUbos()const;
+		/**
+		 *\~english
 		 *\brief		Cleans the program up
 		 *\~french
 		 *\brief		Nettoie le programme
@@ -746,7 +760,10 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status.
 		//!\~french		Le statut du programme.
-		ePROGRAM_STATUS m_status;
+		ePROGRAM_STATUS m_status{ ePROGRAM_STATUS_NOTLINKED };
+		//!\~english	Tells if the UBOs were bound on or since last call to Bind.
+		//!\~french		Dit si les UBOs on été activés lors du ou depuis le dernier appel à Bind.
+		mutable bool m_ubosBound{ false };
 		//!\~english The shaders array.
 		//!\~french		Le tableau de shaders.
 		std::array< ShaderObjectSPtr, size_t( ShaderType::Count ) > m_pShaders;

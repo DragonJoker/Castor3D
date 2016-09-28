@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_type	Le type d'attache
 		 */
-		C3D_API explicit FrameBufferAttachment( eATTACHMENT_TYPE p_type );
+		C3D_API explicit FrameBufferAttachment( AttachmentType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'attache.
 		 */
-		inline eATTACHMENT_TYPE GetAttachmentType()const
+		inline AttachmentType GetAttachmentType()const
 		{
 			return m_type;
 		}
@@ -202,7 +202,7 @@ namespace Castor3D
 
 	private:
 		//\~english The attachment type.	\~french Le type d'attache.
-		eATTACHMENT_TYPE m_type;
+		AttachmentType m_type;
 		//\~english The attachment point.	\~french Le point d'attache.
 		AttachmentPoint m_point;
 		//\~english The attachment index.	\~french L'index d'attache.

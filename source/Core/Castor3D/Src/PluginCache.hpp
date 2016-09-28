@@ -42,7 +42,7 @@ namespace Castor3D
 	struct CacheTraits< Plugin, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, ePLUGIN_TYPE, Castor::DynamicLibrarySPtr ) >;
+		using Producer = std::function< std::shared_ptr< Plugin >( KeyType const &, PluginType, Castor::DynamicLibrarySPtr ) >;
 		using Merger = std::function< void( CacheBase< Plugin, KeyType > const &
 											, Castor::Collection< Plugin, KeyType > &
 											, std::shared_ptr< Plugin > ) >;
@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
-		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
+		C3D_API PluginStrMap GetPlugins( PluginType p_type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plug-ins located in working folder

@@ -720,15 +720,29 @@ namespace CastorViewer
 
 		if ( m_pRenderPanel )
 		{
+			if ( wxGetApp().GetCastor()->IsThreaded() )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().Pause();
+			}
+
 			m_pRenderPanel->SetRenderWindow( nullptr );
-			m_pRenderPanel->UnFocus();
-			m_pRenderPanel->Close( true );
-			m_pRenderPanel = nullptr;
+
+			if ( wxGetApp().GetCastor()->IsThreaded() )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().Resume();
+			}
 		}
 
 		if ( wxGetApp().GetCastor() )
 		{
 			wxGetApp().GetCastor()->Cleanup();
+		}
+
+		if ( m_pRenderPanel )
+		{
+			m_pRenderPanel->UnFocus();
+			m_pRenderPanel->Close( true );
+			m_pRenderPanel = nullptr;
 		}
 
 		DestroyChildren();

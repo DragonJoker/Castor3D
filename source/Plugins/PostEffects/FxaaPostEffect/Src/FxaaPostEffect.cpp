@@ -261,7 +261,7 @@ namespace Fxaa
 	{
 		auto l_attach = p_framebuffer.GetAttachment( AttachmentPoint::Colour, 0 );
 
-		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::Texture )
 		{
 			m_pipeline->Apply();
 			bool l_return = m_surface.m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );

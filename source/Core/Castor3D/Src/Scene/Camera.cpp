@@ -166,7 +166,7 @@ namespace Castor3D
 				real l_nearHeight{ 0.0_r };
 				real l_nearWidth{ 0.0_r };
 
-				if ( m_viewport.GetType() == eVIEWPORT_TYPE_ORTHO )
+				if ( m_viewport.GetType() == ViewportType::Ortho )
 				{
 					l_nearHeight = m_viewport.GetBottom() - m_viewport.GetTop();
 					l_nearWidth = m_viewport.GetRight() - m_viewport.GetLeft();
@@ -219,7 +219,7 @@ namespace Castor3D
 		m_viewport.Resize( p_size );
 	}
 
-	eVIEWPORT_TYPE Camera::GetViewportType()const
+	ViewportType Camera::GetViewportType()const
 	{
 		return m_viewport.GetType();
 	}
@@ -234,7 +234,7 @@ namespace Castor3D
 		return m_viewport.GetHeight();
 	}
 
-	void Camera::SetViewportType( eVIEWPORT_TYPE val )
+	void Camera::SetViewportType( ViewportType val )
 	{
 		m_viewport.UpdateType( val );
 	}

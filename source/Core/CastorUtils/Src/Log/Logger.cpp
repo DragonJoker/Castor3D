@@ -164,9 +164,12 @@ namespace Castor
 		delete m_wcout;
 		delete m_wcerr;
 		delete m_wclog;
-		m_impl->Cleanup();
-		delete m_impl;
-		m_impl = nullptr;
+		{
+			std::unique_lock< std::mutex > lock( m_mutex );
+			m_impl->Cleanup();
+			delete m_impl;
+			m_impl = nullptr;
+		}
 	}
 
 	void Logger::Initialise( ELogType p_eLogLevel )
@@ -179,9 +182,12 @@ namespace Castor
 		{
 			m_singleton = new Logger();
 			Logger & l_logger = GetSingleton();
-			delete l_logger.m_impl;
-			l_logger.m_impl = new LoggerImpl;
-			l_logger.m_impl->Initialise( l_logger );
+			{
+				std::unique_lock< std::mutex > lock( l_logger.m_mutex );
+				delete l_logger.m_impl;
+				l_logger.m_impl = new LoggerImpl;
+				l_logger.m_impl->Initialise( l_logger );
+			}
 			l_logger.m_logLevel = p_eLogLevel;
 			l_logger.DoInitialiseThread();
 		}
@@ -389,7 +395,10 @@ namespace Castor
 				std::swap( queue, m_queue );
 			}
 
-			m_impl->LogMessageQueue( queue );
+			{
+				std::unique_lock< std::mutex > lock( m_mutex );
+				m_impl->LogMessageQueue( queue );
+			}
 		}
 	}
 

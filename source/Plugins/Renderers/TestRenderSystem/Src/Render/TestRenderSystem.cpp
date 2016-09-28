@@ -99,7 +99,7 @@ namespace TestRender
 		return std::make_shared< TestBackBuffers >( *GetEngine() );
 	}
 
-	GpuQuerySPtr TestRenderSystem::CreateQuery( eQUERY_TYPE p_type )
+	GpuQuerySPtr TestRenderSystem::CreateQuery( QueryType p_type )
 	{
 		return std::make_shared< TestQuery >( *this, p_type );
 	}

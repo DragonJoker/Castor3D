@@ -5,6 +5,8 @@
 
 namespace GLSL
 {
+	using Castor::operator<<;
+
 	//*****************************************************************************************
 
 	LightingModelFactory::LightingModelFactory()

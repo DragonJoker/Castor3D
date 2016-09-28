@@ -96,7 +96,7 @@ namespace GuiCommon
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
-		void OnTypeChange( Castor3D::eVIEWPORT_TYPE p_value );
+		void OnTypeChange( Castor3D::ViewportType p_value );
 		void OnSizeChange( Castor::Size const & p_value );
 		void OnTopChange( double p_value );
 		void OnBottomChange( double p_value );

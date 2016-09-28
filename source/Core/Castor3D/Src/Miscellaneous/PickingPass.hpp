@@ -82,14 +82,66 @@ namespace Castor3D
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	p_position		The position in the pass.
 		 *\param[in]	p_camera		The viewing camera.
-		 *\return		The picked geometry, nullptr if none.
+		 *\return		\p true if something was picked.
 		 *\~french
 		 *\brief		Sélectionne la géométrie à la position de souris donnée.
 		 *\param[in]	p_position		La position dans la passe.
 		 *\param[in]	p_camera		La caméra regardant la scène.
-		 *\return		La géométrie sélectionnée, nullptr si aucune.
+		 *\return		\p true si quelque chose a été sélectionné.
 		 */
-		C3D_API GeometrySPtr Pick( Castor::Position const & p_position, Camera const & p_camera );
+		C3D_API bool Pick( Castor::Position const & p_position, Camera const & p_camera );
+		/**
+		*\~english
+		*\return		The picked geometry.
+		*\~french
+		*\return		La géométrie sélectionnée.
+		*/
+		inline GeometrySPtr GetPickedGeometry()const
+		{
+			return m_geometry.lock();
+		}
+		/**
+		*\~english
+		*\return		The picked submesh.
+		*\~french
+		*\return		Le sous-maillage sélectionné.
+		*/
+		inline SubmeshSPtr GetPickedSubmesh()const
+		{
+			return m_submesh.lock();
+		}
+		/**
+		*\~english
+		*\return		The picked face index.
+		*\~french
+		*\return		L'indice de la face sélectionnée.
+		*/
+		inline uint32_t GetPickedFace()const
+		{
+			return m_face;
+		}
+		/**
+		 *\~copydoc		Castor3D::RenderPass::CreateAnimatedNode
+		 */
+		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+															   , Pipeline & p_pipeline
+															   , Submesh & p_submesh
+															   , Geometry & p_primitive
+															   , AnimatedSkeletonSPtr p_skeleton
+															   , AnimatedMeshSPtr p_mesh )override;;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::CreateStaticNode
+		 */
+		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+														   , Pipeline & p_pipeline
+														   , Submesh & p_submesh
+														   , Geometry & p_primitive )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::CreateBillboardNode
+		 */
+		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
+														 , Pipeline & p_pipeline
+														 , BillboardList & p_billboard )override;
 
 	private:
 		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
@@ -97,35 +149,50 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const override;
+		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 */
+		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderBillboards
+		 */
+		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
+		 */
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
+		 */
+		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaquePipeline
+		 */
+		Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
+		 */
+		Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
+		 */
+		Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 */
+		void DoCompleteProgramFlags( uint8_t & p_programFlags )const override;
 
 	private:
 		//!\~english	The scenes, and cameras used to render them.
 		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
 		std::map< Castor::String, GeometryWPtr > m_pickable;
-		//!\~english	The pipeline used to render opaque nodes.
-		//!\~french		Le pipeline de rendu utilisé pour dessiner les noeuds opaques.
-		PipelineSPtr m_pipeline;
 		//!\~english	The texture receiving the color render.
 		//!\~french		La texture recevant le rendu couleur.
 		TextureLayoutSPtr m_colourTexture;
@@ -141,9 +208,18 @@ namespace Castor3D
 		//!\~english	The attach between depth buffer and main frame buffer.
 		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
 		RenderBufferAttachmentSPtr m_depthAttach;
-		//!\~english	The render queue.
-		//!\~french		La file de rendu.
-		RenderQueue m_renderQueue;
+		//!\~english	The geometry buffer.
+		//!\~french		Les tampons de géométrie.
+		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	The picked geometry.
+		//!\~french		La géométrie sélectionnée.
+		GeometryWPtr m_geometry;
+		//!\~english	The picked submesh.
+		//!\~french		Le sous-maillage sélectionné.
+		SubmeshWPtr m_submesh;
+		//!\~english	The picked face index.
+		//!\~french		L'indice de la face sélectionnée.
+		uint32_t m_face;
 	};
 }
 

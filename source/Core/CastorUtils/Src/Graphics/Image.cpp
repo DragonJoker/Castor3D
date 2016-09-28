@@ -57,6 +57,32 @@ namespace Castor
 				Logger::LogWarning( std::stringstream() << "FreeImage - Unknown Format - " << message );
 			}
 		}
+
+		void SwapComponents( uint8_t * p_pixels, PixelFormat p_format, uint32_t p_width, uint32_t p_height )
+		{
+			uint32_t l_count{ p_width * p_height };
+			uint32_t l_bpp{ PF::GetBytesPerPixel( p_format ) };
+			uint32_t l_bpc{ 0u };
+
+			if ( PF::HasAlpha( p_format ) )
+			{
+				l_bpc = l_bpp / 4;
+			}
+			else
+			{
+				l_bpc = l_bpp / 3;
+			}
+
+			uint8_t * l_r{ p_pixels + 0 * l_bpc };
+			uint8_t * l_b{ p_pixels + 2 * l_bpc };
+
+			for ( uint32_t i = 0; i < l_count; i++ )
+			{
+				std::swap( *l_r, *l_b );
+				l_r += l_bpp;
+				l_b += l_bpp;
+			}
+		}
 	}
 
 	//************************************************************************************************
@@ -159,16 +185,9 @@ namespace Castor
 		if ( !p_image.m_buffer )
 		{
 			uint8_t * l_pixels = FreeImage_GetBits( l_fiImage );
-			//0=Blue, 1=Green, 2=Red, 3=Alpha
-#if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
-			uint8_t * l_pTmp = l_pixels;
-			uint32_t l_uiSize = l_width * l_height;
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
 
-			for ( uint32_t i = 0; i < l_uiSize; i++ )
-			{
-				std::swap( l_pTmp[0], l_pTmp[2] );
-				l_pTmp += 4;
-			}
+			SwapComponents( l_pixels, l_ePF, l_width, l_height );
 
 #endif
 			p_image.m_buffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
@@ -201,6 +220,39 @@ namespace Castor
 			{
 				memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
+				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				FreeImage_Unload( l_fiImage );
+			}
+		}
+		else if ( p_path.GetExtension() == cuT( "hdr" ) )
+		{
+			if ( PF::HasAlpha( p_image.GetPixelFormat() ) )
+			{
+				l_fiImage = FreeImage_AllocateT( FIT_RGBAF, l_w, l_h );
+				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::RGBA32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
+
+				if ( l_fiImage )
+				{
+					memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
+					FIBITMAP * l_dib = FreeImage_ConvertToRGBF( l_fiImage );
+					FreeImage_Unload( l_fiImage );
+					l_fiImage = l_dib;
+				}
+			}
+			else
+			{
+				l_fiImage = FreeImage_AllocateT( FIT_RGBF, l_w, l_h );
+				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::RGB32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
+
+				if ( l_fiImage )
+				{
+					memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
+				}
+			}
+
+			if ( l_fiImage )
+			{
+				FREE_IMAGE_FORMAT l_fif = FIF_HDR;
 				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_fiImage );
 			}
@@ -367,16 +419,10 @@ namespace Castor
 					l_width = FreeImage_GetWidth( l_fiImage );
 					l_height = FreeImage_GetHeight( l_fiImage );
 					uint8_t * l_pixels = FreeImage_GetBits( l_fiImage );
-					//0=Blue, 1=Green, 2=Red, 3=Alpha
-#if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
-					uint8_t * l_pTmp = l_pixels;
-					uint32_t l_uiSize = l_width * l_height;
 
-					for ( uint32_t i = 0; i < l_uiSize; i++ )
-					{
-						std::swap( l_pTmp[0], l_pTmp[2] );
-						l_pTmp += l_uiBpp;
-					}
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+					SwapComponents( l_pixels, m_buffer->format(), l_width, l_height );
 
 #endif
 					m_buffer = PxBufferBase::create( p_size, l_ePF, l_pixels, l_ePF );
@@ -404,11 +450,13 @@ namespace Castor
 		return * this;
 	}
 
-	Image & Image::SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel )
+	Image & Image::SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
-		memcpy( &m_buffer->ptr()[( x + y * GetWidth() ) * PF::GetBytesPerPixel( GetPixelFormat() )], p_pPixel, PF::GetBytesPerPixel( GetPixelFormat() ) );
+		uint8_t const * l_pSrc = p_pPixel;
+		uint8_t * l_pDst = &( *m_buffer->get_at( x, y ) );
+		PF::ConvertPixel( p_format, l_pSrc, GetPixelFormat(), l_pDst );
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -455,7 +503,7 @@ namespace Castor
 		{
 			if ( GetPixelFormat() == p_src.GetPixelFormat() )
 			{
-				m_buffer = p_src.m_buffer->clone();
+				memcpy( m_buffer->ptr(), p_src.m_buffer->ptr(), m_buffer->size() );
 			}
 			else
 			{
@@ -473,36 +521,14 @@ namespace Castor
 		else
 		{
 			Point2d l_ptSrcStep( static_cast< double >( p_src.GetWidth() ) / GetWidth(), static_cast< double >( p_src.GetHeight() ) / GetHeight() );
+			ByteArray l_pSrcPix( PF::GetBytesPerPixel( p_src.GetPixelFormat() ), 0 );
 
-			if ( GetPixelFormat() == p_src.GetPixelFormat() )
+			for ( uint32_t i = 0; i < GetWidth(); ++i )
 			{
-				uint8_t * l_pSrcPix	= new uint8_t[PF::GetBytesPerPixel( m_buffer->format() )];
-
-				for ( uint32_t i = 0; i < GetWidth(); ++i )
+				for ( uint32_t j = 0; j < GetHeight(); ++j )
 				{
-					for ( uint32_t j = 0; j < GetHeight(); ++j )
-					{
-						p_src.GetPixel( static_cast< uint32_t >( i * l_ptSrcStep[0] ), static_cast< uint32_t >( j * l_ptSrcStep[1] ), l_pSrcPix, GetPixelFormat() );
-						SetPixel( i, j, l_pSrcPix );
-					}
-				}
-			}
-			else
-			{
-				// Parcours des pixels de l'image source et conversion / copie dans l'image courante
-				ByteArray l_pSrcPix( PF::GetBytesPerPixel( p_src.GetPixelFormat() ), 0 );
-				ByteArray l_pDestPix( PF::GetBytesPerPixel( GetPixelFormat() ), 0 );
-
-				for ( uint32_t i = 0; i < GetWidth(); ++i )
-				{
-					for ( uint32_t j = 0; j < GetHeight(); ++j )
-					{
-						p_src.GetPixel( static_cast< uint32_t >( i * l_ptSrcStep[0] ), static_cast< uint32_t >( j * l_ptSrcStep[1] ), l_pSrcPix.data(), p_src.GetPixelFormat() );
-						uint8_t const * l_pSrc = l_pSrcPix.data();
-						uint8_t * l_pDst = l_pDestPix.data();
-						PF::ConvertPixel( p_src.GetPixelFormat(), l_pSrc, GetPixelFormat(), l_pDst );
-						SetPixel( i, j, l_pDestPix.data() );
-					}
+					p_src.GetPixel( static_cast< uint32_t >( i * l_ptSrcStep[0] ), static_cast< uint32_t >( j * l_ptSrcStep[1] ), l_pSrcPix.data(), p_src.GetPixelFormat() );
+					SetPixel( i, j, l_pSrcPix.data(), p_src.GetPixelFormat() );
 				}
 			}
 		}
@@ -528,7 +554,7 @@ namespace Castor
 		for ( int i = l_rcRect.left(); i < l_rcRect.right(); ++i )
 		{
 			std::memcpy( l_pDest, l_pSrc, l_uiDestPitch );
-			l_pSrc  += l_uiSrcPitch;
+			l_pSrc += l_uiSrcPitch;
 			l_pDest += l_uiDestPitch;
 		}
 

@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TextureAttachment::TextureAttachment( TextureLayoutSPtr p_texture )
-		: FrameBufferAttachment( eATTACHMENT_TYPE_TEXTURE )
+		: FrameBufferAttachment( AttachmentType::Texture )
 		, m_texture( p_texture )
 		, m_target( TextureType::Count )
 		, m_layer( 0 )

@@ -29,8 +29,6 @@ SOFTWARE.
 
 #include <Graphics/Rectangle.hpp>
 
-#include <unordered_map>
-
 #if !defined( NDEBUG )
 #	define DEBUG_BUFFERS 0
 #else
@@ -254,7 +252,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -265,7 +263,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
 		/**
 		 *\~english
 		 *\brief		Creation function

@@ -262,7 +262,7 @@ namespace GuiCommon
 		DoLoadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto l_renderers = m_castor->GetPluginCache().GetPlugins( ePLUGIN_TYPE_RENDERER );
+		auto l_renderers = m_castor->GetPluginCache().GetPlugins( PluginType::Renderer );
 
 		if ( l_renderers.empty() )
 		{

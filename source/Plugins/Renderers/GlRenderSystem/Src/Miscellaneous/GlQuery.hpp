@@ -51,7 +51,7 @@ namespace GlRender
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		GlQuery( GlRenderSystem & p_renderSystem, Castor3D::eQUERY_TYPE p_query );
+		GlQuery( GlRenderSystem & p_renderSystem, Castor3D::QueryType p_query );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -80,19 +80,19 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::eQUERY_INFO p_infos, int32_t & p_param )const;
+		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::eQUERY_INFO p_infos, uint32_t & p_param )const;
+		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::eQUERY_INFO p_infos, int64_t & p_param )const;
+		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::eQUERY_INFO p_infos, uint64_t & p_param )const;
+		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
 	};
 }
 

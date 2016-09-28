@@ -28,6 +28,8 @@ SOFTWARE.
 
 #include "Render/RenderQueue.hpp"
 
+#include <unordered_map>
+
 namespace Castor3D
 {
 	/*!
@@ -144,7 +146,7 @@ namespace Castor3D
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
 		 */
-		C3D_API void PreparePipeline( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		C3D_API void PreparePipeline( uint16_t p_textureFlags, uint8_t & p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags.
@@ -188,6 +190,71 @@ namespace Castor3D
 		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
 		 */
 		C3D_API Pipeline & GetTransparentPipelineBack( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		/**
+		 *\~english
+		 *\brief		Creates an animated render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	p_submesh	The submesh.
+		 *\param[in]	p_primitive	The geometry.
+		 *\param[in]	p_skeleton	The animated skeleton.
+		 *\param[in]	p_mesh		The animated mesh.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu animé.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	p_submesh	Le sous-maillage.
+		 *\param[in]	p_primitive	La géométrie.
+		 *\param[in]	p_skeleton	Le squelette animé.
+		 *\param[in]	p_mesh		Le maillage animé.
+		 *\return		Le noeud de rendu.
+		 */
+		C3D_API virtual AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
+																	   , Pipeline & p_pipeline
+																	   , Submesh & p_submesh
+																	   , Geometry & p_primitive
+																	   , AnimatedSkeletonSPtr p_skeleton
+																	   , AnimatedMeshSPtr p_mesh );
+		/**
+		 *\~english
+		 *\brief		Creates a static render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	p_submesh	The submesh.
+		 *\param[in]	p_primitive	The geometry.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu statique.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	p_submesh	Le sous-maillage.
+		 *\param[in]	p_primitive	La géométrie.
+		 *\return		Le noeud de rendu.
+		 */
+		C3D_API virtual StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
+																   , Pipeline & p_pipeline
+																   , Submesh & p_submesh
+																   , Geometry & p_primitive );
+		/**
+		*\~english
+		*\brief		Creates a static render node.
+		*\param[in]	p_pass		The pass.
+		*\param[in]	p_pipeline	The pipeline.
+		*\param[in]	p_submesh	The submesh.
+		*\param[in]	p_billboard	The billboard.
+		*\return		The render node.
+		*\~french
+		*\brief		Crée un noeud de rendu statique.
+		*\param[in]	p_pass		La passe.
+		*\param[in]	p_pipeline	Le pipeline.
+		*\param[in]	p_submesh	Le sous-maillage.
+		*\param[in]	p_billboard	Le billboard.
+		*\return		Le noeud de rendu.
+		*/
+		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
+																 , Pipeline & p_pipeline
+																 , BillboardList & p_billboard );
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -290,6 +357,43 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Creates a render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\return		Le noeud de rendu.
+		 */
+		C3D_API RenderNode DoCreateRenderNode( Pass & p_pass, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Creates a scene render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu de scène.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\return		Le noeud de rendu.
+		 */
+		C3D_API SceneRenderNode DoCreateSceneRenderNode( Pass & p_pass, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Retrieves the shader program matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief		Récupère le programme shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags )const;
 
 	private:
 		/**
@@ -321,15 +425,13 @@ namespace Castor3D
 		C3D_API virtual Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	A combination of TextureChannel.
-		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\brief			Modifies the given program flags to make them match the render pass requirements.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const = 0;
+		C3D_API virtual void DoCompleteProgramFlags( uint8_t & p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -340,7 +442,18 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint32_t p_textureFlags, uint32_t p_programFlags )const = 0;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const = 0;
 
 	protected:
 		//!\~english	The render system.

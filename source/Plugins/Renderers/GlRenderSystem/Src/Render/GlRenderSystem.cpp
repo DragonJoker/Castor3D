@@ -509,7 +509,7 @@ namespace GlRender
 		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
 	}
 
-	GpuQuerySPtr GlRenderSystem::CreateQuery( eQUERY_TYPE p_type )
+	GpuQuerySPtr GlRenderSystem::CreateQuery( QueryType p_type )
 	{
 		return std::make_shared< GlQuery >( *this, p_type );
 	}

@@ -271,7 +271,7 @@ namespace Castor
 		 *\param[in]	p_pPixel	Le buffer
 		 *\return		La référence de l'image
 		 */
-		CU_API Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel );
+		CU_API Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel, PixelFormat p_format );
 		/**
 		 *\~english
 		 *\brief		Sets the colour of the wanted pixel to the given one

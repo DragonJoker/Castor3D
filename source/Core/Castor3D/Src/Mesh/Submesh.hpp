@@ -49,6 +49,7 @@ namespace Castor3D
 	*/
 	class Submesh
 		: public Castor::OwnedBy< Scene >
+		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
@@ -407,7 +408,7 @@ namespace Castor3D
 		 *\brief		Récupère un GeometryBuffers pour le programme donné.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\return		The animated status.

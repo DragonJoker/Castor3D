@@ -11,9 +11,9 @@ C3D_PnTriangles_API void GetRequiredVersion( Castor3D::Version & p_version )
 	p_version = Castor3D::Version();
 }
 
-C3D_PnTriangles_API Castor3D::ePLUGIN_TYPE GetType()
+C3D_PnTriangles_API Castor3D::PluginType GetType()
 {
-	return Castor3D::ePLUGIN_TYPE_DIVIDER;
+	return Castor3D::PluginType::Divider;
 }
 
 C3D_PnTriangles_API String GetName()

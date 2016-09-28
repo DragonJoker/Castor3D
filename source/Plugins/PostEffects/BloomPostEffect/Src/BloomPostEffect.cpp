@@ -379,7 +379,7 @@ namespace Bloom
 	{
 		auto l_attach = p_framebuffer.GetAttachment( AttachmentPoint::Colour, 0 );
 
-		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::Texture )
 		{
 			auto const & l_texture = *std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 
@@ -486,7 +486,7 @@ namespace Bloom
 			}
 
 			m_combinePipeline->Apply();
-			m_combinePipeline->GetProgram().Bind();
+			m_combinePipeline->GetProgram().BindUbos();
 
 			l_texture0.Bind();
 			l_texture1.Bind();
@@ -504,7 +504,7 @@ namespace Bloom
 			p_origin.Unbind( 4 );
 			m_linearSampler->Unbind( 4 );
 
-			m_combinePipeline->GetProgram().Unbind();
+			m_combinePipeline->GetProgram().UnbindUbos();
 
 			m_blurSurfaces[0].m_fbo->Unbind();
 

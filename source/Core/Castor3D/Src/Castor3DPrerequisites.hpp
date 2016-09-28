@@ -128,35 +128,35 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de plug-ins
 	*/
-	typedef enum ePLUGIN_TYPE
+	enum class PluginType
 		: uint8_t
 	{
 		//!\~english	Renderer plug-in.
 		//!\~french		Plug-in de rendu.
-		ePLUGIN_TYPE_RENDERER,
+		Renderer,
 		//!\~english	Importer plug-in.
 		//!\~french		Plug-in d'importation.
-		ePLUGIN_TYPE_IMPORTER,
+		Importer,
 		//!\~english	Mesh Divider plug-in.
 		//!\~french		Plug-in de subdivision de maillage.
-		ePLUGIN_TYPE_DIVIDER,
+		Divider,
 		//!\~english	Procedural generator.
 		//!\~french		Plug-in de génération procédurale.
-		ePLUGIN_TYPE_GENERATOR,
+		Generator,
 		//!\~english	Render technique plug-in.
 		//!\~french		Plug-in de technique de rendu.
-		ePLUGIN_TYPE_TECHNIQUE,
+		Technique,
 		//!\~english	Tone mapping plug-in.
 		//!\~french		Plug-in d'effet de mappage de tons.
-		ePLUGIN_TYPE_TONEMAPPING,
+		ToneMapping,
 		//!\~english	Post effect plug-in.
 		//!\~french		Plug-in d'effet post-rendu.
-		ePLUGIN_TYPE_POSTFX,
+		PostEffect,
 		//!\~english	Generic plug-in.
 		//!\~french		Plug-in générique.
-		ePLUGIN_TYPE_GENERIC,
-		CASTOR_ENUM_BOUNDS( ePLUGIN_TYPE, ePLUGIN_TYPE_RENDERER )
-	}	ePLUGIN_TYPE;
+		Generic,
+		CASTOR_ENUM_CLASS_BOUNDS( Renderer )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -194,7 +194,7 @@ namespace Castor3D
 	 *\brief		ET binaire sur des BufferComponent.
 	 *\param[in]	p_lhs, p_rhs	Les opérandes.
 	 */
-	inline uint8_t operator&(BufferComponent p_lhs, BufferComponent p_rhs )
+	inline uint8_t operator&( BufferComponent p_lhs, BufferComponent p_rhs )
 	{
 		return uint8_t( p_lhs ) & uint8_t( p_rhs );
 	}
@@ -207,21 +207,21 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des composantes de tampon d'image
 	*/
-	typedef enum eBUFFER
+	enum class WindowBuffer
 		: uint8_t
 	{
-		eBUFFER_NONE,
-		eBUFFER_FRONT_LEFT,
-		eBUFFER_FRONT_RIGHT,
-		eBUFFER_BACK_LEFT,
-		eBUFFER_BACK_RIGHT,
-		eBUFFER_FRONT,
-		eBUFFER_BACK,
-		eBUFFER_LEFT,
-		eBUFFER_RIGHT,
-		eBUFFER_FRONT_AND_BACK,
-		CASTOR_ENUM_BOUNDS( eBUFFER, eBUFFER_NONE )
-	}	eBUFFER;
+		None,
+		FrontLeft,
+		FrontRight,
+		BackLeft,
+		BackRight,
+		Front,
+		Back,
+		Left,
+		Right,
+		FrontAndBack,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -295,13 +295,13 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types d'attache pour un tampon d'image.
 	*/
-	typedef enum eATTACHMENT_TYPE
+	enum class AttachmentType
 		: uint8_t
 	{
-		eATTACHMENT_TYPE_TEXTURE,
-		eATTACHMENT_TYPE_BUFFER,
-		CASTOR_ENUM_BOUNDS( eATTACHMENT_TYPE, eATTACHMENT_TYPE_TEXTURE )
-	}	eATTACHMENT_TYPE;
+		Texture,
+		Buffer,
+		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\~english
@@ -309,14 +309,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de projection de viewport
 	*/
-	typedef enum eVIEWPORT_TYPE
+	enum class ViewportType
 		: uint8_t
 	{
-		eVIEWPORT_TYPE_ORTHO,
-		eVIEWPORT_TYPE_PERSPECTIVE,
-		eVIEWPORT_TYPE_FRUSTUM,
-		CASTOR_ENUM_BOUNDS( eVIEWPORT_TYPE, eVIEWPORT_TYPE_ORTHO )
-	}	eVIEWPORT_TYPE;
+		Ortho,
+		Perspective,
+		Frustum,
+		CASTOR_ENUM_CLASS_BOUNDS( Ortho )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		10/06/2013
@@ -404,20 +404,20 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des mode de rastérisation des polygones
 	*/
-	typedef enum eFILL_MODE
+	enum class FillMode
 		: uint8_t
 	{
 		//!\~english	Polygon vertices that are marked as the start of a boundary edge are drawn as points.
 		//!\~french		Les vertices marquant les arêtes sont dessinés en tant que points.
-		eFILL_MODE_POINT,
+		Point,
 		//!\~english	Boundary edges of the polygon are drawn as line segments.
 		//!\~french		Les arêtes du polygone sont dessinées en tant que segments.
-		eFILL_MODE_LINE,
+		Line,
 		//!\~english	The interior of the polygon is filled.
 		//!\~french		L'intérieur du polygone est rempli.
-		eFILL_MODE_SOLID,
-		CASTOR_ENUM_BOUNDS( eFILL_MODE, eFILL_MODE_POINT )
-	}   eFILL_MODE;
+		Solid,
+		CASTOR_ENUM_CLASS_BOUNDS( Point )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -427,18 +427,18 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de requêtes GPU supportés.
 	*/
-	typedef enum eQUERY_TYPE
+	enum class QueryType
 		: uint32_t
 	{
-		eQUERY_TYPE_TIME_ELAPSED,
-		eQUERY_TYPE_SAMPLES_PASSED,
-		eQUERY_TYPE_ANY_SAMPLES_PASSED,
-		eQUERY_TYPE_PRIMITIVES_GENERATED,
-		eQUERY_TYPE_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
-		eQUERY_TYPE_ANY_SAMPLES_PASSED_CONSERVATIVE,
-		eQUERY_TYPE_TIMESTAMP,
-		CASTOR_ENUM_BOUNDS( eQUERY_TYPE, eQUERY_TYPE_TIME_ELAPSED )
-	}	eQUERY_TYPE;
+		TimeElapsed,
+		SamplesPassed,
+		AnySamplesPassed,
+		PrimitivesGenerated,
+		TransformFeedbackPrimitivesWritten,
+		AnySamplesPassedConservative,
+		Timestamp,
+		CASTOR_ENUM_CLASS_BOUNDS( TimeElapsed )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -448,14 +448,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des informations de requêtes GPU supportés.
 	*/
-	typedef enum eQUERY_INFO
+	enum class QueryInfo
 		: uint32_t
 	{
-		eQUERY_INFO_RESULT,
-		eQUERY_INFO_RESULT_AVAILABLE,
-		eQUERY_INFO_RESULT_NO_WAIT,
-		CASTOR_ENUM_BOUNDS( eQUERY_INFO, eQUERY_INFO_RESULT )
-	}	eQUERY_INFO;
+		Result,
+		ResultAvailable,
+		ResultNoWait,
+		CASTOR_ENUM_CLASS_BOUNDS( Result )
+	};
 
 	class WindowHandle;
 	class RenderTarget;
@@ -489,6 +489,7 @@ namespace Castor3D
 	class RenderLoopAsync;
 	class RenderLoopSync;
 	class GpuQuery;
+	class PickingPass;
 
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderTarget );
@@ -515,6 +516,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( BillboardList );
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
+	DECLARE_SMART_PTR( PickingPass );
 
 	/*!
 	\author 	Sylvain DOREMUS
@@ -643,10 +645,10 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
 	DECLARE_MAP( Castor::String, RendererPluginSPtr, RendererPtr );
-	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );
+	DECLARE_ARRAY( PluginStrMap, size_t( PluginType::Count ), PluginStrMap );
 	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
-	DECLARE_ARRAY( DynamicLibraryPtrPathMap, ePLUGIN_TYPE_COUNT, DynamicLibraryPtrPathMap );
-	DECLARE_MAP( Castor::Path, ePLUGIN_TYPE, PluginTypePath );
+	DECLARE_ARRAY( DynamicLibraryPtrPathMap, size_t( PluginType::Count ), DynamicLibraryPtrPathMap );
+	DECLARE_MAP( Castor::Path, PluginType, PluginTypePath );
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;

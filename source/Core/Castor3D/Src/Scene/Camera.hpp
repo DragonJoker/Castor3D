@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de viewport
 		 *\return		Le type de viewport
 		 */
-		C3D_API eVIEWPORT_TYPE GetViewportType()const;
+		C3D_API ViewportType GetViewportType()const;
 		/**
 		 *\~english
 		 *\brief		Sets the viewport type
@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\brief		Définit le type de viewport
 		 *\param[in]	val	Le type de viewport
 		 */
-		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
+		C3D_API void SetViewportType( ViewportType val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport width

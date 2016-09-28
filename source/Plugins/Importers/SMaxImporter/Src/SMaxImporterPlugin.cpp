@@ -11,9 +11,9 @@ C3D_SMax_API void GetRequiredVersion( Version & p_version )
 	p_version = Version();
 }
 
-C3D_SMax_API ePLUGIN_TYPE GetType()
+C3D_SMax_API PluginType GetType()
 {
-	return ePLUGIN_TYPE_IMPORTER;
+	return PluginType::Importer;
 }
 
 C3D_SMax_API String GetName()

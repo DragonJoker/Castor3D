@@ -357,7 +357,8 @@ namespace castortd
 
 	void Game::UpgradeTowerSpeed( Tower & p_tower )
 	{
-		if ( CanAfford( p_tower.GetSpeedUpgradeCost() ) )
+		if ( CanAfford( p_tower.GetSpeedUpgradeCost() )
+			 && p_tower.CanUpgradeSpeed() )
 		{
 			Spend( p_tower.GetSpeedUpgradeCost() );
 			p_tower.UpgradeSpeed();
@@ -366,7 +367,8 @@ namespace castortd
 
 	void Game::UpgradeTowerRange( Tower & p_tower )
 	{
-		if ( CanAfford( p_tower.GetRangeUpgradeCost() ) )
+		if ( CanAfford( p_tower.GetRangeUpgradeCost() )
+			 && p_tower.CanUpgradeRange() )
 		{
 			Spend( p_tower.GetRangeUpgradeCost() );
 			p_tower.UpgradeRange();
@@ -375,7 +377,8 @@ namespace castortd
 
 	void Game::UpgradeTowerDamage( Tower & p_tower )
 	{
-		if ( CanAfford( p_tower.GetDamageUpgradeCost() ) )
+		if ( CanAfford( p_tower.GetDamageUpgradeCost() )
+			 && p_tower.CanUpgradeDamage() )
 		{
 			Spend( p_tower.GetDamageUpgradeCost() );
 			p_tower.UpgradeDamage();

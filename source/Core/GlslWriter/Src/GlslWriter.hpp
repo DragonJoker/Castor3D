@@ -31,6 +31,7 @@ SOFTWARE.
 namespace GLSL
 {
 	struct Int;
+	struct UInt;
 	struct Vec4;
 	struct SamplerBuffer;
 	struct Sampler1D;
