@@ -46,7 +46,7 @@ namespace TestRender
 
 	bool TestShaderProgram::Link()
 	{
-		m_status = ePROGRAM_STATUS_LINKED;
+		m_status = ProgramStatus::Linked;
 		return true;
 	}
 

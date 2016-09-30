@@ -38,7 +38,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure d'aide utilisée pour lier une passe et un programme shader.
 	*/
-	struct RenderNode
+	struct PassRenderNode
 	{
 		//!\~english	The pass.
 		//!\~french		La passe.
@@ -84,10 +84,7 @@ namespace Castor3D
 	*/
 	struct SceneRenderNode
 	{
-		SceneRenderNode( RenderNode const & p_node, FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos );
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
-		RenderNode m_node;
+		SceneRenderNode( FrameVariableBuffer & p_sceneUbo, Point3rFrameVariable & p_cameraPos );
 		//!\~english	The scene UBO.
 		//!\~french		L'UBO de scène.
 		FrameVariableBuffer & m_sceneUbo;
@@ -105,7 +102,10 @@ namespace Castor3D
 	*/
 	struct ObjectRenderNodeBase
 	{
-		ObjectRenderNodeBase( SceneRenderNode const & p_scene, GeometryBuffers & p_buffers, SceneNode & p_sceneNode );
+		ObjectRenderNodeBase( SceneRenderNode const & p_scene
+							  , PassRenderNode const & p_pass
+							  , GeometryBuffers & p_buffers
+							  , SceneNode & p_sceneNode );
 		/**
 		 *\~english
 		 *\brief		Render function.
@@ -140,9 +140,12 @@ namespace Castor3D
 		 */
 		C3D_API virtual void UnbindPass( Scene const & p_scene )const = 0;
 
-		//!\~english	The base render node.
-		//!\~french		Le noeud de rendu.
+		//!\~english	The scene render node.
+		//!\~french		Le noeud de rendu de scène.
 		SceneRenderNode m_scene;
+		//!\~english	The pass render node.
+		//!\~french		Le noeud de rendu de passe.
+		PassRenderNode m_pass;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;
@@ -163,10 +166,11 @@ namespace Castor3D
 		: public ObjectRenderNodeBase
 	{
 		ObjectRenderNode( SceneRenderNode && p_scene
+						  , PassRenderNode && p_pass
 						  , GeometryBuffers & p_buffers
 						  , SceneNode & p_sceneNode
 						  , DataType & p_data )
-			: ObjectRenderNodeBase{ std::move( p_scene ), p_buffers, p_sceneNode }
+			: ObjectRenderNodeBase{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode }
 			, m_data{ p_data }
 		{
 		}
@@ -197,11 +201,12 @@ namespace Castor3D
 		: public SubmeshRenderNode
 	{
 		StaticGeometryRenderNode( SceneRenderNode && p_scene
+								  , PassRenderNode && p_pass
 								  , GeometryBuffers & p_buffers
 								  , SceneNode & p_sceneNode
 								  , Submesh & p_data
 								  , Geometry & p_geometry )
-			: SubmeshRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
 			, m_geometry{ p_geometry }
 		{
 		}
@@ -227,6 +232,7 @@ namespace Castor3D
 		: public SubmeshRenderNode
 	{
 		AnimatedGeometryRenderNode( SceneRenderNode && p_scene
+									, PassRenderNode && p_pass
 									, GeometryBuffers & p_buffers
 									, SceneNode & p_sceneNode
 									, Submesh & p_data
@@ -234,7 +240,7 @@ namespace Castor3D
 									, AnimatedSkeleton * p_skeleton
 									, AnimatedMesh * p_mesh
 									, FrameVariableBuffer & p_animationUbo )
-			: SubmeshRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
 			, m_geometry{ p_geometry }
 			, m_skeleton{ p_skeleton }
 			, m_mesh{ p_mesh }
@@ -270,13 +276,14 @@ namespace Castor3D
 	struct BillboardRenderNode
 		: public BillboardListRenderNode
 	{
-		BillboardRenderNode ( SceneRenderNode && p_scene
+		BillboardRenderNode( SceneRenderNode && p_scene
+							 , PassRenderNode && p_pass
 							 , GeometryBuffers & p_buffers
 							 , SceneNode & p_sceneNode
 							 , BillboardList & p_data
 							 , FrameVariableBuffer & p_billboardUbo
 							 , Point2iFrameVariable & p_dimensions )
-			: BillboardListRenderNode{ std::move( p_scene ), p_buffers, p_sceneNode, p_data }
+			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
 		{

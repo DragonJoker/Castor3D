@@ -18,6 +18,9 @@
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/PointFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
 
@@ -573,6 +576,17 @@ namespace Castor3D
 			{
 				m_skybox->Cleanup();
 			} ) );
+		}
+	}
+
+	void Scene::FillShader( FrameVariableBuffer const & p_buffer )const
+	{
+		Point4fFrameVariableSPtr l_bgColour;
+		p_buffer.GetVariable( ShaderProgram::BackgroundColour, l_bgColour );
+
+		if ( l_bgColour )
+		{
+			l_bgColour->SetValue( rgba_float( m_backgroundColour ) );
 		}
 	}
 

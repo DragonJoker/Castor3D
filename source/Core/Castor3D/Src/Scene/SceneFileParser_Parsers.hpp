@@ -89,6 +89,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneTextOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSkybox )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFogType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFogDensity )
 
 	// Light parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent )

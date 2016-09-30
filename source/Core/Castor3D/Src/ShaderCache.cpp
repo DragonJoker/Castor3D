@@ -68,14 +68,14 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+				ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 				l_return->SetSource( ShaderType::Vertex, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_textureFlags, p_programFlags ) );
 				l_return->SetSource( ShaderType::Pixel, l_model, p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags ) );
 
 				CreateTextureVariables( *l_return, p_textureFlags );
-				CreateMatrixBuffer( *l_return, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
-				CreateSceneBuffer( *l_return, MASK_SHADER_TYPE_PIXEL );
-				CreatePassBuffer( *l_return, MASK_SHADER_TYPE_PIXEL );
+				CreateMatrixBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+				CreateSceneBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_PIXEL );
+				CreatePassBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_PIXEL );
 
 				if ( CheckFlag( p_programFlags, ProgramFlag::Skinning )
 					 || CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
@@ -122,7 +122,7 @@ namespace Castor3D
 		}
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Mat4x4r, Pipeline::MtxProjection, 1 );
@@ -138,17 +138,20 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferScene, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Vec4f, ShaderProgram::AmbientLight, 1 );
 		l_buffer.CreateVariable( FrameVariableType::Vec4f, ShaderProgram::BackgroundColour, 1 );
 		l_buffer.CreateVariable( FrameVariableType::Vec4i, ShaderProgram::LightsCount, 1 );
 		l_buffer.CreateVariable( FrameVariableType::Vec3r, ShaderProgram::CameraPos, 1 );
+		l_buffer.CreateVariable( FrameVariableType::Int, ShaderProgram::FogType, 1 );
+		l_buffer.CreateVariable( FrameVariableType::Float, ShaderProgram::FogDensity, 1 );
+
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer( ShaderProgram & p_shader, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferPass, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Vec4f, ShaderProgram::MatAmbient, 1 );

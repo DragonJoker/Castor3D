@@ -316,7 +316,7 @@ namespace Castor3D
 		m_cleaned = true;
 	}
 
-	bool Engine::SupportsShaderModel( eSHADER_MODEL p_eShaderModel )
+	bool Engine::SupportsShaderModel( ShaderModel p_eShaderModel )
 	{
 		bool l_return = false;
 

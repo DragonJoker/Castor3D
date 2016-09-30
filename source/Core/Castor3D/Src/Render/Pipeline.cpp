@@ -48,6 +48,7 @@ namespace Castor3D
 		, m_msState{ std::move( p_msState ) }
 		, m_program{ p_program }
 	{
+		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
 	}
 
 	Pipeline::~Pipeline()

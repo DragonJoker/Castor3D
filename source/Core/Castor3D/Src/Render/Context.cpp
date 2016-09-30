@@ -213,7 +213,7 @@ namespace Castor3D
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 		m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		m_mapDiffuse->SetValue( 0 );
-		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 
 		String l_strVtxShader;
 		{
@@ -275,7 +275,7 @@ namespace Castor3D
 			l_strPxlShader = l_writer.Finalise();
 		}
 
-		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
 		return l_program;

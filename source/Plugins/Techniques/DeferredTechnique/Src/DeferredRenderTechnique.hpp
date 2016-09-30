@@ -148,9 +148,13 @@ namespace Deferred
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaquePixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 */
+		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags

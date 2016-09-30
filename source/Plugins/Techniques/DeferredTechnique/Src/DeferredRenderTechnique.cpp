@@ -127,13 +127,13 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::Pixel )->SetValue( i + 1 );
 			}
 
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *m_lightPassShaderProgram, 0u, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
 			m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *m_lightPassShaderProgram, 0u, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 
 			m_vertexBuffer->Create();
-			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( ShaderType::Vertex, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( ShaderType::Pixel, l_model, DoGetLightPassPixelShaderSource( 0 ) );
 
@@ -297,7 +297,10 @@ namespace Deferred
 			{
 				m_lightPassPipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *m_lightPassScene.lock();
-				m_scene->GetLightCache().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
+				m_scene->GetLightCache().FillShader( l_sceneBuffer );
+				m_scene->GetLightCache().BindLights();
+				m_scene->GetFog().FillShader( l_sceneBuffer );
+				m_scene->FillShader( l_sceneBuffer );
 				m_camera->FillShader( l_sceneBuffer );
 
 				m_lightPassTextures[size_t( DsTexture::Position )]->Bind();
@@ -318,11 +321,12 @@ namespace Deferred
 				m_lightPassTextures[size_t( DsTexture::Diffuse )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Position )]->Unbind();
 
-				m_scene->GetLightCache().UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
+				m_scene->GetLightCache().UnbindLights();
 			}
+
+			m_frameBuffer.m_frameBuffer->Unbind();
 		}
 
-		m_frameBuffer.m_frameBuffer->Unbind();
 		m_geometryPassFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, Rectangle{ Position{}, m_size }, uint32_t( BufferComponent::Depth ) );
 		m_frameBuffer.m_frameBuffer->Bind();
 
@@ -362,8 +366,9 @@ namespace Deferred
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
 
-		// Fragment Intputs
+		// Fragment Inputs
 		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
+		auto vtx_view = l_writer.GetInput< Vec4 >( cuT( "vtx_view" ) );
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
@@ -378,6 +383,9 @@ namespace Deferred
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
 
+		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+
+		// Fragment Outputs
 		uint32_t l_index = 0;
 		auto out_c3dPosition = l_writer.GetFragData< Vec4 >( cuT( "out_c3dPosition" ), l_index++ );
 		auto out_c3dDiffuse = l_writer.GetFragData< Vec4 >( cuT( "out_c3dDiffuse" ), l_index++ );
@@ -435,7 +443,8 @@ namespace Deferred
 			}
 
 			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
-			out_c3dDiffuse = vec4( l_v3Diffuse, 0 );
+			out_c3dDiffuse = vec4( l_v3Diffuse, gl_FragCoord.z() / gl_FragCoord.w() );
+			//out_c3dDiffuse = vec4( l_v3Diffuse, vtx_view.z() );
 			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
 			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
@@ -443,6 +452,10 @@ namespace Deferred
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	{
 	}
 
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint8_t p_programFlags )const
@@ -497,6 +510,7 @@ namespace Deferred
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
+		GLSL::Fog l_fog{ l_writer };
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -522,6 +536,7 @@ namespace Deferred
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+				LOCALE_ASSIGN( l_writer, Float, l_z, l_v4Diffuse.w() );
 
 				LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
 				LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.x() );
@@ -563,6 +578,7 @@ namespace Deferred
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
+				l_fog.ApplyFog( pxl_v4FragColor, l_z );
 			}
 			ELSE
 			{

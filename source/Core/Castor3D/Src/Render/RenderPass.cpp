@@ -9,6 +9,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -19,13 +20,33 @@ namespace Castor3D
 {
 	namespace
 	{
-		template< typename MapType, typename FuncType >
-		void DoTraverseNodes( Camera const & p_camera, MapType & p_nodes, FuncType p_function )
+		template< bool Opaque >
+		struct PipelineUpdater
+		{
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
+			{
+				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline );
+			}
+		};
+
+		template<>
+		struct PipelineUpdater< false >
+		{
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
+			{
+				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline );
+			}
+		};
+
+		template< bool Opaque, typename MapType, typename FuncType >
+		inline void DoTraverseNodes( RenderPass const & p_pass
+									 , Camera const & p_camera
+									 , MapType & p_nodes
+									 , FuncType p_function )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
+				PipelineUpdater< Opaque >::Update( p_pass, p_camera, *l_itPipelines.first );
 				l_itPipelines.first->Apply();
 
 				for ( auto l_itPass : l_itPipelines.second )
@@ -38,17 +59,17 @@ namespace Castor3D
 			}
 		}
 
-		template< typename MapType >
-		void DoRenderNonInstanced( Scene & p_scene
-								   , Camera const & p_camera
-								   , MapType & p_nodes
-								   , bool p_register
-								   , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
+		template< bool Opaque, typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+										  , Scene & p_scene
+										  , Camera const & p_camera
+										  , MapType & p_nodes
+										  , bool p_register
+										  , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
-				l_itPipelines.first->SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
-				l_itPipelines.first->SetViewMatrix( p_camera.GetView() );
+				PipelineUpdater< Opaque >::Update( p_pass, p_camera, *l_itPipelines.first );
 				l_itPipelines.first->Apply();
 
 				for ( auto & l_renderNode : l_itPipelines.second )
@@ -63,7 +84,7 @@ namespace Castor3D
 			}
 		}
 
-		BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
 		{
 			BlendState l_state;
 			bool l_blend = false;
@@ -238,7 +259,8 @@ namespace Castor3D
 
 		return AnimatedGeometryRenderNode
 		{
-			DoCreateSceneRenderNode( p_pass, p_pipeline ),
+			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
+			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() ),
 			*p_primitive.GetParent(),
 			p_submesh,
@@ -256,7 +278,8 @@ namespace Castor3D
 	{
 		return StaticGeometryRenderNode
 		{
-			DoCreateSceneRenderNode( p_pass, p_pipeline ),
+			DoCreateSceneRenderNode( *p_primitive.GetScene(), p_pipeline ),
+			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() ),
 			*p_primitive.GetParent(),
 			p_submesh,
@@ -273,7 +296,8 @@ namespace Castor3D
 
 		return BillboardRenderNode
 		{
-			DoCreateSceneRenderNode( p_pass, p_pipeline ),
+			DoCreateSceneRenderNode( *p_billboard.GetScene(), p_pipeline ),
+			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() ),
 			*p_billboard.GetParent(),
 			p_billboard,
@@ -282,19 +306,33 @@ namespace Castor3D
 		};
 	}
 
-	void RenderPass::DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	void RenderPass::UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+		p_pipeline.SetViewMatrix( p_camera.GetView() );
+		DoUpdateOpaquePipeline( p_camera, p_pipeline );
 	}
 
-	void RenderPass::DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
+		p_pipeline.SetViewMatrix( p_camera.GetView() );
+		DoUpdateTransparentPipeline( p_camera, p_pipeline );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	void RenderPass::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoTraverseNodes( p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderPass::DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderPass::DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< true >( *this, p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
@@ -308,9 +346,63 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderPass::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	void RenderPass::DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoTraverseNodes( p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes< true >( *this, p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+			{
+				uint32_t l_count = uint32_t( p_renderNodes.size() );
+				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				const uint32_t l_stride = 16 * sizeof( real );
+
+				for ( auto const & l_renderNode : p_renderNodes )
+				{
+					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+					l_buffer += l_stride;
+
+					if ( p_register )
+					{
+						m_renderedObjects.push_back( l_renderNode );
+					}
+				}
+
+				p_renderNodes[0].BindPass( p_scene, p_camera, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_scene );
+			}
+		} );
+	}
+
+	void RenderPass::DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderPass::DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderPass::DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< false >( *this, p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			for ( auto & l_renderNode : p_renderNodes )
+			{
+				l_renderNode.Render( p_scene, p_camera );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
+			}
+		} );
+	}
+
+	void RenderPass::DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< false >( *this, p_camera, p_nodes, [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -340,7 +432,8 @@ namespace Castor3D
 	{
 		for ( auto & l_it : p_nodes )
 		{
-			l_it.second.get().m_scene.m_node.m_pipeline.Apply();
+			l_it.second.get().m_pass.m_pipeline.Apply();
+			DoUpdateTransparentPipeline( p_camera, l_it.second.get().m_pass.m_pipeline );
 			l_it.second.get().Render( p_scene, p_camera );
 
 			if ( p_register )
@@ -350,12 +443,17 @@ namespace Castor3D
 		}
 	}
 
-	void RenderPass::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
+	void RenderPass::DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
 	{
-		DoRenderNonInstanced( p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
 	}
 
-	RenderNode RenderPass::DoCreateRenderNode( Pass & p_pass, Pipeline & p_pipeline )
+	void RenderPass::DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass, Pipeline & p_pipeline )
 	{
 		FrameVariableBufferSPtr l_passBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferPass );
 		FrameVariableBufferSPtr l_matrixBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
@@ -363,7 +461,7 @@ namespace Castor3D
 		Point4rFrameVariableSPtr l_pt4r;
 		OneFloatFrameVariableSPtr l_1f;
 
-		return RenderNode
+		auto l_node = PassRenderNode
 		{
 			p_pass,
 			p_pipeline,
@@ -376,21 +474,20 @@ namespace Castor3D
 			*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
 			*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
 		};
+		p_pass.FillRenderNode( l_node );
+		return l_node;
 	}
 
-	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Pass & p_pass, Pipeline & p_pipeline )
+	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Scene & p_scene, Pipeline & p_pipeline )
 	{
 		FrameVariableBufferSPtr l_sceneBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferScene );
 		Point3rFrameVariableSPtr l_pt3r;
 
-		SceneRenderNode l_node
+		return SceneRenderNode
 		{
-			DoCreateRenderNode( p_pass, p_pipeline ),
 			*l_sceneBuffer,
 			*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r )
 		};
-		p_pass.FillRenderNode( l_node );
-		return l_node;
 	}
 
 	ShaderProgramSPtr RenderPass::DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags )const

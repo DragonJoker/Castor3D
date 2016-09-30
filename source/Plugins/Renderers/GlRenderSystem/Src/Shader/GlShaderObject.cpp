@@ -36,10 +36,10 @@ namespace GlRender
 	{
 		Detach();
 
-		if ( m_status == eSHADER_STATUS_COMPILED )
+		if ( m_status == ShaderStatus::Compiled )
 		{
 			ObjectType::Destroy();
-			m_status = eSHADER_STATUS_NOTCOMPILED;
+			m_status = ShaderStatus::NotCompiled;
 		}
 	}
 
@@ -48,27 +48,27 @@ namespace GlRender
 		bool l_return = false;
 		String l_loadedSource;
 
-		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && l_loadedSource.empty(); i-- )
+		for ( size_t i = size_t( ShaderModel::Model5 ); i >= size_t( ShaderModel::Model1 ) && l_loadedSource.empty(); i-- )
 		{
-			if ( m_parent->GetRenderSystem()->GetGpuInformations().CheckSupport( eSHADER_MODEL( i ) ) )
+			if ( m_parent->GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
 			{
 				l_loadedSource = m_arraySources[i];
 
 				if ( !l_loadedSource.empty() )
 				{
-					m_eShaderModel = eSHADER_MODEL( i );
+					m_eShaderModel = ShaderModel( i );
 				}
 			}
 		}
 
-		if ( m_status != eSHADER_STATUS_ERROR && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
+		if ( m_status != ShaderStatus::Error && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
 		{
 			l_return = true;
 			m_loadedSource = l_loadedSource;
 
 			if ( m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 			{
-				m_status = eSHADER_STATUS_NOTCOMPILED;
+				m_status = ShaderStatus::NotCompiled;
 				int l_compiled = 0;
 				int l_iLength = int( m_loadedSource.size() );
 				std::string l_tmp = string::string_cast< char >( m_loadedSource );
@@ -111,11 +111,11 @@ namespace GlRender
 
 				if ( l_return && l_compiled )
 				{
-					m_status = eSHADER_STATUS_COMPILED;
+					m_status = ShaderStatus::Compiled;
 				}
 				else
 				{
-					m_status = eSHADER_STATUS_ERROR;
+					m_status = ShaderStatus::Error;
 					FAILURE( "Shader is not compiled." );
 				}
 
@@ -140,7 +140,7 @@ namespace GlRender
 
 	void GlShaderObject::Detach()
 	{
-		if ( m_status == eSHADER_STATUS_COMPILED && m_shaderProgram && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::Compiled && m_shaderProgram && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 		{
 			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
 			m_shaderProgram = nullptr;
@@ -151,7 +151,7 @@ namespace GlRender
 	{
 		Detach();
 
-		if ( m_status == eSHADER_STATUS_COMPILED && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
+		if ( m_status == ShaderStatus::Compiled && m_parent->GetRenderSystem()->GetGpuInformations().HasShaderType( m_type ) )
 		{
 			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
 			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
@@ -167,7 +167,7 @@ namespace GlRender
 	{
 		uint32_t l_uiReturn = uint32_t( eGL_INVALID_INDEX );
 
-		if ( m_status == eSHADER_STATUS_COMPILED )
+		if ( m_status == ShaderStatus::Compiled )
 		{
 			UIntStrMap::iterator l_it = m_mapParamsByName.find( p_name );
 

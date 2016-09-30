@@ -34,6 +34,7 @@ namespace Castor3D
 	class SceneFileContext;
 	class SceneFileParser;
 	class Skybox;
+	class Fog;
 	class AnimatedObject;
 	class AnimatedObjectGroup;
 	class AnimatedSkeleton;

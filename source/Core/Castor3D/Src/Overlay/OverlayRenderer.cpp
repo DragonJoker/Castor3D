@@ -318,7 +318,7 @@ namespace Castor3D
 		m_sizeChanged = false;
 	}
 
-	RenderNode & OverlayRenderer::DoGetPanelNode( Pass & p_pass )
+	PassRenderNode & OverlayRenderer::DoGetPanelNode( Pass & p_pass )
 	{
 		auto l_it = m_mapPanelNodes.find( &p_pass );
 
@@ -331,7 +331,7 @@ namespace Castor3D
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
 
-			l_it = m_mapPanelNodes.insert( { &p_pass, RenderNode
+			l_it = m_mapPanelNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
@@ -351,7 +351,7 @@ namespace Castor3D
 		return l_it->second;
 	}
 
-	RenderNode & OverlayRenderer::DoGetTextNode( Pass & p_pass )
+	PassRenderNode & OverlayRenderer::DoGetTextNode( Pass & p_pass )
 	{
 		auto l_it = m_mapTextNodes.find( &p_pass );
 
@@ -364,7 +364,7 @@ namespace Castor3D
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
 
-			l_it = m_mapTextNodes.insert( { &p_pass, RenderNode
+			l_it = m_mapTextNodes.insert( { &p_pass, PassRenderNode
 				{
 					p_pass,
 					l_pipeline,
@@ -481,7 +481,7 @@ namespace Castor3D
 
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
-		RenderNode & l_node = DoGetPanelNode( p_pass );
+		auto & l_node = DoGetPanelNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 		p_pass.FillShaderVariables( l_node );
 		l_node.m_pipeline.Apply();
@@ -494,7 +494,7 @@ namespace Castor3D
 
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
 	{
-		RenderNode & l_node = DoGetTextNode( p_pass );
+		auto & l_node = DoGetTextNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );
 
 		OneIntFrameVariableSPtr l_textureVariable = l_node.m_pipeline.GetProgram().FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapText, ShaderType::Pixel );
@@ -566,8 +566,8 @@ namespace Castor3D
 		// Shader program
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
-		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreatePassBuffer( *l_program, 0u, MASK_SHADER_TYPE_PIXEL );
 
 		// Vertex shader
 		String l_strVs;
@@ -662,7 +662,7 @@ namespace Castor3D
 			l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapOpacity, ShaderType::Pixel );
 		}
 
-		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_strVs );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_strPs );
 

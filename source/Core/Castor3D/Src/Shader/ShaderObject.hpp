@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
-		C3D_API void SetSource( eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( ShaderModel p_eModel, Castor::String const & p_strSource );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -266,9 +266,9 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le code de la source
 		 */
-		inline Castor::String const & GetSource( eSHADER_MODEL p_eModel )const
+		inline Castor::String const & GetSource( ShaderModel p_eModel )const
 		{
-			return m_arraySources[p_eModel];
+			return m_arraySources[size_t( p_eModel )];
 		}
 		/**
 		 *\~english
@@ -292,9 +292,9 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le nom du fichier
 		 */
-		inline Castor::Path const & GetFile( eSHADER_MODEL p_eModel )const
+		inline Castor::Path const & GetFile( ShaderModel p_eModel )const
 		{
-			return m_arrayFiles[p_eModel];
+			return m_arrayFiles[size_t( p_eModel )];
 		}
 		/**
 		 *\~english
@@ -306,7 +306,7 @@ namespace Castor3D
 		 */
 		inline Castor::Path const & GetCurrentFile()const
 		{
-			return m_arrayFiles[m_eShaderModel];
+			return m_arrayFiles[size_t( m_eShaderModel )];
 		}
 		/**
 		 *\~english
@@ -412,7 +412,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de compilation de l'objet
 		 *\return		Le statut
 		 */
-		inline eSHADER_STATUS GetStatus()const
+		inline ShaderStatus GetStatus()const
 		{
 			return m_status;
 		}
@@ -475,7 +475,7 @@ namespace Castor3D
 		//!\~english The parent shader program	\~french Le programme parent
 		ShaderProgram * m_parent{ nullptr };
 		//!<\~english The shader compile status	\~french Le statut de compilation du shader
-		eSHADER_STATUS m_status{ eSHADER_STATUS_NOTCOMPILED };
+		ShaderStatus m_status{ ShaderStatus::NotCompiled };
 		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
 		Topology m_eInputType{ Topology::Triangles };
 		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
@@ -483,11 +483,11 @@ namespace Castor3D
 		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
 		uint8_t m_uiOutputVtxCount{ 3 };
 		//!\~english The current shader model	\~french Le modèle de shader actuel
-		eSHADER_MODEL m_eShaderModel{ eSHADER_MODEL_1 };
+		ShaderModel m_eShaderModel{ ShaderModel::Model1 };
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
-		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
+		std::array< Castor::Path, size_t( ShaderModel::Count ) > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
-		std::array< Castor::String, eSHADER_MODEL_COUNT > m_arraySources;
+		std::array< Castor::String, size_t( ShaderModel::Count ) > m_arraySources;
 		//!<\~english Actually loaded ASCII Source-Code	\~french Le texte ASCII du shader chargé
 		Castor::String m_loadedSource;
 		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader

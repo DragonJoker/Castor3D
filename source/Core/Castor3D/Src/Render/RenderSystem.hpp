@@ -88,17 +88,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the scene ambient lighting
-		 *\param[in]	p_clColour			The light colour
-		 *\param[in]	p_variableBuffer	The variable buffer that receives the ambient light
-		 *\~french
-		 *\brief		Rend la lumière ambiante de la scène
-		 *\param[in]	p_clColour			La couleur de la lumière
-		 *\param[in]	p_variableBuffer	Le buffer the variables, qui reçoit la lumière ambient
-		 */
-		C3D_API void RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer const & p_variableBuffer );
-		/**
-		 *\~english
 		 *\brief		Pushes a scene on th stack
 		 *\param[in]	p_scene	The scene
 		 *\~french

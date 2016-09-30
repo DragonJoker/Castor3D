@@ -46,7 +46,7 @@ namespace GlRender
 	{
 		bool l_return = true;
 
-		if ( m_status != ePROGRAM_STATUS_LINKED )
+		if ( m_status != ProgramStatus::Linked )
 		{
 			ObjectType::Create();
 			l_return = DoInitialise();
@@ -94,7 +94,7 @@ namespace GlRender
 				Logger::LogError( cuT( "GlShaderProgram::Link - The linked shaders count doesn't match the active shaders count." ) );
 			}
 
-			m_status = ePROGRAM_STATUS_ERROR;
+			m_status = ProgramStatus::Error;
 		}
 
 		return l_return;
@@ -102,7 +102,7 @@ namespace GlRender
 
 	void GlShaderProgram::Bind( bool p_bindUbo )const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ProgramStatus::Linked )
 		{
 			GetOpenGl().UseProgram( GetGlName() );
 			DoBind( p_bindUbo );
@@ -111,7 +111,7 @@ namespace GlRender
 
 	void GlShaderProgram::Unbind()const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ProgramStatus::Linked )
 		{
 			DoUnbind();
 			GetOpenGl().UseProgram( 0 );

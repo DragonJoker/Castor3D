@@ -243,27 +243,21 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
 		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 */
+		C3D_API void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
+		 */
+		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
 		/**
 		 *\~english
 		 *\brief		Creation function

@@ -333,7 +333,7 @@ namespace Castor3D
 		 *\param[in]	p_model	Le modèle de shaders.
 		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle.
 		 */
-		inline bool CheckSupport( eSHADER_MODEL p_model )const
+		inline bool CheckSupport( ShaderModel p_model )const
 		{
 			return p_model <= m_maxShaderModel;
 		}
@@ -343,7 +343,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le modèle de shader maximal supporté.
 		 */
-		inline eSHADER_MODEL GetMaxShaderModel()const
+		inline ShaderModel GetMaxShaderModel()const
 		{
 			return m_maxShaderModel;
 		}
@@ -357,23 +357,23 @@ namespace Castor3D
 		{
 			if ( m_useShader[size_t( ShaderType::Compute )] )
 			{
-				m_maxShaderModel = eSHADER_MODEL_5;
+				m_maxShaderModel = ShaderModel::Model5;
 			}
 			else if ( m_useShader[size_t( ShaderType::Hull )] )
 			{
-				m_maxShaderModel = eSHADER_MODEL_4;
+				m_maxShaderModel = ShaderModel::Model4;
 			}
 			else if ( m_useShader[size_t( ShaderType::Geometry )] )
 			{
-				m_maxShaderModel = eSHADER_MODEL_3;
+				m_maxShaderModel = ShaderModel::Model3;
 			}
 			else if ( m_useShader[size_t( ShaderType::Pixel )] )
 			{
-				m_maxShaderModel = eSHADER_MODEL_2;
+				m_maxShaderModel = ShaderModel::Model2;
 			}
 			else
 			{
-				m_maxShaderModel = eSHADER_MODEL_1;
+				m_maxShaderModel = ShaderModel::Model1;
 			}
 		}
 		/**
@@ -555,7 +555,7 @@ namespace Castor3D
 		//!\~english Combination of GpuFeature.	\~french Combinaisond e GpuFeature.
 		uint32_t m_features{ false };
 		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
-		eSHADER_MODEL m_maxShaderModel{ eSHADER_MODEL_MIN };
+		ShaderModel m_maxShaderModel{ ShaderModel::Min };
 		//!\~english The shader language version.	\~french La version du langage de shader.
 		uint32_t m_shaderLanguageVersion{ 0 };
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés

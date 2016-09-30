@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API virtual void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API virtual void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Creates a frame variable buffer.
@@ -193,7 +193,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API void SetFile( ShaderType p_target, eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( ShaderType p_target, ShaderModel p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader file for given model
@@ -206,7 +206,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le nom du fichier
 		 */
-		C3D_API Castor::Path GetFile( ShaderType p_target, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::Path GetFile( ShaderType p_target, ShaderModel p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -232,7 +232,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
-		C3D_API void SetSource( ShaderType p_target, eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( ShaderType p_target, ShaderModel p_eModel, Castor::String const & p_strSource );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
@@ -245,7 +245,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le code de la source
 		 */
-		C3D_API Castor::String GetSource( ShaderType p_target, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::String GetSource( ShaderType p_target, ShaderModel p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -276,7 +276,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut du type d'objet donné
 		 *\return		Le statut
 		 */
-		C3D_API eSHADER_STATUS GetObjectStatus( ShaderType p_target )const;
+		C3D_API ShaderStatus GetObjectStatus( ShaderType p_target )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable
@@ -501,7 +501,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de link du programme
 		 *\return		La valeur
 		 */
-		inline ePROGRAM_STATUS GetStatus()const
+		inline ProgramStatus GetStatus()const
 		{
 			return m_status;
 		}
@@ -650,6 +650,12 @@ namespace Castor3D
 		//!\~english	Name of the background colour frame variable.
 		//!\~french		Nom de la frame variable contenant la couleur de fond.
 		C3D_API static const Castor::String BackgroundColour;
+		//!\~english	Name of the fog type frame variable.
+		//!\~french		Nom de la frame variable contenant le type de brouillard.
+		C3D_API static const Castor::String FogType;
+		//!\~english	Name of the fog's density frame variable.
+		//!\~french		Nom de la frame variable contenant la densité du brouillard.
+		C3D_API static const Castor::String FogDensity;
 		//!\~english	Name of the lights count frame variable.
 		//!\~french		Nom de la frame variable contenant le compte des lumières.
 		C3D_API static const Castor::String LightsCount;
@@ -760,7 +766,7 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status.
 		//!\~french		Le statut du programme.
-		ePROGRAM_STATUS m_status{ ePROGRAM_STATUS_NOTLINKED };
+		ProgramStatus m_status{ ProgramStatus::NotLinked };
 		//!\~english	Tells if the UBOs were bound on or since last call to Bind.
 		//!\~french		Dit si les UBOs on été activés lors du ou depuis le dernier appel à Bind.
 		mutable bool m_ubosBound{ false };
@@ -772,7 +778,7 @@ namespace Castor3D
 		std::vector< ShaderObjectSPtr > m_activeShaders;
 		//!\~english Array of files path, sorted by shader model.
 		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
-		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
+		std::array< Castor::Path, size_t( ShaderModel::Count ) > m_arrayFiles;
 		//!\~english The frame variable buffers map, ordered by name.
 		//!\~french		La liste des buffers de variable de frame, triés par nom.
 		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;

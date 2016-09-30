@@ -151,19 +151,35 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
 		 */
-		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
-		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 */
+		void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 */
+		void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 */
+		void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoRenderBillboards
+		 */
+		void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
@@ -172,6 +188,14 @@ namespace Castor3D
 		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
 		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
+		 */
+		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
+		 */
+		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaquePipeline
 		 */

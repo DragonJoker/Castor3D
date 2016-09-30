@@ -241,7 +241,7 @@ namespace Bloom
 		bool l_return = false;
 		m_viewport.Initialise();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;
 		String l_hipass;
@@ -257,7 +257,7 @@ namespace Bloom
 		{
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
-			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_hipass );
 			l_program->Initialise();
@@ -276,7 +276,7 @@ namespace Bloom
 			m_filterCoefficients = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigCoefficients, KERNEL_SIZE );
 			m_filterOffsetX = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigOffsetX );
 			m_filterOffsetY = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigOffsetY );
-			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_blur );
@@ -296,8 +296,7 @@ namespace Bloom
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass2, ShaderType::Pixel )->SetValue( 2 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass3, ShaderType::Pixel )->SetValue( 3 );
 			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapScene, ShaderType::Pixel )->SetValue( 4 );
-
-			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_combine );
