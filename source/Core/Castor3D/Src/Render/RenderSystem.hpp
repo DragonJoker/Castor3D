@@ -124,26 +124,30 @@ namespace Castor3D
 		 *\param[in]	p_renderPass	The pass from which the program code is retrieved.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\return		The created program.
 		 *\~french
 		 *\brief		Crée un programme shader pour les rendu de billboards.
 		 *\param[in]	p_renderPass	La passe a partir de laquelle est récupéré le code du programme.
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés.
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\return		The GPU informations.

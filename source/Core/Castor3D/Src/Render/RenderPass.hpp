@@ -51,32 +51,41 @@ namespace Castor3D
 	protected:
 		struct PipelineFlags
 		{
-			uint16_t m_textureFlags;
-			uint8_t m_programFlags;
-			BlendMode m_colourBlendMode;
-			BlendMode m_alphaBlendMode;
+			size_t m_colourBlendMode : 2;
+			size_t m_alphaBlendMode : 2;
+			size_t m_textureFlags : 12;
+			size_t m_programFlags : 8;
+			size_t m_sceneFlags : 8;
+
+			static PipelineFlags Create( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
+			{
+				PipelineFlags l_flags;
+				l_flags.m_colourBlendMode = size_t( p_colourBlendMode );
+				l_flags.m_alphaBlendMode = size_t( p_alphaBlendMode );
+				l_flags.m_textureFlags = size_t( p_textureFlags );
+				l_flags.m_programFlags = size_t( p_programFlags );
+				l_flags.m_sceneFlags = size_t( p_sceneFlags );
+				return l_flags;
+			}
 		};
+
 		struct PipelineFlagsHasher
 		{
 			size_t operator()( PipelineFlags const & p_flags )const
 			{
-				return size_t
-				{
-					( ( size_t( p_flags.m_textureFlags ) << 0 ) & 0x0000FFFF )
-					| ( ( size_t( p_flags.m_programFlags ) << 16 ) & 0x00FF0000 )
-					| ( ( size_t( p_flags.m_colourBlendMode ) << 24 ) & 0x0F000000 )
-					| ( ( size_t( p_flags.m_alphaBlendMode ) << 28 ) & 0xF0000000 )
-				};
+				return *( reinterpret_cast< size_t const * >( &p_flags ) );
 			}
 		};
+
 		struct PipelineFlagsComparer
 		{
 			size_t operator()( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )const
 			{
-				return p_lhs.m_textureFlags == p_rhs.m_textureFlags
+				return p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
+					&& p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
+					&& p_lhs.m_textureFlags == p_rhs.m_textureFlags
 					&& p_lhs.m_programFlags == p_rhs.m_programFlags
-					&& p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
-					&& p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode;
+					&& p_lhs.m_sceneFlags == p_rhs.m_sceneFlags;
 			}
 		};
 		/**
@@ -126,70 +135,80 @@ namespace Castor3D
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API void PreparePipeline( uint16_t p_textureFlags, uint8_t & p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t & p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
-		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
-		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetOpaquePipeline( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode );
+		C3D_API Pipeline & GetOpaquePipeline( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces avant supprimées.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineFront( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		C3D_API Pipeline & GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for back face culling.
-		 *\param[in]	p_textureFlags		A combination of TextureChannel.
-		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
-		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
-		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineBack( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode );
+		C3D_API Pipeline & GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -483,12 +502,14 @@ namespace Castor3D
 		 *\brief		Retrieves the shader program matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
 		 *\brief		Récupère le programme shader correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
 
 	private:
 		/**
@@ -532,23 +553,27 @@ namespace Castor3D
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const = 0;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const = 0;
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

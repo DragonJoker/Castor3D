@@ -715,4 +715,9 @@ namespace Castor3D
 
 		return l_return;
 	}
+
+	uint8_t Scene::GetFlags()const
+	{
+		return uint8_t( m_fog.GetType() );
+	}
 }

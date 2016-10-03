@@ -84,8 +84,9 @@ namespace Castor3D
 			}
 		}
 
-		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+		inline BlendState DoCreateBlendState( uint32_t p_colourBlendMode, uint32_t p_alphaBlendMode )
 		{
+			
 			BlendState l_state;
 			bool l_blend = false;
 
@@ -195,55 +196,57 @@ namespace Castor3D
 		m_renderQueue.AddScene( p_scene );
 	}
 
-	String RenderPass::GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String RenderPass::GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		String l_return;
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::AlphaBlending ) )
 		{
-			l_return = DoGetTransparentPixelShaderSource( p_textureFlags, p_programFlags );
+			l_return = DoGetTransparentPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 		}
 		else
 		{
-			l_return = DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags );
+			l_return = DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 		}
 
 		return l_return;
 	}
 
-	void RenderPass::PreparePipeline( uint16_t p_textureFlags, uint8_t & p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t & p_programFlags, uint8_t p_sceneFlags )
 	{
 		DoCompleteProgramFlags( p_programFlags );
-		auto l_program = DoGetProgram( p_textureFlags, p_programFlags );
+		auto l_program = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags );
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::AlphaBlending ) )
 		{
-			DoPrepareTransparentFrontPipeline( *l_program, { p_textureFlags, p_programFlags, p_colourBlendMode, p_alphaBlendMode } );
-			DoPrepareTransparentBackPipeline( *l_program, { p_textureFlags, p_programFlags, p_colourBlendMode, p_alphaBlendMode } );
+			auto l_flags = PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags );
+			DoPrepareTransparentFrontPipeline( *l_program, l_flags );
+			DoPrepareTransparentBackPipeline( *l_program, l_flags );
 		}
 		else
 		{
-			DoPrepareOpaquePipeline( *l_program, { p_textureFlags, p_programFlags, p_colourBlendMode, BlendMode::NoBlend } );
+			auto l_flags = PipelineFlags::Create( p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags );
+			DoPrepareOpaquePipeline( *l_program, l_flags );
 		}
 	}
 
-	Pipeline & RenderPass::GetOpaquePipeline( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode )
+	Pipeline & RenderPass::GetOpaquePipeline( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_opaquePipelines.find( { p_textureFlags, p_programFlags, p_colourBlendMode, BlendMode::NoBlend } );
+		auto l_it = m_opaquePipelines.find( PipelineFlags::Create( p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags ) );
 		REQUIRE( l_it != m_opaquePipelines.end() );
 		return *l_it->second;
 	}
 
-	Pipeline & RenderPass::GetTransparentPipelineFront( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+	Pipeline & RenderPass::GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_frontTransparentPipelines.find( { p_textureFlags, p_programFlags, p_colourBlendMode, p_alphaBlendMode } );
+		auto l_it = m_frontTransparentPipelines.find( PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags ) );
 		REQUIRE( l_it != m_frontTransparentPipelines.end() );
 		return *l_it->second;
 	}
 
-	Pipeline & RenderPass::GetTransparentPipelineBack( uint16_t p_textureFlags, uint8_t p_programFlags, BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+	Pipeline & RenderPass::GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_backTransparentPipelines.find( { p_textureFlags, p_programFlags, p_colourBlendMode, p_alphaBlendMode } );
+		auto l_it = m_backTransparentPipelines.find( PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags ) );
 		REQUIRE( l_it != m_backTransparentPipelines.end() );
 		return *l_it->second;
 	}
@@ -490,23 +493,23 @@ namespace Castor3D
 		};
 	}
 
-	ShaderProgramSPtr RenderPass::DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	ShaderProgramSPtr RenderPass::DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		ShaderProgramSPtr l_program;
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::Billboards ) )
 		{
-			l_program = GetEngine()->GetShaderProgramCache().GetBillboardProgram( p_textureFlags, p_programFlags );
+			l_program = GetEngine()->GetShaderProgramCache().GetBillboardProgram( p_textureFlags, p_programFlags, p_sceneFlags );
 
 			if ( !l_program )
 			{
-				l_program = GetEngine()->GetRenderSystem()->CreateBillboardsProgram( *this, p_textureFlags, p_programFlags );
-				GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, p_textureFlags, p_programFlags );
+				l_program = GetEngine()->GetRenderSystem()->CreateBillboardsProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags );
+				GetEngine()->GetShaderProgramCache().AddBillboardProgram( l_program, p_textureFlags, p_programFlags, p_sceneFlags );
 			}
 		}
 		else
 		{
-			l_program = GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags );
+			l_program = GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags );
 		}
 
 		return l_program;

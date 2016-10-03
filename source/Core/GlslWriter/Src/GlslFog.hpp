@@ -30,8 +30,8 @@ namespace GLSL
 	class Fog
 	{
 	public:
-		GlslWriter_API Fog( GlslWriter & p_writer );
-		GlslWriter_API void ApplyFog( Vec4 & p_colour, Float const & p_z );
+		GlslWriter_API Fog( uint8_t p_flags, GlslWriter & p_writer );
+		GlslWriter_API void ApplyFog( Vec4 & p_colour, Float const & p_dist, Float const & p_y );
 
 	protected:
 		GlslWriter & m_writer;

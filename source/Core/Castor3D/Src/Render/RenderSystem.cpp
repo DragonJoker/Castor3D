@@ -93,7 +93,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )
+	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -185,7 +185,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 
@@ -332,7 +332,7 @@ namespace Castor3D
 			l_strGeoShader = l_writer.Finalise();
 		}
 
-		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags );
+		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 		l_program->SetSource( ShaderType::Vertex, ShaderModel::Model3, l_strVtxShader );
 		l_program->SetSource( ShaderType::Geometry, ShaderModel::Model3, l_strGeoShader );
 		l_program->SetSource( ShaderType::Pixel, ShaderModel::Model3, l_strPxlShader );

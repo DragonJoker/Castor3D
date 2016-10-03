@@ -28,6 +28,17 @@ namespace Castor3D
 	/**@name Scene */
 	//@{
 
+	enum class FogType
+	{
+		Disabled,
+		Linear,
+		Exponential,
+		SquaredExponential,
+		Coloured,
+		Ground,
+		CASTOR_ENUM_CLASS_BOUNDS( Disabled )
+	};
+
 	class Scene;
 	class SceneLoader;
 	class SceneNode;

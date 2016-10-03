@@ -584,7 +584,7 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_index, p_nodes );
 	}
 
-	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -614,9 +614,9 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String PickingPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String PickingPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
-		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags );
+		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const

@@ -26,17 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
-{
-	enum class FogType
-	{
-		Disabled,
-		Linear,
-		Exponential,
-		SquaredExponential,
-		Coloured,
-		Ground,
-	};
-	/*!
+{	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/05/2016

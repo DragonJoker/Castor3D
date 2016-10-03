@@ -30,6 +30,18 @@ SOFTWARE.
 namespace Deferred
 {
 	using Castor3D::Point3rFrameVariable;
+
+	enum class DsTexture
+		: uint8_t
+	{
+		Position,
+		Diffuse,
+		Normals,
+		Tangent,
+		Specular,
+		Emissive,
+		CASTOR_ENUM_CLASS_BOUNDS( Position ),
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -49,18 +61,6 @@ namespace Deferred
 		: public Castor3D::RenderTechnique
 	{
 	protected:
-		enum class DsTexture
-			: uint8_t
-		{
-			Position,
-			Diffuse,
-			Normals,
-			Tangent,
-			Specular,
-			Emissive,
-			CASTOR_ENUM_CLASS_BOUNDS( Position ),
-		};
-
 		DECLARE_SMART_PTR( Point3rFrameVariable );
 
 	protected:
@@ -150,7 +150,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
@@ -163,7 +163,7 @@ namespace Deferred
 		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
 		 */
-		Castor::String DoGetLightPassVertexShaderSource( uint8_t p_programFlags )const;
+		Castor::String DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -172,13 +172,30 @@ namespace Deferred
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 */
-		Castor::String DoGetLightPassPixelShaderSource( uint16_t p_textureFlags )const;
+		Castor::String DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
 
-	private:
-		static Castor::String GetTextureName( DsTexture p_texture );
-		static Castor::PixelFormat GetTextureFormat( DsTexture p_texture );
-		static Castor3D::AttachmentPoint GetTextureAttachmentPoint( DsTexture p_texture );
-		static uint32_t GetTextureAttachmentIndex( DsTexture p_texture );
+	protected:
+		struct LightPassProgram
+		{
+			//!\~english	The shader program used to render lights.
+			//!\~french		Le shader utilisé pour rendre les lumières.
+			Castor3D::ShaderProgramSPtr m_program;
+			//!\~english	The framve variable buffer used to apply matrices.
+			//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
+			Castor3D::FrameVariableBufferSPtr m_matrixUbo;
+			//!\~english	The framve variable buffer used to transmit scene values.
+			//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
+			Castor3D::FrameVariableBufferSPtr m_sceneUbo;
+			//!\~english	The shader variable containing the camera position.
+			//!\~french		La variable de shader contenant la position de la caméra.
+			Castor3D::Point3rFrameVariableSPtr m_camera;
+			//!\~english	Geometry buffers holder.
+			//!\~french		Conteneur de buffers de géométries.
+			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
+			//!\~english	The pipeline used by the light pass.
+			//!\~french		Le pipeline utilisé par la passe lumières.
+			Castor3D::PipelineSPtr m_pipeline;
+		};
 
 	protected:
 		//!\~english	The various textures.
@@ -198,13 +215,7 @@ namespace Deferred
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
-		Castor3D::ShaderProgramSPtr m_lightPassShaderProgram;
-		//!\~english	The framve variable buffer used to apply matrices.
-		//!\~french		Le tampon de variables shader utilisé pour appliquer les matrices.
-		Castor3D::FrameVariableBufferWPtr m_lightPassMatrices;
-		//!\~english	The framve variable buffer used to transmit scene values.
-		//!\~french		Le tampon de variables shader utilisé pour transmettre les variables de scène.
-		Castor3D::FrameVariableBufferWPtr m_lightPassScene;
+		std::array< LightPassProgram, size_t( Castor3D::FogType::Count ) > m_lightPassShaderPrograms;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
@@ -214,18 +225,9 @@ namespace Deferred
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;
-		//!\~english	Geometry buffers holder.
-		//!\~french		Conteneur de buffers de géométries.
-		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
-		//!\~english	The shader variable containing the camera position.
-		//!\~french		La variable de shader contenant la position de la caméra.
-		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
-		//!\~english	The pipeline used by the light pass.
-		//!\~french		Le pipeline utilisé par la passe lumières.
-		Castor3D::PipelineSPtr m_lightPassPipeline;
 		//!\~english	The current camera.
 		//!\~french		La caméra actuelle.
 		Castor3D::Camera * m_camera{ nullptr };

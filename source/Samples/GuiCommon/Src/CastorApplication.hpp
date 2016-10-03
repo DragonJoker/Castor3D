@@ -57,8 +57,8 @@ namespace GuiCommon
 				<li>h (--help)	Affiche l'aide.
 				<li>l (--log)	Dàfinit le niveau de log.
 				<li>f (--file)	Dàfinit un fichier de scène à charger au lancement.
-				<li>opengl"		Dàfinit l'API de rendu à OpenGl (la fenàtre de choix du renderer ne sera pas affichàe).
-				<li>directx		Dàfinit l'API de rendu à Direct3D 11 (la fenàtre de choix du renderer ne sera pas affichàe).
+				<li>opengl"		Dàfinit l'API de rendu à OpenGl (la fenêtre de choix du renderer ne sera pas affichée).
+				<li>directx		Dàfinit l'API de rendu à Direct3D 11 (la fenêtre de choix du renderer ne sera pas affichée).
 				</ul>
 	*/
 	class CastorApplication
@@ -71,13 +71,15 @@ namespace GuiCommon
 		 *\param[in]	p_internalName	The application name, used to look for language files and printed in logs.
 		 *\param[in]	p_displayName	The displayed application name.
 		 *\param[in]	p_steps			The initialisation steps count, used for splash screen.
+		 *\param[in]	p_version		The application version.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_internalName	Le nom de l'application, utilisà pour rechercher les fichiers de langages, et àcrit dans les logs.
-		 *\param[in]	p_displayName	Le nom de l'application, affichà dans les fenàtres.
+		 *\param[in]	p_displayName	Le nom de l'application, affiché dans les fenêtres.
 		 *\param[in]	p_steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
+		 *\param[in]	p_version		La version de l'application.
 		 */
-		CastorApplication( Castor::String const & p_internalName, Castor::String const & p_displayName, uint32_t p_steps );
+		CastorApplication( Castor::String const & p_internalName, Castor::String const & p_displayName, uint32_t p_steps, Castor3D::Version const & p_version );
 		/**
 		 *\~english
 		 *\return		The application name.
@@ -92,7 +94,7 @@ namespace GuiCommon
 		 *\~english
 		 *\return		The application displayed name.
 		 *\~french
-		 *\return		Le nom de l'application, tel qu'affichà dans les fenàtres.
+		 *\return		Le nom de l'application, tel qu'affiché dans les fenêtres.
 		 */
 		inline Castor::String const & GetDisplayName()const
 		{
@@ -138,6 +140,16 @@ namespace GuiCommon
 		{
 			return m_splashScreen;
 		}
+		/**
+		 *\~english
+		 *\return		The application version.
+		 *\~french
+		 *\return		La version de l'application.
+		 */
+		inline Castor3D::Version const & GetVersion()const
+		{
+			return m_version;
+		}
 
 	protected:
 		/**
@@ -171,9 +183,9 @@ namespace GuiCommon
 		 *\param[in]	p_splashScreen	The splash screen.
 		 *\return		The main frame. If nullptr, the application will stop.
 		 *\~french
-		 *\brief		Devrait contenir le code d'initialisation de la fenàtre principale de l'application.
+		 *\brief		Devrait contenir le code d'initialisation de la fenêtre principale de l'application.
 		 *\param[in]	p_splashScreen	Le splash screen.
-		 *\return		La fenàtre principale. Si nullptr, l'application s'arràtera.
+		 *\return		La fenêtre principale. Si nullptr, l'application s'arràtera.
 		 */
 		virtual wxWindow * DoInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
 
@@ -196,6 +208,7 @@ namespace GuiCommon
 		std::unique_ptr< wxLocale > m_locale;
 		uint32_t m_steps;
 		SplashScreen * m_splashScreen;
+		Castor3D::Version m_version;
 	};
 }
 

@@ -135,6 +135,12 @@ if( MSVC )
 	file( COPY ${CMAKE_SOURCE_DIR}/../data/VS/Rebracer.xml DESTINATION ${CMAKE_BINARY_DIR} )
 endif()
 
+add_definitions(
+ -DVERSION_MAJOR=${VERSION_MAJOR}
+ -DVERSION_MINOR=${VERSION_MINOR}
+ -DVERSION_BUILD=${VERSION_BUILD}
+)
+
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
 

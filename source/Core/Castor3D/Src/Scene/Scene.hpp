@@ -226,6 +226,13 @@ namespace Castor3D
 		C3D_API uint32_t GetFaceCount()const;
 		/**
 		 *\~english
+		 *\return		The scene flags.
+		 *\~french
+		 *\return		Les indicateurs de la scène.
+		 */
+		C3D_API uint8_t GetFlags()const;
+		/**
+		 *\~english
 		 *\brief		Sets the background colour
 		 *\param[in]	p_clrNew	The new colour
 		 *\~french

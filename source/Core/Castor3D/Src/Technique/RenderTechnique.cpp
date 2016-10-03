@@ -273,7 +273,13 @@ namespace Castor3D
 		p_camera.GetViewport().Resize( p_size );
 		p_camera.Update();
 		DoRenderOpaqueNodes( p_nodes, p_camera );
-		p_nodes.m_scene.RenderForeground( p_size, p_camera );
+
+		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled
+			 || p_nodes.m_scene.GetFog().GetType() == FogType::Ground )
+		{
+			p_nodes.m_scene.RenderForeground( GetSize(), p_camera );
+		}
+
 		DoRenderTransparentNodes( p_nodes, p_camera );
 	}
 
@@ -367,7 +373,7 @@ namespace Castor3D
 		}
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -405,7 +411,7 @@ namespace Castor3D
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
-		GLSL::Fog l_fog{ l_writer };
+		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outtputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
@@ -499,13 +505,16 @@ namespace Castor3D
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 									l_v3Emissive, 1.0 );
-			l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ) );
+			if ( p_sceneFlags != 0 )
+			{
+				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
+			}
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -544,7 +553,7 @@ namespace Castor3D
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-		GLSL::Fog l_fog{ l_writer };
+		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
@@ -644,7 +653,10 @@ namespace Castor3D
 															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 															   l_v3Emissive ), l_fAlpha );
-			l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ) );
+			if ( p_sceneFlags != 0 )
+			{
+				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
+			}
 		} );
 
 		return l_writer.Finalise();

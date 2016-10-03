@@ -183,11 +183,11 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const override;
+		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
