@@ -13,6 +13,8 @@
 #include <Event/Frame/FrameListener.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
 #include <Render/RenderTarget.hpp>

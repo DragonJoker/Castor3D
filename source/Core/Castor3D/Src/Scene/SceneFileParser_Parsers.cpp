@@ -1071,7 +1071,7 @@ namespace Castor3D
 			l_parsingContext->pScene->GetFog().SetType( FogType( l_value ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SKYBOX )
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFogDensity )
 	{
@@ -1088,7 +1088,7 @@ namespace Castor3D
 			l_parsingContext->pScene->GetFog().SetDensity( l_value );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SKYBOX )
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightParent )
 	{

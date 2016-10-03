@@ -6,6 +6,8 @@
 #include <Data/File.hpp>
 #include <Exception/Exception.hpp>
 
+#include <Miscellaneous/Version.hpp>
+
 #include <ImagesLoader.hpp>
 #include <RendererSelector.hpp>
 
@@ -28,7 +30,10 @@ wxIMPLEMENT_APP( CastorShape::CastorShapeApp );
 namespace CastorShape
 {
 	CastorShapeApp::CastorShapeApp()
-		: CastorApplication( cuT( "CastorShape" ), cuT( "Castor Shape" ), 8 )
+		: CastorApplication{ cuT( "CastorShape" )
+				     , cuT( "Castor Shape" )
+				     , 8
+				     , Version{ CastorShape_VERSION_MAJOR, CastorShape_VERSION_MINOR, CastorShape_VERSION_BUILD } }
 		, m_mainFrame( NULL )
 	{
 	}

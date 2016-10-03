@@ -2,6 +2,7 @@
 
 #include <RequiredVersion.hpp>
 #include <Log/Logger.hpp>
+#include <Miscellaneous/Version.hpp>
 
 #include "xpms/splash.xpm"
 

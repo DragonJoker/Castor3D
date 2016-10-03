@@ -260,8 +260,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::Linear );
 	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::Exponential );
 	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::SquaredExponential );
-	m_fogTypes[cuT( "coloured" )] = uint32_t( FogType::Coloured );
-	m_fogTypes[cuT( "ground" )] = uint32_t( FogType::Ground );
 }
 
 SceneFileParser::~SceneFileParser()

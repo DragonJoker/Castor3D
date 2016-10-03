@@ -32,6 +32,27 @@ SOFTWARE.
 
 namespace Castor3D
 {
+	struct PipelineFlags
+	{
+		BlendMode m_colourBlendMode;
+		BlendMode m_alphaBlendMode;
+		uint16_t m_textureFlags;
+		uint8_t m_programFlags;
+		uint8_t m_sceneFlags;
+	};
+
+	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
+	{
+		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
+			|| ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
+				 && ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
+					  || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
+						   && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
+								|| ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
+									 && ( p_lhs.m_programFlags < p_rhs.m_programFlags
+										  || ( p_lhs.m_programFlags == p_rhs.m_programFlags
+											   && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
+	}
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -49,45 +70,6 @@ namespace Castor3D
 		using DistanceSortedNodeMap = std::multimap< double, std::reference_wrapper< ObjectRenderNodeBase > >;
 
 	protected:
-		struct PipelineFlags
-		{
-			size_t m_colourBlendMode : 2;
-			size_t m_alphaBlendMode : 2;
-			size_t m_textureFlags : 12;
-			size_t m_programFlags : 8;
-			size_t m_sceneFlags : 8;
-
-			static PipelineFlags Create( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
-			{
-				PipelineFlags l_flags;
-				l_flags.m_colourBlendMode = size_t( p_colourBlendMode );
-				l_flags.m_alphaBlendMode = size_t( p_alphaBlendMode );
-				l_flags.m_textureFlags = size_t( p_textureFlags );
-				l_flags.m_programFlags = size_t( p_programFlags );
-				l_flags.m_sceneFlags = size_t( p_sceneFlags );
-				return l_flags;
-			}
-		};
-
-		struct PipelineFlagsHasher
-		{
-			size_t operator()( PipelineFlags const & p_flags )const
-			{
-				return *( reinterpret_cast< size_t const * >( &p_flags ) );
-			}
-		};
-
-		struct PipelineFlagsComparer
-		{
-			size_t operator()( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )const
-			{
-				return p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
-					&& p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
-					&& p_lhs.m_textureFlags == p_rhs.m_textureFlags
-					&& p_lhs.m_programFlags == p_rhs.m_programFlags
-					&& p_lhs.m_sceneFlags == p_rhs.m_sceneFlags;
-			}
-		};
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -609,13 +591,13 @@ namespace Castor3D
 		std::map< SceneRPtr, std::vector< CameraRPtr > > m_scenes;
 		//!\~english	The pipelines used to render opaque nodes.
 		//!\~french		Les pipelines de rendu utilisés pour dessiner les noeuds opaques.
-		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_opaquePipelines;
+		std::map< PipelineFlags, PipelineUPtr > m_opaquePipelines;
 		//!\~english	The pipelines used to render transparent nodes' back faces.
 		//!\~french		Les pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
-		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_frontTransparentPipelines;
+		std::map< PipelineFlags, PipelineUPtr > m_frontTransparentPipelines;
 		//!\~english	The pipelines used to render transparent nodes' front faces.
 		//!\~french		Les pipelines de rendu utilisé pour dessiner les faces avant des noeuds transparents.
-		std::unordered_map< PipelineFlags, PipelineUPtr, PipelineFlagsHasher, PipelineFlagsComparer > m_backTransparentPipelines;
+		std::map< PipelineFlags, PipelineUPtr > m_backTransparentPipelines;
 		//!\~english	The objects rendered in the last frame.
 		//!\~french		Les objets dessinés lors de la dernière frame.
 		std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > m_renderedObjects;

@@ -84,6 +84,13 @@ namespace Castor3D
 
 	bool Scene::TextWriter::operator()( Scene const & p_scene, TextFile & p_file )
 	{
+		static std::map< FogType, Castor::String > const FogTypes
+		{
+			{ FogType::Linear, cuT( "linear" ) },
+			{ FogType::Exponential, cuT( "exponential" ) },
+			{ FogType::SquaredExponential, cuT( "squared_exponential" ) },
+		};
+
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
 
 		bool l_return = true;
@@ -173,6 +180,20 @@ namespace Castor3D
 					   && Colour::TextWriter( String() )( p_scene.GetAmbientLight(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene ambient light" );
+		}
+
+		if ( l_return && p_scene.GetFog().GetType() != FogType::Disabled )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Fog type" ) );
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( p_scene.GetFog().GetType() )->second + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Scene >::CheckError( l_return, "Scene fog type" );
+
+			if ( l_return )
+			{
+				Logger::LogInfo( cuT( "Scene::Write - Fog density" ) );
+				l_return = p_file.WriteText( m_tabs + cuT( "\tfog_density " ) + string::to_string( p_scene.GetFog().GetDensity() ) + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Scene >::CheckError( l_return, "Scene fog density" );
+			}
 		}
 
 		if ( l_return && p_scene.GetSkybox() )

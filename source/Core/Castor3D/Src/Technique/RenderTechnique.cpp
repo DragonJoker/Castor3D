@@ -274,8 +274,7 @@ namespace Castor3D
 		p_camera.Update();
 		DoRenderOpaqueNodes( p_nodes, p_camera );
 
-		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled
-			 || p_nodes.m_scene.GetFog().GetType() == FogType::Ground )
+		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled )
 		{
 			p_nodes.m_scene.RenderForeground( GetSize(), p_camera );
 		}

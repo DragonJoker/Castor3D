@@ -34,8 +34,6 @@ namespace Castor3D
 		Linear,
 		Exponential,
 		SquaredExponential,
-		Coloured,
-		Ground,
 		CASTOR_ENUM_CLASS_BOUNDS( Disabled )
 	};
 

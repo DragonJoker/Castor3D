@@ -7,12 +7,12 @@ namespace GLSL
 	Fog::Fog( uint8_t p_flags, GlslWriter & p_writer )
 		: m_writer{ p_writer }
 	{
-		auto c3d_fFogDensity = m_writer.GetBuiltin< Float >( cuT( "c3d_fFogDensity" ) );
-		auto c3d_v4BackgroundColour = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );
-		auto c3d_v3CameraPosition = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v3CameraPosition" ) );
-
 		if ( p_flags != 0 )
 		{
+			auto c3d_fFogDensity = m_writer.GetBuiltin< Float >( cuT( "c3d_fFogDensity" ) );
+			auto c3d_v4BackgroundColour = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );
+			auto c3d_v3CameraPosition = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v3CameraPosition" ) );
+
 			m_writer.ImplementFunction< Vec4 >( cuT( "ApplyFog" ), [&]( Vec4 const & p_colour, Float const & p_dist, Float const & p_y )
 			{
 				auto l_dist = m_writer.GetLocale< Float >( cuT( "l_z" ), p_dist / 100 );

@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "GuiCommonPrerequisites.hpp"
 
+#include <Miscellaneous/Version.hpp>
+
 #include <memory>
 
 #include <wx/app.h>

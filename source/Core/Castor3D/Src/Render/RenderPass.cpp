@@ -84,7 +84,7 @@ namespace Castor3D
 			}
 		}
 
-		inline BlendState DoCreateBlendState( uint32_t p_colourBlendMode, uint32_t p_alphaBlendMode )
+		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
 		{
 			
 			BlendState l_state;
@@ -219,34 +219,33 @@ namespace Castor3D
 
 		if ( CheckFlag( p_programFlags, ProgramFlag::AlphaBlending ) )
 		{
-			auto l_flags = PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags );
+			auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
 			DoPrepareTransparentFrontPipeline( *l_program, l_flags );
 			DoPrepareTransparentBackPipeline( *l_program, l_flags );
 		}
 		else
 		{
-			auto l_flags = PipelineFlags::Create( p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags );
-			DoPrepareOpaquePipeline( *l_program, l_flags );
+			DoPrepareOpaquePipeline( *l_program, { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		}
 	}
 
 	Pipeline & RenderPass::GetOpaquePipeline( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_opaquePipelines.find( PipelineFlags::Create( p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags ) );
+		auto l_it = m_opaquePipelines.find( { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		REQUIRE( l_it != m_opaquePipelines.end() );
 		return *l_it->second;
 	}
 
 	Pipeline & RenderPass::GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_frontTransparentPipelines.find( PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags ) );
+		auto l_it = m_frontTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
 		REQUIRE( l_it != m_frontTransparentPipelines.end() );
 		return *l_it->second;
 	}
 
 	Pipeline & RenderPass::GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_backTransparentPipelines.find( PipelineFlags::Create( p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags ) );
+		auto l_it = m_backTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
 		REQUIRE( l_it != m_backTransparentPipelines.end() );
 		return *l_it->second;
 	}
