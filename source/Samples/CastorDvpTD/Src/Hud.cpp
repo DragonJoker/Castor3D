@@ -2,8 +2,10 @@
 
 #include "Game.hpp"
 
+#include <OverlayCache.hpp>
 #include <Overlay/Overlay.hpp>
 #include <Overlay/TextOverlay.hpp>
+#include <Scene/Scene.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

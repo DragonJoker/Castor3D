@@ -42,7 +42,7 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		static std::array< String, eSHADER_MODEL_COUNT > const l_arrayModels
+		static std::array< String, size_t( ShaderModel::Count ) > const l_arrayModels
 		{
 			cuT( "sm_1" ),
 			cuT( "sm_2" ),
@@ -64,9 +64,9 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			for ( int i = 0; i < eSHADER_MODEL_COUNT; i++ )
+			for ( size_t i = 0; i < size_t( ShaderModel::Count ); i++ )
 			{
-				Path l_file = p_shaderObject.GetFile( eSHADER_MODEL( i ) );
+				Path l_file = p_shaderObject.GetFile( ShaderModel( i ) );
 
 				if ( !l_file.empty() )
 				{
@@ -136,11 +136,11 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderObject::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
+	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
 	{
-		m_status = eSHADER_STATUS_NOTCOMPILED;
-		m_arrayFiles[p_eModel].clear();
-		m_arraySources[p_eModel].clear();
+		m_status = ShaderStatus::NotCompiled;
+		m_arrayFiles[size_t( p_eModel )].clear();
+		m_arraySources[size_t( p_eModel )].clear();
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
@@ -150,8 +150,8 @@ namespace Castor3D
 			{
 				if ( l_file.GetLength() > 0 )
 				{
-					m_arrayFiles[p_eModel] = p_filename;
-					l_file.CopyToString( m_arraySources[p_eModel] );
+					m_arrayFiles[size_t( p_eModel )] = p_filename;
+					l_file.CopyToString( m_arraySources[size_t( p_eModel )] );
 				}
 			}
 		}
@@ -161,7 +161,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_return; i++ )
+		for ( size_t i = 0; i < size_t( ShaderModel::Count ) && !l_return; i++ )
 		{
 			l_return = !m_arrayFiles[i].empty();
 		}
@@ -169,17 +169,17 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObject::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
+	void ShaderObject::SetSource( ShaderModel p_eModel, String const & p_strSource )
 	{
-		m_status = eSHADER_STATUS_NOTCOMPILED;
-		m_arraySources[p_eModel] = p_strSource;
+		m_status = ShaderStatus::NotCompiled;
+		m_arraySources[size_t( p_eModel )] = p_strSource;
 	}
 
 	bool ShaderObject::HasSource()const
 	{
 		bool l_return = false;
 
-		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_return; i++ )
+		for ( size_t i = 0; i < size_t( ShaderModel::Count ) && !l_return; i++ )
 		{
 			l_return = !m_arraySources[i].empty();
 		}
@@ -221,7 +221,7 @@ namespace Castor3D
 
 		if ( !l_compilerLog.empty() )
 		{
-			if ( m_status == eSHADER_STATUS_ERROR )
+			if ( m_status == ShaderStatus::Error )
 			{
 				Logger::LogError( l_compilerLog );
 			}
@@ -233,19 +233,19 @@ namespace Castor3D
 			StringStream l_source;
 			l_source << format::line_prefix();
 			l_source << m_loadedSource;
-			Logger::LogDebug( l_source.str() );
+			Logger::LogInfo( l_source.str() );
 			m_loadedSource.clear();
 		}
-		else if ( m_status == eSHADER_STATUS_ERROR )
+		else if ( m_status == ShaderStatus::Error )
 		{
 			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
 			StringStream l_source;
 			l_source << format::line_prefix();
 			l_source << m_loadedSource;
-			Logger::LogDebug( l_source.str() );
-			m_status = eSHADER_STATUS_NOTCOMPILED;
+			Logger::LogInfo( l_source.str() );
+			m_status = ShaderStatus::NotCompiled;
 		}
 
-		return m_status != eSHADER_STATUS_ERROR;
+		return m_status != ShaderStatus::Error;
 	}
 }

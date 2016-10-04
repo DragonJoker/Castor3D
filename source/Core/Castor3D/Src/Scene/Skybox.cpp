@@ -279,7 +279,7 @@ namespace Castor3D
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
-		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, uint32_t( ShaderType::Vertex ) );
+		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		m_matricesBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
 		return *l_program;

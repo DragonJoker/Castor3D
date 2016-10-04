@@ -242,6 +242,7 @@ namespace Castor3D
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime, uint32_t & p_visible )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes( p_camera, p_scene );
+		p_scene.GetLightCache().UpdateLights();
 
 		m_renderSystem.PushScene( &p_scene );
 
@@ -272,7 +273,12 @@ namespace Castor3D
 		p_camera.GetViewport().Resize( p_size );
 		p_camera.Update();
 		DoRenderOpaqueNodes( p_nodes, p_camera );
-		p_nodes.m_scene.RenderForeground( p_size, p_camera );
+
+		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled )
+		{
+			p_nodes.m_scene.RenderForeground( GetSize(), p_camera );
+		}
+
 		DoRenderTransparentNodes( p_nodes, p_camera );
 	}
 
@@ -287,29 +293,29 @@ namespace Castor3D
 
 			if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodes );
+				DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodes );
 			}
 
 			if ( !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
 			{
 				if ( m_renderSystem.GetGpuInformations().HasInstancing() )
 				{
-					DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 				else
 				{
-					DoRenderInstancedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
+					DoRenderOpaqueInstancedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes );
 				}
 			}
 
 			if ( !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodes );
+				DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodes );
 			}
 
 			if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
 			{
-				DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodes );
+				DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodes );
 			}
 
 			DoEndOpaqueRendering();
@@ -326,15 +332,15 @@ namespace Castor3D
 
 			if ( m_multisampling )
 			{
-				DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesFront, false );
-				DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_transparentRenderNodesFront, false );
-				DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_transparentRenderNodesFront, false );
-				DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_transparentRenderNodesFront, false );
+				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesFront, false );
+				DoRenderTransparentStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_transparentRenderNodesFront, false );
+				DoRenderTransparentAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_transparentRenderNodesFront, false );
+				DoRenderTransparentBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_transparentRenderNodesFront, false );
 
-				DoRenderInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesBack, true );
-				DoRenderStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_transparentRenderNodesBack, true );
-				DoRenderAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_transparentRenderNodesBack, true );
-				DoRenderBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_transparentRenderNodesBack, true );
+				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesBack, true );
+				DoRenderTransparentStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_transparentRenderNodesBack, true );
+				DoRenderTransparentAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_transparentRenderNodesBack, true );
+				DoRenderTransparentBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_transparentRenderNodesBack, true );
 			}
 			else
 			{
@@ -366,7 +372,7 @@ namespace Castor3D
 		}
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -378,6 +384,7 @@ namespace Castor3D
 
 		// Fragment Intputs
 		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
+		auto vtx_view = l_writer.GetInput< Vec4 >( cuT( "vtx_view" ) );
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
@@ -401,11 +408,13 @@ namespace Castor3D
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
 
+		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
+		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outtputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-
+		
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
@@ -495,12 +504,16 @@ namespace Castor3D
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 									l_v3Emissive, 1.0 );
+			if ( p_sceneFlags != 0 )
+			{
+				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
+			}
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )const
+	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -512,6 +525,7 @@ namespace Castor3D
 
 		// Fragment Intputs
 		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
+		auto vtx_view = l_writer.GetInput< Vec4 >( cuT( "vtx_view" ) );
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
@@ -537,8 +551,10 @@ namespace Castor3D
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
+		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
-		// Fragment Outtputs
+		// Fragment Outputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
@@ -636,8 +652,30 @@ namespace Castor3D
 															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 															   l_v3Emissive ), l_fAlpha );
+			if ( p_sceneFlags != 0 )
+			{
+				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
+			}
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	{
+		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
+		p_camera.FillShader( l_sceneUbo );
+		p_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
+		p_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
+		p_camera.GetScene()->FillShader( l_sceneUbo );
+	}
+
+	void RenderTechnique::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	{
+		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
+		p_camera.FillShader( l_sceneUbo );
+		p_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
+		p_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
+		p_camera.GetScene()->FillShader( l_sceneUbo );
 	}
 }

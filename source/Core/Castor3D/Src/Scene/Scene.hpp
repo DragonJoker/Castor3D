@@ -28,6 +28,7 @@ SOFTWARE.
 
 #include "BillboardCache.hpp"
 #include "CameraCache.hpp"
+#include "Fog.hpp"
 #include "GeometryCache.hpp"
 #include "SceneNodeCache.hpp"
 #include "AnimatedObjectGroupCache.hpp"
@@ -131,6 +132,15 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Fills the frame variable buffer with the scene's parameters.
+		 *\param[in]	p_camera	The scene's camera.
+		 *\~french
+		 *\brief		Remplit le tampon de variables shader avec les paramètres de scène.
+		 *\param[in]	p_camera	La caméra de la scène.
+		 */
+		C3D_API void FillShader( FrameVariableBuffer const & p_buffer )const;
+		/**
+		 *\~english
 		 *\brief		Renders the scene background.
 		 *\param[in]	p_size		The target dimensions.
 		 *\~french
@@ -214,6 +224,13 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		C3D_API uint32_t GetFaceCount()const;
+		/**
+		 *\~english
+		 *\return		The scene flags.
+		 *\~french
+		 *\return		Les indicateurs de la scène.
+		 */
+		C3D_API uint8_t GetFlags()const;
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -343,6 +360,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The fog's parameters.
+		 *\~french
+		 *\return		Les paramètres du brouillard.
+		 */
+		inline Fog const & GetFog()const
+		{
+			return m_fog;
+		}
+		/**
+		 *\~english
+		 *\return		The fog's parameters.
+		 *\~french
+		 *\return		Les paramètres du brouillard.
+		 */
+		inline Fog & GetFog()
+		{
+			return m_fog;
+		}
+		/**
+		 *\~english
 		 *\brief		Connects a client to the changed notification signal.
 		 *\param[in]	p_function	The client function.
 		 *\return		The connection.
@@ -435,6 +472,9 @@ namespace Castor3D
 		//!\~english	The LightCategory factory.
 		//!\~french		La fabrique de LightCategory.
 		LightFactory m_lightFactory;
+		//!\~english	The fog's parameters.
+		//!\~french		Les paramètres de brouillard.
+		Fog m_fog;
 		//!\~english	The signal raised when the scene has changed.
 		//!\~french		Le signal levé lorsque la scène a changé.
 		Castor::Signal< std::function< void( Scene const & ) > > m_signalChanged;

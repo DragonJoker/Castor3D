@@ -1056,6 +1056,40 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( eSECTION_SKYBOX )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFogType )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pScene->GetFog().SetType( FogType( l_value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneFogDensity )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			float l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pScene->GetFog().SetDensity( l_value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightParent )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2772,7 +2806,7 @@ namespace Castor3D
 				Path l_path;
 				p_params[0]->Get( l_uiModel );
 				p_params[1]->Get( l_path );
-				l_parsingContext->pShaderProgram->SetFile( l_parsingContext->eShaderObject, eSHADER_MODEL( l_uiModel ), p_context->m_file->GetFilePath() / l_path );
+				l_parsingContext->pShaderProgram->SetFile( l_parsingContext->eShaderObject, ShaderModel( l_uiModel ), p_context->m_file->GetFilePath() / l_path );
 			}
 			else
 			{

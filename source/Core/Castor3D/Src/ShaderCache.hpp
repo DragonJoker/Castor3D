@@ -87,28 +87,32 @@ namespace Castor3D
 		 *\param[in]	p_renderPass	The pass from which the program code is retrieved.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\return		The found or created program.
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés.
 		 *\param[in]	p_renderPass	La passe a partir de laquelle est récupéré le code du programme.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\return		The found program.
 		 *\~french
 		 *\brief		Cherche un programme de billboards correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API ShaderProgramSPtr GetBillboardProgram( uint16_t p_textureFlags, uint8_t p_programFlags )const;
+		C3D_API ShaderProgramSPtr GetBillboardProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Adds a billboards shader program corresponding to given flags.
@@ -123,72 +127,78 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint8_t p_programFlags );
+		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
-		 *\brief		Creates a matrix frame variable buffer
-		 *\param[in]	p_program		The programme to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les matrices
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		C3D_API FrameVariableBuffer & CreateMatrixBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates a scene frame variable buffer
-		 *\param[in]	p_program		The program to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les données de scène
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		C3D_API FrameVariableBuffer & CreateSceneBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates a pass frame variable buffer
-		 *\param[in]	p_program		The program to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les données de passe
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		C3D_API FrameVariableBuffer & CreatePassBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates an animation frame variable buffer
-		 *\param[in]	p_program		The program to which the buffer is bound
+		 *\brief		Creates a matrix frame variable buffer.
+		 *\param[in]	p_program		The programme to which the buffer is bound.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound.
+		 *\return		The frame variable buffer.
 		 *\~french
-		 *\brief		Crée un frame variable buffer pour les données d'animation
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
+		 *\brief		Crée un frame variable buffer pour les matrices.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le frame variable buffer.
+		 */
+		C3D_API FrameVariableBuffer & CreateMatrixBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates a scene frame variable buffer.
+		 *\param[in]	p_program		The program to which the buffer is bound.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound.
+		 *\return		The frame variable buffer.
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de scène.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le frame variable buffer.
+		 */
+		C3D_API FrameVariableBuffer & CreateSceneBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates a pass frame variable buffer.
+		 *\param[in]	p_program		The program to which the buffer is bound.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound.
+		 *\return		The frame variable buffer.
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de passe.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le frame variable buffer.
+		 */
+		C3D_API FrameVariableBuffer & CreatePassBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates an animation frame variable buffer.
+		 *\param[in]	p_program		The program to which the buffer is bound.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound.
+		 *\return		The frame variable buffer.
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données d'animation.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le frame variable buffer.
 		 */
 		C3D_API FrameVariableBuffer & CreateAnimationBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
-		 *\brief		Creates the textures related frame variables
-		 *\param[in]	p_uiTextureFlags	Bitwise ORed TextureChannel
-		 *\param[in]	p_program			The program to which the buffer is bound
+		 *\brief		Creates the textures related frame variables.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_program		The program to which the buffer is bound.
 		 *\~french
-		 *\brief		Crée les frame variables relatives aux textures
-		 *\param[in]	p_uiTextureFlags	Une combinaison de TextureChannel
-		 *\param[in]	p_program			Le programme auquel le buffer est lié
+		 *\brief		Crée les frame variables relatives aux textures.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
 		 */
-		C3D_API void CreateTextureVariables( ShaderProgram & p_program, uint16_t p_uiTextureFlags );
+		C3D_API void CreateTextureVariables( ShaderProgram & p_program, uint16_t p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex

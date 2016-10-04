@@ -91,7 +91,7 @@ namespace GlRender
 
 	bool GlGeometryBuffers::DoInitialise()
 	{
-		if ( m_program.GetStatus() != ePROGRAM_STATUS_LINKED )
+		if ( m_program.GetStatus() != ProgramStatus::Linked )
 		{
 			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
 		}

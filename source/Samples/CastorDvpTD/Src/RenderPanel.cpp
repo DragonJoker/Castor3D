@@ -7,6 +7,7 @@
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
+#include <Mesh/Mesh.hpp>
 #include <Miscellaneous/Ray.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Scene/Camera.hpp>

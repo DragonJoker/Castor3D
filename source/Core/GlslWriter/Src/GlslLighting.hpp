@@ -106,6 +106,4 @@ namespace GLSL
 	};
 }
 
-#include "GlslLighting.inl"
-
 #endif

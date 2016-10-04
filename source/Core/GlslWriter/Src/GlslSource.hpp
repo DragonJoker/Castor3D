@@ -24,5 +24,6 @@ SOFTWARE.
 #define ___GLSL_SOURCE_H___
 
 #include "GlslLighting.hpp"
+#include "GlslFog.hpp"
 
 #endif

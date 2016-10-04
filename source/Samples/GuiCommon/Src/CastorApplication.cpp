@@ -81,13 +81,14 @@ namespace GuiCommon
 
 #endif
 
-	CastorApplication::CastorApplication( String const & p_internalName, String const & p_displayName, uint32_t p_steps )
+	CastorApplication::CastorApplication( String const & p_internalName, String const & p_displayName, uint32_t p_steps, Version const & p_version )
 		: m_internalName( p_internalName )
 		, m_displayName( p_displayName )
 		, m_castor( nullptr )
 		, m_rendererType( RENDERER_TYPE_UNDEFINED )
 		, m_steps( p_steps + 4 )
 		, m_splashScreen( nullptr )
+		, m_version( p_version )
 	{
 #if defined( __WXGTK__ )
 		XInitThreads();
@@ -105,7 +106,7 @@ namespace GuiCommon
 		bool l_return = DoParseCommandLine();
 		wxDisplay l_display;
 		wxRect l_rect = l_display.GetClientArea();
-		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps );
+		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps, m_version );
 		m_splashScreen = &l_splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
 		wxWindow * l_window = nullptr;

@@ -185,16 +185,9 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::FillRenderNode( RenderNode & p_node )
+	void Pass::FillRenderNode( PassRenderNode & p_node )
 	{
 		DoGetTextures( p_node );
-		DoGetBuffers( p_node );
-	}
-
-	void Pass::FillRenderNode( SceneRenderNode & p_node )
-	{
-		FillRenderNode( p_node.m_node );
-		DoGetBuffers( p_node );
 	}
 
 	void Pass::Cleanup()
@@ -288,7 +281,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::FillShaderVariables( RenderNode & p_node )const
+	void Pass::FillShaderVariables( PassRenderNode & p_node )const
 	{
 		for ( auto l_pair : p_node.m_textures )
 		{
@@ -390,7 +383,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::DoGetTexture( TextureChannel p_channel, String const & p_name, RenderNode & p_node )
+	void Pass::DoGetTexture( TextureChannel p_channel, String const & p_name, PassRenderNode & p_node )
 	{
 		TextureUnitSPtr l_unit = GetTextureUnit( p_channel );
 
@@ -405,7 +398,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::DoGetTextures( RenderNode & p_node )
+	void Pass::DoGetTextures( PassRenderNode & p_node )
 	{
 		m_mapUnits.clear();
 		DoGetTexture( TextureChannel::Ambient, ShaderProgram::MapAmbient, p_node );
@@ -417,21 +410,6 @@ namespace Castor3D
 		DoGetTexture( TextureChannel::Opacity, ShaderProgram::MapOpacity, p_node );
 		DoGetTexture( TextureChannel::Gloss, ShaderProgram::MapGloss, p_node );
 		DoGetTexture( TextureChannel::Height, ShaderProgram::MapHeight, p_node );
-	}
-
-	void Pass::DoGetBuffers( RenderNode & p_node )
-	{
-		RetrieveVariable( &p_node.m_ambient, ShaderProgram::MatAmbient, p_node.m_passUbo );
-		RetrieveVariable( &p_node.m_diffuse, ShaderProgram::MatDiffuse, p_node.m_passUbo );
-		RetrieveVariable( &p_node.m_specular, ShaderProgram::MatSpecular, p_node.m_passUbo );
-		RetrieveVariable( &p_node.m_emissive, ShaderProgram::MatEmissive, p_node.m_passUbo );
-		RetrieveVariable( &p_node.m_shininess, ShaderProgram::MatShininess, p_node.m_passUbo );
-		RetrieveVariable( &p_node.m_opacity, ShaderProgram::MatOpacity, p_node.m_passUbo );
-	}
-
-	void Pass::DoGetBuffers( SceneRenderNode & p_node )
-	{
-		RetrieveVariable( &p_node.m_cameraPos, ShaderProgram::CameraPos, p_node.m_sceneUbo );
 	}
 
 	bool Pass::DoPrepareTexture( TextureChannel p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )

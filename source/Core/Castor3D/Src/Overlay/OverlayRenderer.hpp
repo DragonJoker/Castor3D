@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\param[in]	p_pass	La passe.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderNode & DoGetPanelNode( Pass & p_pass );
+		C3D_API PassRenderNode & DoGetPanelNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given pass.
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\param[in]	p_pass	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API RenderNode & DoGetTextNode( Pass & p_pass );
+		C3D_API PassRenderNode & DoGetTextNode( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
@@ -314,10 +314,10 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	The shader programs used to render a panel (used for borders too).
 		//!\~french		Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi).
-		std::map< Pass *, RenderNode > m_mapPanelNodes;
+		std::map< Pass *, PassRenderNode > m_mapPanelNodes;
 		//!\~english	The shader programs used to render texts.
 		//!\~french		Les programmes de shader utilisés pour rendre les textes.
-		std::map< Pass *, RenderNode > m_mapTextNodes;
+		std::map< Pass *, PassRenderNode > m_mapTextNodes;
 		//!\~english	The shader programs.
 		//!\~french		Les programmes de shader.
 		std::map< uint32_t, PipelineUPtr > m_pipelines;

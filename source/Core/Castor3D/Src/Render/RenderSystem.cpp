@@ -43,7 +43,7 @@ namespace Castor3D
 		m_gpuInformations = std::move( p_informations );
 		DoInitialise();
 		m_gpuInformations.UpdateMaxShaderModel();
-		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= eSHADER_MODEL_3 );
+		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= ShaderModel::Model3 );
 		Logger::LogInfo( cuT( "Vendor: " ) + m_gpuInformations.GetVendor() );
 		Logger::LogInfo( cuT( "Renderer: " ) + m_gpuInformations.GetRenderer() );
 		Logger::LogInfo( cuT( "Version: " ) + m_gpuInformations.GetVersion() );
@@ -64,13 +64,6 @@ namespace Castor3D
 		DoReportTracked();
 
 #endif
-	}
-
-	void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer const & p_variableBuffer )
-	{
-		Point4fFrameVariableSPtr l_variable;
-		p_variableBuffer.GetVariable( ShaderProgram::AmbientLight, l_variable );
-		l_variable->SetValue( rgba_float( p_clColour ) );
 	}
 
 	void RenderSystem::PushScene( Scene * p_scene )
@@ -100,7 +93,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags )
+	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -127,6 +120,7 @@ namespace Castor3D
 
 		// Outputs
 		auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
+		auto vtx_view = l_writer.GetOutput< Vec4 >( cuT( "vtx_view" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -179,18 +173,19 @@ namespace Castor3D
 
 			vtx_texture = l_v3Texture;
 			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
+			vtx_view = c3d_mtxView * l_mtxModel * l_v4Vertex;
 			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
 			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
 			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			vtx_instance = gl_InstanceID;
-			gl_Position = l_writer.Paren( c3d_mtxProjection * c3d_mtxView * l_mtxModel ) * l_v4Vertex;
+			gl_Position = c3d_mtxProjection * vtx_view;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags )
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 
@@ -214,9 +209,9 @@ namespace Castor3D
 
 		auto & l_cache = GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-		l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-		l_cache.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-		l_cache.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreateMatrixBuffer( *l_program, p_programFlags, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreateSceneBuffer( *l_program, p_programFlags, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_cache.CreatePassBuffer( *l_program, p_programFlags, MASK_SHADER_TYPE_PIXEL );
 		l_cache.CreateTextureVariables( *l_program, p_textureFlags );
 		auto & l_billboardUbo = l_program->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, MASK_SHADER_TYPE_GEOMETRY );
 		l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
@@ -337,13 +332,13 @@ namespace Castor3D
 			l_strGeoShader = l_writer.Finalise();
 		}
 
-		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags );
-		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_3, l_strVtxShader );
-		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_3, l_strGeoShader );
-		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_3, l_strPxlShader );
-		l_program->SetSource( ShaderType::Vertex, eSHADER_MODEL_4, l_strVtxShader );
-		l_program->SetSource( ShaderType::Geometry, eSHADER_MODEL_4, l_strGeoShader );
-		l_program->SetSource( ShaderType::Pixel, eSHADER_MODEL_4, l_strPxlShader );
+		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+		l_program->SetSource( ShaderType::Vertex, ShaderModel::Model3, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, ShaderModel::Model3, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, ShaderModel::Model3, l_strPxlShader );
+		l_program->SetSource( ShaderType::Vertex, ShaderModel::Model4, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, ShaderModel::Model4, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, ShaderModel::Model4, l_strPxlShader );
 
 		return l_program;
 	}

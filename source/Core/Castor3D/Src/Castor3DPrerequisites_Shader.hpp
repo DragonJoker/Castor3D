@@ -36,21 +36,26 @@ namespace Castor3D
 	\brief		Enumération des modèles de shader existants
 	\remark
 	*/
-	typedef enum eSHADER_MODEL
+	enum class ShaderModel
 		: uint8_t
 	{
-		//!\~english Vertex shaders \~french Vertex shaders
-		eSHADER_MODEL_1,
-		//!\~english Pixel shaders \~french Pixel shaders
-		eSHADER_MODEL_2,
-		//!\~english Geometry shaders \~french Geometry shaders
-		eSHADER_MODEL_3,
-		//!\~english Tessellation shaders \~french Tessellation shaders
-		eSHADER_MODEL_4,
-		//!\~english Compute shaders \~french Compute shaders
-		eSHADER_MODEL_5,
-		CASTOR_ENUM_BOUNDS( eSHADER_MODEL, eSHADER_MODEL_1 )
-	}	eSHADER_MODEL;
+		//!\~english	Vertex shaders.
+		//!\~french		Vertex shaders.
+		Model1,
+		//!\~english	Pixel shaders.
+		//!\~french		Pixel shaders.
+		Model2,
+		//!\~english	Geometry shaders.
+		//!\~french		Geometry shaders.
+		Model3,
+		//!\~english	Tessellation shaders.
+		//!\~french		Tessellation shaders.
+		Model4,
+		//!\~english	Compute shaders.
+		//!\~french		Compute shaders.
+		Model5,
+		CASTOR_ENUM_CLASS_BOUNDS( Model1 )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		22/08/2012
@@ -60,15 +65,15 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des statuts de shader
 	*/
-	typedef enum eSHADER_STATUS
+	enum class ShaderStatus
 		: uint8_t
 	{
-		eSHADER_STATUS_DONTEXIST,
-		eSHADER_STATUS_NOTCOMPILED,
-		eSHADER_STATUS_ERROR,
-		eSHADER_STATUS_COMPILED,
-		CASTOR_ENUM_BOUNDS( eSHADER_STATUS, eSHADER_STATUS_DONTEXIST )
-	}	eSHADER_STATUS;
+		DontExist,
+		NotCompiled,
+		Error,
+		Compiled,
+		CASTOR_ENUM_CLASS_BOUNDS( DontExist )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		22/08/2012
@@ -78,14 +83,14 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des statuts de programme
 	*/
-	typedef enum ePROGRAM_STATUS
+	enum class ProgramStatus
 		: uint8_t
 	{
-		ePROGRAM_STATUS_NOTLINKED,
-		ePROGRAM_STATUS_ERROR,
-		ePROGRAM_STATUS_LINKED,
-		CASTOR_ENUM_BOUNDS( ePROGRAM_STATUS, ePROGRAM_STATUS_NOTLINKED )
-	}	ePROGRAM_STATUS;
+		NotLinked,
+		Error,
+		Linked,
+		CASTOR_ENUM_CLASS_BOUNDS( NotLinked )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -530,6 +535,8 @@ namespace Castor3D
 	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
 	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
 	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
+	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
 	l_scene.End()
 
 #define UBO_BILLBOARD( Writer )\

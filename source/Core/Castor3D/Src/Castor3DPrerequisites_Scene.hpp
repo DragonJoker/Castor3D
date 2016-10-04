@@ -28,12 +28,22 @@ namespace Castor3D
 	/**@name Scene */
 	//@{
 
+	enum class FogType
+	{
+		Disabled,
+		Linear,
+		Exponential,
+		SquaredExponential,
+		CASTOR_ENUM_CLASS_BOUNDS( Disabled )
+	};
+
 	class Scene;
 	class SceneLoader;
 	class SceneNode;
 	class SceneFileContext;
 	class SceneFileParser;
 	class Skybox;
+	class Fog;
 	class AnimatedObject;
 	class AnimatedObjectGroup;
 	class AnimatedSkeleton;

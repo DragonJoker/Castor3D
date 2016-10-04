@@ -7,7 +7,10 @@ wxIMPLEMENT_APP( castortd::CastorDvpTD );
 namespace castortd
 {
 	CastorDvpTD::CastorDvpTD()
-		: CastorApplication( cuT( "CastorDvpTD" ), cuT( "Castor Tower Defense" ), 7 )
+		: CastorApplication{ cuT( "CastorDvpTD" )
+							 , cuT( "Castor Tower Defense" )
+							 , 7
+							 , Castor3D::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD } }
 	{
 	}
 

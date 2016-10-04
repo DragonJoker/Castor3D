@@ -265,8 +265,8 @@ namespace GLSL
 #define ELSE\
  ).Else( [&]()
 
-#define ELSEIF()\
- ).ElseIf( [&]()
+#define ELSEIF( Writer, Condition )\
+ ).ElseIf( Expr( &( Writer ), Castor::String( Condition ) ), [&]()
 
 #define FI\
  );

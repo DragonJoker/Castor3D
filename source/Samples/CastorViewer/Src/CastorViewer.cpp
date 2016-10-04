@@ -28,7 +28,10 @@ wxIMPLEMENT_APP( CastorViewer::CastorViewerApp );
 namespace CastorViewer
 {
 	CastorViewerApp::CastorViewerApp()
-		: CastorApplication( cuT( "CastorViewer" ), cuT( "Castor Viewer" ), 7 )
+		: CastorApplication{ cuT( "CastorViewer" )
+							 , cuT( "Castor Viewer" )
+							 , 7
+							 , Version{ CastorViewer_VERSION_MAJOR, CastorViewer_VERSION_MINOR, CastorViewer_VERSION_BUILD } }
 		, m_mainFrame( nullptr )
 	{
 	}

@@ -2,6 +2,9 @@
 
 #include "Game.hpp"
 
+#include <Mesh/Mesh.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
 #include <Scene/Light/PointLight.hpp>
 
 using namespace Castor;

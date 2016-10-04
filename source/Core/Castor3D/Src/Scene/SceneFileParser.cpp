@@ -7,6 +7,7 @@
 #include "Plugin/GenericPlugin.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
+#include "Scene/Fog.hpp"
 #include "Scene/MovableObject.hpp"
 #include "Scene/SceneFileParser_Parsers.hpp"
 #include "Scene/SceneNode.hpp"
@@ -186,11 +187,11 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapPrimitiveOutputTypes[cuT( "triangle_strip" )] = uint32_t( Topology::TriangleStrips );
 	m_mapPrimitiveOutputTypes[cuT( "quad_strip" )] = uint32_t( Topology::QuadStrips );
 
-	m_mapModels[cuT( "sm_1" )] = uint32_t( eSHADER_MODEL_1 );
-	m_mapModels[cuT( "sm_2" )] = uint32_t( eSHADER_MODEL_2 );
-	m_mapModels[cuT( "sm_3" )] = uint32_t( eSHADER_MODEL_3 );
-	m_mapModels[cuT( "sm_4" )] = uint32_t( eSHADER_MODEL_4 );
-	m_mapModels[cuT( "sm_5" )] = uint32_t( eSHADER_MODEL_5 );
+	m_mapModels[cuT( "sm_1" )] = uint32_t( ShaderModel::Model1 );
+	m_mapModels[cuT( "sm_2" )] = uint32_t( ShaderModel::Model2 );
+	m_mapModels[cuT( "sm_3" )] = uint32_t( ShaderModel::Model3 );
+	m_mapModels[cuT( "sm_4" )] = uint32_t( ShaderModel::Model4 );
+	m_mapModels[cuT( "sm_5" )] = uint32_t( ShaderModel::Model5 );
 
 	m_mapViewportModes[cuT( "ortho" )] = uint32_t( ViewportType::Ortho );
 	m_mapViewportModes[cuT( "perspective" )] = uint32_t( ViewportType::Perspective );
@@ -255,6 +256,10 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapLineSpacingModes[cuT( "own_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_OWN_HEIGHT );
 	m_mapLineSpacingModes[cuT( "max_lines_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT );
 	m_mapLineSpacingModes[cuT( "max_font_height" )] = uint32_t( eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT );
+
+	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::Linear );
+	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::Exponential );
+	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::SquaredExponential );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -377,6 +382,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "text_overlay" ), Parser_SceneTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "skybox" ), Parser_SceneSkybox );
+	AddParser( eSECTION_SCENE, cuT( "fog_type" ), Parser_SceneFogType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_fogTypes ) } );
+	AddParser( eSECTION_SCENE, cuT( "fog_density" ), Parser_SceneFogDensity, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapLightTypes ) } );

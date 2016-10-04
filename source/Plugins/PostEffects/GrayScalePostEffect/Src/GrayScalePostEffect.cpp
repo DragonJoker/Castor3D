@@ -122,7 +122,7 @@ namespace GrayScale
 	{
 		bool l_return = false;
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 
 		auto l_vertex = GetVertexProgram( GetRenderSystem() );
@@ -132,7 +132,7 @@ namespace GrayScale
 		{
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
 			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
-			l_cache.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( ShaderType::Vertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::Pixel, l_model, l_fragment );
 			l_program->Initialise();

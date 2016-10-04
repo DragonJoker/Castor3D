@@ -18,7 +18,7 @@ namespace GuiCommon
 		, m_stcContext( p_stcContext )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_shaderType( p_type )
-		, m_shaderModel( eSHADER_MODEL_COUNT )
+		, m_shaderModel( ShaderModel::Count )
 #if defined( NDEBUG )
 		, m_canEdit( p_bCanEdit )
 #else
@@ -27,7 +27,7 @@ namespace GuiCommon
 	{
 		DoInitialiseShaderLanguage();
 
-		if ( m_shaderModel != eSHADER_MODEL_COUNT )
+		if ( m_shaderModel != ShaderModel::Count )
 		{
 			DoInitialiseLayout();
 			DoLoadPage();
@@ -72,7 +72,7 @@ namespace GuiCommon
 
 	void ShaderEditorPage::DoInitialiseShaderLanguage()
 	{
-		m_shaderModel = eSHADER_MODEL_COUNT;
+		m_shaderModel = ShaderModel::Count;
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
 		m_shaderModel = l_program->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
@@ -126,20 +126,20 @@ namespace GuiCommon
 		wxArrayString l_arrayChoices;
 		l_arrayChoices.push_back( wxCOMBO_NEW );
 
-		if ( l_program->GetObjectStatus( m_shaderType ) != eSHADER_STATUS_DONTEXIST )
+		if ( l_program->GetObjectStatus( m_shaderType ) != ShaderStatus::DontExist )
 		{
 			// Load the shader source file/text
-			int l_shaderModel = m_shaderModel;
+			uint8_t l_shaderModel = uint8_t( m_shaderModel );
 
-			while ( m_shaderSource.empty() && m_shaderFile.empty() && l_shaderModel >= eSHADER_MODEL_1 )
+			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel  )>= ShaderModel::Model1 )
 			{
-				m_shaderSource = l_program->GetSource( m_shaderType, eSHADER_MODEL( l_shaderModel ) );
-				m_shaderFile = l_program->GetFile( m_shaderType, eSHADER_MODEL( l_shaderModel ) );
+				m_shaderSource = l_program->GetSource( m_shaderType, ShaderModel( l_shaderModel ) );
+				m_shaderFile = l_program->GetFile( m_shaderType, ShaderModel( l_shaderModel ) );
 
 				if ( !m_shaderSource.empty() || !m_shaderFile.empty() )
 				{
 					// Stop the loop as soon as we've got one of source or file
-					l_shaderModel = eSHADER_MODEL_1;
+					l_shaderModel = uint8_t( ShaderModel::Model1 );
 				}
 
 				--l_shaderModel;

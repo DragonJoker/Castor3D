@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\param[in]	p_eShaderModel	le shader model
 		 *\return		\p true si le shader model est supporté dans la configuration actuelle
 		 */
-		C3D_API bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
+		C3D_API bool SupportsShaderModel( ShaderModel p_eShaderModel );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.

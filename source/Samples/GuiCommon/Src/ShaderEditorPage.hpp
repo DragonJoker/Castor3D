@@ -50,7 +50,7 @@ namespace GuiCommon
 			return m_shaderSource;
 		}
 
-		Castor3D::eSHADER_MODEL GetShaderModel()const
+		Castor3D::ShaderModel GetShaderModel()const
 		{
 			return m_shaderModel;
 		}
@@ -74,7 +74,7 @@ namespace GuiCommon
 		wxString m_shaderSource;
 		Castor3D::ShaderProgramWPtr m_shaderProgram;
 		Castor3D::ShaderType m_shaderType;
-		Castor3D::eSHADER_MODEL m_shaderModel;
+		Castor3D::ShaderModel m_shaderModel;
 		bool m_canEdit;
 	};
 }

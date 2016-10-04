@@ -142,26 +142,34 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Binds the scene lights.
-		 *\param[in]	p_program		The shader program.
+		 *\brief		Fills the lights frame variables.
 		 *\param[in]	p_sceneBuffer	The constants buffer.
 		 *\~french
-		 *\brief		Attache les sources lumineuses
-		 *\param[in]	p_program		Le programme shader.
+		 *\brief		Remplit les variables shader relatives aux sources lumineuses.
 		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
 		 */
-		C3D_API void BindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const;
+		C3D_API void FillShader( FrameVariableBuffer const & p_sceneBuffer )const;
 		/**
 		 *\~english
-		 *\brief		Unbinds the scene lights.
-		 *\param[in]	p_program		The shader program.
-		 *\param[in]	p_sceneBuffer	The constants buffer.
+		 *\brief		Updates the lights texture.
 		 *\~french
-		 *\brief		Détache les sources lumineuses
-		 *\param[in]	p_program		Le programme shader.
-		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+		 *\brief		Met à jour la texture de sources lumineuses.
 		 */
-		C3D_API void UnbindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const;
+		C3D_API void UpdateLights()const;
+		/**
+		 *\~english
+		 *\brief		Binds the lights texture.
+		 *\~french
+		 *\brief		Active la texture de sources lumineuses.
+		 */
+		C3D_API void BindLights()const;
+		/**
+		 *\~english
+		 *\brief		Unbinds the lights texture.
+		 *\~french
+		 *\brief		Désactive la texture de sources lumineuses.
+		 */
+		C3D_API void UnbindLights()const;
 
 	private:
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.

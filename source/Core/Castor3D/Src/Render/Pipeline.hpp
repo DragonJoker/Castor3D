@@ -296,6 +296,17 @@ namespace Castor3D
 		{
 			return m_program;
 		}
+		/**
+		 *\~english
+		 *\return		The shader program.
+		 *\~french
+		 *\return		Le programme shader.
+		 */
+		inline FrameVariableBuffer & GetSceneUbo()
+		{
+			REQUIRE( m_sceneUbo );
+			return *m_sceneUbo;
+		}
 
 	private:
 		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const;
@@ -338,6 +349,9 @@ namespace Castor3D
 		//!\~english	The shader program.
 		//!\~french		Le programme shader.
 		ShaderProgram & m_program;
+		//!\~english	The scene frame variable buffer.
+		//!\~french		Le tampon de variables shader pour la scène.
+		FrameVariableBufferSPtr m_sceneUbo;
 	};
 }
 

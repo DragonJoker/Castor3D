@@ -398,8 +398,8 @@ namespace OceanLighting
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strOcnV;
 		Logger::LogDebug( "Loading 'render' shader program" );
 		m_render = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_render->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_render->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_render->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_render->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_renderSkyIrradianceSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_renderInscatterSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_renderTransmittanceSampler = m_render->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
@@ -465,8 +465,8 @@ namespace OceanLighting
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strSkyF;
 		Logger::LogDebug( "Loading 'sky' shader program" );
 		m_sky = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_sky->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_sky->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_sky->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_sky->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_skySkyIrradianceSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_skyInscatterSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_skyTransmittanceSampler = m_sky->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
@@ -488,8 +488,8 @@ namespace OceanLighting
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strMapF;
 		Logger::LogDebug( "Loading 'skymap' shader program" );
 		m_skymap = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_skymap->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_skymap->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_skymap->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_skymap->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_skymapSkyIrradianceSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 		m_skymapInscatterSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 		m_skymapTransmittanceSampler = m_skymap->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
@@ -521,8 +521,8 @@ namespace OceanLighting
 			l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strCloF;
 			Logger::LogDebug( "Loading 'clouds' shader program" );
 			m_clouds = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-			m_clouds->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-			m_clouds->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+			m_clouds->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+			m_clouds->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 			m_cloudsSkyIrradianceSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "skyIrradianceSampler" ), ShaderType::Pixel );
 			m_cloudsInscatterSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "inscatterSampler" ), ShaderType::Pixel );
 			m_cloudsTransmittanceSampler = m_clouds->CreateFrameVariable< OneIntFrameVariable >( cuT( "transmittanceSampler" ), ShaderType::Pixel );
@@ -569,8 +569,8 @@ namespace OceanLighting
 		l_strSrcF = l_strIniF;
 		Logger::LogDebug( "Loading 'init' shader program" );
 		m_init = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_init->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_init->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_init->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_init->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_initSpectrum_1_2_Sampler = m_init->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_1_2_Sampler" ), ShaderType::Pixel );
 		m_initSpectrum_3_4_Sampler = m_init->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_3_4_Sampler" ), ShaderType::Pixel );
 		m_initSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
@@ -586,8 +586,8 @@ namespace OceanLighting
 		l_strSrcF = l_strVarF;
 		Logger::LogDebug( "Loading 'variances' shader program" );
 		m_variances = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_variances->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_variances->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_variances->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_variances->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_variancesSpectrum_1_2_Sampler = m_variances->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_1_2_Sampler" ), ShaderType::Pixel );
 		m_variancesSpectrum_3_4_Sampler = m_variances->CreateFrameVariable< OneIntFrameVariable >( cuT( "spectrum_3_4_Sampler" ), ShaderType::Pixel );
 		m_variancesSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
@@ -607,8 +607,8 @@ namespace OceanLighting
 		l_strSrcF = l_strFtxF;
 		Logger::LogDebug( "Loading 'fftx' shader program" );
 		m_fftx = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_fftx->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_fftx->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_fftx->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_fftx->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_fftxButterflySampler = m_fftx->CreateFrameVariable< OneIntFrameVariable >( cuT( "butterflySampler" ), ShaderType::Pixel );
 		m_fftxImgSampler = m_fftx->CreateFrameVariable< OneIntFrameVariable >( cuT( "imgSampler" ), ShaderType::Pixel );
 		m_fftxButterflySampler->SetValue( BUTTERFLY_UNIT );
@@ -622,8 +622,8 @@ namespace OceanLighting
 		l_strSrcF = l_strFtyF;
 		Logger::LogDebug( "Loading 'ffty' shader program" );
 		m_ffty = GetEngine()->GetRenderSystem()->GetEngine()->GetShaderProgramCache().GetNewProgram();
-		m_ffty->SetSource( ShaderType::Vertex, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
-		m_ffty->SetSource( ShaderType::Pixel, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
+		m_ffty->SetSource( ShaderType::Vertex, ShaderModel::Count, l_strVertex + l_strSrcV );
+		m_ffty->SetSource( ShaderType::Pixel, ShaderModel::Count, l_strPixel + l_strSrcF );
 		m_fftyButterflySampler = m_ffty->CreateFrameVariable< OneIntFrameVariable >( cuT( "butterflySampler" ), ShaderType::Pixel );
 		m_fftyImgSampler = m_ffty->CreateFrameVariable< OneIntFrameVariable >( cuT( "imgSampler" ), ShaderType::Pixel );
 		m_fftyButterflySampler->SetValue( BUTTERFLY_UNIT );

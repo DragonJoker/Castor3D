@@ -116,23 +116,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Fills a render node's values from this pass.
-		 *\param[in]	p_node	The render node.
+		 *\param[in]	p_node		The render node.
 		 *\~french
 		 *\brief		Remplit un noeud de rendu avec les informations de cette passe.
-		 *\param[in]	p_node	Le noeud de rendu.
+		 *\param[in]	p_node		Le noeud de rendu.
 		 *\return
 		 */
-		C3D_API void FillRenderNode( RenderNode & p_node );
-		/**
-		 *\~english
-		 *\brief		Fills a render node's values from this pass.
-		 *\param[in]	p_node	The render node.
-		 *\~french
-		 *\brief		Remplit un noeud de rendu avec les informations de cette passe.
-		 *\param[in]	p_node	Le noeud de rendu.
-		 *\return
-		 */
-		C3D_API void FillRenderNode( SceneRenderNode & p_node );
+		C3D_API void FillRenderNode( PassRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -224,7 +214,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader.
 		 */
-		C3D_API void FillShaderVariables( RenderNode & p_node )const;
+		C3D_API void FillShaderVariables( PassRenderNode & p_node )const;
 		/**
 		 *\~english
 		 *\brief		Reduces the textures.
@@ -623,28 +613,14 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		C3D_API void DoGetTexture( TextureChannel p_channel, Castor::String const & p_name, RenderNode & p_node );
+		C3D_API void DoGetTexture( TextureChannel p_channel, Castor::String const & p_name, PassRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
 		 *\~french
 		 *\brief		Récupère les variables associées aux texture affectées à un canal
 		 */
-		C3D_API void DoGetTextures( RenderNode & p_node );
-		/**
-		 *\~english
-		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
-		 *\~french
-		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
-		 */
-		C3D_API void DoGetBuffers( RenderNode & p_node );
-		/**
-		 *\~english
-		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
-		 *\~french
-		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
-		 */
-		C3D_API void DoGetBuffers( SceneRenderNode & p_node );
+		C3D_API void DoGetTextures( PassRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.

@@ -502,7 +502,7 @@ namespace Castor3D
 	class MultisampleState;
 	class ToneMapping;
 	class PostEffect;
-	struct RenderNode;
+	struct PassRenderNode;
 	struct SceneRenderNode;
 	struct StaticGeometryRenderNode;
 	struct AnimatedGeometryRenderNode;

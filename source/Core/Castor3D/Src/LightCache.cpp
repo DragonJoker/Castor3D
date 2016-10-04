@@ -116,61 +116,67 @@ namespace Castor3D
 		MyObjectCache::Cleanup();
 	}
 
-	void LightCache::BindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const
+	void LightCache::FillShader( FrameVariableBuffer const & p_sceneBuffer )const
 	{
-		GetEngine()->GetRenderSystem()->RenderAmbientLight( GetScene()->GetAmbientLight(), p_sceneBuffer );
-		OneIntFrameVariableSPtr l_lights = p_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::Pixel );
-		Point4iFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
+		Point4fFrameVariableSPtr l_ambientLight;
+		p_sceneBuffer.GetVariable( ShaderProgram::AmbientLight, l_ambientLight );
 
-		if ( l_lights && l_lightsCount )
+		if ( l_ambientLight )
 		{
-			m_lightsTexture->Bind();
-			auto l_layout = m_lightsTexture->GetTexture();
-
-			if ( l_layout )
-			{
-				auto const & l_image = l_layout->GetImage();
-				auto l_buffer = l_image.GetBuffer();
-				l_lights->SetValue( m_lightsTexture->GetIndex() );
-				int l_index = 0;
-
-				for ( auto l_it : m_typeSortedLights )
-				{
-					l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
-
-					for ( auto l_light : l_it.second )
-					{
-						l_light->Bind( *l_buffer, l_index++ );
-					}
-				}
-
-				auto l_locked = l_layout->GetImage().Lock( AccessType::Write );
-
-				if ( l_locked )
-				{
-					memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
-				}
-
-				l_layout->GetImage().Unlock( true );
-			}
+			l_ambientLight->SetValue( rgba_float( GetScene()->GetAmbientLight() ) );
 		}
-	}
 
-	void LightCache::UnbindLights( ShaderProgram const & p_program, FrameVariableBuffer const & p_sceneBuffer )const
-	{
 		Point4iFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable( ShaderProgram::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )
 		{
-			m_lightsTexture->Unbind();
+			for ( auto l_it : m_typeSortedLights )
+			{
+				l_lightsCount->GetValue( 0 )[l_it.first] = uint32_t( l_it.second.size() );
+			}
+		}
+	}
+
+	void LightCache::UpdateLights()const
+	{
+		m_lightsTexture->Bind();
+		auto l_layout = m_lightsTexture->GetTexture();
+
+		if ( l_layout )
+		{
+			auto const & l_image = l_layout->GetImage();
+			auto l_buffer = l_image.GetBuffer();
 			int l_index = 0;
 
 			for ( auto l_it : m_typeSortedLights )
 			{
-				l_lightsCount->GetValue( 0 )[l_it.first] -= uint32_t( l_it.second.size() );
+				for ( auto l_light : l_it.second )
+				{
+					l_light->Bind( *l_buffer, l_index++ );
+				}
 			}
+
+			auto l_locked = l_layout->GetImage().Lock( AccessType::Write );
+
+			if ( l_locked )
+			{
+				memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
+			}
+
+			l_layout->GetImage().Unlock( true );
 		}
+
+		m_lightsTexture->Unbind();
+	}
+
+	void LightCache::BindLights()const
+	{
+		m_lightsTexture->Bind();
+	}
+
+	void LightCache::UnbindLights()const
+	{
+		m_lightsTexture->Unbind();
 	}
 }

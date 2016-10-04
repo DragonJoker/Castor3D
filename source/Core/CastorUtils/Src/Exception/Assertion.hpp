@@ -151,9 +151,14 @@ namespace Castor
 #		define CASTOR_ASSERT( pred, text ) Castor::Assert( pred, text )
 
 #	endif
+
+//!\~english Calls invariant checking function.	\~french Appelle la fonction de vérification des invariants de classe.
+#	define CHECK_INVARIANTS DoContractCheckInvariants
+
 #else
 
 #	define CASTOR_ASSERT( pred, text )
+#	define CHECK_INVARIANTS()
 
 #endif
 
@@ -171,7 +176,5 @@ namespace Castor
 #define BEGIN_INVARIANT_BLOCK( className ) void className::DoContractCheckInvariants()const {
 //!\~english Ends invariant checking function implementation.	\~french Termine l'implémentation de la fonction de vérification des invariants de classe.
 #define END_INVARIANT_BLOCK() }
-//!\~english Calls invariant checking function.	\~french Appelle la fonction de vérification des invariants de classe.
-#define CHECK_INVARIANTS DoContractCheckInvariants
 
 #endif

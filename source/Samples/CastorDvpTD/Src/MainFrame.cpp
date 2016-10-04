@@ -6,6 +6,7 @@
 
 #include <wx/sizer.h>
 
+#include <Event/Frame/FunctorEvent.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>
 
