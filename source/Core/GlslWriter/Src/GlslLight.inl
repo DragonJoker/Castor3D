@@ -53,6 +53,11 @@ namespace GLSL
 		return Int( m_writer, Castor::String( *this ) + cuT( ".m_iType" ) );
 	}
 
+	Mat4 Light::m_mtxLightSpace()const
+	{
+		return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_mtxLightSpace" ) );
+	}
+
 	Vec3 Light::m_v3Attenuation()const
 	{
 		return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );

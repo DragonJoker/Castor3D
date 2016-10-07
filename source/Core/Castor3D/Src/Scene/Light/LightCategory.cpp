@@ -4,6 +4,8 @@
 #include <Log/Logger.hpp>
 #include <Graphics/PixelBuffer.hpp>
 
+#include <GlslSource.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -73,19 +75,19 @@ namespace Castor3D
 
 	void LightCategory::DoBindComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 	}
 
 	void LightCategory::DoBindComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
 	void LightCategory::DoBindComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 

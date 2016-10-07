@@ -4,6 +4,8 @@
 
 #include <Graphics/PixelBuffer.hpp>
 
+#include <GlslSource.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -77,6 +79,7 @@ namespace Castor3D
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		Point4f l_posType = GetPositionType();
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 		Matrix4x4r l_orientation;
 		GetLight()->GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
@@ -112,7 +115,7 @@ namespace Castor3D
 
 	void SpotLight::DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
+		float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) ) );
 		*l_pDst++ = p_exp;
 		*l_pDst++ = p_cut;
 	}
