@@ -41,13 +41,7 @@ namespace GLSL
 	struct SamplerCube;
 
 	class LightingModel;
-
-	class LightingModelFactory
-		: public Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >
-	{
-	public:
-		GlslWriter_API LightingModelFactory();
-	};
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >;
 
 	struct Endl {};
 	struct Endi {};

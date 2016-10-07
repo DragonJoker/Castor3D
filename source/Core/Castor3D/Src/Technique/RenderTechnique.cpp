@@ -239,6 +239,23 @@ namespace Castor3D
 		DoCleanup();
 	}
 
+	void RenderTechnique::Update()
+	{
+		for ( auto & l_it : m_scenes )
+		{
+			for ( auto & l_spec: l_it.second )
+			{
+				m_renderQueue.Prepare( *l_spec.m_camera, *l_it.first );
+			}
+		}
+	}
+
+	void RenderTechnique::AddScene( Scene & p_scene, Camera & p_camera )
+	{
+		m_scenes.insert( { &p_scene, std::vector< SceneSpecifics >{} } ).first->second.push_back( { &p_camera } );
+		m_renderQueue.AddScene( p_scene );
+	}
+
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime, uint32_t & p_visible )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes( p_camera, p_scene );
@@ -249,7 +266,7 @@ namespace Castor3D
 		if ( DoBeginRender( p_scene, p_camera ) )
 		{
 			p_scene.RenderBackground( GetSize() );
-			DoRender( m_size, l_nodes, p_camera, p_frameTime );
+			DoRender( l_nodes, p_camera, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
 			DoEndRender( p_scene, p_camera );
 		}
@@ -267,7 +284,7 @@ namespace Castor3D
 		return DoWriteInto( p_file );
 	}
 
-	void RenderTechnique::DoRender( Size const & p_size, SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
+	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
 		p_camera.Resize( m_size );
@@ -532,15 +549,6 @@ namespace Castor3D
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
 		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
 
-		if ( l_writer.HasTextureBuffers() )
-		{
-			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
-		}
-		else
-		{
-			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
-		}
-
 		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) ) );
 		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
 		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::Diffuse ) ) );
@@ -551,8 +559,16 @@ namespace Castor3D
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
+		if ( l_writer.HasTextureBuffers() )
+		{
+			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( cuT( "c3d_sLights" ) );
+		}
+		else
+		{
+			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
+		}
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outputs

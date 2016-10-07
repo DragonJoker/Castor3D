@@ -179,23 +179,6 @@ namespace Castor3D
 	{
 	}
 
-	void RenderPass::Update()
-	{
-		for ( auto & l_it : m_scenes )
-		{
-			for ( auto & l_camera : l_it.second )
-			{
-				m_renderQueue.Prepare( *l_camera, *l_it.first );
-			}
-		}
-	}
-
-	void RenderPass::AddScene( Scene & p_scene, Camera & p_camera )
-	{
-		m_scenes.insert( { &p_scene, std::vector< CameraRPtr >{} } ).first->second.push_back( &p_camera );
-		m_renderQueue.AddScene( p_scene );
-	}
-
 	String RenderPass::GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		String l_return;

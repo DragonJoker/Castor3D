@@ -9,14 +9,6 @@ namespace GLSL
 
 	//*****************************************************************************************
 
-	LightingModelFactory::LightingModelFactory()
-		: Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >{}
-	{
-		Register( PhongLightingModel::Name, &PhongLightingModel::Create );
-	}
-
-	//*****************************************************************************************
-
 	IndentBlock::IndentBlock( GlslWriter & p_writter )
 		: m_stream( p_writter.m_stream )
 	{
@@ -107,6 +99,7 @@ namespace GLSL
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
+		m_lightingFactory.Register( PhongLightingModel::Name, &PhongLightingModel::Create );
 		*this << GLSL::Version() << Endl();
 	}
 

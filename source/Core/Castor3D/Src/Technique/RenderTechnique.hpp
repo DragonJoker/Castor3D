@@ -159,6 +159,26 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Update function.
+		 *\remarks		Updates the scenes render nodes, if needed.
+		 *\~french
+		 *\brief		Fonction de mise à jour.
+		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\~french
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 */
+		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
+		/**
+		 *\~english
 		 *\brief		Render function
 		 *\param[in]	p_scene		The scene to render.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
@@ -206,18 +226,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_size		The render target dimensions.
 		 *\param[in]	p_nodes		The scene render nodes.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_size		Les dimensions de la cible de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 */
-		C3D_API void DoRender( Castor::Size const & p_size, SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime );
+		C3D_API void DoRender( SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Renders opaque render nodes.
@@ -363,9 +381,18 @@ namespace Castor3D
 		C3D_API virtual bool DoWriteInto( Castor::TextFile & p_file ) = 0;
 
 	protected:
+		struct SceneSpecifics
+		{
+			CameraRPtr m_camera;
+		};
+
+	protected:
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
+		//!\~english	The scenes, and cameras used to render them.
+		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
+		std::map< SceneRPtr, std::vector< SceneSpecifics > > m_scenes;
 		//!\~english	The parent render target.
 		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;

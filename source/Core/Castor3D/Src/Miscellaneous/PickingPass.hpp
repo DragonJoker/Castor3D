@@ -79,6 +79,17 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\~french
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 */
+		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
+		/**
+		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	p_position		The position in the pass.
 		 *\param[in]	p_camera		The viewing camera.
@@ -235,6 +246,9 @@ namespace Castor3D
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	The scenes, and cameras used to render them.
+		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
+		std::map< SceneRPtr, std::vector< CameraRPtr > > m_scenes;
 		//!\~english	The picked geometry.
 		//!\~french		La géométrie sélectionnée.
 		GeometryWPtr m_geometry;

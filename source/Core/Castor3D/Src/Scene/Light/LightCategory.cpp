@@ -88,4 +88,12 @@ namespace Castor3D
 		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
+
+	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const
+	{
+		DoBindComponent( p_component[0], p_index, p_offset, p_data );
+		DoBindComponent( p_component[1], p_index, p_offset, p_data );
+		DoBindComponent( p_component[2], p_index, p_offset, p_data );
+		DoBindComponent( p_component[3], p_index, p_offset, p_data );
+	}
 }

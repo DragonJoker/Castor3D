@@ -348,17 +348,28 @@ namespace Castor3D
 		void DoBindComponent( Castor::Point3f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Point4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Coords4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+
+	protected:
+		//!\~english	The light source space transformation matrix.
+		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
+		mutable Castor::Matrix4x4f m_lightSpace;
 
 	private:
-		//!\~english The light type	\~french Le type de lumière
+		//!\~english	The light type.
+		//!\~french		Le type de lumière.
 		eLIGHT_TYPE m_eLightType;
-		//!\~english The parent light	\~french La lumière parente
+		//!\~english	The parent light.
+		//!\~french		La lumière parente.
 		Light * m_pLight{ nullptr };
-		//!\~english The colour.	\~french La couleur.
+		//!\~english	The colour.
+		//!\~french		La couleur.
 		Castor::Point3f m_colour;
-		//!\~english The intensity values.	\~french Les valeurs d'intensité.
+		//!\~english	The intensity values.
+		//!\~french		Les valeurs d'intensité.
 		Castor::Point3f m_intensity;
-		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumière (le type est dans la 4ème coordonnée)
+		//!\~english	The position and type of the light (type is in 4th coordinate).
+		//!\~french		La position et le type de la lumière (le type est dans la 4ème coordonnée).
 		Castor::Point4f m_positionType;
 	};
 }

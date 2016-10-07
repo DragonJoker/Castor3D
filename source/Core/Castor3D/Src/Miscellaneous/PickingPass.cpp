@@ -39,21 +39,6 @@ namespace Castor3D
 		static String const DrawIndex = cuT( "c3d_iDrawIndex" );
 		static String const NodeIndex = cuT( "c3d_iNodeIndex" );
 
-		inline void Split( uint32_t p_in, uint8_t & A, uint8_t & B, uint8_t & C )
-		{
-			p_in = p_in & 0x00FFFFFF;
-			A = uint8_t( ( p_in >> 16 ) & 0xFF );
-			B = uint8_t( ( p_in >> 8 ) & 0xFF );
-			C = uint8_t( p_in & 0xFF );
-		}
-
-		inline uint32_t Join( uint8_t A, uint8_t B, uint8_t C )
-		{
-			return uint32_t(   ( uint32_t( A ) << 16 )
-							 | ( uint32_t( B ) << 8 )
-							 | uint32_t( C ) );
-		}
-
 		template< bool Opaque >
 		struct PipelineUpdater
 		{
@@ -336,6 +321,12 @@ namespace Castor3D
 
 		m_geometryBuffers.clear();
 	}
+	
+	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
+	{
+		m_scenes.insert( { &p_scene, std::vector< CameraRPtr >{} } ).first->second.push_back( &p_camera );
+		m_renderQueue.AddScene( p_scene );
+	}
 
 	bool PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
 	{
@@ -343,6 +334,14 @@ namespace Castor3D
 		m_geometry.reset();
 		m_submesh.reset();
 		m_face = 0u;
+
+		for ( auto & l_it : m_scenes )
+		{
+			for ( auto & l_camera : l_it.second )
+			{
+				m_renderQueue.Prepare( *l_camera, *l_it.first );
+			}
+		}
 
 		if ( m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{

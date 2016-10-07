@@ -94,26 +94,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderPass();
 		/**
 		 *\~english
-		 *\brief		Update function.
-		 *\remarks		Updates the scenes render nodes, if needed.
-		 *\~french
-		 *\brief		Fonction de mise à jour.
-		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
-		 */
-		C3D_API void Update();
-		/**
-		 *\~english
-		 *\brief		Adds a scene rendered through this technique.
-		 *\param[in]	p_scene		The scene.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
-		 *\~french
-		 *\brief		Ajoute une scène dessinée via cette technique.
-		 *\param[in]	p_scene		La scène.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
-		 */
-		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
-		/**
-		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
@@ -586,9 +566,6 @@ namespace Castor3D
 		//!\~english	The render queue.
 		//!\~french		La file de rendu.
 		RenderQueue m_renderQueue;
-		//!\~english	The scenes, and cameras used to render them.
-		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
-		std::map< SceneRPtr, std::vector< CameraRPtr > > m_scenes;
 		//!\~english	The pipelines used to render opaque nodes.
 		//!\~french		Les pipelines de rendu utilisés pour dessiner les noeuds opaques.
 		std::map< PipelineFlags, PipelineUPtr > m_opaquePipelines;
