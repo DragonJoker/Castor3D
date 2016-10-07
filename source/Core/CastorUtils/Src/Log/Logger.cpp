@@ -1,9 +1,10 @@
 #include "CastorUtilsPch.hpp"
 
 #include "Logger.hpp"
-#include "Data/File.hpp"
-
 #include "LoggerImpl.hpp"
+
+#include "Config/MultiThreadConfig.hpp"
+#include "Data/File.hpp"
 #include "Miscellaneous/StringUtils.hpp"
 #include "Exception/Exception.hpp"
 
@@ -140,7 +141,7 @@ namespace Castor
 	Logger::Logger()
 		: m_impl( nullptr )
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		m_headers[ELogType_DEBUG] = cuT( "***DEBUG*** " );
 		m_headers[ELogType_INFO] = String();
 		m_headers[ELogType_WARNING] = cuT( "***WARNING*** " );
@@ -165,7 +166,7 @@ namespace Castor
 		delete m_wcerr;
 		delete m_wclog;
 		{
-			std::unique_lock< std::mutex > lock( m_mutex );
+			auto l_lock = make_unique_lock( m_mutex );
 			m_impl->Cleanup();
 			delete m_impl;
 			m_impl = nullptr;
@@ -183,7 +184,7 @@ namespace Castor
 			m_singleton = new Logger();
 			Logger & l_logger = GetSingleton();
 			{
-				std::unique_lock< std::mutex > lock( l_logger.m_mutex );
+				auto l_lock = make_unique_lock( l_logger.m_mutex );
 				delete l_logger.m_impl;
 				l_logger.m_impl = new LoggerImpl;
 				l_logger.m_impl->Initialise( l_logger );
@@ -335,13 +336,13 @@ namespace Castor
 
 	void Logger::DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		m_impl->RegisterCallback( p_pfnCallback, p_pCaller );
 	}
 
 	void Logger::DoUnregisterCallback( void * p_pCaller )
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		m_impl->UnregisterCallback( p_pCaller );
 	}
 
@@ -349,7 +350,7 @@ namespace Castor
 	{
 		m_initialised = true;
 		{
-			std::unique_lock< std::mutex > lock( m_mutex );
+			auto l_lock = make_unique_lock( m_mutex );
 			m_impl->SetFileName( logFilePath, logLevel );
 		}
 	}
@@ -360,11 +361,11 @@ namespace Castor
 		{
 #if !defined( NDEBUG )
 			{
-				std::unique_lock< std::mutex > lock( m_mutex );
+				auto l_lock = make_unique_lock( m_mutex );
 				m_impl->PrintMessage( logLevel, message );
 			}
 #endif
-			std::unique_lock< std::mutex > l_lock( m_mutexQueue );
+			auto l_lock = make_unique_lock( m_mutexQueue );
 			m_queue.push_back( std::make_unique< Message >( logLevel, message ) );
 		}
 	}
@@ -375,11 +376,11 @@ namespace Castor
 		{
 #if !defined( NDEBUG )
 			{
-				std::unique_lock< std::mutex > lock( m_mutex );
+				auto l_lock = make_unique_lock( m_mutex );
 				m_impl->PrintMessage( logLevel, message );
 			}
 #endif
-			std::unique_lock< std::mutex > l_lock( m_mutexQueue );
+			auto l_lock = make_unique_lock( m_mutexQueue );
 			m_queue.push_back( std::make_unique< WMessage >( logLevel, message ) );
 		}
 	}
@@ -391,12 +392,12 @@ namespace Castor
 			MessageQueue queue;
 
 			{
-				std::unique_lock< std::mutex > l_lock( m_mutexQueue );
+				auto l_lock = make_unique_lock( m_mutexQueue );
 				std::swap( queue, m_queue );
 			}
 
 			{
-				std::unique_lock< std::mutex > lock( m_mutex );
+				auto l_lock = make_unique_lock( m_mutex );
 				m_impl->LogMessageQueue( queue );
 			}
 		}
@@ -424,7 +425,7 @@ namespace Castor
 			}
 
 			{
-				std::unique_lock< std::mutex > l_lock( m_mutexThreadEnded );
+				auto l_lock = make_unique_lock( m_mutexThreadEnded );
 				m_threadEnded.notify_all();
 			}
 		} );
@@ -436,7 +437,7 @@ namespace Castor
 		{
 			m_stopped = true;
 			{
-				std::unique_lock< std::mutex > l_lock( m_mutexThreadEnded );
+				auto l_lock = make_unique_lock( m_mutexThreadEnded );
 				m_threadEnded.wait( l_lock );
 			}
 			m_logThread.join();

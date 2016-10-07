@@ -114,11 +114,12 @@ namespace Castor
 		{
 			if ( m_eEncoding != eENCODING_MODE_ASCII )
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< wchar_t >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( p_line.c_str() ), sizeof( xchar ) * p_line.size() );
 			}
 			else
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< char >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
+				auto l_line = string::string_cast< char >( p_line );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( l_line.c_str() ), sizeof( char ) * l_line.size() );
 			}
 		}
 

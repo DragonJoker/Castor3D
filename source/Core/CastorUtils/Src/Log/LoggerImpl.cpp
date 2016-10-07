@@ -123,14 +123,13 @@ namespace Castor
 
 				if ( !l_text.empty() )
 				{
-					FILE * l_file = nullptr;
-					FOpen( l_file, string::string_cast< char >( m_logFilePath[i++] ).c_str(), "a" );
-
-					if ( l_file )
+					try
 					{
-						std::string l_log = string::string_cast< char >( l_text );
-						fwrite( l_log.c_str(), sizeof( char ), l_log.size(), l_file );
-						fclose( l_file );
+						TextFile l_file{ Path{ m_logFilePath[i++] }, File::eOPEN_MODE_APPEND };
+						l_file.WriteText( l_text );
+					}
+					catch ( Exception & )
+					{
 					}
 				}
 			}

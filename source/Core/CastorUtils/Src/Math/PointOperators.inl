@@ -1,9 +1,9 @@
 #include "Point.hpp"
 #include "Coords.hpp"
 #include "Design/Templates.hpp"
+#include "Simd.hpp"
 
 #include <cstring>
-#include <xmmintrin.h>
 
 namespace Castor
 {
@@ -276,121 +276,121 @@ namespace Castor
 	{
 		static inline Castor::Point< float, 4 > add_sse2( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_scalar = _mm_set_ps1( p_rhs );				// l_scalar = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_value = _mm_add_ps( l_value, l_scalar );			// l_value = p_lhs + p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > sub_sse2( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_scalar = _mm_set_ps1( p_rhs );				// l_scalar = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_value = _mm_sub_ps( l_value, l_scalar );			// l_value = p_lhs - p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > mul_sse2( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_scalar = _mm_set_ps1( p_rhs );				// l_scalar = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_value = _mm_mul_ps( l_value, l_scalar );			// l_value = p_lhs * p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > div_sse2( Castor::Point< float, 4 > const & p_lhs, float const & p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_scalar = _mm_set_ps1( p_rhs );				// l_scalar = { p_rhs, p_rhs, p_rhs, p_rhs }
-			l_value = _mm_div_ps( l_value, l_scalar );			// l_value = p_lhs / p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs, p_rhs, p_rhs, p_rhs }
+			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > add_sse2( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_buffer = _mm_load_ps( p_rhs );				// l_scalar = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_value = _mm_add_ps( l_value, l_buffer );			// l_value = p_lhs + p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > sub_sse2( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_buffer = _mm_load_ps( p_rhs );				// l_scalar = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_value = _mm_sub_ps( l_value, l_buffer );			// l_value = p_lhs - p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > mul_sse2( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_buffer = _mm_load_ps( p_rhs );				// l_scalar = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_value = _mm_mul_ps( l_value, l_buffer );			// l_value = p_lhs * p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > div_sse2( Castor::Point< float, 4 > const & p_lhs, float const * p_rhs )
 		{
-			__m128 l_value = _mm_load_ps( p_lhs.const_ptr() );	// l_value = p_lhs
-			__m128 l_buffer = _mm_load_ps( p_rhs );				// l_buffer = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
-			l_value = _mm_div_ps( l_value, l_buffer );			// l_value = p_lhs / p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs };				// l_rhs = { p_rhs[0], p_rhs[1], p_rhs[2], p_rhs[3] }
+			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_value );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > add_sse2( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			__m128 l_valueA = _mm_load_ps( p_lhs.const_ptr() );	// l_valueA = p_lhs
-			__m128 l_valueB = _mm_load_ps( p_rhs.const_ptr() );	// l_valueB = p_rhs
-			l_valueA = _mm_add_ps( l_valueA, l_valueB );		// l_valueA = p_lhs + p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
+			l_lhs += l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_valueA );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > sub_sse2( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			__m128 l_valueA = _mm_load_ps( p_lhs.const_ptr() );	// l_valueA = p_lhs
-			__m128 l_valueB = _mm_load_ps( p_rhs.const_ptr() );	// l_valueB = p_rhs
-			l_valueA = _mm_sub_ps( l_valueA, l_valueB );		// l_valueA = p_lhs - p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
+			l_lhs -= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_valueA );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > mul_sse2( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			__m128 l_valueA = _mm_load_ps( p_lhs.const_ptr() );	// l_valueA = p_lhs
-			__m128 l_valueB = _mm_load_ps( p_rhs.const_ptr() );	// l_valueB = p_rhs
-			l_valueA = _mm_mul_ps( l_valueA, l_valueB );		// l_valueA = p_lhs * p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
+			l_lhs *= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_valueA );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
 		static inline Castor::Point< float, 4 > div_sse2( Castor::Point< float, 4 > const & p_lhs, Castor::Point< float, 4 > const & p_rhs )
 		{
-			__m128 l_valueA = _mm_load_ps( p_lhs.const_ptr() );	// l_valueA = p_lhs
-			__m128 l_valueB = _mm_load_ps( p_rhs.const_ptr() );	// l_valueB = p_rhs
-			l_valueA = _mm_div_ps( l_valueA, l_valueB );		// l_valueA = p_lhs / p_rhs
+			Float4 l_lhs{ p_lhs.const_ptr() };	// l_lhs = p_lhs
+			Float4 l_rhs{ p_rhs.const_ptr() };	// l_rhs = p_rhs
+			l_lhs /= l_rhs;						// l_lhs = p_lhs + p_rhs
 			Castor::Point< float, 4 > l_res;
-			_mm_store_ps( l_res.ptr(), l_valueA );
+			l_lhs.to_ptr( l_res.ptr() );
 			return l_res;
 		}
 
