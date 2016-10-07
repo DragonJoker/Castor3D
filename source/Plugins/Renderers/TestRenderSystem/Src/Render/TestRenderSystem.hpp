@@ -52,7 +52,8 @@ namespace TestRender
 											   , Castor3D::RasteriserState && p_rsState
 											   , Castor3D::BlendState && p_bdState
 											   , Castor3D::MultisampleState && p_msState
-											   , Castor3D::ShaderProgram & p_program )override;
+											   , Castor3D::ShaderProgram & p_program
+											   , Castor3D::PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */

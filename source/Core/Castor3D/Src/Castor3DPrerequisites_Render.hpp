@@ -488,6 +488,15 @@ namespace Castor3D
 		return 0;
 	}
 
+	struct PipelineFlags
+	{
+		BlendMode m_colourBlendMode;
+		BlendMode m_alphaBlendMode;
+		uint16_t m_textureFlags;
+		uint8_t m_programFlags;
+		uint8_t m_sceneFlags;
+	};
+
 	template< typename T > class CpuBuffer;
 	class GpuInformations;
 	class RenderSystem;

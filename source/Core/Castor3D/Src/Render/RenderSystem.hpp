@@ -195,6 +195,7 @@ namespace Castor3D
 		 *\param[in]	p_bdState	The blend state.
 		 *\param[in]	p_msState	The multisample state.
 		 *\param[in]	p_program	The shader program.
+		 *\param[in]	p_flags		The creation flags.
 		 *\return		The pipeline.
 		 *\~french
 		 *\brief		Crée un pipeline.
@@ -203,13 +204,15 @@ namespace Castor3D
 		 *\param[in]	p_bdState	L'état de mélange.
 		 *\param[in]	p_msState	L'état de multi-échantillonnage.
 		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	p_flags		Les indicateurs de création.
 		 *\return		Le pipeline.
 		 */
 		C3D_API virtual PipelineUPtr CreatePipeline( DepthStencilState && p_dsState
 													 , RasteriserState && p_rsState
 													 , BlendState && p_bdState
 													 , MultisampleState && p_msState
-													 , ShaderProgram & p_program ) = 0;
+													 , ShaderProgram & p_program
+													 , PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler

@@ -142,7 +142,7 @@ namespace GrayScale
 			l_dsstate.SetDepthMask( WritingMask::Zero );
 			RasteriserState l_rsstate;
 			l_rsstate.SetCulledFaces( Culling::Back );
-			m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program );
+			m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );

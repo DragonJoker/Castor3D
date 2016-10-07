@@ -85,7 +85,7 @@ namespace Castor3D
 			{
 				DepthStencilState l_dsState;
 				l_dsState.SetDepthTest( false );
-				m_texturePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_textureProgram );
+				m_texturePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_textureProgram, PipelineFlags{} );
 			}
 			ShaderProgramSPtr l_depthProgram = DoCreateProgram( false );
 			l_depthProgram->Initialise();
@@ -100,7 +100,7 @@ namespace Castor3D
 				DepthStencilState l_dsState;
 				l_dsState.SetDepthTest( true );
 				l_dsState.SetDepthMask( WritingMask::All );
-				m_depthPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_depthProgram );
+				m_depthPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_depthProgram, PipelineFlags{} );
 			}
 			DoEndCurrent();
 		}

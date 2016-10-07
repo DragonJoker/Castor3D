@@ -222,7 +222,7 @@ namespace Deferred
 				DepthStencilState l_dsstate;
 				l_dsstate.SetDepthTest( false );
 				l_dsstate.SetDepthMask( WritingMask::Zero );
-				program.m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program );
+				program.m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program, PipelineFlags{} );
 
 				++l_sceneFlags;
 			}

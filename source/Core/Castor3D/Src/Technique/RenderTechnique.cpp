@@ -98,6 +98,86 @@ namespace Castor3D
 				}
 			}
 		}
+
+		inline BlendState DoCreateBlendState( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode )
+		{
+			BlendState l_state;
+			bool l_blend = false;
+
+			switch ( p_colourBlendMode )
+			{
+			case BlendMode::NoBlend:
+				l_state.SetRgbSrcBlend( BlendOperand::One );
+				l_state.SetRgbDstBlend( BlendOperand::Zero );
+				break;
+
+			case BlendMode::Additive:
+				l_blend = true;
+				l_state.SetRgbSrcBlend( BlendOperand::One );
+				l_state.SetRgbDstBlend( BlendOperand::One );
+				break;
+
+			case BlendMode::Multiplicative:
+				l_blend = true;
+				l_state.SetRgbSrcBlend( BlendOperand::Zero );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				break;
+
+			case BlendMode::Interpolative:
+				l_blend = true;
+				l_state.SetRgbSrcBlend( BlendOperand::SrcColour );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				break;
+
+			default:
+				l_blend = true;
+				l_state.SetRgbSrcBlend( BlendOperand::SrcColour );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				break;
+			}
+
+			switch ( p_alphaBlendMode )
+			{
+			case BlendMode::NoBlend:
+				l_blend = true;
+				l_state.SetAlphaSrcBlend( BlendOperand::One );
+				l_state.SetAlphaDstBlend( BlendOperand::Zero );
+				break;
+
+			case BlendMode::Additive:
+				l_blend = true;
+				l_state.SetAlphaSrcBlend( BlendOperand::One );
+				l_state.SetAlphaDstBlend( BlendOperand::One );
+				break;
+
+			case BlendMode::Multiplicative:
+				l_blend = true;
+				l_state.SetAlphaSrcBlend( BlendOperand::Zero );
+				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::Zero );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				break;
+
+			case BlendMode::Interpolative:
+				l_blend = true;
+				l_state.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::SrcAlpha );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				break;
+
+			default:
+				l_blend = true;
+				l_state.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
+				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::SrcAlpha );
+				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				break;
+			}
+
+			l_state.EnableBlend( l_blend );
+			return l_state;
+		}
 	}
 
 	//*************************************************************************************************
@@ -427,6 +507,7 @@ namespace Castor3D
 		}
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -522,6 +603,7 @@ namespace Castor3D
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 									l_v3Emissive, 1.0 );
+
 			if ( p_sceneFlags != 0 )
 			{
 				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
@@ -568,6 +650,7 @@ namespace Castor3D
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
+		
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -669,6 +752,7 @@ namespace Castor3D
 															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 															   l_v3Emissive ), l_fAlpha );
+
 			if ( p_sceneFlags != 0 )
 			{
 				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_view ), vtx_view.y() );
@@ -694,5 +778,74 @@ namespace Castor3D
 		p_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
 		p_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
 		p_camera.GetScene()->FillShader( l_sceneUbo );
+	}
+
+	Pipeline & RenderTechnique::DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	{
+		auto l_it = m_opaquePipelines.find( p_flags );
+
+		if ( l_it == m_opaquePipelines.end() )
+		{
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::Back );
+			MultisampleState l_msState;
+			l_msState.SetMultisample( m_multisampling );
+			l_it = m_opaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
+																									   , std::move( l_rsState )
+																									   , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																									   , std::move( l_msState )
+																									   , p_program
+																									   , p_flags ) ).first;
+		}
+
+		return *l_it->second;
+	}
+
+	Pipeline & RenderTechnique::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	{
+		auto l_it = m_frontTransparentPipelines.find( p_flags );
+
+		if ( l_it == m_frontTransparentPipelines.end() )
+		{
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::Back );
+			MultisampleState l_msState;
+			l_msState.SetMultisample( m_multisampling );
+			l_msState.EnableAlphaToCoverage( m_multisampling );
+			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																												 , std::move( l_rsState )
+																												 , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																												 , std::move( l_msState )
+																												 , p_program
+																												 , p_flags ) ).first;
+		}
+
+		return *l_it->second;
+	}
+
+	Pipeline & RenderTechnique::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	{
+		auto l_it = m_backTransparentPipelines.find( p_flags );
+
+		if ( l_it == m_backTransparentPipelines.end() )
+		{
+			DepthStencilState l_dsState;
+			l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::Back );
+			MultisampleState l_msState;
+			l_msState.SetMultisample( m_multisampling );
+			l_msState.EnableAlphaToCoverage( m_multisampling );
+			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
+																												, std::move( l_rsState )
+																												, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																												, std::move( l_msState )
+																												, p_program
+																												, p_flags ) ).first;
+		}
+
+		return *l_it->second;
 	}
 }

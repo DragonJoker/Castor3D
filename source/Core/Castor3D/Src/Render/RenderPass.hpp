@@ -32,15 +32,6 @@ SOFTWARE.
 
 namespace Castor3D
 {
-	struct PipelineFlags
-	{
-		BlendMode m_colourBlendMode;
-		BlendMode m_alphaBlendMode;
-		uint16_t m_textureFlags;
-		uint8_t m_programFlags;
-		uint8_t m_sceneFlags;
-	};
-
 	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
 	{
 		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
@@ -476,33 +467,6 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline for opaque objets render.
-		 *\return		The ready to use pipeline.
-		 *\~french
-		 *\brief		Prépare le pipeline de rendu des objets opaques.
-		 *\return		Le pipeline prêt à l'utilisation.
-		 */
-		C3D_API virtual Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
-		/**
-		 *\~english
-		 *\brief		Prepares the pipeline for transparent objets render, culling front faces.
-		 *\return		The ready to use pipeline.
-		 *\~french
-		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces avant.
-		 *\return		Le pipeline prêt à l'utilisation.
-		 */
-		C3D_API virtual Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
-		/**
-		 *\~english
-		 *\brief		Prepares the pipeline for transparent objets render, culling back faces.
-		 *\return		The ready to use pipeline.
-		 *\~french
-		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces arrière.
-		 *\return		Le pipeline prêt à l'utilisation.
-		 */
-		C3D_API virtual Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags );
-		/**
-		 *\~english
 		 *\brief			Modifies the given program flags to make them match the render pass requirements.
 		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
 		 *\~french
@@ -558,6 +522,33 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
 		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const = 0;
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for opaque objets render.
+		 *\return		The ready to use pipeline.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets opaques.
+		 *\return		Le pipeline prêt à l'utilisation.
+		 */
+		C3D_API virtual Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for transparent objets render, culling front faces.
+		 *\return		The ready to use pipeline.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces avant.
+		 *\return		Le pipeline prêt à l'utilisation.
+		 */
+		C3D_API virtual Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for transparent objets render, culling back faces.
+		 *\return		The ready to use pipeline.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces arrière.
+		 *\return		Le pipeline prêt à l'utilisation.
+		 */
+		C3D_API virtual Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 
 	protected:
 		//!\~english	The render system.
