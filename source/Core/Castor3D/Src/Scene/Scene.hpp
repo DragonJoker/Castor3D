@@ -233,6 +233,13 @@ namespace Castor3D
 		C3D_API uint8_t GetFlags()const;
 		/**
 		 *\~english
+		 *\return		Tells if the scene has a shadow projecting light.
+		 *\~french
+		 *\return		Dit si la scène a au moins une source lumineuse projetant des ombres.
+		 */
+		C3D_API bool HasShadows()const;
+		/**
+		 *\~english
 		 *\brief		Sets the background colour
 		 *\param[in]	p_clrNew	The new colour
 		 *\~french

@@ -741,4 +741,14 @@ namespace Castor3D
 	{
 		return uint8_t( m_fog.GetType() );
 	}
+
+	bool Scene::HasShadows()const
+	{
+		auto l_lock = make_unique_lock( GetLightCache() );
+
+		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
+		{
+			return p_it.second->CastShadows();
+		} );
+	}
 }

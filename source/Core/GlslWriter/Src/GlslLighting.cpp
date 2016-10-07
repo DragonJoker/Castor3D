@@ -1,5 +1,7 @@
 #include "GlslLighting.hpp"
 
+#include "GlslShadow.hpp"
+
 using namespace Castor;
 
 namespace GLSL
@@ -85,8 +87,8 @@ namespace GLSL
 
 	//***********************************************************************************************
 
-	LightingModel::LightingModel( uint32_t p_flags, GlslWriter & p_writer )
-		: m_flags{ p_flags }
+	LightingModel::LightingModel( bool p_shadows, GlslWriter & p_writer )
+		: m_shadows{ p_shadows }
 		, m_writer{ p_writer }
 	{
 	}
@@ -360,14 +362,14 @@ namespace GLSL
 
 	const String PhongLightingModel::Name = cuT( "phong" );
 
-	PhongLightingModel::PhongLightingModel( uint32_t p_flags, GlslWriter & p_writer )
-		: LightingModel( p_flags, p_writer )
+	PhongLightingModel::PhongLightingModel( bool p_shadows, GlslWriter & p_writer )
+		: LightingModel{ p_shadows, p_writer }
 	{
 	}
 
-	std::unique_ptr< LightingModel > PhongLightingModel::Create( uint32_t p_flags, GlslWriter & p_writer )
+	std::unique_ptr< LightingModel > PhongLightingModel::Create( bool p_shadows, GlslWriter & p_writer )
 	{
-		return std::make_unique< PhongLightingModel >( p_flags, p_writer );
+		return std::make_unique< PhongLightingModel >( p_shadows, p_writer );
 	}
 
 	void PhongLightingModel::DoDeclareModel()
@@ -390,8 +392,20 @@ namespace GLSL
 			OutputComponents l_output{ l_ambient, l_diffuse, l_specular };
 			DoComputeLight( p_light, p_worldEye, normalize( p_light.m_v3Position().xyz() ), p_shininess, p_fragmentIn, l_output );
 			p_output.m_v3Ambient += l_ambient;
-			p_output.m_v3Diffuse += l_diffuse;
-			p_output.m_v3Specular += l_specular;
+
+			if ( m_shadows )
+			{
+				auto c3d_mapShadow = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapShadow" ) );
+				Shadow l_shadows{ m_writer };
+				auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_worldEye, 1.0 ), c3d_mapShadow ) );
+				p_output.m_v3Diffuse += l_shadow * l_diffuse;
+				p_output.m_v3Specular += l_shadow * l_specular;
+			}
+			else
+			{
+				p_output.m_v3Diffuse += l_diffuse;
+				p_output.m_v3Specular += l_specular;
+			}
 		};
 		m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
 											, l_compute

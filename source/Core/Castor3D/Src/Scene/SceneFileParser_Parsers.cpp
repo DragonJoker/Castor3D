@@ -1253,6 +1253,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCastShadows )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pLight )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pLight->CastShadows( l_value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeParent )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

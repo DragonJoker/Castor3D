@@ -511,6 +511,7 @@ namespace Castor3D
 	class MultisampleState;
 	class ToneMapping;
 	class PostEffect;
+	class ShadowMapPass;
 	struct PassRenderNode;
 	struct SceneRenderNode;
 	struct StaticGeometryRenderNode;
@@ -540,6 +541,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Pipeline );
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
+	DECLARE_SMART_PTR( ShadowMapPass );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

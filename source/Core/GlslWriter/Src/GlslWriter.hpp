@@ -41,7 +41,7 @@ namespace GLSL
 	struct SamplerCube;
 
 	class LightingModel;
-	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >;
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( bool, GlslWriter & ) > >;
 
 	struct Endl {};
 	struct Endi {};
@@ -118,7 +118,7 @@ namespace GLSL
 			return GetShaderLanguageVersion() >= 130;
 		}
 
-		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, uint32_t p_flags );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, bool p_shadows );
 
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );

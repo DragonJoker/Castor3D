@@ -237,6 +237,8 @@ namespace Castor3D
 			p_animated.m_transparentRenderNodesFront.clear();
 			p_animated.m_transparentRenderNodesBack.clear();
 
+			bool l_shadows{ p_scene.HasShadows() };
+
 			auto l_lock = make_unique_lock( p_scene.GetGeometryCache() );
 
 			for ( auto l_primitive : p_scene.GetGeometryCache() )
@@ -265,6 +267,11 @@ namespace Castor3D
 						if ( l_mesh )
 						{
 							AddFlag( l_programFlags, ProgramFlag::Morphing );
+						}
+
+						if ( l_shadows )
+						{
+							AddFlag( l_programFlags, ProgramFlag::Shadows );
 						}
 
 						l_pass->PrepareTextures();

@@ -395,6 +395,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_LIGHT, cuT( "cast_shadows" ), Parser_LightCastShadows, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 
 	AddParser( eSECTION_NODE, cuT( "parent" ), Parser_NodeParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_NODE, cuT( "position" ), Parser_NodePosition, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );

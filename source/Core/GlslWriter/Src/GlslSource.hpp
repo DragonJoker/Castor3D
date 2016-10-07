@@ -25,5 +25,6 @@ SOFTWARE.
 
 #include "GlslLighting.hpp"
 #include "GlslFog.hpp"
+#include "GlslShadow.hpp"
 
 #endif

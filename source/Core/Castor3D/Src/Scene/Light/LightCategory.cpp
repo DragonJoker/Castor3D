@@ -56,6 +56,12 @@ namespace Castor3D
 			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
 		}
 
+		if ( l_return && p_light.GetLight()->CastShadows() )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcast_shadows true\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory casto shadows" );
+		}
+
 		return l_return;
 	}
 

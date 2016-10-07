@@ -399,6 +399,28 @@ namespace Castor3D
 		{
 			return m_category;
 		}
+		/**
+		 *\~english
+		 *\return		Tells if the light casts shadows.
+		 *\~french
+		 *\return		Dit si la lumière projette des ombres.
+		 */
+		inline bool CastShadows()const
+		{
+			return m_castShadows;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light shadow casting status.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le statut de projection d'ombre de la lumère
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void CastShadows( bool p_value )
+		{
+			m_castShadows = p_value;
+		}
 
 	protected:
 		void OnNodeChanged();
@@ -407,6 +429,9 @@ namespace Castor3D
 		//!\~english	Tells the light is enabled.
 		//!\~french		Dit si la lumière est active ou pas.
 		bool m_enabled{ false };
+		//!\~english	Tells if the light casts shadows.
+		//!\~french		Dit si la lumière projette des ombres.
+		bool m_castShadows{ false };
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;

@@ -153,6 +153,9 @@ namespace Castor3D
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
 		Picking = 0x20,
+		//!\~english	Shadow map is available as input.
+		//\~french		La map d'ombres est disponible en entrée.
+		Shadows = 0x40,
 	};
 	/*!
 	\author 	Sylvain DOREMUS

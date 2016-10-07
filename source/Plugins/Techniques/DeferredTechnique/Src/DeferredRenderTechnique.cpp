@@ -513,7 +513,7 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
 	{
 	}
 
@@ -564,11 +564,14 @@ namespace Deferred
 		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Tangent ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Specular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Emissive ) );
+		auto c3d_mapShadow = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, CheckFlag( p_programFlags, ProgramFlag::Shadows ) );
 
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
+		GLSL::Shadow l_shadow{ l_writer };
+		l_shadow.Declare( p_sceneFlags );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()

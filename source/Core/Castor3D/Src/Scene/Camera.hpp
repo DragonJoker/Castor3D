@@ -284,6 +284,18 @@ namespace Castor3D
 		{
 			return m_view;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the view matrix.
+		 *\param[in]	p_view	The new value.
+		 *\~french
+		 *\brief		Définit la matrice de vue.
+		 *\param[in]	p_view	La nouvelle valeur.
+		 */
+		inline void SetView( Castor::Matrix4x4r const & p_view )
+		{
+			m_view = p_view;
+		}
 
 	private:
 		friend class Scene;

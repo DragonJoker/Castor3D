@@ -154,7 +154,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline )const override;
+		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline, Castor3D::TextureLayoutArray const & p_depthMaps )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags

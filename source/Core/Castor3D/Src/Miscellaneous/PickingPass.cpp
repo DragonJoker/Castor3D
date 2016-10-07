@@ -44,7 +44,7 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline );
+				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, TextureLayoutArray{} );
 			}
 		};
 
@@ -53,7 +53,7 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline );
+				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, TextureLayoutArray{} );
 			}
 		};
 
@@ -618,13 +618,13 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
