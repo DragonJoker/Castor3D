@@ -215,9 +215,4 @@ namespace GlRender
 		DoApply( m_msState, GetOpenGl() );
 		m_program.Bind( false );
 	}
-
-	void GlPipeline::ApplyViewport( int p_windowWidth, int p_windowHeight )
-	{
-		GetOpenGl().Viewport( 0, 0, p_windowWidth, p_windowHeight );
-	}
 }

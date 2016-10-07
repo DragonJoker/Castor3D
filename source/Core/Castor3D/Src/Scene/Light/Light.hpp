@@ -365,9 +365,9 @@ namespace Castor3D
 		 *\brief		Définit le statut d'activation de la lumère
 		 *\param[in]	p_enabled	La nouvelle valeur
 		 */
-		inline void SetEnabled( bool p_enabled )
+		inline void SetEnabled( bool p_value)
 		{
-			m_enabled = p_enabled;
+			m_enabled = p_value;
 		}
 		/**
 		 *\~english
@@ -406,7 +406,7 @@ namespace Castor3D
 	protected:
 		//!\~english	Tells the light is enabled.
 		//!\~french		Dit si la lumière est active ou pas.
-		bool m_enabled;
+		bool m_enabled{ false };
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;

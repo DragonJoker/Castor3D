@@ -717,7 +717,6 @@ namespace CastorViewer
 				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window, l_x, l_y]()
 				{
 					Camera & l_camera = *l_window->GetCamera();
-					m_picking.Update();
 					l_camera.Update();
 					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
 					{

@@ -63,7 +63,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::IViewportImpl::Apply
 		 */
-		virtual bool Apply();
+		void Apply()override;
 	};
 }
 

@@ -45,7 +45,7 @@ namespace Castor3D
 	{
 		static const String StrBlendModes[uint32_t( BlendMode::Count )] =
 		{
-			cuT( "no_blend" ),
+			cuT( "none" ),
 			cuT( "additive" ),
 			cuT( "multiplicative" ),
 			cuT( "interpolative" ),

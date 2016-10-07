@@ -18,8 +18,8 @@ namespace GlRender
 	{
 	}
 
-	bool GlViewport::Apply()
+	void GlViewport::Apply()
 	{
-		return GetOpenGl().Viewport( 0, 0, m_viewport.GetWidth(), m_viewport.GetHeight() );
+		GetOpenGl().Viewport( 0, 0, m_viewport.GetWidth(), m_viewport.GetHeight() );
 	}
 }

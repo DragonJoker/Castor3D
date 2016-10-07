@@ -81,14 +81,18 @@ namespace GuiCommon
 
 #endif
 
-	CastorApplication::CastorApplication( String const & p_internalName, String const & p_displayName, uint32_t p_steps, Version const & p_version )
-		: m_internalName( p_internalName )
-		, m_displayName( p_displayName )
-		, m_castor( nullptr )
-		, m_rendererType( RENDERER_TYPE_UNDEFINED )
-		, m_steps( p_steps + 4 )
-		, m_splashScreen( nullptr )
-		, m_version( p_version )
+	CastorApplication::CastorApplication( String const & p_internalName
+										  , String const & p_displayName
+										  , uint32_t p_steps
+										  , Version const & p_version
+										  , String const & p_rendererType )
+		: m_internalName{ p_internalName }
+		, m_displayName{ p_displayName }
+		, m_castor{ nullptr }
+		, m_rendererType{ p_rendererType }
+		, m_steps{ p_steps + 4 }
+		, m_splashScreen{ nullptr }
+		, m_version{ p_version }
 	{
 #if defined( __WXGTK__ )
 		XInitThreads();

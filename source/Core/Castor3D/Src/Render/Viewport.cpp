@@ -97,80 +97,6 @@ namespace Castor3D
 	{
 	}
 
-	Viewport::Viewport( Viewport const & p_rhs )
-		: OwnedBy< Engine >{ *p_rhs.GetEngine() }
-		, m_type{ p_rhs.m_type }
-		, m_size{ p_rhs.m_size }
-		, m_fovY{ p_rhs.m_fovY }
-		, m_ratio{ p_rhs.m_ratio }
-		, m_left{ p_rhs.m_left }
-		, m_right{ p_rhs.m_right }
-		, m_bottom{ p_rhs.m_bottom }
-		, m_top{ p_rhs.m_top }
-		, m_near{ p_rhs.m_near }
-		, m_far{ p_rhs.m_far }
-		, m_modified{ p_rhs.m_modified }
-		, m_projection{ p_rhs.m_projection }
-	{
-	}
-
-	Viewport::Viewport( Viewport && p_rhs )
-		: OwnedBy< Engine >{ *p_rhs.GetEngine() }
-		, m_type{ std::move( p_rhs.m_type ) }
-		, m_size{ std::move( p_rhs.m_size ) }
-		, m_fovY{ std::move( p_rhs.m_fovY ) }
-		, m_ratio{ std::move( p_rhs.m_ratio ) }
-		, m_left{ std::move( p_rhs.m_left ) }
-		, m_right{ std::move( p_rhs.m_right ) }
-		, m_bottom{ std::move( p_rhs.m_bottom ) }
-		, m_top{ std::move( p_rhs.m_top ) }
-		, m_near{ std::move( p_rhs.m_near ) }
-		, m_far{ std::move( p_rhs.m_far ) }
-		, m_modified{ std::move( p_rhs.m_modified ) }
-		, m_projection{ std::move( p_rhs.m_projection ) }
-		, m_impl{ std::move( p_rhs.m_impl ) }
-	{
-	}
-
-	Viewport & Viewport::operator=( Viewport const & p_rhs )
-	{
-		m_type = p_rhs.m_type;
-		m_size = p_rhs.m_size;
-		m_fovY = p_rhs.m_fovY;
-		m_ratio = p_rhs.m_ratio;
-		m_left = p_rhs.m_left;
-		m_right = p_rhs.m_right;
-		m_bottom = p_rhs.m_bottom;
-		m_top = p_rhs.m_top;
-		m_near = p_rhs.m_near;
-		m_far = p_rhs.m_far;
-		m_modified = p_rhs.m_modified;
-		m_projection = p_rhs.m_projection;
-		return *this;
-	}
-
-	Viewport & Viewport::operator=( Viewport && p_rhs )
-	{
-		if ( &p_rhs != this )
-		{
-			m_type = std::move( p_rhs.m_type );
-			m_size = std::move( p_rhs.m_size );
-			m_fovY = std::move( p_rhs.m_fovY );
-			m_ratio = std::move( p_rhs.m_ratio );
-			m_left = std::move( p_rhs.m_left );
-			m_right = std::move( p_rhs.m_right );
-			m_bottom = std::move( p_rhs.m_bottom );
-			m_top = std::move( p_rhs.m_top );
-			m_near = std::move( p_rhs.m_near );
-			m_far = std::move( p_rhs.m_far );
-			m_modified = std::move( p_rhs.m_modified );
-			m_projection = std::move( p_rhs.m_projection );
-			m_impl = std::move( p_rhs.m_impl );
-		}
-
-		return *this;
-	}
-
 	Viewport::~Viewport()
 	{
 	}
@@ -214,8 +140,12 @@ namespace Castor3D
 			l_return = true;
 		}
 
-		m_impl->Apply();
 		return l_return;
+	}
+
+	void Viewport::Apply()
+	{
+		m_impl->Apply();
 	}
 
 	void Viewport::SetPerspective( Angle const & p_fovY, real p_aspect, real p_near, real p_far )

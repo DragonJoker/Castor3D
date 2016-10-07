@@ -421,7 +421,7 @@ namespace Castor3D
 																		p_element->Detach();
 																	} );
 		m_cameraCache = MakeObjectCache< Camera, String >(	p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
-															, [this]( String const & p_name, SceneNodeSPtr p_parent, Viewport const & p_viewport )
+															, [this]( String const & p_name, SceneNodeSPtr p_parent, Viewport & p_viewport )
 															{
 																return std::make_shared< Camera >( p_name, *this, p_parent, p_viewport );
 															}

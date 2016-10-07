@@ -184,6 +184,7 @@ namespace Castor3D
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
+		m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 		p_pipeline.Apply();

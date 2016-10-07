@@ -270,8 +270,9 @@ namespace Castor3D
 	void RenderTechnique::DoRender( Size const & p_size, SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
-		p_camera.GetViewport().Resize( p_size );
+		p_camera.Resize( m_size );
 		p_camera.Update();
+		p_camera.Apply();
 		DoRenderOpaqueNodes( p_nodes, p_camera );
 
 		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled )

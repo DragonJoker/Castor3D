@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le noeud de scène parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport const & p_viewport );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -118,14 +118,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Camera();
+		C3D_API ~Camera();
 		/**
 		 *\~english
-		 *\brief		Applies the viewport, the rotation ...
+		 *\brief		Updates the viewport, the frustum...
 		 *\~french
-		 *\brief		Applique le viewport, la rotation ...
+		 *\brief		Met à jour le viewport, frustum...
 		 */
-		C3D_API virtual void Update();
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Applies the viewport.
+		 *\~french
+		 *\brief		Applique le viewport.
+		 */
+		C3D_API void Apply();
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -273,7 +280,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère la matrice de vue
 		 */
-		virtual Castor::Matrix4x4r const & GetView()const
+		inline Castor::Matrix4x4r const & GetView()const
 		{
 			return m_view;
 		}

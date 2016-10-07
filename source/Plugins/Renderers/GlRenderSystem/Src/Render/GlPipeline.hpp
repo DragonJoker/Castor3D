@@ -81,10 +81,6 @@ namespace GlRender
 		 *\brief		Applique le pipeline.
 		 */
 		void Apply()const override;
-		/**
-		 *\copydoc		Castor3D::Context::ApplyViewport
-		 */
-		virtual void ApplyViewport( int p_windowWidth, int p_windowHeight );
 	};
 }
 

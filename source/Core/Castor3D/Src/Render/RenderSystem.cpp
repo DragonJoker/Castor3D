@@ -170,7 +170,6 @@ namespace Castor3D
 				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
-
 			vtx_texture = l_v3Texture;
 			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
 			vtx_view = c3d_mtxView * l_mtxModel * l_v4Vertex;
@@ -189,7 +188,7 @@ namespace Castor3D
 	{
 		using namespace GLSL;
 
-		static String PRIMITIVES[] =
+		static String const Primitives[] =
 		{
 			cuT( "points" ),//Topology::Points
 			cuT( "lines" ),//Topology::Lines
@@ -243,8 +242,8 @@ namespace Castor3D
 		{
 			auto l_writer = CreateGlslWriter();
 
-			l_writer.InputGeometryLayout( PRIMITIVES[size_t( l_input )] );
-			l_writer.OutputGeometryLayout( PRIMITIVES[size_t( l_output )] );
+			l_writer.InputGeometryLayout( Primitives[size_t( l_input )] );
+			l_writer.OutputGeometryLayout( Primitives[size_t( l_output )] );
 			l_writer.OutputVertexCount( l_count );
 
 			// Shader inputs
@@ -333,12 +332,10 @@ namespace Castor3D
 		}
 
 		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
-		l_program->SetSource( ShaderType::Vertex, ShaderModel::Model3, l_strVtxShader );
-		l_program->SetSource( ShaderType::Geometry, ShaderModel::Model3, l_strGeoShader );
-		l_program->SetSource( ShaderType::Pixel, ShaderModel::Model3, l_strPxlShader );
-		l_program->SetSource( ShaderType::Vertex, ShaderModel::Model4, l_strVtxShader );
-		l_program->SetSource( ShaderType::Geometry, ShaderModel::Model4, l_strGeoShader );
-		l_program->SetSource( ShaderType::Pixel, ShaderModel::Model4, l_strPxlShader );
+		auto l_model = GetGpuInformations().GetMaxShaderModel();
+		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
+		l_program->SetSource( ShaderType::Geometry, l_model, l_strGeoShader );
+		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
 
 		return l_program;
 	}

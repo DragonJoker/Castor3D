@@ -68,10 +68,7 @@ namespace Castor3D
 
 namespace Castor3D
 {
-	namespace
-	{
-		Castor::String const RENDERER_TYPE_UNDEFINED = cuT( "Undefined" );
-	}
+	Castor::String const RENDERER_TYPE_UNDEFINED = cuT( "Undefined" );
 
 	/**@name Importer */
 	//@{

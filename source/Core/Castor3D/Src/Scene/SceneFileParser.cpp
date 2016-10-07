@@ -241,6 +241,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::NoBlend );
 	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::Additive );
 	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::Multiplicative );
+	m_mapBlendModes[cuT( "interpolative" )] = uint32_t( BlendMode::Interpolative );
+	m_mapBlendModes[cuT( "a_buffer" )] = uint32_t( BlendMode::ABuffer );
+	m_mapBlendModes[cuT( "depth_peeling" )] = uint32_t( BlendMode::DepthPeeling );
 
 	m_mapVerticalAligns[cuT( "top" )] = uint32_t( eVALIGN_TOP );
 	m_mapVerticalAligns[cuT( "center" )] = uint32_t( eVALIGN_CENTER );

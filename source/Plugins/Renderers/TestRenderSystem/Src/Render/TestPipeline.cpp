@@ -24,8 +24,4 @@ namespace TestRender
 	void TestPipeline::Apply()const
 	{
 	}
-
-	void TestPipeline::ApplyViewport( int p_windowWidth, int p_windowHeight )
-	{
-	}
 }

@@ -33,8 +33,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType )
-		: MovableObject( p_name, p_scene, MovableType::Light, p_node )
-		, m_enabled( false )
+		: MovableObject{ p_name, p_scene, MovableType::Light, p_node }
 	{
 		m_category = p_factory.Create( p_lightType );
 		m_category->SetLight( this );

@@ -42,7 +42,7 @@ namespace Castor3D
 	struct ObjectCacheTraits< Camera, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Camera >( KeyType const &, SceneNodeSPtr, Viewport const & ) >;
+		using Producer = std::function< std::shared_ptr< Camera >( KeyType const &, SceneNodeSPtr, Viewport & ) >;
 		using Merger = std::function< void( ObjectCacheBase< Camera, KeyType > const &
 											, Castor::Collection< Camera, KeyType > &
 											, std::shared_ptr< Camera >
