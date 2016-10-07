@@ -258,6 +258,171 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
 		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders objects sorted by distance to camera.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine d'objets triés par distance à la caméra.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register = true );
 
 	private:
 		/**

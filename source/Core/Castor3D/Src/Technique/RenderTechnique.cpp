@@ -55,6 +55,71 @@ namespace Castor3D
 {
 	namespace
 	{
+		template< bool Opaque >
+		struct PipelineUpdater
+		{
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
+			{
+				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline );
+			}
+		};
+
+		template<>
+		struct PipelineUpdater< false >
+		{
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
+			{
+				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline );
+			}
+		};
+
+		template< bool Opaque, typename MapType, typename FuncType >
+		inline void DoTraverseNodes( RenderPass const & p_pass
+									 , Camera const & p_camera
+									 , MapType & p_nodes
+									 , FuncType p_function )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				PipelineUpdater< Opaque >::Update( p_pass, p_camera, *l_itPipelines.first );
+				l_itPipelines.first->Apply();
+
+				for ( auto l_itPass : l_itPipelines.second )
+				{
+					for ( auto l_itSubmeshes : l_itPass.second )
+					{
+						p_function( *l_itPipelines.first, *l_itPass.first, *l_itSubmeshes.first, l_itSubmeshes.second );
+					}
+				}
+			}
+		}
+
+		template< bool Opaque, typename MapType >
+		inline void DoRenderNonInstanced( RenderPass const & p_pass
+										  , Scene & p_scene
+										  , Camera const & p_camera
+										  , MapType & p_nodes
+										  
+										  , bool p_register
+										  , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
+		{
+			for ( auto l_itPipelines : p_nodes )
+			{
+				PipelineUpdater< Opaque >::Update( p_pass, p_camera, *l_itPipelines.first );
+				l_itPipelines.first->Apply();
+
+				for ( auto & l_renderNode : l_itPipelines.second )
+				{
+					l_renderNode.Render( p_scene, p_camera );
+
+					if ( p_register )
+					{
+						p_renderedObjects.push_back( l_renderNode );
+					}
+				}
+			}
+		}
+
 		AnimatedObjectSPtr DoFindAnimatedObject( Scene & p_scene, String const & p_name )
 		{
 			AnimatedObjectSPtr l_return;
@@ -470,6 +535,167 @@ namespace Castor3D
 		}
 	}
 
+	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderTechnique::DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< true >( *this
+								 , p_camera
+								 , p_nodes
+								 
+								 , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
+																			 , Pass & p_pass
+																			 , Submesh & p_submesh
+																			 , StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			for ( auto & l_renderNode : p_renderNodes )
+			{
+				l_renderNode.Render( p_scene, p_camera );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
+			}
+		} );
+	}
+
+	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< true >( *this
+								 , p_camera
+								 , p_nodes
+								 
+								 , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
+																			 , Pass & p_pass
+																			 , Submesh & p_submesh
+																			 , StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+			{
+				uint32_t l_count = uint32_t( p_renderNodes.size() );
+				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				const uint32_t l_stride = 16 * sizeof( real );
+
+				for ( auto const & l_renderNode : p_renderNodes )
+				{
+					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+					l_buffer += l_stride;
+
+					if ( p_register )
+					{
+						m_renderedObjects.push_back( l_renderNode );
+					}
+				}
+
+				p_renderNodes[0].BindPass( p_scene, p_camera, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_scene );
+			}
+		} );
+	}
+
+	void RenderTechnique::DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderTechnique::DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderTechnique::DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< false >( *this
+								  , p_camera
+								  , p_nodes
+								  
+								  , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
+																			  , Pass & p_pass
+																			  , Submesh & p_submesh
+																			  , StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			for ( auto & l_renderNode : p_renderNodes )
+			{
+				l_renderNode.Render( p_scene, p_camera );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
+			}
+		} );
+	}
+
+	void RenderTechnique::DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoTraverseNodes< false >( *this
+								  , p_camera
+								  , p_nodes
+								  
+								  , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
+																			  , Pass & p_pass
+																			  , Submesh & p_submesh
+																			  , StaticGeometryRenderNodeArray & p_renderNodes )
+		{
+			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
+			{
+				uint32_t l_count = uint32_t( p_renderNodes.size() );
+				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				const uint32_t l_stride = 16 * sizeof( real );
+
+				for ( auto const & l_renderNode : p_renderNodes )
+				{
+					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+					l_buffer += l_stride;
+
+					if ( p_register )
+					{
+						m_renderedObjects.push_back( l_renderNode );
+					}
+				}
+
+				p_renderNodes[0].BindPass( p_scene, p_camera, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_scene );
+			}
+		} );
+	}
+
+	void RenderTechnique::DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, bool p_register )
+	{
+		for ( auto & l_it : p_nodes )
+		{
+			l_it.second.get().m_pass.m_pipeline.Apply();
+			DoUpdateTransparentPipeline( p_camera, l_it.second.get().m_pass.m_pipeline );
+			l_it.second.get().Render( p_scene, p_camera );
+
+			if ( p_register )
+			{
+				m_renderedObjects.push_back( l_it.second.get() );
+			}
+		}
+	}
+
+	void RenderTechnique::DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
+	void RenderTechnique::DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, bool p_register )
+	{
+		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_register, m_renderedObjects );
+	}
+
 	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
@@ -507,7 +733,7 @@ namespace Castor3D
 		}
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-		
+
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -524,80 +750,16 @@ namespace Castor3D
 			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
 			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
-			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
-			{
-				auto l_v3MapNormal = l_writer.GetLocale< Vec3 >( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
-				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
-				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
-			}
+			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
-			{
-				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
-			}
+			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+			l_lighting->ComputeCombinedLighting( l_worldEye
+												 , l_fMatShininess
+												 , FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent }
+												 , l_output );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
-			{
-				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
-			}
-
-			auto l_begin = l_writer.GetLocale< Int >( cuT( "l_begin" ), Int( 0 ) );
-			auto l_end = l_writer.GetLocale< Int >( cuT( "l_end" ), c3d_iLightsCount.x() );
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-													 l_output );
-			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.y();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-											   FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-											   l_output );
-			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.z();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-											  FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-											  l_output );
-			}
-			ROF;
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
-			{
-			l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
-			{
-				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
-			{
-				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
-			{
-				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
-			}
+			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
@@ -649,8 +811,9 @@ namespace Castor3D
 		{
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
+
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-		
+
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -670,82 +833,19 @@ namespace Castor3D
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
-			{
-				auto l_v3MapNormal = l_writer.GetLocale< Vec3 >( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
-				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
-				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
-			}
+			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
-			{
-				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
-			}
+			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+			l_lighting->ComputeCombinedLighting( l_worldEye
+												 , l_fMatShininess
+												 , FragmentInput( vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent )
+												 , l_output );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
-			{
-				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
-			}
-
-			auto l_begin = l_writer.GetLocale< Int >( cuT( "l_begin" ), Int( 0 ) );
-			auto l_end = l_writer.GetLocale< Int >( cuT( "l_end" ), c3d_iLightsCount.x() );
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-													 l_output );
-			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.y();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-											   FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-											   l_output );
-			}
-			ROF;
-
-			l_begin = l_end;
-			l_end += c3d_iLightsCount.z();
-
-			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-											  FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
-											  l_output );
-			}
-			ROF;
+			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 			{
 				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
-			{
-			l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
-			{
-				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
-			{
-				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
-			{
-				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 			}
 
 			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
