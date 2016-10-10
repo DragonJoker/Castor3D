@@ -152,6 +152,24 @@ namespace Castor3D
 		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
 		/**
 		 *\~english
+		 *\brief		Sets the currently active render context
+		 *\param[in]	p_context	The context
+		 *\~french
+		 *\brief		Définit le contexte de rendu actuellement actif
+		 *\param[in]	p_context	Le contexte
+		 */
+		C3D_API void SetCurrentContext( Context * p_context );
+		/**
+		 *\~english
+		 *\brief		Retrieves the currently active render context
+		 *\return		The context
+		 *\~french
+		 *\brief		Récupère le contexte de rendu actuellement actif
+		 *\return		Le contexte
+		 */
+		C3D_API Context * GetCurrentContext();
+		/**
+		 *\~english
 		 *\return		The GPU informations.
 		 *\~french
 		 *\return		Les informations sur le GPU.
@@ -159,6 +177,97 @@ namespace Castor3D
 		inline GpuInformations const & GetGpuInformations()const
 		{
 			return m_gpuInformations;
+		}
+		/**
+		 *\~english
+		 *\brief		Tells if the RenderSystem is initialised
+		 *\~french
+		 *\brief		Dit si le RenderSystem est initialisé
+		 */
+		inline bool IsInitialised()const
+		{
+			return m_initialised;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the renderer API
+		 *\~french
+		 *\brief		Récupère l'API de rendu
+		 */
+		inline Castor::String const & GetRendererType()const
+		{
+			return m_name;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the main render context
+		 *\param[in]	p_context	The context
+		 *\~french
+		 *\brief		Définit le contexte de rendu principal
+		 *\param[in]	p_context	Le contexte
+		 */
+		inline void SetMainContext( ContextSPtr p_context )
+		{
+			m_mainContext = p_context;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the main render context
+		 *\return		The context
+		 *\~french
+		 *\brief		Récupère le contexte de rendu principal
+		 *\return		Le contexte
+		 */
+		inline ContextSPtr GetMainContext()
+		{
+			return m_mainContext;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay renderer
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le renderer d'overlays
+		 *\return		La valeur
+		 */
+		inline OverlayRendererSPtr GetOverlayRenderer()
+		{
+			return m_overlayRenderer;
+		}
+		/**
+		 *\~english
+		 *\brief		Increments the GPU time.
+		 *\param[in]	p_time	The increment value.
+		 *\~french
+		 *\brief		Incrémente le temps CPU.
+		 *\param[in]	p_time	La valeur d'incrément.
+		 */
+		template< class Rep, class Period >
+		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
+		{
+			m_gpuTime += std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
+		}
+		/**
+		 *\~english
+		 *\brief		Resets the GPU time.
+		 *\~french
+		 *\brief		Réinitialise le temps CPU.
+		 */
+		inline void ResetGpuTime()
+		{
+			m_gpuTime = std::chrono::milliseconds( 0 );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the GPU time.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère le temps CPU.
+		 *\return		La valeur.
+		 */
+		inline std::chrono::milliseconds GetGpuTime()const
+		{
+			return m_gpuTime;
 		}
 		/**
 		 *\~english
@@ -324,121 +433,6 @@ namespace Castor3D
 		 *\return		L'implémentation créée.
 		 */
 		C3D_API virtual IViewportImplUPtr CreateViewport( Viewport & p_viewport ) = 0;
-		/**
-		 *\~english
-		 *\brief		Tells if the RenderSystem is initialised
-		 *\~french
-		 *\brief		Dit si le RenderSystem est initialisé
-		 */
-		inline bool IsInitialised()const
-		{
-			return m_initialised;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the renderer API
-		 *\~french
-		 *\brief		Récupère l'API de rendu
-		 */
-		inline Castor::String const & GetRendererType()const
-		{
-			return m_name;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the main render context
-		 *\param[in]	p_context	The context
-		 *\~french
-		 *\brief		Définit le contexte de rendu principal
-		 *\param[in]	p_context	Le contexte
-		 */
-		inline void SetMainContext( ContextSPtr p_context )
-		{
-			m_mainContext = p_context;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the main render context
-		 *\return		The context
-		 *\~french
-		 *\brief		Récupère le contexte de rendu principal
-		 *\return		Le contexte
-		 */
-		inline ContextSPtr GetMainContext()
-		{
-			return m_mainContext;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the currently active render context
-		 *\param[in]	p_context	The context
-		 *\~french
-		 *\brief		Définit le contexte de rendu actuellement actif
-		 *\param[in]	p_context	Le contexte
-		 */
-		inline void SetCurrentContext( Context * p_context )
-		{
-			m_currentContext = p_context;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the currently active render context
-		 *\return		The context
-		 *\~french
-		 *\brief		Récupère le contexte de rendu actuellement actif
-		 *\return		Le contexte
-		 */
-		inline Context * GetCurrentContext()
-		{
-			return m_currentContext;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay renderer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le renderer d'overlays
-		 *\return		La valeur
-		 */
-		inline OverlayRendererSPtr GetOverlayRenderer()
-		{
-			return m_overlayRenderer;
-		}
-		/**
-		 *\~english
-		 *\brief		Increments the GPU time.
-		 *\param[in]	p_time	The increment value.
-		 *\~french
-		 *\brief		Incrémente le temps CPU.
-		 *\param[in]	p_time	La valeur d'incrément.
-		 */
-		template< class Rep, class Period >
-		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
-		{
-			m_gpuTime += std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
-		}
-		/**
-		 *\~english
-		 *\brief		Resets the GPU time.
-		 *\~french
-		 *\brief		Réinitialise le temps CPU.
-		 */
-		inline void ResetGpuTime()
-		{
-			m_gpuTime = std::chrono::milliseconds( 0 );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the GPU time.
-		 *\return		The value.
-		 *\~french
-		 *\brief		Récupère le temps CPU.
-		 *\return		La valeur.
-		 */
-		inline std::chrono::milliseconds GetGpuTime()const
-		{
-			return m_gpuTime;
-		}
 
 	protected:
 		/**
@@ -468,7 +462,7 @@ namespace Castor3D
 		//!\~english The main render context	\~french Le contexte de rendu principal
 		ContextSPtr m_mainContext;
 		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
-		ContextRPtr m_currentContext;
+		std::map< std::thread::id, ContextRPtr > m_currentContexts;
 		//!\~english Scene stack	\~french Pile des scènes
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
