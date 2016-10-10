@@ -100,7 +100,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightAttenuation )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightCutOff )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightExponent )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightCastShadows )
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightShadowProducer )
 
 	// Scene node parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_NodeParent )
@@ -113,6 +113,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectMesh )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectMaterials )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectCastShadows )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 
 	// Object Materials Parsers

@@ -1253,7 +1253,7 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCastShadows )
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightShadowProducer )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
@@ -1480,6 +1480,23 @@ namespace Castor3D
 	{
 	}
 	END_ATTRIBUTE_PUSH( eSECTION_OBJECT_MATERIALS )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectCastShadows )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pGeometry )
+		{
+			PARSING_ERROR( cuT( "No Geometry initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pGeometry->CastShadows( l_value );
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 	{

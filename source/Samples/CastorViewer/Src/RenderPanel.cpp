@@ -329,23 +329,24 @@ namespace CastorViewer
 
 			if ( !l_shadowMaps.empty() )
 			{
-				auto const & l_shadowMap = *l_shadowMaps.begin()->second;
-				auto const & l_light = *l_shadowMaps.begin()->first;
-				l_camera->GetViewport() = l_shadowMap.GetViewport();
-				l_camera->GetParent()->SetPosition( Point3f{ l_light.GetParent()->GetPosition() } );
+				m_currentNode = l_shadowMaps.begin()->first->GetParent();
+				//auto const & l_shadowMap = *l_shadowMaps.begin()->second;
+				//auto const & l_light = *l_shadowMaps.begin()->first;
+				//l_camera->GetViewport() = l_shadowMap.GetViewport();
+				//l_camera->GetParent()->SetPosition( Point3f{ l_light.GetParent()->GetPosition() } );
 
-				switch ( l_light.GetLightType() )
-				{
-				case LightType::Directional:
-					break;
+				//switch ( l_light.GetLightType() )
+				//{
+				//case LightType::Directional:
+				//	break;
 
-				case LightType::Point:
-					break;
+				//case LightType::Point:
+				//	break;
 
-				case LightType::Spot:
-					l_camera->GetParent()->SetOrientation( l_light.GetParent()->GetOrientation() );
-					break;
-				}
+				//case LightType::Spot:
+				//	l_camera->GetParent()->SetOrientation( l_light.GetParent()->GetOrientation() );
+				//	break;
+				//}
 			}
 		}
 	}

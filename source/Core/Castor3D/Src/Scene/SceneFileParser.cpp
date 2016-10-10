@@ -395,7 +395,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_LIGHT, cuT( "cast_shadows" ), Parser_LightCastShadows, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
+	AddParser( eSECTION_LIGHT, cuT( "shadow_producer" ), Parser_LightShadowProducer, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 
 	AddParser( eSECTION_NODE, cuT( "parent" ), Parser_NodeParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_NODE, cuT( "position" ), Parser_NodePosition, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
@@ -406,6 +406,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_OBJECT, cuT( "mesh" ), Parser_ObjectMesh, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT, cuT( "material" ), Parser_ObjectMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT, cuT( "materials" ), Parser_ObjectMaterials );
+	AddParser( eSECTION_OBJECT, cuT( "cast_shadows" ), Parser_ObjectCastShadows, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_OBJECT, cuT( "}" ), Parser_ObjectEnd );
 
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ePARAMETER_TYPE_UINT16 >(), MakeParameter< ePARAMETER_TYPE_NAME >() } );

@@ -53,7 +53,7 @@ scene "Scene"
 		intensity 0.0 0.8 1.0 1.0
 		attenuation 1.0 0.1 0.0
 		cut_off 20
-		cast_shadows true
+		shadow_producer true
 	}
 
 	scene_node "Plane"
@@ -70,6 +70,7 @@ scene "Scene"
 	object "SpotLight"
 	{
 		parent "SpotLightNode"
+		cast_shadows false
 
 		mesh "LightMesh"
 		{

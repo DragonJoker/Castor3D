@@ -16,7 +16,7 @@ namespace GLSL
 			// Perspective divide (result in range [-1,1]).
 			auto l_lightSpacePosition = m_writer.GetLocale< Vec3 >( cuT( "l_lightSpacePosition" ), p_lightSpacePosition.xyz() / p_lightSpacePosition.w() );
 			// Now put the position in range [0,1].
-			l_lightSpacePosition = l_lightSpacePosition * Float( 0.5 ) + Float( 0.5 );
+			l_lightSpacePosition = m_writer.Paren( l_lightSpacePosition * Float( 0.5 ) ) + Float( 0.5 );
 			// Sample shadow map to get closest depth from light's point of view.
 			auto l_closestDepth = m_writer.GetLocale< Float >( cuT( "l_closestDepth" ), texture( p_map, l_lightSpacePosition.xy() ).r() );
 			// And get the current depth of the fragment, from light's point of view.

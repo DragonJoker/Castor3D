@@ -202,33 +202,20 @@ namespace Castor3D
 	{
 		m_cameraNode->SetPosition( m_light.GetParent()->GetDerivedPosition() );
 		m_cameraNode->SetOrientation( m_light.GetParent()->GetDerivedOrientation() );
-		m_renderQueue.Prepare( *m_camera, m_scene );
-		Point3r l_position;
-		Point3r l_front;
-		Point3r l_up{ 0, 1, 0 };
 		auto l_size = m_depthTexture->GetImage().GetDimensions();
 
 		switch ( m_light.GetLightType() )
 		{
 		case LightType::Directional:
-			l_position = -m_light.GetDirectionalLight()->GetDirection();
 			break;
 
 		case LightType::Spot:
-			{
-				Matrix4x4r l_orientation;
-				m_light.GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
-				l_position = m_light.GetParent()->GetDerivedPosition();
-				l_front = l_position + ( l_orientation * Point3f{ 0, 0, 1 } );
-				l_up = ( l_orientation * Point3f{ 0, 1, 0 } );
-				m_camera->GetViewport().SetPerspective( m_light.GetSpotLight()->GetCutOff(), real( l_size.width() ) / l_size.height(), 1.0_r, 1000.0_r );
-			}
+			m_camera->GetViewport().SetPerspective( m_light.GetSpotLight()->GetCutOff(), real( l_size.width() ) / l_size.height(), 1.0_r, 1000.0_r );
 			break;
 		}
 
-		matrix::look_at( m_view, l_position, l_front, l_up );
-		m_camera->GetViewport().Update();
-		m_camera->SetView( m_view );
+		m_camera->Update();
+		m_renderQueue.Prepare( *m_camera, m_scene );
 	}
 
 	void ShadowMapPass::Render()
@@ -386,9 +373,6 @@ namespace Castor3D
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
 
-		// UBOs
-		UBO_SCENE( l_writer );
-
 		// Fragment Intputs
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -397,7 +381,7 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			pxl_fFragDepth = gl_FragCoord.z();
+			//pxl_fFragDepth = gl_FragCoord.z();
 		} );
 
 		return l_writer.Finalise();

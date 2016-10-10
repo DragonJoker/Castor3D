@@ -479,6 +479,7 @@ namespace Castor3D
 			DoEndRender( p_scene, p_camera );
 
 #else
+
 			m_renderSystem.GetCurrentContext()->RenderDepth( l_depthMaps.begin()->get().GetImage().GetDimensions(), l_depthMaps.begin()->get() );
 
 #endif
