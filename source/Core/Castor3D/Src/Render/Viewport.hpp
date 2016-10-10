@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\brief		Applique les dimensions de viewport données.
 		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
 		 */
-		C3D_API virtual void Apply() = 0;
+		C3D_API virtual void Apply()const = 0;
 
 	protected:
 		//!\~english The parent viewport.	\~french Le viewport parent.
@@ -174,7 +174,16 @@ namespace Castor3D
 		 *\brief		Constructeur par copie.
 		 *\param[in]	p_rhs	L'objet à copier.
 		 */
-		C3D_API Viewport( Viewport const & p_rhs ) = delete;
+		C3D_API Viewport( Viewport const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator.
+		 *\param[in]	p_rhs	The object to copy.
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	p_rhs	L'objet à copier.
+		 */
+		C3D_API Viewport & operator=( Viewport const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move constructor.
@@ -184,15 +193,6 @@ namespace Castor3D
 		 *\param[in]	p_rhs	L'objet à déplacer.
 		 */
 		C3D_API Viewport( Viewport && p_rhs ) = default;
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator.
-		 *\param[in]	p_rhs	The object to copy.
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie.
-		 *\param[in]	p_rhs	L'objet à copier.
-		 */
-		C3D_API Viewport & operator=( Viewport const & p_rhs ) = delete;
 		/**
 		 *\~english
 		 *\brief		Move assignment operator.
@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\brief		Applique les dimensions de viewport données.
 		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
 		 */
-		C3D_API void Apply();
+		C3D_API void Apply()const;
 		/**
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.

@@ -32,7 +32,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType )
+	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType )
 		: MovableObject{ p_name, p_scene, MovableType::Light, p_node }
 	{
 		m_category = p_factory.Create( p_lightType );
@@ -54,15 +54,15 @@ namespace Castor3D
 
 		switch ( m_category->GetLightType() )
 		{
-		case eLIGHT_TYPE_DIRECTIONAL:
+		case LightType::Directional:
 			GetDirectionalLight()->Bind( p_texture, p_index );
 			break;
 
-		case eLIGHT_TYPE_POINT:
+		case LightType::Point:
 			GetPointLight()->Bind( p_texture, p_index );
 			break;
 
-		case eLIGHT_TYPE_SPOT:
+		case LightType::Spot:
 			GetSpotLight()->Bind( p_texture, p_index );
 			break;
 		}
@@ -99,7 +99,7 @@ namespace Castor3D
 	{
 		DirectionalLightSPtr l_return;
 
-		if ( m_category->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		if ( m_category->GetLightType() == LightType::Directional )
 		{
 			l_return = std::static_pointer_cast< DirectionalLight >( m_category );
 		}
@@ -111,7 +111,7 @@ namespace Castor3D
 	{
 		PointLightSPtr l_return;
 
-		if ( m_category->GetLightType() == eLIGHT_TYPE_POINT )
+		if ( m_category->GetLightType() == LightType::Point )
 		{
 			l_return = std::static_pointer_cast< PointLight >( m_category );
 		}
@@ -123,7 +123,7 @@ namespace Castor3D
 	{
 		SpotLightSPtr l_return;
 
-		if ( m_category->GetLightType() == eLIGHT_TYPE_SPOT )
+		if ( m_category->GetLightType() == LightType::Spot )
 		{
 			l_return = std::static_pointer_cast< SpotLight >( m_category );
 		}

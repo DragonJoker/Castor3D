@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 #include "Render/RenderPass.hpp"
 #include "Render/Viewport.hpp"
+#include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
 
 namespace Castor3D
@@ -129,6 +130,16 @@ namespace Castor3D
 		{
 			return *m_depthTexture;
 		}
+		/**
+		 *\~english
+		 *\return		The camera's viewport.
+		 *\~french
+		 *\return		Le viewport de la caméra.
+		 */
+		inline Viewport const & GetViewport()const
+		{
+			return m_camera->GetViewport();
+		}
 
 	private:
 		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
@@ -138,19 +149,19 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
-		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
 		 */
-		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, uint8_t p_index, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
-		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, uint8_t p_index, BillboardRenderNodesByPipelineMap & p_nodes );
+		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
@@ -168,9 +179,13 @@ namespace Castor3D
 		 */
 		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaquePipeline
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
-		Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 */
+		Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
@@ -193,7 +208,10 @@ namespace Castor3D
 		Light const & m_light;
 		//!\~english	The camera created from the light.
 		//!\~french		La caméra créée à partir de la lumière.
-		CameraUPtr m_camera;
+		CameraSPtr m_camera;
+		//!\~english	The camera node.
+		//!\~french		Le noeud de la caméra.
+		SceneNodeSPtr m_cameraNode;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;

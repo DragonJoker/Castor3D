@@ -281,7 +281,7 @@ namespace Castor
 
 		if ( !l_return )
 		{
-			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_missingParam + cuT( "> param that is currently missing" ) );
+			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_missingParam + cuT( "> parameter that is currently missing" ) );
 		}
 
 		return l_return;

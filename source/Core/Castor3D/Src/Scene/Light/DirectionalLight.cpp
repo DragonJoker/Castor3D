@@ -31,7 +31,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight()
-		: LightCategory( eLIGHT_TYPE_DIRECTIONAL )
+		: LightCategory( LightType::Directional )
 	{
 	}
 

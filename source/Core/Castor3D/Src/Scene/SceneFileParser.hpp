@@ -103,7 +103,7 @@ namespace Castor3D
 		BillboardListSPtr pBillboards;
 		int iFace1;
 		int iFace2;
-		eLIGHT_TYPE eLightType;
+		LightType eLightType;
 		eMESH_TYPE eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;

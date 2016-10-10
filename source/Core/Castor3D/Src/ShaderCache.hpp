@@ -88,6 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\return		The found or created program.
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés.
@@ -95,9 +96,10 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.

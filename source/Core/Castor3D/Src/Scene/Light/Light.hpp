@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_lightType	Le type de lumière
 		 *\param[in]	p_node		Le scene node parent
 		 */
-		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType );
+		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -159,7 +159,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de lumière
 		 *\return		La valeur
 		 */
-		inline eLIGHT_TYPE GetLightType()const
+		inline LightType GetLightType()const
 		{
 			return m_category->GetLightType();
 		}

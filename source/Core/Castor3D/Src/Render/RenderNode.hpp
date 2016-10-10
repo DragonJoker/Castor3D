@@ -109,36 +109,26 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_scene		The rendered scene.
-		 *\param[in]	p_camera	The camera used to render the scene.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_scene		La scène rendue.
-		 *\param[in]	p_camera	La caméra utilisée pour dessiner la scène.
 		 */
-		C3D_API virtual void Render( Scene const & p_scene, Camera const & p_camera ) = 0;
+		C3D_API virtual void Render() = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
-		 *\param[in]	p_scene				The rendered scene.
-		 *\param[in]	p_camera			The camera used to render the scene.
 		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
 		 *\~french
 		 *\brief		Active la passe donnée pour le noeud de rendu.
-		 *\param[in]	p_scene				La scène rendue.
-		 *\param[in]	p_camera			La caméra utilisée pour dessiner la scène.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API virtual void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags ) = 0;
+		C3D_API virtual void BindPass( uint64_t p_excludedMtxFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
-		 *\param[in]	p_scene			The scene.
 		 *\~french
 		 *\brief		Désctive la passe du noeud de rendu.
-		 *\param[in]	p_scene			La scène.
 		 */
-		C3D_API virtual void UnbindPass( Scene const & p_scene )const = 0;
+		C3D_API virtual void UnbindPass()const = 0;
 
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de scène.
@@ -177,11 +167,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
 		 */
-		C3D_API void Render( Scene const & p_scene, Camera const & p_camera )override;
+		C3D_API void Render()override;
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
 		 */
-		C3D_API void UnbindPass( Scene const & p_scene )const override;
+		C3D_API void UnbindPass()const override;
 
 		//!\~english	The object's data.
 		//!\~french		Les données de l'objet.
@@ -193,12 +183,46 @@ namespace Castor3D
 	\author 	Sylvain DOREMUS
 	\date
 	\~english
+	\brief		Helper structure used to render objects.
+	\~french
+	\brief		Structure d'aide utilisée pour le dessin d'objets.
+	*/
+	struct GeometryRenderNode
+		: public SubmeshRenderNode
+	{
+		GeometryRenderNode( SceneRenderNode && p_scene
+							, PassRenderNode && p_pass
+							, GeometryBuffers & p_buffers
+							, SceneNode & p_sceneNode
+							, Submesh & p_data
+							, Geometry & p_geometry )
+			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
+			, m_geometry{ p_geometry }
+		{
+		}
+		/**
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
+		 */
+		C3D_API void Render()override;
+		/**
+		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
+		 */
+		C3D_API void UnbindPass()const override;
+
+		//!\~english	The geometry instanciating the submesh.
+		//!\~french		La géométrie instanciant le submesh.
+		Geometry & m_geometry;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date
+	\~english
 	\brief		Helper structure used to render static submeshes.
 	\~french
 	\brief		Structure d'aide utilisée pour le dessin des sous-maillages non animés.
 	*/
 	struct StaticGeometryRenderNode
-		: public SubmeshRenderNode
+		: public GeometryRenderNode
 	{
 		StaticGeometryRenderNode( SceneRenderNode && p_scene
 								  , PassRenderNode && p_pass
@@ -206,19 +230,13 @@ namespace Castor3D
 								  , SceneNode & p_sceneNode
 								  , Submesh & p_data
 								  , Geometry & p_geometry )
-			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
-			, m_geometry{ p_geometry }
+			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data, p_geometry }
 		{
 		}
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
-
-		//!\~english	The geometry instanciating the submesh.
-		//!\~french		La géométrie instanciant le submesh.
-		Geometry & m_geometry;
-
+		C3D_API void BindPass( uint64_t p_excludedMtxFlags )override;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -229,7 +247,7 @@ namespace Castor3D
 	\brief		Structure d'aide utilisée pour le dessin des sous-maillages animés.
 	*/
 	struct AnimatedGeometryRenderNode
-		: public SubmeshRenderNode
+		: public GeometryRenderNode
 	{
 		AnimatedGeometryRenderNode( SceneRenderNode && p_scene
 									, PassRenderNode && p_pass
@@ -240,8 +258,7 @@ namespace Castor3D
 									, AnimatedSkeleton * p_skeleton
 									, AnimatedMesh * p_mesh
 									, FrameVariableBuffer & p_animationUbo )
-			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
-			, m_geometry{ p_geometry }
+			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data, p_geometry }
 			, m_skeleton{ p_skeleton }
 			, m_mesh{ p_mesh }
 			, m_animationUbo{ p_animationUbo }
@@ -250,11 +267,8 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( uint64_t p_excludedMtxFlags )override;
 
-		//!\~english	The geometry instanciating the submesh.
-		//!\~french		La géométrie instanciant le submesh.
-		Geometry & m_geometry;
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
 		AnimatedSkeleton * m_skeleton;
@@ -291,7 +305,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.

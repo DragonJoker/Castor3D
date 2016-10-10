@@ -1134,7 +1134,7 @@ namespace Castor3D
 		{
 			uint32_t l_uiType;
 			p_params[0]->Get( l_uiType );
-			l_parsingContext->eLightType = eLIGHT_TYPE( l_uiType );
+			l_parsingContext->eLightType = LightType( l_uiType );
 			l_parsingContext->pLight = l_parsingContext->pScene->GetLightCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->eLightType );
 		}
 	}
@@ -1187,11 +1187,11 @@ namespace Castor3D
 			Point3f l_vVector;
 			p_params[0]->Get( l_vVector );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_POINT )
+			if ( l_parsingContext->eLightType == LightType::Point )
 			{
 				l_parsingContext->pLight->GetPointLight()->SetAttenuation( l_vVector );
 			}
-			else if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			else if ( l_parsingContext->eLightType == LightType::Spot )
 			{
 				l_parsingContext->pLight->GetSpotLight()->SetAttenuation( l_vVector );
 			}
@@ -1216,9 +1216,9 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			if ( l_parsingContext->eLightType == LightType::Spot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetCutOff( l_fFloat );
+				l_parsingContext->pLight->GetSpotLight()->SetCutOff( Angle::from_degrees( l_fFloat ) );
 			}
 			else
 			{
@@ -1241,7 +1241,7 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			if ( l_parsingContext->eLightType == LightType::Spot )
 			{
 				l_parsingContext->pLight->GetSpotLight()->SetExponent( l_fFloat );
 			}
@@ -3569,8 +3569,16 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_uiType;
-		l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
+
+		if ( p_params.size() > 0 )
+		{
+			uint32_t l_uiType;
+			l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
 	}
 	END_ATTRIBUTE()
 

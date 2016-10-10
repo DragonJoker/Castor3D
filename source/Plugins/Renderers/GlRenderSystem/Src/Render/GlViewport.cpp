@@ -18,7 +18,7 @@ namespace GlRender
 	{
 	}
 
-	void GlViewport::Apply()
+	void GlViewport::Apply()const
 	{
 		GetOpenGl().Viewport( 0, 0, m_viewport.GetWidth(), m_viewport.GetHeight() );
 	}

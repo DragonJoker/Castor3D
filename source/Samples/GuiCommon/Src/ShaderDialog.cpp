@@ -82,7 +82,7 @@ namespace GuiCommon
 
 				if ( l_technique )
 				{
-					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0u, 0u );
+					m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0u, 0u, false );
 					m_bOwnShader = true;
 				}
 			}

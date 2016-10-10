@@ -133,7 +133,7 @@ namespace Castor3D
 		{
 			for ( auto l_it : m_typeSortedLights )
 			{
-				l_lightsCount->GetValue( 0 )[l_it.first] = uint32_t( l_it.second.size() );
+				l_lightsCount->GetValue( 0 )[size_t( l_it.first )] = uint32_t( l_it.second.size() );
 			}
 		}
 	}

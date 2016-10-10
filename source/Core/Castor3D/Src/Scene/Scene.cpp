@@ -447,7 +447,7 @@ namespace Castor3D
 																	p_element->Detach();
 																} );
 		m_lightCache = MakeObjectCache< Light, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
-														, [this]( String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
+														, [this]( String const & p_name, SceneNodeSPtr p_node, LightType p_lightType )
 														{
 															return std::make_shared< Light >( p_name, *this, p_node, m_lightFactory, p_lightType );
 														}

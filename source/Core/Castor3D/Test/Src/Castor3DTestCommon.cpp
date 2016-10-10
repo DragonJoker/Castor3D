@@ -229,15 +229,15 @@ namespace Testing
 
 		switch ( p_a.GetLightType() )
 		{
-		case eLIGHT_TYPE_DIRECTIONAL:
+		case LightType::Directional:
 			l_return &= CT_EQUAL( static_cast< DirectionalLight const & >( p_a ), static_cast< DirectionalLight const & >( p_b ) );
 			break;
 
-		case eLIGHT_TYPE_POINT:
+		case LightType::Point:
 			l_return &= CT_EQUAL( static_cast< PointLight const & >( p_a ), static_cast< PointLight const & >( p_b ) );
 			break;
 
-		case eLIGHT_TYPE_SPOT:
+		case LightType::Spot:
 			l_return &= CT_EQUAL( static_cast< SpotLight const & >( p_a ), static_cast< SpotLight const & >( p_b ) );
 			break;
 		}

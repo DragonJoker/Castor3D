@@ -203,6 +203,13 @@ namespace Castor3D
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
 		/**
 		 *\~english
+		 *\return		The shadow maps associated to given scene and camera.
+		 *\~french
+		 *\return		Les maps d'ombre associées à la scène et la caméra données.
+		 */
+		C3D_API std::map< LightRPtr, ShadowMapPassUPtr > const & GetShadowMaps( Scene & p_scene, Camera & p_camera )const;
+		/**
+		 *\~english
 		 *\return		The render area dimensions.
 		 *\~french
 		 *\return		Les dimensions de la zone de rendu.
@@ -470,9 +477,13 @@ namespace Castor3D
 		 */
 		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaquePipeline
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
-		C3D_API Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		C3D_API Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 */
+		C3D_API Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */

@@ -40,7 +40,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PointLight::PointLight()
-		: LightCategory( eLIGHT_TYPE_POINT )
+		: LightCategory( LightType::Point )
 		, m_attenuation( 1.0f, 0.0f, 0.0f )
 	{
 	}

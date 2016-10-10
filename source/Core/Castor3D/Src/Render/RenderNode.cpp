@@ -7,6 +7,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
@@ -25,23 +26,33 @@ namespace Castor3D
 	namespace
 	{
 		template< typename NodeType >
-		void DoRender( Scene const & p_scene, Camera const & p_camera, NodeType & p_node )
+		void DoRender( NodeType & p_node )
 		{
 			p_node.m_pass.m_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
-			p_node.BindPass( p_scene, p_camera, 0 );
+			p_node.BindPass( 0 );
 			p_node.m_data.Draw( p_node.m_buffers );
-			p_node.UnbindPass( p_scene );
+			p_node.UnbindPass();
 		}
 
-		template< typename NodeType >
-		void DoUnbind( Scene const & p_scene, NodeType & p_node )
+		void DoUnbind( GeometryRenderNode const & p_node )
 		{
 			p_node.m_pass.m_pass.EndRender();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
-			if ( p_scene.GetEngine()->GetPerObjectLighting() )
+			if ( p_node.m_geometry.GetScene()->GetEngine()->GetPerObjectLighting() )
 			{
-				p_scene.GetLightCache().UnbindLights();
+				p_node.m_geometry.GetScene()->GetLightCache().UnbindLights();
+			}
+		}
+
+		void DoUnbind( BillboardListRenderNode const & p_node )
+		{
+			p_node.m_pass.m_pass.EndRender();
+			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
+
+			if ( p_node.m_data.GetScene()->GetEngine()->GetPerObjectLighting() )
+			{
+				p_node.m_data.GetScene()->GetLightCache().UnbindLights();
 			}
 		}
 	}
@@ -71,34 +82,44 @@ namespace Castor3D
 	}
 
 	template<>
-	void SubmeshRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
+	void SubmeshRenderNode::Render()
 	{
-		DoRender( p_scene, p_camera, *this );
+		REQUIRE( false && "Did you forget to implement an appropriate SubmeshRenderNode derivated class?" );
 	}
 
 	template<>
-	void SubmeshRenderNode::UnbindPass( Scene const & p_scene )const
+	void SubmeshRenderNode::UnbindPass()const
 	{
-		DoUnbind( p_scene, *this );
+		REQUIRE( false && "Did you forget to implement an appropriate SubmeshRenderNode derivated class?" );
 	}
 
 	template<>
-	void BillboardListRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
+	void BillboardListRenderNode::Render()
 	{
-		DoRender( p_scene, p_camera, *this );
+		DoRender( *this );
 	}
 
 	template<>
-	void BillboardListRenderNode::UnbindPass( Scene const & p_scene )const
+	void BillboardListRenderNode::UnbindPass()const
 	{
-		DoUnbind( p_scene, *this );
+		DoUnbind( *this );
 	}
 
-	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void GeometryRenderNode::Render()
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		DoRender( *this );
+	}
+
+	void GeometryRenderNode::UnbindPass()const
+	{
+		DoUnbind( *this );
+	}
+
+	void StaticGeometryRenderNode::BindPass( uint64_t p_excludedMtxFlags )
+	{
+		if ( m_geometry.GetScene()->GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
@@ -107,11 +128,11 @@ namespace Castor3D
 		m_pass.m_pass.Render();
 	}
 
-	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void AnimatedGeometryRenderNode::BindPass( uint64_t p_excludedMtxFlags )
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		if ( m_geometry.GetScene()->GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
@@ -155,11 +176,11 @@ namespace Castor3D
 		m_pass.m_pass.Render();
 	}
 
-	void BillboardRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void BillboardRenderNode::BindPass( uint64_t p_excludedMtxFlags )
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		if ( m_data.GetScene()->GetEngine()->GetPerObjectLighting() )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_data.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );

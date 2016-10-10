@@ -156,6 +156,9 @@ namespace Castor3D
 		//!\~english	Shadow map is available as input.
 		//\~french		La map d'ombres est disponible en entrée.
 		Shadows = 0x40,
+		//!\~english	Shader used to render a shadow map.
+		//\~french		Shader utilisé pour dessiner la shadow map.
+		ShadowMap = 0x80,
 	};
 	/*!
 	\author 	Sylvain DOREMUS

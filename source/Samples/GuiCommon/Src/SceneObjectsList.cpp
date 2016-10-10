@@ -230,15 +230,15 @@ namespace GuiCommon
 
 		switch ( l_light->GetLightType() )
 		{
-		case eLIGHT_TYPE_DIRECTIONAL:
+		case LightType::Directional:
 			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
-		case eLIGHT_TYPE_POINT:
+		case LightType::Point:
 			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
-		case eLIGHT_TYPE_SPOT:
+		case LightType::Spot:
 			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 		}

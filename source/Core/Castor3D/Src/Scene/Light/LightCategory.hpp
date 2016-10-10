@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Le constructeur utilisé par la fonction de clonage
 		 *\param[in]	p_lightType	Le type de catégorie de lumière
 		 */
-		C3D_API explicit LightCategory( eLIGHT_TYPE p_lightType );
+		C3D_API explicit LightCategory( LightType p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -195,7 +195,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de lumière
 		 *\return		La valeur
 		 */
-		inline eLIGHT_TYPE GetLightType()const
+		inline LightType GetLightType()const
 		{
 			return m_eLightType;
 		}
@@ -358,7 +358,7 @@ namespace Castor3D
 	private:
 		//!\~english	The light type.
 		//!\~french		Le type de lumière.
-		eLIGHT_TYPE m_eLightType;
+		LightType m_eLightType;
 		//!\~english	The parent light.
 		//!\~french		La lumière parente.
 		Light * m_pLight{ nullptr };

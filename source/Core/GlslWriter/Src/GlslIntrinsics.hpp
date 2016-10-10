@@ -37,18 +37,78 @@ namespace GLSL
 	template<> struct is_arithmetic_type< IVec3 > : public std::true_type {};
 	template<> struct is_arithmetic_type< IVec4 > : public std::true_type {};
 	template<> struct is_arithmetic_type< Mat3 > : public std::true_type {};
-	template<> struct is_arithmetic_type< Mat4 > : public std::true_type {};
+	template<> struct is_arithmetic_type< Mat4 > : public std::true_type
+	{
+	};
 
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator+( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator-( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator*( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator/( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator==( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator!=( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<=( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>=( TypeA const & p_a, TypeB const & p_b );
+#	define GLSL_DECLARE_OPERATOR( RetType, LhsType, RhsType, Operator )\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )
+
+#	define GLSL_DECLARE_ARITHMETIC_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_DECLARE_OPERATOR( LhsType, LhsType, RhsType, Operator )
+
+#	define GLSL_DECLARE_BOOLEAN_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_DECLARE_OPERATOR( GlslBool, LhsType, RhsType, Operator )
+
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, + );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, - );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, * );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, / );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, == );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, != );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, < );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, <= );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, > );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, >= );
 
 	GlslWriter_API Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b );
 	GlslWriter_API Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b );

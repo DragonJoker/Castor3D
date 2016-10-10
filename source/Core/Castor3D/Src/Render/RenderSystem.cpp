@@ -93,7 +93,7 @@ namespace Castor3D
 		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
-	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
+	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
 	{
 		using namespace GLSL;
 		auto l_writer = CreateGlslWriter();
@@ -148,12 +148,10 @@ namespace Castor3D
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
 				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxModel * c3d_mtxView ) ) );
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
 			{
 				l_mtxModel = transform;
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxModel * c3d_mtxView ) ) );
 			}
 			else
 			{
@@ -173,7 +171,16 @@ namespace Castor3D
 			vtx_texture = l_v3Texture;
 			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
 			vtx_view = c3d_mtxView * l_mtxModel * l_v4Vertex;
-			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+
+			if ( p_invertNormals )
+			{
+				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+			}
+			else
+			{
+				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+			}
+
 			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
 			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			vtx_instance = gl_InstanceID;
@@ -262,23 +269,23 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxVP, c3d_mtxProjection * c3d_mtxView );
+				auto l_mtxVP = l_writer.GetLocale< Mat4 >( cuT( "l_mtxVP" ), c3d_mtxProjection * c3d_mtxView );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().xyz() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_left, cross( l_toCamera, l_up ) );
+				auto l_pos = l_writer.GetLocale< Vec3 >( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
+				auto l_toCamera = l_writer.GetLocale< Vec3 >( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
+				auto l_up = l_writer.GetLocale< Vec3 >( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
+				auto l_left = l_writer.GetLocale< Vec3 >( cuT( "l_left" ), cross( l_toCamera, l_up ) );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_up );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_left );
+				auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
+				auto l_v3Tangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Tangent" ), l_up );
+				auto l_v3Bitangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Bitangent" ), l_left );
 
 				l_left *= c3d_v2iDimensions.x();
 				l_up *= c3d_v2iDimensions.y();
 				l_writer << Endl();
 
 				{
-					l_pos -= ( l_left * 0.5 );
+					l_pos -= ( l_left * Float( 0.5 ) );
 					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;

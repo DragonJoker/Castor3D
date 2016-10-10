@@ -121,7 +121,7 @@ namespace Castor3D
 
 				for ( auto & l_renderNode : l_itPipelines.second )
 				{
-					l_renderNode.Render( p_scene, p_camera );
+					l_renderNode.Render();
 
 					if ( p_register )
 					{
@@ -390,7 +390,7 @@ namespace Castor3D
 				{
 					for ( auto & l_it: l_spec.m_shadowMaps )
 					{
-						l_it.second->Initialise( Size{ 1024, 1024 } );
+						l_it.second->Initialise( m_size );
 					}
 				}
 			}
@@ -444,9 +444,9 @@ namespace Castor3D
 			{
 				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, std::make_unique< ShadowMapPass >( *GetEngine(), p_scene, p_light ) } ).first;
 				auto & l_shadowMap = *l_insit->second;
-				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [&l_shadowMap]()
+				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_shadowMap]()
 				{
-					l_shadowMap.Initialise( Size{ 1024, 1024 } );
+					l_shadowMap.Initialise( m_size );
 				} ) );
 			}
 		} );
@@ -458,27 +458,12 @@ namespace Castor3D
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes( p_camera, p_scene );
 		p_scene.GetLightCache().UpdateLights();
-		auto l_itScene = m_scenes.find( &p_scene );
-
-		if ( l_itScene == m_scenes.end() )
-		{
-			CASTOR_EXCEPTION( "Couldn't find the scene in the render pass' scenes" );
-		}
-
-		auto l_it = std::find_if( l_itScene->second.begin(), l_itScene->second.end(), [&p_camera]( SceneSpecifics const & p_spec )
-		{
-			return p_spec.m_camera == &p_camera;
-		} );
-
-		if ( l_it == l_itScene->second.end() )
-		{
-			CASTOR_EXCEPTION( "Couldn't find the camera in the scene's cameras" );
-		}
+		auto & l_shadowMaps = GetShadowMaps( p_scene, p_camera );
 
 		m_renderSystem.PushScene( &p_scene );
 		std::vector< std::reference_wrapper< TextureLayout const > > l_depthMaps;
 
-		for ( auto & l_shadowMap : l_it->m_shadowMaps )
+		for ( auto & l_shadowMap : l_shadowMaps )
 		{
 			l_shadowMap.second->Render();
 			l_depthMaps.push_back( std::ref( l_shadowMap.second->GetResult() ) );
@@ -486,10 +471,17 @@ namespace Castor3D
 
 		if ( DoBeginRender( p_scene, p_camera ) )
 		{
+#if 1
+
 			p_scene.RenderBackground( GetSize() );
 			DoRender( l_nodes, l_depthMaps, p_camera, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
 			DoEndRender( p_scene, p_camera );
+
+#else
+			m_renderSystem.GetCurrentContext()->RenderDepth( l_depthMaps.begin()->get().GetImage().GetDimensions(), l_depthMaps.begin()->get() );
+
+#endif
 		}
 
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
@@ -505,12 +497,35 @@ namespace Castor3D
 		return DoWriteInto( p_file );
 	}
 
+	std::map< LightRPtr, ShadowMapPassUPtr > const & RenderTechnique::GetShadowMaps( Scene & p_scene, Camera & p_camera )const
+	{
+		auto l_scene = m_scenes.find( &p_scene );
+
+		if ( l_scene == m_scenes.end() )
+		{
+			CASTOR_EXCEPTION( "Couldn't find the scene in the render pass' scenes" );
+		}
+
+		auto l_camera = std::find_if( l_scene->second.begin(), l_scene->second.end(), [&p_camera]( SceneSpecifics const & p_spec )
+		{
+			return p_spec.m_camera == &p_camera;
+		} );
+
+		if ( l_camera == l_scene->second.end() )
+		{
+			CASTOR_EXCEPTION( "Couldn't find the camera in the scene's cameras" );
+		}
+
+		return l_camera->m_shadowMaps;
+	}
+
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, TextureLayoutArray const & p_depthMaps, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
 		p_camera.Resize( m_size );
 		p_camera.Update();
 		p_camera.Apply();
+
 		DoRenderOpaqueNodes( p_nodes, p_depthMaps, p_camera );
 
 		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled )
@@ -523,39 +538,22 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, TextureLayoutArray const & p_depthMaps, Camera const & p_camera )
 	{
-		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty()
-			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty()
-			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty()
-			 || !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
+		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodesBack.empty()
+			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack.empty()
+			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack.empty()
+			 || !p_nodes.m_billboards.m_opaqueRenderNodesBack.empty() )
 		{
 			DoBeginOpaqueRendering();
 
-			if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodes.empty() )
-			{
-				DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodes, p_depthMaps );
-			}
+			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
+			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesFront, p_depthMaps );
+			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
+			DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodesFront, p_depthMaps );
 
-			if ( !p_nodes.m_instancedGeometries.m_opaqueRenderNodes.empty() )
-			{
-				if ( m_renderSystem.GetGpuInformations().HasInstancing() )
-				{
-					DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes, p_depthMaps );
-				}
-				else
-				{
-					DoRenderOpaqueInstancedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodes, p_depthMaps );
-				}
-			}
-
-			if ( !p_nodes.m_animatedGeometries.m_opaqueRenderNodes.empty() )
-			{
-				DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodes, p_depthMaps );
-			}
-
-			if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
-			{
-				DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodes, p_depthMaps );
-			}
+			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
+			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesBack, p_depthMaps );
+			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
+			DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodesBack, p_depthMaps );
 
 			DoEndOpaqueRendering();
 		}
@@ -627,14 +625,14 @@ namespace Castor3D
 								 , p_camera
 								 , p_nodes
 								 , p_depthMaps
-								 , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
-																			 , Pass & p_pass
-																			 , Submesh & p_submesh
-																			 , StaticGeometryRenderNodeArray & p_renderNodes )
+								 , [&p_register, this]( Pipeline & p_pipeline
+														, Pass & p_pass
+														, Submesh & p_submesh
+														, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
-				l_renderNode.Render( p_scene, p_camera );
+				l_renderNode.Render();
 
 				if ( p_register )
 				{
@@ -650,10 +648,10 @@ namespace Castor3D
 								 , p_camera
 								 , p_nodes
 								 , p_depthMaps
-								 , [&p_scene, &p_camera, &p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																						   , Pass & p_pass
-																						   , Submesh & p_submesh
-																						   , StaticGeometryRenderNodeArray & p_renderNodes )
+								 , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
+																	  , Pass & p_pass
+																	  , Submesh & p_submesh
+																	  , StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -672,9 +670,9 @@ namespace Castor3D
 					}
 				}
 
-				p_renderNodes[0].BindPass( p_scene, p_camera, MASK_MTXMODE_MODEL );
+				p_renderNodes[0].BindPass( MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_scene );
+				p_renderNodes[0].UnbindPass();
 			}
 		} );
 	}
@@ -695,14 +693,14 @@ namespace Castor3D
 								  , p_camera
 								  , p_nodes
 								  , p_depthMaps
-								  , [&p_scene, &p_camera, &p_register, this]( Pipeline & p_pipeline
-																			  , Pass & p_pass
-																			  , Submesh & p_submesh
-																			  , StaticGeometryRenderNodeArray & p_renderNodes )
+								  , [&p_register, this]( Pipeline & p_pipeline
+														 , Pass & p_pass
+														 , Submesh & p_submesh
+														 , StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
-				l_renderNode.Render( p_scene, p_camera );
+				l_renderNode.Render();
 
 				if ( p_register )
 				{
@@ -718,10 +716,10 @@ namespace Castor3D
 								  , p_camera
 								  , p_nodes
 								  , p_depthMaps
-								  , [&p_scene, &p_camera, &p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																							, Pass & p_pass
-																							, Submesh & p_submesh
-																							, StaticGeometryRenderNodeArray & p_renderNodes )
+								  , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
+																	   , Pass & p_pass
+																	   , Submesh & p_submesh
+																	   , StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -740,9 +738,9 @@ namespace Castor3D
 					}
 				}
 
-				p_renderNodes[0].BindPass( p_scene, p_camera, MASK_MTXMODE_MODEL );
+				p_renderNodes[0].BindPass( MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_scene );
+				p_renderNodes[0].UnbindPass();
 			}
 		} );
 	}
@@ -753,7 +751,7 @@ namespace Castor3D
 		{
 			l_it.second.get().m_pass.m_pipeline.Apply();
 			DoUpdateTransparentPipeline( p_camera, l_it.second.get().m_pass.m_pipeline, p_depthMaps );
-			l_it.second.get().Render( p_scene, p_camera );
+			l_it.second.get().Render();
 
 			if ( p_register )
 			{
@@ -840,7 +838,7 @@ namespace Castor3D
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 									l_v3Emissive, 1.0 );
@@ -930,7 +928,7 @@ namespace Castor3D
 				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}
 
-			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.xyz() ) +
+			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
 															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
 															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
 															   l_v3Emissive ), l_fAlpha );
@@ -964,22 +962,43 @@ namespace Castor3D
 		DoBindDepthMaps( p_depthMaps, p_pipeline.GetTexturesCount() + 1 );
 	}
 
-	Pipeline & RenderTechnique::DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	Pipeline & RenderTechnique::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_opaquePipelines.find( p_flags );
+		auto l_it = m_frontOpaquePipelines.find( p_flags );
 
-		if ( l_it == m_opaquePipelines.end() )
+		if ( l_it == m_frontOpaquePipelines.end() )
+		{
+			RasteriserState l_rsState;
+			l_rsState.SetCulledFaces( Culling::Front );
+			MultisampleState l_msState;
+			l_msState.SetMultisample( m_multisampling );
+			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
+																											, std::move( l_rsState )
+																											, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																											, std::move( l_msState )
+																											, p_program
+																											, p_flags ) ).first;
+		}
+
+		return *l_it->second;
+	}
+
+	Pipeline & RenderTechnique::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	{
+		auto l_it = m_backOpaquePipelines.find( p_flags );
+
+		if ( l_it == m_backOpaquePipelines.end() )
 		{
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::Back );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_opaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
-																									   , std::move( l_rsState )
-																									   , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																									   , std::move( l_msState )
-																									   , p_program
-																									   , p_flags ) ).first;
+			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
+																										   , std::move( l_rsState )
+																										   , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
+																										   , std::move( l_msState )
+																										   , p_program
+																										   , p_flags ) ).first;
 		}
 
 		return *l_it->second;
@@ -994,7 +1013,7 @@ namespace Castor3D
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Back );
+			l_rsState.SetCulledFaces( Culling::Front );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );

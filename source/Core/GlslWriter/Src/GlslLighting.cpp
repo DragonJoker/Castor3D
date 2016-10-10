@@ -327,7 +327,7 @@ namespace GLSL
 				auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 				auto l_offset = m_writer.GetLocale< Int >( cuT( "l_offset" ), p_index * Int( LightComponentsCount ) + Int( LightAttenuationOffset ) );
 				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).xyz();
-				l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++ ).xyz();
+				l_lightReturn.m_v3Direction() = normalize( texelFetch( c3d_sLights, l_offset++ ).xyz() );
 				auto l_v2Spot = m_writer.GetLocale< Vec2 >( cuT( "l_v2Spot" ), texelFetch( c3d_sLights, l_offset++ ).xy() );
 				l_lightReturn.m_fExponent() = l_v2Spot.x();
 				l_lightReturn.m_fCutOff() = l_v2Spot.y();
@@ -341,7 +341,7 @@ namespace GLSL
 				auto l_offset = m_writer.GetLocale< Float >( cuT( "l_offset" ), l_mult * Float( LightAttenuationOffset ) );
 				l_lightReturn.m_v3Attenuation() = texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
 				l_offset += l_mult;
-				l_lightReturn.m_v3Direction() = texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz();
+				l_lightReturn.m_v3Direction() = normalize( texture( c3d_sLights, l_factor + l_offset + l_decal ).xyz() );
 				l_offset += l_mult;
 				auto l_v2Spot = m_writer.GetLocale< Vec2 >( cuT( "l_v2Spot" ), texture( c3d_sLights, l_factor + l_offset + l_decal ).xy() );
 				l_lightReturn.m_fExponent() = l_v2Spot.x();
@@ -429,9 +429,10 @@ namespace GLSL
 			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse"), vec3( Float( 0.0f ), 0.0f, 0.0f ) );
 			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular"), vec3( Float( 0.0f ), 0.0f, 0.0f ) );
 			OutputComponents l_output{ l_ambient, l_diffuse, l_specular };
-			auto l_lightDirection = m_writer.GetLocale< Vec3 >( cuT( "l_lightDirection" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
-			auto l_distance = m_writer.GetLocale< Float >( cuT( "l_distance" ), length( l_lightDirection ) );
-			DoComputeLight( p_light, p_worldEye, normalize( -l_lightDirection ), p_shininess, p_fragmentIn, l_output );
+			auto l_lightToVertex = m_writer.GetLocale< Vec3 >( cuT( "l_lightDirection" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
+			auto l_distance = m_writer.GetLocale< Float >( cuT( "l_distance" ), length( l_lightToVertex ) );
+			l_lightToVertex = normalize( -l_lightToVertex );
+			DoComputeLight( p_light, p_worldEye, l_lightToVertex, p_shininess, p_fragmentIn, l_output );
 
 			auto l_attenuation = m_writer.GetLocale< Float >( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 			p_output.m_v3Ambient += l_ambient / l_attenuation;
@@ -460,8 +461,9 @@ namespace GLSL
 			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse"), vec3( Float( 0.0f ), 0.0f, 0.0f ) );
 			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular"), vec3( Float( 0.0f ), 0.0f, 0.0f ) );
 			OutputComponents l_output{ l_ambient, l_diffuse, l_specular };
-			auto l_lightToPixel = m_writer.GetLocale< Vec3 >( cuT( "l_lightToPixel" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
-			auto l_spotFactor = m_writer.GetLocale< Float >( cuT( "l_spotFactor" ), dot( l_lightToPixel, p_light.m_v3Direction() ) );
+			auto l_lightToVertex = m_writer.GetLocale< Vec3 >( cuT( "l_lightDirection" ), normalize( p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() ) );
+			auto l_spotFactor = m_writer.GetLocale< Float >( cuT( "l_spotFactor" ), dot( l_lightToVertex, p_light.m_v3Direction() ) );
+			l_ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().x();
 
 			IF( m_writer, l_spotFactor > p_light.m_fCutOff() )
 			{
@@ -494,23 +496,15 @@ namespace GLSL
 								 , OutputComponents & p_output )
 		{
 			p_output.m_v3Ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().x();
-
 			auto l_diffuseFactor = m_writer.GetLocale< Float >( cuT( "l_diffuseFactor" ), dot( p_fragmentIn.m_v3Normal, p_direction ) );
 
 			IF( m_writer, l_diffuseFactor > Float( 0 ) )
 			{
 				p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
-
 				auto l_vertexToEye = m_writer.GetLocale< Vec3 >( cuT( "l_vertexToEye" ), normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
-				auto l_lightReflect = m_writer.GetLocale< Vec3 >( cuT( "l_lightReflect" ), normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
-				auto l_specularFactor = m_writer.GetLocale< Float >( cuT( "l_specularFactor" ), -dot( l_vertexToEye, l_lightReflect ) );
-
-				IF( m_writer, l_specularFactor > Float( 0 ) )
-				{
-					l_specularFactor = pow( l_specularFactor, p_shininess );
-					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor;
-				}
-				FI;
+				auto l_lightReflect = m_writer.GetLocale< Vec3 >( cuT( "l_lightReflect" ), normalize( reflect( -p_direction, p_fragmentIn.m_v3Normal ) ) );
+				auto l_specularFactor = m_writer.GetLocale< Float >( cuT( "l_specularFactor" ), pow( max( dot( l_vertexToEye, l_lightReflect ), 0.0 ), p_shininess ) );
+				p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor;
 			}
 			FI;
 		};

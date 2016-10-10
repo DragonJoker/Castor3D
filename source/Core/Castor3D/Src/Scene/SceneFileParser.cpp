@@ -38,7 +38,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, pOverlay( nullptr )
 	, iFace1( -1 )
 	, iFace2( -1 )
-	, eLightType( eLIGHT_TYPE_COUNT )
+	, eLightType( LightType::Count )
 	, eMeshType( eMESH_TYPE_COUNT )
 	, ePrimitiveType( Topology::Count )
 	, pViewport( nullptr )
@@ -62,7 +62,7 @@ void SceneFileContext::Initialise()
 	pOverlay = nullptr;
 	iFace1 = -1;
 	iFace2 = -1;
-	eLightType = eLIGHT_TYPE_COUNT;
+	eLightType = LightType::Count;
 	eMeshType = eMESH_TYPE_COUNT;
 	ePrimitiveType = Topology::Count;
 	uiUInt16 = 0;
@@ -167,9 +167,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapNormalModes[cuT( "smooth" )] = uint32_t( eNORMAL_SMOOTH );
 	m_mapNormalModes[cuT( "flat" )] = uint32_t( eNORMAL_FLAT );
 
-	m_mapLightTypes[cuT( "point_light" )] = uint32_t( eLIGHT_TYPE_POINT );
-	m_mapLightTypes[cuT( "spot_light" )] = uint32_t( eLIGHT_TYPE_SPOT );
-	m_mapLightTypes[cuT( "directional" )] = uint32_t( eLIGHT_TYPE_DIRECTIONAL );
+	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::Point );
+	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::Spot );
+	m_mapLightTypes[cuT( "directional" )] = uint32_t( LightType::Directional );
 
 	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( Topology::Points );
 	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( Topology::Lines );

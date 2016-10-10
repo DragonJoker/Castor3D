@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique le viewport.
 		 */
-		C3D_API void Apply();
+		C3D_API void Apply()const;
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport

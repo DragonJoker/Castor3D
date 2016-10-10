@@ -101,6 +101,40 @@ namespace Castor3D
 	{
 	}
 
+	Viewport::Viewport( Viewport const & p_rhs )
+		: OwnedBy< Engine >{ *p_rhs.GetEngine() }
+		, m_type{ p_rhs.m_type }
+		, m_size{ p_rhs.m_size }
+		, m_fovY{ p_rhs.m_fovY }
+		, m_ratio{ p_rhs.m_ratio }
+		, m_left{ p_rhs.m_left }
+		, m_right{ p_rhs.m_right }
+		, m_bottom{ p_rhs.m_bottom }
+		, m_top{ p_rhs.m_top }
+		, m_near{ p_rhs.m_near }
+		, m_far{ p_rhs.m_far }
+		, m_modified{ p_rhs.m_modified }
+		, m_projection{ p_rhs.m_projection }
+	{
+	}
+
+	Viewport & Viewport::operator=( Viewport const & p_rhs )
+	{
+		m_type = p_rhs.m_type;
+		m_size = p_rhs.m_size;
+		m_fovY = p_rhs.m_fovY;
+		m_ratio = p_rhs.m_ratio;
+		m_left = p_rhs.m_left;
+		m_right = p_rhs.m_right;
+		m_bottom = p_rhs.m_bottom;
+		m_top = p_rhs.m_top;
+		m_near = p_rhs.m_near;
+		m_far = p_rhs.m_far;
+		m_modified = p_rhs.m_modified;
+		m_projection = p_rhs.m_projection;
+		return *this;
+	}
+
 	bool Viewport::Initialise()
 	{
 		m_impl = GetEngine()->GetRenderSystem()->CreateViewport( *this );
@@ -143,7 +177,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Viewport::Apply()
+	void Viewport::Apply()const
 	{
 		m_impl->Apply();
 	}

@@ -17,11 +17,11 @@ namespace Castor3D
 
 	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		String const l_type[]
+		static std::map< LightType, String > l_type
 		{
-			cuT( "directional" ),
-			cuT( "point_light" ),
-			cuT( "spot_light" ),
+			{ LightType::Directional, cuT( "directional" ) },
+			{ LightType::Point, cuT( "point" ) },
+			{ LightType::Spot, cuT( "spot" ) },
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
@@ -67,7 +67,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	LightCategory::LightCategory( eLIGHT_TYPE p_lightType )
+	LightCategory::LightCategory( LightType p_lightType )
 		: m_eLightType( p_lightType )
 		, m_colour( 1.0, 1.0, 1.0 )
 		, m_intensity( 0.0, 1.0, 1.0 )

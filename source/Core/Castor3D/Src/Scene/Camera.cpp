@@ -106,7 +106,14 @@ namespace Castor3D
 		: MovableObject{ p_name, p_scene, MovableType::Camera, p_node }
 		, m_viewport{ std::move( p_viewport ) }
 	{
-		p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
+		if ( p_scene.GetEngine()->GetRenderSystem()->GetCurrentContext() )
+		{
+			m_viewport.Initialise();
+		}
+		else
+		{
+			p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
+		}
 	}
 
 	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
@@ -147,6 +154,7 @@ namespace Castor3D
 		{
 			if ( l_modified || l_node->IsModified() )
 			{
+				l_node->GetTransformationMatrix();
 				auto const & l_position = l_node->GetDerivedPosition();
 				auto const & l_orientation = l_node->GetDerivedOrientation();
 				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
@@ -209,7 +217,7 @@ namespace Castor3D
 		}
 	}
 
-	void Camera::Apply()
+	void Camera::Apply()const
 	{
 		m_viewport.Apply();
 	}

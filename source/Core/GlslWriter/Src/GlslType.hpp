@@ -68,32 +68,6 @@ namespace GLSL
 		return l_return;
 	}
 
-	GlslWriter_API Type operator+( Type const & p_a, Type const & p_b );
-	GlslWriter_API Type operator-( Type const & p_a, Type const & p_b );
-	GlslWriter_API Type operator*( Type const & p_a, Type const & p_b );
-	GlslWriter_API Type operator/( Type const & p_a, Type const & p_b );
-	GlslWriter_API Type operator+( Type const & p_a, float p_b );
-	GlslWriter_API Type operator-( Type const & p_a, float p_b );
-	GlslWriter_API Type operator*( Type const & p_a, float p_b );
-	GlslWriter_API Type operator/( Type const & p_a, float p_b );
-	GlslWriter_API Type operator+( Type const & p_a, int p_b );
-	GlslWriter_API Type operator-( Type const & p_a, int p_b );
-	GlslWriter_API Type operator*( Type const & p_a, int p_b );
-	GlslWriter_API Type operator/( Type const & p_a, int p_b );
-	GlslWriter_API Optional< Type > operator-( Optional< Type > const & p_value );
-	GlslWriter_API Optional< Type > operator+( Type const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator-( Type const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator*( Type const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator/( Type const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator+( Optional< Type > const & p_a, Type const & p_b );
-	GlslWriter_API Optional< Type > operator-( Optional< Type > const & p_a, Type const & p_b );
-	GlslWriter_API Optional< Type > operator*( Optional< Type > const & p_a, Type const & p_b );
-	GlslWriter_API Optional< Type > operator/( Optional< Type > const & p_a, Type const & p_b );
-	GlslWriter_API Optional< Type > operator+( Optional< Type > const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator-( Optional< Type > const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator*( Optional< Type > const & p_a, Optional< Type > const & p_b );
-	GlslWriter_API Optional< Type > operator/( Optional< Type > const & p_a, Optional< Type > const & p_b );
-
 	GlslWriter_API Castor::String ToString( Type const & p_value );
 	GlslWriter_API Castor::String ParamToString( Castor::String & p_sep, Type const & p_value );
 }

@@ -114,22 +114,37 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t & p_programFlags, uint8_t p_sceneFlags );
+		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided );
 		/**
 		 *\~english
-		 *\brief		Retrieves the opaque pipeline matching the given flags.
+		 *\brief		Retrieves the opaque pipeline matching the given flags, for front face culling.
 		 *\param[in]	p_colourBlendMode	The colour blend mode.
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
-		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés.
+		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés, pour les faces avant supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetOpaquePipeline( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline & GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		/**
+		 *\~english
+		 *\brief		Retrieves the opaque pipeline matching the given flags, for back face culling.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\~french
+		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 */
+		C3D_API Pipeline & GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
@@ -293,13 +308,15 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le programme shader correspondant aux flags donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
+		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
 
 	private:
 		/**
@@ -361,13 +378,22 @@ namespace Castor3D
 		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const = 0;
 		/**
 		 *\~english
-		 *\brief		Prepares the pipeline for opaque objets render.
+		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.
 		 *\return		The ready to use pipeline.
 		 *\~french
-		 *\brief		Prépare le pipeline de rendu des objets opaques.
+		 *\brief		Prépare le pipeline de rendu des objets opaques, en supprimant les faces avant.
 		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline for opaque objets render, culling back faces.
+		 *\return		The ready to use pipeline.
+		 *\~french
+		 *\brief		Prépare le pipeline de rendu des objets opaques, en supprimant les faces arrière.
+		 *\return		Le pipeline prêt à l'utilisation.
+		 */
+		C3D_API virtual Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for transparent objets render, culling front faces.
@@ -394,9 +420,12 @@ namespace Castor3D
 		//!\~english	The render queue.
 		//!\~french		La file de rendu.
 		RenderQueue m_renderQueue;
-		//!\~english	The pipelines used to render opaque nodes.
-		//!\~french		Les pipelines de rendu utilisés pour dessiner les noeuds opaques.
-		std::map< PipelineFlags, PipelineUPtr > m_opaquePipelines;
+		//!\~english	The pipelines used to render opaque nodes' back faces.
+		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces arrière des noeuds opaques.
+		std::map< PipelineFlags, PipelineUPtr > m_frontOpaquePipelines;
+		//!\~english	The pipelines used to render opaque nodes' front faces.
+		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces avant noeuds opaques.
+		std::map< PipelineFlags, PipelineUPtr > m_backOpaquePipelines;
 		//!\~english	The pipelines used to render transparent nodes' back faces.
 		//!\~french		Les pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
 		std::map< PipelineFlags, PipelineUPtr > m_frontTransparentPipelines;

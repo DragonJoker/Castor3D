@@ -64,7 +64,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::IViewportImpl::Apply
 		 */
-		void Apply()override;
+		void Apply()const override;
 	};
 }
 

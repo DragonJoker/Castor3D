@@ -607,7 +607,7 @@ namespace Deferred
 													 , FragmentInput( l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent )
 													 , l_output );
 
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient + l_v3MapAmbient.xyz() ) +
+				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );

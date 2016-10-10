@@ -141,13 +141,15 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
 		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
 		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés.
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\return		The GPU informations.
