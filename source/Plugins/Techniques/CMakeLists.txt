@@ -1,11 +1,13 @@
 option( CASTOR_BUILDGRP_TECHNIQUE "Build Castor3D RenderTechnique plugins" TRUE )
 option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" TRUE )
 option( CASTOR_BUILD_TECHNIQUE_MSAA "Build MSAA RenderTechnique plugin" TRUE )
+option( CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA "Build Deferred Lighting & MSAA RenderTechnique plugin" TRUE )
 
 function( TechniquesInit )
 	set( Drct "no (Not wanted)" PARENT_SCOPE )
 	set( Defr "no (Not wanted)" PARENT_SCOPE )
 	set( Msaa "no (Not wanted)" PARENT_SCOPE )
+	set( DrMs "no (Not wanted)" PARENT_SCOPE )
 endfunction( TechniquesInit )
 
 function( TechniquesBuild )
@@ -35,6 +37,12 @@ function( TechniquesBuild )
 			set( Msaa ${Build} PARENT_SCOPE )
 		endif()
 
+		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
+			set( Build ${DrMs} )
+			add_subdirectory( Plugins/Techniques/DeferredMsaaTechnique )
+			set( DrMs ${Build} PARENT_SCOPE )
+		endif()
+
 		set( CastorMinLibraries
 			${CastorMinLibraries}
 			PARENT_SCOPE
@@ -57,6 +65,9 @@ function( TechniquesSummary msg )
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_MSAA} )
 			set( msg_tmp "${msg_tmp}\n    MSAA                ${Msaa}" )
+		endif()
+		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
+			set( msg_tmp "${msg_tmp}\n    Deferred & MSAA     ${DrMs}" )
 		endif()
 	endif()
 	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
@@ -90,6 +101,15 @@ function( TechniquesSetup )
 			cpack_add_component( MsaaTechnique
 				DISPLAY_NAME "MsaaTechnique"
 				DESCRIPTION "Allows rendering with MSAA technique."
+				GROUP Techniques
+				DEPENDS Castor3D
+				INSTALL_TYPES Developer Full
+			)
+		endif()
+		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED_MSAA} )
+			cpack_add_component( DeferredMsaaTechnique
+				DISPLAY_NAME "DeferredMsaaTechnique"
+				DESCRIPTION "Allows rendering with Deferred Lighting and MSAA technique."
 				GROUP Techniques
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
