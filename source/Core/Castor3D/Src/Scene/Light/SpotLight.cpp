@@ -71,19 +71,23 @@ namespace Castor3D
 
 	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
-		Matrix4x4r l_orientation;
-		GetLight()->GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
-		Point3f l_direction = l_orientation * Point3f{ 0, 0, 1 };
+		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		auto l_position = GetPosition();
+		l_position[2] = -l_position[2];
+		Point3f l_front{ 0, 0, 1 };
+		Point3f l_up{ 0, 1, 0 };
+		l_orientation.transform( l_front, l_front );
+		l_orientation.transform( l_up, l_up );
 
 		int l_offset = 0;
 		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		Point4f l_posType = GetPositionType();
-		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		matrix::look_at( m_lightSpace, GetPosition(), GetPosition() + l_direction, Point3f{ 0, 1, 0 } );
+		DoBindComponent( Point4f( l_position[0], l_position[1], l_position[2], l_posType[3] ), p_index, l_offset, p_texture );
+		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
 		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
-		DoBindComponent( l_direction, p_index, l_offset, p_texture );
+		DoBindComponent( l_front, p_index, l_offset, p_texture );
 		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );
 	}
 

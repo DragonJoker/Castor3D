@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 */
-		C3D_API void DoRender( SceneRenderNodes & p_nodes, TextureLayoutArray const & p_depthMaps, Camera & p_camera, uint32_t p_frameTime );
+		C3D_API void DoRender( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Renders opaque render nodes.
@@ -257,7 +257,7 @@ namespace Castor3D
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, TextureLayoutArray const & p_depthMaps, Camera const & p_camera );
+		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders transparent render nodes.
@@ -270,7 +270,7 @@ namespace Castor3D
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, TextureLayoutArray const & p_depthMaps, Camera const & p_camera );
+		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -287,7 +287,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -304,7 +304,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -321,7 +321,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -338,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -355,7 +355,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -372,7 +372,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
@@ -389,7 +389,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
@@ -406,7 +406,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders objects sorted by distance to camera.
@@ -423,7 +423,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -440,7 +440,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
@@ -457,7 +457,7 @@ namespace Castor3D
 		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 */
-		C3D_API void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, TextureLayoutArray const & p_depthMaps, bool p_register = true );
+		C3D_API void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register = true );
 
 	private:
 		/**
@@ -471,11 +471,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		C3D_API void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		C3D_API void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */

@@ -379,8 +379,8 @@ namespace DeferredMsaa
 		UBO_PASS( l_writer );
 
 		// Fragment Inputs
-		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
-		auto vtx_view = l_writer.GetInput< Vec4 >( cuT( "vtx_view" ) );
+		auto vtx_worldSpacePosition( l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) ) );
+		auto vtx_worldViewSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
@@ -414,24 +414,24 @@ namespace DeferredMsaa
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, c3d_v4MatSpecular.xyz() );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_vertex );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_worldSpacePosition );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
-			out_c3dDiffuse = vec4( l_v3Diffuse, length( vtx_view ) );
+			out_c3dDiffuse = vec4( l_v3Diffuse, length( vtx_worldViewSpacePosition ) );
 			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
 			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, vtx_view.z() );
+			out_c3dEmissive = vec4( l_v3Emissive, vtx_worldViewSpacePosition.z() );
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 	}
 

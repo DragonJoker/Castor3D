@@ -202,11 +202,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */

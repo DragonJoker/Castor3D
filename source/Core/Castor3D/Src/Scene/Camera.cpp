@@ -163,9 +163,6 @@ namespace Castor3D
 				l_orientation.transform( l_right, l_right );
 				l_orientation.transform( l_up, l_up );
 				l_orientation.transform( l_front, l_front );
-				point::normalise( l_up );
-				point::normalise( l_right );
-				point::normalise( l_front );
 
 				// Update frustum
 				// Retrieve near and far planes' dimensions

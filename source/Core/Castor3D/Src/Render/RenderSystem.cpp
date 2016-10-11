@@ -161,7 +161,8 @@ namespace Castor3D
 			auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
 
 			// Shader outputs
-			auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
+			auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+			auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 			auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 			auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 			auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -170,8 +171,6 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_mtxVP = l_writer.GetLocale< Mat4 >( cuT( "l_mtxVP" ), c3d_mtxProjection * c3d_mtxView );
-
 				auto l_pos = l_writer.GetLocale< Vec3 >( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
 				auto l_toCamera = l_writer.GetLocale< Vec3 >( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
 				auto l_up = l_writer.GetLocale< Vec3 >( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
@@ -187,8 +186,9 @@ namespace Castor3D
 
 				{
 					l_pos -= ( l_left * Float( 0.5 ) );
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
+					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
+					vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
+					gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
@@ -199,8 +199,9 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
+					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
+					vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
+					gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
@@ -212,8 +213,9 @@ namespace Castor3D
 				{
 					l_pos -= l_up;
 					l_pos += l_left;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
+					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
+					vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
+					gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
@@ -224,8 +226,9 @@ namespace Castor3D
 
 				{
 					l_pos += l_up;
-					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
+					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
+					vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
+					gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
@@ -274,8 +277,8 @@ namespace Castor3D
 		UBO_ANIMATION( l_writer, p_programFlags );
 
 		// Outputs
-		auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
-		auto vtx_view = l_writer.GetOutput< Vec4 >( cuT( "vtx_view" ) );
+		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -324,8 +327,10 @@ namespace Castor3D
 			}
 
 			vtx_texture = l_v3Texture;
-			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).xyz();
-			vtx_view = c3d_mtxView * l_mtxModel * l_v4Vertex;
+			l_v4Vertex = l_mtxModel * l_v4Vertex;
+			vtx_worldSpacePosition = l_v4Vertex.xyz();
+			l_v4Vertex = c3d_mtxView * l_v4Vertex;
+			vtx_worldViewSpacePosition = l_v4Vertex.xyz();
 
 			if ( p_invertNormals )
 			{
@@ -339,7 +344,7 @@ namespace Castor3D
 			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
 			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
 			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * vtx_view;
+			gl_Position = c3d_mtxProjection * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

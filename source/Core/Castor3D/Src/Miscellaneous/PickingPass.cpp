@@ -44,7 +44,7 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, TextureLayoutArray{} );
+				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, DepthMapArray{} );
 			}
 		};
 
@@ -53,7 +53,7 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, TextureLayoutArray{} );
+				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, DepthMapArray{} );
 			}
 		};
 
@@ -118,7 +118,7 @@ namespace Castor3D
 
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
-						l_renderNode.Render();
+						l_renderNode.Render( DepthMapArray{} );
 					}
 				}
 
@@ -525,9 +525,9 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				p_renderNodes[0].BindPass( MASK_MTXMODE_MODEL );
+				p_renderNodes[0].BindPass( DepthMapArray{}, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass();
+				p_renderNodes[0].UnbindPass( DepthMapArray{} );
 			}
 		} );
 	}
@@ -563,9 +563,9 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				p_renderNodes[0].BindPass( MASK_MTXMODE_MODEL );
+				p_renderNodes[0].BindPass( DepthMapArray{}, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass();
+				p_renderNodes[0].UnbindPass( DepthMapArray{} );
 			}
 		} );
 	}
@@ -620,13 +620,13 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );

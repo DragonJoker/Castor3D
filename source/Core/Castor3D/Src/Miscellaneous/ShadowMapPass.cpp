@@ -76,7 +76,7 @@ namespace Castor3D
 				{
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
-						l_renderNode.Render();
+						l_renderNode.Render( DepthMapArray{} );
 					}
 				}
 			}
@@ -87,7 +87,9 @@ namespace Castor3D
 		: RenderPass{ ShadowMap, p_engine }
 		, m_light{ p_light }
 		, m_scene{ p_scene }
+		, m_depthTexture{ p_engine }
 	{
+		m_depthTexture.SetTexture( GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite ) );
 		m_renderQueue.AddScene( m_scene );
 	}
 
@@ -103,25 +105,25 @@ namespace Castor3D
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-			m_depthTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite );
-			m_depthTexture->GetImage().SetSource( p_size, PixelFormat::D32F );
-			auto l_size = m_depthTexture->GetImage().GetDimensions();
+			auto l_texture = m_depthTexture.GetTexture();
+			l_texture->GetImage().SetSource( p_size, PixelFormat::D32F );
+			auto l_size = l_texture->GetImage().GetDimensions();
 
-			l_return = m_depthTexture->Create();
+			l_return = l_texture->Create();
 
 			if ( l_return )
 			{
-				l_return = m_depthTexture->Initialise();
+				l_return = l_texture->Initialise();
 
 				if ( !l_return )
 				{
-					m_depthTexture->Destroy();
+					l_texture->Destroy();
 				}
 			}
 
 			if ( l_return )
 			{
-				m_depthAttach = m_frameBuffer->CreateAttachment( m_depthTexture );
+				m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 				l_return = m_frameBuffer->Create();
 			}
 
@@ -131,7 +133,7 @@ namespace Castor3D
 
 				if ( l_return && m_frameBuffer->Bind( FrameBufferMode::Config ) )
 				{
-					m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, m_depthTexture->GetType() );
+					m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, l_texture->GetType() );
 					l_return = m_frameBuffer->IsComplete();
 					m_frameBuffer->Unbind();
 				}
@@ -180,13 +182,11 @@ namespace Castor3D
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
-			m_depthTexture->Cleanup();
+			m_depthTexture.Cleanup();
 
-			m_depthTexture->Destroy();
 			m_frameBuffer->Destroy();
 
 			m_depthAttach.reset();
-			m_depthTexture.reset();
 			m_frameBuffer.reset();
 		}
 
@@ -202,7 +202,7 @@ namespace Castor3D
 	{
 		m_cameraNode->SetPosition( m_light.GetParent()->GetDerivedPosition() );
 		m_cameraNode->SetOrientation( m_light.GetParent()->GetDerivedOrientation() );
-		auto l_size = m_depthTexture->GetImage().GetDimensions();
+		auto l_size = m_depthTexture.GetTexture()->GetImage().GetDimensions();
 
 		switch ( m_light.GetLightType() )
 		{
@@ -231,18 +231,18 @@ namespace Castor3D
 
 #if 0
 
-			if ( m_depthTexture->Bind( 0 ) )
+			if ( m_depthTexture.GetTexture()->Bind( 0 ) )
 			{
-				auto l_data = m_depthTexture->Lock( 0, AccessType::Read );
+				auto l_data = m_depthTexture.GetTexture()->Lock( 0, AccessType::Read );
 
 				if ( l_data )
 				{
-					auto l_dimensions = m_depthTexture->GetImage().GetDimensions();
-					Image l_image{ cuT( "tmp" ), l_dimensions, m_depthTexture->GetImage().GetPixelFormat(), l_data, m_depthTexture->GetImage().GetPixelFormat() };
+					auto l_dimensions = m_depthTexture.GetTexture()->GetImage().GetDimensions();
+					Image l_image{ cuT( "tmp" ), l_dimensions, m_depthTexture.GetTexture()->GetImage().GetPixelFormat(), l_data, m_depthTexture.GetTexture()->GetImage().GetPixelFormat() };
 					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_ShadowMap.hdr" ) );
 				}
 
-				m_depthTexture->Unbind( 0 );
+				m_depthTexture.GetTexture()->Unbind( 0 );
 			}
 
 #endif
@@ -346,9 +346,9 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				p_renderNodes[0].BindPass( MASK_MTXMODE_MODEL );
+				p_renderNodes[0].BindPass( DepthMapArray{}, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass();
+				p_renderNodes[0].UnbindPass( DepthMapArray{} );
 			}
 		} );
 	}
@@ -377,11 +377,11 @@ namespace Castor3D
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
 		// Fragment Outputs
-		auto pxl_fFragDepth ( l_writer.GetFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
+		auto pxl_fFragDepth( l_writer.GetFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			//pxl_fFragDepth = gl_FragCoord.z();
+			pxl_fFragDepth = gl_FragCoord.z();
 		} );
 
 		return l_writer.Finalise();
@@ -392,13 +392,13 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void ShadowMapPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void ShadowMapPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void ShadowMapPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void ShadowMapPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );

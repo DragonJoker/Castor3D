@@ -493,19 +493,22 @@ namespace GLSL
 
 			IF( m_writer, l_diffuseFactor > Float( 0 ) )
 			{
-				p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
 				auto l_vertexToEye = m_writer.GetLocale< Vec3 >( cuT( "l_vertexToEye" ), normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
 				auto l_lightReflect = m_writer.GetLocale< Vec3 >( cuT( "l_lightReflect" ), normalize( reflect( -p_direction, p_fragmentIn.m_v3Normal ) ) );
 				auto l_specularFactor = m_writer.GetLocale< Float >( cuT( "l_specularFactor" ), pow( max( dot( l_vertexToEye, l_lightReflect ), 0.0 ), p_shininess ) );
-				p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor;
 
 				if ( m_shadows )
 				{
 					auto c3d_mapShadow = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapShadow" ) );
 					Shadow l_shadows{ m_writer };
 					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), c3d_mapShadow ) );
-					p_output.m_v3Diffuse *= l_shadow;
-					p_output.m_v3Specular *= l_shadow;
+					p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor * l_shadow;
+					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor * l_shadow;
+				}
+				else
+				{
+					p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
+					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor;
 				}
 			}
 			FI;

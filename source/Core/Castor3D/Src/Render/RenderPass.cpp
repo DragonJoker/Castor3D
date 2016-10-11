@@ -159,14 +159,14 @@ namespace Castor3D
 		};
 	}
 
-	void RenderPass::UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void RenderPass::UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
 		DoUpdateOpaquePipeline( p_camera, p_pipeline, p_depthMaps );
 	}
 
-	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const
+	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );

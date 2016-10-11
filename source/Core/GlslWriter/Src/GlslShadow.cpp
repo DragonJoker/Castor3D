@@ -21,6 +21,7 @@ namespace GLSL
 			auto l_closestDepth = m_writer.GetLocale< Float >( cuT( "l_closestDepth" ), texture( p_map, l_lightSpacePosition.xy() ).r() );
 			// And get the current depth of the fragment, from light's point of view.
 			auto l_currentDepth = m_writer.GetLocale< Float >( cuT( "l_currentDepth" ), l_lightSpacePosition.z() );
+			// Check whether the fragment is in shadow or not.
 			m_writer.Return( m_writer.Ternary< Float >( l_currentDepth > l_closestDepth, Float( 1.0f ), Float( 0.0f ) ) );
 		};
 		m_writer.ImplementFunction< Float >( cuT( "ComputeShadow" )

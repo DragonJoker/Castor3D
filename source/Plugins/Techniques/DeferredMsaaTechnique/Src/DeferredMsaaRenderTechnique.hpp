@@ -154,7 +154,7 @@ namespace DeferredMsaa
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline, Castor3D::TextureLayoutArray const & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline, Castor3D::DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\~english
 		 *\brief		Creates deferred rendering related stuff.

@@ -28,6 +28,7 @@ SOFTWARE.
 #include "Render/Viewport.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
 {
@@ -126,9 +127,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de profondeur contenant le résultat du rendu.
 		 */
-		inline TextureLayout const & GetResult()const
+		inline TextureUnit const & GetResult()const
 		{
-			return *m_depthTexture;
+			return m_depthTexture;
 		}
 		/**
 		 *\~english
@@ -173,11 +174,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const override;
+		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
@@ -217,7 +218,7 @@ namespace Castor3D
 		Castor::Matrix4x4r m_view;
 		//!\~english	The texture receiving the render.
 		//!\~french		La texture recevant le rendu.
-		TextureLayoutSPtr m_depthTexture;
+		TextureUnit m_depthTexture;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;

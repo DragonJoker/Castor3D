@@ -32,8 +32,6 @@ SOFTWARE.
 
 namespace Castor3D
 {
-	using TextureLayoutArray = std::vector< std::reference_wrapper< TextureLayout const > >;
-
 	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
 	{
 		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
@@ -252,7 +250,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const;
+		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -263,7 +261,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const;
+		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -364,7 +362,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -375,7 +373,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, TextureLayoutArray const & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.
