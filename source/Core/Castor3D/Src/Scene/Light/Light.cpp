@@ -83,8 +83,8 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			m_notifyIndex = l_node->RegisterObject( std::bind( &Light::OnNodeChanged, this ) );
-			OnNodeChanged();
+			m_notifyIndex = l_node->RegisterObject( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *l_node );
 		}
 		else
 		{
@@ -131,13 +131,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Light::OnNodeChanged()
+	void Light::OnNodeChanged( SceneNode const & p_node )
 	{
-		SceneNodeSPtr l_node = GetParent();
-		Point4f l_ptPosType = GetPositionType();
-		l_ptPosType[0] = float( l_node->GetDerivedPosition()[0] );
-		l_ptPosType[1] = float( l_node->GetDerivedPosition()[1] );
-		l_ptPosType[2] = float( l_node->GetDerivedPosition()[2] );
-		m_category->SetPositionType( l_ptPosType );
+		auto l_posType = GetPositionType();
+		auto l_derived = p_node.GetDerivedPosition();
+		l_posType[0] = float( l_derived[0] );
+		l_posType[1] = float( l_derived[1] );
+		l_posType[2] = float( l_derived[2] );
+		m_category->SetPositionType( l_posType );
 	}
 }

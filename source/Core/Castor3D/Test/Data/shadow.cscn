@@ -67,18 +67,18 @@ scene "Scene"
 		position 0.0 30.0 0.0
 	}
 
-	object "SpotLight"
-	{
-		parent "SpotLightNode"
-		cast_shadows false
+	// object "SpotLight"
+	// {
+		// parent "SpotLightNode"
+		// cast_shadows false
 
-		mesh "LightMesh"
-		{
-			type cube 1.0 1.0 4.0
-		}
+		// mesh "LightMesh"
+		// {
+			// type cube 1.0 1.0 4.0
+		// }
 
-		material "WhiteEmit"
-	}
+		// material "WhiteEmit"
+	// }
 
 	object "Plane"
 	{

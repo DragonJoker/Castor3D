@@ -423,7 +423,7 @@ namespace Castor3D
 		}
 
 	protected:
-		void OnNodeChanged();
+		void OnNodeChanged( SceneNode const & p_node );
 
 	protected:
 		//!\~english	Tells the light is enabled.

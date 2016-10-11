@@ -1550,73 +1550,65 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_strType;
-		p_params[0]->Get( l_strType );
-		eMESH_TYPE l_type = eMESH_TYPE_CUSTOM;
+		uint32_t l_uiType;
+		p_params[0]->Get( l_uiType );
+		eMESH_TYPE l_type = eMESH_TYPE( l_uiType );
 		UIntArray l_arrayFaces;
 		RealArray l_arraySizes;
 		String l_strParams;
-		p_params[0]->Get( l_strParams );
+
+		if ( p_params.size() > 1 )
+		{
+			p_params[1]->Get( l_strParams );
+		}
 
 		if ( !l_parsingContext->pMesh )
 		{
-			if ( l_strType != cuT( "custom" ) )
-			{
-				StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
-				l_strType = l_arrayMeshInfos[0];
+			StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
+			auto l_it = l_arrayMeshInfos.begin();
 
-				if ( l_strType == cuT( "cube" ) )
-				{
-					l_type = eMESH_TYPE_CUBE;
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "cone" ) )
-				{
-					l_type = eMESH_TYPE_CONE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "cylinder" ) )
-				{
-					l_type = eMESH_TYPE_CYLINDER;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "sphere" ) )
-				{
-					l_type = eMESH_TYPE_SPHERE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-				}
-				else if ( l_strType == cuT( "icosahedron" ) )
-				{
-					l_type = eMESH_TYPE_ICOSAHEDRON;
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
-				}
-				else if ( l_strType == cuT( "plane" ) )
-				{
-					l_type = eMESH_TYPE_PLANE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
-				}
-				else if ( l_strType == cuT( "torus" ) )
-				{
-					l_type = eMESH_TYPE_TORUS;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
-				}
-				else
-				{
-					PARSING_ERROR( cuT( "Unknown mesh type : " ) + l_strType );
-				}
+			switch ( l_type )
+			{
+			case eMESH_TYPE_CUBE:
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_CONE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_CYLINDER:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_SPHERE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_ICOSAHEDRON:
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_PLANE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_TORUS:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
 			}
 
 			if ( l_parsingContext->pScene )

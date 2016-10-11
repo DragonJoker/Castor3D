@@ -177,18 +177,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the mesh buffers creation status
-		 *\return		The mesh buffers creation status
-		 *\~french
-		 *\brief		Récupère le statut de création des tampons du maillage
-		 *\return		Le statut de création des tampons du maillage
-		 */
-		inline bool HasListsCreated()const
-		{
-			return m_listCreated;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the visibility status
 		 *\return		The visibility status
 		 *\~french

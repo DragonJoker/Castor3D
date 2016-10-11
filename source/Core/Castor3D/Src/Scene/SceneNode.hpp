@@ -47,7 +47,7 @@ namespace Castor3D
 		, public Castor::OwnedBy< Scene >
 		, public Castor::Named
 	{
-		typedef std::function< void() > NodeChangedNotifyFunction;
+		typedef std::function< void( SceneNode const & ) > NodeChangedNotifyFunction;
 
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
@@ -117,7 +117,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~SceneNode();
+		C3D_API ~SceneNode();
+		/**
+		 *\~english
+		 *\brief		Updates the scene node matrices.
+		 *\~french
+		 *\brief		Met à jour les matrices du noeud.
+		 */
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Attaches a MovableObject to the node
@@ -303,7 +310,7 @@ namespace Castor3D
 		 *\brief		Récupère la position absolue
 		 *\return		La valeur
 		 */
-		C3D_API Castor::Point3r GetDerivedPosition();
+		C3D_API Castor::Point3r GetDerivedPosition()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute orientation
@@ -312,7 +319,7 @@ namespace Castor3D
 		 *\brief		Récupère l'orientation absolue
 		 *\return		La valeur
 		 */
-		C3D_API Castor::Quaternion GetDerivedOrientation();
+		C3D_API Castor::Quaternion GetDerivedOrientation()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute scale
@@ -321,7 +328,7 @@ namespace Castor3D
 		 *\brief		Récupère l'échelle absolue
 		 *\return		La valeur
 		 */
-		C3D_API Castor::Point3r GetDerivedScale();
+		C3D_API Castor::Point3r GetDerivedScale()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the relative transformation matrix
@@ -330,7 +337,7 @@ namespace Castor3D
 		 *\brief		Récupère la matrice de transformation relative
 		 *\return		La valeur
 		 */
-		C3D_API Castor::Matrix4x4r const & GetTransformationMatrix();
+		C3D_API Castor::Matrix4x4r const & GetTransformationMatrix()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute transformation matrix
@@ -339,7 +346,7 @@ namespace Castor3D
 		 *\brief		Récupère la matrice de transformation absolue
 		 *\return		La valeur
 		 */
-		C3D_API Castor::Matrix4x4r const & GetDerivedTransformationMatrix();
+		C3D_API Castor::Matrix4x4r const & GetDerivedTransformationMatrix()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the relative position
@@ -386,7 +393,7 @@ namespace Castor3D
 		 *\param[out]	p_axis	Reçoit l'axe
 		 *\param[out]	p_angle	Reçoit l'angle
 		 */
-		inline void GetAxisAngle( Castor::Point3r & p_axis, Castor::Angle & p_angle )
+		inline void GetAxisAngle( Castor::Point3r & p_axis, Castor::Angle & p_angle )const
 		{
 			m_orientation.to_axis_angle( p_axis, p_angle );
 		}
@@ -556,7 +563,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'enfant
 		 *\return		La valeur, nullptr si non trouvé
 		 */
-		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
+		inline SceneNodeSPtr GetChild( Castor::String const & p_name )const
 		{
 			return ( m_children.find( p_name ) != m_children.end() ? m_children.find( p_name )->second.lock() : nullptr );
 		}
@@ -625,21 +632,21 @@ namespace Castor3D
 		//!\~english Tells if it is displayable. A node is displayable if his parent is either displayable or the root node	\~french Dit si le noeud est affichable. Il est affichable si son parent est le noeud racine ou s'il est affichable.
 		bool m_displayable;
 		//!\~english The visible status. If a node is hidden, all objects attached to it are hidden	\~french Le statut de visibilité. Si un noeud est caché, tous les objets qui y sont attachés sont cachés aussi.
-		bool m_visible;
+		bool m_visible{ true };
 		//!\~english  The relative orientation of the node	\~french L'orientation du noeud, relative au parent
 		Castor::Quaternion m_orientation;
 		//!\~english  The relative position of the node	\~french La position du noeud, relative au parent
-		Castor::Point3r m_position;
+		Castor::Point3r m_position{ 0.0_r, 0.0_r, 0.0_r };
 		//!\~english  The relative scale transform value of the node	\~french La mise à l'échelle du noeud, relative au parent
-		Castor::Point3r m_scale;
+		Castor::Point3r m_scale{ 1.0_r, 1.0_r, 1.0_r };
 		//!\~english  The reative transformation matrix	\~french La matrice de transformation, relative au parent
-		Castor::Matrix4x4r m_transform;
+		Castor::Matrix4x4r m_transform{ 1.0_r };
 		//!\~english Tells the relative transformation matrix needs recomputation	\~french Dit si la matrice de transformation relative doit être recalculée
-		bool m_mtxChanged;
+		bool m_mtxChanged{ true };
 		//!\~english  The absolute transformation matrix	\~french la matrice de transformation absolue
-		Castor::Matrix4x4r m_derivedTransform;
+		Castor::Matrix4x4r m_derivedTransform{ 1.0_r };
 		//!\~english Tells the absolute transformation matrix needs recomputation	\~french Dit si la matrice de transformation absolue doit être recalculée
-		bool m_derivedMtxChanged;
+		bool m_derivedMtxChanged{ true };
 		//!\~english  This node's parent	\~french Le noeud parent
 		SceneNodeWPtr m_parent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud

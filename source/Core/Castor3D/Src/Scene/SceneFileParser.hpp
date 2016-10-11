@@ -244,6 +244,7 @@ namespace Castor3D
 		UIntStrMap m_mapTextTexturingModes;
 		UIntStrMap m_mapLineSpacingModes;
 		UIntStrMap m_fogTypes;
+		UIntStrMap m_mapMeshTypes;
 	};
 }
 

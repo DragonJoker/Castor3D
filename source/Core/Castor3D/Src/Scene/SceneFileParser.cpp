@@ -263,6 +263,16 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::Linear );
 	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::Exponential );
 	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::SquaredExponential );
+
+	m_mapMeshTypes[cuT( "custom" )] = uint32_t( eMESH_TYPE_CUSTOM );
+	m_mapMeshTypes[cuT( "cone" )] = uint32_t( eMESH_TYPE_CONE );
+	m_mapMeshTypes[cuT( "cylinder" )] = uint32_t( eMESH_TYPE_CYLINDER );
+	m_mapMeshTypes[cuT( "sphere" )] = uint32_t( eMESH_TYPE_SPHERE );
+	m_mapMeshTypes[cuT( "cube" )] = uint32_t( eMESH_TYPE_CUBE );
+	m_mapMeshTypes[cuT( "torus" )] = uint32_t( eMESH_TYPE_TORUS );
+	m_mapMeshTypes[cuT( "plane" )] = uint32_t( eMESH_TYPE_PLANE );
+	m_mapMeshTypes[cuT( "icosahedron" )] = uint32_t( eMESH_TYPE_ICOSAHEDRON );
+	m_mapMeshTypes[cuT( "projection" )] = uint32_t( eMESH_TYPE_PROJECTION );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -412,7 +422,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ePARAMETER_TYPE_UINT16 >(), MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "}" ), Parser_ObjectMaterialsEnd );
 
-	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapMeshTypes ), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
