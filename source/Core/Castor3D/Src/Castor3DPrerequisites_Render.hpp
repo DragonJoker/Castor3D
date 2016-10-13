@@ -493,7 +493,7 @@ namespace Castor3D
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
 		uint16_t m_textureFlags;
-		uint8_t m_programFlags;
+		uint16_t m_programFlags;
 		uint8_t m_sceneFlags;
 	};
 

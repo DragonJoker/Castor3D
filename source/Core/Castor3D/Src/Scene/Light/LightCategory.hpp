@@ -86,16 +86,20 @@ namespace Castor3D
 	private:
 		friend class Light;
 
-	public:
+	protected:
 		/**
 		 *\~english
-		 *\brief		The constructor, used by clone function
-		 *\param[in]	p_lightType	The light category type
+		 *\brief		Constructor.
+		 *\param[in]	p_lightType	The light category type.
+		 *\param[in]	p_viewport	The shadow map render viewport.
 		 *\~french
-		 *\brief		Le constructeur utilisé par la fonction de clonage
-		 *\param[in]	p_lightType	Le type de catégorie de lumière
+		 *\brief		Constructeur.
+		 *\param[in]	p_lightType	Le type de catégorie de lumière.
+		 *\param[in]	p_viewport	Le viewport utilisé pour le rrendu de la map d'ombres.
 		 */
-		C3D_API explicit LightCategory( LightType p_lightType );
+		C3D_API explicit LightCategory( LightType p_lightType, Viewport & p_viewport );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,6 +107,15 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~LightCategory();
+		/**
+		 *\~english
+		 *\brief		Updates the light viewport.
+		 *\param[in]	p_size	The viewport dimensions.
+		 *\~french
+		 *\brief		Met le viewport de la source à jour.
+		 *\param[in]	p_size	Les dimensions du viewport.
+		 */
+		C3D_API virtual void Update( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a LightCategroy specific TextLoader.
@@ -277,6 +290,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The Light space view matrix.
+		 *\~french
+		 *\return		La matrice vue dans l'espace lumière.
+		 */
+		inline Castor::Matrix4x4f const & GetLightSpaceView()const
+		{
+			return m_lightSpace;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the parent light
 		 *\return		The value
 		 *\~french
@@ -354,6 +377,9 @@ namespace Castor3D
 		//!\~english	The light source space transformation matrix.
 		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
 		mutable Castor::Matrix4x4f m_lightSpace;
+		//!\~english	The shadow map rendering viewport.
+		//\~french		Le viewport de rendu de la mp d'ombres.
+		Viewport & m_viewport;
 
 	private:
 		//!\~english	The light type.
@@ -364,10 +390,10 @@ namespace Castor3D
 		Light * m_pLight{ nullptr };
 		//!\~english	The colour.
 		//!\~french		La couleur.
-		Castor::Point3f m_colour;
+		Castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
 		//!\~english	The intensity values.
 		//!\~french		Les valeurs d'intensité.
-		Castor::Point3f m_intensity;
+		Castor::Point3f m_intensity{ 0.0, 1.0, 1.0 };
 		//!\~english	The position and type of the light (type is in 4th coordinate).
 		//!\~french		La position et le type de la lumière (le type est dans la 4ème coordonnée).
 		Castor::Point4f m_positionType;

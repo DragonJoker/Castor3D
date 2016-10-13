@@ -84,16 +84,18 @@ namespace Castor3D
 	private:
 		friend class Scene;
 
-	public:
+	private:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
+		 *\brief		Constructor.
+		 *\param[in]	p_viewport	The shadow map render viewport.
 		 *\~french
-		 *\brief		Constructeur
-		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\brief		Constructeur.
+		 *\param[in]	p_viewport	Le viewport utilisé pour le rendu de la map d'ombres.
 		 */
-		C3D_API DirectionalLight();
+		C3D_API DirectionalLight( Viewport & p_viewport );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,13 +105,19 @@ namespace Castor3D
 		C3D_API ~DirectionalLight();
 		/**
 		 *\~english
-		 *\brief		Creation function, used by the Factory
-		 *\return		The light
+		 *\brief		Creation function, used by Factory.
+		 *\param[in]	p_viewport	The shadow map render viewport.
+		 *\return		A light source.
 		 *\~french
-		 *\brief		Fonction de création utilisée par la fabrique
-		 *\return		La lumière
+		 *\brief		Fonction de création utilisée par Factory.
+		 *\param[in]	p_viewport	Le viewport utilisé pour le rendu de la map d'ombres.
+		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategorySPtr Create();
+		C3D_API static LightCategorySPtr Create( Viewport & p_viewport );
+		/**
+		 *\copydoc		Castor::LightCategory::Update
+		 */
+		C3D_API void Update( Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */

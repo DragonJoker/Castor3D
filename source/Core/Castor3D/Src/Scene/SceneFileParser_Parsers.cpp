@@ -3570,7 +3570,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pSceneNode && l_parsingContext->pViewport )
 		{
-			l_parsingContext->pScene->GetCameraCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, *l_parsingContext->pViewport );
+			l_parsingContext->pScene->GetCameraCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, std::move( *l_parsingContext->pViewport ) );
+			l_parsingContext->pViewport.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()

@@ -27,6 +27,8 @@ SOFTWARE.
 
 #include "LightCategory.hpp"
 
+#include "Render/Viewport.hpp"
+
 #include <Design/OwnedBy.hpp>
 
 namespace Castor3D
@@ -104,6 +106,15 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API ~Light();
+		/**
+		 *\~english
+		 *\brief		Updates the light viewport.
+		 *\param[in]	p_size	The viewport dimensions.
+		 *\~french
+		 *\brief		Met le viewport de la source à jour.
+		 *\param[in]	p_size	Les dimensions du viewport.
+		 */
+		C3D_API void Update( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
@@ -421,6 +432,26 @@ namespace Castor3D
 		{
 			m_castShadows = p_value;
 		}
+		/**
+		 *\~english
+		 *\return		The shadow map rendering viewport.
+		 *\~french
+		 *\return		The viewport de rendu de shadow map.
+		 */
+		inline Viewport const & GetViewport()const
+		{
+			return m_viewport;
+		}
+		/**
+		 *\~english
+		 *\return		The Light space view matrix.
+		 *\~french
+		 *\return		La matrice vue dans l'espace lumière.
+		 */
+		inline Castor::Matrix4x4f const & GetLightSpaceView()const
+		{
+			return m_category->GetLightSpaceView();
+		}
 
 	protected:
 		void OnNodeChanged( SceneNode const & p_node );
@@ -435,6 +466,9 @@ namespace Castor3D
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;
+		//!\~english	The shadow map rendering viewport.
+		//\~french		Le viewport de rendu de la mp d'ombres.
+		Viewport m_viewport;
 	};
 }
 

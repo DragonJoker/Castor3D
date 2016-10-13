@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 *\return		Le programme trouvé ou créé.
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API ShaderProgramSPtr GetBillboardProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
+		C3D_API ShaderProgramSPtr GetBillboardProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Adds a billboards shader program corresponding to given flags.
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a matrix frame variable buffer.
@@ -144,7 +144,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateMatrixBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		C3D_API FrameVariableBuffer & CreateMatrixBuffer( ShaderProgram & p_program, uint16_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a scene frame variable buffer.
@@ -159,7 +159,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateSceneBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		C3D_API FrameVariableBuffer & CreateSceneBuffer( ShaderProgram & p_program, uint16_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a pass frame variable buffer.
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreatePassBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		C3D_API FrameVariableBuffer & CreatePassBuffer( ShaderProgram & p_program, uint16_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates an animation frame variable buffer.
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié.
 		 *\return		Le frame variable buffer.
 		 */
-		C3D_API FrameVariableBuffer & CreateAnimationBuffer( ShaderProgram & p_program, uint8_t p_programFlags, uint32_t p_shaderMask );
+		C3D_API FrameVariableBuffer & CreateAnimationBuffer( ShaderProgram & p_program, uint16_t p_programFlags, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables.

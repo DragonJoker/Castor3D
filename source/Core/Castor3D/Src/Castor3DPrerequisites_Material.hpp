@@ -516,7 +516,7 @@ namespace Castor3D
 	//! Material pointer map
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
 	//! TextureUnit reference array
-	DECLARE_VECTOR( std::reference_wrapper< TextureUnit const >, DepthMap );
+	DECLARE_VECTOR( std::reference_wrapper< TextureUnit >, DepthMap );
 
 	//@}
 }

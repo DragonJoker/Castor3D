@@ -209,14 +209,13 @@ namespace GlRender
 		String l_log;
 		int l_infologLength = 0;
 		int l_charsWritten = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_charsWritten );
+		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_infologLength );
 
 		if ( l_infologLength > 0 )
 		{
-			char * infoLog = new char[l_infologLength];
-			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, infoLog );
-			l_log = string::string_cast< xchar >( infoLog );
-			delete[] infoLog;
+			std::vector< char > l_infoLog( l_infologLength + 1 );
+			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, l_infoLog.data() );
+			l_log = string::string_cast< xchar >( l_infoLog.data() );
 		}
 
 		if ( !l_log.empty() )

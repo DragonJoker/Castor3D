@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le noeud de scène parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport & p_viewport );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport && p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport

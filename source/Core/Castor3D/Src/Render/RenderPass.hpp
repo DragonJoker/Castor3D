@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided );
+		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for front face culling.
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline & GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for back face culling.
@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline & GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
@@ -159,7 +159,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline & GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for back face culling.
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline & GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -250,7 +250,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const;
+		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -261,7 +261,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const;
+		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
 
 	private:
 		/**
@@ -325,7 +325,7 @@ namespace Castor3D
 		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
 		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( uint8_t & p_programFlags )const;
+		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -338,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -351,7 +351,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
@@ -362,7 +362,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -373,7 +373,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.

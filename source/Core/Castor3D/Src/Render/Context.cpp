@@ -281,6 +281,7 @@ namespace Castor3D
 		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		return l_program;
 	}
 }

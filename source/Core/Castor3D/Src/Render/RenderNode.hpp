@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 */
-		C3D_API virtual void Render( DepthMapArray const & p_depthMaps ) = 0;
+		C3D_API virtual void Render( DepthMapArray & p_depthMaps ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the given pass to the render node.
@@ -121,14 +121,14 @@ namespace Castor3D
 		 *\brief		Active la passe donnée pour le noeud de rendu.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API virtual void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags ) = 0;
+		C3D_API virtual void BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds the render node's pass.
 		 *\~french
 		 *\brief		Désctive la passe du noeud de rendu.
 		 */
-		C3D_API virtual void UnbindPass( DepthMapArray const & p_depthMaps )const = 0;
+		C3D_API virtual void UnbindPass( DepthMapArray & p_depthMaps )const = 0;
 
 		//!\~english	The scene render node.
 		//!\~french		Le noeud de rendu de scène.
@@ -167,11 +167,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
 		 */
-		C3D_API void Render( DepthMapArray const & p_depthMaps )override;
+		C3D_API void Render( DepthMapArray & p_depthMaps )override;
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
 		 */
-		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const override;
+		C3D_API void UnbindPass( DepthMapArray & p_depthMaps )const override;
 
 		//!\~english	The object's data.
 		//!\~french		Les données de l'objet.
@@ -203,11 +203,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
 		 */
-		C3D_API void Render( DepthMapArray const & p_depthMaps )override;
+		C3D_API void Render( DepthMapArray & p_depthMaps )override;
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
 		 */
-		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const override;
+		C3D_API void UnbindPass( DepthMapArray & p_depthMaps )const override;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -236,7 +236,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )override;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -267,7 +267,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
@@ -305,7 +305,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )override;
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.

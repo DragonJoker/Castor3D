@@ -111,7 +111,7 @@ namespace Castor3D
 		}
 
 		void DoAddAnimatedNode( RenderPass & p_renderPass
-								, uint8_t p_programFlags
+								, uint16_t p_programFlags
 								, Pass & p_pass
 								, Submesh & p_submesh
 								, Geometry & p_primitive
@@ -148,7 +148,7 @@ namespace Castor3D
 		}
 
 		void DoAddStaticNode( RenderPass & p_renderPass
-							  , uint8_t p_programFlags
+							  , uint16_t p_programFlags
 							  , Pass & p_pass
 							  , Submesh & p_submesh
 							  , Geometry & p_primitive
@@ -216,7 +216,7 @@ namespace Castor3D
 		}
 
 		void DoAddBillboardNode( RenderPass & p_renderPass
-								 , uint8_t p_programFlags
+								 , uint16_t p_programFlags
 								 , Pass & p_pass
 								 , BillboardList & p_billboard
 								 , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
@@ -365,7 +365,7 @@ namespace Castor3D
 					for ( auto l_pass : *l_material )
 					{
 						l_pass->PrepareTextures();
-						uint8_t l_programFlags = 0u;
+						uint16_t l_programFlags = 0u;
 						AddFlag( l_programFlags, ProgramFlag::Billboards );
 
 						if ( l_pass->HasAlphaBlending() )

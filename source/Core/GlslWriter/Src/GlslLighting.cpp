@@ -499,9 +499,9 @@ namespace GLSL
 
 				if ( m_shadows )
 				{
-					auto c3d_mapShadow = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapShadow" ) );
+					auto c3d_mapShadow = m_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapShadow" ), 10u );
 					Shadow l_shadows{ m_writer };
-					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), c3d_mapShadow ) );
+					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), c3d_mapShadow[0] ) );
 					p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor * l_shadow;
 					p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * l_specularFactor * l_shadow;
 				}

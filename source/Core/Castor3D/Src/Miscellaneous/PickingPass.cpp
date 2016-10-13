@@ -44,7 +44,8 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, DepthMapArray{} );
+				auto l_depthMaps = DepthMapArray{};
+				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, l_depthMaps );
 			}
 		};
 
@@ -53,7 +54,8 @@ namespace Castor3D
 		{
 			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, Pipeline & p_pipeline )
 			{
-				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, DepthMapArray{} );
+				auto l_depthMaps = DepthMapArray{};
+				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, l_depthMaps );
 			}
 		};
 
@@ -98,6 +100,7 @@ namespace Castor3D
 										  , uint8_t p_index
 										  , MapType & p_nodes )
 		{
+			auto l_depthMaps = DepthMapArray{};
 			uint32_t l_count{ 1u };
 
 			for ( auto l_itPipelines : p_nodes )
@@ -118,7 +121,7 @@ namespace Castor3D
 
 					if ( l_renderNode.m_data.IsInitialised() )
 					{
-						l_renderNode.Render( DepthMapArray{} );
+						l_renderNode.Render( l_depthMaps );
 					}
 				}
 
@@ -525,9 +528,10 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				p_renderNodes[0].BindPass( DepthMapArray{}, MASK_MTXMODE_MODEL );
+				auto l_depthMaps = DepthMapArray{};
+				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( DepthMapArray{} );
+				p_renderNodes[0].UnbindPass( l_depthMaps );
 			}
 		} );
 	}
@@ -563,9 +567,10 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				p_renderNodes[0].BindPass( DepthMapArray{}, MASK_MTXMODE_MODEL );
+				auto l_depthMaps = DepthMapArray{};
+				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( DepthMapArray{} );
+				p_renderNodes[0].UnbindPass( l_depthMaps );
 			}
 		} );
 	}
@@ -585,7 +590,7 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_index, p_nodes );
 	}
 
-	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -615,18 +620,18 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String PickingPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String PickingPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
+	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
+	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
@@ -692,7 +697,7 @@ namespace Castor3D
 		return *l_it->second;
 	}
 
-	void PickingPass::DoCompleteProgramFlags( uint8_t & p_programFlags )const
+	void PickingPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::Picking );
 	}

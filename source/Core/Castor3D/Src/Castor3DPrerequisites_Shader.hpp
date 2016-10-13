@@ -133,32 +133,35 @@ namespace Castor3D
 	\brief		Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
 	enum class ProgramFlag
-		: uint8_t
+		: uint16_t
 	{
 		//!\~english	Program using instanciation.
 		//!\~french		Programme utilisant l'instanciation.
-		Instantiation = 0x01,
+		Instantiation = 0x0001,
 		//!\~english	Program using skeleton animations.
 		//!\~french		Programme utilisant les animations par squelette.
-		Skinning = 0x02,
+		Skinning = 0x0002,
 		//!\~english	Program used by billboards.
 		//!\~french		Programme utilisé par des billboards.
-		Billboards = 0x04,
+		Billboards = 0x0004,
 		//!\~english	Program using per-vertex animations.
 		//!\~french		Programme utilisant les animations par sommet.
-		Morphing = 0x08,
+		Morphing = 0x0008,
 		//!\~english	Program used in transparent pipeline.
 		//!\~french		Programme utilisé dans le pipeline des objets transparents.
-		AlphaBlending = 0x10,
+		AlphaBlending = 0x0010,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		Picking = 0x20,
+		Picking = 0x0020,
 		//!\~english	Shadow map is available as input.
 		//\~french		La map d'ombres est disponible en entrée.
-		Shadows = 0x40,
+		Shadows = 0x0040,
 		//!\~english	Shader used to render a shadow map.
 		//\~french		Shader utilisé pour dessiner la shadow map.
-		ShadowMap = 0x80,
+		ShadowMap = 0x0080,
+		//!\~english	Shader supporting lighting.
+		//\~french		Shader supportant les éclairages.
+		Lighting = 0x0100,
 	};
 	/*!
 	\author 	Sylvain DOREMUS

@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light const & p_light );
+		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -133,6 +133,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The depth texture holding the render's result.
+		 *\~french
+		 *\return		La texture de profondeur contenant le résultat du rendu.
+		 */
+		inline TextureUnit & GetResult()
+		{
+			return m_depthTexture;
+		}
+		/**
+		 *\~english
 		 *\return		The camera's viewport.
 		 *\~french
 		 *\return		Le viewport de la caméra.
@@ -166,19 +176,19 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const override;
+		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
@@ -198,7 +208,7 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
-		void DoCompleteProgramFlags( uint8_t & p_programFlags )const override;
+		void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
 
 	private:
 		//!\~english	The scene.
@@ -206,7 +216,7 @@ namespace Castor3D
 		Scene & m_scene;
 		//!\~english	The light used to generate the shadows.
 		//!\~french		La lumière utilisée pour générer les ombres.
-		Light const & m_light;
+		Light & m_light;
 		//!\~english	The camera created from the light.
 		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;

@@ -17,7 +17,7 @@ namespace Castor3D
 {
 	namespace
 	{
-		uint64_t MakeKey( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
+		uint64_t MakeKey( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
 		{
 			return ( uint64_t( p_textureFlags ) << 48 )
 				| ( uint64_t( p_programFlags ) << 40 )
@@ -63,7 +63,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
+	ShaderProgramSPtr ShaderProgramCache::GetAutomaticProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
 	{
 		ShaderProgramSPtr l_return;
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
@@ -106,7 +106,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::GetBillboardProgram( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	ShaderProgramSPtr ShaderProgramCache::GetBillboardProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		ShaderProgramSPtr l_return;
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, false );
@@ -120,7 +120,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramCache::AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )
+	void ShaderProgramCache::AddBillboardProgram( ShaderProgramSPtr p_program, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		uint64_t l_key = MakeKey( p_textureFlags, p_programFlags, p_sceneFlags, false );
 		auto const & l_it = m_mapBillboards.find( l_key );
@@ -133,7 +133,7 @@ namespace Castor3D
 		}
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreateMatrixBuffer( ShaderProgram & p_shader, uint16_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Mat4x4r, Pipeline::MtxProjection, 1 );
@@ -149,7 +149,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreateSceneBuffer( ShaderProgram & p_shader, uint16_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferScene, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Vec4f, ShaderProgram::AmbientLight, 1 );
@@ -162,7 +162,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreatePassBuffer( ShaderProgram & p_shader, uint16_t p_programFlags, uint32_t p_shaderMask )
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferPass, p_shaderMask );
 		l_buffer.CreateVariable( FrameVariableType::Vec4f, ShaderProgram::MatAmbient, 1 );
@@ -174,7 +174,7 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariableBuffer & ShaderProgramCache::CreateAnimationBuffer( ShaderProgram & p_shader, uint8_t p_programFlags, uint32_t p_shaderMask )
+	FrameVariableBuffer & ShaderProgramCache::CreateAnimationBuffer( ShaderProgram & p_shader, uint16_t p_programFlags, uint32_t p_shaderMask )
 	{
 		REQUIRE( CheckFlag( p_programFlags, ProgramFlag::Skinning ) || CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferAnimation, p_shaderMask );

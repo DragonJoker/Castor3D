@@ -102,7 +102,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport & p_viewport )
+	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport && p_viewport )
 		: MovableObject{ p_name, p_scene, MovableType::Camera, p_node }
 		, m_viewport{ std::move( p_viewport ) }
 	{

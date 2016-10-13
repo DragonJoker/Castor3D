@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	LightFactory::LightFactory()
-		: Factory< LightCategory, LightType >()
+		: Factory< LightCategory, LightType, LightCategorySPtr, std::function< LightCategorySPtr( Viewport & ) > >()
 	{
 		Register( LightType::Directional, DirectionalLight::Create );
 		Register( LightType::Point, PointLight::Create );

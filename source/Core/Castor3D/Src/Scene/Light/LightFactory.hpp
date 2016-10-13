@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de sources lumineuse
 	*/
 	class LightFactory
-		: public Castor::Factory< LightCategory, LightType >
+		: public Castor::Factory< LightCategory, LightType, LightCategorySPtr, std::function< LightCategorySPtr( Viewport & ) > >
 	{
 	public:
 		/**

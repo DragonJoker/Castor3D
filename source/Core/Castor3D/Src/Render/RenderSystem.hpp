@@ -134,7 +134,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags.
@@ -149,7 +149,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
+		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals );
 		/**
 		 *\~english
 		 *\brief		Sets the currently active render context

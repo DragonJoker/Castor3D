@@ -39,9 +39,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	PointLight::PointLight()
-		: LightCategory( LightType::Point )
-		, m_attenuation( 1.0f, 0.0f, 0.0f )
+	PointLight::PointLight( Viewport & p_viewport )
+		: LightCategory{ LightType::Point, p_viewport }
 	{
 	}
 
@@ -49,9 +48,13 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr PointLight::Create()
+	LightCategorySPtr PointLight::Create( Viewport & p_viewport )
 	{
-		return std::make_shared< PointLight >();
+		return std::shared_ptr< PointLight >( new PointLight{ p_viewport } );
+	}
+
+	void PointLight::Update( Size const & p_size )
+	{
 	}
 
 	void PointLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const

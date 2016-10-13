@@ -65,6 +65,7 @@ namespace Castor3D
 		}
 
 		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
+		m_shadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapShadow, ShaderType::Pixel );
 	}
 
 	Pipeline::~Pipeline()

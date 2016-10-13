@@ -55,8 +55,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SpotLight::SpotLight()
-		: LightCategory{ LightType::Spot }
+	SpotLight::SpotLight( Viewport & p_viewport )
+		: LightCategory{ LightType::Spot, p_viewport }
 	{
 	}
 
@@ -64,13 +64,14 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr SpotLight::Create()
+	LightCategorySPtr SpotLight::Create( Viewport & p_viewport )
 	{
-		return std::make_shared< SpotLight >();
+		return std::shared_ptr< SpotLight >( new SpotLight{ p_viewport } );
 	}
 
-	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	void SpotLight::Update( Size const & p_size )
 	{
+		m_viewport.SetPerspective( GetCutOff(), real( p_size.width() ) / p_size.height(), 1.0_r, 1000.0_r );
 		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
 		auto l_position = GetPosition();
 		l_position[2] = -l_position[2];
@@ -78,14 +79,21 @@ namespace Castor3D
 		Point3f l_up{ 0, 1, 0 };
 		l_orientation.transform( l_front, l_front );
 		l_orientation.transform( l_up, l_up );
+		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
+	}
+
+	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	{
+		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		Point3f l_front{ 0, 0, 1 };
+		l_orientation.transform( l_front, l_front );
+		Point4f l_posType = GetPositionType();
 
 		int l_offset = 0;
 		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		Point4f l_posType = GetPositionType();
-		DoBindComponent( Point4f( l_position[0], l_position[1], l_position[2], l_posType[3] ), p_index, l_offset, p_texture );
-		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
-		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
+		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( m_viewport.GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 		DoBindComponent( l_front, p_index, l_offset, p_texture );
 		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );

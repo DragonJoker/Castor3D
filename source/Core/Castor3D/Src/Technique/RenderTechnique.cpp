@@ -62,7 +62,7 @@ namespace Castor3D
 		template< bool Opaque >
 		struct PipelineUpdater
 		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray const & p_depthMaps, Pipeline & p_pipeline )
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, Pipeline & p_pipeline )
 			{
 				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, p_depthMaps );
 			}
@@ -71,7 +71,7 @@ namespace Castor3D
 		template<>
 		struct PipelineUpdater< false >
 		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray const & p_depthMaps, Pipeline & p_pipeline )
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, Pipeline & p_pipeline )
 			{
 				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, p_depthMaps );
 			}
@@ -81,7 +81,7 @@ namespace Castor3D
 		inline void DoTraverseNodes( RenderPass const & p_pass
 									 , Camera const & p_camera
 									 , MapType & p_nodes
-									 , DepthMapArray const & p_depthMaps
+									 , DepthMapArray & p_depthMaps
 									 , FuncType p_function )
 		{
 			for ( auto l_itPipelines : p_nodes )
@@ -104,7 +104,7 @@ namespace Castor3D
 										  , Scene & p_scene
 										  , Camera const & p_camera
 										  , MapType & p_nodes
-										  , DepthMapArray const & p_depthMaps
+										  , DepthMapArray & p_depthMaps
 										  , bool p_register
 										  , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
 		{
@@ -169,7 +169,7 @@ namespace Castor3D
 			}
 		}
 
-		inline void DoUpdateProgram( ShaderProgram & p_program, uint8_t p_programFlags )
+		inline void DoUpdateProgram( ShaderProgram & p_program, uint16_t p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::Shadows )
 				 && !p_program.FindFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel ) )
@@ -178,16 +178,17 @@ namespace Castor3D
 			}
 		}
 
-		void DoFillShaderDepthMaps( ShaderProgram const & p_program, DepthMapArray const & p_depthMaps, uint32_t p_index )
+		void DoFillShaderDepthMaps( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )
 		{
 			if ( !p_depthMaps.empty() )
 			{
-				auto l_variable = p_program.FindFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel );
+				auto & l_variable = p_pipeline.GetShadowMapsVariable();
+				auto l_index = p_pipeline.GetTexturesCount() + 1;
 				auto l_offset = 0u;
 
 				for ( auto l_depthMap : p_depthMaps )
 				{
-					l_variable->SetValue( p_index++, l_offset++ );
+					l_variable.SetValue( l_index++, l_offset++ );
 				}
 			}
 		}
@@ -459,7 +460,7 @@ namespace Castor3D
 		{
 			if ( p_light.CastShadows() )
 			{
-				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, std::make_unique< ShadowMapPass >( *GetEngine(), p_scene, p_light ) } ).first;
+				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, std::make_shared< ShadowMapPass >( *GetEngine(), p_scene, p_light ) } ).first;
 				auto & l_shadowMap = *l_insit->second;
 				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_shadowMap]()
 				{
@@ -515,7 +516,7 @@ namespace Castor3D
 		return DoWriteInto( p_file );
 	}
 
-	std::map< LightRPtr, ShadowMapPassUPtr > const & RenderTechnique::GetShadowMaps( Scene & p_scene, Camera & p_camera )const
+	RenderTechnique::ShadowMapLightMap const & RenderTechnique::GetShadowMaps( Scene & p_scene, Camera & p_camera )const
 	{
 		auto l_scene = m_scenes.find( &p_scene );
 
@@ -537,7 +538,7 @@ namespace Castor3D
 		return l_camera->m_shadowMaps;
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera & p_camera, uint32_t p_frameTime )
+	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
 		p_camera.Resize( m_size );
@@ -554,7 +555,7 @@ namespace Castor3D
 		DoRenderTransparentNodes( p_nodes, p_depthMaps, p_camera );
 	}
 
-	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera const & p_camera )
+	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
 		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack.empty()
@@ -577,7 +578,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray const & p_depthMaps, Camera const & p_camera )
+	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
 		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodesFront.empty()
 			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodesFront.empty()
@@ -627,17 +628,17 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoTraverseNodes< true >( *this
 								 , p_camera
@@ -660,7 +661,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoTraverseNodes< true >( *this
 								 , p_camera
@@ -695,17 +696,17 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoTraverseNodes< false >( *this
 								  , p_camera
@@ -728,7 +729,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoTraverseNodes< false >( *this
 								  , p_camera
@@ -763,7 +764,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		for ( auto & l_it : p_nodes )
 		{
@@ -778,17 +779,22 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< true >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray const & p_depthMaps, bool p_register )
+	void RenderTechnique::DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const
+	{
+		AddFlag( p_programFlags, ProgramFlag::Lighting );
+	}
+
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -823,7 +829,7 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
-		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
+		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, 10, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -837,44 +843,44 @@ namespace Castor3D
 		
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			//auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			//auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			//auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			//auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
-			//auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			//auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			//auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			//pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
+			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 
-			//ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			//OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			//l_lighting->ComputeCombinedLighting( l_worldEye
-			//									 , l_fMatShininess
-			//									 , FragmentInput { vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent }
-			//									 , l_output );
+			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+			l_lighting->ComputeCombinedLighting( l_worldEye
+												 , l_fMatShininess
+												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent }
+												 , l_output );
 
-			//ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			//pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
-			//						l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
-			//						l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
-			//						l_v3Emissive, 1.0 );
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
+									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
+									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
+									l_v3Emissive, 1.0 );
 
-			//if ( p_sceneFlags != 0 )
-			//{
-			//	l_fog.ApplyFog( pxl_v4FragColor, length( vtx_worldViewSpacePosition ), vtx_worldViewSpacePosition.y() );
-			//}
+			if ( p_sceneFlags != 0 )
+			{
+				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_worldViewSpacePosition ), vtx_worldViewSpacePosition.y() );
+			}
 
-			auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapShadow, vtx_texture.xy() ).r() );
-			l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
-			pxl_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
+			//auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapShadow[0], vtx_texture.xy() ).r() );
+			//l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
+			//pxl_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -910,7 +916,7 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
-		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
+		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, 10, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
@@ -964,24 +970,24 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 		p_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
 		p_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
 		p_camera.GetScene()->FillShader( l_sceneUbo );
-		DoFillShaderDepthMaps( p_pipeline.GetProgram(), p_depthMaps, p_pipeline.GetTexturesCount() + 1 );
+		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 	}
 
-	void RenderTechnique::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
+	void RenderTechnique::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		p_camera.FillShader( l_sceneUbo );
 		p_camera.GetScene()->GetLightCache().FillShader( l_sceneUbo );
 		p_camera.GetScene()->GetFog().FillShader( l_sceneUbo );
 		p_camera.GetScene()->FillShader( l_sceneUbo );
-		DoFillShaderDepthMaps( p_pipeline.GetProgram(), p_depthMaps, p_pipeline.GetTexturesCount() + 1 );
+		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 
 	}
 

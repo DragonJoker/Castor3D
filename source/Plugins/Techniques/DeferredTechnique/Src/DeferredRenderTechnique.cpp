@@ -450,7 +450,7 @@ namespace Deferred
 		return true;
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -513,11 +513,11 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray const & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 
-	String RenderTechnique::DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -540,7 +540,7 @@ namespace Deferred
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
