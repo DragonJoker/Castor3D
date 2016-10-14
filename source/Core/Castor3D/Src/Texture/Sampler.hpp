@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Design/Named.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Graphics/Colour.hpp>
 
