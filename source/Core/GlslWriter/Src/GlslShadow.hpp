@@ -31,7 +31,7 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
-		GlslWriter_API void Declare();
+		GlslWriter_API void Declare( ShadowType p_type );
 		GlslWriter_API Float ComputeShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDir, Vec3 const & p_normal, Sampler2DShadow const & p_map );
 
 	protected:

@@ -87,7 +87,7 @@ namespace GLSL
 
 	//***********************************************************************************************
 
-	LightingModel::LightingModel( bool p_shadows, GlslWriter & p_writer )
+	LightingModel::LightingModel( ShadowType p_shadows, GlslWriter & p_writer )
 		: m_shadows{ p_shadows }
 		, m_writer{ p_writer }
 	{
@@ -95,10 +95,10 @@ namespace GLSL
 
 	void LightingModel::DeclareModel()
 	{
-		if ( m_shadows )
+		if ( m_shadows != ShadowType::None )
 		{
-			GLSL::Shadow l_shadow{ m_writer };
-			l_shadow.Declare();
+			Shadow l_shadow{ m_writer };
+			l_shadow.Declare( m_shadows );
 		}
 
 		Declare_Light();
@@ -368,12 +368,12 @@ namespace GLSL
 
 	const String PhongLightingModel::Name = cuT( "phong" );
 
-	PhongLightingModel::PhongLightingModel( bool p_shadows, GlslWriter & p_writer )
+	PhongLightingModel::PhongLightingModel( ShadowType p_shadows, GlslWriter & p_writer )
 		: LightingModel{ p_shadows, p_writer }
 	{
 	}
 
-	std::unique_ptr< LightingModel > PhongLightingModel::Create( bool p_shadows, GlslWriter & p_writer )
+	std::unique_ptr< LightingModel > PhongLightingModel::Create( ShadowType p_shadows, GlslWriter & p_writer )
 	{
 		return std::make_unique< PhongLightingModel >( p_shadows, p_writer );
 	}
@@ -503,7 +503,7 @@ namespace GLSL
 				auto l_lightReflect = m_writer.GetLocale< Vec3 >( cuT( "l_lightReflect" ), normalize( reflect( -p_direction, p_fragmentIn.m_v3Normal ) ) );
 				auto l_specularFactor = m_writer.GetLocale< Float >( cuT( "l_specularFactor" ), pow( max( dot( l_vertexToEye, l_lightReflect ), 0.0 ), p_shininess ) );
 
-				if ( m_shadows )
+				if ( m_shadows != ShadowType::None )
 				{
 					auto c3d_mapShadow = m_writer.GetBuiltin< Sampler2DShadow >( cuT( "c3d_mapShadow" ), 10u );
 					Shadow l_shadows{ m_writer };

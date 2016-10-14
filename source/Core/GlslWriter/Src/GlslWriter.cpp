@@ -123,7 +123,7 @@ namespace GLSL
 		return *this;
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, bool p_shadows )
+	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
 		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareModel();

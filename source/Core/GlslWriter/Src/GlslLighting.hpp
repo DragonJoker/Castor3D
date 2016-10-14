@@ -55,7 +55,7 @@ namespace GLSL
 	class LightingModel
 	{
 	public:
-		GlslWriter_API LightingModel( bool p_shadows, GlslWriter & p_writer );
+		GlslWriter_API LightingModel( ShadowType p_shadows, GlslWriter & p_writer );
 		GlslWriter_API void DeclareModel();
 		// Calls
 		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
@@ -97,7 +97,7 @@ namespace GLSL
 		virtual void Declare_ComputeSpotLight() = 0;
 
 	protected:
-		bool m_shadows;
+		ShadowType m_shadows;
 		GlslWriter & m_writer;
 	};
 
@@ -105,8 +105,8 @@ namespace GLSL
 		: public LightingModel
 	{
 	public:
-		GlslWriter_API PhongLightingModel( bool p_shadows, GlslWriter & p_writer );
-		GlslWriter_API static std::unique_ptr< LightingModel > Create( bool p_shadows, GlslWriter & p_writer );
+		GlslWriter_API PhongLightingModel( ShadowType p_shadows, GlslWriter & p_writer );
+		GlslWriter_API static std::unique_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
 
 	protected:
 		virtual void DoDeclareModel();

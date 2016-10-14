@@ -81,6 +81,27 @@ namespace GLSL
 		return l_return;
 	}
 
+	Int operator%( Int const & p_a, int p_b )
+	{
+		Int l_return( p_a.m_writer );
+		l_return.m_value << String( p_a ) << cuT( " % " ) << ToString( p_b );
+		return l_return;
+	}
+
+	Int operator%( int p_a, Int const & p_b )
+	{
+		Int l_return( p_b.m_writer );
+		l_return.m_value << ToString( p_a ) << cuT( " % " ) << String( p_b );
+		return l_return;
+	}
+
+	Int operator%( Int const & p_a, Int const & p_b )
+	{
+		Int l_return( p_a.m_writer );
+		l_return.m_value << String( p_a ) << cuT( " % " ) << String( p_b );
+		return l_return;
+	}
+
 	Vec4 texture( Sampler1D const & p_sampler, Float const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
@@ -286,6 +307,11 @@ namespace GLSL
 		return WriteFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
 	}
 
+	Float fract( Type const & p_value )
+	{
+		return WriteFunctionCall< Float >( p_value.m_writer, cuT( "fract" ), p_value );
+	}
+
 	Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
@@ -489,5 +515,10 @@ namespace GLSL
 	Optional< Float > tan( Optional< Type > const & p_value )
 	{
 		return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
+	}
+
+	Optional< Float > fract( Optional< Type > const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "fract" ), p_value );
 	}
 }

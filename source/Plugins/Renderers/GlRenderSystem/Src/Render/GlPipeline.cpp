@@ -186,7 +186,16 @@ namespace GlRender
 				l_return &= p_gl.Enable( eGL_TWEAK_DEPTH_CLAMP );
 			}
 
-			l_return &= p_gl.PolygonOffset( p_state.GetDepthBias(), 4096.0 );
+			if ( p_state.GetDepthBiasFactor() != 0 || p_state.GetDepthBiasUnits() != 0 )
+			{
+				l_return &= p_gl.Enable( eGL_TWEAK_OFFSET_FILL );
+				l_return &= p_gl.PolygonOffset( p_state.GetDepthBiasFactor(), p_state.GetDepthBiasUnits() );
+			}
+			else
+			{
+				l_return &= p_gl.Disable( eGL_TWEAK_OFFSET_FILL );
+			}
+
 			return l_return;
 		}
 	}

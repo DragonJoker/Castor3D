@@ -404,6 +404,27 @@ namespace GLSL
 	}
 
 	template< typename T >
+	inline Array< T > GlslWriter::GetUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs )
+	{
+		if ( p_rhs.size() != p_dimension )
+		{
+			CASTOR_EXCEPTION ("Given parameters count doesn't match the array dimensions");
+		}
+
+		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
+		Castor::String l_sep;
+
+		for ( auto const & l_value : p_rhs )
+		{
+			*this << l_sep << Castor::String( l_value ) << Endl();
+			l_sep = cuT( "\t, " );
+		}
+
+		*this << cuT (");") << Endl();
+		return Array< T >( this, p_name, p_dimension );
+	}
+
+	template< typename T >
 	inline Optional< T > GlslWriter::GetAttribute( Castor::String const & p_name, bool p_enabled )
 	{
 		if ( p_enabled )

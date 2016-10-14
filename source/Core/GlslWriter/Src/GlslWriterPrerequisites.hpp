@@ -37,6 +37,14 @@ SOFTWARE.
 
 namespace GLSL
 {
+	enum class ShadowType
+	{
+		None,
+		Raw,
+		Poisson,
+		StratifiedPoisson
+	};
+
 	struct GlslWriterConfig;
 	class GlslWriter;
 	class KeywordsBase;

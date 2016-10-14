@@ -120,6 +120,9 @@ namespace GLSL
 	GlslWriter_API Int operator-( int p_a, Int const & p_b );
 	GlslWriter_API Int operator*( int p_a, Int const & p_b );
 	GlslWriter_API Int operator/( int p_a, Int const & p_b );
+	GlslWriter_API Int operator%( int p_a, Int const & p_b );
+	GlslWriter_API Int operator%( Int const & p_a, int p_b );
+	GlslWriter_API Int operator%( Int const & p_a, Int const & p_b );
 
 	template< typename ... Values > inline Vec2 vec2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Vec3 vec3( Type const & p_value, Values const & ... p_values );
@@ -197,6 +200,7 @@ namespace GLSL
 	GlslWriter_API Float cos( Type const & p_value );
 	GlslWriter_API Float sin( Type const & p_value );
 	GlslWriter_API Float tan( Type const & p_value );
+	GlslWriter_API Float fract( Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value, Float const & p_lod );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value );
@@ -238,6 +242,7 @@ namespace GLSL
 	GlslWriter_API Optional< Float > cos( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > sin( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > tan( Optional< Type > const & p_value );
+	GlslWriter_API Optional< Float > fract( Optional< Type > const & p_value );
 }
 
 #include "GlslIntrinsics.inl"
