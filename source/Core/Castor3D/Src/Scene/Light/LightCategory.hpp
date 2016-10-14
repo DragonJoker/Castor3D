@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\param[in]	p_lightType	Le type de catégorie de lumière.
 		 *\param[in]	p_viewport	Le viewport utilisé pour le rrendu de la map d'ombres.
 		 */
-		C3D_API explicit LightCategory( LightType p_lightType, Viewport & p_viewport );
+		C3D_API explicit LightCategory( LightType p_lightType );
 
 	public:
 		/**
@@ -110,12 +110,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the light viewport.
-		 *\param[in]	p_size	The viewport dimensions.
+		 *\param[in]	p_target	The target position, used by directional shadow map.
 		 *\~french
 		 *\brief		Met le viewport de la source à jour.
-		 *\param[in]	p_size	Les dimensions du viewport.
+		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
 		 */
-		C3D_API virtual void Update( Castor::Size const & p_size ) = 0;
+		C3D_API virtual void Update( Castor::Point3r const & p_target ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a LightCategroy specific TextLoader.
@@ -322,6 +322,18 @@ namespace Castor3D
 		{
 			m_pLight = val;
 		}
+		/**
+		 *\~english
+		 *\return		Sets the shadow map rendering viewport.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\return		Définit le viewport de rendu de shadow map.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetViewport( Viewport & p_value )
+		{
+			m_viewport = &p_value;
+		}
 
 	protected:
 		/**
@@ -379,7 +391,7 @@ namespace Castor3D
 		mutable Castor::Matrix4x4f m_lightSpace;
 		//!\~english	The shadow map rendering viewport.
 		//\~french		Le viewport de rendu de la mp d'ombres.
-		Viewport & m_viewport;
+		Viewport * m_viewport;
 
 	private:
 		//!\~english	The light type.

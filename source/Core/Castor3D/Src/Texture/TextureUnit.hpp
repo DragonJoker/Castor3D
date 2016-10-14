@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\brief		Récupère la fonction d'alpha
 		 *\return		La valeur
 		 */
-		inline Castor3D::AlphaFunc GetAlphaFunc()const
+		inline Castor3D::ComparisonFunc GetAlphaFunc()const
 		{
 			return m_eAlphaFunc;
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Définit la fonction d'alpha
 		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetAlphaFunc( Castor3D::AlphaFunc p_func )
+		inline void SetAlphaFunc( Castor3D::ComparisonFunc p_func )
 		{
 			m_eAlphaFunc = p_func;
 		}
@@ -483,7 +483,7 @@ namespace Castor3D
 		float m_fAlphaValue;
 		//!\~english	The alpha function for alpha comparison.
 		//!\~french		La fonction d'alpha utilisée lors de la comparaison d'alpha.
-		AlphaFunc m_eAlphaFunc;
+		ComparisonFunc m_eAlphaFunc;
 		//!\~english	The RGB blending parameters.
 		//!\~french		Les paramètres de mélange RGB.
 		BlendSource m_eRgbArguments[uint32_t( BlendSrcIndex::Count )];

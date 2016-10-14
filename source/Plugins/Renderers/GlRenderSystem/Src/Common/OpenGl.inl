@@ -607,7 +607,7 @@ namespace GlRender
 		return TextureDimensions[uint32_t( p_index )];
 	}
 
-	inline eGL_FUNC OpenGl::Get( Castor3D::AlphaFunc p_eAlphaFunc )const
+	inline eGL_FUNC OpenGl::Get( Castor3D::ComparisonFunc p_eAlphaFunc )const
 	{
 		return AlphaFuncs[uint32_t( p_eAlphaFunc )];
 	}
@@ -742,6 +742,11 @@ namespace GlRender
 	inline eGL_TEXTURE_STORAGE OpenGl::Get( Castor3D::TextureStorageType p_value )const
 	{
 		return TextureStorages[uint32_t( p_value )];
+	}
+
+	inline eGL_COMPARE_MODE OpenGl::Get( Castor3D::ComparisonMode p_value )const
+	{
+		return ComparisonModes[uint32_t( p_value )];
 	}
 
 	inline bool OpenGl::Get( Castor3D::WritingMask p_eMask )const
@@ -1336,7 +1341,7 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::AlphaFunc( eGL_FUNC func, float ref )const
+	bool OpenGl::ComparisonFunc( eGL_FUNC func, float ref )const
 	{
 		m_pfnAlphaFunc( func, ref );
 		return glCheckError( *this, "glAlphaFunc" );

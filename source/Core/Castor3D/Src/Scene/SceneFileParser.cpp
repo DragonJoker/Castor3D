@@ -118,14 +118,14 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTypes[cuT( "2d" )] = uint32_t( TextureType::TwoDimensions );
 	m_mapTypes[cuT( "3d" )] = uint32_t( TextureType::ThreeDimensions );
 
-	m_mapAlphaFuncs[cuT( "always" )] = uint32_t( AlphaFunc::Always );
-	m_mapAlphaFuncs[cuT( "less" )] = uint32_t( AlphaFunc::Less );
-	m_mapAlphaFuncs[cuT( "less_or_equal" )] = uint32_t( AlphaFunc::LEqual );
-	m_mapAlphaFuncs[cuT( "equal" )] = uint32_t( AlphaFunc::Equal );
-	m_mapAlphaFuncs[cuT( "not_equal" )] = uint32_t( AlphaFunc::NEqual );
-	m_mapAlphaFuncs[cuT( "greater_or_equal" )] = uint32_t( AlphaFunc::GEqual );
-	m_mapAlphaFuncs[cuT( "greater" )] = uint32_t( AlphaFunc::Greater );
-	m_mapAlphaFuncs[cuT( "never" )] = uint32_t( AlphaFunc::Never );
+	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( ComparisonFunc::Always );
+	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( ComparisonFunc::Less );
+	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( ComparisonFunc::LEqual );
+	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( ComparisonFunc::Equal );
+	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( ComparisonFunc::NEqual );
+	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( ComparisonFunc::GEqual );
+	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( ComparisonFunc::Greater );
+	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( ComparisonFunc::Never );
 
 	m_mapTextureArguments[cuT( "texture" )] = uint32_t( BlendSource::Texture );
 	m_mapTextureArguments[cuT( "texture0" )] = uint32_t( BlendSource::Texture0 );
@@ -273,6 +273,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapMeshTypes[cuT( "plane" )] = uint32_t( eMESH_TYPE_PLANE );
 	m_mapMeshTypes[cuT( "icosahedron" )] = uint32_t( eMESH_TYPE_ICOSAHEDRON );
 	m_mapMeshTypes[cuT( "projection" )] = uint32_t( eMESH_TYPE_PROJECTION );
+
+	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::None );
+	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::RefToTexture );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -374,6 +377,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapWrappingModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "comparison_mode" ), Parser_SamplerComparisonMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "comparison_func" ), Parser_SamplerComparisonFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonFuncs ) } );
 
 	AddParser( eSECTION_SCENE, cuT( "include" ), Parser_SceneInclude, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
@@ -460,7 +465,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureChannels ) } );

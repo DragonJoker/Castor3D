@@ -76,6 +76,9 @@ namespace GLSL
 	struct Sampler2D;
 	struct Sampler3D;
 	struct SamplerCube;
+	struct Sampler1DShadow;
+	struct Sampler2DShadow;
+	struct SamplerCubeShadow;
 }
 
 #endif

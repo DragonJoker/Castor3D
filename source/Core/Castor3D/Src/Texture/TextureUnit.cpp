@@ -48,16 +48,16 @@ namespace Castor3D
 			{ AlphaBlendFunc::Interpolate, cuT( "interpolate" ) },
 			{ AlphaBlendFunc::Subtract, cuT( "substract" ) },
 		};
-		static std::map< AlphaFunc, String > l_strAlphaFuncs
+		static std::map< ComparisonFunc, String > l_strAlphaFuncs
 		{
-			{ AlphaFunc::Always, cuT( "always" ) },
-			{ AlphaFunc::Less, cuT( "less" ) },
-			{ AlphaFunc::LEqual, cuT( "less_or_equal" ) },
-			{ AlphaFunc::Equal, cuT( "equal" ) },
-			{ AlphaFunc::NEqual, cuT( "not_equal" ) },
-			{ AlphaFunc::GEqual, cuT( "greater_or_equal" ) },
-			{ AlphaFunc::Greater, cuT( "greater" ) },
-			{ AlphaFunc::Never, cuT( "never" ) },
+			{ ComparisonFunc::Always, cuT( "always" ) },
+			{ ComparisonFunc::Less, cuT( "less" ) },
+			{ ComparisonFunc::LEqual, cuT( "less_or_equal" ) },
+			{ ComparisonFunc::Equal, cuT( "equal" ) },
+			{ ComparisonFunc::NEqual, cuT( "not_equal" ) },
+			{ ComparisonFunc::GEqual, cuT( "greater_or_equal" ) },
+			{ ComparisonFunc::Greater, cuT( "greater" ) },
+			{ ComparisonFunc::Never, cuT( "never" ) },
 		};
 		static std::map< ColourBlendFunc, String > l_strTextureRgbFunctions
 		{
@@ -146,7 +146,7 @@ namespace Castor3D
 
 					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit channel" );
 
-					if ( l_return && p_unit.GetAlphaFunc() != AlphaFunc::Always )
+					if ( l_return && p_unit.GetAlphaFunc() != ComparisonFunc::Always )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha function" );
@@ -196,7 +196,7 @@ namespace Castor3D
 		, m_index( 0 )
 		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
 		, m_eChannel( TextureChannel::Diffuse )
-		, m_eAlphaFunc( AlphaFunc::Always )
+		, m_eAlphaFunc( ComparisonFunc::Always )
 		, m_fAlphaValue( 0 )
 		, m_eRgbFunction( ColourBlendFunc::NoBlend )
 		, m_eAlpFunction( AlphaBlendFunc::NoBlend )

@@ -1,6 +1,6 @@
 #include "PointLight.hpp"
 
-#include "Mesh/Vertex.hpp"
+#include "Render/Viewport.hpp"
 
 using namespace Castor;
 
@@ -39,8 +39,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	PointLight::PointLight( Viewport & p_viewport )
-		: LightCategory{ LightType::Point, p_viewport }
+	PointLight::PointLight()
+		: LightCategory{ LightType::Point }
 	{
 	}
 
@@ -48,12 +48,12 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr PointLight::Create( Viewport & p_viewport )
+	LightCategorySPtr PointLight::Create()
 	{
-		return std::shared_ptr< PointLight >( new PointLight{ p_viewport } );
+		return std::shared_ptr< PointLight >( new PointLight );
 	}
 
-	void PointLight::Update( Size const & p_size )
+	void PointLight::Update( Point3r const & p_target )
 	{
 	}
 

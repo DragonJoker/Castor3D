@@ -34,7 +34,8 @@ namespace GLSL
 		inline Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline Mat3 & operator=( Mat3 const & p_rhs );
 		template< typename T > inline Mat3 & operator=( T const & p_rhs );
-		template< typename T > inline Mat3 & operator[]( T const & p_rhs );
+		template< typename T > inline Vec3 operator[]( T const & p_rhs );
+		inline Vec3 operator[]( int const & p_rhs );
 	};
 
 	struct Mat4
@@ -44,7 +45,8 @@ namespace GLSL
 		inline Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline Mat4 & operator=( Mat4 const & p_rhs );
 		template< typename T > inline Mat4 & operator=( T const & p_rhs );
-		template< typename T > inline Mat4 & operator[]( T const & p_rhs );
+		template< typename T > inline Vec4 operator[]( T const & p_rhs );
+		inline Vec4 operator[]( int const & p_rhs );
 	};
 }
 

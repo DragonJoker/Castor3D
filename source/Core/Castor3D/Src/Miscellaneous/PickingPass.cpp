@@ -637,22 +637,11 @@ namespace Castor3D
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	Pipeline & PickingPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void PickingPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_frontOpaquePipelines.find( p_flags );
-
-		if ( l_it == m_frontOpaquePipelines.end() )
-		{
-			DoUpdateProgram( p_program );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
-			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
-		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & PickingPass::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void PickingPass::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backOpaquePipelines.find( p_flags );
 
@@ -660,29 +649,16 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
+			l_rsState.SetCulledFaces( Culling::Back );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & PickingPass::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void PickingPass::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_frontTransparentPipelines.find( p_flags );
-
-		if ( l_it == m_frontTransparentPipelines.end() )
-		{
-			DoUpdateProgram( p_program );
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
-			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
-		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & PickingPass::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void PickingPass::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backTransparentPipelines.find( p_flags );
 
@@ -690,11 +666,9 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
+			l_rsState.SetCulledFaces( Culling::Back );
 			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
 	void PickingPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const

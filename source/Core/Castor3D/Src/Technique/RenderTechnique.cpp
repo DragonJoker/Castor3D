@@ -489,18 +489,21 @@ namespace Castor3D
 
 		if ( DoBeginRender( p_scene, p_camera ) )
 		{
-#if 1
-
 			p_scene.RenderBackground( GetSize() );
 			DoRender( l_nodes, l_depthMaps, p_camera, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
-			DoEndRender( p_scene, p_camera );
 
-#else
+#if 1
 
-			m_renderSystem.GetCurrentContext()->RenderDepth( l_depthMaps.begin()->get().GetTexture()->GetImage().GetDimensions(), *l_depthMaps.begin()->get().GetTexture() );
+			if ( !l_depthMaps.empty() )
+			{
+				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetImage().GetDimensions();
+				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture() );
+			}
 
 #endif
+
+			DoEndRender( p_scene, p_camera );
 		}
 
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
@@ -829,12 +832,9 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
-		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, 10, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		GLSL::Shadow l_shadows { l_writer };
-		l_shadows.Declare( p_sceneFlags );
 		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -871,10 +871,6 @@ namespace Castor3D
 			{
 				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_worldViewSpacePosition ), vtx_worldViewSpacePosition.y() );
 			}
-
-			//auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapShadow[0], vtx_texture.xy() ).r() );
-			//l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
-			//pxl_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 		} );
 
 		return l_writer.Finalise();
@@ -916,12 +912,9 @@ namespace Castor3D
 		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
 		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
 		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
-		auto c3d_mapShadow( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapShadow, 10, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		GLSL::Shadow l_shadows{ l_writer };
-		l_shadows.Declare( p_sceneFlags );
 		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
@@ -991,7 +984,7 @@ namespace Castor3D
 
 	}
 
-	Pipeline & RenderTechnique::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void RenderTechnique::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_frontOpaquePipelines.find( p_flags );
 
@@ -1009,11 +1002,9 @@ namespace Castor3D
 																											, p_program
 																											, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & RenderTechnique::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void RenderTechnique::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backOpaquePipelines.find( p_flags );
 
@@ -1031,11 +1022,9 @@ namespace Castor3D
 																										   , p_program
 																										   , p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & RenderTechnique::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void RenderTechnique::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_frontTransparentPipelines.find( p_flags );
 
@@ -1056,11 +1045,9 @@ namespace Castor3D
 																												 , p_program
 																												 , p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & RenderTechnique::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void RenderTechnique::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backTransparentPipelines.find( p_flags );
 
@@ -1081,7 +1068,5 @@ namespace Castor3D
 																												, p_program
 																												, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 }

@@ -143,13 +143,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The camera's viewport.
+		 *\return		The camera.
 		 *\~french
-		 *\return		Le viewport de la caméra.
+		 *\return		La caméra.
 		 */
-		inline Viewport const & GetViewport()const
+		inline CameraSPtr GetCamera()const
 		{
-			return m_camera->GetViewport();
+			return m_camera;
 		}
 
 	private:
@@ -192,19 +192,19 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
-		Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
 		 */
-		Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
-		Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
-		Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
@@ -220,9 +220,6 @@ namespace Castor3D
 		//!\~english	The camera created from the light.
 		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;
-		//!\~english	The camera node.
-		//!\~french		Le noeud de la caméra.
-		SceneNodeSPtr m_cameraNode;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;

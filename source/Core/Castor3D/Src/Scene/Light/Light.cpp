@@ -10,6 +10,7 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/Pipeline.hpp"
 #include "Render/RenderSystem.hpp"
+#include "Render/Viewport.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 
@@ -35,27 +36,28 @@ namespace Castor3D
 
 	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType )
 		: MovableObject{ p_name, p_scene, MovableType::Light, p_node }
-		, m_viewport{ *p_scene.GetEngine() }
 	{
-		m_category = p_factory.Create( p_lightType, m_viewport );
+		m_category = p_factory.Create( p_lightType );
 		m_category->SetLight( this );
 
 		if ( p_node )
 		{
 			m_category->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
+			m_notifyIndex = p_node->RegisterObject( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *p_node );
 		}
-
-		GetScene()->GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
 	}
 
 	Light::~Light()
 	{
 	}
 
-	void Light::Update( Castor::Size const & p_size )
+	void Light::Update( Point3r const & p_target )
 	{
-		m_viewport.Resize( p_size );
-		m_category->Update( p_size );
+		REQUIRE( m_viewport );
+		GetParent()->Update();
+		m_category->Update( p_target );
+		m_viewport->Update();
 	}
 
 	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )

@@ -93,8 +93,10 @@ namespace Castor3D
 	{
 		m_depthTexture.SetTexture( GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite ) );
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( p_light.GetName() + cuT( "_ShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
 		m_depthTexture.SetSampler( l_sampler );
 		m_renderQueue.AddScene( m_scene );
 	}
@@ -106,13 +108,14 @@ namespace Castor3D
 	bool ShadowMapPass::Initialise( Size const & p_size )
 	{
 		bool l_return = true;
+		Size const l_size{ 1024, 1024 };
 
 		if ( !m_frameBuffer )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
 			auto l_texture = m_depthTexture.GetTexture();
-			l_texture->GetImage().SetSource( p_size, PixelFormat::D32F );
+			l_texture->GetImage().SetSource( l_size, PixelFormat::D32F );
 			auto l_size = l_texture->GetImage().GetDimensions();
 
 			l_return = l_texture->Create();
@@ -152,12 +155,12 @@ namespace Castor3D
 			if ( l_return )
 			{
 				Viewport l_viewport{ *GetEngine() };
-				m_cameraNode = std::make_shared< SceneNode >( cuT( "ShadowMap_" ) + m_light.GetName(), m_scene );
 				m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 													   , m_scene
-													   , m_cameraNode
+													   , m_light.GetParent()
 													   , std::move( l_viewport ) );
-				m_camera->Resize( p_size );
+				m_camera->Resize( l_size );
+				m_light.SetViewport( m_camera->GetViewport() );
 			}
 		}
 
@@ -170,7 +173,6 @@ namespace Castor3D
 		{
 			m_camera->Detach();
 			m_camera.reset();
-			m_cameraNode.reset();
 
 			m_frameBuffer->Bind( FrameBufferMode::Config );
 			m_frameBuffer->DetachAll();
@@ -194,11 +196,8 @@ namespace Castor3D
 	
 	void ShadowMapPass::Update()
 	{
-		m_cameraNode->SetPosition( m_light.GetParent()->GetDerivedPosition() );
-		m_cameraNode->SetOrientation( m_light.GetParent()->GetDerivedOrientation() );
 		auto l_size = m_depthTexture.GetTexture()->GetImage().GetDimensions();
-		m_light.Update( l_size );
-		m_camera->GetViewport() = m_light.GetViewport();
+		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
 		m_camera->Update();
 		m_renderQueue.Prepare( *m_camera, m_scene );
 	}
@@ -213,24 +212,6 @@ namespace Castor3D
 			DoRenderOpaqueNodes( l_nodes, *m_camera );
 			DoRenderTransparentNodes( l_nodes, *m_camera );
 			m_frameBuffer->Unbind();
-
-#if 0
-
-			if ( m_depthTexture.GetTexture()->Bind( 0 ) )
-			{
-				auto l_data = m_depthTexture.GetTexture()->Lock( 0, AccessType::Read );
-
-				if ( l_data )
-				{
-					auto l_dimensions = m_depthTexture.GetTexture()->GetImage().GetDimensions();
-					Image l_image{ cuT( "tmp" ), l_dimensions, m_depthTexture.GetTexture()->GetImage().GetPixelFormat(), l_data, m_depthTexture.GetTexture()->GetImage().GetPixelFormat() };
-					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_ShadowMap.hdr" ) );
-				}
-
-				m_depthTexture.GetTexture()->Unbind( 0 );
-			}
-
-#endif
 		}
 	}
 
@@ -390,21 +371,11 @@ namespace Castor3D
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	Pipeline & ShadowMapPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_frontOpaquePipelines.find( p_flags );
-
-		if ( l_it == m_frontOpaquePipelines.end() )
-		{
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
-			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
-		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & ShadowMapPass::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backOpaquePipelines.find( p_flags );
 
@@ -414,25 +385,13 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::None );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & ShadowMapPass::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
-		auto l_it = m_frontTransparentPipelines.find( p_flags );
-
-		if ( l_it == m_frontTransparentPipelines.end() )
-		{
-			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
-			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
-		}
-
-		return *l_it->second;
 	}
 
-	Pipeline & ShadowMapPass::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
+	void ShadowMapPass::DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )
 	{
 		auto l_it = m_backTransparentPipelines.find( p_flags );
 
@@ -442,8 +401,6 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::None );
 			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
-
-		return *l_it->second;
 	}
 
 	void ShadowMapPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const

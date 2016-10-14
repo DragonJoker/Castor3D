@@ -372,6 +372,42 @@ namespace GLSL
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "exp2" ), p_value );
 	}
 
+	template< typename Value >
+	inline Value tan( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "tan" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value sin( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "sin" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value cos( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "cos" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value atan( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "atan" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value asin( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "asin" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value acos( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "acos" ), p_value );
+	}
+
 	//***********************************************************************************************
 
 	template< typename ... Values >

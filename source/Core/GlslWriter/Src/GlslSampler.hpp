@@ -71,6 +71,33 @@ namespace GLSL
 		template< typename T > inline SamplerCube & operator=( T const & p_rhs );
 		inline operator uint32_t();
 	};
+
+	struct Sampler1DShadow
+		: public Type
+	{
+		inline Sampler1DShadow();
+		inline Sampler1DShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline Sampler1DShadow & operator=( T const & p_rhs );
+		inline operator uint32_t();
+	};
+
+	struct Sampler2DShadow
+		: public Type
+	{
+		inline Sampler2DShadow();
+		inline Sampler2DShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline Sampler2DShadow & operator=( T const & p_rhs );
+		inline operator uint32_t();
+	};
+
+	struct SamplerCubeShadow
+		: public Type
+	{
+		inline SamplerCubeShadow();
+		inline SamplerCubeShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline SamplerCubeShadow & operator=( T const & p_rhs );
+		inline operator uint32_t();
+	};
 }
 
 #include "GlslSampler.inl"

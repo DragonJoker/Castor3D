@@ -73,32 +73,56 @@ namespace Castor3D
 		}
 	}
 
-	Pipeline & RenderPass::GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontOpaquePipelines.find( { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
-		REQUIRE( l_it != m_frontOpaquePipelines.end() );
-		return *l_it->second;
+		Pipeline * l_return{ nullptr };
+
+		if ( l_it != m_frontOpaquePipelines.end() )
+		{
+			l_return = l_it->second.get();
+		}
+
+		return l_return;
 	}
 
-	Pipeline & RenderPass::GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backOpaquePipelines.find( { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
-		REQUIRE( l_it != m_backOpaquePipelines.end() );
-		return *l_it->second;
+		Pipeline * l_return{ nullptr };
+
+		if ( l_it != m_backOpaquePipelines.end() )
+		{
+			l_return = l_it->second.get();
+		}
+
+		return l_return;
 	}
 
-	Pipeline & RenderPass::GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		REQUIRE( l_it != m_frontTransparentPipelines.end() );
-		return *l_it->second;
+		Pipeline * l_return{ nullptr };
+
+		if ( l_it != m_frontTransparentPipelines.end() )
+		{
+			l_return = l_it->second.get();
+		}
+
+		return l_return;
 	}
 
-	Pipeline & RenderPass::GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		REQUIRE( l_it != m_backTransparentPipelines.end() );
-		return *l_it->second;
+		Pipeline * l_return{ nullptr };
+
+		if ( l_it != m_backTransparentPipelines.end() )
+		{
+			l_return = l_it->second.get();
+		}
+
+		return l_return;
 	}
 
 	AnimatedGeometryRenderNode RenderPass::CreateAnimatedNode( Pass & p_pass

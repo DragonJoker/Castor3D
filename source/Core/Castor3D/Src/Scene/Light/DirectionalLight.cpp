@@ -1,5 +1,6 @@
 #include "DirectionalLight.hpp"
 
+#include "Render/Viewport.hpp"
 
 using namespace Castor;
 
@@ -30,8 +31,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	DirectionalLight::DirectionalLight( Viewport & p_viewport )
-		: LightCategory{ LightType::Directional, p_viewport }
+	DirectionalLight::DirectionalLight()
+		: LightCategory{ LightType::Directional }
 	{
 	}
 
@@ -39,15 +40,22 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr DirectionalLight::Create( Viewport & p_viewport )
+	LightCategorySPtr DirectionalLight::Create()
 	{
-		return std::shared_ptr< DirectionalLight >( new DirectionalLight{ p_viewport } );
+		return std::shared_ptr< DirectionalLight >( new DirectionalLight );
 	}
 
-	void DirectionalLight::Update( Size const & p_size )
+	void DirectionalLight::Update( Point3r const & p_target )
 	{
-		m_viewport.SetOrtho( -512.0_r, 511.0_r, -512.0_r, 511.0_r, 1.0_r, 1000.0_r );
-		matrix::look_at( m_lightSpace, -GetDirection(), Point3f{ 0, 0, 0 }, Point3f{ 0, 1, 0 } );
+		real const l_width = real( m_viewport->GetWidth() );
+		real const l_height = real( m_viewport->GetHeight() );
+		m_viewport->SetOrtho( -l_width / 2, l_width / 2, l_height / 2, -l_height / 2, 1.0_r, 1000.0_r );
+		Point3f l_right{ 1, 0, 0 };
+		auto l_direction = GetDirection();
+		l_direction = Point3f{ 0.0, 0.70, 0.70 };
+		//l_direction[2] = -l_direction[2];
+		auto l_up = l_direction ^ l_right;
+		matrix::look_at( m_lightSpace, p_target - l_direction, p_target, l_up );
 	}
 
 	void DirectionalLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const

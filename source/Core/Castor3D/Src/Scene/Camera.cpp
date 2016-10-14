@@ -114,6 +114,12 @@ namespace Castor3D
 		{
 			p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
 		}
+
+		if ( p_node )
+		{
+			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *p_node );
+		}
 	}
 
 	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
@@ -123,6 +129,17 @@ namespace Castor3D
 
 	Camera::~Camera()
 	{
+	}
+
+	void Camera::AttachTo( SceneNodeSPtr p_node )
+	{
+		MovableObject::AttachTo( p_node );
+
+		if ( p_node )
+		{
+			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *p_node );
+		}
 	}
 
 	void Camera::ResetOrientation()
@@ -152,7 +169,7 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			if ( l_modified || l_node->IsModified() )
+			if ( l_modified || m_nodeChanged )
 			{
 				l_node->GetTransformationMatrix();
 				auto const & l_position = l_node->GetDerivedPosition();
@@ -210,6 +227,7 @@ namespace Castor3D
 
 				// Update view matrix
 				matrix::look_at( m_view, l_position, l_position + l_front, l_up );
+				m_nodeChanged = false;
 			}
 		}
 	}
@@ -343,5 +361,10 @@ namespace Castor3D
 		{
 			l_cameraPos->SetValue( l_position );
 		}
+	}
+
+	void Camera::OnNodeChanged( SceneNode const & p_node )
+	{
+		m_nodeChanged = true;
 	}
 }

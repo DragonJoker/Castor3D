@@ -149,14 +149,11 @@ namespace CastorViewer
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;
 
-		Castor3D::SceneNodeSPtr m_cameraNode;
+		Castor3D::CameraSPtr m_currentCamera;
 		Castor3D::SceneNodeSPtr m_lightsNode;
 		Castor3D::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;
 		Castor::real m_camSpeed;
-
-		Castor3D::SceneNodeSPtr m_originalCameraNode;
-		Castor3D::ViewportUPtr m_originalViewport;
 	};
 }
 

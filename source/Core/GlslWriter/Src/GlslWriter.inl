@@ -258,10 +258,10 @@ namespace GLSL
 	}
 
 	template< typename ExprType >
-	ExprType GlslWriter::Ternary( Type const & p_condition, Type const & p_left, Type const & p_right )
+	ExprType GlslWriter::Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
 	{
 		ExprType l_return( this );
-		l_return.m_value << ToString( p_condition ) << cuT( " ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
+		l_return.m_value << cuT( "( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
 		return l_return;
 	}
 

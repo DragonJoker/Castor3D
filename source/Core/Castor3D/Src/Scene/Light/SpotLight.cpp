@@ -1,10 +1,9 @@
 #include "SpotLight.hpp"
 
 #include "Scene/SceneNode.hpp"
+#include "Render/Viewport.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
-
-#include <GlslSource.hpp>
 
 using namespace Castor;
 
@@ -55,8 +54,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SpotLight::SpotLight( Viewport & p_viewport )
-		: LightCategory{ LightType::Spot, p_viewport }
+	SpotLight::SpotLight()
+		: LightCategory{ LightType::Spot }
 	{
 	}
 
@@ -64,14 +63,14 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr SpotLight::Create( Viewport & p_viewport )
+	LightCategorySPtr SpotLight::Create()
 	{
-		return std::shared_ptr< SpotLight >( new SpotLight{ p_viewport } );
+		return std::shared_ptr< SpotLight >( new SpotLight );
 	}
 
-	void SpotLight::Update( Size const & p_size )
+	void SpotLight::Update( Point3r const & p_target )
 	{
-		m_viewport.SetPerspective( GetCutOff(), real( p_size.width() ) / p_size.height(), 1.0_r, 1000.0_r );
+		m_viewport->SetPerspective( GetCutOff() * 2, m_viewport->GetRatio(), 1.0_r, 1000.0_r );
 		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
 		auto l_position = GetPosition();
 		l_position[2] = -l_position[2];
@@ -93,7 +92,7 @@ namespace Castor3D
 		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( m_viewport.GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
+		DoBindComponent( m_viewport->GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 		DoBindComponent( l_front, p_index, l_offset, p_texture );
 		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );

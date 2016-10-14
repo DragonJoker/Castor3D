@@ -210,19 +210,19 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
-		Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
 		 */
-		Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
-		Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
-		Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */

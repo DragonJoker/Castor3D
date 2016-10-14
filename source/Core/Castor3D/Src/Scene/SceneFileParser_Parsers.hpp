@@ -67,6 +67,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerWWrapMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerBorderColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerMaxAnisotropy )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerComparisonMode )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SamplerComparisonFunc )
 
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneInclude )

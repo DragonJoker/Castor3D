@@ -335,7 +335,7 @@ namespace GlRender
 		inline Castor::String const & GetGlslErrorString( int p_index )const;
 		inline eGL_PRIMITIVE Get( Castor3D::Topology p_index )const;
 		inline eGL_TEXDIM Get( Castor3D::TextureType p_index )const;
-		inline eGL_FUNC Get( Castor3D::AlphaFunc p_eAlphaFunc )const;
+		inline eGL_FUNC Get( Castor3D::ComparisonFunc p_eAlphaFunc )const;
 		inline eGL_WRAP_MODE Get( Castor3D::WrapMode p_eWrapMode )const;
 		inline eGL_INTERPOLATION_MODE Get( Castor3D::InterpolationMode p_interpolation )const;
 		inline int Get( Castor3D::BlendSource p_eArgument )const;
@@ -362,6 +362,7 @@ namespace GlRender
 		inline eGL_QUERY Get( Castor3D::QueryType p_value )const;
 		inline eGL_QUERY_INFO Get( Castor3D::QueryInfo p_value )const;
 		inline eGL_TEXTURE_STORAGE Get( Castor3D::TextureStorageType p_value )const;
+		inline eGL_COMPARE_MODE Get( Castor3D::ComparisonMode p_value )const;
 		inline bool Get( Castor3D::WritingMask p_eMask )const;
 		inline bool HasDebugOutput()const;
 		inline Castor::String const & GetVendor()const;
@@ -467,7 +468,7 @@ namespace GlRender
 		inline bool BlendFunc( uint32_t p_index, eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst )const;
 		inline bool BlendEquation( eGL_BLEND_OP p_eOp )const;
 		inline bool BlendEquation( uint32_t p_uiBuffer, eGL_BLEND_OP p_eOp )const;
-		inline bool AlphaFunc( eGL_FUNC func, float ref )const;
+		inline bool ComparisonFunc( eGL_FUNC func, float ref )const;
 
 		//@}
 		/**@name Texture functions */
@@ -835,7 +836,7 @@ namespace GlRender
 		Castor::String GlslErrors[8];
 		eGL_PRIMITIVE PrimitiveTypes[uint32_t( Castor3D::Topology::Count )];
 		eGL_TEXDIM TextureDimensions[uint32_t( Castor3D::TextureType::Count )];
-		eGL_FUNC AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Count )];
+		eGL_FUNC AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Count )];
 		eGL_WRAP_MODE TextureWrapMode[uint32_t( Castor3D::WrapMode::Count )];
 		eGL_INTERPOLATION_MODE TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Count )];
 		eGL_BLEND_FACTOR BlendFactors[uint32_t( Castor3D::BlendOperand::Count )];
@@ -858,6 +859,7 @@ namespace GlRender
 		eGL_QUERY Queries[uint32_t( Castor3D::QueryType::Count )];
 		eGL_QUERY_INFO QueryInfos[uint32_t( Castor3D::QueryInfo::Count )];
 		eGL_TEXTURE_STORAGE TextureStorages[uint32_t( Castor3D::TextureStorageType::Count )];
+		eGL_COMPARE_MODE ComparisonModes[uint32_t( Castor3D::ComparisonMode::Count )];
 		bool WriteMasks[uint32_t( Castor3D::WritingMask::Count )];
 		eGL_FUNC DepthFuncs[uint32_t( Castor3D::DepthFunc::Count )];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;

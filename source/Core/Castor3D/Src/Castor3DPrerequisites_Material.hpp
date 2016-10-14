@@ -35,7 +35,7 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des fonctions alpha
 	*/
-	enum class AlphaFunc
+	enum class ComparisonFunc
 		: uint8_t
 	{
 		//!\~english Always take texture colour
@@ -109,6 +109,20 @@ namespace Castor3D
 		Mag,
 		Mip,
 		Count
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\~english
+	\brief		Texture comparison modes enumeration.
+	\~french
+	\brief		Enumération des modes de comparaison de texture.
+	*/
+	enum class ComparisonMode
+		: uint8_t
+	{
+		None,
+		RefToTexture,
+		CASTOR_ENUM_CLASS_BOUNDS( None )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

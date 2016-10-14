@@ -27,8 +27,6 @@ SOFTWARE.
 
 #include "LightCategory.hpp"
 
-#include "Render/Viewport.hpp"
-
 #include <Design/OwnedBy.hpp>
 
 namespace Castor3D
@@ -109,12 +107,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the light viewport.
-		 *\param[in]	p_size	The viewport dimensions.
+		 *\param[in]	p_target	The target position, used by directional shadow map.
 		 *\~french
 		 *\brief		Met le viewport de la source à jour.
-		 *\param[in]	p_size	Les dimensions du viewport.
+		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
 		 */
-		C3D_API void Update( Castor::Size const & p_size );
+		C3D_API void Update( Castor::Point3r const & p_target );
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
@@ -134,7 +132,7 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
+		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category
@@ -434,13 +432,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The shadow map rendering viewport.
+		 *\return		Sets the shadow map rendering viewport.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\return		The viewport de rendu de shadow map.
+		 *\return		Définit le viewport de rendu de shadow map.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline Viewport const & GetViewport()const
+		inline void SetViewport( Viewport & p_value )
 		{
-			return m_viewport;
+			m_viewport = &p_value;
+			m_category->SetViewport( p_value );
 		}
 		/**
 		 *\~english
@@ -468,7 +469,7 @@ namespace Castor3D
 		LightCategorySPtr m_category;
 		//!\~english	The shadow map rendering viewport.
 		//\~french		Le viewport de rendu de la mp d'ombres.
-		Viewport m_viewport;
+		Viewport * m_viewport;
 	};
 }
 

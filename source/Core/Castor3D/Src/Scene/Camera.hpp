@@ -121,6 +121,29 @@ namespace Castor3D
 		C3D_API ~Camera();
 		/**
 		 *\~english
+		 *\brief		Attaches this light to a Material
+		 *\param[in]	p_node	The new light's parent node
+		 *\~french
+		 *\brief		Attache cette lumière au node donné
+		 *\param[in]	p_node	Le nouveau node parent de cette lumière
+		 */
+		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
+		/**
+		 *\~english
+		 *\brief		Sets the orientation to identity
+		 *\~french
+		 *\brief		Met l'orientation à l'identité
+		 */
+		C3D_API void ResetOrientation();
+		/**
+		 *\~english
+		 *\brief		Sets the position to 0
+		 *\~french
+		 *\brief		Réinitialise la position
+		 */
+		C3D_API void ResetPosition();
+		/**
+		 *\~english
 		 *\brief		Updates the viewport, the frustum...
 		 *\~french
 		 *\brief		Met à jour le viewport, frustum...
@@ -151,20 +174,6 @@ namespace Castor3D
 		 *\param[in]	p_size	Dimensions de la fenêtre d'affichage
 		 */
 		C3D_API void Resize( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Sets the orientation to identity
-		 *\~french
-		 *\brief		Met l'orientation à l'identité
-		 */
-		C3D_API void ResetOrientation();
-		/**
-		 *\~english
-		 *\brief		Sets the position to 0
-		 *\~french
-		 *\brief		Réinitialise la position
-		 */
-		C3D_API void ResetPosition();
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport type
@@ -298,14 +307,23 @@ namespace Castor3D
 		}
 
 	private:
+		void OnNodeChanged( SceneNode const & p_node );
+
+	private:
 		friend class Scene;
 		friend class CameraRenderer;
-		//!\~english The viewport of the camera	\~french Le viewport de la caméra
+		//!\~english	The viewport of the camera.
+		//!\~french		Le viewport de la caméra.
 		Viewport m_viewport;
-		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
+		//!\~english	The view frustum's planes.
+		//!\~french		Les plans du frustum de vue.
 		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::Count ) > m_planes;
-		//!\~english The view matrix	\~french La matrice vue
+		//!\~english	The view matrix.
+		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;
+		//!\~english	Tells if the parent node has changed.
+		//!\~french		Dit si le noeud parent a changé.
+		bool m_nodeChanged{ true };
 	};
 }
 

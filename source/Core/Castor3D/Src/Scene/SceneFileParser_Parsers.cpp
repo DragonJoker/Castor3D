@@ -703,6 +703,40 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonMode )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pSampler )
+		{
+			PARSING_ERROR( cuT( "No sampler initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t l_uiMode;
+			p_params[0]->Get( l_uiMode );
+			l_parsingContext->pSampler->SetComparisonMode( ComparisonMode( l_uiMode ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonFunc )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pSampler )
+		{
+			PARSING_ERROR( cuT( "No sampler initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t l_uiMode;
+			p_params[0]->Get( l_uiMode );
+			l_parsingContext->pSampler->SetComparisonFunc( ComparisonFunc( l_uiMode ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneInclude )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2572,7 +2606,7 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_uiFunc );
 			p_params[1]->Get( l_fFloat );
-			l_parsingContext->pTextureUnit->SetAlphaFunc( AlphaFunc( l_uiFunc ) );
+			l_parsingContext->pTextureUnit->SetAlphaFunc( ComparisonFunc( l_uiFunc ) );
 			l_parsingContext->pTextureUnit->SetAlphaValue( l_fFloat );
 		}
 	}

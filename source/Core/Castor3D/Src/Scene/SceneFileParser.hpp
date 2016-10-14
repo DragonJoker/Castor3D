@@ -219,7 +219,7 @@ namespace Castor3D
 
 		UIntStrMap m_mapBlendFactors;
 		UIntStrMap m_mapTypes;
-		UIntStrMap m_mapAlphaFuncs;
+		UIntStrMap m_mapComparisonFuncs;
 		UIntStrMap m_mapTextureArguments;
 		UIntStrMap m_mapTextureRgbFunctions;
 		UIntStrMap m_mapTextureAlphaFunctions;
@@ -245,6 +245,7 @@ namespace Castor3D
 		UIntStrMap m_mapLineSpacingModes;
 		UIntStrMap m_fogTypes;
 		UIntStrMap m_mapMeshTypes;
+		UIntStrMap m_mapComparisonModes;
 	};
 }
 

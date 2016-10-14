@@ -203,14 +203,14 @@ namespace GlRender
 		TextureDimensions[uint32_t( Castor3D::TextureType::Cube )] = eGL_TEXDIM_CUBE;
 		TextureDimensions[uint32_t( Castor3D::TextureType::CubeArray )] = eGL_TEXDIM_CUBE_ARRAY;
 
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Always )] = eGL_FUNC_ALWAYS;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Less )] = eGL_FUNC_LESS;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::LEqual )] = eGL_FUNC_LEQUAL;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Equal )] = eGL_FUNC_EQUAL;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::NEqual )] = eGL_FUNC_NOTEQUAL;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::GEqual )] = eGL_FUNC_GEQUAL;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Greater )] = eGL_FUNC_GREATER;
-		AlphaFuncs[uint32_t( Castor3D::AlphaFunc::Never )] = eGL_FUNC_NEVER;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Always )] = eGL_FUNC_ALWAYS;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Less )] = eGL_FUNC_LESS;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::LEqual )] = eGL_FUNC_LEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Equal )] = eGL_FUNC_EQUAL;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::NEqual )] = eGL_FUNC_NOTEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::GEqual )] = eGL_FUNC_GEQUAL;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Greater )] = eGL_FUNC_GREATER;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Never )] = eGL_FUNC_NEVER;
 
 		TextureWrapMode[uint32_t( Castor3D::WrapMode::Repeat )] = eGL_WRAP_MODE_REPEAT;
 		TextureWrapMode[uint32_t( Castor3D::WrapMode::MirroredRepeat )] = eGL_WRAP_MODE_MIRRORED_REPEAT;
@@ -456,6 +456,9 @@ namespace GlRender
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ;
+
+		ComparisonModes[uint32_t( Castor3D::ComparisonMode::None )] = eGL_COMPARE_MODE_NONE;
+		ComparisonModes[uint32_t( Castor3D::ComparisonMode::RefToTexture )] = eGL_COMPARE_MODE_REF_TO_TEXTURE;
 
 		Cleanup();
 

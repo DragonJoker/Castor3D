@@ -110,6 +110,58 @@ namespace Castor3D
 			return l_return;
 		}
 
+		template< typename CreatorFunc, typename NodesType, typename ... Params >
+		void DoAddNode( RenderPass & p_renderPass
+						, uint16_t p_programFlags
+						, Pass & p_pass
+						, Scene const & p_scene
+						, NodesType & p_nodes
+						, CreatorFunc p_creator )
+		{
+			if ( !p_pass.HasAlphaBlending() )
+			{
+				if ( p_pass.IsTwoSided() )
+				{
+					auto l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_scene.GetFlags() );
+
+					if ( l_pipeline )
+					{
+						auto l_node = p_creator( *l_pipeline );
+						DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_opaqueRenderNodesFront );
+					}
+				}
+
+				auto l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_scene.GetFlags() );
+
+				if ( l_pipeline )
+				{
+					auto l_node = p_creator( *l_pipeline );
+					DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_opaqueRenderNodesBack );
+				}
+			}
+			else
+			{
+				{
+					auto l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_scene.GetFlags() );
+
+					if ( l_pipeline )
+					{
+						auto l_node = p_creator( *l_pipeline );
+						DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_transparentRenderNodesFront );
+					}
+				}
+				{
+					auto l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_scene.GetFlags() );
+
+					if ( l_pipeline )
+					{
+						auto l_node = p_creator( *l_pipeline );
+						DoAddRenderNode( *l_pipeline, l_node, p_nodes.m_transparentRenderNodesBack );
+					}
+				}
+			}
+		}
+
 		void DoAddAnimatedNode( RenderPass & p_renderPass
 								, uint16_t p_programFlags
 								, Pass & p_pass
@@ -119,32 +171,12 @@ namespace Castor3D
 								, AnimatedMeshSPtr p_mesh
 								, RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > & p_animated )
 		{
-			if ( !p_pass.HasAlphaBlending() )
-			{
-				if ( p_pass.IsTwoSided() )
-				{
-					auto & l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateAnimatedNode( p_pass, l_pipeline, p_submesh, p_primitive, p_skeleton, p_mesh );
-					DoAddRenderNode( l_pipeline, l_node, p_animated.m_opaqueRenderNodesFront );
-				}
-
-				auto & l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-				auto l_node = p_renderPass.CreateAnimatedNode( p_pass, l_pipeline, p_submesh, p_primitive, p_skeleton, p_mesh );
-				DoAddRenderNode( l_pipeline, l_node, p_animated.m_opaqueRenderNodesBack );
-			}
-			else
-			{
-				{
-					auto & l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateAnimatedNode( p_pass, l_pipeline, p_submesh, p_primitive, p_skeleton, p_mesh );
-					DoAddRenderNode( l_pipeline, l_node, p_animated.m_transparentRenderNodesFront );
-				}
-				{
-					auto & l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateAnimatedNode( p_pass, l_pipeline, p_submesh, p_primitive, p_skeleton, p_mesh );
-					DoAddRenderNode( l_pipeline, l_node, p_animated.m_transparentRenderNodesBack );
-				}
-			}
+			DoAddNode( p_renderPass
+					   , p_programFlags
+					   , p_pass
+					   , *p_primitive.GetScene()
+					   , p_animated
+					   , std::bind( &RenderPass::CreateAnimatedNode, &p_renderPass, std::ref( p_pass ), std::placeholders::_1, std::ref( p_submesh ), std::ref( p_primitive ), p_skeleton, p_mesh ) );
 		}
 
 		void DoAddStaticNode( RenderPass & p_renderPass
@@ -161,57 +193,53 @@ namespace Castor3D
 				{
 					if ( p_pass.IsTwoSided() )
 					{
-						auto & l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( p_pass, l_pipeline, l_node, p_submesh, p_instanced.m_opaqueRenderNodesFront );
+						auto l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
+
+						if ( l_pipeline )
+						{
+							auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
+							DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_opaqueRenderNodesFront );
+						}
 					}
 
-					auto & l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-					DoAddRenderNode( p_pass, l_pipeline, l_node, p_submesh, p_instanced.m_opaqueRenderNodesBack );
+					auto l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
+
+					if ( l_pipeline )
+					{
+						auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
+						DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_opaqueRenderNodesBack );
+					}
 				}
 				else
 				{
 					{
-						auto & l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( p_pass, l_pipeline, l_node, p_submesh, p_instanced.m_transparentRenderNodesFront );
+						auto l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
+
+						if ( l_pipeline )
+						{
+							auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
+							DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_transparentRenderNodesFront );
+						}
 					}
 					{
-						auto & l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( p_pass, l_pipeline, l_node, p_submesh, p_instanced.m_transparentRenderNodesBack );
+						auto l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
+
+						if ( l_pipeline )
+						{
+							auto l_node = p_renderPass.CreateStaticNode( p_pass, *l_pipeline, p_submesh, p_primitive );
+							DoAddRenderNode( p_pass, *l_pipeline, l_node, p_submesh, p_instanced.m_transparentRenderNodesBack );
+						}
 					}
 				}
 			}
 			else
 			{
-				if ( !p_pass.HasAlphaBlending() )
-				{
-					if ( p_pass.IsTwoSided() )
-					{
-						auto & l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( l_pipeline, l_node, p_static.m_opaqueRenderNodesFront );
-					}
-
-					auto & l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-					DoAddRenderNode( l_pipeline, l_node, p_static.m_opaqueRenderNodesBack );
-				}
-				else
-				{
-					{
-						auto & l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( l_pipeline, l_node, p_static.m_transparentRenderNodesFront );
-					}
-					{
-						auto & l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_primitive.GetScene()->GetFlags() );
-						auto l_node = p_renderPass.CreateStaticNode( p_pass, l_pipeline, p_submesh, p_primitive );
-						DoAddRenderNode( l_pipeline, l_node, p_static.m_transparentRenderNodesBack );
-					}
-				}
+				DoAddNode( p_renderPass
+						   , p_programFlags
+						   , p_pass
+						   , *p_primitive.GetScene()
+						   , p_static
+						   , std::bind( &RenderPass::CreateStaticNode, &p_renderPass, std::ref( p_pass ), std::placeholders::_1, std::ref( p_submesh ), std::ref( p_primitive ) ) );
 			}
 		}
 
@@ -221,32 +249,12 @@ namespace Castor3D
 								 , BillboardList & p_billboard
 								 , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
 		{
-			if ( !p_pass.HasAlphaBlending() )
-			{
-				if ( p_pass.IsTwoSided() )
-				{
-					auto & l_pipeline = p_renderPass.GetOpaquePipelineFront( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_billboard.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateBillboardNode( p_pass, l_pipeline, p_billboard );
-					DoAddRenderNode( l_pipeline, l_node, p_nodes.m_opaqueRenderNodesFront );
-				}
-
-				auto & l_pipeline = p_renderPass.GetOpaquePipelineBack( p_pass.GetColourBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_billboard.GetScene()->GetFlags() );
-				auto l_node = p_renderPass.CreateBillboardNode( p_pass, l_pipeline, p_billboard );
-				DoAddRenderNode( l_pipeline, l_node, p_nodes.m_opaqueRenderNodesBack );
-			}
-			else
-			{
-				{
-					auto & l_pipeline = p_renderPass.GetTransparentPipelineFront( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_billboard.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateBillboardNode( p_pass, l_pipeline, p_billboard );
-					DoAddRenderNode( l_pipeline, l_node, p_nodes.m_transparentRenderNodesFront );
-				}
-				{
-					auto & l_pipeline = p_renderPass.GetTransparentPipelineBack( p_pass.GetColourBlendMode(), p_pass.GetAlphaBlendMode(), p_pass.GetTextureFlags(), p_programFlags, p_billboard.GetScene()->GetFlags() );
-					auto l_node = p_renderPass.CreateBillboardNode( p_pass, l_pipeline, p_billboard );
-					DoAddRenderNode( l_pipeline, l_node, p_nodes.m_transparentRenderNodesBack );
-				}
-			}
+			DoAddNode( p_renderPass
+					   , p_programFlags
+					   , p_pass
+					   , *p_billboard.GetScene()
+					   , p_nodes
+					   , std::bind( &RenderPass::CreateBillboardNode, &p_renderPass, std::ref( p_pass ), std::placeholders::_1, std::ref( p_billboard ) ) );
 		}
 
 		void DoSortRenderNodes( RenderPass & p_renderPass

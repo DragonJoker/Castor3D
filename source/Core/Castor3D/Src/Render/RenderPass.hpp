@@ -120,14 +120,16 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés, pour les faces avant supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline & GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for back face culling.
@@ -135,14 +137,16 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline opaque qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline & GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
@@ -151,6 +155,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces avant supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
@@ -158,8 +163,9 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for back face culling.
@@ -168,6 +174,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\return		The ready to use pipeline, \p nullptr if none is available for wanted configuration.
 		 *\~french
 		 *\brief		Récupère le pipeline transparent qui correspond aux indicateurs donnés, pour les faces arrière supprimées.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
@@ -175,8 +182,9 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline & GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -377,39 +385,31 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.
-		 *\return		The ready to use pipeline.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu des objets opaques, en supprimant les faces avant.
-		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual Pipeline & DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling back faces.
-		 *\return		The ready to use pipeline.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu des objets opaques, en supprimant les faces arrière.
-		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual Pipeline & DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for transparent objets render, culling front faces.
-		 *\return		The ready to use pipeline.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces avant.
-		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for transparent objets render, culling back faces.
-		 *\return		The ready to use pipeline.
 		 *\~french
 		 *\brief		Prépare le pipeline de rendu des objets transparents, en supprimant les faces arrière.
-		 *\return		Le pipeline prêt à l'utilisation.
 		 */
-		C3D_API virtual Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags ) = 0;
 
 	protected:
 		//!\~english	The render system.

@@ -88,12 +88,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_viewport	The shadow map render viewport.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_viewport	Le viewport utilisé pour le rendu de la map d'ombres.
 		 */
-		C3D_API SpotLight( Viewport & p_viewport );
+		C3D_API SpotLight();
 
 	public:
 		/**
@@ -106,18 +104,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory.
-		 *\param[in]	p_viewport	The shadow map render viewport.
 		 *\return		A light source.
 		 *\~french
 		 *\brief		Fonction de création utilisée par Factory.
-		 *\param[in]	p_viewport	Le viewport utilisé pour le rendu de la map d'ombres.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategorySPtr Create( Viewport & p_viewport );
+		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */
-		C3D_API void Update( Castor::Size const & p_size )override;
+		C3D_API void Update( Castor::Point3r const & p_target )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */

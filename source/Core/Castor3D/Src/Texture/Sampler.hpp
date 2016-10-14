@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include <Design/OwnedBy.hpp>
+#include <Graphics/Colour.hpp>
 
 namespace Castor3D
 {
@@ -40,6 +41,7 @@ namespace Castor3D
 	*/
 	class Sampler
 		: public Castor::OwnedBy< Engine >
+		, public Castor::Named
 	{
 	public:
 		/*!
@@ -309,46 +311,91 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the sampler name
-		 \return		The name
+		 *\return		The comparison mode.
 		 *\~french
-		 *\brief		Récupère le nom de l'échantillonneur
-		 *\return		Le nom
+		 *\return		Le mode de comparaison.
 		 */
-		inline Castor::String const & GetName()const
+		inline ComparisonMode GetComparisonMode()const
 		{
-			return m_name;
+			return m_comparisonMode;
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the sampler name
-		 *\param[in]	p_name	The name
+		 *\brief		Defines the comparison mode.
+		 *\param[in]	p_mode		The wanted mode.
 		 *\~french
-		 *\brief		Récupère le nom de l'échantillonneur
-		 *\param[in]	p_name	Le nom
+		 *\brief		Définit le mode de comparaison.
+		 *\param[in]	p_mode		Le mode souhaité.
 		 */
-		inline void SetName( Castor::String const & p_name )
+		inline void SetComparisonMode( ComparisonMode p_mode )
 		{
-			m_name = p_name;
+			m_comparisonMode = p_mode;
+		}
+		/**
+		 *\~english
+		 *\return		The comparison function.
+		 *\~french
+		 *\return		La fonction de comparaison.
+		 */
+		inline ComparisonFunc GetComparisonFunc()const
+		{
+			return m_comparisonFunc;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the comparison function.
+		 *\param[in]	p_mode		The wanted function.
+		 *\~french
+		 *\brief		Définit la fonction de comparaison.
+		 *\param[in]	p_mode		La fonction souhaitée.
+		 */
+		inline void SetComparisonFunc( ComparisonFunc p_mode )
+		{
+			m_comparisonFunc = p_mode;
 		}
 
 	private:
-		//!\~english Sampler interpolation modes	\~french Modes d'interpolation du sampler
-		InterpolationMode m_eInterpolationModes[uint32_t( InterpolationFilter::Count )];
-		//!\~english Sampler wrapping modes	\~french Modes de wrapping du sampler
-		WrapMode m_eWrapModes[uint32_t( TextureUVW::Count )];
-		//!\~english Minimal LOD Level	\~french Niveau de LOD minimal
-		real m_rMinLod;
-		//!\~english Maximal LOD Level	\~french Niveau de LOD maximal
-		real m_rMaxLod;
-		//!\~english The texture LOD offset	\~french Le décalage de Lod de la texture
-		real m_rLodBias;
-		//!\~english Texture border colour	\~french Couleur des bords de la texture
-		Castor::Colour m_clrBorderColour;
-		//!\~english Maximal anisotropic filtering value	\~french Valeur maximale pour le filtrage anisotropique
-		real m_rMaxAnisotropy;
-		//!\~english The sampler name	\~french Le nom de l'échantillonneur
-		Castor::String m_name;
+		//!\~english	Sampler interpolation modes
+		//!\~french		Modes d'interpolation de l'échantillonneur.
+		std::array< InterpolationMode, size_t( InterpolationFilter::Count ) > m_eInterpolationModes
+		{
+			{
+				InterpolationMode::Nearest,
+				InterpolationMode::Nearest,
+				InterpolationMode::Undefined,
+			}
+		};
+		//!\~english	Sampler wrapping modes.
+		//!\~french		Modes de wrapping de l'échantillonneur.
+		std::array< WrapMode, size_t( TextureUVW::Count ) > m_eWrapModes
+		{
+			{
+				WrapMode::Repeat,
+				WrapMode::Repeat,
+				WrapMode::Repeat,
+			}
+		};
+		//!\~english	Minimal LOD Level.
+		//!\~french		Niveau de LOD minimal.
+		real m_rMinLod{ -1000.0_r };
+		//!\~english	Maximal LOD Level.
+		//!\~french		Niveau de LOD maximal.
+		real m_rMaxLod{ 1000.0_r };
+		//!\~english	The texture LOD offset.
+		//!\~french		Le décalage de LOD de la texture.
+		real m_rLodBias{ 0.0_r };
+		//!\~english	Texture border colour.
+		//!\~french		Couleur des bords de la texture.
+		Castor::Colour m_clrBorderColour{ Castor::Colour::from_components( 0, 0, 0, 0 ) };
+		//!\~english	Maximal anisotropic filtering value.
+		//!\~french		Valeur maximale pour le filtrage anisotropique.
+		real m_rMaxAnisotropy{ 1.0_r };
+		//!\~english	The texture comparison mode.
+		//!\~french		Le mode de comparaison de la texture.
+		ComparisonMode m_comparisonMode{ ComparisonMode::None };
+		//!\~english	The texture comparison function.
+		//!\~french		La fonction de comparaison de la texture.
+		ComparisonFunc m_comparisonFunc{ ComparisonFunc::LEqual };
 	};
 }
 
