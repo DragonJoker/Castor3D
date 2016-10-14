@@ -24,6 +24,7 @@ SOFTWARE.
 #define __COMC3D_COM_SPOT_OLIGHT_H__
 
 #include "ComLightCategory.hpp"
+#include "ComAngle.hpp"
 
 #include <Scene/Light/SpotLight.hpp>
 
@@ -74,7 +75,7 @@ namespace CastorCom
 		COM_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::SpotLight::GetPosition ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetPosition ) );
 		COM_PROPERTY( Attenuation, IVector3D *, make_getter( m_internal.get(), &Castor3D::SpotLight::GetAttenuation ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetAttenuation ) );
 		COM_PROPERTY( Exponent, float, make_getter( m_internal.get(), &Castor3D::SpotLight::GetExponent ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetExponent ) );
-		COM_PROPERTY( CutOff, float, make_getter( m_internal.get(), &Castor3D::SpotLight::GetCutOff ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetCutOff ) );
+		COM_PROPERTY( CutOff, IAngle *, make_getter( m_internal.get(), &Castor3D::SpotLight::GetCutOff ), make_putter( m_internal.get(), &Castor3D::SpotLight::SetCutOff ) );
 
 	private:
 		Castor3D::SpotLightSPtr m_internal;

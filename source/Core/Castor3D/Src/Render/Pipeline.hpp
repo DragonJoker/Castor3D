@@ -66,6 +66,7 @@ namespace Castor3D
 		 *\param[in]	p_blState		The blend state.
 		 *\param[in]	p_msState		The multisample state.
 		 *\param[in]	p_program		The shader program.
+		 *\param[in]	p_flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem parent.
@@ -74,13 +75,15 @@ namespace Castor3D
 		 *\param[in]	p_blState		L'état de mélange.
 		 *\param[in]	p_msState		L'état de multi-échantillonnage.
 		 *\param[in]	p_program		Le programme shader.
+		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
 		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
 								   , DepthStencilState && p_dsState
 								   , RasteriserState && p_rsState
 								   , BlendState && p_blState
 								   , MultisampleState && p_msState
-								   , ShaderProgram & p_program );
+								   , ShaderProgram & p_program
+								   , PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Denstructor.
@@ -298,6 +301,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The creation flags.
+		 *\~french
+		 *\return		Les indicateurs de création.
+		 */
+		inline PipelineFlags const & GetFlags()const
+		{
+			return m_flags;
+		}
+		/**
+		 *\~english
 		 *\return		The shader program.
 		 *\~french
 		 *\return		Le programme shader.
@@ -306,6 +319,27 @@ namespace Castor3D
 		{
 			REQUIRE( m_sceneUbo );
 			return *m_sceneUbo;
+		}
+		/**
+		 *\~english
+		 *\return		The count of textures used by the program.
+		 *\~french
+		 *\return		Le nombre de textures utilisées par le programme.
+		 */
+		inline uint32_t GetTexturesCount()
+		{
+			return m_textureCount;
+		}
+		/**
+		 *\~english
+		 *\return		The shadow maps frame variable.
+		 *\~french
+		 *\return		La variabe shader des shadow maps.
+		 */
+		inline OneIntFrameVariable & GetShadowMapsVariable()
+		{
+			REQUIRE( m_shadowMaps );
+			return *m_shadowMaps;
 		}
 
 	private:
@@ -352,6 +386,15 @@ namespace Castor3D
 		//!\~english	The scene frame variable buffer.
 		//!\~french		Le tampon de variables shader pour la scène.
 		FrameVariableBufferSPtr m_sceneUbo;
+		//!\~english	The shadow maps frame variable.
+		//!\~french		La variable shader pour las shadow maps.
+		OneIntFrameVariableSPtr m_shadowMaps;
+		//!\~english	The creation flags.
+		//!\~french		Les indicateurs de création.
+		PipelineFlags m_flags;
+		//!\~english	The count of textures used by the program.
+		//!\~french		Le nombre de textures utilisées par le programme.
+		uint32_t m_textureCount{ 0u };
 	};
 }
 

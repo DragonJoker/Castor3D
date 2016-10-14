@@ -37,6 +37,14 @@ SOFTWARE.
 
 namespace GLSL
 {
+	enum class ShadowType
+	{
+		None,
+		Raw,
+		Poisson,
+		StratifiedPoisson
+	};
+
 	struct GlslWriterConfig;
 	class GlslWriter;
 	class KeywordsBase;
@@ -76,6 +84,9 @@ namespace GLSL
 	struct Sampler2D;
 	struct Sampler3D;
 	struct SamplerCube;
+	struct Sampler1DShadow;
+	struct Sampler2DShadow;
+	struct SamplerCubeShadow;
 }
 
 #endif

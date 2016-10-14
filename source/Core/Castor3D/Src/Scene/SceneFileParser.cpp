@@ -38,7 +38,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, pOverlay( nullptr )
 	, iFace1( -1 )
 	, iFace2( -1 )
-	, eLightType( eLIGHT_TYPE_COUNT )
+	, eLightType( LightType::Count )
 	, eMeshType( eMESH_TYPE_COUNT )
 	, ePrimitiveType( Topology::Count )
 	, pViewport( nullptr )
@@ -62,7 +62,7 @@ void SceneFileContext::Initialise()
 	pOverlay = nullptr;
 	iFace1 = -1;
 	iFace2 = -1;
-	eLightType = eLIGHT_TYPE_COUNT;
+	eLightType = LightType::Count;
 	eMeshType = eMESH_TYPE_COUNT;
 	ePrimitiveType = Topology::Count;
 	uiUInt16 = 0;
@@ -118,14 +118,14 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTypes[cuT( "2d" )] = uint32_t( TextureType::TwoDimensions );
 	m_mapTypes[cuT( "3d" )] = uint32_t( TextureType::ThreeDimensions );
 
-	m_mapAlphaFuncs[cuT( "always" )] = uint32_t( AlphaFunc::Always );
-	m_mapAlphaFuncs[cuT( "less" )] = uint32_t( AlphaFunc::Less );
-	m_mapAlphaFuncs[cuT( "less_or_equal" )] = uint32_t( AlphaFunc::LEqual );
-	m_mapAlphaFuncs[cuT( "equal" )] = uint32_t( AlphaFunc::Equal );
-	m_mapAlphaFuncs[cuT( "not_equal" )] = uint32_t( AlphaFunc::NEqual );
-	m_mapAlphaFuncs[cuT( "greater_or_equal" )] = uint32_t( AlphaFunc::GEqual );
-	m_mapAlphaFuncs[cuT( "greater" )] = uint32_t( AlphaFunc::Greater );
-	m_mapAlphaFuncs[cuT( "never" )] = uint32_t( AlphaFunc::Never );
+	m_mapComparisonFuncs[cuT( "always" )] = uint32_t( ComparisonFunc::Always );
+	m_mapComparisonFuncs[cuT( "less" )] = uint32_t( ComparisonFunc::Less );
+	m_mapComparisonFuncs[cuT( "less_or_equal" )] = uint32_t( ComparisonFunc::LEqual );
+	m_mapComparisonFuncs[cuT( "equal" )] = uint32_t( ComparisonFunc::Equal );
+	m_mapComparisonFuncs[cuT( "not_equal" )] = uint32_t( ComparisonFunc::NEqual );
+	m_mapComparisonFuncs[cuT( "greater_or_equal" )] = uint32_t( ComparisonFunc::GEqual );
+	m_mapComparisonFuncs[cuT( "greater" )] = uint32_t( ComparisonFunc::Greater );
+	m_mapComparisonFuncs[cuT( "never" )] = uint32_t( ComparisonFunc::Never );
 
 	m_mapTextureArguments[cuT( "texture" )] = uint32_t( BlendSource::Texture );
 	m_mapTextureArguments[cuT( "texture0" )] = uint32_t( BlendSource::Texture0 );
@@ -167,9 +167,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapNormalModes[cuT( "smooth" )] = uint32_t( eNORMAL_SMOOTH );
 	m_mapNormalModes[cuT( "flat" )] = uint32_t( eNORMAL_FLAT );
 
-	m_mapLightTypes[cuT( "point_light" )] = uint32_t( eLIGHT_TYPE_POINT );
-	m_mapLightTypes[cuT( "spot_light" )] = uint32_t( eLIGHT_TYPE_SPOT );
-	m_mapLightTypes[cuT( "directional" )] = uint32_t( eLIGHT_TYPE_DIRECTIONAL );
+	m_mapLightTypes[cuT( "point" )] = uint32_t( LightType::Point );
+	m_mapLightTypes[cuT( "spot" )] = uint32_t( LightType::Spot );
+	m_mapLightTypes[cuT( "directional" )] = uint32_t( LightType::Directional );
 
 	m_mapPrimitiveTypes[cuT( "points" )] = uint32_t( Topology::Points );
 	m_mapPrimitiveTypes[cuT( "lines" )] = uint32_t( Topology::Lines );
@@ -241,6 +241,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapBlendModes[cuT( "none" )] = uint32_t( BlendMode::NoBlend );
 	m_mapBlendModes[cuT( "additive" )] = uint32_t( BlendMode::Additive );
 	m_mapBlendModes[cuT( "multiplicative" )] = uint32_t( BlendMode::Multiplicative );
+	m_mapBlendModes[cuT( "interpolative" )] = uint32_t( BlendMode::Interpolative );
+	m_mapBlendModes[cuT( "a_buffer" )] = uint32_t( BlendMode::ABuffer );
+	m_mapBlendModes[cuT( "depth_peeling" )] = uint32_t( BlendMode::DepthPeeling );
 
 	m_mapVerticalAligns[cuT( "top" )] = uint32_t( eVALIGN_TOP );
 	m_mapVerticalAligns[cuT( "center" )] = uint32_t( eVALIGN_CENTER );
@@ -260,6 +263,19 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_fogTypes[cuT( "linear" )] = uint32_t( FogType::Linear );
 	m_fogTypes[cuT( "exponential" )] = uint32_t( FogType::Exponential );
 	m_fogTypes[cuT( "squared_exponential" )] = uint32_t( FogType::SquaredExponential );
+
+	m_mapMeshTypes[cuT( "custom" )] = uint32_t( eMESH_TYPE_CUSTOM );
+	m_mapMeshTypes[cuT( "cone" )] = uint32_t( eMESH_TYPE_CONE );
+	m_mapMeshTypes[cuT( "cylinder" )] = uint32_t( eMESH_TYPE_CYLINDER );
+	m_mapMeshTypes[cuT( "sphere" )] = uint32_t( eMESH_TYPE_SPHERE );
+	m_mapMeshTypes[cuT( "cube" )] = uint32_t( eMESH_TYPE_CUBE );
+	m_mapMeshTypes[cuT( "torus" )] = uint32_t( eMESH_TYPE_TORUS );
+	m_mapMeshTypes[cuT( "plane" )] = uint32_t( eMESH_TYPE_PLANE );
+	m_mapMeshTypes[cuT( "icosahedron" )] = uint32_t( eMESH_TYPE_ICOSAHEDRON );
+	m_mapMeshTypes[cuT( "projection" )] = uint32_t( eMESH_TYPE_PROJECTION );
+
+	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::None );
+	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::RefToTexture );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -361,6 +377,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapWrappingModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "comparison_mode" ), Parser_SamplerComparisonMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "comparison_func" ), Parser_SamplerComparisonFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonFuncs ) } );
 
 	AddParser( eSECTION_SCENE, cuT( "include" ), Parser_SceneInclude, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
@@ -392,6 +410,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_LIGHT, cuT( "shadow_producer" ), Parser_LightShadowProducer, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 
 	AddParser( eSECTION_NODE, cuT( "parent" ), Parser_NodeParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_NODE, cuT( "position" ), Parser_NodePosition, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
@@ -402,12 +421,13 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_OBJECT, cuT( "mesh" ), Parser_ObjectMesh, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT, cuT( "material" ), Parser_ObjectMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT, cuT( "materials" ), Parser_ObjectMaterials );
+	AddParser( eSECTION_OBJECT, cuT( "cast_shadows" ), Parser_ObjectCastShadows, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_OBJECT, cuT( "}" ), Parser_ObjectEnd );
 
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ePARAMETER_TYPE_UINT16 >(), MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "}" ), Parser_ObjectMaterialsEnd );
 
-	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapMeshTypes ), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
@@ -445,7 +465,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapComparisonFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureChannels ) } );

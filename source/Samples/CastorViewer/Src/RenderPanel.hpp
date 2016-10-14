@@ -87,6 +87,7 @@ namespace CastorViewer
 		void DoStopTimer( int p_iId );
 		void DoResetCamera();
 		void DoTurnCamera();
+		void DoChangeCamera();
 		void DoReloadScene();
 		Castor::real DoTransformX( int x );
 		Castor::real DoTransformY( int y );
@@ -136,6 +137,8 @@ namespace CastorViewer
 		eCAMERA_MODE m_eCameraMode;
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
+		Castor3D::CameraWPtr m_camera;
+		Castor3D::SceneWPtr m_scene;
 		Castor3D::PickingPass m_picking;
 		Castor3D::FrameListenerSPtr m_listener;
 		Castor3D::GeometryWPtr m_selectedGeometry;
@@ -146,7 +149,7 @@ namespace CastorViewer
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;
 
-		Castor3D::SceneNodeSPtr m_cameraNode;
+		Castor3D::CameraSPtr m_currentCamera;
 		Castor3D::SceneNodeSPtr m_lightsNode;
 		Castor3D::SceneNodeSPtr m_currentNode;
 		KeyboardEventUPtr m_keyboardEvent;

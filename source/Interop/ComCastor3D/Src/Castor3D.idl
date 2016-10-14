@@ -1448,8 +1448,8 @@ interface ISpotLight
 	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
 	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
 	[propput, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
-	[propget, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [out, retval] float * pVal );
-	[propput, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [in] float val );
+	[propget, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [out, retval] IAngle ** pVal );
+	[propput, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [in] IAngle * val );
 };
 
 // ICamera

@@ -398,7 +398,7 @@ namespace CastorShape
 					m_materialsList->LoadMaterials( wxGetApp().GetCastor(), *m_mainScene.lock() );
 				}
 
-				LightSPtr l_light1 = l_scene->GetLightCache().Add( cuT( "Light1" ), l_scene->GetSceneNodeCache().Add( cuT( "Light1Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light1 = l_scene->GetLightCache().Add( cuT( "Light1" ), l_scene->GetSceneNodeCache().Add( cuT( "Light1Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light1 )
 				{
@@ -408,7 +408,7 @@ namespace CastorShape
 					l_light1->SetEnabled( true );
 				}
 
-				LightSPtr l_light2 = l_scene->GetLightCache().Add( cuT( "Light2" ), l_scene->GetSceneNodeCache().Add( cuT( "Light2Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light2 = l_scene->GetLightCache().Add( cuT( "Light2" ), l_scene->GetSceneNodeCache().Add( cuT( "Light2Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light2 )
 				{
@@ -418,7 +418,7 @@ namespace CastorShape
 					l_light2->SetEnabled( true );
 				}
 
-				LightSPtr l_light3 = l_scene->GetLightCache().Add( cuT( "Light3" ), l_scene->GetSceneNodeCache().Add( cuT( "Light3Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light3 = l_scene->GetLightCache().Add( cuT( "Light3" ), l_scene->GetSceneNodeCache().Add( cuT( "Light3Node" ), nullptr ), LightType::Directional );
 
 				if ( l_light3 )
 				{

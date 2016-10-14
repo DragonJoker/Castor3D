@@ -29,7 +29,7 @@ SOFTWARE.
 namespace Castor3D
 {
 	using LightsArray = std::vector< LightSPtr >;
-	using LightsMap = std::map< eLIGHT_TYPE, LightsArray >;
+	using LightsMap = std::map< LightType, LightsArray >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/02/2016
@@ -45,7 +45,7 @@ namespace Castor3D
 	struct ObjectCacheTraits< Light, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Light >( KeyType const &, SceneNodeSPtr, eLIGHT_TYPE ) >;
+		using Producer = std::function< std::shared_ptr< Light >( KeyType const &, SceneNodeSPtr, LightType ) >;
 		using Merger = std::function< void( ObjectCacheBase< Light, KeyType > const &
 											, Castor::Collection< Light, KeyType > &
 											, std::shared_ptr< Light >
@@ -136,7 +136,7 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_type )
+		inline ElementPtr Add( Key const & p_name, SceneNodeSPtr p_parent, LightType p_type )
 		{
 			return MyObjectCache::Add( p_name, p_parent, p_type );
 		}

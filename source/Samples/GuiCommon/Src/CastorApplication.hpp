@@ -81,7 +81,11 @@ namespace GuiCommon
 		 *\param[in]	p_steps			Le nombre d'àtapes de l'initialisation, sert pour l'affichage du splash screen.
 		 *\param[in]	p_version		La version de l'application.
 		 */
-		CastorApplication( Castor::String const & p_internalName, Castor::String const & p_displayName, uint32_t p_steps, Castor3D::Version const & p_version );
+		CastorApplication( Castor::String const & p_internalName
+						   , Castor::String const & p_displayName
+						   , uint32_t p_steps
+						   , Castor3D::Version const & p_version
+						   , Castor::String const & p_rendererType = Castor3D::RENDERER_TYPE_UNDEFINED );
 		/**
 		 *\~english
 		 *\return		The application name.

@@ -79,6 +79,17 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\~french
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 */
+		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
+		/**
+		 *\~english
 		 *\brief		Picks a geometry at given mouse position.
 		 *\param[in]	p_position		The position in the pass.
 		 *\param[in]	p_camera		The viewing camera.
@@ -183,35 +194,39 @@ namespace Castor3D
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaquePipeline
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
-		Pipeline & DoPrepareOpaquePipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 */
+		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
-		Pipeline & DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
-		Pipeline & DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
-		void DoCompleteProgramFlags( uint8_t & p_programFlags )const override;
+		void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
 
 	private:
 		//!\~english	The scenes, and cameras used to render them.
@@ -235,6 +250,9 @@ namespace Castor3D
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	The scenes, and cameras used to render them.
+		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
+		std::map< SceneRPtr, std::vector< CameraRPtr > > m_scenes;
 		//!\~english	The picked geometry.
 		//!\~french		La géométrie sélectionnée.
 		GeometryWPtr m_geometry;

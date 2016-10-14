@@ -36,10 +36,16 @@ namespace GLSL
 	}
 
 	template< typename T >
-	Mat3 & Mat3::operator[]( T const & p_rhs )
+	Vec3 Mat3::operator[]( T const & p_rhs )
 	{
-		m_value << Castor::String( *this ) << cuT( "[" ) << Castor::String( p_rhs ) << cuT( "]" );
-		return *this;
+		Vec3 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_return;
+	}
+
+	Vec3 Mat3::operator[]( int const & p_rhs )
+	{
+		Vec3 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_return;
 	}
 
 	//*****************************************************************************************
@@ -78,10 +84,16 @@ namespace GLSL
 	}
 
 	template< typename T >
-	Mat4 & Mat4::operator[]( T const & p_rhs )
+	Vec4 Mat4::operator[]( T const & p_rhs )
 	{
-		m_value << Castor::String( *this ) << cuT( "[" ) << Castor::String( p_rhs ) << cuT( "]" );
-		return *this;
+		Vec4 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_return;
+	}
+
+	Vec4 Mat4::operator[]( int const & p_rhs )
+	{
+		Vec4 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_return;
 	}
 
 	//*****************************************************************************************

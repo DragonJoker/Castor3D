@@ -25,7 +25,7 @@ namespace Castor3D
 		: Animable{ p_scene }
 		, Named( p_name )
 		, m_type( p_type )
-		, m_pSceneNode( p_sn )
+		, m_sceneNode( p_sn )
 	{
 	}
 
@@ -48,13 +48,13 @@ namespace Castor3D
 			}
 
 			l_node->DetachObject( shared_from_this() );
-			m_pSceneNode.reset();
+			m_sceneNode.reset();
 		}
 	}
 
 	void MovableObject::AttachTo( SceneNodeSPtr p_node )
 	{
-		m_pSceneNode = p_node;
+		m_sceneNode = p_node;
 
 		if ( p_node )
 		{

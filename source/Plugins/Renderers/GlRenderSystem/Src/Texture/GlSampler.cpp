@@ -45,6 +45,8 @@ namespace GlRender
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAGFILTER, GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
 				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAXANISOTROPY, float( GetMaxAnisotropy() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREMODE, GetOpenGl().Get( GetComparisonMode() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREFUNC, GetOpenGl().Get( GetComparisonFunc() ) );
 			}
 		}
 

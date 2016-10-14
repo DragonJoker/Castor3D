@@ -247,7 +247,7 @@ namespace GLSL
 	{
 		m_value << p_value;
 
-		if ( p_value - int( p_value ) <= std::numeric_limits< double >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
 			m_value << cuT( ".0" );
 		}
@@ -264,7 +264,7 @@ namespace GLSL
 	{
 		m_value << p_value;
 
-		if ( p_value - int( p_value ) <= std::numeric_limits< float >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< float >::epsilon() )
 		{
 			m_value << cuT( ".0" );
 		}
@@ -275,7 +275,7 @@ namespace GLSL
 	{
 		m_value << p_value;
 
-		if ( p_value - int( p_value ) <= std::numeric_limits< double >::epsilon() )
+		if ( abs( p_value - int( p_value ) ) <= std::numeric_limits< double >::epsilon() )
 		{
 			m_value << cuT( ".0" );
 		}

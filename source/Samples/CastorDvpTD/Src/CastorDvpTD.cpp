@@ -10,7 +10,8 @@ namespace castortd
 		: CastorApplication{ cuT( "CastorDvpTD" )
 							 , cuT( "Castor Tower Defense" )
 							 , 7
-							 , Castor3D::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD } }
+							 , Castor3D::Version{ CastorDvpTD_VERSION_MAJOR, CastorDvpTD_VERSION_MINOR, CastorDvpTD_VERSION_BUILD }
+							 , cuT( "opengl" ) }
 	{
 	}
 

@@ -16,8 +16,7 @@ namespace TestRender
 	{
 	}
 
-	bool TestViewport::Apply()
+	void TestViewport::Apply()const
 	{
-		return true;
 	}
 }

@@ -52,6 +52,8 @@ namespace GlRender
 		 *\param[in]	p_rsState		The rateriser state.
 		 *\param[in]	p_bdState		The blend state.
 		 *\param[in]	p_msState		The multisample state.
+		 *\param[in]	p_program		The shader program.
+		 *\param[in]	p_flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_gl			L'api OpenGL.
@@ -60,13 +62,16 @@ namespace GlRender
 		 *\param[in]	p_rsState		L'état de rastériseur.
 		 *\param[in]	p_bdState		L'état de mélange.
 		 *\param[in]	p_msState		L'état de multi-échantillonnage.
+		 *\param[in]	p_program		Le programme shader.
+		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
 		GlPipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem
 					, Castor3D::DepthStencilState && p_dsState
 					, Castor3D::RasteriserState && p_rsState
 					, Castor3D::BlendState && p_bdState
 					, Castor3D::MultisampleState && p_msState
-					, Castor3D::ShaderProgram & p_program );
+					, Castor3D::ShaderProgram & p_program
+					, Castor3D::PipelineFlags const & p_flags );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -81,10 +86,6 @@ namespace GlRender
 		 *\brief		Applique le pipeline.
 		 */
 		void Apply()const override;
-		/**
-		 *\copydoc		Castor3D::Context::ApplyViewport
-		 */
-		virtual void ApplyViewport( int p_windowWidth, int p_windowHeight );
 	};
 }
 

@@ -37,18 +37,78 @@ namespace GLSL
 	template<> struct is_arithmetic_type< IVec3 > : public std::true_type {};
 	template<> struct is_arithmetic_type< IVec4 > : public std::true_type {};
 	template<> struct is_arithmetic_type< Mat3 > : public std::true_type {};
-	template<> struct is_arithmetic_type< Mat4 > : public std::true_type {};
+	template<> struct is_arithmetic_type< Mat4 > : public std::true_type
+	{
+	};
 
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator+( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator-( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator*( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator/( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator==( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator!=( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<=( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>( TypeA const & p_a, TypeB const & p_b );
-	template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>=( TypeA const & p_a, TypeB const & p_b );
+#	define GLSL_DECLARE_OPERATOR( RetType, LhsType, RhsType, Operator )\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( LhsType const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( InOutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( OutParam< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, RhsType const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, InOutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, OutParam< RhsType > const & p_rhs );\
+	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\
+	RetType operator Operator( Optional< LhsType > const & p_lhs, Optional< RhsType > const & p_rhs )
+
+#	define GLSL_DECLARE_ARITHMETIC_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_DECLARE_OPERATOR( LhsType, LhsType, RhsType, Operator )
+
+#	define GLSL_DECLARE_BOOLEAN_OPERATOR( LhsType, RhsType, Operator )\
+	GLSL_DECLARE_OPERATOR( GlslBool, LhsType, RhsType, Operator )
+
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, + );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, - );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, * );
+	GLSL_DECLARE_ARITHMETIC_OPERATOR( TypeA, TypeB, / );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, == );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, != );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, < );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, <= );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, > );
+	GLSL_DECLARE_BOOLEAN_OPERATOR( TypeA, TypeB, >= );
 
 	GlslWriter_API Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b );
 	GlslWriter_API Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b );
@@ -60,6 +120,9 @@ namespace GLSL
 	GlslWriter_API Int operator-( int p_a, Int const & p_b );
 	GlslWriter_API Int operator*( int p_a, Int const & p_b );
 	GlslWriter_API Int operator/( int p_a, Int const & p_b );
+	GlslWriter_API Int operator%( int p_a, Int const & p_b );
+	GlslWriter_API Int operator%( Int const & p_a, int p_b );
+	GlslWriter_API Int operator%( Int const & p_a, Int const & p_b );
 
 	template< typename ... Values > inline Vec2 vec2( Type const & p_value, Values const & ... p_values );
 	template< typename ... Values > inline Vec3 vec3( Type const & p_value, Values const & ... p_values );
@@ -84,6 +147,12 @@ namespace GLSL
 	template< typename Value > inline Value exp( Value const & p_value );
 	template< typename Value > inline Value log2( Value const & p_value );
 	template< typename Value > inline Value exp2( Value const & p_value );
+	template< typename Value > inline Value tan( Value const & p_value );
+	template< typename Value > inline Value sin( Value const & p_value );
+	template< typename Value > inline Value cos( Value const & p_value );
+	template< typename Value > inline Value atan( Value const & p_value );
+	template< typename Value > inline Value asin( Value const & p_value );
+	template< typename Value > inline Value acos( Value const & p_value );
 	template< typename Input, typename Output > inline Output neg( Swizzle< Input, Output > const & p_value );
 	template< typename Value > inline Value normalize( Value const & p_value );
 	template< typename Input, typename Output > inline Output normalize( Swizzle< Input, Output > const & p_value );
@@ -111,6 +180,18 @@ namespace GLSL
 	GlslWriter_API Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Vec4 texelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Vec4 texelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
+	GlslWriter_API Float texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Float texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Float texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Float texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Float texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Float texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Float textureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const p_offset );
+	GlslWriter_API Float textureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod );
+	GlslWriter_API Float textureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const p_offset );
+	GlslWriter_API Float textureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const p_offset, Float const & p_lod );
+	GlslWriter_API Float textureLodOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset );
+	GlslWriter_API Float textureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const p_offset );
 	GlslWriter_API Vec2 reflect( Vec2 const & p_a, Type const & p_b );
 	GlslWriter_API Vec3 reflect( Vec3 const & p_a, Type const & p_b );
 	GlslWriter_API Vec4 reflect( Vec4 const & p_a, Type const & p_b );
@@ -119,6 +200,7 @@ namespace GLSL
 	GlslWriter_API Float cos( Type const & p_value );
 	GlslWriter_API Float sin( Type const & p_value );
 	GlslWriter_API Float tan( Type const & p_value );
+	GlslWriter_API Float fract( Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value, Float const & p_lod );
 	GlslWriter_API Optional< Vec4 > texture( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value );
@@ -140,6 +222,18 @@ namespace GLSL
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif );
+	GlslWriter_API Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Optional< Float > texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Optional< Float > texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value );
+	GlslWriter_API Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+	GlslWriter_API Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const p_offset );
+	GlslWriter_API Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod );
+	GlslWriter_API Optional< Float > textureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const p_offset );
+	GlslWriter_API Optional< Float > textureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const p_offset, Float const & p_lod );
+	GlslWriter_API Optional< Float > textureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset );
+	GlslWriter_API Optional< Float > textureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const p_offset );
 	GlslWriter_API Optional< Vec2 > reflect( Optional< Vec2 > const & p_a, Type const & p_b );
 	GlslWriter_API Optional< Vec3 > reflect( Optional< Vec3 > const & p_a, Type const & p_b );
 	GlslWriter_API Optional< Vec4 > reflect( Optional< Vec4 > const & p_a, Type const & p_b );
@@ -148,6 +242,7 @@ namespace GLSL
 	GlslWriter_API Optional< Float > cos( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > sin( Optional< Type > const & p_value );
 	GlslWriter_API Optional< Float > tan( Optional< Type > const & p_value );
+	GlslWriter_API Optional< Float > fract( Optional< Type > const & p_value );
 }
 
 #include "GlslIntrinsics.inl"

@@ -703,6 +703,40 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonMode )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pSampler )
+		{
+			PARSING_ERROR( cuT( "No sampler initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t l_uiMode;
+			p_params[0]->Get( l_uiMode );
+			l_parsingContext->pSampler->SetComparisonMode( ComparisonMode( l_uiMode ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SamplerComparisonFunc )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pSampler )
+		{
+			PARSING_ERROR( cuT( "No sampler initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			uint32_t l_uiMode;
+			p_params[0]->Get( l_uiMode );
+			l_parsingContext->pSampler->SetComparisonFunc( ComparisonFunc( l_uiMode ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SceneInclude )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -1134,7 +1168,7 @@ namespace Castor3D
 		{
 			uint32_t l_uiType;
 			p_params[0]->Get( l_uiType );
-			l_parsingContext->eLightType = eLIGHT_TYPE( l_uiType );
+			l_parsingContext->eLightType = LightType( l_uiType );
 			l_parsingContext->pLight = l_parsingContext->pScene->GetLightCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->eLightType );
 		}
 	}
@@ -1187,11 +1221,11 @@ namespace Castor3D
 			Point3f l_vVector;
 			p_params[0]->Get( l_vVector );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_POINT )
+			if ( l_parsingContext->eLightType == LightType::Point )
 			{
 				l_parsingContext->pLight->GetPointLight()->SetAttenuation( l_vVector );
 			}
-			else if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			else if ( l_parsingContext->eLightType == LightType::Spot )
 			{
 				l_parsingContext->pLight->GetSpotLight()->SetAttenuation( l_vVector );
 			}
@@ -1216,9 +1250,9 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			if ( l_parsingContext->eLightType == LightType::Spot )
 			{
-				l_parsingContext->pLight->GetSpotLight()->SetCutOff( l_fFloat );
+				l_parsingContext->pLight->GetSpotLight()->SetCutOff( Angle::from_degrees( l_fFloat ) );
 			}
 			else
 			{
@@ -1241,7 +1275,7 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
 
-			if ( l_parsingContext->eLightType == eLIGHT_TYPE_SPOT )
+			if ( l_parsingContext->eLightType == LightType::Spot )
 			{
 				l_parsingContext->pLight->GetSpotLight()->SetExponent( l_fFloat );
 			}
@@ -1249,6 +1283,23 @@ namespace Castor3D
 			{
 				PARSING_ERROR( cuT( "Wrong type of light to apply an exponent, needs spotlight" ) );
 			}
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightShadowProducer )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pLight )
+		{
+			PARSING_ERROR( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pLight->CastShadows( l_value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1464,6 +1515,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( eSECTION_OBJECT_MATERIALS )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectCastShadows )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pGeometry )
+		{
+			PARSING_ERROR( cuT( "No Geometry initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pGeometry->CastShadows( l_value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -1516,73 +1584,65 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_strType;
-		p_params[0]->Get( l_strType );
-		eMESH_TYPE l_type = eMESH_TYPE_CUSTOM;
+		uint32_t l_uiType;
+		p_params[0]->Get( l_uiType );
+		eMESH_TYPE l_type = eMESH_TYPE( l_uiType );
 		UIntArray l_arrayFaces;
 		RealArray l_arraySizes;
 		String l_strParams;
-		p_params[0]->Get( l_strParams );
+
+		if ( p_params.size() > 1 )
+		{
+			p_params[1]->Get( l_strParams );
+		}
 
 		if ( !l_parsingContext->pMesh )
 		{
-			if ( l_strType != cuT( "custom" ) )
-			{
-				StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
-				l_strType = l_arrayMeshInfos[0];
+			StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
+			auto l_it = l_arrayMeshInfos.begin();
 
-				if ( l_strType == cuT( "cube" ) )
-				{
-					l_type = eMESH_TYPE_CUBE;
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "cone" ) )
-				{
-					l_type = eMESH_TYPE_CONE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "cylinder" ) )
-				{
-					l_type = eMESH_TYPE_CYLINDER;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-				}
-				else if ( l_strType == cuT( "sphere" ) )
-				{
-					l_type = eMESH_TYPE_SPHERE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
-				}
-				else if ( l_strType == cuT( "icosahedron" ) )
-				{
-					l_type = eMESH_TYPE_ICOSAHEDRON;
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
-				}
-				else if ( l_strType == cuT( "plane" ) )
-				{
-					l_type = eMESH_TYPE_PLANE;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
-				}
-				else if ( l_strType == cuT( "torus" ) )
-				{
-					l_type = eMESH_TYPE_TORUS;
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
-					l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
-					l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
-				}
-				else
-				{
-					PARSING_ERROR( cuT( "Unknown mesh type : " ) + l_strType );
-				}
+			switch ( l_type )
+			{
+			case eMESH_TYPE_CUBE:
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_CONE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_CYLINDER:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_SPHERE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_ICOSAHEDRON:
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_PLANE:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
+
+			case eMESH_TYPE_TORUS:
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arrayFaces.push_back( string::to_int( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				l_arraySizes.push_back( string::to_real( *l_it++ ) );
+				break;
 			}
 
 			if ( l_parsingContext->pScene )
@@ -2546,7 +2606,7 @@ namespace Castor3D
 			float l_fFloat;
 			p_params[0]->Get( l_uiFunc );
 			p_params[1]->Get( l_fFloat );
-			l_parsingContext->pTextureUnit->SetAlphaFunc( AlphaFunc( l_uiFunc ) );
+			l_parsingContext->pTextureUnit->SetAlphaFunc( ComparisonFunc( l_uiFunc ) );
 			l_parsingContext->pTextureUnit->SetAlphaValue( l_fFloat );
 		}
 	}
@@ -3544,7 +3604,8 @@ namespace Castor3D
 
 		if ( l_parsingContext->pSceneNode && l_parsingContext->pViewport )
 		{
-			l_parsingContext->pScene->GetCameraCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, *l_parsingContext->pViewport );
+			l_parsingContext->pScene->GetCameraCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, std::move( *l_parsingContext->pViewport ) );
+			l_parsingContext->pViewport.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()
@@ -3552,8 +3613,16 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ViewportType )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		uint32_t l_uiType;
-		l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
+
+		if ( p_params.size() > 0 )
+		{
+			uint32_t l_uiType;
+			l_parsingContext->pViewport->UpdateType( ViewportType( p_params[0]->Get( l_uiType ) ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
 	}
 	END_ATTRIBUTE()
 

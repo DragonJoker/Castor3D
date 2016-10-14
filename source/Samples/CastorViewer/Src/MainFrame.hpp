@@ -113,7 +113,7 @@ namespace CastorViewer
 		GuiCommon::MaterialsList * m_materialsList;
 		Castor3D::SceneWPtr m_pMainScene;
 		Castor3D::CameraWPtr m_pMainCamera;
-		Castor3D::SceneNodeWPtr m_pSceneNode;
+		Castor3D::SceneNodeWPtr m_sceneNode;
 		Castor::Path m_strFilePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;

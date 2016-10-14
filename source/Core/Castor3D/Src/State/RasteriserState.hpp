@@ -43,195 +43,206 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Retrieves the fill mode
-		 *\return		The value
+		 *\return		The fill mode.
 		 *\~french
-		 *\brief		Récupère le mode de remplissage
-		 *\return		La valeur
+		 *\return		La mode de remplissage.
 		 */
 		inline Castor3D::FillMode GetFillMode()const
 		{
-			return m_eFillMode;
+			return m_fillMode;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the fill mode
-		 *\param[in]	p_mode	The new value
+		 *\brief		Sets the fill mode.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le mode de remplissage
-		 *\param[in]	p_mode	La nouvelle valeur
+		 *\brief		Définit le mode de remplissage.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetFillMode( Castor3D::FillMode p_mode )
+		inline void SetFillMode( Castor3D::FillMode p_value )
 		{
-			m_eFillMode = p_mode;
+			m_fillMode = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the culled faces
-		 *\return		The value
+		 *\return		The culled faces
 		 *\~french
-		 *\brief		Récupère les faces cachées
-		 *\return		La valeur
+		 *\return		Les faces cachées
 		 */
 		inline Castor3D::Culling GetCulledFaces()const
 		{
-			return m_eCulledFaces;
+			return m_culledFaces;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the culled faces
-		 *\param[in]	p_eFace	The new value
+		 *\brief		Sets the culled faces.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit les faces cachées
-		 *\param[in]	p_eFace	La nouvelle valeur
+		 *\brief		Définit les faces cachées.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetCulledFaces( Castor3D::Culling p_eFace )
+		inline void SetCulledFaces( Castor3D::Culling p_value )
 		{
-			m_eCulledFaces = p_eFace;
+			m_culledFaces = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the faces considered front facing
-		 *\return		The value
+		 *\return		The orientation of the faces considered front facing.
 		 *\~french
-		 *\brief		Récupère les faces considérées comme tournées vers l'avant
-		 *\return		La valeur
+		 *\return		L'orientation des faces considérées comme tournées vers l'avant.
 		 */
 		inline bool GetFrontCCW()const
 		{
-			return m_bFrontCCW;
+			return m_frontCCW;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the faces considered front facing
-		 *\param[in]	p_bCCW	The new value
+		 *\brief		Sets the orientation of the faces considered front facing.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit les faces considérées comme tournées vers l'avant
-		 *\param[in]	p_bCCW	La nouvelle valeur
+		 *\brief		Définit le'orientation des faces considérées comme tournées vers l'avant.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetFrontCCW( bool p_bCCW )
+		inline void SetFrontCCW( bool p_value )
 		{
-			m_bFrontCCW = p_bCCW;
+			m_frontCCW = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the antialiased lines status
-		 *\return		The value
+		 *\return		The antialiased lines status.
 		 *\~french
-		 *\brief		Récupère le statut d'antialising des lignes
-		 *\return		La valeur
+		 *\return		Le statut d'antialising des lignes.
 		 */
 		inline bool GetAntialiasedLines()const
 		{
-			return m_bAntialiasedLines;
+			return m_antialiasedLines;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the antialiased lines status
-		 *\param[in]	p_bAA	The new value
+		 *\brief		Sets the antialiased lines status.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut d'antialising des lignes
-		 *\param[in]	p_bAA	La nouvelle valeur
+		 *\brief		Définit le statut d'antialising des lignes.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetAntialiasedLines( bool p_bAA )
+		inline void SetAntialiasedLines( bool p_value )
 		{
-			m_bAntialiasedLines = p_bAA;
+			m_antialiasedLines = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the depth bias
-		 *\return		The value
+		 *\return		The depth bias factor.
 		 *\~french
-		 *\brief		Récupère le depth bias
-		 *\return		La valeur
+		 *\return		Le facteur de modificateur de profondeur.
 		 */
-		inline float GetDepthBias()const
+		inline float GetDepthBiasFactor()const
 		{
-			return m_fDepthBias;
+			return m_depthBiasFactor;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the depth bias
-		 *\param[in]	p_fBias	The new value
+		 *\brief		Sets the depth bias factor.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le depth bias
-		 *\param[in]	p_fBias	La nouvelle valeur
+		 *\brief		Définit le facteur de modificateur de profondeur.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetDepthBias( float p_fBias )
+		inline void SetDepthBiasFactor( float p_value )
 		{
-			m_fDepthBias = p_fBias;
+			m_depthBiasFactor = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the depth clipping status
-		 *\return		The value
+		 *\return		The depth bias unit.
 		 *\~french
-		 *\brief		Récupère le statut de depth clipping
-		 *\return		La valeur
+		 *\return		L'unité du modificateur de profondeur.
+		 */
+		inline float GetDepthBiasUnits()const
+		{
+			return m_depthBiasUnits;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the depth bias unit.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit l'unité du modificateur de profondeur.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetDepthBiasUnits( float p_value )
+		{
+			m_depthBiasUnits = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The depth clipping status.
+		 *\~french
+		 *\return		Le statut de depth clipping.
 		 */
 		inline bool GetDepthClipping()const
 		{
-			return m_bDepthClipping;
+			return m_depthClipping;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the depth clipping status
-		 *\param[in]	p_enable	The new value
+		 *\brief		Sets the depth clipping status.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut de depth clipping
-		 *\param[in]	p_enable	La nouvelle valeur
+		 *\brief		Définit le statut de depth clipping.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetDepthClipping( bool p_enable )
+		inline void SetDepthClipping( bool p_value )
 		{
-			m_bDepthClipping = p_enable;
+			m_depthClipping = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the scissor test activation status
-		 *\return		The value
+		 *\return		The scissor test activation status.
 		 *\~french
-		 *\brief		Récupère le statut d'acitvation du scissor test
-		 *\return		La valeur
+		 *\return		La statut d'acitvation du scissor test.
 		 */
 		inline bool GetScissor()const
 		{
-			return m_bScissor;
+			return m_scissorTest;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the scissor test activation status
-		 *\param[in]	p_enable	The new value
+		 *\brief		Sets the scissor test activation status.
+		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut d'acitvation du scissor test
-		 *\param[in]	p_enable	La nouvelle valeur
+		 *\brief		Définit le statut d'acitvation du scissor test.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetScissor( bool p_enable )
+		inline void SetScissor( bool p_value )
 		{
-			m_bScissor = p_enable;
+			m_scissorTest = p_value;
 		}
 
 	protected:
 		//!\~english	The fill mode.
 		//!\~french		Définit le mode de remplissage.
-		FillMode m_eFillMode{ FillMode::Solid };
+		FillMode m_fillMode{ FillMode::Solid };
 		//!\~english	The culled faces.
 		//!\~french		Les faces cachées.
-		Culling m_eCulledFaces{ Culling::Back };
+		Culling m_culledFaces{ Culling::Back };
 		//!\~english	The faces considered front facing.
 		//!\~french		Les faces considérées comme tournées vers l'avant.
-		bool m_bFrontCCW{ true };
+		bool m_frontCCW{ true };
 		//!\~english	The antialiased lines status.
 		//!\~french		Le statut d'antialising des lignes.
-		bool m_bAntialiasedLines{ false };
-		//!\~english	The depth bias.
-		//!\~french		Le depth bias.
-		float m_fDepthBias{ 0.0f };
+		bool m_antialiasedLines{ false };
+		//!\~english	The depth bias factor.
+		//!\~french		Le facteur du modificateur de profondeur.
+		float m_depthBiasFactor{ 0.0f };
+		//!\~english	The depth bias unit.
+		//!\~french		L'unité du modificateur de profondeur.
+		float m_depthBiasUnits{ 0.0f };
 		//!\~english	The scissor test activation status.
 		//!\~french		Le statut d'acitvation du scissor test.
-		bool m_bScissor{ false };
+		bool m_scissorTest{ false };
 		//!\~english	The depth clipping status.
 		//!\~french		Le statut de depth clipping.
-		bool m_bDepthClipping{ true };
+		bool m_depthClipping{ true };
 	};
 }
 

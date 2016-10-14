@@ -60,15 +60,15 @@ namespace GuiCommon
 
 			switch ( l_light->GetLightType() )
 			{
-			case eLIGHT_TYPE_DIRECTIONAL:
+			case LightType::Directional:
 				DoCreateDirectionalLightProperties( p_grid, l_light->GetDirectionalLight() );
 				break;
 
-			case eLIGHT_TYPE_POINT:
+			case LightType::Point:
 				DoCreatePointLightProperties( p_grid, l_light->GetPointLight() );
 				break;
 
-			case eLIGHT_TYPE_SPOT:
+			case LightType::Spot:
 				DoCreateSpotLightProperties( p_grid, l_light->GetSpotLight() );
 				break;
 			}
@@ -93,13 +93,13 @@ namespace GuiCommon
 			{
 				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
 			}
-			else if ( l_light->GetLightType() != eLIGHT_TYPE_DIRECTIONAL )
+			else if ( l_light->GetLightType() != LightType::Directional )
 			{
 				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
 					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
 				}
-				else if ( l_light->GetLightType() == eLIGHT_TYPE_SPOT )
+				else if ( l_light->GetLightType() == LightType::Spot )
 				{
 					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
@@ -128,7 +128,7 @@ namespace GuiCommon
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
 		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( WXVARIANT( p_light->GetAttenuation() ) );
-		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->GetCutOff() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->GetCutOff().degrees() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->GetExponent() );
 	}
 
@@ -163,7 +163,7 @@ namespace GuiCommon
 			Point3f l_value( x, y, z );
 			LightSPtr l_light = GetLight();
 
-			if ( l_light->GetLightType() == eLIGHT_TYPE_POINT )
+			if ( l_light->GetLightType() == LightType::Point )
 			{
 				l_light->GetPointLight()->SetAttenuation( l_value );
 			}
@@ -178,7 +178,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetCutOff( float( p_value ) );
+			GetLight()->GetSpotLight()->SetCutOff( Angle::from_degrees( p_value ) );
 		} );
 	}
 

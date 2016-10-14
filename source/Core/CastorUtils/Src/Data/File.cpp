@@ -196,72 +196,79 @@ namespace Castor
 
 #if defined( _MSC_VER)
 
-	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
+	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		errno_t l_err = fopen_s( &p_pFile, p_pszPath, p_pszMode );
+		errno_t l_err = fopen_s( &p_file, p_path, p_mode );
 
-		if ( l_err && !p_pFile )
+		if ( l_err && !p_file )
 		{
-			Logger::LogError( System::GetLastErrorText() );
+			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
 		}
 
 		return l_err == 0;
 	}
 
-	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
+	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		return fopen_s( &p_pFile, p_pszPath, p_pszMode ) == 0;
+		errno_t l_err = fopen_s( &p_file, p_path, p_mode );
+
+		if ( l_err && !p_file )
+		{
+			Logger::LogError( StringStream() << cuT( "Couldn't open file [" ) << p_path << cuT( "], due to error: " ) << System::GetLastErrorText() );
+		}
+
+		return l_err == 0;
 	}
 
-	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
 	{
-		return _fseeki64( p_pFile, p_i64Offset, p_iOrigin ) == 0;
+		return _fseeki64( p_file, p_i64Offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_pFile )
+	int64_t FTell( FILE * p_file )
 	{
-		return _ftelli64( p_pFile );
+		return _ftelli64( p_file );
 	}
 
 #else
 
-	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
+	bool FOpen( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != nullptr;
+		p_file = fopen( p_path, p_mode );
+		return p_file != nullptr;
 	}
 
 #	if !defined( _WIN32 )
-	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
+	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		p_pFile = fopen64( p_pszPath, p_pszMode );
-		return p_pFile != nullptr;
+		p_file = fopen64( p_path, p_mode );
+		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
 	{
-		return fseeko64( p_pFile, p_i64Offset, p_iOrigin ) == 0;
+		return fseeko64( p_file, p_i64Offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_pFile )
+	int64_t FTell( FILE * p_file )
 	{
-		return ftello64( p_pFile );
+		return ftello64( p_file );
 	}
 #	else
-	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
+	bool FOpen64( FILE *& p_file, char const * p_path, char const * p_mode )
 	{
-		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != nullptr;
+		p_file = fopen( p_path, p_mode );
+		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
 	{
-		return fseek( p_pFile, p_i64Offset, p_iOrigin ) == 0;
+		return fseek( p_file, p_i64Offset, p_iOrigin ) == 0;
 	}
 
-	int64_t FTell( FILE * p_pFile )
+	int64_t FTell( FILE * p_file )
 	{
-		return ftell( p_pFile );
+		return ftell( p_file );
 	}
 
 #	endif
@@ -438,7 +445,7 @@ namespace Castor
 	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_WRITE ) );
+		REQUIRE( IsOk() && ( CheckFlag( m_iMode, eOPEN_MODE_WRITE ) || CheckFlag( m_iMode, eOPEN_MODE_APPEND ) ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )

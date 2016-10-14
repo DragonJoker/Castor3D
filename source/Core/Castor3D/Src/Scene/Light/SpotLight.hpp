@@ -84,16 +84,16 @@ namespace Castor3D
 	private:
 		friend class Scene;
 
-	public:
+	private:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
-		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\brief		Constructeur.
 		 */
 		C3D_API SpotLight();
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,13 +103,17 @@ namespace Castor3D
 		C3D_API ~SpotLight();
 		/**
 		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A light source
+		 *\brief		Creation function, used by Factory.
+		 *\return		A light source.
 		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Une source lumineuse
+		 *\brief		Fonction de création utilisée par Factory.
+		 *\return		Une source lumineuse.
 		 */
 		C3D_API static LightCategorySPtr Create();
+		/**
+		 *\copydoc		Castor::LightCategory::Update
+		 */
+		C3D_API void Update( Castor::Point3r const & p_target )override;
 		/**
 		 *\copydoc		Castor::LightCategory::CreateTextLoader
 		 */
@@ -162,7 +166,7 @@ namespace Castor3D
 		*\brief			Sets the light cutoff
 		 *\param[in]	p_cutOff	The new cutoff value
 		 */
-		C3D_API void SetCutOff( float p_cutOff );
+		C3D_API void SetCutOff( Castor::Angle const & p_cutOff );
 		/**
 		 *\~english
 		 *\brief		Retrieves the attenuation components
@@ -207,24 +211,21 @@ namespace Castor3D
 		 *\brief		Récupère l'angle du cône
 		 *\return		L'angle du cône
 		 */
-		inline float GetCutOff()const
+		inline Castor::Angle const & GetCutOff()const
 		{
 			return m_cutOff;
 		}
 
 	private:
-		using LightCategory::DoBindComponent;
-		void DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Matrix4x4d const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-
-	private:
-		//!\~english The attenuation components : constant, linear and quadratic	\~french Les composantes d'attenuation : constante, linéaire et quadratique
-		Castor::Point3f m_attenuation;
-		//!\~english The light exponent, id est how much the light is focused	\~french L'exposant de la lumièrs, càd à quel point elle est concentrée
-		float m_exponent;
-		//!\~english The angle of the cone	\~french L'angle du cône
-		float m_cutOff;
+		//!\~english	The attenuation components : constant, linear and quadratic.
+		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
+		Castor::Point3f m_attenuation{ 1, 0, 0 };
+		//!\~english	The light exponent, id est how much the light is focused.
+		//\~french		L'exposant de la lumièrs, càd à quel point elle est concentrée.
+		float m_exponent{ 1.0f };
+		//!\~english	The angle of the cone.
+		//\~french		L'angle du cône.
+		Castor::Angle m_cutOff{ 45.0_degrees };
 	};
 }
 

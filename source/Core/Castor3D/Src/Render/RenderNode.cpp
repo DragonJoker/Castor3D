@@ -7,6 +7,7 @@
 #include "Mesh/Submesh.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
+#include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneNode.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
@@ -17,6 +18,9 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"
 #include "Shader/ShaderProgram.hpp"
+#include "Texture/Sampler.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
 
 using namespace Castor;
 
@@ -24,24 +28,53 @@ namespace Castor3D
 {
 	namespace
 	{
-		template< typename NodeType >
-		void DoRender( Scene const & p_scene, Camera const & p_camera, NodeType & p_node )
+		void DoBindDepthMaps( DepthMapArray & p_depthMaps, uint32_t p_index )
 		{
-			p_node.m_pass.m_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
-			p_node.BindPass( p_scene, p_camera, 0 );
-			p_node.m_data.Draw( p_node.m_buffers );
-			p_node.UnbindPass( p_scene );
+			for ( auto & l_depthMap : p_depthMaps )
+			{
+				l_depthMap.get().SetIndex( p_index++ );
+				l_depthMap.get().Bind();
+			}
+		}
+
+		void DoUnbindDepthMaps( DepthMapArray & p_depthMaps )
+		{
+			for ( auto & l_depthMap : p_depthMaps )
+			{
+				l_depthMap.get().Unbind();
+			}
 		}
 
 		template< typename NodeType >
-		void DoUnbind( Scene const & p_scene, NodeType & p_node )
+		void DoRender( NodeType & p_node, DepthMapArray & p_depthMaps )
 		{
+			p_node.m_pass.m_pipeline.SetModelMatrix( p_node.m_sceneNode.GetDerivedTransformationMatrix() );
+			p_node.BindPass( p_depthMaps, 0 );
+			p_node.m_data.Draw( p_node.m_buffers );
+			p_node.UnbindPass( p_depthMaps );
+		}
+
+		void DoUnbind( GeometryRenderNode const & p_node, DepthMapArray & p_depthMaps )
+		{
+			DoUnbindDepthMaps( p_depthMaps );
 			p_node.m_pass.m_pass.EndRender();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
-			if ( p_scene.GetEngine()->GetPerObjectLighting() )
+			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
 			{
-				p_scene.GetLightCache().UnbindLights();
+				p_node.m_geometry.GetScene()->GetLightCache().UnbindLights();
+			}
+		}
+
+		void DoUnbind( BillboardListRenderNode const & p_node, DepthMapArray & p_depthMaps )
+		{
+			DoUnbindDepthMaps( p_depthMaps );
+			p_node.m_pass.m_pass.EndRender();
+			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
+			
+			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+			{
+				p_node.m_data.GetScene()->GetLightCache().UnbindLights();
 			}
 		}
 	}
@@ -71,47 +104,58 @@ namespace Castor3D
 	}
 
 	template<>
-	void SubmeshRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
+	void SubmeshRenderNode::Render( DepthMapArray & p_depthMaps )
 	{
-		DoRender( p_scene, p_camera, *this );
+		REQUIRE( false && "Did you forget to implement an appropriate SubmeshRenderNode derivated class?" );
 	}
 
 	template<>
-	void SubmeshRenderNode::UnbindPass( Scene const & p_scene )const
+	void SubmeshRenderNode::UnbindPass( DepthMapArray & p_depthMaps )const
 	{
-		DoUnbind( p_scene, *this );
+		REQUIRE( false && "Did you forget to implement an appropriate SubmeshRenderNode derivated class?" );
 	}
 
 	template<>
-	void BillboardListRenderNode::Render( Scene const & p_scene, Camera const & p_camera )
+	void BillboardListRenderNode::Render( DepthMapArray & p_depthMaps )
 	{
-		DoRender( p_scene, p_camera, *this );
+		DoRender( *this, p_depthMaps );
 	}
 
 	template<>
-	void BillboardListRenderNode::UnbindPass( Scene const & p_scene )const
+	void BillboardListRenderNode::UnbindPass( DepthMapArray & p_depthMaps )const
 	{
-		DoUnbind( p_scene, *this );
+		DoUnbind( *this, p_depthMaps );
 	}
 
-	void StaticGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void GeometryRenderNode::Render( DepthMapArray & p_depthMaps )
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		DoRender( *this, p_depthMaps );
+	}
+
+	void GeometryRenderNode::UnbindPass( DepthMapArray & p_depthMaps )const
+	{
+		DoUnbind( *this, p_depthMaps );
+	}
+
+	void StaticGeometryRenderNode::BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )
+	{
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		m_pass.m_pass.FillShaderVariables( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.Render();
+		DoBindDepthMaps( p_depthMaps, m_pass.m_pipeline.GetTexturesCount() + 1 );
 	}
 
-	void AnimatedGeometryRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void AnimatedGeometryRenderNode::BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
@@ -153,13 +197,14 @@ namespace Castor3D
 		m_pass.m_pass.FillShaderVariables( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.Render();
+		DoBindDepthMaps( p_depthMaps, m_pass.m_pipeline.GetTexturesCount() + 1 );
 	}
 
-	void BillboardRenderNode::BindPass( Scene const & p_scene, Camera const & p_camera, uint64_t p_excludedMtxFlags )
+	void BillboardRenderNode::BindPass( DepthMapArray & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
-		if ( p_scene.GetEngine()->GetPerObjectLighting() )
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
 		{
-			p_scene.GetLightCache().BindLights();
+			m_data.GetScene()->GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
@@ -168,5 +213,6 @@ namespace Castor3D
 		m_pass.m_pass.FillShaderVariables( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.Render();
+		DoBindDepthMaps( p_depthMaps, m_pass.m_pipeline.GetTexturesCount() + 1 );
 	}
 }

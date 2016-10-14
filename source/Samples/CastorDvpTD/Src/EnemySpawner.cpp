@@ -52,7 +52,7 @@ namespace castortd
 		m_timeSinceLastSpawn = std::chrono::milliseconds{};
 		++m_totalSpawned;
 		auto & l_pathNode = *p_path.begin();
-		auto & l_cell{ p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } ) };
+		auto & l_cell = p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } );
 		EnemyPtr l_return;
 
 		if ( m_enemiesCache.empty() )
@@ -71,7 +71,7 @@ namespace castortd
 				l_geometry->SetMaterial( l_submesh, p_game.GetEnemyMaterial() );
 			}
 
-			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, eLIGHT_TYPE_POINT );
+			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::Point );
 			l_light->SetColour( Colour::from_predef( Colour::Predefined::OpaqueRed ) );
 			l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
 			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );

@@ -41,13 +41,7 @@ namespace GLSL
 	struct SamplerCube;
 
 	class LightingModel;
-
-	class LightingModelFactory
-		: public Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >
-	{
-	public:
-		GlslWriter_API LightingModelFactory();
-	};
+	using LightingModelFactory = Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( ShadowType, GlslWriter & ) > >;
 
 	struct Endl {};
 	struct Endi {};
@@ -124,7 +118,7 @@ namespace GLSL
 			return GetShaderLanguageVersion() >= 130;
 		}
 
-		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, uint32_t p_flags );
+		GlslWriter_API std::unique_ptr< LightingModel > CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows );
 
 		GlslWriter_API Castor::String Finalise();
 		GlslWriter_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
@@ -163,6 +157,18 @@ namespace GLSL
 		GlslWriter_API Vec4 TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Vec4 TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
+		GlslWriter_API Float Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Float Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Float Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Float Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Float Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Float TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Float TextureLodOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Float TextureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
 		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value );
 		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value, Float const & p_lod );
 		GlslWriter_API Optional< Vec4 > Texture( Optional< Sampler2D > const & p_sampler, Vec2 const & p_value );
@@ -184,12 +190,24 @@ namespace GLSL
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value );
+		GlslWriter_API Optional< Float > Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset );
+		GlslWriter_API Optional< Float > TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset );
+		GlslWriter_API Optional< Float > TextureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset );
 
 		template< typename T > void WriteAssign( Type const & p_lhs, Optional< T > const & p_rhs );
 		template< typename RetType, typename FuncType, typename ... Params > inline void ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 		template< typename RetType > void Return( RetType const & p_return );
 		template< typename ExprType > ExprType Paren( ExprType const p_expr );
-		template< typename ExprType > ExprType Ternary( Type const & p_condition, Type const & p_left, Type const & p_right );
+		template< typename ExprType > ExprType Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right );
 		template< typename T > inline T Cast( Type const & p_from );
 		template< typename T > inline T GetAttribute( Castor::String const & p_name );
 		template< typename T > inline T GetOutput( Castor::String const & p_name );
@@ -208,6 +226,7 @@ namespace GLSL
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Type const & p_rhs );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetUniform (Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
 		template< typename T > inline Optional< T > GetAttribute( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetOutput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetInput( Castor::String const & p_name, bool p_enabled );

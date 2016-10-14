@@ -85,9 +85,9 @@ namespace Castor3D
 			{
 				DepthStencilState l_dsState;
 				l_dsState.SetDepthTest( false );
-				m_texturePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_textureProgram );
+				m_texturePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_textureProgram, PipelineFlags{} );
 			}
-			ShaderProgramSPtr l_depthProgram = DoCreateProgram( false );
+			ShaderProgramSPtr l_depthProgram = DoCreateProgram( true );
 			l_depthProgram->Initialise();
 			m_vertexBufferDepth = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBufferDepth->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
@@ -100,7 +100,7 @@ namespace Castor3D
 				DepthStencilState l_dsState;
 				l_dsState.SetDepthTest( true );
 				l_dsState.SetDepthMask( WritingMask::All );
-				m_depthPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_depthProgram );
+				m_depthPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_depthProgram, PipelineFlags{} );
 			}
 			DoEndCurrent();
 		}
@@ -184,6 +184,7 @@ namespace Castor3D
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Update();
+		m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_viewport.GetProjection() );
 
 		p_pipeline.Apply();
@@ -249,11 +250,13 @@ namespace Castor3D
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			auto gl_FragDepth = l_writer.GetBuiltin< Float >( cuT( "gl_FragDepth" ) );
+			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				gl_FragDepth = texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
+				auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
+				l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
+				plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 			} );
 			l_strPxlShader = l_writer.Finalise();
 		}
@@ -278,6 +281,7 @@ namespace Castor3D
 		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
 		return l_program;
 	}
 }

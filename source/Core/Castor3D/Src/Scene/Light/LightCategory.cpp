@@ -4,6 +4,8 @@
 #include <Log/Logger.hpp>
 #include <Graphics/PixelBuffer.hpp>
 
+#include <GlslSource.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -15,11 +17,11 @@ namespace Castor3D
 
 	bool LightCategory::TextWriter::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		String const l_type[]
+		static std::map< LightType, String > l_type
 		{
-			cuT( "directional" ),
-			cuT( "point_light" ),
-			cuT( "spot_light" ),
+			{ LightType::Directional, cuT( "directional" ) },
+			{ LightType::Point, cuT( "point" ) },
+			{ LightType::Spot, cuT( "spot" ) },
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
@@ -54,15 +56,19 @@ namespace Castor3D
 			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory intensity" );
 		}
 
+		if ( l_return && p_light.GetLight()->CastShadows() )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcast_shadows true\n" ) ) > 0;
+			Castor::TextWriter< LightCategory >::CheckError( l_return, "LightCategory casto shadows" );
+		}
+
 		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	LightCategory::LightCategory( eLIGHT_TYPE p_lightType )
-		: m_eLightType( p_lightType )
-		, m_colour( 1.0, 1.0, 1.0 )
-		, m_intensity( 0.0, 1.0, 1.0 )
+	LightCategory::LightCategory( LightType p_lightType )
+		: m_eLightType{ p_lightType }
 		, m_positionType( 0.0, 0.0, 1.0, float( p_lightType ) )
 	{
 	}
@@ -73,19 +79,27 @@ namespace Castor3D
 
 	void LightCategory::DoBindComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 	}
 
 	void LightCategory::DoBindComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
 	void LightCategory::DoBindComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+	}
+
+	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const
+	{
+		DoBindComponent( p_component[0], p_index, p_offset, p_data );
+		DoBindComponent( p_component[1], p_index, p_offset, p_data );
+		DoBindComponent( p_component[2], p_index, p_offset, p_data );
+		DoBindComponent( p_component[3], p_index, p_offset, p_data );
 	}
 }

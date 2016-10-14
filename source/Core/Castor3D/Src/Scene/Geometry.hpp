@@ -177,18 +177,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the mesh buffers creation status
-		 *\return		The mesh buffers creation status
-		 *\~french
-		 *\brief		Récupère le statut de création des tampons du maillage
-		 *\return		Le statut de création des tampons du maillage
-		 */
-		inline bool HasListsCreated()const
-		{
-			return m_listCreated;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the visibility status
 		 *\return		The visibility status
 		 *\~french
@@ -207,23 +195,54 @@ namespace Castor3D
 		 *\brief		Définit le statut de visibilité de la géométrie
 		 *\param[in]	p_visible	Le statut de visibilité de la géométrie
 		 */
-		inline void	SetVisible( bool p_visible )
+		inline void SetVisible( bool p_visible )
 		{
 			m_visible = p_visible;
 		}
+		/**
+		 *\~english
+		 *\return		The shadow casting value.
+		 *\~french
+		 *\return		Le statut de projection d'ombres.
+		 */
+		inline bool CastShadows()const
+		{
+			return m_castShadows;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the shadow caster status.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le statut de projection d'ombres.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void CastShadows( bool p_value )
+		{
+			m_castShadows = p_value;
+		}
 
 	protected:
-		//!\~english The mesh	\~french Le maillage
+		//!\~english	The mesh.
+		//!\~french		Le maillage.
 		MeshWPtr m_mesh;
-		//!\~english The mesh name	\~french Le nom du mesh
+		//!\~english	The mesh name
+		//!\~french		Le nom du maillage.
 		Castor::String m_strMeshName;
-		//!\~english Tells if the geometry has changed	\~french Dit si la géométrie a changé
-		bool m_changed;
-		//!<\~english Tells if the mesh buffers are generated	\~french Dit si les tampons du mesh ont été générés
-		bool m_listCreated;
-		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
-		bool m_visible;
-		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
+		//!\~english	Tells if the geometry has changed.
+		//!\~french		Dit si la géométrie a changé.
+		bool m_changed{ true };
+		//!<\~english	Tells if the mesh buffers are generated.
+		//!\~french		Dit si les tampons du mesh ont été générés.
+		bool m_listCreated{ false };
+		//!\~english	Tells if the geometry is visible.
+		//!\~french		Dit si la géométrie est visible.
+		bool m_visible{ true };
+		//!\~english	Tells if the geometry casts shadows.
+		//!\~french		Dit si la géométrie projette des ombres.
+		bool m_castShadows{ true };
+		//!\~english	The submeshes materials.
+		//!\~french		Les matériaux des sous maillages.
 		std::map< Submesh *, MaterialWPtr > m_submeshesMaterials;
 	};
 }

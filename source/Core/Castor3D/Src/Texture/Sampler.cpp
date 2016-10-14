@@ -33,6 +33,22 @@ namespace Castor3D
 				{ WrapMode::ClampToBorder, cuT( "clamp_to_border" ) },
 				{ WrapMode::ClampToEdge, cuT( "clamp_to_edge" ) },
 			};
+			static std::map< ComparisonMode, String > ComparisonModes
+			{
+				{ ComparisonMode::None, cuT( "none" ) },
+				{ ComparisonMode::RefToTexture, cuT( "ref_to_texture" ) },
+			};
+			static std::map< ComparisonFunc, String > ComparisonFunctions
+			{
+				{ ComparisonFunc::Always, cuT( "always" ) },
+				{ ComparisonFunc::Less, cuT( "less" ) },
+				{ ComparisonFunc::LEqual, cuT( "less_or_equal" ) },
+				{ ComparisonFunc::Equal, cuT( "equal" ) },
+				{ ComparisonFunc::NEqual, cuT( "not_equal" ) },
+				{ ComparisonFunc::GEqual, cuT( "greater_or_equal" ) },
+				{ ComparisonFunc::Greater, cuT( "greater" ) },
+				{ ComparisonFunc::Never, cuT( "never" ) },
+			};
 
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
@@ -92,6 +108,18 @@ namespace Castor3D
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler lod bias" );
 			}
 
+			if ( l_return && p_sampler.GetComparisonMode() != ComparisonMode::None )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tcomparison_mode " ) + ComparisonModes[p_sampler.GetComparisonMode()] + cuT( "\n" ) ) > 0;
+				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler comparison mode" );
+
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( m_tabs + cuT( "\tcomparison_func " ) + ComparisonFunctions[p_sampler.GetComparisonFunc()] + cuT( "\n" ) ) > 0;
+					Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler comparison function" );
+				}
+			}
+
 			if ( l_return )
 			{
 				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
@@ -118,20 +146,9 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	Sampler::Sampler( Engine & p_engine, String const & p_name )
-		: OwnedBy< Engine >( p_engine )
-		, m_rMinLod( -1000 )
-		, m_rMaxLod( 1000 )
-		, m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )
-		, m_rMaxAnisotropy( 1.0 )
-		, m_name( p_name )
-		, m_rLodBias( 0.0 )
+		: OwnedBy< Engine >{ p_engine }
+		, Named{ p_name }
 	{
-		m_eWrapModes[uint32_t( TextureUVW::U )] = WrapMode::Repeat;
-		m_eWrapModes[uint32_t( TextureUVW::V )] = WrapMode::Repeat;
-		m_eWrapModes[uint32_t( TextureUVW::W )] = WrapMode::Repeat;
-		m_eInterpolationModes[uint32_t( InterpolationFilter::Min )] = InterpolationMode::Nearest;
-		m_eInterpolationModes[uint32_t( InterpolationFilter::Mag )] = InterpolationMode::Nearest;
-		m_eInterpolationModes[uint32_t( InterpolationFilter::Mip )] = InterpolationMode::Undefined;
 	}
 
 	Sampler::~Sampler()

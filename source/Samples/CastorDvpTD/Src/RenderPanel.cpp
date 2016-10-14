@@ -73,7 +73,6 @@ namespace castortd
 				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_sizeWnd]()
 				{
 					m_picking.Initialise( l_sizeWnd );
-					m_picking.Update();
 				} ) );
 			}
 		}
@@ -387,7 +386,6 @@ namespace castortd
 				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window, l_x, l_y]()
 				{
 					Camera & l_camera = *l_window->GetCamera();
-					m_picking.Update();
 					l_camera.Update();
 
 					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
@@ -474,8 +472,6 @@ namespace castortd
 				{
 					DoUpdateSelectedGeometry( nullptr );
 				}
-
-				m_picking.Update();
 			} ) );
 		}
 	}
@@ -490,8 +486,6 @@ namespace castortd
 				{
 					DoUpdateSelectedGeometry( nullptr );
 				}
-
-				m_picking.Update();
 			} ) );
 		}
 	}

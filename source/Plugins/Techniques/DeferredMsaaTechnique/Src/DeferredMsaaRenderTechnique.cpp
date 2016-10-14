@@ -368,7 +368,7 @@ namespace DeferredMsaa
 		return true;
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -379,8 +379,8 @@ namespace DeferredMsaa
 		UBO_PASS( l_writer );
 
 		// Fragment Inputs
-		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
-		auto vtx_view = l_writer.GetInput< Vec4 >( cuT( "vtx_view" ) );
+		auto vtx_worldSpacePosition( l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) ) );
+		auto vtx_worldViewSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
 		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
 		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
@@ -414,62 +414,28 @@ namespace DeferredMsaa
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, c3d_v4MatSpecular.xyz() );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_vertex );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_worldSpacePosition );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Normal ) )
-			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
-				l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
-				l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Gloss ) )
-			{
-				l_fMatShininess = texture( c3d_mapGloss, vtx_texture.xy() ).r();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
-			{
-				l_v3Emissive = texture( c3d_mapEmissive, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
-			{
-				l_v3Ambient += texture( c3d_mapColour, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Ambient ) )
-			{
-				l_v3Ambient += texture( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Diffuse ) )
-			{
-				l_v3Diffuse *= texture( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
-			}
-
-			if ( CheckFlag( p_textureFlags, TextureChannel::Specular ) )
-			{
-				l_v3Specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
-			}
+			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
+			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
-			out_c3dDiffuse = vec4( l_v3Diffuse, length( vtx_view ) );
+			out_c3dDiffuse = vec4( l_v3Diffuse, length( vtx_worldViewSpacePosition ) );
 			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
 			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, vtx_view.z() );
+			out_c3dEmissive = vec4( l_v3Emissive, vtx_worldViewSpacePosition.z() );
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 
-	String RenderTechnique::DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -492,7 +458,7 @@ namespace DeferredMsaa
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -517,11 +483,11 @@ namespace DeferredMsaa
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Specular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::Emissive ) );
 
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ? ShadowType::Poisson : ShadowType::None );
+		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
+
 		// Shader outputs
 		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_textureFlags );
-		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -550,43 +516,13 @@ namespace DeferredMsaa
 				LOCALE_ASSIGN( l_writer, Float, l_dist, l_v4Diffuse.w() );
 				LOCALE_ASSIGN( l_writer, Float, l_y, l_v4Emissive.w() );
 
-				LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
-				LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.x() );
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeCombinedLighting( l_worldEye
+													 , l_fMatShininess
+													 , FragmentInput( l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent )
+													 , l_output );
 
-				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-				{
-					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-					l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-														 FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-														 l_output );
-				}
-				ROF;
-
-				l_begin = l_end;
-				l_end += c3d_iLightsCount.y();
-
-				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-				{
-					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-					l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-												   FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-												   l_output );
-				}
-				ROF;
-
-				l_begin = l_end;
-				l_end += c3d_iLightsCount.z();
-
-				FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
-				{
-					OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-					l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-												  FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
-												  l_output );
-				}
-				ROF;
-
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient + l_v3MapAmbient.xyz() ) +
+				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
@@ -624,7 +560,7 @@ namespace DeferredMsaa
 				DepthStencilState l_dsstate;
 				l_dsstate.SetDepthTest( false );
 				l_dsstate.SetDepthMask( WritingMask::Zero );
-				program.m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program );
+				program.m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program, PipelineFlags{} );
 
 				++l_sceneFlags;
 			}

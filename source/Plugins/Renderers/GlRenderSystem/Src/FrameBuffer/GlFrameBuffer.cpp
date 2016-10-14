@@ -59,7 +59,18 @@ namespace GlRender
 				}
 			}
 
-			GetOpenGl().DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+			if ( !l_arrayAttaches.empty() )
+			{
+				GetOpenGl().DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+			}
+			else
+			{
+				GetOpenGl().DrawBuffer( eGL_BUFFER_NONE );
+			}
+		}
+		else
+		{
+			GetOpenGl().DrawBuffer( eGL_BUFFER_NONE );
 		}
 	}
 

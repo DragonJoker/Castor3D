@@ -180,7 +180,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightCache().Add( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
+					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightCache().Add( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, Castor3D::LightType( type ) ) );
 				}
 			}
 		}

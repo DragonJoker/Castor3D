@@ -48,7 +48,10 @@ namespace Castor3D
 	{
 		//!\~english	The geometries without alpha blending, sorted by shader program.
 		//!\~french		Les géométries sans alpha blending, triées par programme shader.
-		OpaqueMapType m_opaqueRenderNodes;
+		OpaqueMapType m_opaqueRenderNodesFront;
+		//!\~english	The geometries without alpha blending, sorted by shader program.
+		//!\~french		Les géométries sans alpha blending, triées par programme shader.
+		OpaqueMapType m_opaqueRenderNodesBack;
 		//!\~english	The geometries with alpha blending, sorted by shader program.
 		//!\~french		Les géométries avec de l'alpha blend, triées par programme shader.
 		TransparentMapType m_transparentRenderNodesFront;

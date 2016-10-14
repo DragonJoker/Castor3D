@@ -374,7 +374,7 @@ namespace Castor
 		//! The logger implementation
 		LoggerImpl * m_impl;
 		//! the mutex used to protect the implementation
-		std::mutex m_mutex;
+		std::recursive_mutex m_mutex;
 		//! the current logging level, all logs lower than this level are ignored
 		ELogType m_logLevel;
 		//! The header for each lg line of given log level

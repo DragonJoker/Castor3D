@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_lightType	Le type de lumière
 		 *\param[in]	p_node		Le scene node parent
 		 */
-		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType );
+		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, LightType p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -104,6 +104,15 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API ~Light();
+		/**
+		 *\~english
+		 *\brief		Updates the light viewport.
+		 *\param[in]	p_target	The target position, used by directional shadow map.
+		 *\~french
+		 *\brief		Met le viewport de la source à jour.
+		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
+		 */
+		C3D_API void Update( Castor::Point3r const & p_target );
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
@@ -123,7 +132,7 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
+		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category
@@ -159,7 +168,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de lumière
 		 *\return		La valeur
 		 */
-		inline eLIGHT_TYPE GetLightType()const
+		inline LightType GetLightType()const
 		{
 			return m_category->GetLightType();
 		}
@@ -365,9 +374,9 @@ namespace Castor3D
 		 *\brief		Définit le statut d'activation de la lumère
 		 *\param[in]	p_enabled	La nouvelle valeur
 		 */
-		inline void SetEnabled( bool p_enabled )
+		inline void SetEnabled( bool p_value)
 		{
-			m_enabled = p_enabled;
+			m_enabled = p_value;
 		}
 		/**
 		 *\~english
@@ -399,17 +408,68 @@ namespace Castor3D
 		{
 			return m_category;
 		}
+		/**
+		 *\~english
+		 *\return		Tells if the light casts shadows.
+		 *\~french
+		 *\return		Dit si la lumière projette des ombres.
+		 */
+		inline bool CastShadows()const
+		{
+			return m_castShadows;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light shadow casting status.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le statut de projection d'ombre de la lumère
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void CastShadows( bool p_value )
+		{
+			m_castShadows = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		Sets the shadow map rendering viewport.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\return		Définit le viewport de rendu de shadow map.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetViewport( Viewport & p_value )
+		{
+			m_viewport = &p_value;
+			m_category->SetViewport( p_value );
+		}
+		/**
+		 *\~english
+		 *\return		The Light space view matrix.
+		 *\~french
+		 *\return		La matrice vue dans l'espace lumière.
+		 */
+		inline Castor::Matrix4x4f const & GetLightSpaceView()const
+		{
+			return m_category->GetLightSpaceView();
+		}
 
 	protected:
-		void OnNodeChanged();
+		void OnNodeChanged( SceneNode const & p_node );
 
 	protected:
 		//!\~english	Tells the light is enabled.
 		//!\~french		Dit si la lumière est active ou pas.
-		bool m_enabled;
+		bool m_enabled{ false };
+		//!\~english	Tells if the light casts shadows.
+		//!\~french		Dit si la lumière projette des ombres.
+		bool m_castShadows{ false };
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;
+		//!\~english	The shadow map rendering viewport.
+		//\~french		Le viewport de rendu de la mp d'ombres.
+		Viewport * m_viewport;
 	};
 }
 

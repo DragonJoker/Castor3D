@@ -126,7 +126,7 @@ namespace Castor3D
 		 */
 		inline SceneNodeSPtr GetParent()const
 		{
-			return m_pSceneNode.lock();
+			return m_sceneNode.lock();
 		}
 		/**
 		 *\~english
@@ -147,7 +147,7 @@ namespace Castor3D
 		//!\~english The parent node name	\~french Le nom du noeud parent
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent
-		SceneNodeWPtr m_pSceneNode;
+		SceneNodeWPtr m_sceneNode;
 		//!\~english The node change notification index.	\~french L'indice de notifcation des changements du noeud.
 		uint32_t m_notifyIndex = 0;
 	};

@@ -32,11 +32,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Pipeline::Pipeline( RenderSystem & p_renderSystem
-					    , DepthStencilState && p_dsState
-					    , RasteriserState && p_rsState
-					    , BlendState && p_blState
-					    , MultisampleState && p_msState
-						, ShaderProgram & p_program )
+						, DepthStencilState && p_dsState
+						, RasteriserState && p_rsState
+						, BlendState && p_blState
+						, MultisampleState && p_msState
+						, ShaderProgram & p_program
+						, PipelineFlags const & p_flags )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_mtxView{ 1 }
 		, m_mtxModel{ 1 }
@@ -47,8 +48,24 @@ namespace Castor3D
 		, m_blState{ std::move( p_blState ) }
 		, m_msState{ std::move( p_msState ) }
 		, m_program{ p_program }
+		, m_flags( p_flags )
 	{
+		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::All );
+
+		while ( l_textures )
+		{
+			m_textureCount++;
+
+			while ( !( l_textures & 0x01 ) )
+			{
+				l_textures >>= 1;
+			}
+
+			l_textures >>= 1;
+		}
+
 		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
+		m_shadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapShadow, ShaderType::Pixel );
 	}
 
 	Pipeline::~Pipeline()

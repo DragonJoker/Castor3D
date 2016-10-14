@@ -685,6 +685,9 @@ namespace Castor3D
 		//!\~english	Name of the material opacity frame variable.
 		//!\~french		Nom de la frame variable contenant l'opacité du matériau.
 		C3D_API static const Castor::String MatOpacity;
+		//!\~english	Name of the shadow map image frame variable.
+		//!\~french		Nom de la frame variable contenant l'image de shadow map.
+		C3D_API static const Castor::String MapShadow;
 		//!\~english	Name of the overlay text image frame variable.
 		//!\~french		Nom de la frame variable contenant l'image de texte pour les overlays.
 		C3D_API static const Castor::String MapText;

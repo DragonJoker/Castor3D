@@ -427,9 +427,10 @@ namespace GlRender
 												 , RasteriserState && p_rsState
 												 , BlendState && p_bdState
 												 , MultisampleState && p_msState
-												 , ShaderProgram & p_program )
+												 , ShaderProgram & p_program
+												 , PipelineFlags const & p_flags )
 	{
-		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program );
+		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
 	}
 
 	SamplerSPtr GlRenderSystem::CreateSampler( Castor::String const & p_name )

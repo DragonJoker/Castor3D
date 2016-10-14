@@ -58,6 +58,14 @@ namespace Castor3D
 	{
 	public:
 		using DistanceSortedNodeMap = std::multimap< double, std::reference_wrapper< ObjectRenderNodeBase > >;
+		using ShadowMapLightMap = std::map< LightRPtr, ShadowMapPassSPtr >;
+
+	protected:
+		struct SceneSpecifics
+		{
+			CameraRPtr m_camera;
+			ShadowMapLightMap m_shadowMaps;
+		};
 
 	protected:
 		/*!
@@ -159,6 +167,26 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Update function.
+		 *\remarks		Updates the scenes render nodes, if needed.
+		 *\~french
+		 *\brief		Fonction de mise à jour.
+		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\~french
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 */
+		C3D_API void AddScene( Scene & p_scene, Camera & p_camera );
+		/**
+		 *\~english
 		 *\brief		Render function
 		 *\param[in]	p_scene		The scene to render.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
@@ -181,6 +209,13 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier.
 		 */
 		C3D_API bool WriteInto( Castor::TextFile & p_file );
+		/**
+		 *\~english
+		 *\return		The shadow maps associated to given scene and camera.
+		 *\~french
+		 *\return		Les maps d'ombre associées à la scène et la caméra données.
+		 */
+		C3D_API ShadowMapLightMap const & GetShadowMaps( Scene & p_scene, Camera & p_camera )const;
 		/**
 		 *\~english
 		 *\return		The render area dimensions.
@@ -206,58 +241,269 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_size		The render target dimensions.
 		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_size		Les dimensions de la cible de rendu.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 */
-		C3D_API void DoRender( Castor::Size const & p_size, SceneRenderNodes & p_nodes, Camera & p_camera, uint32_t p_frameTime );
+		C3D_API void DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Renders opaque render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu opaques.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		C3D_API void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders transparent render nodes.
 		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
 		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\~french
 		 *\brief		Dessine les noeuds de rendu transparents.
 		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 */
-		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
+		C3D_API void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderOpaqueAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderOpaqueInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderOpaqueInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderTransparentStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderTransparentAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderTransparentInstancedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderTransparentInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders objects sorted by distance to camera.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine d'objets triés par distance à la caméra.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderByDistance( Scene & p_scene, Camera const & p_camera, DistanceSortedNodeMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderOpaqueBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
+		 */
+		C3D_API void DoRenderTransparentBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register = true );
 
 	private:
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 */
+		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint8_t p_programFlags, uint8_t p_sceneFlags )const override;
+		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		C3D_API void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		C3D_API void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline )const override;
+		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 */
+		C3D_API void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 */
+		C3D_API void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
+		 */
+		C3D_API void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
+		 */
+		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -366,6 +612,9 @@ namespace Castor3D
 		//!\~english	The technique intialisation status.
 		//!\~french		Le statut d'initialisation de la technique.
 		bool m_initialised;
+		//!\~english	The scenes, and cameras used to render them.
+		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
+		std::map< SceneRPtr, std::vector< SceneSpecifics > > m_scenes;
 		//!\~english	The parent render target.
 		//!\~french		La render target parente.
 		RenderTarget & m_renderTarget;

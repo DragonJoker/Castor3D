@@ -102,11 +102,24 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport const & p_viewport )
+	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport && p_viewport )
 		: MovableObject{ p_name, p_scene, MovableType::Camera, p_node }
-		, m_viewport{ p_viewport }
+		, m_viewport{ std::move( p_viewport ) }
 	{
-		p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
+		if ( p_scene.GetEngine()->GetRenderSystem()->GetCurrentContext() )
+		{
+			m_viewport.Initialise();
+		}
+		else
+		{
+			p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
+		}
+
+		if ( p_node )
+		{
+			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *p_node );
+		}
 	}
 
 	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
@@ -116,6 +129,17 @@ namespace Castor3D
 
 	Camera::~Camera()
 	{
+	}
+
+	void Camera::AttachTo( SceneNodeSPtr p_node )
+	{
+		MovableObject::AttachTo( p_node );
+
+		if ( p_node )
+		{
+			m_notifyIndex = p_node->RegisterObject( std::bind( &Camera::OnNodeChanged, this, std::placeholders::_1 ) );
+			OnNodeChanged( *p_node );
+		}
 	}
 
 	void Camera::ResetOrientation()
@@ -145,8 +169,9 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			if ( l_modified || l_node->IsModified() )
+			if ( l_modified || m_nodeChanged )
 			{
+				l_node->GetTransformationMatrix();
 				auto const & l_position = l_node->GetDerivedPosition();
 				auto const & l_orientation = l_node->GetDerivedOrientation();
 				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
@@ -155,9 +180,6 @@ namespace Castor3D
 				l_orientation.transform( l_right, l_right );
 				l_orientation.transform( l_up, l_up );
 				l_orientation.transform( l_front, l_front );
-				point::normalise( l_up );
-				point::normalise( l_right );
-				point::normalise( l_front );
 
 				// Update frustum
 				// Retrieve near and far planes' dimensions
@@ -205,8 +227,14 @@ namespace Castor3D
 
 				// Update view matrix
 				matrix::look_at( m_view, l_position, l_position + l_front, l_up );
+				m_nodeChanged = false;
 			}
 		}
+	}
+
+	void Camera::Apply()const
+	{
+		m_viewport.Apply();
 	}
 
 	void Camera::Resize( uint32_t p_width, uint32_t p_height )
@@ -333,5 +361,10 @@ namespace Castor3D
 		{
 			l_cameraPos->SetValue( l_position );
 		}
+	}
+
+	void Camera::OnNodeChanged( SceneNode const & p_node )
+	{
+		m_nodeChanged = true;
 	}
 }

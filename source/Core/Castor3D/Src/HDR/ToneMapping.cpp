@@ -83,7 +83,7 @@ namespace Castor3D
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
-			m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program );
+			m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;

@@ -35,17 +35,17 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de lumières
 	*/
-	typedef enum eLIGHT_TYPE
+	enum class LightType
 		: uint8_t
 	{
 		//!\~english Directional light type	\~french Lumière directionnelle
-		eLIGHT_TYPE_DIRECTIONAL,
+		Directional,
 		//!\~english Point light type	\~french Lumière ponctuelle
-		eLIGHT_TYPE_POINT,
+		Point,
 		//!\~english Spot light type	\~french Lumière projecteur
-		eLIGHT_TYPE_SPOT,
-		CASTOR_ENUM_BOUNDS( eLIGHT_TYPE, eLIGHT_TYPE_DIRECTIONAL )
-	}	eLIGHT_TYPE;
+		Spot,
+		CASTOR_ENUM_CLASS_BOUNDS( Directional )
+	};
 
 	class Light;
 	class LightCategory;

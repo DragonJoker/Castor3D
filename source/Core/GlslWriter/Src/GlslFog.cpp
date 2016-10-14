@@ -9,12 +9,12 @@ namespace GLSL
 	{
 		if ( p_flags != 0 )
 		{
-			auto c3d_fFogDensity = m_writer.GetBuiltin< Float >( cuT( "c3d_fFogDensity" ) );
-			auto c3d_v4BackgroundColour = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );
-			auto c3d_v3CameraPosition = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v3CameraPosition" ) );
-
-			m_writer.ImplementFunction< Vec4 >( cuT( "ApplyFog" ), [&]( Vec4 const & p_colour, Float const & p_dist, Float const & p_y )
+			auto l_apply = [this, p_flags]( Vec4 const & p_colour, Float const & p_dist, Float const & p_y )
 			{
+				auto c3d_fFogDensity = m_writer.GetBuiltin< Float >( cuT( "c3d_fFogDensity" ) );
+				auto c3d_v4BackgroundColour = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );
+				auto c3d_v3CameraPosition = m_writer.GetBuiltin< Vec4 >( cuT( "c3d_v3CameraPosition" ) );
+
 				auto l_dist = m_writer.GetLocale< Float >( cuT( "l_z" ), p_dist / 100 );
 				auto l_density = m_writer.GetLocale< Float >( cuT( "l_density" ), c3d_fFogDensity );
 
@@ -56,9 +56,11 @@ namespace GLSL
 					auto l_inscattering = m_writer.GetLocale< Float >( cuT( "l_insc" ), exp( -l_dist * l_bi ) );
 					m_writer.Return( m_writer.Paren( p_colour * l_extinction ) + m_writer.Paren( c3d_v4BackgroundColour * m_writer.Paren( Float( 1 ) - l_inscattering ) ) );
 				}
-			}, InParam< Vec4 >( &m_writer, cuT( "p_colour" ) )
-				, InParam< Float >( &m_writer, cuT( "p_dist" ) )
-				, InParam< Float >( &m_writer, cuT( "p_y" ) ) );
+			};
+			m_writer.ImplementFunction< Vec4 >( cuT( "ApplyFog" ), l_apply
+												, InParam< Vec4 >( &m_writer, cuT( "p_colour" ) )
+												, InParam< Float >( &m_writer, cuT( "p_dist" ) )
+												, InParam< Float >( &m_writer, cuT( "p_y" ) ) );
 		}
 	}
 

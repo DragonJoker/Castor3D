@@ -1,6 +1,6 @@
 #include "PointLight.hpp"
 
-#include "Mesh/Vertex.hpp"
+#include "Render/Viewport.hpp"
 
 using namespace Castor;
 
@@ -40,8 +40,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PointLight::PointLight()
-		: LightCategory( eLIGHT_TYPE_POINT )
-		, m_attenuation( 1.0f, 0.0f, 0.0f )
+		: LightCategory{ LightType::Point }
 	{
 	}
 
@@ -51,7 +50,11 @@ namespace Castor3D
 
 	LightCategorySPtr PointLight::Create()
 	{
-		return std::make_shared< PointLight >();
+		return std::shared_ptr< PointLight >( new PointLight );
+	}
+
+	void PointLight::Update( Point3r const & p_target )
+	{
 	}
 
 	void PointLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
@@ -61,6 +64,7 @@ namespace Castor3D
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		Point4f l_posType = GetPositionType();
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 	}
 

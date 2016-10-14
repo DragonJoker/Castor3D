@@ -107,13 +107,9 @@ namespace Castor3D
 	uint64_t SceneNode::Count = 0;
 
 	SceneNode::SceneNode( String const & p_name, Scene & p_scene )
-		: OwnedBy< Scene >( p_scene )
-		, Named( p_name )
-		, m_visible( true )
-		, m_scale( 1.0, 1.0, 1.0 )
-		, m_position( 0.0, 0.0, 0.0 )
-		, m_displayable( p_name == cuT( "RootNode" ) )
-		, m_mtxChanged( true )
+		: OwnedBy< Scene >{ p_scene }
+		, Named{ p_name }
+		, m_displayable{ p_name == cuT( "RootNode" ) }
 	{
 		if ( m_name.empty() )
 		{
@@ -135,6 +131,21 @@ namespace Castor3D
 		}
 
 		DetachAllChilds();
+	}
+
+	void SceneNode::Update()
+	{
+		DoComputeMatrix();
+
+		for ( auto l_it : m_children )
+		{
+			auto l_child = l_it.second.lock();
+
+			if ( l_child )
+			{
+				l_child->Update();
+			}
+		}
 	}
 
 	void SceneNode::AttachObject( MovableObjectSPtr p_object )
@@ -377,7 +388,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Point3r SceneNode::GetDerivedPosition()
+	Point3r SceneNode::GetDerivedPosition()const
 	{
 		Point3r l_return( m_position );
 		auto l_parent = GetParent();
@@ -390,7 +401,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Quaternion SceneNode::GetDerivedOrientation()
+	Quaternion SceneNode::GetDerivedOrientation()const
 	{
 		Quaternion l_return( m_orientation );
 		auto l_parent = GetParent();
@@ -403,7 +414,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Point3r SceneNode::GetDerivedScale()
+	Point3r SceneNode::GetDerivedScale()const
 	{
 		Point3r l_return( m_scale );
 		auto l_parent = GetParent();
@@ -416,15 +427,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Matrix4x4r const & SceneNode::GetTransformationMatrix()
+	Matrix4x4r const & SceneNode::GetTransformationMatrix()const
 	{
-		DoComputeMatrix();
 		return m_transform;
 	}
 
-	Matrix4x4r const & SceneNode::GetDerivedTransformationMatrix()
+	Matrix4x4r const & SceneNode::GetDerivedTransformationMatrix()const
 	{
-		DoComputeMatrix();
 		return m_derivedTransform;
 	}
 
@@ -452,7 +461,7 @@ namespace Castor3D
 			}
 
 			m_derivedMtxChanged = false;
-			m_signalChanged();
+			m_signalChanged( *this );
 		}
 	}
 

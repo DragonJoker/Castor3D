@@ -421,9 +421,9 @@ namespace Castor3D
 																		p_element->Detach();
 																	} );
 		m_cameraCache = MakeObjectCache< Camera, String >(	p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
-															, [this]( String const & p_name, SceneNodeSPtr p_parent, Viewport const & p_viewport )
+															, [this]( String const & p_name, SceneNodeSPtr p_parent, Viewport && p_viewport )
 															{
-																return std::make_shared< Camera >( p_name, *this, p_parent, p_viewport );
+																return std::make_shared< Camera >( p_name, *this, p_parent, std::move( p_viewport ) );
 															}
 															, l_dummy
 															, l_dummy
@@ -447,7 +447,7 @@ namespace Castor3D
 																	p_element->Detach();
 																} );
 		m_lightCache = MakeObjectCache< Light, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
-														, [this]( String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_lightType )
+														, [this]( String const & p_name, SceneNodeSPtr p_node, LightType p_lightType )
 														{
 															return std::make_shared< Light >( p_name, *this, p_node, m_lightFactory, p_lightType );
 														}
@@ -632,12 +632,12 @@ namespace Castor3D
 
 	void Scene::Update()
 	{
-		auto l_lock = make_unique_lock( *m_animatedObjectGroupCache );
+		m_rootNode->Update();
 
-		for ( auto l_pair : *m_animatedObjectGroupCache )
+		m_animatedObjectGroupCache->ForEach( []( AnimatedObjectGroup & p_group )
 		{
-			l_pair.second->Update();
-		}
+			p_group.Update();
+		} );
 
 		m_changed = false;
 	}
@@ -740,5 +740,15 @@ namespace Castor3D
 	uint8_t Scene::GetFlags()const
 	{
 		return uint8_t( m_fog.GetType() );
+	}
+
+	bool Scene::HasShadows()const
+	{
+		auto l_lock = make_unique_lock( GetLightCache() );
+
+		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
+		{
+			return p_it.second->CastShadows();
+		} );
 	}
 }

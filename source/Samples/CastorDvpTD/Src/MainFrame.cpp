@@ -48,8 +48,8 @@ namespace castortd
 		{
 			wxGetApp().GetCastor()->Initialise( 120, CASTOR3D_THREADED );
 			DoLoadScene();
-			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxVERTICAL } };
-			l_sizer->Add( m_panel.get(), wxSizerFlags{ 1 }.Expand() );
+			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxHORIZONTAL } };
+			l_sizer->Add( m_panel.get(), wxSizerFlags{ 1 }.Shaped().Centre() );
 			l_sizer->SetSizeHints( this );
 			SetSizer( l_sizer );
 		}
@@ -67,7 +67,7 @@ namespace castortd
 	{
 		auto & l_engine = *wxGetApp().GetCastor();
 		auto l_window = GuiCommon::LoadScene( l_engine
-											  , File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "DataLights.zip" )
+											  , File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 											  , l_engine.GetRenderLoop().GetWantedFps()
 											  , l_engine.IsThreaded() );
 

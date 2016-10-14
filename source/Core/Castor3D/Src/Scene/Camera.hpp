@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le noeud de scène parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport const & p_viewport );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport && p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -118,14 +118,44 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Camera();
+		C3D_API ~Camera();
 		/**
 		 *\~english
-		 *\brief		Applies the viewport, the rotation ...
+		 *\brief		Attaches this light to a Material
+		 *\param[in]	p_node	The new light's parent node
 		 *\~french
-		 *\brief		Applique le viewport, la rotation ...
+		 *\brief		Attache cette lumière au node donné
+		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		C3D_API virtual void Update();
+		C3D_API void AttachTo( SceneNodeSPtr p_node )override;
+		/**
+		 *\~english
+		 *\brief		Sets the orientation to identity
+		 *\~french
+		 *\brief		Met l'orientation à l'identité
+		 */
+		C3D_API void ResetOrientation();
+		/**
+		 *\~english
+		 *\brief		Sets the position to 0
+		 *\~french
+		 *\brief		Réinitialise la position
+		 */
+		C3D_API void ResetPosition();
+		/**
+		 *\~english
+		 *\brief		Updates the viewport, the frustum...
+		 *\~french
+		 *\brief		Met à jour le viewport, frustum...
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Applies the viewport.
+		 *\~french
+		 *\brief		Applique le viewport.
+		 */
+		C3D_API void Apply()const;
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -144,20 +174,6 @@ namespace Castor3D
 		 *\param[in]	p_size	Dimensions de la fenêtre d'affichage
 		 */
 		C3D_API void Resize( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Sets the orientation to identity
-		 *\~french
-		 *\brief		Met l'orientation à l'identité
-		 */
-		C3D_API void ResetOrientation();
-		/**
-		 *\~english
-		 *\brief		Sets the position to 0
-		 *\~french
-		 *\brief		Réinitialise la position
-		 */
-		C3D_API void ResetPosition();
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport type
@@ -273,20 +289,41 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère la matrice de vue
 		 */
-		virtual Castor::Matrix4x4r const & GetView()const
+		inline Castor::Matrix4x4r const & GetView()const
 		{
 			return m_view;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the view matrix.
+		 *\param[in]	p_view	The new value.
+		 *\~french
+		 *\brief		Définit la matrice de vue.
+		 *\param[in]	p_view	La nouvelle valeur.
+		 */
+		inline void SetView( Castor::Matrix4x4r const & p_view )
+		{
+			m_view = p_view;
+		}
+
+	private:
+		void OnNodeChanged( SceneNode const & p_node );
 
 	private:
 		friend class Scene;
 		friend class CameraRenderer;
-		//!\~english The viewport of the camera	\~french Le viewport de la caméra
+		//!\~english	The viewport of the camera.
+		//!\~french		Le viewport de la caméra.
 		Viewport m_viewport;
-		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
+		//!\~english	The view frustum's planes.
+		//!\~french		Les plans du frustum de vue.
 		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::Count ) > m_planes;
-		//!\~english The view matrix	\~french La matrice vue
+		//!\~english	The view matrix.
+		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;
+		//!\~english	Tells if the parent node has changed.
+		//!\~french		Dit si le noeud parent a changé.
+		bool m_nodeChanged{ true };
 	};
 }
 

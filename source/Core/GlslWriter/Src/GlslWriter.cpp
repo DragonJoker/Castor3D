@@ -9,14 +9,6 @@ namespace GLSL
 
 	//*****************************************************************************************
 
-	LightingModelFactory::LightingModelFactory()
-		: Castor::Factory< LightingModel, Castor::String, std::unique_ptr< LightingModel >, std::function< std::unique_ptr< LightingModel >( uint32_t, GlslWriter & ) > >{}
-	{
-		Register( PhongLightingModel::Name, &PhongLightingModel::Create );
-	}
-
-	//*****************************************************************************************
-
 	IndentBlock::IndentBlock( GlslWriter & p_writter )
 		: m_stream( p_writter.m_stream )
 	{
@@ -107,6 +99,7 @@ namespace GLSL
 		, m_uniform( cuT( "uniform " ) )
 		, m_config( p_config )
 	{
+		m_lightingFactory.Register( PhongLightingModel::Name, &PhongLightingModel::Create );
 		*this << GLSL::Version() << Endl();
 	}
 
@@ -130,9 +123,9 @@ namespace GLSL
 		return *this;
 	}
 
-	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, uint32_t p_flags )
+	std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, ShadowType p_shadows )
 	{
-		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_flags, *this );
+		std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_shadows, *this );
 		l_lighting->DeclareModel();
 		return l_lighting;
 	}
@@ -346,6 +339,66 @@ namespace GLSL
 		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
 	}
 
+	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadow(), p_sampler, p_value );
+	}
+
+	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Float GlslWriter::Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadow(), p_sampler, p_value );
+	}
+
+	Float GlslWriter::Texture( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadow(), p_sampler, p_value );
+	}
+
+	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float GlslWriter::TextureLodOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float GlslWriter::TextureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
 	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value )
 	{
 		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1D(), p_sampler, p_value );
@@ -449,6 +502,66 @@ namespace GLSL
 	Optional< Vec4 > GlslWriter::TexelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif )
 	{
 		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadow(), p_sampler, p_value );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadow(), p_sampler, p_value );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadow(), p_sampler, p_value );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
 	}
 
 	GlslWriter & GlslWriter::operator<<( Version const & p_rhs )

@@ -186,7 +186,16 @@ namespace GlRender
 				l_return &= p_gl.Enable( eGL_TWEAK_DEPTH_CLAMP );
 			}
 
-			l_return &= p_gl.PolygonOffset( p_state.GetDepthBias(), 4096.0 );
+			if ( p_state.GetDepthBiasFactor() != 0 || p_state.GetDepthBiasUnits() != 0 )
+			{
+				l_return &= p_gl.Enable( eGL_TWEAK_OFFSET_FILL );
+				l_return &= p_gl.PolygonOffset( p_state.GetDepthBiasFactor(), p_state.GetDepthBiasUnits() );
+			}
+			else
+			{
+				l_return &= p_gl.Disable( eGL_TWEAK_OFFSET_FILL );
+			}
+
 			return l_return;
 		}
 	}
@@ -197,8 +206,9 @@ namespace GlRender
 							, RasteriserState && p_rsState
 							, BlendState && p_bdState
 							, MultisampleState && p_msState
-							, ShaderProgram & p_program )
-		: Pipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program }
+							, ShaderProgram & p_program
+							, PipelineFlags const & p_flags )
+		: Pipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
 		, Holder{ p_gl }
 	{
 	}
@@ -214,10 +224,5 @@ namespace GlRender
 		DoApply( m_blState, GetOpenGl() );
 		DoApply( m_msState, GetOpenGl() );
 		m_program.Bind( false );
-	}
-
-	void GlPipeline::ApplyViewport( int p_windowWidth, int p_windowHeight )
-	{
-		GetOpenGl().Viewport( 0, 0, p_windowWidth, p_windowHeight );
 	}
 }

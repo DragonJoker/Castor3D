@@ -103,7 +103,7 @@ namespace Castor3D
 		BillboardListSPtr pBillboards;
 		int iFace1;
 		int iFace2;
-		eLIGHT_TYPE eLightType;
+		LightType eLightType;
 		eMESH_TYPE eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
@@ -219,7 +219,7 @@ namespace Castor3D
 
 		UIntStrMap m_mapBlendFactors;
 		UIntStrMap m_mapTypes;
-		UIntStrMap m_mapAlphaFuncs;
+		UIntStrMap m_mapComparisonFuncs;
 		UIntStrMap m_mapTextureArguments;
 		UIntStrMap m_mapTextureRgbFunctions;
 		UIntStrMap m_mapTextureAlphaFunctions;
@@ -244,6 +244,8 @@ namespace Castor3D
 		UIntStrMap m_mapTextTexturingModes;
 		UIntStrMap m_mapLineSpacingModes;
 		UIntStrMap m_fogTypes;
+		UIntStrMap m_mapMeshTypes;
+		UIntStrMap m_mapComparisonModes;
 	};
 }
 

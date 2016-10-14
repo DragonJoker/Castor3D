@@ -258,10 +258,10 @@ namespace GLSL
 	}
 
 	template< typename ExprType >
-	ExprType GlslWriter::Ternary( Type const & p_condition, Type const & p_left, Type const & p_right )
+	ExprType GlslWriter::Ternary( Type const & p_condition, ExprType const & p_left, ExprType const & p_right )
 	{
 		ExprType l_return( this );
-		l_return.m_value << ToString( p_condition ) << cuT( " ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
+		l_return.m_value << cuT( "( " ) << ToString( p_condition ) << cuT( " ) ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
 		return l_return;
 	}
 
@@ -400,6 +400,27 @@ namespace GLSL
 	inline Array< T > GlslWriter::GetUniform( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+		return Array< T >( this, p_name, p_dimension );
+	}
+
+	template< typename T >
+	inline Array< T > GlslWriter::GetUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs )
+	{
+		if ( p_rhs.size() != p_dimension )
+		{
+			CASTOR_EXCEPTION ("Given parameters count doesn't match the array dimensions");
+		}
+
+		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
+		Castor::String l_sep;
+
+		for ( auto const & l_value : p_rhs )
+		{
+			*this << l_sep << Castor::String( l_value ) << Endl();
+			l_sep = cuT( "\t, " );
+		}
+
+		*this << cuT (");") << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 

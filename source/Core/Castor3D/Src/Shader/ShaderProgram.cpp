@@ -141,6 +141,7 @@ namespace Castor3D
 	const String ShaderProgram::MapOpacity = cuT( "c3d_mapOpacity" );
 	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
+	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );

@@ -86,16 +86,20 @@ namespace Castor3D
 	private:
 		friend class Light;
 
-	public:
+	protected:
 		/**
 		 *\~english
-		 *\brief		The constructor, used by clone function
-		 *\param[in]	p_lightType	The light category type
+		 *\brief		Constructor.
+		 *\param[in]	p_lightType	The light category type.
+		 *\param[in]	p_viewport	The shadow map render viewport.
 		 *\~french
-		 *\brief		Le constructeur utilisé par la fonction de clonage
-		 *\param[in]	p_lightType	Le type de catégorie de lumière
+		 *\brief		Constructeur.
+		 *\param[in]	p_lightType	Le type de catégorie de lumière.
+		 *\param[in]	p_viewport	Le viewport utilisé pour le rrendu de la map d'ombres.
 		 */
-		C3D_API explicit LightCategory( eLIGHT_TYPE p_lightType );
+		C3D_API explicit LightCategory( LightType p_lightType );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,6 +107,15 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~LightCategory();
+		/**
+		 *\~english
+		 *\brief		Updates the light viewport.
+		 *\param[in]	p_target	The target position, used by directional shadow map.
+		 *\~french
+		 *\brief		Met le viewport de la source à jour.
+		 *\param[in]	p_target	La position de la cible, utilisée pour la map d'ombres des source directionnelles.
+		 */
+		C3D_API virtual void Update( Castor::Point3r const & p_target ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a LightCategroy specific TextLoader.
@@ -195,7 +208,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de lumière
 		 *\return		La valeur
 		 */
-		inline eLIGHT_TYPE GetLightType()const
+		inline LightType GetLightType()const
 		{
 			return m_eLightType;
 		}
@@ -277,6 +290,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The Light space view matrix.
+		 *\~french
+		 *\return		La matrice vue dans l'espace lumière.
+		 */
+		inline Castor::Matrix4x4f const & GetLightSpaceView()const
+		{
+			return m_lightSpace;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the parent light
 		 *\return		The value
 		 *\~french
@@ -298,6 +321,18 @@ namespace Castor3D
 		inline void SetLight( Light * val )
 		{
 			m_pLight = val;
+		}
+		/**
+		 *\~english
+		 *\return		Sets the shadow map rendering viewport.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\return		Définit le viewport de rendu de shadow map.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetViewport( Viewport & p_value )
+		{
+			m_viewport = &p_value;
 		}
 
 	protected:
@@ -348,17 +383,31 @@ namespace Castor3D
 		void DoBindComponent( Castor::Point3f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Point4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Coords4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+
+	protected:
+		//!\~english	The light source space transformation matrix.
+		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
+		mutable Castor::Matrix4x4f m_lightSpace;
+		//!\~english	The shadow map rendering viewport.
+		//\~french		Le viewport de rendu de la mp d'ombres.
+		Viewport * m_viewport;
 
 	private:
-		//!\~english The light type	\~french Le type de lumière
-		eLIGHT_TYPE m_eLightType;
-		//!\~english The parent light	\~french La lumière parente
+		//!\~english	The light type.
+		//!\~french		Le type de lumière.
+		LightType m_eLightType;
+		//!\~english	The parent light.
+		//!\~french		La lumière parente.
 		Light * m_pLight{ nullptr };
-		//!\~english The colour.	\~french La couleur.
-		Castor::Point3f m_colour;
-		//!\~english The intensity values.	\~french Les valeurs d'intensité.
-		Castor::Point3f m_intensity;
-		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumière (le type est dans la 4ème coordonnée)
+		//!\~english	The colour.
+		//!\~french		La couleur.
+		Castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
+		//!\~english	The intensity values.
+		//!\~french		Les valeurs d'intensité.
+		Castor::Point3f m_intensity{ 0.0, 1.0, 1.0 };
+		//!\~english	The position and type of the light (type is in 4th coordinate).
+		//!\~french		La position et le type de la lumière (le type est dans la 4ème coordonnée).
 		Castor::Point4f m_positionType;
 	};
 }

@@ -1,6 +1,7 @@
 #include "SpotLight.hpp"
 
 #include "Scene/SceneNode.hpp"
+#include "Render/Viewport.hpp"
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -34,7 +35,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff().degrees() ) > 0;
 			LightCategory::TextWriter::CheckError( l_return, "SpotLight cutoff" );
 		}
 
@@ -54,10 +55,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SpotLight::SpotLight()
-		: LightCategory( eLIGHT_TYPE_SPOT )
-		, m_attenuation( 1, 0, 0 )
-		, m_exponent( 0 )
-		, m_cutOff( 180 )
+		: LightCategory{ LightType::Spot }
 	{
 	}
 
@@ -67,21 +65,37 @@ namespace Castor3D
 
 	LightCategorySPtr SpotLight::Create()
 	{
-		return std::make_shared< SpotLight >();
+		return std::shared_ptr< SpotLight >( new SpotLight );
+	}
+
+	void SpotLight::Update( Point3r const & p_target )
+	{
+		m_viewport->SetPerspective( GetCutOff() * 2, m_viewport->GetRatio(), 1.0_r, 1000.0_r );
+		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		auto l_position = GetPosition();
+		l_position[2] = -l_position[2];
+		Point3f l_front{ 0, 0, 1 };
+		Point3f l_up{ 0, 1, 0 };
+		l_orientation.transform( l_front, l_front );
+		l_orientation.transform( l_up, l_up );
+		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
 	}
 
 	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
+		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		Point3f l_front{ 0, 0, 1 };
+		l_orientation.transform( l_front, l_front );
+		Point4f l_posType = GetPositionType();
+
 		int l_offset = 0;
 		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		Point4f l_posType = GetPositionType();
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( m_viewport->GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
-		Matrix4x4r l_orientation;
-		GetLight()->GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
-		DoBindComponent( l_orientation, p_index, l_offset, p_texture );
-		DoBindComponent( GetExponent(), GetCutOff(), p_index, l_offset, p_texture );
+		DoBindComponent( l_front, p_index, l_offset, p_texture );
+		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );
 	}
 
 	void SpotLight::SetPosition( Castor::Point3r const & p_position )
@@ -105,27 +119,8 @@ namespace Castor3D
 		m_exponent = p_exponent;
 	}
 
-	void SpotLight::SetCutOff( float p_cutOff )
+	void SpotLight::SetCutOff( Angle const & p_cutOff )
 	{
 		m_cutOff = p_cutOff;
-	}
-
-	void SpotLight::DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )const
-	{
-		float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
-		*l_pDst++ = p_exp;
-		*l_pDst++ = p_cut;
-	}
-
-	void SpotLight::DoBindComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
-	{
-		Point3f l_direction( 0, 0, 1 );
-		l_direction = matrix::get_transformed( p_component, l_direction );
-		DoBindComponent( l_direction, p_index, p_offset, p_data );
-	}
-
-	void SpotLight::DoBindComponent( Matrix4x4d const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
-	{
-		DoBindComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
 	}
 }
