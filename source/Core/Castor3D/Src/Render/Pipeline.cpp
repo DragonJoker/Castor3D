@@ -48,7 +48,7 @@ namespace Castor3D
 		, m_blState{ std::move( p_blState ) }
 		, m_msState{ std::move( p_msState ) }
 		, m_program{ p_program }
-		, m_flags{ p_flags }
+		, m_flags( p_flags )
 	{
 		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::All );
 

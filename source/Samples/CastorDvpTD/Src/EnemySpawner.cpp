@@ -52,7 +52,7 @@ namespace castortd
 		m_timeSinceLastSpawn = std::chrono::milliseconds{};
 		++m_totalSpawned;
 		auto & l_pathNode = *p_path.begin();
-		auto & l_cell{ p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } ) };
+		auto & l_cell = p_game.GetCell( Point2i{ l_pathNode.m_x, l_pathNode.m_y } );
 		EnemyPtr l_return;
 
 		if ( m_enemiesCache.empty() )

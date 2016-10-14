@@ -7,6 +7,10 @@
 #elif defined( __linux__ )
 #	include <gdk/gdkx.h>
 #	include <gtk/gtk.h>
+#	undef None
+#	undef Bool
+#	undef Always
+using Bool = int;
 #endif
 
 #include <Graphics/Font.hpp>
@@ -358,7 +362,7 @@ namespace GuiCommon
 #elif defined( __linux__ )
 
 		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
-		GLXDrawable l_drawable = None;
+		GLXDrawable l_drawable = 0;
 		Display * l_pDisplay = nullptr;
 
 		if ( l_pGtkWidget && l_pGtkWidget->window )

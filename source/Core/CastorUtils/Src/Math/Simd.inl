@@ -1,12 +1,12 @@
 namespace Castor
 {
 	inline Float4::Float4( float const * p_values )
-		: m_value{ _mm_load_ps( p_values ) }
+		: m_value( _mm_load_ps( p_values ) )
 	{
 	}
 
 	inline Float4::Float4( float p_value )
-		: m_value{ _mm_set_ps1( p_value ) }
+		: m_value( _mm_set_ps1( p_value ) )
 	{
 	}
 
