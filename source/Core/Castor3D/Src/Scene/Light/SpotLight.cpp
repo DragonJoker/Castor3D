@@ -35,7 +35,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tcut_off %f\n" ), m_tabs.c_str(), p_light.GetCutOff().degrees() ) > 0;
 			LightCategory::TextWriter::CheckError( l_return, "SpotLight cutoff" );
 		}
 

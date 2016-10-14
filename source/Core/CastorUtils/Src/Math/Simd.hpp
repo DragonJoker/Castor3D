@@ -68,7 +68,7 @@ namespace Castor
 		 *\brief		Met les valeurs dans un pointeur.
 		 *\param[out]	p_values	Un pointeur sur 4 flottants alignés sur 16 bits.
 		 */
-        inline void to_ptr( float * p_values );
+		inline void to_ptr( float * p_values );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator.
