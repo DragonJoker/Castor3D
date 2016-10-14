@@ -23,6 +23,8 @@ SOFTWARE.
 #ifndef ___CU_SIMD_H___
 #define ___CU_SIMD_H___
 
+#if CASTOR_USE_SSE2
+
 #include "CastorUtilsPrerequisites.hpp"
 
 #include <xmmintrin.h>
@@ -163,5 +165,6 @@ namespace Castor
 
 #include "Simd.inl"
 
+#endif
 #endif
 
