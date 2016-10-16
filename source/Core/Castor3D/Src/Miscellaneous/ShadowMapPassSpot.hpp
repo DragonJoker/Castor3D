@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light );
+		C3D_API ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -72,7 +72,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light );
+		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 		/**
 		 *\~english
 		 *\return		The camera.

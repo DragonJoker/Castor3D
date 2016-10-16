@@ -104,14 +104,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
-		 *\param[in]	p_size			The render viewport size.
-		 *\param[in]	p_texture		The texture.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
 		 *\~french
 		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_texture		La texture.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
 		 */
 		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture );
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given texture array to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_index		The layer index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_index		L'index de la couche.
+		 */
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -136,6 +149,19 @@ namespace Castor3D
 		 *\param[in]	p_texture		La texture.
 		 */
 		C3D_API void RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture );
+		/**
+		 *\~english
+		 *\brief		Renders the wanted layer of given depth texture array to the currently draw-bound frame buffer.
+		 *\param[in]	p_size		The render viewport size.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_index		The layer index.
+		 *\~french
+		 *\brief		Rend la couche voulue du tableau de textures profondeur donné dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size		La taille du viewport de rendu.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_index		L'index de la couche.
+		 */
+		C3D_API void RenderDepth( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -209,13 +235,32 @@ namespace Castor3D
 		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
+		 *\brief		Renders the wanted layer of given texture array.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_index				The layer index.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	p_program			The program used to render the texture.
+		 *\~french
+		 *\brief		Dessine la couche voulue du tableau de textures donné.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_index				L'index de la couche.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
+		 */
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		/**
+		 *\~english
 		 *\brief		Creates the render to texture shader program.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Crée le programme shader de dessin de texture.
 		 *\return		Le programme.
 		 */
-		ShaderProgramSPtr DoCreateProgram( bool p_depth );
+		ShaderProgramSPtr DoCreateProgram( bool p_depth, bool p_array );
 		/**
 		 *\~english
 		 *\brief		Initialises this context
@@ -271,15 +316,18 @@ namespace Castor3D
 		//!\~english	Tells the context is currently set to use multisampling.
 		//!\~french		Dit si le contexte est actuellement configuré pour utiliser le multisampling.
 		bool m_bMultiSampling;
-		//!\~english	The diffuse map frame variable, in the buffer-to-buffer shader program.
-		//!\~french		La frame variable de l'image diffuse, dans le shader buffer-to-buffer.
-		OneIntFrameVariableSPtr m_mapDiffuse;
 		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english	The GeometryBuffers used when rendering a depth texture to the current frame buffer.
 		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture de profondeur dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffersDepth;
+		//!\~english	The GeometryBuffers used when rendering a texture to the current frame buffer.
+		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
+		GeometryBuffersSPtr m_geometryBuffersArray;
+		//!\~english	The GeometryBuffers used when rendering a depth texture to the current frame buffer.
+		//!\~french		Le GeometryBuffers utilisé lors du dessin d'une texture de profondeur dans le tampon d'image courant.
+		GeometryBuffersSPtr m_geometryBuffersDepthArray;
 		//!\~english	The Viewport used when rendering a texture into to a frame buffer.
 		//!\~french		Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
@@ -297,18 +345,30 @@ namespace Castor3D
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBufferDepth;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBufferArray;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBufferDepthArray;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
 		std::array< GpuQuerySPtr, 2 > m_timerQuery;
 		//!\~english	The active query index.
 		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;
-		//!\~english	The pipeline used for render to texture.
-		//!\~french		Le pipeline utilisé pour le rendu en texture.
+		//!\~english	The pipeline used for render a texture.
+		//!\~french		Le pipeline utilisé pour le rendu de texture.
 		PipelineUPtr m_texturePipeline;
-		//!\~english	The pipeline used for render to depth.
-		//!\~french		Le pipeline utilisé pour le rendu en profondeur.
+		//!\~english	The pipeline used to render a depth texture.
+		//!\~french		Le pipeline utilisé pour le rendu d'une texture profondeur.
 		PipelineUPtr m_depthPipeline;
+		//!\~english	The pipeline used to render one layer from texture array.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures.
+		PipelineUPtr m_textureArrayPipeline;
+		//!\~english	The pipeline used for render one layer from depth texture array.
+		//!\~french		Le pipeline utilisé pour le rendu d'une couche d'un tableau de textures profondeur.
+		PipelineUPtr m_depthArrayPipeline;
 	};
 }
 

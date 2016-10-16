@@ -126,30 +126,30 @@ namespace GLSL
 		inline operator uint32_t();
 	};
 
-	struct Sampler1DShadowArray
+	struct Sampler1DArrayShadow
 		: public Type
 	{
-		inline Sampler1DShadowArray();
-		inline Sampler1DShadowArray( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		template< typename T > inline Sampler1DShadowArray & operator=( T const & p_rhs );
+		inline Sampler1DArrayShadow();
+		inline Sampler1DArrayShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline Sampler1DArrayShadow & operator=( T const & p_rhs );
 		inline operator uint32_t();
 	};
 
-	struct Sampler2DShadowArray
+	struct Sampler2DArrayShadow
 		: public Type
 	{
-		inline Sampler2DShadowArray();
-		inline Sampler2DShadowArray( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		template< typename T > inline Sampler2DShadowArray & operator=( T const & p_rhs );
+		inline Sampler2DArrayShadow();
+		inline Sampler2DArrayShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline Sampler2DArrayShadow & operator=( T const & p_rhs );
 		inline operator uint32_t();
 	};
 
-	struct SamplerCubeShadowArray
+	struct SamplerCubeArrayShadow
 		: public Type
 	{
-		inline SamplerCubeShadowArray();
-		inline SamplerCubeShadowArray( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-		template< typename T > inline SamplerCubeShadowArray & operator=( T const & p_rhs );
+		inline SamplerCubeArrayShadow();
+		inline SamplerCubeArrayShadow( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline SamplerCubeArrayShadow & operator=( T const & p_rhs );
 		inline operator uint32_t();
 	};
 }

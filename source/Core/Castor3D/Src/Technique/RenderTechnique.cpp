@@ -176,7 +176,7 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::Shadows )
 				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel, 10 );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
 				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel, 10 );
 			}
 		}
@@ -192,10 +192,10 @@ namespace Castor3D
 
 					for ( auto & l_depthMap : p_depthMaps )
 					{
-						if ( l_depthMap.get().GetType() == TextureType::TwoDimensions )
+						if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
 						{
 							l_depthMap.get().SetIndex( l_index );
-							l_variable.SetValue( l_index++, l_offset++ );
+							l_variable.SetValue( l_index++ );
 						}
 					}
 				}
@@ -384,6 +384,7 @@ namespace Castor3D
 		, m_renderTarget{ p_renderTarget }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
+		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -413,6 +414,11 @@ namespace Castor3D
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
 
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialiseSpotShadowMap( Size{ 1024, 1024 } );
+			}
+
 			for ( auto & l_it : m_scenes )
 			{
 				for ( auto & l_spec: l_it.second )
@@ -430,6 +436,7 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		DoCleanupSpotShadowMap();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
 		DoCleanup();
@@ -472,7 +479,16 @@ namespace Castor3D
 			if ( p_light.IsShadowProducer()
 				 && p_light.GetLightType() != LightType::Directional )
 			{
-				auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), p_scene, p_light );
+				TextureUnit * l_unit{ nullptr };
+
+				switch ( p_light.GetLightType() )
+				{
+				case LightType::Spot:
+					l_unit = &m_spotShadowMap;
+					break;
+				}
+
+				auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), p_scene, p_light, *l_unit, 0u );
 				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, l_pass } ).first;
 				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_pass]()
 				{
@@ -492,11 +508,11 @@ namespace Castor3D
 
 		m_renderSystem.PushScene( &p_scene );
 		DepthMapArray l_depthMaps;
+		l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
 
 		for ( auto & l_shadowMap : l_shadowMaps )
 		{
 			l_shadowMap.second->Render();
-			l_depthMaps.push_back( std::ref( l_shadowMap.second->GetShadowMap() ) );
 		}
 
 		if ( DoBeginRender( p_scene, p_camera ) )
@@ -510,7 +526,7 @@ namespace Castor3D
 			if ( !l_depthMaps.empty() )
 			{
 				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetDimensions();
-				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture() );
+				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture(), 0u );
 			}
 
 #endif
@@ -1080,5 +1096,33 @@ namespace Castor3D
 																												, p_program
 																												, p_flags ) ).first;
 		}
+	}
+
+	bool RenderTechnique::DoInitialiseSpotShadowMap( Size const & p_size )
+	{
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
+
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), 10u } );
+		m_spotShadowMap.SetTexture( l_texture );
+		m_spotShadowMap.SetSampler( l_sampler );
+
+		for ( auto & l_image : *l_texture )
+		{
+			l_image->InitialiseSource();
+		}
+
+		return m_spotShadowMap.Initialise();
+	}
+
+	void RenderTechnique::DoCleanupSpotShadowMap()
+	{
+		m_spotShadowMap.Cleanup();
 	}
 }

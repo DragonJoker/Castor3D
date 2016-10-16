@@ -85,11 +85,12 @@ namespace Castor3D
 		}
 	}
 
-	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light )
+	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: RenderPass{ ShadowMap, p_engine }
 		, m_light{ p_light }
 		, m_scene{ p_scene }
-		, m_shadowMap{ p_engine }
+		, m_shadowMap{ p_shadowMap }
+		, m_index{ p_index }
 	{
 		m_renderQueue.AddScene( m_scene );
 	}

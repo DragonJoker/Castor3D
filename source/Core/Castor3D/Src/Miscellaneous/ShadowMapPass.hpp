@@ -57,7 +57,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light );
+		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -246,7 +246,10 @@ namespace Castor3D
 		Light & m_light;
 		//!\~english	The shadow map texture.
 		//!\~french		La texture de mappage d'ombres.
-		TextureUnit m_shadowMap;
+		TextureUnit & m_shadowMap;
+		//!\~english	The shadow map layer index.
+		//!\~french		L'index dans la texture mappage d'ombres.
+		uint32_t m_index;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;

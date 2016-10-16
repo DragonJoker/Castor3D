@@ -461,9 +461,8 @@ namespace GLSL
 
 			if ( m_shadows != ShadowType::None )
 			{
-				auto c3d_mapShadowCube = m_writer.GetBuiltin< SamplerCube >( Shadow::MapShadowCube, 10u );
 				Shadow l_shadows{ m_writer };
-				auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( l_lightToVertex, p_fragmentIn.m_v3Vertex, c3d_mapShadowCube[0] ) );
+				auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( l_lightToVertex, p_fragmentIn.m_v3Vertex, Int( 0 ) ) );
 				p_output.m_v3Diffuse *= l_shadow;
 				p_output.m_v3Specular *= l_shadow;
 			}
@@ -506,9 +505,8 @@ namespace GLSL
 
 				if ( m_shadows != ShadowType::None )
 				{
-					auto c3d_mapShadow2D = m_writer.GetBuiltin< Sampler2DShadow >( Shadow::MapShadow2D, 10u );
 					Shadow l_shadows{ m_writer };
-					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Vertex, c3d_mapShadow2D[0] ) );
+					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Vertex, Int( 0 ) ) );
 					p_output.m_v3Diffuse *= l_shadow;
 					p_output.m_v3Specular *= l_shadow;
 				}

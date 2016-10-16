@@ -90,9 +90,9 @@ namespace GLSL
 	struct Sampler1DShadow;
 	struct Sampler2DShadow;
 	struct SamplerCubeShadow;
-	struct Sampler1DShadowArray;
-	struct Sampler2DShadowArray;
-	struct SamplerCubeShadowArray;
+	struct Sampler1DArrayShadow;
+	struct Sampler2DArrayShadow;
+	struct SamplerCubeArrayShadow;
 }
 
 #endif

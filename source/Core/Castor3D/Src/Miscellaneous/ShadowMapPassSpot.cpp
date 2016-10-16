@@ -19,8 +19,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ShadowMapPassSpot::ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light )
-		: ShadowMapPass{ p_engine, p_scene, p_light }
+	ShadowMapPassSpot::ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
+		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
 	{
 
 	}
@@ -29,9 +29,9 @@ namespace Castor3D
 	{
 	}
 
-	ShadowMapPassSPtr ShadowMapPassSpot::Create( Engine & p_engine, Scene & p_scene, Light & p_light )
+	ShadowMapPassSPtr ShadowMapPassSpot::Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 	{
-		return std::make_shared< ShadowMapPassSpot >( p_engine, p_scene, p_light );
+		return std::make_shared< ShadowMapPassSpot >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
 	bool ShadowMapPassSpot::DoInitialise( Size const & p_size )
@@ -44,26 +44,13 @@ namespace Castor3D
 		m_camera->Resize( p_size );
 		m_light.GetSpotLight()->SetViewport( m_camera->GetViewport() );
 
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( m_light.GetName() + cuT( "_SpotShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
-		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
-		m_shadowMap.SetTexture( l_texture );
-		m_shadowMap.SetSampler( l_sampler );
-
-		l_texture->GetImage().InitialiseSource();
-		auto l_return = m_shadowMap.Initialise();
-
+		auto l_texture = m_shadowMap.GetTexture();
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
+		bool l_return{ false };
 
-		if ( l_return && m_frameBuffer->Bind( FrameBufferMode::Config ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::Config ) )
 		{
-			m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, l_texture->GetType() );
+			m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, l_texture->GetType(), m_index );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -81,8 +68,6 @@ namespace Castor3D
 		m_frameBuffer->DetachAll();
 		m_frameBuffer->Unbind();
 		m_depthAttach.reset();
-
-		m_shadowMap.Cleanup();
 	}
 	
 	void ShadowMapPassSpot::DoUpdate()

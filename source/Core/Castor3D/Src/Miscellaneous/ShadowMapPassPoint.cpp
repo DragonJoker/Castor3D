@@ -31,8 +31,8 @@ namespace Castor3D
 		static String const WorldLightPosition = cuT( "c3d_v3WorldLightPosition" );
 	}
 
-	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light )
-		: ShadowMapPass{ p_engine, p_scene, p_light }
+	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
+		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
 	{
 	}
 
@@ -40,9 +40,9 @@ namespace Castor3D
 	{
 	}
 
-	ShadowMapPassSPtr ShadowMapPassPoint::Create( Engine & p_engine, Scene & p_scene, Light & p_light )
+	ShadowMapPassSPtr ShadowMapPassPoint::Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 	{
-		return std::make_shared< ShadowMapPassPoint >( p_engine, p_scene, p_light );
+		return std::make_shared< ShadowMapPassPoint >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
 
 	bool ShadowMapPassPoint::DoInitialise( Size const & p_size )
@@ -79,13 +79,14 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::L32F, p_size );
 		m_shadowMap.SetTexture( l_texture );
 		m_shadowMap.SetSampler( l_sampler );
 
-		for ( size_t i = size_t( CubeMapFace::PositiveX ); i < size_t( CubeMapFace::Count ); ++i )
+		for ( auto & l_image : *l_texture )
 		{
-			l_texture->GetImage( i ).InitialiseSource();
+			l_image->InitialiseSource();
 		}
 
 		auto l_return = m_shadowMap.Initialise();
