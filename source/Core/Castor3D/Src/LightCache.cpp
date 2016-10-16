@@ -101,8 +101,8 @@ namespace Castor3D
 
 	void LightCache::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, AccessType::Write, AccessType::Read );
-		l_texture->GetImage().SetSource( Size( 1000, 1 ), PixelFormat::RGBA32F );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, AccessType::Write, AccessType::Read, PixelFormat::RGBA32F, Size( 1000, 1 ) );
+		l_texture->GetImage().InitialiseSource();
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
 		m_lightsTexture->SetSampler( l_sampler );
@@ -140,7 +140,6 @@ namespace Castor3D
 
 	void LightCache::UpdateLights()const
 	{
-		m_lightsTexture->Bind();
 		auto l_layout = m_lightsTexture->GetTexture();
 
 		if ( l_layout )
@@ -157,17 +156,15 @@ namespace Castor3D
 				}
 			}
 
-			auto l_locked = l_layout->GetImage().Lock( AccessType::Write );
+			auto l_locked = l_layout->Lock( AccessType::Write );
 
 			if ( l_locked )
 			{
 				memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
 			}
 
-			l_layout->GetImage().Unlock( true );
+			l_layout->Unlock( true );
 		}
-
-		m_lightsTexture->Unbind();
 	}
 
 	void LightCache::BindLights()const

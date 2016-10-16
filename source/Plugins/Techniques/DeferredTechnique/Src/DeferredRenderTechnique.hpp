@@ -200,7 +200,7 @@ namespace Deferred
 	protected:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::Count ) > m_lightPassTextures;
+		std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::Count ) > m_lightPassTextures;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
 		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;

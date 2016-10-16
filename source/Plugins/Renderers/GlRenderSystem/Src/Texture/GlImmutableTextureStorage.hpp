@@ -55,15 +55,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessType p_lock );
+		uint8_t * Lock( Castor3D::TextureStorage & p_storage, Castor3D::AccessType p_lock, uint32_t p_index );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
-		void Unlock( Castor3D::TextureStorage & p_storage, bool p_modified );
+		void Unlock( Castor3D::TextureStorage & p_storage, bool p_modified, uint32_t p_index );
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Fill
 		 */
-		void Fill( Castor3D::TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format );
+		void Fill( Castor3D::TextureStorage & p_storage, Castor3D::TextureImage const & p_image );
 	};
 }
 

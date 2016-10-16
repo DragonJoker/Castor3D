@@ -352,21 +352,59 @@ namespace Castor3D
 		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates a texture.
+		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\return		The created texture, depending of current API.
+		 *\param[in]	p_format	The texture format.
+		 *\param[in]	p_size		The texture dimensions.
+		 *\~french
+		 *\brief		Crée une texture.
+		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	p_format	Le format de la texture.
+		 *\param[in]	p_size		Les dimensions de la texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
+		 */
+		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a texture.
+		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
+		 *\return		The created texture, depending of current API.
+		 *\param[in]	p_format	The texture format.
+		 *\param[in]	p_size		The texture dimensions.
+		 *\~french
+		 *\brief		Crée une texture.
+		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
+		 *\param[in]	p_format	Le format de la texture.
+		 *\param[in]	p_size		Les dimensions de la texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
+		 */
+		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size ) = 0;
+		/**
+		 *\~english
 		 *\brief		Creates a texture storage.
 		 *\param[in]	p_type		The storage type.
-		 *\param[in]	p_image		The texture image.
+		 *\param[in]	p_layout	The texture layout.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\return		The created storage, depending on current API.
 		 *\~french
 		 *\brief		Crée un stockage de texture.
 		 *\param[in]	p_type		Le type de stockage.
-		 *\param[in]	p_image		L'image de la texture.
+		 *\param[in]	p_layout	Le layout de la texture.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer

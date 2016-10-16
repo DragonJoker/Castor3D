@@ -405,42 +405,12 @@ namespace Castor3D
 		//!\~english 3 dimensions textures.
 		//!\~french Textures à 3 dimensions.
 		ThreeDimensions,
-		//!\~english Face on positive X.
-		//!\~french Face des X positifs.
-		CubeMapPositiveX,
-		//!\~english Face on negative X.
-		//!\~french Face des X négatifs.
-		CubeMapNegativeX,
-		//!\~english Face on positive Y.
-		//!\~french Face des Y positifs.
-		CubeMapPositiveY,
-		//!\~english Face on negative Y.
-		//!\~french Face des Y négatifs.
-		CubeMapNegativeY,
-		//!\~english Face on positive Z.
-		//!\~french Face des Z positifs.
-		CubeMapPositiveZ,
-		//!\~english Face on negative Z.
-		//!\~french Face des Z négatifs.
-		CubeMapNegativeZ,
-		//!\~english Face on positive X.
-		//!\~french Face des X positifs.
-		CubeMapArrayPositiveX,
-		//!\~english Face on negative X.
-		//!\~french Face des X négatifs.
-		CubeMapArrayNegativeX,
-		//!\~english Face on positive Y.
-		//!\~french Face des Y positifs.
-		CubeMapArrayPositiveY,
-		//!\~english Face on negative Y.
-		//!\~french Face des Y négatifs.
-		CubeMapArrayNegativeY,
-		//!\~english Face on positive Z.
-		//!\~french Face des Z positifs.
-		CubeMapArrayPositiveZ,
-		//!\~english Face on negative Z.
-		//!\~french Face des Z négatifs.
-		CubeMapArrayNegativeZ,
+		//!\~english Cube map.
+		//!\~french Cube map.
+		CubeMap,
+		//!\~english Cube map array.
+		//!\~french Tableau de cube maps.
+		CubeMapArray,
 		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
 	};
 	/*!

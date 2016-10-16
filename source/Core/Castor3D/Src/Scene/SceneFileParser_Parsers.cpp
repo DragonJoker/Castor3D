@@ -2570,7 +2570,7 @@ namespace Castor3D
 			{
 				l_parsingContext->pTextureUnit->SetAutoMipmaps( true );
 				auto l_texture = l_parsingContext->m_pParser->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read );
-				l_texture->GetImage().SetSource( l_folder, l_relative );
+				l_texture->SetSource( l_folder, l_relative );
 				l_parsingContext->pTextureUnit->SetTexture( l_texture );
 			}
 		}
@@ -3933,7 +3933,7 @@ namespace Castor3D
 		if ( l_parsingContext->pSkybox )
 		{
 			Path l_path;
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeX ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{
@@ -3950,7 +3950,7 @@ namespace Castor3D
 		{
 			Path l_path;
 			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveX ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveX ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{
@@ -3967,7 +3967,7 @@ namespace Castor3D
 		{
 			Path l_path;
 			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeY ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{
@@ -3984,7 +3984,7 @@ namespace Castor3D
 		{
 			Path l_path;
 			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveY ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveY ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{
@@ -4001,7 +4001,7 @@ namespace Castor3D
 		{
 			Path l_path;
 			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeZ ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{
@@ -4018,7 +4018,7 @@ namespace Castor3D
 		{
 			Path l_path;
 			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveZ ) ).SetSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
+			l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveZ ) ).InitialiseSource( p_context->m_file->GetFilePath(), p_params[0]->Get( l_path ) );
 		}
 		else
 		{

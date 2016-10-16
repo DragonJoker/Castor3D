@@ -126,18 +126,6 @@ namespace Deferred
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-		uint32_t l_index{ 0u };
-
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write );
-			m_geometryPassTexAttachs[l_index] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			l_unit = std::make_shared< TextureUnit >( *GetEngine() );
-			l_unit->SetIndex( ++l_index );
-			l_unit->SetTexture( l_texture );
-			l_unit->SetSampler( GetEngine()->GetLightsSampler() );
-		}
-		
 		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
@@ -235,11 +223,6 @@ namespace Deferred
 	{
 		m_vertexBuffer->Destroy();
 
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			l_unit->Cleanup();
-		}
-
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_pipeline->Cleanup();
@@ -254,10 +237,18 @@ namespace Deferred
 	{
 		bool l_return = true;
 		
-		for ( size_t i = 0; i < size_t( DsTexture::Count ); i++ )
+		for ( uint32_t i = 0; i < uint32_t( DsTexture::Count ); i++ )
 		{
-			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, GetTextureFormat( DsTexture( i ) ) );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write, GetTextureFormat( DsTexture( i ) ), m_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+			m_lightPassTextures[i]->SetIndex( i + 1 );
+			m_lightPassTextures[i]->SetTexture( l_texture );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 			m_lightPassTextures[i]->Initialise();
+
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			p_index++;
 		}
 
@@ -316,6 +307,7 @@ namespace Deferred
 	{
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
+			program.m_geometryBuffers->Cleanup();
 			program.m_geometryBuffers.reset();
 			program.m_program->Cleanup();
 		}
@@ -330,6 +322,7 @@ namespace Deferred
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
+			l_unit.reset();
 		}
 	}
 

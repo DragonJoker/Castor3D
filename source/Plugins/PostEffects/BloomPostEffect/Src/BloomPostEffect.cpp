@@ -392,7 +392,7 @@ namespace Bloom
 
 			if ( p_framebuffer.Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture.GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetDimensions(), *m_blurSurfaces[0].m_colourTexture.GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
@@ -468,8 +468,9 @@ namespace Bloom
 		if ( m_blurSurfaces[0].m_fbo->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
 			m_blurSurfaces[0].m_fbo->Clear();
-			m_viewport.Resize( p_origin.GetImage().GetDimensions() );
+			m_viewport.Resize( p_origin.GetDimensions() );
 			m_viewport.Update();
+			m_viewport.Apply();
 			m_combinePipeline->SetProjectionMatrix( m_viewport.GetProjection() );
 			m_combinePipeline->Apply();
 

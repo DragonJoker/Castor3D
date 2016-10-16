@@ -234,21 +234,10 @@ namespace Castor3D
 
 	bool PickingPass::Initialise( Size const & p_size )
 	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite );
-		m_colourTexture->GetImage().SetSource( p_size, PixelFormat::RGB32F );
-		auto l_size = m_colourTexture->GetImage().GetDimensions();
-
-		bool l_return = m_colourTexture->Create();
-
-		if ( l_return )
-		{
-			l_return = m_colourTexture->Initialise();
-
-			if ( !l_return )
-			{
-				m_colourTexture->Destroy();
-			}
-		}
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGB32F, p_size );
+		m_colourTexture->GetImage().InitialiseSource();
+		auto l_size = m_colourTexture->GetDimensions();
+		bool l_return = m_colourTexture->Initialise();
 
 		if ( l_return )
 		{
@@ -306,7 +295,6 @@ namespace Castor3D
 			m_colourTexture->Cleanup();
 			m_depthBuffer->Cleanup();
 
-			m_colourTexture->Destroy();
 			m_depthBuffer->Destroy();
 			m_frameBuffer->Destroy();
 
@@ -358,12 +346,12 @@ namespace Castor3D
 			if ( m_colourTexture->Bind( 0 ) )
 			{
 				Point3f l_pixel;
-				auto l_data = m_colourTexture->Lock( 0, AccessType::Read );
+				auto l_data = m_colourTexture->Lock( AccessType::Read, 0u );
 
 				if ( l_data )
 				{
-					auto l_dimensions = m_colourTexture->GetImage().GetDimensions();
-					auto l_format = m_colourTexture->GetImage().GetPixelFormat();
+					auto l_dimensions = m_colourTexture->GetDimensions();
+					auto l_format = m_colourTexture->GetPixelFormat();
 					Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
 					l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
 
@@ -372,6 +360,7 @@ namespace Castor3D
 					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
 
 #endif
+					m_colourTexture->Unlock( false, 0u );
 				}
 
 				m_colourTexture->Unbind( 0 );

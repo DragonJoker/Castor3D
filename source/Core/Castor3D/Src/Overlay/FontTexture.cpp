@@ -20,13 +20,18 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_font( p_font )
 	{
+		uint32_t const l_maxWidth = p_font->GetMaxWidth();
+		uint32_t const l_maxHeight = p_font->GetMaxHeight();
+		uint32_t const l_count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
+
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
 		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read, PixelFormat::L8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
+		m_texture->GetImage().InitialiseSource();
 	}
 
 	FontTexture::~FontTexture()
@@ -35,7 +40,6 @@ namespace Castor3D
 
 	void FontTexture::Initialise()
 	{
-		m_texture->Create();
 		m_texture->Initialise();
 		m_texture->Bind( 0 );
 		m_texture->GenerateMipmaps();
@@ -49,16 +53,17 @@ namespace Castor3D
 
 		if ( l_font )
 		{
-			uint32_t const l_uiMaxWidth = l_font->GetMaxWidth();
-			uint32_t const l_uiMaxHeight = l_font->GetMaxHeight();
+			uint32_t const l_maxWidth = l_font->GetMaxWidth();
+			uint32_t const l_maxHeight = l_font->GetMaxHeight();
 			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
+			Size l_size{ l_maxWidth * 16, l_maxHeight * l_count };
 			auto & l_image = m_texture->GetImage();
-			l_image.SetSource( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), PixelFormat::L8 ) );
+			m_texture->Resize( l_size );
 
 			auto l_it = l_font->begin();
-			Size const & l_sizeImg = l_image.GetDimensions();
+			Size const & l_sizeImg = l_size;
 			uint32_t const l_uiTotalWidth = l_sizeImg.width();
-			uint32_t l_uiOffY = l_sizeImg.height() - l_uiMaxHeight;
+			uint32_t l_uiOffY = l_sizeImg.height() - l_maxHeight;
 			uint8_t * l_pBuffer = l_image.GetBuffer()->ptr();
 			size_t const l_bufsize = l_image.GetBuffer()->size();
 
@@ -82,11 +87,11 @@ namespace Castor3D
 					}
 
 					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
-					l_uiOffX += l_uiMaxWidth;
+					l_uiOffX += l_maxWidth;
 					++l_it;
 				}
 
-				l_uiOffY -= l_uiMaxHeight;
+				l_uiOffY -= l_maxHeight;
 			}
 		}
 
@@ -97,7 +102,6 @@ namespace Castor3D
 		if ( m_texture )
 		{
 			m_texture->Cleanup();
-			m_texture->Destroy();
 		}
 	}
 

@@ -452,18 +452,8 @@ namespace GlRender
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = eGL_TEXTURE_STORAGE_2DARRAY;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayPositiveX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayNegativeX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayPositiveY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayNegativeY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayPositiveZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArrayNegativeZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap)] = eGL_TEXTURE_STORAGE_CUBE_MAP;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY;
 
 		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = eGL_TEXDIM_CUBE_FACE_POSX;
 		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeX )] = eGL_TEXDIM_CUBE_FACE_NEGX;

@@ -110,33 +110,19 @@ namespace Castor3D
 	{
 	}
 
-	bool RenderTarget::stFRAME_BUFFER::Create()
-	{
-		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read | AccessType::Write );
-		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
-		m_colorTexture.SetTexture( l_colourTexture );
-		m_colorTexture.SetSampler( l_sampler );
-		return true;
-	}
-
-	void RenderTarget::stFRAME_BUFFER::Destroy()
-	{
-		m_frameBuffer->Destroy();
-		m_pColorAttach.reset();
-		m_colorTexture.SetTexture( nullptr );
-		m_frameBuffer.reset();
-	}
-
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
 		bool l_return = false;
+		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, m_renderTarget.GetPixelFormat(), p_size );
+		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
+		m_colorTexture.SetTexture( l_colourTexture );
+		m_colorTexture.SetSampler( l_sampler );
 		m_colorTexture.SetIndex( p_index );
-		m_colorTexture.GetTexture()->GetImage().SetSource( p_size, m_renderTarget.GetPixelFormat() );
-		Size l_size = m_colorTexture.GetTexture()->GetImage().GetDimensions();
+		m_colorTexture.GetTexture()->GetImage().InitialiseSource();
+		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
 		m_frameBuffer->Create();
-		m_colorTexture.GetTexture()->Create();
 		m_colorTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );
 
@@ -157,6 +143,10 @@ namespace Castor3D
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
 		m_colorTexture.Cleanup();
+		m_frameBuffer->Destroy();
+		m_pColorAttach.reset();
+		m_colorTexture.SetTexture( nullptr );
+		m_frameBuffer.reset();
 	}
 
 	//*************************************************************************************************
@@ -191,7 +181,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			m_frameBuffer.Create();
+			m_frameBuffer.Initialise( p_index, m_size );
 
 			if ( !m_renderTechnique )
 			{
@@ -211,8 +201,7 @@ namespace Castor3D
 				}
 			}
 
-			m_frameBuffer.Initialise( p_index, m_size );
-			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetImage().GetDimensions();
+			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetDimensions();
 			m_renderTechnique->Create();
 			uint32_t l_index = p_index;
 			m_renderTechnique->Initialise( l_index );
@@ -250,9 +239,8 @@ namespace Castor3D
 			m_initialised = false;
 			GetEngine()->GetRenderTechniqueCache().Remove( cuT( "RenderTargetTechnique_" ) + string::to_string( m_index ) );
 			m_renderTechnique->Cleanup();
-			m_frameBuffer.Cleanup();
 			m_renderTechnique->Destroy();
-			m_frameBuffer.Destroy();
+			m_frameBuffer.Cleanup();
 			m_renderTechnique.reset();
 		}
 	}

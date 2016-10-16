@@ -1,6 +1,7 @@
 #include "TextureImage.hpp"
 
 #include "Engine.hpp"
+#include "TextureLayout.hpp"
 #include "TextureStorage.hpp"
 
 #include "Render/RenderSystem.hpp"
@@ -236,59 +237,6 @@ namespace Castor3D
 		private:
 			uint32_t m_depth{ 1u };
 		};
-
-		//*********************************************************************************************
-
-		TextureStorageType GetStorageType( TextureType p_type, uint32_t p_index )
-		{
-			TextureStorageType l_return = TextureStorageType::Count;
-
-			switch ( p_type )
-			{
-			case TextureType::Buffer:
-				l_return = TextureStorageType::Buffer;
-				break;
-
-			case TextureType::OneDimension:
-				l_return = TextureStorageType::OneDimension;
-				break;
-
-			case TextureType::OneDimensionArray:
-				l_return = TextureStorageType::OneDimensionArray;
-				break;
-
-			case TextureType::TwoDimensions:
-				l_return = TextureStorageType::TwoDimensions;
-				break;
-
-			case TextureType::TwoDimensionsArray:
-				l_return = TextureStorageType::TwoDimensionsArray;
-				break;
-
-			case TextureType::TwoDimensionsMS:
-				l_return = TextureStorageType::TwoDimensionsMS;
-				break;
-
-			case TextureType::ThreeDimensions:
-				l_return = TextureStorageType::ThreeDimensions;
-				break;
-
-			case TextureType::Cube:
-				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapPositiveX ) + p_index );
-				break;
-
-			case TextureType::CubeArray:
-				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapArrayPositiveX ) + p_index );
-				break;
-
-			default:
-				FAILURE( "The given texture type doesn't have any associated storage type" );
-				CASTOR_EXCEPTION( cuT( "The given texture type doesn't have any associated storage type" ) );
-				break;
-			}
-
-			return l_return;
-		}
 	}
 
 	//*********************************************************************************************
@@ -324,121 +272,68 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureImage::TextureImage( Engine & p_engine, uint32_t p_index )
-		: OwnedBy< Engine >{ p_engine }
+	TextureImage::TextureImage( TextureLayout & p_layout, uint32_t p_index )
+		: OwnedBy< TextureLayout >{ p_layout }
 		, m_index{ p_index }
 	{
 	}
 
-	void TextureImage::SetSource( Path const & p_folder, Path const & p_relative )
+	void TextureImage::InitialiseSource( Path const & p_folder, Path const & p_relative )
 	{
 		m_source = std::make_unique< StaticFileTextureSource >( p_folder, p_relative );
+		auto l_buffer = m_source->GetBuffer();
+
+		if ( l_buffer )
+		{
+			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
+		}
 	}
 
-	void TextureImage::SetSource( PxBufferBaseSPtr p_buffer )
+	void TextureImage::InitialiseSource( PxBufferBaseSPtr p_buffer )
 	{
-		m_source = std::make_unique< Static2DTextureSource >( p_buffer );
+		if ( GetOwner()->GetDepth() > 1 )
+		{
+			m_source = std::make_unique< Static3DTextureSource >( Point3ui{ GetOwner()->GetWidth(), GetOwner()->GetHeight(), GetOwner()->GetDepth() }, p_buffer );
+		}
+		else
+		{
+			m_source = std::make_unique< Static2DTextureSource >( p_buffer );
+		}
+
+		auto l_buffer = m_source->GetBuffer();
+
+		if ( l_buffer )
+		{
+			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
+		}
 	}
 
-	void TextureImage::SetSource( Point3ui const & p_dimensions, PxBufferBaseSPtr p_buffer )
+	void TextureImage::InitialiseSource()
 	{
-		m_source = std::make_unique< Static3DTextureSource >( p_dimensions, p_buffer );
-	}
+		if ( GetOwner()->GetDepth() > 1 )
+		{
+			m_source = std::make_unique< Dynamic3DTextureSource >( Point3ui{ GetOwner()->GetWidth(), GetOwner()->GetHeight(), GetOwner()->GetDepth() }, GetOwner()->GetPixelFormat() );
+		}
+		else
+		{
+			m_source = std::make_unique< Dynamic2DTextureSource >( Size{ GetOwner()->GetWidth(), GetOwner()->GetHeight() }, GetOwner()->GetPixelFormat() );
+		}
 
-	void TextureImage::SetSource( Size const & p_size, PixelFormat p_format )
-	{
-		m_source = std::make_unique< Dynamic2DTextureSource >( p_size, p_format );
-	}
+		auto l_buffer = m_source->GetBuffer();
 
-	void TextureImage::SetSource( Point3ui const & p_size, PixelFormat p_format )
-	{
-		m_source = std::make_unique< Dynamic3DTextureSource >( p_size, p_format );
+		if ( l_buffer )
+		{
+			GetOwner()->DoUpdateFromFirstImage( l_buffer->dimensions(), l_buffer->format() );
+		}
 	}
 
 	void TextureImage::Resize( Size const & p_size )
 	{
-		if ( m_source->Resize( p_size, 1u ) )
-		{
-			DoResetStorage();
-		}
+		m_source->Resize( p_size, 1u );
 	}
 
 	void TextureImage::Resize( Point3ui const & p_size )
 	{
-		if ( m_source->Resize( Size{ p_size[0], p_size[1] }, p_size[2] ) )
-		{
-			DoResetStorage();
-		}
-	}
-
-	bool TextureImage::Initialise( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
-	{
-		return DoCreateStorage( GetStorageType( p_type, m_index ), p_cpuAccess, p_gpuAccess );
-	}
-
-	void TextureImage::Cleanup()
-	{
-		m_storage.reset();
-	}
-
-	bool TextureImage::Bind( uint32_t p_index )const
-	{
-		REQUIRE( m_storage );
-		return m_storage->Bind( p_index );
-	}
-
-	void TextureImage::Unbind( uint32_t p_index )const
-	{
-		REQUIRE( m_storage );
-		m_storage->Unbind( p_index );
-	}
-
-	uint8_t * TextureImage::Lock( AccessType p_lock )
-	{
-		REQUIRE( m_storage );
-		return m_storage->Lock( p_lock );
-	}
-
-	void TextureImage::Unlock( bool p_modified )
-	{
-		REQUIRE( m_storage );
-		m_storage->Unlock( p_modified );
-	}
-
-	bool TextureImage::DoResetStorage()
-	{
-		bool l_return = true;
-
-		if ( m_storage )
-		{
-			auto l_cpuAccess = m_storage->GetCPUAccess();
-			auto l_gpuAccess = m_storage->GetGPUAccess();
-			auto l_type = m_storage->GetType();
-			Cleanup();
-			l_return = DoCreateStorage( l_type, l_cpuAccess, l_gpuAccess );
-		}
-
-		return l_return;
-	}
-
-	bool TextureImage::DoCreateStorage( TextureStorageType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
-	{
-		bool l_return = false;
-
-		if ( !m_storage )
-		{
-			try
-			{
-				m_storage = GetEngine()->GetRenderSystem()->CreateTextureStorage( p_type, *this, p_cpuAccess, p_gpuAccess );
-				l_return = true;
-			}
-			catch ( std::exception & p_exc )
-			{
-				Logger::LogError( StringStream() << cuT( "TextureImage::Initialise - Error encountered while allocating storage: " ) << string::string_cast< xchar >( p_exc.what() ) );
-			}
-		}
-
-		ENSURE( m_storage );
-		return l_return;
+		m_source->Resize( Size{ p_size[0], p_size[1] }, p_size[2] );
 	}
 }

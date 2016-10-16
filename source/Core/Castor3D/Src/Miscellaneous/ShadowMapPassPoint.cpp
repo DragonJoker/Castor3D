@@ -34,14 +34,6 @@ namespace Castor3D
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light )
 		: ShadowMapPass{ p_engine, p_scene, p_light }
 	{
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( p_light.GetName() + cuT( "_PointShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
-		m_shadowMap.SetTexture( GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite ) );
-		m_shadowMap.SetSampler( l_sampler );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
@@ -81,30 +73,28 @@ namespace Castor3D
 			m_cameraNodes[i] = l_node;
 		}
 
-		auto l_texture = m_shadowMap.GetTexture();
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( m_light.GetName() + cuT( "_PointShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::L32F, p_size );
+		m_shadowMap.SetTexture( l_texture );
+		m_shadowMap.SetSampler( l_sampler );
 
 		for ( size_t i = size_t( CubeMapFace::PositiveX ); i < size_t( CubeMapFace::Count ); ++i )
 		{
-			l_texture->GetImage( i ).SetSource( p_size, PixelFormat::L32F );
+			l_texture->GetImage( i ).InitialiseSource();
 		}
 
 		auto l_return = m_shadowMap.Initialise();
 
 		if ( l_return )
 		{
-			m_depthBuffer = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite );
-			m_depthBuffer->GetImage().SetSource( p_size, PixelFormat::D32F );
-			l_return = m_depthBuffer->Create();
-		}
-
-		if ( l_return )
-		{
+			m_depthBuffer = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+			m_depthBuffer->GetImage().InitialiseSource();
 			l_return = m_depthBuffer->Initialise();
-
-			if ( !l_return )
-			{
-				m_depthBuffer->Destroy();
-			}
 		}
 
 		if ( l_return )
@@ -157,7 +147,6 @@ namespace Castor3D
 		m_depthAttach.reset();
 
 		m_depthBuffer->Cleanup();
-		m_depthBuffer->Destroy();
 		m_depthBuffer.reset();
 
 		m_shadowMap.Cleanup();

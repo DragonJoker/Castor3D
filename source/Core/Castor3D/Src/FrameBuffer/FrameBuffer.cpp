@@ -250,7 +250,7 @@ namespace Castor3D
 				if ( ( *l_it )->GetAttachmentType() == AttachmentType::Texture )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
-					l_return = l_attach->GetTexture()->GetImage().GetPixelFormat();
+					l_return = l_attach->GetTexture()->GetPixelFormat();
 				}
 				else
 				{

@@ -69,7 +69,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			postfx "fxaa"
+			technique "deferred_msaa" -samples_count=8
 		}
 		fullscreen false
 		vsync true

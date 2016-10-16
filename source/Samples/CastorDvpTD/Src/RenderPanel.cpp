@@ -144,7 +144,8 @@ namespace castortd
 
 		if ( p_geometry != l_geometry )
 		{
-			if ( !p_geometry )
+			if ( !p_geometry
+				 || p_geometry->GetName() != cuT( "MapBase" ) )
 			{
 				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry]()
 				{
@@ -166,7 +167,7 @@ namespace castortd
 
 				if ( l_cell.m_state != Cell::State::Invalid )
 				{
-					switch( l_cell.m_state )
+					switch ( l_cell.m_state )
 					{
 					case Cell::State::Empty:
 						if ( !l_geometry )

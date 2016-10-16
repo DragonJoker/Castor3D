@@ -143,18 +143,6 @@ namespace DeferredMsaa
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-		uint32_t l_index{ 0u };
-
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write );
-			m_geometryPassTexAttachs[l_index] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			l_unit = std::make_shared< TextureUnit >( *GetEngine() );
-			l_unit->SetIndex( ++l_index );
-			l_unit->SetTexture( l_texture );
-			l_unit->SetSampler( GetEngine()->GetLightsSampler() );
-		}
-		
 		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
@@ -283,12 +271,12 @@ namespace DeferredMsaa
 		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 		int l_thirdHeight = int( l_height / 3.0f );
 		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Tangent )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_frameBuffer.m_frameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Tangent )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), InterpolationMode::Linear );
 
 #else
 
@@ -583,17 +571,12 @@ namespace DeferredMsaa
 	{
 		m_vertexBuffer->Destroy();
 
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			l_unit->Cleanup();
-		}
-
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_pipeline->Cleanup();
 			program.m_pipeline.reset();
 		}
-		
+
 		m_lightPassDepthBuffer->Destroy();
 		m_geometryPassFrameBuffer->Destroy();
 	}
@@ -608,11 +591,19 @@ namespace DeferredMsaa
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )
 	{
 		bool l_return = true;
-		
-		for ( size_t i = 0; i < size_t( DsTexture::Count ); i++ )
+
+		for ( uint32_t i = 0; i < uint32_t( DsTexture::Count ); i++ )
 		{
-			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, GetTextureFormat( DsTexture( i ) ) );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write, GetTextureFormat( DsTexture( i ) ), m_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+			m_lightPassTextures[i]->SetIndex( i + 1 );
+			m_lightPassTextures[i]->SetTexture( l_texture );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 			m_lightPassTextures[i]->Initialise();
+
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			p_index++;
 		}
 
@@ -711,6 +702,7 @@ namespace DeferredMsaa
 	{
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
+			program.m_geometryBuffers->Cleanup();
 			program.m_geometryBuffers.reset();
 			program.m_program->Cleanup();
 		}
@@ -725,6 +717,7 @@ namespace DeferredMsaa
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
+			l_unit.reset();
 		}
 	}
 

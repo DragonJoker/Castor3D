@@ -305,21 +305,11 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read | AccessType::Write );
-		m_colourTexture->GetImage().SetSource( p_size, PixelFormat::RGBA16F32F );
-		p_size = m_colourTexture->GetImage().GetDimensions();
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGBA16F32F, p_size );
+		m_colourTexture->GetImage().InitialiseSource();
+		p_size = m_colourTexture->GetDimensions();
 
-		bool l_return = m_colourTexture->Create();
-
-		if ( l_return )
-		{
-			l_return = m_colourTexture->Initialise();
-
-			if ( !l_return )
-			{
-				m_colourTexture->Destroy();
-			}
-		}
+		bool l_return = m_colourTexture->Initialise();
 
 		if ( l_return )
 		{
@@ -376,7 +366,6 @@ namespace Castor3D
 			m_colourTexture->Cleanup();
 			m_depthBuffer->Cleanup();
 
-			m_colourTexture->Destroy();
 			m_depthBuffer->Destroy();
 			m_frameBuffer->Destroy();
 
@@ -520,7 +509,7 @@ namespace Castor3D
 
 			if ( !l_depthMaps.empty() )
 			{
-				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetImage().GetDimensions();
+				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetDimensions();
 				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture() );
 			}
 

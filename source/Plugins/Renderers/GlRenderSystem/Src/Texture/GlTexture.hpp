@@ -52,17 +52,31 @@ namespace GlRender
 		 */
 		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess );
 		/**
+		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_type			The texture type.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	p_format		The texture format.
+		 *\param[in]	p_size			The texture dimensions.
+		 */
+		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size );
+		/**
+		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_type			The texture type.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
+		 *\param[in]	p_format		The texture format.
+		 *\param[in]	p_size			The texture dimensions.
+		 */
+		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size );
+		/**
 		 *\brief		Destructor.
 		 */
 		~GlTexture();
-		/**
-		 *\copydoc		Castor3D::TextureLayout::Create
-		 */
-		virtual bool Create();
-		/**
-		 *\copydoc		Castor3D::TextureLayout::Destroy
-		 */
-		virtual void Destroy();
 		/**
 		*\brief		Forces mipmaps generation.
 		*/
@@ -77,13 +91,21 @@ namespace GlRender
 
 	private:
 		/**
+		 *\copydoc		Castor3D::TextureLayout::DoInitialise
+		 */
+		bool DoInitialise()override;
+		/**
+		 *\copydoc		Castor3D::TextureLayout::DoCleanup
+		 */
+		void DoCleanup()override;
+		/**
 		 *\copydoc		Castor3D::TextureLayout::DoBind
 		 */
-		virtual bool DoBind( uint32_t p_index )const;
+		bool DoBind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoUnbind
 		 */
-		virtual void DoUnbind( uint32_t p_index )const;
+		void DoUnbind( uint32_t p_index )const override;
 
 	public:
 		using ObjectType::IsValid;

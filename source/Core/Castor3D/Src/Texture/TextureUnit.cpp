@@ -238,17 +238,7 @@ namespace Castor3D
 		}
 		else if ( m_pTexture )
 		{
-			l_return = m_pTexture->Create();
-
-			if ( l_return )
-			{
-				l_return = m_pTexture->Initialise();
-
-				if ( !l_return )
-				{
-					m_pTexture->Destroy();
-				}
-			}
+			l_return = m_pTexture->Initialise();
 		}
 
 		return l_return;
@@ -259,7 +249,6 @@ namespace Castor3D
 		if ( m_pTexture )
 		{
 			m_pTexture->Cleanup();
-			m_pTexture->Destroy();
 		}
 
 		m_clrBlend = Colour();

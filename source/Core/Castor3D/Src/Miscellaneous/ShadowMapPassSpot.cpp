@@ -22,16 +22,6 @@ namespace Castor3D
 	ShadowMapPassSpot::ShadowMapPassSpot( Engine & p_engine, Scene & p_scene, Light & p_light )
 		: ShadowMapPass{ p_engine, p_scene, p_light }
 	{
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( p_light.GetName() + cuT( "_SpotShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
-		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
-		m_shadowMap.SetTexture( GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite ) );
-		m_shadowMap.SetSampler( l_sampler );
 
 	}
 
@@ -54,8 +44,19 @@ namespace Castor3D
 		m_camera->Resize( p_size );
 		m_light.GetSpotLight()->SetViewport( m_camera->GetViewport() );
 
-		auto l_texture = m_shadowMap.GetTexture();
-		l_texture->GetImage().SetSource( p_size, PixelFormat::D32F );
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( m_light.GetName() + cuT( "_SpotShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+		m_shadowMap.SetTexture( l_texture );
+		m_shadowMap.SetSampler( l_sampler );
+
+		l_texture->GetImage().InitialiseSource();
 		auto l_return = m_shadowMap.Initialise();
 
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );

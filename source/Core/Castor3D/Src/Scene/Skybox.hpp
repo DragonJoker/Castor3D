@@ -127,8 +127,8 @@ namespace Castor3D
 
 	private:
 		ShaderProgram & DoInitialiseShader();
-		bool DoInitialiseVertexBuffer();
 		bool DoInitialiseTexture();
+		bool DoInitialiseVertexBuffer();
 		bool DoInitialisePipeline( ShaderProgram & p_program );
 
 	private:
