@@ -133,8 +133,11 @@ namespace GlRender
 			break;
 
 		case eGL_TEXTURE_STORAGE_3D:
-		case eGL_TEXTURE_STORAGE_2DARRAY:
 			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXTURE_STORAGE_2DARRAY:
+			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 1, l_glPixelFmt.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
 			break;
 		}
 	}

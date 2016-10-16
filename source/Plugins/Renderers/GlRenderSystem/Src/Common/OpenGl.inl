@@ -744,6 +744,11 @@ namespace GlRender
 		return TextureStorages[uint32_t( p_value )];
 	}
 
+	inline eGL_TEXDIM OpenGl::Get( Castor3D::CubeMapFace p_value )const
+	{
+		return CubeMapFaces[uint32_t( p_value )];
+	}
+
 	inline eGL_COMPARE_MODE OpenGl::Get( Castor3D::ComparisonMode p_value )const
 	{
 		return ComparisonModes[uint32_t( p_value )];

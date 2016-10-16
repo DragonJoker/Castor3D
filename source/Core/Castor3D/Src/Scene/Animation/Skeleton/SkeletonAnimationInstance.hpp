@@ -179,7 +179,7 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::AnimationInstance::DoUpdate
+		 *\copydoc		Casto3D::AnimationInstance::DoUpdate
 		 */
 		void DoUpdate()override;
 

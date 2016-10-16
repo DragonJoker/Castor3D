@@ -336,7 +336,7 @@ namespace Castor3D
 
 						p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
 
-						if ( !CheckFlag( l_programFlags, ProgramFlag::ShadowMap ) || l_primitive.second->CastShadows() )
+						if ( !CheckFlag( l_programFlags, ProgramFlag::ShadowMap ) || l_primitive.second->IsShadowCaster() )
 						{
 							if ( CheckFlag( l_programFlags, ProgramFlag::Skinning )
 									|| CheckFlag( l_programFlags, ProgramFlag::Morphing ) )

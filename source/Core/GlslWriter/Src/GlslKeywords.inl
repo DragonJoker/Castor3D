@@ -106,6 +106,66 @@ namespace GLSL
 		REQUIRE( !m_strTextureCubeLod.empty() );
 		return m_strTextureCubeLod;
 	}
+	inline Castor::String const & KeywordsBase::GetTexture1DArray()const
+	{
+		REQUIRE( !m_strTexture1DArray.empty() );
+		return m_strTexture1DArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DArrayLod()const
+	{
+		REQUIRE( !m_strTexture1DArrayLod.empty() );
+		return m_strTexture1DArrayLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DArrayOffset()const
+	{
+		REQUIRE( !m_strTexture1DArrayOffset.empty() );
+		return m_strTexture1DArrayOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DArrayOffsetLod()const
+	{
+		REQUIRE( !m_strTexture1DArrayOffsetLod.empty() );
+		return m_strTexture1DArrayOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DArrayLodOffset()const
+	{
+		REQUIRE( !m_strTexture1DArrayLodOffset.empty() );
+		return m_strTexture1DArrayLodOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DArray()const
+	{
+		REQUIRE( !m_strTexture2DArray.empty() );
+		return m_strTexture2DArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DArrayLod()const
+	{
+		REQUIRE( !m_strTexture2DArrayLod.empty() );
+		return m_strTexture2DArrayLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DArrayOffset()const
+	{
+		REQUIRE( !m_strTexture2DArrayOffset.empty() );
+		return m_strTexture2DArrayOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DArrayOffsetLod()const
+	{
+		REQUIRE( !m_strTexture2DArrayOffsetLod.empty() );
+		return m_strTexture2DArrayOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DArrayLodOffset()const
+	{
+		REQUIRE( !m_strTexture2DArrayLodOffset.empty() );
+		return m_strTexture2DArrayLodOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTextureCubeArray()const
+	{
+		REQUIRE( !m_strTextureCubeArray.empty() );
+		return m_strTextureCubeArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTextureCubeArrayLod()const
+	{
+		REQUIRE( !m_strTextureCubeShadowLod.empty() );
+		return m_strTextureCubeShadowLod;
+	}
 	inline Castor::String const & KeywordsBase::GetTexture1DShadow()const
 	{
 		REQUIRE( !m_strTexture1DShadow.empty() );
@@ -165,6 +225,66 @@ namespace GLSL
 	{
 		REQUIRE( !m_strTextureCubeShadowLod.empty() );
 		return m_strTextureCubeShadowLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DShadowArray()const
+	{
+		REQUIRE( !m_strTexture1DShadowArray.empty() );
+		return m_strTexture1DShadowArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DShadowArrayLod()const
+	{
+		REQUIRE( !m_strTexture1DShadowArrayLod.empty() );
+		return m_strTexture1DShadowArrayLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DShadowArrayOffset()const
+	{
+		REQUIRE( !m_strTexture1DShadowArrayOffset.empty() );
+		return m_strTexture1DShadowArrayOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DShadowArrayOffsetLod()const
+	{
+		REQUIRE( !m_strTexture1DShadowArrayOffsetLod.empty() );
+		return m_strTexture1DShadowArrayOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture1DShadowArrayLodOffset()const
+	{
+		REQUIRE( !m_strTexture1DShadowArrayLodOffset.empty() );
+		return m_strTexture1DShadowArrayLodOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DShadowArray()const
+	{
+		REQUIRE( !m_strTexture2DShadowArray.empty() );
+		return m_strTexture2DShadowArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DShadowArrayLod()const
+	{
+		REQUIRE( !m_strTexture2DShadowArrayLod.empty() );
+		return m_strTexture2DShadowArrayLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DShadowArrayOffset()const
+	{
+		REQUIRE( !m_strTexture2DShadowArrayOffset.empty() );
+		return m_strTexture2DShadowArrayOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DShadowArrayOffsetLod()const
+	{
+		REQUIRE( !m_strTexture2DShadowArrayOffsetLod.empty() );
+		return m_strTexture2DShadowArrayOffsetLod;
+	}
+	inline Castor::String const & KeywordsBase::GetTexture2DShadowArrayLodOffset()const
+	{
+		REQUIRE( !m_strTexture2DShadowArrayLodOffset.empty() );
+		return m_strTexture2DShadowArrayLodOffset;
+	}
+	inline Castor::String const & KeywordsBase::GetTextureCubeShadowArray()const
+	{
+		REQUIRE( !m_strTextureCubeShadowArray.empty() );
+		return m_strTextureCubeShadowArray;
+	}
+	inline Castor::String const & KeywordsBase::GetTextureCubeShadowArrayLod()const
+	{
+		REQUIRE( !m_strTextureCubeShadowArrayLod.empty() );
+		return m_strTextureCubeShadowArrayLod;
 	}
 	inline Castor::String const & KeywordsBase::GetTexelFetchBuffer()const
 	{
@@ -285,12 +405,12 @@ namespace GLSL
 			m_strTexture3DLod = cuT( "texture3DLod" );
 			m_strTextureCube = cuT( "textureCube" );
 			m_strTextureCubeLod = cuT( "textureCubeLod" );
-			m_strTexture1DShadow = cuT( "texture1DShadow" );
-			m_strTexture1DShadowLod = cuT( "texture1DShadowLod" );
-			m_strTexture2DShadow = cuT( "texture2DShadow" );
-			m_strTexture2DShadowLod = cuT( "texture2DShadowLod" );
-			m_strTextureCubeShadow = cuT( "textureCubeShadow" );
-			m_strTextureCubeShadowLod = cuT( "textureCubeShadowLod" );
+			m_strTexture1DArray = cuT( "texture1D" );
+			m_strTexture1DArrayLod = cuT( "texture1D" );
+			m_strTexture2DArray = cuT( "texture2D" );
+			m_strTexture2DArrayLod = cuT( "texture2D" );
+			m_strTextureCubeArray = cuT( "textureCube" );
+			m_strTextureCubeArrayLod = cuT( "textureCubeLod" );
 			m_strTexelFetch1D = cuT( "texture1D" );
 			m_strTexelFetch2D = cuT( "texture2D" );
 			m_strTexelFetch3D = cuT( "texture3D" );
@@ -351,6 +471,18 @@ namespace GLSL
 			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCube = cuT( "texture" );
 			m_strTextureCubeLod = cuT( "texture" );
+			m_strTexture1DArray = cuT( "texture" );
+			m_strTexture1DArrayLod = cuT( "texture" );
+			m_strTexture1DArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DArray = cuT( "texture" );
+			m_strTexture2DArrayLod = cuT( "texture" );
+			m_strTexture2DArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeArray = cuT( "texture" );
+			m_strTextureCubeArrayLod = cuT( "texture" );
 			m_strTexture1DShadow = cuT( "texture" );
 			m_strTexture1DShadowLod = cuT( "texture" );
 			m_strTexture1DShadowOffset = cuT( "textureOffset" );
@@ -361,6 +493,20 @@ namespace GLSL
 			m_strTexture2DShadowOffset = cuT( "textureOffset" );
 			m_strTexture2DShadowOffsetLod = cuT( "textureOffset" );
 			m_strTexture2DShadowLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeShadow = cuT( "texture" );
+			m_strTextureCubeShadowLod = cuT( "texture" );
+			m_strTexture1DShadowArray = cuT( "texture" );
+			m_strTexture1DShadowArrayLod = cuT( "texture" );
+			m_strTexture1DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DShadowArray = cuT( "texture" );
+			m_strTexture2DShadowArrayLod = cuT( "texture" );
+			m_strTexture2DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeShadowArray = cuT( "texture" );
+			m_strTextureCubeShadowArrayLod = cuT( "texture" );
 			m_strTextureCubeShadow = cuT( "texture" );
 			m_strTextureCubeShadowLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
@@ -425,6 +571,18 @@ namespace GLSL
 			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCube = cuT( "texture" );
 			m_strTextureCubeLod = cuT( "texture" );
+			m_strTexture1DArray = cuT( "texture" );
+			m_strTexture1DArrayLod = cuT( "texture" );
+			m_strTexture1DArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DArray = cuT( "texture" );
+			m_strTexture2DArrayLod = cuT( "texture" );
+			m_strTexture2DArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeArray = cuT( "texture" );
+			m_strTextureCubeArrayLod = cuT( "texture" );
 			m_strTexture1DShadow = cuT( "texture" );
 			m_strTexture1DShadowLod = cuT( "texture" );
 			m_strTexture1DShadowOffset = cuT( "textureOffset" );
@@ -437,6 +595,18 @@ namespace GLSL
 			m_strTexture2DShadowLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCubeShadow = cuT( "texture" );
 			m_strTextureCubeShadowLod = cuT( "texture" );
+			m_strTexture1DShadowArray = cuT( "texture" );
+			m_strTexture1DShadowArrayLod = cuT( "texture" );
+			m_strTexture1DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DShadowArray = cuT( "texture" );
+			m_strTexture2DShadowArrayLod = cuT( "texture" );
+			m_strTexture2DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeShadowArray = cuT( "texture" );
+			m_strTextureCubeShadowArrayLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );
@@ -504,6 +674,18 @@ namespace GLSL
 			m_strTexture3DLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCube = cuT( "texture" );
 			m_strTextureCubeLod = cuT( "texture" );
+			m_strTexture1DArray = cuT( "texture" );
+			m_strTexture1DArrayLod = cuT( "texture" );
+			m_strTexture1DArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DArray = cuT( "texture" );
+			m_strTexture2DArrayLod = cuT( "texture" );
+			m_strTexture2DArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeArray = cuT( "texture" );
+			m_strTextureCubeArrayLod = cuT( "texture" );
 			m_strTexture1DShadow = cuT( "texture" );
 			m_strTexture1DShadowLod = cuT( "texture" );
 			m_strTexture1DShadowOffset = cuT( "textureOffset" );
@@ -516,6 +698,18 @@ namespace GLSL
 			m_strTexture2DShadowLodOffset = cuT( "textureLodOffset" );
 			m_strTextureCubeShadow = cuT( "texture" );
 			m_strTextureCubeShadowLod = cuT( "texture" );
+			m_strTexture1DShadowArray = cuT( "texture" );
+			m_strTexture1DShadowArrayLod = cuT( "texture" );
+			m_strTexture1DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture1DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTexture2DShadowArray = cuT( "texture" );
+			m_strTexture2DShadowArrayLod = cuT( "texture" );
+			m_strTexture2DShadowArrayOffset = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayOffsetLod = cuT( "textureOffset" );
+			m_strTexture2DShadowArrayLodOffset = cuT( "textureLodOffset" );
+			m_strTextureCubeShadowArray = cuT( "texture" );
+			m_strTextureCubeShadowArrayLod = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );

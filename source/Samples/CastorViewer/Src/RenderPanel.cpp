@@ -234,7 +234,6 @@ namespace CastorViewer
 					} ) );
 
 					m_camera = l_camera;
-					m_currentCamera = l_camera;
 				}
 
 				m_scene = l_scene;
@@ -283,14 +282,14 @@ namespace CastorViewer
 	void RenderPanel::DoResetCamera()
 	{
 		DoResetTimers();
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			m_currentCamera = m_camera.lock();
-			m_currentNode = m_currentCamera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			m_currentNode = l_camera->GetParent();
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_camera]()
 			{
-				auto l_cameraNode = m_currentCamera->GetParent();
+				auto l_cameraNode = l_camera->GetParent();
 				l_cameraNode->SetOrientation( m_qOriginalOrientation );
 				l_cameraNode->SetPosition( m_ptOriginalPosition );
 			} ) );
@@ -300,10 +299,11 @@ namespace CastorViewer
 	void RenderPanel::DoTurnCamera()
 	{
 		DoResetTimers();
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			auto l_cameraNode = m_currentCamera->GetParent();
+			auto l_cameraNode = l_camera->GetParent();
 			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
@@ -326,8 +326,7 @@ namespace CastorViewer
 			if ( !l_shadowMaps.empty() )
 			{
 				auto l_it = l_shadowMaps.begin();
-				m_currentCamera = l_it->second->GetCamera();
-				m_currentNode = m_currentCamera->GetParent();
+				m_currentNode = l_it->first->GetParent();
 			}
 		}
 	}
@@ -341,10 +340,11 @@ namespace CastorViewer
 	real RenderPanel::DoTransformX( int x )
 	{
 		real l_result = real( x );
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			l_result *= real( m_currentCamera->GetWidth() ) / GetClientSize().x;
+			l_result *= real( l_camera->GetWidth() ) / GetClientSize().x;
 		}
 
 		return l_result;
@@ -353,10 +353,11 @@ namespace CastorViewer
 	real RenderPanel::DoTransformY( int y )
 	{
 		real l_result = real( y );
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			l_result *= real( m_currentCamera->GetHeight() ) / GetClientSize().y;
+			l_result *= real( l_camera->GetHeight() ) / GetClientSize().y;
 		}
 
 		return l_result;
@@ -365,10 +366,11 @@ namespace CastorViewer
 	int RenderPanel::DoTransformX( real x )
 	{
 		int l_result = int( x );
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			l_result = int( x * GetClientSize().x / real( m_currentCamera->GetWidth() ) );
+			l_result = int( x * GetClientSize().x / real( l_camera->GetWidth() ) );
 		}
 
 		return l_result;
@@ -377,10 +379,11 @@ namespace CastorViewer
 	int RenderPanel::DoTransformY( real y )
 	{
 		int l_result = int( y );
+		auto l_camera = m_camera.lock();
 
-		if ( m_currentCamera )
+		if ( l_camera )
 		{
-			l_result = int( y * GetClientSize().y / real( m_currentCamera->GetHeight() ) );
+			l_result = int( y * GetClientSize().y / real( l_camera->GetHeight() ) );
 		}
 
 		return l_result;

@@ -54,8 +54,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	SpotLight::SpotLight()
-		: LightCategory{ LightType::Spot }
+	SpotLight::SpotLight( Light & p_light )
+		: LightCategory{ LightType::Spot, p_light }
 	{
 	}
 
@@ -63,15 +63,19 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr SpotLight::Create()
+	LightCategoryUPtr SpotLight::Create( Light & p_light )
 	{
-		return std::shared_ptr< SpotLight >( new SpotLight );
+		return std::unique_ptr< SpotLight >( new SpotLight{ p_light } );
 	}
 
 	void SpotLight::Update( Point3r const & p_target )
 	{
+		REQUIRE( m_viewport );
+		auto l_node = GetLight().GetParent();
+		l_node->Update();
 		m_viewport->SetPerspective( GetCutOff() * 2, m_viewport->GetRatio(), 1.0_r, 1000.0_r );
-		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		m_viewport->Update();
+		auto l_orientation = l_node->GetDerivedOrientation();
 		auto l_position = GetPosition();
 		l_position[2] = -l_position[2];
 		Point3f l_front{ 0, 0, 1 };
@@ -83,7 +87,7 @@ namespace Castor3D
 
 	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
-		auto l_orientation = GetLight()->GetParent()->GetDerivedOrientation();
+		auto l_orientation = GetLight().GetParent()->GetDerivedOrientation();
 		Point3f l_front{ 0, 0, 1 };
 		l_orientation.transform( l_front, l_front );
 		Point4f l_posType = GetPositionType();
@@ -92,10 +96,10 @@ namespace Castor3D
 		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( m_viewport->GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 		DoBindComponent( l_front, p_index, l_offset, p_texture );
 		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );
+		DoBindComponent( m_viewport->GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
 	}
 
 	void SpotLight::SetPosition( Castor::Point3r const & p_position )

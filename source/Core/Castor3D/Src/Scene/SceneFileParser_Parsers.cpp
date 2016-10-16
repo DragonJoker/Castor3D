@@ -1299,7 +1299,7 @@ namespace Castor3D
 		{
 			bool l_value;
 			p_params[0]->Get( l_value );
-			l_parsingContext->pLight->CastShadows( l_value );
+			l_parsingContext->pLight->SetShadowProducer( l_value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -1527,7 +1527,7 @@ namespace Castor3D
 		{
 			bool l_value;
 			p_params[0]->Get( l_value );
-			l_parsingContext->pGeometry->CastShadows( l_value );
+			l_parsingContext->pGeometry->SetShadowCaster( l_value );
 		}
 	}
 	END_ATTRIBUTE()

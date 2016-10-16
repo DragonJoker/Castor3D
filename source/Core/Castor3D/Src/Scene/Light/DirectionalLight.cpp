@@ -31,8 +31,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	DirectionalLight::DirectionalLight()
-		: LightCategory{ LightType::Directional }
+	DirectionalLight::DirectionalLight( Light & p_light )
+		: LightCategory{ LightType::Directional, p_light }
 	{
 	}
 
@@ -40,22 +40,13 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr DirectionalLight::Create()
+	LightCategoryUPtr DirectionalLight::Create( Light & p_light )
 	{
-		return std::shared_ptr< DirectionalLight >( new DirectionalLight );
+		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ p_light } );
 	}
 
 	void DirectionalLight::Update( Point3r const & p_target )
 	{
-		real const l_width = real( m_viewport->GetWidth() );
-		real const l_height = real( m_viewport->GetHeight() );
-		m_viewport->SetOrtho( -l_width / 2, l_width / 2, l_height / 2, -l_height / 2, 1.0_r, 1000.0_r );
-		Point3f l_right{ 1, 0, 0 };
-		auto l_direction = GetDirection();
-		l_direction = Point3f{ 0.0, 0.70, 0.70 };
-		//l_direction[2] = -l_direction[2];
-		auto l_up = l_direction ^ l_right;
-		matrix::look_at( m_lightSpace, p_target - l_direction, p_target, l_up );
 	}
 
 	void DirectionalLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
@@ -65,7 +56,6 @@ namespace Castor3D
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		Point4f l_posType = GetPositionType();
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 	}
 
 	void DirectionalLight::SetDirection( Castor::Point3f const & p_position )

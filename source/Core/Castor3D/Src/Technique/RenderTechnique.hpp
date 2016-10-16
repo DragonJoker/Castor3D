@@ -489,19 +489,19 @@ namespace Castor3D
 		 */
 		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
 		C3D_API void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
 		 */
 		C3D_API void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
 		C3D_API void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
 		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**

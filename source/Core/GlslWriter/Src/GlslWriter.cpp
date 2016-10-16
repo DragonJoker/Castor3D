@@ -339,12 +339,72 @@ namespace GLSL
 		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
 	}
 
-	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value )
+	Vec4 GlslWriter::Texture( Sampler1DArray const & p_sampler, Vec2 const & p_value )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArray(), p_sampler, p_value );
+	}
+
+	Vec4 GlslWriter::Texture( Sampler1DArray const & p_sampler, Vec2 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Vec4 GlslWriter::Texture( Sampler2DArray const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArray(), p_sampler, p_value );
+	}
+
+	Vec4 GlslWriter::Texture( Sampler2DArray const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Vec4 GlslWriter::Texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTextureCubeArray(), p_sampler, p_value );
+	}
+
+	Vec4 GlslWriter::Texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTextureCubeArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Vec4 GlslWriter::TextureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const & p_offset )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Vec4 GlslWriter::TextureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Vec4 GlslWriter::TextureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Vec4 GlslWriter::TextureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Vec4 GlslWriter::TextureLodOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Vec4 GlslWriter::TextureLodOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadow(), p_sampler, p_value );
 	}
 
-	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Float GlslWriter::Texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLod(), p_sampler, p_value, p_lod );
 	}
@@ -359,22 +419,22 @@ namespace GLSL
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLod(), p_sampler, p_value, p_lod );
 	}
 
-	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value )
+	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadow(), p_sampler, p_value );
 	}
 
-	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Float GlslWriter::Texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowLod(), p_sampler, p_value, p_lod );
 	}
 
-	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const & p_offset )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffset(), p_sampler, p_value, p_offset );
 	}
 
-	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	Float GlslWriter::TextureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
 	}
@@ -389,7 +449,7 @@ namespace GLSL
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
 	}
 
-	Float GlslWriter::TextureLodOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	Float GlslWriter::TextureLodOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
 	}
@@ -397,6 +457,66 @@ namespace GLSL
 	Float GlslWriter::TextureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
 	{
 		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float GlslWriter::Texture( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArray(), p_sampler, p_value );
+	}
+
+	Float GlslWriter::Texture( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Float GlslWriter::Texture( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArray(), p_sampler, p_value );
+	}
+
+	Float GlslWriter::Texture( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Float GlslWriter::Texture( SamplerCubeShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_layer )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowArray(), p_sampler, p_value, p_layer );
+	}
+
+	Float GlslWriter::Texture( SamplerCubeShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowArrayLod(), p_sampler, p_value, p_layer, p_lod );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Float GlslWriter::TextureOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float GlslWriter::TextureLodOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float GlslWriter::TextureLodOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
 	}
 
 	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler1D > const & p_sampler, Float const & p_value )
@@ -504,12 +624,72 @@ namespace GLSL
 		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
 	}
 
-	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value )
+	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArray(), p_sampler, p_value );
+	}
+
+	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArray(), p_sampler, p_value );
+	}
+
+	Optional< Vec4 > GlslWriter::Texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > GlslWriter::Texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTextureCubeArray(), p_sampler, p_value );
+	}
+
+	Optional< Vec4 > GlslWriter::Texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTextureCubeArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureLodOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1DArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureLodOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2DArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadow(), p_sampler, p_value );
 	}
 
-	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLod(), p_sampler, p_value, p_lod );
 	}
@@ -524,22 +704,22 @@ namespace GLSL
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLod(), p_sampler, p_value, p_lod );
 	}
 
-	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value )
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadow(), p_sampler, p_value );
 	}
 
-	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowLod(), p_sampler, p_value, p_lod );
 	}
 
-	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const & p_offset )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffset(), p_sampler, p_value, p_offset );
 	}
 
-	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const & p_offset, Float const & p_lod )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
 	}
@@ -554,7 +734,7 @@ namespace GLSL
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowOffsetLod(), p_sampler, p_value, p_offset, p_lod );
 	}
 
-	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const & p_offset )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
 	}
@@ -562,6 +742,66 @@ namespace GLSL
 	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const & p_offset )
 	{
 		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArray(), p_sampler, p_value );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArray(), p_sampler, p_value );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayLod(), p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_layer )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowArray(), p_sampler, p_value, p_layer );
+	}
+
+	Optional< Float > GlslWriter::Texture( Optional< SamplerCubeShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTextureCubeShadowArrayLod(), p_sampler, p_value, p_layer, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Int const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayOffset(), p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, IVec2 const & p_offset, Float const & p_lod )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayOffsetLod(), p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture1DShadowArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > GlslWriter::TextureLodOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const & p_offset )
+	{
+		return WriteOptionalFunctionCall< Float >( this, m_keywords->GetTexture2DShadowArrayLodOffset(), p_sampler, p_value, p_lod, p_offset );
 	}
 
 	GlslWriter & GlslWriter::operator<<( Version const & p_rhs )

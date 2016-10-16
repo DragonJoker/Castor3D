@@ -88,10 +88,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_light	The parent Light.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_light	La Light parente.
 		 */
-		C3D_API DirectionalLight();
+		C3D_API DirectionalLight( Light & p_light );
 
 	public:
 		/**
@@ -109,7 +111,7 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategorySPtr Create();
+		C3D_API static LightCategoryUPtr Create( Light & p_light );
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */

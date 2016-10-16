@@ -36,7 +36,18 @@ namespace Castor3D
 
 	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
 	{
-		m_clearColour = p_clrClear;
+		m_redClear = p_clrClear.red();
+		m_greenClear = p_clrClear.green();
+		m_blueClear = p_clrClear.blue();
+		m_alphaClear = p_clrClear.alpha();
+	}
+
+	void FrameBuffer::SetClearColour( float p_r, float p_g, float p_b, float p_a )
+	{
+		m_redClear = p_r;
+		m_greenClear = p_g;
+		m_blueClear = p_b;
+		m_alphaClear = p_a;
 	}
 
 	void FrameBuffer::Clear()

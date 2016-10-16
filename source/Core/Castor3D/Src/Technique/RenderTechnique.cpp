@@ -49,9 +49,11 @@
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 
 using namespace Castor;
 
@@ -172,9 +174,10 @@ namespace Castor3D
 		inline void DoUpdateProgram( ShaderProgram & p_program, uint16_t p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::Shadows )
-				 && !p_program.FindFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel ) )
+				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel, 10 );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel, 10 );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel, 10 );
 			}
 		}
 
@@ -182,13 +185,32 @@ namespace Castor3D
 		{
 			if ( !p_depthMaps.empty() )
 			{
-				auto & l_variable = p_pipeline.GetShadowMapsVariable();
 				auto l_index = p_pipeline.GetTexturesCount() + 1;
-				auto l_offset = 0u;
-
-				for ( auto l_depthMap : p_depthMaps )
 				{
-					l_variable.SetValue( l_index++, l_offset++ );
+					auto & l_variable = p_pipeline.GetSpotShadowMapsVariable();
+					auto l_offset = 0u;
+
+					for ( auto & l_depthMap : p_depthMaps )
+					{
+						if ( l_depthMap.get().GetType() == TextureType::TwoDimensions )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_variable.SetValue( l_index++, l_offset++ );
+						}
+					}
+				}
+				{
+					auto & l_variable = p_pipeline.GetPointShadowMapsVariable();
+					auto l_offset = 0u;
+
+					for ( auto & l_depthMap : p_depthMaps )
+					{
+						if ( l_depthMap.get().GetType() == TextureType::Cube )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_variable.SetValue( l_index++, l_offset++ );
+						}
+					}
 				}
 			}
 		}
@@ -458,13 +480,14 @@ namespace Castor3D
 
 		p_scene.GetLightCache().ForEach( [&l_it, &p_scene, this]( Light & p_light )
 		{
-			if ( p_light.CastShadows() )
+			if ( p_light.IsShadowProducer()
+				 && p_light.GetLightType() != LightType::Directional )
 			{
-				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, std::make_shared< ShadowMapPass >( *GetEngine(), p_scene, p_light ) } ).first;
-				auto & l_shadowMap = *l_insit->second;
-				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_shadowMap]()
+				auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), p_scene, p_light );
+				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, l_pass } ).first;
+				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_pass]()
 				{
-					l_shadowMap.Initialise( m_size );
+					l_pass->Initialise( m_size );
 				} ) );
 			}
 		} );
@@ -484,7 +507,7 @@ namespace Castor3D
 		for ( auto & l_shadowMap : l_shadowMaps )
 		{
 			l_shadowMap.second->Render();
-			l_depthMaps.push_back( std::ref( l_shadowMap.second->GetResult() ) );
+			l_depthMaps.push_back( std::ref( l_shadowMap.second->GetShadowMap() ) );
 		}
 
 		if ( DoBeginRender( p_scene, p_camera ) )

@@ -33,14 +33,14 @@ scene "Scene"
 
 	scene_node "FinalNode"
 	{
-		position 0.0 0.0 0.0
+		position 0.0 0.0 1000.0
 	}
 	object "FinalPrimitive"
 	{
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 40 40 25 50
+			type torus 40 40 250 500
 		}
 		material "Silver"
 	}

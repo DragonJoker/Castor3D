@@ -11,6 +11,9 @@
 
 #include <Math/TransformationMatrix.hpp>
 
+#include <GlslSource.hpp>
+#include <GlslShadow.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -65,7 +68,8 @@ namespace Castor3D
 		}
 
 		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
-		m_shadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( ShaderProgram::MapShadow, ShaderType::Pixel );
+		m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
+		m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel );
 	}
 
 	Pipeline::~Pipeline()

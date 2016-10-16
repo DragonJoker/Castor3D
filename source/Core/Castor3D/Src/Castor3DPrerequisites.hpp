@@ -515,6 +515,8 @@ namespace Castor3D
 	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );
 
+	using ShadowMapPassFactory = Castor::Factory< ShadowMapPass, LightType, ShadowMapPassSPtr, std::function< ShadowMapPassSPtr( Engine &, Scene &, Light & ) > >;
+
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/02/2016

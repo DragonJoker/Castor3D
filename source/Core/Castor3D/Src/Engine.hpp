@@ -518,6 +518,16 @@ namespace Castor3D
 		{
 			return m_importerFactory;
 		}
+		/**
+		 *\~english
+		 *\return		The ShadowMapPass factory.
+		 *\~french
+		 *\return		La fabrique de ShadowMapPass.
+		 */
+		inline ShadowMapPassFactory & GetShadowMapPassFactory()
+		{
+			return m_shadowMapPassFactory;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -610,6 +620,9 @@ namespace Castor3D
 		//!\~english	The importer factory.
 		//!\~french		La fabrique d'importeurs.
 		ImporterFactory m_importerFactory;
+		//!\~english	The ShadowMapPass factory.
+		//!\~french		La fabrique de ShadowMapPass.
+		ShadowMapPassFactory m_shadowMapPassFactory;
 	};
 }
 

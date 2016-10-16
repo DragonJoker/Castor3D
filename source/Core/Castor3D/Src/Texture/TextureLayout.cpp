@@ -16,7 +16,7 @@ namespace Castor3D
 		{
 			size_t l_return = 1;
 
-			if ( p_type == TextureType::Cube )
+			if ( p_type == TextureType::Cube || p_type == TextureType::CubeArray )
 			{
 				l_return = size_t( CubeMapFace::Count );
 			}

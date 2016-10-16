@@ -68,7 +68,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlTextureAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
+	bool GlTextureAttachment::DoAttach()
 	{
 		bool l_return = false;
 

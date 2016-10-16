@@ -20,38 +20,40 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_RENDER_BUFFER_ATTACHMENT_H___
-#define ___GL_RENDER_BUFFER_ATTACHMENT_H___
+#ifndef ___GL_CUBE_TEXTURE_FACE_ATTACHMENT_H___
+#define ___GL_CUBE_TEXTURE_FACE_ATTACHMENT_H___
 
 #include "Common/GlHolder.hpp"
 
-#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
 
 namespace GlRender
 {
-	class GlRenderBufferAttachment
-		: public Castor3D::RenderBufferAttachment
+	class GlCubeTextureFaceAttachment
+		: public Castor3D::TextureAttachment
 		, public Holder
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\para[in]		p_gl			The OpenGL APIs.
-		 *\param[in]	p_renderBuffer	The render buffer.
+		 *\para[in]		p_gl		The OpenGL APIs.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_face		The face.
 		 *\~french
 		 *\brief		Constructeur
-		 *\para[in]		p_gl			Les APIs OpenGL.
-		 *\param[in]	p_renderBuffer	Le tampon de rendu.
+		 *\para[in]		p_gl		Les APIs OpenGL.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_face		La face.
 		 */
-		GlRenderBufferAttachment( OpenGl & p_gl, Castor3D::RenderBufferSPtr p_renderBuffer );
+		GlCubeTextureFaceAttachment( OpenGl & p_gl, Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~GlRenderBufferAttachment();
+		virtual ~GlCubeTextureFaceAttachment();
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
@@ -72,7 +74,7 @@ namespace GlRender
 		 *\~french
 		 *\return		Le point d'attache OpenGL.
 		 */
-		inline eGL_RENDERBUFFER_ATTACHMENT GetGlAttachmentPoint()const
+		inline eGL_TEXTURE_ATTACHMENT GetGlAttachmentPoint()const
 		{
 			return m_glAttachmentPoint;
 		}
@@ -88,8 +90,9 @@ namespace GlRender
 		virtual void DoDetach();
 
 	private:
-		eGL_RENDERBUFFER_ATTACHMENT m_glAttachmentPoint;
-		eGL_FRAMEBUFFER_STATUS m_glStatus;
+		eGL_TEXDIM m_glFace;
+		eGL_TEXTURE_ATTACHMENT m_glAttachmentPoint{ eGL_TEXTURE_ATTACHMENT_NONE };
+		eGL_FRAMEBUFFER_STATUS m_glStatus{ eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT };
 	};
 }
 

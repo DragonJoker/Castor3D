@@ -99,7 +99,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer
 		 */
-		C3D_API void Initialise();
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture

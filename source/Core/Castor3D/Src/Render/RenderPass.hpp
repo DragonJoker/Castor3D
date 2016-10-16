@@ -324,16 +324,7 @@ namespace Castor3D
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
 
-	private:
-		/**
-		 *\~english
-		 *\brief			Modifies the given program flags to make them match the render pass requirements.
-		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
-		 *\~french
-		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
-		 */
-		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
+	protected:
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -347,6 +338,17 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
 		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+
+	private:
+		/**
+		 *\~english
+		 *\brief			Modifies the given program flags to make them match the render pass requirements.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.

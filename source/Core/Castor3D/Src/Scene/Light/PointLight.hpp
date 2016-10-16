@@ -85,12 +85,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_viewport	The shadow map render viewport.
+		 *\param[in]	p_light	The parent Light.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_viewport	Le viewport utilisé pour le rendu de la map d'ombres.
+		 *\param[in]	p_light	La Light parente.
 		 */
-		C3D_API PointLight();
+		C3D_API PointLight( Light & p_light );
 
 	public:
 		/**
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory.
 		 *\return		Une source lumineuse.
 		 */
-		C3D_API static LightCategorySPtr Create();
+		C3D_API static LightCategoryUPtr Create( Light & p_light );
 		/**
 		 *\copydoc		Castor::LightCategory::Update
 		 */

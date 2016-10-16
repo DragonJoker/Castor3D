@@ -61,7 +61,27 @@ namespace GlRender
 			break;
 
 		case eGL_TEXTURE_STORAGE_2D:
-			l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), 4, l_format.Internal, p_size.width(), p_size.height() );
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ:
+		case eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ:
+			switch ( l_storage.GetType() )
+			{
+			case TextureStorageType::CubeMapArrayPositiveX:
+			case TextureStorageType::CubeMapArrayNegativeX:
+			case TextureStorageType::CubeMapArrayPositiveY:
+			case TextureStorageType::CubeMapArrayNegativeY:
+			case TextureStorageType::CubeMapArrayPositiveZ:
+			case TextureStorageType::CubeMapArrayNegativeZ:
+				l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth() );
+				break;
+
+			default:
+				l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), 4, l_format.Internal, p_size.width(), p_size.height() );
+				break;
+			}
 			break;
 
 		case eGL_TEXTURE_STORAGE_2DMS:
@@ -69,6 +89,9 @@ namespace GlRender
 			break;
 
 		case eGL_TEXTURE_STORAGE_3D:
+			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth() );
+			break;
+
 		case eGL_TEXTURE_STORAGE_2DARRAY:
 			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, p_size.width(), p_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth() );
 			break;

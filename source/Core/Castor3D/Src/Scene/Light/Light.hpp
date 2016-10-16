@@ -414,9 +414,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Dit si la lumière projette des ombres.
 		 */
-		inline bool CastShadows()const
+		inline bool IsShadowProducer()const
 		{
-			return m_castShadows;
+			return m_shadowCaster;
 		}
 		/**
 		 *\~english
@@ -426,32 +426,9 @@ namespace Castor3D
 		 *\brief		Définit le statut de projection d'ombre de la lumère
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void CastShadows( bool p_value )
+		inline void SetShadowProducer( bool p_value )
 		{
-			m_castShadows = p_value;
-		}
-		/**
-		 *\~english
-		 *\return		Sets the shadow map rendering viewport.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\return		Définit le viewport de rendu de shadow map.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetViewport( Viewport & p_value )
-		{
-			m_viewport = &p_value;
-			m_category->SetViewport( p_value );
-		}
-		/**
-		 *\~english
-		 *\return		The Light space view matrix.
-		 *\~french
-		 *\return		La matrice vue dans l'espace lumière.
-		 */
-		inline Castor::Matrix4x4f const & GetLightSpaceView()const
-		{
-			return m_category->GetLightSpaceView();
+			m_shadowCaster = p_value;
 		}
 
 	protected:
@@ -463,13 +440,10 @@ namespace Castor3D
 		bool m_enabled{ false };
 		//!\~english	Tells if the light casts shadows.
 		//!\~french		Dit si la lumière projette des ombres.
-		bool m_castShadows{ false };
+		bool m_shadowCaster{ false };
 		//!\~english	The Light category that effectively holds light data.
 		//!\~french		la light category contenant les données de la lumière.
 		LightCategorySPtr m_category;
-		//!\~english	The shadow map rendering viewport.
-		//\~french		Le viewport de rendu de la mp d'ombres.
-		Viewport * m_viewport;
 	};
 }
 

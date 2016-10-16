@@ -57,6 +57,8 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~FrameBufferAttachment();
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -92,8 +94,6 @@ namespace Castor3D
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
 		C3D_API void Detach();
-
-	public:
 		/**
 		*\~english
 		*\return		The data buffer.
@@ -163,15 +163,13 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_frameBuffer	The frame buffer
+		 *\brief		Attaches the render buffer to the frame buffer, at given attachment point
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_frameBuffer	Le tampon d'image
+		 *\brief		Attache le tampon de rendu au tampon d'image, au point d'attache voulu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoAttach( FrameBufferSPtr p_frameBuffer ) = 0;
+		C3D_API virtual bool DoAttach() = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer

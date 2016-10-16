@@ -30,11 +30,22 @@ namespace GLSL
 	class Shadow
 	{
 	public:
+		GlslWriter_API static Castor::String const MapShadow2D;
+		GlslWriter_API static Castor::String const MapShadowCube;
+
+	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
 		GlslWriter_API void Declare( ShadowType p_type );
-		GlslWriter_API Float ComputeShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDir, Vec3 const & p_normal, Sampler2DShadow const & p_map );
+		GlslWriter_API Float ComputeShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Sampler2DShadow const & p_map );
+		GlslWriter_API Float ComputeShadow( Vec3 const & p_lightDirection, Vec3 const & p_normal, SamplerCube const & p_map );
+		GlslWriter_API Float GetRandom( Vec4 const & p_seed );
 
-	protected:
+	private:
+		void DoDeclare_Compute2DShadow( ShadowType p_type );
+		void DoDeclare_ComputeCubeShadow( ShadowType p_type );
+		void DoDeclare_GetRandom();
+
+	private:
 		GlslWriter & m_writer;
 	};
 }

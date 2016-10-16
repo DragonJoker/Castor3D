@@ -35,7 +35,7 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = GetOpenGl().BindFramebuffer( eGL_FRAMEBUFFER_MODE_READ, m_glFrameBuffer.lock()->GetGlName() );
+				l_return = GetOpenGl().BindFramebuffer( eGL_FRAMEBUFFER_MODE_READ, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
 			}
 
 			if ( l_return )
@@ -68,7 +68,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlRenderBufferAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
+	bool GlRenderBufferAttachment::DoAttach()
 	{
 		bool l_return = false;
 
@@ -98,7 +98,6 @@ namespace GlRender
 
 			if ( l_uiGlName != eGL_INVALID_INDEX )
 			{
-				m_glFrameBuffer = std::static_pointer_cast< GlFrameBuffer >( p_frameBuffer );
 				l_return = GetOpenGl().FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, eGL_RENDERBUFFER_MODE_DEFAULT, l_uiGlName );
 			}
 

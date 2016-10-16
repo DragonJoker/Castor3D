@@ -207,12 +207,72 @@ namespace GLSL
 		return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
 	}
 
-	Float texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value )
+	Vec4 texture( Sampler1DArray const & p_sampler, Vec2 const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
 	}
 
-	Float texture( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Vec4 texture( Sampler1DArray const & p_sampler, Vec2 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Vec4 texture( Sampler2DArray const & p_sampler, Vec3 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Vec4 texture( Sampler2DArray const & p_sampler, Vec3 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Vec4 texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Vec4 texture( SamplerCubeArray const & p_sampler, Vec4 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Vec4 textureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Vec4 textureOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Int const p_offset, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Vec4 textureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Vec4 textureOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, IVec2 const p_offset, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Vec4 textureLodOffset( Sampler1DArray const & p_sampler, Vec2 const & p_value, Vec4 const & p_lod, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Vec4 textureLodOffset( Sampler2DArray const & p_sampler, Vec3 const & p_value, Vec4 const & p_lod, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Float texture( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
@@ -227,22 +287,22 @@ namespace GLSL
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
 
-	Float texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value )
+	Float texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
 	}
 
-	Float texture( SamplerCubeShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Float texture( SamplerCubeShadow const & p_sampler, Vec4 const & p_value, Float const & p_lod )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
 
-	Float textureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const p_offset )
+	Float textureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const p_offset )
 	{
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
 	}
 
-	Float textureOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod )
+	Float textureOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Int const p_offset, Float const & p_lod )
 	{
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
 	}
@@ -257,12 +317,72 @@ namespace GLSL
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
 	}
 
-	Float textureLodOffset( Sampler1DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset )
+	Float textureLodOffset( Sampler1DShadow const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const p_offset )
 	{
 		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
 	}
 
 	Float textureLodOffset( Sampler2DShadow const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float texture( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Float texture( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Float texture( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Float texture( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Float texture( SamplerCubeShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_layer )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_layer );
+	}
+
+	Float texture( SamplerCubeShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_layer, p_lod );
+	}
+
+	Float textureOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Float textureOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float textureOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Float textureOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, IVec2 const p_offset, Float const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Float textureLodOffset( Sampler1DShadowArray const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Float textureLodOffset( Sampler2DShadowArray const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const p_offset )
 	{
 		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
 	}
@@ -417,12 +537,72 @@ namespace GLSL
 		return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
 	}
 
-	Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value )
+	Optional< Vec4 > texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
 	}
 
-	Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Optional< Vec4 > texture( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Optional< Vec4 > texture( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Optional< Vec4 > texture( Optional< SamplerCubeArray > const & p_sampler, Vec4 const & p_value, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Optional< Vec4 > textureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Optional< Vec4 > textureOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Int const p_offset, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Vec4 > textureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Optional< Vec4 > textureOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, IVec2 const p_offset, Vec4 const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Vec4 > textureLodOffset( Optional< Sampler1DArray > const & p_sampler, Vec2 const & p_value, Vec4 const & p_lod, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Vec4 > textureLodOffset( Optional< Sampler2DArray > const & p_sampler, Vec3 const & p_value, Vec4 const & p_lod, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Optional< Float > texture( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
@@ -437,22 +617,22 @@ namespace GLSL
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
 
-	Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value )
+	Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
 	}
 
-	Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	Optional< Float > texture( Optional< SamplerCubeShadow > const & p_sampler, Vec4 const & p_value, Float const & p_lod )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
 	}
 
-	Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const p_offset )
+	Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const p_offset )
 	{
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
 	}
 
-	Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod )
+	Optional< Float > textureOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Int const p_offset, Float const & p_lod )
 	{
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
 	}
@@ -467,12 +647,72 @@ namespace GLSL
 		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
 	}
 
-	Optional< Float > textureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset )
+	Optional< Float > textureLodOffset( Optional< Sampler1DShadow > const & p_sampler, Vec2 const & p_value, Float const & p_lod, Int const p_offset )
 	{
 		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
 	}
 
 	Optional< Float > textureLodOffset( Optional< Sampler2DShadow > const & p_sampler, Vec3 const & p_value, Float const & p_lod, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > texture( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Optional< Float > texture( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > texture( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value );
+	}
+
+	Optional< Float > texture( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_lod );
+	}
+
+	Optional< Float > texture( Optional< SamplerCubeShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_layer )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_layer );
+	}
+
+	Optional< Float > texture( Optional< SamplerCubeShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_layer, Float const & p_lod )
+	{
+		return p_sampler.m_writer->Texture( p_sampler, p_value, p_layer, p_lod );
+	}
+
+	Optional< Float > textureOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > textureOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Int const p_offset, Float const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > textureOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, IVec2 const p_offset )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset );
+	}
+
+	Optional< Float > textureOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, IVec2 const p_offset, Float const & p_lod )
+	{
+		return p_sampler.m_writer->TextureOffset( p_sampler, p_value, p_offset, p_lod );
+	}
+
+	Optional< Float > textureLodOffset( Optional< Sampler1DShadowArray > const & p_sampler, Vec3 const & p_value, Float const & p_lod, Int const p_offset )
+	{
+		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
+	}
+
+	Optional< Float > textureLodOffset( Optional< Sampler2DShadowArray > const & p_sampler, Vec4 const & p_value, Float const & p_lod, IVec2 const p_offset )
 	{
 		return p_sampler.m_writer->TextureLodOffset( p_sampler, p_value, p_lod, p_offset );
 	}

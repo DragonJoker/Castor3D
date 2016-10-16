@@ -254,12 +254,15 @@ namespace Castor3D
 				break;
 
 			case TextureType::OneDimensionArray:
+				l_return = TextureStorageType::OneDimensionArray;
+				break;
+
 			case TextureType::TwoDimensions:
 				l_return = TextureStorageType::TwoDimensions;
 				break;
 
 			case TextureType::TwoDimensionsArray:
-				l_return = TextureStorageType::ThreeDimensions;
+				l_return = TextureStorageType::TwoDimensionsArray;
 				break;
 
 			case TextureType::TwoDimensionsMS:
@@ -272,6 +275,10 @@ namespace Castor3D
 
 			case TextureType::Cube:
 				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapPositiveX ) + p_index );
+				break;
+
+			case TextureType::CubeArray:
+				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapArrayPositiveX ) + p_index );
 				break;
 
 			default:

@@ -107,7 +107,7 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Castor3D::AnimationInstance::DoUpdate
+		 *\copydoc		Castor3D::AnimationInstance::DoUpdate
 		 */
 		void DoUpdate()override;
 

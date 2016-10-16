@@ -748,7 +748,7 @@ namespace Castor3D
 
 		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{
-			return p_it.second->CastShadows();
+			return p_it.second->IsShadowProducer();
 		} );
 	}
 }
