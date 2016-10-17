@@ -421,7 +421,7 @@ namespace Castor3D
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_fIndex ) ).x() );
+					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture, c3d_fIndex ) ).x() );
 					l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
 					plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 				} );
@@ -461,7 +461,7 @@ namespace Castor3D
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
+					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vtx_texture.xy() ).x() );
 					l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
 					plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 				} );
@@ -545,7 +545,7 @@ namespace Castor3D
 
 				std::function< void() > l_main = [&]()
 				{
-					auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec4( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z(), c3d_fIndex ) ).x() );
+					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec4( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z(), c3d_fIndex ) ).x() );
 					l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
 					plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 				};
@@ -589,7 +589,7 @@ namespace Castor3D
 
 				std::function< void() > l_main = [&]()
 				{
-					auto l_depth = l_writer.GetLocale< Float >( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ).x() );
+					auto l_depth = l_writer.GetLocale( cuT( "l_depth" ), texture( c3d_mapDiffuse, vec3( vtx_texture.x(), -vtx_texture.y(), vtx_texture.z() ) ).x() );
 					l_depth = Float( 1.0f ) - l_writer.Paren( Float( 1.0f ) - l_depth ) * 25.0f;
 					plx_v4FragColor = vec4( l_depth, l_depth, l_depth, 1.0 );
 				};

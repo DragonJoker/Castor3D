@@ -504,25 +504,9 @@ namespace GlRender
 		l_stream >> l_version;
 		m_iVersion = int( l_version * 10 );
 
-		if ( m_iVersion >= 43 )
+		if ( m_iVersion >= 33 )
 		{
-			m_iGlslVersion = 430;
-		}
-		else if ( m_iVersion >= 42 )
-		{
-			m_iGlslVersion = 420;
-		}
-		else if ( m_iVersion >= 41 )
-		{
-			m_iGlslVersion = 410;
-		}
-		else if ( m_iVersion >= 40 )
-		{
-			m_iGlslVersion = 400;
-		}
-		else if ( m_iVersion >= 33 )
-		{
-			m_iGlslVersion = 330;
+			m_iGlslVersion = m_iVersion * 10;
 		}
 		else if ( m_iVersion >= 32 )
 		{

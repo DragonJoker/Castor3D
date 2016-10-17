@@ -910,13 +910,13 @@ namespace Castor3D
 		
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -990,14 +990,14 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_fAlpha = l_writer.GetLocale< Float >( cuT( "l_fAlpha" ), c3d_fMatOpacity );
-			auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
@@ -1146,7 +1146,7 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
 		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
+		l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
 
 		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), 10u } );
 		m_spotShadowMap.SetTexture( l_texture );

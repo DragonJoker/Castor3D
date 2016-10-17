@@ -69,7 +69,7 @@ namespace Linear
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
+				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				l_hdrColor *= vec3( c3d_exposure );
 				plx_v4FragColor = vec4( pow( l_hdrColor, vec3( 1.0 / c3d_gamma ) ), 1.0 );
 			} );

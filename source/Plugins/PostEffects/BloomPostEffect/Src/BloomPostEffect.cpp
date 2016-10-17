@@ -112,7 +112,7 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec2, l_offset, vec2( c3d_fOffsetX, c3d_fOffsetY ) );
+				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( c3d_fOffsetX, c3d_fOffsetY ) );
 				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 0, cuT( "i < 3" ), cuT( "++i" ) )

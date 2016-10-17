@@ -172,7 +172,7 @@ namespace Castor3D
 			if ( l_modified || m_nodeChanged )
 			{
 				l_node->GetTransformationMatrix();
-				auto const & l_position = l_node->GetDerivedPosition();
+				auto l_position = l_node->GetDerivedPosition();
 				auto const & l_orientation = l_node->GetDerivedOrientation();
 				Point3r l_right{ 1.0_r, 0.0_r, 0.0_r };
 				Point3r l_up{ 0.0_r, 1.0_r, 0.0_r };

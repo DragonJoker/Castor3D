@@ -261,8 +261,7 @@ namespace GLSL
 		template< typename T > inline T GetOutput( Castor::String const & p_name );
 		template< typename T > inline T GetInput( Castor::String const & p_name );
 		template< typename T > inline T GetLocale( Castor::String const & p_name );
-		template< typename T > inline T GetLocale( Castor::String const & p_name, Expr const & p_rhs );
-		template< typename T > inline T GetLocale( Castor::String const & p_name, Type const & p_rhs );
+		template< typename T > inline T GetLocale( Castor::String const & p_name, T const & p_rhs );
 		template< typename T > inline T GetBuiltin( Castor::String const & p_name );
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
@@ -270,8 +269,7 @@ namespace GLSL
 		template< typename T > inline Array< T > GetOutput( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetInput( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Expr const & p_rhs );
-		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Type const & p_rhs );
+		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform (Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
@@ -279,16 +277,14 @@ namespace GLSL
 		template< typename T > inline Optional< T > GetOutput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetInput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled );
-		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Expr const & p_rhs );
-		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs );
+		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< T > GetBuiltin( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetUniform( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetAttribute( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetOutput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetInput( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
-		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Expr const & p_rhs );
-		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Type const & p_rhs );
+		template< typename T > inline Optional< Array< T > > GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs );
 		template< typename T > inline Optional< Array< T > > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 		template< typename T > inline Optional< Array< T > > GetUniform( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled );
 
@@ -337,12 +333,6 @@ namespace GLSL
 
 #define FI\
  );
-
-#define LOCALE_ASSIGN( Writer, Type, Name, Assign )\
-	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )
-
-#define LOCALE_ASSIGN_ARRAY( Writer, Type, Name, Dimension, Assign )\
-	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
 }
 
 #define TERNARY( Writer, ExprType, Condition, Left, Right )\

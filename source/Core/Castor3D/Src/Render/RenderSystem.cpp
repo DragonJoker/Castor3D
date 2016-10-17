@@ -171,14 +171,14 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_pos = l_writer.GetLocale< Vec3 >( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
-				auto l_toCamera = l_writer.GetLocale< Vec3 >( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
-				auto l_up = l_writer.GetLocale< Vec3 >( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
-				auto l_left = l_writer.GetLocale< Vec3 >( cuT( "l_left" ), cross( l_toCamera, l_up ) );
+				auto l_pos = l_writer.GetLocale( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
+				auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
+				auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
+				auto l_left = l_writer.GetLocale( cuT( "l_left" ), cross( l_toCamera, l_up ) );
 
-				auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
-				auto l_v3Tangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Tangent" ), l_up );
-				auto l_v3Bitangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Bitangent" ), l_left );
+				auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
+				auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_up );
+				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), l_left );
 
 				l_left *= c3d_v2iDimensions.x();
 				l_up *= c3d_v2iDimensions.y();
@@ -288,16 +288,17 @@ namespace Castor3D
 
 		std::function< void() > l_main = [&]()
 		{
-			auto l_v4Vertex = l_writer.GetLocale< Vec4 >( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.GetLocale< Vec4 >( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v4Bitangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
-			auto l_v3Texture = l_writer.GetLocale< Vec3 >( cuT( "l_v3Texture" ), texture );
+			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
+			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
+			auto l_v4Bitangent = l_writer.GetLocale( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
+			auto l_v3Texture = l_writer.GetLocale( cuT( "l_v3Texture" ), texture );
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
 			{
-				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ), c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
+				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
+				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
@@ -318,7 +319,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
 			{
-				auto l_time = l_writer.GetLocale< Float >( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
+				auto l_time = l_writer.GetLocale( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
 				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
 				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
 				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
