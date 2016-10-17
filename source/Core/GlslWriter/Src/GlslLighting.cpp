@@ -500,15 +500,18 @@ namespace GLSL
 
 				l_spotFactor = m_writer.Paren( Float( 1 ) - m_writer.Paren( Float( 1 ) - l_spotFactor ) * Float( 1 ) / m_writer.Paren( Float( 1 ) - p_light.m_fCutOff() ) );
 				p_output.m_v3Ambient += l_output.m_v3Ambient * l_spotFactor;
-				p_output.m_v3Diffuse += l_output.m_v3Diffuse * l_spotFactor;
-				p_output.m_v3Specular += l_output.m_v3Specular * l_spotFactor;
 
 				if ( m_shadows != ShadowType::None )
 				{
 					Shadow l_shadows{ m_writer };
-					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), Float( 1.0f ) - l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Vertex, Int( 0 ) ) );
-					p_output.m_v3Diffuse *= l_shadow;
-					p_output.m_v3Specular *= l_shadow;
+					auto l_shadow = m_writer.GetLocale< Float >( cuT( "l_shadow" ), l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) ) );
+					p_output.m_v3Diffuse += l_output.m_v3Diffuse * l_spotFactor * l_shadow;
+					p_output.m_v3Specular += l_output.m_v3Specular * l_spotFactor * l_shadow;
+				}
+				else
+				{
+					p_output.m_v3Diffuse += l_output.m_v3Diffuse * l_spotFactor;
+					p_output.m_v3Specular += l_output.m_v3Specular * l_spotFactor;
 				}
 			}
 			FI;

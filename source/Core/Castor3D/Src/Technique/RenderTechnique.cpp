@@ -541,10 +541,31 @@ namespace Castor3D
 
 #if 1
 
-			if ( !l_depthMaps.empty() )
+			if ( !l_shadowMaps.empty() )
 			{
-				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetDimensions();
-				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture(), 0u );
+				auto l_it = l_shadowMaps.begin();
+				auto & l_depthMap = l_it->second->GetShadowMap();
+				auto l_size = l_depthMap.GetTexture()->GetDimensions();
+				auto l_lightNode = l_it->first->GetParent();
+
+				switch ( l_depthMap.GetType() )
+				{
+				case TextureType::TwoDimensions:
+					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
+					break;
+
+				case TextureType::TwoDimensionsArray:
+					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
+					break;
+
+				case TextureType::Cube:
+					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
+					break;
+
+				case TextureType::CubeArray:
+					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
+					break;
+				}
 			}
 
 #endif

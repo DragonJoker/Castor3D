@@ -102,6 +102,71 @@ namespace GLSL
 		return l_return;
 	}
 
+	Int textureSize( Sampler1D const & p_sampler, Int const p_lod )
+	{
+		return WriteFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( Sampler2D const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec3 textureSize( Sampler3D const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( SamplerCube const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( Sampler1DArray const & p_sampler, Int const p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec3 textureSize( Sampler2DArray const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec3 textureSize( SamplerCubeArray const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Int textureSize( Sampler1DShadow const & p_sampler, Int const p_lod )
+	{
+		return WriteFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( Sampler2DShadow const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( SamplerCubeShadow const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec2 textureSize( Sampler1DArrayShadow const & p_sampler, Int const p_lod )
+	{
+		return WriteFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec3 textureSize( Sampler2DArrayShadow const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	IVec3 textureSize( SamplerCubeArrayShadow const & p_sampler, Int const & p_lod )
+	{
+		return WriteFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
 	Vec4 texture( Sampler1D const & p_sampler, Float const & p_value )
 	{
 		return p_sampler.m_writer->Texture( p_sampler, p_value );
@@ -430,6 +495,71 @@ namespace GLSL
 	Float fract( Type const & p_value )
 	{
 		return WriteFunctionCall< Float >( p_value.m_writer, cuT( "fract" ), p_value );
+	}
+
+	Optional< Int > textureSize( Optional< Sampler1D > const & p_sampler, Int const p_lod )
+	{
+		return WriteOptionalFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< Sampler2D > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec3 > textureSize( Optional< Sampler3D > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< SamplerCube > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< Sampler1DArray > const & p_sampler, Int const p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec3 > textureSize( Optional< Sampler2DArray > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec3 > textureSize( Optional< SamplerCubeArray > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< Int > textureSize( Optional< Sampler1DShadow > const & p_sampler, Int const p_lod )
+	{
+		return WriteOptionalFunctionCall< Int >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< Sampler2DShadow > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< SamplerCubeShadow > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec2 > textureSize( Optional< Sampler1DArrayShadow > const & p_sampler, Int const p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec2 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec3 > textureSize( Optional< Sampler2DArrayShadow > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
+	}
+
+	Optional< IVec3 > textureSize( Optional< SamplerCubeArrayShadow > const & p_sampler, Int const & p_lod )
+	{
+		return WriteOptionalFunctionCall< IVec3 >( p_sampler.m_writer, cuT( "textureSize" ), p_sampler, p_lod );
 	}
 
 	Optional< Vec4 > texture( Optional< Sampler1D > const & p_sampler, Float const & p_value )

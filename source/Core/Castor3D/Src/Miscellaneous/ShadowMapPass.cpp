@@ -302,7 +302,7 @@ namespace Castor3D
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::None );
-			l_rsState.SetDepthBiasFactor( 4.0_r );
+			l_rsState.SetDepthBiasFactor( 20.0_r );
 			l_rsState.SetDepthBiasUnits( 20.0_r );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
@@ -321,7 +321,7 @@ namespace Castor3D
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::None );
-			l_rsState.SetDepthBiasFactor( 4.0_r );
+			l_rsState.SetDepthBiasFactor( 20.0_r );
 			l_rsState.SetDepthBiasUnits( 20.0_r );
 			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}

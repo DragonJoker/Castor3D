@@ -83,6 +83,7 @@ namespace Castor3D
 		l_orientation.transform( l_front, l_front );
 		l_orientation.transform( l_up, l_up );
 		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
+		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
 	}
 
 	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
@@ -99,7 +100,7 @@ namespace Castor3D
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 		DoBindComponent( l_front, p_index, l_offset, p_texture );
 		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );
-		DoBindComponent( m_viewport->GetProjection() * m_lightSpace, p_index, l_offset, p_texture );
+		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 	}
 
 	void SpotLight::SetPosition( Castor::Point3r const & p_position )
