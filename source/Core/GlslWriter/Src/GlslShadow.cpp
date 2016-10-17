@@ -15,7 +15,7 @@ namespace GLSL
 	void Shadow::Declare( ShadowType p_type )
 	{
 		auto c3d_mapShadow2D = m_writer.GetUniform< Sampler2DArrayShadow >( MapShadow2D );
-		auto c3d_mapShadowCube = m_writer.GetUniform< SamplerCube >( MapShadowCube, 10u );
+		auto c3d_mapShadowCube = m_writer.GetUniform< SamplerCube >( MapShadowCube, 4u );
 
 		if ( p_type == ShadowType::Poisson || p_type == ShadowType::StratifiedPoisson )
 		{
@@ -95,7 +95,7 @@ namespace GLSL
 	{
 		auto l_compute = [this, &p_type]( Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index )
 		{
-			auto c3d_mapShadowCube = m_writer.GetBuiltin< SamplerCube >( Shadow::MapShadowCube, 10u );
+			auto c3d_mapShadowCube = m_writer.GetBuiltin< SamplerCube >( Shadow::MapShadowCube, 4u );
 			auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 			auto l_visibility = m_writer.GetLocale< Float >( cuT( "l_visibility" ), Float( 1 ) );
 

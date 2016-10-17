@@ -177,7 +177,7 @@ namespace Castor3D
 				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
 			{
 				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel, 10 );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel, 4u );
 			}
 		}
 
@@ -186,30 +186,20 @@ namespace Castor3D
 			if ( !p_depthMaps.empty() )
 			{
 				auto l_index = p_pipeline.GetTexturesCount() + 1;
-				{
-					auto & l_variable = p_pipeline.GetSpotShadowMapsVariable();
-					auto l_offset = 0u;
+				auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
+				auto & l_point = p_pipeline.GetPointShadowMapsVariable();
 
-					for ( auto & l_depthMap : p_depthMaps )
+				for ( auto & l_depthMap : p_depthMaps )
+				{
+					if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
 					{
-						if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_variable.SetValue( l_index++ );
-						}
+						l_depthMap.get().SetIndex( l_index );
+						l_spot.SetValue( l_index++ );
 					}
-				}
-				{
-					auto & l_variable = p_pipeline.GetPointShadowMapsVariable();
-					auto l_offset = 0u;
-
-					for ( auto & l_depthMap : p_depthMaps )
+					else if ( l_depthMap.get().GetType() == TextureType::Cube )
 					{
-						if ( l_depthMap.get().GetType() == TextureType::Cube )
-						{
-							l_depthMap.get().SetIndex( l_index );
-							l_variable.SetValue( l_index++, l_offset++ );
-						}
+						l_depthMap.get().SetIndex( l_index );
+						l_point.SetValue( l_index++ );
 					}
 				}
 			}
@@ -385,6 +375,15 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
+		, m_pointShadowMaps
+		{
+			{
+				TextureUnit{ *p_renderTarget.GetEngine() },
+				TextureUnit{ *p_renderTarget.GetEngine() },
+				TextureUnit{ *p_renderTarget.GetEngine() },
+				TextureUnit{ *p_renderTarget.GetEngine() }
+			}
+		}
 	{
 	}
 
@@ -419,6 +418,11 @@ namespace Castor3D
 				m_initialised = DoInitialiseSpotShadowMap( Size{ 1024, 1024 } );
 			}
 
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialisePointShadowMap( Size{ 512, 512 } );
+			}
+
 			for ( auto & l_it : m_scenes )
 			{
 				for ( auto & l_spec: l_it.second )
@@ -436,6 +440,7 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		DoCleanupPointShadowMap();
 		DoCleanupSpotShadowMap();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
@@ -483,6 +488,10 @@ namespace Castor3D
 
 				switch ( p_light.GetLightType() )
 				{
+				case LightType::Point:
+					l_unit = &m_pointShadowMaps[0u];
+					break;
+
 				case LightType::Spot:
 					l_unit = &m_spotShadowMap;
 					break;
@@ -508,11 +517,20 @@ namespace Castor3D
 
 		m_renderSystem.PushScene( &p_scene );
 		DepthMapArray l_depthMaps;
-		l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
 
-		for ( auto & l_shadowMap : l_shadowMaps )
+		if ( p_scene.HasShadows() )
 		{
-			l_shadowMap.second->Render();
+			l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
+
+			for ( auto & l_shadowMap : l_shadowMaps )
+			{
+				l_shadowMap.second->Render();
+
+				if ( l_shadowMap.first->GetLightType() != LightType::Spot )
+				{
+					l_depthMaps.push_back( std::ref( l_shadowMap.second->GetShadowMap() ) );
+				}
+			}
 		}
 
 		if ( DoBeginRender( p_scene, p_camera ) )
@@ -1121,8 +1139,46 @@ namespace Castor3D
 		return m_spotShadowMap.Initialise();
 	}
 
+	bool RenderTechnique::DoInitialisePointShadowMap( Size const & p_size )
+	{
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		bool l_return{ true };
+
+		for ( auto & l_shadowMap : m_pointShadowMaps )
+		{
+			if ( l_return )
+			{
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+				l_shadowMap.SetTexture( l_texture );
+				l_shadowMap.SetSampler( l_sampler );
+
+				for ( auto & l_image : *l_texture )
+				{
+					l_image->InitialiseSource();
+				}
+
+				l_return = l_shadowMap.Initialise();
+			}
+		}
+
+		return l_return;
+	}
+
 	void RenderTechnique::DoCleanupSpotShadowMap()
 	{
 		m_spotShadowMap.Cleanup();
+	}
+
+	void RenderTechnique::DoCleanupPointShadowMap()
+	{
+		for ( auto & l_shadowMap : m_pointShadowMaps )
+		{
+			l_shadowMap.Cleanup();
+		}
 	}
 }

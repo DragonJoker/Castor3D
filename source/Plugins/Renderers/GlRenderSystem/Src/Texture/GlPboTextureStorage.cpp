@@ -68,7 +68,12 @@ namespace GlRender
 			break;
 
 		case eGL_TEXTURE_STORAGE_CUBE_MAP:
-			l_storage.GetOpenGl().TexImage2D( l_storage.GetGlType(), 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage2D( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ, 0, l_format.Internal, l_size, 0, l_format.Format, l_format.Type, nullptr );
 			break;
 
 		case eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY:

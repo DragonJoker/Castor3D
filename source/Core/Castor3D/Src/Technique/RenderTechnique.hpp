@@ -479,11 +479,27 @@ namespace Castor3D
 		bool DoInitialiseSpotShadowMap( Castor::Size const & p_size );
 		/**
 		 *\~english
+		 *\brief		Initialises the texture array used for point lights shadow mapping.
+		 *\param[in]	p_size	The texture size.
+		 *\~french
+		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
+		 *\param[in]	p_size	Les dimensions de la texture.
+		 */
+		bool DoInitialisePointShadowMap( Castor::Size const & p_size );
+		/**
+		 *\~english
 		 *\brief		Cleans up the texture array used for spot lights shadow mapping.
 		 *\~french
 		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
 		 */
 		void DoCleanupSpotShadowMap();
+		/**
+		 *\~english
+		 *\brief		Cleans up the texture array used for point lights shadow mapping.
+		 *\~french
+		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
+		 */
+		void DoCleanupPointShadowMap();
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
@@ -643,6 +659,9 @@ namespace Castor3D
 		//!\~english	The shadow map texture used for spot lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type spot.
 		TextureUnit m_spotShadowMap;
+		//!\~english	The shadow map texture used for pont lights.
+		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
+		std::array< TextureUnit, 4u > m_pointShadowMaps;
 	};
 }
 

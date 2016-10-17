@@ -73,57 +73,19 @@ namespace Castor3D
 			m_cameraNodes[i] = l_node;
 		}
 
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( m_light.GetName() + cuT( "_PointShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		auto l_texture = m_shadowMap.GetTexture();
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::L32F, p_size );
-		m_shadowMap.SetTexture( l_texture );
-		m_shadowMap.SetSampler( l_sampler );
-
-		for ( auto & l_image : *l_texture )
+		for ( size_t i = size_t( CubeMapFace::PositiveX ); i < size_t( CubeMapFace::Count ); ++i )
 		{
-			l_image->InitialiseSource();
-		}
-
-		auto l_return = m_shadowMap.Initialise();
-
-		if ( l_return )
-		{
-			m_depthBuffer = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
-			m_depthBuffer->GetImage().InitialiseSource();
-			l_return = m_depthBuffer->Initialise();
-		}
-
-		if ( l_return )
-		{
-			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-
-			if ( m_frameBuffer->Bind( FrameBufferMode::Config ) )
-			{
-				m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, m_depthBuffer->GetType() );
-				l_return = m_frameBuffer->IsComplete();
-				m_frameBuffer->Unbind();
-			}
-		}
-
-		if ( l_return )
-		{
-			for ( size_t i = size_t( CubeMapFace::PositiveX ); i < size_t( CubeMapFace::Count ); ++i )
-			{
-				m_cubeAttachs[i] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i ) );
-				m_cubeAttachs[i]->SetTarget( l_texture->GetType() );
-			}
+			m_cubeAttachs[i] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i ) );
+			m_cubeAttachs[i]->SetTarget( l_texture->GetType() );
 		}
 
 		m_onNodeChanged = m_light.GetParent()->RegisterObject( std::bind( &ShadowMapPassPoint::OnNodeChanged, this, std::placeholders::_1 ) );
 		OnNodeChanged( *m_light.GetParent() );
 		constexpr float l_component = std::numeric_limits< float >::max();
 		m_frameBuffer->SetClearColour( l_component, l_component, l_component, l_component );
-		return l_return;
+		return true;
 	}
 
 	void ShadowMapPassPoint::DoCleanup()
@@ -141,14 +103,6 @@ namespace Castor3D
 		{
 			l_attach.reset();
 		}
-
-		m_frameBuffer->Bind( FrameBufferMode::Config );
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_depthAttach.reset();
-
-		m_depthBuffer->Cleanup();
-		m_depthBuffer.reset();
 
 		m_shadowMap.Cleanup();
 
@@ -209,7 +163,7 @@ namespace Castor3D
 
 			if ( m_frameBuffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw ) )
 			{
-				l_attach->Attach( AttachmentPoint::Colour, 0, m_frameBuffer );
+				l_attach->Attach( AttachmentPoint::Depth, 0, m_frameBuffer );
 				m_frameBuffer->SetDrawBuffer( l_attach );
 				m_frameBuffer->Clear();
 				auto & l_nodes = m_renderQueue.GetRenderNodes( l_camera, m_scene );

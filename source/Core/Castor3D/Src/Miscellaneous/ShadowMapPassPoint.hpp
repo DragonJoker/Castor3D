@@ -117,12 +117,6 @@ namespace Castor3D
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
 		uint32_t m_onNodeChanged{ 0 };
-		//!\~english	The depth buffer.
-		//!\~french		Le tampon de profondeur.
-		TextureLayoutSPtr m_depthBuffer;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon de profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
 		//!\~english	The attach between cube textures and main frame buffer.
 		//!\~french		L'attache entre les texture du cube et le tampon principal.
 		std::array< TextureAttachmentSPtr, size_t( CubeMapFace::Count ) > m_cubeAttachs;
