@@ -177,7 +177,7 @@ namespace Castor3D
 				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
 			{
 				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel, 4u );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel );
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace Castor3D
 						l_depthMap.get().SetIndex( l_index );
 						l_spot.SetValue( l_index++ );
 					}
-					else if ( l_depthMap.get().GetType() == TextureType::Cube )
+					else if ( l_depthMap.get().GetType() == TextureType::CubeArray )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_point.SetValue( l_index++ );
@@ -375,15 +375,7 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
-		, m_pointShadowMaps
-		{
-			{
-				TextureUnit{ *p_renderTarget.GetEngine() },
-				TextureUnit{ *p_renderTarget.GetEngine() },
-				TextureUnit{ *p_renderTarget.GetEngine() },
-				TextureUnit{ *p_renderTarget.GetEngine() }
-			}
-		}
+		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -489,7 +481,7 @@ namespace Castor3D
 				switch ( p_light.GetLightType() )
 				{
 				case LightType::Point:
-					l_unit = &m_pointShadowMaps[0u];
+					l_unit = &m_pointShadowMap;
 					break;
 
 				case LightType::Spot:
@@ -521,15 +513,11 @@ namespace Castor3D
 		if ( p_scene.HasShadows() )
 		{
 			l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
+			l_depthMaps.push_back( std::ref( m_pointShadowMap ) );
 
 			for ( auto & l_shadowMap : l_shadowMaps )
 			{
 				l_shadowMap.second->Render();
-
-				if ( l_shadowMap.first->GetLightType() != LightType::Spot )
-				{
-					l_depthMaps.push_back( std::ref( l_shadowMap.second->GetShadowMap() ) );
-				}
 			}
 		}
 
@@ -1148,7 +1136,7 @@ namespace Castor3D
 		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), 10u } );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
 		m_spotShadowMap.SetTexture( l_texture );
 		m_spotShadowMap.SetSampler( l_sampler );
 
@@ -1168,26 +1156,20 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		//l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
+		//l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
 		bool l_return{ true };
 
-		for ( auto & l_shadowMap : m_pointShadowMaps )
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::CubeArray, AccessType::None, AccessType::ReadWrite, PixelFormat::L32F, Point3ui{ p_size.width(), p_size.height(), GLSL::PointShadowMapCount } );
+		m_pointShadowMap.SetTexture( l_texture );
+		m_pointShadowMap.SetSampler( l_sampler );
+
+		for ( auto & l_image : *l_texture )
 		{
-			if ( l_return )
-			{
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
-				l_shadowMap.SetTexture( l_texture );
-				l_shadowMap.SetSampler( l_sampler );
-
-				for ( auto & l_image : *l_texture )
-				{
-					l_image->InitialiseSource();
-				}
-
-				l_return = l_shadowMap.Initialise();
-			}
+			l_image->InitialiseSource();
 		}
 
-		return l_return;
+		return m_pointShadowMap.Initialise();
 	}
 
 	void RenderTechnique::DoCleanupSpotShadowMap()
@@ -1197,9 +1179,6 @@ namespace Castor3D
 
 	void RenderTechnique::DoCleanupPointShadowMap()
 	{
-		for ( auto & l_shadowMap : m_pointShadowMaps )
-		{
-			l_shadowMap.Cleanup();
-		}
+		m_pointShadowMap.Cleanup();
 	}
 }

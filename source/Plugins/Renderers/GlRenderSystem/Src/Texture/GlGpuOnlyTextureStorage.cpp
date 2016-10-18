@@ -51,7 +51,7 @@ namespace GlRender
 			break;
 
 		case eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY:
-			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 1, l_format.Internal, l_size.width(), l_size.height() / p_storage.GetOwner()->GetDepth(), p_storage.GetOwner()->GetDepth() * 6, 0, l_format.Format, l_format.Type, nullptr );
+			l_storage.GetOpenGl().TexImage3D( l_storage.GetGlType(), 0, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() * 6, 0, l_format.Format, l_format.Type, nullptr );
 			break;
 		}
 	}

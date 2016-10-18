@@ -138,11 +138,11 @@ namespace GuiCommon
 
 						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
 						{
-							l_it.Blue() = *l_line;
+							l_it.Red() = *l_line;
 							l_line++;
 							l_it.Green() = *l_line;
 							l_line++;
-							l_it.Red() = *l_line;
+							l_it.Blue() = *l_line;
 							l_line++;
 							// Don't write the alpha.
 							l_line++;
@@ -169,11 +169,11 @@ namespace GuiCommon
 
 						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
 						{
-							l_it.Blue() = *l_buffer;
+							l_it.Red() = *l_buffer;
 							l_buffer++;
 							l_it.Green() = *l_buffer;
 							l_buffer++;
-							l_it.Red() = *l_buffer;
+							l_it.Blue() = *l_buffer;
 							l_buffer++;
 							// Don't write the alpha.
 							l_buffer++;

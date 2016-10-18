@@ -661,7 +661,7 @@ namespace Castor3D
 		TextureUnit m_spotShadowMap;
 		//!\~english	The shadow map texture used for pont lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
-		std::array< TextureUnit, 4u > m_pointShadowMaps;
+		TextureUnit m_pointShadowMap;
 	};
 }
 

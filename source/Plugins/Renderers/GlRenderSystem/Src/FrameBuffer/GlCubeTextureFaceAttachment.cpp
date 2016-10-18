@@ -30,7 +30,18 @@ namespace GlRender
 	{
 		m_glAttachmentPoint = eGL_TEXTURE_ATTACHMENT( GetOpenGl().Get( GetAttachmentPoint() ) + GetAttachmentIndex() );
 		auto l_texture = std::static_pointer_cast< GlTexture >( GetTexture() );
-		bool l_return = GetOpenGl().FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+		bool l_return{ false };
+
+		switch ( l_texture->GetType() )
+		{
+		case TextureType::Cube:
+			GetOpenGl().FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			break;
+
+		case TextureType::CubeArray:
+			l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( m_glFace - eGL_TEXDIM_CUBE_FACE_POSX ) );
+			break;
+		}
 
 		if ( l_return && m_glStatus == eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
 		{

@@ -93,6 +93,9 @@ namespace GLSL
 	struct Sampler1DArrayShadow;
 	struct Sampler2DArrayShadow;
 	struct SamplerCubeArrayShadow;
+
+	constexpr uint32_t SpotShadowMapCount = 10u;
+	constexpr uint32_t PointShadowMapCount = 6u;
 }
 
 #endif

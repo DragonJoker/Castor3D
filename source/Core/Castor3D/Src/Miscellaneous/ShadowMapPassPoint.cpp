@@ -50,12 +50,12 @@ namespace Castor3D
 		std::array< Quaternion, size_t( CubeMapFace::Count ) > const l_orientations
 		{
 			{
-				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 90 ), Angle::from_degrees( 0 ) },
-				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( -90 ), Angle::from_degrees( 0 ) },
-				Quaternion{ Angle::from_degrees( 90 ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) },
+				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 90 ), Angle::from_degrees( 0 ) } * Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 180 ) },
+				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( -90 ), Angle::from_degrees( 0 ) } * Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 180 ) },
 				Quaternion{ Angle::from_degrees( -90 ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) },
-				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) },
-				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 180 ), Angle::from_degrees( 0 ) },
+				Quaternion{ Angle::from_degrees( 90 ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) },
+				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) } * Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 180 ) },
+				Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 180 ), Angle::from_degrees( 0 ) } * Quaternion{ Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( 180 ) },
 			}
 		};
 
@@ -79,6 +79,7 @@ namespace Castor3D
 		{
 			m_cubeAttachs[i] = m_frameBuffer->CreateAttachment( l_texture, CubeMapFace( i ) );
 			m_cubeAttachs[i]->SetTarget( l_texture->GetType() );
+			m_cubeAttachs[i]->SetLayer( m_index );
 		}
 
 		m_onNodeChanged = m_light.GetParent()->RegisterObject( std::bind( &ShadowMapPassPoint::OnNodeChanged, this, std::placeholders::_1 ) );
@@ -163,7 +164,7 @@ namespace Castor3D
 
 			if ( m_frameBuffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw ) )
 			{
-				l_attach->Attach( AttachmentPoint::Depth, 0, m_frameBuffer );
+				l_attach->Attach( AttachmentPoint::Colour, 0, m_frameBuffer );
 				m_frameBuffer->SetDrawBuffer( l_attach );
 				m_frameBuffer->Clear();
 				auto & l_nodes = m_renderQueue.GetRenderNodes( l_camera, m_scene );
