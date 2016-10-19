@@ -5,6 +5,7 @@
 #include "FrameBuffer/GlDepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/GlRenderBufferAttachment.hpp"
 #include "FrameBuffer/GlTextureAttachment.hpp"
+#include "FrameBuffer/GlCubeTextureFaceAttachment.hpp"
 #include "Texture/GlTexture.hpp"
 
 using namespace Castor3D;
@@ -132,9 +133,14 @@ namespace GlRender
 		return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
 	}
 
+	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	{
+		return std::make_shared< GlCubeTextureFaceAttachment >( GetOpenGl(), p_texture, p_face );
+	}
+
 	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )
 	{
-		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
+		GetOpenGl().ClearColor( m_redClear, m_greenClear, m_blueClear, m_alphaClear );
 		GetOpenGl().ClearDepth( 1.0 );
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}

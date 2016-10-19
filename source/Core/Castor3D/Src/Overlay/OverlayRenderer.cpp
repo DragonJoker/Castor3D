@@ -623,12 +623,12 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
-				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+				auto l_v4Ambient = l_writer.GetLocale( cuT( "l_v4Ambient" ), c3d_v4MatAmbient );
+				auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::Text ) )
 				{
-					l_fAlpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).SWIZZLE_R;
+					l_fAlpha *= texture( c3d_mapText, vec2( vtx_text.x(), vtx_text.y() ) ).r();
 				}
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::Colour ) )
@@ -638,7 +638,7 @@ namespace Castor3D
 
 				if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
 				{
-					l_fAlpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).SWIZZLE_R;
+					l_fAlpha *= texture( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
 				}
 
 				pxl_v4FragColor = vec4( l_v4Ambient.xyz(), l_fAlpha );

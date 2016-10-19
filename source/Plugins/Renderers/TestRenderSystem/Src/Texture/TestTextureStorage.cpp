@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace TestRender
 {
-	TestTextureStorage::TestTextureStorage( TestRenderSystem & p_renderSystem, TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
-		: TextureStorage{ p_type, p_image, p_cpuAccess, p_gpuAccess }
+	TestTextureStorage::TestTextureStorage( TestRenderSystem & p_renderSystem, TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess )
+		: TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
 	{
 	}
 
@@ -34,6 +34,16 @@ namespace TestRender
 	}
 
 	void TestTextureStorage::Unlock( bool p_modified )
+	{
+	}
+
+	uint8_t * TestTextureStorage::Lock( AccessType p_lock, uint32_t p_index )
+	{
+		ENSURE( CheckFlag( m_cpuAccess, p_lock ) );
+		return nullptr;
+	}
+
+	void TestTextureStorage::Unlock( bool p_modified, uint32_t p_index )
 	{
 	}
 

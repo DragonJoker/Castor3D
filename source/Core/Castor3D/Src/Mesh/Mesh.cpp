@@ -138,36 +138,12 @@ namespace Castor3D
 		for ( auto l_submesh : m_submeshes )
 		{
 			CubeBox const & l_box = l_submesh->GetCollisionBox();
-
-			if ( l_box.GetMin()[0] < l_min[0] )
-			{
-				l_min[0] = l_box.GetMin()[0];
-			}
-
-			if ( l_box.GetMin()[1] < l_min[1] )
-			{
-				l_min[1] = l_box.GetMin()[1];
-			}
-
-			if ( l_box.GetMin()[2] < l_min[2] )
-			{
-				l_min[2] = l_box.GetMin()[2];
-			}
-
-			if ( l_box.GetMax()[0] > l_max[0] )
-			{
-				l_max[0] = l_box.GetMax()[0];
-			}
-
-			if ( l_box.GetMax()[1] > l_max[1] )
-			{
-				l_max[1] = l_box.GetMax()[1];
-			}
-
-			if ( l_box.GetMax()[2] > l_max[2] )
-			{
-				l_max[2] = l_box.GetMax()[2];
-			}
+			l_max[0] = std::max( l_box.GetMax()[0], l_max[0] );
+			l_max[1] = std::max( l_box.GetMax()[1], l_max[1] );
+			l_max[2] = std::max( l_box.GetMax()[2], l_max[2] );
+			l_min[0] = std::min( l_box.GetMin()[0], l_min[0] );
+			l_min[1] = std::min( l_box.GetMin()[1], l_min[1] );
+			l_min[2] = std::min( l_box.GetMin()[2], l_min[2] );
 		}
 
 		m_box.Load( l_min, l_max );

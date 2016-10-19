@@ -205,9 +205,9 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le statut de projection d'ombres.
 		 */
-		inline bool CastShadows()const
+		inline bool IsShadowCaster()const
 		{
-			return m_castShadows;
+			return m_shadowCaster;
 		}
 		/**
 		 *\~english
@@ -217,9 +217,9 @@ namespace Castor3D
 		 *\brief		Définit le statut de projection d'ombres.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void CastShadows( bool p_value )
+		inline void SetShadowCaster( bool p_value )
 		{
-			m_castShadows = p_value;
+			m_shadowCaster = p_value;
 		}
 
 	protected:
@@ -240,7 +240,7 @@ namespace Castor3D
 		bool m_visible{ true };
 		//!\~english	Tells if the geometry casts shadows.
 		//!\~french		Dit si la géométrie projette des ombres.
-		bool m_castShadows{ true };
+		bool m_shadowCaster{ true };
 		//!\~english	The submeshes materials.
 		//!\~french		Les matériaux des sous maillages.
 		std::map< Submesh *, MaterialWPtr > m_submeshesMaterials;

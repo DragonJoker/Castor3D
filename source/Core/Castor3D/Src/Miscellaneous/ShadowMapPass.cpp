@@ -85,19 +85,13 @@ namespace Castor3D
 		}
 	}
 
-	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light )
+	ShadowMapPass::ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: RenderPass{ ShadowMap, p_engine }
 		, m_light{ p_light }
 		, m_scene{ p_scene }
-		, m_depthTexture{ p_engine }
+		, m_shadowMap{ p_shadowMap }
+		, m_index{ p_index }
 	{
-		m_depthTexture.SetTexture( GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite ) );
-		auto l_sampler = GetEngine()->GetSamplerCache().Add( p_light.GetName() + cuT( "_ShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::GEqual );
-		m_depthTexture.SetSampler( l_sampler );
 		m_renderQueue.AddScene( m_scene );
 	}
 
@@ -113,54 +107,16 @@ namespace Castor3D
 		if ( !m_frameBuffer )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-			auto l_texture = m_depthTexture.GetTexture();
-			l_texture->GetImage().SetSource( l_size, PixelFormat::D32F );
-			auto l_size = l_texture->GetImage().GetDimensions();
-
-			l_return = l_texture->Create();
-
-			if ( l_return )
-			{
-				l_return = l_texture->Initialise();
-
-				if ( !l_return )
-				{
-					l_texture->Destroy();
-				}
-			}
-
-			if ( l_return )
-			{
-				m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
-				l_return = m_frameBuffer->Create();
-			}
+			l_return = m_frameBuffer->Create();
 
 			if ( l_return )
 			{
 				l_return = m_frameBuffer->Initialise( l_size );
-
-				if ( l_return && m_frameBuffer->Bind( FrameBufferMode::Config ) )
-				{
-					m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, l_texture->GetType() );
-					l_return = m_frameBuffer->IsComplete();
-					m_frameBuffer->Unbind();
-				}
-				else
-				{
-					m_frameBuffer->Destroy();
-				}
 			}
 
 			if ( l_return )
 			{
-				Viewport l_viewport{ *GetEngine() };
-				m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
-													   , m_scene
-													   , m_light.GetParent()
-													   , std::move( l_viewport ) );
-				m_camera->Resize( l_size );
-				m_light.SetViewport( m_camera->GetViewport() );
+				l_return = DoInitialise( l_size );
 			}
 		}
 
@@ -171,18 +127,10 @@ namespace Castor3D
 	{
 		if ( m_frameBuffer )
 		{
-			m_camera->Detach();
-			m_camera.reset();
+			DoCleanup();
 
-			m_frameBuffer->Bind( FrameBufferMode::Config );
-			m_frameBuffer->DetachAll();
-			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
-			m_depthTexture.Cleanup();
-
 			m_frameBuffer->Destroy();
-
-			m_depthAttach.reset();
 			m_frameBuffer.reset();
 		}
 
@@ -196,23 +144,12 @@ namespace Castor3D
 	
 	void ShadowMapPass::Update()
 	{
-		auto l_size = m_depthTexture.GetTexture()->GetImage().GetDimensions();
-		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
-		m_camera->Update();
-		m_renderQueue.Prepare( *m_camera, m_scene );
+		DoUpdate();
 	}
 
 	void ShadowMapPass::Render()
 	{
-		if ( m_camera && m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
-		{
-			m_frameBuffer->Clear();
-			auto & l_nodes = m_renderQueue.GetRenderNodes( *m_camera, m_scene );
-			m_camera->Apply();
-			DoRenderOpaqueNodes( l_nodes, *m_camera );
-			DoRenderTransparentNodes( l_nodes, *m_camera );
-			m_frameBuffer->Unbind();
-		}
+		DoRender();
 	}
 
 	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode( Pass & p_pass
@@ -335,25 +272,6 @@ namespace Castor3D
 		DoRenderNonInstanced( p_scene, p_camera, p_nodes );
 	}
 
-	String ShadowMapPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
-	{
-		using namespace GLSL;
-		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
-
-		// Fragment Intputs
-		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
-
-		// Fragment Outputs
-		auto pxl_fFragDepth( l_writer.GetFragData< Float >( cuT( "pxl_fFragDepth" ), 0 ) );
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-		{
-			pxl_fFragDepth = gl_FragCoord.z();
-		} );
-
-		return l_writer.Finalise();
-	}
-
 	String ShadowMapPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
@@ -381,10 +299,9 @@ namespace Castor3D
 
 		if ( l_it == m_backOpaquePipelines.end() )
 		{
+			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::None );
-			l_rsState.SetDepthBiasFactor( 4.0_r );
-			l_rsState.SetDepthBiasUnits( 20.0_r );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}
@@ -399,10 +316,9 @@ namespace Castor3D
 
 		if ( l_it == m_backTransparentPipelines.end() )
 		{
+			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::None );
-			l_rsState.SetDepthBiasFactor( 4.0_r );
-			l_rsState.SetDepthBiasUnits( 20.0_r );
 			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}

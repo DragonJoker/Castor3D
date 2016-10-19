@@ -91,13 +91,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_lightType	The light category type.
-		 *\param[in]	p_viewport	The shadow map render viewport.
+		 *\param[in]	p_light		The parent Light.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_lightType	Le type de catégorie de lumière.
-		 *\param[in]	p_viewport	Le viewport utilisé pour le rrendu de la map d'ombres.
+		 *\param[in]	p_light		La Light parente.
 		 */
-		C3D_API explicit LightCategory( LightType p_lightType );
+		C3D_API explicit LightCategory( LightType p_lightType, Light & p_light );
 
 	public:
 		/**
@@ -210,7 +210,7 @@ namespace Castor3D
 		 */
 		inline LightType GetLightType()const
 		{
-			return m_eLightType;
+			return m_lightType;
 		}
 		/**
 		 *\~english
@@ -290,13 +290,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The Light space view matrix.
+		 *\brief		Retrieves the parent light
+		 *\return		The value
 		 *\~french
-		 *\return		La matrice vue dans l'espace lumière.
+		 *\brief		Récupère la lumière parente
+		 *\return		La valeur
 		 */
-		inline Castor::Matrix4x4f const & GetLightSpaceView()const
+		inline Light const & GetLight()const
 		{
-			return m_lightSpace;
+			return m_light;
 		}
 		/**
 		 *\~english
@@ -306,33 +308,9 @@ namespace Castor3D
 		 *\brief		Récupère la lumière parente
 		 *\return		La valeur
 		 */
-		inline Light * GetLight()const
+		inline Light & GetLight()
 		{
-			return m_pLight;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the parent light
-		 *\return		The value
-		 *\~french
-		 *\brief		Définit la lumière parente
-		 *\return		La valeur
-		 */
-		inline void SetLight( Light * val )
-		{
-			m_pLight = val;
-		}
-		/**
-		 *\~english
-		 *\return		Sets the shadow map rendering viewport.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\return		Définit le viewport de rendu de shadow map.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetViewport( Viewport & p_value )
-		{
-			m_viewport = &p_value;
+			return m_light;
 		}
 
 	protected:
@@ -385,21 +363,13 @@ namespace Castor3D
 		void DoBindComponent( Castor::Coords4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 
-	protected:
-		//!\~english	The light source space transformation matrix.
-		//!\~french		La matrice de transformation vers l'espace de la source lumineuse.
-		mutable Castor::Matrix4x4f m_lightSpace;
-		//!\~english	The shadow map rendering viewport.
-		//\~french		Le viewport de rendu de la mp d'ombres.
-		Viewport * m_viewport;
-
 	private:
 		//!\~english	The light type.
 		//!\~french		Le type de lumière.
-		LightType m_eLightType;
+		LightType m_lightType;
 		//!\~english	The parent light.
 		//!\~french		La lumière parente.
-		Light * m_pLight{ nullptr };
+		Light & m_light;
 		//!\~english	The colour.
 		//!\~french		La couleur.
 		Castor::Point3f m_colour{ 1.0, 1.0, 1.0 };

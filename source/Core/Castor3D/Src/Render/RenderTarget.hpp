@@ -104,8 +104,6 @@ namespace Castor3D
 		{
 		public:
 			explicit stFRAME_BUFFER( RenderTarget & p_renderTarget );
-			bool Create();
-			void Destroy();
 			bool Initialise( uint32_t p_index, Castor::Size const & p_size );
 			void Cleanup();
 

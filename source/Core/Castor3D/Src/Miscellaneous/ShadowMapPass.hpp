@@ -49,11 +49,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_scene		The scene.
+		 *\param[in]	p_light		The light.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_scene		La scène.
+		 *\param[in]	p_light		La source lumineuse.
 		 */
-		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light );
+		C3D_API ShadowMapPass( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -100,7 +104,7 @@ namespace Castor3D
 		 */
 		C3D_API void Render();
 		/**
-		 *\~copydoc		Castor3D::RenderPass::CreateAnimatedNode
+		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
 		 */
 		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
 															   , Pipeline & p_pipeline
@@ -109,76 +113,99 @@ namespace Castor3D
 															   , AnimatedSkeletonSPtr p_skeleton
 															   , AnimatedMeshSPtr p_mesh )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::CreateStaticNode
+		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
 		 */
 		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
 														   , Pipeline & p_pipeline
 														   , Submesh & p_submesh
 														   , Geometry & p_primitive )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::CreateBillboardNode
+		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
 		 */
 		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
 														 , BillboardList & p_billboard )override;
 		/**
 		 *\~english
-		 *\return		The depth texture holding the render's result.
-		 *\~french
-		 *\return		La texture de profondeur contenant le résultat du rendu.
-		 */
-		inline TextureUnit const & GetResult()const
-		{
-			return m_depthTexture;
-		}
-		/**
+		 *\return		The shadow map.
 		 *\~english
-		 *\return		The depth texture holding the render's result.
-		 *\~french
-		 *\return		La texture de profondeur contenant le résultat du rendu.
+		 *\return		La map d'ombres.
 		 */
-		inline TextureUnit & GetResult()
+		inline TextureUnit & GetShadowMap()
 		{
-			return m_depthTexture;
-		}
-		/**
-		 *\~english
-		 *\return		The camera.
-		 *\~french
-		 *\return		La caméra.
-		 */
-		inline CameraSPtr GetCamera()const
-		{
-			return m_camera;
+			return m_shadowMap;
 		}
 
-	private:
+	protected:
 		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );
 
 	private:
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\~english
+		 *\brief		Initialises the pipeline, FBO and program.
+		 *\param		p_size	The FBO dimensions.
+		 *\return		\p true if ok.
+		 *\~french
+		 *\brief		Initialise le pipeline, le FBO et le programme.
+		 *\param		p_size	Les dimensions du FBO.
+		 *\return		\p true if ok.
+		 */
+		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function.
+		 *\~french
+		 *\brief		Fonction de nettoyage.
+		 */
+		C3D_API virtual void DoCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Update function.
+		 *\remarks		Updates the scenes render nodes, if needed.
+		 *\~french
+		 *\brief		Fonction de mise à jour.
+		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
+		 */
+		C3D_API virtual void DoUpdate() = 0;
+		/**
+		 *\~english
+		 *\brief		Render function
+		 *\param[in]	p_scene		The scene to render.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_scene		La scène à dessiner.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 */
+		C3D_API virtual void DoRender() = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the program, to add variables to it.
+		 *\param[in]	p_program	The program to update.
+		 *\~french
+		 *\brief		Met à jour le programme, en lui ajoutant des variables.
+		 *\param[in]	p_program	Le programme à mettre à jour.
+		 */
+		C3D_API virtual void DoUpdateProgram( ShaderProgram & p_program ) = 0;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
 		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderStaticSubmeshesNonInstanced
 		 */
 		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
+		 *\copydoc		Castor3D::RenderPass::DoRenderAnimatedSubmeshesNonInstanced
 		 */
 		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoRenderBillboards
+		 *\copydoc		Castor3D::RenderPass::DoRenderBillboards
 		 */
 		void DoRenderBillboards( Scene & p_scene, Camera const & p_camera, BillboardRenderNodesByPipelineMap & p_nodes );
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
-		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
-		/**
-		 *\~copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
+		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
 		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
@@ -190,48 +217,42 @@ namespace Castor3D
 		 */
 		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
 		void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
 		 */
 		void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
 		void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
 		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
 		void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
 
-	private:
+	protected:
 		//!\~english	The scene.
 		//!\~french		La scène.
 		Scene & m_scene;
 		//!\~english	The light used to generate the shadows.
 		//!\~french		La lumière utilisée pour générer les ombres.
 		Light & m_light;
-		//!\~english	The camera created from the light.
-		//!\~french		La caméra créée à partir de la lumière.
-		CameraSPtr m_camera;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
-		Castor::Matrix4x4r m_view;
-		//!\~english	The texture receiving the render.
-		//!\~french		La texture recevant le rendu.
-		TextureUnit m_depthTexture;
+		//!\~english	The shadow map texture.
+		//!\~french		La texture de mappage d'ombres.
+		TextureUnit & m_shadowMap;
+		//!\~english	The shadow map layer index.
+		//!\~french		L'index dans la texture mappage d'ombres.
+		uint32_t m_index;
 		//!\~english	The frame buffer.
 		//!\~french		Le tampon d'image.
 		FrameBufferSPtr m_frameBuffer;
-		//!\~english	The attach between depth buffer and main frame buffer.
-		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
-		TextureAttachmentSPtr m_depthAttach;
 		//!\~english	The geometry buffer.
 		//!\~french		Les tampons de géométrie.
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;

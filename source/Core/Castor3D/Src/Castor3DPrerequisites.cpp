@@ -31,7 +31,7 @@ namespace Castor3D
 			auto vtx_bitangent( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_bitangent" ) ) );
 			auto c3d_mapNormal( p_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapNormal" ) ) );
 
-			auto l_v3MapNormal = p_writer.GetLocale< Vec3 >( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
+			auto l_v3MapNormal = p_writer.GetLocale( cuT( "l_v3MapNormal" ), texture( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 			l_v3MapNormal = Float( &p_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &p_writer, 1 ), 1.0, 1.0 );
 			p_normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 		}

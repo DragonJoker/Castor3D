@@ -39,8 +39,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	PointLight::PointLight()
-		: LightCategory{ LightType::Point }
+	PointLight::PointLight( Light & p_light )
+		: LightCategory{ LightType::Point, p_light }
 	{
 	}
 
@@ -48,9 +48,9 @@ namespace Castor3D
 	{
 	}
 
-	LightCategorySPtr PointLight::Create()
+	LightCategoryUPtr PointLight::Create( Light & p_light )
 	{
-		return std::shared_ptr< PointLight >( new PointLight );
+		return std::unique_ptr< PointLight >( new PointLight{ p_light } );
 	}
 
 	void PointLight::Update( Point3r const & p_target )
@@ -64,7 +64,6 @@ namespace Castor3D
 		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
 		Point4f l_posType = GetPositionType();
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 	}
 

@@ -3,6 +3,8 @@
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
 #include "Texture/GlDirectTextureStorage.hpp"
+#include "Texture/GlGpuOnlyTextureStorage.hpp"
+#include "Texture/GlImmutableTextureStorage.hpp"
 #include "Texture/GlPboTextureStorage.hpp"
 #include "Texture/GlTboTextureStorage.hpp"
 #include "Texture/GlTextureStorage.hpp"
@@ -27,18 +29,34 @@ namespace GlRender
 	{
 	}
 
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
+		: ObjectType{ p_gl,
+					  "GlTexture",
+					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
+					}
+		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		, m_glRenderSystem{ &p_renderSystem }
+		, m_glDimension{ p_gl.Get( p_type ) }
+	{
+	}
+
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+		: ObjectType{ p_gl,
+					  "GlTexture",
+					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
+					}
+		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+		, m_glRenderSystem{ &p_renderSystem }
+		, m_glDimension{ p_gl.Get( p_type ) }
+	{
+	}
+
 	GlTexture::~GlTexture()
 	{
-	}
-
-	bool GlTexture::Create()
-	{
-		return ObjectType::Create();
-	}
-
-	void GlTexture::Destroy()
-	{
-		ObjectType::Destroy();
 	}
 
 	void GlTexture::GenerateMipmaps()const
@@ -59,6 +77,16 @@ namespace GlRender
 		}
 
 		return l_return;
+	}
+
+	bool GlTexture::DoInitialise()
+	{
+		return ObjectType::Create();
+	}
+
+	void GlTexture::DoCleanup()
+	{
+		ObjectType::Destroy();
 	}
 
 	void GlTexture::DoUnbind( uint32_t p_index )const

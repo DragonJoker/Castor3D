@@ -195,7 +195,6 @@ namespace Castor3D
 	{
 		REQUIRE( m_texture );
 		m_texture->Cleanup();
-		m_texture->Destroy();
 		m_texture.reset();
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
@@ -297,8 +296,7 @@ namespace Castor3D
 
 	bool Skybox::DoInitialiseTexture()
 	{
-		return m_texture->Create()
-			   && m_texture->Initialise();
+		return m_texture->Initialise();
 	}
 
 	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )

@@ -1,4 +1,6 @@
-﻿namespace Castor
+﻿#include "Point.hpp"
+
+namespace Castor
 {
 	template< typename T >
 	PlaneEquation< T >::PlaneEquation()

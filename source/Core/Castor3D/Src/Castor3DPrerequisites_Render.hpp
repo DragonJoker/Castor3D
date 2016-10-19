@@ -23,6 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_PREREQUISITES_RENDER_H___
 #define ___C3D_PREREQUISITES_RENDER_H___
 
+#include <Design/Factory.hpp>
+
 namespace Castor3D
 {
 	/**@name Render */
@@ -545,7 +547,6 @@ namespace Castor3D
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
-	//!\~english Multimap of RenderNodes sorted by distance.	\~french Multimap de RenderNodes triés par distance.
 	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );

@@ -69,7 +69,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			//postfx "fxaa"
+			postfx "fxaa"
 		}
 		fullscreen false
 		vsync true

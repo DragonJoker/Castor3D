@@ -1,6 +1,6 @@
 #include "Common/OpenGl.hpp"
 
-#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
 
 namespace GlRender
 {
@@ -8,15 +8,19 @@ namespace GlRender
 	GlTextureStorage< Traits >::GlTextureStorage( OpenGl & p_gl
 												  , GlRenderSystem & p_renderSystem
 												  , Castor3D::TextureStorageType p_type
-												  , Castor3D::TextureImage & p_image
+												  , Castor3D::TextureLayout & p_layout
 												  , Castor3D::AccessType p_cpuAccess
 												  , Castor3D::AccessType p_gpuAccess )
-		: Castor3D::TextureStorage{ p_type, p_image, p_cpuAccess, p_gpuAccess }
+		: Castor3D::TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
 		, Holder{ p_gl }
 		, m_glRenderSystem{ &p_renderSystem }
 		, m_glType{ p_gl.Get( p_type ) }
 		, m_impl{ *this }
 	{
+		for ( auto & l_image : p_layout )
+		{
+			m_impl.Fill( *this, *l_image );
+		}
 	}
 
 	template< typename Traits >
@@ -39,18 +43,24 @@ namespace GlRender
 	template< typename Traits >
 	uint8_t * GlTextureStorage< Traits >::Lock( Castor3D::AccessType p_lock )
 	{
-		return m_impl.Lock( *this, p_lock );
+		return m_impl.Lock( *this, p_lock, 0u );
 	}
 
 	template< typename Traits >
 	void GlTextureStorage< Traits >::Unlock( bool p_modified )
 	{
-		m_impl.Unlock( *this, p_modified );
+		m_impl.Unlock( *this, p_modified, 0u );
 	}
 
 	template< typename Traits >
-	void GlTextureStorage< Traits >::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
+	uint8_t * GlTextureStorage< Traits >::Lock( Castor3D::AccessType p_lock, uint32_t p_index )
 	{
-		m_impl.Fill( *this, p_buffer, p_size, p_format );
+		return m_impl.Lock( *this, p_lock, p_index );
+	}
+
+	template< typename Traits >
+	void GlTextureStorage< Traits >::Unlock( bool p_modified, uint32_t p_index )
+	{
+		m_impl.Unlock( *this, p_modified, p_index );
 	}
 }

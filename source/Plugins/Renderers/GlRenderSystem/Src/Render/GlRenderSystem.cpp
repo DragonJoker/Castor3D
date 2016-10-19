@@ -458,7 +458,17 @@ namespace GlRender
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
+	{
+		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+	}
+
+	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	{
+		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+	}
+
+	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
 	{
 		TextureStorageUPtr l_return;
 
@@ -469,15 +479,9 @@ namespace GlRender
 
 		if ( !l_return )
 		{
-			if ( p_image.IsStaticSource() )
+			if ( !CheckFlag( p_gpuAccess, AccessType::Write ) )
 			{
 				if ( GetOpenGl().HasExtension( ARB_texture_storage )
-					 && p_type != TextureStorageType::CubeMapPositiveX
-					 && p_type != TextureStorageType::CubeMapNegativeX
-					 && p_type != TextureStorageType::CubeMapPositiveY
-					 && p_type != TextureStorageType::CubeMapNegativeY
-					 && p_type != TextureStorageType::CubeMapPositiveZ
-					 && p_type != TextureStorageType::CubeMapNegativeZ
 					 && p_cpuAccess == AccessType::None )
 				{
 					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );

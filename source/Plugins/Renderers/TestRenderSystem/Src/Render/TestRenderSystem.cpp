@@ -85,9 +85,19 @@ namespace TestRender
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
 	{
-		return std::make_unique< TestTextureStorage >( *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+	}
+
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	{
+		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
+	}
+
+	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	{
+		return std::make_unique< TestTextureStorage >( *this, p_type, p_layout, p_cpuAccess, p_gpuAccess );
 	}
 
 	FrameBufferSPtr TestRenderSystem::CreateFrameBuffer()

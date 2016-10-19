@@ -587,7 +587,6 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
 				m_backgroundImage->Cleanup();
-				m_backgroundImage->Destroy();
 			} ) );
 		}
 
@@ -649,11 +648,10 @@ namespace Castor3D
 		try
 		{
 			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
-			l_texture->GetImage().SetSource( p_folder, p_relative );
+			l_texture->SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
 			{
-				m_backgroundImage->Create();
 				m_backgroundImage->Initialise();
 				m_backgroundImage->Bind( 0 );
 				m_backgroundImage->GenerateMipmaps();
@@ -748,7 +746,7 @@ namespace Castor3D
 
 		return GetLightCache().end() != std::find_if( GetLightCache().begin(), GetLightCache().end(), []( std::pair< String, LightSPtr > const & p_it )
 		{
-			return p_it.second->CastShadows();
+			return p_it.second->IsShadowProducer();
 		} );
 	}
 }

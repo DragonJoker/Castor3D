@@ -124,11 +124,21 @@ namespace Castor3D
 		{
 			return *m_texture;
 		}
+		/**
+		 *\~english
+		 *\return		Sets the skybox's texture.
+		 *\~french
+		 *\return		Définit la texture de la skybox.
+		 */
+		inline void SetTexture( TextureLayoutSPtr p_texture )
+		{
+			m_texture = p_texture;
+		}
 
 	private:
 		ShaderProgram & DoInitialiseShader();
-		bool DoInitialiseVertexBuffer();
 		bool DoInitialiseTexture();
+		bool DoInitialiseVertexBuffer();
 		bool DoInitialisePipeline( ShaderProgram & p_program );
 
 	private:

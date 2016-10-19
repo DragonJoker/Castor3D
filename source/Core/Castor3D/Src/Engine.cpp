@@ -6,6 +6,8 @@
 #include "Material/Material.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Miscellaneous/VersionException.hpp"
+#include "Miscellaneous/ShadowMapPassPoint.hpp"
+#include "Miscellaneous/ShadowMapPassSpot.hpp"
 #include "Overlay/DebugOverlays.hpp"
 #include "Overlay/Overlay.hpp"
 #include "Overlay/TextOverlay.hpp"
@@ -81,6 +83,9 @@ namespace Castor3D
 		};
 		std::locale::global( std::locale() );
 		Image::InitialiseImageLib();
+
+		m_shadowMapPassFactory.Register( LightType::Point, &ShadowMapPassPoint::Create );
+		m_shadowMapPassFactory.Register( LightType::Spot, &ShadowMapPassSpot::Create );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = MakeCache< FrameListener, String >(	*this

@@ -126,18 +126,6 @@ namespace Deferred
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
 		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-		uint32_t l_index{ 0u };
-
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write );
-			m_geometryPassTexAttachs[l_index] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			l_unit = std::make_shared< TextureUnit >( *GetEngine() );
-			l_unit->SetIndex( ++l_index );
-			l_unit->SetTexture( l_texture );
-			l_unit->SetSampler( GetEngine()->GetLightsSampler() );
-		}
-		
 		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
@@ -235,11 +223,6 @@ namespace Deferred
 	{
 		m_vertexBuffer->Destroy();
 
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			l_unit->Cleanup();
-		}
-
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_pipeline->Cleanup();
@@ -254,10 +237,18 @@ namespace Deferred
 	{
 		bool l_return = true;
 		
-		for ( size_t i = 0; i < size_t( DsTexture::Count ); i++ )
+		for ( uint32_t i = 0; i < uint32_t( DsTexture::Count ); i++ )
 		{
-			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, GetTextureFormat( DsTexture( i ) ) );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write, GetTextureFormat( DsTexture( i ) ), m_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+			m_lightPassTextures[i]->SetIndex( i + 1 );
+			m_lightPassTextures[i]->SetTexture( l_texture );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 			m_lightPassTextures[i]->Initialise();
+
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			p_index++;
 		}
 
@@ -316,6 +307,7 @@ namespace Deferred
 	{
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
+			program.m_geometryBuffers->Cleanup();
 			program.m_geometryBuffers.reset();
 			program.m_program->Cleanup();
 		}
@@ -330,6 +322,7 @@ namespace Deferred
 		for ( auto & l_unit : m_lightPassTextures )
 		{
 			l_unit->Cleanup();
+			l_unit.reset();
 		}
 	}
 
@@ -490,14 +483,14 @@ namespace Deferred
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4MatAmbient.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, c3d_v4MatDiffuse.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, c3d_v4MatSpecular.xyz() );
-			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_worldSpacePosition );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4MatAmbient.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), c3d_v4MatDiffuse.xyz() );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), c3d_v4MatSpecular.xyz() );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), vtx_worldSpacePosition );
+			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), normalize( vtx_tangent ) );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -573,30 +566,30 @@ namespace Deferred
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture( c3d_mapNormals, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture( c3d_mapTangent, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normal.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangent.xyz() );
+			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), texture( c3d_mapNormals, vtx_texture ) );
+			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapTangent, vtx_texture ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
+			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
 
-			IF (l_writer, l_v3Normal != l_v3Tangent )
+			IF( l_writer, l_v3Normal != l_v3Tangent )
 			{
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture( c3d_mapPosition, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture( c3d_mapDiffuse, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture( c3d_mapSpecular, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture( c3d_mapEmissive, vtx_texture ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapAmbient, c3d_v4AmbientLight.xyz() + vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapDiffuse, l_v4Diffuse.xyz() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.xyz() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapEmissive, l_v4Emissive.xyz() );
-				LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.w() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Position.xyz() );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-				LOCALE_ASSIGN( l_writer, Float, l_dist, l_v4Diffuse.w() );
-				LOCALE_ASSIGN( l_writer, Float, l_y, l_v4Emissive.w() );
+				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, vtx_texture ) );
+				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, vtx_texture ) );
+				auto l_v4Specular = l_writer.GetLocale( cuT( "l_v4Specular" ), texture( c3d_mapSpecular, vtx_texture ) );
+				auto l_v4Emissive = l_writer.GetLocale( cuT( "l_v4Emissive" ), texture( c3d_mapEmissive, vtx_texture ) );
+				auto l_v3MapAmbient = l_writer.GetLocale( cuT( "l_v3MapAmbient" ), c3d_v4AmbientLight.xyz() + vec3( l_v4Position.w(), l_v4Normal.w(), l_v4Tangent.w() ) );
+				auto l_v3MapDiffuse = l_writer.GetLocale( cuT( "l_v3MapDiffuse" ), l_v4Diffuse.xyz() );
+				auto l_v3MapSpecular = l_writer.GetLocale( cuT( "l_v3MapSpecular" ), l_v4Specular.xyz() );
+				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
+				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
+				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
+				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
+				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
+				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );
 
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye

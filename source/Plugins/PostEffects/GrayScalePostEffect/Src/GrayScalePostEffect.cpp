@@ -75,8 +75,8 @@ namespace GrayScale
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_colour, texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
-				LOCALE_ASSIGN( l_writer, Float, l_average, Float( 0.2126f ) * l_colour.SWIZZLE_R + 0.7152f * l_colour.SWIZZLE_G + 0.0722f * l_colour.SWIZZLE_B );
+				auto l_colour = l_writer.GetLocale( cuT( "l_colour" ), texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
+				auto l_average = l_writer.GetLocale( cuT( "l_average" ), Float( 0.2126f ) * l_colour.r() + 0.7152f * l_colour.g() + 0.0722f * l_colour.b() );
 				plx_v4FragColor = vec4( l_average, l_average, l_average, 1.0 );
 			} );
 			return l_writer.Finalise();
@@ -173,7 +173,7 @@ namespace GrayScale
 
 			if ( p_framebuffer.Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetImage().GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}

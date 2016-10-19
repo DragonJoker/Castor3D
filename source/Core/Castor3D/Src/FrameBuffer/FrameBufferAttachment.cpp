@@ -27,7 +27,7 @@ namespace Castor3D
 		m_index = p_index;
 		m_point = p_eAttachment;
 		m_frameBuffer = p_frameBuffer;
-		return DoAttach( p_frameBuffer );
+		return DoAttach();
 	}
 
 	void FrameBufferAttachment::Detach()

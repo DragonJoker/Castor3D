@@ -37,6 +37,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
@@ -49,9 +50,11 @@
 #include "State/MultisampleState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
+#include "Texture/TextureImage.hpp"
 #include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 
 using namespace Castor;
 
@@ -172,9 +175,10 @@ namespace Castor3D
 		inline void DoUpdateProgram( ShaderProgram & p_program, uint16_t p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::Shadows )
-				 && !p_program.FindFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel ) )
+				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( cuT( "c3d_mapShadow" ), ShaderType::Pixel, 10 );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel );
 			}
 		}
 
@@ -182,13 +186,32 @@ namespace Castor3D
 		{
 			if ( !p_depthMaps.empty() )
 			{
-				auto & l_variable = p_pipeline.GetShadowMapsVariable();
 				auto l_index = p_pipeline.GetTexturesCount() + 1;
-				auto l_offset = 0u;
+				auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
+				auto & l_point = p_pipeline.GetPointShadowMapsVariable();
 
-				for ( auto l_depthMap : p_depthMaps )
+				for ( auto & l_depthMap : p_depthMaps )
 				{
-					l_variable.SetValue( l_index++, l_offset++ );
+					if ( l_depthMap.get().GetType() == TextureType::TwoDimensions )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_spot.SetValue( l_index++ );
+					}
+					else if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_spot.SetValue( l_index++ );
+					}
+					else if ( l_depthMap.get().GetType() == TextureType::Cube )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_point.SetValue( l_index++ );
+					}
+					else if ( l_depthMap.get().GetType() == TextureType::CubeArray )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_point.SetValue( l_index++ );
+					}
 				}
 			}
 		}
@@ -283,21 +306,11 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read | AccessType::Write );
-		m_colourTexture->GetImage().SetSource( p_size, PixelFormat::RGBA16F32F );
-		p_size = m_colourTexture->GetImage().GetDimensions();
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGBA16F32F, p_size );
+		m_colourTexture->GetImage().InitialiseSource();
+		p_size = m_colourTexture->GetDimensions();
 
-		bool l_return = m_colourTexture->Create();
-
-		if ( l_return )
-		{
-			l_return = m_colourTexture->Initialise();
-
-			if ( !l_return )
-			{
-				m_colourTexture->Destroy();
-			}
-		}
+		bool l_return = m_colourTexture->Initialise();
 
 		if ( l_return )
 		{
@@ -354,7 +367,6 @@ namespace Castor3D
 			m_colourTexture->Cleanup();
 			m_depthBuffer->Cleanup();
 
-			m_colourTexture->Destroy();
 			m_depthBuffer->Destroy();
 			m_frameBuffer->Destroy();
 
@@ -373,6 +385,8 @@ namespace Castor3D
 		, m_renderTarget{ p_renderTarget }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
+		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
+		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -402,6 +416,16 @@ namespace Castor3D
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
 
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialiseSpotShadowMap( Size{ 1024, 1024 } );
+			}
+
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialisePointShadowMap( Size{ 512, 512 } );
+			}
+
 			for ( auto & l_it : m_scenes )
 			{
 				for ( auto & l_spec: l_it.second )
@@ -419,6 +443,8 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
+		DoCleanupPointShadowMap();
+		DoCleanupSpotShadowMap();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
 		DoCleanup();
@@ -458,13 +484,27 @@ namespace Castor3D
 
 		p_scene.GetLightCache().ForEach( [&l_it, &p_scene, this]( Light & p_light )
 		{
-			if ( p_light.CastShadows() )
+			if ( p_light.IsShadowProducer()
+				 && p_light.GetLightType() != LightType::Directional )
 			{
-				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, std::make_shared< ShadowMapPass >( *GetEngine(), p_scene, p_light ) } ).first;
-				auto & l_shadowMap = *l_insit->second;
-				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, &l_shadowMap]()
+				TextureUnit * l_unit{ nullptr };
+
+				switch ( p_light.GetLightType() )
 				{
-					l_shadowMap.Initialise( m_size );
+				case LightType::Point:
+					l_unit = &m_pointShadowMap;
+					break;
+
+				case LightType::Spot:
+					l_unit = &m_spotShadowMap;
+					break;
+				}
+
+				auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), p_scene, p_light, *l_unit, 0u );
+				auto l_insit = l_it->second.back().m_shadowMaps.insert( { &p_light, l_pass } ).first;
+				GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_pass]()
+				{
+					l_pass->Initialise( m_size );
 				} ) );
 			}
 		} );
@@ -481,10 +521,15 @@ namespace Castor3D
 		m_renderSystem.PushScene( &p_scene );
 		DepthMapArray l_depthMaps;
 
-		for ( auto & l_shadowMap : l_shadowMaps )
+		if ( p_scene.HasShadows() )
 		{
-			l_shadowMap.second->Render();
-			l_depthMaps.push_back( std::ref( l_shadowMap.second->GetResult() ) );
+			l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
+			l_depthMaps.push_back( std::ref( m_pointShadowMap ) );
+
+			for ( auto & l_shadowMap : l_shadowMaps )
+			{
+				l_shadowMap.second->Render();
+			}
 		}
 
 		if ( DoBeginRender( p_scene, p_camera ) )
@@ -493,12 +538,33 @@ namespace Castor3D
 			DoRender( l_nodes, l_depthMaps, p_camera, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
 
-#if 1
+#if !defined( NDEBUG )
 
-			if ( !l_depthMaps.empty() )
+			if ( !l_shadowMaps.empty() )
 			{
-				auto l_size = l_depthMaps.begin()->get().GetTexture()->GetImage().GetDimensions();
-				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMaps.begin()->get().GetTexture() );
+				auto l_it = l_shadowMaps.begin();
+				auto & l_depthMap = l_it->second->GetShadowMap();
+				auto l_size = l_depthMap.GetTexture()->GetDimensions();
+				auto l_lightNode = l_it->first->GetParent();
+
+				switch ( l_depthMap.GetType() )
+				{
+				case TextureType::TwoDimensions:
+					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
+					break;
+
+				case TextureType::TwoDimensionsArray:
+					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
+					break;
+
+				case TextureType::Cube:
+					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
+					break;
+
+				case TextureType::CubeArray:
+					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
+					break;
+				}
 			}
 
 #endif
@@ -560,13 +626,13 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
+		DoBeginOpaqueRendering();
+
 		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_billboards.m_opaqueRenderNodesBack.empty() )
 		{
-			DoBeginOpaqueRendering();
-
 			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
 			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesFront, p_depthMaps );
 			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
@@ -576,19 +642,19 @@ namespace Castor3D
 			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesBack, p_depthMaps );
 			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
 			DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodesBack, p_depthMaps );
-
-			DoEndOpaqueRendering();
 		}
+
+		DoEndOpaqueRendering();
 	}
 
 	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
+		DoBeginTransparentRendering();
+
 		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodesFront.empty()
 			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodesFront.empty()
 			|| !p_nodes.m_billboards.m_transparentRenderNodesFront.empty() )
 		{
-			DoBeginTransparentRendering();
-
 			if ( m_multisampling )
 			{
 				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesFront, p_depthMaps, false );
@@ -626,9 +692,9 @@ namespace Castor3D
 					}
 				}
 			}
-
-			DoEndTransparentRendering();
 		}
+
+		DoEndTransparentRendering();
 	}
 
 	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
@@ -797,6 +863,11 @@ namespace Castor3D
 		AddFlag( p_programFlags, ProgramFlag::Lighting );
 	}
 
+	String RenderTechnique::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	{
+		return String{};
+	}
+
 	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
@@ -843,13 +914,13 @@ namespace Castor3D
 		
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -923,14 +994,14 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			auto l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_fAlpha = l_writer.GetLocale< Float >( cuT( "l_fAlpha" ), c3d_fMatOpacity );
-			auto l_fMatShininess = l_writer.GetLocale< Float >( cuT( "l_fMatShininess" ), c3d_fMatShininess );
-			auto l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
-			auto l_worldEye = l_writer.GetLocale< Vec3 >( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
+			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
+			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
+			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
+			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
@@ -1068,5 +1139,60 @@ namespace Castor3D
 																												, p_program
 																												, p_flags ) ).first;
 		}
+	}
+
+	bool RenderTechnique::DoInitialiseSpotShadowMap( Size const & p_size )
+	{
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
+
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
+		m_spotShadowMap.SetTexture( l_texture );
+		m_spotShadowMap.SetSampler( l_sampler );
+
+		for ( auto & l_image : *l_texture )
+		{
+			l_image->InitialiseSource();
+		}
+
+		return m_spotShadowMap.Initialise();
+	}
+
+	bool RenderTechnique::DoInitialisePointShadowMap( Size const & p_size )
+	{
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		bool l_return{ true };
+
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+		m_pointShadowMap.SetTexture( l_texture );
+		m_pointShadowMap.SetSampler( l_sampler );
+
+		for ( auto & l_image : *l_texture )
+		{
+			l_image->InitialiseSource();
+		}
+
+		return m_pointShadowMap.Initialise();
+	}
+
+	void RenderTechnique::DoCleanupSpotShadowMap()
+	{
+		m_spotShadowMap.Cleanup();
+	}
+
+	void RenderTechnique::DoCleanupPointShadowMap()
+	{
+		m_pointShadowMap.Cleanup();
 	}
 }

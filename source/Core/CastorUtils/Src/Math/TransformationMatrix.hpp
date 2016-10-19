@@ -290,6 +290,24 @@ namespace Castor
 		static SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U aspect, U zNear, U zFar );
 		/**
 		 *\~english
+		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
+		 *\param[in]	p_fovy		Y Field of View
+		 *\param[in]	aspect		Width / Height ratio
+		 *\param[in]	nearVal		Near clipping plane value
+		 *\param[in]	farVal		Far clipping plane value
+		 *\return		The resulting matrix
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective centrée
+		 *\param[in]	p_fovy		Angle de vision Y
+		 *\param[in]	aspect		Ratio Largeur / Hauteur
+		 *\param[in]	nearVal		Position du plan proche
+		 *\param[in]	farVal		Position du plan lointain
+		 *\return		La matrice résultante
+		 */
+		template< typename T >
+		static SquareMatrix< T, 4 > perspective( Angle const & p_fovy, T aspect, T nearVal, T farVal );
+		/**
+		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
 		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	left		Left clipping plane value
@@ -310,6 +328,28 @@ namespace Castor
 		 */
 		template< typename T, typename U >
 		static SquareMatrix< T, 4 > & frustum( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U nearVal, U farVal );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
+		 *\param[in]	left		Left clipping plane value
+		 *\param[in]	right		Right clipping plane value
+		 *\param[in]	bottom		Bottom clipping plane value
+		 *\param[in]	top			Top clipping plane value
+		 *\param[in]	nearVal		Near clipping plane value
+		 *\param[in]	farVal		Far clipping plane value
+		 *\return		The resulting matrix
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée
+		 *\param[in]	left		Position du plan gauche
+		 *\param[in]	right		Position du plan droit
+		 *\param[in]	bottom		Position du plan bas
+		 *\param[in]	top			Position du plan haut
+		 *\param[in]	nearVal		Position du plan proche
+		 *\param[in]	farVal		Position du plan lointain
+		 *\return		La matrice résultante
+		 */
+		template< typename T >
+		static SquareMatrix< T, 4 > frustum( T left, T right, T bottom, T top, T nearVal, T farVal );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -334,6 +374,28 @@ namespace Castor
 		static SquareMatrix< T, 4 > & ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U zNear, U zFar );
 		/**
 		 *\~english
+		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
+		 *\param[in]	left		Left clipping plane value
+		 *\param[in]	right		Right clipping plane value
+		 *\param[in]	bottom		Bottom clipping plane value
+		 *\param[in]	top			Top clipping plane value
+		 *\param[in]	zNear		Near clipping plane value
+		 *\param[in]	zFar		Far clipping plane value
+		 *\return		The resulting matrix
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique non centrée
+		 *\param[in]	left		Position du plan gauche
+		 *\param[in]	right		Position du plan droit
+		 *\param[in]	bottom		Position du plan bas
+		 *\param[in]	top			Position du plan haut
+		 *\param[in]	zNear		Position du plan proche
+		 *\param[in]	zFar		Position du plan lointain
+		 *\return		La matrice résultante
+		 */
+		template< typename T >
+		static SquareMatrix< T, 4 > ortho( T left, T right, T bottom, T top, T zNear, T zFar );
+		/**
+		 *\~english
 		 *\brief		Builds a view matrix that looks at a given point
 		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	p_ptEye		The eye position
@@ -348,6 +410,22 @@ namespace Castor
 		 */
 		template< typename T, typename U >
 		static SquareMatrix< T, 4 > & look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptEye, Point< U, 3 > const & p_ptCenter, Point< U, 3 > const & p_ptUp );
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point
+		 *\param[in]	p_ptEye		The eye position
+		 *\param[in]	p_ptCenter	The point to look at
+		 *\param[in]	p_ptUp		The up direction
+		 *\return		The resulting matrix
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné
+		 *\param[in]	p_ptEye		La position de l'oeil
+		 *\param[in]	p_ptCenter	Le point à regarder
+		 *\param[in]	p_ptUp		La direction vers le haut
+		 *\return		La matrice résultante
+		 */
+		template< typename T >
+		static SquareMatrix< T, 4 > look_at( Point< T, 3 > const & p_ptEye, Point< T, 3 > const & p_ptCenter, Point< T, 3 > const & p_ptUp );
 		/**
 		 *\~english
 		 *\brief			Switches the handness of a matrix (from right to left or left to right)

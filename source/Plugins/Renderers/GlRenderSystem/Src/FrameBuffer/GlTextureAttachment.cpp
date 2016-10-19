@@ -68,7 +68,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlTextureAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
+	bool GlTextureAttachment::DoAttach()
 	{
 		bool l_return = false;
 
@@ -119,6 +119,14 @@ namespace GlRender
 				break;
 
 			case TextureType::TwoDimensionsArray:
+				l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
+				break;
+
+			case TextureType::Cube:
+				l_return = GetOpenGl().FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+				break;
+
+			case TextureType::CubeArray:
 				l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
 				break;
 			}

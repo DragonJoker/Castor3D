@@ -332,14 +332,25 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The shadow maps frame variable.
+		 *\return		The spot lights shadow maps frame variable.
 		 *\~french
-		 *\return		La variabe shader des shadow maps.
+		 *\return		La variable shader des maps d'ombres pour les lumières spots.
 		 */
-		inline OneIntFrameVariable & GetShadowMapsVariable()
+		inline OneIntFrameVariable & GetSpotShadowMapsVariable()
 		{
-			REQUIRE( m_shadowMaps );
-			return *m_shadowMaps;
+			REQUIRE( m_spotShadowMaps );
+			return *m_spotShadowMaps;
+		}
+		/**
+		 *\~english
+		 *\return		The point lights shadow maps frame variable.
+		 *\~french
+		 *\return		La variable shader des maps d'ombres pour les lumières ponctuelles.
+		 */
+		inline OneIntFrameVariable & GetPointShadowMapsVariable()
+		{
+			REQUIRE( m_pointShadowMaps );
+			return *m_pointShadowMaps;
 		}
 
 	private:
@@ -386,9 +397,12 @@ namespace Castor3D
 		//!\~english	The scene frame variable buffer.
 		//!\~french		Le tampon de variables shader pour la scène.
 		FrameVariableBufferSPtr m_sceneUbo;
-		//!\~english	The shadow maps frame variable.
-		//!\~french		La variable shader pour las shadow maps.
-		OneIntFrameVariableSPtr m_shadowMaps;
+		//!\~english	The spot lights shadow maps frame variable.
+		//!\~french		La variable shader pour les maps d'ombres des lumières spot.
+		OneIntFrameVariableSPtr m_spotShadowMaps;
+		//!\~english	The point lights shadow maps frame variable.
+		//!\~french		La variable shader pour les maps d'ombres des lumières ponctuelles.
+		OneIntFrameVariableSPtr m_pointShadowMaps;
 		//!\~english	The creation flags.
 		//!\~french		Les indicateurs de création.
 		PipelineFlags m_flags;

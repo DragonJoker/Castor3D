@@ -95,11 +95,24 @@ namespace Castor3D
 		C3D_API void SetClearColour( Castor::Colour const & p_colour );
 		/**
 		 *\~english
+		 *\brief		Defines the colour used when Clear is called on the color buffer.
+		 *\remarks		This version accepts non normalised components.
+		 *\param[in]	p_r, p_g, p_b, p_a	The colour components.
+		 *\~french
+		 *\brief		Définit la couleur utilisée quand Clear est appelée sur le tampon couleur.
+		 *\remarks		Cette version accepte des composantes non normalisées.
+		 *\param[in]	p_r, p_g, p_b, p_a	Les composantes de la couleur.
+		 */
+		C3D_API void SetClearColour( float p_r, float p_g, float p_b, float p_a );
+		/**
+		 *\~english
 		 *\brief		Clears the buffers.
+		 *\param[in]	p_targets	The buffers to clear (combination of BufferComponent).
 		 *\~french
 		 *\brief		Vide les tampons.
+		 *\param[in]	p_targets	Les tampons à vider (combinaison de BufferComponent).
 		 */
-		C3D_API void Clear();
+		C3D_API void Clear( uint8_t p_targets = 0 );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -353,6 +366,19 @@ namespace Castor3D
 		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates an attachment to a cube texture's face.
+		 *\param[in]	p_texture	The texture.
+		 *\param[in]	p_face		The face.
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une face d'une texture cube.
+		 *\param[in]	p_texture	La texture.
+		 *\param[in]	p_texture	La face.
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face ) = 0;
+		/**
+		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french
@@ -373,16 +399,6 @@ namespace Castor3D
 		 *\param[in]	p_buffer	Reçoit les données.
 		 */
 		C3D_API virtual bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the background colour
-		 *\~french
-		 *\brief		Récupère la couleur de fond
-		 */
-		inline Castor::Colour GetClearColour()const
-		{
-			return m_clearColour;
-		}
 
 	protected:
 		/**
@@ -465,10 +481,21 @@ namespace Castor3D
 		C3D_API void DoDetach( AttachmentPoint p_point, uint8_t p_index );
 
 	protected:
-		//!\~english All attachments.	\~french Toutes les attaches.
+		//!\~english	All attachments.
+		//!\~french		Toutes les attaches.
 		AttachArray m_attaches;
-		//!\~english The background colour	\~french La couleur de fond
-		Castor::Colour m_clearColour;
+		//!\~english	The clear colour red component.
+		//!\~french		La composante rouge de la couleur de vidage.
+		float m_redClear;
+		//!\~english	The clear colour green component.
+		//!\~french		La composante verte de la couleur de vidage.
+		float m_greenClear;
+		//!\~english	The clear colour blue component.
+		//!\~french		La composante bleue de la couleur de vidage.
+		float m_blueClear;
+		//!\~english	The clear colour alpha component.
+		//!\~french		La composante alpha de la couleur de vidage.
+		float m_alphaClear;
 	};
 }
 

@@ -26,10 +26,10 @@ namespace Castor3D
 		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read | AccessType::Write );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::A8R8G8B8, p_size );
 
 		m_colourTexture.SetSampler( p_sampler );
-		l_colourTexture->GetImage().SetSource( p_size, PixelFormat::A8R8G8B8 );
+		l_colourTexture->GetImage().InitialiseSource();
 		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
 
 		m_fbo->Create();

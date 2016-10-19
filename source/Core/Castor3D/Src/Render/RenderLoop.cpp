@@ -161,13 +161,13 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetEngine()->GetRenderTechniqueCache().ForEach( []( RenderTechnique & p_technique )
-		{
-			p_technique.Update();
-		} );
 		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 		{
 			p_scene.Update();
+		} );
+		GetEngine()->GetRenderTechniqueCache().ForEach( []( RenderTechnique & p_technique )
+		{
+			p_technique.Update();
 		} );
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{

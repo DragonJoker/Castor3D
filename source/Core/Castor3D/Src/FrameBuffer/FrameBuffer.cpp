@@ -36,12 +36,23 @@ namespace Castor3D
 
 	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
 	{
-		m_clearColour = p_clrClear;
+		m_redClear = p_clrClear.red();
+		m_greenClear = p_clrClear.green();
+		m_blueClear = p_clrClear.blue();
+		m_alphaClear = p_clrClear.alpha();
 	}
 
-	void FrameBuffer::Clear()
+	void FrameBuffer::SetClearColour( float p_r, float p_g, float p_b, float p_a )
 	{
-		uint8_t l_targets = 0u;
+		m_redClear = p_r;
+		m_greenClear = p_g;
+		m_blueClear = p_b;
+		m_alphaClear = p_a;
+	}
+
+	void FrameBuffer::Clear( uint8_t p_targets )
+	{
+		uint8_t l_targets = p_targets;
 
 		for ( auto l_attach : m_attaches )
 		{
@@ -239,7 +250,7 @@ namespace Castor3D
 				if ( ( *l_it )->GetAttachmentType() == AttachmentType::Texture )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
-					l_return = l_attach->GetTexture()->GetImage().GetPixelFormat();
+					l_return = l_attach->GetTexture()->GetPixelFormat();
 				}
 				else
 				{

@@ -390,33 +390,27 @@ namespace Castor3D
 		//!\~english 1 dimension textures.
 		//!\~french Textures à 1 dimension.
 		OneDimension,
+		//!\~english 1 dimension texture arrays.
+		//!\~french Tableaux de textures à 1 dimension.
+		OneDimensionArray,
 		//!\~english 2 dimensions textures.
 		//!\~french Textures à 2 dimensions.
 		TwoDimensions,
+		//!\~english 2 dimensions texture arrays.
+		//!\~french Tableaux de textures à 2 dimensions.
+		TwoDimensionsArray,
 		//!\~english 2 dimensions textures with multisample support.
 		//!\~french Textures à 2 dimensions avec support du multisampling.
 		TwoDimensionsMS,
 		//!\~english 3 dimensions textures.
 		//!\~french Textures à 3 dimensions.
 		ThreeDimensions,
-		//!\~english Face on positive X.
-		//!\~french Face des X positifs.
-		CubeMapPositiveX,
-		//!\~english Face on negative X.
-		//!\~french Face des X négatifs.
-		CubeMapNegativeX,
-		//!\~english Face on positive Y.
-		//!\~french Face des Y positifs.
-		CubeMapPositiveY,
-		//!\~english Face on negative Y.
-		//!\~french Face des Y négatifs.
-		CubeMapNegativeY,
-		//!\~english Face on positive Z.
-		//!\~french Face des Z positifs.
-		CubeMapPositiveZ,
-		//!\~english Face on negative Z.
-		//!\~french Face des Z négatifs.
-		CubeMapNegativeZ,
+		//!\~english Cube map.
+		//!\~french Cube map.
+		CubeMap,
+		//!\~english Cube map array.
+		//!\~french Tableau de cube maps.
+		CubeMapArray,
 		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
 	};
 	/*!

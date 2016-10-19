@@ -469,9 +469,45 @@ namespace Castor3D
 
 	private:
 		/**
+		 *\~english
+		 *\brief		Initialises the texture array used for spot lights shadow mapping.
+		 *\param[in]	p_size	The texture size.
+		 *\~french
+		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
+		 *\param[in]	p_size	Les dimensions de la texture.
+		 */
+		bool DoInitialiseSpotShadowMap( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Initialises the texture array used for point lights shadow mapping.
+		 *\param[in]	p_size	The texture size.
+		 *\~french
+		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
+		 *\param[in]	p_size	Les dimensions de la texture.
+		 */
+		bool DoInitialisePointShadowMap( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Cleans up the texture array used for spot lights shadow mapping.
+		 *\~french
+		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
+		 */
+		void DoCleanupSpotShadowMap();
+		/**
+		 *\~english
+		 *\brief		Cleans up the texture array used for point lights shadow mapping.
+		 *\~french
+		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type point.
+		 */
+		void DoCleanupPointShadowMap();
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+		C3D_API void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 */
+		C3D_API Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
@@ -489,19 +525,19 @@ namespace Castor3D
 		 */
 		C3D_API void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
 		C3D_API void DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueBackPipeline
 		 */
 		C3D_API void DoPrepareOpaqueBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentFrontPipeline
 		 */
 		C3D_API void DoPrepareTransparentFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\~copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
+		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
 		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
@@ -624,6 +660,12 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english	The shadow map texture used for spot lights.
+		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type spot.
+		TextureUnit m_spotShadowMap;
+		//!\~english	The shadow map texture used for pont lights.
+		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type point.
+		TextureUnit m_pointShadowMap;
 	};
 }
 

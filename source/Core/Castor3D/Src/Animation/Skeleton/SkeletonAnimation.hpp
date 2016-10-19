@@ -184,7 +184,7 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Casto3D::Animation::DoUpdateLength
+		 *\copydoc		Casto3D::Animation::DoUpdateLength
 		 */
 		C3D_API void DoUpdateLength()override;
 

@@ -69,21 +69,21 @@ namespace HaarmPieterDuiker
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture( c3d_mapDiffuse, vtx_texture ).SWIZZLE_RGB );
+				auto l_hdrColor = l_writer.GetLocale( cuT( "l_hdrColor" ), texture( c3d_mapDiffuse, vtx_texture ).rgb() );
 				l_hdrColor *= c3d_exposure;
 
-				auto LogColor = l_writer.GetLocale < Vec3 >( cuT( "LogColor" ) );
-				LogColor = l_writer.Paren( l_writer.Paren( GLSL::log2( vec3( Float( 0.4 ) ) * l_hdrColor.SWIZZLE_RGB / vec3( Float( 0.18 ) ) ) / GLSL::log2( vec3( Float( 10 ) ) ) ) / vec3( Float( 0.002 ) ) * vec3( Float( 1.0 ) / c3d_gamma ) + vec3( Float( 444 ) ) ) / vec3( Float( 1023.0f ) );
+				auto LogColor = l_writer.GetLocale< Vec3 >( cuT( "LogColor" ) );
+				LogColor = l_writer.Paren( l_writer.Paren( GLSL::log2( vec3( Float( 0.4 ) ) * l_hdrColor.rgb() / vec3( Float( 0.18 ) ) ) / GLSL::log2( vec3( Float( 10 ) ) ) ) / vec3( Float( 0.002 ) ) * vec3( Float( 1.0 ) / c3d_gamma ) + vec3( Float( 444 ) ) ) / vec3( Float( 1023.0f ) );
 				LogColor = clamp( LogColor, 0.0, 1.0 );
 
-				LOCALE_ASSIGN( l_writer, Float, FilmLutWidth, Float( 256 ) );
-				LOCALE_ASSIGN( l_writer, Float, Padding, Float( 0.5 ) / FilmLutWidth );
+				auto FilmLutWidth = l_writer.GetLocale( cuT( "FilmLutWidth" ), Float( 256 ) );
+				auto Padding = l_writer.GetLocale( cuT( "Padding" ), Float( 0.5 ) / FilmLutWidth );
 
 				//  apply response lookup and color grading for target display
-				plx_v4FragColor.SWIZZLE_R = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_R );
-				plx_v4FragColor.SWIZZLE_G = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_G );
-				plx_v4FragColor.SWIZZLE_B = mix( Padding, 1.0f - Padding, LogColor.SWIZZLE_B );
-				plx_v4FragColor.SWIZZLE_A = 1.0f;
+				plx_v4FragColor.r() = mix( Padding, 1.0f - Padding, LogColor.r() );
+				plx_v4FragColor.g() = mix( Padding, 1.0f - Padding, LogColor.g() );
+				plx_v4FragColor.b() = mix( Padding, 1.0f - Padding, LogColor.b() );
+				plx_v4FragColor.a() = 1.0f;
 			} );
 
 			l_pxl = l_writer.Finalise();

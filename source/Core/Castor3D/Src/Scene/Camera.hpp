@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_CAMERA_H___
 
 #include "MovableObject.hpp"
+#include "Miscellaneous/Frustum.hpp"
 #include "Render/Viewport.hpp"
 
 #include <Math/PlaneEquation.hpp>
@@ -82,14 +83,14 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
+		 *\brief		Constructor.
 		 *\remarks		Not to be used by the user, use Scene::CreateCamera instead
 		 *\param[in]	p_name		The camera name
 		 *\param[in]	p_scene		The parent scene
 		 *\param[in]	p_node		The parent scene node
 		 *\param[in]	p_viewport	Viewport to copy
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 *\remarks		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_name		Le nom de la caméra
 		 *\param[in]	p_scene		La scène parente
@@ -311,13 +312,12 @@ namespace Castor3D
 
 	private:
 		friend class Scene;
-		friend class CameraRenderer;
 		//!\~english	The viewport of the camera.
 		//!\~french		Le viewport de la caméra.
 		Viewport m_viewport;
-		//!\~english	The view frustum's planes.
-		//!\~french		Les plans du frustum de vue.
-		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::Count ) > m_planes;
+		//!\~english	The view frustum.
+		//!\~french		Le frustum de vue.
+		Frustum m_frustum;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;

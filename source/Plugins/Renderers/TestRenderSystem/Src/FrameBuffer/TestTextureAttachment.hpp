@@ -60,7 +60,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
-		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_frameBuffer );
+		virtual bool DoAttach();
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */

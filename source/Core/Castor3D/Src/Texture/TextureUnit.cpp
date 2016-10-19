@@ -225,20 +225,23 @@ namespace Castor3D
 		m_changed = true;
 	}
 
-	void TextureUnit::Initialise()
+	bool TextureUnit::Initialise()
 	{
 		RenderTargetSPtr l_target = m_renderTarget.lock();
+		bool l_return = false;
 
 		if ( l_target )
 		{
 			l_target->Initialise( GetIndex() );
 			m_pTexture = l_target->GetTexture().GetTexture();
+			l_return = true;
 		}
 		else if ( m_pTexture )
 		{
-			m_pTexture->Create();
-			m_pTexture->Initialise();
+			l_return = m_pTexture->Initialise();
 		}
+
+		return l_return;
 	}
 
 	void TextureUnit::Cleanup()
@@ -246,7 +249,6 @@ namespace Castor3D
 		if ( m_pTexture )
 		{
 			m_pTexture->Cleanup();
-			m_pTexture->Destroy();
 		}
 
 		m_clrBlend = Colour();

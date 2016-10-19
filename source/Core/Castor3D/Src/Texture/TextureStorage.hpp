@@ -39,24 +39,24 @@ namespace Castor3D
 	\brief		Class de base du stockage GPU d'une texture.
 	*/
 	class TextureStorage
-		: public Castor::OwnedBy< TextureImage >
+		: public Castor::OwnedBy< TextureLayout >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_type		The storage type.
-		 *\param[in]	p_image		The TextureImage.
+		 *\param[in]	p_layout	The parent layout.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of AccessType).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type		Le type de stockage.
-		 *\param[in]	p_image		La TextureImage.
+		 *\param[in]	p_layout	Le layout parent.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 */
-		C3D_API TextureStorage( TextureStorageType p_type, TextureImage & p_image, AccessType p_cpuAccess, AccessType p_gpuAccess );
+		C3D_API TextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -64,19 +64,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~TextureStorage();
-		/**
-		 *\~english
-		 *\brief		Initialises the texture initial storage data.
-		 *\param[in]	p_buffer	The texture pixel buffer.
-		 *\param[in]	p_size		The pixel buffer dimensions.
-		 *\param[in]	p_format	The pixel buffer format.
-		 *\~french
-		 *\brief		Charge sur le GPU les données initiales.
-		 *\param[in]	p_buffer	Le tampon de données.
-		 *\param[in]	p_size		La taille du tampon.
-		 *\param[in]	p_format	Le format des données.
-		 */
-		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -121,6 +108,30 @@ namespace Castor3D
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
 		C3D_API virtual void Unlock( bool p_modified ) = 0;
+		/**
+		 *\~english
+		 *\brief		Locks image buffer from GPU, allowing modifications into it.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of AccessType.
+		 *\return		The image buffer.
+		 *\~french
+		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
+		 *\return		Le buffer de l'image.
+		 */
+		C3D_API virtual uint8_t * Lock( AccessType p_lock, uint32_t p_index ) = 0;
+		/**
+		 *\~english
+		 *\brief		Unlocks image buffer from GPU.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
+		 *\~french
+		 *\brief		Délocke le buffer de l'image à partir du GPU.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
+		 */
+		C3D_API virtual void Unlock( bool p_modified, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\return		The CPU access rights.

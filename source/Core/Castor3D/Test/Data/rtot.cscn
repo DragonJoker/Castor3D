@@ -121,7 +121,7 @@ scene "FinalScene"
 
 	scene_node "SunLightNode1"
 	{
-		position  0 1 1
+		position  0 1 -1
 	}
 	light "SunLight1"
 	{

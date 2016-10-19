@@ -52,6 +52,14 @@ namespace GLSL
 			l_return = std::make_unique< Keywords< 430 > >();
 			break;
 
+		case 440:
+			l_return = std::make_unique< Keywords< 440 > >();
+			break;
+
+		case 450:
+			l_return = std::make_unique< Keywords< 450 > >();
+			break;
+
 		default:
 			l_return = std::make_unique< Keywords< 110 > >();
 			break;

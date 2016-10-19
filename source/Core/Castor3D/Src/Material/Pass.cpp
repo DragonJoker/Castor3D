@@ -339,13 +339,15 @@ namespace Castor3D
 			{
 				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetTexture()->GetImage().GetBuffer();
 				PF::ReduceToAlpha( l_pReduced );
-				l_pOpacityMap->GetTexture()->GetImage().SetBuffer( l_pReduced );
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
+				l_texture->SetSource( l_pReduced );
+				l_pOpacityMap->SetTexture( l_texture );
 				l_pImageOpa.reset();
 			}
 			else if ( l_pImageOpa )
 			{
 				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
-				l_texture->GetImage().SetSource( l_pImageOpa );
+				l_texture->SetSource( l_pImageOpa );
 				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
 				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
 				l_pOpacityMap->SetChannel( TextureChannel::Opacity );
@@ -438,7 +440,11 @@ namespace Castor3D
 			{
 				PxBufferBaseSPtr l_extracted = l_texture->GetImage().GetBuffer();
 				l_return = PF::ExtractAlpha( l_extracted );
-				l_texture->GetImage().SetBuffer( l_extracted );
+
+				if ( l_return )
+				{
+					l_texture->SetSource( l_extracted );
+				}
 			}
 
 			p_unit->SetIndex( p_index++ );

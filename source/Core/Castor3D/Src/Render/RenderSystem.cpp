@@ -171,19 +171,18 @@ namespace Castor3D
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_pos = l_writer.GetLocale< Vec3 >( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
-				auto l_toCamera = l_writer.GetLocale< Vec3 >( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
-				auto l_up = l_writer.GetLocale< Vec3 >( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
-				auto l_left = l_writer.GetLocale< Vec3 >( cuT( "l_left" ), cross( l_toCamera, l_up ) );
+				auto l_pos = l_writer.GetLocale( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
+				auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
+				auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
+				auto l_left = l_writer.GetLocale( cuT( "l_left" ), cross( l_toCamera, l_up ) );
 
-				auto l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
-				auto l_v3Tangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Tangent" ), l_up );
-				auto l_v3Bitangent = l_writer.GetLocale< Vec3 >( cuT( "l_v3Bitangent" ), l_left );
+				auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
+				auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_up );
+				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), l_left );
 
 				l_left *= c3d_v2iDimensions.x();
 				l_up *= c3d_v2iDimensions.y();
 				l_writer << Endl();
-
 				{
 					l_pos -= ( l_left * Float( 0.5 ) );
 					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
@@ -196,7 +195,6 @@ namespace Castor3D
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
-
 				{
 					l_pos += l_up;
 					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
@@ -209,7 +207,6 @@ namespace Castor3D
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
-
 				{
 					l_pos -= l_up;
 					l_pos += l_left;
@@ -223,7 +220,6 @@ namespace Castor3D
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
-
 				{
 					l_pos += l_up;
 					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
@@ -249,106 +245,6 @@ namespace Castor3D
 		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
 
 		return l_program;
-	}
-
-	String RenderSystem::GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
-	{
-		using namespace GLSL;
-		auto l_writer = CreateGlslWriter();
-		// Vertex inputs
-		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-		auto normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
-		auto tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
-		auto bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
-		auto texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
-
-		UBO_MATRIX( l_writer );
-		UBO_ANIMATION( l_writer, p_programFlags );
-
-		// Outputs
-		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
-		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
-		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
-		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-		auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
-		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-		std::function< void() > l_main = [&]()
-		{
-			auto l_v4Vertex = l_writer.GetLocale< Vec4 >( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
-			auto l_v4Normal = l_writer.GetLocale< Vec4 >( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
-			auto l_v4Tangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
-			auto l_v4Bitangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
-			auto l_v3Texture = l_writer.GetLocale< Vec3 >( cuT( "l_v3Texture" ), texture );
-			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
-
-			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
-			{
-				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ), c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 0 )]] * weights1[Int( 0 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
-				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
-			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
-			{
-				l_mtxModel = transform;
-			}
-			else
-			{
-				l_mtxModel = c3d_mtxModel;
-			}
-
-			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
-			{
-				auto l_time = l_writer.GetLocale< Float >( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
-				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
-				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
-				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
-				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
-			}
-
-			vtx_texture = l_v3Texture;
-			l_v4Vertex = l_mtxModel * l_v4Vertex;
-			vtx_worldSpacePosition = l_v4Vertex.xyz();
-			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-			vtx_worldViewSpacePosition = l_v4Vertex.xyz();
-
-			if ( p_invertNormals )
-			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
-			}
-			else
-			{
-				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
-			}
-
-			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
-			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
-			vtx_instance = gl_InstanceID;
-			gl_Position = c3d_mtxProjection * l_v4Vertex;
-		};
-
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
 	}
 
 	void RenderSystem::SetCurrentContext( Context * p_context )

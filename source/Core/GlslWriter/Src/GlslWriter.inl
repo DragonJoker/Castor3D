@@ -302,15 +302,7 @@ namespace GLSL
 	}
 
 	template< typename T >
-	inline T GlslWriter::GetLocale( Castor::String const & p_name, Expr const & p_rhs )
-	{
-		m_stream << T().m_type << p_name << cuT( " = " ) << p_rhs.m_value.rdbuf() << cuT( ";" ) << std::endl;
-		T l_return( this, p_name );
-		return l_return;
-	}
-
-	template< typename T >
-	inline T GlslWriter::GetLocale( Castor::String const & p_name, Type const & p_rhs )
+	inline T GlslWriter::GetLocale( Castor::String const & p_name, T const & p_rhs )
 	{
 		m_stream << T().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		T l_return( this, p_name );
@@ -377,14 +369,7 @@ namespace GLSL
 	}
 
 	template< typename T >
-	inline Array< T > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, Expr const & p_rhs )
-	{
-		m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << p_rhs.m_value.rdbuf() << cuT( ";" ) << std::endl;
-		return Array< T >( this, p_name );
-	}
-
-	template< typename T >
-	inline Array< T > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, Type const & p_rhs )
+	inline Array< T > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs )
 	{
 		m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
 		return Array< T >( this, p_name );
@@ -469,18 +454,7 @@ namespace GLSL
 	}
 
 	template< typename T >
-	inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled, Expr const & p_rhs )
-	{
-		if ( p_enabled )
-		{
-			m_stream << T().m_type << p_name << cuT( " = " ) << p_rhs.m_value.rdbuf() << cuT( ";" ) << std::endl;
-		}
-
-		return Optional< T >( this, p_name, p_enabled );
-	}
-
-	template< typename T >
-	inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs )
+	inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled, T const & p_rhs )
 	{
 		if ( p_enabled )
 		{
@@ -552,18 +526,7 @@ namespace GLSL
 	}
 
 	template< typename T >
-	inline Optional< Array< T > > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Expr const & p_rhs )
-	{
-		if ( p_enabled )
-		{
-			m_stream << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "]" ) << cuT( " = " ) << p_rhs.m_value.rdbuf() << cuT( ";" ) << std::endl;
-		}
-
-		return Optional< Array< T > >( this, p_name, p_dimension, p_enabled );
-	}
-
-	template< typename T >
-	inline Optional< Array< T > > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, Type const & p_rhs )
+	inline Optional< Array< T > > GlslWriter::GetLocale( Castor::String const & p_name, uint32_t p_dimension, bool p_enabled, T const & p_rhs )
 	{
 		if ( p_enabled )
 		{

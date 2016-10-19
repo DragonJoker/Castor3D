@@ -122,8 +122,6 @@ namespace Castor3D
 		}
 
 	private:
-		using FrameBufferAttachment::Attach;
-
 		//!\~english The attached texture	\~french La texture attachée
 		TextureLayoutWPtr m_texture;
 		//!\~english The texture target type	\~french Le type de cible de la texture

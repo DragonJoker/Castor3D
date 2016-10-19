@@ -447,15 +447,20 @@ namespace GlRender
 
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::Buffer )] = eGL_TEXTURE_STORAGE_BUFFER;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimension )] = eGL_TEXTURE_STORAGE_1D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimensionArray )] = eGL_TEXTURE_STORAGE_2D;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensions )] = eGL_TEXTURE_STORAGE_2D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = eGL_TEXTURE_STORAGE_2DARRAY;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapPositiveZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapNegativeZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap)] = eGL_TEXTURE_STORAGE_CUBE_MAP;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY;
+
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = eGL_TEXDIM_CUBE_FACE_POSX;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeX )] = eGL_TEXDIM_CUBE_FACE_NEGX;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveY )] = eGL_TEXDIM_CUBE_FACE_POSY;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeY )] = eGL_TEXDIM_CUBE_FACE_NEGY;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveZ )] = eGL_TEXDIM_CUBE_FACE_POSZ;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeZ )] = eGL_TEXDIM_CUBE_FACE_NEGZ;
 
 		ComparisonModes[uint32_t( Castor3D::ComparisonMode::None )] = eGL_COMPARE_MODE_NONE;
 		ComparisonModes[uint32_t( Castor3D::ComparisonMode::RefToTexture )] = eGL_COMPARE_MODE_REF_TO_TEXTURE;
@@ -499,25 +504,9 @@ namespace GlRender
 		l_stream >> l_version;
 		m_iVersion = int( l_version * 10 );
 
-		if ( m_iVersion >= 43 )
+		if ( m_iVersion >= 33 )
 		{
-			m_iGlslVersion = 430;
-		}
-		else if ( m_iVersion >= 42 )
-		{
-			m_iGlslVersion = 420;
-		}
-		else if ( m_iVersion >= 41 )
-		{
-			m_iGlslVersion = 410;
-		}
-		else if ( m_iVersion >= 40 )
-		{
-			m_iGlslVersion = 400;
-		}
-		else if ( m_iVersion >= 33 )
-		{
-			m_iGlslVersion = 330;
+			m_iGlslVersion = m_iVersion * 10;
 		}
 		else if ( m_iVersion >= 32 )
 		{

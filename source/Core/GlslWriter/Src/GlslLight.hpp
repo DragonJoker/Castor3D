@@ -28,7 +28,7 @@ SOFTWARE.
 namespace GLSL
 {
 	static constexpr int LightComponentsCount = 14;
-	static constexpr int LightAttenuationOffset = 7;
+	static constexpr int LightAttenuationOffset = 3;
 	static constexpr float LightComponentsOffset = LightComponentsCount * 0.001f;
 
 	struct Light
@@ -42,11 +42,11 @@ namespace GLSL
 		inline Vec3 m_v3Intensity()const;
 		inline Vec3 m_v3Position()const;
 		inline Int m_iType()const;
-		inline Mat4 m_mtxLightSpace()const;
 		inline Vec3 m_v3Attenuation()const;
 		inline Vec3 m_v3Direction()const;
 		inline Float m_fExponent()const;
 		inline Float m_fCutOff()const;
+		inline Mat4 m_mtxLightSpace()const;
 	};
 }
 

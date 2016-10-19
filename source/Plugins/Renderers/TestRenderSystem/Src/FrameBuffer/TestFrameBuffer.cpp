@@ -1,6 +1,7 @@
 #include "FrameBuffer/TestFrameBuffer.hpp"
 
 #include "FrameBuffer/TestColourRenderBuffer.hpp"
+#include "FrameBuffer/TestCubeTextureFaceAttachment.hpp"
 #include "FrameBuffer/TestDepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/TestRenderBufferAttachment.hpp"
 #include "FrameBuffer/TestTextureAttachment.hpp"
@@ -64,6 +65,11 @@ namespace TestRender
 	TextureAttachmentSPtr TestFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture )
 	{
 		return std::make_shared< TestTextureAttachment >( p_texture );
+	}
+
+	TextureAttachmentSPtr TestFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture, CubeMapFace p_face )
+	{
+		return std::make_shared< TestCubeTextureFaceAttachment >( p_texture, p_face );
 	}
 
 	void TestFrameBuffer::DoClear( uint32_t p_uiTargets )

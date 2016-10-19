@@ -47,6 +47,7 @@ namespace GLSL
 
 	GlslWriter_API Castor::String ToString( Expr const & p_value );
 	GlslWriter_API Castor::String ToString( int const & p_value );
+	GlslWriter_API Castor::String ToString( uint32_t const & p_value );
 	GlslWriter_API Castor::String ToString( double const & p_value );
 	GlslWriter_API Castor::String ToString( float const & p_value );
 }

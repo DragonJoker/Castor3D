@@ -75,6 +75,6 @@ namespace Castor
 	{
 		m_min = p_ptMin;
 		m_max = p_ptMax;
-		m_ptCenter = ( m_min + m_max ) / real( 2.0 );
+		m_ptCenter = m_min + ( m_max - m_min ) / real( 2.0 );
 	}
 }

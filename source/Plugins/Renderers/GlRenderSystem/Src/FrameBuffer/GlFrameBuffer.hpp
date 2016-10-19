@@ -102,6 +102,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
 		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture )override;
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
+		 */
+		Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face )override;
 
 	public:
 		using BindableType::GetGlName;

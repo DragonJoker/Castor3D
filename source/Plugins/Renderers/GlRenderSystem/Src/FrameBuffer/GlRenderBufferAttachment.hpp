@@ -81,7 +81,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
-		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_frameBuffer );
+		virtual bool DoAttach();
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */
@@ -90,7 +90,6 @@ namespace GlRender
 	private:
 		eGL_RENDERBUFFER_ATTACHMENT m_glAttachmentPoint;
 		eGL_FRAMEBUFFER_STATUS m_glStatus;
-		GlFrameBufferWPtr m_glFrameBuffer;
 	};
 }
 

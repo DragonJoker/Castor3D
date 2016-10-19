@@ -20,7 +20,7 @@ namespace GlRender
 		if ( l_return )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
-			auto l_buffer = p_storage.GetOwner()->GetBuffer();
+			auto l_buffer = p_storage.GetOwner()->GetImage().GetBuffer();
 			m_glInternal = l_storage.GetOpenGl().GetInternal( l_buffer->format() );
 			l_return = m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		}
@@ -44,21 +44,23 @@ namespace GlRender
 		l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
 	}
 
-	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock )
+	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock, uint32_t p_index )
 	{
 		auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 		m_glBuffer.Bind();
 		return m_glBuffer.Lock( l_storage.GetOpenGl().GetLockFlags( p_lock ) );
 	}
 
-	void GlTboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified )
+	void GlTboTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
 	{
 		m_glBuffer.Unlock();
 		m_glBuffer.Unbind();
 	}
 
-	void GlTboTextureStorageTraits::Fill( TextureStorage & p_storage, uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format )
+	void GlTboTextureStorageTraits::Fill( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		m_glBuffer.Fill( p_buffer, p_size.width() * p_size.height() * PF::GetBytesPerPixel( p_format ), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+		auto const l_size = p_image.GetBuffer()->dimensions();
+		auto const l_format = p_image.GetBuffer()->format();
+		m_glBuffer.Fill( p_image.GetBuffer()->const_ptr(), l_size.width() * l_size.height() * PF::GetBytesPerPixel( l_format ), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 	}
 }

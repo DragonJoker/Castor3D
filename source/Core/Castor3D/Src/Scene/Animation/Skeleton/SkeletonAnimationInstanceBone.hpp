@@ -91,7 +91,7 @@ namespace Castor3D
 
 	private:
 		/**
-		 *\~copydoc		Castor3D::SkeletonAnimatedObject::DoApply
+		 *\copydoc		Castor3D::SkeletonAnimatedObject::DoApply
 		 */
 		void DoApply()override;
 
