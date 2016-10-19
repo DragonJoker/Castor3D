@@ -11,6 +11,6 @@ namespace GLSL
 	template< typename U >
 	T Array< T >::operator[]( U const & p_offset )
 	{
-		return T{ m_writer, m_name + cuT( "[" ) + ToString( p_offset ) + cuT( "]" ) };
+		return T{ T::m_writer, T::m_name + cuT( "[" ) + ToString( p_offset ) + cuT( "]" ) };
 	}
 }
