@@ -229,6 +229,11 @@ namespace GLSL
 		m_stream << cuT( "layout( " ) << p_layout << cuT( " ) out;" ) << std::endl;
 	}
 
+	void GlslWriter::OutputGeometryLayout( Castor::String const & p_layout, uint32_t p_count )
+	{
+		m_stream << cuT( "layout( " ) << p_layout << cuT( ", max_vertices = " ) << p_count << cuT( " ) out;" ) << std::endl;
+	}
+
 	void GlslWriter::OutputVertexCount( uint32_t p_count )
 	{
 		m_stream << cuT( "layout( max_vertices = " ) << p_count << cuT( " ) out;" ) << std::endl;

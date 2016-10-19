@@ -117,12 +117,12 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de shader object
 	*/
-	static const uint64_t MASK_SHADER_TYPE_VERTEX = uint64_t( 0x1 ) << int( ShaderType::Vertex );
-	static const uint64_t MASK_SHADER_TYPE_HULL = uint64_t( 0x1 ) << int( ShaderType::Hull );
-	static const uint64_t MASK_SHADER_TYPE_DOMAIN = uint64_t( 0x1 ) << int( ShaderType::Domain );
-	static const uint64_t MASK_SHADER_TYPE_GEOMETRY = uint64_t( 0x1 ) << int( ShaderType::Geometry );
-	static const uint64_t MASK_SHADER_TYPE_PIXEL = uint64_t( 0x1 ) << int( ShaderType::Pixel );
-	static const uint64_t MASK_SHADER_TYPE_COMPUTE = uint64_t( 0x1 ) << int( ShaderType::Compute );
+	static const uint32_t MASK_SHADER_TYPE_VERTEX = uint32_t( 0x1 ) << int( ShaderType::Vertex );
+	static const uint32_t MASK_SHADER_TYPE_HULL = uint32_t( 0x1 ) << int( ShaderType::Hull );
+	static const uint32_t MASK_SHADER_TYPE_DOMAIN = uint32_t( 0x1 ) << int( ShaderType::Domain );
+	static const uint32_t MASK_SHADER_TYPE_GEOMETRY = uint32_t( 0x1 ) << int( ShaderType::Geometry );
+	static const uint32_t MASK_SHADER_TYPE_PIXEL = uint32_t( 0x1 ) << int( ShaderType::Pixel );
+	static const uint32_t MASK_SHADER_TYPE_COMPUTE = uint32_t( 0x1 ) << int( ShaderType::Compute );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13

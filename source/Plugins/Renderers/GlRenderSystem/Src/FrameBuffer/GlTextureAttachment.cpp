@@ -121,6 +121,14 @@ namespace GlRender
 			case TextureType::TwoDimensionsArray:
 				l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
 				break;
+
+			case TextureType::Cube:
+				l_return = GetOpenGl().FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0 );
+				break;
+
+			case TextureType::CubeArray:
+				l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
+				break;
 			}
 
 			if ( l_return )

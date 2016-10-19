@@ -37,6 +37,7 @@
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
 #include "Scene/Scene.hpp"
+#include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
@@ -191,10 +192,20 @@ namespace Castor3D
 
 				for ( auto & l_depthMap : p_depthMaps )
 				{
-					if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
+					if ( l_depthMap.get().GetType() == TextureType::TwoDimensions )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_spot.SetValue( l_index++ );
+					}
+					else if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_spot.SetValue( l_index++ );
+					}
+					else if ( l_depthMap.get().GetType() == TextureType::Cube )
+					{
+						l_depthMap.get().SetIndex( l_index );
+						l_point.SetValue( l_index++ );
 					}
 					else if ( l_depthMap.get().GetType() == TextureType::CubeArray )
 					{
@@ -527,7 +538,7 @@ namespace Castor3D
 			DoRender( l_nodes, l_depthMaps, p_camera, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
 
-#if 1
+#if !defined( NDEBUG )
 
 			if ( !l_shadowMaps.empty() )
 			{
@@ -615,13 +626,13 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
+		DoBeginOpaqueRendering();
+
 		if ( !p_nodes.m_staticGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_instancedGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack.empty()
 			 || !p_nodes.m_billboards.m_opaqueRenderNodesBack.empty() )
 		{
-			DoBeginOpaqueRendering();
-
 			DoRenderOpaqueInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
 			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesFront, p_depthMaps );
 			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesFront, p_depthMaps );
@@ -631,19 +642,19 @@ namespace Castor3D
 			DoRenderOpaqueStaticSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_staticGeometries.m_opaqueRenderNodesBack, p_depthMaps );
 			DoRenderOpaqueAnimatedSubmeshesNonInstanced( p_nodes.m_scene, p_camera, p_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, p_depthMaps );
 			DoRenderOpaqueBillboards( p_nodes.m_scene, p_camera, p_nodes.m_billboards.m_opaqueRenderNodesBack, p_depthMaps );
-
-			DoEndOpaqueRendering();
 		}
+
+		DoEndOpaqueRendering();
 	}
 
 	void RenderTechnique::DoRenderTransparentNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, Camera const & p_camera )
 	{
+		DoBeginTransparentRendering();
+
 		if ( !p_nodes.m_staticGeometries.m_transparentRenderNodesFront.empty()
 			|| !p_nodes.m_animatedGeometries.m_transparentRenderNodesFront.empty()
 			|| !p_nodes.m_billboards.m_transparentRenderNodesFront.empty() )
 		{
-			DoBeginTransparentRendering();
-
 			if ( m_multisampling )
 			{
 				DoRenderTransparentInstancedSubmeshesInstanced( p_nodes.m_scene, p_camera, p_nodes.m_instancedGeometries.m_transparentRenderNodesFront, p_depthMaps, false );
@@ -681,9 +692,9 @@ namespace Castor3D
 					}
 				}
 			}
-
-			DoEndTransparentRendering();
 		}
+
+		DoEndTransparentRendering();
 	}
 
 	void RenderTechnique::DoRenderOpaqueStaticSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, StaticGeometryRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
@@ -850,6 +861,11 @@ namespace Castor3D
 	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::Lighting );
+	}
+
+	String RenderTechnique::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	{
+		return String{};
 	}
 
 	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
@@ -1156,11 +1172,9 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
 		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
-		//l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		//l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
 		bool l_return{ true };
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::CubeArray, AccessType::None, AccessType::ReadWrite, PixelFormat::L32F, Point3ui{ p_size.width(), p_size.height(), GLSL::PointShadowMapCount } );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

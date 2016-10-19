@@ -63,6 +63,7 @@ namespace Castor
 	{
 		m_ptCenter = p_box.GetCenter();
 		m_radius = real( point::distance( p_box.GetMax() - m_ptCenter ) );
+		ENSURE( std::abs( m_radius - real( point::distance( m_ptCenter - p_box.GetMin() ) ) ) < 0.0001 );
 	}
 
 	bool SphereBox::IsWithin( Point3r const & p_v )

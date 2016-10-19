@@ -41,8 +41,6 @@ scene "Scene"
 
 	scene_node "PointLightNode"
 	{
-		orientation 1 0 0 45
-		position 0.0 100.0 -100.0
 	}
 
 	light "PointLight"
@@ -55,15 +53,12 @@ scene "Scene"
 		shadow_producer true
 	}
 
-	scene_node "Plane"
+	scene_node "Cube"
 	{
-		position 0.0 0.0 0.0
-		orientation 1.0 0.0 0.0 90.0
 	}
 
 	scene_node "Torus"
 	{
-		position 0.0 30.0 0.0
 	}
 
 	object "PointLight"
@@ -79,13 +74,13 @@ scene "Scene"
 		material "WhiteEmit"
 	}
 
-	object "Plane"
+	object "Cube"
 	{
-		parent "Plane"
+		parent "Cube"
 
-		mesh "Plane"
+		mesh "Cube"
 		{
-			type plane 0 0 200 200
+			type cube 400 400 400
 		}
 
 		material "Gold"
@@ -105,8 +100,7 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 180.0 -200.0
-		orientation 0.320588 0 0 40.947219
+		position 0.0 80.0 -100.0
 	}
 
 	camera "MainCamera"

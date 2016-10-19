@@ -466,27 +466,8 @@ namespace Castor3D
 			auto l_itPosition = m_cameraPositions.insert( { &p_camera
 														  , { l_position + Point3r{ 1.0_r, 1.0_r, 1.0_r }
 															  , l_orientation + Quaternion{ Point4r{ 1.0_r, 1.0_r, 1.0_r, 1.0_r } } } } ).first;
-			auto l_itNodes = m_scenesRenderNodes.insert( { &p_scene, { p_scene } } ).first;
-			auto l_itNew = std::find( m_newScenes.begin(), m_newScenes.end(), &p_scene );
-			bool l_continue = false;
-
-			if ( l_itNew != m_newScenes.end() )
-			{
-				DoSortRenderNodes( l_itNodes->second );
-				m_newScenes.erase( l_itNew );
-				l_continue = true;
-			}
-			else
-			{
-				auto l_it = m_changedScenes.find( &p_scene );
-
-				if ( l_it != m_changedScenes.end() )
-				{
-					m_changedScenes.erase( l_it );
-					DoSortRenderNodes( l_itNodes->second );
-					l_continue = true;
-				}
-			}
+			auto l_continue = Prepare( p_scene );
+			auto l_itNodes = m_scenesRenderNodes.find( &p_scene );
 
 			if ( l_continue
 				 || l_itPosition->second.first != l_position
@@ -500,6 +481,33 @@ namespace Castor3D
 				l_itPosition->second.second = l_orientation;
 			}
 		}
+	}
+
+	bool RenderQueue::Prepare( Scene & p_scene )
+	{
+		auto l_itNodes = m_scenesRenderNodes.insert( { &p_scene,{ p_scene } } ).first;
+		auto l_itNew = std::find( m_newScenes.begin(), m_newScenes.end(), &p_scene );
+		bool l_return{ false };
+
+		if ( l_itNew != m_newScenes.end() )
+		{
+			DoSortRenderNodes( l_itNodes->second );
+			m_newScenes.erase( l_itNew );
+			l_return = true;
+		}
+		else
+		{
+			auto l_it = m_changedScenes.find( &p_scene );
+
+			if ( l_it != m_changedScenes.end() )
+			{
+				m_changedScenes.erase( l_it );
+				DoSortRenderNodes( l_itNodes->second );
+				l_return = true;
+			}
+		}
+
+		return l_return;
 	}
 
 	void RenderQueue::AddScene( Scene & p_scene )
@@ -516,11 +524,24 @@ namespace Castor3D
 		if ( l_itCam != m_preparedRenderNodes.end() )
 		{
 			auto l_itScene = l_itCam->second.find( &p_scene );
-			
+
 			if ( l_itScene != l_itCam->second.end() )
 			{
 				return l_itScene->second;
 			}
+		}
+
+		return l_dummy;
+	}
+	
+	SceneRenderNodes & RenderQueue::GetRenderNodes( Scene & p_scene )
+	{
+		static SceneRenderNodes l_dummy{ p_scene };
+		auto l_itScene = m_scenesRenderNodes.find( &p_scene );
+
+		if ( l_itScene != m_scenesRenderNodes.end() )
+		{
+			return l_itScene->second;
 		}
 
 		return l_dummy;

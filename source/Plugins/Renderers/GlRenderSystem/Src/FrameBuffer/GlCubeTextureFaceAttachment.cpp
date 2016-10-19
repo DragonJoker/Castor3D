@@ -35,7 +35,7 @@ namespace GlRender
 		switch ( l_texture->GetType() )
 		{
 		case TextureType::Cube:
-			GetOpenGl().FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			l_return = GetOpenGl().FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
 			break;
 
 		case TextureType::CubeArray:

@@ -276,6 +276,10 @@ namespace Castor3D
 				m_pShaders[size_t( p_target )]->SetFile( p_eModel, p_pathFile );
 			}
 		}
+		else
+		{
+			CASTOR_EXCEPTION( "Setting the source file of a non available shader object" );
+		}
 
 		ResetToCompile();
 	}
@@ -322,6 +326,10 @@ namespace Castor3D
 			{
 				m_pShaders[size_t( p_target )]->SetSource( p_eModel, p_strSource );
 			}
+		}
+		else
+		{
+			CASTOR_EXCEPTION( "Setting the source of a non available shader object" );
 		}
 
 		ResetToCompile();

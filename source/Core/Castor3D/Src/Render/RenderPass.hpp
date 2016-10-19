@@ -85,17 +85,45 @@ namespace Castor3D
 		C3D_API virtual ~RenderPass();
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
+		 */
+		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
-		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux indicateurs donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
 		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the geometry shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\~french
+		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 */
+		C3D_API Castor::String GetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
@@ -332,7 +360,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags	Scene related flags.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés.
+		 *\brief		Récupère le source du pixel shader correspondant aux indicateurs donnés.
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
@@ -342,13 +370,32 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
-		 *\brief			Modifies the given program flags to make them match the render pass requirements.
-		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\brief		Retrieves the vertex shader source matching the given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\param[in]	p_invertNormals	Tells if the normals must be inverted, in the program.
 		 *\~french
-		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
-		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
+		C3D_API virtual Castor::String DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the geometry shader source matching the given flags.
+		 *\param[in]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in]	p_programFlags	A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags	Scene related flags.
+		 *\~french
+		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
+		 */
+		C3D_API virtual Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -362,6 +409,15 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
 		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		/**
+		 *\~english
+		 *\brief			Modifies the given program flags to make them match the render pass requirements.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

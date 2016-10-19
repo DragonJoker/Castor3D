@@ -94,6 +94,11 @@ namespace Castor3D
 	{
 	}
 
+	String ShadowMapPassSpot::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	{
+		return String{};
+	}
+
 	String ShadowMapPassSpot::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;

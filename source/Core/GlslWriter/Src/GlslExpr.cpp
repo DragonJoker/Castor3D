@@ -84,6 +84,11 @@ namespace GLSL
 		return String( Int( p_value ) );
 	}
 
+	String ToString( uint32_t const & p_value )
+	{
+		return String( Int( int( p_value ) ) );
+	}
+
 	String ToString( double const & p_value )
 	{
 		return String( Float( p_value ) );

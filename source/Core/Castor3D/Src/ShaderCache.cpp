@@ -79,12 +79,21 @@ namespace Castor3D
 
 			if ( l_return )
 			{
+				auto l_matrixUboShaderMask = MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL;
 				ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-				l_return->SetSource( ShaderType::Vertex, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals ) );
+				l_return->SetSource( ShaderType::Vertex, l_model, p_renderPass.GetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals ) );
 				l_return->SetSource( ShaderType::Pixel, l_model, p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags ) );
+				auto l_geometry = p_renderPass.GetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
+
+				if ( !l_geometry.empty() )
+				{
+					AddFlag( l_matrixUboShaderMask, MASK_SHADER_TYPE_GEOMETRY );
+					l_return->CreateObject( ShaderType::Geometry );
+					l_return->SetSource( ShaderType::Geometry, l_model, l_geometry );
+				}
 
 				CreateTextureVariables( *l_return, p_textureFlags );
-				CreateMatrixBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+				CreateMatrixBuffer( *l_return, p_programFlags, l_matrixUboShaderMask );
 				CreateSceneBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_PIXEL );
 				CreatePassBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_PIXEL );
 

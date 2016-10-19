@@ -120,16 +120,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Prepares a scene's nodes from a camera viewpoint.
-		 *\param[in]	p_technique	The render technique.
 		 *\param[in]	p_scene		The scene.
 		 *\param[in]	p_camera	The camera.
 		 *\~french
 		 *\brief		Prépare les noeuds d'une scène, du point de vue d'une caméra.
-		 *\param[in]	p_technique	La technique de rendu.
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_camera	La caméra.
 		 */
 		C3D_API void Prepare( Camera const & p_camera, Scene & p_scene );
+		/**
+		 *\~english
+		 *\brief		Prepares a scene's nodes.
+		 *\param[in]	p_scene		The scene.
+		 *\return		\p true if the nodes have changed.
+		 *\~french
+		 *\brief		Prépare les noeuds d'une scène.
+		 *\param[in]	p_scene		La scène.
+		 *\return		\p true si les noeuds ont changé.
+		 */
+		C3D_API bool Prepare( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Adds a scene rendered through this technique.
@@ -142,18 +151,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a scene's nodes from a camera viewpoint.
-		 *\param[in]	p_technique	The render technique.
 		 *\param[in]	p_scene		The scene.
 		 *\param[in]	p_camera	The camera.
 		 *\return		The render nodes.
 		 *\~french
 		 *\brief		Récupère les noeuds d'une scène, du point de vue d'une caméra.
-		 *\param[in]	p_technique	La technique de rendu.
 		 *\param[in]	p_scene		La scène.
 		 *\param[in]	p_camera	La caméra.
 		 *\return		Les noeuds de rendu
 		 */
 		C3D_API SceneRenderNodes & GetRenderNodes( Camera const & p_camera, Scene & p_scene );
+		/**
+		 *\~english
+		 *\brief		Retrieves a scene's nodes.
+		 *\param[in]	p_scene		The scene.
+		 *\return		The render nodes.
+		 *\~french
+		 *\brief		Récupère les noeuds d'une scène.
+		 *\param[in]	p_scene		La scène.
+		 *\return		Les noeuds de rendu
+		 */
+		C3D_API SceneRenderNodes & GetRenderNodes( Scene & p_scene );
 
 	private:
 		/**

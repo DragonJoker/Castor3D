@@ -9,9 +9,8 @@ namespace GLSL
 
 	template< typename T >
 	template< typename U >
-	T & Array< T >::operator[]( U const & p_offset )
+	T Array< T >::operator[]( U const & p_offset )
 	{
-		T::m_value << Castor::String( *static_cast< T * >( this ) ) << cuT( "[" ) << ToString( p_offset ) << cuT( "]" );
-		return *this;
+		return T{ m_writer, m_name + cuT( "[" ) + ToString( p_offset ) + cuT( "]" ) };
 	}
 }

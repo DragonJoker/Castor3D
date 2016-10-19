@@ -73,16 +73,14 @@ namespace Castor3D
 		 *\param[in]	p_light		La source lumineuse.
 		 */
 		C3D_API static ShadowMapPassSPtr Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index );
-		/**
-		 *\~english
-		 *\return		The camera.
-		 *\~french
-		 *\return		La caméra.
-		 */
-		inline CameraSPtr GetCamera( CubeMapFace p_face )const
-		{
-			return m_cameras[size_t( p_face )];
-		}
+
+	protected:
+		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes );
+		void DoRenderTransparentNodes( SceneRenderNodes & p_nodes );
+		void DoRenderInstancedSubmeshesInstanced( Scene & p_scene, SubmeshStaticRenderNodesByPipelineMap & p_nodes );
+		void DoRenderStaticSubmeshesNonInstanced( Scene & p_scene, StaticGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderAnimatedSubmeshesNonInstanced( Scene & p_scene, AnimatedGeometryRenderNodesByPipelineMap & p_nodes );
+		void DoRenderBillboards( Scene & p_scene, BillboardRenderNodesByPipelineMap & p_nodes );
 
 	private:
 		/**
@@ -106,29 +104,28 @@ namespace Castor3D
 		 */
 		void DoUpdateProgram( ShaderProgram & p_program )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetVertexShaderSource
+		 */
+		Castor::String DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 */
+		Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
 
 	private:
-		void OnNodeChanged( SceneNode const & p_node );
-
-	private:
 		//!\~english	The connection to light's node changed signal.
 		//!\~french		La connexion au signal de changement du noeud de la source lumineuse.
 		uint32_t m_onNodeChanged{ 0 };
-		//!\~english	The attach between cube textures and main frame buffer.
-		//!\~french		L'attache entre les texture du cube et le tampon principal.
-		std::array< TextureAttachmentSPtr, size_t( CubeMapFace::Count ) > m_cubeAttachs;
-		//!\~english	The cameras created from the light.
-		//!\~french		Les caméras créées à partir de la lumière.
-		std::array< CameraSPtr, size_t( CubeMapFace::Count ) > m_cameras;
-		//!\~english	The cameras nodes.
-		//!\~french		Les noeuds des caméras.
-		std::array< SceneNodeSPtr, size_t( CubeMapFace::Count ) > m_cameraNodes;
-		//!\~english	The view matrix.
-		//!\~french		La matrice vue.
-		std::array< Castor::Matrix4x4r, size_t( CubeMapFace::Count ) > m_views;
+		//!\~english	The attach between depth buffer and main frame buffer.
+		//!\~french		L'attache entre le tampon profondeur et le tampon principal.
+		TextureAttachmentSPtr m_depthAttach;
+		//!\~english	The projection matrix.
+		//!\~french		La matrice de projection.
+		Castor::Matrix4x4r m_projection;
 	};
 }
 

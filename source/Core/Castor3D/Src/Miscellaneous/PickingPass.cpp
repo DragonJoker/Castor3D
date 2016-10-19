@@ -579,6 +579,11 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_index, p_nodes );
 	}
 
+	String PickingPass::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	{
+		return String{};
+	}
+
 	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;

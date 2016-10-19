@@ -50,9 +50,9 @@ namespace Castor3D
 		m_alphaClear = p_a;
 	}
 
-	void FrameBuffer::Clear()
+	void FrameBuffer::Clear( uint8_t p_targets )
 	{
-		uint8_t l_targets = 0u;
+		uint8_t l_targets = p_targets;
 
 		for ( auto l_attach : m_attaches )
 		{

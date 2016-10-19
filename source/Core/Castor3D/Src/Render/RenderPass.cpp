@@ -14,6 +14,8 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 
+#include <GlslSource.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -31,6 +33,11 @@ namespace Castor3D
 	{
 	}
 
+	String RenderPass::GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	{
+		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
+	}
+
 	String RenderPass::GetPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		String l_return;
@@ -45,6 +52,11 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	String RenderPass::GetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	{
+		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
 	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided )
@@ -254,5 +266,106 @@ namespace Castor3D
 		}
 
 		return l_program;
+	}
+
+	String RenderPass::DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	{
+		using namespace GLSL;
+		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+		// Vertex inputs
+		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
+		auto normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
+		auto tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
+		auto bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
+		auto texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
+		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
+		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
+		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+
+		UBO_MATRIX( l_writer );
+		UBO_ANIMATION( l_writer, p_programFlags );
+
+		// Outputs
+		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
+		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
+		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+		std::function< void() > l_main = [&]()
+		{
+			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
+			auto l_v4Normal = l_writer.GetLocale( cuT( "l_v4Normal" ), vec4( normal, 0.0 ) );
+			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), vec4( tangent, 0.0 ) );
+			auto l_v4Bitangent = l_writer.GetLocale( cuT( "l_v4Bitangent" ), vec4( bitangent, 0.0 ) );
+			auto l_v3Texture = l_writer.GetLocale( cuT( "l_v3Texture" ), texture );
+			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
+
+			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
+			{
+				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
+				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 0 )]] * weights1[Int( 0 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
+				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
+			}
+			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
+			{
+				l_mtxModel = transform;
+			}
+			else
+			{
+				l_mtxModel = c3d_mtxModel;
+			}
+
+			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
+			{
+				auto l_time = l_writer.GetLocale( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
+				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
+				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
+				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
+				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
+				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
+			}
+
+			vtx_texture = l_v3Texture;
+			l_v4Vertex = l_mtxModel * l_v4Vertex;
+			vtx_worldSpacePosition = l_v4Vertex.xyz();
+			l_v4Vertex = c3d_mtxView * l_v4Vertex;
+			vtx_worldViewSpacePosition = l_v4Vertex.xyz();
+
+			if ( p_invertNormals )
+			{
+				vtx_normal = normalize( l_writer.Paren( l_mtxModel * -l_v4Normal ).xyz() );
+			}
+			else
+			{
+				vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).xyz() );
+			}
+
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).xyz() );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).xyz() );
+			vtx_instance = gl_InstanceID;
+			gl_Position = c3d_mtxProjection * l_v4Vertex;
+		};
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
 	}
 }

@@ -106,6 +106,10 @@ namespace Castor3D
 		 */
 		void DoUpdateProgram( ShaderProgram & p_program )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 */
+		Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;

@@ -505,6 +505,10 @@ namespace Castor3D
 		 */
 		C3D_API void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
+		 */
+		C3D_API Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;

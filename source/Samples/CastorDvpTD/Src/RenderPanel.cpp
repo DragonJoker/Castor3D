@@ -145,8 +145,9 @@ namespace castortd
 		if ( p_geometry != l_geometry )
 		{
 			if ( !p_geometry
-				 || p_geometry->GetName() != cuT( "MapBase" ) )
+				 || p_geometry->GetName() == cuT( "MapBase" ) )
 			{
+				m_selectedGeometry.reset();
 				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry]()
 				{
 					m_marker->SetVisible( false );
@@ -202,10 +203,10 @@ namespace castortd
 						m_selectedTower = nullptr;
 						break;
 					}
+
+					m_selectedGeometry = p_geometry;
 				}
 			}
-
-			m_selectedGeometry = p_geometry;
 		}
 	}
 
