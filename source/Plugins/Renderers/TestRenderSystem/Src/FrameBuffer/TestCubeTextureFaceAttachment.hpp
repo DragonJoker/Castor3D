@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_TEXTURE_ATTACHMENT_H___
-#define ___TRS_TEXTURE_ATTACHMENT_H___
+#ifndef ___TRS_CUBE_TEXTURE_FACE_ATTACHMENT_H___
+#define ___TRS_CUBE_TEXTURE_FACE_ATTACHMENT_H___
 
 #include "TestRenderSystemPrerequisites.hpp"
 
@@ -29,7 +29,7 @@ SOFTWARE.
 
 namespace TestRender
 {
-	class TestTextureAttachment
+	class TestCubeTextureFaceAttachment
 		: public Castor3D::TextureAttachment
 	{
 	public:
@@ -43,14 +43,14 @@ namespace TestRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		TestTextureAttachment( Castor3D::TextureLayoutSPtr p_texture );
+		TestCubeTextureFaceAttachment( Castor3D::TextureLayoutSPtr p_texture, Castor3D::CubeMapFace p_face );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~TestTextureAttachment();
+		virtual ~TestCubeTextureFaceAttachment();
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
@@ -65,6 +65,9 @@ namespace TestRender
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */
 		virtual void DoDetach();
+
+	private:
+		Castor3D::CubeMapFace m_face;
 	};
 }
 

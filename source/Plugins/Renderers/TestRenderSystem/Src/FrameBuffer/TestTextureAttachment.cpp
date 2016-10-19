@@ -19,7 +19,7 @@ namespace TestRender
 		return true;
 	}
 
-	bool TestTextureAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
+	bool TestTextureAttachment::DoAttach()
 	{
 		return true;
 	}

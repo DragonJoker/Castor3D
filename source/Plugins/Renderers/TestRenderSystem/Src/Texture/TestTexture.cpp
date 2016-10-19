@@ -14,20 +14,30 @@ namespace TestRender
 	{
 	}
 
+	TestTexture::TestTexture( TestRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
+		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+	{
+	}
+
+	TestTexture::TestTexture( TestRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+		: TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size }
+	{
+	}
+
 	TestTexture::~TestTexture()
 	{
 	}
 
-	bool TestTexture::Create()
+	void TestTexture::GenerateMipmaps()const
+	{
+	}
+
+	bool TestTexture::DoInitialise()
 	{
 		return true;
 	}
 
-	void TestTexture::Destroy()
-	{
-	}
-
-	void TestTexture::GenerateMipmaps()const
+	void TestTexture::DoCleanup()
 	{
 	}
 

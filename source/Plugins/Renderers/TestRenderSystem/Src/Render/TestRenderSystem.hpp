@@ -75,9 +75,17 @@ namespace TestRender
 		 */
 		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateTexture
+		 */
+		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size )override;
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateTexture
+		 */
+		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size )override;
+		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
-		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
+		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureLayout & p_layout, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
 		 */
