@@ -23,6 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_FRUSTUM_H___
 #define ___C3D_FRUSTUM_H___
 
+#include "Castor3DPrerequisites.hpp"
+
 #include <Math/PlaneEquation.hpp>
 
 namespace Castor3D
