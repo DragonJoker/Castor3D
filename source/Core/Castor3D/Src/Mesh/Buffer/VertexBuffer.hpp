@@ -105,7 +105,8 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english Buffer elements description	\~french Description des élément du tampon
+		//!\~english	Buffer elements description.
+		//!\~french		Description des élément du tampon.
 		BufferDeclaration m_bufferDeclaration;
 	};
 }

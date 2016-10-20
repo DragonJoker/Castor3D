@@ -93,6 +93,13 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSkybox )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFogType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneFogDensity )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneParticleSystem )
+
+	// ParticleSystem parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemParent );
+	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemCount );
+	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemMaterial );
+	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd );
 
 	// Light parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent )

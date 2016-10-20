@@ -114,6 +114,7 @@ namespace Castor3D
 			for ( auto l_it : m_elements )
 			{
 				m_detach( l_it.second );
+				m_clean( l_it.second );
 			}
 
 			m_onChanged();

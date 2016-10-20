@@ -418,6 +418,34 @@ namespace Castor3D
 		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates a transform feedback buffer.
+		 *\param[in]	p_elementSize	The size of one element.
+		 *\return		The created transform feedback buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon de transform feedback.
+		 *\param[in]	p_elementSize	Le taille d'un objet.
+		 *\return		Le tampon de transform feedback créé, dépendant de l'API actuelle.
+		 */
+		C3D_API virtual GpuTransformBufferUPtr CreateTransformBuffer( size_t p_elementSize ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a transform feedback buffer.
+		 *\remarks		Only the render system can do that.
+		 *\param[in]	p_buffer	The hardware buffer to which the vertex buffer will be linked.
+		 *\return		The created vertex buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon de transform feedback.
+		 *\remarks		Seul le render system peut faire ça.
+		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon de sommets.
+		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle.
+		 */
+		template< typename T >
+		inline GpuTransformBufferUPtr CreateTransformBuffer( CpuTransformBuffer< T > * p_buffer )
+		{
+			return CreateTransformBuffer( sizeof( T ) );
+		}
+		/**
+		 *\~english
 		 *\brief		Creates a frame buffer.
 		 *\return		The created frame buffer.
 		 *\~french

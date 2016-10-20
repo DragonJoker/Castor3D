@@ -499,7 +499,6 @@ namespace Castor3D
 		uint8_t m_sceneFlags;
 	};
 
-	template< typename T > class CpuBuffer;
 	class GpuInformations;
 	class RenderSystem;
 	class RenderPass;
@@ -520,9 +519,18 @@ namespace Castor3D
 	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
 
+	template< typename T >
+	class GpuBuffer;
+	template< typename T >
+	class CpuBuffer;
+	template< typename T >
+	class CpuTransformBuffer;
+	class GpuTransformBuffer;
+
 	struct BufferElementDeclaration;
 	class BufferDeclaration;
-	template< typename T > class GpuBuffer;
+	struct TransformBufferElementDeclaration;
+	class TransformBufferDeclaration;
 	class VertexBuffer;
 	class IndexBuffer;
 	class GeometryBuffers;
@@ -532,9 +540,12 @@ namespace Castor3D
 	DECLARE_SMART_PTR( GeometryBuffers );
 	DECLARE_SMART_PTR( BufferElementDeclaration );
 	DECLARE_SMART_PTR( BufferDeclaration );
+	DECLARE_SMART_PTR( TransformBufferElementDeclaration );
+	DECLARE_SMART_PTR( TransformBufferDeclaration );
 	DECLARE_SMART_PTR( VertexBuffer );
 	DECLARE_SMART_PTR( IndexBuffer );
 	DECLARE_SMART_PTR( TextureBuffer );
+	DECLARE_SMART_PTR( GpuTransformBuffer );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );

@@ -584,6 +584,42 @@ namespace GlRender
 		inline bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const;
 
 		//@}
+		/**@name Transform Feedback functions */
+		//@{
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glGenTransformFeedbacks.xhtml
+		*/
+		inline bool GenTransformFeedbacks( int n, uint32_t * buffers )const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glDeleteTransformFeedbacks.xhtml
+		*/
+		inline bool DeleteTransformFeedbacks( int n, uint32_t const * buffers )const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glBindTransformFeedback.xhtml
+		*/
+		inline bool BindTransformFeedback( eGL_BUFFER_TARGET target, uint32_t buffer )const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glIsTransformFeedback.xhtml
+		*/
+		inline bool IsTransformFeedback( uint32_t buffer )const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glBeginTransformFeedback.xhtml
+		*/
+		inline bool BeginTransformFeedback( uint32_t primitive )const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glPauseTransformFeedback.xhtml
+		*/
+		inline bool PauseTransformFeedback()const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glResumeTransformFeedback.xhtml
+		*/
+		inline bool ResumeTransformFeedback()const;
+
+		/** see https://www.opengl.org/sdk/docs/man4/html/glBeginTransformFeedback.xhtml
+		*/
+		inline bool EndTransformFeedback()const;
+
+		//@}
 		/**@name FBO functions */
 		//@{
 
@@ -1058,6 +1094,19 @@ namespace GlRender
 		std::function< void( int size, uint32_t type, int stride, void  const * pointer ) > m_pfnTexCoordPointer;
 
 		//@}
+		/**@name Transform Feedback */
+		//@{
+
+		std::function< void( int n, uint32_t * buffers ) > m_pfnGenTransformFeedbacks;
+		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteTransformFeedbacks;
+		std::function< void( eGL_BUFFER_TARGET target, uint32_t buffer ) > m_pfnBindTransformFeedback;
+		std::function< uint8_t( uint32_t buffer ) > m_pfnIsTransformFeedback;
+		std::function< void( uint32_t primitive ) > m_pfnBeginTransformFeedback;
+		std::function< void() > m_pfnPauseTransformFeedback;
+		std::function< void() > m_pfnResumeTransformFeedback;
+		std::function< void() > m_pfnEndTransformFeedback;
+
+		//@}
 		/**@name FBO */
 		//@{
 
@@ -1358,6 +1407,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
 	MAKE_GL_EXTENSION( ARB_texture_storage )
 	MAKE_GL_EXTENSION( ARB_texture_storage_multisample )
+	MAKE_GL_EXTENSION( ARB_transform_feedback2 )
 
 #	if defined( _WIN32 )
 

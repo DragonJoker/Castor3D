@@ -402,6 +402,12 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "skybox" ), Parser_SceneSkybox );
 	AddParser( eSECTION_SCENE, cuT( "fog_type" ), Parser_SceneFogType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_fogTypes ) } );
 	AddParser( eSECTION_SCENE, cuT( "fog_density" ), Parser_SceneFogDensity, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SCENE, cuT( "particle_system" ), Parser_SceneParticleSystem, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "parent" ), Parser_ParticleSystemParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "particles_count" ), Parser_ParticleSystemCount, { MakeParameter< ePARAMETER_TYPE_UINT32 >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "material" ), Parser_ParticleSystemMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "}" ), Parser_ParticleSystemEnd );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapLightTypes ) } );
@@ -739,6 +745,10 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 
 	case eSECTION_SKYBOX:
 		l_return = cuT( "skybox" );
+		break;
+
+	case eSECTION_PARTICLE_SYSTEM:
+		l_return = cuT( "particle_system" );
 		break;
 
 	default:

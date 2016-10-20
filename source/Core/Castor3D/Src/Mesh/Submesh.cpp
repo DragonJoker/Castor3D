@@ -575,8 +575,8 @@ namespace Castor3D
 					l_vec3m1 = l_pt3 - l_pt1;
 					l_tex2m1 = l_uv2 - l_uv1;
 					l_tex3m1 = l_uv3 - l_uv1;
-					l_vFaceNormal	= -( l_vec3m1 ^ l_vec2m1 );
-					l_vFaceTangent	= ( l_vec2m1 * l_tex3m1[1] ) - ( l_vec3m1 * l_tex2m1[1] );
+					l_vFaceNormal = -( l_vec3m1 ^ l_vec2m1 );
+					l_vFaceTangent = ( l_vec2m1 * l_tex3m1[1] ) - ( l_vec3m1 * l_tex2m1[1] );
 					Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal;
 					Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal;
 					Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal;
@@ -602,8 +602,8 @@ namespace Castor3D
 					l_vec3m1 = l_pt3 - l_pt1;
 					l_tex2m1 = l_uv2 - l_uv1;
 					l_tex3m1 = l_uv3 - l_uv1;
-					l_vFaceNormal	= l_vec3m1 ^ l_vec2m1;
-					l_vFaceTangent	= ( l_vec3m1 * l_tex2m1[1] ) - ( l_vec2m1 * l_tex3m1[1] );
+					l_vFaceNormal = l_vec3m1 ^ l_vec2m1;
+					l_vFaceTangent = ( l_vec3m1 * l_tex2m1[1] ) - ( l_vec2m1 * l_tex3m1[1] );
 					Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal;
 					Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal;
 					Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal;
@@ -735,11 +735,11 @@ namespace Castor3D
 		{
 			Point3r l_normal;
 			Vertex::GetNormal( m_points[i], l_normal );
-			Point3r l_tangent 	= point::get_normalised( p_tangent );
+			Point3r l_tangent = point::get_normalised( p_tangent );
 			l_tangent -= l_normal * point::dot( l_tangent, l_normal );
 			Point3r l_bitangent = l_normal ^ l_tangent;
-			Vertex::SetTangent(	m_points[i], l_tangent );
-			Vertex::SetBitangent(	m_points[i], l_bitangent );
+			Vertex::SetTangent( m_points[i], l_tangent );
+			Vertex::SetBitangent( m_points[i], l_bitangent );
 			i++;
 		} );
 	}
@@ -750,10 +750,10 @@ namespace Castor3D
 		{
 			Point3r l_normal;
 			Point3r l_bitangent;
-			Vertex::GetNormal(	p_pVertex, l_normal );
+			Vertex::GetNormal( p_pVertex, l_normal );
 			Vertex::GetBitangent( p_pVertex, l_bitangent );
 			Point3r l_tangent = l_normal ^ l_bitangent;
-			Vertex::SetTangent(	p_pVertex, l_tangent );
+			Vertex::SetTangent( p_pVertex, l_tangent );
 		} );
 	}
 
@@ -815,7 +815,7 @@ namespace Castor3D
 										l_dDistance += point::distance_squared( l_pVtx2 - p_ptCameraPosition );
 										Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
 										l_dDistance += point::distance_squared( l_pVtx3 - p_ptCameraPosition );
-										stFACE_DISTANCE l_face = { {l_it[0], l_it[1], l_it[2]}, l_dDistance };
+										stFACE_DISTANCE l_face = { { l_it[0], l_it[1], l_it[2] }, l_dDistance };
 										l_arraySorted.push_back( l_face );
 									}
 
@@ -973,7 +973,7 @@ namespace Castor3D
 		}
 
 		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::Skinning ) && m_parentMesh.GetSkeleton() )
-				|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
+			 || CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 		{
 			if ( CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 			{
@@ -1165,9 +1165,9 @@ namespace Castor3D
 
 				for ( auto const & l_face : m_faces )
 				{
-					l_indexBuffer.SetElement( l_index++, l_face[0] );
-					l_indexBuffer.SetElement( l_index++, l_face[1] );
-					l_indexBuffer.SetElement( l_index++, l_face[2] );
+					l_indexBuffer[l_index++] = l_face[0];
+					l_indexBuffer[l_index++] = l_face[1];
+					l_indexBuffer[l_index++] = l_face[2];
 				}
 
 				//m_faces.clear();

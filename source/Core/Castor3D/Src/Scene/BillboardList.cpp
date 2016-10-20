@@ -157,9 +157,9 @@ namespace Castor3D
 		p_geometryBuffers.Draw( l_size, 0 );
 	}
 
-	void BillboardList::SetMaterial( MaterialSPtr p_pMaterial )
+	void BillboardList::SetMaterial( MaterialSPtr p_material )
 	{
-		m_wpMaterial = p_pMaterial;
+		m_wpMaterial = p_material;
 	}
 
 	void BillboardList::SetDimensions( Size const & p_dimensions )

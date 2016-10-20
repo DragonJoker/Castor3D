@@ -1912,6 +1912,54 @@ namespace GlRender
 		return m_pBufFunctions->GetNamedBufferParameter( buffer, pname, params );
 	}
 
+	bool OpenGl::GenTransformFeedbacks( int n, uint32_t * buffers )const
+	{
+		m_pfnGenTransformFeedbacks( n, buffers );
+		return glCheckError( *this, "glGenTransformFeedbacks" );
+	}
+
+	bool OpenGl::DeleteTransformFeedbacks( int n, uint32_t const * buffers )const
+	{
+		m_pfnDeleteTransformFeedbacks( n, buffers );
+		return glCheckError( *this, "glDeleteTransformFeedbacks" );
+	}
+
+	bool OpenGl::BindTransformFeedback( eGL_BUFFER_TARGET target, uint32_t buffer )const
+	{
+		m_pfnBindTransformFeedback( target, buffer );
+		return glCheckError( *this, "glBindTransformFeedback" );
+	}
+
+	bool OpenGl::IsTransformFeedback( uint32_t buffer )const
+	{
+		m_pfnIsTransformFeedback( buffer );
+		return glCheckError( *this, "glIsTransformFeedback" );
+	}
+
+	bool OpenGl::BeginTransformFeedback( uint32_t primitive )const
+	{
+		m_pfnBeginTransformFeedback( primitive );
+		return glCheckError( *this, "glBeginTransformFeedback" );
+	}
+
+	bool OpenGl::PauseTransformFeedback()const
+	{
+		m_pfnPauseTransformFeedback();
+		return glCheckError( *this, "glPauseTransformFeedback" );
+	}
+
+	bool OpenGl::ResumeTransformFeedback()const
+	{
+		m_pfnResumeTransformFeedback();
+		return glCheckError( *this, "glResumeTransformFeedback" );
+	}
+
+	bool OpenGl::EndTransformFeedback()const
+	{
+		m_pfnEndTransformFeedback();
+		return glCheckError( *this, "glEndTransformFeedback" );
+	}
+
 	bool OpenGl::GenFramebuffers( int n, uint32_t * framebuffers )const
 	{
 		m_pfnGenFramebuffers( n, framebuffers );

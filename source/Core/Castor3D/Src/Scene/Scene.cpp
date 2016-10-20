@@ -4,12 +4,14 @@
 #include "Camera.hpp"
 #include "BillboardList.hpp"
 #include "Geometry.hpp"
+#include "ParticleSystem.hpp"
 #include "SceneNode.hpp"
 #include "Skybox.hpp"
 
 #include "Animation/AnimatedObjectGroup.hpp"
 #include "Cache/CacheView.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Light/Light.hpp"
 #include "Material/Material.hpp"
 #include "Mesh/Importer.hpp"
@@ -348,6 +350,10 @@ namespace Castor3D
 			p_element->SetName( l_name );
 			p_destination.insert( l_name, p_element );
 		};
+		auto l_eventInitialise = [this]( auto p_element )
+		{
+			this->GetEngine()->PostEvent( MakeInitialiseEvent( *p_element ) );
+		};
 		auto l_eventClean = [this]( auto p_element )
 		{
 			this->GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
@@ -364,7 +370,7 @@ namespace Castor3D
 			}
 			else
 			{
-				p_rootCameraNode->AttachObject( p_element );
+				p_rootObjectNode->AttachObject( p_element );
 			}
 		};
 		auto l_attachCamera = []( auto p_element
@@ -459,6 +465,19 @@ namespace Castor3D
 														{
 															p_element->Detach();
 														} );
+		m_particleSystemCache = MakeObjectCache< ParticleSystem, String >(	p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
+																			, [this]( String const & p_name, SceneNodeSPtr p_parent, uint32_t p_count )
+																			{
+																				return std::make_shared< ParticleSystem >( p_name, *this, p_parent, *GetEngine()->GetRenderSystem(), p_count );
+																			}
+																			, l_eventInitialise
+																			, l_eventClean
+																			, l_mergeObject
+																			, l_attachObject
+																			, [this]( ParticleSystemSPtr p_element )
+																			{
+																				p_element->Detach();
+																			} );
 		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
 																, [this]( String const & p_name )
 																{
@@ -526,6 +545,7 @@ namespace Castor3D
 		m_skybox.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
+		m_particleSystemCache.reset();
 		m_cameraCache.reset();
 		m_geometryCache.reset();
 		m_lightCache.reset();
@@ -569,6 +589,7 @@ namespace Castor3D
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
 		m_billboardCache->Cleanup();
+		m_particleSystemCache->Cleanup();
 		m_geometryCache->Cleanup();
 		m_lightCache->Cleanup();
 		m_sceneNodeCache->Cleanup();
@@ -683,6 +704,7 @@ namespace Castor3D
 			p_scene->GetAnimatedObjectGroupCache().MergeInto( *m_animatedObjectGroupCache );
 			p_scene->GetCameraCache().MergeInto( *m_cameraCache );
 			p_scene->GetBillboardListCache().MergeInto( *m_billboardCache );
+			p_scene->GetParticleSystemCache().MergeInto( *m_particleSystemCache );
 			p_scene->GetGeometryCache().MergeInto( *m_geometryCache );
 			p_scene->GetLightCache().MergeInto( *m_lightCache );
 			p_scene->GetSceneNodeCache().MergeInto( *m_sceneNodeCache );

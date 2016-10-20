@@ -61,21 +61,21 @@ namespace Castor3D
 
 	OverlayRenderer::OverlayRenderer( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_declaration{ 
-		{
+		, m_declaration{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 )
-			}
-		} }
+				{
+					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
+					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 )
+				}
+			} }
 		, m_textDeclaration{
-		{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
-				BufferElementDeclaration( ShaderProgram::Text, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 0 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 1 )
-			}
-		} }
+				{
+					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
+					BufferElementDeclaration( ShaderProgram::Text, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 0 ),
+					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 1 )
+				}
+			} }
 	{
 	}
 
@@ -332,18 +332,18 @@ namespace Castor3D
 			OneFloatFrameVariableSPtr l_1f;
 
 			l_it = m_mapPanelNodes.insert( { &p_pass, PassRenderNode
-				{
-					p_pass,
-					l_pipeline,
-					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer,
-					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-				}
+			{
+				p_pass,
+				l_pipeline,
+				*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+				*l_passBuffer,
+				*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+			}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
 		}
@@ -365,18 +365,18 @@ namespace Castor3D
 			OneFloatFrameVariableSPtr l_1f;
 
 			l_it = m_mapTextNodes.insert( { &p_pass, PassRenderNode
-				{
-					p_pass,
-					l_pipeline,
-					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
-					*l_passBuffer,
-					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-				}
+			{
+				p_pass,
+				l_pipeline,
+				*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+				*l_passBuffer,
+				*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+				*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+			}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
 		}
@@ -492,7 +492,7 @@ namespace Castor3D
 		p_pass.EndRender();
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler, uint32_t p_count )
 	{
 		auto & l_node = DoGetTextNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );

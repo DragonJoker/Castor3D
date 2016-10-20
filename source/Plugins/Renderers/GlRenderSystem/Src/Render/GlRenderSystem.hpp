@@ -76,6 +76,10 @@ namespace GlRender
 		 */
 		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer )override;
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateTransformBuffer
+		 */
+		Castor3D::GpuTransformBufferUPtr CreateTransformBuffer( size_t p_elementSize )override;
+		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
 		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;

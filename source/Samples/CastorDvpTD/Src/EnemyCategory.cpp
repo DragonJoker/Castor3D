@@ -18,7 +18,7 @@ namespace castortd
 
 		m_bounty.Initialise( 9u, []( uint32_t p_value, uint32_t p_level )
 		{
-			return p_value + 2u;
+			return p_value + std::max( 2u, ( p_value * 4 ) / 100 );
 		} );
 	}
 }
