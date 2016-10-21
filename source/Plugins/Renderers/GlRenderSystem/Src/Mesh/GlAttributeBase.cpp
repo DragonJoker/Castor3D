@@ -9,10 +9,10 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, BufferDeclaration const & p_declaration, String const & p_attributeName, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor )
+	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, uint32_t p_stride, String const & p_attributeName, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor )
 		: Holder( p_gl )
 		, m_program( p_program )
-		, m_declaration( p_declaration )
+		, m_stride( p_stride )
 		, m_attributeName( p_attributeName )
 		, m_attributeLocation( eGL_INVALID_INDEX )
 		, m_count( p_count )
@@ -37,11 +37,11 @@ namespace GlRender
 
 		if ( m_glType == eGL_TYPE_INT )
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_declaration.GetStride(), BUFFER_OFFSET( m_offset ) );
+			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 		else
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_declaration.GetStride(), BUFFER_OFFSET( m_offset ) );
+			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 
 		return l_return;

@@ -663,6 +663,7 @@ namespace GlRender
 		eGL_TWEAK_ALPHA_TO_COVERAGE = 0x809E,
 		eGL_TWEAK_DEBUG_OUTPUT_SYNCHRONOUS = 0x8242,
 		eGL_TWEAK_DEPTH_CLAMP = 0x864F,
+		eGL_TWEAK_RASTERIZER_DISCARD = 0x8C89,
 	}	eGL_TWEAK;
 
 	typedef enum eGL_RENDER_MODE
@@ -1304,7 +1305,7 @@ namespace GlRender
 	class GlRenderSystem;
 	class GlAttributeBase;
 	template< typename T, uint32_t Columns, uint32_t Rows > class GlMatAttribute;
-	template< typename T, uint32_t Count > class GlAttribute;
+	template< typename T, uint32_t Count > class GlVecAttribute;
 	template< typename T > class GlBufferBase;
 	template< typename T > class GlBuffer;
 	class GlVertexBufferObject;
@@ -1318,15 +1319,18 @@ namespace GlRender
 	typedef GlMatAttribute< real, 4, 4 > GlAttributeMat4;
 	typedef GlMatAttribute< real, 3, 3 > GlAttributeMat3;
 	typedef GlMatAttribute< real, 2, 2 > GlAttributeMat2;
-	typedef GlAttribute< real, 4 > GlAttribute4r;
-	typedef GlAttribute< real, 3 > GlAttribute3r;
-	typedef GlAttribute< real, 2 > GlAttribute2r;
-	typedef GlAttribute< real, 1 > GlAttribute1r;
-	typedef GlAttribute< int, 4 > GlAttribute4i;
-	typedef GlAttribute< int, 3 > GlAttribute3i;
-	typedef GlAttribute< int, 2 > GlAttribute2i;
-	typedef GlAttribute< int, 1 > GlAttribute1i;
-	typedef GlAttribute< uint32_t, 1 > GlAttribute1ui;
+	typedef GlVecAttribute< real, 4 > GlAttributeVec4r;
+	typedef GlVecAttribute< real, 3 > GlAttributeVec3r;
+	typedef GlVecAttribute< real, 2 > GlAttributeVec2r;
+	typedef GlVecAttribute< real, 1 > GlAttributeVec1r;
+	typedef GlVecAttribute< int, 4 > GlAttributeVec4i;
+	typedef GlVecAttribute< int, 3 > GlAttributeVec3i;
+	typedef GlVecAttribute< int, 2 > GlAttributeVec2i;
+	typedef GlVecAttribute< int, 1 > GlAttributeVec1i;
+	typedef GlVecAttribute< uint32_t, 4 > GlAttributeVec4ui;
+	typedef GlVecAttribute< uint32_t, 3 > GlAttributeVec3ui;
+	typedef GlVecAttribute< uint32_t, 2 > GlAttributeVec2ui;
+	typedef GlVecAttribute< uint32_t, 1 > GlAttributeVec1ui;
 	DECLARE_SMART_PTR( GlAttributeBase );
 	DECLARE_SMART_PTR( GlIndexArray );
 	DECLARE_SMART_PTR( GlVertexArray );

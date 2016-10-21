@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_GPU_TRANSFORM_BUFFER_H___
 #define ___C3D_GPU_TRANSFORM_BUFFER_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "Mesh/Buffer/TransformBufferDeclaration.hpp"
 
 #include <Design/OwnedBy.hpp>
 
@@ -48,15 +48,18 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_renderSystem	The RenderSystem
-		 *\param[in]	p_elementSize	One element size.
+		 *\param[in]	m_declaration	The buffer elements declaration.
+		 *\param[in]	m_program		The shader program.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_elementSize	La taille d'un élément.
+		 *\param[in]	m_declaration	La déclaration des éléments du tampon.
+		 *\param[in]	m_program		Le programm shader.
 		 */
-		explicit GpuTransformBuffer( RenderSystem & p_renderSystem, size_t p_elementSize )
+		explicit GpuTransformBuffer( RenderSystem & p_renderSystem, ShaderProgram & p_program, TransformBufferDeclaration const & p_declaration )
 			: Castor::OwnedBy< RenderSystem >( p_renderSystem )
-			, m_elementSize{ p_elementSize }
+			, m_declaration{ p_declaration }
+			, m_program{ p_program }
 		{
 		}
 		/**
@@ -100,6 +103,13 @@ namespace Castor3D
 		 *\brief		Fonction de nettoyage
 		 */
 		C3D_API virtual void Cleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the GPU buffer and attributes.
+		 *\~french
+		 *\brief		Met à jour le tampon et les aattributs.
+		 */
+		C3D_API virtual void Update() = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
@@ -176,10 +186,13 @@ namespace Castor3D
 		 */
 		C3D_API virtual bool Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature ) = 0;
 
-	private:
-		//!\~english	One element size.
-		//!\~french		Taille d'un élément.
-		size_t m_elementSize;
+	protected:
+		//!\~english	The buffer's elements declaration.
+		//!\~french		La déclaration des éléments du tampon.
+		TransformBufferDeclaration m_declaration;
+		//!\~english	The shader program.
+		//!\~french		Le programm shader.
+		ShaderProgram & m_program;
 	};
 }
 

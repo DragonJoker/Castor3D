@@ -421,6 +421,14 @@ namespace Castor3D
 		IVec3,
 		//! 4 ints (4 bytes each, GLSL ivec4)
 		IVec4,
+		//! 1 uint (4 bytes each, GLSL uint)
+		UInt,
+		//! 2 uints (4 bytes each, GLSL uivec2)
+		UIVec2,
+		//! 3 uints (4 bytes each, GLSL uivec3)
+		UIVec3,
+		//! 4 uints (4 bytes each, GLSL uivec4)
+		UIVec4,
 		//! 2x2 floats (GLSL mat2)
 		Mat2,
 		//! 3x3 floats (GLSL mat3)

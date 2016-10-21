@@ -69,12 +69,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		GPU side creation function.
+		 *\param[in]	p_program	The shader program to which the buffer will be linked.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Fonction de création sur le GPU.
+		 *\param[in]	p_program	Le programme shader auquel ce tampon va être lié.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Create();
+		inline bool Create( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		GPU side destruction function.

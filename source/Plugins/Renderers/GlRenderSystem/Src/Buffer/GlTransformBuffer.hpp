@@ -49,7 +49,7 @@ namespace GlRender
 			, std::function< bool( uint32_t ) > >;
 
 	public:
-		GlTransformBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, size_t p_elementSize );
+		GlTransformBuffer( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::ShaderProgram & p_program, Castor3D::TransformBufferDeclaration const & p_declaration );
 		virtual ~GlTransformBuffer();
 		/**
 		 *\copydoc		Castor3D::GpuTransformBuffer::Initialise
@@ -67,6 +67,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::GpuTransformBuffer::Cleanup
 		 */
 		void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::GpuTransformBuffer::Update
+		 */
+		void Update()override;
 		/**
 		 *\copydoc		Castor3D::GpuTransformBuffer::Bind
 		 */
@@ -94,7 +98,13 @@ namespace GlRender
 		}
 
 	private:
+		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::TransformBufferElementDeclaration const & p_element );
+		bool DoCreateAttributes();
+
+	private:
 		GlBufferBase< uint8_t > m_glBuffer;
+		//! The transform attributes.
+		GlAttributePtrArray m_attributes;
 	};
 }
 

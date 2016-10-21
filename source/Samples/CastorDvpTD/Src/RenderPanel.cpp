@@ -144,18 +144,15 @@ namespace castortd
 
 		if ( p_geometry != l_geometry )
 		{
-			if ( !p_geometry
-				 || p_geometry->GetName() == cuT( "MapBase" ) )
+			bool l_freeCell = false;
+
+			if ( !p_geometry || p_geometry->GetName() == cuT( "MapBase" ) )
 			{
 				m_selectedGeometry.reset();
-				m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry]()
-				{
-					m_marker->SetVisible( false );
-				} ) );
 			}
 			else
 			{
-				Cell l_cell;
+				Cell l_cell{ 0u, 0u, Cell::State::Invalid };
 
 				if ( p_geometry->GetName().find( cuT( "Tower" ) ) == String::npos )
 				{
@@ -171,13 +168,7 @@ namespace castortd
 					switch ( l_cell.m_state )
 					{
 					case Cell::State::Empty:
-						if ( !l_geometry )
-						{
-							m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, p_geometry]()
-							{
-								m_marker->SetVisible( true );
-							} ) );
-						}
+						l_freeCell = true;
 						m_listener->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, p_geometry]()
 						{
 							Point3r l_position = p_geometry->GetParent()->GetPosition();
@@ -207,6 +198,11 @@ namespace castortd
 					m_selectedGeometry = p_geometry;
 				}
 			}
+
+			m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_freeCell]()
+			{
+				m_marker->SetVisible( l_freeCell );
+			} ) );
 		}
 	}
 

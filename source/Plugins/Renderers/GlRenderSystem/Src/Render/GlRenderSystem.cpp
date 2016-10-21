@@ -454,9 +454,9 @@ namespace GlRender
 		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ARRAY, p_buffer );
 	}
 
-	Castor3D::GpuTransformBufferUPtr GlRenderSystem::CreateTransformBuffer( size_t p_elementSize )
+	Castor3D::GpuTransformBufferUPtr GlRenderSystem::CreateTransformBuffer( ShaderProgram & p_program, TransformBufferDeclaration const & p_declaration )
 	{
-		return std::make_unique< GlTransformBuffer >( *this, GetOpenGl(), p_elementSize );
+		return std::make_unique< GlTransformBuffer >( GetOpenGl(), *this, p_program, p_declaration );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )

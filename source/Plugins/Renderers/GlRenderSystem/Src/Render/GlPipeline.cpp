@@ -196,6 +196,15 @@ namespace GlRender
 				l_return &= p_gl.Disable( eGL_TWEAK_OFFSET_FILL );
 			}
 
+			if ( p_state.GetDiscardPrimitives() )
+			{
+				l_return &= p_gl.Enable( eGL_TWEAK_RASTERIZER_DISCARD );
+			}
+			else
+			{
+				l_return &= p_gl.Disable( eGL_TWEAK_RASTERIZER_DISCARD );
+			}
+
 			return l_return;
 		}
 	}

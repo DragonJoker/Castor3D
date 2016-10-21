@@ -78,7 +78,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTransformBuffer
 		 */
-		Castor3D::GpuTransformBufferUPtr CreateTransformBuffer( size_t p_elementSize )override;
+		Castor3D::GpuTransformBufferUPtr CreateTransformBuffer( Castor3D::ShaderProgram & p_program, Castor3D::TransformBufferDeclaration const & p_declaration )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */

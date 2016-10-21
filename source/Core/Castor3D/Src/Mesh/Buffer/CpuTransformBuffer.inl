@@ -24,11 +24,11 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	inline bool CpuTransformBuffer< T >::Create()
+	inline bool CpuTransformBuffer< T >::Create( ShaderProgram & p_program )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateTransformBuffer( this );
+			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateTransformBuffer( p_program, m_declaration );
 		}
 
 		bool l_return = m_gpuBuffer != nullptr;

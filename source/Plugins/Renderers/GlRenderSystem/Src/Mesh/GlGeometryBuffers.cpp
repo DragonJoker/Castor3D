@@ -192,55 +192,72 @@ namespace GlRender
 		bool l_return = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
 		GlAttributeBaseSPtr l_attribute;
+		uint32_t l_stride = p_declaration.GetStride();
 
 		switch ( p_element.m_dataType )
 		{
 		case ElementType::Float:
-			l_attribute = std::make_shared< GlAttribute1r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec2:
-			l_attribute = std::make_shared< GlAttribute2r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec3:
-			l_attribute = std::make_shared< GlAttribute3r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec4:
-			l_attribute = std::make_shared< GlAttribute4r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Colour:
-			l_attribute = std::make_shared< GlAttribute1ui >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Int:
-			l_attribute = std::make_shared< GlAttribute1i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec2:
-			l_attribute = std::make_shared< GlAttribute2i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec3:
-			l_attribute = std::make_shared< GlAttribute3i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec4:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UInt:
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec2:
+			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec3:
+			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec4:
+			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat2:
-			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat3:
-			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat4:
-			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		default:

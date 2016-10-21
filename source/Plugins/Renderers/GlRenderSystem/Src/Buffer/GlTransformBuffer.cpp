@@ -1,11 +1,15 @@
 #include "GlTransformBuffer.hpp"
 
 #include "Render/GlRenderSystem.hpp"
+#include "Mesh/GlAttribute.hpp"
+
+using namespace Castor;
+using namespace Castor3D;
 
 namespace GlRender
 {
-	GlTransformBuffer::GlTransformBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, size_t p_elementSize )
-		: Castor3D::GpuTransformBuffer( p_renderSystem, p_elementSize )
+	GlTransformBuffer::GlTransformBuffer( OpenGl & p_gl, GlRenderSystem & p_renderSystem, ShaderProgram & p_program, TransformBufferDeclaration const & p_declaration )
+		: Castor3D::GpuTransformBuffer( p_renderSystem, p_program, p_declaration )
 		, BindableType{ p_gl,
 						"GlTransformBuffer",
 						std::bind( &OpenGl::GenTransformFeedbacks, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -54,6 +58,11 @@ namespace GlRender
 				l_return = GetOpenGl().BindBufferBase( eGL_BUFFER_TARGET_TRANSFORM_FEEDBACK_BUFFER, 0, m_glBuffer.GetGlName() );
 				m_glBuffer.Unbind();
 			}
+				
+			if ( l_return )
+			{
+				l_return = DoCreateAttributes();
+			}
 
 			BindableType::Unbind();
 		}
@@ -64,6 +73,10 @@ namespace GlRender
 	void GlTransformBuffer::Cleanup()
 	{
 		m_glBuffer.Cleanup();
+	}
+
+	void GlTransformBuffer::Update()
+	{
 	}
 
 	bool GlTransformBuffer::Bind()
@@ -89,5 +102,107 @@ namespace GlRender
 	void GlTransformBuffer::Unlock()
 	{
 		m_glBuffer.Unlock();
+	}
+
+	GlAttributeBaseSPtr GlTransformBuffer::DoCreateAttribute( TransformBufferElementDeclaration const & p_element )
+	{
+		bool l_return = true;
+		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
+		auto & l_program = static_cast< GlShaderProgram & >( m_program );
+		GlAttributeBaseSPtr l_attribute;
+		uint32_t l_stride = m_declaration.GetStride();
+
+		switch ( p_element.m_dataType )
+		{
+		case ElementType::Float:
+			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Vec2:
+			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Vec3:
+			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Vec4:
+			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Colour:
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Int:
+			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::IVec2:
+			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::IVec3:
+			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::IVec4:
+			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UInt:
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec2:
+			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec3:
+			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec4:
+			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Mat2:
+			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Mat3:
+			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::Mat4:
+			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		default:
+			assert( false && "Unsupported element type" );
+			break;
+		}
+
+		if ( l_attribute )
+		{
+			l_attribute->SetOffset( p_element.m_offset );
+		}
+
+		return l_attribute;
+	}
+
+	bool GlTransformBuffer::DoCreateAttributes()
+	{
+		for ( auto & l_element : m_declaration )
+		{
+			auto l_attribute = DoCreateAttribute( l_element );
+
+			if ( l_attribute )
+			{
+				m_attributes.push_back( l_attribute );
+			}
+		}
+
+		return !m_attributes.empty();
 	}
 }

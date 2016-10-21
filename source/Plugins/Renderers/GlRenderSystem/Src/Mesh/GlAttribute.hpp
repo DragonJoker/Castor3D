@@ -34,12 +34,12 @@ namespace GlRender
 	\brief		Derived from GlAttribsBase, allows to specify attribute type and count
 	*/
 	template< typename T, uint32_t Count >
-	class GlAttribute
+	class GlVecAttribute
 		: public GlAttributeBase
 	{
 	public:
-		GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor3D::BufferDeclaration const & p_declaration, Castor::String const & p_attributeName );
-		virtual ~GlAttribute();
+		GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
+		virtual ~GlVecAttribute();
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor3D::BufferDeclaration const & p_declaration, Castor::String const & p_attributeName );
+		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
 		virtual ~GlMatAttribute();
 		virtual bool Bind( bool p_bNormalised = false );
 	};

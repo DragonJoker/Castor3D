@@ -199,7 +199,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The scissor test activation status.
 		 *\~french
-		 *\return		La statut d'acitvation du scissor test.
+		 *\return		La statut d'activation du scissor test.
 		 */
 		inline bool GetScissor()const
 		{
@@ -210,12 +210,34 @@ namespace Castor3D
 		 *\brief		Sets the scissor test activation status.
 		 *\param[in]	p_value	The new value.
 		 *\~french
-		 *\brief		Définit le statut d'acitvation du scissor test.
+		 *\brief		Définit le statut d'activation du scissor test.
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
 		inline void SetScissor( bool p_value )
 		{
 			m_scissorTest = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The primitive discard status.
+		 *\~french
+		 *\return		La statut de défausse des primitives.
+		 */
+		inline bool GetDiscardPrimitives()const
+		{
+			return m_discardPrimitives;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the primitive discard status.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le statut de défausse des primitives.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetDiscardPrimitives( bool p_value )
+		{
+			m_discardPrimitives = p_value;
 		}
 
 	protected:
@@ -238,11 +260,14 @@ namespace Castor3D
 		//!\~french		L'unité du modificateur de profondeur.
 		float m_depthBiasUnits{ 0.0f };
 		//!\~english	The scissor test activation status.
-		//!\~french		Le statut d'acitvation du scissor test.
+		//!\~french		Le statut d'activation du scissor test.
 		bool m_scissorTest{ false };
 		//!\~english	The depth clipping status.
 		//!\~french		Le statut de depth clipping.
 		bool m_depthClipping{ true };
+		//!\~english	The primitive discard status.
+		//!\~french		Le statut de défausse des primitives.
+		bool m_discardPrimitives{ false };
 	};
 }
 
