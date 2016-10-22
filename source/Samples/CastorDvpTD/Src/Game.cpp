@@ -14,6 +14,14 @@ namespace castortd
 {
 	namespace
 	{
+#if defined( NDEBUG )
+		constexpr uint32_t InitialLives = 5u;
+		constexpr uint32_t InitialOre = 750u;
+#else
+		constexpr uint32_t InitialLives = 1u;
+		constexpr uint32_t InitialOre = 75000u;
+#endif
+
 		void DoPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
 		{
 			if ( p_prv.m_x != p_cur.m_x )
@@ -100,13 +108,8 @@ namespace castortd
 		std::swap( m_grid, l_grid );
 
 		m_totalBullets = 0ull;
-
-#if defined( NDEBUG )
-		m_lives = 5u;
-#else
-		m_lives = 1u;
-#endif
-		m_ore = 750u;
+		m_lives = InitialLives;
+		m_ore = InitialOre;
 		m_kills = 0u;
 		m_selectedTower.reset();
 		m_paused = false;

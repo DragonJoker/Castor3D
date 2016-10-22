@@ -1960,6 +1960,18 @@ namespace GlRender
 		return glCheckError( *this, "glEndTransformFeedback" );
 	}
 
+	bool OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, eGL_ATTRIBS_LAYOUT bufferMode )const
+	{
+		m_pfnTransformFeedbackVaryings( program, count, varyings, bufferMode );
+		return glCheckError( *this, "glTransformFeedbackVaryings" );
+	}
+
+	bool OpenGl::DrawTransformFeedback( eGL_PRIMITIVE mode, uint32_t id )const
+	{
+		m_pfnDrawTransformFeedback( mode, id );
+		return glCheckError( *this, "glDrawTransformFeedback" );
+	}
+
 	bool OpenGl::GenFramebuffers( int n, uint32_t * framebuffers )const
 	{
 		m_pfnGenFramebuffers( n, framebuffers );

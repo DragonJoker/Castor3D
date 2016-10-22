@@ -50,14 +50,18 @@ namespace Castor3D
 		m_arrayPrograms.clear();
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::GetNewProgram()
+	ShaderProgramSPtr ShaderProgramCache::GetNewProgram( bool p_initialise )
 	{
 		ShaderProgramSPtr l_return = GetEngine()->GetRenderSystem()->CreateShaderProgram();
 
 		if ( l_return )
 		{
 			m_arrayPrograms.push_back( l_return );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+
+			if ( p_initialise )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			}
 		}
 
 		return l_return;

@@ -44,7 +44,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
+		Castor3D::GeometryBuffersUPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
 		 */
@@ -62,6 +62,10 @@ namespace TestRender
 		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
 		 */
 		Castor3D::ShaderProgramSPtr CreateShaderProgram()override;
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
+		 */
+		Castor3D::TransformFeedbackUPtr CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
 		 */
@@ -97,7 +101,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateQuery
 		 */
-		Castor3D::GpuQuerySPtr CreateQuery( Castor3D::QueryType p_type )override;
+		Castor3D::GpuQueryUPtr CreateQuery( Castor3D::QueryType p_type )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateViewport
 		 */

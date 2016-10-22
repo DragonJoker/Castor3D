@@ -23,17 +23,6 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
-	{
-		return Fill( p_buffer, p_size, p_type, p_nature );
-	}
-
-	template< typename T >
-	void GlBufferBase< T >::Cleanup()
-	{
-	}
-
-	template< typename T >
 	bool GlBufferBase< T >::Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		bool l_bResult = Bind();

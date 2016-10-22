@@ -38,7 +38,7 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
+		GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_id = ~uint32_t( 0 ) );
 		virtual ~GlVecAttribute();
 	};
 	/*!
@@ -52,7 +52,7 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
+		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_id = ~uint32_t( 0 ) );
 		virtual ~GlMatAttribute();
 		virtual bool Bind( bool p_bNormalised = false );
 	};

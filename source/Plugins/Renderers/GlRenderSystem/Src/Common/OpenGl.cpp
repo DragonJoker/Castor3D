@@ -495,11 +495,20 @@ namespace GlRender
 	bool OpenGl::PreInitialise( String const & p_strExtensions )
 	{
 		char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
-		m_extensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+
+		if ( l_extensions )
+		{
+			m_extensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+		}
+		else
+		{
+			m_extensions = p_strExtensions;
+		}
+
 		m_vendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
 		m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 		m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
-		double l_version;
+		double l_version{ 0u };
 		StringStream l_stream( m_version );
 		l_stream >> l_version;
 		m_iVersion = int( l_version * 10 );
@@ -733,6 +742,8 @@ namespace GlRender
 			GetFunction( m_pfnPauseTransformFeedback, cuT( "glPauseTransformFeedback" ), cuT( "ARB" ) );
 			GetFunction( m_pfnResumeTransformFeedback, cuT( "glResumeTransformFeedback" ), cuT( "ARB" ) );
 			GetFunction( m_pfnEndTransformFeedback, cuT( "glEndTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnTransformFeedbackVaryings, cuT( "glTransformFeedbackVaryings" ), cuT( "ARB" ) );
+			GetFunction( m_pfnDrawTransformFeedback, cuT( "glDrawTransformFeedback" ), cuT( "ARB" ) );
 		}
 
 		if ( HasExtension( ARB_vertex_array_object ) )

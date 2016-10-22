@@ -29,23 +29,17 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
+	bool GlBuffer< T >::Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		bool l_return = true;
 		HardwareBufferPtr l_cpuBuffer = GetCpuBuffer();
 
 		if ( l_cpuBuffer && l_cpuBuffer->GetSize() )
 		{
-			l_return = m_glBuffer.Initialise( &l_cpuBuffer->data()[0], l_cpuBuffer->GetSize(), p_type, p_nature );
+			l_return = m_glBuffer.Fill( &l_cpuBuffer->data()[0], l_cpuBuffer->GetSize(), p_type, p_nature );
 		}
 
 		return l_return;
-	}
-
-	template< typename T >
-	void GlBuffer< T >::Cleanup()
-	{
-		m_glBuffer.Cleanup();
 	}
 
 	template< typename T >

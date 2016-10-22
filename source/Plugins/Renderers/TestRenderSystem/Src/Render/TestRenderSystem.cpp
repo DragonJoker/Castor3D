@@ -6,6 +6,7 @@
 #include "Mesh/TestIndexBuffer.hpp"
 #include "Mesh/TestGeometryBuffers.hpp"
 #include "Miscellaneous/TestQuery.hpp"
+#include "Miscellaneous/TestTransformFeedback.hpp"
 #include "Render/TestContext.hpp"
 #include "Render/TestPipeline.hpp"
 #include "Render/TestViewport.hpp"
@@ -45,9 +46,9 @@ namespace TestRender
 		return std::make_shared< TestContext >( *this );
 	}
 
-	GeometryBuffersSPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersUPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
-		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
+		return std::make_unique< TestGeometryBuffers >( p_topology, p_program );
 	}
 
 	PipelineUPtr TestRenderSystem::CreatePipeline( DepthStencilState && p_dsState
@@ -68,6 +69,11 @@ namespace TestRender
 	ShaderProgramSPtr TestRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< TestShaderProgram >( *this );
+	}
+
+	TransformFeedbackUPtr TestRenderSystem::CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program )
+	{
+		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
 	std::shared_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
@@ -110,9 +116,9 @@ namespace TestRender
 		return std::make_shared< TestBackBuffers >( *GetEngine() );
 	}
 
-	GpuQuerySPtr TestRenderSystem::CreateQuery( QueryType p_type )
+	GpuQueryUPtr TestRenderSystem::CreateQuery( QueryType p_type )
 	{
-		return std::make_shared< TestQuery >( *this, p_type );
+		return std::make_unique< TestQuery >( *this, p_type );
 	}
 
 	IViewportImplUPtr TestRenderSystem::CreateViewport( Viewport & p_viewport )

@@ -23,12 +23,12 @@ namespace GlRender
 	{
 	}
 
-	bool GlQuery::DoCreate()
+	bool GlQuery::DoInitialise()
 	{
 		return ObjectType::Create();
 	}
 
-	void GlQuery::DoDestroy()
+	void GlQuery::DoCleanup()
 	{
 		return ObjectType::Destroy();
 	}

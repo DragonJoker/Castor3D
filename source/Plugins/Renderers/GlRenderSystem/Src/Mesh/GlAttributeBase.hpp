@@ -41,11 +41,12 @@ namespace GlRender
 		: public Holder
 	{
 	public:
-		GlAttributeBase( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor );
+		GlAttributeBase( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_id, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor );
 		virtual ~GlAttributeBase();
 
-		virtual bool Bind( bool p_bNormalised = false );
-		virtual void Unbind();
+		bool Initialise();
+		bool Bind( bool p_bNormalised = false );
+		void Unbind();
 
 		inline void SetOffset( uint32_t p_offset )
 		{

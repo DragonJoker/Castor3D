@@ -25,13 +25,9 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool TestVertexBuffer::Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
-	}
-
-	void TestVertexBuffer::Cleanup()
-	{
 	}
 
 	bool TestVertexBuffer::Bind()

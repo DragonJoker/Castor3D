@@ -619,6 +619,14 @@ namespace GlRender
 		*/
 		inline bool EndTransformFeedback()const;
 
+		/** see https://www.opengl.org/sdk/docs/man/html/glTransformFeedbackVaryings.xhtml
+		*/
+		inline bool TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, eGL_ATTRIBS_LAYOUT bufferMode )const;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glDrawTransformFeedback.xhtml
+		*/
+		inline bool DrawTransformFeedback( eGL_PRIMITIVE mode, uint32_t p_id )const;
+
 		//@}
 		/**@name FBO functions */
 		//@{
@@ -1105,6 +1113,8 @@ namespace GlRender
 		std::function< void() > m_pfnPauseTransformFeedback;
 		std::function< void() > m_pfnResumeTransformFeedback;
 		std::function< void() > m_pfnEndTransformFeedback;
+		std::function< void( uint32_t program, int count, char const ** varyings, eGL_ATTRIBS_LAYOUT bufferMode ) > m_pfnTransformFeedbackVaryings;
+		std::function< void( uint32_t mode, uint32_t p_id ) > m_pfnDrawTransformFeedback;
 
 		//@}
 		/**@name FBO */

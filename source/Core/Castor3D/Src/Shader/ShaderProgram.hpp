@@ -29,6 +29,8 @@ SOFTWARE.
 #include "FrameVariableTyper.hpp"
 #include "ProgramInputLayout.hpp"
 
+#include "Mesh/Buffer/BufferDeclaration.hpp"
+
 #include <Design/OwnedBy.hpp>
 
 namespace Castor3D
@@ -443,6 +445,18 @@ namespace Castor3D
 		C3D_API virtual ProgramInputLayout & GetLayout() = 0;
 		/**
 		 *\~english
+		 *\brief		Sets the transform feedback layout.
+		 *\param[in]	p_declaration	The layout.
+		 *\~french
+		 *\brief		Définit le layout de transform feedback.
+		 *\param[in]	p_declaration	Le layout.
+		 */
+		inline void SetTransformLayout( BufferDeclaration const & p_declaration )
+		{
+			m_declaration = p_declaration;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the frame variable buffers bound to one shader type
 		 *\param[in]	p_type	The shader type
 		 *\return		The list
@@ -791,6 +805,9 @@ namespace Castor3D
 		//!\~english The frame variable buffers map.
 		//!\~french		La liste des buffer de variables de frame.
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
+		//!\~english	The transform feedback layout.
+		//!\~french		Le layout de transform feedback.
+		BufferDeclaration m_declaration;
 	};
 }
 

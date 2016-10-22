@@ -66,14 +66,14 @@ namespace Castor3D
 		 *\brief		Crée la requête sur le GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Create();
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
 		 *\brief		Détruit la requête sur le GPU.
 		 */
-		C3D_API void Destroy();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Begins the query.
@@ -117,14 +117,14 @@ namespace Castor3D
 		 *\brief		Crée la requête sur le GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoCreate() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
 		 *\brief		Détruit la requête sur le GPU.
 		 */
-		C3D_API virtual void DoDestroy() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Begins the query.

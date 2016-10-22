@@ -198,7 +198,6 @@ namespace Castor3D
 		m_texture.reset();
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
-		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
 		m_pipeline->Cleanup();
@@ -291,7 +290,7 @@ namespace Castor3D
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_vertexBuffer->Create();
 
-		return m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		return m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 	}
 
 	bool Skybox::DoInitialiseTexture()
@@ -309,6 +308,6 @@ namespace Castor3D
 
 		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, m_pipeline->GetProgram() );
-		return m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 	}
 }

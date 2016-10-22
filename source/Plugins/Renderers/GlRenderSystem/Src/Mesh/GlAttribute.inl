@@ -40,8 +40,8 @@ namespace GlRender
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Count >
-	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count, 0 )
+	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_id )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, p_id, eGL_TYPE( GlTyper< T >::Value ), Count, 0 )
 	{
 	}
 
@@ -53,8 +53,8 @@ namespace GlRender
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Columns, 1 )
+	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_id )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, p_id, eGL_TYPE( GlTyper< T >::Value ), Columns, 1 )
 	{
 	}
 

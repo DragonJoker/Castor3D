@@ -76,17 +76,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Create()
-		{
-			return false;
-		}
+		virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() {}
+		virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function, used by VBOs
@@ -99,14 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		virtual void Cleanup() {}
+		virtual bool Upload( BufferAccessType p_type, BufferAccessNature p_nature ) = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it

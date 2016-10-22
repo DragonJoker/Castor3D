@@ -233,31 +233,31 @@ namespace Castor3D
 			if ( m_vertexBuffer )
 			{
 				m_initialised = m_vertexBuffer->Create();
-				m_initialised &= m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_initialised &= m_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_animBuffer )
 			{
 				m_initialised = m_animBuffer->Create();
-				m_initialised &= m_animBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_initialised &= m_animBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_indexBuffer )
 			{
 				m_initialised = m_indexBuffer->Create();
-				m_initialised &= m_indexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_initialised &= m_indexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_bonesBuffer )
 			{
 				m_initialised = m_bonesBuffer->Create();
-				m_initialised &= m_bonesBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_initialised &= m_bonesBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 
 			if ( m_initialised && m_matrixBuffer )
 			{
 				m_initialised = m_matrixBuffer->Create();
-				m_initialised &= m_matrixBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_initialised &= m_matrixBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			}
 		}
 	}
@@ -447,7 +447,6 @@ namespace Castor3D
 	{
 		if ( m_matrixBuffer )
 		{
-			m_matrixBuffer->Cleanup();
 			uint32_t l_count = 0;
 
 			for ( auto l_it : m_instanceCount )
@@ -456,7 +455,7 @@ namespace Castor3D
 			}
 
 			DoGenerateMatrixBuffer( l_count );
-			m_matrixBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
+			m_matrixBuffer->Upload( BufferAccessType::Stream, BufferAccessNature::Draw );
 		}
 	}
 
@@ -472,11 +471,11 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::Stream, BufferAccessNature::Draw );
 
 			if ( m_animBuffer )
 			{
-				m_animBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
+				m_animBuffer->Upload( BufferAccessType::Stream, BufferAccessNature::Draw );
 			}
 
 			m_dirty = false;
@@ -497,7 +496,7 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Initialise( BufferAccessType::Stream, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::Stream, BufferAccessNature::Draw );
 			m_dirty = false;
 		}
 
@@ -920,7 +919,7 @@ namespace Castor3D
 
 	GeometryBuffersSPtr Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
-		GeometryBuffersSPtr l_buffers;
+		GeometryBuffersSPtr l_geometryBuffers;
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
 		{
 			return &p_buffers->GetProgram() == &p_program;
@@ -928,27 +927,48 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
-			m_geometryBuffers.push_back( l_buffers );
+			l_geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
+			m_geometryBuffers.push_back( l_geometryBuffers );
+			VertexBufferArray l_buffers;
+
+			if ( m_vertexBuffer )
+			{
+				l_buffers.push_back( *m_vertexBuffer );
+			}
+
+			if ( m_animBuffer )
+			{
+				l_buffers.push_back( *m_animBuffer );
+			}
+
+			if ( m_bonesBuffer )
+			{
+				l_buffers.push_back( *m_bonesBuffer );
+			}
+
+			if ( m_matrixBuffer )
+			{
+				l_buffers.push_back( *m_matrixBuffer );
+			}
 
 			if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
 			{
-				l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
+				l_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
 			}
 			else
 			{
-				GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
+				GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_geometryBuffers, l_buffers]()
 				{
-					l_buffers->Initialise( m_vertexBuffer, m_animBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
+					l_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
 				} ) );
 			}
 		}
 		else
 		{
-			l_buffers = *l_it;
+			l_geometryBuffers = *l_it;
 		}
 
-		return l_buffers;
+		return l_geometryBuffers;
 	}
 
 	void Submesh::SetAnimated( bool p_animated )
@@ -1029,31 +1049,26 @@ namespace Castor3D
 
 		if ( m_vertexBuffer )
 		{
-			m_vertexBuffer->Cleanup();
 			m_vertexBuffer->Destroy();
 		}
 
 		if ( m_animBuffer )
 		{
-			m_animBuffer->Cleanup();
 			m_animBuffer->Destroy();
 		}
 
 		if ( m_indexBuffer )
 		{
-			m_indexBuffer->Cleanup();
 			m_indexBuffer->Destroy();
 		}
 
 		if ( m_matrixBuffer )
 		{
-			m_matrixBuffer->Cleanup();
 			m_matrixBuffer->Destroy();
 		}
 
 		if ( m_bonesBuffer )
 		{
-			m_bonesBuffer->Cleanup();
 			m_bonesBuffer->Destroy();
 		}
 

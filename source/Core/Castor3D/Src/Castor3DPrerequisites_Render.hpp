@@ -526,19 +526,15 @@ namespace Castor3D
 	struct StaticGeometryRenderNode;
 	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
+	class TransformFeedback;
 
 	template< typename T >
 	class GpuBuffer;
 	template< typename T >
 	class CpuBuffer;
-	template< typename T >
-	class CpuTransformBuffer;
-	class GpuTransformBuffer;
 
 	struct BufferElementDeclaration;
 	class BufferDeclaration;
-	struct TransformBufferElementDeclaration;
-	class TransformBufferDeclaration;
 	class VertexBuffer;
 	class IndexBuffer;
 	class GeometryBuffers;
@@ -548,12 +544,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( GeometryBuffers );
 	DECLARE_SMART_PTR( BufferElementDeclaration );
 	DECLARE_SMART_PTR( BufferDeclaration );
-	DECLARE_SMART_PTR( TransformBufferElementDeclaration );
-	DECLARE_SMART_PTR( TransformBufferDeclaration );
 	DECLARE_SMART_PTR( VertexBuffer );
 	DECLARE_SMART_PTR( IndexBuffer );
 	DECLARE_SMART_PTR( TextureBuffer );
-	DECLARE_SMART_PTR( GpuTransformBuffer );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );
@@ -563,12 +556,14 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( ShadowMapPass );
+	DECLARE_SMART_PTR( TransformFeedback );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
+	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 
 	//@}
 }

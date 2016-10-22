@@ -290,14 +290,14 @@ namespace Deferred
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 		m_viewport.Initialise();
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_program->Initialise();
 			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::Triangles, *program.m_program );
-			program.m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 		}
 
 		return l_return;
@@ -313,7 +313,6 @@ namespace Deferred
 		}
 
 		m_viewport.Cleanup();
-		m_vertexBuffer->Cleanup();
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::Config );
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();

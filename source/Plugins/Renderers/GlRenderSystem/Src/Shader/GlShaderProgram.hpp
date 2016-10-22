@@ -106,6 +106,9 @@ namespace GlRender
 		Castor::String DoRetrieveLinkerLog();
 
 	private:
+		bool DoBindTransformLayout();
+
+	private:
 		Castor::String m_linkerLog;
 		GlProgramInputLayout m_layout;
 	};

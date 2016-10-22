@@ -22,7 +22,8 @@ namespace GlRender
 					  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
 					  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
 				 )
-		, m_program( p_program )
+		, m_program{ p_program }
+		, m_glTopology{ p_gl.Get( p_topology ) }
 	{
 	}
 
@@ -32,23 +33,15 @@ namespace GlRender
 
 	bool GlGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
-
-		if ( m_program.HasObject( ShaderType::Hull ) )
-		{
-			l_eMode = eGL_PRIMITIVE_PATCHES;
-			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
-		}
-
 		if ( ObjectType::Bind() )
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElements( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArrays( l_eMode, int( p_index ), int( p_size ) );
+				GetOpenGl().DrawArrays( m_glTopology, int( p_index ), int( p_size ) );
 			}
 
 			ObjectType::Unbind();
@@ -59,28 +52,15 @@ namespace GlRender
 
 	bool GlGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
-
-		if ( m_program.HasObject( ShaderType::Hull ) )
-		{
-			l_eMode = eGL_PRIMITIVE_PATCHES;
-			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
-		}
-
-		if ( m_matrixBuffer )
-		{
-			m_matrixBuffer->GetGpuBuffer()->Fill( m_matrixBuffer->data(), m_matrixBuffer->GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
-		}
-
 		if ( ObjectType::Bind() )
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElementsInstanced( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
+				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArraysInstanced( l_eMode, int( p_index ), int( p_size ), int( p_count ) );
+				GetOpenGl().DrawArraysInstanced( m_glTopology, int( p_index ), int( p_size ), int( p_count ) );
 			}
 
 			ObjectType::Unbind();
@@ -105,42 +85,21 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			if ( DoCreateAttributes( m_program.GetLayout(), m_vertexBuffer->GetDeclaration(), m_vertexAttributes ) )
+			for ( auto & l_buffer : m_buffers )
 			{
-				m_vertexBuffer->Bind();
-				DoBindAttributes( m_vertexAttributes );
-			}
+				GlAttributePtrArray l_attributes;
 
-			if ( m_animationBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_animationBuffer->GetDeclaration(), m_animationAttributes ) )
+				if ( DoCreateAttributes( m_program.GetLayout(), l_buffer.get().GetDeclaration(), l_attributes ) )
 				{
-					m_animationBuffer->Bind();
-					DoBindAttributes( m_animationAttributes );
+					l_buffer.get().Bind();
+					DoBindAttributes( l_attributes );
+					m_attributes.insert( std::end( m_attributes ), std::begin( l_attributes ), std::end( l_attributes ) );
 				}
 			}
 
 			if ( m_indexBuffer )
 			{
 				m_indexBuffer->Bind();
-			}
-
-			if ( m_bonesBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_bonesBuffer->GetDeclaration(), m_bonesAttributes ) )
-				{
-					m_bonesBuffer->Bind();
-					DoBindAttributes( m_bonesAttributes );
-				}
-			}
-
-			if ( m_matrixBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_matrixBuffer->GetDeclaration(), m_matrixAttributes ) )
-				{
-					m_matrixBuffer->Bind();
-					DoBindAttributes( m_matrixAttributes );
-				}
 			}
 
 			GetOpenGl().BindVertexArray( 0 );
@@ -151,10 +110,7 @@ namespace GlRender
 
 	void GlGeometryBuffers::DoCleanup()
 	{
-		m_vertexAttributes.clear();
-		m_animationAttributes.clear();
-		m_matrixAttributes.clear();
-		m_bonesAttributes.clear();
+		m_attributes.clear();
 		ObjectType::Destroy();
 	}
 

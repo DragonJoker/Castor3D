@@ -97,14 +97,10 @@ namespace GlRender
 	private:
 		//! The shader program.
 		Castor3D::ShaderProgram const & m_program;
-		//! The vertex attributes.
-		GlAttributePtrArray m_vertexAttributes;
-		//! The vertex animation attributes.
-		GlAttributePtrArray m_animationAttributes;
-		//! The instantiation matrix attribute.
-		GlAttributePtrArray m_matrixAttributes;
-		//! The bones data attributes.
-		GlAttributePtrArray m_bonesAttributes;
+		//! The vertex, animation, ... attributes.
+		GlAttributePtrArray m_attributes;
+		//! The topology type.
+		eGL_PRIMITIVE m_glTopology;
 	};
 }
 

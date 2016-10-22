@@ -273,7 +273,7 @@ namespace Castor3D
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program ) = 0;
+		C3D_API virtual GeometryBuffersUPtr CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -418,17 +418,19 @@ namespace Castor3D
 		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a transform feedback buffer.
-		 *\param[in]	m_declaration	The buffer elements declaration.
-		 *\param[in]	m_program		The shader program.
-		 *\return		The created transform feedback buffer, depending on current API.
+		 *\brief		Creates a transform feedback instance.
+		 *\param[in]	p_computed	The computed elements description.
+		 *\param[in]	p_topology	The topology.
+		 *\param[in]	p_program	The shader program.
+		 *\return		The created transform feedback, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon de transform feedback.
-		 *\param[in]	m_declaration	La déclaration des éléments du tampon.
-		 *\param[in]	m_program		Le programm shader.
+		 *\brief		Crée une instance de transform feedback.
+		 *\param[in]	p_computed	La description des éléments calculés.
+		 *\param[in]	p_topology	La topologie.
+		 *\param[in]	p_program	Le programm shader.
 		 *\return		Le tampon de transform feedback créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual GpuTransformBufferUPtr CreateTransformBuffer( ShaderProgram & p_program, TransformBufferDeclaration const & p_declaration ) = 0;
+		C3D_API virtual TransformFeedbackUPtr CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a frame buffer.
@@ -457,7 +459,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de requête.
 		 *\return		La requête GPU créée.
 		 */
-		C3D_API virtual GpuQuerySPtr CreateQuery( QueryType p_type ) = 0;
+		C3D_API virtual GpuQueryUPtr CreateQuery( QueryType p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a viewport render API specific implementation.

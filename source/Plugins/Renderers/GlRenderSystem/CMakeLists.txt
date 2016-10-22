@@ -31,7 +31,7 @@ if( OPENGL_FOUND )
 	
 	add_target(
 		${PROJECT_NAME}
-		plugin
+		api_plugin
 		"Castor3D"
 		"${CastorMinLibraries};${OpenGlLibraries}"
 		"GlRenderSystemPch.hpp"
@@ -53,6 +53,10 @@ if( OPENGL_FOUND )
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+
+	if( ${CASTOR_BUILDGRP_TEST} )
+		add_subdirectory( Test )
+	endif()
 else()
 	set( Build "no (OpenGL libraries not found)" PARENT_SCOPE )
 endif()

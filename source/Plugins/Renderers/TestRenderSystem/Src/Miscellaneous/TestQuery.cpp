@@ -16,12 +16,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestQuery::DoCreate()
+	bool TestQuery::DoInitialise()
 	{
 		return true;
 	}
 
-	void TestQuery::DoDestroy()
+	void TestQuery::DoCleanup()
 	{
 	}
 

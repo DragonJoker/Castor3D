@@ -959,7 +959,6 @@ namespace GlRender
 	{
 		m_uniformBlockIndex = int( eGL_INVALID_INDEX );
 		m_uniformBlockSize = 0;
-		m_glBuffer.Cleanup();
 		m_glBuffer.Destroy();
 	}
 

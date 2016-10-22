@@ -483,7 +483,7 @@ namespace Castor3D
 		bool m_bMultiSampling;
 		//!\~english	The GPU time elapsed queries.
 		//!\~french		Les requêtes GPU de temps écoulé.
-		std::array< GpuQuerySPtr, 2 > m_timerQuery;
+		std::array< GpuQueryUPtr, 2 > m_timerQuery;
 		//!\~english	The active query index.
 		//!\~french		L'index de la requête active.
 		uint32_t m_queryIndex = 0;

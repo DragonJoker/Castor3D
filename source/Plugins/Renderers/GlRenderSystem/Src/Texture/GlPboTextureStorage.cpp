@@ -88,7 +88,6 @@ namespace GlRender
 		{
 			if ( m_uploadBuffer )
 			{
-				m_uploadBuffer->Cleanup();
 				m_uploadBuffer->Destroy();
 				m_uploadBuffer.reset();
 			}
@@ -98,7 +97,6 @@ namespace GlRender
 		{
 			if ( m_downloadBuffer )
 			{
-				m_downloadBuffer->Cleanup();
 				m_downloadBuffer->Destroy();
 				m_downloadBuffer.reset();
 			}

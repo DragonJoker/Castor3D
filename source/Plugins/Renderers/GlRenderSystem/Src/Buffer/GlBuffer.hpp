@@ -60,11 +60,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Initialise
 		 */
-		bool Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
-		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Cleanup
-		 */
-		void Cleanup()override;
+		bool Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
 		 */

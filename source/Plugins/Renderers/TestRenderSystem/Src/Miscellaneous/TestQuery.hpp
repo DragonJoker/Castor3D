@@ -58,19 +58,19 @@ namespace TestRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::GpuQuery::Create
+		 *\copydoc		Castor3D::GpuQuery::DoInitialise
 		 */
-		virtual bool DoCreate();
+		virtual bool DoInitialise();
 		/**
-		 *\copydoc		Castor3D::GpuQuery::Destroy
+		 *\copydoc		Castor3D::GpuQuery::DoCleanup
 		 */
-		virtual void DoDestroy();
+		virtual void DoCleanup();
 		/**
-		 *\copydoc		Castor3D::GpuQuery::Begin
+		 *\copydoc		Castor3D::GpuQuery::DoBegin
 		 */
 		virtual bool DoBegin()const;
 		/**
-		 *\copydoc		Castor3D::GpuQuery::End
+		 *\copydoc		Castor3D::GpuQuery::DoEnd
 		 */
 		virtual void DoEnd()const;
 		/**

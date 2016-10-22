@@ -25,7 +25,8 @@ SOFTWARE.
 
 #include "MovableObject.hpp"
 
-#include "Mesh/Buffer/TransformBufferDeclaration.hpp"
+#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Texture/TextureUnit.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
 
@@ -61,8 +62,6 @@ namespace Castor3D
 		//!\~french		La durée de vie de la particule.
 		float m_lifeTime;
 	};
-	using ParticleTransformBuffer = CpuTransformBuffer< Particle >;
-	DECLARE_SMART_PTR( ParticleTransformBuffer );
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -161,11 +160,11 @@ namespace Castor3D
 		C3D_API void SetMaterial( MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Updates the particles.
+		 *\brief		Renders the particles.
 		 *\~french
-		 *\brief		Met à jour les particules.
+		 *\brief		Dessine les particules.
 		 */
-		C3D_API void Update();
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Sets the particles dimensions.
@@ -201,9 +200,14 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english	The Vertex buffer's description.
-		//!\~french		La description du tampon de sommets.
-		TransformBufferDeclaration m_declaration;
+		bool DoCreateUpdateProgram();
+		void DoUpdate();
+		void DoRender();
+
+	private:
+		//!\~english	The computed elements description.
+		//!\~french		La description des éléments calculés.
+		BufferDeclaration m_computed;
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		size_t m_count{ 0 };
@@ -213,15 +217,48 @@ namespace Castor3D
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
 		Castor::Size m_dimensions;
+		//!\~english	The program used to update the transform buffer.
+		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
+		ShaderProgramSPtr m_updateProgram;
+		//!\~english	The frame variable holding time since last update.
+		//!\~french		La variable de frame contenant le temps écoulé depuis la dernière mise à jour.
+		OneFloatFrameVariableSPtr m_deltaTime;
+		//!\~english	The frame variable holding total elapsed time.
+		//!\~french		La variable de frame contenant le temps total écoulé.
+		OneFloatFrameVariableSPtr m_time;
+		//!\~english	The frame variable holding the launches lifetime.
+		//!\~french		La variable de frame contenant la durée de vie des lanceurs.
+		OneFloatFrameVariableSPtr m_launcherLifetime;
+		//!\~english	The frame variable holding the shells lifetime.
+		//!\~french		La variable de frame contenant la durée de vie des particules.
+		OneFloatFrameVariableSPtr m_shellLifetime;
+		//!\~english	The frame variable holding the secondary shells lifetime.
+		//!\~french		La variable de frame contenant la durée de vie des particules secondaires.
+		OneFloatFrameVariableSPtr m_secondaryShellLifetime;
+		//!\~english	The pipeline used to update the transform buffer.
+		//!\~french		Le pipeline utilisé pour mettre à jour le tampon de transformation.
+		PipelineUPtr m_updatePipeline;
+		//!\~english	The transform feedback used to update the particles.
+		//!\~french		Le transform feedback utilisé pour mettre à jour les particules.
+		std::array< TransformFeedbackUPtr, 2u > m_transformFeedbacks;
 		//!\~english	The particles buffer.
 		//!\~french		Le tampon de particules.
 		std::array< VertexBufferSPtr, 2u > m_particleBuffers;
 		//!\~english	The Transform Feedback buffers.
 		//!\~french		Les tampons de transform feedback.
-		std::array< ParticleTransformBufferUPtr, 2u > m_transformBuffers;
+		std::array< VertexBufferSPtr, 2u > m_transformBuffers;
+		//!\~english	The current transform feedback buffer index.
+		//!\~french		L'index du tampon de transform feedback courant.
+		size_t m_currentUpdateBuffer{ 0u };
+		//!\~english	The current transform feedback buffer index.
+		//!\~french		L'index du tampon de transform feedback courant.
+		size_t m_currentRenderBuffer{ 1u };
 		//!\~english	The timer, for the particles update.
 		//!\~french		Le timer, pour la mise à jour des particules.
 		Castor::PreciseTimer m_timer;
+		//!\~english	The texture containing random directions.
+		//!\~french		La texture contenant des directions aléatoires.
+		TextureUnit m_randomTexture;
 	};
 }
 

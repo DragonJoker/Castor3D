@@ -104,7 +104,7 @@ namespace Castor3D
 			}
 
 			m_vertexBuffer->Create();
-			m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			m_initialised = true;
 		}
 
@@ -123,7 +123,6 @@ namespace Castor3D
 			}
 
 			m_geometryBuffers.clear();
-			m_vertexBuffer->Cleanup();
 			m_vertexBuffer->Destroy();
 			m_vertexBuffer.reset();
 		}
@@ -203,7 +202,7 @@ namespace Castor3D
 
 			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
 			{
-				l_buffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+				l_buffers->Initialise( { *m_vertexBuffer }, nullptr );
 			} ) );
 			m_geometryBuffers.push_back( l_buffers );
 		}
@@ -229,7 +228,7 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			m_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 			m_needUpdate = false;
 		}
 	}

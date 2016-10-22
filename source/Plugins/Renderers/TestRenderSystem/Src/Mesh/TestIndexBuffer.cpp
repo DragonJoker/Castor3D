@@ -25,18 +25,9 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool TestIndexBuffer::Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
-	}
-
-	bool TestIndexBuffer::AttachTo( ShaderProgramSPtr )
-	{
-		return true;
-	}
-
-	void TestIndexBuffer::Cleanup()
-	{
 	}
 
 	bool TestIndexBuffer::Bind()

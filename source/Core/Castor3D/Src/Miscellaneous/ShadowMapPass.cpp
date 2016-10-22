@@ -239,7 +239,8 @@ namespace Castor3D
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
+				uint8_t * l_buffer = l_matrixBuffer.data();
 				const uint32_t l_stride = 16 * sizeof( real );
 
 				for ( auto const & l_renderNode : p_renderNodes )
@@ -248,6 +249,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
+				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );

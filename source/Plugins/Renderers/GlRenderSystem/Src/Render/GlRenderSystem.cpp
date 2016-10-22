@@ -1,12 +1,12 @@
 #include "Render/GlRenderSystem.hpp"
 
 #include "Buffer/GlBuffer.hpp"
-#include "Buffer/GlTransformBuffer.hpp"
 #include "Common/OpenGl.hpp"
 #include "FrameBuffer/GlBackBuffers.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
 #include "Mesh/GlGeometryBuffers.hpp"
 #include "Miscellaneous/GlQuery.hpp"
+#include "Miscellaneous/GlTransformFeedback.hpp"
 #include "Render/GlContext.hpp"
 #include "Render/GlPipeline.hpp"
 #include "Render/GlViewport.hpp"
@@ -419,9 +419,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersUPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
-		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
+		return std::make_unique< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
 	PipelineUPtr GlRenderSystem::CreatePipeline( DepthStencilState && p_dsState
@@ -454,9 +454,9 @@ namespace GlRender
 		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ARRAY, p_buffer );
 	}
 
-	Castor3D::GpuTransformBufferUPtr GlRenderSystem::CreateTransformBuffer( ShaderProgram & p_program, TransformBufferDeclaration const & p_declaration )
+	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )
 	{
-		return std::make_unique< GlTransformBuffer >( GetOpenGl(), *this, p_program, p_declaration );
+		return std::make_unique< GlTransformFeedback >( GetOpenGl(), *this, p_computed, p_topology, p_program );
 	}
 
 	TextureLayoutSPtr GlRenderSystem::CreateTexture( Castor3D::TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
@@ -512,17 +512,17 @@ namespace GlRender
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()
 	{
-		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
+		return std::make_unique< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
 	}
 
 	BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
 	{
-		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
+		return std::make_unique< GlBackBuffers >( GetOpenGl(), *GetEngine() );
 	}
 
-	GpuQuerySPtr GlRenderSystem::CreateQuery( QueryType p_type )
+	GpuQueryUPtr GlRenderSystem::CreateQuery( QueryType p_type )
 	{
-		return std::make_shared< GlQuery >( *this, p_type );
+		return std::make_unique< GlQuery >( *this, p_type );
 	}
 
 	IViewportImplUPtr GlRenderSystem::CreateViewport( Viewport & p_viewport )

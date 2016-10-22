@@ -95,19 +95,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		inline void Cleanup()
-		{
-			if ( m_gpuBuffer )
-			{
-				m_gpuBuffer->Cleanup();
-			}
-		}
-		/**
-		 *\~english
 		 *\brief		Initialisation function, initialises GPU buffer
 		 *\param[in]	p_type		Buffer access type
 		 *\param[in]	p_nature	Buffer access nature
@@ -118,13 +105,13 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		inline bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+		inline bool Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 		{
 			bool l_return = false;
 
 			if ( m_gpuBuffer )
 			{
-				l_return = m_gpuBuffer->Initialise( p_type, p_nature );
+				l_return = m_gpuBuffer->Upload( p_type, p_nature );
 			}
 
 			return l_return;

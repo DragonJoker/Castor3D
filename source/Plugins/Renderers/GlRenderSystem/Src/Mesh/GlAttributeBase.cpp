@@ -9,12 +9,12 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, uint32_t p_stride, String const & p_attributeName, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor )
+	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, uint32_t p_stride, String const & p_attributeName, uint32_t p_id, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor )
 		: Holder( p_gl )
 		, m_program( p_program )
 		, m_stride( p_stride )
 		, m_attributeName( p_attributeName )
-		, m_attributeLocation( eGL_INVALID_INDEX )
+		, m_attributeLocation( p_id )
 		, m_count( p_count )
 		, m_divisor( p_divisor )
 		, m_offset( 0u )
@@ -22,13 +22,23 @@ namespace GlRender
 	{
 		if ( m_program.GetStatus() == ProgramStatus::Linked )
 		{
-			m_attributeLocation = static_cast< GlShaderProgram const & >( m_program ).GetAttributeLocation( m_attributeName );
+			Initialise();
 		}
 	}
 
 	GlAttributeBase::~GlAttributeBase()
 	{
 		m_attributeLocation = uint32_t( eGL_INVALID_INDEX );
+	}
+
+	bool GlAttributeBase::Initialise()
+	{
+		if ( m_attributeLocation == uint32_t( eGL_INVALID_INDEX ) )
+		{
+			m_attributeLocation = static_cast< GlShaderProgram const & >( m_program ).GetAttributeLocation( m_attributeName );
+		}
+
+		return m_attributeLocation != uint32_t( eGL_INVALID_INDEX );
 	}
 
 	bool GlAttributeBase::Bind( bool p_bNormalised )

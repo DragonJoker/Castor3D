@@ -103,8 +103,8 @@ namespace Castor3D
 		if ( l_return )
 		{
 			DoSetCurrent();
-			m_timerQuery[0]->Create();
-			m_timerQuery[1]->Create();
+			m_timerQuery[0]->Initialise();
+			m_timerQuery[1]->Initialise();
 			m_timerQuery[1 - m_queryIndex]->Begin();
 			m_timerQuery[1 - m_queryIndex]->End();
 
@@ -148,8 +148,8 @@ namespace Castor3D
 		DoCleanupRTOTPipelineCube( m_rtotPipelineCube.m_depth );
 		DoCleanupRTOTPipelineCube( m_rtotPipelineCube.m_depthArray );
 
-		m_timerQuery[0]->Destroy();
-		m_timerQuery[1]->Destroy();
+		m_timerQuery[0]->Cleanup();
+		m_timerQuery[1]->Cleanup();
 		DoEndCurrent();
 		DoDestroy();
 
@@ -641,9 +641,9 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() * m_rtotPipelinePlane.m_declaration.GetStride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelinePlane.m_arrayVertex.begin(), m_rtotPipelinePlane.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
-		p_pipeline.m_geometryBuffers->Initialise( p_pipeline.m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
 		if ( p_depth )
 		{
@@ -664,7 +664,6 @@ namespace Castor3D
 	{
 		p_pipeline.m_pipeline->Cleanup();
 		p_pipeline.m_pipeline.reset();
-		p_pipeline.m_vertexBuffer->Cleanup();
 		p_pipeline.m_vertexBuffer->Destroy();
 		p_pipeline.m_vertexBuffer.reset();
 		p_pipeline.m_geometryBuffers->Cleanup();
@@ -678,9 +677,9 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() * m_rtotPipelineCube.m_declaration.GetStride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelineCube.m_arrayVertex.begin(), m_rtotPipelineCube.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
-		p_pipeline.m_geometryBuffers->Initialise( p_pipeline.m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
 		if ( p_depth )
 		{
@@ -711,7 +710,6 @@ namespace Castor3D
 	{
 		p_pipeline.m_pipeline->Cleanup();
 		p_pipeline.m_pipeline.reset();
-		p_pipeline.m_vertexBuffer->Cleanup();
 		p_pipeline.m_vertexBuffer->Destroy();
 		p_pipeline.m_vertexBuffer.reset();
 		p_pipeline.m_geometryBuffers->Cleanup();
