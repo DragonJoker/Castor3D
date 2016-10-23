@@ -12,7 +12,7 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTboTextureStorageTraits::GlTboTextureStorageTraits( TextureStorage & p_storage )
-		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), eGL_BUFFER_TARGET_TEXTURE }
+		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::Texture }
 	{
 		REQUIRE( p_storage.GetType() == TextureStorageType::Buffer );
 		bool l_return = m_glBuffer.Create();

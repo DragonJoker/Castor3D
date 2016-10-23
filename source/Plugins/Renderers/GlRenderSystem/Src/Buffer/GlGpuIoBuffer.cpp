@@ -7,7 +7,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlGpuIoBuffer::GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize, eGL_BUFFER_TARGET p_packMode, BufferAccessType p_type, BufferAccessNature p_nature )
+	GlGpuIoBuffer::GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize, GlBufferTarget p_packMode, BufferAccessType p_type, BufferAccessNature p_nature )
 		: GlBufferBase< uint8_t >{ p_gl, p_packMode }
 		, m_pixelsSize{ p_pixelsSize }
 		, m_pixels{ p_pixels }

@@ -3,7 +3,7 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer )
+	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target, HardwareBufferPtr p_buffer )
 		: Castor3D::GpuBuffer< T >( p_renderSystem )
 		, Holder{ p_gl }
 		, m_buffer{ p_buffer }
@@ -52,6 +52,12 @@ namespace GlRender
 	void GlBuffer< T >::Unbind()
 	{
 		m_glBuffer.Unbind();
+	}
+
+	template< typename T >
+	bool GlBuffer< T >::Copy( GpuBuffer< T > const & p_src, uint32_t p_size )
+	{
+		return m_glBuffer.Copy( static_cast< GlBuffer< T > const & >( p_src ).m_glBuffer, p_size );
 	}
 
 	template< typename T >

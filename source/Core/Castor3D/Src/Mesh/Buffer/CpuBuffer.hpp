@@ -220,6 +220,29 @@ namespace Castor3D
 			}
 		}
 		/**
+		 *\~english
+		 *\brief		Copies data from given buffer to this one.
+		 *\param[in]	p_src	The cource buffer.
+		 *\param[in]	p_size	The number of elements to copy.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Copie les données du tampon donné dans celui-ci.
+		 *\param[in]	p_src	Le tampon source.
+		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		inline bool Copy( CpuBuffer< T > const & p_src, uint32_t p_size )
+		{
+			bool l_return = false;
+
+			if ( m_gpuBuffer )
+			{
+				l_return = m_gpuBuffer->Copy( *p_src.m_gpuBuffer, p_size );
+			}
+
+			return l_return;
+		}
+		/**
 		*\~english
 		*\brief		Index opertor.
 		*\param[in]	p_index	The index.

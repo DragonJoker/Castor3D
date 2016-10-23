@@ -275,7 +275,7 @@ namespace Castor3D
 		*/
 		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
 																 , Pipeline & p_pipeline
-																 , BillboardList & p_billboard );
+																 , BillboardListBase & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

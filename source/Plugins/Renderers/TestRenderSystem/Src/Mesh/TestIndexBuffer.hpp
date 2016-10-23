@@ -37,16 +37,17 @@ namespace TestRender
 
 	public:
 		TestIndexBuffer( TestRenderSystem & p_renderSystem );
-		virtual ~TestIndexBuffer();
+		~TestIndexBuffer();
 
-		virtual bool Create();
-		virtual void Destroy();
-		virtual bool Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
-		virtual uint32_t * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
-		virtual void Unlock();
-		virtual bool Bind();
-		virtual void Unbind();
-		virtual bool Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
+		bool Create()override;
+		void Destroy()override;
+		bool Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
+		uint32_t * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags )override;
+		void Unlock()override;
+		bool Bind()override;
+		void Unbind()override;
+		bool Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )override;
+		bool Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
 	};
 }
 

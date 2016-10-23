@@ -161,42 +161,43 @@ namespace GlRender
 	{
 	public:
 		BufFunctionsBase( OpenGl & p_gl );
-		virtual bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer ) = 0;
-		virtual bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage ) = 0;
-		virtual bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data ) = 0;
-		virtual void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access ) = 0;
-		virtual bool UnmapBuffer( eGL_BUFFER_TARGET target ) = 0;
-		virtual void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) = 0;
-		virtual bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params ) = 0;
-		virtual bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length ) = 0;
+		virtual bool BindBuffer( GlBufferTarget target, uint32_t buffer )const = 0;
+		virtual bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const = 0;
+		virtual bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
+		virtual bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const = 0;
+		virtual void * MapBuffer( GlBufferTarget target, eGL_LOCK access )const = 0;
+		virtual bool UnmapBuffer( GlBufferTarget target )const = 0;
+		virtual void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const = 0;
+		virtual bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, int * params )const = 0;
+		virtual bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const = 0;
 
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
-		inline bool BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length );
-		inline bool VertexFormat( int size, eGL_TYPE type, int stride );
-		inline bool NormalFormat( eGL_TYPE type, int stride );
-		inline bool ColorFormat( int size, eGL_TYPE type, int stride );
-		inline bool IndexFormat( eGL_TYPE type, int stride );
-		inline bool TexCoordFormat( int size, eGL_TYPE type, int stride );
-		inline bool EdgeFlagFormat( int stride );
-		inline bool SecondaryColorFormat( int size, eGL_TYPE type, int stride );
-		inline bool FogCoordFormat( uint32_t type, int stride );
-		inline bool VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride );
-		inline bool VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride );
+		inline bool BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const;
+		inline bool VertexFormat( int size, eGL_TYPE type, int stride )const;
+		inline bool NormalFormat( eGL_TYPE type, int stride )const;
+		inline bool ColorFormat( int size, eGL_TYPE type, int stride )const;
+		inline bool IndexFormat( eGL_TYPE type, int stride )const;
+		inline bool TexCoordFormat( int size, eGL_TYPE type, int stride )const;
+		inline bool EdgeFlagFormat( int stride )const;
+		inline bool SecondaryColorFormat( int size, eGL_TYPE type, int stride )const;
+		inline bool FogCoordFormat( uint32_t type, int stride )const;
+		inline bool VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )const;
+		inline bool VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )const;
 
 		//@}
 		/*@name NV_shader_buffer_load extension */
 		//@{
 
-		inline bool MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access );
-		inline bool MakeBufferNonResident( eGL_BUFFER_TARGET target );
-		inline bool IsBufferResident( eGL_BUFFER_TARGET target );
-		inline bool MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access );
-		inline bool MakeNamedBufferNonResident( uint32_t buffer );
-		inline bool IsNamedBufferResident( uint32_t buffer );
-		inline bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params );
-		inline bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname,  uint64_t * params );
+		inline bool MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const;
+		inline bool MakeBufferNonResident( GlBufferTarget target )const;
+		inline bool IsBufferResident( GlBufferTarget target )const;
+		inline bool MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const;
+		inline bool MakeNamedBufferNonResident( uint32_t buffer )const;
+		inline bool IsNamedBufferResident( uint32_t buffer )const;
+		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const;
+		inline bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname,  uint64_t * params )const;
 
 		//@}
 		/*@name NV_vertex_buffer_unified_memory extension */
@@ -235,18 +236,20 @@ namespace GlRender
 	{
 	public:
 		BufFunctions( OpenGl & p_gl );
-		inline bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer );
-		inline bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage );
-		inline bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data );
-		inline void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access );
-		inline bool UnmapBuffer( eGL_BUFFER_TARGET target );
-		inline void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access );
-		inline bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params );
-		inline bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length );
+		inline bool BindBuffer( GlBufferTarget target, uint32_t buffer )const override;
+		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const override;
+		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
+		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
+		inline void * MapBuffer( GlBufferTarget target, eGL_LOCK access )const override;
+		inline bool UnmapBuffer( GlBufferTarget target )const override;
+		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
+		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, int * params )const override;
+		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
 		std::function< void( uint32_t target, uint32_t buffer ) > m_pfnBindBuffer;
 		std::function< void( uint32_t target, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnBufferData;
 		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnBufferSubData;
+		std::function< void( uint32_t readtarget, ptrdiff_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyBufferSubData;
 		std::function< void * ( uint32_t target, uint32_t access ) > m_pfnMapBuffer;
 		std::function< uint8_t( uint32_t target ) > m_pfnUnmapBuffer;
 		std::function< void * ( uint32_t target, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapBufferRange;
@@ -259,22 +262,24 @@ namespace GlRender
 	{
 	public:
 		BufFunctionsDSA( OpenGl & p_gl );
-		inline bool BindBuffer( eGL_BUFFER_TARGET /*target*/, uint32_t buffer )
+		inline bool BindBuffer( GlBufferTarget /*target*/, uint32_t buffer )const override
 		{
 			m_uiBuffer = buffer;
 			return true;
 		}
-		inline bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage );
-		inline bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data );
-		inline void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access );
-		inline bool UnmapBuffer( eGL_BUFFER_TARGET target );
-		inline void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access );
-		inline bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params );
-		inline bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length );
+		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const override;
+		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
+		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
+		inline void * MapBuffer( GlBufferTarget target, eGL_LOCK access )const override;
+		inline bool UnmapBuffer( GlBufferTarget target )const override;
+		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
+		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, int * params )const override;
+		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
-		uint32_t m_uiBuffer;
+		mutable uint32_t m_uiBuffer;
 		std::function< void( uint32_t buffer, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnNamedBufferData;
 		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnNamedBufferSubData;
+		std::function< void( uint32_t readtarget, ptrdiff_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyNamedBufferSubData;
 		std::function< void * ( uint32_t buffer, uint32_t access ) > m_pfnMapNamedBuffer;
 		std::function< uint8_t ( uint32_t buffer ) > m_pfnUnmapNamedBuffer;
 		std::function< void * ( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapNamedBufferRange;
@@ -547,15 +552,16 @@ namespace GlRender
 		inline bool GenBuffers( int n, uint32_t * buffers )const;
 		inline bool DeleteBuffers( int n, uint32_t const * buffers )const;
 		inline bool IsBuffer( uint32_t buffer )const;
-		inline bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer )const;
-		inline bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const;
-		inline bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data )const;
-		inline void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access )const;
-		inline bool UnmapBuffer( eGL_BUFFER_TARGET target )const;
-		inline void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const;
-		inline bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params )const;
-		inline bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const;
-		inline bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length )const;
+		inline bool BindBuffer( GlBufferTarget target, uint32_t buffer )const;
+		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const;
+		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const;
+		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const;
+		inline void * MapBuffer( GlBufferTarget target, eGL_LOCK access )const;
+		inline bool UnmapBuffer( GlBufferTarget target )const;
+		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const;
+		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, int * params )const;
+		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const;
+		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const;
 		inline bool VertexPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const;
 		inline bool NormalPointer( uint32_t type, uint32_t stride, void const * pointer )const;
 		inline bool TangentPointer( uint32_t type, uint32_t stride, void const * pointer )const;
@@ -575,9 +581,9 @@ namespace GlRender
 		inline bool FogCoordFormat( uint32_t type, int stride )const;
 		inline bool VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )const;
 		inline bool VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )const;
-		inline bool MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access )const;
-		inline bool MakeBufferNonResident( eGL_BUFFER_TARGET target )const;
-		inline bool IsBufferResident( eGL_BUFFER_TARGET target )const;
+		inline bool MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const;
+		inline bool MakeBufferNonResident( GlBufferTarget target )const;
+		inline bool IsBufferResident( GlBufferTarget target )const;
 		inline bool MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const;
 		inline bool MakeNamedBufferNonResident( uint32_t buffer )const;
 		inline bool IsNamedBufferResident( uint32_t buffer )const;
@@ -597,7 +603,7 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glBindTransformFeedback.xhtml
 		*/
-		inline bool BindTransformFeedback( eGL_BUFFER_TARGET target, uint32_t buffer )const;
+		inline bool BindTransformFeedback( GlBufferTarget target, uint32_t buffer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glIsTransformFeedback.xhtml
 		*/
@@ -760,7 +766,7 @@ namespace GlRender
 		//@{
 
 		inline uint32_t GetUniformBlockIndex( uint32_t shader, char const * uniformBlockName )const;
-		inline bool BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer )const;
+		inline bool BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const;
 		inline bool UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
 		inline bool GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
 		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, eGL_UNIFORM_NAME pname, int * params )const;
@@ -1107,7 +1113,7 @@ namespace GlRender
 
 		std::function< void( int n, uint32_t * buffers ) > m_pfnGenTransformFeedbacks;
 		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteTransformFeedbacks;
-		std::function< void( eGL_BUFFER_TARGET target, uint32_t buffer ) > m_pfnBindTransformFeedback;
+		std::function< void( GlBufferTarget target, uint32_t buffer ) > m_pfnBindTransformFeedback;
 		std::function< uint8_t( uint32_t buffer ) > m_pfnIsTransformFeedback;
 		std::function< void( uint32_t primitive ) > m_pfnBeginTransformFeedback;
 		std::function< void() > m_pfnPauseTransformFeedback;

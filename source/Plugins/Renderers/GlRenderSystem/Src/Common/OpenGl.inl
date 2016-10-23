@@ -7,7 +7,7 @@
 namespace GlRender
 {
 	template< typename FuncT, typename ... ParamsT >
-	bool ExecuteFunction( OpenGl & p_gl, FuncT p_function, char const * const p_name, ParamsT && ... p_params )
+	bool ExecuteFunction( OpenGl const & p_gl, FuncT p_function, char const * const p_name, ParamsT && ... p_params )
 	{
 		REQUIRE( p_function );
 		p_function( p_params... );
@@ -245,126 +245,131 @@ namespace GlRender
 
 	//*************************************************************************************************
 
-	bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )
+	bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const
 	{
 		return EXEC_FUNCTION( BufferAddressRange, pname, index, address, length );
 	}
 
-	bool BufFunctionsBase::VertexFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::VertexFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( VertexFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::NormalFormat( eGL_TYPE type, int stride )
+	bool BufFunctionsBase::NormalFormat( eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( NormalFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::ColorFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::ColorFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( ColorFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::IndexFormat( eGL_TYPE type, int stride )
+	bool BufFunctionsBase::IndexFormat( eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( IndexFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::TexCoordFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::TexCoordFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( TexCoordFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::EdgeFlagFormat( int stride )
+	bool BufFunctionsBase::EdgeFlagFormat( int stride )const
 	{
 		return EXEC_FUNCTION( EdgeFlagFormat, stride );
 	}
 
-	bool BufFunctionsBase::SecondaryColorFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::SecondaryColorFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( SecondaryColorFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::FogCoordFormat( uint32_t type, int stride )
+	bool BufFunctionsBase::FogCoordFormat( uint32_t type, int stride )const
 	{
 		return EXEC_FUNCTION( FogCoordFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )
+	bool BufFunctionsBase::VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )const
 	{
 		return EXEC_FUNCTION( VertexAttribFormat, index, size, type, normalized, stride );
 	}
 
-	bool BufFunctionsBase::VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( VertexAttribIFormat, index, size, type, stride );
 	}
 
-	bool BufFunctionsBase::MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access )
+	bool BufFunctionsBase::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
-		return EXEC_FUNCTION( MakeBufferResident, target, access );
+		return EXEC_FUNCTION( MakeBufferResident, uint32_t( target ), access );
 	}
 
-	bool BufFunctionsBase::MakeBufferNonResident( eGL_BUFFER_TARGET target )
+	bool BufFunctionsBase::MakeBufferNonResident( GlBufferTarget target )const
 	{
-		return EXEC_FUNCTION( MakeBufferNonResident, target );
+		return EXEC_FUNCTION( MakeBufferNonResident, uint32_t( target ) );
 	}
 
-	bool BufFunctionsBase::IsBufferResident( eGL_BUFFER_TARGET target )
+	bool BufFunctionsBase::IsBufferResident( GlBufferTarget target )const
 	{
-		return m_pfnIsBufferResident( target ) && glCheckError( GetOpenGl(), cuT( "glIsBufferResident" ) );
+		return m_pfnIsBufferResident( uint32_t( target ) ) && glCheckError( GetOpenGl(), cuT( "glIsBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )
+	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
 		return EXEC_FUNCTION( MakeNamedBufferResident, buffer, access );
 	}
 
-	bool BufFunctionsBase::MakeNamedBufferNonResident( uint32_t buffer )
+	bool BufFunctionsBase::MakeNamedBufferNonResident( uint32_t buffer )const
 	{
 		return EXEC_FUNCTION( MakeNamedBufferNonResident, buffer );
 	}
 
-	bool BufFunctionsBase::IsNamedBufferResident( uint32_t buffer )
+	bool BufFunctionsBase::IsNamedBufferResident( uint32_t buffer )const
 	{
 		return m_pfnIsNamedBufferResident( buffer ) && glCheckError( GetOpenGl(), cuT( "glIsNamedBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params )
+	bool BufFunctionsBase::GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
-		return EXEC_FUNCTION( GetBufferParameterui64v, target, pname, params );
+		return EXEC_FUNCTION( GetBufferParameterui64v, uint32_t( target ), pname, params );
 	}
 
-	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )
+	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameterui64v, buffer, pname, params );
 	}
 
 	//*************************************************************************************************
 
-	bool BufFunctions::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )
+	bool BufFunctions::BindBuffer( GlBufferTarget p_target, uint32_t buffer )const
 	{
-		return EXEC_FUNCTION( BindBuffer, p_target, buffer );
+		return EXEC_FUNCTION( BindBuffer, uint32_t( p_target ), buffer );
 	}
 
-	bool BufFunctions::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
+	bool BufFunctions::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
-		return EXEC_FUNCTION( BufferData, p_target, size, data, usage );
+		return EXEC_FUNCTION( BufferData, uint32_t( p_target ), size, data, usage );
 	}
 
-	bool BufFunctions::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )
+	bool BufFunctions::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
 	{
-		return EXEC_FUNCTION( BufferSubData, p_target, offset, size, data );
+		return EXEC_FUNCTION( CopyBufferSubData, uint32_t( readtarget ), uint32_t( writetarget ), readoffset, writeoffset, size );
 	}
 
-	bool BufFunctions::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )
+	bool BufFunctions::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
-		return EXEC_FUNCTION( GetBufferParameteriv, p_target, pname, params );
+		return EXEC_FUNCTION( BufferSubData, uint32_t( p_target ), offset, size, data );
 	}
 
-	void * BufFunctions::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
+	bool BufFunctions::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
-		void * l_return = m_pfnMapBuffer( p_target, access );
+		return EXEC_FUNCTION( GetBufferParameteriv, uint32_t( p_target ), pname, params );
+	}
+
+	void * BufFunctions::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
+	{
+		void * l_return = m_pfnMapBuffer( uint32_t( p_target ), access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBuffer" ) ) )
 		{
@@ -374,14 +379,14 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctions::UnmapBuffer( eGL_BUFFER_TARGET p_target )
+	bool BufFunctions::UnmapBuffer( GlBufferTarget p_target )const
 	{
-		return EXEC_FUNCTION( UnmapBuffer, p_target );
+		return EXEC_FUNCTION( UnmapBuffer, uint32_t( p_target ) );
 	}
 
-	void * BufFunctions::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
+	void * BufFunctions::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
-		void * l_return = m_pfnMapBufferRange( p_target, offset, length, access );
+		void * l_return = m_pfnMapBufferRange( uint32_t( p_target ), offset, length, access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBufferRange" ) ) )
 		{
@@ -391,29 +396,34 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctions::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )
+	bool BufFunctions::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
-		return EXEC_FUNCTION( FlushMappedBufferRange, p_target, offset, length );
+		return EXEC_FUNCTION( FlushMappedBufferRange, uint32_t( p_target ), offset, length );
 	}
 
 	//*************************************************************************************************
 
-	bool BufFunctionsDSA::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
+	bool BufFunctionsDSA::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
 		return EXEC_FUNCTION( NamedBufferData, m_uiBuffer, size, data, usage );
 	}
 
-	bool BufFunctionsDSA::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )
+	bool BufFunctionsDSA::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
 		return EXEC_FUNCTION( NamedBufferSubData, m_uiBuffer, offset, size, data );
 	}
 
-	bool BufFunctionsDSA::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )
+	bool BufFunctionsDSA::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
+	{
+		return EXEC_FUNCTION( CopyNamedBufferSubData, uint32_t( readtarget ), uint32_t( writetarget ), readoffset, writeoffset, size );
+	}
+
+	bool BufFunctionsDSA::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameteriv, m_uiBuffer, pname, params );
 	}
 
-	void * BufFunctionsDSA::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
+	void * BufFunctionsDSA::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
 	{
 		void * l_return = m_pfnMapNamedBuffer( m_uiBuffer, access );
 
@@ -425,12 +435,12 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctionsDSA::UnmapBuffer( eGL_BUFFER_TARGET p_target )
+	bool BufFunctionsDSA::UnmapBuffer( GlBufferTarget p_target )const
 	{
 		return EXEC_FUNCTION( UnmapNamedBuffer, m_uiBuffer );
 	}
 
-	void * BufFunctionsDSA::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
+	void * BufFunctionsDSA::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
 		void * l_return = m_pfnMapNamedBufferRange( m_uiBuffer, offset, length, access );
 
@@ -442,7 +452,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )
+	bool BufFunctionsDSA::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
 		return EXEC_FUNCTION( FlushMappedNamedBufferRange, m_uiBuffer, offset, length );
 	}
@@ -1723,47 +1733,52 @@ namespace GlRender
 		return m_pfnIsBuffer( buffer ) && glCheckError( *this, "glIsBuffer" );
 	}
 
-	bool OpenGl::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )const
+	bool OpenGl::BindBuffer( GlBufferTarget p_target, uint32_t buffer )const
 	{
 		return m_pBufFunctions->BindBuffer( p_target, buffer );
 	}
 
-	bool OpenGl::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
+	bool OpenGl::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
 		return m_pBufFunctions->BufferData( p_target, size, data, usage );
 	}
 
-	bool OpenGl::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
+	bool OpenGl::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
 		return m_pBufFunctions->BufferSubData( p_target, offset, size, data );
 	}
 
-	bool OpenGl::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )const
+	bool OpenGl::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
+	{
+		return m_pBufFunctions->CopyBufferSubData( readtarget, writetarget, readoffset, writeoffset, size );
+	}
+
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
 
-	bool OpenGl::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
 
-	void * OpenGl::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )const
+	void * OpenGl::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
 	{
 		return m_pBufFunctions->MapBuffer( p_target, access );
 	}
 
-	bool OpenGl::UnmapBuffer( eGL_BUFFER_TARGET p_target )const
+	bool OpenGl::UnmapBuffer( GlBufferTarget p_target )const
 	{
 		return m_pBufFunctions->UnmapBuffer( p_target );
 	}
 
-	void * OpenGl::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
+	void * OpenGl::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
 		return m_pBufFunctions->MapBufferRange( p_target, offset, length, access );
 	}
 
-	bool OpenGl::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )const
+	bool OpenGl::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
 		return m_pBufFunctions->FlushMappedBufferRange( p_target, offset, length );
 	}
@@ -1877,17 +1892,17 @@ namespace GlRender
 		return m_pBufFunctions->VertexAttribIFormat( index, size, type, stride );
 	}
 
-	bool OpenGl::MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool OpenGl::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
 		return m_pBufFunctions->MakeBufferResident( target, access );
 	}
 
-	bool OpenGl::MakeBufferNonResident( eGL_BUFFER_TARGET target )const
+	bool OpenGl::MakeBufferNonResident( GlBufferTarget target )const
 	{
 		return m_pBufFunctions->MakeBufferNonResident( target );
 	}
 
-	bool OpenGl::IsBufferResident( eGL_BUFFER_TARGET target )const
+	bool OpenGl::IsBufferResident( GlBufferTarget target )const
 	{
 		return m_pBufFunctions->IsBufferResident( target );
 	}
@@ -1924,7 +1939,7 @@ namespace GlRender
 		return glCheckError( *this, "glDeleteTransformFeedbacks" );
 	}
 
-	bool OpenGl::BindTransformFeedback( eGL_BUFFER_TARGET target, uint32_t buffer )const
+	bool OpenGl::BindTransformFeedback( GlBufferTarget target, uint32_t buffer )const
 	{
 		m_pfnBindTransformFeedback( target, buffer );
 		return glCheckError( *this, "glBindTransformFeedback" );
@@ -2570,9 +2585,9 @@ namespace GlRender
 		return l_uiReturn;
 	}
 
-	bool OpenGl::BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer )const
+	bool OpenGl::BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const
 	{
-		m_pfnBindBufferBase( target, index, buffer );
+		m_pfnBindBufferBase( uint32_t( target ), index, buffer );
 		return glCheckError( *this, "glBindBufferBase" );
 	}
 

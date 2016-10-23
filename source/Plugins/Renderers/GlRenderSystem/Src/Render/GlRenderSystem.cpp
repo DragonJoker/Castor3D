@@ -446,12 +446,12 @@ namespace GlRender
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
 	{
-		return std::make_shared< GlBuffer< uint32_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ELEMENT_ARRAY, p_buffer );
+		return std::make_shared< GlBuffer< uint32_t > >( *this, GetOpenGl(), GlBufferTarget::ElementArray, p_buffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer )
 	{
-		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), eGL_BUFFER_TARGET_ARRAY, p_buffer );
+		return std::make_shared< GlBuffer< uint8_t > >( *this, GetOpenGl(), GlBufferTarget::Array, p_buffer );
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )

@@ -578,7 +578,7 @@ namespace Castor3D
 
 		p_nodes.m_scene.GetParticleSystemCache().ForEach( []( ParticleSystem & p_particleSystem )
 		{
-			p_particleSystem.Render();
+			p_particleSystem.Update();
 		} );
 
 		DoRenderTransparentNodes( p_nodes, p_depthMaps );

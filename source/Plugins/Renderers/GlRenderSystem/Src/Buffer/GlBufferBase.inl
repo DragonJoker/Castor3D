@@ -3,7 +3,7 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target )
+	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, GlBufferTarget p_target )
 		: BindableType{ p_gl,
 						"GlBufferBase",
 						std::bind( &OpenGl::GenBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -23,17 +23,38 @@ namespace GlRender
 	}
 
 	template< typename T >
+	bool GlBufferBase< T >::Copy( GlBufferBase< T > const & p_src, uint32_t p_size )
+	{
+		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::Read, p_src.GetGlName() );
+
+		if ( l_return )
+		{
+			l_return = GetOpenGl().BindBuffer( GlBufferTarget::Write, GetGlName() );
+
+			if ( l_return )
+			{
+				l_return = BindableType::GetOpenGl().CopyBufferSubData( GlBufferTarget::Read, GlBufferTarget::Write, 0, 0, p_size * sizeof( T ) );
+				GetOpenGl().BindBuffer( GlBufferTarget::Write, 0 );
+			}
+
+			GetOpenGl().BindBuffer( GlBufferTarget::Read, 0 );
+		}
+
+		return l_return;
+	}
+
+	template< typename T >
 	bool GlBufferBase< T >::Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
-		bool l_bResult = Bind();
+		bool l_return = Bind();
 
-		if ( l_bResult )
+		if ( l_return )
 		{
-			l_bResult = BindableType::GetOpenGl().BufferData( m_target, p_size * sizeof( T ), p_buffer, BindableType::GetOpenGl().GetBufferFlags( uint32_t( p_nature ) | uint32_t( p_type ) ) );
+			l_return = BindableType::GetOpenGl().BufferData( m_target, p_size * sizeof( T ), p_buffer, BindableType::GetOpenGl().GetBufferFlags( uint32_t( p_nature ) | uint32_t( p_type ) ) );
 			Unbind();
 		}
 
-		return l_bResult;
+		return l_return;
 	}
 
 	template< typename T >

@@ -18,7 +18,7 @@ namespace GlRender
 						std::bind( &OpenGl::IsTransformFeedback, std::ref( p_gl ), std::placeholders::_1 ),
 						[&p_gl]( uint32_t p_glName )
 						{
-							return p_gl.BindTransformFeedback( eGL_BUFFER_TARGET_TRANSFORM_FEEDBACK, p_glName );
+							return p_gl.BindTransformFeedback( GlBufferTarget::TransformFeedback, p_glName );
 						} }
 		, m_topology{ p_gl.Get( p_topology ) }
 	{
@@ -43,7 +43,7 @@ namespace GlRender
 				for ( auto & l_buffer : m_buffers )
 				{
 					auto & l_tb = static_cast< GlBuffer< uint8_t > & >( *l_buffer.get().GetGpuBuffer() );
-					l_return = GetOpenGl().BindBufferBase( eGL_BUFFER_TARGET_TRANSFORM_FEEDBACK_BUFFER, l_index++, l_tb.GetGlName() );
+					l_return = GetOpenGl().BindBufferBase( GlBufferTarget::TransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
 				}
 
 				BindableType::Unbind();

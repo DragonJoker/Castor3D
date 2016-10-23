@@ -157,6 +157,19 @@ namespace Castor3D
 		virtual void Unbind() = 0;
 		/**
 		 *\~english
+		 *\brief		Copies data from given buffer to this one.
+		 *\param[in]	p_src	The cource buffer.
+		 *\param[in]	p_size	The number of elements to copy.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Copie les données du tampon donné dans celui-ci.
+		 *\param[in]	p_src	Le tampon source.
+		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		virtual bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size ) = 0;
+		/**
+		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM
 		 *\param[in]	p_buffer	The data
 		 *\param[in]	p_size		Data buffer size

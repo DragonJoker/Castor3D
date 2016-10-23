@@ -178,7 +178,7 @@ namespace Castor3D
 
 	BillboardRenderNode RenderPass::CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardList & p_billboard )
+														 , BillboardListBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;

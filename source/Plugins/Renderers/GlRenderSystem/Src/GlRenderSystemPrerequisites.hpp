@@ -389,17 +389,20 @@ namespace GlRender
 		eGL_COMPONENT_DEPTH = 0x1902,
 	}	eGL_COMPONENT;
 
-	typedef enum eGL_BUFFER_TARGET
+	enum class GlBufferTarget
+		: uint32_t
 	{
-		eGL_BUFFER_TARGET_ARRAY = 0x8892,
-		eGL_BUFFER_TARGET_ELEMENT_ARRAY = 0x8893,
-		eGL_BUFFER_TARGET_PIXEL_PACK = 0x88EB,
-		eGL_BUFFER_TARGET_PIXEL_UNPACK = 0x88EC,
-		eGL_BUFFER_TARGET_TEXTURE = 0x8C2A,
-		eGL_BUFFER_TARGET_UNIFORM = 0x8A11,
-		eGL_BUFFER_TARGET_TRANSFORM_FEEDBACK = 0x8E22,
-		eGL_BUFFER_TARGET_TRANSFORM_FEEDBACK_BUFFER = 0x8C8E,
-	}	eGL_BUFFER_TARGET;
+		Array = 0x8892,
+		ElementArray = 0x8893,
+		PixelPack = 0x88EB,
+		PixelUnpack = 0x88EC,
+		Texture = 0x8C2A,
+		Uniform = 0x8A11,
+		TransformFeedback = 0x8E22,
+		TransformFeedbackBuffer = 0x8C8E,
+		Read = 0x8F36,
+		Write = 0x8F37,
+	};
 
 	typedef enum eGL_SHADER_TYPE
 	{

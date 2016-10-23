@@ -3906,7 +3906,6 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardEnd )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		l_parsingContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_parsingContext->pBillboards ) );
 		l_parsingContext->pBillboards = nullptr;
 	}
 	END_ATTRIBUTE_POP()

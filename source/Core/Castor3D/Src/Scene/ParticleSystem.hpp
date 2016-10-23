@@ -29,6 +29,8 @@ SOFTWARE.
 #include "Texture/TextureUnit.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
+#include <Design/Named.hpp>
+#include <Design/OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -72,7 +74,8 @@ namespace Castor3D
 	\brief		Implémentation d'un système de particules.
 	*/
 	class ParticleSystem
-		: public MovableObject
+		: public Castor::Named
+		, public Castor::OwnedBy< Scene >
 	{
 	public:
 		/*!
@@ -115,17 +118,15 @@ namespace Castor3D
 		 *\param[in]	p_name			The name.
 		 *\param[in]	p_scene			The parent scene.
 		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_renderSystem	The RenderSystem.
 		 *\param[in]	p_count			The particles count.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
 		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_count			Le nombre de particules.
 		 */
-		C3D_API ParticleSystem( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem, size_t p_count );
+		C3D_API ParticleSystem( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -160,11 +161,11 @@ namespace Castor3D
 		C3D_API void SetMaterial( MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Renders the particles.
+		 *\brief		Updates the particles.
 		 *\~french
-		 *\brief		Dessine les particules.
+		 *\brief		Met à jour les particules.
 		 */
-		C3D_API void Render();
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Sets the particles dimensions.
@@ -176,50 +177,82 @@ namespace Castor3D
 		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
 		/**
 		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
+		 *\return		The material.
 		 *\~french
-		 *\brief		Recupere le materiau
-		 *\return		La valeur
+		 *\return		Le materiau.
 		 */
-		inline MaterialSPtr GetMaterial()const
-		{
-			return m_material.lock();
-		}
+		C3D_API MaterialSPtr GetMaterial()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the billboards dimensions
+		 *\return		The billboards dimensions.
+		 *\~french
+		 *\return		Les dimensions des billboards.
+		 */
+		C3D_API Castor::Size const & GetDimensions()const;
+		/**
+		 *\~english
+		 *\brief		Detaches the movable object from it's parent
+		 *\~french
+		 *\brief		Détache l'objet de son parent
+		 */
+		C3D_API void Detach();
+		/**
+		 *\~english
+		 *\brief		Attaches the movable object to a node
+		 *\~french
+		 *\brief		Attache l'object à un noeud
+		 */
+		C3D_API void AttachTo( SceneNodeSPtr p_node );
+		/**
+		 *\~english
+		 *\brief		Retrieves the parent node
 		 *\return		The value
 		 *\~french
-		 *\brief		Recupere les dimensions des billboards
+		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline Castor::Size const & GetDimensions()const
+		C3D_API SceneNodeSPtr GetParent()const;
+		/**
+		 *\~english
+		 *\return		The billboards.
+		 *\~french
+		 *\return		Les billboards.
+		 */
+		inline BillboardListBaseSPtr GetBillboards()const
 		{
-			return m_dimensions;
+			return m_particlesBillboard;
 		}
 
 	private:
 		bool DoCreateUpdateProgram();
+		bool DoCreateUpdatePipeline();
 		void DoUpdate();
-		void DoRender();
 
 	private:
 		//!\~english	The computed elements description.
 		//!\~french		La description des éléments calculés.
 		BufferDeclaration m_computed;
+		//!\~english	The billboards containing the particles.
+		//!\~french		Les billboards contenant les particules.
+		BillboardListBaseSPtr m_particlesBillboard;
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
-		size_t m_count{ 0 };
-		//!\~english	The material.
-		//!\~french		Le materiau.
-		MaterialWPtr m_material;
-		//!\~english	The billboards dimensions.
-		//!\~french		Les dimensions des billboards.
-		Castor::Size m_dimensions;
+		size_t m_particlesCount{ 0 };
 		//!\~english	The program used to update the transform buffer.
 		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
 		ShaderProgramSPtr m_updateProgram;
+		//!\~english	The pipeline used to update the transform buffer.
+		//!\~french		Le pipeline utilisé pour mettre à jour le tampon de transformation.
+		PipelineUPtr m_updatePipeline;
+		//!\~english	The geometry buffers used to update the transform buffer.
+		//!\~french		Les tampons de géométrie utilisé pour mettre à jour le tampon de transformation.
+		GeometryBuffersUPtr m_updateGeometryBuffers;
+		//!\~english	The vertex buffers used to update the transform buffer.
+		//!\~french		Le tampon de sommets utilisé pour mettre à jour le tampon de transformation.
+		VertexBufferSPtr m_updateParticlesBuffers;
+		//!\~english	The frame variable buffer holding particle system related variables.
+		//!\~french		Le tampon de variables contenant les variables relatives au système de particules.
+		FrameVariableBufferSPtr m_ubo;
 		//!\~english	The frame variable holding time since last update.
 		//!\~french		La variable de frame contenant le temps écoulé depuis la dernière mise à jour.
 		OneFloatFrameVariableSPtr m_deltaTime;
@@ -235,30 +268,21 @@ namespace Castor3D
 		//!\~english	The frame variable holding the secondary shells lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des particules secondaires.
 		OneFloatFrameVariableSPtr m_secondaryShellLifetime;
-		//!\~english	The pipeline used to update the transform buffer.
-		//!\~french		Le pipeline utilisé pour mettre à jour le tampon de transformation.
-		PipelineUPtr m_updatePipeline;
 		//!\~english	The transform feedback used to update the particles.
 		//!\~french		Le transform feedback utilisé pour mettre à jour les particules.
-		std::array< TransformFeedbackUPtr, 2u > m_transformFeedbacks;
-		//!\~english	The particles buffer.
-		//!\~french		Le tampon de particules.
-		std::array< VertexBufferSPtr, 2u > m_particleBuffers;
-		//!\~english	The Transform Feedback buffers.
-		//!\~french		Les tampons de transform feedback.
-		std::array< VertexBufferSPtr, 2u > m_transformBuffers;
-		//!\~english	The current transform feedback buffer index.
-		//!\~french		L'index du tampon de transform feedback courant.
-		size_t m_currentUpdateBuffer{ 0u };
-		//!\~english	The current transform feedback buffer index.
-		//!\~french		L'index du tampon de transform feedback courant.
-		size_t m_currentRenderBuffer{ 1u };
+		TransformFeedbackUPtr m_transformFeedbacks;
 		//!\~english	The timer, for the particles update.
 		//!\~french		Le timer, pour la mise à jour des particules.
 		Castor::PreciseTimer m_timer;
 		//!\~english	The texture containing random directions.
 		//!\~french		La texture contenant des directions aléatoires.
 		TextureUnit m_randomTexture;
+		//!\~english	Tells that the next update is the first one.
+		//!\~french		Dit que la prochaine mise à jour est la première.
+		bool m_firstUpdate{ true };
+		//!\~english	The total elapsed time.
+		//!\~french		Le temps total écoulé.
+		float m_totalTime{ 0.0f };
 	};
 }
 

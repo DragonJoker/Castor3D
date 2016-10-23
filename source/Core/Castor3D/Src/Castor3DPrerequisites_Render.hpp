@@ -248,6 +248,68 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
+	\~english
+	\brief		Helper structure to get a topology name.
+	\~french
+	\brief		Structure d'aide pour récupérer le nom d'une topologie.
+	*/
+	template< Topology Topo >
+	struct TopologyNamer
+	{
+		static Castor::String const Name;
+	};
+	/**
+	 *\~english
+	 *\brief		Gets the name of the given topology.
+	 *\param[in]	p_topology	The topology.
+	 *\return		The name.
+	 *\~french
+	 *\brief		Récupère le nom de la topologie donnée.
+	 *\param[in]	p_topology	La topologie.
+	 *\return		Le nom.
+	 */
+	static inline Castor::String const GetTopologyName( Topology p_topology )
+	{
+		switch ( p_topology )
+		{
+		case Topology::Points:
+			return TopologyNamer< Topology::Points >::Name;
+
+		case Topology::Lines:
+			return TopologyNamer< Topology::Lines >::Name;
+
+		case Topology::LineLoop:
+			return TopologyNamer< Topology::LineLoop >::Name;
+
+		case Topology::LineStrip:
+			return TopologyNamer< Topology::LineStrip >::Name;
+
+		case Topology::Triangles:
+			return TopologyNamer< Topology::Triangles >::Name;
+
+		case Topology::TriangleStrips:
+			return TopologyNamer< Topology::TriangleStrips >::Name;
+
+		case Topology::TriangleFan:
+			return TopologyNamer< Topology::TriangleFan >::Name;
+
+		case Topology::Quads:
+			return TopologyNamer< Topology::Quads >::Name;
+
+		case Topology::QuadStrips:
+			return TopologyNamer< Topology::QuadStrips >::Name;
+
+		case Topology::Polygon:
+			return TopologyNamer< Topology::Polygon >::Name;
+
+		default:
+			FAILURE( "Topology type unknown" );
+			CASTOR_EXCEPTION( "Topology type unknown" );
+			break;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.7.0
 	\date 		02/06/2013
 	\~english
@@ -437,7 +499,16 @@ namespace Castor3D
 		Mat4,
 		CASTOR_ENUM_CLASS_BOUNDS( Float )
 	};
-
+	/**
+	 *\~english
+	 *\brief		Gets the byte size of the given element type.
+	 *\param[in]	p_type	The element type.
+	 *\return		The size.
+	 *\~french
+	 *\brief		Récupère la taille en octets du type d'élément donné.
+	 *\param[in]	p_type	Le type d'élément.
+	 *\return		La taille.
+	 */
 	inline uint32_t GetSize( ElementType p_type )
 	{
 		switch ( p_type )

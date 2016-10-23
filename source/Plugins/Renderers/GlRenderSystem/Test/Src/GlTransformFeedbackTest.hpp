@@ -44,6 +44,8 @@ namespace Testing
 		void BasicCompute();
 		void GeometryShader();
 		void VariableFeedback();
+		void ParticleSystem();
+		void TwoWaysParticleSystem();
 	};
 }
 

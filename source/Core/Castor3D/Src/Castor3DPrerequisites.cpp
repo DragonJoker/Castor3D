@@ -14,6 +14,17 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	template<> String const TopologyNamer< Topology::Points >::Name = cuT( "points" );
+	template<> String const TopologyNamer< Topology::Lines >::Name = cuT( "lines" );
+	template<> String const TopologyNamer< Topology::LineLoop >::Name = cuT( "line_loop" );
+	template<> String const TopologyNamer< Topology::LineStrip >::Name = cuT( "line_strip" );
+	template<> String const TopologyNamer< Topology::Triangles >::Name = cuT( "triangles" );
+	template<> String const TopologyNamer< Topology::TriangleStrips >::Name = cuT( "triangle_strip" );
+	template<> String const TopologyNamer< Topology::TriangleFan >::Name = cuT( "triangle_fan" );
+	template<> String const TopologyNamer< Topology::Quads >::Name = cuT( "quads" );
+	template<> String const TopologyNamer< Topology::QuadStrips >::Name = cuT( "quad_strip" );
+	template<> String const TopologyNamer< Topology::Polygon >::Name = cuT( "polygon" );
+
 	void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
 											 , GLSL::Vec3 & p_normal
 											 , GLSL::Float & p_shininess

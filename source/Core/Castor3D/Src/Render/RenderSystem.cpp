@@ -94,22 +94,6 @@ namespace Castor3D
 
 	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		using namespace GLSL;
-
-		static String const Primitives[] =
-		{
-			cuT( "points" ),//Topology::Points
-			cuT( "lines" ),//Topology::Lines
-			cuT( "line_loop" ),//Topology::LineLoop
-			cuT( "line_strip" ),//Topology::LineStrip
-			cuT( "triangles" ),//Topology::Triangles
-			cuT( "triangle_strip" ),//Topology::TriangleStrips
-			cuT( "triangle_fan" ),//Topology::TriangleFan
-			cuT( "quads" ),//Topology::Quads
-			cuT( "quad_strip" ),//Topology::QuadStrips
-			cuT( "polygon" ),//Topology::Polygon
-		};
-
 		Topology l_input = Topology::Points;
 		Topology l_output = Topology::TriangleStrips;
 		uint32_t l_count = 4;
@@ -130,6 +114,7 @@ namespace Castor3D
 
 		String l_strVtxShader;
 		{
+			using namespace GLSL;
 			auto l_writer = CreateGlslWriter();
 
 			// Shader inputs
@@ -148,11 +133,11 @@ namespace Castor3D
 
 		String l_strGeoShader;
 		{
+			using namespace GLSL;
 			auto l_writer = CreateGlslWriter();
 
-			l_writer.InputGeometryLayout( Primitives[size_t( l_input )] );
-			l_writer.OutputGeometryLayout( Primitives[size_t( l_output )] );
-			l_writer.OutputVertexCount( l_count );
+			l_writer.InputGeometryLayout( GetTopologyName( l_input ) );
+			l_writer.OutputGeometryLayout( GetTopologyName( l_output ), l_count );
 
 			// Shader inputs
 			UBO_MATRIX( l_writer );

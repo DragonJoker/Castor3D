@@ -48,6 +48,11 @@ namespace TestRender
 	{
 	}
 
+	bool TestIndexBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )
+	{
+		return true;
+	}
+
 	bool TestIndexBuffer::Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		return true;
