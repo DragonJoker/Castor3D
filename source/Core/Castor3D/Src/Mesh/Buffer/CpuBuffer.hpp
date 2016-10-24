@@ -44,10 +44,10 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	protected:
-		using GpuBuffer = typename GpuBuffer< T >;
-		using GpuBufferSPtr = typename std::shared_ptr< GpuBuffer >;
-		using GpuBufferWPtr = typename std::weak_ptr< GpuBuffer >;
-		using CpuBufferWPtr = typename std::weak_ptr< CpuBuffer< T > >;
+		using MyGpuBuffer = GpuBuffer< T >;
+		using GpuBufferSPtr = std::shared_ptr< MyGpuBuffer >;
+		using GpuBufferWPtr = std::weak_ptr< MyGpuBuffer >;
+		using CpuBufferWPtr = std::weak_ptr< CpuBuffer< T > >;
 
 		DECLARE_TPL_VECTOR( T, T );
 

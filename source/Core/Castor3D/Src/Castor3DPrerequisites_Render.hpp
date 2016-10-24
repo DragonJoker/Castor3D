@@ -307,7 +307,7 @@ namespace Castor3D
 			CASTOR_EXCEPTION( "Topology type unknown" );
 			break;
 		}
-	};
+	}
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0

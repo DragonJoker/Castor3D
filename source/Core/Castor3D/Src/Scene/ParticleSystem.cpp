@@ -482,7 +482,7 @@ namespace Castor3D
 			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
 
 			static std::random_device l_device;
-			std::uniform_real< float > l_distribution;
+			std::uniform_real_distribution< float > l_distribution;
 
 			for ( auto i{ 0u }; i < l_buffer.count() * 3; ++i )
 			{
