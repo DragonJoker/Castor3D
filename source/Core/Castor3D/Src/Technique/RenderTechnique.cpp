@@ -705,24 +705,35 @@ namespace Castor3D
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
 				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
-				uint8_t * l_buffer = l_matrixBuffer.data();
-				const uint32_t l_stride = 16 * sizeof( real );
 
-				for ( auto const & l_renderNode : p_renderNodes )
+				if ( l_matrixBuffer.Bind() )
 				{
-					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-					l_buffer += l_stride;
+					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::Write ) );
 
-					if ( p_register )
+					if ( l_buffer )
 					{
-						m_renderedObjects.push_back( l_renderNode );
-					}
-				}
+						constexpr uint32_t l_stride = 16;
 
-				l_matrixBuffer.GetGpuBuffer()->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
-				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_depthMaps );
+						for ( auto const & l_renderNode : p_renderNodes )
+						{
+							std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride * sizeof( real ) );
+							l_buffer += l_stride;
+
+							if ( p_register )
+							{
+								m_renderedObjects.push_back( l_renderNode );
+							}
+						}
+
+						l_matrixBuffer.Unlock();
+					}
+
+					l_matrixBuffer.Unbind();
+
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
 			}
 		} );
 	}

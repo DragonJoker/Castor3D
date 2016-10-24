@@ -35,8 +35,8 @@ namespace GlRender
 {
 	class GlFrameBuffer
 		: public Castor3D::FrameBuffer
-		, private Bindable< std::function< bool( int, uint32_t * ) >,
-			, std::function< bool( int, uint32_t const * ) >,
+		, private Bindable< std::function< bool( int, uint32_t * ) >
+			, std::function< bool( int, uint32_t const * ) >
 			, std::function< bool( uint32_t ) > >
 	{
 		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >
