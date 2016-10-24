@@ -218,11 +218,6 @@ namespace Castor3D
 					{
 						System::Sleep( l_frameTime - l_timeDiff );
 					}
-					else
-					{
-						// In order to let the CPU work, we sleep at least 1ms
-						System::Sleep( 1 );
-					}
 				}
 
 				m_ended = true;
