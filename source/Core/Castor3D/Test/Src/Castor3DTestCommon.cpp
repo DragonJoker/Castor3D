@@ -493,7 +493,7 @@ namespace Testing
 
 	bool C3DTestCase::compare( KeyFrame const & p_a, KeyFrame const & p_b )
 	{
-		bool l_return{ CT_EQUAL( p_a.GetTransform(), p_b.GetTransform () ) };
+		bool l_return{ CT_EQUAL( p_a.GetTransform(), p_b.GetTransform() ) };
 		l_return &= CT_EQUAL( p_a.GetTimeIndex(), p_b.GetTimeIndex() );
 		return l_return;
 	}

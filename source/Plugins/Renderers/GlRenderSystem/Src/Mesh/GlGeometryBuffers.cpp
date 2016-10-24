@@ -21,7 +21,7 @@ namespace GlRender
 					  std::bind( &OpenGl::DeleteVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
 					  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
-				 )
+					)
 		, m_program{ p_program }
 		, m_glTopology{ p_gl.Get( p_topology ) }
 	{

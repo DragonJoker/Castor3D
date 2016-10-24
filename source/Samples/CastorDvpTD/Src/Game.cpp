@@ -187,7 +187,7 @@ namespace castortd
 			m_elapsed = std::chrono::milliseconds{ 40 };
 #else
 			m_elapsed = std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - m_saved );
-#endif 
+#endif
 			DoUpdateBullets();
 			DoUpdateTowers();
 			DoUpdateEnemies();
@@ -345,7 +345,7 @@ namespace castortd
 			auto l_it = std::find_if( m_towers.begin(), m_towers.end(), [&p_cell]( TowerPtr p_tower )
 			{
 				return p_tower->GetCell().m_x == p_cell.m_x
-					&& p_tower->GetCell().m_y == p_cell.m_y;
+					   && p_tower->GetCell().m_y == p_cell.m_y;
 			} );
 
 			if ( l_it != m_towers.end() )

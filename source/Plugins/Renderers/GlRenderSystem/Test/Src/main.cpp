@@ -142,6 +142,7 @@ namespace
 		default:
 			return DefWindowProc( hWnd, message, wParam, lParam );
 		}
+
 		return 0;
 	}
 
@@ -174,11 +175,11 @@ namespace
 #elif ( __linux__ )
 
 	static int const None = 0;
-	
+
 	IWindowHandleSPtr CreateWindowHandle()
 	{
 		IWindowHandleSPtr l_handle;
-		Display *display = XOpenDisplay( NULL );
+		Display * display = XOpenDisplay( NULL );
 
 		if ( !display )
 		{
@@ -207,7 +208,7 @@ namespace
 
 		// FBConfigs were added in GLX version 1.3.
 		if ( !glXQueryVersion( display, &glx_major, &glx_minor ) ||
-			( ( glx_major == 1 ) && ( glx_minor < 3 ) ) || ( glx_major < 1 ) )
+			 ( ( glx_major == 1 ) && ( glx_minor < 3 ) ) || ( glx_major < 1 ) )
 		{
 			printf( "Invalid GLX version" );
 			exit( 1 );
@@ -215,22 +216,24 @@ namespace
 
 		printf( "Getting matching framebuffer configs\n" );
 		int fbcount;
-		GLXFBConfig* fbc = glXChooseFBConfig( display, DefaultScreen( display ), visual_attribs, &fbcount );
+		GLXFBConfig * fbc = glXChooseFBConfig( display, DefaultScreen( display ), visual_attribs, &fbcount );
+
 		if ( !fbc )
 		{
 			printf( "Failed to retrieve a framebuffer config\n" );
 			exit( 1 );
 		}
+
 		printf( "Found %d matching FB configs.\n", fbcount );
 
 		// Pick the FB config/visual with the most samples per pixel
 		printf( "Getting XVisualInfos\n" );
 		int best_fbc = -1, worst_fbc = -1, best_num_samp = -1, worst_num_samp = 999;
 
-		int i;
-		for ( i = 0; i<fbcount; ++i )
+		for ( int i = 0; i < fbcount; ++i )
 		{
-			XVisualInfo *vi = glXGetVisualFromFBConfig( display, fbc[i] );
+			XVisualInfo * vi = glXGetVisualFromFBConfig( display, fbc[i] );
+
 			if ( vi )
 			{
 				int samp_buf, samples;
@@ -242,10 +245,16 @@ namespace
 						i, vi->visualid, samp_buf, samples );
 
 				if ( best_fbc < 0 || samp_buf && samples > best_num_samp )
+				{
 					best_fbc = i, best_num_samp = samples;
+				}
+
 				if ( worst_fbc < 0 || !samp_buf || samples < worst_num_samp )
+				{
 					worst_fbc = i, worst_num_samp = samples;
+				}
 			}
+
 			XFree( vi );
 		}
 
@@ -255,7 +264,7 @@ namespace
 		XFree( fbc );
 
 		// Get a visual
-		XVisualInfo *vi = glXGetVisualFromFBConfig( display, bestFbc );
+		XVisualInfo * vi = glXGetVisualFromFBConfig( display, bestFbc );
 		printf( "Chosen visual ID = 0x%x\n", vi->visualid );
 
 		printf( "Creating colormap\n" );
@@ -273,6 +282,7 @@ namespace
 									0, 0, 100, 100, 0, vi->depth, InputOutput,
 									vi->visual,
 									CWBorderPixel | CWColormap | CWEventMask, &swa );
+
 		if ( !win )
 		{
 			printf( "Failed to create window.\n" );

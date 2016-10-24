@@ -394,7 +394,7 @@ namespace GlRender
 		inline bool Enable( eGL_TEXDIM texture )const;
 		inline bool Disable( eGL_TEXDIM texture )const;
 		inline bool SelectBuffer( int size, uint32_t * buffer )const;
-		inline bool GetIntegerv (uint32_t pname, int * params)const;
+		inline bool GetIntegerv( uint32_t pname, int * params )const;
 		inline bool GetIntegerv( GlMax pname, int * params )const;
 		inline bool GetIntegerv( GlMin pname, int * params )const;
 		inline bool GetIntegerv( GlGpuInfo pname, int * params )const;
@@ -1368,7 +1368,7 @@ namespace GlRender
 	}
 
 #	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x );
-	
+
 	MAKE_GL_EXTENSION( AMD_draw_buffers_blend )
 	MAKE_GL_EXTENSION( AMDX_debug_output )
 	MAKE_GL_EXTENSION( ARB_compute_shader )

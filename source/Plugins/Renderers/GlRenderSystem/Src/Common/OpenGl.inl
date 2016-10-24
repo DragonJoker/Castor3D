@@ -883,11 +883,11 @@ namespace GlRender
 	uint32_t OpenGl::GetBitfieldFlags( Castor3D::AccessType p_flags )const
 	{
 		uint32_t l_uiFlags = 0;
-		
+
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
 		{
 			l_uiFlags = eGL_BUFFER_MAPPING_BIT_READ;
-			
+
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 			{
 				l_uiFlags |= eGL_BUFFER_MAPPING_BIT_WRITE;

@@ -454,7 +454,7 @@ namespace GlRender
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = eGL_TEXTURE_STORAGE_2DARRAY;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap)] = eGL_TEXTURE_STORAGE_CUBE_MAP;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap )] = eGL_TEXTURE_STORAGE_CUBE_MAP;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY;
 
 		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = eGL_TEXDIM_CUBE_FACE_POSX;

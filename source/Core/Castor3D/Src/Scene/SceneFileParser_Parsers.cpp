@@ -1199,7 +1199,7 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
-		IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemMaterial )
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemMaterial )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 

@@ -774,6 +774,7 @@ namespace CastorViewer
 				{
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
+
 					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
 					{
 						DoUpdateSelectedGeometry( m_picking.GetPickedGeometry(), m_picking.GetPickedSubmesh() );

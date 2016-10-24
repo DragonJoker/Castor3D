@@ -57,7 +57,7 @@ namespace castortd
 		l_cache.Find( cuT( "GameEndPanel" ) )->SetVisible( false );
 		l_cache.Find( cuT( "HelpPanel" ) )->SetVisible( false );
 	}
-	
+
 	void Hud::Start()
 	{
 		auto & l_cache = m_game.GetScene().GetEngine()->GetOverlayCache();

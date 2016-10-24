@@ -45,9 +45,9 @@ namespace GLSL
 		l_return << ToString( p_value.m_v3Specular );
 		return l_return.str();
 	}
-	
+
 	//***********************************************************************************************
-	
+
 	FragmentInput::FragmentInput( GlslWriter & p_writer )
 		: m_v3Vertex{ &p_writer, cuT( "p_v3Vertex" ) }
 		, m_v3Normal{ &p_writer, cuT( "p_v3Normal" ) }
@@ -68,7 +68,7 @@ namespace GLSL
 	}
 
 	//***********************************************************************************************
-	
+
 	OutputComponents::OutputComponents( GlslWriter & p_writer )
 		: m_v3Ambient{ &p_writer, cuT( "p_v3Ambient" ) }
 		, m_v3Diffuse{ &p_writer, cuT( "p_v3Diffuse" ) }
@@ -77,8 +77,8 @@ namespace GLSL
 	}
 
 	OutputComponents::OutputComponents( InOutParam< Vec3 > const & p_v3Ambient
-									    , InOutParam< Vec3 > const & p_v3Diffuse
-									    , InOutParam< Vec3 > const & p_v3Specular )
+										, InOutParam< Vec3 > const & p_v3Diffuse
+										, InOutParam< Vec3 > const & p_v3Specular )
 		: m_v3Ambient{ p_v3Ambient }
 		, m_v3Diffuse{ p_v3Diffuse }
 		, m_v3Specular{ p_v3Specular }
@@ -140,7 +140,7 @@ namespace GLSL
 							   , p_worldEye
 							   , p_shininess
 							   , p_fragmentIn
-							   , p_output);
+							   , p_output );
 		}
 		ROF;
 

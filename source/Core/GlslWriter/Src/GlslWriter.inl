@@ -397,7 +397,7 @@ namespace GLSL
 	{
 		if ( p_rhs.size() != p_dimension )
 		{
-			CASTOR_EXCEPTION ("Given parameters count doesn't match the array dimensions");
+			CASTOR_EXCEPTION( "Given parameters count doesn't match the array dimensions" );
 		}
 
 		*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "] = " ) << T().m_type << cuT( "[]( " );
@@ -409,7 +409,7 @@ namespace GLSL
 			l_sep = cuT( "\t, " );
 		}
 
-		*this << cuT (");") << Endl();
+		*this << cuT( ");" ) << Endl();
 		return Array< T >( this, p_name, p_dimension );
 	}
 

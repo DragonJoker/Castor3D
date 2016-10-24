@@ -35,14 +35,14 @@ namespace Castor3D
 	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
 	{
 		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
-			|| ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
-				 && ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
-					  || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
-						   && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
-								|| ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
-									 && ( p_lhs.m_programFlags < p_rhs.m_programFlags
-										  || ( p_lhs.m_programFlags == p_rhs.m_programFlags
-											   && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
+			   || ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
+					&& ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
+						 || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
+							  && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
+								   || ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
+										&& ( p_lhs.m_programFlags < p_rhs.m_programFlags
+											 || ( p_lhs.m_programFlags == p_rhs.m_programFlags
+												  && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
 	}
 	/*!
 	\author		Sylvain DOREMUS

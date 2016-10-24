@@ -50,7 +50,7 @@ namespace Castor
 		 *\brief		Constructeur depuis un pointeur.
 		 *\param[in]	p_values	Un pointeur sur 4 flottants alignés sur 16 bits.
 		 */
-		explicit inline Float4( float const * p_values);
+		explicit inline Float4( float const * p_values );
 		/**
 		 *\~english
 		 *\brief		Constructor from a single value (duplicates it).

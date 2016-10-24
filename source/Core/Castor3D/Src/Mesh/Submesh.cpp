@@ -206,13 +206,16 @@ namespace Castor3D
 		, m_defaultMaterial( p_scene.GetEngine()->GetMaterialCache().GetDefaultMaterial() )
 		, m_id( p_id )
 		, m_parentMesh( p_mesh )
-		, m_layout( {
-						BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3, Vertex::GetOffsetPos() ),
-						BufferElementDeclaration( ShaderProgram::Normal, uint32_t( ElementUsage::Normal ), ElementType::Vec3, Vertex::GetOffsetNml() ),
-						BufferElementDeclaration( ShaderProgram::Tangent, uint32_t( ElementUsage::Tangent ), ElementType::Vec3, Vertex::GetOffsetTan() ),
-						BufferElementDeclaration( ShaderProgram::Bitangent, uint32_t( ElementUsage::Bitangent ), ElementType::Vec3, Vertex::GetOffsetBin() ),
-						BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec3, Vertex::GetOffsetTex() ),
-					} )
+		, m_layout
+		{
+			{
+				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3, Vertex::GetOffsetPos() ),
+				BufferElementDeclaration( ShaderProgram::Normal, uint32_t( ElementUsage::Normal ), ElementType::Vec3, Vertex::GetOffsetNml() ),
+				BufferElementDeclaration( ShaderProgram::Tangent, uint32_t( ElementUsage::Tangent ), ElementType::Vec3, Vertex::GetOffsetTan() ),
+				BufferElementDeclaration( ShaderProgram::Bitangent, uint32_t( ElementUsage::Bitangent ), ElementType::Vec3, Vertex::GetOffsetBin() ),
+				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec3, Vertex::GetOffsetTex() ),
+			}
+		}
 	{
 	}
 
@@ -993,7 +996,7 @@ namespace Castor3D
 		}
 
 		if ( ( CheckFlag( GetProgramFlags(), ProgramFlag::Skinning ) && m_parentMesh.GetSkeleton() )
-			 || CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
+				|| CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 		{
 			if ( CheckFlag( GetProgramFlags(), ProgramFlag::Morphing ) )
 			{

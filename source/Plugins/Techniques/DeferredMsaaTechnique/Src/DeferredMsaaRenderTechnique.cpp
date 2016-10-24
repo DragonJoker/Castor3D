@@ -312,7 +312,7 @@ namespace DeferredMsaa
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				l_program.m_program->UnbindUbos();
-				
+
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Tangent )]->Unbind();
@@ -349,7 +349,7 @@ namespace DeferredMsaa
 	{
 	}
 
-	bool RenderTechnique::DoWriteInto (TextFile & p_file)
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
 	}
@@ -482,7 +482,7 @@ namespace DeferredMsaa
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
 			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
 
-			IF (l_writer, l_v3Normal != l_v3Tangent )
+			IF( l_writer, l_v3Normal != l_v3Tangent )
 			{
 				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, vtx_texture ) );
 				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, vtx_texture ) );
@@ -512,6 +512,7 @@ namespace DeferredMsaa
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
+
 				if ( p_sceneFlags != 0 )
 				{
 					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );

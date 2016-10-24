@@ -25,7 +25,7 @@ namespace Castor
 						facet.in( state,
 								  p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
 								  &dst[0], &dst[0] + dst.size(), endDst
-							 );
+								);
 						p_strOut = std::wstring( &dst.front(), endDst );
 					}
 				}

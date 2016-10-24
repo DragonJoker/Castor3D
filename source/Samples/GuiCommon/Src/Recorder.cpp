@@ -29,7 +29,7 @@ namespace libffmpeg
 	{
 		if ( p_error < 0 )
 		{
-			char l_err[AV_ERROR_MAX_STRING_SIZE]{ 0 };
+			char l_err[AV_ERROR_MAX_STRING_SIZE] { 0 };
 			std::stringstream l_stream;
 			l_stream << ( char const * )_( "Failure on:" ).mb_str( wxConvUTF8 ) << "\n";
 			l_stream << "\t" << ( char const * )wxGetTranslation( p_action ).mb_str( wxConvUTF8 );

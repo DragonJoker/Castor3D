@@ -329,6 +329,7 @@ namespace Testing
 
 				l_vboIn.Unlock();
 			}
+
 			l_vboIn.Unbind();
 
 			l_pipeline->Apply();
@@ -350,6 +351,7 @@ namespace Testing
 
 				l_vboOut.Unlock();
 			}
+
 			l_vboOut.Unbind();
 			l_vboIn.Copy( l_vboOut, sizeof( l_data ) );
 		}
@@ -696,7 +698,7 @@ namespace Testing
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );
 		l_program->SetTransformLayout( l_outputs );
-		
+
 		// Transform feedback
 		TransformFeedbackSPtr l_transformFeedback[]
 		{

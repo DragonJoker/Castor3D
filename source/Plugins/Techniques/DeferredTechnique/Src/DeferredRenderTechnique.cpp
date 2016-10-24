@@ -228,7 +228,7 @@ namespace Deferred
 			program.m_pipeline->Cleanup();
 			program.m_pipeline.reset();
 		}
-		
+
 		m_lightPassDepthBuffer->Destroy();
 		m_geometryPassFrameBuffer->Destroy();
 	}
@@ -236,7 +236,7 @@ namespace Deferred
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		bool l_return = true;
-		
+
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::Count ); i++ )
 		{
 			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write, GetTextureFormat( DsTexture( i ) ), m_size );
@@ -399,7 +399,7 @@ namespace Deferred
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				l_program.m_program->UnbindUbos();
-				
+
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Tangent )]->Unbind();
@@ -435,7 +435,7 @@ namespace Deferred
 	{
 	}
 
-	bool RenderTechnique::DoWriteInto (TextFile & p_file)
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
 	}
@@ -598,6 +598,7 @@ namespace Deferred
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
+
 				if ( p_sceneFlags != 0 )
 				{
 					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );

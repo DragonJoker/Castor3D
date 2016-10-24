@@ -228,7 +228,7 @@ namespace Castor3D
 	{
 		return m_particlesBillboard->GetDimensions();
 	}
-	
+
 	void ParticleSystem::Detach()
 	{
 		m_particlesBillboard->Detach();

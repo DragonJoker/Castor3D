@@ -875,7 +875,7 @@ namespace Castor3D
 
 		// Fragment Outtputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-		
+
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );

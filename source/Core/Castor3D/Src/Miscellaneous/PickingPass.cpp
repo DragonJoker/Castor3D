@@ -211,7 +211,7 @@ namespace Castor3D
 			}
 
 			if ( l_itPass != l_itPipeline->second.end()
-				 && l_itMesh != l_itPass->second.end() )
+					&& l_itMesh != l_itPass->second.end() )
 			{
 				REQUIRE( !l_itMesh->second.empty() );
 				auto l_itNode = l_itMesh->second.begin() + l_instanceIndex;
@@ -312,7 +312,7 @@ namespace Castor3D
 
 		m_geometryBuffers.clear();
 	}
-	
+
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
 		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;

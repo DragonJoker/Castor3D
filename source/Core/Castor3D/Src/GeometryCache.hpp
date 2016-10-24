@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le nombre d'objets
 		 */
-		C3D_API uint32_t GetObjectCount ()const;
+		C3D_API uint32_t GetObjectCount()const;
 		/**
 		 *\~english
 		 *\brief		Creates an object.

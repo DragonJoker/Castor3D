@@ -63,12 +63,12 @@ namespace Castor3D
 				break;
 
 			case AttachmentPoint::Depth:
-				AddFlag (l_targets, BufferComponent::Depth );
-				AddFlag (l_targets, BufferComponent::Stencil );
+				AddFlag( l_targets, BufferComponent::Depth );
+				AddFlag( l_targets, BufferComponent::Stencil );
 				break;
 
 			case AttachmentPoint::Stencil:
-				AddFlag (l_targets, BufferComponent::Stencil );
+				AddFlag( l_targets, BufferComponent::Stencil );
 				break;
 			}
 		}

@@ -329,18 +329,18 @@ namespace Castor3D
 			OneFloatFrameVariableSPtr l_1f;
 
 			l_it = m_mapPanelNodes.insert( { &p_pass, PassRenderNode
-			{
-				p_pass,
-				l_pipeline,
-				*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
-				*l_passBuffer,
-				*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-			}
+				{
+					p_pass,
+					l_pipeline,
+					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+					*l_passBuffer,
+					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
 		}
@@ -362,18 +362,18 @@ namespace Castor3D
 			OneFloatFrameVariableSPtr l_1f;
 
 			l_it = m_mapTextNodes.insert( { &p_pass, PassRenderNode
-			{
-				p_pass,
-				l_pipeline,
-				*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
-				*l_passBuffer,
-				*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
-				*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
-			}
+				{
+					p_pass,
+					l_pipeline,
+					*l_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+					*l_passBuffer,
+					*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+					*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+				}
 			} ).first;
 			p_pass.FillRenderNode( l_it->second );
 		}

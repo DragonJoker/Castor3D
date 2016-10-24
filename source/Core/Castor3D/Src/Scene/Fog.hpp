@@ -26,7 +26,8 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 namespace Castor3D
-{	/*!
+{
+	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		21/05/2016

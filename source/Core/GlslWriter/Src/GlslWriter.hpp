@@ -274,7 +274,7 @@ namespace GLSL
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, T const & p_rhs );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Array< T > GetUniform (Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
+		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension, std::vector< T > const & p_rhs );
 		template< typename T > inline Optional< T > GetAttribute( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetOutput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetInput( Castor::String const & p_name, bool p_enabled );

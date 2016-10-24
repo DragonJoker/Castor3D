@@ -49,7 +49,7 @@ namespace castortd
 			wxGetApp().GetCastor()->Initialise( 120, CASTOR3D_THREADED );
 			DoLoadScene();
 			wxBoxSizer * l_sizer{ new wxBoxSizer{ wxHORIZONTAL } };
-			l_sizer->Add( m_panel.get(), wxSizerFlags{ 1 }.Shaped().Centre() );
+			l_sizer->Add( m_panel.get(), wxSizerFlags( 1 ).Shaped().Centre() );
 			l_sizer->SetSizeHints( this );
 			SetSizer( l_sizer );
 		}

@@ -321,7 +321,7 @@ namespace Castor3D
 								&& !l_mesh
 								&& !l_skeleton
 								&& ( !l_pass->HasAlphaBlending()
-									|| p_renderPass.IsMultisampling() )
+									 || p_renderPass.IsMultisampling() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 						{
 							AddFlag( l_programFlags, ProgramFlag::Instantiation );

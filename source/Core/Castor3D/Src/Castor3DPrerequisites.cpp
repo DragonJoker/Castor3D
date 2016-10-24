@@ -94,7 +94,7 @@ namespace Castor3D
 
 			p_specular *= texture( c3d_mapSpecular, vtx_texture.xy() ).xyz();
 		}
-			
+
 		if ( CheckFlag( p_textureFlags, TextureChannel::Emissive ) )
 		{
 			auto c3d_mapEmissive( p_writer.GetBuiltin< Sampler2D >( cuT( "c3d_mapEmissive" ) ) );

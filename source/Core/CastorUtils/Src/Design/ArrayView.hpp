@@ -58,7 +58,7 @@ namespace Castor
 		}
 
 		template< size_t N >
-		ArrayView( T ( & p_buffer )[N] )noexcept
+		ArrayView( T( & p_buffer )[N] )noexcept
 			: ArrayView( p_buffer, p_buffer + N )
 		{
 		}

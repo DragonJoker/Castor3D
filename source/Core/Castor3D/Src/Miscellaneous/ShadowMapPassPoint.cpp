@@ -91,6 +91,7 @@ namespace Castor3D
 								   , MapType & p_nodes )
 		{
 			auto l_depthMaps = DepthMapArray{};
+
 			for ( auto l_itPipelines : p_nodes )
 			{
 				l_itPipelines.first->Apply();

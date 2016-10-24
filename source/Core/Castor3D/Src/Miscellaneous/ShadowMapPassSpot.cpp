@@ -38,9 +38,9 @@ namespace Castor3D
 	{
 		Viewport l_viewport{ *GetEngine() };
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
-												, m_scene
-												, m_light.GetParent()
-												, std::move( l_viewport ) );
+											   , m_scene
+											   , m_light.GetParent()
+											   , std::move( l_viewport ) );
 		m_camera->Resize( p_size );
 		m_light.GetSpotLight()->SetViewport( m_camera->GetViewport() );
 
@@ -70,7 +70,7 @@ namespace Castor3D
 		m_frameBuffer->Unbind();
 		m_depthAttach.reset();
 	}
-	
+
 	void ShadowMapPassSpot::DoUpdate()
 	{
 		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
