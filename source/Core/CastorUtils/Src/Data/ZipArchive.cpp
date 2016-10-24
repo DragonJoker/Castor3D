@@ -349,7 +349,7 @@ namespace Castor
 					{
 						zip_fileinfo l_zfi{ 0 };
 
-						if ( S_OK == zipOpenNewFileInZip( m_zip, l_filePath.c_str(), &l_zfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
+						if ( UNZ_OK == zipOpenNewFileInZip( m_zip, l_filePath.c_str(), &l_zfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
 						{
 							zipWriteInFileInZip( m_zip, l_size == 0 ? "" : l_buffer.data(), l_size );
 							zipCloseFileInZip( m_zip );

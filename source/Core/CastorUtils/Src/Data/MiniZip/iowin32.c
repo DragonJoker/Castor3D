@@ -6,7 +6,7 @@
 
    Copyright (C) 1998-2005 Gilles Vollant
 */
-
+#if defined( _WIN32 )
 #include <stdlib.h>
 
 #include "zlib.h"
@@ -268,3 +268,5 @@ void fill_win32_filefunc (pzlib_filefunc_def)
     pzlib_filefunc_def->zerror_file = win32_error_file_func;
     pzlib_filefunc_def->opaque=NULL;
 }
+#endif
+
