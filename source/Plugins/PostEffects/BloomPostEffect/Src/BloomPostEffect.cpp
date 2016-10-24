@@ -306,9 +306,9 @@ namespace Bloom
 			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_vertexBuffer->Create();
-			m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, *l_program );
-			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
@@ -346,7 +346,6 @@ namespace Bloom
 		m_filterOffsetX.reset();
 		m_filterOffsetY.reset();
 
-		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
 		m_geometryBuffers->Cleanup();

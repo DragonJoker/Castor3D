@@ -172,9 +172,12 @@ namespace
 	}
 
 #elif ( __linux__ )
+
+	static int const None = 0;
 	
 	IWindowHandleSPtr CreateWindowHandle()
 	{
+		IWindowHandleSPtr l_handle;
 		Display *display = XOpenDisplay( NULL );
 
 		if ( !display )
@@ -197,8 +200,6 @@ namespace
 			GLX_DEPTH_SIZE      , 24,
 			GLX_STENCIL_SIZE    , 8,
 			GLX_DOUBLEBUFFER    , True,
-			//GLX_SAMPLE_BUFFERS  , 1,
-			//GLX_SAMPLES         , 4,
 			None
 		};
 
@@ -281,23 +282,17 @@ namespace
 		// Done with the visual info data
 		XFree( vi );
 
-		XStoreName( display, win, "GL 3.0 Window" );
+		XStoreName( display, win, "GlRenderSystemTests" );
 
 		printf( "Mapping window\n" );
 		XMapWindow( display, win );
-
-		if ( RegisterClass( &wc ) )
-		{
-			auto l_hWnd = CreateWindowA( wc.lpszClassName, "GlRenderSystemTests", WS_OVERLAPPEDWINDOW, 0, 0, 640, 480, 0, 0, wc.hInstance, 0 );
-			l_handle = std::make_shared< IMswWindowHandle >( l_hWnd );
-		}
 
 		return l_handle;
 	}
 
 	void DestroyWindowHandle( IWindowHandleSPtr p_handle )
 	{
-		auto l_handle = std::static_pointer_cast< IMswWindowHandle >( p_handle );
+		auto l_handle = std::static_pointer_cast< IXWindowHandle >( p_handle );
 		XDestroyWindow( display, win );
 		XFreeColormap( display, cmap );
 		XCloseDisplay( display );

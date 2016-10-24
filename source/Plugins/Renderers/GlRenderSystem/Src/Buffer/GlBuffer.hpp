@@ -72,7 +72,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
 		 */
-		bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size )override;
+		bool Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Fill
 		 */

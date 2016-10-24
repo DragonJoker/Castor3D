@@ -55,7 +55,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Copy( GpuBuffer< T > const & p_src, uint32_t p_size )
+	bool GlBuffer< T >::Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )
 	{
 		return m_glBuffer.Copy( static_cast< GlBuffer< T > const & >( p_src ).m_glBuffer, p_size );
 	}

@@ -19,6 +19,8 @@
 
 #include <GlslSource.hpp>
 
+#include <Graphics/PixelBuffer.hpp>
+
 #include <random>
 
 using namespace Castor;
@@ -484,7 +486,7 @@ namespace Castor3D
 			static std::random_device l_device;
 			std::uniform_real_distribution< float > l_distribution;
 
-			for ( auto i{ 0u }; i < l_buffer.count() * 3; ++i )
+			for ( uint32_t i{ 0u }; i < l_buffer.count() * 3; ++i )
 			{
 				*l_pixels++ = l_distribution( l_device );
 			}
