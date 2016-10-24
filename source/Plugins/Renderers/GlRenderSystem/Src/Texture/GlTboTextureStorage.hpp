@@ -70,7 +70,7 @@ namespace GlRender
 		//! The texture buffer, used to hold the texture pixels.
 		GlBufferBase< uint8_t > m_glBuffer;
 		//! The internal pixel format.
-		eGL_INTERNAL_FORMAT m_glInternal;
+		GlInternal m_glInternal;
 	};
 }
 

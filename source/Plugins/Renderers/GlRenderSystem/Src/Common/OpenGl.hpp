@@ -71,10 +71,10 @@ namespace GlRender
 		virtual bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data ) = 0;
 		virtual bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data ) = 0;
 		virtual bool TexSubImage3D( eGL_TEXTURE_STORAGE p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data ) = 0;
-		virtual bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
-		virtual bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
-		virtual bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
-		virtual bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
+		virtual bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
+		virtual bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
+		virtual bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
+		virtual bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data ) = 0;
 		virtual bool GetTexImage( eGL_TEXTURE_STORAGE p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img ) = 0;
 	};
 
@@ -94,10 +94,10 @@ namespace GlRender
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data );
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data );
 		inline bool TexSubImage3D( eGL_TEXTURE_STORAGE p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
 		inline bool GetTexImage( eGL_TEXTURE_STORAGE p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
 
 		std::function< void( uint32_t mode, uint32_t texture ) > m_pfnBindTexture;
@@ -135,10 +135,10 @@ namespace GlRender
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data );
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data );
 		inline bool TexSubImage3D( eGL_TEXTURE_STORAGE p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
 		inline bool GetTexImage( eGL_TEXTURE_STORAGE p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
 
 		uint32_t m_uiTexture;
@@ -294,12 +294,12 @@ namespace GlRender
 		struct PixelFmt
 		{
 			eGL_FORMAT Format;
-			eGL_INTERNAL Internal;
+			GlInternal Internal;
 			eGL_TYPE Type;
 
 			PixelFmt() {}
 
-			PixelFmt( eGL_FORMAT p_format, eGL_INTERNAL p_eInternal, eGL_TYPE p_type )
+			PixelFmt( eGL_FORMAT p_format, GlInternal p_eInternal, eGL_TYPE p_type )
 				: Format( p_format )
 				, Internal( p_eInternal )
 				, Type( p_type )
@@ -333,12 +333,11 @@ namespace GlRender
 		inline bool HasCSh()const;
 		inline bool HasSpl()const;
 		inline bool HasVbo()const;
-		inline bool HasDepthClipping()const;
 		inline bool HasInstancing()const;
 		inline bool HasNonPowerOfTwoTextures()const;
 		inline bool CanBindVboToGpuAddress()const;
 		inline Castor::String const & GetGlslErrorString( int p_index )const;
-		inline eGL_PRIMITIVE Get( Castor3D::Topology p_index )const;
+		inline GlTopology Get( Castor3D::Topology p_index )const;
 		inline eGL_TEXDIM Get( Castor3D::TextureType p_index )const;
 		inline eGL_FUNC Get( Castor3D::ComparisonFunc p_eAlphaFunc )const;
 		inline eGL_WRAP_MODE Get( Castor3D::WrapMode p_eWrapMode )const;
@@ -348,16 +347,16 @@ namespace GlRender
 		inline eGL_BLEND_FUNC Get( Castor3D::AlphaBlendFunc p_mode )const;
 		inline eGL_BLEND_FACTOR Get( Castor3D::BlendOperand p_eBlendFactor )const;
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
-		inline eGL_SHADER_TYPE Get( Castor3D::ShaderType p_type )const;
-		inline eGL_INTERNAL_FORMAT GetInternal( Castor::PixelFormat p_format )const;
+		inline GlShaderType Get( Castor3D::ShaderType p_type )const;
+		inline GlInternal GetInternal( Castor::PixelFormat p_format )const;
 		inline uint32_t GetComponents( uint32_t p_components )const;
 		inline eGL_TEXTURE_ATTACHMENT Get( Castor3D::AttachmentPoint p_eAttachment )const;
 		inline eGL_FRAMEBUFFER_MODE Get( Castor3D::FrameBufferTarget p_target )const;
 		inline eGL_RENDERBUFFER_ATTACHMENT GetRboAttachment( Castor3D::AttachmentPoint p_eAttachment )const;
 		inline eGL_RENDERBUFFER_STORAGE GetRboStorage( Castor::PixelFormat p_pixelFormat )const;
-		inline eGL_BUFFER Get( Castor3D::WindowBuffer p_buffer )const;
-		inline eGL_BUFFER Get( eGL_TEXTURE_ATTACHMENT p_buffer )const;
-		inline eGL_BUFFER Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const;
+		inline GlBufferBinding Get( Castor3D::WindowBuffer p_buffer )const;
+		inline GlBufferBinding Get( eGL_TEXTURE_ATTACHMENT p_buffer )const;
+		inline GlBufferBinding Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const;
 		inline eGL_FACE Get( Castor3D::Culling p_eFace )const;
 		inline eGL_FILL_MODE Get( Castor3D::FillMode p_mode )const;
 		inline eGL_FUNC Get( Castor3D::StencilFunc p_func )const;
@@ -395,7 +394,10 @@ namespace GlRender
 		inline bool Enable( eGL_TEXDIM texture )const;
 		inline bool Disable( eGL_TEXDIM texture )const;
 		inline bool SelectBuffer( int size, uint32_t * buffer )const;
-		inline bool GetIntegerv( uint32_t pname, int * params )const;
+		inline bool GetIntegerv (uint32_t pname, int * params)const;
+		inline bool GetIntegerv( GlMax pname, int * params )const;
+		inline bool GetIntegerv( GlMin pname, int * params )const;
+		inline bool GetIntegerv( GlGpuInfo pname, int * params )const;
 		inline bool GetIntegerv( uint32_t pname, uint64_t * params )const;
 		inline int RenderMode( eGL_RENDER_MODE mode )const;
 		inline bool DepthFunc( eGL_FUNC p_func )const;
@@ -420,10 +422,10 @@ namespace GlRender
 		/**@name Draw Functions */
 		//@{
 
-		inline bool DrawArrays( eGL_PRIMITIVE mode, int first, int count )const;
-		inline bool DrawElements( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices )const;
-		inline bool DrawArraysInstanced( eGL_PRIMITIVE mode, int first, int count, int primcount )const;
-		inline bool DrawElementsInstanced( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices, int primcount )const;
+		inline bool DrawArrays( GlTopology mode, int first, int count )const;
+		inline bool DrawElements( GlTopology mode, int count, eGL_TYPE type, const void * indices )const;
+		inline bool DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const;
+		inline bool DrawElementsInstanced( GlTopology mode, int count, eGL_TYPE type, const void * indices, int primcount )const;
 
 		//@}
 		/**@name Instanciation Functions */
@@ -496,31 +498,31 @@ namespace GlRender
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
 		inline bool TexSubImage2D( eGL_TEXTURE_STORAGE p_target, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
 		inline bool TexSubImage3D( eGL_TEXTURE_STORAGE p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
-		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
-		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
-		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
-		inline bool TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_samples, eGL_INTERNAL p_internalFormat, int p_width, int p_height, bool p_fixedSampleLocations )const;
-		inline bool TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_samples, eGL_INTERNAL p_internalFormat, Castor::Size const & p_size, bool p_fixedSampleLocations )const;
+		inline bool TexImage1D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
+		inline bool TexImage2D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
+		inline bool TexImage3D( eGL_TEXTURE_STORAGE p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const;
+		inline bool TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_samples, GlInternal p_internalFormat, int p_width, int p_height, bool p_fixedSampleLocations )const;
+		inline bool TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_samples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_fixedSampleLocations )const;
 		inline bool GetTexImage( eGL_TEXTURE_STORAGE p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img )const;
 		inline bool TexEnvi( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int param )const;
 		inline bool TexEnviv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int const * param )const;
 		inline bool TexEnvf( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float param )const;
 		inline bool TexEnvfv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float const * param )const;
 		inline bool TexGeni( eGL_TEXGEN_COORD coord, eGL_TEXGEN_PARAM param, eGL_TEXGEN_MODE mode )const;
-		inline bool ReadBuffer( eGL_BUFFER p_buffer )const;
+		inline bool ReadBuffer( GlBufferBinding p_buffer )const;
 		inline bool ReadPixels( int x, int y, int width, int height, eGL_FORMAT format, eGL_TYPE type, void * pixels )const;
 		inline bool ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void * pixels )const;
 		inline bool ReadPixels( Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void * pixels )const;
-		inline bool DrawBuffer( eGL_BUFFER p_buffer )const;
+		inline bool DrawBuffer( GlBufferBinding p_buffer )const;
 		inline bool DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
 		inline bool PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam )const;
 		inline bool PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam )const;
-		inline bool TexStorage1D( GLenum target, GLint levels, GLint internalformat, GLsizei width )const;
-		inline bool TexStorage2D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height )const;
-		inline bool TexStorage3D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
-		inline bool TexStorage2DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
-		inline bool TexStorage3DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
+		inline bool TexStorage1D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width )const;
+		inline bool TexStorage2D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const;
+		inline bool TexStorage3D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
+		inline bool TexStorage2DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
+		inline bool TexStorage3DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
 
 		//@}
 		/**@name Sampler functions */
@@ -543,7 +545,7 @@ namespace GlRender
 		/**@name Texture Buffer objects functions */
 		//@{
 
-		inline bool TexBuffer( eGL_TEXDIM p_target, eGL_INTERNAL_FORMAT p_eInternalFormat, uint32_t buffer )const;
+		inline bool TexBuffer( eGL_TEXDIM p_target, GlInternal p_internalFormat, uint32_t buffer )const;
 
 		//@}
 		/**@name Buffer objects functions */
@@ -562,14 +564,6 @@ namespace GlRender
 		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, int * params )const;
 		inline bool GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const;
 		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const;
-		inline bool VertexPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const;
-		inline bool NormalPointer( uint32_t type, uint32_t stride, void const * pointer )const;
-		inline bool TangentPointer( uint32_t type, uint32_t stride, void const * pointer )const;
-		inline bool BinormalPointer( uint32_t type, uint32_t stride, void const * pointer )const;
-		inline bool HasTangentPointer()const;
-		inline bool HasBinormalPointer()const;
-		inline bool ColorPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const;
-		inline bool TexCoordPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const;
 		inline bool BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const;
 		inline bool VertexFormat( int size, eGL_TYPE type, int stride )const;
 		inline bool NormalFormat( eGL_TYPE type, int stride )const;
@@ -611,7 +605,7 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glBeginTransformFeedback.xhtml
 		*/
-		inline bool BeginTransformFeedback( uint32_t primitive )const;
+		inline bool BeginTransformFeedback( GlTopology primitive )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glPauseTransformFeedback.xhtml
 		*/
@@ -631,7 +625,7 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glDrawTransformFeedback.xhtml
 		*/
-		inline bool DrawTransformFeedback( eGL_PRIMITIVE mode, uint32_t p_id )const;
+		inline bool DrawTransformFeedback( GlTopology mode, uint32_t p_id )const;
 
 		//@}
 		/**@name FBO functions */
@@ -776,7 +770,7 @@ namespace GlRender
 		/**@name Shader object Functions */
 		//@{
 
-		inline uint32_t CreateShader( eGL_SHADER_TYPE type )const;
+		inline uint32_t CreateShader( GlShaderType type )const;
 		inline bool DeleteShader( uint32_t program )const;
 		inline bool IsShader( uint32_t program )const;
 		inline bool AttachShader( uint32_t program, uint32_t shader )const;
@@ -823,7 +817,7 @@ namespace GlRender
 		/**@name Tesselation functions */
 		//@{
 
-		inline bool PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue )const;
+		inline bool PatchParameter( GlPatchParameter p_param, int p_iValue )const;
 
 		//@}
 		/**@name Query functions */
@@ -885,7 +879,7 @@ namespace GlRender
 	private:
 		std::array< Castor::String, 8u > GlslStrings;
 		std::array< Castor::String, 8u > GlslErrors;
-		std::array< eGL_PRIMITIVE, size_t( Castor3D::Topology::Count ) > PrimitiveTypes;
+		std::array< GlTopology, size_t( Castor3D::Topology::Count ) > PrimitiveTypes;
 		std::array< eGL_TEXDIM, size_t( Castor3D::TextureType::Count ) > TextureDimensions;
 		std::array< eGL_FUNC, size_t( Castor3D::ComparisonFunc::Count ) > AlphaFuncs;
 		std::array< eGL_WRAP_MODE, size_t( Castor3D::WrapMode::Count ) > TextureWrapMode;
@@ -896,13 +890,13 @@ namespace GlRender
 		std::array< eGL_BLEND_FUNC, size_t( Castor3D::AlphaBlendFunc::Count ) > AlphaBlendFuncs;
 		std::array< eGL_BLEND_OP, size_t( Castor3D::BlendOperation::Count ) > BlendOps;
 		std::array< PixelFmt, size_t( Castor::PixelFormat::Count ) > PixelFormats;
-		std::array< eGL_SHADER_TYPE, size_t( Castor3D::ShaderType::Count ) > ShaderTypes;
-		std::array< eGL_INTERNAL_FORMAT, size_t( Castor::PixelFormat::Count ) > Internals;
+		std::array< GlShaderType, size_t( Castor3D::ShaderType::Count ) > ShaderTypes;
+		std::array< GlInternal, size_t( Castor::PixelFormat::Count ) > Internals;
 		std::array< eGL_TEXTURE_ATTACHMENT, size_t( Castor3D::AttachmentPoint::Count ) > Attachments;
 		std::array< eGL_FRAMEBUFFER_MODE, size_t( Castor3D::FrameBufferMode::Count ) > FramebufferModes;
 		std::array< eGL_RENDERBUFFER_ATTACHMENT, size_t( Castor3D::AttachmentPoint::Count ) > RboAttachments;
 		std::array< eGL_RENDERBUFFER_STORAGE, size_t( Castor::PixelFormat::Count ) > RboStorages;
-		std::array< eGL_BUFFER, size_t( Castor3D::WindowBuffer::Count ) > Buffers;
+		std::array< GlBufferBinding, size_t( Castor3D::WindowBuffer::Count ) > Buffers;
 		std::array< eGL_FACE, size_t( Castor3D::Culling::Count ) > Faces;
 		std::array< eGL_FILL_MODE, 3u > FillModes;
 		std::array< eGL_STENCIL_OP, size_t( Castor3D::StencilOp::Count ) > StencilOps;
@@ -914,8 +908,8 @@ namespace GlRender
 		std::array< eGL_COMPARE_MODE, size_t( Castor3D::ComparisonMode::Count ) > ComparisonModes;
 		std::array< bool, size_t( Castor3D::WritingMask::Count ) > WriteMasks;
 		std::array< eGL_FUNC, size_t( Castor3D::DepthFunc::Count ) > DepthFuncs;
-		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;
-		std::map< eGL_RENDERBUFFER_ATTACHMENT, eGL_BUFFER > BuffersRBA;
+		std::map< eGL_TEXTURE_ATTACHMENT, GlBufferBinding > BuffersTA;
+		std::map< eGL_RENDERBUFFER_ATTACHMENT, GlBufferBinding > BuffersRBA;
 
 		bool m_bHasVao;
 		bool m_bHasUbo;
@@ -929,7 +923,6 @@ namespace GlRender
 		bool m_bHasTSh;
 		bool m_bHasCSh;
 		bool m_bHasSpl;
-		bool m_bHasDepthClipping;
 		bool m_bHasAnisotropic;
 		bool m_bBindVboToGpuAddress;
 		Castor::String m_extensions;
@@ -1100,12 +1093,6 @@ namespace GlRender
 		std::function< void( int n, uint32_t * buffers ) > m_pfnGenBuffers;
 		std::function< void( int n, uint32_t const * buffers ) > m_pfnDeleteBuffers;
 		std::function< uint8_t( uint32_t buffer ) > m_pfnIsBuffer;
-		std::function< void( int size, uint32_t type, int stride, void const * pointer ) > m_pfnVertexPointer;
-		std::function< void( uint32_t type, int stride, void const * pointer ) > m_pfnNormalPointer;
-		std::function< void( uint32_t type, int stride, void * pointer ) > m_pfnTangentPointer;
-		std::function< void( uint32_t type, int stride, void * pointer ) > m_pfnBinormalPointer;
-		std::function< void( int size, uint32_t type, int stride, void const * pointer ) > m_pfnColorPointer;
-		std::function< void( int size, uint32_t type, int stride, void  const * pointer ) > m_pfnTexCoordPointer;
 
 		//@}
 		/**@name Transform Feedback */
@@ -1381,49 +1368,47 @@ namespace GlRender
 	}
 
 #	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x );
-
-	MAKE_GL_EXTENSION( ARB_draw_buffers_blend )
+	
 	MAKE_GL_EXTENSION( AMD_draw_buffers_blend )
-	MAKE_GL_EXTENSION( EXT_clip_volume_hint )
-	MAKE_GL_EXTENSION( ARB_texture_multisample )
-	MAKE_GL_EXTENSION( ARB_imaging )
-	MAKE_GL_EXTENSION( ARB_debug_output )
 	MAKE_GL_EXTENSION( AMDX_debug_output )
-	MAKE_GL_EXTENSION( ARB_vertex_buffer_object )
-	MAKE_GL_EXTENSION( EXT_coordinate_frame )
-	MAKE_GL_EXTENSION( ARB_pixel_buffer_object )
-	MAKE_GL_EXTENSION( ARB_vertex_array_object )
-	MAKE_GL_EXTENSION( ARB_texture_buffer_object )
-	MAKE_GL_EXTENSION( EXT_framebuffer_object )
-	MAKE_GL_EXTENSION( ARB_framebuffer_object )
-	MAKE_GL_EXTENSION( EXT_sampler_objects )
-	MAKE_GL_EXTENSION( ARB_sampler_objects )
-	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic )
-	MAKE_GL_EXTENSION( ARB_vertex_program )
-	MAKE_GL_EXTENSION( ARB_fragment_program )
-	MAKE_GL_EXTENSION( EXT_uniform_buffer_object )
-	MAKE_GL_EXTENSION( ARB_uniform_buffer_object )
-	MAKE_GL_EXTENSION( ARB_geometry_shader4 )
-	MAKE_GL_EXTENSION( EXT_geometry_shader4 )
-	MAKE_GL_EXTENSION( ARB_tessellation_shader )
 	MAKE_GL_EXTENSION( ARB_compute_shader )
+	MAKE_GL_EXTENSION( ARB_debug_output )
+	MAKE_GL_EXTENSION( ARB_draw_buffers_blend )
 	MAKE_GL_EXTENSION( ARB_draw_instanced )
-	MAKE_GL_EXTENSION( ARB_instanced_arrays )
-	MAKE_GL_EXTENSION( EXT_draw_instanced )
-	MAKE_GL_EXTENSION( EXT_instanced_arrays )
-	MAKE_GL_EXTENSION( EXT_direct_state_access )
-	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two )
-	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory )
-	MAKE_GL_EXTENSION( NV_shader_buffer_load )
-	MAKE_GL_EXTENSION( ARB_timer_query )
-	MAKE_GL_EXTENSION( ARB_program_interface_query )
-	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object )
 	MAKE_GL_EXTENSION( ARB_explicit_uniform_location )
-	MAKE_GL_EXTENSION( ATI_meminfo )
-	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
+	MAKE_GL_EXTENSION( ARB_fragment_program )
+	MAKE_GL_EXTENSION( ARB_framebuffer_object )
+	MAKE_GL_EXTENSION( ARB_geometry_shader4 )
+	MAKE_GL_EXTENSION( ARB_imaging )
+	MAKE_GL_EXTENSION( ARB_instanced_arrays )
+	MAKE_GL_EXTENSION( ARB_pixel_buffer_object )
+	MAKE_GL_EXTENSION( ARB_program_interface_query )
+	MAKE_GL_EXTENSION( ARB_sampler_objects )
+	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object )
+	MAKE_GL_EXTENSION( ARB_tessellation_shader )
+	MAKE_GL_EXTENSION( ARB_texture_buffer_object )
+	MAKE_GL_EXTENSION( ARB_texture_multisample )
+	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two )
 	MAKE_GL_EXTENSION( ARB_texture_storage )
 	MAKE_GL_EXTENSION( ARB_texture_storage_multisample )
+	MAKE_GL_EXTENSION( ARB_timer_query )
+	MAKE_GL_EXTENSION( ARB_uniform_buffer_object )
+	MAKE_GL_EXTENSION( ARB_vertex_array_object )
+	MAKE_GL_EXTENSION( ARB_vertex_buffer_object )
+	MAKE_GL_EXTENSION( ARB_vertex_program )
 	MAKE_GL_EXTENSION( ARB_transform_feedback2 )
+	MAKE_GL_EXTENSION( ATI_meminfo )
+	MAKE_GL_EXTENSION( EXT_direct_state_access )
+	MAKE_GL_EXTENSION( EXT_draw_instanced )
+	MAKE_GL_EXTENSION( EXT_framebuffer_object )
+	MAKE_GL_EXTENSION( EXT_geometry_shader4 )
+	MAKE_GL_EXTENSION( EXT_instanced_arrays )
+	MAKE_GL_EXTENSION( EXT_sampler_objects )
+	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic )
+	MAKE_GL_EXTENSION( EXT_uniform_buffer_object )
+	MAKE_GL_EXTENSION( NV_shader_buffer_load )
+	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory )
+	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
 
 #	if defined( _WIN32 )
 

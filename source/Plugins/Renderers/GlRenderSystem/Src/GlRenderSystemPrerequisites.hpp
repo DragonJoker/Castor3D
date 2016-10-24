@@ -46,95 +46,160 @@ namespace GlRender
 {
 	using Castor::real;
 
-	typedef enum eGL_BUFFER
-	{
-		eGL_BUFFER_NONE = 0x0000,
-		eGL_BUFFER_FRONT_LEFT = 0x0400,
-		eGL_BUFFER_FRONT_RIGHT = 0x0401,
-		eGL_BUFFER_BACK_LEFT = 0x0402,
-		eGL_BUFFER_BACK_RIGHT = 0x0403,
-		eGL_BUFFER_FRONT = 0x0404,
-		eGL_BUFFER_BACK = 0x0405,
-		eGL_BUFFER_LEFT = 0x0406,
-		eGL_BUFFER_RIGHT = 0x0407,
-		eGL_BUFFER_FRONT_AND_BACK = 0x0408,
-		eGL_BUFFER_COLOR0 = 0x8CE0,
-		eGL_BUFFER_COLOR1 = 0x8CE1,
-		eGL_BUFFER_COLOR2 = 0x8CE2,
-		eGL_BUFFER_COLOR3 = 0x8CE3,
-		eGL_BUFFER_COLOR4 = 0x8CE4,
-		eGL_BUFFER_COLOR5 = 0x8CE5,
-		eGL_BUFFER_COLOR6 = 0x8CE6,
-		eGL_BUFFER_COLOR7 = 0x8CE7,
-		eGL_BUFFER_COLOR8 = 0x8CE8,
-		eGL_BUFFER_COLOR9 = 0x8CE9,
-		eGL_BUFFER_COLOR10 = 0x8CEA,
-		eGL_BUFFER_COLOR11 = 0x8CEB,
-		eGL_BUFFER_COLOR12 = 0x8CEC,
-		eGL_BUFFER_COLOR13 = 0x8CED,
-		eGL_BUFFER_COLOR14 = 0x8CEE,
-		eGL_BUFFER_COLOR15 = 0x8CEF,
-		eGL_BUFFER_DEPTH = 0x8D00,
-		eGL_BUFFER_STENCIL = 0x8D20,
-	}	eGL_BUFFER;
-
-	typedef enum eGL_PATCH_PARAMETER
-	{
-		eGL_PATCH_PARAMETER_VERTICES = 0x8E72,
-		eGL_PATCH_PARAMETER_DEFAULT_INNER_LEVEL = 0x8E73,
-		eGL_PATCH_PARAMETER_DEFAULT_OUTER_LEVEL = 0x8E74,
-	}	eGL_PATCH_PARAMETER;
-
-	typedef enum eGL_PRIMITIVE
+	enum class GlBufferBinding
 		: uint32_t
 	{
-		eGL_PRIMITIVE_POINTS = 0x0000,
-		eGL_PRIMITIVE_LINES = 0x0001,
-		eGL_PRIMITIVE_LINE_LOOP = 0x0002,
-		eGL_PRIMITIVE_LINE_STRIP = 0x0003,
-		eGL_PRIMITIVE_TRIANGLES = 0x0004,
-		eGL_PRIMITIVE_TRIANGLE_STRIP = 0x0005,
-		eGL_PRIMITIVE_TRIANGLE_FAN = 0x0006,
-		eGL_PRIMITIVE_QUADS = 0x0007,
-		eGL_PRIMITIVE_QUAD_STRIP = 0x0008,
-		eGL_PRIMITIVE_POLYGON = 0x0009,
-		eGL_PRIMITIVE_PATCHES = 0x000E,
-	}	eGL_PRIMITIVE;
+		None = 0x0000,
+		FrontLeft = 0x0400,
+		FrontRight = 0x0401,
+		BackLeft = 0x0402,
+		BackRight = 0x0403,
+		Front = 0x0404,
+		Back = 0x0405,
+		Left = 0x0406,
+		Right = 0x0407,
+		FrontAndBack = 0x0408,
+		Color0 = 0x8CE0,
+		Color1 = 0x8CE1,
+		Color2 = 0x8CE2,
+		Color3 = 0x8CE3,
+		Color4 = 0x8CE4,
+		Color5 = 0x8CE5,
+		Color6 = 0x8CE6,
+		Color7 = 0x8CE7,
+		Color8 = 0x8CE8,
+		Color9 = 0x8CE9,
+		Color10 = 0x8CEA,
+		Color11 = 0x8CEB,
+		Color12 = 0x8CEC,
+		Color13 = 0x8CED,
+		Color14 = 0x8CEE,
+		Color15 = 0x8CEF,
+		Depth = 0x8D00,
+		Stencil = 0x8D20,
+	};
 
-	typedef enum eGL_INTERNAL_FORMAT			//	Type	Comps	Norm	0	1	2	3
+	enum class GlPatchParameter
+		: uint32_t
 	{
-		eGL_INTERNAL_FORMAT_RGBA8 = 0x8058,		//	uint		4	YES		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA16 = 0x805B,	//	short		4	YES		R	G	B	A
-		eGL_INTERNAL_FORMAT_R8 = 0x8229,		//	ubyte		1	YES		R	0	0	1
-		eGL_INTERNAL_FORMAT_R16 = 0x822A,		//	ushort		1	YES		R	0	0	1
-		eGL_INTERNAL_FORMAT_RG8 = 0x822B,		//	ubyte		2	YES		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG16 = 0x822C,		//	ushort		2	YES		R	G	0	1
-		eGL_INTERNAL_FORMAT_R16F = 0x822D,		//	half		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R32F = 0x822E,		//	float		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_RG16F = 0x822F,		//	half		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG32F = 0x8230,		//	float		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_R8I = 0x8231,		//	byte		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R8UI = 0x8232,		//	ubyte		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R16I = 0x8233,		//	short		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R16UI = 0x8234,		//	ushort		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R32I = 0x8235,		//	int			1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R32UI = 0x8236,		//	uint		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_RG8I = 0x8237,		//	byte		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG8UI = 0x8238,		//	ubyte		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG16I = 0x8239,		//	short		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG16UI = 0x823A,	//	ushort		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG32I = 0x823B,		//	int			2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG32UI = 0x823C,	//	uint		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RGBA32F = 0x8814,	//	float		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA16F = 0x881A,	//	half		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA32UI = 0x8D70,	//	uint		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA16UI = 0x8D76,	//	ushort		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGB16UI = 0x8D77,	//	ushort		3	NO		R	G	B	1
-		eGL_INTERNAL_FORMAT_RGBA8UI = 0x8D7C,	//	ubyte		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA32I = 0x8D82,	//	int			4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA16I = 0x8D88,	//	short		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA8I = 0x8D8E,	//	byte		4	NO		R	G	B	A
-	}	eGL_INTERNAL_FORMAT;
+		Vertices = 0x8E72,
+		DefaultInnerLevel = 0x8E73,
+		DefaultOuterLevel = 0x8E74,
+	};
+
+	enum class GlTopology
+		: uint32_t
+	{
+		Points = 0x0000,
+		Lines = 0x0001,
+		LineLoop = 0x0002,
+		LineStrip = 0x0003,
+		Triangles = 0x0004,
+		TriangleStrip = 0x0005,
+		TriangleFan = 0x0006,
+		Quads = 0x0007,
+		QuadStrip = 0x0008,
+		Polygon = 0x0009,
+		Patches = 0x000E,
+	};
+
+	enum class GlInternal						//	Type	Comps	Norm	R	G	B	A
+	{
+		One = 0x0001,
+		Two = 0x0002,
+		Three = 0x0003,
+		Four = 0x0004,
+		R3G3B2 = 0x2A10,
+		Alpha4 = 0x803B,
+		Alpha8 = 0x803C,
+		Alpha12 = 0x803D,
+		Alpha16 = 0x803E,
+		CompressedAlpha = 0x84E9,
+		CompressedLuminance = 0x84EA,
+		CompressedLuminanceAlpha = 0x84EB,
+		CompressedIntensity = 0x84EC,
+		CompressedRGB = 0x84ED,
+		CompressedRGBA = 0x84EE,
+		L4 = 0x803F,
+		L8 = 0x8040,
+		L12 = 0x8041,
+		L16 = 0x8042,
+		L4A4 = 0x8043,
+		L6A2 = 0x8044,
+		L8A8 = 0x8045,
+		L12A4 = 0x8046,
+		L12A12 = 0x8047,
+		L16A16 = 0x8048,
+		Intensity = 0x8049,
+		I4 = 0x804A,
+		I8 = 0x804B,
+		I12 = 0x804C,
+		I16 = 0x804D,
+		RGB4 = 0x804F,
+		RGB5 = 0x8050,
+		RGB8 = 0x8051,
+		RGB10 = 0x8052,
+		RGB12 = 0x8053,
+		RGB16 = 0x8054,
+		RGBA2 = 0x8055,
+		RGBA4 = 0x8056,
+		RGB5A1 = 0x8057,
+		RGBA8 = 0x8058,							//	uint		4	YES		R	G	B	A
+		RGB10A2 = 0x8059,
+		RGBA12 = 0x805A,
+		RGBA16 = 0x805B,						//	short		4	YES		R	G	B	A
+		D16 = 0x81A5,
+		D24 = 0x81A6,
+		D32 = 0x81A7,
+		R8 = 0x8229,							//	ubyte		1	YES		R	0	0	1
+		R16 = 0x822A,							//	ushort		1	YES		R	0	0	1
+		RG8 = 0x822B,							//	ubyte		2	YES		R	G	0	1
+		RG16 = 0x822C,							//	ushort		2	YES		R	G	0	1
+		R16F = 0x822D,							//	half		1	NO		R	0	0	1
+		R32F = 0x822E,							//	float		1	NO		R	0	0	1
+		RG16F = 0x822F,							//	half		2	NO		R	G	0	1
+		RG32F = 0x8230,							//	float		2	NO		R	G	0	1
+		R8I = 0x8231,							//	byte		1	NO		R	0	0	1
+		R8UI = 0x8232,							//	ubyte		1	NO		R	0	0	1
+		R16I = 0x8233,							//	short		1	NO		R	0	0	1
+		R16UI = 0x8234,							//	ushort		1	NO		R	0	0	1
+		R32I = 0x8235,							//	int			1	NO		R	0	0	1
+		R32UI = 0x8236,							//	uint		1	NO		R	0	0	1
+		RG8I = 0x8237,							//	byte		2	NO		R	G	0	1
+		RG8UI = 0x8238,							//	ubyte		2	NO		R	G	0	1
+		RG16I = 0x8239,							//	short		2	NO		R	G	0	1
+		RG16UI = 0x823A,						//	ushort		2	NO		R	G	0	1
+		RG32I = 0x823B,							//	int			2	NO		R	G	0	1
+		RG32UI = 0x823C,						//	uint		2	NO		R	G	0	1
+		DXT1 = 0x83F1,
+		DXT3 = 0x83F2,
+		DXT5 = 0x83F3,
+		RGBA32F = 0x8814,						//	float		4	NO		R	G	B	A
+		RGB32F = 0x8815,
+		RGBA16F = 0x881A,						//	half		4	NO		R	G	B	A
+		RGB16F = 0x881B,
+		D24S8 = 0x88F0,
+		SRGB = 0x8C40,
+		SRGB8 = 0x8C41,
+		SRGBA = 0x8C42,
+		SRGB8A8 = 0x8C43,
+		LA = 0x8C44,
+		SL8A8 = 0x8C45,
+		SLuminance = 0x8C46,
+		SL8 = 0x8C47,
+		D32F = 0x8CAC,
+		S1 = 0x8D46,
+		S4 = 0x8D47,
+		S8 = 0x8D48,
+		S16 = 0x8D49,
+		RGBA32UI = 0x8D70,						//	uint		4	NO		R	G	B	A
+		RGBA16UI = 0x8D76,						//	ushort		4	NO		R	G	B	A
+		RGB16UI = 0x8D77,						//	ushort		3	NO		R	G	B	1
+		RGBA8UI = 0x8D7C,						//	ubyte		4	NO		R	G	B	A
+		RGBA32I = 0x8D82,						//	int			4	NO		R	G	B	A
+		RGBA16I = 0x8D88,						//	short		4	NO		R	G	B	A
+		RGBA8I = 0x8D8E,						//	byte		4	NO		R	G	B	A
+	};
 
 	typedef enum eGL_TEXDIM
 	{
@@ -290,85 +355,6 @@ namespace GlRender
 		eGL_BLEND_OP_REV_SUBTRACT = 0x800B,
 	}	eGL_BLEND_OP;
 
-	typedef enum eGL_INTERNAL
-	{
-		eGL_INTERNAL_1 = 0x0001,
-		eGL_INTERNAL_2 = 0x0002,
-		eGL_INTERNAL_3 = 0x0003,
-		eGL_INTERNAL_4 = 0x0004,
-		eGL_INTERNAL_LUMINANCE = 0x1909,
-		eGL_INTERNAL_R3_G3_B2 = 0x2A10,
-		eGL_INTERNAL_ALPHA4 = 0x803B,
-		eGL_INTERNAL_ALPHA8 = 0x803C,
-		eGL_INTERNAL_ALPHA12 = 0x803D,
-		eGL_INTERNAL_ALPHA16 = 0x803E,
-		eGL_INTERNAL_COMPRESSED_ALPHA = 0x84E9,
-		eGL_INTERNAL_COMPRESSED_LUMINANCE = 0x84EA,
-		eGL_INTERNAL_COMPRESSED_LUMINANCE_ALPHA = 0x84EB,
-		eGL_INTERNAL_COMPRESSED_INTENSITY = 0x84EC,
-		eGL_INTERNAL_COMPRESSED_RGB = 0x84ED,
-		eGL_INTERNAL_COMPRESSED_RGBA = 0x84EE,
-		eGL_INTERNAL_LUMINANCE4 = 0x803F,
-		eGL_INTERNAL_LUMINANCE8 = 0x8040,
-		eGL_INTERNAL_LUMINANCE12 = 0x8041,
-		eGL_INTERNAL_LUMINANCE16 = 0x8042,
-		eGL_INTERNAL_LUMINANCE4_ALPHA4 = 0x8043,
-		eGL_INTERNAL_LUMINANCE6_ALPHA2 = 0x8044,
-		eGL_INTERNAL_LUMINANCE8_ALPHA8 = 0x8045,
-		eGL_INTERNAL_LUMINANCE12_ALPHA4 = 0x8046,
-		eGL_INTERNAL_LUMINANCE12_ALPHA12 = 0x8047,
-		eGL_INTERNAL_LUMINANCE16_ALPHA16 = 0x8048,
-		eGL_INTERNAL_INTENSITY = 0x8049,
-		eGL_INTERNAL_INTENSITY4 = 0x804A,
-		eGL_INTERNAL_INTENSITY8 = 0x804B,
-		eGL_INTERNAL_INTENSITY12 = 0x804C,
-		eGL_INTERNAL_INTENSITY16 = 0x804D,
-		eGL_INTERNAL_RGB4 = 0x804F,
-		eGL_INTERNAL_RGB5 = 0x8050,
-		eGL_INTERNAL_RGB8 = 0x8051,
-		eGL_INTERNAL_RGB10 = 0x8052,
-		eGL_INTERNAL_RGB12 = 0x8053,
-		eGL_INTERNAL_RGB16 = 0x8054,
-		eGL_INTERNAL_RGBA2 = 0x8055,
-		eGL_INTERNAL_RGBA4 = 0x8056,
-		eGL_INTERNAL_RGB5_A1 = 0x8057,
-		eGL_INTERNAL_RGBA8 = 0x8058,
-		eGL_INTERNAL_RGB10_A2 = 0x8059,
-		eGL_INTERNAL_RGBA12 = 0x805A,
-		eGL_INTERNAL_RGBA16 = 0x805B,
-		eGL_INTERNAL_DEPTH_COMPONENT16 = 0x81A5,
-		eGL_INTERNAL_DEPTH_COMPONENT24 = 0x81A6,
-		eGL_INTERNAL_DEPTH_COMPONENT32 = 0x81A7,
-		eGL_INTERNAL_R8 = 0x8229,
-		eGL_INTERNAL_RG8 = 0x822B,
-		eGL_INTERNAL_RG16 = 0x822C,
-		eGL_INTERNAL_R16F = 0x822D,
-		eGL_INTERNAL_R32F = 0x822E,
-		eGL_INTERNAL_RG16F = 0x822F,
-		eGL_INTERNAL_RG32F = 0x8230,
-		eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1 = 0x83F1,
-		eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3 = 0x83F2,
-		eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT5 = 0x83F3,
-		eGL_INTERNAL_RGBA32F = 0x8814,
-		eGL_INTERNAL_RGB32F = 0x8815,
-		eGL_INTERNAL_RGBA16F = 0x881A,
-		eGL_INTERNAL_RGB16F = 0x881B,
-		eGL_INTERNAL_DEPTH24_STENCIL8 = 0x88F0,
-		eGL_INTERNAL_SRGB = 0x8C40,
-		eGL_INTERNAL_SRGB8 = 0x8C41,
-		eGL_INTERNAL_SRGB_ALPHA = 0x8C42,
-		eGL_INTERNAL_SRGB8_ALPHA8 = 0x8C43,
-		eGL_INTERNAL_SLUMINANCE_ALPHA = 0x8C44,
-		eGL_INTERNAL_SLUMINANCE8_ALPHA8 = 0x8C45,
-		eGL_INTERNAL_SLUMINANCE = 0x8C46,
-		eGL_INTERNAL_SLUMINANCE8 = 0x8C47,
-		eGL_INTERNAL_DEPTH_COMPONENT32F = 0x8CAC,
-		eGL_INTERNAL_STENCIL_INDEX1 = 0x8D46,
-		eGL_INTERNAL_STENCIL_INDEX4 = 0x8D47,
-		eGL_INTERNAL_STENCIL_INDEX8 = 0x8D48,
-		eGL_INTERNAL_STENCIL_INDEX16 = 0x8D49,
-	}	eGL_INTERNAL;
-
 	typedef enum eGL_BUFFER_MODE
 	{
 		eGL_BUFFER_MODE_STREAM_DRAW = 0x88E0,
@@ -404,15 +390,15 @@ namespace GlRender
 		Write = 0x8F37,
 	};
 
-	typedef enum eGL_SHADER_TYPE
+	enum class GlShaderType
 	{
-		eGL_SHADER_TYPE_FRAGMENT = 0x8B30,
-		eGL_SHADER_TYPE_VERTEX = 0x8B31,
-		eGL_SHADER_TYPE_GEOMETRY = 0x8DD9,
-		eGL_SHADER_TYPE_TESS_EVALUATION = 0x8E87,
-		eGL_SHADER_TYPE_TESS_CONTROL = 0x8E88,
-		eGL_SHADER_TYPE_COMPUTE = 0x91B9,
-	}	eGL_SHADER_TYPE;
+		Fragment = 0x8B30,
+		Vertex = 0x8B31,
+		Geometry = 0x8DD9,
+		TessEvaluation = 0x8E87,
+		TessControl = 0x8E88,
+		Compute = 0x91B9,
+	};
 
 	typedef enum eGL_LOCK
 	{
@@ -928,96 +914,103 @@ namespace GlRender
 		eGL_DEBUG_SEVERITY_LOW = 0x9148,
 	}	eGL_DEBUG_SEVERITY;
 
-	typedef enum eGL_MAX
+	enum class GlMin
 		: uint32_t
 	{
-		eGL_MAX_COMPUTE_SHADER_STORAGE_BLOCKS = 0x90DB,
-		eGL_MAX_COMBINED_SHADER_STORAGE_BLOCKS = 0x90DC,
-		eGL_MAX_COMPUTE_UNIFORM_BLOCKS = 0x91BB,
-		eGL_MAX_COMPUTE_TEXTURE_IMAGE_UNITS = 0x91BC,
-		eGL_MAX_COMPUTE_UNIFORM_COMPONENTS = 0x8263,
-		eGL_MAX_COMPUTE_ATOMIC_COUNTERS = 0x8265,
-		eGL_MAX_COMPUTE_ATOMIC_COUNTER_BUFFERS = 0x8264,
-		eGL_MAX_COMBINED_COMPUTE_UNIFORM_COMPONENTS = 0x8266,
-		eGL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS = 0x90EB,
-		eGL_MAX_COMPUTE_WORK_GROUP_COUNT = 0x91BE,
-		eGL_MAX_COMPUTE_WORK_GROUP_SIZE = 0x91BF,
-		eGL_MAX_DEBUG_GROUP_STACK_DEPTH = 0x826C,
-		eGL_MAX_3D_TEXTURE_SIZE = 0x8073,
-		eGL_MAX_ARRAY_TEXTURE_LAYERS = 0x88FF,
-		eGL_MAX_CLIP_DISTANCES = 0x0D32,
-		eGL_MAX_COLOR_TEXTURE_SAMPLES = 0x910E,
-		eGL_MAX_COMBINED_ATOMIC_COUNTERS = 0x92D7,
-		eGL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS = 0x8A33,
-		eGL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS = 0x8A32,
-		eGL_MAX_COMBINED_TEXTURE_IMAGE_UNITS = 0x8B4D,
-		eGL_MAX_COMBINED_UNIFORM_BLOCKS = 0x8A2E,
-		eGL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS = 0x8A31,
-		eGL_MAX_CUBE_MAP_TEXTURE_SIZE = 0x851C,
-		eGL_MAX_DEPTH_TEXTURE_SAMPLES = 0x910F,
-		eGL_MAX_DRAW_BUFFERS = 0x8824,
-		eGL_MAX_DUAL_SOURCE_DRAW_BUFFERS = 0x88FC,
-		eGL_MAX_ELEMENTS_INDICES = 0x80E9,
-		eGL_MAX_ELEMENTS_VERTICES = 0x80E8,
-		eGL_MAX_FRAGMENT_ATOMIC_COUNTERS = 0x92D6,
-		eGL_MAX_FRAGMENT_SHADER_STORAGE_BLOCKS = 0x90DA,
-		eGL_MAX_FRAGMENT_INPUT_COMPONENTS = 0x9125,
-		eGL_MAX_FRAGMENT_UNIFORM_COMPONENTS = 0x8B49,
-		eGL_MAX_FRAGMENT_UNIFORM_VECTORS = 0x8DFD,
-		eGL_MAX_FRAGMENT_UNIFORM_BLOCKS = 0x8A2D,
-		eGL_MAX_FRAMEBUFFER_WIDTH = 0x9315,
-		eGL_MAX_FRAMEBUFFER_HEIGHT = 0x9316,
-		eGL_MAX_FRAMEBUFFER_LAYERS = 0x9317,
-		eGL_MAX_FRAMEBUFFER_SAMPLES = 0x9318,
-		eGL_MAX_GEOMETRY_ATOMIC_COUNTERS = 0x92D5,
-		eGL_MAX_GEOMETRY_SHADER_STORAGE_BLOCKS = 0x90D7,
-		eGL_MAX_GEOMETRY_INPUT_COMPONENTS = 0x9123,
-		eGL_MAX_GEOMETRY_OUTPUT_COMPONENTS = 0x9124,
-		eGL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS = 0x8C29,
-		eGL_MAX_GEOMETRY_UNIFORM_BLOCKS = 0x8A2C,
-		eGL_MAX_GEOMETRY_UNIFORM_COMPONENTS = 0x8DDF,
-		eGL_MAX_INTEGER_SAMPLES = 0x9110,
-		eGL_MAX_LABEL_LENGTH = 0x82E8,
-		eGL_MAX_PROGRAM_TEXEL_OFFSET = 0x8905,
-		eGL_MAX_RECTANGLE_TEXTURE_SIZE = 0x84F8,
-		eGL_MAX_RENDERBUFFER_SIZE = 0x84E8,
-		eGL_MAX_SAMPLE_MASK_WORDS = 0x8E59,
-		eGL_MAX_SAMPLES = 0x8D57,
-		eGL_MAX_SERVER_WAIT_TIMEOUT = 0x9111,
-		eGL_MAX_SHADER_STORAGE_BUFFER_BINDINGS = 0x90DD,
-		eGL_MAX_TESS_CONTROL_ATOMIC_COUNTERS = 0x92D3,
-		eGL_MAX_TESS_EVALUATION_ATOMIC_COUNTERS = 0x92D4,
-		eGL_MAX_TESS_CONTROL_SHADER_STORAGE_BLOCKS = 0x90D8,
-		eGL_MAX_TESS_EVALUATION_SHADER_STORAGE_BLOCKS = 0x90D9,
-		eGL_MAX_TEXTURE_BUFFER_SIZE = 0x8C2B,
-		eGL_MAX_TEXTURE_IMAGE_UNITS = 0x8872,
-		eGL_MAX_TEXTURE_LOD_BIAS = 0x84FD,
-		eGL_MAX_TEXTURE_SIZE = 0x0D33,
-		eGL_MAX_UNIFORM_BUFFER_BINDINGS = 0x8A2F,
-		eGL_MAX_UNIFORM_BLOCK_SIZE = 0x8A30,
-		eGL_MAX_UNIFORM_LOCATIONS = 0x826E,
-		eGL_MAX_VARYING_COMPONENTS = 0x8B4B,
-		eGL_MAX_VARYING_VECTORS = 0x8DFC,
-		eGL_MAX_VARYING_FLOATS = 0x8B4B,
-		eGL_MAX_VERTEX_ATOMIC_COUNTERS = 0x92D2,
-		eGL_MAX_VERTEX_ATTRIBS = 0x8869,
-		eGL_MAX_VERTEX_SHADER_STORAGE_BLOCKS = 0x90D6,
-		eGL_MAX_VERTEX_TEXTURE_IMAGE_UNITS = 0x8B4C,
-		eGL_MAX_VERTEX_UNIFORM_COMPONENTS = 0x8B4A,
-		eGL_MAX_VERTEX_UNIFORM_VECTORS = 0x8DFB,
-		eGL_MAX_VERTEX_OUTPUT_COMPONENTS = 0x9122,
-		eGL_MAX_VERTEX_UNIFORM_BLOCKS = 0x8A2B,
-		eGL_MAX_VIEWPORT_DIMS = 0x0D3A,
-		eGL_MAX_VIEWPORTS = 0x825B,
-	}	eGL_MAX;
+		ProgramTexelOffset = 0x8904,
+		MapBufferAlignment = 0x90BC,
+	};
 
-	typedef enum eGL_GPU_INFO
+	enum class GlMax
+		: uint32_t
 	{
-		eGL_GPU_INFO_TOTAL_AVAILABLE_MEM_NVX = 0x9048,
-		eGL_GPU_INFO_VBO_FREE_MEMORY_ATI = 0x87FB,
-		eGL_GPU_INFO_TEXTURE_FREE_MEMORY_ATI = 0x87FC,
-		eGL_GPU_INFO_RENDERBUFFER_FREE_MEMORY_ATI = 0x87FD,
-	}	eGL_GPU_INFO;
+		ComputeShaderStorageBlocks = 0x90DB,
+		CombinedShaderStorageBlocks = 0x90DC,
+		ComputeUniformBlocks = 0x91BB,
+		ComputeTextureImageUnits = 0x91BC,
+		ComputeUniformComponents = 0x8263,
+		ComputeAtomicCounters = 0x8265,
+		ComputeAtomicCounterBuffers = 0x8264,
+		CombinedComputeUniformComponents = 0x8266,
+		ComputeWorkGroupInvocations = 0x90EB,
+		ComputeWorkGroupCount = 0x91BE,
+		ComputeWorkGroupSize = 0x91BF,
+		DebugGroupStackDepth = 0x826C,
+		Texture3DSize = 0x8073,
+		TextureArrayLayers = 0x88FF,
+		ClipDistances = 0x0D32,
+		ColorTextureSamples = 0x910E,
+		CombinedAtomicCounters = 0x92D7,
+		CombinedFragmentUniformComponents = 0x8A33,
+		CombinedGeometryUniformComponents = 0x8A32,
+		CombinedTextureImageUnits = 0x8B4D,
+		CombinedUniformBlocks = 0x8A2E,
+		CombinedVertexUniformComponents = 0x8A31,
+		TextureCubeSize = 0x851C,
+		DepthTextureSamples = 0x910F,
+		DrawBuffers = 0x8824,
+		DualSourceDrawBuffers = 0x88FC,
+		ElementsIndices = 0x80E9,
+		ElementsVertices = 0x80E8,
+		FragmentAtomicCounters = 0x92D6,
+		FragmentShaderStorageBlocks = 0x90DA,
+		FragmentInputComponents = 0x9125,
+		FragmentUniformComponents = 0x8B49,
+		FragmentUniformVectors = 0x8DFD,
+		FragmentUniformBlocks = 0x8A2D,
+		FramebufferWidth = 0x9315,
+		FramebufferHeight = 0x9316,
+		FramebufferLayers = 0x9317,
+		FramebufferSamples = 0x9318,
+		GeometryAtomicCounters = 0x92D5,
+		GeometryShaderStorageBlocks = 0x90D7,
+		GeometryInputComponents = 0x9123,
+		GeometryOutputComponents = 0x9124,
+		GeometryTextureImageUnits = 0x8C29,
+		GeometryUniformBlocks = 0x8A2C,
+		GeometryUniformComponents = 0x8DDF,
+		IntegerSamples = 0x9110,
+		LabelLength = 0x82E8,
+		ProgramTexelOffset = 0x8905,
+		RectangleTextureSize = 0x84F8,
+		RenderbufferSize = 0x84E8,
+		SampleMaskWords = 0x8E59,
+		Samples = 0x8D57,
+		ServerWaitTimeout = 0x9111,
+		ShaderStorageBufferBindings = 0x90DD,
+		TessControlAtomicCounters = 0x92D3,
+		TessEvaluationAtomicCounters = 0x92D4,
+		TessControlShaderStorageBlocks = 0x90D8,
+		TessEvaluationShaderStorageBlocks = 0x90D9,
+		TextureBufferSize = 0x8C2B,
+		TextureImageUnits = 0x8872,
+		TextureLODBias = 0x84FD,
+		TextureSize = 0x0D33,
+		UniformBufferBindings = 0x8A2F,
+		UniformBlockSize = 0x8A30,
+		UniformLocations = 0x826E,
+		VaryingComponents = 0x8B4B,
+		VaryingVectors = 0x8DFC,
+		VaryingFloats = 0x8B4B,
+		VertexAtomicCounters = 0x92D2,
+		VertexAttribs = 0x8869,
+		VertexShaderStorageBlocks = 0x90D6,
+		VertexTextureImageUnits = 0x8B4C,
+		VertexUniformComponents = 0x8B4A,
+		VertexUniformVectors = 0x8DFB,
+		VertexOutputComponents = 0x9122,
+		VertexUniformBlocks = 0x8A2B,
+		ViewportDims = 0x0D3A,
+		Viewports = 0x825B,
+	};
+
+	enum class GlGpuInfo
+	{
+		TotalAvailableMemNVX = 0x9048,
+		VBOFreeMemoryATI = 0x87FB,
+		TextureFreeMemoryATI = 0x87FC,
+		RenderbufferFreeMemoryATI = 0x87FD,
+	};
 
 	typedef enum eGL_HINT
 	{

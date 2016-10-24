@@ -100,7 +100,7 @@ namespace GlRender
 		//! The vertex, animation, ... attributes.
 		GlAttributePtrArray m_attributes;
 		//! The topology type.
-		eGL_PRIMITIVE m_glTopology;
+		GlTopology m_glTopology;
 	};
 }
 

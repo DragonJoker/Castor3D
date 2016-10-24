@@ -719,7 +719,7 @@ namespace Castor3D
 					}
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				l_matrixBuffer.GetGpuBuffer()->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
 				p_renderNodes[0].UnbindPass( p_depthMaps );
@@ -789,7 +789,7 @@ namespace Castor3D
 					}
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				l_matrixBuffer.GetGpuBuffer()->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
 				p_renderNodes[0].UnbindPass( p_depthMaps );

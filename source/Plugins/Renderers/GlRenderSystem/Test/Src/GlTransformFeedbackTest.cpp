@@ -695,61 +695,55 @@ namespace Testing
 		l_launcherLifetime->SetValue( 100.0f );
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );
-
+		l_program->SetTransformLayout( l_outputs );
+		
 		// Transform feedback
 		TransformFeedbackSPtr l_transformFeedback[]
 		{
-			m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ),
-			m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ),
+			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ) },
+			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ) }
 		};
-		l_program->SetTransformLayout( l_outputs );
 
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
 		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
-		// Input VBO
-		VertexBuffer l_vboIn[]
+		// Input/Output VBOs
+		VertexBuffer l_vbos[]
 		{
 			{ m_engine, l_inputs },
 			{ m_engine, l_inputs }
 		};
 
-		// Output VBO
-		VertexBuffer l_vboOut[]
-		{
-			{ m_engine, l_outputs },
-			{ m_engine, l_outputs }
-		};
-
 		// VAO
 		GeometryBuffersUPtr l_geometryBuffers[]
 		{
-			m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ),
-			m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program )
+			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) },
+			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) }
 		};
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 
-		for ( int i = 0; i < 2; ++i )
+		for ( uint32_t i = 0; i < 2; ++i )
 		{
-			CT_CHECK( l_vboIn[i].Create() );
-			CT_CHECK( l_vboOut[i].Create() );
-			l_vboIn[i].Resize( 10000 * sizeof( l_particle ) );
-			l_vboOut[i].Resize( 10000 * sizeof( l_particle ) );
-			std::memcpy( l_vboIn[i].data(), &l_particle, sizeof( l_particle ) );
-			CT_CHECK( l_vboIn[i].Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
-			CT_CHECK( l_vboOut[i].Upload( BufferAccessType::Static, BufferAccessNature::Read ) );
-			CT_CHECK( l_transformFeedback[i]->Initialise( { l_vboOut[i] } ) );
-			CT_CHECK( l_geometryBuffers[i]->Initialise( { l_vboIn[i] }, nullptr ) );
+			CT_CHECK( l_vbos[i].Create() );
+			l_vbos[i].Resize( 10000 * sizeof( l_particle ) );
+			std::memcpy( l_vbos[i].data(), &l_particle, sizeof( l_particle ) );
+			CT_CHECK( l_vbos[i].Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
 		}
 
-		uint32_t l_vtx{ 1 };
-		uint32_t l_tfb{ 0 };
+		for ( uint32_t i = 0; i < 2; ++i )
+		{
+			CT_CHECK( l_transformFeedback[i]->Initialise( { l_vbos[i] } ) );
+			CT_CHECK( l_geometryBuffers[i]->Initialise( { l_vbos[i] }, nullptr ) );
+		}
+
 		double l_totalTime{ 0u };
 		Particle l_particles[10000];
+		uint32_t l_vtx{ 0u };
+		uint32_t l_tfb{ 1u };
 
 		for ( int i = 0; i < 10000; ++i )
 		{
@@ -758,48 +752,34 @@ namespace Testing
 			l_deltaTime->SetValue( float( l_time ) );
 			l_total->SetValue( float( l_totalTime ) );
 
-			l_vboOut[l_vtx].Bind();
-			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback[l_vtx]->GetWrittenPrimitives() ) );
-			auto l_buffer = reinterpret_cast< Particle * >( l_vboOut[l_vtx].Lock( 0, l_count, AccessType::Read ) );
-
-			if ( l_buffer )
-			{
-				std::memcpy( l_particles, l_buffer, l_count );
-				l_vboOut[l_vtx].Unlock();
-			}
-
-			l_vboOut[l_vtx].Unbind();
-
 			l_pipeline->Apply();
 			CT_CHECK( l_transformFeedback[l_tfb]->Bind() );
 			CT_CHECK( l_geometryBuffers[l_vtx]->Draw( std::max( 1u, l_transformFeedback[l_vtx]->GetWrittenPrimitives() ), 0 ) );
 			l_transformFeedback[l_tfb]->Unbind();
 			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
-			Logger::LogDebug( cuT( "Written primitives : " ) + string::to_string( l_transformFeedback[l_tfb]->GetWrittenPrimitives() ) );
 
-			l_vboOut[l_tfb].Bind();
-			l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback[l_tfb]->GetWrittenPrimitives() ) );
-			l_buffer = reinterpret_cast< Particle * >( l_vboOut[l_tfb].Lock( 0, l_count, AccessType::Read ) );
+			l_vbos[l_tfb].Bind();
+			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback[l_tfb]->GetWrittenPrimitives() ) );
+			auto l_buffer = reinterpret_cast< Particle * >( l_vbos[l_tfb].Lock( 0, l_count, AccessType::Read ) );
 
 			if ( l_buffer )
 			{
 				std::memcpy( l_particles, l_buffer, l_count );
-				l_vboOut[l_tfb].Unlock();
+				l_vbos[l_tfb].Unlock();
 			}
 
-			l_vboOut[l_tfb].Unbind();
-			l_tfb = l_vtx;
-			l_vtx = 1 - l_vtx;
+			l_vbos[l_tfb].Unbind();
+			l_vtx = l_tfb;
+			l_tfb = 1 - l_tfb;
 		}
 
-		l_geometryBuffers[0]->Cleanup();
-		l_geometryBuffers[1]->Cleanup();
-		l_transformFeedback[0]->Cleanup();
-		l_transformFeedback[1]->Cleanup();
-		l_vboOut[0].Destroy();
-		l_vboOut[1].Destroy();
-		l_vboIn[0].Destroy();
-		l_vboIn[1].Destroy();
+		for ( uint32_t i = 0; i < 2; ++i )
+		{
+			l_geometryBuffers[i]->Cleanup();
+			l_transformFeedback[i]->Cleanup();
+			l_vbos[i].Destroy();
+		}
+
 		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}

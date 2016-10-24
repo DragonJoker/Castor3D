@@ -874,7 +874,7 @@ namespace GlRender
 		bool l_return = false;
 		GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
 		int l_max = 0;
-		GetOpenGl().GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
+		GetOpenGl().GetIntegerv( GlMax::UniformBufferBindings, &l_max );
 
 		if ( int( m_index ) < l_max )
 		{

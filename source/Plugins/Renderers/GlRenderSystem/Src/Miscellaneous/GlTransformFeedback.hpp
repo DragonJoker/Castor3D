@@ -97,7 +97,7 @@ namespace GlRender
 		void DoEnd()const override;
 
 	private:
-		eGL_PRIMITIVE m_topology;
+		GlTopology m_topology;
 	};
 }
 

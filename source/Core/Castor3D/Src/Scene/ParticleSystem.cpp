@@ -189,7 +189,7 @@ namespace Castor3D
 		m_randomTexture.Unbind();
 		m_updateParticlesBuffers->Copy( m_particlesBillboard->GetVertexBuffer(), m_transformFeedbacks->GetWrittenPrimitives() * m_computed.GetStride() );
 
-#if !defined( NDEBUG )
+#if 0 && !defined( NDEBUG )
 
 		m_updateParticlesBuffers->Bind();
 		auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, m_transformFeedbacks->GetWrittenPrimitives() ) );
