@@ -48,6 +48,8 @@ add_target(
 	"${CUT_CXX_FLAGS}"
 )
 
+add_test( NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME} )
+
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Test" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 add_target_test( ${PROJECT_NAME} )
