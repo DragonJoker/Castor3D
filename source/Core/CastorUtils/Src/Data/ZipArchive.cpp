@@ -4,8 +4,14 @@
 #include "Log/Logger.hpp"
 #include "BinaryFile.hpp"
 
-#include <zip.h>
+#include "MiniZip/unzip.h"
+#include "MiniZip/zip.h"
 #include <limits>
+
+#ifdef WIN32
+#	define USEWIN32IOAPI
+#	include "MiniZip/iowin32.h"
+#endif
 
 #if defined( MSDOS ) || defined( OS2 ) || defined( _WIN32 ) || defined( __CYGWIN__ )
 #	include <fcntl.h>
@@ -21,20 +27,20 @@ namespace Castor
 
 	//*********************************************************************************************
 
-	namespace libzip
+	namespace zlib
 	{
 		std::string GetError( int p_error )
 		{
-			char l_buffer[1024] = { 0 };
-			zip_error_to_str( l_buffer, 1024, errno, p_error );
-			return "(code " + std::to_string( p_error ) + ") " + std::string( l_buffer );
+			//std::string l_error( zError( p_error ) );
+			return "(code " + std::to_string( p_error ) + ")";
 		}
 
 		struct ZipImpl
 			: public ZipArchive::ZipImpl
 		{
 			ZipImpl()
-				: m_zip( nullptr )
+				: m_unzip( nullptr )
+				, m_zip( nullptr )
 			{
 			}
 
@@ -44,69 +50,92 @@ namespace Castor
 
 			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode )
 			{
-				int l_mode = 0;
-
-				if ( ( p_mode & File::eOPEN_MODE_READ ) == File::eOPEN_MODE_READ )
+				if ( p_mode == File::eOPEN_MODE_WRITE )
 				{
-					l_mode |= ZIP_CHECKCONS;
+#ifdef USEWIN32IOAPI
+
+					zlib_filefunc_def l_ffunc;
+					fill_win32_filefunc( &l_ffunc );
+					m_zip = zipOpen2( string::string_cast< char >( p_path ).c_str(), 0, NULL, &l_ffunc );
+
+#else
+
+					m_zip = zipOpen( string::string_cast< char >( p_path ).c_str(), 0 );
+
+#endif
+
+					if ( !m_zip )
+					{
+						CASTOR_EXCEPTION( "Couldn't create archive file" );
+					}
 				}
-
-				if ( ( p_mode & File::eOPEN_MODE_WRITE ) == File::eOPEN_MODE_WRITE )
+				else
 				{
-					std::remove( string::string_cast< char >( p_path ).c_str() );
-					l_mode |= ZIP_CREATE;
-				}
+#ifdef USEWIN32IOAPI
 
-				if ( ( p_mode & File::eOPEN_MODE_APPEND ) == File::eOPEN_MODE_APPEND )
-				{
-					l_mode |= ZIP_CREATE;
-				}
+					zlib_filefunc_def l_ffunc;
+					fill_win32_filefunc( &l_ffunc );
+					m_unzip = unzOpen2( string::string_cast< char >( p_path ).c_str(), &l_ffunc );
 
-				int l_result = 0;
-				m_zip = zip_open( string::string_cast< char >( p_path ).c_str(), l_mode, &l_result );
+#else
 
-				if ( !m_zip )
-				{
-					CASTOR_EXCEPTION( "Couldn't create archive file " + string::string_cast< char >( libzip::GetError( l_result ) ) );
-				}
-				else if ( l_result != ZIP_ER_OK )
-				{
-					CASTOR_EXCEPTION( "Couldn't create archive file " + string::string_cast< char >( libzip::GetError( l_result ) ) );
+					m_unzip = unzOpen( string::string_cast< char >( p_path ).c_str() );
+
+#endif
+
+					if ( !m_unzip )
+					{
+						CASTOR_EXCEPTION( "Couldn't open archive file" );
+					}
 				}
 			}
 
 			virtual void Close()
 			{
-				if ( zip_close( m_zip ) == -1 )
+				if ( m_zip )
 				{
-					int l_zep, l_sep;
-					zip_error_get( m_zip, &l_zep, &l_sep );
-					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-					CASTOR_EXCEPTION( "Error while closing ZIP archive : " + l_error );
+					int l_error = zipClose( m_zip, nullptr );
+
+					if ( l_error != UNZ_OK )
+					{
+						CASTOR_EXCEPTION( "Error while closing ZIP archive : " + zlib::GetError( l_error ) );
+					}
+
+					m_zip = nullptr;
 				}
 
-				m_zip = nullptr;
+				if ( m_unzip )
+				{
+					int l_error = unzClose( m_unzip );
+
+					if ( l_error != UNZ_OK )
+					{
+						CASTOR_EXCEPTION( "Error while closing ZIP archive : " + zlib::GetError( l_error ) );
+					}
+
+					m_unzip = nullptr;
+				}
 			}
 
 			virtual bool FindFolder( String const & p_folder )
 			{
 				bool l_return = false;
-				std::string l_folder = string::string_cast< char >( p_folder );
+				//std::string l_folder = string::string_cast< char >( p_folder );
 
-				//Search for the folder
-				struct zip_stat l_stat = { 0 };
+				////Search for the folder
+				//struct zip_stat l_stat = { 0 };
 
-				if ( zip_stat( m_zip, l_folder.c_str(), 0, &l_stat ) == -1 )
-				{
-					int l_zep, l_sep;
-					zip_error_get( m_zip, &l_zep, &l_sep );
-					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-					Logger::LogWarning( "Couldn't retrieve ZIP archive folder [" + l_folder + "] informations : " + l_error );
-				}
-				else
-				{
-					l_return = true;
-				}
+				//if ( zip_stat( m_zip, l_folder.c_str(), 0, &l_stat ) == -1 )
+				//{
+				//	int l_zep, l_sep;
+				//	zip_error_get( m_zip, &l_zep, &l_sep );
+				//	std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
+				//	Logger::LogWarning( "Couldn't retrieve ZIP archive folder [" + l_folder + "] informations : " + l_error );
+				//}
+				//else
+				//{
+				//	l_return = true;
+				//}
 
 				return l_return;
 			}
@@ -114,31 +143,31 @@ namespace Castor
 			virtual bool FindFile( String const & p_file )
 			{
 				bool l_return = false;
-				std::string l_file = string::string_cast< char >( p_file );
+				//std::string l_file = string::string_cast< char >( p_file );
 
-				//Search for the folder
-				struct zip_stat l_stat = { 0 };
+				////Search for the folder
+				//struct zip_stat l_stat = { 0 };
 
-				if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
-				{
-					int l_zep, l_sep;
-					zip_error_get( m_zip, &l_zep, &l_sep );
-					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-					Logger::LogWarning( "Couldn't retrieve ZIP archive file [" + l_file + "] informations : " + l_error );
-				}
-				else
-				{
-					l_return = true;
-				}
+				//if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
+				//{
+				//	int l_zep, l_sep;
+				//	zip_error_get( m_zip, &l_zep, &l_sep );
+				//	std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
+				//	Logger::LogWarning( "Couldn't retrieve ZIP archive file [" + l_file + "] informations : " + l_error );
+				//}
+				//else
+				//{
+				//	l_return = true;
+				//}
 
 				return l_return;
 			}
 
 			virtual void Deflate( ZipArchive::Folder const & p_folder )
 			{
-				for ( ZipArchive::FolderList::const_iterator l_it = p_folder.folders.begin(); l_it != p_folder.folders.end(); ++l_it )
+				for ( auto l_folder : p_folder.folders )
 				{
-					DoDeflate( cuT( "" ), *l_it );
+					DoDeflate( cuT( "" ), l_folder );
 				}
 
 				DoDeflateFiles( cuT( "" ), p_folder.files );
@@ -152,90 +181,34 @@ namespace Castor
 				}
 
 				StringArray l_result;
-				int l_count = zip_get_num_files( m_zip );
+				unz_global_info l_gi;
 
-				if ( l_count == -1 )
+				auto l_error = unzGetGlobalInfo( m_unzip, &l_gi );
+
+				if ( l_error != UNZ_OK )
 				{
-					CASTOR_EXCEPTION( "Couldn't retrieve ZIP archive file files count" );
+					CASTOR_EXCEPTION( "Error in unzGetGlobalInfo: " + zlib::GetError( l_error ) );
 				}
 
-				for ( int64_t i = 0; i < l_count; ++i )
+				l_error = unzGoToFirstFile( m_unzip );
+
+				if ( l_error != UNZ_OK )
 				{
-					//Search for the file at given index
-					struct zip_stat l_stat = { 0 };
+					CASTOR_EXCEPTION( "Error in unzGoToFirstFile: " + zlib::GetError( l_error ) );
+				}
 
-					if ( zip_stat_index( m_zip, i, 0, &l_stat ) == -1 )
+				for ( uLong i = 0; i < l_gi.number_entry; ++i )
+				{
+					DoInflateCurrentFile( p_outFolder, l_result );
+
+					if ( ( i + 1 ) < l_gi.number_entry )
 					{
-						int l_zep, l_sep;
-						zip_error_get( m_zip, &l_zep, &l_sep );
-						std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-						CASTOR_EXCEPTION( "Couldn't retrieve ZIP archive file informations : " + l_error );
-					}
+						l_error = unzGoToNextFile( m_unzip );
 
-					if ( l_stat.size > 0 )
-					{
-						zip_file * l_zipfile = zip_fopen_index( m_zip, i, ZIP_FL_UNCHANGED );
-
-						if ( !l_zipfile )
+						if ( l_error != UNZ_OK )
 						{
-							int l_zep, l_sep;
-							zip_error_get( m_zip, &l_zep, &l_sep );
-							std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-							CASTOR_EXCEPTION( "Couldn't add directory to ZIP archive : " + l_error );
+							CASTOR_EXCEPTION( "Error in unzGoToNextFile: " + zlib::GetError( l_error ) );
 						}
-
-						//Alloc memory for its uncompressed contents
-						ByteArray l_contents( CHUNK );
-
-						//Read the compressed file
-						zip_uint64_t l_read = 0;
-						Path l_name = Path{ string::string_cast< xchar >( l_stat.name ) };
-						StringArray l_folders = string::split( l_name.GetPath(), string::to_string( Path::Separator ), 100, false );
-
-						if ( !l_folders.empty() )
-						{
-							Path l_path = p_outFolder;
-
-							if ( !File::DirectoryExists( l_path ) )
-							{
-								File::DirectoryCreate( l_path );
-							}
-
-							for ( StringArrayConstIt l_it = l_folders.begin(); l_it != l_folders.end(); ++l_it )
-							{
-								l_path /= ( *l_it );
-
-								if ( !File::DirectoryExists( l_path ) )
-								{
-									File::DirectoryCreate( l_path );
-								}
-							}
-						}
-
-						BinaryFile l_file( p_outFolder / l_name, File::eOPEN_MODE_WRITE );
-
-						while ( l_read < l_stat.size )
-						{
-							zip_uint64_t l_tmp = zip_fread( l_zipfile, l_contents.data(), std::min( zip_uint64_t( CHUNK ), l_stat.size ) );
-
-							if ( l_tmp >= 0 )
-							{
-								l_file.WriteArray( l_contents.data(), l_tmp );
-								l_read += l_tmp;
-							}
-							else
-							{
-								int l_zep, l_sep;
-								zip_error_get( m_zip, &l_zep, &l_sep );
-								std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-								zip_fclose( l_zipfile );
-								CASTOR_EXCEPTION( "Couldn't read ZIP archive file " + string::string_cast< char >( l_name ) + " : " + l_error );
-							}
-						}
-
-						l_result.push_back( p_outFolder / l_name );
-
-						zip_fclose( l_zipfile );
 					}
 				}
 
@@ -243,6 +216,90 @@ namespace Castor
 			}
 
 		private:
+			virtual void DoInflateCurrentFile( Path const & p_outFolder, StringArray & p_result )
+			{
+				std::array< char, 256 > l_fileNameInZip;
+				unz_file_info l_fileInfo;
+				auto l_error = unzGetCurrentFileInfo( m_unzip, &l_fileInfo, l_fileNameInZip.data(), sizeof( l_fileNameInZip ), NULL, 0, NULL, 0 );
+
+				if ( l_error != UNZ_OK )
+				{
+					CASTOR_EXCEPTION( "Error in unzGetCurrentFileInfo: " + zlib::GetError( l_error ) );
+				}
+
+				Path l_name = Path{ string::string_cast< xchar >( l_fileNameInZip.data(), l_fileNameInZip.data() + l_fileInfo.size_filename ) };
+				StringArray l_folders = string::split( l_name.GetPath(), string::to_string( Path::Separator ), 100, false );
+
+				if ( !l_folders.empty() )
+				{
+					Path l_path = p_outFolder;
+
+					if ( !File::DirectoryExists( l_path ) )
+					{
+						File::DirectoryCreate( l_path );
+					}
+
+					for ( StringArrayConstIt l_it = l_folders.begin(); l_it != l_folders.end(); ++l_it )
+					{
+						l_path /= ( *l_it );
+
+						if ( !File::DirectoryExists( l_path ) )
+						{
+							File::DirectoryCreate( l_path );
+						}
+					}
+				}
+
+				auto l_last = l_fileNameInZip[l_fileInfo.size_filename - 1];
+
+				if ( l_last != '/' && l_last != '\\' )
+				{
+					std::string l_outputFileName;
+					int skip = 0;
+
+					l_error = unzOpenCurrentFile( m_unzip );
+
+					if ( l_error != UNZ_OK )
+					{
+						CASTOR_EXCEPTION( "Error in unzOpenCurrentFilePassword: " + zlib::GetError( l_error ) );
+					}
+
+					BinaryFile l_file( p_outFolder / l_name, File::eOPEN_MODE_WRITE );
+					std::vector< uint8_t > l_buffer( CHUNK );
+
+					try
+					{
+						do
+						{
+							l_error = unzReadCurrentFile( m_unzip, l_buffer.data(), static_cast< unsigned int >( l_buffer.size() ) );
+
+							if ( l_error < 0 )
+							{
+								CASTOR_EXCEPTION( "Error in unzReadCurrentFile: " + zlib::GetError( l_error ) );
+							}
+
+							if ( l_error > 0 )
+							{
+								l_file.WriteArray( l_buffer.data(), l_error );
+							}
+						}
+						while ( l_error > 0 );
+
+						unzCloseCurrentFile( m_unzip ); /* don't lose the error */
+						p_result.push_back( p_outFolder / l_name );
+					}
+					catch ( Exception & p_exc )
+					{
+						l_error = unzCloseCurrentFile( m_unzip );
+
+						if ( l_error != UNZ_OK )
+						{
+							CASTOR_EXCEPTION( "Error in unzCloseCurrentFile: " + zlib::GetError( l_error ) );
+						}
+					}
+				}
+			}
+
 			virtual void DoDeflate( String const & p_path, ZipArchive::Folder const & p_folder )
 			{
 				String l_path;
@@ -256,9 +313,9 @@ namespace Castor
 					l_path = p_path + cuT( "/" ) + p_folder.name;
 				}
 
-				for ( ZipArchive::FolderList::const_iterator l_it = p_folder.folders.begin(); l_it != p_folder.folders.end(); ++l_it )
+				for ( auto l_folder : p_folder.folders )
 				{
-					DoDeflate( l_path, *l_it );
+					DoDeflate( l_path, l_folder );
 				}
 
 				DoDeflateFiles( l_path, p_folder.files );
@@ -266,47 +323,44 @@ namespace Castor
 
 			virtual void DoDeflateFiles( String const & p_path, std::list< String > const & p_files )
 			{
-				for ( std::list< String >::const_iterator l_it = p_files.begin(); l_it != p_files.end(); ++l_it )
+				for ( auto l_name : p_files )
 				{
-					std::string l_file = string::string_cast< char >( p_path + cuT( "/" ) + ( *l_it ) );
+					std::string l_filePath = string::string_cast< char >( p_path + cuT( "/" ) + l_name );
 
-					if ( !File::FileExists( Path{ string::string_cast< xchar >( l_file ) } ) )
+					if ( !File::FileExists( Path{ string::string_cast< xchar >( l_filePath ) } ) )
 					{
-						CASTOR_EXCEPTION( "The file doesn't exist: " + l_file );
+						CASTOR_EXCEPTION( "The file doesn't exist: " + l_filePath );
 					}
 
-					struct zip_source * l_source = zip_source_file( m_zip, l_file.c_str(), 0, 0 );
+					std::fstream l_file( l_filePath, std::ios::binary | std::ios::in );
 
-					if ( l_source )
+					if ( !l_file.is_open() )
 					{
-						if ( zip_add( m_zip, l_file.c_str(), l_source ) == -1 )
-						{
-							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
-						}
-
-						struct zip_stat l_stat = { 0 };
-
-						if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
-						{
-							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
-						}
-						else
-						{
-							Logger::LogInfo( "Added file " + l_file );
-						}
+						CASTOR_EXCEPTION( "Couldn't open file: " + l_filePath );
 					}
-					else
+
+					l_file.seekg( 0, std::ios::end );
+					long l_size = long( l_file.tellg() );
+					l_file.seekg( 0, std::ios::beg );
+
+					std::vector< char > l_buffer( l_size );
+
+					if ( l_size == 0 || l_file.read( l_buffer.data(), l_size ) )
 					{
-						std::string l_error = zip_strerror( m_zip );
-						CASTOR_EXCEPTION( "Couldn't write ZIP archive: " + l_error );
+						zip_fileinfo l_zfi{ 0 };
+
+						if ( UNZ_OK == zipOpenNewFileInZip( m_zip, l_filePath.c_str(), &l_zfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, Z_DEFAULT_COMPRESSION ) )
+						{
+							zipWriteInFileInZip( m_zip, l_size == 0 ? "" : l_buffer.data(), l_size );
+							zipCloseFileInZip( m_zip );
+						}
 					}
 				}
 			}
 
 		private:
-			zip * m_zip;
+			unzFile m_unzip;
+			zipFile m_zip;
 		};
 	}
 
@@ -425,7 +479,7 @@ namespace Castor
 	//*********************************************************************************************
 
 	ZipArchive::ZipArchive( Path const & p_path, File::eOPEN_MODE p_mode )
-		: m_impl( std::make_unique< libzip::ZipImpl >() )
+		: m_impl( std::make_unique< zlib::ZipImpl >() )
 	{
 		m_impl->Open( p_path, p_mode );
 	}

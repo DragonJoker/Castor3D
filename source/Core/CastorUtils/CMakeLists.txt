@@ -11,7 +11,6 @@ else ()
 	find_package( ZLIB )
 endif ()
 find_package( FreeImage )
-find_package( LibZip )
 
 if( NOT WIN32 )
 	find_package( X11 )
@@ -29,15 +28,10 @@ if( FREEIMAGE_FOUND )
 	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
-if( LIBZIP_FOUND )
-	message( STATUS "+ Found libzip" )
-endif()
-
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
+if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 	include_directories( ${FREETYPE_INCLUDE_DIRS} )
 	include_directories( ${FreeImage_INCLUDE_DIR} )
 	include_directories( ${ZLIB_INCLUDE_DIRS} )
-	include_directories( ${LIBZIP_INCLUDE_DIRS} )
 
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
@@ -72,16 +66,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		endif()
 	endforeach()
 
-	#libzip Libs
-	set( LibZipLibraries "")
-	foreach(Lib ${LIBZIP_LIBRARY})
-		if (LibZipLibraries)
-			set(LibZipLibraries "${LibZipLibraries}|${Lib}")
-		else()
-			set(LibZipLibraries "${Lib}")
-		endif()
-	endforeach()
-
 	#X11 Libs
 	set( X11Libraries "" )
 	foreach( Lib ${X11_LIBRARIES} )
@@ -103,7 +87,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${FreeImageLibraries}
 		${FreeTypeLibraries}
 		${ZlibLibraries}
-		${LibZipLibraries}
 		${X11Libraries}
  )
 
@@ -165,6 +148,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	parse_subdir_files( Align "Align" )
 	parse_subdir_files( Config "Config" )
 	parse_subdir_files( Data "Data" )
+	parse_subdir_files( Data/MiniZip "Data\\\\MiniZip" )
 	parse_subdir_files( Design "Design" )
 	parse_subdir_files( Exception "Exception" )
 	parse_subdir_files( FileParser "FileParser" )
@@ -203,7 +187,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			copy_dll( ${PROJECT_NAME} ${ZLIB_LIBRARY} ${ZLIB_LIBRARY} )
 		endif ()
 
-		copy_dll( ${PROJECT_NAME} ${LIBZIP_LIBRARY} ${LIBZIP_LIBRARY} )
 		if ( ${PROJECTS_PLATFORM} STREQUAL "x86" )
 			copy_dll( ${PROJECT_NAME} ${FREETYPE_LIBRARY} ${FREETYPE_LIBRARY} 6 )
 		endif ()
@@ -226,9 +209,6 @@ else ()
 	endif()
 	if( NOT ZLIB_FOUND )
 		set( msg "${msg} Zlib" )
-	endif()
-	if( NOT LIBZIP_FOUND )
-		set( msg "${msg} libzip" )
 	endif()
 	set( Build "${msg})" PARENT_SCOPE )
 	set( Error TRUE PARENT_SCOPE )

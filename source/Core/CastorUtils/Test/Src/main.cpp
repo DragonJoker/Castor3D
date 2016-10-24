@@ -40,7 +40,7 @@ int main( int argc, char const * argv[] )
 	Testing::Register( std::make_shared< Testing::CastorUtilsUniqueTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
+	//Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsZipTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsObjectsPoolTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsQuaternionTest >() );
