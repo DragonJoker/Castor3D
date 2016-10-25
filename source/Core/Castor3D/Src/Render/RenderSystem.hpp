@@ -273,7 +273,7 @@ namespace Castor3D
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API virtual GeometryBuffersUPtr CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context

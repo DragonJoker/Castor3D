@@ -185,6 +185,6 @@ scene "FinalScene"
 			camera "MainCamera"
 		}
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }

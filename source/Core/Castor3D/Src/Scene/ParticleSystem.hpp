@@ -246,7 +246,7 @@ namespace Castor3D
 		PipelineUPtr m_updatePipeline;
 		//!\~english	The geometry buffers used to update the transform buffer.
 		//!\~french		Les tampons de géométrie utilisé pour mettre à jour le tampon de transformation.
-		GeometryBuffersUPtr m_updateGeometryBuffers;
+		GeometryBuffersSPtr m_updateGeometryBuffers;
 		//!\~english	The vertex buffers used to update the transform buffer.
 		//!\~french		Le tampon de sommets utilisé pour mettre à jour le tampon de transformation.
 		VertexBufferSPtr m_updateParticlesBuffers;

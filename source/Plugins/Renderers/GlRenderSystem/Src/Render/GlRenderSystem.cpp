@@ -412,9 +412,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersUPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
-		return std::make_unique< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
 	PipelineUPtr GlRenderSystem::CreatePipeline( DepthStencilState && p_dsState
@@ -505,12 +505,12 @@ namespace GlRender
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()
 	{
-		return std::make_unique< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
+		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
 	}
 
 	BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
 	{
-		return std::make_unique< GlBackBuffers >( GetOpenGl(), *GetEngine() );
+		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
 	}
 
 	GpuQueryUPtr GlRenderSystem::CreateQuery( QueryType p_type )

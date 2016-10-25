@@ -28,6 +28,8 @@ SOFTWARE.
 
 #include <Math/SquareMatrix.hpp>
 
+#include <random>
+
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
 #	include <glm/glm.hpp>

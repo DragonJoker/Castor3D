@@ -49,7 +49,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		Castor3D::GeometryBuffersUPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
+		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
 		 */

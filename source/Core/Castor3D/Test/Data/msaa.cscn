@@ -72,6 +72,6 @@ scene "Scene"
 			technique "msaa" -samples_count 8
 		}
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }
