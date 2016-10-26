@@ -407,6 +407,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "parent" ), Parser_ParticleSystemParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "particles_count" ), Parser_ParticleSystemCount, { MakeParameter< ePARAMETER_TYPE_UINT32 >() } );
 	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "material" ), Parser_ParticleSystemMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "dimensions" ), Parser_ParticleSystemDimensions, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
 	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "}" ), Parser_ParticleSystemEnd );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );

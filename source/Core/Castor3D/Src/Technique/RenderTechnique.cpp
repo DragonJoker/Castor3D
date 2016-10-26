@@ -256,7 +256,6 @@ namespace Castor3D
 			switch ( p_alphaBlendMode )
 			{
 			case BlendMode::NoBlend:
-				l_blend = true;
 				l_state.SetAlphaSrcBlend( BlendOperand::One );
 				l_state.SetAlphaDstBlend( BlendOperand::Zero );
 				break;
@@ -822,7 +821,7 @@ namespace Castor3D
 		for ( auto & l_it : p_nodes )
 		{
 			l_it.second.get().m_pass.m_pipeline.Apply();
-			DoUpdateTransparentPipeline( l_it.second.get().m_pass.m_pipeline, p_depthMaps );
+			UpdateTransparentPipeline( *m_renderTarget.GetCamera(), l_it.second.get().m_pass.m_pipeline, p_depthMaps );
 			l_it.second.get().Render( p_depthMaps );
 
 			if ( p_register )
@@ -912,7 +911,7 @@ namespace Castor3D
 			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 												 , l_fMatShininess
-												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent }
+												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal }
 												 , l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -994,7 +993,7 @@ namespace Castor3D
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 												 , l_fMatShininess
-												 , FragmentInput( vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent )
+												 , FragmentInput( vtx_worldSpacePosition, l_v3Normal )
 												 , l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );

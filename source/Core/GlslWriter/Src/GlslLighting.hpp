@@ -30,11 +30,9 @@ namespace GLSL
 	struct FragmentInput
 	{
 		GlslWriter_API FragmentInput( GlslWriter & p_writer );
-		GlslWriter_API FragmentInput( InParam< Vec3 > const & p_v3Vertex, InParam< Vec3 > const & p_v3Normal, InParam< Vec3 > const & p_v3Tangent, InParam< Vec3 > const & p_v3Bitangent );
+		GlslWriter_API FragmentInput( InParam< Vec3 > const & p_v3Vertex, InParam< Vec3 > const & p_v3Normal );
 		InParam< Vec3 > m_v3Vertex;
 		InParam< Vec3 > m_v3Normal;
-		InParam< Vec3 > m_v3Tangent;
-		InParam< Vec3 > m_v3Bitangent;
 	};
 
 	struct OutputComponents

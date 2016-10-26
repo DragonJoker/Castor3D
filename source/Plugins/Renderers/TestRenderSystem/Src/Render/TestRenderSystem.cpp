@@ -46,9 +46,9 @@ namespace TestRender
 		return std::make_shared< TestContext >( *this );
 	}
 
-	GeometryBuffersUPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
+	GeometryBuffersSPtr TestRenderSystem::CreateGeometryBuffers( Topology p_topology, ShaderProgram const & p_program )
 	{
-		return std::make_unique< TestGeometryBuffers >( p_topology, p_program );
+		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
 	PipelineUPtr TestRenderSystem::CreatePipeline( DepthStencilState && p_dsState

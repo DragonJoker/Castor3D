@@ -246,10 +246,13 @@ namespace Castor3D
 		PipelineUPtr m_updatePipeline;
 		//!\~english	The geometry buffers used to update the transform buffer.
 		//!\~french		Les tampons de géométrie utilisé pour mettre à jour le tampon de transformation.
-		GeometryBuffersSPtr m_updateGeometryBuffers;
+		std::array< GeometryBuffersSPtr, 2 > m_updateGeometryBuffers;
 		//!\~english	The vertex buffers used to update the transform buffer.
 		//!\~french		Le tampon de sommets utilisé pour mettre à jour le tampon de transformation.
-		VertexBufferSPtr m_updateParticlesBuffers;
+		std::array< VertexBufferSPtr, 2 > m_updateVertexBuffers;
+		//!\~english	The transform feedback used to update the particles.
+		//!\~french		Le transform feedback utilisé pour mettre à jour les particules.
+		std::array< TransformFeedbackUPtr, 2 > m_transformFeedbacks;
 		//!\~english	The frame variable buffer holding particle system related variables.
 		//!\~french		Le tampon de variables contenant les variables relatives au système de particules.
 		FrameVariableBufferSPtr m_ubo;
@@ -268,9 +271,6 @@ namespace Castor3D
 		//!\~english	The frame variable holding the secondary shells lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des particules secondaires.
 		OneFloatFrameVariableSPtr m_secondaryShellLifetime;
-		//!\~english	The transform feedback used to update the particles.
-		//!\~french		Le transform feedback utilisé pour mettre à jour les particules.
-		TransformFeedbackUPtr m_transformFeedbacks;
 		//!\~english	The timer, for the particles update.
 		//!\~french		Le timer, pour la mise à jour des particules.
 		Castor::PreciseTimer m_timer;
@@ -283,6 +283,8 @@ namespace Castor3D
 		//!\~english	The total elapsed time.
 		//!\~french		Le temps total écoulé.
 		float m_totalTime{ 0.0f };
+		uint32_t m_vtx{ 0u };
+		uint32_t m_tfb{ 1u };
 	};
 }
 

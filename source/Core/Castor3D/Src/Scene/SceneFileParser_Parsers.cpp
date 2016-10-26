@@ -1229,6 +1229,25 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+		IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemDimensions )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->Get( l_parsingContext->size );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -1250,6 +1269,7 @@ namespace Castor3D
 
 			auto l_particleSystem = l_parsingContext->pScene->GetParticleSystemCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->uiUInt32 );
 			l_particleSystem->SetMaterial( l_parsingContext->pMaterial );
+			l_particleSystem->SetDimensions( l_parsingContext->size );
 		}
 	}
 	END_ATTRIBUTE_POP()

@@ -84,19 +84,27 @@ namespace Castor3D
 	ParticleSystem::ParticleSystem( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count )
 		: Named{ p_name }
 		, OwnedBy< Scene >{ p_scene }
-		, m_computed{
+		, m_computed
 		{
-			BufferElementDeclaration( cuT( "geo_type" ), 0u, ElementType::Float ),
-			BufferElementDeclaration( cuT( "geo_position" ), 0u, ElementType::Vec3 ),
-			BufferElementDeclaration( cuT( "geo_velocity" ), 0u, ElementType::Vec3 ),
-			BufferElementDeclaration( cuT( "geo_lifetime" ), 0u, ElementType::Float ),
-		} }
+			{
+				BufferElementDeclaration( cuT( "geo_type" ), 0u, ElementType::Float ),
+				BufferElementDeclaration( cuT( "geo_position" ), 0u, ElementType::Vec3 ),
+				BufferElementDeclaration( cuT( "geo_velocity" ), 0u, ElementType::Vec3 ),
+				BufferElementDeclaration( cuT( "geo_lifetime" ), 0u, ElementType::Float ),
+			}
+		}
 		, m_particlesBillboard{ std::make_unique< BillboardListBase >( p_name
 																	   , p_scene
 																	   , p_parent
 																	   , std::make_shared< VertexBuffer >( *p_scene.GetEngine(), DoCreateDeclaration() ) ) }
 		, m_particlesCount{ p_count }
-		, m_updateParticlesBuffers{ std::make_shared< VertexBuffer >( *p_scene.GetEngine(), DoCreateDeclaration() ) }
+		, m_updateVertexBuffers
+		{
+			{
+				std::make_shared< VertexBuffer >( *p_scene.GetEngine(), DoCreateDeclaration() ),
+				std::make_shared< VertexBuffer >( *p_scene.GetEngine(), DoCreateDeclaration() )
+			}
+		}
 		, m_randomTexture{ *p_scene.GetEngine() }
 	{
 	}
@@ -137,27 +145,22 @@ namespace Castor3D
 
 		m_updatePipeline->Cleanup();
 		m_updatePipeline.reset();
-		m_updateGeometryBuffers->Cleanup();
-		m_updateGeometryBuffers.reset();
+
+		for ( size_t i = 0u; i < 2; ++i )
+		{
+			m_updateGeometryBuffers[i]->Cleanup();
+			m_updateGeometryBuffers[i].reset();
+			m_transformFeedbacks[i]->Cleanup();
+			m_transformFeedbacks[i].reset();
+			m_updateVertexBuffers[i]->Destroy();
+		}
+
 		m_updateProgram.reset();
-
-		m_transformFeedbacks->Cleanup();
-		m_transformFeedbacks.reset();
-
-		m_updateParticlesBuffers->Destroy();
 	}
 
 	void ParticleSystem::Update()
 	{
-#if !defined( NDEBUG )
-
-		auto l_time = 40.0f;
-
-#else
-
 		auto l_time = float( m_timer.TimeMs() );
-
-#endif
 
 		if ( m_firstUpdate )
 		{
@@ -167,46 +170,42 @@ namespace Castor3D
 		m_totalTime += l_time;
 		m_deltaTime->SetValue( l_time );
 		m_time->SetValue( m_totalTime );
-		auto & l_gbuffers = *m_updateGeometryBuffers;
-		auto & l_transform = *m_transformFeedbacks;
+		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];
+		auto & l_transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->Apply();
 		m_ubo->Bind( 0 );
 		m_randomTexture.Bind();
 		l_transform.Bind();
 
-		if ( m_firstUpdate )
-		{
-			l_gbuffers.Draw( 1, 0 );
-			m_firstUpdate = false;
-		}
-		else
-		{
-			l_gbuffers.Draw( m_transformFeedbacks->GetWrittenPrimitives(), 0 );
-		}
+		l_gbuffers.Draw( std::max( 1u, m_transformFeedbacks[m_vtx]->GetWrittenPrimitives() ), 0 );
 
 		l_transform.Unbind();
 		m_randomTexture.Unbind();
-		m_updateParticlesBuffers->Copy( m_particlesBillboard->GetVertexBuffer(), m_transformFeedbacks->GetWrittenPrimitives() * m_computed.GetStride() );
+		auto const l_written = std::max( 1u, l_transform.GetWrittenPrimitives() );
+		auto const l_count = uint32_t( m_computed.GetStride() * std::max( 1u, l_written ) );
+		m_particlesBillboard->GetVertexBuffer().Copy( *m_updateVertexBuffers[m_tfb], l_count );
 
-#if 0 && !defined( NDEBUG )
+#if 1 && !defined( NDEBUG )
 
-		m_updateParticlesBuffers->Bind();
-		auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, m_transformFeedbacks->GetWrittenPrimitives() ) );
-		auto l_buffer = reinterpret_cast< Particle * >( m_updateParticlesBuffers->Lock( 0, l_count, AccessType::Read ) );
+		m_particlesBillboard->GetVertexBuffer().Bind();
+		auto l_buffer = reinterpret_cast< Particle * >( m_particlesBillboard->GetVertexBuffer().Lock( 0, l_count, AccessType::Read ) );
 
 		if ( l_buffer )
 		{
 			Particle l_particles[10000];
 			std::memcpy( l_particles, l_buffer, l_count );
-			m_updateParticlesBuffers->Unlock();
+			m_particlesBillboard->GetVertexBuffer().Unlock();
 		}
 
-		m_updateParticlesBuffers->Unbind();
+		m_particlesBillboard->GetVertexBuffer().Unbind();
 
 #endif
 
-		m_particlesBillboard->SetCount( l_transform.GetWrittenPrimitives() );
+		m_particlesBillboard->SetCount( l_written );
+		m_vtx = m_tfb;
+		m_tfb = 1 - m_tfb;
+		m_firstUpdate = false;
 	}
 
 	void ParticleSystem::SetMaterial( MaterialSPtr p_material )
@@ -314,7 +313,6 @@ namespace Castor3D
 			auto l_randomDir = [&]( Float const & p_uv )
 			{
 				auto l_dir = l_writer.GetLocale( cuT( "l_dir" ), texture( c3d_mapRandom, p_uv ).xyz() );
-				l_dir -= vec3( Float( 0.5 ), 0.5, 0.5 );
 				l_writer.Return( l_dir );
 			};
 			l_writer.ImplementFunction< Vec3 >( cuT( "GetRandomDir" )
@@ -329,40 +327,30 @@ namespace Castor3D
 				{
 					IF( l_writer, l_age >= c3d_fLancherLifetime )
 					{
-						geo_type = PARTICLE_TYPE_LAUNCHER;
-						geo_position = vtx_position[0];
-						geo_velocity = vtx_velocity[0];
-						geo_lifetime = Float( 0.0f );
-						l_writer.EmitVertex();
-						l_writer.EndPrimitive();
-
 						geo_type = PARTICLE_TYPE_SHELL;
 						geo_position = vtx_position[0];
-						auto l_dir = l_writer.GetLocale( cuT( "l_dir" ), WriteFunctionCall< Vec3 >( &l_writer, cuT( "GetRandomDir" ), c3d_fTime / 1000.0f ) );
-						l_dir.y() = max( l_dir.y(), 0.5 );
-						geo_velocity = normalize( l_dir ) / 20.0;
+						auto l_dir = l_writer.GetLocale( cuT( "l_dir" ), WriteFunctionCall< Vec3 >( &l_writer, cuT( "GetRandomDir" ), c3d_fTime / 1000.0f ) * 5.0f );
+						l_dir.y() = max( l_dir.y() * 7.0f, 10.0f );
+						geo_velocity = l_dir;
 						geo_lifetime = Float( 0.0 );
 						l_writer.EmitVertex();
 						l_writer.EndPrimitive();
-					}
-					ELSE
-					{
-						geo_type = PARTICLE_TYPE_LAUNCHER;
-						geo_position = vtx_position[0];
-						geo_velocity = vtx_velocity[0];
-						geo_lifetime = l_age;
-						l_writer.EmitVertex();
-						l_writer.EndPrimitive();
+						l_age = Float( 0.0f );
 					}
 					FI;
+
+					geo_type = PARTICLE_TYPE_LAUNCHER;
+					geo_position = vtx_position[0];
+					geo_velocity = vtx_velocity[0];
+					geo_lifetime = l_age;
+					l_writer.EmitVertex();
+					l_writer.EndPrimitive();
 				}
 				ELSE
 				{
 					auto l_deltaTime = l_writer.GetLocale( cuT( "l_deltaTime" ), c3d_fDeltaTime / 1000.0f );
-					auto l_t1 = l_writer.GetLocale( cuT( "l_t1" ), vtx_lifetime[0] / 1000.0 );
-					auto l_t2 = l_writer.GetLocale( cuT( "l_t2" ), l_age / 1000.0 );
 					auto l_deltaP = l_writer.GetLocale( cuT( "l_deltaP" ), vec3( l_deltaTime ) * vtx_velocity[0] );
-					auto l_deltaV = l_writer.GetLocale( cuT( "l_deltaV" ), vec3( l_deltaTime ) * vec3( Float( 0.0 ), -9.81, 0.0 ) );
+					auto l_deltaV = l_writer.GetLocale( cuT( "l_deltaV" ), vec3( l_deltaTime ) * vec3( Float( 0.0 ), -0.981, 0.0 ) );
 
 					IF( l_writer, vtx_type[0] == PARTICLE_TYPE_SHELL )
 					{
@@ -381,8 +369,8 @@ namespace Castor3D
 							{
 								geo_type = PARTICLE_TYPE_SECONDARY_SHELL;
 								geo_position = vtx_position[0];
-								auto l_dir = l_writer.GetLocale( cuT( "l_dir" ), WriteFunctionCall< Vec3 >( &l_writer, cuT( "GetRandomDir" ), ( c3d_fTime + i ) / 1000.0f ) );
-								geo_velocity = normalize( l_dir ) / 20.0;
+								auto l_dir = l_writer.GetLocale( cuT( "l_dir" ), WriteFunctionCall< Vec3 >( &l_writer, cuT( "GetRandomDir" ), ( c3d_fTime + i ) / 1000.0f ) * 5.0f );
+								geo_velocity = l_dir + vtx_velocity[0] / 2;
 								geo_lifetime = Float( 0.0 );
 								l_writer.EmitVertex();
 								l_writer.EndPrimitive();
@@ -441,35 +429,36 @@ namespace Castor3D
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
 		bool l_return = DoCreateUpdateProgram();
 
-		if ( l_return )
+		Particle l_particle
 		{
-			l_return = m_updateParticlesBuffers->Create();
-		}
+			float( Particle::Type::Launcher ),
+			Point3r{ 0, 0, 0 },
+			Point3r{ 0.0f, 0.0001f, 0.0f },
+			0.0f
+		};
 
-		if ( l_return )
+		for ( uint32_t i = 0; i < 2 && l_return; ++i )
 		{
-			Particle l_particle
+			l_return = m_updateVertexBuffers[i]->Create();
+
+			if ( l_return )
 			{
-				float( Particle::Type::Launcher ),
-				Point3r{ 0, 0, 0 },
-				Point3r{ 0.0f, 0.0001f, 0.0f },
-				0.0f
-			};
-			m_updateParticlesBuffers->Resize( uint32_t( m_particlesCount ) * m_computed.GetStride() );
-			std::memcpy( m_updateParticlesBuffers->data(), &l_particle, m_computed.GetStride() );
-			l_return = m_updateParticlesBuffers->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				m_updateVertexBuffers[i]->Resize( uint32_t( m_particlesCount ) * m_computed.GetStride() );
+				std::memcpy( m_updateVertexBuffers[i]->data(), &l_particle, m_computed.GetStride() );
+				l_return = m_updateVertexBuffers[i]->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			}
 		}
 
-		if ( l_return )
+		for ( uint32_t i = 0; i < 2 && l_return; ++i )
 		{
-			m_updateGeometryBuffers = l_renderSystem.CreateGeometryBuffers( Topology::Points, *m_updateProgram );
-			l_return = m_updateGeometryBuffers->Initialise( { *m_updateParticlesBuffers }, nullptr );
-		}
+			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::Points, *m_updateProgram );
+			l_return = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
 
-		if ( l_return )
-		{
-			m_transformFeedbacks = l_renderSystem.CreateTransformFeedback( m_computed, Topology::Points, *m_updateProgram );
-			l_return = m_transformFeedbacks->Initialise( { m_particlesBillboard->GetVertexBuffer() } );
+			if ( l_return )
+			{
+				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::Points, *m_updateProgram );
+				l_return = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
+			}
 		}
 
 		if ( l_return )
@@ -478,16 +467,18 @@ namespace Castor3D
 			l_rs.SetDiscardPrimitives( true );
 			m_updatePipeline = l_renderSystem.CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
 
-			auto l_texture = l_renderSystem.CreateTexture( TextureType::OneDimension, AccessType::Write, AccessType::Read, PixelFormat::RGB32F, Size{ 1024, 1 } );
+			auto l_texture = l_renderSystem.CreateTexture( TextureType::OneDimension, AccessType::None, AccessType::Read, PixelFormat::RGB32F, Size{ 1024, 1 } );
 			l_texture->GetImage().InitialiseSource();
 			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::RGB32F > >( l_texture->GetImage().GetBuffer() );
 			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
 
 			static std::random_device l_device;
-			std::uniform_real_distribution< float > l_distribution;
+			std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
 
-			for ( uint32_t i{ 0u }; i < l_buffer.count() * 3; ++i )
+			for ( uint32_t i{ 0u }; i < l_buffer.count(); ++i )
 			{
+				*l_pixels++ = l_distribution( l_device );
+				*l_pixels++ = l_distribution( l_device );
 				*l_pixels++ = l_distribution( l_device );
 			}
 
@@ -501,6 +492,7 @@ namespace Castor3D
 			m_randomTexture.SetSampler( l_sampler );
 			m_randomTexture.SetIndex( 0 );
 			m_randomTexture.Initialise();
+			l_texture->GenerateMipmaps();
 		}
 
 		return l_return;

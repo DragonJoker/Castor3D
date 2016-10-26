@@ -13,8 +13,6 @@ namespace GLSL
 		StringStream l_return;
 		l_return << ParamToString( p_sep, p_value.m_v3Vertex );
 		l_return << ParamToString( p_sep, p_value.m_v3Normal );
-		l_return << ParamToString( p_sep, p_value.m_v3Tangent );
-		l_return << ParamToString( p_sep, p_value.m_v3Bitangent );
 		return l_return.str();
 	}
 
@@ -31,9 +29,7 @@ namespace GLSL
 	{
 		StringStream l_return;
 		l_return << ToString( p_value.m_v3Vertex ) << ", ";
-		l_return << ToString( p_value.m_v3Normal ) << ", ";
-		l_return << ToString( p_value.m_v3Tangent ) << ", ";
-		l_return << ToString( p_value.m_v3Bitangent );
+		l_return << ToString( p_value.m_v3Normal );
 		return l_return.str();
 	}
 
@@ -51,19 +47,13 @@ namespace GLSL
 	FragmentInput::FragmentInput( GlslWriter & p_writer )
 		: m_v3Vertex{ &p_writer, cuT( "p_v3Vertex" ) }
 		, m_v3Normal{ &p_writer, cuT( "p_v3Normal" ) }
-		, m_v3Tangent{ &p_writer, cuT( "p_v3Tangent" ) }
-		, m_v3Bitangent{ &p_writer, cuT( "p_v3Bitangent" ) }
 	{
 	}
 
 	FragmentInput::FragmentInput( InParam< Vec3 > const & p_v3Vertex
-								  , InParam< Vec3 > const & p_v3Normal
-								  , InParam< Vec3 > const & p_v3Tangent
-								  , InParam< Vec3 > const & p_v3Bitangent )
+								  , InParam< Vec3 > const & p_v3Normal )
 		: m_v3Vertex{ p_v3Vertex }
 		, m_v3Normal{ p_v3Normal }
-		, m_v3Tangent{ p_v3Tangent }
-		, m_v3Bitangent{ p_v3Bitangent }
 	{
 	}
 

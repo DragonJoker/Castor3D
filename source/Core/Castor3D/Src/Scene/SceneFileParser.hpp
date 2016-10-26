@@ -111,6 +111,7 @@ namespace Castor3D
 		Castor::String strName;
 		Castor::String strName2;
 		Castor::Path path;
+		Castor::Size size;
 		uint8_t uiUInt8;
 		uint16_t uiUInt16;
 		uint32_t uiUInt32;

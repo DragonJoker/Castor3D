@@ -99,6 +99,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemParent )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemCount )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemMaterial )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemDimensions )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd )
 
 	// Light parsers

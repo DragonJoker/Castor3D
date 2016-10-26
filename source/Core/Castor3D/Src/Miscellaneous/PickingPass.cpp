@@ -317,6 +317,7 @@ namespace Castor3D
 	{
 		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
 		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this } ).first;
+		l_itCam->second.Initialise( p_scene, p_camera );
 	}
 
 	bool PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
@@ -331,6 +332,8 @@ namespace Castor3D
 		if ( l_itScn != m_scenes.end() )
 		{
 			auto l_itCam = l_itScn->second.find( &p_camera );
+
+			if ( l_itCam != l_itScn->second.end() )
 			{
 				l_itCam->second.Update();
 

@@ -580,7 +580,6 @@ namespace Deferred
 				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
 				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
 				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
-				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
 				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
@@ -591,7 +590,7 @@ namespace Deferred
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
 													 , l_fMatShininess
-													 , FragmentInput( l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent )
+													 , FragmentInput( l_v3Position, l_v3Normal )
 													 , l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +

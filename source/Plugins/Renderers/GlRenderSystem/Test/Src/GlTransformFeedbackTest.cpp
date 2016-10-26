@@ -584,7 +584,7 @@ namespace Testing
 		l_vboOut.Resize( 10000 * sizeof( l_particle ) );
 
 		// VAO
-		GeometryBuffersUPtr l_geometryBuffers{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) };
+		GeometryBuffersSPtr l_geometryBuffers{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) };
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
@@ -656,10 +656,10 @@ namespace Testing
 				Shell,
 				SecondaryShell
 			};
-			float m_type;
-			Castor::Point3f m_position;
-			Castor::Point3f m_velocity;
-			float m_lifeTime;
+			float m_type{ float( Type::Launcher ) };
+			Castor::Point3f m_position{ 0, 0, 0 };
+			Castor::Point3f m_velocity{ 0.0f, 0.0001f, 0.0f };
+			float m_lifeTime{ 0.0f };
 		};
 		BufferDeclaration l_outputs
 		{
@@ -679,13 +679,7 @@ namespace Testing
 				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::Float ),
 			}
 		};
-		Particle l_particle
-		{
-			float( Particle::Type::Launcher ),
-			Point3r{ 0, 0, 0 },
-			Point3r{ 0.0f, 0.0001f, 0.0f },
-			0.0f
-		};
+		Particle l_particle;
 
 		// Shader program
 		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
@@ -719,7 +713,7 @@ namespace Testing
 		};
 
 		// VAO
-		GeometryBuffersUPtr l_geometryBuffers[]
+		GeometryBuffersSPtr l_geometryBuffers[]
 		{
 			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) },
 			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) }
