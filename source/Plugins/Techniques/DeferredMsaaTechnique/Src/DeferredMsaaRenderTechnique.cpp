@@ -238,10 +238,8 @@ namespace DeferredMsaa
 		DoCleanupDeferred();
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
+	bool RenderTechnique::DoBeginRender()
 	{
-		m_camera = &p_camera;
-		m_scene = &p_scene;
 		return true;
 	}
 
@@ -282,10 +280,12 @@ namespace DeferredMsaa
 
 		if ( m_msFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
-			m_msFrameBuffer->SetClearColour( m_scene->GetBackgroundColour() );
+			auto & l_scene = *m_renderTarget.GetScene();
+			auto & l_camera = *m_renderTarget.GetCamera();
+			m_msFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
 			m_msFrameBuffer->Clear();
 
-			auto & l_program = m_lightPassShaderPrograms[m_scene->GetFlags()];
+			auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
 			l_program.m_pipeline->Apply();
 
 			m_viewport.Resize( m_size );
@@ -296,11 +296,11 @@ namespace DeferredMsaa
 			{
 				l_program.m_pipeline->ApplyMatrices( *l_program.m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
 				auto & l_sceneBuffer = *l_program.m_sceneUbo;
-				m_scene->GetLightCache().FillShader( l_sceneBuffer );
-				m_scene->GetLightCache().BindLights();
-				m_scene->GetFog().FillShader( l_sceneBuffer );
-				m_scene->FillShader( l_sceneBuffer );
-				m_camera->FillShader( l_sceneBuffer );
+				l_scene.GetLightCache().FillShader( l_sceneBuffer );
+				l_scene.GetLightCache().BindLights();
+				l_scene.GetFog().FillShader( l_sceneBuffer );
+				l_scene.FillShader( l_sceneBuffer );
+				l_camera.FillShader( l_sceneBuffer );
 
 				m_lightPassTextures[size_t( DsTexture::Position )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::Diffuse )]->Bind();
@@ -320,7 +320,7 @@ namespace DeferredMsaa
 				m_lightPassTextures[size_t( DsTexture::Diffuse )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Position )]->Unbind();
 
-				m_scene->GetLightCache().UnbindLights();
+				l_scene.GetLightCache().UnbindLights();
 			}
 
 			m_msFrameBuffer->Unbind();
@@ -345,10 +345,8 @@ namespace DeferredMsaa
 		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
 	}
 
-	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
+	void RenderTechnique::DoEndRender()
 	{
-		m_camera = nullptr;
-		m_scene = nullptr;
 	}
 
 	bool RenderTechnique::DoWriteInto (TextFile & p_file)
@@ -419,7 +417,7 @@ namespace DeferredMsaa
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 

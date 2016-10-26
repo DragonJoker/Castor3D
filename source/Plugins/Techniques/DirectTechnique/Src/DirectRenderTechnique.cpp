@@ -64,13 +64,13 @@ namespace Direct
 	{
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
+	bool RenderTechnique::DoBeginRender()
 	{
 		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
-			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+			m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
 		}
 
@@ -95,7 +95,7 @@ namespace Direct
 	{
 	}
 
-	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
+	void RenderTechnique::DoEndRender()
 	{
 		m_frameBuffer.m_frameBuffer->Unbind();
 

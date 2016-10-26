@@ -122,7 +122,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
+		bool DoBeginRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
@@ -142,7 +142,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
+		void DoEndRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
@@ -154,7 +154,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Castor3D::Camera const & p_camera, Castor3D::Pipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Castor3D::Pipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -228,12 +228,6 @@ namespace Deferred
 		//!\~english	The viewport used when rendering is done.
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
-		//!\~english	The current camera.
-		//!\~french		La caméra actuelle.
-		Castor3D::Camera * m_camera{ nullptr };
-		//!\~english	The current scene.
-		//!\~french		La scène actuelle.
-		Castor3D::Scene * m_scene{ nullptr };
 	};
 }
 

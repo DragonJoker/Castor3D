@@ -315,8 +315,8 @@ namespace Castor3D
 	
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
-		m_scenes.insert( { &p_scene, std::vector< CameraRPtr >{} } ).first->second.push_back( &p_camera );
-		m_renderQueue.AddScene( p_scene );
+		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
+		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this } ).first;
 	}
 
 	bool PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
@@ -326,92 +326,94 @@ namespace Castor3D
 		m_submesh.reset();
 		m_face = 0u;
 
-		for ( auto & l_it : m_scenes )
+		auto l_itScn = m_scenes.find( p_camera.GetScene() );
+
+		if ( l_itScn != m_scenes.end() )
 		{
-			for ( auto & l_camera : l_it.second )
+			auto l_itCam = l_itScn->second.find( &p_camera );
 			{
-				m_renderQueue.Prepare( *l_camera, *l_it.first );
-			}
-		}
+				l_itCam->second.Update();
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
-		{
-			m_frameBuffer->Clear();
-			p_camera.Apply();
-			auto & l_nodes = m_renderQueue.GetRenderNodes( p_camera, *m_scenes.begin()->first );
-			DoRenderOpaqueNodes( l_nodes, p_camera );
-			DoRenderTransparentNodes( l_nodes, p_camera );
-			m_frameBuffer->Unbind();
-
-			if ( m_colourTexture->Bind( 0 ) )
-			{
-				Point3f l_pixel;
-				auto l_data = m_colourTexture->Lock( AccessType::Read, 0u );
-
-				if ( l_data )
+				if ( m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 				{
-					auto l_dimensions = m_colourTexture->GetDimensions();
-					auto l_format = m_colourTexture->GetPixelFormat();
-					Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
-					l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
+					m_frameBuffer->Clear();
+					p_camera.Apply();
+					auto & l_nodes = l_itCam->second.GetRenderNodes();
+					DoRenderOpaqueNodes( l_nodes, p_camera );
+					DoRenderTransparentNodes( l_nodes, p_camera );
+					m_frameBuffer->Unbind();
+
+					if ( m_colourTexture->Bind( 0 ) )
+					{
+						Point3f l_pixel;
+						auto l_data = m_colourTexture->Lock( AccessType::Read, 0u );
+
+						if ( l_data )
+						{
+							auto l_dimensions = m_colourTexture->GetDimensions();
+							auto l_format = m_colourTexture->GetPixelFormat();
+							Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
+							l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
 
 #if 0
 
-					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
+							Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
 
 #endif
-					m_colourTexture->Unlock( false, 0u );
-				}
+							m_colourTexture->Unlock( false, 0u );
+						}
 
-				m_colourTexture->Unbind( 0 );
+						m_colourTexture->Unbind( 0 );
 
-				if ( Castor::point::distance_squared( l_pixel ) )
-				{
-					uint32_t l_index = uint32_t( l_pixel[0] );
+						if ( Castor::point::distance_squared( l_pixel ) )
+						{
+							uint32_t l_index = uint32_t( l_pixel[0] );
 
-					switch ( l_index & 0xFF )
-					{
-					case 0u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							switch ( l_index & 0xFF )
+							{
+							case 0u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 1u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_instancedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 1u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_instancedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 2u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_staticGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 2u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_staticGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 3u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_staticGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 3u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_staticGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 4u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 4u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 5u:
-						l_return = true;
-						DoPickFromList( l_nodes.m_animatedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 5u:
+								l_return = true;
+								DoPickFromList( l_nodes.m_animatedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 6u:
-						//DoPickFromList( l_nodes.m_billboards.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 6u:
+								//DoPickFromList( l_nodes.m_billboards.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					case 7u:
-						//DoPickFromList( l_nodes.m_billboards.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-						break;
+							case 7u:
+								//DoPickFromList( l_nodes.m_billboards.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+								break;
 
-					default:
-						FAILURE( "Unsupported index" );
-						break;
+							default:
+								FAILURE( "Unsupported index" );
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -619,16 +621,12 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void PickingPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void PickingPass::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void PickingPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void PickingPass::DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		p_camera.FillShader( l_sceneUbo );
 	}
 
 	void PickingPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )

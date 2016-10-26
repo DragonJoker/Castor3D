@@ -306,6 +306,32 @@ namespace Castor3D
 		{
 			m_view = p_view;
 		}
+		/**
+		 *\~english
+		 *\brief		Connects a client to the changed notification signal.
+		 *\param[in]	p_function	The client function.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Connecte un client au signal de notification de changement.
+		 *\param[in]	p_function	La fonction du client.
+		 *\return		La connexion.
+		 */
+		inline uint32_t Connect( std::function< void( Camera const & ) > p_function )
+		{
+			return m_signalChanged.connect( p_function );
+		}
+		/**
+		 *\~english
+		 *\brief		Disconnects a client from the changed notification signal.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Déconnecte un client du signal de notification de changement.
+		 *\return		La connexion.
+		 */
+		inline void Disconnect( uint32_t p_connection )
+		{
+			m_signalChanged.disconnect( p_connection );
+		}
 
 	private:
 		void OnNodeChanged( SceneNode const & p_node );
@@ -324,6 +350,9 @@ namespace Castor3D
 		//!\~english	Tells if the parent node has changed.
 		//!\~french		Dit si le noeud parent a changé.
 		bool m_nodeChanged{ true };
+		//!\~english	The signal raised when the camera has changed.
+		//!\~french		Le signal levé lorsque la caméra a changé.
+		Castor::Signal< std::function< void( Camera const & ) > > m_signalChanged;
 	};
 }
 

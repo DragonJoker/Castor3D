@@ -206,11 +206,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */
@@ -231,6 +231,9 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
 		void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+
+	private:
+		using CameraQueueMap = std::map< Camera const *, RenderQueue >;
 
 	private:
 		//!\~english	The scenes, and cameras used to render them.
@@ -256,7 +259,7 @@ namespace Castor3D
 		std::set< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	The scenes, and cameras used to render them.
 		//!\~french		Les scènes, et les caméras utilisées pour les dessiner.
-		std::map< SceneRPtr, std::vector< CameraRPtr > > m_scenes;
+		std::map< Scene const *, CameraQueueMap > m_scenes;
 		//!\~english	The picked geometry.
 		//!\~french		La géométrie sélectionnée.
 		GeometryWPtr m_geometry;

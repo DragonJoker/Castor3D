@@ -92,7 +92,6 @@ namespace Castor3D
 		, m_shadowMap{ p_shadowMap }
 		, m_index{ p_index }
 	{
-		m_renderQueue.AddScene( m_scene );
 	}
 
 	ShadowMapPass::~ShadowMapPass()
@@ -277,16 +276,12 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void ShadowMapPass::DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void ShadowMapPass::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void ShadowMapPass::DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void ShadowMapPass::DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
-		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
-		p_camera.FillShader( l_sceneUbo );
 	}
 
 	void ShadowMapPass::DoPrepareOpaqueFrontPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )

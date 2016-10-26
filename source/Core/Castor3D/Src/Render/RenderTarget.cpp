@@ -185,7 +185,7 @@ namespace Castor3D
 
 			if ( !m_renderTechnique )
 			{
-				if ( m_techniqueName == cuT( "msaa" ) )
+				if ( m_techniqueName.find( cuT( "msaa" ) ) != String::npos )
 				{
 					m_bMultisampling = true;
 				}
@@ -203,16 +203,7 @@ namespace Castor3D
 
 			m_size = m_frameBuffer.m_colorTexture.GetTexture()->GetDimensions();
 			m_renderTechnique->Create();
-			uint32_t l_index = p_index;
-			m_renderTechnique->Initialise( l_index );
-
-			SceneSPtr l_scene = GetScene();
-			auto l_camera = m_pCamera.lock();
-
-			if ( l_scene && l_camera )
-			{
-				m_renderTechnique->AddScene( *l_scene, *l_camera );
-			}
+			m_renderTechnique->Initialise( p_index );
 
 			for ( auto l_effect : m_postEffects )
 			{
@@ -318,7 +309,7 @@ namespace Castor3D
 		if ( l_scene )
 		{
 			// Render the scene through the RenderTechnique.
-			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime, m_visibleObjectsCount );
+			m_renderTechnique->Render( p_frameTime, m_visibleObjectsCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
 			if ( p_fb.m_frameBuffer->Bind() )

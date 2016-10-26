@@ -98,7 +98,7 @@ namespace Direct
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
+		bool DoBeginRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
@@ -118,7 +118,7 @@ namespace Direct
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		void DoEndRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera )override;
+		void DoEndRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
