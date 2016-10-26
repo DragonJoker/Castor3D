@@ -92,10 +92,10 @@ namespace Castor3D
 						  , RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > const & p_animatedGeometries = RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap >()
 						  , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > const & p_billboards = RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap >() )
 			: m_scene{ p_scene }
-			, m_staticGeometries{ p_staticGeometries }
-			, m_instancedGeometries{ p_instancedGeometries }
-			, m_animatedGeometries{ p_animatedGeometries }
-			, m_billboards{ p_billboards }
+			, m_staticGeometries( p_staticGeometries )
+			, m_instancedGeometries( p_instancedGeometries )
+			, m_animatedGeometries( p_animatedGeometries )
+			, m_billboards( p_billboards )
 		{
 		}
 	};
