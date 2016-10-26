@@ -136,13 +136,13 @@ namespace Msaa
 		m_pMsDepthBuffer->Cleanup();
 	}
 
-	bool RenderTechnique::DoBeginRender( Scene & p_scene, Camera & p_camera )
+	bool RenderTechnique::DoBeginRender()
 	{
 		bool l_return = m_msFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
 
 		if ( l_return )
 		{
-			m_msFrameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+			m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
 			m_msFrameBuffer->Clear();
 		}
 
@@ -167,7 +167,7 @@ namespace Msaa
 	{
 	}
 
-	void RenderTechnique::DoEndRender( Scene & p_scene, Camera & p_camera )
+	void RenderTechnique::DoEndRender()
 	{
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );

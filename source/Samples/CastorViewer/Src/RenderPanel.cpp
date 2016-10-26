@@ -321,7 +321,7 @@ namespace CastorViewer
 
 		if ( l_camera && l_window && l_scene )
 		{
-			auto & l_shadowMaps = l_window->GetRenderTarget()->GetTechnique()->GetShadowMaps( *l_scene, *l_camera );
+			auto & l_shadowMaps = l_window->GetRenderTarget()->GetTechnique()->GetShadowMaps();
 
 			if ( !l_shadowMaps.empty() )
 			{

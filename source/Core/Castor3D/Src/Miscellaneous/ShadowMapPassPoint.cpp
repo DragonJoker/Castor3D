@@ -109,7 +109,7 @@ namespace Castor3D
 	ShadowMapPassPoint::ShadowMapPassPoint( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
 		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
 	{
-
+		m_renderQueue.Initialise( m_scene );
 	}
 
 	ShadowMapPassPoint::~ShadowMapPassPoint()
@@ -217,7 +217,7 @@ namespace Castor3D
 	{
 		auto l_position = m_light.GetParent()->GetDerivedPosition();
 		m_light.Update( l_position );
-		m_renderQueue.Prepare( m_scene );
+		m_renderQueue.Update();
 		//l_position[2] = -l_position[2];
 
 		for ( auto & l_it : m_frontOpaquePipelines )
@@ -246,7 +246,7 @@ namespace Castor3D
 		if ( m_frameBuffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw ) )
 		{
 			m_frameBuffer->Clear();
-			auto & l_nodes = m_renderQueue.GetRenderNodes( m_scene );
+			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			DoRenderOpaqueNodes( l_nodes );
 			DoRenderTransparentNodes( l_nodes );
 			m_frameBuffer->Unbind();

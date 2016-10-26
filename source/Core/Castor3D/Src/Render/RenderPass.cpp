@@ -199,14 +199,18 @@ namespace Castor3D
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
-		DoUpdateOpaquePipeline( p_camera, p_pipeline, p_depthMaps );
+		DoUpdateOpaquePipeline( p_pipeline, p_depthMaps );
+		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
+		p_camera.FillShader( l_sceneUbo );
 	}
 
 	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
-		DoUpdateTransparentPipeline( p_camera, p_pipeline, p_depthMaps );
+		DoUpdateTransparentPipeline( p_pipeline, p_depthMaps );
+		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
+		p_camera.FillShader( l_sceneUbo );
 	}
 
 	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass, Pipeline & p_pipeline )

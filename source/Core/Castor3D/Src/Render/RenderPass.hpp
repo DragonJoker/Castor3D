@@ -421,25 +421,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Met à jour lee pipeline opaque.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
-		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Met à jour le pipeline transparent.
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.

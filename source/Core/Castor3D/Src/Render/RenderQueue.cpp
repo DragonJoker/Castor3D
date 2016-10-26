@@ -185,7 +185,7 @@ namespace Castor3D
 							  , Submesh & p_submesh
 							  , Geometry & p_primitive
 							  , RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > & p_static
-							  , RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesByPipelineMap > & p_instanced )
+							  , RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap > & p_instanced )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
 			{
@@ -260,7 +260,7 @@ namespace Castor3D
 		void DoSortRenderNodes( RenderPass & p_renderPass
 								, Scene & p_scene
 								, RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > & p_static
-								, RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap, SubmeshStaticRenderNodesByPipelineMap > & p_instanced
+								, RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap > & p_instanced
 								, RenderNodesT< AnimatedGeometryRenderNode, AnimatedGeometryRenderNodesByPipelineMap > & p_animated )
 		{
 			p_static.m_opaqueRenderNodesFront.clear();
@@ -451,186 +451,163 @@ namespace Castor3D
 	{
 	}
 
-	RenderQueue::~RenderQueue()
+	void RenderQueue::Initialise( Scene & p_scene, Camera & p_camera )
 	{
+		Initialise( p_scene );
+		m_cameraChanged = p_camera.Connect( std::bind( &RenderQueue::OnCameraChanged, this, std::placeholders::_1 ) );
+		OnCameraChanged( p_camera );
+		m_camera = &p_camera;
+		m_preparedRenderNodes = std::make_unique< SceneRenderNodes >( p_scene );
 	}
 
-	void RenderQueue::Prepare( Camera const & p_camera, Scene & p_scene )
+	void RenderQueue::Initialise( Scene & p_scene )
 	{
-		auto l_node = p_camera.GetParent();
+		m_sceneChanged = p_scene.Connect( std::bind( &RenderQueue::OnSceneChanged, this, std::placeholders::_1 ) );
+		OnSceneChanged( p_scene );
+		m_renderNodes = std::make_unique< SceneRenderNodes >( p_scene );
+	}
 
-		if ( l_node )
+	void RenderQueue::Update()
+	{
+		if ( m_changed )
 		{
-			auto const l_position = l_node->GetDerivedPosition();
-			auto const l_orientation = l_node->GetDerivedOrientation();
-			auto l_itPosition = m_cameraPositions.insert( { &p_camera
-														  , { l_position + Point3r{ 1.0_r, 1.0_r, 1.0_r }
-															  , l_orientation + Quaternion{ Point4r{ 1.0_r, 1.0_r, 1.0_r, 1.0_r } } } } ).first;
-			auto l_continue = Prepare( p_scene );
-			auto l_itNodes = m_scenesRenderNodes.find( &p_scene );
+			DoSortRenderNodes();
 
-			if ( l_continue
-				 || l_itPosition->second.first != l_position
-				 || l_itPosition->second.second != l_orientation )
+			if ( m_camera )
 			{
-				auto l_itCamera = m_preparedRenderNodes.insert( { &p_camera, SceneRenderNodesMap{} } ).first;
-				auto l_itScene = l_itCamera->second.insert( { &p_scene, SceneRenderNodes{ p_scene } } ).first;
-
-				DoPrepareRenderNodes( p_camera, l_itNodes->second, l_itScene->second );
-				l_itPosition->second.first = l_position;
-				l_itPosition->second.second = l_orientation;
+				DoPrepareRenderNodes();
 			}
 		}
-	}
-
-	bool RenderQueue::Prepare( Scene & p_scene )
-	{
-		auto l_itNodes = m_scenesRenderNodes.insert( { &p_scene,{ p_scene } } ).first;
-		auto l_itNew = std::find( m_newScenes.begin(), m_newScenes.end(), &p_scene );
-		bool l_return{ false };
-
-		if ( l_itNew != m_newScenes.end() )
-		{
-			DoSortRenderNodes( l_itNodes->second );
-			m_newScenes.erase( l_itNew );
-			l_return = true;
-		}
-		else
-		{
-			auto l_it = m_changedScenes.find( &p_scene );
-
-			if ( l_it != m_changedScenes.end() )
-			{
-				m_changedScenes.erase( l_it );
-				DoSortRenderNodes( l_itNodes->second );
-				l_return = true;
-			}
-		}
-
-		return l_return;
-	}
-
-	void RenderQueue::AddScene( Scene & p_scene )
-	{
-		m_newScenes.push_back( &p_scene );
-		m_scenes.insert( { &p_scene, p_scene.Connect( std::bind( &RenderQueue::OnSceneChanged, this, std::placeholders::_1 ) ) } );
 	}
 	
-	SceneRenderNodes & RenderQueue::GetRenderNodes( Camera const & p_camera, Scene & p_scene )
+	SceneRenderNodes & RenderQueue::GetRenderNodes()
 	{
-		static SceneRenderNodes l_dummy{ p_scene };
-		auto l_itCam = m_preparedRenderNodes.find( &p_camera );
-
-		if ( l_itCam != m_preparedRenderNodes.end() )
+		if ( m_camera )
 		{
-			auto l_itScene = l_itCam->second.find( &p_scene );
-
-			if ( l_itScene != l_itCam->second.end() )
-			{
-				return l_itScene->second;
-			}
+			REQUIRE( m_preparedRenderNodes );
+			return *m_preparedRenderNodes;
 		}
 
-		return l_dummy;
-	}
-	
-	SceneRenderNodes & RenderQueue::GetRenderNodes( Scene & p_scene )
-	{
-		static SceneRenderNodes l_dummy{ p_scene };
-		auto l_itScene = m_scenesRenderNodes.find( &p_scene );
-
-		if ( l_itScene != m_scenesRenderNodes.end() )
-		{
-			return l_itScene->second;
-		}
-
-		return l_dummy;
+		return *m_renderNodes;
 	}
 
-	void RenderQueue::DoPrepareRenderNodes( Camera const & p_camera, SceneRenderNodes const & p_inputNodes, SceneRenderNodes & p_outputNodes )
+	void RenderQueue::DoPrepareRenderNodes()
 	{
-		p_outputNodes.m_instancedGeometries.m_opaqueRenderNodesFront.clear();
-		p_outputNodes.m_instancedGeometries.m_opaqueRenderNodesBack.clear();
-		p_outputNodes.m_instancedGeometries.m_transparentRenderNodesFront.clear();
-		p_outputNodes.m_instancedGeometries.m_transparentRenderNodesBack.clear();
-		p_outputNodes.m_staticGeometries.m_opaqueRenderNodesFront.clear();
-		p_outputNodes.m_staticGeometries.m_opaqueRenderNodesBack.clear();
-		p_outputNodes.m_staticGeometries.m_transparentRenderNodesFront.clear();
-		p_outputNodes.m_staticGeometries.m_transparentRenderNodesBack.clear();
-		p_outputNodes.m_animatedGeometries.m_opaqueRenderNodesFront.clear();
-		p_outputNodes.m_animatedGeometries.m_opaqueRenderNodesBack.clear();
-		p_outputNodes.m_animatedGeometries.m_transparentRenderNodesFront.clear();
-		p_outputNodes.m_animatedGeometries.m_transparentRenderNodesBack.clear();
-		p_outputNodes.m_billboards.m_opaqueRenderNodesFront.clear();
-		p_outputNodes.m_billboards.m_opaqueRenderNodesBack.clear();
-		p_outputNodes.m_billboards.m_transparentRenderNodesFront.clear();
-		p_outputNodes.m_billboards.m_transparentRenderNodesBack.clear();
+		m_preparedRenderNodes->m_instancedGeometries.m_opaqueRenderNodesFront.clear();
+		m_preparedRenderNodes->m_instancedGeometries.m_opaqueRenderNodesBack.clear();
+		m_preparedRenderNodes->m_instancedGeometries.m_transparentRenderNodesFront.clear();
+		m_preparedRenderNodes->m_instancedGeometries.m_transparentRenderNodesBack.clear();
+		m_preparedRenderNodes->m_staticGeometries.m_opaqueRenderNodesFront.clear();
+		m_preparedRenderNodes->m_staticGeometries.m_opaqueRenderNodesBack.clear();
+		m_preparedRenderNodes->m_staticGeometries.m_transparentRenderNodesFront.clear();
+		m_preparedRenderNodes->m_staticGeometries.m_transparentRenderNodesBack.clear();
+		m_preparedRenderNodes->m_animatedGeometries.m_opaqueRenderNodesFront.clear();
+		m_preparedRenderNodes->m_animatedGeometries.m_opaqueRenderNodesBack.clear();
+		m_preparedRenderNodes->m_animatedGeometries.m_transparentRenderNodesFront.clear();
+		m_preparedRenderNodes->m_animatedGeometries.m_transparentRenderNodesBack.clear();
+		m_preparedRenderNodes->m_billboards.m_opaqueRenderNodesFront.clear();
+		m_preparedRenderNodes->m_billboards.m_opaqueRenderNodesBack.clear();
+		m_preparedRenderNodes->m_billboards.m_transparentRenderNodesFront.clear();
+		m_preparedRenderNodes->m_billboards.m_transparentRenderNodesBack.clear();
 
-		auto l_checkVisible = [&p_camera]( SceneNode & p_node, auto const & p_data )
-		{
-			return true;
-		};
+		auto & l_camera = *m_camera;
 
-		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_opaqueRenderNodesFront
+		DoTraverseNodes( m_renderNodes->m_instancedGeometries.m_opaqueRenderNodesFront
 						 , std::bind( DoAddRenderNodes
-									  , std::ref( p_camera )
-									  , std::ref( p_outputNodes.m_instancedGeometries.m_opaqueRenderNodesFront )
+									  , std::ref( l_camera )
+									  , std::ref( m_preparedRenderNodes->m_instancedGeometries.m_opaqueRenderNodesFront )
 									  , std::placeholders::_1
 									  , std::placeholders::_2
 									  , std::placeholders::_3
 									  , std::placeholders::_4 ) );
 
-		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_opaqueRenderNodesBack
+		DoTraverseNodes( m_renderNodes->m_instancedGeometries.m_opaqueRenderNodesBack
 						 , std::bind( DoAddRenderNodes
-									  , std::ref( p_camera )
-									  , std::ref( p_outputNodes.m_instancedGeometries.m_opaqueRenderNodesBack )
+									  , std::ref( l_camera )
+									  , std::ref( m_preparedRenderNodes->m_instancedGeometries.m_opaqueRenderNodesBack )
 									  , std::placeholders::_1
 									  , std::placeholders::_2
 									  , std::placeholders::_3
 									  , std::placeholders::_4 ) );
 
-		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_transparentRenderNodesFront
+		DoTraverseNodes( m_renderNodes->m_instancedGeometries.m_transparentRenderNodesFront
 						 , std::bind( DoAddRenderNodes
-									  , std::ref( p_camera )
-									  , std::ref( p_outputNodes.m_instancedGeometries.m_transparentRenderNodesFront )
+									  , std::ref( l_camera )
+									  , std::ref( m_preparedRenderNodes->m_instancedGeometries.m_transparentRenderNodesFront )
 									  , std::placeholders::_1
 									  , std::placeholders::_2
 									  , std::placeholders::_3
 									  , std::placeholders::_4 ) );
 
-		DoTraverseNodes( p_inputNodes.m_instancedGeometries.m_transparentRenderNodesBack
+		DoTraverseNodes( m_renderNodes->m_instancedGeometries.m_transparentRenderNodesBack
 						 , std::bind( DoAddRenderNodes
-									  , std::ref( p_camera )
-									  , std::ref( p_outputNodes.m_instancedGeometries.m_transparentRenderNodesBack )
+									  , std::ref( l_camera )
+									  , std::ref( m_preparedRenderNodes->m_instancedGeometries.m_transparentRenderNodesBack )
 									  , std::placeholders::_1
 									  , std::placeholders::_2
 									  , std::placeholders::_3
 									  , std::placeholders::_4 ) );
 
-		DoParseRenderNodes( p_camera, p_inputNodes.m_staticGeometries.m_opaqueRenderNodesFront, p_outputNodes.m_staticGeometries.m_opaqueRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_staticGeometries.m_opaqueRenderNodesBack, p_outputNodes.m_staticGeometries.m_opaqueRenderNodesBack );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_staticGeometries.m_transparentRenderNodesFront, p_outputNodes.m_staticGeometries.m_transparentRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_staticGeometries.m_transparentRenderNodesBack, p_outputNodes.m_staticGeometries.m_transparentRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_staticGeometries.m_opaqueRenderNodesFront
+							, m_preparedRenderNodes->m_staticGeometries.m_opaqueRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_staticGeometries.m_opaqueRenderNodesBack
+							, m_preparedRenderNodes->m_staticGeometries.m_opaqueRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_staticGeometries.m_transparentRenderNodesFront
+							, m_preparedRenderNodes->m_staticGeometries.m_transparentRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_staticGeometries.m_transparentRenderNodesBack
+							, m_preparedRenderNodes->m_staticGeometries.m_transparentRenderNodesBack );
 
-		DoParseRenderNodes( p_camera, p_inputNodes.m_animatedGeometries.m_opaqueRenderNodesFront, p_outputNodes.m_animatedGeometries.m_opaqueRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_animatedGeometries.m_opaqueRenderNodesBack, p_outputNodes.m_animatedGeometries.m_opaqueRenderNodesBack );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_animatedGeometries.m_transparentRenderNodesFront, p_outputNodes.m_animatedGeometries.m_transparentRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_animatedGeometries.m_transparentRenderNodesBack, p_outputNodes.m_animatedGeometries.m_transparentRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_animatedGeometries.m_opaqueRenderNodesFront
+							, m_preparedRenderNodes->m_animatedGeometries.m_opaqueRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_animatedGeometries.m_opaqueRenderNodesBack
+							, m_preparedRenderNodes->m_animatedGeometries.m_opaqueRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_animatedGeometries.m_transparentRenderNodesFront
+							, m_preparedRenderNodes->m_animatedGeometries.m_transparentRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_animatedGeometries.m_transparentRenderNodesBack
+							, m_preparedRenderNodes->m_animatedGeometries.m_transparentRenderNodesBack );
 
-		DoParseRenderNodes( p_camera, p_inputNodes.m_billboards.m_opaqueRenderNodesFront, p_outputNodes.m_billboards.m_opaqueRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_billboards.m_opaqueRenderNodesBack, p_outputNodes.m_billboards.m_opaqueRenderNodesBack );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_billboards.m_transparentRenderNodesFront, p_outputNodes.m_billboards.m_transparentRenderNodesFront );
-		DoParseRenderNodes( p_camera, p_inputNodes.m_billboards.m_transparentRenderNodesBack, p_outputNodes.m_billboards.m_transparentRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_billboards.m_opaqueRenderNodesFront
+							, m_preparedRenderNodes->m_billboards.m_opaqueRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_billboards.m_opaqueRenderNodesBack
+							, m_preparedRenderNodes->m_billboards.m_opaqueRenderNodesBack );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_billboards.m_transparentRenderNodesFront
+							, m_preparedRenderNodes->m_billboards.m_transparentRenderNodesFront );
+		DoParseRenderNodes( l_camera
+							, m_renderNodes->m_billboards.m_transparentRenderNodesBack
+							, m_preparedRenderNodes->m_billboards.m_transparentRenderNodesBack );
 	}
 
-	void RenderQueue::DoSortRenderNodes( SceneRenderNodes & p_nodes )
+	void RenderQueue::DoSortRenderNodes()
 	{
-		Castor3D::DoSortRenderNodes( *GetOwner(), p_nodes.m_scene, p_nodes.m_staticGeometries, p_nodes.m_instancedGeometries, p_nodes.m_animatedGeometries );
-		Castor3D::DoSortRenderNodes( *GetOwner(), p_nodes.m_scene, p_nodes.m_billboards );
+		Castor3D::DoSortRenderNodes( *GetOwner()
+									 , m_renderNodes->m_scene
+									 , m_renderNodes->m_staticGeometries
+									 , m_renderNodes->m_instancedGeometries
+									 , m_renderNodes->m_animatedGeometries );
+		Castor3D::DoSortRenderNodes( *GetOwner()
+									 , m_renderNodes->m_scene
+									 , m_renderNodes->m_billboards );
 	}
 
 	void RenderQueue::OnSceneChanged( Scene const & p_scene )
 	{
-		m_changedScenes.insert( &p_scene );
+		m_changed = true;
+	}
+
+	void RenderQueue::OnCameraChanged( Camera const & p_camera )
+	{
+		m_changed = true;
+		m_camera = &p_camera;
 	}
 }

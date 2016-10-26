@@ -56,6 +56,7 @@ namespace Castor3D
 		}
 
 		m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
+		m_renderQueue.Initialise( m_scene, *m_camera );
 		return l_return;
 	}
 
@@ -74,7 +75,7 @@ namespace Castor3D
 	{
 		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
 		m_camera->Update();
-		m_renderQueue.Prepare( *m_camera, m_scene );
+		m_renderQueue.Update();
 	}
 
 	void ShadowMapPassSpot::DoRender()
@@ -82,7 +83,7 @@ namespace Castor3D
 		if ( m_camera && m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
 			m_frameBuffer->Clear();
-			auto & l_nodes = m_renderQueue.GetRenderNodes( *m_camera, m_scene );
+			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();
 			DoRenderOpaqueNodes( l_nodes, *m_camera );
 			DoRenderTransparentNodes( l_nodes, *m_camera );

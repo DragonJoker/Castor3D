@@ -209,5 +209,6 @@ namespace Castor3D
 	void Camera::OnNodeChanged( SceneNode const & p_node )
 	{
 		m_nodeChanged = true;
+		m_signalChanged( *this );
 	}
 }
