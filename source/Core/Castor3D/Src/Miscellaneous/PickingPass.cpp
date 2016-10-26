@@ -315,8 +315,8 @@ namespace Castor3D
 	
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
-		auto l_itScn = m_scenes.insert( { &p_scene, CameraQueueMap{} } ).first;
-		auto l_itCam = l_itScn->second.insert( std::make_pair( &p_camera, RenderQueue{ *this } ) ).first;
+		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
+		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this } ).first;
 	}
 
 	bool PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
