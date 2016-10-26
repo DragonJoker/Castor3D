@@ -477,6 +477,8 @@ namespace Castor3D
 			{
 				DoPrepareRenderNodes();
 			}
+
+			m_changed = false;
 		}
 	}
 	
