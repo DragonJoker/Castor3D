@@ -225,6 +225,23 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapVariableTypes[cuT( "mat3x3f" )] = uint32_t( FrameVariableType::Mat3x3f );
 	m_mapVariableTypes[cuT( "mat4x4f" )] = uint32_t( FrameVariableType::Mat4x4f );
 
+	m_mapElementTypes[cuT( "int" )] = uint32_t( ElementType::Int );
+	m_mapElementTypes[cuT( "uint" )] = uint32_t( ElementType::UInt );
+	m_mapElementTypes[cuT( "float" )] = uint32_t( ElementType::Float );
+	m_mapElementTypes[cuT( "colour" )] = uint32_t( ElementType::Colour );
+	m_mapElementTypes[cuT( "vec2i" )] = uint32_t( ElementType::IVec2 );
+	m_mapElementTypes[cuT( "vec3i" )] = uint32_t( ElementType::IVec3 );
+	m_mapElementTypes[cuT( "vec4i" )] = uint32_t( ElementType::IVec4 );
+	m_mapElementTypes[cuT( "vec2ui" )] = uint32_t( ElementType::UIVec2 );
+	m_mapElementTypes[cuT( "vec3ui" )] = uint32_t( ElementType::UIVec3 );
+	m_mapElementTypes[cuT( "vec4ui" )] = uint32_t( ElementType::UIVec4 );
+	m_mapElementTypes[cuT( "vec2f" )] = uint32_t( ElementType::Vec2 );
+	m_mapElementTypes[cuT( "vec3f" )] = uint32_t( ElementType::Vec3 );
+	m_mapElementTypes[cuT( "vec4f" )] = uint32_t( ElementType::Vec4 );
+	m_mapElementTypes[cuT( "mat2f" )] = uint32_t( ElementType::Mat2 );
+	m_mapElementTypes[cuT( "mat3f" )] = uint32_t( ElementType::Mat3 );
+	m_mapElementTypes[cuT( "mat4f" )] = uint32_t( ElementType::Mat4 );
+
 	m_mapMovables[cuT( "camera" )] = uint32_t( MovableType::Camera );
 	m_mapMovables[cuT( "light" )] = uint32_t( MovableType::Light );
 	m_mapMovables[cuT( "object" )] = uint32_t( MovableType::Geometry );
@@ -402,6 +419,17 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "skybox" ), Parser_SceneSkybox );
 	AddParser( eSECTION_SCENE, cuT( "fog_type" ), Parser_SceneFogType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_fogTypes ) } );
 	AddParser( eSECTION_SCENE, cuT( "fog_density" ), Parser_SceneFogDensity, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SCENE, cuT( "particle_system" ), Parser_SceneParticleSystem, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "parent" ), Parser_ParticleSystemParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "particles_count" ), Parser_ParticleSystemCount, { MakeParameter< ePARAMETER_TYPE_UINT32 >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "material" ), Parser_ParticleSystemMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "dimensions" ), Parser_ParticleSystemDimensions, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "particle" ), Parser_ParticleSystemParticle );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "shader_program" ), Parser_ParticleSystemShader );
+	AddParser( eSECTION_PARTICLE_SYSTEM, cuT( "}" ), Parser_ParticleSystemEnd );
+
+	AddParser( eSECTION_PARTICLE, cuT( "variable" ), Parser_ParticleVariable, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapElementTypes ), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapLightTypes ) } );
@@ -473,19 +501,19 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "}" ), Parser_UnitEnd );
 
-	AddParser( eSECTION_GLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "vertex_program" ), Parser_VertexShader );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "pixel_program" ), Parser_PixelShader );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "geometry_program" ), Parser_GeometryShader );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "hull_program" ), Parser_HullShader );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "domain_program" ), Parser_DomainShader );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapModels ), MakeParameter< ePARAMETER_TYPE_PATH >() } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveTypes ) } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveOutputTypes ) } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
+	AddParser( eSECTION_SHADER_OBJECT, cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapModels ), MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SHADER_OBJECT, cuT( "sampler" ), Parser_ShaderProgramSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SHADER_OBJECT, cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveTypes ) } );
+	AddParser( eSECTION_SHADER_OBJECT, cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveOutputTypes ) } );
+	AddParser( eSECTION_SHADER_OBJECT, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
 
 	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >( m_mapShaderTypes ) } );
 	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
@@ -705,11 +733,11 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		l_return = cuT( "render_target" );
 		break;
 
-	case eSECTION_GLSL_SHADER:
+	case eSECTION_SHADER_PROGRAM:
 		l_return = cuT( "gl_shader_program" );
 		break;
 
-	case eSECTION_SHADER_PROGRAM:
+	case eSECTION_SHADER_OBJECT:
 		l_return = cuT( "shader_object" );
 		break;
 
@@ -739,6 +767,14 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 
 	case eSECTION_SKYBOX:
 		l_return = cuT( "skybox" );
+		break;
+
+	case eSECTION_PARTICLE_SYSTEM:
+		l_return = cuT( "particle_system" );
+		break;
+
+	case eSECTION_PARTICLE:
+		l_return = cuT( "particle" );
 		break;
 
 	default:

@@ -71,15 +71,15 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates a new program
-		 *\param[in]	p_langage	The wanted shader language
-		 *\return		The newly created program
+		 *\brief		Creates a new program.
+		 *\param[in]	p_initialise	Tells if we want the program to be initialised.
+		 *\return		The newly created program.
 		 *\~french
-		 *\brief		Crée un nouveau programme
-		 *\param[in]	p_langage	Le langage de shader souhaité
-		 *\return		Le programme créé
+		 *\brief		Crée un nouveau programme.
+		 *\param[in]	p_initialise	Dit si on veut que le programme soit initialisé.
+		 *\return		Le programme créé.
 		 */
-		C3D_API ShaderProgramSPtr GetNewProgram();
+		C3D_API ShaderProgramSPtr GetNewProgram( bool p_initialise = true );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags.

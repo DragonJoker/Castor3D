@@ -179,7 +179,7 @@ namespace DeferredMsaa
 		};
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.GetStride();
+		uint32_t l_stride = m_declaration.stride();
 		m_vertexBuffer->Resize( sizeof( l_data ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
@@ -190,11 +190,11 @@ namespace DeferredMsaa
 			l_buffer += l_stride;
 		}
 
-		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::RGBA16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
-		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
-		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
+		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
+		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::RGBA16F32F );
+		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
+		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
 
 		Logger::LogInfo( StringStream() << cuT( "Using Deferred MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
@@ -269,21 +269,21 @@ namespace DeferredMsaa
 		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 		int l_thirdHeight = int( l_height / 3.0f );
 		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Tangent )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
-		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_msFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Position )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Diffuse )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Normals )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Tangent )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Specular )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), InterpolationMode::Linear );
+		m_geometryPassTexAttachs[size_t( DsTexture::Emissive )]->Blit( m_msaaFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), InterpolationMode::Linear );
 
 #else
 
-		if ( m_msFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
+		if ( m_msaaFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw ) )
 		{
 			auto & l_scene = *m_renderTarget.GetScene();
 			auto & l_camera = *m_renderTarget.GetCamera();
-			m_msFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
-			m_msFrameBuffer->Clear();
+			m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
+			m_msaaFrameBuffer->Clear();
 
 			auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
 			l_program.m_pipeline->Apply();
@@ -312,7 +312,7 @@ namespace DeferredMsaa
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				l_program.m_program->UnbindUbos();
-				
+
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Tangent )]->Unbind();
@@ -323,11 +323,11 @@ namespace DeferredMsaa
 				l_scene.GetLightCache().UnbindLights();
 			}
 
-			m_msFrameBuffer->Unbind();
+			m_msaaFrameBuffer->Unbind();
 		}
 
-		m_geometryPassFrameBuffer->BlitInto( *m_msFrameBuffer, m_rect, uint32_t( BufferComponent::Depth ) );
-		m_msFrameBuffer->Bind();
+		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::Depth ) );
+		m_msaaFrameBuffer->Bind();
 
 #endif
 
@@ -341,15 +341,15 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoEndTransparentRendering()
 	{
-		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
+		m_msaaFrameBuffer->Unbind();
+		m_msaaFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
 	}
 
-	bool RenderTechnique::DoWriteInto (TextFile & p_file)
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
 	}
@@ -482,7 +482,7 @@ namespace DeferredMsaa
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
 			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
 
-			IF (l_writer, l_v3Normal != l_v3Tangent )
+			IF( l_writer, l_v3Normal != l_v3Tangent )
 			{
 				auto l_v4Position = l_writer.GetLocale( cuT( "l_v4Position" ), texture( c3d_mapPosition, vtx_texture ) );
 				auto l_v4Diffuse = l_writer.GetLocale( cuT( "l_v4Diffuse" ), texture( c3d_mapDiffuse, vtx_texture ) );
@@ -505,13 +505,14 @@ namespace DeferredMsaa
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
 													 , l_fMatShininess
-													 , FragmentInput( l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent )
+													 , FragmentInput( l_v3Position, l_v3Normal )
 													 , l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
+
 				if ( p_sceneFlags != 0 )
 				{
 					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );
@@ -557,11 +558,11 @@ namespace DeferredMsaa
 
 	bool RenderTechnique::DoCreateMsaa()
 	{
-		bool l_bReturn = m_msFrameBuffer->Create();
-		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
-		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
-		l_bReturn &= m_pMsColorBuffer->Create();
-		l_bReturn &= m_pMsDepthBuffer->Create();
+		bool l_bReturn = m_msaaFrameBuffer->Create();
+		m_msaaColorBuffer->SetSamplesCount( m_samplesCount );
+		m_msaaDepthBuffer->SetSamplesCount( m_samplesCount );
+		l_bReturn &= m_msaaColorBuffer->Create();
+		l_bReturn &= m_msaaDepthBuffer->Create();
 		return l_bReturn;
 	}
 
@@ -581,9 +582,9 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoDestroyMsaa()
 	{
-		m_pMsColorBuffer->Destroy();
-		m_pMsDepthBuffer->Destroy();
-		m_msFrameBuffer->Destroy();
+		m_msaaColorBuffer->Destroy();
+		m_msaaDepthBuffer->Destroy();
+		m_msaaFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )
@@ -643,14 +644,14 @@ namespace DeferredMsaa
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 		m_viewport.Initialise();
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_program->Initialise();
 			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::Triangles, *program.m_program );
-			program.m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 		}
 
 		return l_return;
@@ -663,33 +664,33 @@ namespace DeferredMsaa
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsColorBuffer->Initialise( m_size );
+			l_bReturn = m_msaaColorBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsDepthBuffer->Initialise( m_size );
+			l_bReturn = m_msaaDepthBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msFrameBuffer->Initialise( m_size );
+			l_bReturn = m_msaaFrameBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msFrameBuffer->Bind( FrameBufferMode::Config );
+			l_bReturn = m_msaaFrameBuffer->Bind( FrameBufferMode::Config );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Colour, m_pMsColorAttach );
+				l_bReturn = m_msaaFrameBuffer->Attach( AttachmentPoint::Colour, m_msaaColorAttach );
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Depth, m_pMsDepthAttach );
+					l_bReturn = m_msaaFrameBuffer->Attach( AttachmentPoint::Depth, m_msaaDepthAttach );
 				}
 
-				m_msFrameBuffer->Unbind();
+				m_msaaFrameBuffer->Unbind();
 			}
 		}
 
@@ -706,7 +707,6 @@ namespace DeferredMsaa
 		}
 
 		m_viewport.Cleanup();
-		m_vertexBuffer->Cleanup();
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::Config );
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
@@ -721,11 +721,11 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoCleanupMsaa()
 	{
-		m_msFrameBuffer->Bind( FrameBufferMode::Config );
-		m_msFrameBuffer->DetachAll();
-		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->Cleanup();
-		m_pMsColorBuffer->Cleanup();
-		m_pMsDepthBuffer->Cleanup();
+		m_msaaFrameBuffer->Bind( FrameBufferMode::Config );
+		m_msaaFrameBuffer->DetachAll();
+		m_msaaFrameBuffer->Unbind();
+		m_msaaFrameBuffer->Cleanup();
+		m_msaaColorBuffer->Cleanup();
+		m_msaaDepthBuffer->Cleanup();
 	}
 }

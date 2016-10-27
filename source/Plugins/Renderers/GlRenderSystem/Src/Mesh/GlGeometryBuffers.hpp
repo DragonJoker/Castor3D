@@ -43,13 +43,13 @@ namespace GlRender
 	*/
 	class GlGeometryBuffers
 		: public Castor3D::GeometryBuffers
-		, public Bindable < std::function< bool( int, uint32_t * ) >,
-							std::function< bool( int, uint32_t const * ) >,
-							std::function< bool( uint32_t ) > >
+		, public Bindable< std::function< bool( int, uint32_t * ) >
+			, std::function< bool( int, uint32_t const * ) >
+			, std::function< bool( uint32_t ) > >
 	{
-		using ObjectType = Bindable< std::function< bool( int, uint32_t * ) >,
-									 std::function< bool( int, uint32_t const * ) >,
-									 std::function< bool( uint32_t ) > >;
+		using ObjectType = Bindable< std::function< bool( int, uint32_t * ) >
+			, std::function< bool( int, uint32_t const * ) >
+			, std::function< bool( uint32_t ) > >;
 
 	public:
 		/**
@@ -97,14 +97,10 @@ namespace GlRender
 	private:
 		//! The shader program.
 		Castor3D::ShaderProgram const & m_program;
-		//! The vertex attributes.
-		GlAttributePtrArray m_vertexAttributes;
-		//! The vertex animation attributes.
-		GlAttributePtrArray m_animationAttributes;
-		//! The instantiation matrix attribute.
-		GlAttributePtrArray m_matrixAttributes;
-		//! The bones data attributes.
-		GlAttributePtrArray m_bonesAttributes;
+		//! The vertex, animation, ... attributes.
+		GlAttributePtrArray m_attributes;
+		//! The topology type.
+		GlTopology m_glTopology;
 	};
 }
 

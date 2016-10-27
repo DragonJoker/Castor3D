@@ -6,8 +6,9 @@
 
    Copyright (C) 1998-2005 Gilles Vollant
 */
-#if defined( _WIN32 )
 #include <stdlib.h>
+
+#if defined( _WIN32 )
 
 #include "zlib.h"
 #include "ioapi.h"
@@ -269,4 +270,3 @@ void fill_win32_filefunc (pzlib_filefunc_def)
     pzlib_filefunc_def->opaque=NULL;
 }
 #endif
-

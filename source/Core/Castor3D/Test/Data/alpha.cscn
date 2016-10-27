@@ -72,6 +72,6 @@ scene "Scene"
 			camera "MainCamera"
 		}
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }

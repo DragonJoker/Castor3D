@@ -12,7 +12,7 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTboTextureStorageTraits::GlTboTextureStorageTraits( TextureStorage & p_storage )
-		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), eGL_BUFFER_TARGET_TEXTURE }
+		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::Texture }
 	{
 		REQUIRE( p_storage.GetType() == TextureStorageType::Buffer );
 		bool l_return = m_glBuffer.Create();
@@ -22,13 +22,12 @@ namespace GlRender
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_storage.GetOwner()->GetImage().GetBuffer();
 			m_glInternal = l_storage.GetOpenGl().GetInternal( l_buffer->format() );
-			l_return = m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			l_return = m_glBuffer.Fill( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 		}
 	}
 
 	GlTboTextureStorageTraits::~GlTboTextureStorageTraits()
 	{
-		m_glBuffer.Cleanup();
 		m_glBuffer.Destroy();
 	}
 

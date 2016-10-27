@@ -241,7 +241,7 @@ namespace GuiCommon
 	{
 		ShaderType l_type = ShaderType::Count;
 
-		for (uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
@@ -272,8 +272,8 @@ namespace GuiCommon
 	void ShaderDialog::OnSaveFile( wxCommandEvent & p_event )
 	{
 		ShaderType l_type = ShaderType::Count;
-		
-		for (uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
+
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
@@ -291,7 +291,7 @@ namespace GuiCommon
 
 	void ShaderDialog::OnSaveAll( wxCommandEvent & p_event )
 	{
-		for (uint8_t i = 0; i < uint8_t( ShaderType::Count ); i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); i++ )
 		{
 			DoSave( ShaderType( i ), false );
 		}

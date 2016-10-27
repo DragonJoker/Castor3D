@@ -93,14 +93,16 @@ namespace Castor3D
 		 *\param[in]	p_faces		The faces count.
 		 *\param[in]	p_objects	The objects count.
 		 *\param[in]	p_visible	The visible objects count.
+		 *\param[in]	p_particles	The particles count.
 		 *\~french
 		 *\brief		Met à jour les textes des incrustations de débogage.
 		 *\param[in]	p_vertices	Le nombre de sommets.
 		 *\param[in]	p_faces		Le nombre de faces.
 		 *\param[in]	p_objects	Le nombre d'objets.
 		 *\param[in]	p_visible	Le nombre d'objets visibles.
+		 *\param[in]	p_particles	Le nombre de particules.
 		 */
-		void EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible );
+		void EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles );
 		/**
 		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either EndGpuTask or EndCpuTask
@@ -131,53 +133,80 @@ namespace Castor3D
 #else
 		static const uint32_t FRAME_SAMPLES_COUNT = 20;
 #endif
-		//!\~english The tasks (CPU or GPU) timer.	\~french Le timer pour les tâches (CPU ou GPU).
+		//!\~english	The tasks (CPU or GPU) timer.
+		//!\~french		Le timer pour les tâches (CPU ou GPU).
 		Castor::PreciseTimer m_taskTimer;
-		//!\~english The frame timer.	\~french Le timer de frame.
+		//!\~english	The frame timer.
+		//!\~french		Le timer de frame.
 		Castor::PreciseTimer m_frameTimer;
-		//!\~english The debug timer.	\~french Le timer de debug.
+		//!\~english	The debug timer.
+		//!\~french		Le timer de debug.
 		Castor::PreciseTimer m_debugTimer;
-		//!\~english The base debug panel overlay.	\~french Le panneau d'incrustations de débogage.
+		//!\~english	The base debug panel overlay.
+		//!\~french		Le panneau d'incrustations de débogage.
 		OverlayWPtr m_debugPanel;
-		//!\~english The CPU time value overlay.	\~french L'incrustation contenant la valeur de temps CPU.
+		//!\~english	The CPU time value overlay.
+		//!\~french		L'incrustation contenant la valeur de temps CPU.
 		TextOverlaySPtr m_debugCpuTime;
-		//!\~english The GPU client time value overlay.	\~french L'incrustation contenant la valeur de temps client GPU (Temps perdu).
+		//!\~english	The GPU client time value overlay.
+		//!\~french		L'incrustation contenant la valeur de temps client GPU (Temps perdu).
 		TextOverlaySPtr m_debugGpuClientTime;
-		//!\~english The GPU server time value overlay.	\~french L'incrustation contenant la valeur de temps serveur GPU (Temps de rendu).
+		//!\~english	The GPU server time value overlay.
+		//!\~french		L'incrustation contenant la valeur de temps serveur GPU (Temps de rendu).
 		TextOverlaySPtr m_debugGpuServerTime;
-		//!\~english The debug time value overlay.	\~french L'incrustation contenant la valeur du temps de débogage.
+		//!\~english	The debug time value overlay.
+		//!\~french		L'incrustation contenant la valeur du temps de débogage.
 		TextOverlaySPtr m_debugTime;
-		//!\~english The external time value overlay.	\~french L'incrustation contenant la valeur du temps externe.
+		//!\~english	The external time value overlay.
+		//!\~french		L'incrustation contenant la valeur du temps externe.
 		TextOverlaySPtr m_externTime;
-		//!\~english The total time value overlay.	\~french L'incrustation contenant la valeur de temps total.
+		//!\~english	The total time value overlay.
+		//!\~french		L'incrustation contenant la valeur de temps total.
 		TextOverlaySPtr m_debugTotalTime;
-		//!\~english The average FPS value overlay.	\~french L'incrustation contenant la valeur du nombre moyen d'images par secondes.
+		//!\~english	The average FPS value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre moyen d'images par secondes.
 		TextOverlaySPtr m_debugAverageFps;
-		//!\~english The average time value overlay.	\~french L'incrustation contenant la valeur du temps moyen par images.
+		//!\~english	The average time value overlay.
+		//!\~french		L'incrustation contenant la valeur du temps moyen par images.
 		TextOverlaySPtr m_debugAverageTime;
-		//!\~english The vertex count value overlay.	\~french L'incrustation contenant la valeur du nombre de sommets.
+		//!\~english	The vertex count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre de sommets.
 		TextOverlaySPtr m_debugVertexCount;
-		//!\~english The faces count value overlay.	\~french L'incrustation contenant la valeur du nombre de faces.
+		//!\~english	The faces count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre de faces.
 		TextOverlaySPtr m_debugFaceCount;
-		//!\~english The objects count value overlay.	\~french L'incrustation contenant la valeur du nombre d'objets.
+		//!\~english	The objects count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre d'objets.
 		TextOverlaySPtr m_debugObjectCount;
-		//!\~english The visible objects count value overlay.	\~french L'incrustation contenant la valeur du nombre d'objets visibles.
+		//!\~english	The visible objects count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre d'objets visibles.
 		TextOverlaySPtr m_debugVisibleObjectCount;
-		//!\~english The times of the 100 last frames.	\~french Les temps des 100 dernières frames.
+		//!\~english	The particles count value overlay.
+		//!\~french		L'incrustation contenant la valeur du nombre de particules.
+		TextOverlaySPtr m_debugParticlesCount;
+		//!\~english	The times of the 100 last frames.
+		//!\~french		Les temps des 100 dernières frames.
 		std::array< double, FRAME_SAMPLES_COUNT > m_framesTimes;
-		//!\~english The current frame index in m_framesTimes.	\~french L'index de la frame courante, dans m_framesTimes.
+		//!\~english	The current frame index in m_framesTimes.
+		//!\~french		L'index de la frame courante, dans m_framesTimes.
 		uint32_t m_frameIndex{ 0 };
-		//!\~english Tells if the debug overlays are successfully loaded.	\~french Dit si les incrustations de débogage sont chargées correctement.
+		//!\~english	Tells if the debug overlays are successfully loaded.
+		//!\~french		Dit si les incrustations de débogage sont chargées correctement.
 		bool m_valid{ false };
-		//!\~english Defines if the debug overlays are shown.	\~french Définit si les incrustations de débogage sont affichées ou cachées.
+		//!\~english	Defines if the debug overlays are shown.
+		//!\~french		Définit si les incrustations de débogage sont affichées ou cachées.
 		bool m_visible{ false };
-		//!\~english The CPU time.	\~french Le temps CPU.
+		//!\~english	The CPU time.
+		//!\~french		Le temps CPU.
 		double m_cpuTime{ 0.0 };
-		//!\~english The GPU time.	\~french Le temps GPU.
+		//!\~english	The GPU time.
+		//!\~french		Le temps GPU.
 		double m_gpuTime{ 0.0 };
-		//!\~english The time spent out of the render loop.	\~french Le temps passé hors de la boucle de rendu.
+		//!\~english	The time spent out of the render loop.
+		//!\~french		Le temps passé hors de la boucle de rendu.
 		double m_externalTime{ 0.0 };
-		//!\~english The locale used to display times.	\~french La locale utilisée pour afficher les temps.
+		//!\~english	The locale used to display times.
+		//!\~french		La locale utilisée pour afficher les temps.
 		std::locale m_timesLocale;
 	};
 }

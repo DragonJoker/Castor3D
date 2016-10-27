@@ -20,9 +20,9 @@ namespace Castor3D
 		uint64_t MakeKey( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )
 		{
 			return ( uint64_t( p_textureFlags ) << 48 )
-				| ( uint64_t( p_programFlags ) << 40 )
-				| ( uint64_t( p_sceneFlags ) << 32 )
-				| ( uint64_t( p_invertNormals ? 0x01 : 0x00 ) );
+				   | ( uint64_t( p_programFlags ) << 40 )
+				   | ( uint64_t( p_sceneFlags ) << 32 )
+				   | ( uint64_t( p_invertNormals ? 0x01 : 0x00 ) );
 		}
 	}
 
@@ -50,14 +50,18 @@ namespace Castor3D
 		m_arrayPrograms.clear();
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::GetNewProgram()
+	ShaderProgramSPtr ShaderProgramCache::GetNewProgram( bool p_initialise )
 	{
 		ShaderProgramSPtr l_return = GetEngine()->GetRenderSystem()->CreateShaderProgram();
 
 		if ( l_return )
 		{
 			m_arrayPrograms.push_back( l_return );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+
+			if ( p_initialise )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			}
 		}
 
 		return l_return;

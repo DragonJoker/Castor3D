@@ -3,7 +3,7 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer )
+	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target, HardwareBufferPtr p_buffer )
 		: Castor3D::GpuBuffer< T >( p_renderSystem )
 		, Holder{ p_gl }
 		, m_buffer{ p_buffer }
@@ -29,23 +29,17 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
+	bool GlBuffer< T >::Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
 	{
 		bool l_return = true;
 		HardwareBufferPtr l_cpuBuffer = GetCpuBuffer();
 
 		if ( l_cpuBuffer && l_cpuBuffer->GetSize() )
 		{
-			l_return = m_glBuffer.Initialise( &l_cpuBuffer->data()[0], l_cpuBuffer->GetSize(), p_type, p_nature );
+			l_return = m_glBuffer.Fill( &l_cpuBuffer->data()[0], l_cpuBuffer->GetSize(), p_type, p_nature );
 		}
 
 		return l_return;
-	}
-
-	template< typename T >
-	void GlBuffer< T >::Cleanup()
-	{
-		m_glBuffer.Cleanup();
 	}
 
 	template< typename T >
@@ -58,6 +52,12 @@ namespace GlRender
 	void GlBuffer< T >::Unbind()
 	{
 		m_glBuffer.Unbind();
+	}
+
+	template< typename T >
+	bool GlBuffer< T >::Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )
+	{
+		return m_glBuffer.Copy( static_cast< GlBuffer< T > const & >( p_src ).m_glBuffer, p_size );
 	}
 
 	template< typename T >

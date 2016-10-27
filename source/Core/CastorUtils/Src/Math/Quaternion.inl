@@ -557,7 +557,7 @@ namespace Castor
 		{
 			// Essential Mathematics, page 467
 			T l_angle = acos( l_cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / sin( l_angle );
+			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / T( sin( l_angle ) );
 		}
 	}
 
@@ -580,7 +580,7 @@ namespace Castor
 		{
 			// Essential Mathematics, page 467
 			T l_angle = acos( l_cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / sin( l_angle );
+			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / T( sin( l_angle ) );
 		}
 	}
 

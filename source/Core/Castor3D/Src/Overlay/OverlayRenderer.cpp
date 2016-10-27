@@ -61,21 +61,21 @@ namespace Castor3D
 
 	OverlayRenderer::OverlayRenderer( RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_declaration{ 
-		{
+		, m_declaration{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 )
-			}
-		} }
+				{
+					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
+					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 )
+				}
+			} }
 		, m_textDeclaration{
-		{
 			{
-				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
-				BufferElementDeclaration( ShaderProgram::Text, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 0 ),
-				BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 1 )
-			}
-		} }
+				{
+					BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::IVec2 ),
+					BufferElementDeclaration( ShaderProgram::Text, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 0 ),
+					BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2, 1 )
+				}
+			} }
 	{
 	}
 
@@ -98,7 +98,7 @@ namespace Castor3D
 		{
 			// Panel Overlays buffers
 			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			uint32_t l_stride = m_declaration.GetStride();
+			uint32_t l_stride = m_declaration.stride();
 			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_panelVertexBuffer->data();
 
@@ -109,17 +109,17 @@ namespace Castor3D
 			}
 
 			m_panelVertexBuffer->Create();
-			m_panelVertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_panelVertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
 			{
 				auto & l_pipeline = DoGetPanelPipeline( 0 );
 				m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-				m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+				m_panelGeometryBuffers.m_noTexture->Initialise( { *m_panelVertexBuffer }, nullptr );
 			}
 			{
 				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::Colour ) );
 				m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-				m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+				m_panelGeometryBuffers.m_textured->Initialise( { *m_panelVertexBuffer }, nullptr );
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Castor3D
 		{
 			// Border Overlays buffers
 			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			uint32_t l_stride = m_declaration.GetStride();
+			uint32_t l_stride = m_declaration.stride();
 			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_borderVertexBuffer->data();
 
@@ -138,17 +138,17 @@ namespace Castor3D
 			}
 
 			m_borderVertexBuffer->Create();
-			m_borderVertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_borderVertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
 			{
 				auto & l_pipeline = DoGetPanelPipeline( 0 );
 				m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-				m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+				m_borderGeometryBuffers.m_noTexture->Initialise( { *m_borderVertexBuffer }, nullptr );
 			}
 			{
 				auto & l_pipeline = DoGetPanelPipeline( uint32_t( TextureChannel::Colour ) );
 				m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-				m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr, nullptr );
+				m_borderGeometryBuffers.m_textured->Initialise( { *m_borderVertexBuffer }, nullptr );
 			}
 		}
 
@@ -183,7 +183,6 @@ namespace Castor3D
 			m_panelGeometryBuffers.m_textured->Cleanup();
 			m_panelGeometryBuffers.m_noTexture.reset();
 			m_panelGeometryBuffers.m_textured.reset();
-			m_panelVertexBuffer->Cleanup();
 			m_panelVertexBuffer->Destroy();
 			m_panelVertexBuffer.reset();
 		}
@@ -194,7 +193,6 @@ namespace Castor3D
 			m_borderGeometryBuffers.m_textured->Cleanup();
 			m_borderGeometryBuffers.m_noTexture.reset();
 			m_borderGeometryBuffers.m_textured.reset();
-			m_borderVertexBuffer->Cleanup();
 			m_borderVertexBuffer->Destroy();
 			m_borderVertexBuffer.reset();
 		}
@@ -209,7 +207,6 @@ namespace Castor3D
 
 		for ( auto l_buffer : m_textsVertexBuffers )
 		{
-			l_buffer->Cleanup();
 			l_buffer->Destroy();
 		}
 
@@ -458,20 +455,20 @@ namespace Castor3D
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
 	{
 		auto l_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
-		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.GetStride() );
+		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
 		l_vertexBuffer->Create();
-		l_vertexBuffer->Initialise( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+		l_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
 		OverlayGeometryBuffers l_geometryBuffers;
 		{
 			auto & l_pipeline = DoGetTextPipeline( 0 );
 			l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-			l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			l_geometryBuffers.m_noTexture->Initialise( { *l_vertexBuffer }, nullptr );
 		}
 		{
 			auto & l_pipeline = DoGetTextPipeline( uint32_t( TextureChannel::Colour ) );
 			l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, l_pipeline.GetProgram() );
-			l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			l_geometryBuffers.m_textured->Initialise( { *l_vertexBuffer }, nullptr );
 		}
 
 		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
@@ -492,7 +489,7 @@ namespace Castor3D
 		p_pass.EndRender();
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler, uint32_t p_count )
 	{
 		auto & l_node = DoGetTextNode( p_pass );
 		l_node.m_pipeline.ApplyProjection( l_node.m_matrixUbo );

@@ -35,6 +35,10 @@ SOFTWARE.
 #	include <windows.h>
 #elif defined( __linux__ )
 #	include <GL/glx.h>
+#	undef None
+#	undef Bool
+#	undef Always
+using Bool = int;
 #else
 #	error "Yet unsupported OS"
 #endif

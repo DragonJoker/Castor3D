@@ -4,12 +4,14 @@
 #include "Camera.hpp"
 #include "BillboardList.hpp"
 #include "Geometry.hpp"
+#include "ParticleSystem.hpp"
 #include "SceneNode.hpp"
 #include "Skybox.hpp"
 
 #include "Animation/AnimatedObjectGroup.hpp"
 #include "Cache/CacheView.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Light/Light.hpp"
 #include "Material/Material.hpp"
 #include "Mesh/Importer.hpp"
@@ -348,6 +350,10 @@ namespace Castor3D
 			p_element->SetName( l_name );
 			p_destination.insert( l_name, p_element );
 		};
+		auto l_eventInitialise = [this]( auto p_element )
+		{
+			this->GetEngine()->PostEvent( MakeInitialiseEvent( *p_element ) );
+		};
 		auto l_eventClean = [this]( auto p_element )
 		{
 			this->GetEngine()->PostEvent( MakeCleanupEvent( *p_element ) );
@@ -364,7 +370,7 @@ namespace Castor3D
 			}
 			else
 			{
-				p_rootCameraNode->AttachObject( p_element );
+				p_rootObjectNode->AttachObject( p_element );
 			}
 		};
 		auto l_attachCamera = []( auto p_element
@@ -410,10 +416,10 @@ namespace Castor3D
 		m_billboardCache = MakeObjectCache< BillboardList, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
 																	, [this]( String const & p_name, SceneNodeSPtr p_parent )
 																	{
-																		return std::make_shared< BillboardList >( p_name, *this, p_parent, *GetEngine()->GetRenderSystem() );
+																		return std::make_shared< BillboardList >( p_name, *this, p_parent );
 																	}
-																	, l_dummy
-																	, l_dummy
+																	, l_eventInitialise
+																	, l_eventClean
 																	, l_mergeObject
 																	, l_attachObject
 																	, [this]( BillboardListSPtr p_element )
@@ -459,6 +465,35 @@ namespace Castor3D
 														{
 															p_element->Detach();
 														} );
+		m_particleSystemCache = MakeObjectCache< ParticleSystem, String >(	p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
+																			, [this]( String const & p_name
+																					  , SceneNodeSPtr p_parent
+																					  , uint32_t p_count )
+																			{
+																				return std::make_shared< ParticleSystem >( p_name, *this, p_parent, p_count );
+																			}
+																			, l_eventInitialise
+																			, l_eventClean
+																			, l_mergeObject
+																			, []( auto p_element
+																				  , SceneNodeSPtr p_parent
+																				  , SceneNodeSPtr p_rootNode
+																				  , SceneNodeSPtr p_rootCameraNode
+																				  , SceneNodeSPtr p_rootObjectNode )
+																			{
+																				if ( p_parent )
+																				{
+																					p_parent->AttachObject( p_element->GetBillboards() );
+																				}
+																				else
+																				{
+																					p_rootObjectNode->AttachObject( p_element->GetBillboards() );
+																				}
+																			}
+																			, [this]( ParticleSystemSPtr p_element )
+																			{
+																				p_element->Detach();
+																			} );
 		m_sceneNodeCache = MakeObjectCache< SceneNode, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
 																, [this]( String const & p_name )
 																{
@@ -509,6 +544,7 @@ namespace Castor3D
 
 		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
 
+		m_onParticleSystemChanged = m_particleSystemCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
 		m_onBillboardListChanged = m_billboardCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
 		m_onGeometryChanged = m_geometryCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
 		m_onSceneNodeChanged = m_sceneNodeCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
@@ -519,6 +555,7 @@ namespace Castor3D
 		m_sceneNodeCache->m_onChanged.disconnect( m_onSceneNodeChanged );
 		m_geometryCache->m_onChanged.disconnect( m_onGeometryChanged );
 		m_billboardCache->m_onChanged.disconnect( m_onBillboardListChanged );
+		m_particleSystemCache->m_onChanged.disconnect( m_onParticleSystemChanged );
 
 		m_meshCache->Clear();
 		m_windowCache->Clear();
@@ -526,6 +563,7 @@ namespace Castor3D
 		m_skybox.reset();
 		m_animatedObjectGroupCache.reset();
 		m_billboardCache.reset();
+		m_particleSystemCache.reset();
 		m_cameraCache.reset();
 		m_geometryCache.reset();
 		m_lightCache.reset();
@@ -569,6 +607,7 @@ namespace Castor3D
 		m_animatedObjectGroupCache->Cleanup();
 		m_cameraCache->Cleanup();
 		m_billboardCache->Cleanup();
+		m_particleSystemCache->Cleanup();
 		m_geometryCache->Cleanup();
 		m_lightCache->Cleanup();
 		m_sceneNodeCache->Cleanup();
@@ -683,6 +722,7 @@ namespace Castor3D
 			p_scene->GetAnimatedObjectGroupCache().MergeInto( *m_animatedObjectGroupCache );
 			p_scene->GetCameraCache().MergeInto( *m_cameraCache );
 			p_scene->GetBillboardListCache().MergeInto( *m_billboardCache );
+			p_scene->GetParticleSystemCache().MergeInto( *m_particleSystemCache );
 			p_scene->GetGeometryCache().MergeInto( *m_geometryCache );
 			p_scene->GetLightCache().MergeInto( *m_lightCache );
 			p_scene->GetSceneNodeCache().MergeInto( *m_sceneNodeCache );

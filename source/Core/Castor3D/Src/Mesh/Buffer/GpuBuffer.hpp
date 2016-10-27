@@ -76,17 +76,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Create()
-		{
-			return false;
-		}
+		virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() {}
+		virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function, used by VBOs
@@ -99,14 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		virtual void Cleanup() {}
+		virtual bool Upload( BufferAccessType p_type, BufferAccessNature p_nature ) = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
@@ -165,6 +155,19 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
 		virtual void Unbind() = 0;
+		/**
+		 *\~english
+		 *\brief		Copies data from given buffer to this one.
+		 *\param[in]	p_src	The cource buffer.
+		 *\param[in]	p_size	The number of elements to copy.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Copie les données du tampon donné dans celui-ci.
+		 *\param[in]	p_src	Le tampon source.
+		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		virtual bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM

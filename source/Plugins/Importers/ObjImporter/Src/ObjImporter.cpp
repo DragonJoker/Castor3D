@@ -329,9 +329,9 @@ namespace Obj
 		}
 
 		if ( l_vit != l_vertex.begin()
-			 && l_fit != l_index.begin() )
+				&& l_fit != l_index.begin() )
 		{
-			DoCreateSubmesh( p_mesh, l_mtlname, std::vector< FaceIndices >{ l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
+			DoCreateSubmesh( p_mesh, l_mtlname, std::vector< FaceIndices > { l_index.begin(), l_fit }, InterleavedVertexArray{ l_vertex.begin(), l_vit } );
 		}
 	}
 

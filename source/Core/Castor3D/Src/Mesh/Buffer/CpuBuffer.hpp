@@ -44,9 +44,11 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	protected:
-		typedef typename std::shared_ptr< GpuBuffer< T > > GpuBufferSPtr;
-		typedef typename std::weak_ptr< GpuBuffer< T > > GpuBufferWPtr;
-		typedef typename std::weak_ptr< CpuBuffer< T > > CpuBufferWPtr;
+		using MyGpuBuffer = GpuBuffer< T >;
+		using GpuBufferSPtr = std::shared_ptr< MyGpuBuffer >;
+		using GpuBufferWPtr = std::weak_ptr< MyGpuBuffer >;
+		using CpuBufferWPtr = std::weak_ptr< CpuBuffer< T > >;
+
 		DECLARE_TPL_VECTOR( T, T );
 
 	protected:
@@ -93,19 +95,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		inline void Cleanup()
-		{
-			if ( m_gpuBuffer )
-			{
-				m_gpuBuffer->Cleanup();
-			}
-		}
-		/**
-		 *\~english
 		 *\brief		Initialisation function, initialises GPU buffer
 		 *\param[in]	p_type		Buffer access type
 		 *\param[in]	p_nature	Buffer access nature
@@ -116,13 +105,13 @@ namespace Castor3D
 		 *\param[in]	p_nature	Nature d'accès du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		inline bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+		inline bool Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 		{
 			bool l_return = false;
 
 			if ( m_gpuBuffer )
 			{
-				l_return = m_gpuBuffer->Initialise( p_type, p_nature );
+				l_return = m_gpuBuffer->Upload( p_type, p_nature );
 			}
 
 			return l_return;
@@ -232,18 +221,52 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets element value at given index
-		 *\param[in]	p_index	The index
-		 *\param[in]	p_value	The value
+		 *\brief		Copies data from given buffer to this one.
+		 *\param[in]	p_src	The cource buffer.
+		 *\param[in]	p_size	The number of elements to copy.
+		 *\return		\p true if successful.
 		 *\~french
-		 *\brief		Définit la valeur de l'élément à l'index donné
-		 *\param[in]	p_index	L'index
-		 *\param[in]	p_value	La valeur
+		 *\brief		Copie les données du tampon donné dans celui-ci.
+		 *\param[in]	p_src	Le tampon source.
+		 *\param[in]	p_size	Le nombre d'éléments à copier.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline void SetElement( uint32_t p_index, T const & p_value )
+		inline bool Copy( CpuBuffer< T > const & p_src, uint32_t p_size )
+		{
+			bool l_return = false;
+
+			if ( m_gpuBuffer )
+			{
+				l_return = m_gpuBuffer->Copy( *p_src.m_gpuBuffer, p_size );
+			}
+
+			return l_return;
+		}
+		/**
+		*\~english
+		*\brief		Index opertor.
+		*\param[in]	p_index	The index.
+		*\~french
+		*\brief		Opérateur d'indexation.
+		*\param[in]	p_index	L'index.
+		*/
+		inline T const & operator[]( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_data.size() );
-			m_data[p_index] = p_value;
+			return m_data[p_index];
+		}
+		/**
+		*\~english
+		*\brief		Index opertor.
+		*\param[in]	p_index	The index.
+		*\~french
+		*\brief		Opérateur d'indexation.
+		*\param[in]	p_index	L'index.
+		*/
+		inline T & operator[]( uint32_t p_index )
+		{
+			REQUIRE( p_index < m_data.size() );
+			return m_data[p_index];
 		}
 		/**
 		 *\~english
@@ -299,7 +322,7 @@ namespace Castor3D
 		 */
 		inline void Resize( uint32_t p_uiNewSize )
 		{
-			m_data.resize( p_uiNewSize, 0 );
+			m_data.resize( p_uiNewSize, T{} );
 		}
 		/**
 		 *\~english
@@ -309,7 +332,7 @@ namespace Castor3D
 		 *\brief		Augmente la taille allouée du tampon
 		 *\param[in]	p_uiIncrement	L'incrément de taille
 		 */
-		inline void Reserve( uint32_t p_uiIncrement )
+		inline void Grow( uint32_t p_uiIncrement )
 		{
 			if ( p_uiIncrement + GetCapacity() < p_uiIncrement )
 			{

@@ -154,12 +154,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
+		 *\param[in]	p_material	The new value
 		 *\~french
 		 *\brief		Définit le matériau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 *\param[in]	p_material	La nouvelle valeur
 		 */
-		C3D_API virtual void SetMaterial( MaterialSPtr p_pMaterial );
+		C3D_API virtual void SetMaterial( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay name

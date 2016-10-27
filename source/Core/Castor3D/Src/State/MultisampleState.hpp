@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\brief		Retrieves the multisample activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut d'acitvation du multisample
+		 *\brief		Récupère le statut d'activation du multisample
 		 *\return		La valeur
 		 */
 		inline bool GetMultisample()const
@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\brief		Sets the multisample activation status
 		 *\param[in]	p_enable	The new value
 		 *\~french
-		 *\brief		Définit le statut d'acitvation du multisample
+		 *\brief		Définit le statut d'activation du multisample
 		 *\param[in]	p_enable	La nouvelle valeur
 		 */
 		inline void SetMultisample( bool p_enable )

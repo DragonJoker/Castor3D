@@ -196,7 +196,7 @@ namespace GlRender
 		PFNWGLGETEXTENSIONSSTRINGEXTPROC * wglGetExtensionsStringEXT;
 		wglGetExtensionsStringEXT = ( PFNWGLGETEXTENSIONSSTRINGEXTPROC * )wglGetProcAddress( "wglGetExtensionsStringEXT" );
 
-		if ( wglGetExtensionsStringEXT() )
+		if ( wglGetExtensionsStringEXT && wglGetExtensionsStringEXT() )
 		{
 			GetOpenGl().PreInitialise( string::string_cast< xchar >( wglGetExtensionsStringEXT() ) );
 		}

@@ -135,6 +135,6 @@ scene "Scene"
 		}
 
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }

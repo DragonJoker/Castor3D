@@ -46,18 +46,17 @@ namespace GlRender
 			  std::function< bool( uint32_t ) > >;
 
 	public:
-		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target );
+		GlBufferBase( OpenGl & p_gl, GlBufferTarget p_target );
 		virtual ~GlBufferBase();
 
-		bool Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
-		void Cleanup();
+		bool Copy( GlBufferBase< T > const & p_src, uint32_t p_size );
 		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
 		T * Lock( eGL_LOCK p_access );
 		bool Unlock();
 
 	private:
-		eGL_BUFFER_TARGET m_target;
+		GlBufferTarget m_target;
 	};
 }
 

@@ -12,6 +12,7 @@
 #include "Engine.hpp"
 #include "GeometryCache.hpp"
 #include "LightCache.hpp"
+#include "ParticleSystemCache.hpp"
 #include "SamplerCache.hpp"
 #include "ShaderCache.hpp"
 
@@ -27,6 +28,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
@@ -246,7 +248,7 @@ namespace Castor3D
 		void DoAddBillboardNode( RenderPass & p_renderPass
 								 , uint16_t p_programFlags
 								 , Pass & p_pass
-								 , BillboardList & p_billboard
+								 , BillboardListBase & p_billboard
 								 , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
 		{
 			DoAddNode( p_renderPass
@@ -319,7 +321,7 @@ namespace Castor3D
 								&& !l_mesh
 								&& !l_skeleton
 								&& ( !l_pass->HasAlphaBlending()
-									|| p_renderPass.IsMultisampling() )
+									 || p_renderPass.IsMultisampling() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 						{
 							AddFlag( l_programFlags, ProgramFlag::Instantiation );
@@ -361,28 +363,55 @@ namespace Castor3D
 			p_nodes.m_opaqueRenderNodesBack.clear();
 			p_nodes.m_transparentRenderNodesFront.clear();
 			p_nodes.m_transparentRenderNodesBack.clear();
-
-			auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
-
-			for ( auto l_billboard : p_scene.GetBillboardListCache() )
 			{
-				MaterialSPtr l_material( l_billboard.second->GetMaterial() );
+				auto l_lock = make_unique_lock( p_scene.GetBillboardListCache() );
 
-				if ( l_material )
+				for ( auto l_billboard : p_scene.GetBillboardListCache() )
 				{
-					for ( auto l_pass : *l_material )
+					MaterialSPtr l_material( l_billboard.second->GetMaterial() );
+
+					if ( l_material )
 					{
-						l_pass->PrepareTextures();
-						uint16_t l_programFlags = 0u;
-						AddFlag( l_programFlags, ProgramFlag::Billboards );
-
-						if ( l_pass->HasAlphaBlending() )
+						for ( auto l_pass : *l_material )
 						{
-							AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
-						}
+							l_pass->PrepareTextures();
+							uint16_t l_programFlags = 0u;
+							AddFlag( l_programFlags, ProgramFlag::Billboards );
 
-						p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
-						DoAddBillboardNode( p_renderPass, l_programFlags, *l_pass, *l_billboard.second, p_nodes );
+							if ( l_pass->HasAlphaBlending() )
+							{
+								AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+							}
+
+							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
+							DoAddBillboardNode( p_renderPass, l_programFlags, *l_pass, *l_billboard.second, p_nodes );
+						}
+					}
+				}
+			}
+			{
+				auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+
+				for ( auto l_particleSystem : p_scene.GetParticleSystemCache() )
+				{
+					MaterialSPtr l_material( l_particleSystem.second->GetMaterial() );
+
+					if ( l_material )
+					{
+						for ( auto l_pass : *l_material )
+						{
+							l_pass->PrepareTextures();
+							uint16_t l_programFlags = 0u;
+							AddFlag( l_programFlags, ProgramFlag::Billboards );
+
+							if ( l_pass->HasAlphaBlending() )
+							{
+								AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+							}
+
+							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
+							DoAddBillboardNode( p_renderPass, l_programFlags, *l_pass, *l_particleSystem.second->GetBillboards(), p_nodes );
+						}
 					}
 				}
 			}

@@ -25,18 +25,9 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool TestIndexBuffer::Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
-	}
-
-	bool TestIndexBuffer::AttachTo( ShaderProgramSPtr )
-	{
-		return true;
-	}
-
-	void TestIndexBuffer::Cleanup()
-	{
 	}
 
 	bool TestIndexBuffer::Bind()
@@ -55,6 +46,11 @@ namespace TestRender
 
 	void TestIndexBuffer::Unlock()
 	{
+	}
+
+	bool TestIndexBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )
+	{
+		return true;
 	}
 
 	bool TestIndexBuffer::Fill( uint32_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )

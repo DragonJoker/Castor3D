@@ -72,6 +72,6 @@ scene "Scene"
 			postfx "fxaa"
 		}
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }

@@ -7,7 +7,7 @@
 namespace GlRender
 {
 	template< typename FuncT, typename ... ParamsT >
-	bool ExecuteFunction( OpenGl & p_gl, FuncT p_function, char const * const p_name, ParamsT && ... p_params )
+	bool ExecuteFunction( OpenGl const & p_gl, FuncT p_function, char const * const p_name, ParamsT && ... p_params )
 	{
 		REQUIRE( p_function );
 		p_function( p_params... );
@@ -80,11 +80,11 @@ namespace GlRender
 		return EXEC_FUNCTION( TexSubImage3D, mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
 	}
 
-	bool TexFunctions::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctions::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TexImage1D, mode, level, internalFormat, width, border, format, type, data );
+			return EXEC_FUNCTION( TexImage1D, mode, level, uint32_t( internalFormat ), width, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -92,11 +92,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TexImage2D, mode, level, internalFormat, width, height, border, format, type, data );
+			return EXEC_FUNCTION( TexImage2D, mode, level, uint32_t( internalFormat ), width, height, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -104,11 +104,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TexImage2D, mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
+			return EXEC_FUNCTION( TexImage2D, mode, level, uint32_t( internalFormat ), p_size.width(), p_size.height(), border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -116,11 +116,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctions::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TexImage3D, mode, level, internalFormat, width, height, depth, border, format, type, data );
+			return EXEC_FUNCTION( TexImage3D, mode, level, uint32_t( internalFormat ), width, height, depth, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -190,11 +190,11 @@ namespace GlRender
 		return EXEC_FUNCTION( TextureSubImage3D, m_uiTexture, mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
 	}
 
-	bool TexFunctionsDSA::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctionsDSA::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TextureImage1D, m_uiTexture, mode, level, internalFormat, width, border, format, type, data );
+			return EXEC_FUNCTION( TextureImage1D, m_uiTexture, mode, level, uint32_t( internalFormat ), width, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -202,11 +202,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TextureImage2D, m_uiTexture, mode, level, internalFormat, width, height, border, format, type, data );
+			return EXEC_FUNCTION( TextureImage2D, m_uiTexture, mode, level, uint32_t( internalFormat ), width, height, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -214,11 +214,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TextureImage2D, m_uiTexture, mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
+			return EXEC_FUNCTION( TextureImage2D, m_uiTexture, mode, level, uint32_t( internalFormat ), p_size.width(), p_size.height(), border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -226,11 +226,11 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	bool TexFunctionsDSA::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
 	{
 		try
 		{
-			return EXEC_FUNCTION( TextureImage3D, m_uiTexture, mode, level, internalFormat, width, height, depth, border, format, type, data );
+			return EXEC_FUNCTION( TextureImage3D, m_uiTexture, mode, level, uint32_t( internalFormat ), width, height, depth, border, format, type, data );
 		}
 		catch ( ... )
 		{
@@ -245,126 +245,131 @@ namespace GlRender
 
 	//*************************************************************************************************
 
-	bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )
+	bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const
 	{
 		return EXEC_FUNCTION( BufferAddressRange, pname, index, address, length );
 	}
 
-	bool BufFunctionsBase::VertexFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::VertexFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( VertexFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::NormalFormat( eGL_TYPE type, int stride )
+	bool BufFunctionsBase::NormalFormat( eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( NormalFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::ColorFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::ColorFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( ColorFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::IndexFormat( eGL_TYPE type, int stride )
+	bool BufFunctionsBase::IndexFormat( eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( IndexFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::TexCoordFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::TexCoordFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( TexCoordFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::EdgeFlagFormat( int stride )
+	bool BufFunctionsBase::EdgeFlagFormat( int stride )const
 	{
 		return EXEC_FUNCTION( EdgeFlagFormat, stride );
 	}
 
-	bool BufFunctionsBase::SecondaryColorFormat( int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::SecondaryColorFormat( int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( SecondaryColorFormat, size, type, stride );
 	}
 
-	bool BufFunctionsBase::FogCoordFormat( uint32_t type, int stride )
+	bool BufFunctionsBase::FogCoordFormat( uint32_t type, int stride )const
 	{
 		return EXEC_FUNCTION( FogCoordFormat, type, stride );
 	}
 
-	bool BufFunctionsBase::VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )
+	bool BufFunctionsBase::VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride )const
 	{
 		return EXEC_FUNCTION( VertexAttribFormat, index, size, type, normalized, stride );
 	}
 
-	bool BufFunctionsBase::VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )
+	bool BufFunctionsBase::VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride )const
 	{
 		return EXEC_FUNCTION( VertexAttribIFormat, index, size, type, stride );
 	}
 
-	bool BufFunctionsBase::MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access )
+	bool BufFunctionsBase::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
-		return EXEC_FUNCTION( MakeBufferResident, target, access );
+		return EXEC_FUNCTION( MakeBufferResident, uint32_t( target ), access );
 	}
 
-	bool BufFunctionsBase::MakeBufferNonResident( eGL_BUFFER_TARGET target )
+	bool BufFunctionsBase::MakeBufferNonResident( GlBufferTarget target )const
 	{
-		return EXEC_FUNCTION( MakeBufferNonResident, target );
+		return EXEC_FUNCTION( MakeBufferNonResident, uint32_t( target ) );
 	}
 
-	bool BufFunctionsBase::IsBufferResident( eGL_BUFFER_TARGET target )
+	bool BufFunctionsBase::IsBufferResident( GlBufferTarget target )const
 	{
-		return m_pfnIsBufferResident( target ) && glCheckError( GetOpenGl(), cuT( "glIsBufferResident" ) );
+		return m_pfnIsBufferResident( uint32_t( target ) ) && glCheckError( GetOpenGl(), cuT( "glIsBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )
+	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
 		return EXEC_FUNCTION( MakeNamedBufferResident, buffer, access );
 	}
 
-	bool BufFunctionsBase::MakeNamedBufferNonResident( uint32_t buffer )
+	bool BufFunctionsBase::MakeNamedBufferNonResident( uint32_t buffer )const
 	{
 		return EXEC_FUNCTION( MakeNamedBufferNonResident, buffer );
 	}
 
-	bool BufFunctionsBase::IsNamedBufferResident( uint32_t buffer )
+	bool BufFunctionsBase::IsNamedBufferResident( uint32_t buffer )const
 	{
 		return m_pfnIsNamedBufferResident( buffer ) && glCheckError( GetOpenGl(), cuT( "glIsNamedBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params )
+	bool BufFunctionsBase::GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
-		return EXEC_FUNCTION( GetBufferParameterui64v, target, pname, params );
+		return EXEC_FUNCTION( GetBufferParameterui64v, uint32_t( target ), pname, params );
 	}
 
-	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )
+	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameterui64v, buffer, pname, params );
 	}
 
 	//*************************************************************************************************
 
-	bool BufFunctions::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )
+	bool BufFunctions::BindBuffer( GlBufferTarget p_target, uint32_t buffer )const
 	{
-		return EXEC_FUNCTION( BindBuffer, p_target, buffer );
+		return EXEC_FUNCTION( BindBuffer, uint32_t( p_target ), buffer );
 	}
 
-	bool BufFunctions::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
+	bool BufFunctions::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
-		return EXEC_FUNCTION( BufferData, p_target, size, data, usage );
+		return EXEC_FUNCTION( BufferData, uint32_t( p_target ), size, data, usage );
 	}
 
-	bool BufFunctions::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )
+	bool BufFunctions::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
 	{
-		return EXEC_FUNCTION( BufferSubData, p_target, offset, size, data );
+		return EXEC_FUNCTION( CopyBufferSubData, uint32_t( readtarget ), uint32_t( writetarget ), readoffset, writeoffset, size );
 	}
 
-	bool BufFunctions::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )
+	bool BufFunctions::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
-		return EXEC_FUNCTION( GetBufferParameteriv, p_target, pname, params );
+		return EXEC_FUNCTION( BufferSubData, uint32_t( p_target ), offset, size, data );
 	}
 
-	void * BufFunctions::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
+	bool BufFunctions::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
-		void * l_return = m_pfnMapBuffer( p_target, access );
+		return EXEC_FUNCTION( GetBufferParameteriv, uint32_t( p_target ), pname, params );
+	}
+
+	void * BufFunctions::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
+	{
+		void * l_return = m_pfnMapBuffer( uint32_t( p_target ), access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBuffer" ) ) )
 		{
@@ -374,14 +379,14 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctions::UnmapBuffer( eGL_BUFFER_TARGET p_target )
+	bool BufFunctions::UnmapBuffer( GlBufferTarget p_target )const
 	{
-		return EXEC_FUNCTION( UnmapBuffer, p_target );
+		return EXEC_FUNCTION( UnmapBuffer, uint32_t( p_target ) );
 	}
 
-	void * BufFunctions::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
+	void * BufFunctions::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
-		void * l_return = m_pfnMapBufferRange( p_target, offset, length, access );
+		void * l_return = m_pfnMapBufferRange( uint32_t( p_target ), offset, length, access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBufferRange" ) ) )
 		{
@@ -391,29 +396,34 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctions::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )
+	bool BufFunctions::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
-		return EXEC_FUNCTION( FlushMappedBufferRange, p_target, offset, length );
+		return EXEC_FUNCTION( FlushMappedBufferRange, uint32_t( p_target ), offset, length );
 	}
 
 	//*************************************************************************************************
 
-	bool BufFunctionsDSA::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
+	bool BufFunctionsDSA::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
 		return EXEC_FUNCTION( NamedBufferData, m_uiBuffer, size, data, usage );
 	}
 
-	bool BufFunctionsDSA::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )
+	bool BufFunctionsDSA::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
 		return EXEC_FUNCTION( NamedBufferSubData, m_uiBuffer, offset, size, data );
 	}
 
-	bool BufFunctionsDSA::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )
+	bool BufFunctionsDSA::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
+	{
+		return EXEC_FUNCTION( CopyNamedBufferSubData, uint32_t( readtarget ), uint32_t( writetarget ), readoffset, writeoffset, size );
+	}
+
+	bool BufFunctionsDSA::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameteriv, m_uiBuffer, pname, params );
 	}
 
-	void * BufFunctionsDSA::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
+	void * BufFunctionsDSA::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
 	{
 		void * l_return = m_pfnMapNamedBuffer( m_uiBuffer, access );
 
@@ -425,12 +435,12 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctionsDSA::UnmapBuffer( eGL_BUFFER_TARGET p_target )
+	bool BufFunctionsDSA::UnmapBuffer( GlBufferTarget p_target )const
 	{
 		return EXEC_FUNCTION( UnmapNamedBuffer, m_uiBuffer );
 	}
 
-	void * BufFunctionsDSA::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
+	void * BufFunctionsDSA::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
 		void * l_return = m_pfnMapNamedBufferRange( m_uiBuffer, offset, length, access );
 
@@ -442,7 +452,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )
+	bool BufFunctionsDSA::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
 		return EXEC_FUNCTION( FlushMappedNamedBufferRange, m_uiBuffer, offset, length );
 	}
@@ -507,11 +517,6 @@ namespace GlRender
 	bool OpenGl::HasVbo()const
 	{
 		return m_bHasVbo;
-	}
-
-	bool OpenGl::HasDepthClipping()const
-	{
-		return m_bHasDepthClipping;
 	}
 
 	bool OpenGl::HasInstancing()const
@@ -589,7 +594,7 @@ namespace GlRender
 		return GlslStrings[p_index];
 	}
 
-	inline eGL_PRIMITIVE OpenGl::Get( Castor3D::Topology p_index )const
+	inline GlTopology OpenGl::Get( Castor3D::Topology p_index )const
 	{
 		return PrimitiveTypes[uint32_t( p_index )];
 	}
@@ -647,12 +652,12 @@ namespace GlRender
 		return PixelFormats[uint32_t( p_pixelFormat )];
 	}
 
-	inline eGL_SHADER_TYPE OpenGl::Get( Castor3D::ShaderType p_type )const
+	inline GlShaderType OpenGl::Get( Castor3D::ShaderType p_type )const
 	{
 		return ShaderTypes[uint32_t( p_type )];
 	}
 
-	inline eGL_INTERNAL_FORMAT OpenGl::GetInternal( Castor::PixelFormat p_format )const
+	inline GlInternal OpenGl::GetInternal( Castor::PixelFormat p_format )const
 	{
 		return Internals[uint32_t( p_format )];
 	}
@@ -684,17 +689,17 @@ namespace GlRender
 		return RboStorages[uint32_t( p_pixelFormat )];
 	}
 
-	inline eGL_BUFFER OpenGl::Get( Castor3D::WindowBuffer p_buffer )const
+	inline GlBufferBinding OpenGl::Get( Castor3D::WindowBuffer p_buffer )const
 	{
 		return Buffers[uint32_t( p_buffer )];
 	}
 
-	inline eGL_BUFFER OpenGl::Get( eGL_TEXTURE_ATTACHMENT p_buffer )const
+	inline GlBufferBinding OpenGl::Get( eGL_TEXTURE_ATTACHMENT p_buffer )const
 	{
 		return BuffersTA.find( p_buffer )->second;
 	}
 
-	inline eGL_BUFFER OpenGl::Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const
+	inline GlBufferBinding OpenGl::Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const
 	{
 		return BuffersRBA.find( p_buffer )->second;
 	}
@@ -878,11 +883,11 @@ namespace GlRender
 	uint32_t OpenGl::GetBitfieldFlags( Castor3D::AccessType p_flags )const
 	{
 		uint32_t l_uiFlags = 0;
-		
+
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
 		{
 			l_uiFlags = eGL_BUFFER_MAPPING_BIT_READ;
-			
+
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 			{
 				l_uiFlags |= eGL_BUFFER_MAPPING_BIT_WRITE;
@@ -955,15 +960,15 @@ namespace GlRender
 		return glCheckError( *this, "glClear" );
 	}
 
-	bool OpenGl::DrawArrays( eGL_PRIMITIVE mode, int first, int count )const
+	bool OpenGl::DrawArrays( GlTopology mode, int first, int count )const
 	{
-		m_pfnDrawArrays( mode, first, count );
+		m_pfnDrawArrays( uint32_t( mode ), first, count );
 		return glCheckError( *this, "glDrawArrays" );
 	}
 
-	bool OpenGl::DrawElements( eGL_PRIMITIVE mode, int count, eGL_TYPE type, void const * indices )const
+	bool OpenGl::DrawElements( GlTopology mode, int count, eGL_TYPE type, void const * indices )const
 	{
-		m_pfnDrawElements( mode, count, type, indices );
+		m_pfnDrawElements( uint32_t( mode ), count, type, indices );
 		return glCheckError( *this, "glDrawElements" );
 	}
 
@@ -1001,6 +1006,21 @@ namespace GlRender
 	{
 		m_pfnGetIntegerv( pname, params );
 		return glCheckError( *this, "glGetIntegerv" );
+	}
+
+	bool OpenGl::GetIntegerv( GlMax pname, int * params )const
+	{
+		return GetIntegerv( uint32_t( pname ), params );
+	}
+
+	bool OpenGl::GetIntegerv( GlMin pname, int * params )const
+	{
+		return GetIntegerv( uint32_t( pname ), params );
+	}
+
+	bool OpenGl::GetIntegerv( GlGpuInfo pname, int * params )const
+	{
+		return GetIntegerv( uint32_t( pname ), params );
 	}
 
 	bool OpenGl::GetIntegerv( uint32_t pname, uint64_t * params )const
@@ -1236,22 +1256,22 @@ namespace GlRender
 		return m_pTexFunctions->TexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
 	}
 
-	bool OpenGl::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	bool OpenGl::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage1D( mode, level, internalFormat, width, border, format, type, data );
 	}
 
-	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
 	}
 
-	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
 	}
 
-	bool OpenGl::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	bool OpenGl::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
 	}
@@ -1485,21 +1505,21 @@ namespace GlRender
 		return glCheckError( *this, "glSampleCoverage" );
 	}
 
-	bool OpenGl::DrawArraysInstanced( eGL_PRIMITIVE mode, int first, int count, int primcount )const
+	bool OpenGl::DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const
 	{
 		if ( m_bHasInstancedDraw )
 		{
-			m_pfnDrawArraysInstanced( mode, first, count, primcount );
+			m_pfnDrawArraysInstanced( uint32_t( mode ), first, count, primcount );
 		}
 
 		return glCheckError( *this, "glDrawArraysInstanced" );
 	}
 
-	bool OpenGl::DrawElementsInstanced( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices, int primcount )const
+	bool OpenGl::DrawElementsInstanced( GlTopology mode, int count, eGL_TYPE type, const void * indices, int primcount )const
 	{
 		if ( m_bHasInstancedDraw )
 		{
-			m_pfnDrawElementsInstanced( mode, count, type, indices, primcount );
+			m_pfnDrawElementsInstanced( uint32_t( mode ), count, type, indices, primcount );
 		}
 
 		return glCheckError( *this, "glDrawElementsInstanced" );
@@ -1515,9 +1535,9 @@ namespace GlRender
 		return glCheckError( *this, "glVertexAttribDivisor" );
 	}
 
-	bool OpenGl::ReadBuffer( eGL_BUFFER p_buffer )const
+	bool OpenGl::ReadBuffer( GlBufferBinding p_buffer )const
 	{
-		m_pfnReadBuffer( p_buffer );
+		m_pfnReadBuffer( uint32_t( p_buffer ) );
 		return glCheckError( *this, "glReadBuffer" );
 	}
 
@@ -1539,9 +1559,9 @@ namespace GlRender
 		return glCheckError( *this, "glReadPixels" );
 	}
 
-	bool OpenGl::DrawBuffer( eGL_BUFFER p_buffer )const
+	bool OpenGl::DrawBuffer( GlBufferBinding p_buffer )const
 	{
-		m_pfnDrawBuffer( p_buffer );
+		m_pfnDrawBuffer( uint32_t( p_buffer ) );
 		return glCheckError( *this, "glDrawBuffer" );
 	}
 
@@ -1563,33 +1583,33 @@ namespace GlRender
 		return glCheckError( *this, "glPixelStoref" );
 	}
 
-	bool OpenGl::TexStorage1D( GLenum target, GLint levels, GLint internalformat, GLsizei width )const
+	bool OpenGl::TexStorage1D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width )const
 	{
-		m_pfnTexStorage1D( target, levels, internalformat, width );
+		m_pfnTexStorage1D( target, levels, uint32_t( internalformat ), width );
 		return glCheckError( *this, "glTexStorage1D" );
 	}
 
-	bool OpenGl::TexStorage2D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height )const
+	bool OpenGl::TexStorage2D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const
 	{
-		m_pfnTexStorage2D( target, levels, internalformat, width, height );
+		m_pfnTexStorage2D( target, levels, uint32_t( internalformat ), width, height );
 		return glCheckError( *this, "glTexStorage2D" );
 	}
 
-	bool OpenGl::TexStorage3D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth )const
+	bool OpenGl::TexStorage3D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const
 	{
-		m_pfnTexStorage3D( target, levels, internalformat, width, height, depth );
+		m_pfnTexStorage3D( target, levels, uint32_t( internalformat ), width, height, depth );
 		return glCheckError( *this, "glTexStorage3D" );
 	}
 
-	bool OpenGl::TexStorage2DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
+	bool OpenGl::TexStorage2DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
 	{
-		m_pfnTexStorage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+		m_pfnTexStorage2DMultisample( target, samples, uint32_t( internalformat ), width, height, fixedsamplelocations );
 		return glCheckError( *this, "glTexStorage2DMultisample" );
 	}
 
-	bool OpenGl::TexStorage3DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
+	bool OpenGl::TexStorage3DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
 	{
-		m_pfnTexStorage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+		m_pfnTexStorage3DMultisample( target, samples, uint32_t( internalformat ), width, height, depth, fixedsamplelocations );
 		return glCheckError( *this, "glTexStorage3DMultisample" );
 	}
 
@@ -1700,9 +1720,9 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::TexBuffer( eGL_TEXDIM p_target, eGL_INTERNAL_FORMAT p_eInternalFormat, uint32_t buffer )const
+	bool OpenGl::TexBuffer( eGL_TEXDIM p_target, GlInternal p_internalFormat, uint32_t buffer )const
 	{
-		m_pfnTexBuffer( p_target, p_eInternalFormat, buffer );
+		m_pfnTexBuffer( p_target, uint32_t( p_internalFormat ), buffer );
 		return glCheckError( *this, "glTexBuffer" );
 	}
 
@@ -1723,103 +1743,54 @@ namespace GlRender
 		return m_pfnIsBuffer( buffer ) && glCheckError( *this, "glIsBuffer" );
 	}
 
-	bool OpenGl::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )const
+	bool OpenGl::BindBuffer( GlBufferTarget p_target, uint32_t buffer )const
 	{
 		return m_pBufFunctions->BindBuffer( p_target, buffer );
 	}
 
-	bool OpenGl::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
+	bool OpenGl::BufferData( GlBufferTarget p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )const
 	{
 		return m_pBufFunctions->BufferData( p_target, size, data, usage );
 	}
 
-	bool OpenGl::BufferSubData( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
+	bool OpenGl::BufferSubData( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t size, void const * data )const
 	{
 		return m_pBufFunctions->BufferSubData( p_target, offset, size, data );
 	}
 
-	bool OpenGl::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, int * params )const
+	bool OpenGl::CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const
+	{
+		return m_pBufFunctions->CopyBufferSubData( readtarget, writetarget, readoffset, writeoffset, size );
+	}
+
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
 
-	bool OpenGl::GetBufferParameter( eGL_BUFFER_TARGET p_target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
 
-	void * OpenGl::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )const
+	void * OpenGl::MapBuffer( GlBufferTarget p_target, eGL_LOCK access )const
 	{
 		return m_pBufFunctions->MapBuffer( p_target, access );
 	}
 
-	bool OpenGl::UnmapBuffer( eGL_BUFFER_TARGET p_target )const
+	bool OpenGl::UnmapBuffer( GlBufferTarget p_target )const
 	{
 		return m_pBufFunctions->UnmapBuffer( p_target );
 	}
 
-	void * OpenGl::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
+	void * OpenGl::MapBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const
 	{
 		return m_pBufFunctions->MapBufferRange( p_target, offset, length, access );
 	}
 
-	bool OpenGl::FlushMappedBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length )const
+	bool OpenGl::FlushMappedBufferRange( GlBufferTarget p_target, ptrdiff_t offset, ptrdiff_t length )const
 	{
 		return m_pBufFunctions->FlushMappedBufferRange( p_target, offset, length );
-	}
-
-	bool OpenGl::VertexPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		m_pfnVertexPointer( size, type, stride, pointer );
-		return glCheckError( *this, "glVertexPointer" );
-	}
-
-	bool OpenGl::NormalPointer( uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		m_pfnNormalPointer( type, stride, pointer );
-		return glCheckError( *this, "glNormalPointer" );
-	}
-
-	bool OpenGl::TangentPointer( uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		if ( m_pfnTangentPointer )
-		{
-			m_pfnTangentPointer( type, stride, const_cast< void * >( pointer ) );
-		}
-
-		return glCheckError( *this, "glTangentPointer" );
-	}
-
-	bool OpenGl::BinormalPointer( uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		if ( m_pfnBinormalPointer )
-		{
-			m_pfnBinormalPointer( type, stride, const_cast< void * >( pointer ) );
-		}
-
-		return glCheckError( *this, "glBinormalPointer" );
-	}
-
-	bool OpenGl::HasTangentPointer()const
-	{
-		return m_pfnTangentPointer != nullptr;
-	}
-
-	bool OpenGl::HasBinormalPointer()const
-	{
-		return m_pfnBinormalPointer != nullptr;
-	}
-
-	bool OpenGl::ColorPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		m_pfnColorPointer( size, type, stride, pointer );
-		return glCheckError( *this, "glColorPointer" );
-	}
-
-	bool OpenGl::TexCoordPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const
-	{
-		m_pfnTexCoordPointer( size, type, stride, pointer );
-		return glCheckError( *this, "glTexCoordPointer" );
 	}
 
 	bool OpenGl::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const
@@ -1877,17 +1848,17 @@ namespace GlRender
 		return m_pBufFunctions->VertexAttribIFormat( index, size, type, stride );
 	}
 
-	bool OpenGl::MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool OpenGl::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
 	{
 		return m_pBufFunctions->MakeBufferResident( target, access );
 	}
 
-	bool OpenGl::MakeBufferNonResident( eGL_BUFFER_TARGET target )const
+	bool OpenGl::MakeBufferNonResident( GlBufferTarget target )const
 	{
 		return m_pBufFunctions->MakeBufferNonResident( target );
 	}
 
-	bool OpenGl::IsBufferResident( eGL_BUFFER_TARGET target )const
+	bool OpenGl::IsBufferResident( GlBufferTarget target )const
 	{
 		return m_pBufFunctions->IsBufferResident( target );
 	}
@@ -1910,6 +1881,66 @@ namespace GlRender
 	bool OpenGl::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
 	{
 		return m_pBufFunctions->GetNamedBufferParameter( buffer, pname, params );
+	}
+
+	bool OpenGl::GenTransformFeedbacks( int n, uint32_t * buffers )const
+	{
+		m_pfnGenTransformFeedbacks( n, buffers );
+		return glCheckError( *this, "glGenTransformFeedbacks" );
+	}
+
+	bool OpenGl::DeleteTransformFeedbacks( int n, uint32_t const * buffers )const
+	{
+		m_pfnDeleteTransformFeedbacks( n, buffers );
+		return glCheckError( *this, "glDeleteTransformFeedbacks" );
+	}
+
+	bool OpenGl::BindTransformFeedback( GlBufferTarget target, uint32_t buffer )const
+	{
+		m_pfnBindTransformFeedback( target, buffer );
+		return glCheckError( *this, "glBindTransformFeedback" );
+	}
+
+	bool OpenGl::IsTransformFeedback( uint32_t buffer )const
+	{
+		m_pfnIsTransformFeedback( buffer );
+		return glCheckError( *this, "glIsTransformFeedback" );
+	}
+
+	bool OpenGl::BeginTransformFeedback( GlTopology primitive )const
+	{
+		m_pfnBeginTransformFeedback( uint32_t( primitive ) );
+		return glCheckError( *this, "glBeginTransformFeedback" );
+	}
+
+	bool OpenGl::PauseTransformFeedback()const
+	{
+		m_pfnPauseTransformFeedback();
+		return glCheckError( *this, "glPauseTransformFeedback" );
+	}
+
+	bool OpenGl::ResumeTransformFeedback()const
+	{
+		m_pfnResumeTransformFeedback();
+		return glCheckError( *this, "glResumeTransformFeedback" );
+	}
+
+	bool OpenGl::EndTransformFeedback()const
+	{
+		m_pfnEndTransformFeedback();
+		return glCheckError( *this, "glEndTransformFeedback" );
+	}
+
+	bool OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, eGL_ATTRIBS_LAYOUT bufferMode )const
+	{
+		m_pfnTransformFeedbackVaryings( program, count, varyings, bufferMode );
+		return glCheckError( *this, "glTransformFeedbackVaryings" );
+	}
+
+	bool OpenGl::DrawTransformFeedback( GlTopology mode, uint32_t id )const
+	{
+		m_pfnDrawTransformFeedback( uint32_t( mode ), id );
+		return glCheckError( *this, "glDrawTransformFeedback" );
 	}
 
 	bool OpenGl::GenFramebuffers( int n, uint32_t * framebuffers )const
@@ -2007,8 +2038,8 @@ namespace GlRender
 		bool l_return = true;
 		int l_iMaxSamples;
 		int l_iMaxSize;
-		OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
-		OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE, &l_iMaxSize );
+		OpenGl::GetIntegerv( GlMax::Samples, &l_iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::RenderbufferSize, &l_iMaxSize );
 
 		if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
 		{
@@ -2046,8 +2077,8 @@ namespace GlRender
 		bool l_return = true;
 		int l_iMaxSamples;
 		int l_iMaxSize;
-		OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
-		OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE, &l_iMaxSize );
+		OpenGl::GetIntegerv( GlMax::Samples, &l_iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::RenderbufferSize, &l_iMaxSize );
 
 		if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
 		{
@@ -2074,9 +2105,9 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool OpenGl::GetRenderbufferParameteriv( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_PARAMETER p_eParam, int * values )const
+	bool OpenGl::GetRenderbufferParameteriv( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_PARAMETER p_param, int * values )const
 	{
-		m_pfnGetRenderbufferParameteriv( p_eBindingMode, p_eParam, values );
+		m_pfnGetRenderbufferParameteriv( p_eBindingMode, p_param, values );
 		return glCheckError( *this, "glGetRenderbufferParameteriv" );
 	}
 
@@ -2110,15 +2141,15 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, GlInternal p_internalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
 	{
-		m_pfnTexImage2DMultisample( p_target, p_iSamples, p_eInternalFormat, p_iWidth, p_iHeight, p_bFixedSampleLocations );
+		m_pfnTexImage2DMultisample( p_target, p_iSamples, uint32_t( p_internalFormat ), p_iWidth, p_iHeight, p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
 	{
-		m_pfnTexImage2DMultisample( p_target, p_iSamples, p_eInternalFormat, p_size.width(), p_size.height(), p_bFixedSampleLocations );
+		m_pfnTexImage2DMultisample( p_target, p_iSamples, uint32_t( p_internalFormat ), p_size.width(), p_size.height(), p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );
 	}
 
@@ -2510,9 +2541,9 @@ namespace GlRender
 		return l_uiReturn;
 	}
 
-	bool OpenGl::BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer )const
+	bool OpenGl::BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const
 	{
-		m_pfnBindBufferBase( target, index, buffer );
+		m_pfnBindBufferBase( uint32_t( target ), index, buffer );
 		return glCheckError( *this, "glBindBufferBase" );
 	}
 
@@ -2540,9 +2571,9 @@ namespace GlRender
 		return glCheckError( *this, "glGetActiveUniformBlockiv" );
 	}
 
-	uint32_t OpenGl::CreateShader( eGL_SHADER_TYPE type )const
+	uint32_t OpenGl::CreateShader( GlShaderType type )const
 	{
-		uint32_t l_uiReturn = m_pfnCreateShader( type );
+		uint32_t l_uiReturn = m_pfnCreateShader( uint32_t( type ) );
 
 		if ( ! glCheckError( *this, "glCreateShader" ) )
 		{
@@ -2756,13 +2787,13 @@ namespace GlRender
 		return glCheckError( *this, "glDeleteVertexArrays" );
 	}
 
-	bool OpenGl::PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue )const
+	bool OpenGl::PatchParameter( GlPatchParameter p_param, int p_iValue )const
 	{
 		bool l_return = false;
 
 		if ( m_pfnPatchParameteri )
 		{
-			m_pfnPatchParameteri( p_eParam, p_iValue );
+			m_pfnPatchParameteri( uint32_t( p_param ), p_iValue );
 			l_return = glCheckError( *this, "glPatchParameteri" );
 		}
 

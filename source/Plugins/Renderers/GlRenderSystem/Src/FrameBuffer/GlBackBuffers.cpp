@@ -58,7 +58,7 @@ namespace GlRender
 
 	void GlBackBuffers::SetReadBuffer( AttachmentPoint p_eAttach, uint8_t p_index )const
 	{
-		GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( p_eAttach ) ) + p_index ) );
+		GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( p_eAttach ) ) ) + p_index ) );
 	}
 
 	bool GlBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
@@ -73,7 +73,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().ReadBuffer( eGL_BUFFER_BACK );
+			l_return = GetOpenGl().ReadBuffer( GlBufferBinding::Back );
 
 			if ( l_return )
 			{

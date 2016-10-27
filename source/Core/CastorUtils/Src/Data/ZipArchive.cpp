@@ -288,7 +288,7 @@ namespace Castor
 						unzCloseCurrentFile( m_unzip ); /* don't lose the error */
 						p_result.push_back( p_outFolder / l_name );
 					}
-					catch ( Exception & p_exc )
+					catch ( Exception & )
 					{
 						l_error = unzCloseCurrentFile( m_unzip );
 

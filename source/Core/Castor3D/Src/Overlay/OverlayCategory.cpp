@@ -99,13 +99,13 @@ namespace Castor3D
 		DoRender( GetOverlay().GetEngine()->GetOverlayCache().GetRenderer() );
 	}
 
-	void OverlayCategory::SetMaterial( MaterialSPtr p_pMaterial )
+	void OverlayCategory::SetMaterial( MaterialSPtr p_material )
 	{
-		m_pMaterial = p_pMaterial;
+		m_pMaterial = p_material;
 
-		if ( p_pMaterial )
+		if ( p_material )
 		{
-			m_strMatName = p_pMaterial->GetName();
+			m_strMatName = p_material->GetName();
 		}
 		else
 		{

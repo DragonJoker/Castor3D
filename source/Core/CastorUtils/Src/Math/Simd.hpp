@@ -23,9 +23,9 @@ SOFTWARE.
 #ifndef ___CU_SIMD_H___
 #define ___CU_SIMD_H___
 
-#if CASTOR_USE_SSE2
-
 #include "CastorUtilsPrerequisites.hpp"
+
+#if CASTOR_USE_SSE2
 
 #include <xmmintrin.h>
 
@@ -50,7 +50,7 @@ namespace Castor
 		 *\brief		Constructeur depuis un pointeur.
 		 *\param[in]	p_values	Un pointeur sur 4 flottants alignés sur 16 bits.
 		 */
-		explicit inline Float4( float const * p_values);
+		explicit inline Float4( float const * p_values );
 		/**
 		 *\~english
 		 *\brief		Constructor from a single value (duplicates it).

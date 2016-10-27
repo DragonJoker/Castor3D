@@ -72,7 +72,7 @@ namespace GlRender
 	uint8_t * GlImmutableTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock, uint32_t p_index )
 	{
 		uint8_t * l_return = nullptr;
-		
+
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read )
 			 && CheckFlag( p_lock, AccessType::Read ) )
 		{

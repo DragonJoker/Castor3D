@@ -89,7 +89,7 @@ namespace Testing
 		CT_EQUAL( l_tstrOut, l_tstrIn );
 		l_tstrOut = string::string_cast< xchar >( l_wstrIn );
 		std::cout << "	Conversion from std::wstring to String" << std::endl;
-		std::wcout<< L"		Entry  : " << l_wstrIn << std::endl;
+		std::wcout << L"		Entry  : " << l_wstrIn << std::endl;
 		std::cout << "		Result : " << l_tstrOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( l_tstrOut, l_tstrIn );
@@ -102,18 +102,18 @@ namespace Testing
 		l_wstrOut = string::string_cast< wchar_t >( l_tstrIn );
 		std::cout << "	Conversion from String to std::wstring" << std::endl;
 		std::cout << "		Entry  : " << l_tstrIn << std::endl;
-		std::wcout<< L"		Result : " << l_wstrOut << std::endl;
+		std::wcout << L"		Result : " << l_wstrOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_strIn, l_wstrOut );
 		std::cout << "	Conversion from std::string to std::wstring" << std::endl;
 		std::cout << "		Entry  : " << l_strIn << std::endl;
-		std::wcout<< L"		Result : " << l_wstrOut << std::endl;
+		std::wcout << L"		Result : " << l_wstrOut << std::endl;
 		std::cout << std::endl;
 		CT_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_wstrIn, l_strOut );
 		std::cout << "	Conversion from std::wstring to std::string" << std::endl;
-		std::wcout<< L"		Entry  : " << l_wstrIn << std::endl;
+		std::wcout << L"		Entry  : " << l_wstrIn << std::endl;
 		std::cout << "		Result : " << l_strOut << std::endl;
 		CT_EQUAL( l_strOut, l_strIn );
 	}

@@ -162,7 +162,7 @@ namespace Deferred
 		};
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.GetStride();
+		uint32_t l_stride = m_declaration.stride();
 		m_vertexBuffer->Resize( sizeof( l_data ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
@@ -228,7 +228,7 @@ namespace Deferred
 			program.m_pipeline->Cleanup();
 			program.m_pipeline.reset();
 		}
-		
+
 		m_lightPassDepthBuffer->Destroy();
 		m_geometryPassFrameBuffer->Destroy();
 	}
@@ -236,7 +236,7 @@ namespace Deferred
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		bool l_return = true;
-		
+
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::Count ); i++ )
 		{
 			auto l_texture = m_renderSystem.CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read | AccessType::Write, GetTextureFormat( DsTexture( i ) ), m_size );
@@ -290,14 +290,14 @@ namespace Deferred
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		m_vertexBuffer->Initialise( BufferAccessType::Static, BufferAccessNature::Draw );
+		m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
 		m_viewport.Initialise();
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_program->Initialise();
 			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::Triangles, *program.m_program );
-			program.m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr, nullptr );
+			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 		}
 
 		return l_return;
@@ -313,7 +313,6 @@ namespace Deferred
 		}
 
 		m_viewport.Cleanup();
-		m_vertexBuffer->Cleanup();
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::Config );
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();
@@ -400,7 +399,7 @@ namespace Deferred
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				l_program.m_program->UnbindUbos();
-				
+
 				m_lightPassTextures[size_t( DsTexture::Emissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Specular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::Tangent )]->Unbind();
@@ -436,7 +435,7 @@ namespace Deferred
 	{
 	}
 
-	bool RenderTechnique::DoWriteInto (TextFile & p_file)
+	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
 	}
@@ -581,7 +580,6 @@ namespace Deferred
 				auto l_v3MapEmissive = l_writer.GetLocale( cuT( "l_v3MapEmissive" ), l_v4Emissive.xyz() );
 				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
 				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
-				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
 				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
 				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
@@ -592,13 +590,14 @@ namespace Deferred
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
 													 , l_fMatShininess
-													 , FragmentInput( l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent )
+													 , FragmentInput( l_v3Position, l_v3Normal )
 													 , l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
 														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
 														l_v3MapEmissive ), 1.0 );
+
 				if ( p_sceneFlags != 0 )
 				{
 					l_fog.ApplyFog( pxl_v4FragColor, l_dist, l_y );

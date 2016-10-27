@@ -21,8 +21,9 @@ namespace GlRender
 					  std::bind( &OpenGl::DeleteVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
 					  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
-				 )
-		, m_program( p_program )
+					)
+		, m_program{ p_program }
+		, m_glTopology{ p_gl.Get( p_topology ) }
 	{
 	}
 
@@ -32,23 +33,15 @@ namespace GlRender
 
 	bool GlGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
-
-		if ( m_program.HasObject( ShaderType::Hull ) )
-		{
-			l_eMode = eGL_PRIMITIVE_PATCHES;
-			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
-		}
-
 		if ( ObjectType::Bind() )
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElements( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArrays( l_eMode, int( p_index ), int( p_size ) );
+				GetOpenGl().DrawArrays( m_glTopology, int( p_index ), int( p_size ) );
 			}
 
 			ObjectType::Unbind();
@@ -59,28 +52,15 @@ namespace GlRender
 
 	bool GlGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
-
-		if ( m_program.HasObject( ShaderType::Hull ) )
-		{
-			l_eMode = eGL_PRIMITIVE_PATCHES;
-			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
-		}
-
-		if ( m_matrixBuffer )
-		{
-			m_matrixBuffer->GetGpuBuffer()->Fill( m_matrixBuffer->data(), m_matrixBuffer->GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
-		}
-
 		if ( ObjectType::Bind() )
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElementsInstanced( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
+				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArraysInstanced( l_eMode, int( p_index ), int( p_size ), int( p_count ) );
+				GetOpenGl().DrawArraysInstanced( m_glTopology, int( p_index ), int( p_size ), int( p_count ) );
 			}
 
 			ObjectType::Unbind();
@@ -105,42 +85,21 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			if ( DoCreateAttributes( m_program.GetLayout(), m_vertexBuffer->GetDeclaration(), m_vertexAttributes ) )
+			for ( auto & l_buffer : m_buffers )
 			{
-				m_vertexBuffer->Bind();
-				DoBindAttributes( m_vertexAttributes );
-			}
+				GlAttributePtrArray l_attributes;
 
-			if ( m_animationBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_animationBuffer->GetDeclaration(), m_animationAttributes ) )
+				if ( DoCreateAttributes( m_program.GetLayout(), l_buffer.get().GetDeclaration(), l_attributes ) )
 				{
-					m_animationBuffer->Bind();
-					DoBindAttributes( m_animationAttributes );
+					l_buffer.get().Bind();
+					DoBindAttributes( l_attributes );
+					m_attributes.insert( std::end( m_attributes ), std::begin( l_attributes ), std::end( l_attributes ) );
 				}
 			}
 
 			if ( m_indexBuffer )
 			{
 				m_indexBuffer->Bind();
-			}
-
-			if ( m_bonesBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_bonesBuffer->GetDeclaration(), m_bonesAttributes ) )
-				{
-					m_bonesBuffer->Bind();
-					DoBindAttributes( m_bonesAttributes );
-				}
-			}
-
-			if ( m_matrixBuffer )
-			{
-				if ( DoCreateAttributes( m_program.GetLayout(), m_matrixBuffer->GetDeclaration(), m_matrixAttributes ) )
-				{
-					m_matrixBuffer->Bind();
-					DoBindAttributes( m_matrixAttributes );
-				}
 			}
 
 			GetOpenGl().BindVertexArray( 0 );
@@ -151,10 +110,7 @@ namespace GlRender
 
 	void GlGeometryBuffers::DoCleanup()
 	{
-		m_vertexAttributes.clear();
-		m_animationAttributes.clear();
-		m_matrixAttributes.clear();
-		m_bonesAttributes.clear();
+		m_attributes.clear();
 		ObjectType::Destroy();
 	}
 
@@ -192,55 +148,72 @@ namespace GlRender
 		bool l_return = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
 		GlAttributeBaseSPtr l_attribute;
+		uint32_t l_stride = p_declaration.stride();
 
 		switch ( p_element.m_dataType )
 		{
 		case ElementType::Float:
-			l_attribute = std::make_shared< GlAttribute1r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec2:
-			l_attribute = std::make_shared< GlAttribute2r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec3:
-			l_attribute = std::make_shared< GlAttribute3r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Vec4:
-			l_attribute = std::make_shared< GlAttribute4r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Colour:
-			l_attribute = std::make_shared< GlAttribute1ui >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Int:
-			l_attribute = std::make_shared< GlAttribute1i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec2:
-			l_attribute = std::make_shared< GlAttribute2i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec3:
-			l_attribute = std::make_shared< GlAttribute3i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::IVec4:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UInt:
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec2:
+			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec3:
+			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			break;
+
+		case ElementType::UIVec4:
+			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat2:
-			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat3:
-			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		case ElementType::Mat4:
-			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
 		default:

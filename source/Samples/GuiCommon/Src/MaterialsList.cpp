@@ -189,16 +189,16 @@ namespace GuiCommon
 	//	}
 	//}
 	//
-	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_width, uint32_t p_height )
+	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_material, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//	wxMemoryDC l_dcReturn( l_bmpReturn );
 	//
-	//	if ( p_pMaterial )
+	//	if ( p_material )
 	//	{
-	//		if ( p_pMaterial->GetPassCount() )
+	//		if ( p_material->GetPassCount() )
 	//		{
-	//			wxImage * l_pPassImage = CreatePassImage( p_pMaterial->GetPass( 0 ), p_width, p_height );
+	//			wxImage * l_pPassImage = CreatePassImage( p_material->GetPass( 0 ), p_width, p_height );
 	//			wxBitmap l_bmpPass( *l_pPassImage, 32 );
 	//			l_dcReturn.DrawBitmap( l_bmpPass, 0, 0, true );
 	//			delete l_pPassImage;

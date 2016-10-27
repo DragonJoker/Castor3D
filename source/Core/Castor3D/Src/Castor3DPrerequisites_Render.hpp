@@ -248,6 +248,68 @@ namespace Castor3D
 	};
 	/*!
 	\author 	Sylvain DOREMUS
+	\~english
+	\brief		Helper structure to get a topology name.
+	\~french
+	\brief		Structure d'aide pour récupérer le nom d'une topologie.
+	*/
+	template< Topology Topo >
+	struct TopologyNamer
+	{
+		static Castor::String const Name;
+	};
+	/**
+	 *\~english
+	 *\brief		Gets the name of the given topology.
+	 *\param[in]	p_topology	The topology.
+	 *\return		The name.
+	 *\~french
+	 *\brief		Récupère le nom de la topologie donnée.
+	 *\param[in]	p_topology	La topologie.
+	 *\return		Le nom.
+	 */
+	static inline Castor::String const GetTopologyName( Topology p_topology )
+	{
+		switch ( p_topology )
+		{
+		case Topology::Points:
+			return TopologyNamer< Topology::Points >::Name;
+
+		case Topology::Lines:
+			return TopologyNamer< Topology::Lines >::Name;
+
+		case Topology::LineLoop:
+			return TopologyNamer< Topology::LineLoop >::Name;
+
+		case Topology::LineStrip:
+			return TopologyNamer< Topology::LineStrip >::Name;
+
+		case Topology::Triangles:
+			return TopologyNamer< Topology::Triangles >::Name;
+
+		case Topology::TriangleStrips:
+			return TopologyNamer< Topology::TriangleStrips >::Name;
+
+		case Topology::TriangleFan:
+			return TopologyNamer< Topology::TriangleFan >::Name;
+
+		case Topology::Quads:
+			return TopologyNamer< Topology::Quads >::Name;
+
+		case Topology::QuadStrips:
+			return TopologyNamer< Topology::QuadStrips >::Name;
+
+		case Topology::Polygon:
+			return TopologyNamer< Topology::Polygon >::Name;
+
+		default:
+			FAILURE( "Topology type unknown" );
+			CASTOR_EXCEPTION( "Topology type unknown" );
+			break;
+		}
+	}
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.7.0
 	\date 		02/06/2013
 	\~english
@@ -421,6 +483,14 @@ namespace Castor3D
 		IVec3,
 		//! 4 ints (4 bytes each, GLSL ivec4)
 		IVec4,
+		//! 1 uint (4 bytes each, GLSL uint)
+		UInt,
+		//! 2 uints (4 bytes each, GLSL uivec2)
+		UIVec2,
+		//! 3 uints (4 bytes each, GLSL uivec3)
+		UIVec3,
+		//! 4 uints (4 bytes each, GLSL uivec4)
+		UIVec4,
 		//! 2x2 floats (GLSL mat2)
 		Mat2,
 		//! 3x3 floats (GLSL mat3)
@@ -429,7 +499,16 @@ namespace Castor3D
 		Mat4,
 		CASTOR_ENUM_CLASS_BOUNDS( Float )
 	};
-
+	/**
+	 *\~english
+	 *\brief		Gets the byte size of the given element type.
+	 *\param[in]	p_type	The element type.
+	 *\return		The size.
+	 *\~french
+	 *\brief		Récupère la taille en octets du type d'élément donné.
+	 *\param[in]	p_type	Le type d'élément.
+	 *\return		La taille.
+	 */
 	inline uint32_t GetSize( ElementType p_type )
 	{
 		switch ( p_type )
@@ -499,7 +578,6 @@ namespace Castor3D
 		uint8_t m_sceneFlags;
 	};
 
-	template< typename T > class CpuBuffer;
 	class GpuInformations;
 	class RenderSystem;
 	class RenderPass;
@@ -519,10 +597,15 @@ namespace Castor3D
 	struct StaticGeometryRenderNode;
 	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
+	class TransformFeedback;
+
+	template< typename T >
+	class GpuBuffer;
+	template< typename T >
+	class CpuBuffer;
 
 	struct BufferElementDeclaration;
 	class BufferDeclaration;
-	template< typename T > class GpuBuffer;
 	class VertexBuffer;
 	class IndexBuffer;
 	class GeometryBuffers;
@@ -544,12 +627,14 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( ShadowMapPass );
+	DECLARE_SMART_PTR( TransformFeedback );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	DECLARE_MULTIMAP( double, StaticGeometryRenderNode, StaticGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, AnimatedGeometryRenderNode, AnimatedGeometryRenderNodeByDistance );
 	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
+	using VertexBufferArray = std::vector< std::reference_wrapper< VertexBuffer > >;
 
 	//@}
 }

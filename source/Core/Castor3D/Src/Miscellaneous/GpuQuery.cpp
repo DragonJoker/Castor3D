@@ -14,19 +14,19 @@ namespace Castor3D
 	{
 	}
 
-	bool GpuQuery::Create()
+	bool GpuQuery::Initialise()
 	{
-		return DoCreate();
+		return DoInitialise();
 	}
 
-	void GpuQuery::Destroy()
+	void GpuQuery::Cleanup()
 	{
 		if ( m_active )
 		{
 			End();
 		}
 
-		DoDestroy();
+		DoCleanup();
 	}
 
 	bool GpuQuery::Begin()

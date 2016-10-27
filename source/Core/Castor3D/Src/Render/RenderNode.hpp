@@ -178,7 +178,7 @@ namespace Castor3D
 		DataType & m_data;
 	};
 	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
-	using BillboardListRenderNode = ObjectRenderNode< BillboardList >;
+	using BillboardListRenderNode = ObjectRenderNode< BillboardListBase >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date
@@ -294,7 +294,7 @@ namespace Castor3D
 							 , PassRenderNode && p_pass
 							 , GeometryBuffers & p_buffers
 							 , SceneNode & p_sceneNode
-							 , BillboardList & p_data
+							 , BillboardListBase & p_data
 							 , FrameVariableBuffer & p_billboardUbo
 							 , Point2iFrameVariable & p_dimensions )
 			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }

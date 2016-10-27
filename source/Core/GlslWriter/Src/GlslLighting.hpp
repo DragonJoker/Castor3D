@@ -30,11 +30,9 @@ namespace GLSL
 	struct FragmentInput
 	{
 		GlslWriter_API FragmentInput( GlslWriter & p_writer );
-		GlslWriter_API FragmentInput( InParam< Vec3 > const & p_v3Vertex, InParam< Vec3 > const & p_v3Normal, InParam< Vec3 > const & p_v3Tangent, InParam< Vec3 > const & p_v3Bitangent );
+		GlslWriter_API FragmentInput( InParam< Vec3 > const & p_v3Vertex, InParam< Vec3 > const & p_v3Normal );
 		InParam< Vec3 > m_v3Vertex;
 		InParam< Vec3 > m_v3Normal;
-		InParam< Vec3 > m_v3Tangent;
-		InParam< Vec3 > m_v3Bitangent;
 	};
 
 	struct OutputComponents
@@ -66,20 +64,20 @@ namespace GLSL
 		GlslWriter_API Light GetPointLight( Type const & p_value );
 		GlslWriter_API Light GetSpotLight( Type const & p_value );
 		GlslWriter_API void ComputeDirectionalLight( Light const & p_light
-													   , Vec3 const & p_worldEye
-													   , Float const & p_shininess
-													   , FragmentInput const & p_fragmentIn
-													   , OutputComponents & p_output );
+													 , Vec3 const & p_worldEye
+													 , Float const & p_shininess
+													 , FragmentInput const & p_fragmentIn
+													 , OutputComponents & p_output );
 		GlslWriter_API void ComputePointLight( Light const & p_light
-												 , Vec3 const & p_worldEye
-												 , Float const & p_shininess
-												 , FragmentInput const & p_fragmentIn
-												 , OutputComponents & p_output );
+											   , Vec3 const & p_worldEye
+											   , Float const & p_shininess
+											   , FragmentInput const & p_fragmentIn
+											   , OutputComponents & p_output );
 		GlslWriter_API void ComputeSpotLight( Light const & p_light
-												, Vec3 const & p_worldEye
-												, Float const & p_shininess
-												, FragmentInput const & p_fragmentIn
-												, OutputComponents & p_output );
+											  , Vec3 const & p_worldEye
+											  , Float const & p_shininess
+											  , FragmentInput const & p_fragmentIn
+											  , OutputComponents & p_output );
 
 	protected:
 

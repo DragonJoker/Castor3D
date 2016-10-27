@@ -1,4 +1,6 @@
-﻿namespace Castor
+﻿#include "Simd.hpp"
+
+namespace Castor
 {
 	namespace
 	{
@@ -120,33 +122,35 @@
 		{
 			static const uint32_t Size = sizeof( float ) * 4;
 
-			static inline void mul_sse2( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
+#if CASTOR_USE_SSE2
+
+			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
 			{
 				Matrix4x4f l_result = Matrix4x4f( NoInit() );
-				__m128 l_colB;
-				__m128 l_colR;
-				__m128 l_col0 = _mm_load_ps( p_lhs[0].const_ptr() );				// l_col0 = p_lhs[0]
-				__m128 l_col1 = _mm_load_ps( p_lhs[1].const_ptr() );				// l_col1 = p_lhs[1]
-				__m128 l_col2 = _mm_load_ps( p_lhs[2].const_ptr() );				// l_col2 = p_lhs[2]
-				__m128 l_col3 = _mm_load_ps( p_lhs[3].const_ptr() );				// l_col3 = p_lhs[3]
+				Float4 l_col0{ p_lhs[0].ptr() };		// l_col0 = p_lhs[0]
+				Float4 l_col1{ p_lhs[1].ptr() };		// l_col1 = p_lhs[1]
+				Float4 l_col2{ p_lhs[2].ptr() };		// l_col2 = p_lhs[2]
+				Float4 l_col3{ p_lhs[3].ptr() };		// l_col3 = p_lhs[3]
 
 				for ( int i = 0; i < 4; ++i )
 				{
-					l_colB = _mm_set_ps1( p_rhs[i][0] );							// l_colB = { p_rhs[i][0], p_rhs[i][0], p_rhs[i][0], p_rhs[i][0] }
-					l_colR = _mm_mul_ps( l_col0, l_colB );							// l_colR = l_col0 * l_colB
-					l_colB = _mm_set_ps1( p_rhs[i][1] );							// l_colB = { p_rhs[i][1], p_rhs[i][1], p_rhs[i][1], p_rhs[i][1] }
-					l_colR = _mm_add_ps( l_colR, _mm_mul_ps( l_col1, l_colB ) );	// l_colR += l_col1 * l_colB
-					l_colB = _mm_set_ps1( p_rhs[i][2] );							// l_colB = { p_rhs[i][2], p_rhs[i][2], p_rhs[i][2], p_rhs[i][2] }
-					l_colR = _mm_add_ps( l_colR, _mm_mul_ps( l_col2, l_colB ) );	// l_colR += l_col2 * l_colB
-					l_colB = _mm_set_ps1( p_rhs[i][3] );							// l_colB = { p_rhs[i][3], p_rhs[i][3], p_rhs[i][3], p_rhs[i][3] }
-					l_colR = _mm_add_ps( l_colR, _mm_mul_ps( l_col3, l_colB ) );	// l_colR += l_col3 * l_colB
-					_mm_store_ps( l_result[i].ptr(), l_colR );
+					Float4 l_colB{ p_rhs[i][0] };		// l_colB = { p_rhs[i][0], p_rhs[i][0], p_rhs[i][0], p_rhs[i][0] }
+					Float4 l_colR{ l_col0 * l_colB };	// l_colR = l_col0 * l_colB
+					l_colB = Float4( p_rhs[i][1] );		// l_colB = { p_rhs[i][1], p_rhs[i][1], p_rhs[i][1], p_rhs[i][1] }
+					l_colR += l_col1 * l_colB;			// l_colR += l_col1 * l_colB
+					l_colB = Float4( p_rhs[i][2] );		// l_colB = { p_rhs[i][2], p_rhs[i][2], p_rhs[i][2], p_rhs[i][2] }
+					l_colR += l_col2 * l_colB;			// l_colR += l_col2 * l_colB
+					l_colB = Float4( p_rhs[i][3] );		// l_colB = { p_rhs[i][3], p_rhs[i][3], p_rhs[i][3], p_rhs[i][3] }
+					l_colR += l_col3 * l_colB;			// l_colR += l_col3 * l_colB
+					l_colR.to_ptr( l_result[i].ptr() );
 				}
 
 				p_lhs = l_result;
 			}
 
-			static inline void mul_cpp( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
+#else
+
+			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
 			{
 				typedef typename Matrix4x4f::row_type row_type;
 				Point4f l_ptSrcA0( p_lhs[0][0], p_lhs[0][1], p_lhs[0][2], p_lhs[0][3] );
@@ -157,19 +161,6 @@
 				std::memcpy( p_lhs[1].ptr(), ( l_ptSrcA0 * p_rhs[1][0] + l_ptSrcA1 * p_rhs[1][1] + l_ptSrcA2 * p_rhs[1][2] + l_ptSrcA3 * p_rhs[1][3] ).const_ptr(), Size );
 				std::memcpy( p_lhs[2].ptr(), ( l_ptSrcA0 * p_rhs[2][0] + l_ptSrcA1 * p_rhs[2][1] + l_ptSrcA2 * p_rhs[2][2] + l_ptSrcA3 * p_rhs[2][3] ).const_ptr(), Size );
 				std::memcpy( p_lhs[3].ptr(), ( l_ptSrcA0 * p_rhs[3][0] + l_ptSrcA1 * p_rhs[3][1] + l_ptSrcA2 * p_rhs[3][2] + l_ptSrcA3 * p_rhs[3][3] ).const_ptr(), Size );
-			}
-
-#if CASTOR_USE_SSE2
-
-			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
-			{
-				mul_sse2( p_lhs, p_rhs );
-			}
-
-#else
-			static inline void mul( Castor::SquareMatrix< float, 4 > & p_lhs, Castor::SquareMatrix< float, 4 > const & p_rhs )
-			{
-				mul_cpp( p_lhs, p_rhs );
 			}
 
 #endif

@@ -15,7 +15,7 @@ namespace GlRender
 					  std::bind( &OpenGl::GenQueries, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::DeleteQueries, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsQuery, std::ref( p_renderSystem.GetOpenGl() ), std::placeholders::_1 )
-				 )
+					)
 	{
 	}
 
@@ -23,12 +23,12 @@ namespace GlRender
 	{
 	}
 
-	bool GlQuery::DoCreate()
+	bool GlQuery::DoInitialise()
 	{
 		return ObjectType::Create();
 	}
 
-	void GlQuery::DoDestroy()
+	void GlQuery::DoCleanup()
 	{
 		return ObjectType::Destroy();
 	}

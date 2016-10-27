@@ -25,13 +25,9 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool TestVertexBuffer::Upload( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		return true;
-	}
-
-	void TestVertexBuffer::Cleanup()
-	{
 	}
 
 	bool TestVertexBuffer::Bind()
@@ -50,6 +46,11 @@ namespace TestRender
 
 	void TestVertexBuffer::Unlock()
 	{
+	}
+
+	bool TestVertexBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )
+	{
+		return true;
 	}
 
 	bool TestVertexBuffer::Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )

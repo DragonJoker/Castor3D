@@ -76,7 +76,7 @@ namespace Castor3D
 		m_passes.push_back( l_newPass );
 		return l_newPass;
 	}
-	
+
 	void Material::AddPass( PassSPtr p_pass )
 	{
 		m_passes.push_back( p_pass );

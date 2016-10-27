@@ -66,12 +66,12 @@ namespace GlRender
 			}
 			else
 			{
-				GetOpenGl().DrawBuffer( eGL_BUFFER_NONE );
+				GetOpenGl().DrawBuffer( GlBufferBinding::None );
 			}
 		}
 		else
 		{
-			GetOpenGl().DrawBuffer( eGL_BUFFER_NONE );
+			GetOpenGl().DrawBuffer( GlBufferBinding::None );
 		}
 	}
 
@@ -99,7 +99,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) + p_index ) );
+			l_return = GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) ) + p_index ) );
 
 			if ( l_return )
 			{

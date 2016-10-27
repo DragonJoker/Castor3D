@@ -250,6 +250,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The particles count.
+		 *\~french
+		 *\return		Le nombre de particules.
+		 */
+		inline uint32_t GetParticlesCount()const
+		{
+			return m_particlesCount;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the target size
 		 *\return		The size
 		 *\~english
@@ -518,6 +528,9 @@ namespace Castor3D
 		//!\~english	The visible objects count.
 		//!\~french		Le nombre d'objets visibles.
 		uint32_t m_visibleObjectsCount;
+		//!\~english	The particles count.
+		//!\~french		Le nombre de particules.
+		uint32_t m_particlesCount;
 	};
 }
 

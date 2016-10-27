@@ -256,19 +256,13 @@ namespace Testing
 
 	void OpenCLBench::Execute()
 	{
-		BENCHMARK( MtxMultCastorCpp, NB_TESTS );
-		BENCHMARK( MtxMultCastorSse2, NB_TESTS );
+		BENCHMARK( MtxMultCastor, NB_TESTS );
 		BENCHMARK( MtxMultCL, NB_TESTS );
 	}
 
-	void OpenCLBench::MtxMultCastorCpp()
+	void OpenCLBench::MtxMultCastor()
 	{
-		Castor::SqrMtxOperators< float, 4 >::mul_cpp( m_mtx4x4CuA, m_mtx4x4CuB );
-	}
-
-	void OpenCLBench::MtxMultCastorSse2()
-	{
-		Castor::SqrMtxOperators< float, 4 >::mul_sse2( m_mtx4x4CuA, m_mtx4x4CuB );
+		Castor::SqrMtxOperators< float, 4 >::mul( m_mtx4x4CuA, m_mtx4x4CuB );
 	}
 
 	void OpenCLBench::MtxMultCL()

@@ -25,6 +25,13 @@ namespace castortd
 			Invalid,
 		};
 
+		inline Cell( uint32_t p_x = 0u, uint32_t p_y = 0u, State p_state = State::Empty )
+			: m_x{ p_x }
+			, m_y{ p_y }
+			, m_state{ p_state }
+		{
+		}
+
 		uint32_t m_x{ 0u };
 		uint32_t m_y{ 0u };
 		State m_state{ State::Empty };

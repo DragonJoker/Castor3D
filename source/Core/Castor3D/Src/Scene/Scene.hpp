@@ -36,6 +36,7 @@ SOFTWARE.
 #include "MaterialCache.hpp"
 #include "MeshCache.hpp"
 #include "OverlayCache.hpp"
+#include "ParticleSystemCache.hpp"
 #include "SamplerCache.hpp"
 #include "WindowCache.hpp"
 
@@ -437,6 +438,9 @@ namespace Castor3D
 		//!\~english	The billboards cache.
 		//!\~french		Le cache de billboards.
 		DECLARE_OBJECT_CACHE_MEMBER( billboard, BillboardList );
+		//!\~english	The particle systems cache.
+		//!\~french		Le cache de systèmes de particules.
+		DECLARE_OBJECT_CACHE_MEMBER( particleSystem, ParticleSystem );
 		//!\~english	The meshes cache.
 		//!\~french		Le cache de maillages.
 		DECLARE_CACHE_MEMBER( mesh, Mesh );

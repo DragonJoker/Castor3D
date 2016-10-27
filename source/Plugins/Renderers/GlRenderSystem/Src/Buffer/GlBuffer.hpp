@@ -47,7 +47,7 @@ namespace GlRender
 		using HardwareBufferPtr = typename Castor3D::GpuBuffer< T >::HardwareBufferPtr;
 
 	public:
-		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer );
+		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target, HardwareBufferPtr p_buffer );
 		virtual ~GlBuffer();
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Create
@@ -60,11 +60,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Initialise
 		 */
-		bool Initialise( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
-		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Cleanup
-		 */
-		void Cleanup()override;
+		bool Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
 		 */
@@ -73,6 +69,10 @@ namespace GlRender
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
 		 */
 		void Unbind()override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
+		 */
+		bool Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Fill
 		 */

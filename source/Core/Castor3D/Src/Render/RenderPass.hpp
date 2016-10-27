@@ -35,14 +35,14 @@ namespace Castor3D
 	inline bool operator<( PipelineFlags const & p_lhs, PipelineFlags const & p_rhs )
 	{
 		return p_lhs.m_colourBlendMode < p_rhs.m_colourBlendMode
-			|| ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
-				 && ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
-					  || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
-						   && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
-								|| ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
-									 && ( p_lhs.m_programFlags < p_rhs.m_programFlags
-										  || ( p_lhs.m_programFlags == p_rhs.m_programFlags
-											   && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
+			   || ( p_lhs.m_colourBlendMode == p_rhs.m_colourBlendMode
+					&& ( p_lhs.m_alphaBlendMode < p_rhs.m_alphaBlendMode
+						 || ( p_lhs.m_alphaBlendMode == p_rhs.m_alphaBlendMode
+							  && ( p_lhs.m_textureFlags < p_rhs.m_textureFlags
+								   || ( p_lhs.m_textureFlags == p_rhs.m_textureFlags
+										&& ( p_lhs.m_programFlags < p_rhs.m_programFlags
+											 || ( p_lhs.m_programFlags == p_rhs.m_programFlags
+												  && p_lhs.m_sceneFlags < p_rhs.m_sceneFlags ) ) ) ) ) ) );
 	}
 	/*!
 	\author		Sylvain DOREMUS
@@ -275,7 +275,7 @@ namespace Castor3D
 		*/
 		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
 																 , Pipeline & p_pipeline
-																 , BillboardList & p_billboard );
+																 , BillboardListBase & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
@@ -487,6 +487,9 @@ namespace Castor3D
 		//!\~english	The objects rendered in the last frame.
 		//!\~french		Les objets dessinés lors de la dernière frame.
 		std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > m_renderedObjects;
+		//!\~english	The rendered particles count.
+		//!\~french		Le nombre de particules dessinées.
+		uint32_t m_particlesCount{ 0u };
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

@@ -131,13 +131,13 @@ namespace Fxaa
 								  , dir * rcpDirMin ) ) * p_rcpFrame.xy();
 				/*--------------------------------------------------------*/
 				auto rgbA = l_writer.GetLocale( cuT( "rgbA" )
-							   , l_writer.Paren( l_writer.Paren(
-								   texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 1.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() +
-								   texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 2.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() ) * Float( 1.0f ) / 2.0 ) );
+												, l_writer.Paren( l_writer.Paren(
+														texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 1.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() +
+														texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 2.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() ) * Float( 1.0f ) / 2.0 ) );
 				auto rgbB = l_writer.GetLocale( cuT( "rgbB" )
-							   , rgbA * l_writer.Paren( Float( 1.0f ) / 2.0 ) + l_writer.Paren( Float( 1.0 ) / 4.0 ) * l_writer.Paren(
-								   texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 0.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() +
-								   texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 3.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() ) );
+												, rgbA * l_writer.Paren( Float( 1.0f ) / 2.0 ) + l_writer.Paren( Float( 1.0 ) / 4.0 ) * l_writer.Paren(
+													texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 0.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() +
+													texture( p_tex, p_posPos.xy() + dir * l_writer.Paren( Float( 3.0f ) / 3.0 - 0.5 ), 0.0 ).xyz() ) );
 				auto lumaB = l_writer.GetLocale( cuT( "lumaB" ), dot( rgbB, luma ) );
 
 				IF( l_writer, "( lumaB < lumaMin ) || ( lumaB > lumaMax )" )

@@ -76,6 +76,10 @@ namespace GlRender
 		 */
 		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer )override;
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateTransformFeedback
+		 */
+		Castor3D::TransformFeedbackUPtr CreateTransformFeedback( Castor3D::BufferDeclaration const & p_computed, Castor3D::Topology p_topology, Castor3D::ShaderProgram & p_program )override;
+		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
 		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
@@ -102,7 +106,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateQuery
 		 */
-		Castor3D::GpuQuerySPtr CreateQuery( Castor3D::QueryType p_type )override;
+		Castor3D::GpuQueryUPtr CreateQuery( Castor3D::QueryType p_type )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateViewport
 		 */
@@ -145,7 +149,7 @@ namespace GlRender
 		void DoCleanup()override;
 
 	public:
-		static Castor::String Name;
+		C3D_Gl_API static Castor::String Name;
 
 	protected:
 		bool m_useVertexBufferObjects;

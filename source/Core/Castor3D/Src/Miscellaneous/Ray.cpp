@@ -93,7 +93,7 @@ namespace Castor3D
 	Intersection Ray::Intersects( Face const & p_face, Castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const
 	{
 		Point3r l_pt1, l_pt2, l_pt3;
-		auto l_stride = p_submesh.GetVertexBuffer().GetDeclaration().GetStride();
+		auto l_stride = p_submesh.GetVertexBuffer().GetDeclaration().stride();
 		return Intersects( p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[0] * l_stride], l_pt1 )
 						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[1] * l_stride], l_pt2 )
 						   , p_transform * Vertex::GetPosition( &p_submesh.GetVertexBuffer().data()[p_face[2] * l_stride], l_pt3 )

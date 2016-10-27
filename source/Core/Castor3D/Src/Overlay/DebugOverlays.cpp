@@ -53,6 +53,7 @@ namespace Castor3D
 		m_debugFaceCount = GetTextOverlay( p_cache, cuT( "DebugPanel-FaceCount-Value" ) );
 		m_debugObjectCount = GetTextOverlay( p_cache, cuT( "DebugPanel-ObjectCount-Value" ) );
 		m_debugVisibleObjectCount = GetTextOverlay( p_cache, cuT( "DebugPanel-VisibleObjectCount-Value" ) );
+		m_debugParticlesCount = GetTextOverlay( p_cache, cuT( "DebugPanel-ParticlesCount-Value" ) );
 		m_debugTime = GetTextOverlay( p_cache, cuT( "DebugPanel-DebugTime-Value" ) );
 		m_externTime = GetTextOverlay( p_cache, cuT( "DebugPanel-ExternalTime-Value" ) );
 
@@ -66,6 +67,7 @@ namespace Castor3D
 				  && m_debugFaceCount
 				  && m_debugObjectCount
 				  && m_debugVisibleObjectCount
+				  && m_debugParticlesCount
 				  && m_debugTime
 				  && m_externTime;
 
@@ -88,6 +90,7 @@ namespace Castor3D
 		m_debugFaceCount.reset();
 		m_debugObjectCount.reset();
 		m_debugVisibleObjectCount.reset();
+		m_debugParticlesCount.reset();
 		m_debugTime.reset();
 		m_externTime.reset();
 	}
@@ -103,7 +106,7 @@ namespace Castor3D
 		}
 	}
 
-	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible )
+	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects, uint32_t p_visible, uint32_t p_particles )
 	{
 		if ( m_valid && m_visible )
 		{
@@ -117,6 +120,7 @@ namespace Castor3D
 			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
 			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
 			m_debugVisibleObjectCount->SetCaption( string::to_string( p_visible ) );
+			m_debugParticlesCount->SetCaption( string::to_string( p_particles ) );
 
 			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_gpuTime << cuT( " ms" ) );
 			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );

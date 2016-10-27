@@ -131,6 +131,7 @@ namespace GlRender
 		GetFunction( m_pfnBindBuffer, cuT( "glBindBuffer" ), cuT( "ARB" ) );
 		GetFunction( m_pfnBufferData, cuT( "glBufferData" ), cuT( "ARB" ) );
 		GetFunction( m_pfnBufferSubData, cuT( "glBufferSubData" ), cuT( "ARB" ) );
+		GetFunction( m_pfnCopyBufferSubData, cuT( "glCopyBufferSubData" ), cuT( "ARB" ) );
 		GetFunction( m_pfnGetBufferParameteriv, cuT( "glGetBufferParameteriv" ), cuT( "ARB" ) );
 		GetFunction( m_pfnMapBuffer, cuT( "glMapBuffer" ), cuT( "ARB" ) );
 		GetFunction( m_pfnUnmapBuffer, cuT( "glUnmapBuffer" ), cuT( "ARB" ) );
@@ -146,6 +147,7 @@ namespace GlRender
 	{
 		GetFunction( m_pfnNamedBufferData, cuT( "glNamedBufferData" ), cuT( "EXT" ) );
 		GetFunction( m_pfnNamedBufferSubData, cuT( "glNamedBufferSubData" ), cuT( "EXT" ) );
+		GetFunction( m_pfnCopyNamedBufferSubData, cuT( "glCopyNamedBufferSubData" ), cuT( "ARB" ) );
 		GetFunction( m_pfnGetNamedBufferParameteriv, cuT( "glGetNamedBufferParameteriv" ), cuT( "EXT" ) );
 		GetFunction( m_pfnMapNamedBuffer, cuT( "glMapNamedBuffer" ), cuT( "EXT" ) );
 		GetFunction( m_pfnUnmapNamedBuffer, cuT( "glUnmapNamedBuffer" ), cuT( "EXT" ) );
@@ -181,16 +183,16 @@ namespace GlRender
 		GlslStrings[l_index++] = cuT( "[e06] Compiler log is not available!" );
 		GlslStrings[l_index] = cuT( "[Empty]" );
 
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Points )] = eGL_PRIMITIVE_POINTS;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Lines )] = eGL_PRIMITIVE_LINES;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::LineLoop )] = eGL_PRIMITIVE_LINE_LOOP;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::LineStrip )] = eGL_PRIMITIVE_LINE_STRIP;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Triangles )] = eGL_PRIMITIVE_TRIANGLES;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleStrips )] = eGL_PRIMITIVE_TRIANGLE_STRIP;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleFan )] = eGL_PRIMITIVE_TRIANGLE_FAN;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Quads )] = eGL_PRIMITIVE_QUADS;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::QuadStrips )] = eGL_PRIMITIVE_QUAD_STRIP;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Polygon )] = eGL_PRIMITIVE_POLYGON;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Points )] = GlTopology::Points;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Lines )] = GlTopology::Lines;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::LineLoop )] = GlTopology::LineLoop;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::LineStrip )] = GlTopology::LineStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Triangles )] = GlTopology::Triangles;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleStrips )] = GlTopology::TriangleStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleFan )] = GlTopology::TriangleFan;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Quads )] = GlTopology::Quads;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::QuadStrips )] = GlTopology::QuadStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Polygon )] = GlTopology::Polygon;
 
 		TextureDimensions[uint32_t( Castor3D::TextureType::Buffer )] = eGL_TEXDIM_BUFFER;
 		TextureDimensions[uint32_t( Castor3D::TextureType::OneDimension )] = eGL_TEXDIM_1D;
@@ -272,63 +274,63 @@ namespace GlRender
 		BlendOps[uint32_t( Castor3D::BlendOperation::Min )] = eGL_BLEND_OP_MIN;
 		BlendOps[uint32_t( Castor3D::BlendOperation::Max )] = eGL_BLEND_OP_MAX;
 
-		PixelFormats[uint32_t( Castor::PixelFormat::L8 )] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R8, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::L16F32F )] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R16F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::L32F )] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R32F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8L8 )] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG16, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::AL16F32F )] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG16F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::AL32F )] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG32F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGB5_A1, eGL_TYPE_UNSIGNED_SHORT_1_5_5_5_REV );
-		PixelFormats[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA4, eGL_TYPE_UNSIGNED_SHORT_4_4_4_4_REV );
-		PixelFormats[uint32_t( Castor::PixelFormat::R5G6B5 )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB16, eGL_TYPE_UNSIGNED_SHORT_5_6_5_REV );
-		PixelFormats[uint32_t( Castor::PixelFormat::R8G8B8 )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::B8G8R8 )] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB16F, eGL_TYPE_HALF_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA16F, eGL_TYPE_HALF_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F32F )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F32F )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB32F )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA32F )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGBA32F, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC1 )] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1, eGL_TYPE_DEFAULT );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC3 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3, eGL_TYPE_DEFAULT );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC5 )] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT5, eGL_TYPE_DEFAULT );
-		PixelFormats[uint32_t( Castor::PixelFormat::YUY2 )] = PixelFmt( eGL_FORMAT( 0 ), eGL_INTERNAL( 0 ), eGL_TYPE_DEFAULT );
-		PixelFormats[uint32_t( Castor::PixelFormat::D16 )] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT16, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::D24 )] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT24, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::D24S8 )] = PixelFmt( eGL_FORMAT_DEPTH_STENCIL, eGL_INTERNAL_DEPTH24_STENCIL8, eGL_TYPE_UNSIGNED_INT_24_8 );
-		PixelFormats[uint32_t( Castor::PixelFormat::D32 )] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT32, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::D32F )] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT32, eGL_TYPE_FLOAT );
-		PixelFormats[uint32_t( Castor::PixelFormat::S1 )] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX1, eGL_TYPE_UNSIGNED_BYTE );
-		PixelFormats[uint32_t( Castor::PixelFormat::S8 )] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::L8 )] = PixelFmt( eGL_FORMAT_RED, GlInternal::R8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::L16F32F )] = PixelFmt( eGL_FORMAT_RED, GlInternal::R16F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::L32F )] = PixelFmt( eGL_FORMAT_RED, GlInternal::R32F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8L8 )] = PixelFmt( eGL_FORMAT_RG, GlInternal::RG16, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::AL16F32F )] = PixelFmt( eGL_FORMAT_RG, GlInternal::RG16F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::AL32F )] = PixelFmt( eGL_FORMAT_RG, GlInternal::RG32F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::RGB5A1, eGL_TYPE_UNSIGNED_SHORT_1_5_5_5_REV );
+		PixelFormats[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::RGBA4, eGL_TYPE_UNSIGNED_SHORT_4_4_4_4_REV );
+		PixelFormats[uint32_t( Castor::PixelFormat::R5G6B5 )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGB16, eGL_TYPE_UNSIGNED_SHORT_5_6_5_REV );
+		PixelFormats[uint32_t( Castor::PixelFormat::R8G8B8 )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGB8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::B8G8R8 )] = PixelFmt( eGL_FORMAT_BGR, GlInternal::RGB8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::RGBA8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = PixelFmt( eGL_FORMAT_BGRA, GlInternal::RGBA8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGB16F, eGL_TYPE_HALF_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::RGBA16F, eGL_TYPE_HALF_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F32F )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGB16F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F32F )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::RGBA16F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB32F )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGB32F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA32F )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::RGBA32F, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC1 )] = PixelFmt( eGL_FORMAT_RGB, GlInternal::DXT1, eGL_TYPE_DEFAULT );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC3 )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::DXT3, eGL_TYPE_DEFAULT );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC5 )] = PixelFmt( eGL_FORMAT_RGBA, GlInternal::DXT5, eGL_TYPE_DEFAULT );
+		PixelFormats[uint32_t( Castor::PixelFormat::YUY2 )] = PixelFmt( eGL_FORMAT( 0 ), GlInternal( 0 ), eGL_TYPE_DEFAULT );
+		PixelFormats[uint32_t( Castor::PixelFormat::D16 )] = PixelFmt( eGL_FORMAT_DEPTH, GlInternal::D16, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::D24 )] = PixelFmt( eGL_FORMAT_DEPTH, GlInternal::D24, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::D24S8 )] = PixelFmt( eGL_FORMAT_DEPTH_STENCIL, GlInternal::D24S8, eGL_TYPE_UNSIGNED_INT_24_8 );
+		PixelFormats[uint32_t( Castor::PixelFormat::D32 )] = PixelFmt( eGL_FORMAT_DEPTH, GlInternal::D32, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::D32F )] = PixelFmt( eGL_FORMAT_DEPTH, GlInternal::D32, eGL_TYPE_FLOAT );
+		PixelFormats[uint32_t( Castor::PixelFormat::S1 )] = PixelFmt( eGL_FORMAT_STENCIL, GlInternal::S1, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[uint32_t( Castor::PixelFormat::S8 )] = PixelFmt( eGL_FORMAT_STENCIL, GlInternal::S8, eGL_TYPE_UNSIGNED_BYTE );
 
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Vertex )] = eGL_SHADER_TYPE_VERTEX;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Hull )] = eGL_SHADER_TYPE_TESS_CONTROL;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Domain )] = eGL_SHADER_TYPE_TESS_EVALUATION;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Geometry )] = eGL_SHADER_TYPE_GEOMETRY;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Pixel )] = eGL_SHADER_TYPE_FRAGMENT;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Compute )] = eGL_SHADER_TYPE_COMPUTE;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Vertex )] = GlShaderType::Vertex;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Hull )] = GlShaderType::TessControl;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Domain )] = GlShaderType::TessEvaluation;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Geometry )] = GlShaderType::Geometry;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Pixel )] = GlShaderType::Fragment;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Compute )] = GlShaderType::Compute;
 
-		Internals[uint32_t( Castor::PixelFormat::L8 )] = eGL_INTERNAL_FORMAT_R16;
-		Internals[uint32_t( Castor::PixelFormat::L16F32F )] = eGL_INTERNAL_FORMAT_R16F;
-		Internals[uint32_t( Castor::PixelFormat::L32F )] = eGL_INTERNAL_FORMAT_R32F;
-		Internals[uint32_t( Castor::PixelFormat::A8L8 )] = eGL_INTERNAL_FORMAT_RG16;
-		Internals[uint32_t( Castor::PixelFormat::AL16F32F )] = eGL_INTERNAL_FORMAT_RG16F;
-		Internals[uint32_t( Castor::PixelFormat::AL32F )] = eGL_INTERNAL_FORMAT_RG32F;
-		Internals[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = eGL_INTERNAL_FORMAT_RGBA16UI;
-		Internals[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = eGL_INTERNAL_FORMAT_RGBA16UI;
-		Internals[uint32_t( Castor::PixelFormat::R5G6B5 )] = eGL_INTERNAL_FORMAT_RGB16UI;
-		Internals[uint32_t( Castor::PixelFormat::R8G8B8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::B8G8R8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = eGL_INTERNAL_FORMAT_RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::RGB16F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA16F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGB16F32F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA16F32F )] = eGL_INTERNAL_FORMAT_RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGB32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA32F )] = eGL_INTERNAL_FORMAT_RGBA32F;
+		Internals[uint32_t( Castor::PixelFormat::L8 )] = GlInternal::R16;
+		Internals[uint32_t( Castor::PixelFormat::L16F32F )] = GlInternal::R16F;
+		Internals[uint32_t( Castor::PixelFormat::L32F )] = GlInternal::R32F;
+		Internals[uint32_t( Castor::PixelFormat::A8L8 )] = GlInternal::RG16;
+		Internals[uint32_t( Castor::PixelFormat::AL16F32F )] = GlInternal::RG16F;
+		Internals[uint32_t( Castor::PixelFormat::AL32F )] = GlInternal::RG32F;
+		Internals[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = GlInternal::RGBA16UI;
+		Internals[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = GlInternal::RGBA16UI;
+		Internals[uint32_t( Castor::PixelFormat::R5G6B5 )] = GlInternal::RGB16UI;
+		Internals[uint32_t( Castor::PixelFormat::R8G8B8 )] = GlInternal::RGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::B8G8R8 )] = GlInternal::RGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = GlInternal::RGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = GlInternal::RGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::RGB16F )] = GlInternal::RGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA16F )] = GlInternal::RGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGB16F32F )] = GlInternal::RGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA16F32F )] = GlInternal::RGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGB32F )] = GlInternal::RGBA32F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA32F )] = GlInternal::RGBA32F;
 
 		Attachments[uint32_t( Castor3D::AttachmentPoint::None )] = eGL_TEXTURE_ATTACHMENT_NONE;
 		Attachments[uint32_t( Castor3D::AttachmentPoint::Colour )] = eGL_TEXTURE_ATTACHMENT_COLOR0;
@@ -375,16 +377,16 @@ namespace GlRender
 		RboStorages[uint32_t( Castor::PixelFormat::S1 )] = eGL_RENDERBUFFER_STORAGE_STENCIL1;
 		RboStorages[uint32_t( Castor::PixelFormat::S8 )] = eGL_RENDERBUFFER_STORAGE_STENCIL8;
 
-		Buffers[uint32_t( WindowBuffer::None )] = eGL_BUFFER_NONE;
-		Buffers[uint32_t( WindowBuffer::FrontLeft )] = eGL_BUFFER_FRONT_LEFT;
-		Buffers[uint32_t( WindowBuffer::FrontRight )] = eGL_BUFFER_FRONT_RIGHT;
-		Buffers[uint32_t( WindowBuffer::BackLeft )] = eGL_BUFFER_BACK_LEFT;
-		Buffers[uint32_t( WindowBuffer::BackRight )] = eGL_BUFFER_BACK_RIGHT;
-		Buffers[uint32_t( WindowBuffer::Front )] = eGL_BUFFER_FRONT;
-		Buffers[uint32_t( WindowBuffer::Back )] = eGL_BUFFER_BACK;
-		Buffers[uint32_t( WindowBuffer::Left )] = eGL_BUFFER_LEFT;
-		Buffers[uint32_t( WindowBuffer::Right )] = eGL_BUFFER_RIGHT;
-		Buffers[uint32_t( WindowBuffer::FrontAndBack )] = eGL_BUFFER_FRONT_AND_BACK;
+		Buffers[uint32_t( WindowBuffer::None )] = GlBufferBinding::None;
+		Buffers[uint32_t( WindowBuffer::FrontLeft )] = GlBufferBinding::FrontLeft;
+		Buffers[uint32_t( WindowBuffer::FrontRight )] = GlBufferBinding::FrontRight;
+		Buffers[uint32_t( WindowBuffer::BackLeft )] = GlBufferBinding::BackLeft;
+		Buffers[uint32_t( WindowBuffer::BackRight )] = GlBufferBinding::BackRight;
+		Buffers[uint32_t( WindowBuffer::Front )] = GlBufferBinding::Front;
+		Buffers[uint32_t( WindowBuffer::Back )] = GlBufferBinding::Back;
+		Buffers[uint32_t( WindowBuffer::Left )] = GlBufferBinding::Left;
+		Buffers[uint32_t( WindowBuffer::Right )] = GlBufferBinding::Right;
+		Buffers[uint32_t( WindowBuffer::FrontAndBack )] = GlBufferBinding::FrontAndBack;
 
 		Faces[uint32_t( Castor3D::Culling::None )] = eGL_FACE( 0 );
 		Faces[uint32_t( Castor3D::Culling::Front )] = eGL_FACE_FRONT;
@@ -425,13 +427,13 @@ namespace GlRender
 		StencilOps[uint32_t( Castor3D::StencilOp::DecrWrap )] = eGL_STENCIL_OP_DECR_WRAP;
 		StencilOps[uint32_t( Castor3D::StencilOp::Invert )] = eGL_STENCIL_OP_INVERT;
 
-		BuffersTA[eGL_TEXTURE_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
-		BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
-		BuffersTA[eGL_TEXTURE_ATTACHMENT_DEPTH] = eGL_BUFFER_DEPTH;
-		BuffersTA[eGL_TEXTURE_ATTACHMENT_STENCIL] = eGL_BUFFER_STENCIL;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_NONE] = GlBufferBinding::None;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR0] = GlBufferBinding::Color0;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_DEPTH] = GlBufferBinding::Depth;
+		BuffersTA[eGL_TEXTURE_ATTACHMENT_STENCIL] = GlBufferBinding::Stencil;
 
-		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
-		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
+		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_NONE] = GlBufferBinding::None;
+		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR0] = GlBufferBinding::Color0;
 
 		Queries[uint32_t( QueryType::TimeElapsed )] = eGL_QUERY_TIME_ELAPSED;
 		Queries[uint32_t( QueryType::SamplesPassed )] = eGL_QUERY_SAMPLES_PASSED;
@@ -452,7 +454,7 @@ namespace GlRender
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = eGL_TEXTURE_STORAGE_2DARRAY;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap)] = eGL_TEXTURE_STORAGE_CUBE_MAP;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap )] = eGL_TEXTURE_STORAGE_CUBE_MAP;
 		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY;
 
 		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = eGL_TEXDIM_CUBE_FACE_POSX;
@@ -495,11 +497,20 @@ namespace GlRender
 	bool OpenGl::PreInitialise( String const & p_strExtensions )
 	{
 		char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
-		m_extensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+
+		if ( l_extensions )
+		{
+			m_extensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+		}
+		else
+		{
+			m_extensions = p_strExtensions;
+		}
+
 		m_vendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
 		m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 		m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
-		double l_version;
+		double l_version{ 0u };
 		StringStream l_stream( m_version );
 		l_stream >> l_version;
 		m_iVersion = int( l_version * 10 );
@@ -570,10 +581,6 @@ namespace GlRender
 		m_pfnDisable = &glDisable;
 		m_pfnGenTextures = &glGenTextures;
 		m_pfnDeleteTextures = &glDeleteTextures;
-		m_pfnVertexPointer = &glVertexPointer;
-		m_pfnColorPointer = &glColorPointer;
-		m_pfnNormalPointer = &glNormalPointer;
-		m_pfnTexCoordPointer = &glTexCoordPointer;
 		m_pfnTexEnvi = &glTexEnvi;
 		m_pfnTexEnviv = &glTexEnviv;
 		m_pfnTexEnvf = &glTexEnvf;
@@ -682,7 +689,6 @@ namespace GlRender
 			gl_api::GetFunction( cuT( "glBlendFuncIndexedAMD" ), m_pfnBlendFuncSeparatei );
 		}
 
-		m_bHasDepthClipping = HasExtension( EXT_clip_volume_hint );
 		m_bHasNonPowerOfTwoTextures = HasExtension( ARB_texture_non_power_of_two );
 
 		if ( HasExtension( ARB_texture_multisample ) )
@@ -711,16 +717,24 @@ namespace GlRender
 			GetFunction( m_pfnDeleteBuffers, cuT( "glDeleteBuffers" ), cuT( "ARB" ) );
 			GetFunction( m_pfnIsBuffer, cuT( "glIsBuffer" ), cuT( "ARB" ) );
 
-			if ( HasExtension( EXT_coordinate_frame ) )
-			{
-				GetFunction( m_pfnTangentPointer, cuT( "glTangentPointer" ), cuT( "EXT" ) );
-				GetFunction( m_pfnBinormalPointer, cuT( "glBinormalPointer" ), cuT( "EXT" ) );
-			}
-
 			if ( HasExtension( ARB_pixel_buffer_object ) )
 			{
 				m_bHasPbo = true;
 			}
+		}
+
+		if ( HasExtension( ARB_transform_feedback2 ) )
+		{
+			GetFunction( m_pfnGenTransformFeedbacks, cuT( "glGenTransformFeedbacks" ), cuT( "ARB" ) );
+			GetFunction( m_pfnDeleteTransformFeedbacks, cuT( "glDeleteTransformFeedbacks" ), cuT( "ARB" ) );
+			GetFunction( m_pfnBindTransformFeedback, cuT( "glBindTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnIsTransformFeedback, cuT( "glIsTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnBeginTransformFeedback, cuT( "glBeginTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnPauseTransformFeedback, cuT( "glPauseTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnResumeTransformFeedback, cuT( "glResumeTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnEndTransformFeedback, cuT( "glEndTransformFeedback" ), cuT( "ARB" ) );
+			GetFunction( m_pfnTransformFeedbackVaryings, cuT( "glTransformFeedbackVaryings" ), cuT( "ARB" ) );
+			GetFunction( m_pfnDrawTransformFeedback, cuT( "glDrawTransformFeedback" ), cuT( "ARB" ) );
 		}
 
 		if ( HasExtension( ARB_vertex_array_object ) )
@@ -794,10 +808,10 @@ namespace GlRender
 			GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "ARB" ) );
 			GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "ARB" ) );
 			GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "ARB" ) );
-			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameterIuiv" ), cuT( "ARB" ) );
 			GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "ARB" ) );
 			GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "ARB" ) );
-			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameterIuiv" ), cuT( "ARB" ) );
 			GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "ARB" ) );
 			GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "ARB" ) );
 			GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "ARB" ) );
@@ -815,10 +829,10 @@ namespace GlRender
 			GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "EXT" ) );
 			GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "EXT" ) );
 			GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "EXT" ) );
-			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameterIuiv" ), cuT( "EXT" ) );
 			GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "EXT" ) );
 			GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "EXT" ) );
-			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameterIuiv" ), cuT( "EXT" ) );
 			GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "EXT" ) );
 			GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "EXT" ) );
 			GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "EXT" ) );
@@ -1032,7 +1046,6 @@ namespace GlRender
 		m_bHasTSh = false;
 		m_bHasCSh = false;
 		m_bHasSpl = false;
-		m_bHasDepthClipping = false;
 		m_bHasNonPowerOfTwoTextures = false;
 		m_bBindVboToGpuAddress = false;
 		m_iGlslVersion = 0;

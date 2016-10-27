@@ -25,7 +25,7 @@ namespace Castor
 						facet.in( state,
 								  p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
 								  &dst[0], &dst[0] + dst.size(), endDst
-							 );
+								);
 						p_strOut = std::wstring( &dst.front(), endDst );
 					}
 				}
@@ -102,7 +102,12 @@ namespace Castor
 		std::basic_string< T > string_cast( U const * p_src )
 		{
 			std::basic_string< T > l_return;
-			StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_return );
+
+			if ( p_src )
+			{
+				StringConverter< U, T >::Convert( std::basic_string< U >( p_src ), l_return );
+			}
+
 			return l_return;
 		}
 

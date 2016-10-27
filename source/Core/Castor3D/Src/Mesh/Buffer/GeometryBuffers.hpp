@@ -67,22 +67,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates the VAO.
-		 *\param[in]	p_vtx	The vertex buffer.
-		 *\param[in]	p_anm	The animation vertex buffer.
-		 *\param[in]	p_idx	The index buffer.
-		 *\param[in]	p_bones	The bones data buffer.
-		 *\param[in]	p_inst	The instances matrices buffer.
+		 *\param[in]	p_buffers	The vertex, animation, ... buffers.
+		 *\param[in]	p_index		The index buffer.
 		 *\return		\p true on ok.
 		 *\~french
 		 *\brief		Crée le VAO.
-		 *\param[in]	p_vtx	Le tampon de sommets.
-		 *\param[in]	p_anm	Le tampon de sommets d'animation.
-		 *\param[in]	p_idx	Le tampon d'indices.
-		 *\param[in]	p_bones	Le tampon de données de bones.
-		 *\param[in]	p_inst	Le tampon de matrices d'instances.
+		 *\param[in]	p_buffers	Les tampons de sommets, animations, ....
+		 *\param[in]	p_index		Le tampon d'indices.
 		 *\return		\p true si ça s'est bien passé.
 		 */
-		C3D_API bool Initialise( VertexBufferSPtr p_vtx, VertexBufferSPtr p_anm, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst );
+		C3D_API bool Initialise( VertexBufferArray const & p_buffers, IndexBufferSPtr p_index );
 		/**
 		 *\~english
 		 *\brief		Destroys the VAO.
@@ -170,21 +164,12 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
-		//!\~english	The vertex buffer.
-		//!\\~french	Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer{ nullptr };
-		//!\~english	The animation vertex buffer.
-		//!\\~french	Le tampon de sommets d'animation.
-		VertexBufferSPtr m_animationBuffer{ nullptr };
+		//!\~english	The vertex, animation, ... buffers.
+		//!\\~french	Les tampons de sommets, animations, ....
+		VertexBufferArray m_buffers;
 		//!\~english	The index buffer.
 		//!\\~french	Le tampon d'indices.
 		IndexBufferSPtr m_indexBuffer{ nullptr };
-		//!\~english	The bones buffer.
-		//!\\~french	Le tampon de bones.
-		VertexBufferSPtr m_bonesBuffer{ nullptr };
-		//!\~english	The matrix buffer.
-		//!\\~french	Le tampon de matrices.
-		VertexBufferSPtr m_matrixBuffer{ nullptr };
 		//!\~english	The shader program.
 		//!\\~french	Le programme de rendu.
 		ShaderProgram const & m_program;

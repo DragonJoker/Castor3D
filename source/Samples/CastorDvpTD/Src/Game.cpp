@@ -14,6 +14,14 @@ namespace castortd
 {
 	namespace
 	{
+#if defined( NDEBUG )
+		constexpr uint32_t InitialLives = 5u;
+		constexpr uint32_t InitialOre = 750u;
+#else
+		constexpr uint32_t InitialLives = 1u;
+		constexpr uint32_t InitialOre = 75000u;
+#endif
+
 		void DoPrepareGridLine( PathNode const & p_prv, PathNode const & p_cur, Grid & p_grid )
 		{
 			if ( p_prv.m_x != p_cur.m_x )
@@ -100,13 +108,8 @@ namespace castortd
 		std::swap( m_grid, l_grid );
 
 		m_totalBullets = 0ull;
-
-#if defined( NDEBUG )
-		m_lives = 5u;
-#else
-		m_lives = 1u;
-#endif
-		m_ore = 750u;
+		m_lives = InitialLives;
+		m_ore = InitialOre;
 		m_kills = 0u;
 		m_selectedTower.reset();
 		m_paused = false;
@@ -184,7 +187,7 @@ namespace castortd
 			m_elapsed = std::chrono::milliseconds{ 40 };
 #else
 			m_elapsed = std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - m_saved );
-#endif 
+#endif
 			DoUpdateBullets();
 			DoUpdateTowers();
 			DoUpdateEnemies();
@@ -342,7 +345,7 @@ namespace castortd
 			auto l_it = std::find_if( m_towers.begin(), m_towers.end(), [&p_cell]( TowerPtr p_tower )
 			{
 				return p_tower->GetCell().m_x == p_cell.m_x
-					&& p_tower->GetCell().m_y == p_cell.m_y;
+					   && p_tower->GetCell().m_y == p_cell.m_y;
 			} );
 
 			if ( l_it != m_towers.end() )

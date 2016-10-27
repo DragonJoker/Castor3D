@@ -28,6 +28,8 @@ SOFTWARE.
 
 #include <Math/SquareMatrix.hpp>
 
+#include <random>
+
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
 #	include <glm/glm.hpp>
@@ -94,7 +96,7 @@ namespace Testing
 
 	inline bool compare( Castor::SquareMatrix< float, 4 > const & a, Castor::SquareMatrix< float, 4 > const & b )
 	{
-		float l_epsilon = 0.0001f;
+		float l_epsilon = 0.001f;
 		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
 			   && std::abs( a[0][1] - b[0][1] ) < l_epsilon
 			   && std::abs( a[0][2] - b[0][2] ) < l_epsilon
@@ -115,7 +117,7 @@ namespace Testing
 
 	inline bool compare( Castor::SquareMatrix< double, 4 > const & a, Castor::SquareMatrix< double, 4 > const & b )
 	{
-		double l_epsilon = 0.0001;
+		double l_epsilon = 0.001;
 		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
 			   && std::abs( a[0][1] - b[0][1] ) < l_epsilon
 			   && std::abs( a[0][2] - b[0][2] ) < l_epsilon
@@ -139,7 +141,7 @@ namespace Testing
 	template< typename T >
 	inline bool operator==( Castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
-		T l_epsilon = T( 0.0001 );
+		T l_epsilon = T( 0.001 );
 		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
 			   && std::abs( a[0][1] - b[0][1] ) < l_epsilon
 			   && std::abs( a[0][2] - b[0][2] ) < l_epsilon

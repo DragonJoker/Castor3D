@@ -152,7 +152,7 @@ namespace Castor3D
 		 */
 		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardList & p_billboard )override;
+														 , BillboardListBase & p_billboard )override;
 
 	private:
 		void DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, Camera const & p_camera );

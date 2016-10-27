@@ -42,7 +42,7 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() ) );
+				l_return = GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( GetAttachmentPoint() ) ) ) + GetAttachmentIndex() ) );
 			}
 
 			if ( l_return )

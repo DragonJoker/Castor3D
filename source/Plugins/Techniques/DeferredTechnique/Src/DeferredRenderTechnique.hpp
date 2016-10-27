@@ -209,7 +209,7 @@ namespace Deferred
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t (DsTexture::Count) > m_geometryPassTexAttachs;
+		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::Count ) > m_geometryPassTexAttachs;
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;

@@ -33,6 +33,217 @@ namespace Castor3D
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		23/10/2016
+	\~english
+	\brief		Billboards list
+	\remarks	All billboards from this list shares the same texture
+	\~french
+	\brief		Liste de billboards
+	\remarks	Tous les billboards de cette liste ont la meme texture
+	*/
+	class BillboardListBase
+		: public MovableObject
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_name			The name.
+		 *\param[in]	p_scene			The parent scene.
+		 *\param[in]	p_parent		The parent scene node.
+		 *\param[in]	p_vertexBuffer	The vertex buffer.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_name			Le nom.
+		 *\param[in]	p_scene			La scene parente.
+		 *\param[in]	p_parent		Le noeud de scène parent.
+		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
+		 */
+		C3D_API BillboardListBase( Castor::String const & p_name
+								   , Scene & p_scene
+								   , SceneNodeSPtr p_parent
+								   , VertexBufferSPtr p_vertexBuffer );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API ~BillboardListBase();
+		/**
+		 *\~english
+		 *\brief		Initialises GPU side elements
+		 *\return		\p true if all is OK
+		 *\~french
+		 *\brief		Initialise les elements GPU
+		 *\return		\p true si tout s'est bien passe
+		 */
+		C3D_API virtual bool Initialise();
+		/**
+		 *\~english
+		 *\brief		Cleans GPU side elements up
+		 *\~french
+		 *\brief		Nettoie les elements GPU
+		 */
+		C3D_API virtual void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Sorts the points from farthest to nearest from the camera.
+		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\~french
+		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
+		 */
+		C3D_API virtual void SortByDistance( Castor::Point3r const & p_cameraPosition );
+		/**
+		 *\~english
+		 *\brief		Draws the billboards.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
+		 *\~french
+		 *\brief		Dessine les billboards.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
+		 */
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given program.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Sets the material
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Definit le materiau
+		 *\param[in]	p_value	La nouvelle valeur
+		 */
+		inline void SetMaterial( MaterialSPtr p_value )
+		{
+			m_material = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The material.
+		 *\~french
+		 *\return		Le materiau.
+		 */
+		inline MaterialSPtr GetMaterial()const
+		{
+			return m_material.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the billboards dimensions
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Definit les dimensios des billboards
+		 *\param[in]	p_value	La nouvelle valeur
+		 */
+		inline void SetDimensions( Castor::Size const & p_value )
+		{
+			m_dimensions = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The billboards dimensions.
+		 *\~french
+		 *\return		Les dimensions des billboards.
+		 */
+		inline Castor::Size const & GetDimensions()const
+		{
+			return m_dimensions;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the billboards count.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Definit le nombre de billboards.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetCount( uint32_t p_value )
+		{
+			m_count = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The billboards count.
+		 *\~french
+		 *\return		Le nombre de billboards.
+		 */
+		inline uint32_t GetCount()const
+		{
+			return m_count;
+		}
+		/**
+		 *\~english
+		 *\return		The initialisation status.
+		 *\~french
+		 *\return		Le statut d'initialisation.
+		 */
+		inline bool IsInitialised()const
+		{
+			return m_initialised;
+		}
+		/**
+		 *\~english
+		 *\return		The vertex buffer.
+		 *\~french
+		 *\return		Le tampon de sommets.
+		 */
+		inline VertexBuffer const & GetVertexBuffer()const
+		{
+			return *m_vertexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The vertex buffer.
+		 *\~french
+		 *\return		Le tampon de sommets.
+		 */
+		inline VertexBuffer & GetVertexBuffer()
+		{
+			return *m_vertexBuffer;
+		}
+
+	private:
+		/**
+		*\~english
+		*\brief		Updates the vertex buffer, if needed.
+		*\~french
+		*\brief		Met à jour le tampon de sommets si nécessaire.
+		*/
+		virtual void DoUpdate()
+		{
+		}
+
+	protected:
+		//!\~english	The Material.
+		//!\~french		Le Material.
+		MaterialWPtr m_material;
+		//!\~english	The billboards dimensions.
+		//!\~french		Les dimensions des billboards.
+		Castor::Size m_dimensions;
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferSPtr m_vertexBuffer;
+		//!\~english	The GeometryBuffers with which this billboards list is compatible.
+		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
+		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	Tells if the billboard is initialised.
+		//!\~french		Dit si le billboard est initialisé.
+		bool m_initialised{ false };
+		//!\~english	The elements count.
+		//!\~french		Le nombre d'éléments.
+		uint32_t m_count{ 0u };
+	};
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.7.0
 	\date		04/11/2013
 	\~english
@@ -43,7 +254,7 @@ namespace Castor3D
 	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
 	class BillboardList
-		: public MovableObject
+		: public BillboardListBase
 	{
 	public:
 		/*!
@@ -86,15 +297,13 @@ namespace Castor3D
 		 *\param[in]	p_name			The name.
 		 *\param[in]	p_scene			The parent scene.
 		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_renderSystem	The RenderSystem.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
 		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
-		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem );
+		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -103,30 +312,17 @@ namespace Castor3D
 		 */
 		C3D_API ~BillboardList();
 		/**
-		 *\~english
-		 *\brief		Initialises GPU side elements
-		 *\return		\p true if all is OK
-		 *\~french
-		 *\brief		Initialise les elements GPU
-		 *\return		\p true si tout s'est bien passe
+		 *\copydoc		Castor3D::BillboardListBase::Initialise
 		 */
-		C3D_API bool Initialise();
+		C3D_API bool Initialise()override;
 		/**
-		 *\~english
-		 *\brief		Cleans GPU side elements up
-		 *\~french
-		 *\brief		Nettoie les elements GPU
+		 *\copydoc		Castor3D::BillboardListBase::Cleanup
 		 */
-		C3D_API void Cleanup();
+		C3D_API void Cleanup()override;
 		/**
-		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
-		 *\~french
-		 *\brief		Definit le materiau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 *\copydoc		Castor3D::BillboardListBase::SortByDistance
 		 */
-		C3D_API void SetMaterial( MaterialSPtr p_pMaterial );
+		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition )override;
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list
@@ -156,42 +352,6 @@ namespace Castor3D
 		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
 		/**
 		 *\~english
-		 *\brief		Draws the billboards.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
-		 *\~french
-		 *\brief		Dessine les billboards.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
-		 */
-		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
-		/**
-		 *\~english
-		 *\brief		Sets the billboards dimensions
-		 *\param[in]	p_dimensions	The new value
-		 *\~french
-		 *\brief		Definit les dimensios des billboards
-		 *\param[in]	p_dimensions	La nouvelle valeur
-		 */
-		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
-		/**
-		 *\~english
-		 *\brief		Sorts the points from farthest to nearest from the camera.
-		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
-		 *\~french
-		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
-		 */
-		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
-		/**
-		 *\~english
-		 *\brief		Retrieves a GeometryBuffers for given program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Récupère un GeometryBuffers pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
-		/**
-		 *\~english
 		 *\brief		Gets a point from the list
 		 *\param[in]	p_index	The point index
 		 *\return		The point
@@ -203,18 +363,6 @@ namespace Castor3D
 		inline Castor::Point3r const & GetAt( uint32_t p_index )const
 		{
 			return m_arrayPositions[p_index];
-		}
-		/**
-		 *\~english
-		 *\brief		Gets the list size
-		 *\return		The value
-		 *\~french
-		 *\brief		Recupere la taille de la liste
-		 *\return		La valeur
-		 */
-		inline uint32_t GetCount()const
-		{
-			return uint32_t( m_arrayPositions.size() );
 		}
 		/**
 		 *\~english
@@ -230,30 +378,6 @@ namespace Castor3D
 		{
 			m_needUpdate = true;
 			m_arrayPositions[p_index] = p_position;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the material
-		 *\return		The value
-		 *\~french
-		 *\brief		Recupere le materiau
-		 *\return		La valeur
-		 */
-		inline MaterialSPtr GetMaterial()const
-		{
-			return m_wpMaterial.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the billboards dimensions
-		 *\return		The value
-		 *\~french
-		 *\brief		Recupere les dimensions des billboards
-		 *\return		La valeur
-		 */
-		inline Castor::Size const & GetDimensions()const
-		{
-			return m_dimensions;
 		}
 		/**
 		 *\~english
@@ -303,54 +427,26 @@ namespace Castor3D
 		{
 			return m_arrayPositions.end();
 		}
-		/**
-		 *\~english
-		 *\return		The initialisation status.
-		 *\~french
-		 *\return		Le statut d'initialisation.
-		 */
-		inline bool	IsInitialised()const
-		{
-			return m_initialised;
-		}
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer, if needed.
 		 *\~french
-		 *\brief		Met à jour le tampon de sommets si nàcessaire.
+		 *\brief		Met à jour le tampon de sommets si nécessaire.
 		 */
-		void DoUpdate();
+		void DoUpdate()override;
 
 	private:
 		//!\~english	The positions list.
 		//!\~french		La liste des positions.
 		Castor::Point3rArray m_arrayPositions;
-		//!\~english	The Vertex buffer's description.
-		//!\~french		La description du tampon de sommets.
-		BufferDeclaration m_declaration;
-		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
-		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
-		bool m_needUpdate;
-		//!\~english	The Material.
-		//!\~french		Le Material.
-		MaterialWPtr m_wpMaterial;
-		//!\~english	The billboards dimensions.
-		//!\~french		Les dimensions des billboards.
-		Castor::Size m_dimensions;
-		//!\~english	The vertex buffer.
-		//!\~french		Le tampon de sommets.
-		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The GeometryBuffers with which this billboards list is compatible.
-		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
-		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english	The transformed camera position at last sort.
 		//!\~french		La position transformée de la caméra au dernier tri.
 		Castor::Point3r m_cameraPosition;
-		//!\~english	Tells if the billboard is initialised.
-		//!\~french		Dit si le billboard est initialisé.
-		bool m_initialised{ false };
+		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
+		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
+		bool m_needUpdate;
 	};
 }
 

@@ -24,7 +24,7 @@ namespace GlRender
 				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
 				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
-			 )
+				)
 		, m_layout( p_gl, p_renderSystem )
 	{
 		CreateObject( ShaderType::Vertex );
@@ -62,7 +62,7 @@ namespace GlRender
 
 	bool GlShaderProgram::Link()
 	{
-		bool l_return = false;
+		bool l_return = DoBindTransformLayout();
 		ENSURE( GetGlName() != eGL_INVALID_INDEX );
 		int l_attached = 0;
 		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_ATTACHED_SHADERS, &l_attached );
@@ -376,5 +376,25 @@ namespace GlRender
 		}
 
 		return l_log;
+	}
+
+	bool GlShaderProgram::DoBindTransformLayout()
+	{
+		bool l_return = true;
+
+		if ( m_declaration.size() > 0 )
+		{
+			std::vector< char const * > l_varyings;
+			l_varyings.reserve( m_declaration.size() );
+
+			for ( auto & l_element : m_declaration )
+			{
+				l_varyings.push_back( l_element.m_name.c_str() );
+			}
+
+			l_return = GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), eGL_ATTRIBS_LAYOUT_INTERLEAVED );
+		}
+
+		return l_return;
 	}
 }

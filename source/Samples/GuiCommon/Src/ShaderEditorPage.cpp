@@ -131,7 +131,7 @@ namespace GuiCommon
 			// Load the shader source file/text
 			uint8_t l_shaderModel = uint8_t( m_shaderModel );
 
-			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel  )>= ShaderModel::Model1 )
+			while ( m_shaderSource.empty() && m_shaderFile.empty() && ShaderModel( l_shaderModel ) >= ShaderModel::Model1 )
 			{
 				m_shaderSource = l_program->GetSource( m_shaderType, ShaderModel( l_shaderModel ) );
 				m_shaderFile = l_program->GetFile( m_shaderType, ShaderModel( l_shaderModel ) );

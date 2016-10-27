@@ -444,6 +444,6 @@ scene "Scene"
 			scene "Scene"
 			camera "MainCamera"
 		}
-		vsync true
+		vsync false
 	}
 }

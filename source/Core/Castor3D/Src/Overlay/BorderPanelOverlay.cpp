@@ -78,13 +78,13 @@ namespace Castor3D
 		return std::make_shared< BorderPanelOverlay >();
 	}
 
-	void BorderPanelOverlay::SetBorderMaterial( MaterialSPtr p_pMaterial )
+	void BorderPanelOverlay::SetBorderMaterial( MaterialSPtr p_material )
 	{
-		m_pBorderMaterial = p_pMaterial;
+		m_pBorderMaterial = p_material;
 
-		if ( p_pMaterial )
+		if ( p_material )
 		{
-			m_strBorderMatName = p_pMaterial->GetName();
+			m_strBorderMatName = p_material->GetName();
 		}
 		else
 		{

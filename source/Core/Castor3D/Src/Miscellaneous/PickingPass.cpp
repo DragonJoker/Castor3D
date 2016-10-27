@@ -211,7 +211,7 @@ namespace Castor3D
 			}
 
 			if ( l_itPass != l_itPipeline->second.end()
-				 && l_itMesh != l_itPass->second.end() )
+					&& l_itMesh != l_itPass->second.end() )
 			{
 				REQUIRE( !l_itMesh->second.empty() );
 				auto l_itNode = l_itMesh->second.begin() + l_instanceIndex;
@@ -312,11 +312,12 @@ namespace Castor3D
 
 		m_geometryBuffers.clear();
 	}
-	
+
 	void PickingPass::AddScene( Scene & p_scene, Camera & p_camera )
 	{
 		auto l_itScn = m_scenes.emplace( &p_scene, CameraQueueMap{} ).first;
 		auto l_itCam = l_itScn->second.emplace( &p_camera, RenderQueue{ *this } ).first;
+		l_itCam->second.Initialise( p_scene, p_camera );
 	}
 
 	bool PickingPass::Pick( Castor::Position const & p_position, Camera const & p_camera )
@@ -331,6 +332,8 @@ namespace Castor3D
 		if ( l_itScn != m_scenes.end() )
 		{
 			auto l_itCam = l_itScn->second.find( &p_camera );
+
+			if ( l_itCam != l_itScn->second.end() )
 			{
 				l_itCam->second.Update();
 
@@ -468,7 +471,7 @@ namespace Castor3D
 
 	BillboardRenderNode PickingPass::CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardList & p_billboard )
+														 , BillboardListBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
@@ -510,7 +513,8 @@ namespace Castor3D
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
+				uint8_t * l_buffer = l_matrixBuffer.data();
 				const uint32_t l_stride = 16 * sizeof( real );
 
 				for ( auto const & l_renderNode : p_renderNodes )
@@ -519,6 +523,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
+				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
@@ -549,7 +554,8 @@ namespace Castor3D
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
+				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
+				uint8_t * l_buffer = l_matrixBuffer.data();
 				const uint32_t l_stride = 16 * sizeof( real );
 
 				for ( auto const & l_renderNode : p_renderNodes )
@@ -558,6 +564,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
+				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );

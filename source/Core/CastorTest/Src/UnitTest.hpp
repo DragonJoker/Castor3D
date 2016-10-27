@@ -315,7 +315,7 @@ namespace Testing
 
 			return l_return;
 		}
-		
+
 		template< typename T, typename U >
 		inline bool compare( T const & p_lhs, U const & p_rhs )
 		{

@@ -481,6 +481,7 @@ namespace Castor3D
 	class FrameListener;
 	class Version;
 	class Parameters;
+	class BillboardListBase;
 	class BillboardList;
 	class RenderLoop;
 	class RenderLoopAsync;
@@ -511,6 +512,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
 	DECLARE_SMART_PTR( BillboardList );
+	DECLARE_SMART_PTR( BillboardListBase );
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );
@@ -651,63 +653,6 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		13/10/2015
-	\~english
-	\brief		Helper class, telling if the template parameter has a Cleanup(void) method.
-	\~french
-	\brief		Classe d'aide, dit si le paramètre template possède une méthode Cleanup(void).
-	*/
-	template< typename T > struct is_cleanable : std::false_type {};
-	template<> struct is_cleanable< Material > : std::true_type {};
-	template<> struct is_cleanable< Mesh > : std::true_type {};
-	template<> struct is_cleanable< RenderWindow > : std::true_type {};
-	template<> struct is_cleanable< Scene > : std::true_type {};
-	template<> struct is_cleanable< Sampler > : std::true_type {};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		13/10/2015
-	\~english
-	\brief		Helper class, telling if the template parameter has an Initialise(void) method.
-	\~french
-	\brief		Classe d'aide, dit si le paramètre template possède une méthode Initialise(void).
-	*/
-	template< typename T > struct is_initialisable : std::false_type {};
-	template<> struct is_initialisable< Material > : std::true_type {};
-	template<> struct is_initialisable< Scene > : std::true_type {};
-	template<> struct is_initialisable< Sampler > : std::true_type {};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		13/10/2015
-	\~english
-	\brief		Helper class, telling if the template parameter Initialise() and Cleanup() methods must be called instantly.
-	\~french
-	\brief		Classe d'aide, dit si les méthodes Initialise() et Cleanup() du paramètre template doivent s'exécuter immédiatement.
-	*/
-	template< typename T > struct is_instant : std::false_type {};
-	template<> struct is_instant< Scene > : std::true_type {};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		29/01/2016
-	\~english
-	\brief		Helper class, telling if the template parameter has the method Detach.
-	\~french
-	\brief		Classe d'aide, dit si le paramètre template possède la méthode Detach.
-	*/
-	template< typename T > struct is_detachable : std::false_type {};
-	template<> struct is_detachable< MovableObject > : std::true_type {};
-	template<> struct is_detachable< Camera > : std::true_type {};
-	template<> struct is_detachable< Geometry > : std::true_type {};
-	template<> struct is_detachable< Light > : std::true_type {};
-	template<> struct is_detachable< BillboardList > : std::true_type {};
-	template<> struct is_detachable< SceneNode >: std::true_type
-	{
-	};
 
 	//@}
 

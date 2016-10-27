@@ -268,8 +268,7 @@ namespace Castor3D
 
 	bool Pass::HasAlphaBlending()const
 	{
-		return /*m_pBlendState->IsBlendEnabled()
-			   || */CheckFlag( m_textureFlags, TextureChannel::Opacity )
+		return CheckFlag( m_textureFlags, TextureChannel::Opacity )
 			   || m_fAlpha < 1.0f;
 	}
 

@@ -70,7 +70,7 @@ namespace Castor3D
 			DoUnbindDepthMaps( p_depthMaps );
 			p_node.m_pass.m_pass.EndRender();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
-			
+
 			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
 			{
 				p_node.m_data.GetScene()->GetLightCache().UnbindLights();

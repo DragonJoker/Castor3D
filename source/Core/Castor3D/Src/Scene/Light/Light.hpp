@@ -374,7 +374,7 @@ namespace Castor3D
 		 *\brief		Définit le statut d'activation de la lumère
 		 *\param[in]	p_enabled	La nouvelle valeur
 		 */
-		inline void SetEnabled( bool p_value)
+		inline void SetEnabled( bool p_value )
 		{
 			m_enabled = p_value;
 		}

@@ -62,7 +62,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-			for (uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_return; i++ )
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_return; i++ )
 			{
 				l_object = p_shaderProgram.m_pShaders[i];
 

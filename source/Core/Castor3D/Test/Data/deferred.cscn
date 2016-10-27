@@ -72,6 +72,6 @@ scene "Scene"
 			technique "deferred"
 		}
 		fullscreen false
-		vsync true
+		vsync false
 	}
 }

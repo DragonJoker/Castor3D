@@ -273,7 +273,7 @@ namespace DeferredMsaa
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t (DsTexture::Count) > m_geometryPassTexAttachs;
+		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::Count ) > m_geometryPassTexAttachs;
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
@@ -293,15 +293,15 @@ namespace DeferredMsaa
 		//!\~french		Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture).
 		Castor3D::Viewport m_viewport;
 		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
-		Castor3D::FrameBufferSPtr m_msFrameBuffer;
+		Castor3D::FrameBufferSPtr m_msaaFrameBuffer;
 		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
-		Castor3D::ColourRenderBufferSPtr m_pMsColorBuffer;
+		Castor3D::ColourRenderBufferSPtr m_msaaColorBuffer;
 		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
-		Castor3D::DepthStencilRenderBufferSPtr m_pMsDepthBuffer;
+		Castor3D::DepthStencilRenderBufferSPtr m_msaaDepthBuffer;
 		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsColorAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_msaaColorAttach;
 		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_msaaDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
 		int m_samplesCount;
 		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique

@@ -36,6 +36,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
+#include "Scene/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
@@ -255,7 +256,6 @@ namespace Castor3D
 			switch ( p_alphaBlendMode )
 			{
 			case BlendMode::NoBlend:
-				l_blend = true;
 				l_state.SetAlphaSrcBlend( BlendOperand::One );
 				l_state.SetAlphaDstBlend( BlendOperand::Zero );
 				break;
@@ -487,7 +487,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible )
+	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		auto & l_scene = *m_renderTarget.GetScene();
@@ -512,6 +512,7 @@ namespace Castor3D
 			l_scene.RenderBackground( GetSize() );
 			DoRender( l_nodes, l_depthMaps, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
+			p_particles = m_particlesCount;
 
 #if !defined( NDEBUG )
 
@@ -563,6 +564,7 @@ namespace Castor3D
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
+		m_particlesCount = 0;
 		auto & l_camera = *m_renderTarget.GetCamera();
 		l_camera.Resize( m_size );
 		l_camera.Update();
@@ -574,6 +576,12 @@ namespace Castor3D
 		{
 			p_nodes.m_scene.RenderForeground( GetSize(), l_camera );
 		}
+
+		p_nodes.m_scene.GetParticleSystemCache().ForEach( [this]( ParticleSystem & p_particleSystem )
+		{
+			p_particleSystem.Update();
+			m_particlesCount += p_particleSystem.GetParticlesCount();
+		} );
 
 		DoRenderTransparentNodes( p_nodes, p_depthMaps );
 	}
@@ -698,23 +706,35 @@ namespace Castor3D
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
-				const uint32_t l_stride = 16 * sizeof( real );
+				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
 
-				for ( auto const & l_renderNode : p_renderNodes )
+				if ( l_matrixBuffer.Bind() )
 				{
-					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-					l_buffer += l_stride;
+					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::Write ) );
 
-					if ( p_register )
+					if ( l_buffer )
 					{
-						m_renderedObjects.push_back( l_renderNode );
-					}
-				}
+						constexpr uint32_t l_stride = 16;
 
-				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_depthMaps );
+						for ( auto const & l_renderNode : p_renderNodes )
+						{
+							std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride * sizeof( real ) );
+							l_buffer += l_stride;
+
+							if ( p_register )
+							{
+								m_renderedObjects.push_back( l_renderNode );
+							}
+						}
+
+						l_matrixBuffer.Unlock();
+					}
+
+					l_matrixBuffer.Unbind();
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
 			}
 		} );
 	}
@@ -766,23 +786,35 @@ namespace Castor3D
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
 				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				uint8_t * l_buffer = p_submesh.GetMatrixBuffer().data();
-				const uint32_t l_stride = 16 * sizeof( real );
+				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
 
-				for ( auto const & l_renderNode : p_renderNodes )
+				if ( l_matrixBuffer.Bind() )
 				{
-					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-					l_buffer += l_stride;
+					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::Write ) );
 
-					if ( p_register )
+					if ( l_buffer )
 					{
-						m_renderedObjects.push_back( l_renderNode );
-					}
-				}
+						constexpr uint32_t l_stride = 16;
 
-				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-				p_renderNodes[0].UnbindPass( p_depthMaps );
+						for ( auto const & l_renderNode : p_renderNodes )
+						{
+							std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride * sizeof( real ) );
+							l_buffer += l_stride;
+
+							if ( p_register )
+							{
+								m_renderedObjects.push_back( l_renderNode );
+							}
+						}
+
+						l_matrixBuffer.Unlock();
+					}
+
+					l_matrixBuffer.Unbind();
+					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+					p_renderNodes[0].UnbindPass( p_depthMaps );
+				}
 			}
 		} );
 	}
@@ -792,7 +824,7 @@ namespace Castor3D
 		for ( auto & l_it : p_nodes )
 		{
 			l_it.second.get().m_pass.m_pipeline.Apply();
-			DoUpdateTransparentPipeline( l_it.second.get().m_pass.m_pipeline, p_depthMaps );
+			UpdateTransparentPipeline( *m_renderTarget.GetCamera(), l_it.second.get().m_pass.m_pipeline, p_depthMaps );
 			l_it.second.get().Render( p_depthMaps );
 
 			if ( p_register )
@@ -865,7 +897,7 @@ namespace Castor3D
 
 		// Fragment Outtputs
 		auto pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
-		
+
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
@@ -882,7 +914,7 @@ namespace Castor3D
 			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 												 , l_fMatShininess
-												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent }
+												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal }
 												 , l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -964,7 +996,7 @@ namespace Castor3D
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 			l_lighting->ComputeCombinedLighting( l_worldEye
 												 , l_fMatShininess
-												 , FragmentInput( vtx_worldSpacePosition, l_v3Normal, vtx_tangent, vtx_bitangent )
+												 , FragmentInput( vtx_worldSpacePosition, l_v3Normal )
 												 , l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );

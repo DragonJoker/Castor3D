@@ -71,7 +71,7 @@ namespace Testing
 
 		for ( auto l_bench : m_arrayBenchs )
 		{
-			std::cout << l_bench->GetSummary ().c_str () << std::endl;
+			std::cout << l_bench->GetSummary().c_str() << std::endl;
 		}
 	}
 

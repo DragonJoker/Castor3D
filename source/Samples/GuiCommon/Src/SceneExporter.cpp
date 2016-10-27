@@ -194,7 +194,7 @@ namespace GuiCommon
 			StringStream l_strF;
 			VertexBuffer & l_vtxBuffer = l_submesh->GetVertexBuffer();
 			IndexBuffer & l_idxBuffer = l_submesh->GetIndexBuffer();
-			uint32_t l_stride = l_vtxBuffer.GetDeclaration().GetStride();
+			uint32_t l_stride = l_vtxBuffer.GetDeclaration().stride();
 			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_stride;
 			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
 			uint8_t * l_pVtx = l_vtxBuffer.data();

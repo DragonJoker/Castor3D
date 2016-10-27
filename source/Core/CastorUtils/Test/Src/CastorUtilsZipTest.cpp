@@ -29,7 +29,7 @@ namespace Testing
 		Path l_folder1{ cuT( "test1" ) };
 		Path l_folder2{ l_folder1 / cuT( "test2" ) };
 
-		std::cout << "	First folder creation" <<std::endl;
+		std::cout << "	First folder creation" << std::endl;
 
 		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )
 		{

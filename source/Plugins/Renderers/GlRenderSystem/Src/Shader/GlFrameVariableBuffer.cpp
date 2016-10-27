@@ -666,7 +666,7 @@ namespace GlRender
 	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlShaderProgram & p_program, RenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_program, p_renderSystem )
 		, Holder( p_gl )
-		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_UNIFORM )
+		, m_glBuffer( p_gl, GlBufferTarget::Uniform )
 		, m_uniformBlockIndex( int( eGL_INVALID_INDEX ) )
 		, m_uniformBlockSize( 0 )
 	{
@@ -874,7 +874,7 @@ namespace GlRender
 		bool l_return = false;
 		GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
 		int l_max = 0;
-		GetOpenGl().GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
+		GetOpenGl().GetIntegerv( GlMax::UniformBufferBindings, &l_max );
 
 		if ( int( m_index ) < l_max )
 		{
@@ -890,7 +890,7 @@ namespace GlRender
 					m_glBuffer.Create();
 					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
 					m_glBuffer.Bind();
-					GetOpenGl().BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_index, m_glBuffer.GetGlName() );
+					GetOpenGl().BindBufferBase( GlBufferTarget::Uniform, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
 					m_buffer.resize( m_uniformBlockSize );
 					std::vector< const char * > l_arrayNames;
@@ -959,7 +959,6 @@ namespace GlRender
 	{
 		m_uniformBlockIndex = int( eGL_INVALID_INDEX );
 		m_uniformBlockSize = 0;
-		m_glBuffer.Cleanup();
 		m_glBuffer.Destroy();
 	}
 
