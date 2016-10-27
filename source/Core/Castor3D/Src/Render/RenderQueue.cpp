@@ -519,6 +519,7 @@ namespace Castor3D
 			return *m_preparedRenderNodes;
 		}
 
+		REQUIRE( m_renderNodes );
 		return *m_renderNodes;
 	}
 

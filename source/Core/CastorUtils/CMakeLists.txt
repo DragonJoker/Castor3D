@@ -72,7 +72,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 		if( X11Libraries )
 			set( X11Libraries "${X11Libraries}|${Lib}" )
 		else()
-			set( X11Libraries "${Lib}" )
+			set( X11Libraries "Xinerama ${Lib}" )
 		endif()
 	endforeach()
 

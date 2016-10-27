@@ -3127,11 +3127,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pFrameVariableBuffer )
-		{
-			PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
-		}
-		else if ( !p_params.empty() )
+		if ( !p_params.empty() )
 		{
 			uint64_t l_value;
 			p_params[0]->Get( l_value );

@@ -6,6 +6,7 @@
 #	include <codecvt>
 #else
 #	include <X11/Xlib.h>
+#	include <X11/extensions/Xinerama.h>
 #endif
 
 #if defined( __GNUG__ )
@@ -122,29 +123,62 @@ namespace Castor
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
 			bool l_return = false;
-			Display * pdsp = nullptr;
-			Screen * pscr = nullptr;
-			pdsp = XOpenDisplay( nullptr );
+			auto l_display = XOpenDisplay( nullptr );
 
-			if ( !pdsp )
+			if ( !l_display )
 			{
-				fprintf( stderr, "Failed to open default display.\n" );
+				Logger::LogError( "Failed to open default display." );
 			}
 			else
 			{
-				pscr = DefaultScreenOfDisplay( pdsp );
+				auto l_screenIndex = DefaultScreen( l_display );
+				int l_dummy1, l_dummy2;
 
-				if ( !pscr )
+				if ( XineramaQueryExtension( l_display, &l_dummy1, &l_dummy2 ) )
 				{
-					fprintf( stderr, "Failed to obtain the default screen of given display.\n" );
+					if ( XineramaIsActive( l_display ) )
+					{
+						int l_heads = 0;
+						XineramaScreenInfo * l_screenInfo = XineramaQueryScreens( l_display, &l_heads );
+
+						if ( l_heads > 0 && l_screenIndex < l_heads )
+						{
+							p_size.set( l_screenInfo[l_screenIndex].width, l_screenInfo[l_screenIndex].height );
+							l_return = true;
+						}
+						else
+						{
+							std::cout << "XineramaQueryScreens says there aren't any" << std::endl;
+						}
+
+						XFree( l_screenInfo );
+					}
+					else
+					{
+						std::cout << "Xinerama not active" << std::endl;
+					}
 				}
 				else
 				{
-					p_size.set( pscr->width, pscr->height );
-					l_return = true;
+					std::cout << "No Xinerama extension" << std::endl;
+				}
+				
+				if ( !l_return )
+				{
+					auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
+
+					if ( !l_screen )
+					{
+						Logger::LogError( "Failed to obtain the default screen of given display." );
+					}
+					else
+					{
+						p_size.set( l_screen->width, l_screen->height );
+						l_return = true;
+					}
 				}
 
-				XCloseDisplay( pdsp );
+				XCloseDisplay( l_display );
 			}
 
 			return l_return;
