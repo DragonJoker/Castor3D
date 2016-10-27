@@ -1248,10 +1248,10 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemParticle )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
+		
 		if ( !l_parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
@@ -1260,6 +1260,10 @@ namespace Castor3D
 		{
 			PARSING_ERROR( cuT( "particles_count has not been specified." ) );
 		}
+		else if ( l_parsingContext->size.width() == 0 || l_parsingContext->size.height() == 0 )
+		{
+			PARSING_ERROR( cuT( "one component of the particles dimensions is 0." ) );
+		}
 		else
 		{
 			if ( !l_parsingContext->pMaterial )
@@ -1267,12 +1271,76 @@ namespace Castor3D
 				l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().GetDefaultMaterial();
 			}
 
-			auto l_particleSystem = l_parsingContext->pScene->GetParticleSystemCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->uiUInt32 );
-			l_particleSystem->SetMaterial( l_parsingContext->pMaterial );
-			l_particleSystem->SetDimensions( l_parsingContext->size );
+			l_parsingContext->particleSystem = l_parsingContext->pScene->GetParticleSystemCache().Add( l_parsingContext->strName, l_parsingContext->pSceneNode, l_parsingContext->uiUInt32 );
+			l_parsingContext->particleSystem->SetMaterial( l_parsingContext->pMaterial );
+			l_parsingContext->particleSystem->SetDimensions( l_parsingContext->size );
+		}
+	}
+	END_ATTRIBUTE_PUSH( eSECTION_PARTICLE )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemShader )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		l_parsingContext->pShaderProgram.reset();
+		l_parsingContext->eShaderObject = ShaderType::Count;
+		
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram();
+		}
+	}
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pScene )
+		{
+			PARSING_ERROR( cuT( "No scene initialised." ) );
+		}
+		else
+		{
+			l_parsingContext->particleSystem->SetUpdateProgram( l_parsingContext->pShaderProgram );
 		}
 	}
 	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleVariable )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		l_parsingContext->pFrameVariable.reset();
+		p_params[0]->Get( l_parsingContext->strName2 );
+
+		if ( !l_parsingContext->particleSystem )
+		{
+			PARSING_ERROR( cuT( "Particle system not initialised" ) );
+		}
+		else if ( p_params.size() < 2 )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			uint32_t l_type;
+			String l_value;
+			p_params[0]->Get( l_name );
+			p_params[1]->Get( l_type );
+
+			if ( p_params.size() > 2 )
+			{
+				p_params[2]->Get( l_value );
+			}
+
+			l_parsingContext->particleSystem->AddParticleVariable( l_name, ElementType( l_type ), l_value );
+		}
+	}
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_UBO_VARIABLE )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightParent )
 	{
@@ -2656,7 +2724,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Pass not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	{
@@ -2903,7 +2971,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_OBJECT )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PixelShader )
 	{
@@ -2919,7 +2987,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_OBJECT )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_GeometryShader )
 	{
@@ -2935,7 +3003,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_OBJECT )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_HullShader )
 	{
@@ -2951,7 +3019,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_OBJECT )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_DomainShader )
 	{
@@ -2967,7 +3035,7 @@ namespace Castor3D
 			PARSING_ERROR( cuT( "Shader not initialised" ) );
 		}
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+	END_ATTRIBUTE_PUSH( eSECTION_SHADER_OBJECT )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
 	{

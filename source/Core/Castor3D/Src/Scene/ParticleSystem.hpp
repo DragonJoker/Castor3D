@@ -34,6 +34,8 @@ SOFTWARE.
 
 namespace Castor3D
 {
+	template< ElementType Type >
+	struct ElementTyper;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
@@ -43,26 +45,48 @@ namespace Castor3D
 	\~french
 	\brief		Contient les données d'une particule.
 	*/
-	struct Particle
+	class Particle
 	{
-		enum class Type
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_description	The particle's elements description.
+		 *\param[in]	p_defaultValues	The default values for the particle's elements.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_description	La description des éléments de la particule.
+		 *\param[in]	p_defaultValues	Les valeurs par défaut des éléments de la particule.
+		 */
+		C3D_API Particle( BufferDeclaration const & p_description, Castor::StrStrMap const & p_defaultValues );
+		/**
+		 *\~english
+		 *\brief		Sets the particle variable's value at given index
+		 *\param[in]	p_description	The particle's elemets description.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_description	La description des éléments de la particule.
+		 */
+		template< ElementType Type >
+		inline void SetValue( uint32_t p_index, typename ElementTyper< Type >::Type const & p_value );
+		/**
+		 *\~english
+		 *\return		The particle data.
+		 *\~french
+		 *\return		Les données de la particule.
+		 */
+		inline uint8_t const * GetData()const
 		{
-			Launcher,
-			Shell,
-			SecondaryShell
-		};
-		//!\~english	The particle type.
-		//!\~french		Le type de particule.
-		float m_type;
-		//!\~english	The particle position.
-		//!\~french		La position de la particule.
-		Castor::Point3f m_position;
-		//!\~english	The particle velocity.
-		//!\~french		La vitesse de la particule.
-		Castor::Point3f m_velocity;
-		//!\~english	The particle life time.
-		//!\~french		La durée de vie de la particule.
-		float m_lifeTime;
+			return m_data.data();
+		}
+
+	private:
+		//!\~english	The particle's elemets description.
+		//!\~french		La description des éléments de la particule.
+		BufferDeclaration const & m_description;
+		//!\~english	The particle's data.
+		//!\~french		Les données de la particule.
+		std::vector< uint8_t > m_data;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -191,27 +215,45 @@ namespace Castor3D
 		C3D_API Castor::Size const & GetDimensions()const;
 		/**
 		 *\~english
-		 *\brief		Detaches the movable object from it's parent
+		 *\brief		Detaches the billboards from it's parent.
 		 *\~french
-		 *\brief		Détache l'objet de son parent
+		 *\brief		Détache les billboards de leur parent.
 		 */
 		C3D_API void Detach();
 		/**
 		 *\~english
-		 *\brief		Attaches the movable object to a node
+		 *\brief		Attaches the billboards to a node.
 		 *\~french
-		 *\brief		Attache l'object à un noeud
+		 *\brief		Attache les billboards à un noeud.
 		 */
 		C3D_API void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
-		 *\brief		Retrieves the parent node
-		 *\return		The value
+		 *\return		The parent node.
 		 *\~french
-		 *\brief		Récupère le noeud parent
-		 *\return		La valeur
+		 *\return		Le noeud parent.
 		 */
 		C3D_API SceneNodeSPtr GetParent()const;
+		/**
+		 *\~english
+		 *\brief		Adds a particle variable.
+		 *\param[in]	p_name	The variable name.
+		 *\param[in]	p_type	The variable type.
+		 *\~french
+		 *\brief		Ajoute une variable de particule.
+		 *\param[in]	p_name	Le nom de la variable.
+		 *\param[in]	p_type	Le type de la variable.
+		 */
+		C3D_API void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue );
+		/**
+		 *\~english
+		 *\brief		Defines the program used to update the particles.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Définit le programme utilisé pour mettre à jour les particules.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API void SetUpdateProgram( ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\return		The billboards.
@@ -224,17 +266,31 @@ namespace Castor3D
 		}
 
 	private:
-		bool DoCreateUpdateProgram();
 		bool DoCreateUpdatePipeline();
 		void DoUpdate();
 
 	private:
+		//!\~english	The map of default value per variable name.
+		//!\~french		La map de valeur par défaut pour les variables.
+		Castor::StrStrMap m_defaultValues;
 		//!\~english	The computed elements description.
 		//!\~french		La description des éléments calculés.
 		BufferDeclaration m_computed;
+		//!\~english	The vertex buffer elements description.
+		//!\~french		La description des éléments des tampons de sommets.
+		BufferDeclaration m_inputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
 		BillboardListBaseSPtr m_particlesBillboard;
+		//!\~english	The node to which the billboards are attached.
+		//!\~french		Le noeud sur lequel sont attachés les billboards.
+		SceneNodeSPtr m_parentNode;
+		//!\~english	The billboards dimensions.
+		//!\~french		Les dimensions des billboards.
+		Castor::Size m_dimensions;
+		//!\~english	The Material.
+		//!\~french		Le Material.
+		MaterialWPtr m_material;
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		size_t m_particlesCount{ 0 };
@@ -283,9 +339,15 @@ namespace Castor3D
 		//!\~english	The total elapsed time.
 		//!\~french		Le temps total écoulé.
 		float m_totalTime{ 0.0f };
+		//!\~english	The current render buffer index.
+		//!\~french		L'indice du tampon de rendu actuel.
 		uint32_t m_vtx{ 0u };
+		//!\~english	The current update buffer index.
+		//!\~french		L'indice du tampon de mise à jour actuel.
 		uint32_t m_tfb{ 1u };
 	};
 }
+
+#include "ParticleSystem.inl"
 
 #endif

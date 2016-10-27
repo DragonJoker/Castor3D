@@ -148,7 +148,7 @@ namespace GlRender
 		bool l_return = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
 		GlAttributeBaseSPtr l_attribute;
-		uint32_t l_stride = p_declaration.GetStride();
+		uint32_t l_stride = p_declaration.stride();
 
 		switch ( p_element.m_dataType )
 		{

@@ -382,10 +382,10 @@ namespace GlRender
 	{
 		bool l_return = true;
 
-		if ( m_declaration.GetSize() > 0 )
+		if ( m_declaration.size() > 0 )
 		{
 			std::vector< char const * > l_varyings;
-			l_varyings.reserve( m_declaration.GetSize() );
+			l_varyings.reserve( m_declaration.size() );
 
 			for ( auto & l_element : m_declaration )
 			{

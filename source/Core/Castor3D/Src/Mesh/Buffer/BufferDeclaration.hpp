@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Récupère le compte des éléments
 		 *\return		Le compte des éléments
 		 */
-		inline uint32_t GetSize()const
+		inline uint32_t size()const
 		{
 			return uint32_t( m_arrayElements.size() );
 		}
@@ -115,9 +115,9 @@ namespace Castor3D
 		 *\brief		Récupère la taille totale en octet des éléments
 		 *\return		La taille en octets
 		 */
-		inline uint32_t GetStride()const
+		inline uint32_t stride()const
 		{
-			return m_uiStride;
+			return m_stride;
 		}
 		/**
 		 *\~english
@@ -159,6 +159,19 @@ namespace Castor3D
 		{
 			return m_arrayElements.end();
 		}
+		/**
+		 *\~english
+		 *\brief		Adds an element to the end of the list.
+		 *\param[in]	p_element	The element.
+		 *\~french
+		 *\brief		Ajoute un élément à la fin de la liste.
+		 *\param[in]	p_element	L'élément.
+		 */
+		inline void push_back( BufferElementDeclaration const & p_element )
+		{
+			m_arrayElements.push_back( p_element );
+			m_stride += Castor3D::GetSize( p_element.m_dataType );
+		}
 
 	private:
 		C3D_API void DoInitialise( BufferElementDeclaration const * p_elements, uint32_t p_count );
@@ -167,7 +180,7 @@ namespace Castor3D
 		//!\~english Element description array	\~french Tableau de descriptions d'éléments
 		BufferElementDeclarationArray m_arrayElements;
 		//!\~english Byte size of the element	\~french Taille de l'élément, en octets
-		uint32_t m_uiStride;
+		uint32_t m_stride;
 	};
 	/**
 	 *\~english

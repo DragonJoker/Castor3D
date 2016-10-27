@@ -61,8 +61,8 @@ namespace Castor3D
 		eSECTION_PASS = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),
 		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
 		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
-		eSECTION_GLSL_SHADER = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
-		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
+		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
+		eSECTION_SHADER_OBJECT = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
 		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
 		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
 		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
@@ -71,6 +71,7 @@ namespace Castor3D
 		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
 		eSECTION_SKYBOX = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
 		eSECTION_PARTICLE_SYSTEM = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
+		eSECTION_PARTICLE = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
 	}	eSECTION;
 	//! The context used into parsing functions
 	/*!
@@ -136,7 +137,7 @@ namespace Castor3D
 		AnimatedObjectSPtr pAnimMovable;
 		AnimationInstanceRPtr pAnimation;
 		SkyboxSPtr pSkybox;
-		ParticleSystemSPtr pParticleSystem;
+		ParticleSystemSPtr particleSystem;
 
 	public:
 		/**
@@ -237,6 +238,7 @@ namespace Castor3D
 		UIntStrMap m_mapWrappingModes;
 		UInt64StrMap m_mapShaderTypes;
 		UIntStrMap m_mapVariableTypes;
+		UIntStrMap m_mapElementTypes;
 		UIntStrMap m_mapMovables;
 		UIntStrMap m_mapTextWrappingModes;
 		UIntStrMap m_mapBorderPositions;

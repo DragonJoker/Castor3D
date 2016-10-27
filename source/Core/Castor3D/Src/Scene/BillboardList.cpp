@@ -171,7 +171,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			uint32_t l_stride = m_vertexBuffer->GetDeclaration().GetStride();
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
 			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
 			uint8_t * l_buffer = m_vertexBuffer->data();
 
@@ -253,7 +253,7 @@ namespace Castor3D
 	{
 		if ( m_needUpdate )
 		{
-			uint32_t l_stride = m_vertexBuffer->GetDeclaration().GetStride();
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
 			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
 			uint8_t * l_buffer = m_vertexBuffer->data();
 

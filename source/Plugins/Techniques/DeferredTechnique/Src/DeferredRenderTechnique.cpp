@@ -162,7 +162,7 @@ namespace Deferred
 		};
 
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.GetStride();
+		uint32_t l_stride = m_declaration.stride();
 		m_vertexBuffer->Resize( sizeof( l_data ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
 		std::memcpy( l_buffer, l_data, sizeof( l_data ) );

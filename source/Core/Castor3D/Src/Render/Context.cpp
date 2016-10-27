@@ -66,14 +66,14 @@ namespace Castor3D
 
 		for ( auto & l_vertex : m_rtotPipelinePlane.m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtotPipelinePlane.m_bufferVertex.data() )[i++ * m_rtotPipelinePlane.m_declaration.GetStride()] );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtotPipelinePlane.m_bufferVertex.data() )[i++ * m_rtotPipelinePlane.m_declaration.stride()] );
 		}
 
 		i = 0;
 
 		for ( auto & l_vertex : m_rtotPipelineCube.m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtotPipelineCube.m_bufferVertex.data() )[i++ * m_rtotPipelineCube.m_declaration.GetStride()] );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_rtotPipelineCube.m_bufferVertex.data() )[i++ * m_rtotPipelineCube.m_declaration.stride()] );
 		}
 	}
 
@@ -638,7 +638,7 @@ namespace Castor3D
 	{
 		p_program.Initialise();
 		p_pipeline.m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_rtotPipelinePlane.m_declaration );
-		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() * m_rtotPipelinePlane.m_declaration.GetStride() ) );
+		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() * m_rtotPipelinePlane.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelinePlane.m_arrayVertex.begin(), m_rtotPipelinePlane.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
 		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
@@ -674,7 +674,7 @@ namespace Castor3D
 	{
 		p_program.Initialise();
 		p_pipeline.m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_rtotPipelineCube.m_declaration );
-		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() * m_rtotPipelineCube.m_declaration.GetStride() ) );
+		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() * m_rtotPipelineCube.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelineCube.m_arrayVertex.begin(), m_rtotPipelineCube.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
 		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );

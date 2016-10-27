@@ -170,7 +170,7 @@ namespace Castor3D
 
 		for ( auto & l_vertex : m_arrayVertex )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.GetStride()] );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_bufferVertex.data() )[i++ * m_declaration.stride()] );
 		}
 	}
 
@@ -286,7 +286,7 @@ namespace Castor3D
 	bool Skybox::DoInitialiseVertexBuffer()
 	{
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_declaration );
-		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
+		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_vertexBuffer->Create();
 

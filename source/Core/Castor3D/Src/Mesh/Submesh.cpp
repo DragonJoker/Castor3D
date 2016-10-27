@@ -63,7 +63,7 @@ namespace Castor3D
 		{
 			VertexBuffer const & l_buffer = p_obj.GetVertexBuffer();
 			size_t l_size = l_buffer.GetSize();
-			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = uint32_t( l_size / l_stride );
 			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_VERTEX_COUNT, m_chunk );
 
@@ -92,7 +92,7 @@ namespace Castor3D
 		if ( l_return && p_obj.HasBonesBuffer() )
 		{
 			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
-			uint32_t l_stride = l_buffer.GetDeclaration().GetStride();
+			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = l_buffer.GetSize() / l_stride;
 			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_BONE_COUNT, m_chunk );
 
@@ -310,7 +310,7 @@ namespace Castor3D
 
 	uint32_t Submesh::GetPointsCount()const
 	{
-		return std::max< uint32_t >( uint32_t( m_points.size() ), m_vertexBuffer ? m_vertexBuffer->GetSize() / m_layout.GetStride() : 0u );
+		return std::max< uint32_t >( uint32_t( m_points.size() ), m_vertexBuffer ? m_vertexBuffer->GetSize() / m_layout.stride() : 0u );
 	}
 
 	int Submesh::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -356,7 +356,7 @@ namespace Castor3D
 
 	void Submesh::AddPoints( InterleavedVertex const * const p_begin, InterleavedVertex const * const p_end )
 	{
-		uint32_t l_stride = m_layout.GetStride();
+		uint32_t l_stride = m_layout.stride();
 		m_pointsData.push_back( ByteArray( std::distance( p_begin, p_end ) * l_stride ) );
 		uint8_t * l_data = m_pointsData.back().data();
 
@@ -465,7 +465,7 @@ namespace Castor3D
 	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
 		ENSURE( m_initialised );
-		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
+		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.stride();
 
 		if ( m_indexBuffer )
 		{
@@ -490,7 +490,7 @@ namespace Castor3D
 	void Submesh::DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
 		ENSURE( m_initialised );
-		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
+		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.stride();
 
 		if ( m_indexBuffer )
 		{
@@ -800,7 +800,7 @@ namespace Castor3D
 									uint32_t m_index[3];
 									double m_distance;
 								};
-								uint32_t l_stride = l_vertices.GetDeclaration().GetStride();
+								uint32_t l_stride = l_vertices.GetDeclaration().stride();
 								uint8_t * l_pVtx = l_vertices.data();
 								DECLARE_VECTOR( stFACE_DISTANCE, Face );
 								FaceArray l_arraySorted;
@@ -1022,7 +1022,7 @@ namespace Castor3D
 						BufferElementDeclaration{ ShaderProgram::Weights1, uint32_t( ElementUsage::BoneWeights1 ), ElementType::Vec4, 48 },
 					}
 				} );
-				ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
+				ENSURE( m_bonesBuffer->GetDeclaration().stride() == BonedVertex::Stride );
 			}
 		}
 		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
@@ -1117,7 +1117,7 @@ namespace Castor3D
 		if ( m_vertexBuffer )
 		{
 			VertexBuffer & l_vertexBuffer = *m_vertexBuffer;
-			uint32_t l_stride = m_layout.GetStride();
+			uint32_t l_stride = m_layout.stride();
 			uint32_t l_size = uint32_t( m_points.size() ) * l_stride;
 
 			if ( l_size )

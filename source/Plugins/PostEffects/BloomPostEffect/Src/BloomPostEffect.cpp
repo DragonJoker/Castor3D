@@ -220,7 +220,7 @@ namespace Bloom
 
 		for ( auto & l_vertex : m_vertices )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration.GetStride()] );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration.stride()] );
 		}
 
 		m_linearSampler = DoCreateSampler( true );
@@ -303,7 +303,7 @@ namespace Bloom
 			l_program->Initialise();
 
 			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.GetStride() ) );
+			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.stride() ) );
 			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );

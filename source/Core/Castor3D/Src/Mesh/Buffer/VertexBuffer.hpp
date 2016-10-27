@@ -94,7 +94,7 @@ namespace Castor3D
 		template< typename ItType >
 		inline void LinkCoords( ItType p_begin, ItType p_end )
 		{
-			uint32_t l_stride = m_bufferDeclaration.GetStride();
+			uint32_t l_stride = m_bufferDeclaration.stride();
 			uint8_t * l_buffer = CpuBuffer< uint8_t >::data();
 
 			for ( auto l_it = p_begin; l_it != p_end; ++l_it )

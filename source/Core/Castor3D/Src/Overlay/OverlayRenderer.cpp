@@ -98,7 +98,7 @@ namespace Castor3D
 		{
 			// Panel Overlays buffers
 			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			uint32_t l_stride = m_declaration.GetStride();
+			uint32_t l_stride = m_declaration.stride();
 			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_panelVertexBuffer->data();
 
@@ -127,7 +127,7 @@ namespace Castor3D
 		{
 			// Border Overlays buffers
 			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			uint32_t l_stride = m_declaration.GetStride();
+			uint32_t l_stride = m_declaration.stride();
 			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_borderVertexBuffer->data();
 
@@ -455,7 +455,7 @@ namespace Castor3D
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
 	{
 		auto l_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
-		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.GetStride() );
+		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
 		l_vertexBuffer->Create();
 		l_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
 
