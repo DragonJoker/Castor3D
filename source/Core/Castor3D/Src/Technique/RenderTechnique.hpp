@@ -172,12 +172,14 @@ namespace Castor3D
 		 *\brief		Render function
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\param[out]	p_visible	The visible objects count.
+		 *\param[out]	p_particles	The particles count.
 		 *\~french
 		 *\brief		Fonction de rendu.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\param[out]	p_visible	Le nombre d'objets visibles.
+		 *\param[out]	p_particles	Le nombre de particules.
 		 */
-		C3D_API void Render( uint32_t p_frameTime, uint32_t & p_visible );
+		C3D_API void Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles );
 		/**
 		 *\~english
 		 *\brief		Writes the technique into a text file.

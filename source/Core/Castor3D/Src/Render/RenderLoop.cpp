@@ -114,7 +114,7 @@ namespace Castor3D
 	{
 	}
 
-	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible )
+	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles )
 	{
 		m_renderSystem.GetMainContext()->SetCurrent();
 
@@ -126,7 +126,7 @@ namespace Castor3D
 			} );
 
 			GetEngine()->GetOverlayCache().UpdateRenderer();
-			GetEngine()->GetRenderTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount, p_visible );
+			GetEngine()->GetRenderTargetCache().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount, p_visible, p_particles );
 		}
 		catch ( Exception & p_exc )
 		{
@@ -185,10 +185,11 @@ namespace Castor3D
 			uint32_t l_faces = 0;
 			uint32_t l_objects = 0;
 			uint32_t l_visible = 0;
+			uint32_t l_particles = 0;
 			m_debugOverlays->StartFrame();
-			DoGpuStep( l_vertices, l_faces, l_objects, l_visible );
+			DoGpuStep( l_vertices, l_faces, l_objects, l_visible, l_particles );
 			DoCpuStep();
-			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects, l_visible );
+			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects, l_visible, l_particles );
 		}
 	}
 

@@ -236,7 +236,7 @@ namespace Castor3D
 
 	private:
 		void DoCpuUpdate();
-		void DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible );
+		void DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount, uint32_t & p_visible, uint32_t & p_particles );
 		void DoCpuStep();
 
 	protected:

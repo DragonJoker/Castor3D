@@ -487,6 +487,9 @@ namespace Castor3D
 		//!\~english	The objects rendered in the last frame.
 		//!\~french		Les objets dessinés lors de la dernière frame.
 		std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > m_renderedObjects;
+		//!\~english	The rendered particles count.
+		//!\~french		Le nombre de particules dessinées.
+		uint32_t m_particlesCount{ 0u };
 		//!\~english	Tells if the technique uses multisampling.
 		//!\~french		Dit si la technique utilise le multiéchantillonnage.
 		bool m_multisampling{ false };

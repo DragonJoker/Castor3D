@@ -256,6 +256,13 @@ namespace Castor3D
 		C3D_API void SetUpdateProgram( ShaderProgramSPtr p_program );
 		/**
 		 *\~english
+		 *\return		The particles written at last update.
+		 *\~french
+		 *\return		Le nombre de particules écrites lors de la dernière mise à jour.
+		 */
+		C3D_API uint32_t GetParticlesCount()const;
+		/**
+		 *\~english
 		 *\return		The billboards.
 		 *\~french
 		 *\return		Les billboards.

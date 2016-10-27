@@ -487,7 +487,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible )
+	void RenderTechnique::Render( uint32_t p_frameTime, uint32_t & p_visible, uint32_t & p_particles )
 	{
 		auto & l_nodes = m_renderQueue.GetRenderNodes();
 		auto & l_scene = *m_renderTarget.GetScene();
@@ -512,6 +512,7 @@ namespace Castor3D
 			l_scene.RenderBackground( GetSize() );
 			DoRender( l_nodes, l_depthMaps, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
+			p_particles = m_particlesCount;
 
 #if !defined( NDEBUG )
 
@@ -563,6 +564,7 @@ namespace Castor3D
 	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
+		m_particlesCount = 0;
 		auto & l_camera = *m_renderTarget.GetCamera();
 		l_camera.Resize( m_size );
 		l_camera.Update();
@@ -575,9 +577,10 @@ namespace Castor3D
 			p_nodes.m_scene.RenderForeground( GetSize(), l_camera );
 		}
 
-		p_nodes.m_scene.GetParticleSystemCache().ForEach( []( ParticleSystem & p_particleSystem )
+		p_nodes.m_scene.GetParticleSystemCache().ForEach( [this]( ParticleSystem & p_particleSystem )
 		{
 			p_particleSystem.Update();
+			m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
 		DoRenderTransparentNodes( p_nodes, p_depthMaps );

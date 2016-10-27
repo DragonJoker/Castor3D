@@ -172,7 +172,7 @@ namespace Castor3D
 		auto & l_transform = *m_transformFeedbacks[m_tfb];
 
 		m_updatePipeline->Apply();
-		m_ubo->Bind( 0 );
+		m_updateProgram->BindUbos();
 		m_randomTexture.Bind();
 		l_transform.Bind();
 
@@ -186,17 +186,27 @@ namespace Castor3D
 
 #if 0 && !defined( NDEBUG )
 
-		m_particlesBillboard->GetVertexBuffer().Bind();
-		auto l_buffer = reinterpret_cast< Particle * >( m_particlesBillboard->GetVertexBuffer().Lock( 0, l_count, AccessType::Read ) );
-
-		if ( l_buffer )
 		{
-			Particle l_particles[10000];
-			std::memcpy( l_particles, l_buffer, l_count );
-			m_particlesBillboard->GetVertexBuffer().Unlock();
-		}
+			struct MyParticle
+			{
+				float type;
+				Point3f position;
+				Point3f velocity;
+				float age;
+			};
 
-		m_particlesBillboard->GetVertexBuffer().Unbind();
+			m_updateVertexBuffers[m_tfb]->Bind();
+			auto l_buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->Lock( 0, l_count, AccessType::Read ) );
+
+			if ( l_buffer )
+			{
+				MyParticle l_particles[10000];
+				std::memcpy( l_particles, l_buffer, l_count );
+				m_updateVertexBuffers[m_tfb]->Unlock();
+			}
+
+			m_updateVertexBuffers[m_tfb]->Unbind();
+		}
 
 #endif
 
@@ -264,7 +274,7 @@ namespace Castor3D
 	void ParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
 	{
 		m_computed.push_back( BufferElementDeclaration{ cuT( "out_" ) + p_name, 0u, p_type, m_computed.stride() } );
-		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type } );
+		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 
@@ -279,6 +289,11 @@ namespace Castor3D
 		m_ubo = m_updateProgram->FindFrameVariableBuffer( cuT( "ParticleSystem" ) );
 
 		m_updateProgram->SetTransformLayout( m_computed );
+	}
+
+	uint32_t ParticleSystem::GetParticlesCount()const
+	{
+		return m_transformFeedbacks[m_vtx]->GetWrittenPrimitives();
 	}
 
 	bool ParticleSystem::DoCreateUpdatePipeline()
