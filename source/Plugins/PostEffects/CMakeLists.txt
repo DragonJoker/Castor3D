@@ -50,7 +50,7 @@ function( PostEffectsBuild )
 	endif ()
 endfunction( PostEffectsBuild )
 
-function( PostEffectsSummary msg )
+function( PostEffectsSummary msg msgtest )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
 		set( msg_tmp "\n\nPostEffects :" )
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )

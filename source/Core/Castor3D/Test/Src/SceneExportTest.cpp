@@ -113,7 +113,7 @@ namespace Testing
 
 	void SceneExportTest::AlphaScene()
 	{
-		DoTestScene( cuT( "Alpha.zip" ) );
+		DoTestScene( cuT( "Msaa.zip" ) );
 	}
 
 	void SceneExportTest::AnimatedScene()

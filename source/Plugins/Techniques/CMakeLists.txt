@@ -55,7 +55,7 @@ function( TechniquesBuild )
 	endif ()
 endfunction( TechniquesBuild )
 
-function( TechniquesSummary msg )
+function( TechniquesSummary msg msgtest )
 	set( msg_tmp "\n\nRenderTechniques :" )
 	set( msg_tmp "${msg_tmp}\n    Direct              ${Drct}" )
   
