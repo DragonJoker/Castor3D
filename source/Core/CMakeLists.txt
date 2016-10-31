@@ -1,9 +1,14 @@
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
+option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
+option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
 
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
+	set( CUtlT "no (Not wanted)" PARENT_SCOPE )
 	set( GlslW "no (Not wanted)" PARENT_SCOPE )
 	set( C3D "no (Not wanted)" PARENT_SCOPE )
+	set( C3DT "no (Not wanted)" PARENT_SCOPE )
+	set( CT "no (Not wanted)" PARENT_SCOPE )
 endfunction( CoreInit )
 
 function( CoreBuild )
@@ -32,7 +37,21 @@ function( CoreBuild )
 	endif ()
 
 	if( ${CASTOR_BUILDGRP_TEST} )
+		set( Build ${CT} )
 		add_subdirectory( Core/CastorTest )
+		set( CT ${Build} PARENT_SCOPE )
+
+		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
+			set( Build ${CUtlT} )
+			add_subdirectory( Core/CastorUtils/Test )
+			set( CUtlT ${Build} PARENT_SCOPE )
+		endif ()
+
+		if ( ${CASTOR_BUILD_CASTOR3D} AND ${CASTOR_BUILD_TEST_CASTOR3D} )
+			set( Build ${C3DT} )
+			add_subdirectory( Core/Castor3D/Test )
+			set( C3DT ${Build} PARENT_SCOPE )
+		endif()
 	endif()
 
 	set( CastorMinLibraries
@@ -46,12 +65,19 @@ function( CoreBuild )
 	)
 endfunction( CoreBuild )
 
-function( CoreSummary msg )
+function( CoreSummary msg msgtest )
 	set( msg_tmp "\nCore :" )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils         ${Cutils}" )
 	set( msg_tmp "${msg_tmp}\n    GlslWriter          ${GlslW}" )
 	set( msg_tmp "${msg_tmp}\n    Castor3D            ${C3D}" )
-	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
+	set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
+
+	if( ${CASTOR_BUILDGRP_TEST} )
+		set( msgtest_tmp "${msgtest_tmp}\n    CastorTest          ${CT}" )
+		set( msgtest_tmp "${msgtest_tmp}\n    CastorUtilsTest     ${CUtlT}" )
+		set( msgtest_tmp "${msgtest_tmp}\n    Castor3DTest        ${C3DT}" )
+		set( msgtest "${msgtest}${msgtest_tmp}" PARENT_SCOPE )
+	endif()
 endfunction( CoreSummary )
 
 function( CoreSetup )
@@ -90,20 +116,26 @@ function( CoreSetup )
 			DEPENDS CastorTest
 			INSTALL_TYPES Minimal Full
 		)
-		cpack_add_component( CastorUtilsTest
-			DISPLAY_NAME "CastorUtils test"
-			DESCRIPTION "Test application for CastorUtils."
-			GROUP Test
-			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
-		)
-		cpack_add_component( Castor3DTest
-			DISPLAY_NAME "Castor3D test"
-			DESCRIPTION "Test application for Castor3D."
-			GROUP Test
-			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
-		)
+
+		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
+			cpack_add_component( CastorUtilsTest
+				DISPLAY_NAME "CastorUtils test"
+				DESCRIPTION "Test application for CastorUtils."
+				GROUP Test
+				DEPENDS CastorTest
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+
+		if ( ${CASTOR_BUILD_TEST_CASTOR3D} )
+			cpack_add_component( Castor3DTest
+				DISPLAY_NAME "Castor3D test"
+				DESCRIPTION "Test application for Castor3D."
+				GROUP Test
+				DEPENDS CastorTest
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
 	endif ()
 
 	if ( ${CASTOR_BUILD_CASTOR3D} )

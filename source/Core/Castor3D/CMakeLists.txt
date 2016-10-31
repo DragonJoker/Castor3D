@@ -125,6 +125,3 @@ install(
 
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 
-if( ${CASTOR_BUILDGRP_TEST} )
-	add_subdirectory( Test )
-endif()

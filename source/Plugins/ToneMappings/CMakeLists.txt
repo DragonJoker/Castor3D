@@ -55,7 +55,7 @@ function( ToneMappingsBuild )
 	)
 endfunction( ToneMappingsBuild )
 
-function( ToneMappingsSummary msg )
+function( ToneMappingsSummary msg msgtest )
 	set( msg_tmp "\n\nToneMappings :" )
 	set( msg_tmp "${msg_tmp}\n    Linear              ${Linear}" )
 

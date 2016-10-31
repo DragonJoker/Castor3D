@@ -456,7 +456,16 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
-				m_renderQueue.Initialise( l_scene, *m_renderTarget.GetCamera() );
+				auto l_camera = m_renderTarget.GetCamera();
+
+				if ( l_camera )
+				{
+					m_renderQueue.Initialise( l_scene, *m_renderTarget.GetCamera() );
+				}
+				else
+				{
+					m_renderQueue.Initialise( l_scene );
+				}
 			}
 		}
 

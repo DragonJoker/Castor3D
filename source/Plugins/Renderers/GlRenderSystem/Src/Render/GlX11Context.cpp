@@ -96,7 +96,8 @@ namespace GlRender
 				GLX_DOUBLEBUFFER, GL_TRUE,
 				GLX_RED_SIZE, 1,
 				GLX_GREEN_SIZE, 1,
-				GLX_BLUE_SIZE, 1
+				GLX_BLUE_SIZE, 1,
+				0
 			};
 
 			if ( p_window->IsUsingStereo() )
@@ -131,6 +132,9 @@ namespace GlRender
 				{
 					if ( !l_renderSystem->IsInitialised() )
 					{
+						Logger::LogDebug( StringStream() << cuT( "Display: " ) << std::hex << cuT( "0x" ) << m_display );
+						Logger::LogDebug( StringStream() << cuT( "Drawable: " ) << std::hex << cuT( "0x" ) << m_drawable );
+						Logger::LogDebug( StringStream() << cuT( "Context: " ) << std::hex << cuT( "0x" ) << m_glxContext );
 						glXMakeCurrent( m_display, m_drawable, m_glxContext );
 						GetOpenGl().PreInitialise( String() );
 						glXMakeCurrent( m_display, 0, nullptr );

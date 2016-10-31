@@ -16,8 +16,12 @@ namespace Castor3D
 {
 #if defined( _MSC_VER)
 	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
-#elif defined( __GNUG__)
+#elif defined( __GNUG__ )
+#	if GCC_VERSION >= 50300
 	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypeB5cxx11v" );
+#	else
+	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypev" );
+#	endif
 #else
 #	error "Implement ABI names for this compiler"
 #endif

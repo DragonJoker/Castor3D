@@ -110,7 +110,7 @@ function( ImportersBuild )
 	endif ()
 endfunction( ImportersBuild )
 
-function( ImportersSummary msg )
+function( ImportersSummary msg msgtest )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
 		set( msg_tmp "\n\nImporters :" )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
