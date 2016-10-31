@@ -1,5 +1,5 @@
 option( CASTOR_BUILD_RENDERER_OGL "Build OpenGL Renderer plugin" TRUE )
-option( CASTOR_BUILD_RENDERER_TEST_OGL "Build OpenGL Renderer Test application" TRUE )
+option( CASTOR_BUILD_TEST_RENDERER_OGL "Build OpenGL Renderer Test application" TRUE )
 
 function( RenderersInit )
 	set( Ogl "no (Not wanted)" PARENT_SCOPE )
@@ -13,7 +13,7 @@ function( RenderersBuild )
 		add_subdirectory( Plugins/Renderers/GlRenderSystem )
 		set( Ogl ${Build} PARENT_SCOPE )
 
-		if ( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_RENDERER_TEST_OGL} )
+		if ( ${CASTOR_BUILDGRP_TEST} AND ${CASTOR_BUILD_TEST_RENDERER_OGL} )
 			set( Build ${OglT} )
 			add_subdirectory( Plugins/Renderers/GlRenderSystem/Test )
 			set( OglT ${Build} PARENT_SCOPE )

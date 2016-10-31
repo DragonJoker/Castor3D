@@ -1,4 +1,6 @@
 option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
+option( CASTOR_BUILD_TEST_CASTORUTILS "Build CastorUtils test application" TRUE )
+option( CASTOR_BUILD_TEST_CASTOR3D "Build Castor3D test application" TRUE )
 
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
@@ -39,11 +41,13 @@ function( CoreBuild )
 		add_subdirectory( Core/CastorTest )
 		set( CT ${Build} PARENT_SCOPE )
 
-		set( Build ${CUtlT} )
-		add_subdirectory( Core/CastorUtils/Test )
-		set( CUtlT ${Build} PARENT_SCOPE )
+		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
+			set( Build ${CUtlT} )
+			add_subdirectory( Core/CastorUtils/Test )
+			set( CUtlT ${Build} PARENT_SCOPE )
+		endif ()
 
-		if ( ${CASTOR_BUILD_CASTOR3D} )
+		if ( ${CASTOR_BUILD_CASTOR3D} AND ${CASTOR_BUILD_TEST_CASTOR3D} )
 			set( Build ${C3DT} )
 			add_subdirectory( Core/Castor3D/Test )
 			set( C3DT ${Build} PARENT_SCOPE )
@@ -112,20 +116,26 @@ function( CoreSetup )
 			DEPENDS CastorTest
 			INSTALL_TYPES Minimal Full
 		)
-		cpack_add_component( CastorUtilsTest
-			DISPLAY_NAME "CastorUtils test"
-			DESCRIPTION "Test application for CastorUtils."
-			GROUP Test
-			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
-		)
-		cpack_add_component( Castor3DTest
-			DISPLAY_NAME "Castor3D test"
-			DESCRIPTION "Test application for Castor3D."
-			GROUP Test
-			DEPENDS CastorTest
-			INSTALL_TYPES Minimal Full
-		)
+
+		if ( ${CASTOR_BUILD_TEST_CASTORUTILS} )
+			cpack_add_component( CastorUtilsTest
+				DISPLAY_NAME "CastorUtils test"
+				DESCRIPTION "Test application for CastorUtils."
+				GROUP Test
+				DEPENDS CastorTest
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+
+		if ( ${CASTOR_BUILD_TEST_CASTOR3D} )
+			cpack_add_component( Castor3DTest
+				DISPLAY_NAME "Castor3D test"
+				DESCRIPTION "Test application for Castor3D."
+				GROUP Test
+				DEPENDS CastorTest
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
 	endif ()
 
 	if ( ${CASTOR_BUILD_CASTOR3D} )

@@ -26,8 +26,10 @@ Renderers:
 - GlRenderSystem depends on OpenGL (not GLU).
 
 Importers:
-- ASE, 3DS, LWO, OBJ, PLY, MD2, MD3.
-- ASSIMP: Depends on Assimp, replaces the previous ones, except for PLY.
+- ASE, 3DS, LWO, OBJ, MD2, MD3.
+- ASSIMP: Depends on Assimp, replaces the previous ones.
+- PLY: Stanford Polygon library mesh importer.
+- OBJ: Wavefront OBJ mesh importer.
 
 Dividers:
 - Loop subdivision surfaces.
@@ -36,11 +38,14 @@ Dividers:
 
 Techniques:
 - Direct: Default one, nothing special about it.
+- Deferred: Deferred rendering technique.
 - MSAA: Multi-sampling anti aliasing
+- DeferredMSAA: Deferred rendering technique using MSAA for transparent meshes.
 
 PostEffects:
 - Bloom.
 - GrayScale.
+- FXAA.
 
 Generic:
 - CastorGUI: to build GUIs inside Castor3D scenes.
@@ -179,6 +184,10 @@ The build is configurable through CMake using the following options:
 - **CASTOR_BUILD_TONEMAP_<NAME>**
 
     Enables the build of <Name> tone mapping plug-in.
+
+- **CASTOR_BUILD_TEST_<NAME>**
+
+    Enables the build of <Name> test application.
 
 - **CASTOR_FORCE_ALL_IMPORTERS**
 
