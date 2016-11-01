@@ -85,6 +85,7 @@ namespace Testing
 		l_dst.reset();
 		l_scene.GetMeshCache().Remove( l_name );
 		l_scene.GetMeshCache().Remove( l_name + cuT( "_imp" ) );
+		m_engine.GetRenderLoop().Cleanup();
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -96,7 +97,7 @@ namespace Testing
 		auto l_src = l_scene.GetMeshCache().Add( l_name );
 		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 		{
-			BinaryFile l_file{ Engine::GetDataDirectory() / l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ m_testDataFolder / l_path, File::eOPEN_MODE_READ };
 			BinaryParser< Mesh > l_parser;
 			CT_CHECK( l_parser.Parse( *l_src, l_file ) );
 		}

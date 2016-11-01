@@ -51,6 +51,13 @@ namespace Castor3D
 			GetEngine()->GetOverlayCache().UpdateRenderer();
 			m_renderSystem.GetMainContext()->EndCurrent();
 		}
+		else
+		{
+			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+			{
+				p_listener.FlushEvents( EventType::PreRender );
+			} );
+		}
 
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{

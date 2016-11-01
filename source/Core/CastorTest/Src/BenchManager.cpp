@@ -6,8 +6,8 @@
 
 namespace Testing
 {
-	std::vector< BenchCaseSPtr > BenchManager::m_arrayBenchs;
-	std::vector< TestCaseSPtr > BenchManager::m_arrayTests;
+	std::vector< BenchCaseUPtr > BenchManager::m_benchs;
+	std::vector< TestCaseUPtr > BenchManager::m_cases;
 
 	BenchManager::BenchManager()
 	{
@@ -15,19 +15,19 @@ namespace Testing
 
 	BenchManager::~BenchManager()
 	{
-		m_arrayBenchs.clear();
-		m_arrayTests.clear();
+		m_benchs.clear();
+		m_cases.clear();
 	}
 
-	void BenchManager::Register( BenchCaseSPtr p_pBench )
+	void BenchManager::Register( BenchCaseUPtr p_bench )
 	{
-		m_arrayBenchs.push_back( p_pBench );
+		m_benchs.push_back( std::move( p_bench ) );
 	}
 
-	void BenchManager::Register( TestCaseSPtr p_pCode )
+	void BenchManager::Register( TestCaseUPtr p_case )
 	{
-		p_pCode->RegisterTests();
-		m_arrayTests.push_back( p_pCode );
+		p_case->RegisterTests();
+		m_cases.push_back( std::move( p_case ) );
 	}
 
 	void BenchManager::ExecuteBenchs()
@@ -38,13 +38,13 @@ namespace Testing
 		l_benchSep.fill( '*' );
 		l_benchSep << '*';
 
-		if ( m_arrayBenchs.size() )
+		if ( m_benchs.size() )
 		{
 			std::cout << std::endl;
 			std::cout << "Benchmarks - Begin" << std::endl;
 			std::cout << l_benchSep.str() << std::endl;
 
-			for ( auto l_bench : m_arrayBenchs )
+			for ( auto & l_bench : m_benchs )
 			{
 				l_bench->Execute();
 			}
@@ -69,7 +69,7 @@ namespace Testing
 		l_benchSep << '*';
 		std::cout << l_benchSep.str() << std::endl;
 
-		for ( auto l_bench : m_arrayBenchs )
+		for ( auto & l_bench : m_benchs )
 		{
 			std::cout << l_bench->GetSummary().c_str() << std::endl;
 		}
@@ -84,14 +84,14 @@ namespace Testing
 		l_testSep.fill( '*' );
 		l_testSep << '*';
 
-		if ( m_arrayTests.size() )
+		if ( m_cases.size() )
 		{
 			std::cout << std::endl;
 			std::cout << "Tests - Begin" << std::endl;
 			std::cout << l_testSep.str() << std::endl;
 			uint32_t l_testCount = 0;
 
-			for ( auto l_testCase : m_arrayTests )
+			for ( auto & l_testCase : m_cases )
 			{
 				l_testCase->Execute( l_errCount, l_testCount );
 				std::cout << l_testSep.str() << std::endl;
@@ -120,15 +120,15 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	bool Register( BenchCaseSPtr p_pBenchmark )
+	bool Register( BenchCaseUPtr p_bench )
 	{
-		BenchManager::Register( p_pBenchmark );
+		BenchManager::Register( std::move( p_bench ) );
 		return true;
 	}
 
-	bool Register( TestCaseSPtr p_pCode )
+	bool Register( TestCaseUPtr p_case )
 	{
-		BenchManager::Register( p_pCode );
+		BenchManager::Register( std::move( p_case ) );
 		return true;
 	}
 }

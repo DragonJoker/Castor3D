@@ -32,19 +32,19 @@ namespace Testing
 	public:
 		BenchManager();
 		~BenchManager();
-		static void Register( BenchCaseSPtr p_pBench );
-		static void Register( TestCaseSPtr p_pTest );
+		static void Register( BenchCaseUPtr p_bench );
+		static void Register( TestCaseUPtr p_case );
 		static void ExecuteBenchs();
 		static void BenchsSummary();
 		static uint32_t ExecuteTests();
 
 	private:
-		static std::vector< BenchCaseSPtr > m_arrayBenchs;
-		static std::vector< TestCaseSPtr > m_arrayTests;
+		static std::vector< BenchCaseUPtr > m_benchs;
+		static std::vector< TestCaseUPtr > m_cases;
 	};
 
-	bool Register( BenchCaseSPtr p_pBench );
-	bool Register( TestCaseSPtr p_pCode );
+	bool Register( BenchCaseUPtr p_bench );
+	bool Register( TestCaseUPtr p_case );
 
 #define BENCHLOOP( p_iMax, p_return )\
 		p_return = ::Testing::BenchManager::ExecuteTests();\

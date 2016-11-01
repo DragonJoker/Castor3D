@@ -138,8 +138,8 @@ int main( int argc, char const * argv[] )
 		std::unique_ptr< Engine > l_engine = DoInitialiseCastor();
 
 		// Test cases.
-		//Testing::Register( std::make_shared< Testing::BinaryExportTest >( *l_engine ) );
-		Testing::Register( std::make_shared< Testing::SceneExportTest >( *l_engine ) );
+		Testing::Register( std::make_unique< Testing::BinaryExportTest >( *l_engine ) );
+		Testing::Register( std::make_unique< Testing::SceneExportTest >( *l_engine ) );
 
 		// Tests loop.
 		BENCHLOOP( l_count, l_return );

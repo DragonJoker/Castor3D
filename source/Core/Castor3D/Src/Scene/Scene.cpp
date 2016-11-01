@@ -543,6 +543,7 @@ namespace Castor3D
 		};
 
 		m_sceneNodeCache->Add( cuT( "ObjectRootNode" ), m_rootObjectNode );
+		m_sceneNodeCache->Add( cuT( "CameraRootNode" ), m_rootCameraNode );
 
 		m_onParticleSystemChanged = m_particleSystemCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
 		m_onBillboardListChanged = m_billboardCache->m_onChanged.connect( std::bind( &Scene::SetChanged, this ) );
@@ -567,14 +568,6 @@ namespace Castor3D
 		m_cameraCache.reset();
 		m_geometryCache.reset();
 		m_lightCache.reset();
-		m_sceneNodeCache.reset();
-
-		m_meshCache.reset();
-		m_materialCacheView.reset();
-		m_samplerCacheView.reset();
-		m_windowCache.reset();
-		m_overlayCacheView.reset();
-		m_fontCacheView.reset();
 
 		if ( m_rootCameraNode )
 		{
@@ -587,6 +580,15 @@ namespace Castor3D
 			m_rootObjectNode->Detach();
 			m_rootObjectNode.reset();
 		}
+
+		m_sceneNodeCache.reset();
+
+		m_meshCache.reset();
+		m_materialCacheView.reset();
+		m_samplerCacheView.reset();
+		m_windowCache.reset();
+		m_overlayCacheView.reset();
+		m_fontCacheView.reset();
 
 		if ( m_rootNode )
 		{

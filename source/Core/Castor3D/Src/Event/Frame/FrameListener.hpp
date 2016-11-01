@@ -34,11 +34,11 @@ namespace Castor3D
 	\version	0.1
 	\date		03/03/2010
 	\~english
-	\brief		User event synchronisation class
-	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times
+	\brief		User event synchronisation class.
+	\remark		The handler of the frame events. It can add frame events and applies them at the wanted times.
 	\~french
-	\brief		Classe de synchronisation des évènements
-	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur EventType)
+	\brief		Classe de synchronisation des évènements.
+	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur EventType).
 	*/
 	class FrameListener
 		: public Castor::Named
@@ -46,18 +46,18 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\param[in]	p_name	The listener's name.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name	Le nom du listener
+		 *\brief		Constructeur.
+		 *\param[in]	p_name	Le nom du listener.
 		 */
 		C3D_API explicit FrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API ~FrameListener();
 		/**
@@ -69,23 +69,33 @@ namespace Castor3D
 		C3D_API void Flush();
 		/**
 		 *\~english
-		 *\brief		Puts an event in the corresponding array
-		 *\param[in]	p_event	The event to put
+		 *\brief		Puts an event in the corresponding array.
+		 *\param[in]	p_event	The event to put.
 		 *\~french
-		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type
-		 *\param[in]	p_event	L'évènement à ajouter
+		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type.
+		 *\param[in]	p_event	L'évènement à ajouter.
 		 */
 		C3D_API void PostEvent( FrameEventUPtr && p_event );
 		/**
 		 *\~english
-		 *\brief		Applies all events of a given type, then discards them
-		 *\param[in]	p_type	The type of events to fire
+		 *\brief		Applies all events of a given type, then discards them.
+		 *\param[in]	p_type	The type of events to fire.
+		 *\return		\p true si tous les évènements se sont exécutés sans erreur.
 		 *\~french
-		 *\brief		Traite tous les évènements d'un type donné
-		 *\param[in]	p_type	Le type des évènements à traiter
-		 *\return
+		 *\brief		Traite tous les évènements d'un type donné.
+		 *\param[in]	p_type	Le type des évènements à traiter.
+		 *\return		\p true if all events were processed successfully.
 		 */
 		C3D_API bool FireEvents( EventType p_type );
+		/**
+		 *\~english
+		 *\brief		Discards all events of a given type.
+		 *\param[in]	p_type	The type of events to fire.
+		 *\~french
+		 *\brief		Supprime tous les évènements d'un type donné.
+		 *\param[in]	p_type	Le type des évènements à traiter.
+		 */
+		C3D_API void FlushEvents( EventType p_type );
 
 	protected:
 		/**
@@ -97,9 +107,11 @@ namespace Castor3D
 		C3D_API virtual void DoFlush() {}
 
 	protected:
-		//!\~english The events arrays	\~french Les tableaux d'évènements
+		//!\~english	The events arrays.
+		//!\~french		Les tableaux d'évènements.
 		std::array< FrameEventPtrArray,	size_t( EventType::Count ) > m_events;
-		//!\~english Mutex to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
+		//!\~english	Mutex to make this class thread safe.
+		//!\~french		Mutex pour rendre cette classe thread safe.
 		std::recursive_mutex m_mutex;
 	};
 }

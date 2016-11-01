@@ -1,4 +1,4 @@
-﻿#include "FrameListener.hpp"
+#include "FrameListener.hpp"
 #include "FrameEvent.hpp"
 
 using namespace Castor;
@@ -69,5 +69,13 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	void FrameListener::FlushEvents( EventType p_type )
+	{
+		m_mutex.lock();
+		FrameEventPtrArray l_arrayEvents;
+		std::swap( l_arrayEvents, m_events[size_t( p_type )] );
+		m_mutex.unlock();
 	}
 }

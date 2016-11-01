@@ -142,7 +142,6 @@ namespace
 	{
 	public:
 		RenderWindow()
-		try
 		{
 			MSG msg = { 0 };
 			WNDCLASS wc = { 0 };
@@ -163,10 +162,6 @@ namespace
 			{
 				CASTOR_EXCEPTION( "Couldn't create window" );
 			}
-		}
-		catch ( Castor::Exception & p_exc )
-		{
-			throw;
 		}
 
 		~RenderWindow()
@@ -391,7 +386,7 @@ int main( int argc, char const * argv[] )
 				if ( l_engine )
 				{
 					// Test cases.
-					Testing::Register( std::make_shared< Testing::GlTransformFeedbackTest >( *l_engine ) );
+					Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
 
 					// Tests loop.
 					BENCHLOOP( l_count, l_return );
