@@ -61,7 +61,7 @@ namespace GlRender
 
 	void GlTexture::GenerateMipmaps()const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_type != TextureType::TwoDimensionsMS && m_type != TextureType::Buffer )
+		if ( GetGlName() != GlInvalidIndex && m_type != TextureType::TwoDimensionsMS && m_type != TextureType::Buffer )
 		{
 			GetOpenGl().GenerateMipmap( m_glDimension );
 		}
@@ -69,7 +69,7 @@ namespace GlRender
 
 	bool GlTexture::DoBind( uint32_t p_index )const
 	{
-		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
+		bool l_return = GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::Index0 ) + p_index ) );
 
 		if ( l_return )
 		{
@@ -91,7 +91,7 @@ namespace GlRender
 
 	void GlTexture::DoUnbind( uint32_t p_index )const
 	{
-		GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
+		GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::Index0 ) + p_index ) );
 		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}
 }

@@ -191,7 +191,7 @@ namespace Castor
 		//!\~english	Stencil 8 bits.
 		//!\~french		Stencil 8 bits.
 		S8,
-		CASTOR_ENUM_CLASS_BOUNDS( L8 )
+		CASTOR_SCOPED_ENUM_BOUNDS( L8 )
 	}	PixelFormat;
 	/*!
 	\author		Sylvain DOREMUS
@@ -216,7 +216,7 @@ namespace Castor
 		//!\~english	Intersection.
 		//!\~french		Intersection
 		Intersect,
-		CASTOR_ENUM_CLASS_BOUNDS( In )
+		CASTOR_SCOPED_ENUM_BOUNDS( In )
 	};
 
 #if CASTOR_USE_DOUBLE

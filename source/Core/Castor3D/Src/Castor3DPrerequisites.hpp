@@ -98,7 +98,7 @@ namespace Castor3D
 		Geometry,
 		Light,
 		Billboard,
-		CASTOR_ENUM_CLASS_BOUNDS( Camera )
+		CASTOR_SCOPED_ENUM_BOUNDS( Camera )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -114,7 +114,7 @@ namespace Castor3D
 	{
 		Window,
 		Texture,
-		CASTOR_ENUM_CLASS_BOUNDS( Window )
+		CASTOR_SCOPED_ENUM_BOUNDS( Window )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -152,7 +152,7 @@ namespace Castor3D
 		//!\~english	Generic plug-in.
 		//!\~french		Plug-in générique.
 		Generic,
-		CASTOR_ENUM_CLASS_BOUNDS( Renderer )
+		CASTOR_SCOPED_ENUM_BOUNDS( Renderer )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -217,7 +217,7 @@ namespace Castor3D
 		Left,
 		Right,
 		FrontAndBack,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_SCOPED_ENUM_BOUNDS( None )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -240,7 +240,7 @@ namespace Castor3D
 		//!\~english	Frame buffer is bound as a target for reads and draws.
 		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
 		Both,
-		CASTOR_ENUM_CLASS_BOUNDS( Draw )
+		CASTOR_SCOPED_ENUM_BOUNDS( Draw )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -263,7 +263,7 @@ namespace Castor3D
 		//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
 		//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
 		Manual,
-		CASTOR_ENUM_CLASS_BOUNDS( Config )
+		CASTOR_SCOPED_ENUM_BOUNDS( Config )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -281,7 +281,7 @@ namespace Castor3D
 		Colour,
 		Depth,
 		Stencil,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_SCOPED_ENUM_BOUNDS( None )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -297,7 +297,7 @@ namespace Castor3D
 	{
 		Texture,
 		Buffer,
-		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+		CASTOR_SCOPED_ENUM_BOUNDS( Texture )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -312,7 +312,7 @@ namespace Castor3D
 		Ortho,
 		Perspective,
 		Frustum,
-		CASTOR_ENUM_CLASS_BOUNDS( Ortho )
+		CASTOR_SCOPED_ENUM_BOUNDS( Ortho )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -343,7 +343,7 @@ namespace Castor3D
 		//!\~english	Bottom plane.
 		//!\~french		Plan bas.
 		Bottom,
-		CASTOR_ENUM_CLASS_BOUNDS( Near )
+		CASTOR_SCOPED_ENUM_BOUNDS( Near )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -364,7 +364,7 @@ namespace Castor3D
 		//!\~english	This kind of event happens after the buffer' swap.
 		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
 		PostRender,
-		CASTOR_ENUM_CLASS_BOUNDS( PreRender )
+		CASTOR_SCOPED_ENUM_BOUNDS( PreRender )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -390,7 +390,7 @@ namespace Castor3D
 		//!\~english	Back and front faces are culled.
 		//!\~french		Faces avant et arrière supprimées.
 		FrontAndBack,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_SCOPED_ENUM_BOUNDS( None )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -413,7 +413,7 @@ namespace Castor3D
 		//!\~english	The interior of the polygon is filled.
 		//!\~french		L'intérieur du polygone est rempli.
 		Solid,
-		CASTOR_ENUM_CLASS_BOUNDS( Point )
+		CASTOR_SCOPED_ENUM_BOUNDS( Point )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -434,7 +434,7 @@ namespace Castor3D
 		TransformFeedbackPrimitivesWritten,
 		AnySamplesPassedConservative,
 		Timestamp,
-		CASTOR_ENUM_CLASS_BOUNDS( TimeElapsed )
+		CASTOR_SCOPED_ENUM_BOUNDS( TimeElapsed )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -451,7 +451,7 @@ namespace Castor3D
 		Result,
 		ResultAvailable,
 		ResultNoWait,
-		CASTOR_ENUM_CLASS_BOUNDS( Result )
+		CASTOR_SCOPED_ENUM_BOUNDS( Result )
 	};
 
 	class WindowHandle;

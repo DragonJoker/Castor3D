@@ -34,7 +34,7 @@ namespace Castor3D
 		Linear,
 		Exponential,
 		SquaredExponential,
-		CASTOR_ENUM_CLASS_BOUNDS( Disabled )
+		CASTOR_SCOPED_ENUM_BOUNDS( Disabled )
 	};
 
 	class Scene;

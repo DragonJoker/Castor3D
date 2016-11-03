@@ -214,22 +214,22 @@ namespace Castor
 	\~french
 	\brief		Structure d'aide pour les paramètres de parseur.
 	*/
-	template< ePARAMETER_TYPE Type > struct ParserParameterHelper;
+	template< ParameterType Type > struct ParserParameterHelper;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_TEXT.
+	\brief		ParserParameterHelper specialisation for ParameterType::Text.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_TEXT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Text.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_TEXT >
+	template<> struct ParserParameterHelper< ParameterType::Text >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = String;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_TEXT;
+		CU_API static const ParameterType ParamType = ParameterType::Text;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -238,18 +238,18 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_NAME.
+	\brief		ParserParameterHelper specialisation for ParameterType::Name.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_NAME.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Name.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_NAME >
+	template<> struct ParserParameterHelper< ParameterType::Name >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = String;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_NAME;
+		CU_API static const ParameterType ParamType = ParameterType::Name;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterBaseType = ePARAMETER_TYPE_TEXT;
+		CU_API static const ParameterType ParameterBaseType = ParameterType::Text;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -258,16 +258,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_PATH.
+	\brief		ParserParameterHelper specialisation for ParameterType::Path.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_PATH.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Path.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_PATH >
+	template<> struct ParserParameterHelper< ParameterType::Path >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Path;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_PATH;
+		CU_API static const ParameterType ParamType = ParameterType::Path;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -276,18 +276,18 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		ParserParameterHelper specialisation for ParameterType::CheckedText.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::CheckedText.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_CHECKED_TEXT >
+	template<> struct ParserParameterHelper< ParameterType::CheckedText >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_CHECKED_TEXT;
+		CU_API static const ParameterType ParamType = ParameterType::CheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterBaseType = ePARAMETER_TYPE_UINT32;
+		CU_API static const ParameterType ParameterBaseType = ParameterType::UInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -296,18 +296,18 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT.
+	\brief		ParserParameterHelper specialisation for ParameterType::BitwiseOred32BitsCheckedText.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::BitwiseOred32BitsCheckedText.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >
+	template<> struct ParserParameterHelper< ParameterType::BitwiseOred32BitsCheckedText >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT;
+		CU_API static const ParameterType ParamType = ParameterType::BitwiseOred32BitsCheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterBaseType = ePARAMETER_TYPE_UINT32;
+		CU_API static const ParameterType ParameterBaseType = ParameterType::UInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -316,18 +316,18 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		ParserParameterHelper specialisation for ParameterType::BitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::BitwiseOred64BitsCheckedText.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >
+	template<> struct ParserParameterHelper< ParameterType::BitwiseOred64BitsCheckedText >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT;
+		CU_API static const ParameterType ParamType = ParameterType::BitwiseOred64BitsCheckedText;
 		//!~english The parameter base type.	\~french Le type de base du paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterBaseType = ePARAMETER_TYPE_UINT64;
+		CU_API static const ParameterType ParameterBaseType = ParameterType::UInt64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -336,16 +336,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_BOOL.
+	\brief		ParserParameterHelper specialisation for ParameterType::Bool.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_BOOL.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Bool.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_BOOL >
+	template<> struct ParserParameterHelper< ParameterType::Bool >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = bool;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_BOOL;
+		CU_API static const ParameterType ParamType = ParameterType::Bool;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -354,16 +354,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_INT8.
+	\brief		ParserParameterHelper specialisation for ParameterType::Int8.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_INT8.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Int8.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_INT8 >
+	template<> struct ParserParameterHelper< ParameterType::Int8 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int8_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_INT8;
+		CU_API static const ParameterType ParamType = ParameterType::Int8;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -372,16 +372,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_INT16.
+	\brief		ParserParameterHelper specialisation for ParameterType::Int16.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_INT16.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Int16.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_INT16 >
+	template<> struct ParserParameterHelper< ParameterType::Int16 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int16_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_INT16;
+		CU_API static const ParameterType ParamType = ParameterType::Int16;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -390,16 +390,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_INT32.
+	\brief		ParserParameterHelper specialisation for ParameterType::Int32.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_INT32.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Int32.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_INT32 >
+	template<> struct ParserParameterHelper< ParameterType::Int32 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_INT32;
+		CU_API static const ParameterType ParamType = ParameterType::Int32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -408,16 +408,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_INT64.
+	\brief		ParserParameterHelper specialisation for ParameterType::Int64.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_INT64.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Int64.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_INT64 >
+	template<> struct ParserParameterHelper< ParameterType::Int64 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = int64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_INT64;
+		CU_API static const ParameterType ParamType = ParameterType::Int64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -426,16 +426,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_UINT8.
+	\brief		ParserParameterHelper specialisation for ParameterType::UInt8.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_UINT8.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::UInt8.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_UINT8 >
+	template<> struct ParserParameterHelper< ParameterType::UInt8 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint8_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_UINT8;
+		CU_API static const ParameterType ParamType = ParameterType::UInt8;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -444,16 +444,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_UINT16.
+	\brief		ParserParameterHelper specialisation for ParameterType::UInt16.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_UINT16.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::UInt16.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_UINT16 >
+	template<> struct ParserParameterHelper< ParameterType::UInt16 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint16_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_UINT16;
+		CU_API static const ParameterType ParamType = ParameterType::UInt16;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -462,16 +462,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_UINT32.
+	\brief		ParserParameterHelper specialisation for ParameterType::UInt32.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_UINT32.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::UInt32.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_UINT32 >
+	template<> struct ParserParameterHelper< ParameterType::UInt32 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint32_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_UINT32;
+		CU_API static const ParameterType ParamType = ParameterType::UInt32;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -480,16 +480,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_UINT64.
+	\brief		ParserParameterHelper specialisation for ParameterType::UInt64.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_UINT64.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::UInt64.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_UINT64 >
+	template<> struct ParserParameterHelper< ParameterType::UInt64 >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = uint64_t;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_UINT64;
+		CU_API static const ParameterType ParamType = ParameterType::UInt64;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -498,16 +498,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_FLOAT.
+	\brief		ParserParameterHelper specialisation for ParameterType::Float.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_FLOAT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Float.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_FLOAT >
+	template<> struct ParserParameterHelper< ParameterType::Float >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = float;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_FLOAT;
+		CU_API static const ParameterType ParamType = ParameterType::Float;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -516,16 +516,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_DOUBLE.
+	\brief		ParserParameterHelper specialisation for ParameterType::Double.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_DOUBLE.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Double.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_DOUBLE >
+	template<> struct ParserParameterHelper< ParameterType::Double >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = double;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_DOUBLE;
+		CU_API static const ParameterType ParamType = ParameterType::Double;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -534,16 +534,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_LONGDOUBLE.
+	\brief		ParserParameterHelper specialisation for ParameterType::LongDouble.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_LONGDOUBLE.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::LongDouble.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_LONGDOUBLE >
+	template<> struct ParserParameterHelper< ParameterType::LongDouble >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = long double;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_LONGDOUBLE;
+		CU_API static const ParameterType ParamType = ParameterType::LongDouble;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -552,16 +552,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_PIXELFORMAT.
+	\brief		ParserParameterHelper specialisation for ParameterType::PixelFormat.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_PIXELFORMAT.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::PixelFormat.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_PIXELFORMAT >
+	template<> struct ParserParameterHelper< ParameterType::PixelFormat >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = PixelFormat;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_PIXELFORMAT;
+		CU_API static const ParameterType ParamType = ParameterType::PixelFormat;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -570,16 +570,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT2I.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point2I.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT2I.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point2I.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT2I >
+	template<> struct ParserParameterHelper< ParameterType::Point2I >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT2I;
+		CU_API static const ParameterType ParamType = ParameterType::Point2I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -588,16 +588,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT3I.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point3I.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT3I.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point3I.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT3I >
+	template<> struct ParserParameterHelper< ParameterType::Point3I >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT3I;
+		CU_API static const ParameterType ParamType = ParameterType::Point3I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -606,16 +606,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT4I.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point4I.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT4I.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point4I.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT4I >
+	template<> struct ParserParameterHelper< ParameterType::Point4I >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4i;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT4I;
+		CU_API static const ParameterType ParamType = ParameterType::Point4I;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -624,16 +624,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT2F.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point2F.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT2F.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point2F.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT2F >
+	template<> struct ParserParameterHelper< ParameterType::Point2F >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT2F;
+		CU_API static const ParameterType ParamType = ParameterType::Point2F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -642,16 +642,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT3F.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point3F.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT3F.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point3F.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT3F >
+	template<> struct ParserParameterHelper< ParameterType::Point3F >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT3F;
+		CU_API static const ParameterType ParamType = ParameterType::Point3F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -660,16 +660,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT4F.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point4F.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT4F.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point4F.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT4F >
+	template<> struct ParserParameterHelper< ParameterType::Point4F >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4f;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT4F;
+		CU_API static const ParameterType ParamType = ParameterType::Point4F;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -678,16 +678,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT2D.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point2D.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT2D.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point2D.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT2D >
+	template<> struct ParserParameterHelper< ParameterType::Point2D >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point2d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT2D;
+		CU_API static const ParameterType ParamType = ParameterType::Point2D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -696,16 +696,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT3D.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point3D.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT3D.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point3D.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT3D >
+	template<> struct ParserParameterHelper< ParameterType::Point3D >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point3d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT3D;
+		CU_API static const ParameterType ParamType = ParameterType::Point3D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -714,16 +714,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POINT4D.
+	\brief		ParserParameterHelper specialisation for ParameterType::Point4D.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POINT4D.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Point4D.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POINT4D >
+	template<> struct ParserParameterHelper< ParameterType::Point4D >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Point4d;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POINT4D;
+		CU_API static const ParameterType ParamType = ParameterType::Point4D;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -732,16 +732,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_SIZE.
+	\brief		ParserParameterHelper specialisation for ParameterType::Size.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_SIZE.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Size.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_SIZE >
+	template<> struct ParserParameterHelper< ParameterType::Size >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Size;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_SIZE;
+		CU_API static const ParameterType ParamType = ParameterType::Size;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -750,16 +750,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_POSITION.
+	\brief		ParserParameterHelper specialisation for ParameterType::Position.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_POSITION.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Position.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_POSITION >
+	template<> struct ParserParameterHelper< ParameterType::Position >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Position;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_POSITION;
+		CU_API static const ParameterType ParamType = ParameterType::Position;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -768,16 +768,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_RECTANGLE.
+	\brief		ParserParameterHelper specialisation for ParameterType::Rectangle.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_RECTANGLE.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Rectangle.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_RECTANGLE >
+	template<> struct ParserParameterHelper< ParameterType::Rectangle >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Rectangle;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_RECTANGLE;
+		CU_API static const ParameterType ParamType = ParameterType::Rectangle;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -786,16 +786,16 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ParserParameterHelper specialisation for ePARAMETER_TYPE_COLOUR.
+	\brief		ParserParameterHelper specialisation for ParameterType::Colour.
 	\~french
-	\brief		Specialisation de ParserParameterHelper pour ePARAMETER_TYPE_COLOUR.
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::Colour.
 	*/
-	template<> struct ParserParameterHelper< ePARAMETER_TYPE_COLOUR >
+	template<> struct ParserParameterHelper< ParameterType::Colour >
 	{
 		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
 		using ValueType = Colour;
 		//!~english The parameter type.	\~french Le type de paramètre.
-		CU_API static const ePARAMETER_TYPE ParameterType = ePARAMETER_TYPE_COLOUR;
+		CU_API static const ParameterType ParamType = ParameterType::Colour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};
@@ -804,11 +804,11 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		Structure used to tell if an ePARAMETER_TYPE has a base parameter type.
+	\brief		Structure used to tell if an ParameterType has a base parameter type.
 	\~french
-	\brief		Structure utilisée pour déterminer si un ePARAMETER_TYPE a un type de paramètre de base.
+	\brief		Structure utilisée pour déterminer si un ParameterType a un type de paramètre de base.
 	*/
-	template< ePARAMETER_TYPE Type >
+	template< ParameterType Type >
 	struct has_base_parameter_type
 		: public std::false_type
 	{
@@ -818,12 +818,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ePARAMETER_TYPE_NAME.
+	\brief		has_base_parameter_type specialisation for ParameterType::Name.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ePARAMETER_TYPE_NAME.
+	\brief		Spécialisation de has_base_parameter_type pour ParameterType::Name.
 	*/
 	template<>
-	struct has_base_parameter_type< ePARAMETER_TYPE_NAME >
+	struct has_base_parameter_type< ParameterType::Name >
 		: public std::true_type
 	{
 	};
@@ -832,12 +832,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		has_base_parameter_type specialisation for ParameterType::CheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		Spécialisation de has_base_parameter_type pour ParameterType::CheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ePARAMETER_TYPE_CHECKED_TEXT >
+	struct has_base_parameter_type< ParameterType::CheckedText >
 		: public std::true_type
 	{
 	};
@@ -846,12 +846,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT.
+	\brief		has_base_parameter_type specialisation for ParameterType::BitwiseOred32BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT.
+	\brief		Spécialisation de has_base_parameter_type pour ParameterType::BitwiseOred32BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >
+	struct has_base_parameter_type< ParameterType::BitwiseOred32BitsCheckedText >
 		: public std::true_type
 	{
 	};
@@ -860,12 +860,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		has_base_parameter_type specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		has_base_parameter_type specialisation for ParameterType::BitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Spécialisation de has_base_parameter_type pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		Spécialisation de has_base_parameter_type pour ParameterType::BitwiseOred64BitsCheckedText.
 	*/
 	template<>
-	struct has_base_parameter_type< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >
+	struct has_base_parameter_type< ParameterType::BitwiseOred64BitsCheckedText >
 		: public std::true_type
 	{
 	};
@@ -877,7 +877,7 @@ namespace Castor
 	 *\brief		Récupère le nom du type de paramètre donné.
 	 *\param[in]	p_type	Le type de paramètre.
 	 */
-	CU_API String const & GetTypeName( ePARAMETER_TYPE p_type );
+	CU_API String const & GetTypeName( ParameterType p_type );
 }
 
 #endif

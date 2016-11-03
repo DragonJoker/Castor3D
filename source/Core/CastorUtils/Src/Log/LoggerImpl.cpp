@@ -125,7 +125,7 @@ namespace Castor
 				{
 					try
 					{
-						TextFile l_file{ Path{ m_logFilePath[i++] }, File::eOPEN_MODE_APPEND };
+						TextFile l_file{ Path{ m_logFilePath[i++] }, File::OpenMode::Append };
 						l_file.WriteText( l_text );
 					}
 					catch ( Exception & )

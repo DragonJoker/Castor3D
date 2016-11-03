@@ -60,7 +60,7 @@ namespace GlRender
 		 *\param[in]	p_internal		Le format OpenGL des pixels.
 		 *\param[in]	p_renderBuffer	Le tampon de rendu parent.
 		 */
-		GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_internal, Castor3D::RenderBuffer & p_renderBuffer );
+		GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, Castor3D::RenderBuffer & p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -103,13 +103,13 @@ namespace GlRender
 		 *\~french
 		 *\return		Le format OpenGL des pixels.
 		 */
-		inline uint32_t GetInternal()const
+		inline GlInternal GetInternal()const
 		{
 			return m_internal;
 		}
 
 	private:
-		eGL_RENDERBUFFER_STORAGE m_internal;
+		GlInternal m_internal;
 		Castor::Size m_size;
 		Castor3D::RenderBuffer & m_renderBuffer;
 	};

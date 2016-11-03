@@ -220,9 +220,9 @@ namespace Castor
 		return l_err == 0;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
-		return _fseeki64( p_file, p_i64Offset, p_iOrigin ) == 0;
+		return _fseeki64( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
 	int64_t FTell( FILE * p_file )
@@ -245,9 +245,9 @@ namespace Castor
 		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
-		return fseeko64( p_file, p_i64Offset, p_iOrigin ) == 0;
+		return fseeko64( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
 	int64_t FTell( FILE * p_file )
@@ -261,9 +261,9 @@ namespace Castor
 		return p_file != nullptr;
 	}
 
-	bool FSeek( FILE * p_file, int64_t p_i64Offset, int p_iOrigin )
+	bool FSeek( FILE * p_file, int64_t p_offset, int p_iOrigin )
 	{
-		return fseek( p_file, p_i64Offset, p_iOrigin ) == 0;
+		return fseek( p_file, p_offset, p_iOrigin ) == 0;
 	}
 
 	int64_t FTell( FILE * p_file )
@@ -274,46 +274,51 @@ namespace Castor
 #	endif
 #endif
 
-	File::File( Path const & p_strFileName, int p_mode, eENCODING_MODE p_eEncoding )
-		: m_iMode{ p_mode }
-		, m_eEncoding{ p_eEncoding }
+	File::File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding )
+		: File{ p_fileName, uint32_t( p_mode ), p_encoding }
+	{
+	}
+
+	File::File( Path const & p_strFileName, uint32_t p_mode, EncodingMode p_encoding )
+		: m_mode{ p_mode }
+		, m_encoding{ p_encoding }
 		, m_strFileFullPath{ p_strFileName }
 	{
 		REQUIRE( !p_strFileName.empty() );
-		String l_strMode;
+		String l_mode;
 
 		switch ( p_mode )
 		{
-		case eOPEN_MODE_READ:
-			l_strMode = cuT( "r" );
+		case uint32_t( OpenMode::Read ):
+			l_mode = cuT( "r" );
 			break;
 
-		case eOPEN_MODE_WRITE:
-			l_strMode = cuT( "w" );
+		case uint32_t( OpenMode::Write ):
+			l_mode = cuT( "w" );
 			break;
 
-		case eOPEN_MODE_APPEND:
-			l_strMode = cuT( "a" );
+		case uint32_t( OpenMode::Append ):
+			l_mode = cuT( "a" );
 			break;
 
-		case eOPEN_MODE_READ | eOPEN_MODE_BINARY:
-			l_strMode = cuT( "rb" );
+		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Binary ):
+			l_mode = cuT( "rb" );
 			break;
 
-		case eOPEN_MODE_WRITE | eOPEN_MODE_BINARY:
-			l_strMode = cuT( "wb" );
+		case uint32_t( OpenMode::Write ) | uint32_t( OpenMode::Binary ):
+			l_mode = cuT( "wb" );
 			break;
 
-		case eOPEN_MODE_APPEND | eOPEN_MODE_BINARY:
-			l_strMode = cuT( "ab" );
+		case uint32_t( OpenMode::Append ) | uint32_t( OpenMode::Binary ):
+			l_mode = cuT( "ab" );
 			break;
 
-		case eOPEN_MODE_READ | eOPEN_MODE_WRITE:
-			l_strMode = cuT( "r+" );
+		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Write ):
+			l_mode = cuT( "r+" );
 			break;
 
-		case eOPEN_MODE_READ | eOPEN_MODE_WRITE | eOPEN_MODE_APPEND:
-			l_strMode = cuT( "a+" );
+		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Write ) | uint32_t( OpenMode::Append ):
+			l_mode = cuT( "a+" );
 			break;
 
 		default:
@@ -321,25 +326,25 @@ namespace Castor
 			break;
 		}
 
-		if ( ( p_mode & eOPEN_MODE_BINARY ) == 0 )
+		if ( !CheckFlag( p_mode, OpenMode::Binary ) )
 		{
-			switch ( p_eEncoding )
+			switch ( p_encoding )
 			{
-			case eENCODING_MODE_AUTO:
-				m_eEncoding = eENCODING_MODE_UTF8;
-				l_strMode += cuT( ", ccs=UTF-8" );
+			case EncodingMode::Auto:
+				m_encoding = EncodingMode::UTF8;
+				l_mode += cuT( ", ccs=UTF-8" );
 				break;
 
-			case eENCODING_MODE_UTF8:
-				l_strMode += cuT( ", ccs=UTF-8" );
+			case EncodingMode::UTF8:
+				l_mode += cuT( ", ccs=UTF-8" );
 				break;
 
-			case eENCODING_MODE_UTF16:
-				l_strMode += cuT( ", ccs=UTF-16LE" );
+			case EncodingMode::UTF16:
+				l_mode += cuT( ", ccs=UTF-16LE" );
 			}
 		}
 
-		FOpen( m_pFile, string::string_cast< char >( m_strFileFullPath ).c_str(), string::string_cast< char >( l_strMode ).c_str() );
+		FOpen( m_pFile, string::string_cast< char >( m_strFileFullPath ).c_str(), string::string_cast< char >( l_mode ).c_str() );
 
 		if ( m_pFile )
 		{
@@ -364,28 +369,28 @@ namespace Castor
 		}
 	}
 
-	int File::Seek( long long p_i64Offset, eOFFSET_MODE p_eOrigin )
+	int File::Seek( long long p_offset, OffsetMode p_origin )
 	{
 		CHECK_INVARIANTS();
 		int l_iReturn = 0;
 
 		if ( m_pFile )
 		{
-			switch ( p_eOrigin )
+			switch ( p_origin )
 			{
-			case eOFFSET_MODE_BEGINNING:
-				l_iReturn = Castor::FSeek( m_pFile, p_i64Offset, SEEK_SET );
-				m_ullCursor = p_i64Offset;
+			case OffsetMode::Beginning:
+				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_SET );
+				m_ullCursor = p_offset;
 				break;
 
-			case eOFFSET_MODE_CURRENT:
-				l_iReturn = Castor::FSeek( m_pFile, p_i64Offset, SEEK_CUR );
-				m_ullCursor += p_i64Offset;
+			case OffsetMode::Current:
+				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_CUR );
+				m_ullCursor += p_offset;
 				break;
 
-			case eOFFSET_MODE_END:
-				l_iReturn = Castor::FSeek( m_pFile, p_i64Offset, SEEK_END );
-				m_ullCursor = GetLength() - p_i64Offset;
+			case OffsetMode::End:
+				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_END );
+				m_ullCursor = GetLength() - p_offset;
 				break;
 			}
 		}
@@ -445,7 +450,7 @@ namespace Castor
 	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( CheckFlag( m_iMode, eOPEN_MODE_WRITE ) || CheckFlag( m_iMode, eOPEN_MODE_APPEND ) ) );
+		REQUIRE( IsOk() && ( CheckFlag( m_mode, OpenMode::Write ) || CheckFlag( m_mode, OpenMode::Append ) ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
@@ -462,7 +467,7 @@ namespace Castor
 	uint64_t File::DoRead( uint8_t * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_READ ) );
+		REQUIRE( IsOk() && CheckFlag( m_mode, OpenMode::Read ) );
 		uint64_t l_uiReturn = 0;
 		uint64_t l_uiPrev = 1;
 
@@ -630,47 +635,47 @@ namespace Castor
 #else
 		mode_t l_mode = 0;
 
-		if ( ( p_flags & eCREATE_MODE_USER_READ ) == eCREATE_MODE_USER_READ )
+		if ( CheckFlag( p_flag, CreateMode::UserRead ) )
 		{
 			l_mode |= S_IRUSR;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_USER_WRITE ) == eCREATE_MODE_USER_WRITE )
+		if ( CheckFlag( p_flag, CreateMode::UserWrite ) )
 		{
 			l_mode |= S_IWUSR;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_USER_EXEC ) == eCREATE_MODE_USER_EXEC )
+		if ( CheckFlag( p_flag, CreateMode::UserExec ) )
 		{
 			l_mode |= S_IXUSR;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_GROUP_READ ) == eCREATE_MODE_GROUP_READ )
+		if ( CheckFlag( p_flag, CreateMode::GroupRead ) )
 		{
 			l_mode |= S_IRGRP;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_GROUP_WRITE ) == eCREATE_MODE_GROUP_WRITE )
+		if ( CheckFlag( p_flag, CreateMode::GroupWrite ) )
 		{
 			l_mode |= S_IWGRP;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_GROUP_EXEC ) == eCREATE_MODE_GROUP_EXEC )
+		if ( CheckFlag( p_flag, CreateMode::GroupExec ) )
 		{
 			l_mode |= S_IXGRP;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_OTHERS_READ ) == eCREATE_MODE_OTHERS_READ )
+		if ( CheckFlag( p_flag, CreateMode::OthersRead ) )
 		{
 			l_mode |= S_IROTH;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_OTHERS_WRITE ) == eCREATE_MODE_OTHERS_WRITE )
+		if ( CheckFlag( p_flag, CreateMode::OthersWrite ) )
 		{
 			l_mode |= S_IWOTH;
 		}
 
-		if ( ( p_flags & eCREATE_MODE_OTHERS_EXEC ) == eCREATE_MODE_OTHERS_EXEC )
+		if ( CheckFlag( p_flag, CreateMode::OthersExec ) )
 		{
 			l_mode |= S_IXOTH;
 		}

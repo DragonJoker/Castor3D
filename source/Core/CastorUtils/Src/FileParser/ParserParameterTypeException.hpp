@@ -38,7 +38,7 @@ namespace Castor
 	\~french
 	\brief		Exception lancée lorsque l'utilisateur se trompe de type de paramètre
 	*/
-	template< ePARAMETER_TYPE GivenType >
+	template< ParameterType GivenType >
 	class ParserParameterTypeException
 		: public Castor::Exception
 	{
@@ -51,7 +51,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_expectedType	Le type réel du paramètre.
 		 */
-		inline ParserParameterTypeException( ePARAMETER_TYPE p_expectedType )
+		inline ParserParameterTypeException( ParameterType p_expectedType )
 			: Castor::Exception( "", "", "", 0 )
 		{
 			m_description = "Wrong parameter type in parser: user gave " + string::string_cast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::string_cast< xchar >( GetTypeName( p_expectedType ) );

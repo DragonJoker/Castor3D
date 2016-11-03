@@ -6,42 +6,42 @@ namespace GlRender
 
 	template <> struct GlTyper< int >
 	{
-		enum { Value = eGL_TYPE_INT };
+		enum { Value = GlType::Int };
 	};
 	template <> struct GlTyper< uint32_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_INT };
+		enum { Value = GlType::UnsignedInt };
 	};
 	template <> struct GlTyper< short >
 	{
-		enum { Value = eGL_TYPE_SHORT };
+		enum { Value = GlType::Short };
 	};
 	template <> struct GlTyper< uint16_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_SHORT };
+		enum { Value = GlType::UnsignedShort };
 	};
 	template <> struct GlTyper< char >
 	{
-		enum { Value = eGL_TYPE_BYTE };
+		enum { Value = GlType::Byte };
 	};
 	template <> struct GlTyper< uint8_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_BYTE };
+		enum { Value = GlType::UnsignedByte };
 	};
 	template <> struct GlTyper< float >
 	{
-		enum { Value = eGL_TYPE_FLOAT };
+		enum { Value = GlType::Float };
 	};
 	template <> struct GlTyper< double >
 	{
-		enum { Value = eGL_TYPE_DOUBLE };
+		enum { Value = GlType::Double };
 	};
 
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Count >
 	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count, 0 )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlType( GlTyper< T >::Value ), Count, 0 )
 	{
 	}
 
@@ -54,7 +54,7 @@ namespace GlRender
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Columns, 1 )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlType( GlTyper< T >::Value ), Columns, 1 )
 	{
 	}
 
@@ -70,7 +70,7 @@ namespace GlRender
 		uint32_t l_offset = m_offset;
 		const uint32_t l_off = Rows * sizeof( T );
 
-		if ( m_glType == eGL_TYPE_INT )
+		if ( m_glType == GlType::Int )
 		{
 			for ( int i = 0; i < Columns && l_return; ++i )
 			{

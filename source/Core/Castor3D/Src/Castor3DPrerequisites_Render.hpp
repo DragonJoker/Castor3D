@@ -97,7 +97,7 @@ namespace Castor3D
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
 		Texture15,
-		CASTOR_ENUM_CLASS_BOUNDS( Projection )
+		CASTOR_SCOPED_ENUM_BOUNDS( Projection )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -244,7 +244,7 @@ namespace Castor3D
 		QuadStrips,
 		//! Display quad strips
 		Polygon,
-		CASTOR_ENUM_CLASS_BOUNDS( Points )
+		CASTOR_SCOPED_ENUM_BOUNDS( Points )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -336,7 +336,7 @@ namespace Castor3D
 		GEqual,
 		//! Always passes.
 		Always,
-		CASTOR_ENUM_CLASS_BOUNDS( Never )
+		CASTOR_SCOPED_ENUM_BOUNDS( Never )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -354,7 +354,7 @@ namespace Castor3D
 		Zero,
 		//! Writing enabled
 		All,
-		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+		CASTOR_SCOPED_ENUM_BOUNDS( Zero )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -384,7 +384,7 @@ namespace Castor3D
 		GEqual,
 		//! Always passes.
 		Always,
-		CASTOR_ENUM_CLASS_BOUNDS( Never )
+		CASTOR_SCOPED_ENUM_BOUNDS( Never )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -414,7 +414,7 @@ namespace Castor3D
 		DecrWrap,
 		//! Bitwise inverts the current stencil buffer value.
 		Invert,
-		CASTOR_ENUM_CLASS_BOUNDS( Keep )
+		CASTOR_SCOPED_ENUM_BOUNDS( Keep )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -497,7 +497,7 @@ namespace Castor3D
 		Mat3,
 		//! 4x4 floats (GLSL mat4)
 		Mat4,
-		CASTOR_ENUM_CLASS_BOUNDS( Float )
+		CASTOR_SCOPED_ENUM_BOUNDS( Float )
 	};
 	/**
 	 *\~english

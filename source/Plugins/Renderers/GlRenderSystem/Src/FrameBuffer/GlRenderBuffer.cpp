@@ -9,7 +9,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlRenderBuffer::GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_internal, RenderBuffer & p_renderBuffer )
+	GlRenderBuffer::GlRenderBuffer( OpenGl & p_gl, GlInternal p_internal, RenderBuffer & p_renderBuffer )
 		: BindableType( p_gl,
 						"GlRenderBuffer",
 						std::bind( &OpenGl::GenRenderbuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -17,13 +17,13 @@ namespace GlRender
 						std::bind( &OpenGl::IsRenderbuffer, std::ref( p_gl ), std::placeholders::_1 ),
 						[&p_gl]( uint32_t p_glName )
 						{
-							return p_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, p_glName );
+							return p_gl.BindRenderbuffer( GlRenderBufferMode::Default, p_glName );
 						} )
 		, m_internal( p_internal )
 		, m_size( 0, 0 )
 		, m_renderBuffer( p_renderBuffer )
 	{
-		REQUIRE( p_internal != 0 );
+		REQUIRE( p_internal != GlInternal( 0 ) );
 	}
 
 	GlRenderBuffer::~GlRenderBuffer()
@@ -40,11 +40,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = GetOpenGl().RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::Default, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = GetOpenGl().RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::Default, m_internal, p_size );
 			}
 
 			Unbind();
@@ -67,11 +67,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = GetOpenGl().RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::Default, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = GetOpenGl().RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::Default, m_internal, p_size );
 			}
 
 			Unbind();

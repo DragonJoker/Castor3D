@@ -180,8 +180,8 @@ namespace GlRender
 
 			if ( m_downloadBuffer->Bind() )
 			{
-				l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
-				uint8_t * l_data = m_downloadBuffer->Lock( eGL_LOCK_READ_ONLY );
+				l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, nullptr );
+				uint8_t * l_data = m_downloadBuffer->Lock( GlAccessType::Read );
 
 				if ( l_data )
 				{

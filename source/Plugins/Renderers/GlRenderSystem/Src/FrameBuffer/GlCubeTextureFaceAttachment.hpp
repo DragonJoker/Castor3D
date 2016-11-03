@@ -64,7 +64,7 @@ namespace GlRender
 		 *\~french
 		 *\return		Le statut OpenGL du tampon.
 		 */
-		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
+		inline GlFramebufferStatus GetGlStatus()const
 		{
 			return m_glStatus;
 		}
@@ -74,7 +74,7 @@ namespace GlRender
 		 *\~french
 		 *\return		Le point d'attache OpenGL.
 		 */
-		inline eGL_TEXTURE_ATTACHMENT GetGlAttachmentPoint()const
+		inline GlAttachmentPoint GetGlAttachmentPoint()const
 		{
 			return m_glAttachmentPoint;
 		}
@@ -90,9 +90,9 @@ namespace GlRender
 		virtual void DoDetach();
 
 	private:
-		eGL_TEXDIM m_glFace;
-		eGL_TEXTURE_ATTACHMENT m_glAttachmentPoint{ eGL_TEXTURE_ATTACHMENT_NONE };
-		eGL_FRAMEBUFFER_STATUS m_glStatus{ eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT };
+		GlTexDim m_glFace;
+		GlAttachmentPoint m_glAttachmentPoint{ GlAttachmentPoint::None };
+		GlFramebufferStatus m_glStatus{ GlFramebufferStatus::IncompleteMissingAttachment };
 	};
 }
 

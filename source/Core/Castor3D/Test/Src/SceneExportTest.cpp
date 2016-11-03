@@ -56,7 +56,7 @@ namespace Testing
 
 			if ( l_result )
 			{
-				TextFile l_scnFile( Path{ l_filePath + cuT( ".cscn" ) }, File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
+				TextFile l_scnFile( Path{ l_filePath + cuT( ".cscn" ) }, File::OpenMode::Write, File::EncodingMode::ASCII );
 				l_result = Scene::TextWriter( String() )( p_scene, l_scnFile );
 			}
 
@@ -75,7 +75,7 @@ namespace Testing
 				{
 					auto l_mesh = l_it.second;
 					Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
-					BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+					BinaryFile l_file{ l_path, File::OpenMode::Write };
 					l_result &= BinaryWriter< Mesh >{}.Write( *l_mesh, l_file );
 				}
 			}

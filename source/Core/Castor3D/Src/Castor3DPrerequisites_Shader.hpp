@@ -54,7 +54,7 @@ namespace Castor3D
 		//!\~english	Compute shaders.
 		//!\~french		Compute shaders.
 		Model5,
-		CASTOR_ENUM_CLASS_BOUNDS( Model1 )
+		CASTOR_SCOPED_ENUM_BOUNDS( Model1 )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -72,7 +72,7 @@ namespace Castor3D
 		NotCompiled,
 		Error,
 		Compiled,
-		CASTOR_ENUM_CLASS_BOUNDS( DontExist )
+		CASTOR_SCOPED_ENUM_BOUNDS( DontExist )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -89,7 +89,7 @@ namespace Castor3D
 		NotLinked,
 		Error,
 		Linked,
-		CASTOR_ENUM_CLASS_BOUNDS( NotLinked )
+		CASTOR_SCOPED_ENUM_BOUNDS( NotLinked )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -108,7 +108,7 @@ namespace Castor3D
 		Geometry,
 		Pixel,
 		Compute,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_SCOPED_ENUM_BOUNDS( None )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -218,7 +218,7 @@ namespace Castor3D
 		//!\~english	4x4 matrix.
 		//!\~french		Matrice 4x4.
 		Mat4x4,
-		CASTOR_ENUM_CLASS_BOUNDS( One )
+		CASTOR_SCOPED_ENUM_BOUNDS( One )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -325,7 +325,7 @@ namespace Castor3D
 		Mat4x3r = Mat4x3f,
 		Mat4x4r = Mat4x4f,
 #endif
-		CASTOR_ENUM_CLASS_BOUNDS( Bool )
+		CASTOR_SCOPED_ENUM_BOUNDS( Bool )
 	};
 
 	class ShaderProgram;

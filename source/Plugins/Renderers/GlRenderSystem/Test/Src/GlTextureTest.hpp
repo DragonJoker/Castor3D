@@ -20,46 +20,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_BUFFER_BASE_H___
-#define ___GL_BUFFER_BASE_H___
+#ifndef ___GLT_GlTextureTest_H___
+#define ___GLT_GlTextureTest_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
-#include "Common/GlBindable.hpp"
+#include "GlRenderSystemTestPrerequisites.hpp"
 
-namespace GlRender
+#include <Design/ArrayView.hpp>
+
+#include <cstring>
+
+namespace Testing
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		OpenGL buffer objects base class
-	\~french
-	\brief		Classe de base des buffers objects OpenGL
-	*/
-	template< typename T >
-	class GlBufferBase
-		: public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-		  std::function< bool( uint32_t ) > >
+	class GlTextureTest
+		: public GlTestCase
 	{
-		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-			  std::function< bool( uint32_t ) > >;
-
 	public:
-		GlBufferBase( OpenGl & p_gl, GlBufferTarget p_target );
-		virtual ~GlBufferBase();
+		explicit GlTextureTest( Castor3D::Engine & p_engine );
+		virtual ~GlTextureTest();
 
-		bool Copy( GlBufferBase< T > const & p_src, uint32_t p_size );
-		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
-		T * Lock( GlAccessType p_access );
-		bool Unlock();
+		void Upload( Castor3D::TextureLayout & p_storage, Castor::ArrayView< uint8_t > const & p_view );
+		void Download( Castor3D::TextureLayout & p_storage, std::vector< uint8_t > & p_dst );
+		void Compare( std::array< uint8_t, 8 * 8 * 3 > const & p_src, std::vector< uint8_t > const & p_dst );
 
 	private:
-		GlBufferTarget m_target;
+		void DoRegisterTests()override;
+
+	private:
+		void ImmutableStorage();
+		void DirectStorage();
+		void PboStorage();
+		void GpuOnlyStorage();
+		void TboStorage();
 	};
 }
-
-#include "GlBufferBase.inl"
 
 #endif

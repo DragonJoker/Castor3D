@@ -37,7 +37,7 @@ namespace Castor
 		int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )
 		{
 			BinaryFile * l_pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
-			return l_pFile->Seek( p_lOffset, File::eOFFSET_MODE( p_iOrigin ) );
+			return l_pFile->Seek( p_lOffset, File::OffsetMode( p_iOrigin ) );
 		}
 
 		long DLL_CALLCONV TellProc( fi_handle p_fiHandle )
@@ -121,7 +121,7 @@ namespace Castor
 
 		if ( !l_fiImage )
 		{
-			BinaryFile l_file( p_path, File::eOPEN_MODE_READ | File::eOPEN_MODE_BINARY );
+			BinaryFile l_file( p_path, uint32_t( File::OpenMode::Read ) | uint32_t( File::OpenMode::Binary ) );
 			FreeImageIO l_fiIo;
 			l_fiIo.read_proc = ReadProc;
 			l_fiIo.write_proc = nullptr;

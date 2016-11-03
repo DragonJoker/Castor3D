@@ -144,7 +144,7 @@ namespace Castor3D
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename, File::eOPEN_MODE_READ );
+			TextFile l_file( p_filename, File::OpenMode::Read );
 
 			if ( l_file.IsOk() )
 			{

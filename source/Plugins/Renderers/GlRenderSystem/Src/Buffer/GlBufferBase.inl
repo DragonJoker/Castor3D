@@ -62,7 +62,7 @@ namespace GlRender
 	{
 		T * l_return = nullptr;
 
-		if ( this->GetGlName() != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != GlInvalidIndex )
 		{
 			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBufferRange( m_target, p_offset * sizeof( T ), p_count * sizeof( T ), BindableType::GetOpenGl().GetBitfieldFlags( p_flags ) ) );
 		}
@@ -71,11 +71,11 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( eGL_LOCK p_access )
+	T * GlBufferBase< T >::Lock( GlAccessType p_access )
 	{
 		T * l_return = nullptr;
 
-		if ( this->GetGlName() != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != GlInvalidIndex )
 		{
 			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBuffer( m_target, p_access ) );
 		}
@@ -86,7 +86,7 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Unlock()
 	{
-		bool l_return = this->GetGlName() != eGL_INVALID_INDEX;
+		bool l_return = this->GetGlName() != GlInvalidIndex;
 		l_return &= BindableType::GetOpenGl().UnmapBuffer( m_target );
 		return l_return;
 	}

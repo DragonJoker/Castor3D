@@ -69,7 +69,7 @@ namespace GlRender
 				{
 					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGPROC( &OpenGl::StDebugLog ), &GetOpenGl() );
 					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGAMDPROC( &OpenGl::StDebugLogAMD ), &GetOpenGl() );
-					GetOpenGl().Enable( eGL_TWEAK_DEBUG_OUTPUT_SYNCHRONOUS );
+					GetOpenGl().Enable( GlTweak::DebugOutputSynchronous );
 				}
 
 #endif

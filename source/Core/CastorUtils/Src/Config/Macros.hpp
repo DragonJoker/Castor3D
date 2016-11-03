@@ -217,7 +217,7 @@ typedef wchar_t ychar;
 	EnumName##_MIN = EnumMin,\
 	EnumName##_MAX = EnumName##_COUNT - 1
 
-#define CASTOR_ENUM_CLASS_BOUNDS( EnumMin )\
+#define CASTOR_SCOPED_ENUM_BOUNDS( EnumMin )\
 	Count,\
 	Min = EnumMin,\
 	Max = Count - 1

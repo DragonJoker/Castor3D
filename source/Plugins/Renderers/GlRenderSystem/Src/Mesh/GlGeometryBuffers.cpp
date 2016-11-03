@@ -37,7 +37,7 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElements( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::UnsignedInt, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
@@ -56,7 +56,7 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
+				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::UnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{
@@ -253,7 +253,7 @@ namespace GlRender
 	{
 		for ( auto const & l_attribute : p_attributes )
 		{
-			if ( l_attribute->GetLocation() != eGL_INVALID_INDEX )
+			if ( l_attribute->GetLocation() != GlInvalidIndex )
 			{
 				l_attribute->Bind( false );
 			}

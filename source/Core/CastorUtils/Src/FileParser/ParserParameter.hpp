@@ -43,7 +43,7 @@ namespace Castor
 	\~french
 	\brief		Parmètre de parseur spécifié.
 	*/
-	template< ePARAMETER_TYPE Type, typename Enable = void >
+	template< ParameterType Type, typename Enable = void >
 	class ParserParameter;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,7 +54,7 @@ namespace Castor
 	\~french
 	\brief		Structure d'aide pour récupérer une valeur.
 	*/
-	template< ePARAMETER_TYPE Type, typename Enable = void >
+	template< ParameterType Type, typename Enable = void >
 	struct ValueParser;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -65,7 +65,7 @@ namespace Castor
 	\~french
 	\brief		Parmètre de parseur spécifié.
 	*/
-	template< ePARAMETER_TYPE Type >
+	template< ParameterType Type >
 	class ParserParameter < Type, typename std::enable_if < !has_base_parameter_type< Type >::value >::type >
 		: public ParserParameterBase
 	{
@@ -82,9 +82,9 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetType
 		 */
-		inline ePARAMETER_TYPE GetType()
+		inline ParameterType GetType()
 		{
-			return ParserParameterHelper< Type >::ParameterType;
+			return ParserParameterHelper< Type >::ParamType;
 		}
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetStrType
@@ -119,14 +119,14 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_NAME.
+	\brief		ParserParameter specialisation for ParameterType::Name.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_NAME.
+	\brief		Specialisation de ParserParameter pour ParameterType::Name.
 	\remark
 	*/
 	template<>
-	class ParserParameter< ePARAMETER_TYPE_NAME >
-		: public ParserParameter< ePARAMETER_TYPE_TEXT >
+	class ParserParameter< ParameterType::Name >
+		: public ParserParameter< ParameterType::Text >
 	{
 	public:
 		/**
@@ -139,11 +139,11 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetType
 		 */
-		inline ePARAMETER_TYPE GetType();
+		inline ParameterType GetType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetBaseType
 		 */
-		inline ePARAMETER_TYPE GetBaseType();
+		inline ParameterType GetBaseType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetStrType
 		 */
@@ -162,13 +162,13 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		ParserParameter specialisation for ParameterType::CheckedText.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_CHECKED_TEXT.
+	\brief		Specialisation de ParserParameter pour ParameterType::CheckedText.
 	\remark
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >
-		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
+	template<> class ParserParameter< ParameterType::CheckedText >
+		: public ParserParameter< ParameterType::UInt32 >
 	{
 	public:
 		/**
@@ -183,11 +183,11 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetType
 		 */
-		inline ePARAMETER_TYPE GetType();
+		inline ParameterType GetType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetBaseType
 		 */
-		inline ePARAMETER_TYPE GetBaseType();
+		inline ParameterType GetBaseType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetStrType
 		 */
@@ -214,8 +214,8 @@ namespace Castor
 	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT.
 	\remark
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >
-		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
+	template<> class ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >
+		: public ParserParameter< ParameterType::UInt32 >
 	{
 	public:
 		/**
@@ -230,11 +230,11 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetType
 		 */
-		inline ePARAMETER_TYPE GetType();
+		inline ParameterType GetType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetBaseType
 		 */
-		inline ePARAMETER_TYPE GetBaseType();
+		inline ParameterType GetBaseType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetStrType
 		 */
@@ -256,13 +256,13 @@ namespace Castor
 	\date 		10/12/2015
 	\version	0.8.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		ParserParameter specialisation for ParameterType::BitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
+	\brief		Specialisation de ParserParameter pour ParameterType::BitwiseOred64BitsCheckedText.
 	\remark
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >
-		: public ParserParameter< ePARAMETER_TYPE_UINT64 >
+	template<> class ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >
+		: public ParserParameter< ParameterType::UInt64 >
 	{
 	public:
 		/**
@@ -277,11 +277,11 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetType
 		 */
-		inline ePARAMETER_TYPE GetType();
+		inline ParameterType GetType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetBaseType
 		 */
-		inline ePARAMETER_TYPE GetBaseType();
+		inline ParameterType GetBaseType();
 		/**
 		 *\copydoc		Castor::ParserParameterBase::GetStrType
 		 */
@@ -306,7 +306,7 @@ namespace Castor
 	 *\brief		Crée un paramètre du type donné.
 	 *\return		Le paramètre créé.
 	 */
-	template< ePARAMETER_TYPE Type >
+	template< ParameterType Type >
 	ParserParameterBaseSPtr MakeParameter()
 	{
 		return std::make_shared< ParserParameter< Type > >();
@@ -321,10 +321,10 @@ namespace Castor
 	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
-	template< ePARAMETER_TYPE Type >
+	template< ParameterType Type >
 	ParserParameterBaseSPtr MakeParameter( UIntStrMap const & p_values )
 	{
-		static_assert( Type == ePARAMETER_TYPE_CHECKED_TEXT || Type == ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT, "Only for ePARAMETER_TYPE_CHECKED_TEXT or ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT" );
+		static_assert( Type == ParameterType::CheckedText || Type == ParameterType::BitwiseOred32BitsCheckedText, "Only for ParameterType::CheckedText or ParameterType::BitwiseOred32BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );
 	}
 	/**
@@ -337,10 +337,10 @@ namespace Castor
 	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
 	 *\return		Le paramètre créé.
 	 */
-	template< ePARAMETER_TYPE Type >
+	template< ParameterType Type >
 	ParserParameterBaseSPtr MakeParameter( UInt64StrMap const & p_values )
 	{
-		static_assert( Type == ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT, "Only for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT" );
+		static_assert( Type == ParameterType::BitwiseOred64BitsCheckedText, "Only for ParameterType::BitwiseOred64BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );
 	}
 }

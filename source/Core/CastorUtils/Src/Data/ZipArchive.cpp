@@ -48,9 +48,9 @@ namespace Castor
 			{
 			}
 
-			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode )
+			virtual void Open( Path const & p_path, File::OpenMode p_mode )
 			{
-				if ( p_mode == File::eOPEN_MODE_WRITE )
+				if ( p_mode == File::OpenMode::Write )
 				{
 #ifdef USEWIN32IOAPI
 
@@ -264,7 +264,7 @@ namespace Castor
 						CASTOR_EXCEPTION( "Error in unzOpenCurrentFilePassword: " + zlib::GetError( l_error ) );
 					}
 
-					BinaryFile l_file( p_outFolder / l_name, File::eOPEN_MODE_WRITE );
+					BinaryFile l_file( p_outFolder / l_name, File::OpenMode::Write );
 					std::vector< uint8_t > l_buffer( CHUNK );
 
 					try
@@ -478,7 +478,7 @@ namespace Castor
 
 	//*********************************************************************************************
 
-	ZipArchive::ZipArchive( Path const & p_path, File::eOPEN_MODE p_mode )
+	ZipArchive::ZipArchive( Path const & p_path, File::OpenMode p_mode )
 		: m_impl( std::make_unique< zlib::ZipImpl >() )
 	{
 		m_impl->Open( p_path, p_mode );

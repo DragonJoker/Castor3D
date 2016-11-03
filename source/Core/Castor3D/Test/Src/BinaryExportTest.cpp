@@ -60,14 +60,14 @@ namespace Testing
 		}
 
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			BinaryFile l_file{ l_path, File::OpenMode::Write };
 			BinaryWriter< Mesh > l_writer;
 			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
 
 		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ l_path, File::OpenMode::Read };
 			BinaryParser< Mesh > l_parser;
 			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}
@@ -97,7 +97,7 @@ namespace Testing
 		auto l_src = l_scene.GetMeshCache().Add( l_name );
 		m_engine.GetMeshFactory().Create( eMESH_TYPE_CUBE )->Generate( *l_src, UIntArray{}, RealArray{ { 1.0_r, 1.0_r, 1.0_r } } );
 		{
-			BinaryFile l_file{ m_testDataFolder / l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ m_testDataFolder / l_path, File::OpenMode::Read };
 			BinaryParser< Mesh > l_parser;
 			CT_CHECK( l_parser.Parse( *l_src, l_file ) );
 		}
@@ -108,14 +108,14 @@ namespace Testing
 		}
 
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			BinaryFile l_file{ l_path, File::OpenMode::Write };
 			BinaryWriter< Mesh > l_writer;
 			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
 
 		auto l_dst = l_scene.GetMeshCache().Add( l_name + cuT( "_exp" ) );
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ l_path, File::OpenMode::Read };
 			BinaryParser< Mesh > l_parser;
 			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}
@@ -156,7 +156,7 @@ namespace Testing
 
 		Path l_path{ cuT( "TestMesh.cmsh" ) };
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+			BinaryFile l_file{ l_path, File::OpenMode::Write };
 			BinaryWriter< Mesh > l_writer;
 			CT_CHECK( l_writer.Write( *l_src, l_file ) );
 		}
@@ -164,7 +164,7 @@ namespace Testing
 		Scene l_sceneDst{ cuT( "TestScene" ), m_engine };
 		auto l_dst = l_sceneDst.GetMeshCache().Add( l_name + cuT( "_imp" ) );
 		{
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_READ };
+			BinaryFile l_file{ l_path, File::OpenMode::Read };
 			BinaryParser< Mesh > l_parser;
 			CT_CHECK( l_parser.Parse( *l_dst, l_file ) );
 		}

@@ -75,7 +75,7 @@ namespace Castor3D
 		MapBufferAlignment,
 		ProgramTexelOffset,
 
-		CASTOR_ENUM_CLASS_BOUNDS( MapBufferAlignment )
+		CASTOR_SCOPED_ENUM_BOUNDS( MapBufferAlignment )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -184,7 +184,7 @@ namespace Castor3D
 		ViewportHeight,
 		Viewports,
 
-		CASTOR_ENUM_CLASS_BOUNDS( ShaderStorageBufferBindings )
+		CASTOR_SCOPED_ENUM_BOUNDS( ShaderStorageBufferBindings )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

@@ -186,8 +186,8 @@ namespace Castor
 	\~french
 	\brief		Spécialisation de ValueParser pour les type entiers signés.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
+	template< ParameterType Type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ParameterType::Int8 && Type <= ParameterType::LongDouble ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -214,8 +214,8 @@ namespace Castor
 	\~french
 	\brief		Spécialisation de ValueParser pour les type points.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser < Type, typename std::enable_if < ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
+	template< ParameterType Type >
+	struct ValueParser < Type, typename std::enable_if < ( Type >= ParameterType::Point2I && Type <= ParameterType::Rectangle && Type != ParameterType::Size ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -238,12 +238,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_TEXT.
+	\brief		ValueParser specialisation for ParameterType::Text.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_TEXT.
+	\brief		Spécialisation de ValueParser pour ParameterType::Text.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_TEXT >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::Text >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -285,12 +285,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_PATH.
+	\brief		ValueParser specialisation for ParameterType::Path.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_PATH.
+	\brief		Spécialisation de ValueParser pour ParameterType::Path.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_PATH >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::Path >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -340,12 +340,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_BOOL.
+	\brief		ValueParser specialisation for ParameterType::Bool.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_BOOL.
+	\brief		Spécialisation de ValueParser pour ParameterType::Bool.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_BOOL >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::Bool >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -383,12 +383,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_PIXELFORMAT.
+	\brief		ValueParser specialisation for ParameterType::PixelFormat.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_PIXELFORMAT.
+	\brief		Spécialisation de ValueParser pour ParameterType::PixelFormat.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_PIXELFORMAT >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::PixelFormat >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -426,12 +426,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_SIZE.
+	\brief		ValueParser specialisation for ParameterType::Size.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_SIZE.
+	\brief		Spécialisation de ValueParser pour ParameterType::Size.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_SIZE >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::Size >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -465,12 +465,12 @@ namespace Castor
 	\date 		12/02/2016
 	\version	0.8.0
 	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_COLOUR.
+	\brief		ValueParser specialisation for ParameterType::Colour.
 	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_COLOUR.
+	\brief		Spécialisation de ValueParser pour ParameterType::Colour.
 	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_COLOUR >::type >
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::Colour >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -574,32 +574,32 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_NAME >::ParserParameter()
-		: ParserParameter< ePARAMETER_TYPE_TEXT >()
+	inline ParserParameter< ParameterType::Name >::ParserParameter()
+		: ParserParameter< ParameterType::Text >()
 	{
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_NAME >::GetType()
+	inline ParameterType ParserParameter< ParameterType::Name >::GetType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_NAME >::ParameterType;
+		return ParserParameterHelper< ParameterType::Name >::ParamType;
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_NAME >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::Name >::GetBaseType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_NAME >::ParameterBaseType;
+		return ParserParameterHelper< ParameterType::Name >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ePARAMETER_TYPE_NAME >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::Name >::GetStrType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_NAME >::StringType;
+		return ParserParameterHelper< ParameterType::Name >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_NAME >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::Name >::Clone()
 	{
-		return std::make_shared< ParserParameter< ePARAMETER_TYPE_NAME > >( *this );
+		return std::make_shared< ParserParameter< ParameterType::Name > >( *this );
 	}
 
-	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::Name >::Parse( String & p_params )
 	{
 		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ details::IGNORED_END } };
 		auto l_begin = std::begin( p_params );
@@ -619,33 +619,33 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::ParserParameter( UIntStrMap const & p_values )
-		: ParserParameter< ePARAMETER_TYPE_UINT32 >()
+	inline ParserParameter< ParameterType::CheckedText >::ParserParameter( UIntStrMap const & p_values )
+		: ParserParameter< ParameterType::UInt32 >()
 		, m_values( p_values )
 	{
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetType()
+	inline ParameterType ParserParameter< ParameterType::CheckedText >::GetType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_CHECKED_TEXT >::ParameterType;
+		return ParserParameterHelper< ParameterType::CheckedText >::ParamType;
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::CheckedText >::GetBaseType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_CHECKED_TEXT >::ParameterBaseType;
+		return ParserParameterHelper< ParameterType::CheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::CheckedText >::GetStrType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_CHECKED_TEXT >::StringType;
+		return ParserParameterHelper< ParameterType::CheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::CheckedText >::Clone()
 	{
-		return std::make_shared< ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT > >( *this );
+		return std::make_shared< ParserParameter< ParameterType::CheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::CheckedText >::Parse( String & p_params )
 	{
 		bool l_return = false;
 		StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
@@ -672,33 +672,33 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::ParserParameter( UIntStrMap const & p_values )
-		: ParserParameter< ePARAMETER_TYPE_UINT32 >()
+	inline ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::ParserParameter( UIntStrMap const & p_values )
+		: ParserParameter< ParameterType::UInt32 >()
 		, m_values( p_values )
 	{
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::GetType()
+	inline ParameterType ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::GetType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::ParameterType;
+		return ParserParameterHelper< ParameterType::BitwiseOred32BitsCheckedText >::ParamType;
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::GetBaseType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::ParameterBaseType;
+		return ParserParameterHelper< ParameterType::BitwiseOred32BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::GetStrType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::StringType;
+		return ParserParameterHelper< ParameterType::BitwiseOred32BitsCheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::Clone()
 	{
-		return std::make_shared< ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT > >( *this );
+		return std::make_shared< ParserParameter< ParameterType::BitwiseOred32BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >::Parse( String & p_params )
 	{
 		bool l_return = false;
 		m_value = 0;
@@ -731,33 +731,33 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::ParserParameter( UInt64StrMap const & p_values )
-		: ParserParameter< ePARAMETER_TYPE_UINT64 >()
+	inline ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::ParserParameter( UInt64StrMap const & p_values )
+		: ParserParameter< ParameterType::UInt64 >()
 		, m_values( p_values )
 	{
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetType()
+	inline ParameterType ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::GetType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::ParameterType;
+		return ParserParameterHelper< ParameterType::BitwiseOred64BitsCheckedText >::ParamType;
 	}
 
-	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetBaseType()
+	inline ParameterType ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::GetBaseType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::ParameterBaseType;
+		return ParserParameterHelper< ParameterType::BitwiseOred64BitsCheckedText >::ParameterBaseType;
 	}
 
-	inline xchar const * const ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetStrType()
+	inline xchar const * const ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::GetStrType()
 	{
-		return ParserParameterHelper< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::StringType;
+		return ParserParameterHelper< ParameterType::BitwiseOred64BitsCheckedText >::StringType;
 	}
 
-	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::Clone()
+	inline ParserParameterBaseSPtr ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::Clone()
 	{
-		return std::make_shared< ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT > >( *this );
+		return std::make_shared< ParserParameter< ParameterType::BitwiseOred64BitsCheckedText > >( *this );
 	}
 
-	inline bool ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_params )
+	inline bool ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >::Parse( String & p_params )
 	{
 		bool l_return = false;
 		m_value = 0;
@@ -793,8 +793,8 @@ namespace Castor
 	template< typename T >
 	T const & ParserParameterBase::Get( T & p_value )
 	{
-		static const ePARAMETER_TYPE l_given = ParserValueTyper< T >::Type;
-		static const ePARAMETER_TYPE l_expected = GetBaseType();
+		static const ParameterType l_given = ParserValueTyper< T >::Type;
+		static const ParameterType l_expected = GetBaseType();
 
 		if ( l_given == l_expected )
 		{

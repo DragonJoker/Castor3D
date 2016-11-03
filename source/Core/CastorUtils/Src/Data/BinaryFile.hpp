@@ -62,15 +62,28 @@ namespace Castor
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
 		 *\param[in]	p_fileName		The file path
-		 *\param[in]	p_mode			The opening mode, combination of one or more eOPEN_MODE
+		 *\param[in]	p_mode			The opening mode, combination of one or more OpenMode
 		 *\param[in]	p_encodingMode	The encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
 		 *\param[in]	p_fileName		Le chemin du fichier
-		 *\param[in]	p_mode			Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
+		 *\param[in]	p_mode			Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_encodingMode	Le mode d'encodage
 		 */
-		CU_API BinaryFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_encodingMode = eENCODING_MODE_ASCII );
+		CU_API BinaryFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encodingMode = EncodingMode::ASCII );
+		/**
+		 *\~english
+		 *\brief		Opens the file at the given path with the given mode and encoding
+		 *\param[in]	p_fileName		The file path
+		 *\param[in]	p_mode			The opening mode, combination of one or more OpenMode
+		 *\param[in]	p_encodingMode	The encoding mode
+		 *\~french
+		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
+		 *\param[in]	p_fileName		Le chemin du fichier
+		 *\param[in]	p_mode			Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
+		 *\param[in]	p_encodingMode	Le mode d'encodage
+		 */
+		CU_API BinaryFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encodingMode = EncodingMode::ASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file

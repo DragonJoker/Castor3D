@@ -63,13 +63,13 @@ namespace GlRender
 	bool GlShaderProgram::Link()
 	{
 		bool l_return = DoBindTransformLayout();
-		ENSURE( GetGlName() != eGL_INVALID_INDEX );
+		ENSURE( GetGlName() != GlInvalidIndex );
 		int l_attached = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_ATTACHED_SHADERS, &l_attached );
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::AttachedShaders, &l_attached );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
 		l_return &= GetOpenGl().LinkProgram( GetGlName() );
 		int l_linked = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_linked );
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::Link, &l_linked );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
 		m_linkerLog = DoRetrieveLinkerLog();
 
@@ -102,7 +102,7 @@ namespace GlRender
 
 	void GlShaderProgram::Bind( bool p_bindUbo )const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ProgramStatus::Linked )
+		if ( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::Linked )
 		{
 			GetOpenGl().UseProgram( GetGlName() );
 			DoBind( p_bindUbo );
@@ -111,7 +111,7 @@ namespace GlRender
 
 	void GlShaderProgram::Unbind()const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ProgramStatus::Linked )
+		if ( GetGlName() != GlInvalidIndex && m_status == ProgramStatus::Linked )
 		{
 			DoUnbind();
 			GetOpenGl().UseProgram( 0 );
@@ -120,9 +120,9 @@ namespace GlRender
 
 	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
 	{
-		int l_iReturn = int( eGL_INVALID_INDEX );
+		int l_iReturn = int( GlInvalidIndex );
 
-		if ( GetGlName() != eGL_INVALID_INDEX && GetOpenGl().IsProgram( GetGlName() ) )
+		if ( GetGlName() != GlInvalidIndex && GetOpenGl().IsProgram( GetGlName() ) )
 		{
 			l_iReturn = GetOpenGl().GetAttribLocation( GetGlName(), string::string_cast< char >( p_name ).c_str() );
 		}
@@ -353,14 +353,14 @@ namespace GlRender
 	{
 		String l_log;
 
-		if ( GetGlName() == eGL_INVALID_INDEX )
+		if ( GetGlName() == GlInvalidIndex )
 		{
 			l_log = GetOpenGl().GetGlslErrorString( 2 );
 		}
 		else
 		{
 			int l_length = 0;
-			GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_length );
+			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::InfoLogLength, &l_length );
 
 			if ( l_length > 1 )
 			{

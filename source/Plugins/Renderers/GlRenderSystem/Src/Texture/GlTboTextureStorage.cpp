@@ -34,13 +34,13 @@ namespace GlRender
 	bool GlTboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		return l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, m_glBuffer.GetGlName() );
+		return l_storage.GetOpenGl().TexBuffer( GlTexDim::Buffer, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
 	void GlTboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
+		l_storage.GetOpenGl().TexBuffer( GlTexDim::Buffer, m_glInternal, 0 );
 	}
 
 	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock, uint32_t p_index )

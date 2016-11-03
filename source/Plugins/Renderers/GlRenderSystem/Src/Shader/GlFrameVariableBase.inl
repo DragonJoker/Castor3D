@@ -333,7 +333,7 @@ namespace GlRender
 	template< typename Type >
 	inline void GlFrameVariableBase::DoBind( Type const * p_value, uint32_t p_occurences )
 	{
-		if ( m_glName != eGL_INVALID_INDEX )
+		if ( m_glName != GlInvalidIndex )
 		{
 			OneVariableBinder< Type>()( GetOpenGl(), m_glName, p_value, p_occurences );
 		}
@@ -341,7 +341,7 @@ namespace GlRender
 	template< typename Type, int Count >
 	inline void GlFrameVariableBase::DoBind( Type const * p_value, uint32_t p_occurences )
 	{
-		if ( m_glName != eGL_INVALID_INDEX )
+		if ( m_glName != GlInvalidIndex )
 		{
 			PointVariableBinder< Type, Count>()( GetOpenGl(), m_glName, p_value, p_occurences );
 		}
@@ -349,7 +349,7 @@ namespace GlRender
 	template< typename Type, int Rows, int Columns >
 	inline void GlFrameVariableBase::DoBind( Type const * p_value, uint32_t p_occurences )
 	{
-		if ( m_glName != eGL_INVALID_INDEX )
+		if ( m_glName != GlInvalidIndex )
 		{
 			MatrixVariableBinder< Type, Rows, Columns>()( GetOpenGl(), m_glName, p_value, p_occurences );
 		}

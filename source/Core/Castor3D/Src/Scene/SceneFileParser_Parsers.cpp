@@ -109,7 +109,7 @@ namespace Castor3D
 
 		if ( File::FileExists( l_path ) )
 		{
-			TextFile l_fileMat( l_path, File::eOPEN_MODE_READ, File::eENCODING_MODE_ASCII );
+			TextFile l_fileMat( l_path, File::OpenMode::Read, File::EncodingMode::ASCII );
 			Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
 
 			if ( l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Read( l_fileMat ) )

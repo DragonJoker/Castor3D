@@ -72,9 +72,9 @@ namespace GlRender
 		else
 		{
 			int l_count = 0;
-			GetOpenGl().GetProgramiv( l_program.GetGlName(), eGL_SHADER_STATUS_ACTIVE_ATTRIBUTE_MAX_LENGTH, &l_count );
+			GetOpenGl().GetProgramiv( l_program.GetGlName(), GlShaderStatus::ActiveAttributeMaxLength, &l_count );
 			std::vector< char > l_buffer( l_count );
-			GetOpenGl().GetProgramiv( l_program.GetGlName(), eGL_SHADER_STATUS_ACTIVE_ATTRIBUTES, &l_count );
+			GetOpenGl().GetProgramiv( l_program.GetGlName(), GlShaderStatus::ActiveAttributes, &l_count );
 
 			for ( int i = 0; i < l_count; ++i )
 			{

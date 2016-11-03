@@ -72,17 +72,17 @@ namespace Castor
 	 *\~english
 	 *\brief		Seeks into a file
 	 *\param[in]	p_pFile		The file descriptor
-	 *\param[in]	p_i64Offset	The seek offset
+	 *\param[in]	p_offset	The seek offset
 	 *\param[in]	p_iOrigin	The seek origin
 	 *\return		\p true on success
 	 *\~french
 	 *\brief		Déplace le curseur du fichier
 	 *\param[out]	p_pFile		Le descripteur du fichier
-	 *\param[in]	p_i64Offset	L'indice de déplacement
+	 *\param[in]	p_offset	L'indice de déplacement
 	 *\param[in]	p_iOrigin	L'origine du déplacement
 	 *\return		\p true en cas de réussite
 	 */
-	CU_API bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin );
+	CU_API bool FSeek( FILE * p_pFile, int64_t p_offset, int p_iOrigin );
 	/**
 	 *\~english
 	 *\brief		Retrieves the file cursor position
@@ -114,105 +114,120 @@ namespace Castor
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
-		typedef enum eCREATE_MODE
+		enum class CreateMode
 			: uint32_t
 		{
 			//!\~english Owner can read	\~french Le propriétaire peut lire
-			eCREATE_MODE_USER_READ = 0x00000001,
+			UserRead = 0x00000001,
 			//!\~english Owner can write	\~french Le propriétaire peut écrire
-			eCREATE_MODE_USER_WRITE = 0x00000002,
+			UserWrite = 0x00000002,
 			//!\~english Owner can execute	\~french Le propriétaire peut exécuter
-			eCREATE_MODE_USER_EXEC = 0x00000004,
+			UserExec = 0x00000004,
 			//!\~english Owner group can read	\~french Le groupe du propriétaire peut lire
-			eCREATE_MODE_GROUP_READ = 0x00000010,
+			GroupRead = 0x00000010,
 			//!\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
-			eCREATE_MODE_GROUP_WRITE = 0x00000020,
+			GroupWrite = 0x00000020,
 			//!\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
-			eCREATE_MODE_GROUP_EXEC = 0x00000040,
+			GroupExec = 0x00000040,
 			//!\~english Others can read	\~french Les autres peuvent lire
-			eCREATE_MODE_OTHERS_READ = 0x00000100,
+			OthersRead = 0x00000100,
 			//!\~english Others can write	\~french Les autres peuvent écrire
-			eCREATE_MODE_OTHERS_WRITE = 0x00000200,
+			OthersWrite = 0x00000200,
 			//!\~english Others can execute	\~french Les autres peuvent exécuter
-			eCREATE_MODE_OTHERS_EXEC = 0x00000400,
-		}	eCREATE_MODE;
-		//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
-		static const uint32_t eCREATE_MODE_USER_RWX = eCREATE_MODE_USER_READ | eCREATE_MODE_USER_WRITE | eCREATE_MODE_USER_EXEC;
-		//!\~english Read, write and execution rights for owner group	\~french Droits en lecture, écriture et exécution pour le groupe du propriétaire
-		static const uint32_t eCREATE_MODE_GROUP_RWX = eCREATE_MODE_GROUP_READ | eCREATE_MODE_GROUP_WRITE | eCREATE_MODE_GROUP_EXEC;
-		//!\~english Read, write and execution rights for others	\~french Droits en lecture, écriture et exécution pour les autres
-		static const uint32_t eCREATE_MODE_OTHERS_RWX = eCREATE_MODE_OTHERS_READ | eCREATE_MODE_OTHERS_WRITE | eCREATE_MODE_OTHERS_EXEC;
+			OthersExec = 0x00000400,
+			//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
+			UserRWX = UserRead | UserWrite | UserExec,
+			//!\~english Read, write and execution rights for owner group	\~french Droits en lecture, écriture et exécution pour le groupe du propriétaire
+			GroupRWX = GroupRead | GroupWrite | GroupExec,
+			//!\~english Read, write and execution rights for others	\~french Droits en lecture, écriture et exécution pour les autres
+			OthersRWX = OthersRead | OthersWrite | OthersExec,
+			//!\~english Read, write and execution rights for all users	\~french Droits en lecture, écriture et exécution pour tous les utilisateurs
+			AllRWX = UserRWX | GroupRWX | OthersRWX,
+		};
 		/*!
 		\~english
 		\brief Open modes enumerator
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
-		typedef enum eOPEN_MODE
+		enum class OpenMode
 			: uint32_t
 		{
 			//!\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
-			eOPEN_MODE_DUMMY = 0x00000000,
+			Dummy = 0x00000000,
 			//!\~english Read open mode	\~french Mode d'ouverture en lecture
-			eOPEN_MODE_READ = 0x00000001,
+			Read = 0x00000001,
 			//!\~english Write open mode	\~french Mode d'ouverture en création / écriture
-			eOPEN_MODE_WRITE = 0x00000002,
+			Write = 0x00000002,
 			//!\~english Append open mode	\~french Mode d'ouverture en écriture en fin de fichier
-			eOPEN_MODE_APPEND = 0x00000004,
+			Append = 0x00000004,
 			//!\~english Binary open mode	\~french Mode d'ouverture en binaire
-			eOPEN_MODE_BINARY = 0x00000008,
-		}	eOPEN_MODE;
+			Binary = 0x00000008,
+		};
 		/*!
 		\~english
 		\brief Offset modes enumerator
 		\~french
 		\brief Modes d'offset pour la fonction seek
 		*/
-		typedef enum eOFFSET_MODE
+		enum class OffsetMode
 			: uint8_t
 		{
 			//!\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
-			eOFFSET_MODE_BEGINNING,
+			Beginning,
 			//!\~english The offset is set from the current position	\~french L'offset est défini par rapport à la position actuelle
-			eOFFSET_MODE_CURRENT,
+			Current,
 			//!\~english The offset is set from the end of the file	\~french L'offset est défini par rapport à la fin du fichier
-			eOFFSET_MODE_END,
-			CASTOR_ENUM_BOUNDS( eOFFSET_MODE, eOFFSET_MODE_BEGINNING )
-		}	eOFFSET_MODE;
+			End,
+			CASTOR_SCOPED_ENUM_BOUNDS( Beginning )
+		};
 		/*!
 		\~english
 		\brief Text file encoding mode
 		\~french
 		\brief Mode d'encodage des fichiers texte
 		*/
-		typedef enum eENCODING_MODE
+		enum class EncodingMode
 			: uint8_t
 		{
 			//!\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
-			eENCODING_MODE_AUTO,
+			Auto,
 			//!\~english ASCII text encoding	\~french Encodage de texte en ASCII
-			eENCODING_MODE_ASCII,
+			ASCII,
 			//!\~english UTF8 text encoding	\~french Encodage de texte en UTF8
-			eENCODING_MODE_UTF8,
+			UTF8,
 			//!\~english UTF16 text encoding	\~french Encodage de texte en UTF16
-			eENCODING_MODE_UTF16,
-			CASTOR_ENUM_BOUNDS( eENCODING_MODE, eENCODING_MODE_AUTO )
-		}	eENCODING_MODE;
+			UTF16,
+			CASTOR_SCOPED_ENUM_BOUNDS( Auto )
+		};
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
 		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_mode		The opening mode, combination of one or more eOPEN_MODE
+		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
 		 *\param[in]	p_eEncoding	The file encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
 		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
+		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName, int p_mode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
+		CU_API File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
+		/**
+		 *\~english
+		 *\brief		Opens the file at the given path with the given mode and encoding
+		 *\param[in]	p_fileName	The file path
+		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
+		 *\param[in]	p_eEncoding	The file encoding mode
+		 *\~french
+		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
+		 *\param[in]	p_fileName	Le chemin du fichier
+		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
+		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
+		 */
+		CU_API File( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
 
 	public:
 		/**
@@ -225,16 +240,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Seek function, sets the cursor in the file according to the given offset and the given mode
-		 *\param[in]	p_i64Offset	The wanted offset
-		 *\param[in]	p_eOrigin	The offset mode
+		 *\param[in]	p_offset	The wanted offset
+		 *\param[in]	p_origin	The offset mode
 		 *\return		\p 0 if successful
 		 *\~french
 		 *\brief		Fonction de déplacement dans le fichier, selon l'offset et le mode donnés
-		 *\param[in]	p_i64Offset	L'offset
-		 *\param[in]	p_eOrigin	Le mode
+		 *\param[in]	p_offset	L'offset
+		 *\param[in]	p_origin	Le mode
 		 *\return		\p 0 si réussi
 		 */
-		CU_API int Seek( long long p_i64Offset, eOFFSET_MODE p_eOrigin = eOFFSET_MODE_BEGINNING );
+		CU_API int Seek( long long p_offset, OffsetMode p_origin = OffsetMode::Beginning );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
@@ -291,7 +306,7 @@ namespace Castor
 		 *\param[in]	p_flags	Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = eCREATE_MODE_USER_RWX | eCREATE_MODE_GROUP_RWX | eCREATE_MODE_OTHERS_RWX );
+		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = uint32_t( CreateMode::AllRWX ) );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory
@@ -409,9 +424,9 @@ namespace Castor
 
 	protected:
 		//!\~english The opening mode	\~french Le mode d'ouverture
-		int m_iMode{ 0 };
+		uint32_t m_mode{ 0u };
 		//!\~english The encoding mode	\~french Le mode d'encodage
-		eENCODING_MODE m_eEncoding{ eENCODING_MODE_ASCII };
+		EncodingMode m_encoding{ EncodingMode::ASCII };
 		//!\~english The full file path	\~french Le chemin d'accès au fichier
 		Path m_strFileFullPath;
 		//!\~english The file	\~french Le fichier

@@ -44,7 +44,7 @@ namespace Castor3D
 		Point,
 		//!\~english Spot light type	\~french Lumière projecteur
 		Spot,
-		CASTOR_ENUM_CLASS_BOUNDS( Directional )
+		CASTOR_SCOPED_ENUM_BOUNDS( Directional )
 	};
 
 	class Light;

@@ -62,7 +62,7 @@ namespace Castor3D
 		//!\~english Never take texture colour
 		//!\~french Ne prend jamais la couleur de la texture
 		Never,
-		CASTOR_ENUM_CLASS_BOUNDS( Always )
+		CASTOR_SCOPED_ENUM_BOUNDS( Always )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -77,7 +77,7 @@ namespace Castor3D
 		U,
 		V,
 		W,
-		CASTOR_ENUM_CLASS_BOUNDS( U )
+		CASTOR_SCOPED_ENUM_BOUNDS( U )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -93,7 +93,7 @@ namespace Castor3D
 		MirroredRepeat,
 		ClampToBorder,
 		ClampToEdge,
-		CASTOR_ENUM_CLASS_BOUNDS( Repeat )
+		CASTOR_SCOPED_ENUM_BOUNDS( Repeat )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -122,7 +122,7 @@ namespace Castor3D
 	{
 		None,
 		RefToTexture,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		CASTOR_SCOPED_ENUM_BOUNDS( None )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -137,7 +137,7 @@ namespace Castor3D
 		Undefined,
 		Nearest,
 		Linear,
-		CASTOR_ENUM_CLASS_BOUNDS( Undefined )
+		CASTOR_SCOPED_ENUM_BOUNDS( Undefined )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -152,7 +152,7 @@ namespace Castor3D
 		Index0,
 		Index1,
 		Index2,
-		CASTOR_ENUM_CLASS_BOUNDS( Index0 )
+		CASTOR_SCOPED_ENUM_BOUNDS( Index0 )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -172,7 +172,7 @@ namespace Castor3D
 		Constant,
 		Diffuse,
 		Previous,
-		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+		CASTOR_SCOPED_ENUM_BOUNDS( Texture )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -211,7 +211,7 @@ namespace Castor3D
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		Dot3RGBA,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		CASTOR_SCOPED_ENUM_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -244,7 +244,7 @@ namespace Castor3D
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
 		Subtract,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		CASTOR_SCOPED_ENUM_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -300,7 +300,7 @@ namespace Castor3D
 		InvSrc1Colour,
 		Src1Alpha,
 		InvSrc1Alpha,
-		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+		CASTOR_SCOPED_ENUM_BOUNDS( Zero )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -330,7 +330,7 @@ namespace Castor3D
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
 		DepthPeeling,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		CASTOR_SCOPED_ENUM_BOUNDS( NoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -372,7 +372,7 @@ namespace Castor3D
 		//!\~english Cube textures array.
 		//!\~french Tableaux de textures cube.
 		CubeArray,
-		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
+		CASTOR_SCOPED_ENUM_BOUNDS( Buffer )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -411,7 +411,7 @@ namespace Castor3D
 		//!\~english Cube map array.
 		//!\~french Tableau de cube maps.
 		CubeMapArray,
-		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
+		CASTOR_SCOPED_ENUM_BOUNDS( Buffer )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -441,7 +441,7 @@ namespace Castor3D
 		//!\~english Face on negative Z
 		//!\~french Face des Z négatifs.
 		NegativeZ,
-		CASTOR_ENUM_CLASS_BOUNDS( PositiveX )
+		CASTOR_SCOPED_ENUM_BOUNDS( PositiveX )
 	};
 	/*!
 	\author 	Sylvain DOREMUS

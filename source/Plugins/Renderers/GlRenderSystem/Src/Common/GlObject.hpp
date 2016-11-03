@@ -161,7 +161,7 @@ namespace GlRender
 			, m_creator( p_creator )
 			, m_destroyer( p_destroyer )
 			, m_validator( p_validator )
-			, m_glName( eGL_INVALID_INDEX )
+			, m_glName( GlInvalidIndex )
 			, m_typeName( p_typeName )
 		{
 		}
@@ -204,7 +204,7 @@ namespace GlRender
 			}
 			else
 			{
-				m_glName = eGL_INVALID_INDEX;
+				m_glName = GlInvalidIndex;
 			}
 		}
 
@@ -214,7 +214,7 @@ namespace GlRender
 		*/
 		inline bool IsValid()const
 		{
-			return m_glName != eGL_INVALID_INDEX;
+			return m_glName != GlInvalidIndex;
 		}
 
 		/** Tells if the object is a valid OpenGL object.
@@ -261,7 +261,7 @@ namespace GlRender
 		inline bool DoCreate()
 		{
 			m_glName = CreatorHelper< CreateFunction >::Apply( m_creator );
-			return m_glName != eGL_INVALID_INDEX;
+			return m_glName != GlInvalidIndex;
 		}
 
 		/** Effectively destroys the object on GPU.
@@ -269,7 +269,7 @@ namespace GlRender
 		inline void DoDestroy()
 		{
 			DestroyerHelper< DestroyFunction >::Apply( m_destroyer, m_glName );
-			m_glName = eGL_INVALID_INDEX;
+			m_glName = GlInvalidIndex;
 		}
 
 	protected:

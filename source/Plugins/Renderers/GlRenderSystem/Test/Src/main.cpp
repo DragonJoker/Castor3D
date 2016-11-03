@@ -14,6 +14,7 @@
 #include <Render/GlRenderSystem.hpp>
 
 #include "GlTransformFeedbackTest.hpp"
+#include "GlTextureTest.hpp"
 
 #if defined( __linux__ )
 #	include <X11/X.h>
@@ -386,7 +387,8 @@ int main( int argc, char const * argv[] )
 				if ( l_engine )
 				{
 					// Test cases.
-					Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
+					Testing::Register( std::make_unique< Testing::GlTextureTest >( *l_engine ) );
+					//Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
 
 					// Tests loop.
 					BENCHLOOP( l_count, l_return );

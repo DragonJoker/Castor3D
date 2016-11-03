@@ -11,7 +11,7 @@ namespace GlRender
 {
 	GlFrameVariableBase::GlFrameVariableBase( OpenGl & p_gl, GlShaderProgram const & p_program )
 		: Holder( p_gl )
-		, m_glName( uint32_t( eGL_INVALID_INDEX ) )
+		, m_glName( uint32_t( GlInvalidIndex ) )
 		, m_program( p_program )
 		, m_presentInProgram( true )
 	{

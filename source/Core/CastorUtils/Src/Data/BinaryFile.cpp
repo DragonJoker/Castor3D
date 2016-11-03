@@ -1,9 +1,16 @@
 #include "BinaryFile.hpp"
 
+#include "Miscellaneous/Utils.hpp"
+
 namespace Castor
 {
-	BinaryFile::BinaryFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_encodingMode )
-		:	File( p_fileName, p_mode | eOPEN_MODE_BINARY, p_encodingMode )
+	BinaryFile::BinaryFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encodingMode )
+		: BinaryFile{ p_fileName, uint32_t( p_mode ), p_encodingMode }
+	{
+	}
+
+	BinaryFile::BinaryFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encodingMode )
+		: File{ p_fileName, p_mode | uint32_t( OpenMode::Binary ), p_encodingMode }
 	{
 	}
 
@@ -14,7 +21,7 @@ namespace Castor
 	bool BinaryFile::Write( String const & p_toWrite )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( ( m_iMode & eOPEN_MODE_WRITE ) || ( m_iMode & eOPEN_MODE_APPEND ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::Write ) || CheckFlag( m_mode, OpenMode::Append ) );
 		bool l_return = Write( uint32_t( p_toWrite.size() ) ) == sizeof( uint32_t );
 
 		if ( l_return && p_toWrite.size() > 0 )
@@ -29,7 +36,7 @@ namespace Castor
 	bool BinaryFile::Read( String & p_toRead )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( m_iMode & eOPEN_MODE_READ );
+		REQUIRE( CheckFlag( m_mode, OpenMode::Read ) );
 		p_toRead.clear();
 		uint32_t l_uiSize = 0;
 		bool l_return = Read( l_uiSize ) == sizeof( uint32_t );

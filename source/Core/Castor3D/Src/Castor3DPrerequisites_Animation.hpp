@@ -51,7 +51,7 @@ namespace Castor3D
 		//!\~english	Submesh animation (morphing).
 		//!\~french		Animation de sous-maillage (morphing).
 		Mesh,
-		CASTOR_ENUM_CLASS_BOUNDS( Movable )
+		CASTOR_SCOPED_ENUM_BOUNDS( Movable )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -71,7 +71,7 @@ namespace Castor3D
 		//!\~english	Linear mode.
 		//!\~french		Mode linéaire.
 		Linear,
-		CASTOR_ENUM_CLASS_BOUNDS( Nearest )
+		CASTOR_SCOPED_ENUM_BOUNDS( Nearest )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -93,7 +93,7 @@ namespace Castor3D
 		//!\~english	Paused animation state.
 		//!\~french		Animation en pause.
 		Paused,
-		CASTOR_ENUM_CLASS_BOUNDS( Playing )
+		CASTOR_SCOPED_ENUM_BOUNDS( Playing )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -115,7 +115,7 @@ namespace Castor3D
 		//!\~english	Bone objects.
 		//!\~french		Objets os.
 		Bone,
-		CASTOR_ENUM_CLASS_BOUNDS( Node )
+		CASTOR_SCOPED_ENUM_BOUNDS( Node )
 	};
 
 	class Animable;

@@ -25,18 +25,18 @@ namespace GlRender
 	template< typename T >
 	bool GlOneFrameVariable< T >::Initialise()
 	{
-		if ( m_glName == eGL_INVALID_INDEX )
+		if ( m_glName == GlInvalidIndex )
 		{
 			GetVariableLocation( Castor::string::string_cast< char >( Castor3D::FrameVariable::m_name ).c_str() );
 		}
 
-		return m_glName != eGL_INVALID_INDEX;
+		return m_glName != GlInvalidIndex;
 	}
 
 	template< typename T >
 	void GlOneFrameVariable< T >::Cleanup()
 	{
-		m_glName = eGL_INVALID_INDEX;
+		m_glName = GlInvalidIndex;
 	}
 
 	template< typename T >

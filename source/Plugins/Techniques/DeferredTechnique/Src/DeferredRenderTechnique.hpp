@@ -40,7 +40,7 @@ namespace Deferred
 		Tangent,
 		Specular,
 		Emissive,
-		CASTOR_ENUM_CLASS_BOUNDS( Position ),
+		CASTOR_SCOPED_ENUM_BOUNDS( Position ),
 	};
 	/*!
 	\author		Sylvain DOREMUS

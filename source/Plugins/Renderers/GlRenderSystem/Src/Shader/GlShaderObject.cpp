@@ -97,7 +97,7 @@ namespace GlRender
 
 				if ( l_return )
 				{
-					l_return = GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_COMPILE, &l_compiled );
+					l_return = GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::Compile, &l_compiled );
 
 					if ( !l_return )
 					{
@@ -160,12 +160,12 @@ namespace GlRender
 
 	bool GlShaderObject::HasParameter( Castor::String const & p_name )
 	{
-		return GetParameter( p_name ) != eGL_INVALID_INDEX;
+		return GetParameter( p_name ) != GlInvalidIndex;
 	}
 
 	uint32_t GlShaderObject::GetParameter( Castor::String const & p_name )
 	{
-		uint32_t l_uiReturn = uint32_t( eGL_INVALID_INDEX );
+		uint32_t l_uiReturn = uint32_t( GlInvalidIndex );
 
 		if ( m_status == ShaderStatus::Compiled )
 		{
@@ -188,7 +188,7 @@ namespace GlRender
 	{
 		uint32_t l_param = GetParameter( p_name );
 
-		if ( l_param != eGL_INVALID_INDEX )
+		if ( l_param != GlInvalidIndex )
 		{
 			GetOpenGl().SetUniformMatrix4x4v( l_param, 1, false, p_value.const_ptr() );
 		}
@@ -198,7 +198,7 @@ namespace GlRender
 	{
 		uint32_t l_param = GetParameter( p_name );
 
-		if ( l_param != eGL_INVALID_INDEX )
+		if ( l_param != GlInvalidIndex )
 		{
 			GetOpenGl().SetUniformMatrix3x3v( l_param, 1, false, p_value.const_ptr() );
 		}
@@ -209,7 +209,7 @@ namespace GlRender
 		String l_log;
 		int l_infologLength = 0;
 		int l_charsWritten = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_infologLength );
+		GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::InfoLogLength, &l_infologLength );
 
 		if ( l_infologLength > 0 )
 		{

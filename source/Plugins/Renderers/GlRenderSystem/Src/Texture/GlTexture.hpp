@@ -84,7 +84,7 @@ namespace GlRender
 		/**
 		*\return	The OpenGL texture dimension.
 		*/
-		eGL_TEXDIM GetGlDimension()const
+		GlTexDim GetGlDimension()const
 		{
 			return m_glDimension;
 		}
@@ -116,7 +116,7 @@ namespace GlRender
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
 		//! The OpenGL texture dimension.
-		eGL_TEXDIM m_glDimension;
+		GlTexDim m_glDimension;
 	};
 }
 
