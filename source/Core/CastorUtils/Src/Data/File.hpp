@@ -117,32 +117,45 @@ namespace Castor
 		enum class CreateMode
 			: uint32_t
 		{
-			//!\~english Owner can read	\~french Le propriétaire peut lire
-			UserRead = 0x00000001,
-			//!\~english Owner can write	\~french Le propriétaire peut écrire
-			UserWrite = 0x00000002,
-			//!\~english Owner can execute	\~french Le propriétaire peut exécuter
-			UserExec = 0x00000004,
-			//!\~english Owner group can read	\~french Le groupe du propriétaire peut lire
-			GroupRead = 0x00000010,
-			//!\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
-			GroupWrite = 0x00000020,
-			//!\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
-			GroupExec = 0x00000040,
-			//!\~english Others can read	\~french Les autres peuvent lire
-			OthersRead = 0x00000100,
-			//!\~english Others can write	\~french Les autres peuvent écrire
-			OthersWrite = 0x00000200,
-			//!\~english Others can execute	\~french Les autres peuvent exécuter
-			OthersExec = 0x00000400,
-			//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
-			UserRWX = UserRead | UserWrite | UserExec,
-			//!\~english Read, write and execution rights for owner group	\~french Droits en lecture, écriture et exécution pour le groupe du propriétaire
-			GroupRWX = GroupRead | GroupWrite | GroupExec,
-			//!\~english Read, write and execution rights for others	\~french Droits en lecture, écriture et exécution pour les autres
-			OthersRWX = OthersRead | OthersWrite | OthersExec,
-			//!\~english Read, write and execution rights for all users	\~french Droits en lecture, écriture et exécution pour tous les utilisateurs
-			AllRWX = UserRWX | GroupRWX | OthersRWX,
+			//!\~english	Owner can read.
+			//!\~french		Le propriétaire peut lire.
+			eUserRead = 0x00000001,
+			//!\~english	Owner can write.
+			//!\~french		Le propriétaire peut écrire.
+			eUserWrite = 0x00000002,
+			//!\~english	Owner can execute.
+			//!\~french		Le propriétaire peut exécuter.
+			eUserExec = 0x00000004,
+			//!\~english	Owner group can read.
+			//!\~french		Le groupe du propriétaire peut lire.
+			eGroupRead = 0x00000010,
+			//!\~english	Owner group can write.
+			//!\~french		Le groupe du propriétaire peut écrire.
+			eGroupWrite = 0x00000020,
+			//!\~english	Owner group can execute.
+			//!\~french		Le groupe du propriétaire peut exécuter.
+			eGroupExec = 0x00000040,
+			//!\~english	Others can read.
+			//!\~french		Les autres peuvent lire.
+			eOthersRead = 0x00000100,
+			//!\~english	Others can write.
+			//!\~french		Les autres peuvent écrire.
+			eOthersWrite = 0x00000200,
+			//!\~english	Others can execute.
+			//!\~french		Les autres peuvent exécuter.
+			eOthersExec = 0x00000400,
+			//!\~english	Read, write and execution rights for owner.
+			//!\~french		Droits en lecture, écriture et exécution pour le propriétaire.
+			eUserRWX = eUserRead | eUserWrite | eUserExec,
+			//!\~english	Read, write and execution rights for owner group.
+			//!\~french		Droits en lecture, écriture et exécution pour le groupe du propriétaire.
+			eGroupRWX = eGroupRead | eGroupWrite | eGroupExec,
+			//!\~english	Read, write and execution rights for others.
+			//!\~french		Droits en lecture, écriture et exécution pour les autres.
+			eOthersRWX = eOthersRead | eOthersWrite | eOthersExec,
+			//!\~english	Read, write and execution rights for all users.
+			//!\~french		Droits en lecture, écriture et exécution pour tous les utilisateurs.
+			eAllRWX = eUserRWX | eGroupRWX | eOthersRWX,
 		};
 		/*!
 		\~english
@@ -153,16 +166,21 @@ namespace Castor
 		enum class OpenMode
 			: uint32_t
 		{
-			//!\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
-			Dummy = 0x00000000,
-			//!\~english Read open mode	\~french Mode d'ouverture en lecture
-			Read = 0x00000001,
-			//!\~english Write open mode	\~french Mode d'ouverture en création / écriture
-			Write = 0x00000002,
-			//!\~english Append open mode	\~french Mode d'ouverture en écriture en fin de fichier
-			Append = 0x00000004,
-			//!\~english Binary open mode	\~french Mode d'ouverture en binaire
-			Binary = 0x00000008,
+			//!\~english	Dummy open mode, not to be used.
+			//!\~french		Mode d'ouverture 'dummy', à ne pas utiliser.
+			eDummy = 0x00000000,
+			//!\~english	Read open mode.
+			//!\~french		Mode d'ouverture en lecture.
+			eRead = 0x00000001,
+			//!\~english	Write open mode.
+			//!\~french		Mode d'ouverture en création / écriture.
+			eWrite = 0x00000002,
+			//!\~english	Append open mode.
+			//!\~french		Mode d'ouverture en écriture en fin de fichier.
+			eAppend = 0x00000004,
+			//!\~english	Binary open mode.
+			//!\~french		Mode d'ouverture en binaire.
+			eBinary = 0x00000008,
 		};
 		/*!
 		\~english
@@ -173,13 +191,16 @@ namespace Castor
 		enum class OffsetMode
 			: uint8_t
 		{
-			//!\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
-			Beginning,
-			//!\~english The offset is set from the current position	\~french L'offset est défini par rapport à la position actuelle
-			Current,
-			//!\~english The offset is set from the end of the file	\~french L'offset est défini par rapport à la fin du fichier
-			End,
-			CASTOR_SCOPED_ENUM_BOUNDS( Beginning )
+			//!\~english	The offset is set from the beginning of the file.
+			//!\~french		L'offset est défini par rapport au début du fichier.
+			eBeginning,
+			//!\~english	The offset is set from the current position.
+			//!\~french		L'offset est défini par rapport à la position actuelle.
+			eCurrent,
+			//!\~english	The offset is set from the end of the file.
+			//!\~french		L'offset est défini par rapport à la fin du fichier.
+			eEnd,
+			CASTOR_SCOPED_ENUM_BOUNDS( eBeginning )
 		};
 		/*!
 		\~english
@@ -190,15 +211,19 @@ namespace Castor
 		enum class EncodingMode
 			: uint8_t
 		{
-			//!\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
-			Auto,
-			//!\~english ASCII text encoding	\~french Encodage de texte en ASCII
-			ASCII,
-			//!\~english UTF8 text encoding	\~french Encodage de texte en UTF8
-			UTF8,
-			//!\~english UTF16 text encoding	\~french Encodage de texte en UTF16
-			UTF16,
-			CASTOR_SCOPED_ENUM_BOUNDS( Auto )
+			//!\~english	Auto select text encoding.
+			//!\~french		Encodage de texte en sélection automatique.
+			eAuto,
+			//!\~english	ASCII text encoding.
+			//!\~french		Encodage de texte en ASCII.
+			eASCII,
+			//!\~english	UTF8 text encoding.
+			//!\~french		Encodage de texte en UTF8.
+			eUTF8,
+			//!\~english	UTF16 text encoding.
+			//!\~french		Encodage de texte en UTF16.
+			eUTF16,
+			CASTOR_SCOPED_ENUM_BOUNDS( eAuto )
 		};
 
 	protected:
@@ -214,7 +239,7 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
+		CU_API File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
@@ -227,7 +252,7 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
+		CU_API File( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
 
 	public:
 		/**
@@ -249,7 +274,7 @@ namespace Castor
 		 *\param[in]	p_origin	Le mode
 		 *\return		\p 0 si réussi
 		 */
-		CU_API int Seek( long long p_offset, OffsetMode p_origin = OffsetMode::Beginning );
+		CU_API int Seek( long long p_offset, OffsetMode p_origin = OffsetMode::eBeginning );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
@@ -306,7 +331,7 @@ namespace Castor
 		 *\param[in]	p_flags	Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = uint32_t( CreateMode::AllRWX ) );
+		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = uint32_t( CreateMode::eAllRWX ) );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory
@@ -426,7 +451,7 @@ namespace Castor
 		//!\~english The opening mode	\~french Le mode d'ouverture
 		uint32_t m_mode{ 0u };
 		//!\~english The encoding mode	\~french Le mode d'encodage
-		EncodingMode m_encoding{ EncodingMode::ASCII };
+		EncodingMode m_encoding{ EncodingMode::eASCII };
 		//!\~english The full file path	\~french Le chemin d'accès au fichier
 		Path m_strFileFullPath;
 		//!\~english The file	\~french Le fichier

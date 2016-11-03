@@ -39,10 +39,10 @@ namespace Castor
 	*/
 	template< class T >
 	class BinaryWriter
-		: public Writer< T, eFILE_TYPE_BINARY >
+		: public Writer< T, FileType::eBinary >
 	{
 	protected:
-		using FileType = typename Writer< T, eFILE_TYPE_BINARY >::FileType;
+		using Type = typename Writer< T, FileType::eBinary >::Type;
 
 	public:
 		/**

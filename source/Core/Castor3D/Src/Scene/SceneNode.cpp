@@ -104,7 +104,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	uint64_t SceneNode::Count = 0;
+	uint64_t SceneNode::eCount = 0;
 
 	SceneNode::SceneNode( String const & p_name, Scene & p_scene )
 		: OwnedBy< Scene >{ p_scene }
@@ -359,7 +359,7 @@ namespace Castor3D
 				{
 					real l_distance = std::numeric_limits< real >::max();
 
-					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::Out && l_distance < p_distance )
+					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::eOut && l_distance < p_distance )
 					{
 						p_distance = l_distance;
 						l_return = l_geometry;

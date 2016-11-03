@@ -157,7 +157,7 @@ namespace Castor3D
 	RenderTarget::RenderTarget( Engine & p_engine, TargetType p_eTargetType )
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
-		, m_pixelFormat{ PixelFormat::A8R8G8B8 }
+		, m_pixelFormat{ PixelFormat::eA8R8G8B8 }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -256,7 +256,7 @@ namespace Castor3D
 
 	ViewportType RenderTarget::GetViewportType()const
 	{
-		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::Count );
+		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::eCount );
 	}
 
 	void RenderTarget::SetViewportType( ViewportType val )

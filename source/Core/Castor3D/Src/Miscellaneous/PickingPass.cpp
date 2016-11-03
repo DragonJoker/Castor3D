@@ -234,7 +234,7 @@ namespace Castor3D
 
 	bool PickingPass::Initialise( Size const & p_size )
 	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGB32F, p_size );
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::eRGB32F, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		auto l_size = m_colourTexture->GetDimensions();
 		bool l_return = m_colourTexture->Initialise();
@@ -242,8 +242,8 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 			l_return = m_depthBuffer->Create();
 		}
 

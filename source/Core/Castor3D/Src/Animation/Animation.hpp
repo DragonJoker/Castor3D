@@ -135,7 +135,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation type.
 		//!\~french		Le type d'animation.
-		AnimationType m_type{ AnimationType::Count };
+		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };

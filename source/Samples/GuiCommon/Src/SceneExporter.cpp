@@ -106,7 +106,7 @@ namespace GuiCommon
 			l_mtl << DoExportMaterial( p_path.GetPath(), *l_material ) + cuT( "\n" );
 		}
 
-		TextFile l_fileMtl( p_path, File::OpenMode::Write, File::EncodingMode::ASCII );
+		TextFile l_fileMtl( p_path, File::OpenMode::eWrite, File::EncodingMode::eASCII );
 		l_fileMtl.WriteText( l_mtl.str() );
 	}
 
@@ -133,7 +133,7 @@ namespace GuiCommon
 			l_obj << DoExportMesh( *l_mesh, l_offset, l_count ) << cuT( "\n" );
 		}
 
-		TextFile l_fileObj( l_pathFileObj, File::OpenMode::Write, File::EncodingMode::ASCII );
+		TextFile l_fileObj( l_pathFileObj, File::OpenMode::eWrite, File::EncodingMode::eASCII );
 		l_fileObj.WriteText( l_obj.str() );
 	}
 
@@ -249,7 +249,7 @@ namespace GuiCommon
 
 		if ( l_result )
 		{
-			TextFile l_scnFile( Path{ l_filePath + cuT( ".cscn" ) }, File::OpenMode::Write, File::EncodingMode::ASCII );
+			TextFile l_scnFile( Path{ l_filePath + cuT( ".cscn" ) }, File::OpenMode::eWrite, File::EncodingMode::eASCII );
 			l_result = Scene::TextWriter( String() )( p_scene, l_scnFile );
 		}
 
@@ -268,7 +268,7 @@ namespace GuiCommon
 			{
 				auto l_mesh = l_it.second;
 				Path l_path{ l_folder / l_subfolder / l_it.first + cuT( ".cmsh" ) };
-				BinaryFile l_file{ l_path, File::OpenMode::Write };
+				BinaryFile l_file{ l_path, File::OpenMode::eWrite };
 				l_result &= BinaryWriter< Mesh > {} .Write( *l_mesh, l_file );
 			}
 		}

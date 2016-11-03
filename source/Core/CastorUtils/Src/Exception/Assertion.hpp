@@ -152,7 +152,8 @@ namespace Castor
 
 #	endif
 
-//!\~english Calls invariant checking function.	\~french Appelle la fonction de vérification des invariants de classe.
+//!\~english	Calls invariant checking function.
+//!\~french		Appelle la fonction de vérification des invariants de classe.
 #	define CHECK_INVARIANTS DoContractCheckInvariants
 
 #else
@@ -162,19 +163,26 @@ namespace Castor
 
 #endif
 
-//!\~english Checks a pre-condition.	\~french Vérifie une pré-condition.
+//!\~english	Checks a pre-condition.
+//!\~french		Vérifie une pré-condition.
 #define REQUIRE( cond ) CASTOR_ASSERT( cond, "Required condition failed: "#cond )
-//!\~english Checks a post-condition.	\~french Vérifie une post-condition.
+//!\~english	Checks a post-condition.
+//!\~french		Vérifie une post-condition.
 #define ENSURE( cond ) CASTOR_ASSERT( cond, "Ensured condition failed: "#cond )
-//!\~english Checks an invariant condition.	\~french Vérifie une condition invariante.
+//!\~english	Checks an invariant condition.
+//!\~french		Vérifie une condition invariante.
 #define CHECK_INVARIANT( cond ) CASTOR_ASSERT( cond, "Invariant check failed: "#cond )
-//!\~english Attests a failure.	\~french Atteste d'un échec.
+//!\~english	Attests a failure.
+//!\~french		Atteste d'un échec.
 #define FAILURE( text ) CASTOR_ASSERT( false, "Failure: "#text )
-//!\~english Declares the invariant checking function.	\~french Déclare la fonction de vérification des invariants de classe.
+//!\~english	Declares the invariant checking function.
+//!\~french		Déclare la fonction de vérification des invariants de classe.
 #define DECLARE_INVARIANT_BLOCK() void DoContractCheckInvariants()const;
-//!\~english Begins invariant checking function implementation.	\~french Commence l'implémentation de la fonction de vérification des invariants de classe.
+//!\~english	Begins invariant checking function implementation.
+//!\~french		Commence l'implémentation de la fonction de vérification des invariants de classe.
 #define BEGIN_INVARIANT_BLOCK( className ) void className::DoContractCheckInvariants()const {
-//!\~english Ends invariant checking function implementation.	\~french Termine l'implémentation de la fonction de vérification des invariants de classe.
+//!\~english	Ends invariant checking function implementation.
+//!\~french		Termine l'implémentation de la fonction de vérification des invariants de classe.
 #define END_INVARIANT_BLOCK() }
 
 #endif

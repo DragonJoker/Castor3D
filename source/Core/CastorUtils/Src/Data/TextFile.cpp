@@ -10,7 +10,7 @@ namespace Castor
 	}
 
 	TextFile::TextFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encodingMode )
-		: File{ p_fileName, p_mode & ~uint32_t( OpenMode::Binary ), p_encodingMode }
+		: File{ p_fileName, p_mode & ~uint32_t( OpenMode::eBinary ), p_encodingMode }
 	{
 	}
 
@@ -21,7 +21,7 @@ namespace Castor
 	uint64_t TextFile::ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::Read ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
 		uint64_t l_uiReturn = 0;
 		p_toRead.clear();
 
@@ -34,7 +34,7 @@ namespace Castor
 
 			while ( l_bContinue && l_uiReturn < p_size )
 			{
-				if ( m_encoding == EncodingMode::ASCII )
+				if ( m_encoding == EncodingMode::eASCII )
 				{
 					l_iOrigChar = getc( m_pFile );
 					l_cChar = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
@@ -87,14 +87,14 @@ namespace Castor
 	uint64_t TextFile::ReadChar( xchar & p_toRead )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::Read ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
 		{
 			int l_iOrigChar;
 
-			if ( m_encoding == EncodingMode::ASCII )
+			if ( m_encoding == EncodingMode::eASCII )
 			{
 				l_iOrigChar = getc( m_pFile );
 				p_toRead = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
@@ -114,12 +114,12 @@ namespace Castor
 	uint64_t TextFile::WriteText( String const & p_line )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::Write ) || CheckFlag( m_mode, OpenMode::Append ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
 		{
-			if ( m_encoding != EncodingMode::ASCII )
+			if ( m_encoding != EncodingMode::eASCII )
 			{
 				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( p_line.c_str() ), sizeof( xchar ) * p_line.size() );
 			}
@@ -137,7 +137,7 @@ namespace Castor
 	uint64_t TextFile::CopyToString( String & p_strOut )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::Read ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::eRead ) );
 		uint64_t l_uiReturn = 0;
 		p_strOut.clear();
 		String l_strLine;
@@ -155,7 +155,7 @@ namespace Castor
 	uint64_t TextFile::Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( CheckFlag( m_mode, OpenMode::Write ) || CheckFlag( m_mode, OpenMode::Append ) );
+		REQUIRE( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) );
 		uint64_t l_uiReturn = 0;
 		xchar * l_text = new xchar[std::size_t( p_uiMaxSize )];
 		va_list l_vaList;

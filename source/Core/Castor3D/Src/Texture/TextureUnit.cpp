@@ -205,10 +205,10 @@ namespace Castor3D
 		, m_pSampler( p_engine.GetDefaultSampler() )
 	{
 		m_mtxTransformations.set_identity();
-		m_eRgbArguments[0] = BlendSource::Count;
-		m_eRgbArguments[1] = BlendSource::Count;
-		m_eAlpArguments[0] = BlendSource::Count;
-		m_eAlpArguments[1] = BlendSource::Count;
+		m_eRgbArguments[0] = BlendSource::eCount;
+		m_eRgbArguments[1] = BlendSource::eCount;
+		m_eAlpArguments[0] = BlendSource::eCount;
+		m_eAlpArguments[1] = BlendSource::eCount;
 	}
 
 	TextureUnit::~TextureUnit()

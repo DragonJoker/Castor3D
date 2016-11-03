@@ -305,7 +305,7 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGBA16F32F, p_size );
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::eRGBA16F32F, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
@@ -314,7 +314,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 			l_return = m_depthBuffer->Create();
 		}
 
@@ -1147,7 +1147,7 @@ namespace Castor3D
 		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::eD32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
 		m_spotShadowMap.SetTexture( l_texture );
 		m_spotShadowMap.SetSampler( l_sampler );
 
@@ -1169,7 +1169,7 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
 		bool l_return{ true };
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::eD32F, p_size );
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

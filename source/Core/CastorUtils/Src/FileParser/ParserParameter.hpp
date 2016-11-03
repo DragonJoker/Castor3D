@@ -119,14 +119,14 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ParameterType::Name.
+	\brief		ParserParameter specialisation for ParameterType::eName.
 	\~french
-	\brief		Specialisation de ParserParameter pour ParameterType::Name.
+	\brief		Specialisation de ParserParameter pour ParameterType::eName.
 	\remark
 	*/
 	template<>
-	class ParserParameter< ParameterType::Name >
-		: public ParserParameter< ParameterType::Text >
+	class ParserParameter< ParameterType::eName >
+		: public ParserParameter< ParameterType::eText >
 	{
 	public:
 		/**
@@ -162,13 +162,13 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ParameterType::CheckedText.
+	\brief		ParserParameter specialisation for ParameterType::eCheckedText.
 	\~french
-	\brief		Specialisation de ParserParameter pour ParameterType::CheckedText.
+	\brief		Specialisation de ParserParameter pour ParameterType::eCheckedText.
 	\remark
 	*/
-	template<> class ParserParameter< ParameterType::CheckedText >
-		: public ParserParameter< ParameterType::UInt32 >
+	template<> class ParserParameter< ParameterType::eCheckedText >
+		: public ParserParameter< ParameterType::eUInt32 >
 	{
 	public:
 		/**
@@ -214,8 +214,8 @@ namespace Castor
 	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT.
 	\remark
 	*/
-	template<> class ParserParameter< ParameterType::BitwiseOred32BitsCheckedText >
-		: public ParserParameter< ParameterType::UInt32 >
+	template<> class ParserParameter< ParameterType::eBitwiseOred32BitsCheckedText >
+		: public ParserParameter< ParameterType::eUInt32 >
 	{
 	public:
 		/**
@@ -256,13 +256,13 @@ namespace Castor
 	\date 		10/12/2015
 	\version	0.8.0
 	\~english
-	\brief		ParserParameter specialisation for ParameterType::BitwiseOred64BitsCheckedText.
+	\brief		ParserParameter specialisation for ParameterType::eBitwiseOred64BitsCheckedText.
 	\~french
-	\brief		Specialisation de ParserParameter pour ParameterType::BitwiseOred64BitsCheckedText.
+	\brief		Specialisation de ParserParameter pour ParameterType::eBitwiseOred64BitsCheckedText.
 	\remark
 	*/
-	template<> class ParserParameter< ParameterType::BitwiseOred64BitsCheckedText >
-		: public ParserParameter< ParameterType::UInt64 >
+	template<> class ParserParameter< ParameterType::eBitwiseOred64BitsCheckedText >
+		: public ParserParameter< ParameterType::eUInt64 >
 	{
 	public:
 		/**
@@ -324,7 +324,7 @@ namespace Castor
 	template< ParameterType Type >
 	ParserParameterBaseSPtr MakeParameter( UIntStrMap const & p_values )
 	{
-		static_assert( Type == ParameterType::CheckedText || Type == ParameterType::BitwiseOred32BitsCheckedText, "Only for ParameterType::CheckedText or ParameterType::BitwiseOred32BitsCheckedText" );
+		static_assert( Type == ParameterType::eCheckedText || Type == ParameterType::eBitwiseOred32BitsCheckedText, "Only for ParameterType::eCheckedText or ParameterType::eBitwiseOred32BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );
 	}
 	/**
@@ -340,7 +340,7 @@ namespace Castor
 	template< ParameterType Type >
 	ParserParameterBaseSPtr MakeParameter( UInt64StrMap const & p_values )
 	{
-		static_assert( Type == ParameterType::BitwiseOred64BitsCheckedText, "Only for ParameterType::BitwiseOred64BitsCheckedText" );
+		static_assert( Type == ParameterType::eBitwiseOred64BitsCheckedText, "Only for ParameterType::eBitwiseOred64BitsCheckedText" );
 		return std::make_shared< ParserParameter< Type > >( p_values );
 	}
 }

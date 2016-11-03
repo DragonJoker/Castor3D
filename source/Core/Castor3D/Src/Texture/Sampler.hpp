@@ -358,7 +358,7 @@ namespace Castor3D
 	private:
 		//!\~english	Sampler interpolation modes
 		//!\~french		Modes d'interpolation de l'échantillonneur.
-		std::array< InterpolationMode, size_t( InterpolationFilter::Count ) > m_eInterpolationModes
+		std::array< InterpolationMode, size_t( InterpolationFilter::eCount ) > m_eInterpolationModes
 		{
 			{
 				InterpolationMode::Nearest,
@@ -368,7 +368,7 @@ namespace Castor3D
 		};
 		//!\~english	Sampler wrapping modes.
 		//!\~french		Modes de wrapping de l'échantillonneur.
-		std::array< WrapMode, size_t( TextureUVW::Count ) > m_eWrapModes
+		std::array< WrapMode, size_t( TextureUVW::eCount ) > m_eWrapModes
 		{
 			{
 				WrapMode::Repeat,

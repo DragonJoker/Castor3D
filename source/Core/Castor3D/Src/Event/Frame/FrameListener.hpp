@@ -109,7 +109,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The events arrays.
 		//!\~french		Les tableaux d'évènements.
-		std::array< FrameEventPtrArray,	size_t( EventType::Count ) > m_events;
+		std::array< FrameEventPtrArray,	size_t( EventType::eCount ) > m_events;
 		//!\~english	Mutex to make this class thread safe.
 		//!\~french		Mutex pour rendre cette classe thread safe.
 		std::recursive_mutex m_mutex;

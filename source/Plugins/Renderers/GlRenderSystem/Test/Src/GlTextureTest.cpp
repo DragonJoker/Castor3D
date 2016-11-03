@@ -80,7 +80,7 @@ namespace Testing
 			auto l_renderSystem = p_engine.GetRenderSystem();
 			l_renderSystem->GetMainContext()->SetCurrent();
 			auto l_texture = l_renderSystem->CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
-			l_texture->SetSource( PxBufferBase::create( Size{ 8, 8 }, PixelFormat::R8G8B8 ) );
+			l_texture->SetSource( PxBufferBase::create( Size{ 8, 8 }, PixelFormat::eR8G8B8 ) );
 			l_texture->Initialise();
 			std::array< uint8_t, 8 * 8 * 3 > l_src;
 			std::iota( l_src.begin(), l_src.end(), 0 );

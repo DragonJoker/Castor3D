@@ -71,12 +71,12 @@ namespace Deferred
 			static std::array< PixelFormat, size_t( DsTexture::Count ) > Values
 			{
 				{
-					PixelFormat::RGBA16F32F,
-					PixelFormat::RGBA16F32F,
-					PixelFormat::RGBA16F32F,
-					PixelFormat::RGBA16F32F,
-					PixelFormat::RGBA16F32F,
-					PixelFormat::RGBA16F32F,
+					PixelFormat::eRGBA16F32F,
+					PixelFormat::eRGBA16F32F,
+					PixelFormat::eRGBA16F32F,
+					PixelFormat::eRGBA16F32F,
+					PixelFormat::eRGBA16F32F,
+					PixelFormat::eRGBA16F32F,
 				}
 			};
 
@@ -125,8 +125,8 @@ namespace Deferred
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
 		for ( auto & program : m_lightPassShaderPrograms )

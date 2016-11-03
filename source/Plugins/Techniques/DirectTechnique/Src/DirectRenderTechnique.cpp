@@ -109,7 +109,7 @@ namespace Direct
 			l_name /= cuT( "ColourBuffer_Technique_Unbind.png" );
 			Image::BinaryWriter()( Image{ cuT( "tmp" )
 										  , m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
-										  , PixelFormat::R8G8B8
+										  , PixelFormat::eR8G8B8
 										  , l_buffer
 										  , m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
 								   , l_name );

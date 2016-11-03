@@ -26,7 +26,7 @@ namespace Castor3D
 		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::A8R8G8B8, p_size );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::eA8R8G8B8, p_size );
 
 		m_colourTexture.SetSampler( p_sampler );
 		l_colourTexture->GetImage().InitialiseSource();
@@ -36,7 +36,7 @@ namespace Castor3D
 		m_colourTexture.SetTexture( l_colourTexture );
 		m_colourTexture.Initialise();
 		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( Colour::Predefined::OpaqueBlack ) );
+		m_fbo->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
 
 		if ( m_fbo->Bind( FrameBufferMode::Config ) )
 		{

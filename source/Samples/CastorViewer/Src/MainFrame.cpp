@@ -448,20 +448,20 @@ namespace CastorViewer
 		m_auiManager.LoadPerspective( m_currentPerspective );
 	}
 
-	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
+	void MainFrame::DoLogCallback( String const & p_strLog, LogType p_eLogType )
 	{
 		switch ( p_eLogType )
 		{
-		case Castor::ELogType_DEBUG:
-		case Castor::ELogType_INFO:
+		case Castor::LogType::eDebug:
+		case Castor::LogType::eInfo:
 		{
 			std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
 			m_msgLogList.push_back( p_strLog );
 		}
 		break;
 
-		case Castor::ELogType_WARNING:
-		case Castor::ELogType_ERROR:
+		case Castor::LogType::eWarning:
+		case Castor::LogType::eError:
 		{
 			std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
 			m_errLogList.push_back( p_strLog );

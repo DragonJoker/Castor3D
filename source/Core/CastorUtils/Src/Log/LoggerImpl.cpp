@@ -22,7 +22,7 @@ namespace Castor
 
 	void LoggerImpl::Initialise( Logger const & logger )
 	{
-		for ( int i = 0; i < ELogType_COUNT; i++ )
+		for ( uint8_t i = 0u; i < uint8_t( LogType::eCount ); i++ )
 		{
 			m_headers[i] = logger.m_headers[i];
 		}
@@ -49,9 +49,9 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::SetFileName( String const & p_logFilePath, ELogType p_eLogType )
+	void LoggerImpl::SetFileName( String const & p_logFilePath, LogType p_eLogType )
 	{
-		if ( p_eLogType == ELogType_COUNT )
+		if ( p_eLogType == LogType::eCount )
 		{
 			for ( auto & path : m_logFilePath )
 			{
@@ -60,7 +60,7 @@ namespace Castor
 		}
 		else
 		{
-			m_logFilePath[p_eLogType] = p_logFilePath;
+			m_logFilePath[size_t( p_eLogType )] = p_logFilePath;
 		}
 
 		FILE * file;
@@ -72,12 +72,12 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::PrintMessage( ELogType logLevel, std::string const & message )
+	void LoggerImpl::PrintMessage( LogType logLevel, std::string const & message )
 	{
 		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
 	}
 
-	void LoggerImpl::PrintMessage( ELogType logLevel, std::wstring const & message )
+	void LoggerImpl::PrintMessage( LogType logLevel, std::wstring const & message )
 	{
 		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
 	}
@@ -91,13 +91,13 @@ namespace Castor
 		char l_buffer[33] = { 0 };
 		strftime( l_buffer, 32, "%Y-%m-%d %H:%M:%S", &l_dtToday );
 		String l_timeStamp = string::string_cast< xchar >( l_buffer );
-		StringStream l_logs[ELogType_COUNT];
+		StringStream l_logs[size_t( LogType::eCount )];
 
 		try
 		{
 			for ( auto const & message : p_queue )
 			{
-				StringStream & l_stream = l_logs[message->m_type];
+				StringStream & l_stream = l_logs[size_t( message->m_type )];
 				String l_toLog = message->GetMessage();
 
 				if ( l_toLog.find( cuT( '\n' ) ) != String::npos )
@@ -125,7 +125,7 @@ namespace Castor
 				{
 					try
 					{
-						TextFile l_file{ Path{ m_logFilePath[i++] }, File::OpenMode::Append };
+						TextFile l_file{ Path{ m_logFilePath[i++] }, File::OpenMode::eAppend };
 						l_file.WriteText( l_text );
 					}
 					catch ( Exception & )
@@ -140,7 +140,7 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::DoPrintMessage( ELogType logLevel, String const & message )
+	void LoggerImpl::DoPrintMessage( LogType logLevel, String const & message )
 	{
 		if ( message.find( cuT( '\n' ) ) != String::npos )
 		{
@@ -157,13 +157,13 @@ namespace Castor
 		}
 	}
 
-	void LoggerImpl::DoPrintLine( String const & line, ELogType logLevel )
+	void LoggerImpl::DoPrintLine( String const & line, LogType logLevel )
 	{
 		m_console->BeginLog( logLevel );
 		m_console->Print( line, true );
 	}
 
-	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, StringStream & stream, ELogType logLevel )
+	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, StringStream & stream, LogType logLevel )
 	{
 #if defined( NDEBUG )
 		DoPrintLine( line, logLevel );
@@ -181,6 +181,6 @@ namespace Castor
 			}
 		}
 
-		stream << timestamp << cuT( " - " ) << m_headers[logLevel] << line << std::endl;
+		stream << timestamp << cuT( " - " ) << m_headers[size_t( logLevel )] << line << std::endl;
 	}
 }

@@ -101,11 +101,11 @@ namespace Castor
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
 		 *\param[in]	p_point	The point to test
-		 *\return		\p Intersection::In if onto or into, \p Intersection::Out if not
+		 *\return		\p Intersection::eIn if onto or into, \p Intersection::eOut if not
 		 *\~french
 		 *\brief		Teste si le point donné est sur ou dans ce rectangle
 		 *\param[in]	p_point	Le point à tester
-		 *\return		\p Intersection::In si sur ou dedans, \p Intersection::Out sinon
+		 *\return		\p Intersection::eIn si sur ou dedans, \p Intersection::eOut sinon
 		 */
 		CU_API Intersection intersects( Position const & p_point )const;
 		/**

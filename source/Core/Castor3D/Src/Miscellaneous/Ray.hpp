@@ -84,14 +84,14 @@ namespace Castor3D
 		 *\param[in]	p_pt2		The second triangle vertex.
 		 *\param[in]	p_pt3		The third triangle vertex.
 		 *\param[out]	p_distance	Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~french
 		 *\brief		Dit si le rayon croise un triangle donné.
 		 *\param[in]	p_pt1		Le premier sommet du triangle.
 		 *\param[in]	p_pt2		Le second sommet du triangle.
 		 *\param[in]	p_pt3		Le troisième sommet du triangle.
 		 *\param[out]	p_distance	Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( Castor::Point3r const & p_pt1, Castor::Point3r const & p_pt2, Castor::Point3r const & p_pt3, real & p_distance )const;
 		/**
@@ -101,14 +101,14 @@ namespace Castor3D
 		 *\param[in]	p_transform	The face's vertex transformation matrix.
 		 *\param[in]	p_submesh	The submesh holding the face.
 		 *\param[out]	p_distance	Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~french
 		 *\brief		Dit si le rayon croise la face donnée.
 		 *\param[in]	p_face		La face donnée.
 		 *\param[in]	p_transform	La matrice de transformation des sommets de la face.
 		 *\param[in]	p_submesh	Le sous-maillage contenant la face.
 		 *\param[out]	p_distance	Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( Face const & p_face, Castor::Matrix4x4r const & p_transform, Submesh const & p_submesh, real & p_distance )const;
 		/**
@@ -116,12 +116,12 @@ namespace Castor3D
 		 *\brief		Tells if the vertex is on the ray.
 		 *\param[in]	p_point		The vertex to test.
 		 *\param[out]	p_distance	Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~english
 		 *\brief		Dit si le point donné se trouve sur le rayon.
 		 *\param[in]	p_point		Le point à tester.
 		 *\param[out]	p_distance	Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( Castor::Point3r const & p_point, real & p_distance )const;
 		/**
@@ -129,12 +129,12 @@ namespace Castor3D
 		 *\brief		Tells if the ray intersects the given Combo box.
 		 *\param[in]	p_box		The box to test.
 		 *\param[out]	p_distance	Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~french
 		 *\brief		Dit si le rayon croise la Combo box donnée.
 		 *\param[in]	p_box		La boîte à tester.
 		 *\param[out]	p_distance	Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( Castor::CubeBox const & p_box, real & p_distance )const;
 		/**
@@ -142,12 +142,12 @@ namespace Castor3D
 		 *\brief		Tells if the ray intersects the given Sphere.
 		 *\param[in]	p_sphere	The sphere to test.
 		 *\param[out]	p_distance	Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~french
 		 *\brief		Dit si le rayon croise la sphère donnée.
 		 *\param[in]	p_sphere	La sphère à tester.
 		 *\param[out]	p_distance	Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( Castor::SphereBox const & p_sphere, real & p_distance )const;
 		/**
@@ -157,14 +157,14 @@ namespace Castor3D
 		 *\param[out]	p_nearestFace		Receives the intersected face.
 		 *\param[out]	p_nearestSubmesh	Receives the intersected submesh.
 		 *\param[out]	p_distance			Receives the distance.
-		 *\return		\p Castor::Intersection::In or \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn or \p Castor::Intersection::eOut.
 		 *\~french
 		 *\brief		Dit si le rayon croise la géométrie donnée.
 		 *\param[in]	p_geometry			La géométrie à tester.
 		 *\param[out]	p_nearestFace		Reçoit la face croisée.
 		 *\param[out]	p_nearestSubmesh	Reçoit le sous-maillage croisé.
 		 *\param[out]	p_distance			Reçoit la distance.
-		 *\return		\p Castor::Intersection::In ou \p Castor::Intersection::Out.
+		 *\return		\p Castor::Intersection::eIn ou \p Castor::Intersection::eOut.
 		 */
 		C3D_API Castor::Intersection Intersects( GeometrySPtr p_geometry, Face & p_nearestFace, SubmeshSPtr & p_nearestSubmesh, real & p_distance )const;
 		/**

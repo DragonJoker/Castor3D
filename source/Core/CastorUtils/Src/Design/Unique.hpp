@@ -56,7 +56,7 @@ namespace Castor
 		{
 			if ( !DoGetInstance() )
 			{
-				UNICITY_ERROR( UnicityError::NoInstance, typeid( T ).name() );
+				UNICITY_ERROR( UnicityError::eNoInstance, typeid( T ).name() );
 			}
 
 			return *DoGetInstance();
@@ -79,7 +79,7 @@ namespace Castor
 			}
 			else
 			{
-				UNICITY_ERROR( UnicityError::AnInstance, typeid( T ).name() );
+				UNICITY_ERROR( UnicityError::eAnInstance, typeid( T ).name() );
 			}
 		}
 		/**

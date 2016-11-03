@@ -39,10 +39,10 @@ namespace Castor
 	enum class UnicityError
 	{
 		//\~english No instance found when expecting one.	\~french Pas d'intance alors qu'on en attend une.
-		NoInstance,
+		eNoInstance,
 		//\~english An instance found when there shouldn't be one.	\~french Un intance alors qu'on ne devrait pas en avoir.
-		AnInstance,
-		CASTOR_SCOPED_ENUM_BOUNDS( NoInstance )
+		eAnInstance,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoInstance )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor
 	\~french
 	\brief		Textes des erreurs d'unicité
 	*/
-	static char const * const STR_UNICITY_ERROR[UnicityError::Count] =
+	static char const * const STR_UNICITY_ERROR[UnicityError::eCount] =
 	{
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",

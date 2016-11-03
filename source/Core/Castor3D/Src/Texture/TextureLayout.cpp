@@ -18,7 +18,7 @@ namespace Castor3D
 
 			if ( p_type == TextureType::Cube || p_type == TextureType::CubeArray )
 			{
-				l_return *= size_t( CubeMapFace::Count );
+				l_return *= size_t( CubeMapFace::eCount );
 			}
 
 			return l_return;
@@ -26,7 +26,7 @@ namespace Castor3D
 
 		TextureStorageType GetStorageType( TextureType p_type )
 		{
-			TextureStorageType l_return = TextureStorageType::Count;
+			TextureStorageType l_return = TextureStorageType::eCount;
 
 			switch ( p_type )
 			{

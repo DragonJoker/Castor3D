@@ -52,7 +52,7 @@ namespace Castor
 		 *\param[in]	p_type		Le type de message.
 		 *\param[in]	p_message	Le texte du message.
 		 */
-		inline MessageBase( ELogType p_type, std::string const & p_message )
+		inline MessageBase( LogType p_type, std::string const & p_message )
 			: m_type( p_type )
 			, m_message( p_message )
 		{
@@ -78,7 +78,7 @@ namespace Castor
 		}
 
 		//! The message type.
-		ELogType m_type;
+		LogType m_type;
 		//! The message text.
 		std::string m_message;
 	};
@@ -106,7 +106,7 @@ namespace Castor
 		 *\param[in]	p_type		Le type de message.
 		 *\param[in]	p_message	Le texte du message.
 		 */
-		inline BasicMessage( ELogType p_type, string_type const & p_message )
+		inline BasicMessage( LogType p_type, string_type const & p_message )
 			: MessageBase( p_type, string::string_cast< char >( p_message ) )
 		{
 		}
@@ -186,13 +186,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Sets the file for given log level
 		 *\param[in]	p_logFilePath	The file path
-		 *\param[in]	p_logLevel		The log level. If ELogType_COUNT, sets the file for every log level
+		 *\param[in]	p_logLevel		The log level. If LogType::eCount, sets the file for every log level
 		 *\~french
 		 *\brief		Définit le fichier pour le niveau de log donné
 		 *\param[in]	p_logFilePath	Le chemin du fichier
-		 *\param[in]	p_logLevel		Le niveau de log. Si ELogType_COUNT, définit le fichier pour tous les niveaux
+		 *\param[in]	p_logLevel		Le niveau de log. Si LogType::eCount, définit le fichier pour tous les niveaux
 		 */
-		void SetFileName( String const & p_logFilePath, ELogType p_logLevel );
+		void SetFileName( String const & p_logFilePath, LogType p_logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -203,7 +203,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void PrintMessage( ELogType p_logLevel, std::string const & p_message );
+		void PrintMessage( LogType p_logLevel, std::string const & p_message );
 		/**
 		 *\~english
 		 *\brief		Prints a message to the console
@@ -214,7 +214,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void PrintMessage( ELogType p_logLevel, std::wstring const & p_message );
+		void PrintMessage( LogType p_logLevel, std::wstring const & p_message );
 		/**
 		 *\~english
 		 *\brief		Logs a message queue
@@ -236,7 +236,7 @@ namespace Castor
 		 *\param[in]	p_logLevel	Le niveau de log
 		 *\param[in]	p_message	Le message
 		 */
-		void DoPrintMessage( ELogType p_logLevel, String const & p_message );
+		void DoPrintMessage( LogType p_logLevel, String const & p_message );
 		/**
 		 *\~english
 		 *\brief		Prints a line to the console
@@ -247,7 +247,7 @@ namespace Castor
 		 *\param[in]	p_line		La ligne de texte
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoPrintLine( String const & p_line, ELogType p_logLevel );
+		void DoPrintLine( String const & p_line, LogType p_logLevel );
 		/**
 		 *\~english
 		 *\brief		Logs a line in the given stream
@@ -262,13 +262,13 @@ namespace Castor
 		 *\param[in]	p_stream	Le flux
 		 *\param[in]	p_logLevel	Le niveau de log
 		 */
-		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, ELogType p_logLevel );
+		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, LogType p_logLevel );
 
 	private:
 		//! The files paths, per log level
-		String m_logFilePath[ELogType_COUNT];
+		String m_logFilePath[LogType::eCount];
 		//! The headers, per log level
-		String m_headers[ELogType_COUNT];
+		String m_headers[LogType::eCount];
 		//! The console
 		std::unique_ptr< ProgramConsole > m_console;
 		//! Registered callbacks

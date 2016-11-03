@@ -69,7 +69,7 @@ namespace Obj
 
 		try
 		{
-			TextFile l_file( m_fileName, File::OpenMode::Read );
+			TextFile l_file( m_fileName, File::OpenMode::eRead );
 
 			if ( l_file.IsOk() )
 			{
@@ -484,7 +484,7 @@ namespace Obj
 		float l_components[3];
 		float l_fAlpha = 1.0f;
 		bool l_bOpaFound = false;
-		TextFile l_matFile( p_pathMatFile, File::OpenMode::Read );
+		TextFile l_matFile( p_pathMatFile, File::OpenMode::eRead );
 
 		while ( l_matFile.IsOk() )
 		{

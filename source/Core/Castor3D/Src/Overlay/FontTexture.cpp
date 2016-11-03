@@ -30,7 +30,7 @@ namespace Castor3D
 		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
 		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
 		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read, PixelFormat::L8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read, PixelFormat::eL8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
 		m_texture->GetImage().InitialiseSource();
 	}
 
@@ -58,7 +58,7 @@ namespace Castor3D
 			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
 			Size l_size{ l_maxWidth * 16, l_maxHeight * l_count };
 			auto & l_image = m_texture->GetImage();
-			l_image.InitialiseSource( PxBufferBase::create( Size( l_maxWidth * 16, l_maxHeight * l_count ), PixelFormat::L8 ) );
+			l_image.InitialiseSource( PxBufferBase::create( Size( l_maxWidth * 16, l_maxHeight * l_count ), PixelFormat::eL8 ) );
 
 			auto l_it = l_font->begin();
 			Size const & l_sizeImg = l_size;

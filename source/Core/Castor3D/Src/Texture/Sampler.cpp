@@ -72,19 +72,19 @@ namespace Castor3D
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler mip filter" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::U ) != WrapMode::Count )
+			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::U ) != WrapMode::eCount )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::U )] + cuT( "\n" ) ) > 0;
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler U wrap mode" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::V ) != WrapMode::Count )
+			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::V ) != WrapMode::eCount )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::V )] + cuT( "\n" ) ) > 0;
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler V wrap mode" );
 			}
 
-			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::W ) != WrapMode::Count )
+			if ( l_return && p_sampler.GetWrappingMode( TextureUVW::W ) != WrapMode::eCount )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + MapWrappingModes[p_sampler.GetWrappingMode( TextureUVW::W )] + cuT( "\n" ) ) > 0;
 				Castor::TextWriter< Sampler >::CheckError( l_return, "Sampler W wrap mode" );

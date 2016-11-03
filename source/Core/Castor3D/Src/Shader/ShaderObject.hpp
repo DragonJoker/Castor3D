@@ -75,7 +75,7 @@ namespace Castor3D
 		};
 
 	private:
-		static const std::array< Castor::String, size_t( ShaderType::Count ) > string_type;
+		static const std::array< Castor::String, size_t( ShaderType::eCount ) > string_type;
 
 	public:
 		/**
@@ -485,9 +485,9 @@ namespace Castor3D
 		//!\~english The current shader model	\~french Le modèle de shader actuel
 		ShaderModel m_eShaderModel{ ShaderModel::Model1 };
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
-		std::array< Castor::Path, size_t( ShaderModel::Count ) > m_arrayFiles;
+		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
-		std::array< Castor::String, size_t( ShaderModel::Count ) > m_arraySources;
+		std::array< Castor::String, size_t( ShaderModel::eCount ) > m_arraySources;
 		//!<\~english Actually loaded ASCII Source-Code	\~french Le texte ASCII du shader chargé
 		Castor::String m_loadedSource;
 		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader

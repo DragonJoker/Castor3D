@@ -50,7 +50,7 @@ namespace Castor
 
 			virtual void Open( Path const & p_path, File::OpenMode p_mode )
 			{
-				if ( p_mode == File::OpenMode::Write )
+				if ( p_mode == File::OpenMode::eWrite )
 				{
 #ifdef USEWIN32IOAPI
 
@@ -264,7 +264,7 @@ namespace Castor
 						CASTOR_EXCEPTION( "Error in unzOpenCurrentFilePassword: " + zlib::GetError( l_error ) );
 					}
 
-					BinaryFile l_file( p_outFolder / l_name, File::OpenMode::Write );
+					BinaryFile l_file( p_outFolder / l_name, File::OpenMode::eWrite );
 					std::vector< uint8_t > l_buffer( CHUNK );
 
 					try

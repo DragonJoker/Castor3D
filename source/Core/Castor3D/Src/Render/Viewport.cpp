@@ -70,7 +70,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, size_t( ViewportType::Count ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
+	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
 	Viewport::Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 		: OwnedBy< Engine >{ p_engine }

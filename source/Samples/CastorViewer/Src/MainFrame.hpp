@@ -68,7 +68,7 @@ namespace CastorViewer
 		void DoPopulateStatusBar();
 		void DoPopulateToolBar();
 		void DoInitialisePerspectives();
-		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
+		void DoLogCallback( Castor::String const & p_strLog, Castor::LogType p_eLogType );
 		void DoCleanupScene();
 		void DoSaveFrame();
 		bool DoStartRecord();

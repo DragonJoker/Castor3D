@@ -40,12 +40,12 @@ namespace Castor
 	\brief		Classe de base pour les loaders de ressource.
 	\remarks	Contient les 2 fonctions nécessaire a un loader : Load et Save.
 	*/
-	template< class T, eFILE_TYPE FT >
+	template< class T, FileType FT >
 	class Loader
 		: public Castor::NonCopyable
 	{
 	protected:
-		using FileType = typename FileTyper< FT >::FileType;
+		using Type = typename FileTyper< FT >::Type;
 
 	public:
 		/**
@@ -72,7 +72,7 @@ namespace Castor
 		 *\param[in,out]	p_object	L'objet à lire.
 		 *\param[in,out]	p_file		Le fichier où lire l'objet.
 		 */
-		virtual bool operator()( T & p_object, FileType & p_file )
+		virtual bool operator()( T & p_object, Type & p_file )
 		{
 			LOADER_ERROR( "Import not supported by the loader registered for this type" );
 		}

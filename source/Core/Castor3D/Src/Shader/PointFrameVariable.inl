@@ -205,7 +205,7 @@ namespace Castor3D
 	template< typename T, uint32_t Count >
 	inline VariableType PointFrameVariable< T, Count >::GetVariableType()
 	{
-		return VariableType( PntFrameVariableDefinitions< T, Count >::Count );
+		return VariableType( PntFrameVariableDefinitions< T, Count >::eCount );
 	}
 
 	template< typename T, uint32_t Count >

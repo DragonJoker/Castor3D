@@ -39,39 +39,39 @@ namespace Castor
 	enum class ParameterType
 		: uint8_t
 	{
-		Text,
-		Name,
-		Path,
-		CheckedText,
-		BitwiseOred32BitsCheckedText,
-		BitwiseOred64BitsCheckedText,
-		Bool,
-		Int8,
-		Int16,
-		Int32,
-		Int64,
-		UInt8,
-		UInt16,
-		UInt32,
-		UInt64,
-		Float,
-		Double,
-		LongDouble,
-		PixelFormat,
-		Point2I,
-		Point3I,
-		Point4I,
-		Point2F,
-		Point3F,
-		Point4F,
-		Point2D,
-		Point3D,
-		Point4D,
-		Size,
-		Position,
-		Rectangle,
-		Colour,
-		CASTOR_SCOPED_ENUM_BOUNDS( Text )
+		eText,
+		eName,
+		ePath,
+		eCheckedText,
+		eBitwiseOred32BitsCheckedText,
+		eBitwiseOred64BitsCheckedText,
+		eBool,
+		eInt8,
+		eInt16,
+		eInt32,
+		eInt64,
+		eUInt8,
+		eUInt16,
+		eUInt32,
+		eUInt64,
+		eFloat,
+		eDouble,
+		eLongDouble,
+		ePixelFormat,
+		ePoint2I,
+		ePoint3I,
+		ePoint4I,
+		ePoint2F,
+		ePoint3F,
+		ePoint4F,
+		ePoint2D,
+		ePoint3D,
+		ePoint4D,
+		eSize,
+		ePosition,
+		eRectangle,
+		eColour,
+		CASTOR_SCOPED_ENUM_BOUNDS( eText )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -105,10 +105,10 @@ namespace Castor
 		CU_API virtual ParameterType GetType() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter base type (like ParameterType::Text for ParameterType::Name).
+		 *\brief		Retrieves the parameter base type (like ParameterType::eText for ParameterType::eName).
 		 *\return		The type.
 		 *\~french
-		 *\brief		Récupère le type de base du paramètre (comme ParameterType::Text pour ParameterType::Name).
+		 *\brief		Récupère le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
 		 *\return		Le type.
 		 */
 		CU_API virtual ParameterType GetBaseType()

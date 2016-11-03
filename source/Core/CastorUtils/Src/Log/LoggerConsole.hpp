@@ -61,7 +61,7 @@ namespace Castor
 		 *\brief		Configure la console pour le niveau de log demandé.
 		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
-		virtual void BeginLog( ELogType p_logLevel ) = 0;
+		virtual void BeginLog( LogType p_logLevel ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked.
@@ -108,7 +108,7 @@ namespace Castor
 		 *\brief		Configure la console pour le niveau de log demandé.
 		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
-		void BeginLog( ELogType p_logLevel );
+		void BeginLog( LogType p_logLevel );
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked.

@@ -51,8 +51,8 @@ namespace Msaa
 		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::RGBA16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 

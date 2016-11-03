@@ -25,9 +25,9 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	Castor::Logger::Initialise( Castor::ELogType_INFO );
+	Castor::Logger::Initialise( Castor::LogType::eInfo );
 #else
-	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+	Castor::Logger::Initialise( Castor::LogType::eDebug );
 #endif
 
 	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Tests.log" ) );

@@ -72,25 +72,25 @@ namespace Castor
 	\~french
 	\brief Enumération des types de fichier supportés par Castor::Loader
 	*/
-	typedef enum eFILE_TYPE
+	enum class FileType
 		: uint8_t
 	{
 		//! Binary file
-		eFILE_TYPE_BINARY,
+		eBinary,
 		//! Text file
-		eFILE_TYPE_TEXT,
-		CASTOR_ENUM_BOUNDS( eFILE_TYPE, eFILE_TYPE_BINARY )
-	}	eFILE_TYPE;
+		eText,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBinary )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.9.0
 	\date		24/05/2016
 	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from FileType.
 	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un FileType.
 	*/
-	template< eFILE_TYPE FT >
+	template< FileType FT >
 	struct FileTyper;
 	/*!
 	\~english
@@ -103,95 +103,95 @@ namespace Castor
 	{
 		//!\~english	8 bits luminosity.
 		//!\~french		Luminosité 8 bits.
-		L8,
+		eL8,
 		//!\~english	Half floats luminosity on VRAM, floats luminosity on RAM.
 		//!\~french		Luminosité en half float en VRAM, et en float en RAM.
-		L16F32F,
+		eL16F32F,
 		//!\~english	32 bits loats luminosity.
 		//!\~french		Luminosité en float 32 bits.
-		L32F,
+		eL32F,
 		//!\~english	16 bits alpha and luminosity.
 		//!\~french		Alpha et luminosité 16 bits.
-		A8L8,
+		eA8L8,
 		//!\~english	Half floats alpha and luminosity on VRAM, floats alpha and luminosity on RAM.
 		//!\~french		Luminosité et alpha en half float en VRAM, et en float en RAM.
-		AL16F32F,
+		eAL16F32F,
 		//!\~english	32 bits floats alpha and luminosity.
 		//!\~french		Luminosité et alpha en float 32 bits.
-		AL32F,
+		eAL32F,
 		//!\~english	16 bits 5551 ARGB.
 		//!\~french		16 bits 5551 ARGB.
-		A1R5G5B5,
+		eA1R5G5B5,
 		//!\~english	16 bits 4444 ARGB.
 		//!\~french		16 bits 4444 ARGB.
-		A4R4G4B4,
+		eA4R4G4B4,
 		//!\~english	16 bits 565 RGB.
 		//!\~french		16 bits 565 RGB.
-		R5G6B5,
+		eR5G6B5,
 		//!\~english	24 bits 888 RGB.
 		//!\~french		24 bits 888 RGB.
-		R8G8B8,
+		eR8G8B8,
 		//!\~english	24 bits 888 BGR.
 		//!\~french		24 bits 888 BGR.
-		B8G8R8,
+		eB8G8R8,
 		//!\~english	32 bits 8888 ARGB.
 		//!\~french		32 bits 8888 ARGB.
-		A8R8G8B8,
+		eA8R8G8B8,
 		//!\~english	32 bits 8888 ABGR.
 		//!\~french		32 bits 8888 ABGR.
-		A8B8G8R8,
+		eA8B8G8R8,
 		//!\~english	Half float RGB.
 		//!\~french		Half float RGB.
-		RGB16F,
+		eRGB16F,
 		//!\~english	Half float ARGB.
 		//!\~french		Half float ARGB.
-		RGBA16F,
+		eRGBA16F,
 		//!\~english	Half float RGB on VRAM, Float RGB on RAM.
 		//!\~french		RGB en half float en VRAM, et en float en RAM.
-		RGB16F32F,
+		eRGB16F32F,
 		//!\~english	Half float ARGB on VRAM, Float ARGB on RAM.
 		//!\~french		ARGB en half float en VRAM, et en float en RAM.
-		RGBA16F32F,
+		eRGBA16F32F,
 		//!\~english	32 bits float RGB.
 		//!\~french		RGB en flottants 32 bits.
-		RGB32F,
+		eRGB32F,
 		//!\~english	32 bits float ARGB.
 		//!\~french		ARGB en flottants 32 bits.
-		RGBA32F,
+		eRGBA32F,
 		//!\~english	DXT1 8 bits compressed format.
 		//!\~french		Format compressé DXT1 8 bits.
-		DXTC1,
+		eDXTC1,
 		//!\~english	DXT3 16 bits compressed format.
 		//!\~french		Format compressé DXT3 16 bits.
-		DXTC3,
+		eDXTC3,
 		//!\~english	DXT5 16 bits compressed format.
 		//!\~french		Format compressé DXT5 16 bits.
-		DXTC5,
+		eDXTC5,
 		//!\~english	YUY2 16 bits compressed format.
 		//!\~french		Format compressé YUY2 16 bits.
-		YUY2,
+		eYUY2,
 		//!\~english	Depth 16 bits.
 		//!\~french		Profondeur 16 bits.
-		D16,
+		eD16,
 		//!\~english	Depth 24 bits.
 		//!\~french		Profondeur 24 bits.
-		D24,
+		eD24,
 		//!\~english	Depth 24 bits, Stencil 8 bits.
 		//!\~french		Profondeur 24 bits, Stencil 8 bits.
-		D24S8,
+		eD24S8,
 		//!\~english	Depth 32 bits.
 		//!\~french		Profondeur 32 bits.
-		D32,
+		eD32,
 		//!\~english	Depth 32 bits floating point.
 		//!\~french		Profondeur en float 32 bits.
-		D32F,
+		eD32F,
 		//!\~english	Stencil 1 bit.
 		//!\~french		Stencil 1 bit.
-		S1,
+		eS1,
 		//!\~english	Stencil 8 bits.
 		//!\~french		Stencil 8 bits.
-		S8,
-		CASTOR_SCOPED_ENUM_BOUNDS( L8 )
+		eS8,
+		CASTOR_SCOPED_ENUM_BOUNDS( eL8 )
 	}	PixelFormat;
 	/*!
 	\author		Sylvain DOREMUS
@@ -209,14 +209,14 @@ namespace Castor
 	{
 		//!\~english	Completely inside.
 		//!\~french		Complètement à l'intérieur.
-		In,
+		eIn,
 		//!\~english	Completely outside.
 		//!\~french		Complètement à l'extérieur.
-		Out,
+		eOut,
 		//!\~english	Intersection.
 		//!\~french		Intersection
-		Intersect,
-		CASTOR_SCOPED_ENUM_BOUNDS( In )
+		eIntersect,
+		CASTOR_SCOPED_ENUM_BOUNDS( eIn )
 	};
 
 #if CASTOR_USE_DOUBLE
@@ -269,7 +269,7 @@ namespace Castor
 	class Line2D;
 	template< typename T >
 	class Line3D;
-	template< class T, eFILE_TYPE FT >
+	template< class T, FileType FT >
 	class Loader;
 	class ILoggerImpl;
 	class Logger;
@@ -321,7 +321,7 @@ namespace Castor
 	\~french
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
-	typedef PxBuffer< PixelFormat::A8R8G8B8 > PixelBuffer;
+	typedef PxBuffer< PixelFormat::eA8R8G8B8 > PixelBuffer;
 
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
@@ -468,7 +468,7 @@ namespace Castor
 	 *\param[in]	p_strLog	Le texte écrit
 	 *\param[in]	p_eLogType	Le type de log
 	 */
-	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
+	typedef std::function< void ( String const & p_strLog, LogType p_eLogType ) > LogCallback;
 
 	/*!
 	\~english
@@ -476,16 +476,16 @@ namespace Castor
 	\~french
 	\brief		Types de MemoryData supportés.
 	*/
-	typedef enum eMEMDATA_TYPE
+	enum class MemoryDataType
 	{
-		eMEMDATA_TYPE_FIXED,
-		eMEMDATA_TYPE_FIXED_MARKED,
-		eMEMDATA_TYPE_FIXED_GROWING,
-		eMEMDATA_TYPE_FIXED_GROWING_MARKED,
-		CASTOR_ENUM_BOUNDS( eMEMDATA_TYPE, eMEMDATA_TYPE_FIXED )
-	}	eMEMDATA_TYPE;
+		eFixed,
+		eMarked,
+		eFixedGrowing,
+		eFixedGrowingMarked,
+		CASTOR_SCOPED_ENUM_BOUNDS( eFixed )
+	};
 
-	template< typename Object, eMEMDATA_TYPE MemDataType > class PoolManagedObject;
+	template< typename Object, MemoryDataType MemDataType > class PoolManagedObject;
 
 	class NonAlignedMemoryAllocator;
 	template< size_t Align > class AlignedMemoryAllocator;

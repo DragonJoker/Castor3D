@@ -37,12 +37,12 @@ namespace Castor
 	\~french
 	\brief		Classe de base pour les writers de ressource.
 	*/
-	template< class T, eFILE_TYPE FT >
+	template< class T, FileType FT >
 	class Writer
 		: public Castor::NonCopyable
 	{
 	protected:
-		using FileType = typename FileTyper< FT >::FileType;
+		using Type = typename FileTyper< FT >::Type;
 
 	public:
 		/**
@@ -69,7 +69,7 @@ namespace Castor
 		 *\param[in]		p_object	L'objet à écrire.
 		 *\param[in,out]	p_file		Le fichier où écrire l'objet.
 		 */
-		virtual bool operator()( T const & p_object, FileType & p_file )
+		virtual bool operator()( T const & p_object, Type & p_file )
 		{
 			LOADER_ERROR( "Export not supported by the loader registered for this type" );
 		}

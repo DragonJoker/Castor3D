@@ -856,12 +856,12 @@ namespace GlRender
 		std::array< GlBlendFunc, size_t( Castor3D::ColourBlendFunc::Count ) > RgbBlendFuncs;
 		std::array< GlBlendFunc, size_t( Castor3D::AlphaBlendFunc::Count ) > AlphaBlendFuncs;
 		std::array< GlBlendOp, size_t( Castor3D::BlendOperation::Count ) > BlendOps;
-		std::array< PixelFmt, size_t( Castor::PixelFormat::Count ) > PixelFormats;
+		std::array< PixelFmt, size_t( Castor::PixelFormat::eCount ) > PixelFormats;
 		std::array< GlShaderType, size_t( Castor3D::ShaderType::Count ) > ShaderTypes;
-		std::array< GlInternal, size_t( Castor::PixelFormat::Count ) > Internals;
+		std::array< GlInternal, size_t( Castor::PixelFormat::eCount ) > Internals;
 		std::array< GlAttachmentPoint, size_t( Castor3D::AttachmentPoint::Count ) > Attachments;
 		std::array< GlFrameBufferMode, size_t( Castor3D::FrameBufferMode::Count ) > FramebufferModes;
-		std::array< GlInternal, size_t( Castor::PixelFormat::Count ) > RboStorages;
+		std::array< GlInternal, size_t( Castor::PixelFormat::eCount ) > RboStorages;
 		std::array< GlBufferBinding, size_t( Castor3D::WindowBuffer::Count ) > Buffers;
 		std::array< GlFace, size_t( Castor3D::Culling::Count ) > Faces;
 		std::array< GlFillMode, 3u > FillModes;

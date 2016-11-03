@@ -45,9 +45,9 @@ namespace Castor3D
 		uint8_t i = 0;
 		uint8_t j = 0;
 
-		while ( i < uint8_t( ShaderType::Count ) && !l_hasFile )
+		while ( i < uint8_t( ShaderType::eCount ) && !l_hasFile )
 		{
-			while ( j < uint8_t( ShaderModel::Count ) && !l_hasFile )
+			while ( j < uint8_t( ShaderModel::eCount ) && !l_hasFile )
 			{
 				l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ), ShaderModel( j ) ).empty();
 				++j;
@@ -62,7 +62,7 @@ namespace Castor3D
 			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_return; i++ )
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && l_return; i++ )
 			{
 				l_object = p_shaderProgram.m_pShaders[i];
 
@@ -164,9 +164,9 @@ namespace Castor3D
 	ShaderObjectSPtr ShaderProgram::CreateObject( ShaderType p_type )
 	{
 		ShaderObjectSPtr l_return;
-		REQUIRE( p_type > ShaderType::None && p_type < ShaderType::Count );
+		REQUIRE( p_type > ShaderType::None && p_type < ShaderType::eCount );
 
-		if ( p_type > ShaderType::None && p_type < ShaderType::Count )
+		if ( p_type > ShaderType::None && p_type < ShaderType::eCount )
 		{
 			l_return = DoCreateObject( p_type );
 			m_pShaders[size_t( p_type )] = l_return;
@@ -261,9 +261,9 @@ namespace Castor3D
 	{
 		if ( m_pShaders[size_t( p_target )] )
 		{
-			if ( p_eModel == ShaderModel::Count )
+			if ( p_eModel == ShaderModel::eCount )
 			{
-				for ( uint8_t i = 0; i < uint8_t( ShaderModel::Count ); ++i )
+				for ( uint8_t i = 0; i < uint8_t( ShaderModel::eCount ); ++i )
 				{
 					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
 					{
@@ -312,9 +312,9 @@ namespace Castor3D
 	{
 		if ( m_pShaders[size_t( p_target )] )
 		{
-			if ( p_eModel == ShaderModel::Count )
+			if ( p_eModel == ShaderModel::eCount )
 			{
-				for ( uint8_t i = 0; i < uint8_t( ShaderModel::Count ); ++i )
+				for ( uint8_t i = 0; i < uint8_t( ShaderModel::eCount ); ++i )
 				{
 					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
 					{
@@ -422,7 +422,7 @@ namespace Castor3D
 			m_listFrameVariableBuffers.push_back( l_ubo );
 			l_it = m_frameVariableBuffersByName.insert( { p_name, l_ubo } ).first;
 
-			for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); ++i )
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
 			{
 				if ( p_shaderMask & ( uint64_t( 0x1 ) << i ) )
 				{

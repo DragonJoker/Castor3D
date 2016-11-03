@@ -335,9 +335,9 @@ namespace Castor3D
 			l_rs.SetDiscardPrimitives( true );
 			m_updatePipeline = l_renderSystem.CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
 
-			auto l_texture = l_renderSystem.CreateTexture( TextureType::OneDimension, AccessType::None, AccessType::Read, PixelFormat::RGB32F, Size{ 1024, 1 } );
+			auto l_texture = l_renderSystem.CreateTexture( TextureType::OneDimension, AccessType::None, AccessType::Read, PixelFormat::eRGB32F, Size{ 1024, 1 } );
 			l_texture->GetImage().InitialiseSource();
-			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::RGB32F > >( l_texture->GetImage().GetBuffer() );
+			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
 			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
 
 			static std::random_device l_device;

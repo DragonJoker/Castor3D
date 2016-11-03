@@ -46,7 +46,7 @@ namespace Castor
 	template< typename Object, typename MemoryAllocator >
 	class FixedGrowingSizeMemoryData
 	{
-		using Namer = MemoryDataNamer< eMEMDATA_TYPE_FIXED_GROWING >;
+		using Namer = MemoryDataNamer< MemoryDataType::eFixedGrowing >;
 
 	protected:
 		/**
@@ -77,7 +77,7 @@ namespace Castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 			}
 
 			delete [] m_free;
@@ -109,7 +109,7 @@ namespace Castor
 
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
+				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
@@ -133,7 +133,7 @@ namespace Castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL >( Namer::Name, ( void * )p_space );
+					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
@@ -143,7 +143,7 @@ namespace Castor
 														return ptrdiff_t( p_space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( p_space ) < ptrdiff_t( buffer.m_end );
 													} ) )
 				{
-					ReportError< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >( Namer::Name, ( void * )p_space );
+					ReportError< PoolErrorType::eGrowingNotFromRanges >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 

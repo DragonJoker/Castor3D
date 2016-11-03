@@ -43,7 +43,7 @@ namespace Castor3D
 
 	bool Pass::TextWriter::operator()( Pass const & p_pass, TextFile & p_file )
 	{
-		static const String StrBlendModes[uint32_t( BlendMode::Count )] =
+		static const String StrBlendModes[uint32_t( BlendMode::eCount )] =
 		{
 			cuT( "none" ),
 			cuT( "additive" ),

@@ -142,10 +142,10 @@ namespace Castor
 		: m_impl( nullptr )
 	{
 		auto l_lock = make_unique_lock( m_mutex );
-		m_headers[ELogType_DEBUG] = cuT( "***DEBUG*** " );
-		m_headers[ELogType_INFO] = String();
-		m_headers[ELogType_WARNING] = cuT( "***WARNING*** " );
-		m_headers[ELogType_ERROR] = cuT( "***ERROR*** " );
+		m_headers[size_t( LogType::eDebug )] = cuT( "***DEBUG*** " );
+		m_headers[size_t( LogType::eInfo )] = String();
+		m_headers[size_t( LogType::eWarning )] = cuT( "***WARNING*** " );
+		m_headers[size_t( LogType::eError )] = cuT( "***ERROR*** " );
 
 		m_cout = new LogStreambuf< char, InfoLogStreambufTraits< char > >( std::cout );
 		m_cerr = new LogStreambuf< char, ErrorLogStreambufTraits< char > >( std::cerr );
@@ -173,7 +173,7 @@ namespace Castor
 		}
 	}
 
-	void Logger::Initialise( ELogType p_eLogLevel )
+	void Logger::Initialise( LogType p_eLogLevel )
 	{
 		if ( m_singleton )
 		{
@@ -214,7 +214,7 @@ namespace Castor
 		GetSingleton().DoUnregisterCallback( p_pCaller );
 	}
 
-	void Logger::SetFileName( String const & p_logFilePath, ELogType p_eLogType )
+	void Logger::SetFileName( String const & p_logFilePath, LogType p_eLogType )
 	{
 		if ( GetSingleton().m_impl )
 		{
@@ -224,7 +224,7 @@ namespace Castor
 
 	void Logger::LogDebug( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
+		GetSingleton().DoPushMessage( LogType::eDebug, p_msg );
 	}
 
 	void Logger::LogDebug( std::ostream const & p_msg )
@@ -237,7 +237,7 @@ namespace Castor
 
 	void Logger::LogDebug( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
+		GetSingleton().DoPushMessage( LogType::eDebug, p_msg );
 	}
 
 	void Logger::LogDebug( std::wostream const & p_msg )
@@ -249,7 +249,7 @@ namespace Castor
 
 	void Logger::LogInfo( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
+		GetSingleton().DoPushMessage( LogType::eInfo, p_msg );
 	}
 
 	void Logger::LogInfo( std::ostream const & p_msg )
@@ -261,7 +261,7 @@ namespace Castor
 
 	void Logger::LogInfo( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
+		GetSingleton().DoPushMessage( LogType::eInfo, p_msg );
 	}
 
 	void Logger::LogInfo( std::wostream const & p_msg )
@@ -273,7 +273,7 @@ namespace Castor
 
 	void Logger::LogWarning( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
+		GetSingleton().DoPushMessage( LogType::eWarning, p_msg );
 	}
 
 	void Logger::LogWarning( std::ostream const & p_msg )
@@ -285,7 +285,7 @@ namespace Castor
 
 	void Logger::LogWarning( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
+		GetSingleton().DoPushMessage( LogType::eWarning, p_msg );
 	}
 
 	void Logger::LogWarning( std::wostream const & p_msg )
@@ -297,7 +297,7 @@ namespace Castor
 
 	void Logger::LogError( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
+		GetSingleton().DoPushMessage( LogType::eError, p_msg );
 	}
 
 	void Logger::LogError( std::ostream const & p_msg )
@@ -309,7 +309,7 @@ namespace Castor
 
 	void Logger::LogError( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
+		GetSingleton().DoPushMessage( LogType::eError, p_msg );
 	}
 
 	void Logger::LogError( std::wostream const & p_msg )
@@ -346,7 +346,7 @@ namespace Castor
 		m_impl->UnregisterCallback( p_pCaller );
 	}
 
-	void Logger::DoSetFileName( String const & logFilePath, ELogType logLevel )
+	void Logger::DoSetFileName( String const & logFilePath, LogType logLevel )
 	{
 		m_initialised = true;
 		{
@@ -355,7 +355,7 @@ namespace Castor
 		}
 	}
 
-	void Logger::DoPushMessage( ELogType logLevel, std::string const & message )
+	void Logger::DoPushMessage( LogType logLevel, std::string const & message )
 	{
 		if ( logLevel >= m_logLevel )
 		{
@@ -370,7 +370,7 @@ namespace Castor
 		}
 	}
 
-	void Logger::DoPushMessage( ELogType logLevel, std::wstring const & message )
+	void Logger::DoPushMessage( LogType logLevel, std::wstring const & message )
 	{
 		if ( logLevel >= m_logLevel )
 		{

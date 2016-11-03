@@ -32,16 +32,16 @@ namespace Castor
 	\version	0.9.0
 	\date		24/05/2016
 	\~english
-	\brief		Helper structure to find File type (BinaryFile or TextFile) from eFILE_TYPE.
-	\remarks	Specialisation for eFILE_TYPE_TEXT.
+	\brief		Helper structure to find File type (BinaryFile or TextFile) from FileType.
+	\remarks	Specialisation for FileType::eText.
 	\~french
-	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un eFILE_TYPE.
-	\remarks	Spécialisation pour eFILE_TYPE_TEXT.
+	\brief		Structure d'aide pour trouver le type de File (BinaryFile ou TextFile) à partir d'un FileType.
+	\remarks	Spécialisation pour FileType::eText.
 	*/
 	template<>
-	struct FileTyper< eFILE_TYPE_TEXT >
+	struct FileTyper< FileType::eText >
 	{
-		using FileType = TextFile;
+		using Type = TextFile;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -68,7 +68,7 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	L'encodage pour un fichier en mode texte
 		 */
-		CU_API TextFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
+		CU_API TextFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
@@ -81,7 +81,7 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	L'encodage pour un fichier en mode texte
 		 */
-		CU_API TextFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::ASCII );
+		CU_API TextFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file

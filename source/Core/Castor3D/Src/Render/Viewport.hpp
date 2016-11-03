@@ -92,7 +92,7 @@ namespace Castor3D
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
-		C3D_API static const std::array< Castor::String, size_t( ViewportType::Count ) > string_type;
+		C3D_API static const std::array< Castor::String, size_t( ViewportType::eCount ) > string_type;
 
 		/*!
 		\author		Sylvain DOREMUS

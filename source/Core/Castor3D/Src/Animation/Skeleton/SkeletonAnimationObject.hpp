@@ -233,7 +233,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
-		InterpolatorType m_mode{ InterpolatorType::Count };
+		InterpolatorType m_mode{ InterpolatorType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };

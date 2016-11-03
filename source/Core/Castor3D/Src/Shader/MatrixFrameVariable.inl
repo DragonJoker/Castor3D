@@ -467,7 +467,7 @@ namespace Castor3D
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline VariableType MatrixFrameVariable< T, Rows, Columns >::GetVariableType()
 	{
-		return VariableType( MtxFrameVariableDefinitions< T, Rows, Columns >::Count );
+		return VariableType( MtxFrameVariableDefinitions< T, Rows, Columns >::eCount );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >

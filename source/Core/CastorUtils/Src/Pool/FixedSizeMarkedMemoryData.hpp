@@ -45,7 +45,7 @@ namespace Castor
 	template< typename Object >
 	class FixedSizeMarkedMemoryData
 	{
-		using Namer = MemoryDataNamer< eMEMDATA_TYPE_FIXED_MARKED >;
+		using Namer = MemoryDataNamer< MemoryDataType::eMarked >;
 
 		static const uint8_t NEVER_ALLOCATED = 0x00;
 		static const uint8_t ALLOCATED = 0xAD;
@@ -89,7 +89,7 @@ namespace Castor
 		{
 			if ( m_freeIndex != m_freeEnd )
 			{
-				ReportError< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
+				ReportError< PoolErrorType::eCommonMemoryLeaksDetected >( Namer::Name, size_t( ( m_freeEnd - m_freeIndex ) * sizeof( Object ) ) );
 				uint8_t * l_buffer = m_buffer;
 				size_t l_size = sizeof( Object ) + 1;
 
@@ -97,7 +97,7 @@ namespace Castor
 				{
 					if ( *l_buffer == ALLOCATED )
 					{
-						ReportError< ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS >( Namer::Name, ( void * )( l_buffer + 1 ) );
+						ReportError< PoolErrorType::eMarkedLeakAddress >( Namer::Name, ( void * )( l_buffer + 1 ) );
 					}
 
 					l_buffer += l_size;
@@ -125,7 +125,7 @@ namespace Castor
 		{
 			if ( m_freeIndex == m_free )
 			{
-				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
+				ReportError< PoolErrorType::eCommonOutOfMemory >( Namer::Name );
 				return nullptr;
 			}
 
@@ -153,13 +153,13 @@ namespace Castor
 			{
 				if ( m_freeIndex == m_freeEnd )
 				{
-					ReportError< ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL >( Namer::Name, ( void * )p_space );
+					ReportError< PoolErrorType::eCommonPoolIsFull >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
 				if ( ptrdiff_t( p_space ) < ptrdiff_t( m_buffer ) || ptrdiff_t( p_space ) >= ptrdiff_t( m_bufferEnd ) )
 				{
-					ReportError< ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE >( Namer::Name, ( void * )p_space );
+					ReportError< PoolErrorType::eCommonNotFromRange >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 
@@ -170,11 +170,11 @@ namespace Castor
 				{
 					if ( *l_marked == FREED )
 					{
-						ReportError< ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE >( Namer::Name, ( void * )p_space );
+						ReportError< PoolErrorType::eMarkedDoubleDelete >( Namer::Name, ( void * )p_space );
 						return false;
 					}
 
-					ReportError< ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL >( Namer::Name, ( void * )p_space );
+					ReportError< PoolErrorType::eMarkedNotFromPool >( Namer::Name, ( void * )p_space );
 					return false;
 				}
 

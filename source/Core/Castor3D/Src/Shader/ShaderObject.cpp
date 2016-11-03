@@ -42,7 +42,7 @@ namespace Castor3D
 
 	bool ShaderObject::TextWriter::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		static std::array< String, size_t( ShaderModel::Count ) > const l_arrayModels
+		static std::array< String, size_t( ShaderModel::eCount ) > const l_arrayModels
 		{
 			cuT( "sm_1" ),
 			cuT( "sm_2" ),
@@ -64,7 +64,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			for ( size_t i = 0; i < size_t( ShaderModel::Count ); i++ )
+			for ( size_t i = 0; i < size_t( ShaderModel::eCount ); i++ )
 			{
 				Path l_file = p_shaderObject.GetFile( ShaderModel( i ) );
 
@@ -96,7 +96,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, size_t( ShaderType::Count ) > ShaderObject::string_type =
+	const std::array< String, size_t( ShaderType::eCount ) > ShaderObject::string_type =
 	{
 		cuT( "vertex_program" ),
 		cuT( "hull_program" ),
@@ -144,7 +144,7 @@ namespace Castor3D
 
 		if ( !p_filename.empty() && File::FileExists( p_filename ) )
 		{
-			TextFile l_file( p_filename, File::OpenMode::Read );
+			TextFile l_file( p_filename, File::OpenMode::eRead );
 
 			if ( l_file.IsOk() )
 			{
@@ -161,7 +161,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		for ( size_t i = 0; i < size_t( ShaderModel::Count ) && !l_return; i++ )
+		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
 		{
 			l_return = !m_arrayFiles[i].empty();
 		}
@@ -179,7 +179,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		for ( size_t i = 0; i < size_t( ShaderModel::Count ) && !l_return; i++ )
+		for ( size_t i = 0; i < size_t( ShaderModel::eCount ) && !l_return; i++ )
 		{
 			l_return = !m_arraySources[i].empty();
 		}

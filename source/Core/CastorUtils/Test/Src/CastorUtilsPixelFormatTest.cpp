@@ -224,17 +224,17 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
 			Logger::LogDebug( l_stream );
-			ConvertPixel< PixelFormat::L8 >( l_source );
-			ConvertPixel< PixelFormat::L32F >( l_source );
-			ConvertPixel< PixelFormat::A8L8 >( l_source );
-			ConvertPixel< PixelFormat::AL32F >( l_source );
-			ConvertPixel< PixelFormat::A1R5G5B5 >( l_source );
-			ConvertPixel< PixelFormat::A4R4G4B4 >( l_source );
-			ConvertPixel< PixelFormat::R5G6B5 >( l_source );
-			ConvertPixel< PixelFormat::R8G8B8 >( l_source );
-			ConvertPixel< PixelFormat::A8R8G8B8 >( l_source );
-			ConvertPixel< PixelFormat::RGB32F >( l_source );
-			ConvertPixel< PixelFormat::RGBA32F >( l_source );
+			ConvertPixel< PixelFormat::eL8 >( l_source );
+			ConvertPixel< PixelFormat::eL32F >( l_source );
+			ConvertPixel< PixelFormat::eA8L8 >( l_source );
+			ConvertPixel< PixelFormat::eAL32F >( l_source );
+			ConvertPixel< PixelFormat::eA1R5G5B5 >( l_source );
+			ConvertPixel< PixelFormat::eA4R4G4B4 >( l_source );
+			ConvertPixel< PixelFormat::eR5G6B5 >( l_source );
+			ConvertPixel< PixelFormat::eR8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::eA8R8G8B8 >( l_source );
+			ConvertPixel< PixelFormat::eRGB32F >( l_source );
+			ConvertPixel< PixelFormat::eRGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -251,11 +251,11 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source pixel : " << l_source;
 			Logger::LogDebug( l_stream );
-			ConvertPixel< PixelFormat::D16 >( l_source );
-			ConvertPixel< PixelFormat::D24 >( l_source );
-			ConvertPixel< PixelFormat::D32 >( l_source );
-			ConvertPixel< PixelFormat::D24S8 >( l_source );
-			ConvertPixel< PixelFormat::S8 >( l_source );
+			ConvertPixel< PixelFormat::eD16 >( l_source );
+			ConvertPixel< PixelFormat::eD24 >( l_source );
+			ConvertPixel< PixelFormat::eD32 >( l_source );
+			ConvertPixel< PixelFormat::eD24S8 >( l_source );
+			ConvertPixel< PixelFormat::eS8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -321,23 +321,23 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< PixelFormat::L8 >( l_source );
-			ConvertBuffer< PixelFormat::L32F >( l_source );
-			ConvertBuffer< PixelFormat::A8L8 >( l_source );
-			ConvertBuffer< PixelFormat::AL32F >( l_source );
-			ConvertBuffer< PixelFormat::A1R5G5B5 >( l_source );
-			ConvertBuffer< PixelFormat::A4R4G4B4 >( l_source );
-			ConvertBuffer< PixelFormat::R5G6B5 >( l_source );
-			ConvertBuffer< PixelFormat::R8G8B8 >( l_source );
-			ConvertBuffer< PixelFormat::A8R8G8B8 >( l_source );
-			ConvertBuffer< PixelFormat::RGB32F >( l_source );
-			ConvertBuffer< PixelFormat::RGBA32F >( l_source );
+			ConvertBuffer< PixelFormat::eL8 >( l_source );
+			ConvertBuffer< PixelFormat::eL32F >( l_source );
+			ConvertBuffer< PixelFormat::eA8L8 >( l_source );
+			ConvertBuffer< PixelFormat::eAL32F >( l_source );
+			ConvertBuffer< PixelFormat::eA1R5G5B5 >( l_source );
+			ConvertBuffer< PixelFormat::eA4R4G4B4 >( l_source );
+			ConvertBuffer< PixelFormat::eR5G6B5 >( l_source );
+			ConvertBuffer< PixelFormat::eR8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::eA8R8G8B8 >( l_source );
+			ConvertBuffer< PixelFormat::eRGB32F >( l_source );
+			ConvertBuffer< PixelFormat::eRGBA32F >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != PixelFormat::D24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -363,16 +363,16 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< PixelFormat::D16 >( l_source );
-			ConvertBuffer< PixelFormat::D24 >( l_source );
-			ConvertBuffer< PixelFormat::D32 >( l_source );
-			ConvertBuffer< PixelFormat::D24S8 >( l_source );
+			ConvertBuffer< PixelFormat::eD16 >( l_source );
+			ConvertBuffer< PixelFormat::eD24 >( l_source );
+			ConvertBuffer< PixelFormat::eD32 >( l_source );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == PixelFormat::D24S8 >::type >
+	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -398,17 +398,17 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< PixelFormat::D16 >( l_source );
-			ConvertBuffer< PixelFormat::D24 >( l_source );
-			ConvertBuffer< PixelFormat::D32 >( l_source );
-			ConvertBuffer< PixelFormat::D24S8 >( l_source );
-			ConvertBuffer< PixelFormat::S8 >( l_source );
+			ConvertBuffer< PixelFormat::eD16 >( l_source );
+			ConvertBuffer< PixelFormat::eD24 >( l_source );
+			ConvertBuffer< PixelFormat::eD32 >( l_source );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			ConvertBuffer< PixelFormat::eS8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != PixelFormat::D24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
 		{
@@ -431,8 +431,8 @@ namespace
 			l_stream.width( 20 );
 			l_stream << "Source buffer : " << *l_source;
 			Logger::LogDebug( l_stream );
-			ConvertBuffer< PixelFormat::D24S8 >( l_source );
-			ConvertBuffer< PixelFormat::S8 >( l_source );
+			ConvertBuffer< PixelFormat::eD24S8 >( l_source );
+			ConvertBuffer< PixelFormat::eS8 >( l_source );
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
@@ -463,41 +463,41 @@ namespace Testing
 
 	void CastorUtilsPixelFormatTest::TestPixelConversions()
 	{
-		CheckPixelConversions< PixelFormat::L8 >();
-		CheckPixelConversions< PixelFormat::L32F >();
-		CheckPixelConversions< PixelFormat::A8L8 >();
-		CheckPixelConversions< PixelFormat::AL32F >();
-		CheckPixelConversions< PixelFormat::A1R5G5B5 >();
-		CheckPixelConversions< PixelFormat::A4R4G4B4 >();
-		CheckPixelConversions< PixelFormat::R5G6B5 >();
-		CheckPixelConversions< PixelFormat::R8G8B8 >();
-		CheckPixelConversions< PixelFormat::A8R8G8B8 >();
-		CheckPixelConversions< PixelFormat::RGB32F >();
-		CheckPixelConversions< PixelFormat::RGBA32F >();
-		CheckPixelConversions< PixelFormat::D16 >();
-		CheckPixelConversions< PixelFormat::D24 >();
-		CheckPixelConversions< PixelFormat::D32 >();
-		CheckPixelConversions< PixelFormat::D24S8 >();
-		CheckPixelConversions< PixelFormat::S8 >();
+		CheckPixelConversions< PixelFormat::eL8 >();
+		CheckPixelConversions< PixelFormat::eL32F >();
+		CheckPixelConversions< PixelFormat::eA8L8 >();
+		CheckPixelConversions< PixelFormat::eAL32F >();
+		CheckPixelConversions< PixelFormat::eA1R5G5B5 >();
+		CheckPixelConversions< PixelFormat::eA4R4G4B4 >();
+		CheckPixelConversions< PixelFormat::eR5G6B5 >();
+		CheckPixelConversions< PixelFormat::eR8G8B8 >();
+		CheckPixelConversions< PixelFormat::eA8R8G8B8 >();
+		CheckPixelConversions< PixelFormat::eRGB32F >();
+		CheckPixelConversions< PixelFormat::eRGBA32F >();
+		CheckPixelConversions< PixelFormat::eD16 >();
+		CheckPixelConversions< PixelFormat::eD24 >();
+		CheckPixelConversions< PixelFormat::eD32 >();
+		CheckPixelConversions< PixelFormat::eD24S8 >();
+		CheckPixelConversions< PixelFormat::eS8 >();
 	}
 
 	void CastorUtilsPixelFormatTest::TestBufferConversions()
 	{
-		CheckBufferConversions< PixelFormat::L8 >();
-		CheckBufferConversions< PixelFormat::L32F >();
-		CheckBufferConversions< PixelFormat::A8L8 >();
-		CheckBufferConversions< PixelFormat::AL32F >();
-		CheckBufferConversions< PixelFormat::A1R5G5B5 >();
-		CheckBufferConversions< PixelFormat::A4R4G4B4 >();
-		CheckBufferConversions< PixelFormat::R5G6B5 >();
-		CheckBufferConversions< PixelFormat::R8G8B8 >();
-		CheckBufferConversions< PixelFormat::A8R8G8B8 >();
-		CheckBufferConversions< PixelFormat::RGB32F >();
-		CheckBufferConversions< PixelFormat::RGBA32F >();
-		CheckBufferConversions< PixelFormat::D16 >();
-		CheckBufferConversions< PixelFormat::D24 >();
-		CheckBufferConversions< PixelFormat::D32 >();
-		CheckBufferConversions< PixelFormat::D24S8 >();
-		CheckBufferConversions< PixelFormat::S8 >();
+		CheckBufferConversions< PixelFormat::eL8 >();
+		CheckBufferConversions< PixelFormat::eL32F >();
+		CheckBufferConversions< PixelFormat::eA8L8 >();
+		CheckBufferConversions< PixelFormat::eAL32F >();
+		CheckBufferConversions< PixelFormat::eA1R5G5B5 >();
+		CheckBufferConversions< PixelFormat::eA4R4G4B4 >();
+		CheckBufferConversions< PixelFormat::eR5G6B5 >();
+		CheckBufferConversions< PixelFormat::eR8G8B8 >();
+		CheckBufferConversions< PixelFormat::eA8R8G8B8 >();
+		CheckBufferConversions< PixelFormat::eRGB32F >();
+		CheckBufferConversions< PixelFormat::eRGBA32F >();
+		CheckBufferConversions< PixelFormat::eD16 >();
+		CheckBufferConversions< PixelFormat::eD24 >();
+		CheckBufferConversions< PixelFormat::eD32 >();
+		CheckBufferConversions< PixelFormat::eD24S8 >();
+		CheckBufferConversions< PixelFormat::eS8 >();
 	}
 }

@@ -646,9 +646,9 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
 	DECLARE_MAP( Castor::String, RendererPluginSPtr, RendererPtr );
-	DECLARE_ARRAY( PluginStrMap, size_t( PluginType::Count ), PluginStrMap );
+	DECLARE_ARRAY( PluginStrMap, size_t( PluginType::eCount ), PluginStrMap );
 	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
-	DECLARE_ARRAY( DynamicLibraryPtrPathMap, size_t( PluginType::Count ), DynamicLibraryPtrPathMap );
+	DECLARE_ARRAY( DynamicLibraryPtrPathMap, size_t( PluginType::eCount ), DynamicLibraryPtrPathMap );
 	DECLARE_MAP( Castor::Path, PluginType, PluginTypePath );
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 

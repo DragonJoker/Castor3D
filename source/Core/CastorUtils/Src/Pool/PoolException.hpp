@@ -38,19 +38,19 @@ namespace Castor
 	\~french
 	\brief		Enumération des erreurs de pool.
 	*/
-	typedef enum ePOOL_ERROR_TYPE
+	typedef enum PoolErrorType
 	{
-		ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY,
-		ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL,
-		ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED,
-		ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE,
-		ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS,
-		ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE,
-		ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL,
-		ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES,
-		ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE,
-		CASTOR_ENUM_BOUNDS( ePOOL_ERROR_TYPE, ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY )
-	}	ePOOL_ERROR_TYPE;
+		eCommonOutOfMemory,
+		eCommonPoolIsFull,
+		eCommonMemoryLeaksDetected,
+		eCommonNotFromRange,
+		eMarkedLeakAddress,
+		eMarkedDoubleDelete,
+		eMarkedNotFromPool,
+		eGrowingNotFromRanges,
+		eSTLAllocatorUnique,
+		CASTOR_SCOPED_ENUM_BOUNDS( eCommonOutOfMemory )
+	}	PoolErrorType;
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -61,11 +61,11 @@ namespace Castor
 	\~french
 	\brief		Texte et fonction de report d'erreur.
 	*/
-	template< ePOOL_ERROR_TYPE ErrorType > struct Error;
+	template< PoolErrorType ErrorType > struct Error;
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.
+	//!\~english Specialisation for PoolErrorType::eCommonOutOfMemory.	\~french Spécialisation pour PoolErrorType::eCommonOutOfMemory.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >
+	struct Error< PoolErrorType::eCommonOutOfMemory >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -77,13 +77,13 @@ namespace Castor
 		 */
 		static inline void Report()
 		{
-			std::cerr << Error< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >::Text << std::endl;
+			std::cerr << Error< PoolErrorType::eCommonOutOfMemory >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.
+	//!\~english Specialisation for PoolErrorType::eCommonPoolIsFull.	\~french Spécialisation pour PoolErrorType::eCommonPoolIsFull.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL >
+	struct Error< PoolErrorType::eCommonPoolIsFull >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -97,13 +97,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL >::Text << std::endl;
+			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonPoolIsFull >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.
+	//!\~english Specialisation for PoolErrorType::eCommonMemoryLeaksDetected.	\~french Spécialisation pour PoolErrorType::eCommonMemoryLeaksDetected.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >
+	struct Error< PoolErrorType::eCommonMemoryLeaksDetected >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -117,13 +117,13 @@ namespace Castor
 		 */
 		static inline void Report( size_t p_size )
 		{
-			std::cerr << Error< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >::Text << ": " << p_size << "bytes" << std::endl;
+			std::cerr << Error< PoolErrorType::eCommonMemoryLeaksDetected >::Text << ": " << p_size << "bytes" << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.
+	//!\~english Specialisation for PoolErrorType::eCommonNotFromRange.	\~french Spécialisation pour PoolErrorType::eCommonNotFromRange.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE >
+	struct Error< PoolErrorType::eCommonNotFromRange >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -137,13 +137,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE >::Text << std::endl;
+			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eCommonNotFromRange >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.
+	//!\~english Specialisation for PoolErrorType::eMarkedLeakAddress.	\~french Spécialisation pour PoolErrorType::eMarkedLeakAddress.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS >
+	struct Error< PoolErrorType::eMarkedLeakAddress >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -157,13 +157,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "***   " << Error< ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS >::Text << ": 0x" << std::hex << p_space << std::endl;
+			std::cerr << "***   " << Error< PoolErrorType::eMarkedLeakAddress >::Text << ": 0x" << std::hex << p_space << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.
+	//!\~english Specialisation for PoolErrorType::eMarkedDoubleDelete.	\~french Spécialisation pour PoolErrorType::eMarkedDoubleDelete.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE >
+	struct Error< PoolErrorType::eMarkedDoubleDelete >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -177,13 +177,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE >::Text << std::endl;
+			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedDoubleDelete >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.
+	//!\~english Specialisation for PoolErrorType::eMarkedNotFromPool.	\~french Spécialisation pour PoolErrorType::eMarkedNotFromPool.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL >
+	struct Error< PoolErrorType::eMarkedNotFromPool >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -197,13 +197,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL >::Text << std::endl;
+			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eMarkedNotFromPool >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.	\~french Spécialisation pour ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.
+	//!\~english Specialisation for PoolErrorType::eGrowingNotFromRanges.	\~french Spécialisation pour PoolErrorType::eGrowingNotFromRanges.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >
+	struct Error< PoolErrorType::eGrowingNotFromRanges >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -217,13 +217,13 @@ namespace Castor
 		 */
 		static inline void Report( void * p_space )
 		{
-			std::cerr << "0x" << std::hex << p_space << " - " << Error< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >::Text << std::endl;
+			std::cerr << "0x" << std::hex << p_space << " - " << Error< PoolErrorType::eGrowingNotFromRanges >::Text << std::endl;
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.
+	//!\~english Specialisation for PoolErrorType::eSTLAllocatorUnique.	\~french Spécialisation pour PoolErrorType::eSTLAllocatorUnique.
 	template<>
-	struct Error< ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE >
+	struct Error< PoolErrorType::eSTLAllocatorUnique >
 	{
 		//!\~english The error text.	\~french Le texte de l'erreur.
 		CU_API static char const * const Text;
@@ -235,7 +235,7 @@ namespace Castor
 		 */
 		static inline void Report()
 		{
-			std::cerr << Error< ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE >::Text << std::endl;
+			std::cerr << Error< PoolErrorType::eSTLAllocatorUnique >::Text << std::endl;
 		}
 	};
 	/**
@@ -248,7 +248,7 @@ namespace Castor
 	 *\param[in]	p_name		Le texte de l'erreur.
 	 *\param[in]	p_params	Les paramètres de l'erreur.
 	 */
-	template< ePOOL_ERROR_TYPE ErrorType, typename ... Params >
+	template< PoolErrorType ErrorType, typename ... Params >
 	static inline void ReportError( char const * const p_name, Params ... p_params )
 	{
 		std::cerr << "*** " << p_name << " *** ";
@@ -263,7 +263,7 @@ namespace Castor
 	\~french
 	\brief		Exception de pool.
 	*/
-	template< ePOOL_ERROR_TYPE ErrorType >
+	template< PoolErrorType ErrorType >
 	class PoolMemoryException
 		: public Exception
 	{

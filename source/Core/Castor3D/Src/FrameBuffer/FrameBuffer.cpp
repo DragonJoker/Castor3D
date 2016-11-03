@@ -236,7 +236,7 @@ namespace Castor3D
 
 	PixelFormat FrameBuffer::DoGetPixelFormat( AttachmentPoint p_point, uint8_t p_index )
 	{
-		PixelFormat l_return = PixelFormat::Count;
+		PixelFormat l_return = PixelFormat::eCount;
 
 		if ( !m_attaches.empty() && p_point != AttachmentPoint::None )
 		{

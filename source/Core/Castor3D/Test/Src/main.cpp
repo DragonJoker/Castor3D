@@ -128,9 +128,9 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	Castor::Logger::Initialise( Castor::ELogType_INFO );
+	Castor::Logger::Initialise( Castor::LogType::eInfo );
 #else
-	Logger::Initialise( Castor::ELogType_DEBUG );
+	Logger::Initialise( Castor::LogType::eDebug );
 #endif
 
 	Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );

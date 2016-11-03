@@ -902,7 +902,7 @@ namespace Castor3D
 
 	Topology Submesh::GetTopology()const
 	{
-		Topology l_return = Topology::Count;
+		Topology l_return = Topology::eCount;
 
 		for ( auto l_buffers : m_geometryBuffers )
 		{

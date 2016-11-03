@@ -123,7 +123,7 @@ namespace
 			auto l_scene = l_return->GetSceneCache().Add( cuT( "Test" ) );
 			auto l_window = l_scene->GetRenderWindowCache().Add( cuT( "Window" ) );
 			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::Window );
-			l_target->SetPixelFormat( PixelFormat::A8R8G8B8 );
+			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			l_target->SetSize( Size{ 1024, 1024 } );
 			l_target->SetScene( l_scene );
 			l_window->SetRenderTarget( l_target );
@@ -372,7 +372,7 @@ int main( int argc, char const * argv[] )
 		l_count = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
-	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+	Castor::Logger::Initialise( Castor::LogType::eDebug );
 	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
 	{
 		try

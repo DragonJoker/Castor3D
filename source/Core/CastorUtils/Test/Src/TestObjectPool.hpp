@@ -33,10 +33,10 @@ namespace Testing
 {
 	namespace Pools
 	{
-		template< typename Object, Castor::eMEMDATA_TYPE MemDataType >
+		template< typename Object, Castor::MemoryDataType MemDataType >
 		using MyObjectPool = Castor::ObjectPool< Object, MemDataType >;
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		struct SFixedChecks
 		{
 			template< typename type >
@@ -66,7 +66,7 @@ namespace Testing
 			}
 		};
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		struct SAllDeallChecks
 		{
 			template< typename type >
@@ -98,7 +98,7 @@ namespace Testing
 			}
 		};
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		struct SScatteredChecks
 		{
 			template< typename type >
@@ -142,7 +142,7 @@ namespace Testing
 			}
 		};
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		struct SVariableChecks
 		{
 			template< typename type >
@@ -186,7 +186,7 @@ namespace Testing
 			}
 		};
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		struct SUniqueFixedChecks
 		{
 			template< typename type >
@@ -559,7 +559,7 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
@@ -604,7 +604,7 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
@@ -680,7 +680,7 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		void Checks( Index const & index )
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
@@ -725,7 +725,7 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;
@@ -768,7 +768,7 @@ namespace Testing
 			std::cout << std::endl;
 		}
 
-		template< Castor::eMEMDATA_TYPE MemDataType >
+		template< Castor::MemoryDataType MemDataType >
 		void Checks()
 		{
 			std::cout << "********************************************************************************" << std::endl << std::endl;

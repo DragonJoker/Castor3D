@@ -494,7 +494,7 @@ namespace Castor3D
 		 */
 		static inline size_t GetDataSize( data_type const & p_value )
 		{
-			return Castor::Colour::eCOMPONENT_COUNT * sizeof( float );
+			return Castor::Colour::Component::eCount * sizeof( float );
 		}
 	};
 	/*!

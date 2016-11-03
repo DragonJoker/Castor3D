@@ -39,7 +39,7 @@ namespace Castor3D
 
 		void DoUpdateShadowMatrices( Matrix4x4r const & p_projection, Point3r const & p_position, ShaderProgram & p_program )
 		{
-			std::array< Matrix4x4r, size_t( CubeMapFace::Count ) > const l_views
+			std::array< Matrix4x4r, size_t( CubeMapFace::eCount ) > const l_views
 			{
 				{
 					p_projection * matrix::look_at( p_position, p_position + Point3r{ +1, 0, 0 }, Point3r{ 0, -1, 0 } ),

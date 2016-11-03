@@ -289,35 +289,35 @@ namespace Castor
 
 		switch ( p_mode )
 		{
-		case uint32_t( OpenMode::Read ):
+		case uint32_t( OpenMode::eRead ):
 			l_mode = cuT( "r" );
 			break;
 
-		case uint32_t( OpenMode::Write ):
+		case uint32_t( OpenMode::eWrite ):
 			l_mode = cuT( "w" );
 			break;
 
-		case uint32_t( OpenMode::Append ):
+		case uint32_t( OpenMode::eAppend ):
 			l_mode = cuT( "a" );
 			break;
 
-		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Binary ):
+		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eBinary ):
 			l_mode = cuT( "rb" );
 			break;
 
-		case uint32_t( OpenMode::Write ) | uint32_t( OpenMode::Binary ):
+		case uint32_t( OpenMode::eWrite ) | uint32_t( OpenMode::eBinary ):
 			l_mode = cuT( "wb" );
 			break;
 
-		case uint32_t( OpenMode::Append ) | uint32_t( OpenMode::Binary ):
+		case uint32_t( OpenMode::eAppend ) | uint32_t( OpenMode::eBinary ):
 			l_mode = cuT( "ab" );
 			break;
 
-		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Write ):
+		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eWrite ):
 			l_mode = cuT( "r+" );
 			break;
 
-		case uint32_t( OpenMode::Read ) | uint32_t( OpenMode::Write ) | uint32_t( OpenMode::Append ):
+		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eWrite ) | uint32_t( OpenMode::eAppend ):
 			l_mode = cuT( "a+" );
 			break;
 
@@ -326,20 +326,20 @@ namespace Castor
 			break;
 		}
 
-		if ( !CheckFlag( p_mode, OpenMode::Binary ) )
+		if ( !CheckFlag( p_mode, OpenMode::eBinary ) )
 		{
 			switch ( p_encoding )
 			{
-			case EncodingMode::Auto:
-				m_encoding = EncodingMode::UTF8;
+			case EncodingMode::eAuto:
+				m_encoding = EncodingMode::eUTF8;
 				l_mode += cuT( ", ccs=UTF-8" );
 				break;
 
-			case EncodingMode::UTF8:
+			case EncodingMode::eUTF8:
 				l_mode += cuT( ", ccs=UTF-8" );
 				break;
 
-			case EncodingMode::UTF16:
+			case EncodingMode::eUTF16:
 				l_mode += cuT( ", ccs=UTF-16LE" );
 			}
 		}
@@ -378,17 +378,17 @@ namespace Castor
 		{
 			switch ( p_origin )
 			{
-			case OffsetMode::Beginning:
+			case OffsetMode::eBeginning:
 				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_SET );
 				m_ullCursor = p_offset;
 				break;
 
-			case OffsetMode::Current:
+			case OffsetMode::eCurrent:
 				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_CUR );
 				m_ullCursor += p_offset;
 				break;
 
-			case OffsetMode::End:
+			case OffsetMode::eEnd:
 				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_END );
 				m_ullCursor = GetLength() - p_offset;
 				break;
@@ -450,7 +450,7 @@ namespace Castor
 	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( CheckFlag( m_mode, OpenMode::Write ) || CheckFlag( m_mode, OpenMode::Append ) ) );
+		REQUIRE( IsOk() && ( CheckFlag( m_mode, OpenMode::eWrite ) || CheckFlag( m_mode, OpenMode::eAppend ) ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
@@ -467,7 +467,7 @@ namespace Castor
 	uint64_t File::DoRead( uint8_t * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && CheckFlag( m_mode, OpenMode::Read ) );
+		REQUIRE( IsOk() && CheckFlag( m_mode, OpenMode::eRead ) );
 		uint64_t l_uiReturn = 0;
 		uint64_t l_uiPrev = 1;
 
@@ -635,47 +635,47 @@ namespace Castor
 #else
 		mode_t l_mode = 0;
 
-		if ( CheckFlag( p_flag, CreateMode::UserRead ) )
+		if ( CheckFlag( p_flag, CreateMode::eUserRead ) )
 		{
 			l_mode |= S_IRUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::UserWrite ) )
+		if ( CheckFlag( p_flag, CreateMode::eUserWrite ) )
 		{
 			l_mode |= S_IWUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::UserExec ) )
+		if ( CheckFlag( p_flag, CreateMode::eUserExec ) )
 		{
 			l_mode |= S_IXUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::GroupRead ) )
+		if ( CheckFlag( p_flag, CreateMode::eGroupRead ) )
 		{
 			l_mode |= S_IRGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::GroupWrite ) )
+		if ( CheckFlag( p_flag, CreateMode::eGroupWrite ) )
 		{
 			l_mode |= S_IWGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::GroupExec ) )
+		if ( CheckFlag( p_flag, CreateMode::eGroupExec ) )
 		{
 			l_mode |= S_IXGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::OthersRead ) )
+		if ( CheckFlag( p_flag, CreateMode::eOthersRead ) )
 		{
 			l_mode |= S_IROTH;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::OthersWrite ) )
+		if ( CheckFlag( p_flag, CreateMode::eOthersWrite ) )
 		{
 			l_mode |= S_IWOTH;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::OthersExec ) )
+		if ( CheckFlag( p_flag, CreateMode::eOthersExec ) )
 		{
 			l_mode |= S_IXOTH;
 		}

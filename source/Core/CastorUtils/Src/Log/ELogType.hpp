@@ -34,20 +34,20 @@ namespace Castor
 	\~french
 	\brief		Définit les différents types de log
 	*/
-	typedef enum ELogType
+	enum class LogType
 		: uint8_t
 	{
 		//!\~english Debug type log	\~french Log de type debug
-		ELogType_DEBUG,
+		eDebug,
 		//!\~english Information type log	\~french Log de type information
-		ELogType_INFO,
+		eInfo,
 		//!\~english Warning type log	\~french Log de type avertissement
-		ELogType_WARNING,
+		eWarning,
 		//!\~english Error type log	\~french Log de type erreur
-		ELogType_ERROR,
+		eError,
 		//!\~english Log types count	\~french Compte des logs
-		ELogType_COUNT,
-	}	ELogType;
+		eCount,
+	};
 }
 
 #endif

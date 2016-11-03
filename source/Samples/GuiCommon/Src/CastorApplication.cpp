@@ -73,11 +73,11 @@ namespace GuiCommon
 {
 #if defined( NDEBUG )
 
-	static const ELogType ELogType_DEFAULT = ELogType_INFO;
+	static const LogType ELogType_DEFAULT = LogType::eInfo;
 
 #else
 
-	static const ELogType ELogType_DEFAULT = ELogType_DEBUG;
+	static const LogType ELogType_DEFAULT = LogType::eDebug;
 
 #endif
 
@@ -182,7 +182,7 @@ namespace GuiCommon
 
 		if ( l_return )
 		{
-			ELogType l_eLogLevel = ELogType_COUNT;
+			LogType l_eLogLevel = LogType::eCount;
 
 			if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 			{

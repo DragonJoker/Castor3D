@@ -349,21 +349,21 @@ namespace Castor
 			}
 		}
 
-		void BeginLog( ELogType logLevel )
+		void BeginLog( LogType logLevel )
 		{
 			WORD l_attributes;
 
 			switch ( logLevel )
 			{
-			case ELogType_DEBUG:
+			case LogType::eDebug:
 				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
-			case ELogType_WARNING:
+			case LogType::eWarning:
 				l_attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
-			case ELogType_ERROR:
+			case LogType::eError:
 				l_attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
 				break;
 
@@ -402,23 +402,23 @@ namespace Castor
 		: public ConsoleImpl
 	{
 	public:
-		void BeginLog( ELogType logLevel )
+		void BeginLog( LogType logLevel )
 		{
 			switch ( logLevel )
 			{
-			case ELogType_DEBUG:
+			case LogType::eDebug:
 				m_header = cuT( "\033[36m" );
 				break;
 
-			case ELogType_INFO:
+			case LogType::eInfo:
 				m_header = cuT( "\033[0m" );
 				break;
 
-			case ELogType_WARNING:
+			case LogType::eWarning:
 				m_header = cuT( "\033[33m" );
 				break;
 
-			case ELogType_ERROR:
+			case LogType::eError:
 				m_header = cuT( "\033[31m" );
 				break;
 			}
@@ -446,7 +446,7 @@ namespace Castor
 		: public ConsoleImpl
 	{
 	public:
-		void BeginLog( ELogType logLevel )
+		void BeginLog( LogType logLevel )
 		{
 		}
 
@@ -476,7 +476,7 @@ namespace Castor
 	{
 	}
 
-	void ProgramConsole::BeginLog( ELogType logLevel )
+	void ProgramConsole::BeginLog( LogType logLevel )
 	{
 		m_console->BeginLog( logLevel );
 	}
