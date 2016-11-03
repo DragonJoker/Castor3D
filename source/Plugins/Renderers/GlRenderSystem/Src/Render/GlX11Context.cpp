@@ -31,13 +31,13 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = int( GlContextAttribute::ForwardCompatibleBit ) | int( GlContextAttribute::DebugBit );
-		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = int( GlProfileAttribute::CoreBit );
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = int( GlContextAttribute::eForwardCompatibleBit ) | int( GlContextAttribute::eDebugBit );
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = int( GlProfileAttribute::eCoreBit );
 
 #else
 
-		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = int( GlContextAttribute::ForwardCompatibleBit );
-		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = int( GlProfileAttribute::CompatibilityBit );
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = int( GlContextAttribute::eForwardCompatibleBit );
+		const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = int( GlProfileAttribute::eCompatibilityBit );
 #endif
 	}
 
@@ -336,10 +336,10 @@ namespace GlRender
 			int l_minor = GetOpenGl().GetVersion() % 10;
 			IntArray l_attribList
 			{
-				int( GlContextAttribute::MajorVersion ), l_major,
-				int( GlContextAttribute::MinorVersion ), l_minor,
-				int( GlContextAttribute::Flags ), C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
-				int( GlProfileAttribute::Mask ), C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
+				int( GlContextAttribute::eMajorVersion ), l_major,
+				int( GlContextAttribute::eMinorVersion ), l_minor,
+				int( GlContextAttribute::eFlags ), C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
+				int( GlProfileAttribute::eMask ), C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
 				0
 			};
 			GetOpenGl().DeleteContext( m_display, m_glxContext );

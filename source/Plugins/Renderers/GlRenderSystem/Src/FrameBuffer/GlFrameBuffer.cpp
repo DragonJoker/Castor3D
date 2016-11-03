@@ -66,12 +66,12 @@ namespace GlRender
 			}
 			else
 			{
-				GetOpenGl().DrawBuffer( GlBufferBinding::None );
+				GetOpenGl().DrawBuffer( GlBufferBinding::eNone );
 			}
 		}
 		else
 		{
-			GetOpenGl().DrawBuffer( GlBufferBinding::None );
+			GetOpenGl().DrawBuffer( GlBufferBinding::eNone );
 		}
 	}
 
@@ -90,7 +90,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::IsComplete()const
 	{
-		return GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::Default ) == GlFramebufferStatus::Complete;
+		return GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) == GlFramebufferStatus::eComplete;
 	}
 
 	bool GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
@@ -158,7 +158,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
-		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), GlInterpolationMode::Nearest );
+		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), GlInterpolationMode::eNearest );
 	}
 
 	bool GlFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const

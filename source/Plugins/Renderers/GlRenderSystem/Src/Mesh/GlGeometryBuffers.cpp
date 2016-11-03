@@ -37,7 +37,7 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::UnsignedInt, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
@@ -56,7 +56,7 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::UnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
+				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{

@@ -35,32 +35,32 @@ namespace GlRender
 		return EXEC_FUNCTION( BindTexture, uint32_t( mode ), texture );
 	}
 
-	bool TexFunctions::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexSubImage1D( GlTextureStorageType mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TexSubImage1D, uint32_t( mode ), level, xoffset, width, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexSubImage2D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TexSubImage2D, uint32_t( mode ), level, xoffset, yoffset, width, height, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TexSubImage2D, uint32_t( mode ), level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TexSubImage2D, uint32_t( mode ), level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctions::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexSubImage3D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TexSubImage3D, uint32_t( mode ), level, xoffset, yoffset, zoffset, width, height, depth, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctions::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexImage1D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -72,7 +72,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -84,7 +84,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -96,7 +96,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctions::TexImage3D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -108,7 +108,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctions::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, GlFormat format, GlType type, void * img )
+	bool TexFunctions::GetTexImage( GlTextureStorageType mode, int level, GlFormat format, GlType type, void * img )
 	{
 		return EXEC_FUNCTION( GetTexImage, uint32_t( mode ), level, uint32_t( format ), uint32_t( type ), img );
 	}
@@ -125,32 +125,32 @@ namespace GlRender
 		return glCheckError( GetOpenGl(), cuT( "glGenerateTextureMipmap" ) );
 	}
 
-	bool TexFunctionsDSA::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexSubImage1D( GlTextureStorageType mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TextureSubImage1D, m_uiTexture, uint32_t( mode ), level, xoffset, width, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexSubImage2D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TextureSubImage2D, m_uiTexture, uint32_t( mode ), level, xoffset, yoffset, width, height, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TextureSubImage2D, m_uiTexture, uint32_t( mode ), level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TextureSubImage2D, m_uiTexture, uint32_t( mode ), level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctionsDSA::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexSubImage3D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )
 	{
 		return EXEC_FUNCTION( TextureSubImage3D, m_uiTexture, uint32_t( mode ), level, xoffset, yoffset, zoffset, width, height, depth, uint32_t( format ), uint32_t( type ), data );
 	}
 
-	bool TexFunctionsDSA::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexImage1D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -162,7 +162,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -174,7 +174,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -186,7 +186,7 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )
+	bool TexFunctionsDSA::TexImage3D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )
 	{
 		try
 		{
@@ -198,14 +198,14 @@ namespace GlRender
 		}
 	}
 
-	bool TexFunctionsDSA::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, GlFormat format, GlType type, void * img )
+	bool TexFunctionsDSA::GetTexImage( GlTextureStorageType mode, int level, GlFormat format, GlType type, void * img )
 	{
 		return EXEC_FUNCTION( GetTextureImage, m_uiTexture, uint32_t( mode ), level, uint32_t( format ), uint32_t( type ), img );
 	}
 
 	//*************************************************************************************************
 
-	bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const
+	bool BufFunctionsBase::BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const
 	{
 		return EXEC_FUNCTION( BufferAddressRange, uint32_t( pname ), index, address, length );
 	}
@@ -260,7 +260,7 @@ namespace GlRender
 		return EXEC_FUNCTION( VertexAttribIFormat, index, size, uint32_t( type ), stride );
 	}
 
-	bool BufFunctionsBase::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool BufFunctionsBase::MakeBufferResident( GlBufferTarget target, GlAccessType access )const
 	{
 		return EXEC_FUNCTION( MakeBufferResident, uint32_t( target ), uint32_t( access ) );
 	}
@@ -275,7 +275,7 @@ namespace GlRender
 		return m_pfnIsBufferResident( uint32_t( target ) ) && glCheckError( GetOpenGl(), cuT( "glIsBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool BufFunctionsBase::MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const
 	{
 		return EXEC_FUNCTION( MakeNamedBufferResident, buffer, uint32_t( access ) );
 	}
@@ -290,12 +290,12 @@ namespace GlRender
 		return m_pfnIsNamedBufferResident( buffer ) && glCheckError( GetOpenGl(), cuT( "glIsNamedBufferResident" ) );
 	}
 
-	bool BufFunctionsBase::GetBufferParameter( GlBufferTarget target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool BufFunctionsBase::GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const
 	{
 		return EXEC_FUNCTION( GetBufferParameterui64v, uint32_t( target ), uint32_t( pname ), params );
 	}
 
-	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname, uint64_t * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameterui64v, buffer, uint32_t( pname ), params );
 	}
@@ -322,7 +322,7 @@ namespace GlRender
 		return EXEC_FUNCTION( BufferSubData, uint32_t( p_target ), offset, size, data );
 	}
 
-	bool BufFunctions::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
+	bool BufFunctions::GetBufferParameter( GlBufferTarget p_target, GlBufferParameter pname, int * params )const
 	{
 		return EXEC_FUNCTION( GetBufferParameteriv, uint32_t( p_target ), uint32_t( pname ), params );
 	}
@@ -378,7 +378,7 @@ namespace GlRender
 		return EXEC_FUNCTION( CopyNamedBufferSubData, uint32_t( readtarget ), uint32_t( writetarget ), readoffset, writeoffset, size );
 	}
 
-	bool BufFunctionsDSA::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
+	bool BufFunctionsDSA::GetBufferParameter( GlBufferTarget p_target, GlBufferParameter pname, int * params )const
 	{
 		return EXEC_FUNCTION( GetNamedBufferParameteriv, m_uiBuffer, uint32_t( pname ), params );
 	}
@@ -494,51 +494,51 @@ namespace GlRender
 		return m_bBindVboToGpuAddress;
 	}
 
-	Castor3D::ElementType OpenGl::Get( eGLSL_ATTRIBUTE_TYPE p_type )const
+	Castor3D::ElementType OpenGl::Get( GlslAttributeType p_type )const
 	{
 		switch ( p_type )
 		{
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT:
+		case GlslAttributeType::eFloat:
 			return Castor3D::ElementType::Float;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC2:
+		case GlslAttributeType::eFloatVec2:
 			return Castor3D::ElementType::Vec2;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC3:
+		case GlslAttributeType::eFloatVec3:
 			return Castor3D::ElementType::Vec3;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC4:
+		case GlslAttributeType::eFloatVec4:
 			return Castor3D::ElementType::Vec4;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_INT:
+		case GlslAttributeType::eInt:
 			return Castor3D::ElementType::Int;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_INT_VEC2:
+		case GlslAttributeType::eIntVec2:
 			return Castor3D::ElementType::IVec2;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_INT_VEC3:
+		case GlslAttributeType::eIntVec3:
 			return Castor3D::ElementType::IVec3;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_INT_VEC4:
+		case GlslAttributeType::eIntVec4:
 			return Castor3D::ElementType::IVec4;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT2:
+		case GlslAttributeType::eFloatMat2:
 			return Castor3D::ElementType::Mat2;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT3:
+		case GlslAttributeType::eFloatMat3:
 			return Castor3D::ElementType::Mat3;
 			break;
 
-		case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT4:
+		case GlslAttributeType::eFloatMat4:
 			return Castor3D::ElementType::Mat4;
 			break;
 
@@ -625,9 +625,9 @@ namespace GlRender
 
 	inline uint32_t OpenGl::GetComponents( uint32_t p_components )const
 	{
-		return ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Colour ) ) ? uint32_t( GlBufferBit::Colour ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Depth ) ) ? uint32_t( GlBufferBit::Depth ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Stencil ) ) ? uint32_t( GlBufferBit::Stencil ) : 0u );
+		return ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Colour ) ) ? uint32_t( GlBufferBit::eColour ) : 0u )
+			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Depth ) ) ? uint32_t( GlBufferBit::eDepth ) : 0u )
+			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Stencil ) ) ? uint32_t( GlBufferBit::eStencil ) : 0u );
 	}
 
 	inline GlAttachmentPoint OpenGl::Get( Castor3D::AttachmentPoint p_eAttachment )const
@@ -655,12 +655,12 @@ namespace GlRender
 		return BuffersTA.find( p_buffer )->second;
 	}
 
-	inline GlCulledFace OpenGl::Get( Castor3D::Culling p_eFace )const
+	inline GlFace OpenGl::Get( Castor3D::Culling p_eFace )const
 	{
 		return Faces[uint32_t( p_eFace )];
 	}
 
-	inline eGL_FILL_MODE OpenGl::Get( Castor3D::FillMode p_mode )const
+	inline GlFillMode OpenGl::Get( Castor3D::FillMode p_mode )const
 	{
 		return FillModes[uint32_t( p_mode )];
 	}
@@ -670,7 +670,7 @@ namespace GlRender
 		return StencilFuncs[uint32_t( p_func )];
 	}
 
-	inline eGL_STENCIL_OP OpenGl::Get( Castor3D::StencilOp p_eOp )const
+	inline GlStencilOp OpenGl::Get( Castor3D::StencilOp p_eOp )const
 	{
 		return StencilOps[uint32_t( p_eOp )];
 	}
@@ -685,17 +685,17 @@ namespace GlRender
 		return DepthFuncs[uint32_t( p_func )];
 	}
 
-	inline eGL_QUERY OpenGl::Get( Castor3D::QueryType p_value )const
+	inline GlQueryType OpenGl::Get( Castor3D::QueryType p_value )const
 	{
 		return Queries[uint32_t( p_value )];
 	}
 
-	inline eGL_QUERY_INFO OpenGl::Get( Castor3D::QueryInfo p_value )const
+	inline GlQueryInfo OpenGl::Get( Castor3D::QueryInfo p_value )const
 	{
 		return QueryInfos[uint32_t( p_value )];
 	}
 
-	inline eGL_TEXTURE_STORAGE OpenGl::Get( Castor3D::TextureStorageType p_value )const
+	inline GlTextureStorageType OpenGl::Get( Castor3D::TextureStorageType p_value )const
 	{
 		return TextureStorages[uint32_t( p_value )];
 	}
@@ -705,7 +705,7 @@ namespace GlRender
 		return CubeMapFaces[uint32_t( p_value )];
 	}
 
-	inline eGL_COMPARE_MODE OpenGl::Get( Castor3D::ComparisonMode p_value )const
+	inline GlCompareMode OpenGl::Get( Castor3D::ComparisonMode p_value )const
 	{
 		return ComparisonModes[uint32_t( p_value )];
 	}
@@ -763,45 +763,45 @@ namespace GlRender
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
 			{
-				l_eReturn = GlBufferMode::DynamicRead;
+				l_eReturn = GlBufferMode::eDynamicRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
 			{
-				l_eReturn = GlBufferMode::DynamicDraw;
+				l_eReturn = GlBufferMode::eDynamicDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
 			{
-				l_eReturn = GlBufferMode::DynamicCopy;
+				l_eReturn = GlBufferMode::eDynamicCopy;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::Static ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
 			{
-				l_eReturn = GlBufferMode::StaticRead;
+				l_eReturn = GlBufferMode::eStaticRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
 			{
-				l_eReturn = GlBufferMode::StaticDraw;
+				l_eReturn = GlBufferMode::eStaticDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
 			{
-				l_eReturn = GlBufferMode::StaticCopy;
+				l_eReturn = GlBufferMode::eStaticCopy;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::Stream ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
 			{
-				l_eReturn = GlBufferMode::StreamRead;
+				l_eReturn = GlBufferMode::eStreamRead;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
 			{
-				l_eReturn = GlBufferMode::StreamDraw;
+				l_eReturn = GlBufferMode::eStreamDraw;
 			}
 			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
 			{
-				l_eReturn = GlBufferMode::StreamCopy;
+				l_eReturn = GlBufferMode::eStreamCopy;
 			}
 		}
 
@@ -810,22 +810,22 @@ namespace GlRender
 
 	GlAccessType OpenGl::GetLockFlags( Castor3D::AccessType p_flags )const
 	{
-		GlAccessType l_eLockFlags = GlAccessType::ReadWrite;
+		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
 		{
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 			{
-				l_eLockFlags = GlAccessType::ReadWrite;
+				l_eLockFlags = GlAccessType::eReadWrite;
 			}
 			else
 			{
-				l_eLockFlags = GlAccessType::Read;
+				l_eLockFlags = GlAccessType::eRead;
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 		{
-			l_eLockFlags = GlAccessType::Write;
+			l_eLockFlags = GlAccessType::eWrite;
 		}
 
 		return l_eLockFlags;
@@ -837,17 +837,17 @@ namespace GlRender
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
 		{
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::Read );
+			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eRead );
 
 			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 			{
-				Castor::AddFlag( l_uiFlags, GlBufferMappingBit::Write );
+				Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
 			}
 		}
 		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
 		{
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::Write );
-			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::InvalidateRange );
+			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
+			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eInvalidateRange );
 		}
 
 		return l_uiFlags;
@@ -1082,7 +1082,7 @@ namespace GlRender
 		return glCheckError( *this, "glViewport" );
 	}
 
-	bool OpenGl::CullFace( GlCulledFace face )const
+	bool OpenGl::CullFace( GlFace face )const
 	{
 		m_pfnCullFace( uint32_t( face ) );
 		return glCheckError( *this, "glCullFace" );
@@ -1133,52 +1133,52 @@ namespace GlRender
 		return glCheckError( *this, "glClientActiveTexture" );
 	}
 
-	bool OpenGl::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexSubImage1D( GlTextureStorageType mode, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexSubImage1D( mode, level, xoffset, width, format, type, data );
 	}
 
-	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexSubImage2D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexSubImage2D( mode, level, xoffset, yoffset, width, height, format, type, data );
 	}
 
-	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexSubImage2D( mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
 	}
 
-	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexSubImage2D( GlTextureStorageType mode, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexSubImage2D( mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
 	}
 
-	bool OpenGl::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexSubImage3D( GlTextureStorageType mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
 	}
 
-	bool OpenGl::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexImage1D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage1D( mode, level, internalFormat, width, border, format, type, data );
 	}
 
-	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
 	}
 
-	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexImage2D( GlTextureStorageType mode, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
 	}
 
-	bool OpenGl::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const
+	bool OpenGl::TexImage3D( GlTextureStorageType mode, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const
 	{
 		return m_pTexFunctions->TexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
 	}
 
-	bool OpenGl::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, GlFormat format, GlType type, void * img )const
+	bool OpenGl::GetTexImage( GlTextureStorageType mode, int level, GlFormat format, GlType type, void * img )const
 	{
 		return m_pTexFunctions->GetTexImage( mode, level, format, type, img );
 	}
@@ -1282,13 +1282,13 @@ namespace GlRender
 		return true;
 	}
 
-	bool OpenGl::PolygonMode( GlCulledFace p_eFacing, eGL_FILL_MODE p_mode )const
+	bool OpenGl::PolygonMode( GlFace p_eFacing, GlFillMode p_mode )const
 	{
-		m_pfnPolygonMode( p_eFacing, uint32_t( p_mode ) );
+		m_pfnPolygonMode( uint32_t( p_eFacing ), uint32_t( p_mode ) );
 		return glCheckError( *this, "glPolygonMode" );
 	}
 
-	bool OpenGl::StencilOp( eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass )const
+	bool OpenGl::StencilOp( GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const
 	{
 		m_pfnStencilOp( uint32_t( p_eStencilFail ), uint32_t( p_eDepthFail ), uint32_t( p_eStencilPass ) );
 		return glCheckError( *this, "glStencilOp" );
@@ -1306,7 +1306,7 @@ namespace GlRender
 		return glCheckError( *this, "glStencilMask" );
 	}
 
-	bool OpenGl::StencilOpSeparate( GlCulledFace p_eFacing, eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass )const
+	bool OpenGl::StencilOpSeparate( GlFace p_eFacing, GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const
 	{
 		if ( m_pfnStencilOpSeparate )
 		{
@@ -1319,7 +1319,7 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::StencilFuncSeparate( GlCulledFace p_eFacing, GlComparator p_func, int p_iRef, uint32_t p_uiMask )const
+	bool OpenGl::StencilFuncSeparate( GlFace p_eFacing, GlComparator p_func, int p_iRef, uint32_t p_uiMask )const
 	{
 		if ( m_pfnStencilFuncSeparate )
 		{
@@ -1332,7 +1332,7 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::StencilMaskSeparate( GlCulledFace p_eFacing, uint32_t p_uiMask )const
+	bool OpenGl::StencilMaskSeparate( GlFace p_eFacing, uint32_t p_uiMask )const
 	{
 		if ( m_pfnStencilMaskSeparate )
 		{
@@ -1345,7 +1345,7 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::Hint( eGL_HINT p_eHint, eGL_HINT_VALUE p_eValue )const
+	bool OpenGl::Hint( GlHint p_eHint, GlHintValue p_eValue )const
 	{
 		m_pfnHint( uint32_t( p_eHint ), uint32_t( p_eValue ) );
 		return glCheckError( *this, "glHint" );
@@ -1443,45 +1443,45 @@ namespace GlRender
 		return glCheckError( *this, "glDrawPixels" );
 	}
 
-	bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam )const
+	bool OpenGl::PixelStore( GlStorageMode p_mode, int p_iParam )const
 	{
 		m_pfnPixelStorei( uint32_t( p_mode ), p_iParam );
 		return glCheckError( *this, "glPixelStorei" );
 	}
 
-	bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam )const
+	bool OpenGl::PixelStore( GlStorageMode p_mode, float p_fParam )const
 	{
 		m_pfnPixelStoref( uint32_t( p_mode ), p_fParam );
 		return glCheckError( *this, "glPixelStoref" );
 	}
 
-	bool OpenGl::TexStorage1D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width )const
+	bool OpenGl::TexStorage1D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width )const
 	{
-		m_pfnTexStorage1D( target, levels, uint32_t( internalformat ), width );
+		m_pfnTexStorage1D( uint32_t( target ), levels, uint32_t( internalformat ), width );
 		return glCheckError( *this, "glTexStorage1D" );
 	}
 
-	bool OpenGl::TexStorage2D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const
+	bool OpenGl::TexStorage2D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const
 	{
-		m_pfnTexStorage2D( target, levels, uint32_t( internalformat ), width, height );
+		m_pfnTexStorage2D( uint32_t( target ), levels, uint32_t( internalformat ), width, height );
 		return glCheckError( *this, "glTexStorage2D" );
 	}
 
-	bool OpenGl::TexStorage3D( GLenum target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const
+	bool OpenGl::TexStorage3D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const
 	{
-		m_pfnTexStorage3D( target, levels, uint32_t( internalformat ), width, height, depth );
+		m_pfnTexStorage3D( uint32_t( target ), levels, uint32_t( internalformat ), width, height, depth );
 		return glCheckError( *this, "glTexStorage3D" );
 	}
 
-	bool OpenGl::TexStorage2DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
+	bool OpenGl::TexStorage2DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
 	{
-		m_pfnTexStorage2DMultisample( target, samples, uint32_t( internalformat ), width, height, fixedsamplelocations );
+		m_pfnTexStorage2DMultisample( uint32_t( target ), samples, uint32_t( internalformat ), width, height, fixedsamplelocations );
 		return glCheckError( *this, "glTexStorage2DMultisample" );
 	}
 
-	bool OpenGl::TexStorage3DMultisample( GLenum target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
+	bool OpenGl::TexStorage3DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
 	{
-		m_pfnTexStorage3DMultisample( target, samples, uint32_t( internalformat ), width, height, depth, fixedsamplelocations );
+		m_pfnTexStorage3DMultisample( uint32_t( target ), samples, uint32_t( internalformat ), width, height, depth, fixedsamplelocations );
 		return glCheckError( *this, "glTexStorage3DMultisample" );
 	}
 
@@ -1509,27 +1509,27 @@ namespace GlRender
 		return glCheckError( *this, "glBindSampler" );
 	}
 
-	bool OpenGl::GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, uint32_t * params )const
+	bool OpenGl::GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, uint32_t * params )const
 	{
 		m_pfnGetSamplerParameteruiv( sampler, uint32_t( pname ), params );
 		return glCheckError( *this, "glGetSamplerParameterIuiv" );
 	}
 
-	bool OpenGl::GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float * params )const
+	bool OpenGl::GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float * params )const
 	{
 		m_pfnGetSamplerParameterfv( sampler, uint32_t( pname ), params );
 		return glCheckError( *this, "glGetSamplerParameterfv" );
 	}
 
-	bool OpenGl::GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int * params )const
+	bool OpenGl::GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int * params )const
 	{
 		m_pfnGetSamplerParameteriv( sampler, uint32_t( pname ), params );
 		return glCheckError( *this, "glGetSamplerParameteriv" );
 	}
 
-	bool OpenGl::SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const uint32_t * params )const
+	bool OpenGl::SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const uint32_t * params )const
 	{
-		if ( pname != eGL_SAMPLER_PARAMETER_MAXANISOTROPY || m_bHasAnisotropic )
+		if ( pname != GlSamplerParameter::eMaxAnisotropy || m_bHasAnisotropic )
 		{
 			m_pfnSamplerParameteruiv( sampler, uint32_t( pname ), params );
 			return glCheckError( *this, "glSamplerParameterIuiv" );
@@ -1540,9 +1540,9 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float param )const
+	bool OpenGl::SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float param )const
 	{
-		if ( pname != eGL_SAMPLER_PARAMETER_MAXANISOTROPY || m_bHasAnisotropic )
+		if ( pname != GlSamplerParameter::eMaxAnisotropy || m_bHasAnisotropic )
 		{
 			m_pfnSamplerParameterf( sampler, uint32_t( pname ), param );
 			return glCheckError( *this, "glSamplerParameterf" );
@@ -1553,9 +1553,9 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const float * params )const
+	bool OpenGl::SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const float * params )const
 	{
-		if ( pname != eGL_SAMPLER_PARAMETER_MAXANISOTROPY || m_bHasAnisotropic )
+		if ( pname != GlSamplerParameter::eMaxAnisotropy || m_bHasAnisotropic )
 		{
 			m_pfnSamplerParameterfv( sampler, uint32_t( pname ), params );
 			return glCheckError( *this, "glSamplerParameterfv" );
@@ -1566,9 +1566,9 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int param )const
+	bool OpenGl::SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int param )const
 	{
-		if ( pname != eGL_SAMPLER_PARAMETER_MAXANISOTROPY || m_bHasAnisotropic )
+		if ( pname != GlSamplerParameter::eMaxAnisotropy || m_bHasAnisotropic )
 		{
 			m_pfnSamplerParameteri( sampler, uint32_t( pname ), param );
 			return glCheckError( *this, "glSamplerParameteri" );
@@ -1579,9 +1579,9 @@ namespace GlRender
 		}
 	}
 
-	bool OpenGl::SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const int * params )const
+	bool OpenGl::SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const int * params )const
 	{
-		if ( pname != eGL_SAMPLER_PARAMETER_MAXANISOTROPY || m_bHasAnisotropic )
+		if ( pname != GlSamplerParameter::eMaxAnisotropy || m_bHasAnisotropic )
 		{
 			m_pfnSamplerParameteriv( sampler, uint32_t( pname ), params );
 			return glCheckError( *this, "glSamplerParameteriv" );
@@ -1635,12 +1635,12 @@ namespace GlRender
 		return m_pBufFunctions->CopyBufferSubData( readtarget, writetarget, readoffset, writeoffset, size );
 	}
 
-	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, int * params )const
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, GlBufferParameter pname, int * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
 
-	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool OpenGl::GetBufferParameter( GlBufferTarget p_target, GlBufferParameter pname, uint64_t * params )const
 	{
 		return m_pBufFunctions->GetBufferParameter( p_target, pname, params );
 	}
@@ -1665,7 +1665,7 @@ namespace GlRender
 		return m_pBufFunctions->FlushMappedBufferRange( p_target, offset, length );
 	}
 
-	bool OpenGl::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )const
+	bool OpenGl::BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const
 	{
 		return m_pBufFunctions->BufferAddressRange( pname, index, address, length );
 	}
@@ -1720,7 +1720,7 @@ namespace GlRender
 		return m_pBufFunctions->VertexAttribIFormat( index, size, type, stride );
 	}
 
-	bool OpenGl::MakeBufferResident( GlBufferTarget target, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool OpenGl::MakeBufferResident( GlBufferTarget target, GlAccessType access )const
 	{
 		return m_pBufFunctions->MakeBufferResident( target, access );
 	}
@@ -1735,7 +1735,7 @@ namespace GlRender
 		return m_pBufFunctions->IsBufferResident( target );
 	}
 
-	bool OpenGl::MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access )const
+	bool OpenGl::MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const
 	{
 		return m_pBufFunctions->MakeNamedBufferResident( buffer, access );
 	}
@@ -1750,7 +1750,7 @@ namespace GlRender
 		return m_pBufFunctions->IsNamedBufferResident( buffer );
 	}
 
-	bool OpenGl::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )const
+	bool OpenGl::GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname, uint64_t * params )const
 	{
 		return m_pBufFunctions->GetNamedBufferParameter( buffer, pname, params );
 	}
@@ -1803,7 +1803,7 @@ namespace GlRender
 		return glCheckError( *this, "glEndTransformFeedback" );
 	}
 
-	bool OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, eGL_ATTRIBS_LAYOUT bufferMode )const
+	bool OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode )const
 	{
 		m_pfnTransformFeedbackVaryings( program, count, varyings, bufferMode );
 		return glCheckError( *this, "glTransformFeedbackVaryings" );
@@ -1910,8 +1910,8 @@ namespace GlRender
 		bool l_return = true;
 		int l_iMaxSamples;
 		int l_iMaxSize;
-		OpenGl::GetIntegerv( GlMax::Samples, &l_iMaxSamples );
-		OpenGl::GetIntegerv( GlMax::RenderbufferSize, &l_iMaxSize );
+		OpenGl::GetIntegerv( GlMax::eSamples, &l_iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &l_iMaxSize );
 
 		if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
 		{
@@ -1949,8 +1949,8 @@ namespace GlRender
 		bool l_return = true;
 		int l_iMaxSamples;
 		int l_iMaxSize;
-		OpenGl::GetIntegerv( GlMax::Samples, &l_iMaxSamples );
-		OpenGl::GetIntegerv( GlMax::RenderbufferSize, &l_iMaxSize );
+		OpenGl::GetIntegerv( GlMax::eSamples, &l_iMaxSamples );
+		OpenGl::GetIntegerv( GlMax::eRenderbufferSize, &l_iMaxSize );
 
 		if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
 		{
@@ -2019,21 +2019,21 @@ namespace GlRender
 
 		if ( !glCheckError( *this, "glCheckFramebufferStatus" ) )
 		{
-			l_return = GlFramebufferStatus::Invalid;
+			l_return = GlFramebufferStatus::eInvalid;
 		}
 
 		return l_return;
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, GlInternal p_internalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( GlTextureStorageType p_target, int p_iSamples, GlInternal p_internalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
 	{
-		m_pfnTexImage2DMultisample( p_target, p_iSamples, uint32_t( p_internalFormat ), p_iWidth, p_iHeight, p_bFixedSampleLocations );
+		m_pfnTexImage2DMultisample( uint32_t( p_target ), p_iSamples, uint32_t( p_internalFormat ), p_iWidth, p_iHeight, p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( GlTextureStorageType p_target, int p_iSamples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
 	{
-		m_pfnTexImage2DMultisample( p_target, p_iSamples, uint32_t( p_internalFormat ), p_size.width(), p_size.height(), p_bFixedSampleLocations );
+		m_pfnTexImage2DMultisample( uint32_t( p_target ), p_iSamples, uint32_t( p_internalFormat ), p_size.width(), p_size.height(), p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );
 	}
 
@@ -2587,39 +2587,39 @@ namespace GlRender
 		return glCheckError( *this, "glProgramParameteri" );
 	}
 
-	bool OpenGl::GetProgramInterfaceInfos( uint32_t program, eGLSL_INTERFACE programInterface, eGLSL_DATA_NAME name, int * params )
+	bool OpenGl::GetProgramInterfaceInfos( uint32_t program, GlslInterface programInterface, GlslDataName name, int * params )
 	{
-		m_pfnGetProgramInterfaceiv( program, programInterface, name, params );
+		m_pfnGetProgramInterfaceiv( program, uint32_t( programInterface ), uint32_t( name ), params );
 		return glCheckError( *this, "glGetProgramInterfaceiv" );
 	}
 
-	int OpenGl::GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+	int OpenGl::GetProgramResourceIndex( uint32_t program, GlslInterface programInterface, char const * const name )
 	{
-		m_pfnGetProgramResourceIndex( program, programInterface, name );
+		m_pfnGetProgramResourceIndex( program, uint32_t( programInterface ), name );
 		return glCheckError( *this, "glGetProgramResourceIndex" );
 	}
 
-	int OpenGl::GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+	int OpenGl::GetProgramResourceLocation( uint32_t program, GlslInterface programInterface, char const * const name )
 	{
-		m_pfnGetProgramResourceLocation( program, programInterface, name );
+		m_pfnGetProgramResourceLocation( program, uint32_t( programInterface ), name );
 		return glCheckError( *this, "glGetProgramResourceLocation" );
 	}
 
-	int OpenGl::GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+	int OpenGl::GetProgramResourceLocationIndex( uint32_t program, GlslInterface programInterface, char const * const name )
 	{
-		m_pfnGetProgramResourceLocationIndex( program, programInterface, name );
+		m_pfnGetProgramResourceLocationIndex( program, uint32_t( programInterface ), name );
 		return glCheckError( *this, "glGetProgramResourceLocationIndex" );
 	}
 
-	bool OpenGl::GetProgramResourceName( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int bufSize, int * length, char * name )
+	bool OpenGl::GetProgramResourceName( uint32_t program, GlslInterface programInterface, uint32_t index, int bufSize, int * length, char * name )
 	{
-		m_pfnGetProgramResourceName( program, programInterface, index, bufSize, length, name );
+		m_pfnGetProgramResourceName( program, uint32_t( programInterface ), index, bufSize, length, name );
 		return glCheckError( *this, "glGetProgramResourceName" );
 	}
 
-	bool OpenGl::GetProgramResourceInfos( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params )
+	bool OpenGl::GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params )
 	{
-		m_pfnGetProgramResourceiv( program, programInterface, index, propCount, props, bufSize, length, params );
+		m_pfnGetProgramResourceiv( program, uint32_t( programInterface ), index, propCount, props, bufSize, length, params );
 		return glCheckError( *this, "m_pfnGetProgramResourceiv" );
 	}
 
@@ -2702,45 +2702,45 @@ namespace GlRender
 		return glCheckError( *this, "glIsQuery" ) && l_return != 0;
 	}
 
-	bool OpenGl::BeginQuery( eGL_QUERY p_target, uint32_t p_query )const
+	bool OpenGl::BeginQuery( GlQueryType p_target, uint32_t p_query )const
 	{
-		m_pfnBeginQuery( p_target, p_query );
+		m_pfnBeginQuery( uint32_t( p_target ), p_query );
 		return glCheckError( *this, "glBeginQuery" );
 	}
 
-	bool OpenGl::EndQuery( eGL_QUERY p_target )const
+	bool OpenGl::EndQuery( GlQueryType p_target )const
 	{
-		m_pfnEndQuery( p_target );
+		m_pfnEndQuery( uint32_t( p_target ) );
 		return glCheckError( *this, "glEndQuery" );
 	}
 
-	bool OpenGl::QueryCounter( uint32_t p_id, eGL_QUERY p_target )const
+	bool OpenGl::QueryCounter( uint32_t p_id, GlQueryType p_target )const
 	{
-		m_pfnQueryCounter( p_id, p_target );
+		m_pfnQueryCounter( p_id, uint32_t( p_target ) );
 		return glCheckError( *this, "glQueryCounter" );
 	}
 
-	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int32_t * p_params )const
+	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int32_t * p_params )const
 	{
-		m_pfnGetQueryObjectiv( p_id, p_name, p_params );
+		m_pfnGetQueryObjectiv( p_id, uint32_t( p_name ), p_params );
 		return glCheckError( *this, "glGetQueryObjectiv" );
 	}
 
-	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint32_t * p_params )const
+	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint32_t * p_params )const
 	{
-		m_pfnGetQueryObjectuiv( p_id, p_name, p_params );
+		m_pfnGetQueryObjectuiv( p_id, uint32_t( p_name ), p_params );
 		return glCheckError( *this, "glGetQueryObjectuiv" );
 	}
 
-	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int64_t * p_params )const
+	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int64_t * p_params )const
 	{
-		m_pfnGetQueryObjecti64v( p_id, p_name, p_params );
+		m_pfnGetQueryObjecti64v( p_id, uint32_t( p_name ), p_params );
 		return glCheckError( *this, "glGetQueryObjecti64v" );
 	}
 
-	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint64_t * p_params )const
+	bool OpenGl::GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint64_t * p_params )const
 	{
-		m_pfnGetQueryObjectui64v( p_id, p_name, p_params );
+		m_pfnGetQueryObjectui64v( p_id, uint32_t( p_name ), p_params );
 		return glCheckError( *this, "glGetQueryObjectui64v" );
 	}
 

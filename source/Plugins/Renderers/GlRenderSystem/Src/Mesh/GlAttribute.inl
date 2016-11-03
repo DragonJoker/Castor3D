@@ -6,35 +6,35 @@ namespace GlRender
 
 	template <> struct GlTyper< int >
 	{
-		enum { Value = GlType::Int };
+		enum { Value = GlType::eInt };
 	};
 	template <> struct GlTyper< uint32_t >
 	{
-		enum { Value = GlType::UnsignedInt };
+		enum { Value = GlType::eUnsignedInt };
 	};
 	template <> struct GlTyper< short >
 	{
-		enum { Value = GlType::Short };
+		enum { Value = GlType::eShort };
 	};
 	template <> struct GlTyper< uint16_t >
 	{
-		enum { Value = GlType::UnsignedShort };
+		enum { Value = GlType::eUnsignedShort };
 	};
 	template <> struct GlTyper< char >
 	{
-		enum { Value = GlType::Byte };
+		enum { Value = GlType::eByte };
 	};
 	template <> struct GlTyper< uint8_t >
 	{
-		enum { Value = GlType::UnsignedByte };
+		enum { Value = GlType::eUnsignedByte };
 	};
 	template <> struct GlTyper< float >
 	{
-		enum { Value = GlType::Float };
+		enum { Value = GlType::eFloat };
 	};
 	template <> struct GlTyper< double >
 	{
-		enum { Value = GlType::Double };
+		enum { Value = GlType::eDouble };
 	};
 
 	//**********************************************************************************************
@@ -70,7 +70,7 @@ namespace GlRender
 		uint32_t l_offset = m_offset;
 		const uint32_t l_off = Rows * sizeof( T );
 
-		if ( m_glType == GlType::Int )
+		if ( m_glType == GlType::eInt )
 		{
 			for ( int i = 0; i < Columns && l_return; ++i )
 			{

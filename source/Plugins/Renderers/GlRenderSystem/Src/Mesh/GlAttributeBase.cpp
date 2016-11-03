@@ -35,9 +35,9 @@ namespace GlRender
 	{
 		bool l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
 
-		if ( m_glType == GlType::Float
-			 || m_glType == GlType::Double
-			 || m_glType == GlType::HalfFloat )
+		if ( m_glType == GlType::eFloat
+			 || m_glType == GlType::eDouble
+			 || m_glType == GlType::eHalfFloat )
 		{
 			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}

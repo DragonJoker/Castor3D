@@ -37,16 +37,16 @@ namespace GlRender
 				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mip ) );
 				DoAdjustMinMipModes( l_minMode, l_mipMode );
 
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_LODBIAS, float( GetLodBias() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_UWRAP, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::U ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_VWRAP, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::V ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_WWRAP, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::W ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MINFILTER, int( l_minMode ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAGFILTER, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAXANISOTROPY, float( GetMaxAnisotropy() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREMODE, int( GetOpenGl().Get( GetComparisonMode() ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREFUNC, int( GetOpenGl().Get( GetComparisonFunc() ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eLODBias, float( GetLodBias() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::U ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::V ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::W ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( l_minMode ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eBorderColour, GetBorderColour().const_ptr() );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMaxAnisotropy, float( GetMaxAnisotropy() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareMode, int( GetOpenGl().Get( GetComparisonMode() ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareFunc, int( GetOpenGl().Get( GetComparisonFunc() ) ) );
 			}
 		}
 
@@ -69,28 +69,28 @@ namespace GlRender
 
 	void GlSampler::DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )
 	{
-		if ( p_mip != GlInterpolationMode::Nearest )
+		if ( p_mip != GlInterpolationMode::eNearest )
 		{
-			if ( p_min == GlInterpolationMode::Linear )
+			if ( p_min == GlInterpolationMode::eLinear )
 			{
-				if ( p_mip == GlInterpolationMode::Linear )
+				if ( p_mip == GlInterpolationMode::eLinear )
 				{
-					p_min = GlInterpolationMode::LinearMipmapLinear;
+					p_min = GlInterpolationMode::eLinearMipmapLinear;
 				}
 				else
 				{
-					p_min = GlInterpolationMode::LinearMipmapNearest;
+					p_min = GlInterpolationMode::eLinearMipmapNearest;
 				}
 			}
 			else
 			{
-				if ( p_mip == GlInterpolationMode::Linear )
+				if ( p_mip == GlInterpolationMode::eLinear )
 				{
-					p_min = GlInterpolationMode::NearestMipmapLinear;
+					p_min = GlInterpolationMode::eNearestMipmapLinear;
 				}
 				else
 				{
-					p_min = GlInterpolationMode::NearestMipmapNearest;
+					p_min = GlInterpolationMode::eNearestMipmapNearest;
 				}
 			}
 		}

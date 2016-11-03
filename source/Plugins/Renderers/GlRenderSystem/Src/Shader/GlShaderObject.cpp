@@ -97,7 +97,7 @@ namespace GlRender
 
 				if ( l_return )
 				{
-					l_return = GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::Compile, &l_compiled );
+					l_return = GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eCompile, &l_compiled );
 
 					if ( !l_return )
 					{
@@ -209,7 +209,7 @@ namespace GlRender
 		String l_log;
 		int l_infologLength = 0;
 		int l_charsWritten = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::InfoLogLength, &l_infologLength );
+		GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eInfoLogLength, &l_infologLength );
 
 		if ( l_infologLength > 0 )
 		{

@@ -65,11 +65,11 @@ namespace GlRender
 		bool l_return = DoBindTransformLayout();
 		ENSURE( GetGlName() != GlInvalidIndex );
 		int l_attached = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::AttachedShaders, &l_attached );
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &l_attached );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
 		l_return &= GetOpenGl().LinkProgram( GetGlName() );
 		int l_linked = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::Link, &l_linked );
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
 		m_linkerLog = DoRetrieveLinkerLog();
 
@@ -360,7 +360,7 @@ namespace GlRender
 		else
 		{
 			int l_length = 0;
-			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::InfoLogLength, &l_length );
+			GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eInfoLogLength, &l_length );
 
 			if ( l_length > 1 )
 			{
@@ -392,7 +392,7 @@ namespace GlRender
 				l_varyings.push_back( l_element.m_name.c_str() );
 			}
 
-			l_return = GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), eGL_ATTRIBS_LAYOUT_INTERLEAVED );
+			l_return = GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), GlAttributeLayout::eInterleaved );
 		}
 
 		return l_return;

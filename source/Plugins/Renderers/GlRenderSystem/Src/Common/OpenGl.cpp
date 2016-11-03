@@ -175,281 +175,281 @@ namespace GlRender
 		GlslStrings[l_index++] = cuT( "[e06] Compiler log is not available!" );
 		GlslStrings[l_index] = cuT( "[Empty]" );
 
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Points )] = GlTopology::Points;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Lines )] = GlTopology::Lines;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::LineLoop )] = GlTopology::LineLoop;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::LineStrip )] = GlTopology::LineStrip;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Triangles )] = GlTopology::Triangles;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleStrips )] = GlTopology::TriangleStrip;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleFan )] = GlTopology::TriangleFan;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Quads )] = GlTopology::Quads;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::QuadStrips )] = GlTopology::QuadStrip;
-		PrimitiveTypes[uint32_t( Castor3D::Topology::Polygon )] = GlTopology::Polygon;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Points )] = GlTopology::ePoints;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Lines )] = GlTopology::eLines;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::LineLoop )] = GlTopology::eLineLoop;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::LineStrip )] = GlTopology::eLineStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Triangles )] = GlTopology::eTriangles;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleStrips )] = GlTopology::eTriangleStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::TriangleFan )] = GlTopology::eTriangleFan;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Quads )] = GlTopology::eQuads;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::QuadStrips )] = GlTopology::eQuadStrip;
+		PrimitiveTypes[uint32_t( Castor3D::Topology::Polygon )] = GlTopology::ePolygon;
 
-		TextureDimensions[uint32_t( Castor3D::TextureType::Buffer )] = GlTexDim::Buffer;
-		TextureDimensions[uint32_t( Castor3D::TextureType::OneDimension )] = GlTexDim::OneDimension;
-		TextureDimensions[uint32_t( Castor3D::TextureType::OneDimensionArray )] = GlTexDim::OneDimensionArray;
-		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensions )] = GlTexDim::TwoDimensions;
-		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsArray )] = GlTexDim::TwoDimensionsArray;
-		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsMS )] = GlTexDim::TwoDimensionsMS;
-		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsMSArray )] = GlTexDim::TwoDimensionsMSArray;
-		TextureDimensions[uint32_t( Castor3D::TextureType::ThreeDimensions )] = GlTexDim::ThreeDimensions;
-		TextureDimensions[uint32_t( Castor3D::TextureType::Cube )] = GlTexDim::Cube;
-		TextureDimensions[uint32_t( Castor3D::TextureType::CubeArray )] = GlTexDim::CubeArray;
+		TextureDimensions[uint32_t( Castor3D::TextureType::Buffer )] = GlTexDim::eBuffer;
+		TextureDimensions[uint32_t( Castor3D::TextureType::OneDimension )] = GlTexDim::e1D;
+		TextureDimensions[uint32_t( Castor3D::TextureType::OneDimensionArray )] = GlTexDim::e1DArray;
+		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensions )] = GlTexDim::e2D;
+		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsArray )] = GlTexDim::e2DArray;
+		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsMS )] = GlTexDim::e2DMS;
+		TextureDimensions[uint32_t( Castor3D::TextureType::TwoDimensionsMSArray )] = GlTexDim::e2DMSArray;
+		TextureDimensions[uint32_t( Castor3D::TextureType::ThreeDimensions )] = GlTexDim::e3D;
+		TextureDimensions[uint32_t( Castor3D::TextureType::Cube )] = GlTexDim::eCube;
+		TextureDimensions[uint32_t( Castor3D::TextureType::CubeArray )] = GlTexDim::eCubeArray;
 
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Always )] = GlComparator::Always;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Less )] = GlComparator::Less;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::LEqual )] = GlComparator::LEqual;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Equal )] = GlComparator::Equal;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::NEqual )] = GlComparator::NEqual;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::GEqual )] = GlComparator::GEqual;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Greater )] = GlComparator::Greater;
-		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Never )] = GlComparator::Never;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Always )] = GlComparator::eAlways;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Less )] = GlComparator::eLess;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::LEqual )] = GlComparator::eLEqual;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Equal )] = GlComparator::eEqual;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::NEqual )] = GlComparator::eNEqual;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::GEqual )] = GlComparator::eGEqual;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Greater )] = GlComparator::eGreater;
+		AlphaFuncs[uint32_t( Castor3D::ComparisonFunc::Never )] = GlComparator::eNever;
 
-		TextureWrapMode[uint32_t( Castor3D::WrapMode::Repeat )] = GlWrapMode::Repeat;
-		TextureWrapMode[uint32_t( Castor3D::WrapMode::MirroredRepeat )] = GlWrapMode::MirroredRepeat;
-		TextureWrapMode[uint32_t( Castor3D::WrapMode::ClampToBorder )] = GlWrapMode::ClampToBorder;
-		TextureWrapMode[uint32_t( Castor3D::WrapMode::ClampToEdge )] = GlWrapMode::ClampToEdge;
+		TextureWrapMode[uint32_t( Castor3D::WrapMode::Repeat )] = GlWrapMode::eRepeat;
+		TextureWrapMode[uint32_t( Castor3D::WrapMode::MirroredRepeat )] = GlWrapMode::eMirroredRepeat;
+		TextureWrapMode[uint32_t( Castor3D::WrapMode::ClampToBorder )] = GlWrapMode::eClampToBorder;
+		TextureWrapMode[uint32_t( Castor3D::WrapMode::ClampToEdge )] = GlWrapMode::eClampToEdge;
 
-		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Undefined )] = GlInterpolationMode::Nearest;
-		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Nearest )] = GlInterpolationMode::Nearest;
-		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Linear )] = GlInterpolationMode::Linear;
+		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Undefined )] = GlInterpolationMode::eNearest;
+		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Nearest )] = GlInterpolationMode::eNearest;
+		TextureInterpolation[uint32_t( Castor3D::InterpolationMode::Linear )] = GlInterpolationMode::eLinear;
 
-		BlendFactors[uint32_t( Castor3D::BlendOperand::Zero )] = GlBlendFactor::Zero;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::One )] = GlBlendFactor::One;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcColour )] = GlBlendFactor::SrcColour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrcColour )] = GlBlendFactor::InvSrcColour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::DstColour )] = GlBlendFactor::DstColour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvDstColour )] = GlBlendFactor::InvDstColour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcAlpha )] = GlBlendFactor::SrcAlpha;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrcAlpha )] = GlBlendFactor::InvSrcAlpha;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::DstAlpha )] = GlBlendFactor::DstAlpha;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvDstAlpha )] = GlBlendFactor::InvDstAlpha;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::Constant )] = GlBlendFactor::Constant;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvConstant )] = GlBlendFactor::InvConstant;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcAlphaSaturate )] = GlBlendFactor::SrcAlphaSaturate;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::Src1Colour )] = GlBlendFactor::Src1Colour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrc1Colour )] = GlBlendFactor::InvSrc1Colour;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::Src1Alpha )] = GlBlendFactor::Src1Alpha;
-		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrc1Alpha )] = GlBlendFactor::InvSrc1Alpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::Zero )] = GlBlendFactor::eZero;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::One )] = GlBlendFactor::eOne;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcColour )] = GlBlendFactor::eSrcColour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrcColour )] = GlBlendFactor::eInvSrcColour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::DstColour )] = GlBlendFactor::eDstColour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvDstColour )] = GlBlendFactor::eInvDstColour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcAlpha )] = GlBlendFactor::eSrcAlpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrcAlpha )] = GlBlendFactor::eInvSrcAlpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::DstAlpha )] = GlBlendFactor::eDstAlpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvDstAlpha )] = GlBlendFactor::eInvDstAlpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::Constant )] = GlBlendFactor::eConstant;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvConstant )] = GlBlendFactor::eInvConstant;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::SrcAlphaSaturate )] = GlBlendFactor::eSrcAlphaSaturate;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::Src1Colour )] = GlBlendFactor::eSrc1Colour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrc1Colour )] = GlBlendFactor::eInvSrc1Colour;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::Src1Alpha )] = GlBlendFactor::eSrc1Alpha;
+		BlendFactors[uint32_t( Castor3D::BlendOperand::InvSrc1Alpha )] = GlBlendFactor::eInvSrc1Alpha;
 
-		TextureArguments[uint32_t( Castor3D::BlendSource::Texture )] = GlBlendSource::Texture;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Texture0 )] = GlBlendSource::Texture0;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Texture1 )] = GlBlendSource::Texture1;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Texture2 )] = GlBlendSource::Texture2;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Texture3 )] = GlBlendSource::Texture3;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Constant )] = GlBlendSource::Constant;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Diffuse )] = GlBlendSource::Colour;
-		TextureArguments[uint32_t( Castor3D::BlendSource::Previous )] = GlBlendSource::Previous;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Texture )] = GlBlendSource::eTexture;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Texture0 )] = GlBlendSource::eTexture0;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Texture1 )] = GlBlendSource::eTexture1;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Texture2 )] = GlBlendSource::eTexture2;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Texture3 )] = GlBlendSource::eTexture3;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Constant )] = GlBlendSource::eConstant;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Diffuse )] = GlBlendSource::eColour;
+		TextureArguments[uint32_t( Castor3D::BlendSource::Previous )] = GlBlendSource::ePrevious;
 
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::NoBlend )] = GlBlendFunc::Modulate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::FirstArg )] = GlBlendFunc::Replace;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Add )] = GlBlendFunc::Add;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::AddSigned )] = GlBlendFunc::AddSigned;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Modulate )] = GlBlendFunc::Modulate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Interpolate )] = GlBlendFunc::Interpolate;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Subtract )] = GlBlendFunc::Subtract;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Dot3RGB )] = GlBlendFunc::Dot3RGB;
-		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Dot3RGBA )] = GlBlendFunc::Dot3RGBA;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::NoBlend )] = GlBlendFunc::eModulate;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::FirstArg )] = GlBlendFunc::eReplace;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Add )] = GlBlendFunc::eAdd;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::AddSigned )] = GlBlendFunc::eAddSigned;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Modulate )] = GlBlendFunc::eModulate;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Interpolate )] = GlBlendFunc::eInterpolate;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Subtract )] = GlBlendFunc::eSubtract;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Dot3RGB )] = GlBlendFunc::eDot3RGB;
+		RgbBlendFuncs[uint32_t( Castor3D::ColourBlendFunc::Dot3RGBA )] = GlBlendFunc::eDot3RGBA;
 
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::NoBlend )] = GlBlendFunc::Modulate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::FirstArg )] = GlBlendFunc::Replace;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Add )] = GlBlendFunc::Add;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::AddSigned )] = GlBlendFunc::AddSigned;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Modulate )] = GlBlendFunc::Modulate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Interpolate )] = GlBlendFunc::Interpolate;
-		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Subtract )] = GlBlendFunc::Subtract;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::NoBlend )] = GlBlendFunc::eModulate;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::FirstArg )] = GlBlendFunc::eReplace;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Add )] = GlBlendFunc::eAdd;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::AddSigned )] = GlBlendFunc::eAddSigned;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Modulate )] = GlBlendFunc::eModulate;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Interpolate )] = GlBlendFunc::eInterpolate;
+		AlphaBlendFuncs[uint32_t( Castor3D::AlphaBlendFunc::Subtract )] = GlBlendFunc::eSubtract;
 
-		BlendOps[uint32_t( Castor3D::BlendOperation::Add )] = GlBlendOp::Add;
-		BlendOps[uint32_t( Castor3D::BlendOperation::Subtract )] = GlBlendOp::Subtract;
-		BlendOps[uint32_t( Castor3D::BlendOperation::RevSubtract )] = GlBlendOp::RevSubtract;
-		BlendOps[uint32_t( Castor3D::BlendOperation::Min )] = GlBlendOp::Min;
-		BlendOps[uint32_t( Castor3D::BlendOperation::Max )] = GlBlendOp::Max;
+		BlendOps[uint32_t( Castor3D::BlendOperation::Add )] = GlBlendOp::eAdd;
+		BlendOps[uint32_t( Castor3D::BlendOperation::Subtract )] = GlBlendOp::eSubtract;
+		BlendOps[uint32_t( Castor3D::BlendOperation::RevSubtract )] = GlBlendOp::eRevSubtract;
+		BlendOps[uint32_t( Castor3D::BlendOperation::Min )] = GlBlendOp::eMin;
+		BlendOps[uint32_t( Castor3D::BlendOperation::Max )] = GlBlendOp::eMax;
 
-		PixelFormats[uint32_t( Castor::PixelFormat::L8 )] = PixelFmt( GlFormat::Red, GlInternal::R8, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::L16F32F )] = PixelFmt( GlFormat::Red, GlInternal::R16F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::L32F )] = PixelFmt( GlFormat::Red, GlInternal::R32F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8L8 )] = PixelFmt( GlFormat::RG, GlInternal::RG16, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::AL16F32F )] = PixelFmt( GlFormat::RG, GlInternal::RG16F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::AL32F )] = PixelFmt( GlFormat::RG, GlInternal::RG32F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = PixelFmt( GlFormat::RGBA, GlInternal::RGB5A1, GlType::UnsignedShort1555Rev );
-		PixelFormats[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = PixelFmt( GlFormat::RGBA, GlInternal::RGBA4, GlType::UnsignedShort4444Rev );
-		PixelFormats[uint32_t( Castor::PixelFormat::R5G6B5 )] = PixelFmt( GlFormat::RGB, GlInternal::RGB16, GlType::UnsignedShort565Rev );
-		PixelFormats[uint32_t( Castor::PixelFormat::R8G8B8 )] = PixelFmt( GlFormat::RGB, GlInternal::RGB8, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::B8G8R8 )] = PixelFmt( GlFormat::BGR, GlInternal::RGB8, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = PixelFmt( GlFormat::RGBA, GlInternal::RGBA8, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = PixelFmt( GlFormat::BGRA, GlInternal::RGBA8, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F )] = PixelFmt( GlFormat::RGB, GlInternal::RGB16F, GlType::HalfFloat );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F )] = PixelFmt( GlFormat::RGBA, GlInternal::RGBA16F, GlType::HalfFloat );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F32F )] = PixelFmt( GlFormat::RGB, GlInternal::RGB16F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F32F )] = PixelFmt( GlFormat::RGBA, GlInternal::RGBA16F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGB32F )] = PixelFmt( GlFormat::RGB, GlInternal::RGB32F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::RGBA32F )] = PixelFmt( GlFormat::RGB, GlInternal::RGBA32F, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC1 )] = PixelFmt( GlFormat::RGB, GlInternal::DXT1, GlType::Default );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC3 )] = PixelFmt( GlFormat::RGBA, GlInternal::DXT3, GlType::Default );
-		PixelFormats[uint32_t( Castor::PixelFormat::DXTC5 )] = PixelFmt( GlFormat::RGBA, GlInternal::DXT5, GlType::Default );
-		PixelFormats[uint32_t( Castor::PixelFormat::YUY2 )] = PixelFmt( GlFormat( 0 ), GlInternal( 0 ), GlType::Default );
-		PixelFormats[uint32_t( Castor::PixelFormat::D16 )] = PixelFmt( GlFormat::Depth, GlInternal::D16, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::D24 )] = PixelFmt( GlFormat::Depth, GlInternal::D24, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::D24S8 )] = PixelFmt( GlFormat::DepthStencil, GlInternal::D24S8, GlType::UnsignedInt248 );
-		PixelFormats[uint32_t( Castor::PixelFormat::D32 )] = PixelFmt( GlFormat::Depth, GlInternal::D32, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::D32F )] = PixelFmt( GlFormat::Depth, GlInternal::D32, GlType::Float );
-		PixelFormats[uint32_t( Castor::PixelFormat::S1 )] = PixelFmt( GlFormat::Stencil, GlInternal::S1, GlType::UnsignedByte );
-		PixelFormats[uint32_t( Castor::PixelFormat::S8 )] = PixelFmt( GlFormat::Stencil, GlInternal::S8, GlType::UnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::L8 )] = PixelFmt( GlFormat::eRed, GlInternal::eR8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::L16F32F )] = PixelFmt( GlFormat::eRed, GlInternal::eR16F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::L32F )] = PixelFmt( GlFormat::eRed, GlInternal::eR32F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8L8 )] = PixelFmt( GlFormat::eRG, GlInternal::eRG16, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::AL16F32F )] = PixelFmt( GlFormat::eRG, GlInternal::eRG16F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::AL32F )] = PixelFmt( GlFormat::eRG, GlInternal::eRG32F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGB5A1, GlType::eUnsignedShort1555Rev );
+		PixelFormats[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA4, GlType::eUnsignedShort4444Rev );
+		PixelFormats[uint32_t( Castor::PixelFormat::R5G6B5 )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16, GlType::eUnsignedShort565Rev );
+		PixelFormats[uint32_t( Castor::PixelFormat::R8G8B8 )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::B8G8R8 )] = PixelFmt( GlFormat::eBGR, GlInternal::eRGB8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = PixelFmt( GlFormat::eBGRA, GlInternal::eRGBA8, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16F, GlType::eHalfFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA16F, GlType::eHalfFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB16F32F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB16F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA16F32F )] = PixelFmt( GlFormat::eRGBA, GlInternal::eRGBA16F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGB32F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGB32F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::RGBA32F )] = PixelFmt( GlFormat::eRGB, GlInternal::eRGBA32F, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC1 )] = PixelFmt( GlFormat::eRGB, GlInternal::eDXT1, GlType::eDefault );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC3 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eDXT3, GlType::eDefault );
+		PixelFormats[uint32_t( Castor::PixelFormat::DXTC5 )] = PixelFmt( GlFormat::eRGBA, GlInternal::eDXT5, GlType::eDefault );
+		PixelFormats[uint32_t( Castor::PixelFormat::YUY2 )] = PixelFmt( GlFormat( 0 ), GlInternal( 0 ), GlType::eDefault );
+		PixelFormats[uint32_t( Castor::PixelFormat::D16 )] = PixelFmt( GlFormat::eDepth, GlInternal::eD16, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::D24 )] = PixelFmt( GlFormat::eDepth, GlInternal::eD24, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::D24S8 )] = PixelFmt( GlFormat::eDepthStencil, GlInternal::eD24S8, GlType::eUnsignedInt248 );
+		PixelFormats[uint32_t( Castor::PixelFormat::D32 )] = PixelFmt( GlFormat::eDepth, GlInternal::eD32, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::D32F )] = PixelFmt( GlFormat::eDepth, GlInternal::eD32, GlType::eFloat );
+		PixelFormats[uint32_t( Castor::PixelFormat::S1 )] = PixelFmt( GlFormat::eStencil, GlInternal::eS1, GlType::eUnsignedByte );
+		PixelFormats[uint32_t( Castor::PixelFormat::S8 )] = PixelFmt( GlFormat::eStencil, GlInternal::eS8, GlType::eUnsignedByte );
 
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Vertex )] = GlShaderType::Vertex;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Hull )] = GlShaderType::TessControl;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Domain )] = GlShaderType::TessEvaluation;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Geometry )] = GlShaderType::Geometry;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Pixel )] = GlShaderType::Fragment;
-		ShaderTypes[uint32_t( Castor3D::ShaderType::Compute )] = GlShaderType::Compute;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Vertex )] = GlShaderType::eVertex;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Hull )] = GlShaderType::eTessControl;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Domain )] = GlShaderType::eTessEvaluation;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Geometry )] = GlShaderType::eGeometry;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Pixel )] = GlShaderType::eFragment;
+		ShaderTypes[uint32_t( Castor3D::ShaderType::Compute )] = GlShaderType::eCompute;
 
-		Internals[uint32_t( Castor::PixelFormat::L8 )] = GlInternal::R16;
-		Internals[uint32_t( Castor::PixelFormat::L16F32F )] = GlInternal::R16F;
-		Internals[uint32_t( Castor::PixelFormat::L32F )] = GlInternal::R32F;
-		Internals[uint32_t( Castor::PixelFormat::A8L8 )] = GlInternal::RG16;
-		Internals[uint32_t( Castor::PixelFormat::AL16F32F )] = GlInternal::RG16F;
-		Internals[uint32_t( Castor::PixelFormat::AL32F )] = GlInternal::RG32F;
-		Internals[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = GlInternal::RGBA16UI;
-		Internals[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = GlInternal::RGBA16UI;
-		Internals[uint32_t( Castor::PixelFormat::R5G6B5 )] = GlInternal::RGB16UI;
-		Internals[uint32_t( Castor::PixelFormat::R8G8B8 )] = GlInternal::RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::B8G8R8 )] = GlInternal::RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = GlInternal::RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = GlInternal::RGBA32UI;
-		Internals[uint32_t( Castor::PixelFormat::RGB16F )] = GlInternal::RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA16F )] = GlInternal::RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGB16F32F )] = GlInternal::RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA16F32F )] = GlInternal::RGBA16F;
-		Internals[uint32_t( Castor::PixelFormat::RGB32F )] = GlInternal::RGBA32F;
-		Internals[uint32_t( Castor::PixelFormat::RGBA32F )] = GlInternal::RGBA32F;
+		Internals[uint32_t( Castor::PixelFormat::L8 )] = GlInternal::eR16;
+		Internals[uint32_t( Castor::PixelFormat::L16F32F )] = GlInternal::eR16F;
+		Internals[uint32_t( Castor::PixelFormat::L32F )] = GlInternal::eR32F;
+		Internals[uint32_t( Castor::PixelFormat::A8L8 )] = GlInternal::eRG16;
+		Internals[uint32_t( Castor::PixelFormat::AL16F32F )] = GlInternal::eRG16F;
+		Internals[uint32_t( Castor::PixelFormat::AL32F )] = GlInternal::eRG32F;
+		Internals[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = GlInternal::eRGBA16UI;
+		Internals[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = GlInternal::eRGBA16UI;
+		Internals[uint32_t( Castor::PixelFormat::R5G6B5 )] = GlInternal::eRGB16UI;
+		Internals[uint32_t( Castor::PixelFormat::R8G8B8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::B8G8R8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = GlInternal::eRGBA32UI;
+		Internals[uint32_t( Castor::PixelFormat::RGB16F )] = GlInternal::eRGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA16F )] = GlInternal::eRGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGB16F32F )] = GlInternal::eRGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA16F32F )] = GlInternal::eRGBA16F;
+		Internals[uint32_t( Castor::PixelFormat::RGB32F )] = GlInternal::eRGBA32F;
+		Internals[uint32_t( Castor::PixelFormat::RGBA32F )] = GlInternal::eRGBA32F;
 
-		Attachments[uint32_t( Castor3D::AttachmentPoint::None )] = GlAttachmentPoint::None;
-		Attachments[uint32_t( Castor3D::AttachmentPoint::Colour )] = GlAttachmentPoint::Colour0;
-		Attachments[uint32_t( Castor3D::AttachmentPoint::Depth )] = GlAttachmentPoint::Depth;
-		Attachments[uint32_t( Castor3D::AttachmentPoint::Stencil )] = GlAttachmentPoint::Stencil;
+		Attachments[uint32_t( Castor3D::AttachmentPoint::None )] = GlAttachmentPoint::eNone;
+		Attachments[uint32_t( Castor3D::AttachmentPoint::Colour )] = GlAttachmentPoint::eColour0;
+		Attachments[uint32_t( Castor3D::AttachmentPoint::Depth )] = GlAttachmentPoint::eDepth;
+		Attachments[uint32_t( Castor3D::AttachmentPoint::Stencil )] = GlAttachmentPoint::eStencil;
 
-		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Draw )] = GlFrameBufferMode::Draw;
-		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Read )] = GlFrameBufferMode::Read;
-		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Both )] = GlFrameBufferMode::Default;
+		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Draw )] = GlFrameBufferMode::eDraw;
+		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Read )] = GlFrameBufferMode::eRead;
+		FramebufferModes[uint32_t( Castor3D::FrameBufferTarget::Both )] = GlFrameBufferMode::eDefault;
 
-		RboStorages[uint32_t( Castor::PixelFormat::L8 )] = GlInternal::L8;
-		RboStorages[uint32_t( Castor::PixelFormat::L16F32F )] = GlInternal::R16F;
-		RboStorages[uint32_t( Castor::PixelFormat::L32F )] = GlInternal::R32F;
-		RboStorages[uint32_t( Castor::PixelFormat::A8L8 )] = GlInternal::L8A8;
-		RboStorages[uint32_t( Castor::PixelFormat::AL16F32F )] = GlInternal::RG16F;
-		RboStorages[uint32_t( Castor::PixelFormat::AL32F )] = GlInternal::RG32F;
-		RboStorages[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = GlInternal::RGB5A1;
-		RboStorages[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = GlInternal::RGBA4;
-		RboStorages[uint32_t( Castor::PixelFormat::R5G6B5 )] = GlInternal::RGB565;
-		RboStorages[uint32_t( Castor::PixelFormat::R8G8B8 )] = GlInternal::RGB8;
-		RboStorages[uint32_t( Castor::PixelFormat::B8G8R8 )] = GlInternal::RGB8;
-		RboStorages[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = GlInternal::RGBA8;
-		RboStorages[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = GlInternal::RGBA8;
-		RboStorages[uint32_t( Castor::PixelFormat::RGB16F )] = GlInternal::RGB16F;
-		RboStorages[uint32_t( Castor::PixelFormat::RGBA16F )] = GlInternal::RGBA16F;
-		RboStorages[uint32_t( Castor::PixelFormat::RGB16F32F )] = GlInternal::RGB16F;
-		RboStorages[uint32_t( Castor::PixelFormat::RGBA16F32F )] = GlInternal::RGBA16F;
-		RboStorages[uint32_t( Castor::PixelFormat::RGB32F )] = GlInternal::RGB32F;
-		RboStorages[uint32_t( Castor::PixelFormat::RGBA32F )] = GlInternal::RGBA32F;
-		RboStorages[uint32_t( Castor::PixelFormat::DXTC1 )] = GlInternal::DXT1;
-		RboStorages[uint32_t( Castor::PixelFormat::DXTC3 )] = GlInternal::DXT3;
-		RboStorages[uint32_t( Castor::PixelFormat::DXTC5 )] = GlInternal::DXT5;
+		RboStorages[uint32_t( Castor::PixelFormat::L8 )] = GlInternal::eL8;
+		RboStorages[uint32_t( Castor::PixelFormat::L16F32F )] = GlInternal::eR16F;
+		RboStorages[uint32_t( Castor::PixelFormat::L32F )] = GlInternal::eR32F;
+		RboStorages[uint32_t( Castor::PixelFormat::A8L8 )] = GlInternal::eL8A8;
+		RboStorages[uint32_t( Castor::PixelFormat::AL16F32F )] = GlInternal::eRG16F;
+		RboStorages[uint32_t( Castor::PixelFormat::AL32F )] = GlInternal::eRG32F;
+		RboStorages[uint32_t( Castor::PixelFormat::A1R5G5B5 )] = GlInternal::eRGB5A1;
+		RboStorages[uint32_t( Castor::PixelFormat::A4R4G4B4 )] = GlInternal::eRGBA4;
+		RboStorages[uint32_t( Castor::PixelFormat::R5G6B5 )] = GlInternal::eRGB565;
+		RboStorages[uint32_t( Castor::PixelFormat::R8G8B8 )] = GlInternal::eRGB8;
+		RboStorages[uint32_t( Castor::PixelFormat::B8G8R8 )] = GlInternal::eRGB8;
+		RboStorages[uint32_t( Castor::PixelFormat::A8R8G8B8 )] = GlInternal::eRGBA8;
+		RboStorages[uint32_t( Castor::PixelFormat::A8B8G8R8 )] = GlInternal::eRGBA8;
+		RboStorages[uint32_t( Castor::PixelFormat::RGB16F )] = GlInternal::eRGB16F;
+		RboStorages[uint32_t( Castor::PixelFormat::RGBA16F )] = GlInternal::eRGBA16F;
+		RboStorages[uint32_t( Castor::PixelFormat::RGB16F32F )] = GlInternal::eRGB16F;
+		RboStorages[uint32_t( Castor::PixelFormat::RGBA16F32F )] = GlInternal::eRGBA16F;
+		RboStorages[uint32_t( Castor::PixelFormat::RGB32F )] = GlInternal::eRGB32F;
+		RboStorages[uint32_t( Castor::PixelFormat::RGBA32F )] = GlInternal::eRGBA32F;
+		RboStorages[uint32_t( Castor::PixelFormat::DXTC1 )] = GlInternal::eDXT1;
+		RboStorages[uint32_t( Castor::PixelFormat::DXTC3 )] = GlInternal::eDXT3;
+		RboStorages[uint32_t( Castor::PixelFormat::DXTC5 )] = GlInternal::eDXT5;
 		RboStorages[uint32_t( Castor::PixelFormat::YUY2 )] = GlInternal( 0 );
-		RboStorages[uint32_t( Castor::PixelFormat::D16 )] = GlInternal::D16;
-		RboStorages[uint32_t( Castor::PixelFormat::D24 )] = GlInternal::D24;
-		RboStorages[uint32_t( Castor::PixelFormat::D24S8 )] = GlInternal::D24;
-		RboStorages[uint32_t( Castor::PixelFormat::D32 )] = GlInternal::D32;
-		RboStorages[uint32_t( Castor::PixelFormat::D32F )] = GlInternal::D32F;
-		RboStorages[uint32_t( Castor::PixelFormat::S1 )] = GlInternal::S1;
-		RboStorages[uint32_t( Castor::PixelFormat::S8 )] = GlInternal::S8;
+		RboStorages[uint32_t( Castor::PixelFormat::D16 )] = GlInternal::eD16;
+		RboStorages[uint32_t( Castor::PixelFormat::D24 )] = GlInternal::eD24;
+		RboStorages[uint32_t( Castor::PixelFormat::D24S8 )] = GlInternal::eD24;
+		RboStorages[uint32_t( Castor::PixelFormat::D32 )] = GlInternal::eD32;
+		RboStorages[uint32_t( Castor::PixelFormat::D32F )] = GlInternal::eD32F;
+		RboStorages[uint32_t( Castor::PixelFormat::S1 )] = GlInternal::eS1;
+		RboStorages[uint32_t( Castor::PixelFormat::S8 )] = GlInternal::eS8;
 
-		Buffers[uint32_t( Castor3D::WindowBuffer::None )] = GlBufferBinding::None;
-		Buffers[uint32_t( Castor3D::WindowBuffer::FrontLeft )] = GlBufferBinding::FrontLeft;
-		Buffers[uint32_t( Castor3D::WindowBuffer::FrontRight )] = GlBufferBinding::FrontRight;
-		Buffers[uint32_t( Castor3D::WindowBuffer::BackLeft )] = GlBufferBinding::BackLeft;
-		Buffers[uint32_t( Castor3D::WindowBuffer::BackRight )] = GlBufferBinding::BackRight;
-		Buffers[uint32_t( Castor3D::WindowBuffer::Front )] = GlBufferBinding::Front;
-		Buffers[uint32_t( Castor3D::WindowBuffer::Back )] = GlBufferBinding::Back;
-		Buffers[uint32_t( Castor3D::WindowBuffer::Left )] = GlBufferBinding::Left;
-		Buffers[uint32_t( Castor3D::WindowBuffer::Right )] = GlBufferBinding::Right;
-		Buffers[uint32_t( Castor3D::WindowBuffer::FrontAndBack )] = GlBufferBinding::FrontAndBack;
+		Buffers[uint32_t( Castor3D::WindowBuffer::None )] = GlBufferBinding::eNone;
+		Buffers[uint32_t( Castor3D::WindowBuffer::FrontLeft )] = GlBufferBinding::eFrontLeft;
+		Buffers[uint32_t( Castor3D::WindowBuffer::FrontRight )] = GlBufferBinding::eFrontRight;
+		Buffers[uint32_t( Castor3D::WindowBuffer::BackLeft )] = GlBufferBinding::eBackLeft;
+		Buffers[uint32_t( Castor3D::WindowBuffer::BackRight )] = GlBufferBinding::eBackRight;
+		Buffers[uint32_t( Castor3D::WindowBuffer::Front )] = GlBufferBinding::eFront;
+		Buffers[uint32_t( Castor3D::WindowBuffer::Back )] = GlBufferBinding::eBack;
+		Buffers[uint32_t( Castor3D::WindowBuffer::Left )] = GlBufferBinding::eLeft;
+		Buffers[uint32_t( Castor3D::WindowBuffer::Right )] = GlBufferBinding::eRight;
+		Buffers[uint32_t( Castor3D::WindowBuffer::FrontAndBack )] = GlBufferBinding::eFrontAndBack;
 
-		Faces[uint32_t( Castor3D::Culling::None )] = GlCulledFace( 0 );
-		Faces[uint32_t( Castor3D::Culling::Front )] = GlCulledFace::Front;
-		Faces[uint32_t( Castor3D::Culling::Back )] = GlCulledFace::Back;
-		Faces[uint32_t( Castor3D::Culling::FrontAndBack )] = GlCulledFace::Both;
+		Faces[uint32_t( Castor3D::Culling::None )] = GlFace( 0 );
+		Faces[uint32_t( Castor3D::Culling::Front )] = GlFace::eFront;
+		Faces[uint32_t( Castor3D::Culling::Back )] = GlFace::eBack;
+		Faces[uint32_t( Castor3D::Culling::FrontAndBack )] = GlFace::eBoth;
 
-		FillModes[uint32_t( Castor3D::FillMode::Point )] = eGL_FILL_MODE_POINT;
-		FillModes[uint32_t( Castor3D::FillMode::Line )] = eGL_FILL_MODE_LINE;
-		FillModes[uint32_t( Castor3D::FillMode::Solid )] = eGL_FILL_MODE_FILL;
+		FillModes[uint32_t( Castor3D::FillMode::Point )] = GlFillMode::ePoint;
+		FillModes[uint32_t( Castor3D::FillMode::Line )] = GlFillMode::eLine;
+		FillModes[uint32_t( Castor3D::FillMode::Solid )] = GlFillMode::eFill;
 
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::Never )] = GlComparator::Never;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::Less )] = GlComparator::Less;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::Equal )] = GlComparator::Equal;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::LEqual )] = GlComparator::LEqual;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::Greater )] = GlComparator::Greater;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::NEqual )] = GlComparator::NEqual;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::GEqual )] = GlComparator::GEqual;
-		DepthFuncs[uint32_t( Castor3D::DepthFunc::Always )] = GlComparator::Always;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::Never )] = GlComparator::eNever;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::Less )] = GlComparator::eLess;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::Equal )] = GlComparator::eEqual;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::LEqual )] = GlComparator::eLEqual;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::Greater )] = GlComparator::eGreater;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::NEqual )] = GlComparator::eNEqual;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::GEqual )] = GlComparator::eGEqual;
+		DepthFuncs[uint32_t( Castor3D::DepthFunc::Always )] = GlComparator::eAlways;
 
 		WriteMasks[uint32_t( Castor3D::WritingMask::Zero )] = false;
 		WriteMasks[uint32_t( Castor3D::WritingMask::All )] = true;
 
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::Never )] = GlComparator::Never;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::Less )] = GlComparator::Less;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::Equal )] = GlComparator::LEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::LEqual )] = GlComparator::Equal;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::Greater )] = GlComparator::NEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::NEqual )] = GlComparator::GEqual;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::GEqual )] = GlComparator::Greater;
-		StencilFuncs[uint32_t( Castor3D::StencilFunc::Always )] = GlComparator::Always;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::Never )] = GlComparator::eNever;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::Less )] = GlComparator::eLess;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::Equal )] = GlComparator::eLEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::LEqual )] = GlComparator::eEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::Greater )] = GlComparator::eNEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::NEqual )] = GlComparator::eGEqual;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::GEqual )] = GlComparator::eGreater;
+		StencilFuncs[uint32_t( Castor3D::StencilFunc::Always )] = GlComparator::eAlways;
 
-		StencilOps[uint32_t( Castor3D::StencilOp::Keep )] = eGL_STENCIL_OP_KEEP;
-		StencilOps[uint32_t( Castor3D::StencilOp::Zero )] = eGL_STENCIL_OP_ZERO;
-		StencilOps[uint32_t( Castor3D::StencilOp::Replace )] = eGL_STENCIL_OP_REPLACE;
-		StencilOps[uint32_t( Castor3D::StencilOp::Increment )] = eGL_STENCIL_OP_INCR;
-		StencilOps[uint32_t( Castor3D::StencilOp::IncrWrap )] = eGL_STENCIL_OP_INCR_WRAP;
-		StencilOps[uint32_t( Castor3D::StencilOp::Decrement )] = eGL_STENCIL_OP_DECR;
-		StencilOps[uint32_t( Castor3D::StencilOp::DecrWrap )] = eGL_STENCIL_OP_DECR_WRAP;
-		StencilOps[uint32_t( Castor3D::StencilOp::Invert )] = eGL_STENCIL_OP_INVERT;
+		StencilOps[uint32_t( Castor3D::StencilOp::Keep )] = GlStencilOp::eKeep;
+		StencilOps[uint32_t( Castor3D::StencilOp::Zero )] = GlStencilOp::eZero;
+		StencilOps[uint32_t( Castor3D::StencilOp::Replace )] = GlStencilOp::eReplace;
+		StencilOps[uint32_t( Castor3D::StencilOp::Increment )] = GlStencilOp::eIncrement;
+		StencilOps[uint32_t( Castor3D::StencilOp::IncrWrap )] = GlStencilOp::eIncrementWrap;
+		StencilOps[uint32_t( Castor3D::StencilOp::Decrement )] = GlStencilOp::eDecrement;
+		StencilOps[uint32_t( Castor3D::StencilOp::DecrWrap )] = GlStencilOp::eDecrementWrap;
+		StencilOps[uint32_t( Castor3D::StencilOp::Invert )] = GlStencilOp::eInvert;
 
-		BuffersTA[GlAttachmentPoint::None] = GlBufferBinding::None;
-		BuffersTA[GlAttachmentPoint::Colour0] = GlBufferBinding::Color0;
-		BuffersTA[GlAttachmentPoint::Depth] = GlBufferBinding::Depth;
-		BuffersTA[GlAttachmentPoint::Stencil] = GlBufferBinding::Stencil;
+		BuffersTA[GlAttachmentPoint::eNone] = GlBufferBinding::eNone;
+		BuffersTA[GlAttachmentPoint::eColour0] = GlBufferBinding::eColor0;
+		BuffersTA[GlAttachmentPoint::eDepth] = GlBufferBinding::eDepth;
+		BuffersTA[GlAttachmentPoint::eStencil] = GlBufferBinding::eStencil;
 
-		Queries[uint32_t( Castor3D::QueryType::TimeElapsed )] = eGL_QUERY_TIME_ELAPSED;
-		Queries[uint32_t( Castor3D::QueryType::SamplesPassed )] = eGL_QUERY_SAMPLES_PASSED;
-		Queries[uint32_t( Castor3D::QueryType::AnySamplesPassed )] = eGL_QUERY_ANY_SAMPLES_PASSED;
-		Queries[uint32_t( Castor3D::QueryType::PrimitivesGenerated )] = eGL_QUERY_PRIMITIVES_GENERATED;
-		Queries[uint32_t( Castor3D::QueryType::TransformFeedbackPrimitivesWritten )] = eGL_QUERY_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN;
-		Queries[uint32_t( Castor3D::QueryType::AnySamplesPassedConservative )] = eGL_QUERY_ANY_SAMPLES_PASSED_CONSERVATIVE;
-		Queries[uint32_t( Castor3D::QueryType::Timestamp )] = eGL_QUERY_TIMESTAMP;
+		Queries[uint32_t( Castor3D::QueryType::TimeElapsed )] = GlQueryType::eTimeElapsed;
+		Queries[uint32_t( Castor3D::QueryType::SamplesPassed )] = GlQueryType::eSamplesPassed;
+		Queries[uint32_t( Castor3D::QueryType::AnySamplesPassed )] = GlQueryType::eAnySamplesPassed;
+		Queries[uint32_t( Castor3D::QueryType::PrimitivesGenerated )] = GlQueryType::ePrimitivesGenerated;
+		Queries[uint32_t( Castor3D::QueryType::TransformFeedbackPrimitivesWritten )] = GlQueryType::eTransformFeedbackPrimitivesWritten;
+		Queries[uint32_t( Castor3D::QueryType::AnySamplesPassedConservative )] = GlQueryType::eAnySamplesPassedConservative;
+		Queries[uint32_t( Castor3D::QueryType::Timestamp )] = GlQueryType::eTimestamp;
 
-		QueryInfos[uint32_t( Castor3D::QueryInfo::Result )] = eGL_QUERY_INFO_RESULT;
-		QueryInfos[uint32_t( Castor3D::QueryInfo::ResultAvailable )] = eGL_QUERY_INFO_RESULT_AVAILABLE;
-		QueryInfos[uint32_t( Castor3D::QueryInfo::ResultNoWait )] = eGL_QUERY_INFO_RESULT_NO_WAIT;
+		QueryInfos[uint32_t( Castor3D::QueryInfo::Result )] = GlQueryInfo::eResult;
+		QueryInfos[uint32_t( Castor3D::QueryInfo::ResultAvailable )] = GlQueryInfo::eResultAvailable;
+		QueryInfos[uint32_t( Castor3D::QueryInfo::ResultNoWait )] = GlQueryInfo::eResultNoWait;
 
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::Buffer )] = eGL_TEXTURE_STORAGE_BUFFER;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimension )] = eGL_TEXTURE_STORAGE_1D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimensionArray )] = eGL_TEXTURE_STORAGE_2D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensions )] = eGL_TEXTURE_STORAGE_2D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = eGL_TEXTURE_STORAGE_2DARRAY;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap )] = eGL_TEXTURE_STORAGE_CUBE_MAP;
-		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::Buffer )] = GlTextureStorageType::eBuffer;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimension )] = GlTextureStorageType::e1D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::OneDimensionArray )] = GlTextureStorageType::e2D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensions )] = GlTextureStorageType::e2D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsArray )] = GlTextureStorageType::e2DArray;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = GlTextureStorageType::e2DMS;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::ThreeDimensions )] = GlTextureStorageType::e3D;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMap )] = GlTextureStorageType::eCubeMap;
+		TextureStorages[uint32_t( Castor3D::TextureStorageType::CubeMapArray )] = GlTextureStorageType::eCubeMapArray;
 
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = GlTexDim::PositiveX;
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeX )] = GlTexDim::NegativeX;
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveY )] = GlTexDim::PositiveY;
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeY )] = GlTexDim::NegativeY;
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveZ )] = GlTexDim::PositiveZ;
-		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeZ )] = GlTexDim::NegativeZ;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveX )] = GlTexDim::ePositiveX;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeX )] = GlTexDim::eNegativeX;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveY )] = GlTexDim::ePositiveY;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeY )] = GlTexDim::eNegativeY;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::PositiveZ )] = GlTexDim::ePositiveZ;
+		CubeMapFaces[uint32_t( Castor3D::CubeMapFace::NegativeZ )] = GlTexDim::eNegativeZ;
 
-		ComparisonModes[uint32_t( Castor3D::ComparisonMode::None )] = eGL_COMPARE_MODE_NONE;
-		ComparisonModes[uint32_t( Castor3D::ComparisonMode::RefToTexture )] = eGL_COMPARE_MODE_REF_TO_TEXTURE;
+		ComparisonModes[uint32_t( Castor3D::ComparisonMode::None )] = GlCompareMode::eNone;
+		ComparisonModes[uint32_t( Castor3D::ComparisonMode::RefToTexture )] = GlCompareMode::eRefToTexture;
 
 		Cleanup();
 
@@ -1053,12 +1053,12 @@ namespace GlRender
 		return DoGlCheckError( string::string_cast< xchar >( p_text ) );
 	}
 
-	void OpenGl::StDebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam )
+	void OpenGl::StDebugLog( GlDebugSource source, GlDebugType type, uint32_t id, GlDebugSeverity severity, int length, const char * message, void * userParam )
 	{
 		reinterpret_cast< OpenGl * >( userParam )->DebugLog( source, type, id, severity, length, message );
 	}
 
-	void OpenGl::StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam )
+	void OpenGl::StDebugLogAMD( uint32_t id, GlDebugCategory category, GlDebugSeverity severity, int length, const char * message, void * userParam )
 	{
 		reinterpret_cast< OpenGl * >( userParam )->DebugLogAMD( id, category, severity, length, message );
 	}
@@ -1111,7 +1111,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )const
+	void OpenGl::DebugLog( GlDebugSource source, GlDebugType type, uint32_t id, GlDebugSeverity severity, int CU_PARAM_UNUSED( length ), const char * message )const
 	{
 		if ( id != 131185 )
 		{
@@ -1121,27 +1121,27 @@ namespace GlRender
 
 			switch ( source )
 			{
-			case eGL_DEBUG_SOURCE_API:
+			case GlDebugSource::eAPI:
 				l_toLog << cuT( "OpenGL" );
 				break;
 
-			case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			case GlDebugSource::eWindowSystem:
 				l_toLog << cuT( "Window System" );
 				break;
 
-			case eGL_DEBUG_SOURCE_SHADER_COMPILER:
+			case GlDebugSource::eShaderCompiler:
 				l_toLog << cuT( "Shader compiler" );
 				break;
 
-			case eGL_DEBUG_SOURCE_THIRD_PARTY:
+			case GlDebugSource::eThirdParty:
 				l_toLog << cuT( "Third party" );
 				break;
 
-			case eGL_DEBUG_SOURCE_APPLICATION:
+			case GlDebugSource::eApplication:
 				l_toLog << cuT( "Application" );
 				break;
 
-			case eGL_DEBUG_SOURCE_OTHER:
+			case GlDebugSource::eOther:
 				l_toLog << cuT( "Other" );
 				break;
 
@@ -1154,27 +1154,27 @@ namespace GlRender
 
 			switch ( type )
 			{
-			case eGL_DEBUG_TYPE_ERROR:
+			case GlDebugType::eError:
 				l_toLog << cuT( "Error" );
 				break;
 
-			case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			case GlDebugType::eDeprecatedBehavior:
 				l_toLog << cuT( "Deprecated behavior" );
 				break;
 
-			case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			case GlDebugType::eUndefinedBehavior:
 				l_toLog << cuT( "Undefined behavior" );
 				break;
 
-			case eGL_DEBUG_TYPE_PORTABILITY:
+			case GlDebugType::ePortability:
 				l_toLog << cuT( "Portability" );
 				break;
 
-			case eGL_DEBUG_TYPE_PERFORMANCE:
+			case GlDebugType::ePerformance:
 				l_toLog << cuT( "Performance" );
 				break;
 
-			case eGL_DEBUG_TYPE_OTHER:
+			case GlDebugType::eOther:
 				l_toLog << cuT( "Other" );
 				break;
 
@@ -1187,16 +1187,16 @@ namespace GlRender
 
 			switch ( severity )
 			{
-			case eGL_DEBUG_SEVERITY_HIGH:
+			case GlDebugSeverity::eHigh:
 				l_error = true;
 				l_toLog << cuT( "High" );
 				break;
 
-			case eGL_DEBUG_SEVERITY_MEDIUM:
+			case GlDebugSeverity::eMedium:
 				l_toLog << cuT( "Medium" );
 				break;
 
-			case eGL_DEBUG_SEVERITY_LOW:
+			case GlDebugSeverity::eLow:
 				l_toLog << cuT( "Low" );
 				break;
 
@@ -1219,7 +1219,7 @@ namespace GlRender
 		}
 	}
 
-	void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )const
+	void OpenGl::DebugLogAMD( uint32_t id, GlDebugCategory category, GlDebugSeverity severity, int CU_PARAM_UNUSED( length ), const char * message )const
 	{
 		bool l_error = false;
 		StringStream l_toLog;
@@ -1227,35 +1227,35 @@ namespace GlRender
 
 		switch ( category )
 		{
-		case eGL_DEBUG_CATEGORY_API_ERROR:
+		case GlDebugCategory::eAPIError:
 			l_toLog << cuT( "OpenGL" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_WINDOW_SYSTEM:
+		case GlDebugCategory::eWindowSystem:
 			l_toLog << cuT( "Windows" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_DEPRECATION:
+		case GlDebugCategory::eDeprecation:
 			l_toLog << cuT( "Deprecated behavior" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR:
+		case GlDebugCategory::eUndefinedBehavior:
 			l_toLog << cuT( "Undefined behavior" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_PERFORMANCE:
+		case GlDebugCategory::ePerformance:
 			l_toLog << cuT( "Performance" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_SHADER_COMPILER:
+		case GlDebugCategory::eShaderCompiler:
 			l_toLog << cuT( "Shader compiler" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_APPLICATION:
+		case GlDebugCategory::eApplication:
 			l_toLog << cuT( "Application" );
 			break;
 
-		case eGL_DEBUG_CATEGORY_OTHER:
+		case GlDebugCategory::eOther:
 			l_toLog << cuT( "Other" );
 			break;
 
@@ -1268,16 +1268,16 @@ namespace GlRender
 
 		switch ( severity )
 		{
-		case eGL_DEBUG_SEVERITY_HIGH:
+		case GlDebugSeverity::eHigh:
 			l_error = true;
 			l_toLog << cuT( "High" );
 			break;
 
-		case eGL_DEBUG_SEVERITY_MEDIUM:
+		case GlDebugSeverity::eMedium:
 			l_toLog << cuT( "Medium" );
 			break;
 
-		case eGL_DEBUG_SEVERITY_LOW:
+		case GlDebugSeverity::eLow:
 			l_toLog << cuT( "Low" );
 			break;
 

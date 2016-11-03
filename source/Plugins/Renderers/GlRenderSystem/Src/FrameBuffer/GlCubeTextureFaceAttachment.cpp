@@ -35,26 +35,26 @@ namespace GlRender
 		switch ( l_texture->GetType() )
 		{
 		case TextureType::Cube:
-			l_return = GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::Default, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			l_return = GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
 			break;
 
 		case TextureType::CubeArray:
-			l_return = GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::Default, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::PositiveX ) ) );
+			l_return = GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 		}
 
-		if ( l_return && m_glStatus == GlFramebufferStatus::IncompleteMissingAttachment )
+		if ( l_return && m_glStatus == GlFramebufferStatus::eIncompleteMissingAttachment )
 		{
-			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::Default ) );
+			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
 
-			if ( m_glStatus != GlFramebufferStatus::Unsupported )
+			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 			{
-				m_glStatus = GlFramebufferStatus::Complete;
+				m_glStatus = GlFramebufferStatus::eComplete;
 			}
 		}
 		else
 		{
-			m_glStatus = GlFramebufferStatus::Unsupported;
+			m_glStatus = GlFramebufferStatus::eUnsupported;
 		}
 
 		return l_return;
@@ -64,11 +64,11 @@ namespace GlRender
 	{
 		auto l_pTexture = GetTexture();
 
-		if ( m_glStatus != GlFramebufferStatus::Unsupported )
+		if ( m_glStatus != GlFramebufferStatus::eUnsupported )
 		{
-			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::Default, m_glAttachmentPoint, m_glFace, 0, 0 );
+			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, 0, 0 );
 		}
 
-		m_glAttachmentPoint = GlAttachmentPoint::None;
+		m_glAttachmentPoint = GlAttachmentPoint::eNone;
 	}
 }

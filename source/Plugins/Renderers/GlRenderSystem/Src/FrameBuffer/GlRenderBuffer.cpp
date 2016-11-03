@@ -17,7 +17,7 @@ namespace GlRender
 						std::bind( &OpenGl::IsRenderbuffer, std::ref( p_gl ), std::placeholders::_1 ),
 						[&p_gl]( uint32_t p_glName )
 						{
-							return p_gl.BindRenderbuffer( GlRenderBufferMode::Default, p_glName );
+							return p_gl.BindRenderbuffer( GlRenderBufferMode::eDefault, p_glName );
 						} )
 		, m_internal( p_internal )
 		, m_size( 0, 0 )
@@ -40,11 +40,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::Default, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::Default, m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
 			}
 
 			Unbind();
@@ -67,11 +67,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::Default, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( GlRenderBufferMode::eDefault, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::Default, m_internal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( GlRenderBufferMode::eDefault, m_internal, p_size );
 			}
 
 			Unbind();

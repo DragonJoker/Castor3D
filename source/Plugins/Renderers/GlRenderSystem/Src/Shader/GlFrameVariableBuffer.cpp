@@ -666,7 +666,7 @@ namespace GlRender
 	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlShaderProgram & p_program, RenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_program, p_renderSystem )
 		, Holder( p_gl )
-		, m_glBuffer( p_gl, GlBufferTarget::Uniform )
+		, m_glBuffer( p_gl, GlBufferTarget::eUniform )
 		, m_uniformBlockIndex( int( GlInvalidIndex ) )
 		, m_uniformBlockSize( 0 )
 	{
@@ -874,7 +874,7 @@ namespace GlRender
 		bool l_return = false;
 		GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
 		int l_max = 0;
-		GetOpenGl().GetIntegerv( GlMax::UniformBufferBindings, &l_max );
+		GetOpenGl().GetIntegerv( GlMax::eUniformBufferBindings, &l_max );
 
 		if ( int( m_index ) < l_max )
 		{
@@ -886,11 +886,11 @@ namespace GlRender
 
 				if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 				{
-					GetOpenGl().GetActiveUniformBlockiv( l_program.GetGlName(), m_uniformBlockIndex, GlUniformBlockValue::BlockDataSize, &m_uniformBlockSize );
+					GetOpenGl().GetActiveUniformBlockiv( l_program.GetGlName(), m_uniformBlockIndex, GlUniformBlockValue::eBlockDataSize, &m_uniformBlockSize );
 					m_glBuffer.Create();
 					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
 					m_glBuffer.Bind();
-					GetOpenGl().BindBufferBase( GlBufferTarget::Uniform, m_index, m_glBuffer.GetGlName() );
+					GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
 					m_buffer.resize( m_uniformBlockSize );
 					std::vector< const char * > l_arrayNames;
@@ -924,8 +924,8 @@ namespace GlRender
 
 						if ( l_index != GlInvalidIndex )
 						{
-							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::Offset, &l_offset );
-							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::Size, &l_size );
+							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::eOffset, &l_offset );
+							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::eSize, &l_size );
 
 							if ( l_size == 1 )
 							{

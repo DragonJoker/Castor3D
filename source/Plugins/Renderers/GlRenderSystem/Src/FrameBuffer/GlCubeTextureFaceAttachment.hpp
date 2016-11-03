@@ -91,8 +91,8 @@ namespace GlRender
 
 	private:
 		GlTexDim m_glFace;
-		GlAttachmentPoint m_glAttachmentPoint{ GlAttachmentPoint::None };
-		GlFramebufferStatus m_glStatus{ GlFramebufferStatus::IncompleteMissingAttachment };
+		GlAttachmentPoint m_glAttachmentPoint{ GlAttachmentPoint::eNone };
+		GlFramebufferStatus m_glStatus{ GlFramebufferStatus::eIncompleteMissingAttachment };
 	};
 }
 

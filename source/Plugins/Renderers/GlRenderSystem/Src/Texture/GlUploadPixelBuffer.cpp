@@ -8,12 +8,12 @@ using namespace Castor;
 namespace GlRender
 {
 	GlUploadPixelBuffer::GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize )
-		: GlGpuIoBuffer( p_gl, p_renderSystem, p_pixels, p_pixelsSize, GlBufferTarget::PixelUnpack, BufferAccessType::Stream, BufferAccessNature::Draw )
+		: GlGpuIoBuffer( p_gl, p_renderSystem, p_pixels, p_pixelsSize, GlBufferTarget::ePixelUnpack, BufferAccessType::Stream, BufferAccessNature::Draw )
 	{
 	}
 
 	GlUploadPixelBuffer::GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, PxBufferBaseSPtr p_pixels )
-		: GlGpuIoBuffer( p_gl, p_renderSystem, p_pixels->ptr(), p_pixels->size(), GlBufferTarget::PixelUnpack, BufferAccessType::Stream, BufferAccessNature::Draw )
+		: GlGpuIoBuffer( p_gl, p_renderSystem, p_pixels->ptr(), p_pixels->size(), GlBufferTarget::ePixelUnpack, BufferAccessType::Stream, BufferAccessNature::Draw )
 	{
 	}
 

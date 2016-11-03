@@ -25,19 +25,19 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Copy( GlBufferBase< T > const & p_src, uint32_t p_size )
 	{
-		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::Read, p_src.GetGlName() );
+		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::eRead, p_src.GetGlName() );
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().BindBuffer( GlBufferTarget::Write, GetGlName() );
+			l_return = GetOpenGl().BindBuffer( GlBufferTarget::eWrite, GetGlName() );
 
 			if ( l_return )
 			{
-				l_return = BindableType::GetOpenGl().CopyBufferSubData( GlBufferTarget::Read, GlBufferTarget::Write, 0, 0, p_size * sizeof( T ) );
-				GetOpenGl().BindBuffer( GlBufferTarget::Write, 0 );
+				l_return = BindableType::GetOpenGl().CopyBufferSubData( GlBufferTarget::eRead, GlBufferTarget::eWrite, 0, 0, p_size * sizeof( T ) );
+				GetOpenGl().BindBuffer( GlBufferTarget::eWrite, 0 );
 			}
 
-			GetOpenGl().BindBuffer( GlBufferTarget::Read, 0 );
+			GetOpenGl().BindBuffer( GlBufferTarget::eRead, 0 );
 		}
 
 		return l_return;

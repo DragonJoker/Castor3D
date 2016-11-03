@@ -73,7 +73,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().ReadBuffer( GlBufferBinding::Back );
+			l_return = GetOpenGl().ReadBuffer( GlBufferBinding::eBack );
 
 			if ( l_return )
 			{
