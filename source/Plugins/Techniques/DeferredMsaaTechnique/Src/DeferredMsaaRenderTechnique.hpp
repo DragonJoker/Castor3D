@@ -34,13 +34,13 @@ namespace DeferredMsaa
 	enum class DsTexture
 		: uint8_t
 	{
-		Position,
-		Diffuse,
-		Normals,
-		Tangent,
-		Specular,
-		Emissive,
-		CASTOR_ENUM_CLASS_BOUNDS( Position ),
+		ePosition,
+		eDiffuse,
+		eNormals,
+		eTangent,
+		eSpecular,
+		eEmissive,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -264,7 +264,7 @@ namespace DeferredMsaa
 	protected:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
-		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::Count ) > m_lightPassTextures;
+		std::array< Castor3D::TextureUnitSPtr, size_t( DsTexture::eCount ) > m_lightPassTextures;
 		//!\~english	The depth buffer.
 		//!\~french		Le tampon de profondeur.
 		Castor3D::RenderBufferSPtr m_lightPassDepthBuffer;
@@ -273,13 +273,13 @@ namespace DeferredMsaa
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english	The attachments between textures and deferred shading frame buffer.
 		//!\~french		Les attaches entre les textures et le tampon deferred shading.
-		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::Count ) > m_geometryPassTexAttachs;
+		std::array< Castor3D::TextureAttachmentSPtr, size_t( DsTexture::eCount ) > m_geometryPassTexAttachs;
 		//!\~english	The attachment between depth buffer and deferred shading frame buffer.
 		//!\~french		L'attache entre le tampon de profondeur et le tampon deferred shading.
 		Castor3D::RenderBufferAttachmentSPtr m_geometryPassDepthAttach;
 		//!\~english	The shader program used to render lights.
 		//!\~french		Le shader utilisé pour rendre les lumières.
-		std::array< LightPassProgram, size_t( Castor3D::FogType::Count ) > m_lightPassShaderPrograms;
+		std::array< LightPassProgram, size_t( Castor3D::FogType::eCount ) > m_lightPassShaderPrograms;
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;

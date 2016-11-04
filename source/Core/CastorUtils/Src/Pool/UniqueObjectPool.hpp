@@ -40,7 +40,7 @@ namespace Castor
 	\param		Object		Le type des objets du pool.
 	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
-	template< typename Object, eMEMDATA_TYPE MemDataType >
+	template< typename Object, MemoryDataType MemDataType >
 	class UniqueObjectPool
 	{
 		using MyObjectPool = ObjectPool< Object, MemDataType >;
@@ -106,7 +106,7 @@ namespace Castor
 	\param		Object		Le type des objets du pool.
 	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
-	template< typename Object, eMEMDATA_TYPE MemDataType, uint32_t Align >
+	template< typename Object, MemoryDataType MemDataType, uint32_t Align >
 	class UniqueAlignedObjectPool
 	{
 		using MyAlignedObjectPool = AlignedObjectPool< Object, MemDataType, Align >;

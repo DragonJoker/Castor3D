@@ -37,7 +37,7 @@ namespace GuiCommon
 	\~english
 	\brief Lexers enumeration
 	\~french
-	\brief Enum�ration des lexers
+	\brief Enumération des lexers
 	*/
 	typedef enum eSTC_LEX
 	{

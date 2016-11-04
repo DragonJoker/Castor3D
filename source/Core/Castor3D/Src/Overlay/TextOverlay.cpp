@@ -84,31 +84,31 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[p_overlay.GetTextWrappingMode()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttext_wrapping " ) + TextWrappingModes[size_t( p_overlay.GetTextWrappingMode() )] + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text wrapping" );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[p_overlay.GetVAlign()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvertical_align " ) + VerticalAligns[size_t( p_overlay.GetVAlign() )] + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text vertical align" );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[p_overlay.GetHAlign()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\thorizontal_align " ) + HorizontalAligns[size_t( p_overlay.GetHAlign() )] + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text horizontal align" );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[p_overlay.GetTexturingMode()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttexturing_mode " ) + TexturingModes[size_t( p_overlay.GetTexturingMode() )] + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay text texturing mode" );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[p_overlay.GetLineSpacingMode()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tline_spacing_mode " ) + LineSpacingModes[size_t( p_overlay.GetLineSpacingMode() )] + cuT( "\n" ) ) > 0;
 			OverlayCategory::TextWriter::CheckError( l_return, "TextOverlay line spacing mode" );
 		}
 
@@ -133,7 +133,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	TextOverlay::TextOverlay()
-		: OverlayCategory{ eOVERLAY_TYPE_TEXT }
+		: OverlayCategory{ OverlayType::eText }
 	{
 	}
 
@@ -215,7 +215,7 @@ namespace Castor3D
 
 			l_fontTexture->Update();
 
-			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [l_fontTexture]()
+			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [l_fontTexture]()
 			{
 				l_fontTexture->Cleanup();
 				l_fontTexture->Initialise();
@@ -338,7 +338,7 @@ namespace Castor3D
 	{
 		switch ( m_texturingMode )
 		{
-		case eTEXT_TEXTURING_MODE_LETTER:
+		case TextTexturingMode::eLetter:
 			DoUpdateBuffer( p_size, [this]( Point2d const & p_size, Rectangle const & p_absolute, Point4r const & p_fontUV,
 											real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom )
 			{
@@ -349,7 +349,7 @@ namespace Castor3D
 			} );
 			break;
 
-		case eTEXT_TEXTURING_MODE_TEXT:
+		case TextTexturingMode::eText:
 			DoUpdateBuffer( p_size, [this]( Point2d const & p_size, Rectangle const & p_absolute, Point4r const & p_fontUV,
 											real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom )
 			{
@@ -415,7 +415,7 @@ namespace Castor3D
 		auto const & l_font = *l_fontTexture->GetFont();
 		auto l_ovPosition = GetAbsolutePosition( p_renderSize );
 
-		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )
+		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == TextWrappingMode::eBreakWords )
 		{
 			// The word will overflow the overlay size, so we jump to the next line,
 			// and will write the word on this next line.
@@ -432,12 +432,12 @@ namespace Castor3D
 			if ( p_left > p_size[0] )
 			{
 				// The character is completely out of the overlay.
-				if ( m_wrappingMode == eTEXT_WRAPPING_MODE_NONE )
+				if ( m_wrappingMode == TextWrappingMode::eNone )
 				{
 					// No wrapping => ignore the character.
 					l_charSize[0] = 0;
 				}
-				else if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
+				else if ( m_wrappingMode == TextWrappingMode::eBreak )
 				{
 					// Break => Jump to the next line.
 					p_line = DoFinishLine( p_size, p_line, p_left, p_lines );
@@ -446,7 +446,7 @@ namespace Castor3D
 			else if ( p_left + l_charSize[0] > p_size[0] )
 			{
 				// The character is partially out of the overlay.
-				if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
+				if ( m_wrappingMode == TextWrappingMode::eBreak )
 				{
 					// Break => Jump to the next line.
 					p_line = DoFinishLine( p_size, p_line, p_left, p_lines );
@@ -488,11 +488,11 @@ namespace Castor3D
 	void TextOverlay::DoAlignHorizontally( double p_width, DisplayableLine p_line, DisplayableLineArray & p_lines )
 	{
 		// Move letters according to halign
-		if ( m_hAlign != eHALIGN_LEFT )
+		if ( m_hAlign != HAlign::eLeft )
 		{
 			double l_offset = p_width - p_line.m_width;
 
-			if ( m_hAlign == eHALIGN_CENTER )
+			if ( m_hAlign == HAlign::eCenter )
 			{
 				l_offset /= 2;
 			}
@@ -529,18 +529,18 @@ namespace Castor3D
 	void TextOverlay::DoAlignVertically( double p_height, DisplayableLineArray & p_lines )
 	{
 		// Compute each line height, according to lines spacing mode
-		if ( m_lineSpacingMode != eTEXT_LINE_SPACING_MODE_OWN_HEIGHT )
+		if ( m_lineSpacingMode != TextLineSpacingMode::eOwnHeight )
 		{
 			double l_height{ 0.0 };
 
-			if ( m_lineSpacingMode == eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT )
+			if ( m_lineSpacingMode == TextLineSpacingMode::eMaxLineHeight )
 			{
 				for ( auto const & l_line : p_lines )
 				{
 					l_height = std::max( l_line.m_height, l_height );
 				}
 			}
-			else if ( m_lineSpacingMode == eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT )
+			else if ( m_lineSpacingMode == TextLineSpacingMode::eMaxFontHeight )
 			{
 				l_height = double( GetFontTexture()->GetFont()->GetMaxHeight() );
 			}
@@ -563,11 +563,11 @@ namespace Castor3D
 		}
 
 		// Move lines according to valign
-		if ( m_vAlign != eVALIGN_TOP )
+		if ( m_vAlign != VAlign::eTop )
 		{
 			double l_offset = p_height - l_linesHeight;
 
-			if ( m_vAlign == eVALIGN_CENTER )
+			if ( m_vAlign == VAlign::eCenter )
 			{
 				l_offset /= 2;
 			}

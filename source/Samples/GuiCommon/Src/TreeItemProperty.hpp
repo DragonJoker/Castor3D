@@ -112,7 +112,7 @@ namespace GuiCommon
 		 *\param[in]	p_type		The object type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les �v�nements.
+		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements.
 		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
 		 *\param[in]	p_type		Le type d'objet
 		 */
@@ -152,7 +152,7 @@ namespace GuiCommon
 		 *\param[in]	p_event	The event
 		 *\~french
 		 *\brief		Appel�e lorsqu'une propri�t� est chang�e
-		 *\param[in]	p_event	L'�v�nement
+		 *\param[in]	p_event	L'évènement
 		 */
 		void OnPropertyChange( wxPropertyGridEvent & p_event );
 		/**
@@ -200,7 +200,7 @@ namespace GuiCommon
 		 *\param[in]	p_engine	The engine, to retrieve the materials
 		 *\param[in]	p_functor	The function to execute
 		 *\~french
-		 *\brief		Poste un �v�nement functeur au moteur
+		 *\brief		Poste un évènement functeur au moteur
 		 *\param[in]	p_engine	Le moteur, pour r�cup�rer les mat�riaux
 		 *\param[in]	p_functor	La fonction � ex�cuter
 		 */
@@ -235,7 +235,7 @@ namespace GuiCommon
 		 *\param[in]	p_event	The event
 		 *\~french
 		 *\brief		Appel�e lorsqu'une propri�t� est chang�e
-		 *\param[in]	p_event	L'�v�nement
+		 *\param[in]	p_event	L'évènement
 		 */
 		virtual void DoPropertyChange( wxPropertyGridEvent & p_event ) = 0;
 

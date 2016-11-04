@@ -68,7 +68,7 @@ namespace CastorGui
 		*/
 		template< size_t N >
 		ComboBoxCtrl( ControlSPtr p_parent, Castor::String const( & p_values )[N], int p_selected, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true )
-			: Control( eCONTROL_TYPE_COMBO, p_parent, p_id, p_position, p_size, p_style, p_visible )
+			: Control( ControlType::eComboBox, p_parent, p_id, p_position, p_size, p_style, p_visible )
 			, m_values( Castor::StringArray( &p_values[0], &p_values[N] ) )
 			, m_selected( p_selected )
 		{
@@ -168,18 +168,18 @@ namespace CastorGui
 		*\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		*/
-		inline uint32_t Connect( eCOMBOBOX_EVENT p_event, std::function< void( int ) > p_function )
+		inline uint32_t Connect( ComboBoxEvent p_event, std::function< void( int ) > p_function )
 		{
-			return m_signals[p_event].connect( p_function );
+			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 		/** Disconnects a function from a combobox event
 		*\param[in]	p_event		The event type
 		*\param[in]	p_index		The function index
 		*/
-		inline void Disconnect( eCOMBOBOX_EVENT p_event, uint32_t p_index )
+		inline void Disconnect( ComboBoxEvent p_event, uint32_t p_index )
 		{
-			m_signals[p_event].disconnect( p_index );
+			m_signals[size_t( p_event )].disconnect( p_index );
 		}
 
 	private:
@@ -246,7 +246,7 @@ namespace CastorGui
 		//! Teh selected value index
 		int m_selected;
 		//! The combobox events signals
-		Castor::Signal< std::function< void( int ) > > m_signals[eCOMBOBOX_EVENT_COUNT];
+		Castor::Signal< std::function< void( int ) > > m_signals[size_t( ComboBoxEvent::eCount )];
 	};
 }
 

@@ -66,7 +66,7 @@ namespace Direct
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
+		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 		if ( l_return )
 		{
@@ -109,7 +109,7 @@ namespace Direct
 			l_name /= cuT( "ColourBuffer_Technique_Unbind.png" );
 			Image::BinaryWriter()( Image{ cuT( "tmp" )
 										  , m_frameBuffer.m_colourTexture->GetImage().GetDimensions()
-										  , PixelFormat::R8G8B8
+										  , PixelFormat::eR8G8B8
 										  , l_buffer
 										  , m_frameBuffer.m_colourTexture->GetImage().GetPixelFormat() }
 								   , l_name );

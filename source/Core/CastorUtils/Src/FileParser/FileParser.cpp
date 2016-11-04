@@ -47,7 +47,7 @@ namespace Castor
 	{
 		m_ignoreLevel = 0;
 		m_ignored = false;
-		TextFile l_file( p_strFileName, File::eOPEN_MODE_READ );
+		TextFile l_file( p_strFileName, File::OpenMode::eRead );
 		return ParseFile( l_file );
 	}
 
@@ -274,7 +274,7 @@ namespace Castor
 
 		if ( !l_params.empty() )
 		{
-			auto l_param = std::make_shared< ParserParameter< ePARAMETER_TYPE_TEXT > >();
+			auto l_param = std::make_shared< ParserParameter< ParameterType::eText > >();
 			l_param->m_value = l_params;
 			p_received.push_back( l_param );
 		}

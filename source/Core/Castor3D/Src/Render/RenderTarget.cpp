@@ -115,7 +115,7 @@ namespace Castor3D
 		bool l_return = false;
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, m_renderTarget.GetPixelFormat(), p_size );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eReadWrite, m_renderTarget.GetPixelFormat(), p_size );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		m_colorTexture.SetTexture( l_colourTexture );
 		m_colorTexture.SetSampler( l_sampler );
@@ -126,9 +126,9 @@ namespace Castor3D
 		m_colorTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::Config ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
 		{
-			m_frameBuffer->Attach( AttachmentPoint::Colour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
+			m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -138,7 +138,7 @@ namespace Castor3D
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
-		m_frameBuffer->Bind( FrameBufferMode::Config );
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
 		m_frameBuffer->DetachAll();
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
@@ -157,7 +157,7 @@ namespace Castor3D
 	RenderTarget::RenderTarget( Engine & p_engine, TargetType p_eTargetType )
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
-		, m_pixelFormat{ PixelFormat::A8R8G8B8 }
+		, m_pixelFormat{ PixelFormat::eA8R8G8B8 }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -169,8 +169,8 @@ namespace Castor3D
 	{
 		m_toneMapping = GetEngine()->GetRenderTargetCache().GetToneMappingFactory().Create( cuT( "linear" ), *GetEngine(), Parameters{} );
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -256,7 +256,7 @@ namespace Castor3D
 
 	ViewportType RenderTarget::GetViewportType()const
 	{
-		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::Count );
+		return ( GetCamera() ? GetCamera()->GetViewportType() : ViewportType::eCount );
 	}
 
 	void RenderTarget::SetViewportType( ViewportType val )
@@ -279,7 +279,7 @@ namespace Castor3D
 			ToneMappingSPtr l_toneMapping;
 			std::swap( m_toneMapping, l_toneMapping );
 			// Give ownership of the tone mapping to the event (capture by value in the lambda).
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [l_toneMapping]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [l_toneMapping]()
 			{
 				l_toneMapping->Cleanup();
 			} ) );

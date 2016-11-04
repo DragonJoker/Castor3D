@@ -121,61 +121,61 @@ namespace Castor
 		enum class Predefined
 			: uint32_t
 		{
-			TransparentBlack = 0x00000000,
-			LowAlphaBlack = 0x00000040,
-			MedAlphaBlack = 0x0000007F,
-			HighAlphaBlack = 0x000000BF,
-			OpaqueBlack = 0x000000FF,
-			TransparentDarkBlue = 0x00007F00,
-			LowAlphaDarkBlue = 0x00007F40,
-			MedAlphaDarkBlue = 0x00007F7F,
-			HighAlphaDarkBlue = 0x00007FBF,
-			OpaqueDarkBlue = 0x00007FFF,
-			TransparentBlue = 0x0000FF00,
-			LowAlphaBlue = 0x0000FF40,
-			MedAlphaBlue = 0x0000FF7F,
-			HighAlphaBlue = 0x0000FFBF,
-			OpaqueBlue = 0x0000FFFF,
-			TransparentDarkGreen = 0x007F0000,
-			LowAlphaDarkGreen = 0x007F0040,
-			MedAlphaDarkGreen = 0x007F007F,
-			HighAlphaDarkGreen = 0x007F00BF,
-			OpaqueDarkGreen = 0x007F00FF,
-			TransparentGreen = 0x00FF0000,
-			LowAlphaGreen = 0x00FF0040,
-			MedAlphaGreen = 0x00FF007F,
-			HighAlphaGreen = 0x00FF00BF,
-			OpaqueGreen = 0x00FF00FF,
-			TransparentDarkRed = 0x7F000000,
-			LowAlphaDarkRed = 0x7F000040,
-			MedAlphaDarkRed = 0x7F00007F,
-			HighAlphaDarkRed = 0x7F0000BF,
-			OpaqueDarkRed = 0x7F0000FF,
-			TransparentRed = 0xFF000000,
-			LowAlphaRed = 0xFF000040,
-			MedAlphaRed = 0xFF00007F,
-			HighAlphaRed = 0xFF0000BF,
-			OpaqueRed = 0xFF0000FF,
-			TransparentLightBlue = 0x7F7FFF00,
-			LowAlphaLightBlue = 0x7F7FFF40,
-			MedAlphaLightBlue = 0x7F7FFF7F,
-			HighAlphaLightBlue = 0x7F7FFFBF,
-			OpaqueLightBlue = 0x7F7FFFFF,
-			TransparentLightGreen = 0x7FFF7F00,
-			LowAlphaLightGreen = 0x7FFF7F40,
-			MedAlphaLightGreen = 0x7FFF7F7F,
-			HighAlphaLightGreen = 0x7FFF7FBF,
-			OpaqueLightGreen = 0x7FFF7FFF,
-			TransparentLightRed = 0xFF7F7F00,
-			LowAlphaLightRed = 0xFF7F7F40,
-			MedAlphaLightRed = 0xFF7F7F7F,
-			HighAlphaLightRed = 0xFF7F7FBF,
-			OpaqueLightRed = 0xFF7F7FFF,
-			TransparentWhite = 0xFFFFFF00,
-			LowAlphaWhite = 0xFFFFFF40,
-			MedAlphaWhite = 0xFFFFFF7F,
-			HighAlphaWhite = 0xFFFFFFBF,
-			OpaqueWhite = 0xFFFFFFFF,
+			eTransparentBlack = 0x00000000,
+			eLowAlphaBlack = 0x00000040,
+			eMedAlphaBlack = 0x0000007F,
+			eHighAlphaBlack = 0x000000BF,
+			eOpaqueBlack = 0x000000FF,
+			eTransparentDarkBlue = 0x00007F00,
+			eLowAlphaDarkBlue = 0x00007F40,
+			eMedAlphaDarkBlue = 0x00007F7F,
+			eHighAlphaDarkBlue = 0x00007FBF,
+			eOpaqueDarkBlue = 0x00007FFF,
+			eTransparentBlue = 0x0000FF00,
+			eLowAlphaBlue = 0x0000FF40,
+			eMedAlphaBlue = 0x0000FF7F,
+			eHighAlphaBlue = 0x0000FFBF,
+			eOpaqueBlue = 0x0000FFFF,
+			eTransparentDarkGreen = 0x007F0000,
+			eLowAlphaDarkGreen = 0x007F0040,
+			eMedAlphaDarkGreen = 0x007F007F,
+			eHighAlphaDarkGreen = 0x007F00BF,
+			eOpaqueDarkGreen = 0x007F00FF,
+			eTransparentGreen = 0x00FF0000,
+			eLowAlphaGreen = 0x00FF0040,
+			eMedAlphaGreen = 0x00FF007F,
+			eHighAlphaGreen = 0x00FF00BF,
+			eOpaqueGreen = 0x00FF00FF,
+			eTransparentDarkRed = 0x7F000000,
+			eLowAlphaDarkRed = 0x7F000040,
+			eMedAlphaDarkRed = 0x7F00007F,
+			eHighAlphaDarkRed = 0x7F0000BF,
+			eOpaqueDarkRed = 0x7F0000FF,
+			eTransparentRed = 0xFF000000,
+			eLowAlphaRed = 0xFF000040,
+			eMedAlphaRed = 0xFF00007F,
+			eHighAlphaRed = 0xFF0000BF,
+			eOpaqueRed = 0xFF0000FF,
+			eTransparentLightBlue = 0x7F7FFF00,
+			eLowAlphaLightBlue = 0x7F7FFF40,
+			eMedAlphaLightBlue = 0x7F7FFF7F,
+			eHighAlphaLightBlue = 0x7F7FFFBF,
+			eOpaqueLightBlue = 0x7F7FFFFF,
+			eTransparentLightGreen = 0x7FFF7F00,
+			eLowAlphaLightGreen = 0x7FFF7F40,
+			eMedAlphaLightGreen = 0x7FFF7F7F,
+			eHighAlphaLightGreen = 0x7FFF7FBF,
+			eOpaqueLightGreen = 0x7FFF7FFF,
+			eTransparentLightRed = 0xFF7F7F00,
+			eLowAlphaLightRed = 0xFF7F7F40,
+			eMedAlphaLightRed = 0xFF7F7F7F,
+			eHighAlphaLightRed = 0xFF7F7FBF,
+			eOpaqueLightRed = 0xFF7F7FFF,
+			eTransparentWhite = 0xFFFFFF00,
+			eLowAlphaWhite = 0xFFFFFF40,
+			eMedAlphaWhite = 0xFFFFFF7F,
+			eHighAlphaWhite = 0xFFFFFFBF,
+			eOpaqueWhite = 0xFFFFFFFF,
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -186,24 +186,24 @@ namespace Castor
 		\~french
 		\brief		Enumération des composantes d'une couleur
 		*/
-		typedef enum eCOMPONENT
+		enum class Component
 			: uint8_t
 		{
 			//!\~english Red component	\~french Composante rouge
-			eCOMPONENT_RED,
+			eRed,
 			//!\~english Green component	\~french Composante verte
-			eCOMPONENT_GREEN,
+			eGreen,
 			//!\~english Blue component	\~french Composante bleue
-			eCOMPONENT_BLUE,
+			eBlue,
 			//!\~english Alpha component	\~french Composante alpha
-			eCOMPONENT_ALPHA,
-			CASTOR_ENUM_BOUNDS( eCOMPONENT, eCOMPONENT_RED )
-		}	eCOMPONENT;
+			eAlpha,
+			CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+		};
 
 	private:
 		friend CU_API void swap( Colour & p_c1, Colour & p_c2 );
-		DECLARE_ARRAY( float, eCOMPONENT_COUNT, Float4 );
-		DECLARE_ARRAY( ColourComponent, eCOMPONENT_COUNT, ColourComponent );
+		DECLARE_ARRAY( float, Component::eCount, Float4 );
+		DECLARE_ARRAY( ColourComponent, Component::eCount, ColourComponent );
 
 	public:
 		/**
@@ -267,10 +267,10 @@ namespace Castor
 		static Colour from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
 		{
 			Colour l_clrReturn;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_RED] = p_r;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_GREEN] = p_g;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_BLUE] = p_b;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_ALPHA] = p_a;
+			l_clrReturn.m_arrayComponents[size_t( Component::eRed )] = p_r;
+			l_clrReturn.m_arrayComponents[size_t( Component::eGreen )] = p_g;
+			l_clrReturn.m_arrayComponents[size_t( Component::eBlue )] = p_b;
+			l_clrReturn.m_arrayComponents[size_t( Component::eAlpha )] = p_a;
 			return l_clrReturn;
 		}
 		/**
@@ -699,9 +699,9 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & operator[]( eCOMPONENT p_eComponent )
+		inline ColourComponent & operator[]( Component p_eComponent )
 		{
-			return m_arrayComponents[p_eComponent];
+			return m_arrayComponents[size_t( p_eComponent )];
 		}
 		/**
 		 *\~english
@@ -713,9 +713,9 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & operator[]( eCOMPONENT p_eComponent )const
+		inline ColourComponent const & operator[]( Component p_eComponent )const
 		{
-			return m_arrayComponents[p_eComponent];
+			return m_arrayComponents[size_t( p_eComponent )];
 		}
 		/**
 		 *\~english
@@ -727,9 +727,9 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & get( eCOMPONENT p_eComponent )
+		inline ColourComponent & get( Component p_eComponent )
 		{
-			return m_arrayComponents[p_eComponent];
+			return m_arrayComponents[size_t( p_eComponent )];
 		}
 		/**
 		 *\~english
@@ -741,9 +741,9 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & get( eCOMPONENT p_eComponent )const
+		inline ColourComponent const & get( Component p_eComponent )const
 		{
-			return m_arrayComponents[p_eComponent];
+			return m_arrayComponents[size_t( p_eComponent )];
 		}
 		/**
 		 *\~english
@@ -755,7 +755,7 @@ namespace Castor
 		 */
 		inline ColourComponent & red()
 		{
-			return get( eCOMPONENT_RED );
+			return get( Component::eRed );
 		}
 		/**
 		 *\~english
@@ -767,7 +767,7 @@ namespace Castor
 		 */
 		inline ColourComponent const & red()const
 		{
-			return get( eCOMPONENT_RED );
+			return get( Component::eRed );
 		}
 		/**
 		 *\~english
@@ -779,7 +779,7 @@ namespace Castor
 		 */
 		inline ColourComponent & green()
 		{
-			return get( eCOMPONENT_GREEN );
+			return get( Component::eGreen );
 		}
 		/**
 		 *\~english
@@ -791,7 +791,7 @@ namespace Castor
 		 */
 		inline ColourComponent const & green()const
 		{
-			return get( eCOMPONENT_GREEN );
+			return get( Component::eGreen );
 		}
 		/**
 		 *\~english
@@ -803,7 +803,7 @@ namespace Castor
 		 */
 		inline ColourComponent & blue()
 		{
-			return get( eCOMPONENT_BLUE );
+			return get( Component::eBlue );
 		}
 		/**
 		 *\~english
@@ -815,7 +815,7 @@ namespace Castor
 		 */
 		inline ColourComponent const & blue()const
 		{
-			return get( eCOMPONENT_BLUE );
+			return get( Component::eBlue );
 		}
 		/**
 		 *\~english
@@ -827,7 +827,7 @@ namespace Castor
 		 */
 		inline ColourComponent & alpha()
 		{
-			return get( eCOMPONENT_ALPHA );
+			return get( Component::eAlpha );
 		}
 		/**
 		 *\~english
@@ -839,7 +839,7 @@ namespace Castor
 		 */
 		inline ColourComponent const & alpha()const
 		{
-			return get( eCOMPONENT_ALPHA );
+			return get( Component::eAlpha );
 		}
 		/**
 		 *\~english
@@ -876,7 +876,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator+=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] += p_scalar;
 			}
@@ -896,7 +896,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator-=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] -= p_scalar;
 			}
@@ -916,7 +916,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator*=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] *= p_scalar;
 			}
@@ -936,7 +936,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator/=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] /= p_scalar;
 			}

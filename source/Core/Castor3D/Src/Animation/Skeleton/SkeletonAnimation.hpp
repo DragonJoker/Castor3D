@@ -205,16 +205,16 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		28/05/2016
 	\~english
-	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\brief		Helper structure to find ChunkType from a type.
 	\remarks	Specialisation for SkeletonAnimation.
 	\~french
-	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
 	\remarks	Spécialisation pour SkeletonAnimation.
 	*/
 	template<>
 	struct ChunkTyper< SkeletonAnimation >
 	{
-		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SKELETON_ANIMATION;
+		static ChunkType const Value = ChunkType::eSkeletonAnimation;
 	};
 	/*!
 	\author		Sylvain DOREMUS

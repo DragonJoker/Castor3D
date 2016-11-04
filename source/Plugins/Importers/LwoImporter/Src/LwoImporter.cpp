@@ -70,7 +70,7 @@ namespace Lwo
 		String l_nodeName = m_fileName.GetFileName();
 		String l_meshName = m_fileName.GetFileName();
 		String l_materialName = m_fileName.GetFileName();
-		m_file = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
+		m_file = new BinaryFile( m_fileName, File::OpenMode::eRead );
 		stLWO_CHUNK l_currentChunk;
 		bool l_return{ false };
 
@@ -119,7 +119,7 @@ namespace Lwo
 			else
 			{
 				l_toLog << cuT( "Invalid chunk : " ) << l_id;
-				m_file->Seek( -4, File::eOFFSET_MODE_CURRENT );
+				m_file->Seek( -4, File::OffsetMode::eCurrent );
 			}
 
 			Logger::LogDebug( l_toLog );
@@ -240,11 +240,11 @@ namespace Lwo
 			{
 				if ( l_size <= l_remaining && l_size > 0 )
 				{
-					m_file->Seek( l_size, Castor::File::eOFFSET_MODE_CURRENT );
+					m_file->Seek( l_size, Castor::File::OffsetMode::eCurrent );
 				}
 				else
 				{
-					m_file->Seek( 0, Castor::File::eOFFSET_MODE_END );
+					m_file->Seek( 0, Castor::File::OffsetMode::eEnd );
 					throw std::range_error( "Bad chunk size" );
 				}
 			}
@@ -272,11 +272,11 @@ namespace Lwo
 			{
 				if ( l_size <= l_remaining && l_size > 0 )
 				{
-					m_file->Seek( l_size, Castor::File::eOFFSET_MODE_CURRENT );
+					m_file->Seek( l_size, Castor::File::OffsetMode::eCurrent );
 				}
 				else
 				{
-					m_file->Seek( 0, Castor::File::eOFFSET_MODE_END );
+					m_file->Seek( 0, Castor::File::OffsetMode::eEnd );
 					throw std::range_error( "	Bad subchunk size" );
 				}
 			}
@@ -330,7 +330,7 @@ namespace Lwo
 
 		if ( !m_file->IsOk() )
 		{
-			m_file->Seek( 1 - l_index, File::eOFFSET_MODE_CURRENT );
+			m_file->Seek( 1 - l_index, File::OffsetMode::eCurrent );
 			l_return = false;
 		}
 		else
@@ -339,7 +339,7 @@ namespace Lwo
 
 			if ( l_return && p_strString.size() % 2 == 0 )
 			{
-				m_file->Seek( 1, File::eOFFSET_MODE_CURRENT );
+				m_file->Seek( 1, File::OffsetMode::eCurrent );
 			}
 		}
 
@@ -370,7 +370,7 @@ namespace Lwo
 			else
 			{
 				l_toLog << p_tabs << cuT( "Invalid subchunk : " ) << l_id;
-				m_file->Seek( -4, File::eOFFSET_MODE_CURRENT );
+				m_file->Seek( -4, File::OffsetMode::eCurrent );
 			}
 
 			Logger::LogDebug( l_toLog );
@@ -394,7 +394,7 @@ namespace Lwo
 		}
 		else
 		{
-			m_file->Seek( -1, File::eOFFSET_MODE_CURRENT );
+			m_file->Seek( -1, File::OffsetMode::eCurrent );
 			UI2 l_ui2Index = 0;
 			m_file->Read( l_ui2Index );
 			BigEndianToSystemEndian( l_ui2Index );
@@ -847,27 +847,27 @@ namespace Lwo
 			switch ( p_channel )
 			{
 			case eTEX_CHANNEL_COLR:
-				p_pTexture->SetChannel( TextureChannel::Diffuse );
+				p_pTexture->SetChannel( TextureChannel::eDiffuse );
 				break;
 
 			case eTEX_CHANNEL_DIFF:
-				p_pTexture->SetChannel( TextureChannel::Diffuse );
+				p_pTexture->SetChannel( TextureChannel::eDiffuse );
 				break;
 
 			case eTEX_CHANNEL_SPEC:
-				p_pTexture->SetChannel( TextureChannel::Specular );
+				p_pTexture->SetChannel( TextureChannel::eSpecular );
 				break;
 
 			case eTEX_CHANNEL_GLOS:
-				p_pTexture->SetChannel( TextureChannel::Gloss );
+				p_pTexture->SetChannel( TextureChannel::eGloss );
 				break;
 
 			case eTEX_CHANNEL_TRAN:
-				p_pTexture->SetChannel( TextureChannel::Opacity );
+				p_pTexture->SetChannel( TextureChannel::eOpacity );
 				break;
 
 			case eTEX_CHANNEL_BUMP:
-				p_pTexture->SetChannel( TextureChannel::Normal );
+				p_pTexture->SetChannel( TextureChannel::eNormal );
 				break;
 			}
 		}
@@ -919,7 +919,7 @@ namespace Lwo
 						StringStream l_toLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_toLog << l_it->second->GetPath().c_str() );
 						l_unit = std::make_shared< TextureUnit >( *p_pass->GetEngine() );
-						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
+						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 						l_texture->SetSource( l_it->second->GetPixels() );
 						l_unit->SetTexture( l_texture );
 						DoSetChannel( l_unit, l_eChannel );

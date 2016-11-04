@@ -14,6 +14,7 @@
 #include <Render/GlRenderSystem.hpp>
 
 #include "GlTransformFeedbackTest.hpp"
+#include "GlTextureTest.hpp"
 
 #if defined( __linux__ )
 #	include <X11/X.h>
@@ -108,7 +109,7 @@ namespace
 		auto l_return = std::make_unique< Castor3D::Engine >();
 		DoLoadPlugins( *l_return );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::Renderer );
+		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{
@@ -121,8 +122,8 @@ namespace
 			auto l_context = l_return->GetRenderSystem()->CreateContext();
 			auto l_scene = l_return->GetSceneCache().Add( cuT( "Test" ) );
 			auto l_window = l_scene->GetRenderWindowCache().Add( cuT( "Window" ) );
-			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::Window );
-			l_target->SetPixelFormat( PixelFormat::A8R8G8B8 );
+			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
+			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			l_target->SetSize( Size{ 1024, 1024 } );
 			l_target->SetScene( l_scene );
 			l_window->SetRenderTarget( l_target );
@@ -371,7 +372,7 @@ int main( int argc, char const * argv[] )
 		l_count = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
-	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+	Castor::Logger::Initialise( Castor::LogType::eDebug );
 	Castor::Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "GlRenderSystemTests.log" ) );
 	{
 		try
@@ -386,7 +387,8 @@ int main( int argc, char const * argv[] )
 				if ( l_engine )
 				{
 					// Test cases.
-					Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
+					Testing::Register( std::make_unique< Testing::GlTextureTest >( *l_engine ) );
+					//Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
 
 					// Tests loop.
 					BENCHLOOP( l_count, l_return );

@@ -35,45 +35,29 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de maillages
 	*/
-	typedef enum eMESH_TYPE
+	enum class MeshType
 		: uint8_t
 	{
 		//!\~english Custom mesh type => User defined vertex, imported mesh...	\~french Type personnalisé => Défini par l'utilisateur, importé...
-		eMESH_TYPE_CUSTOM,
+		eCustom,
 		//!\~english Cone mesh type	\~french Cône
-		eMESH_TYPE_CONE,
+		eCone,
 		//!\~english Cylinder mesh type	\~french Cylindre
-		eMESH_TYPE_CYLINDER,
+		eCylinder,
 		//!\~english Rectangular faces sphere mesh type	\~french Sphère à faces rectanglaires
-		eMESH_TYPE_SPHERE,
+		eSphere,
 		//!\~english Cube mesh type	\~french Cube
-		eMESH_TYPE_CUBE,
+		eCube,
 		//!\~english Torus mesh type	\~french Torre
-		eMESH_TYPE_TORUS,
+		eTorus,
 		//!\~english Plane mesh type	\~french Plan
-		eMESH_TYPE_PLANE,
+		ePlane,
 		//!\~english Triangular faces sphere mesh type	\~french Sphère à faces triangulaires
-		eMESH_TYPE_ICOSAHEDRON,
+		eIcosahedron,
 		//!\~english Projection mesh type	\~french Projection
-		eMESH_TYPE_PROJECTION,
-		CASTOR_ENUM_BOUNDS( eMESH_TYPE, eMESH_TYPE_CUSTOM )
-	}	eMESH_TYPE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Enumerates supported normal generation
-	\~french
-	\brief		Enumération des types de génération de normales supportés
-	*/
-	typedef enum eNORMAL
-		: uint8_t
-	{
-		//!\~english Flat (face) normals	\~french Normales plates (par face)
-		eNORMAL_FLAT,
-		//!\~english Smooth normals	\~french Normales smooth
-		eNORMAL_SMOOTH,
-		CASTOR_ENUM_BOUNDS( eNORMAL, eNORMAL_FLAT )
-	}	eNORMAL;
+		eProjection,
+		CASTOR_SCOPED_ENUM_BOUNDS( eCustom )
+	};
 
 	class Vertex;
 	class VertexLayout;

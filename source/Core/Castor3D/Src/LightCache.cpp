@@ -101,7 +101,7 @@ namespace Castor3D
 
 	void LightCache::Initialise()
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Buffer, AccessType::Write, AccessType::Read, PixelFormat::RGBA32F, Size( 1000, 1 ) );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eBuffer, AccessType::eWrite, AccessType::eRead, PixelFormat::eRGBA32F, Size( 1000, 1 ) );
 		l_texture->GetImage().InitialiseSource();
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
@@ -156,7 +156,7 @@ namespace Castor3D
 				}
 			}
 
-			auto l_locked = l_layout->Lock( AccessType::Write );
+			auto l_locked = l_layout->Lock( AccessType::eWrite );
 
 			if ( l_locked )
 			{

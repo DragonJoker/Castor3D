@@ -34,18 +34,21 @@ namespace Castor3D
 	*\~english
 	*\brief		Supported events types enumeration.
 	*\~french
-	*\brief		Enum�ration des types �v�nements support�s.
+	*\brief		Enumération des types évènements support�s.
 	*/
-	typedef enum eUSER_INPUT_EVENT_TYPE
+	enum class UserInputEventType
 	{
-		//!\~english Mouse event type.	\~french Type d'�v�nement de souris.
-		eUSER_INPUT_EVENT_TYPE_MOUSE,
-		//!\~english Keyboard event type.	\~french Type d'�v�nement de clavier.
-		eUSER_INPUT_EVENT_TYPE_KEYBOARD,
-		//!\~english Keyboard event type.	\~french Type d'�v�nement de clavier.
-		eEVENT_TYPE_HANDLER,
-		CASTOR_ENUM_BOUNDS( eUSER_INPUT_EVENT_TYPE, eUSER_INPUT_EVENT_TYPE_MOUSE )
-	}	eUSER_INPUT_EVENT_TYPE;
+		//!\~english	Mouse event type.
+		//!\~french		Type d'evènement de souris.
+		eMouse,
+		//!\~english	Keyboard event type.
+		//!\~french		Type d'évènement de clavier.
+		eKeyboard,
+		//!\~english	Keyboard event type.
+		//!\~french		Type d'évènement de clavier.
+		eHandler,
+		CASTOR_SCOPED_ENUM_BOUNDS( eMouse )
+	};
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -53,27 +56,34 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported mouse events.
 	*\~english
-	*\brief		Enum�ration des �v�nement de souris support�s.
+	*\brief		Enumération des évènement de souris support�s.
 	*/
-	typedef enum eMOUSE_EVENT
+	enum class MouseEventType
 		: uint8_t
 	{
-		//!\~english The mouse moves.	\~french La souris se d�place.
-		eMOUSE_EVENT_MOVE,
-		//!\~english The mouse enters an handler's zone.	\~french La souris entre dans la zone d'action d'un gestionnaire.
-		eMOUSE_EVENT_ENTER,
-		//!\~english The mouse remains still in an handler's zone during hover time.	\~french La souris reste immobile pendant un temps d�termin�, dans la zone d'action d'un gestionnaire.
-		eMOUSE_EVENT_HOVER,
-		//!\~english The mouse leaves an handler's zone.	\~french La souris quitte la zone d'action d'un gestionnaire.
-		eMOUSE_EVENT_LEAVE,
-		//!\~english One mouse button is pushed.	\~french Un bouton appuy�.
-		eMOUSE_EVENT_BUTTON_PUSHED,
-		//!\~english One mouse button is released.	\~french Un bouton rel�ch�.
-		eMOUSE_EVENT_BUTTON_RELEASED,
-		//!\~english One mouse wheel is rolled.	\~french Une roulette de la souris est tourn�e.
-		eMOUSE_EVENT_WHEEL,
-		CASTOR_ENUM_BOUNDS( eMOUSE_EVENT, eMOUSE_EVENT_MOVE )
-	}	eMOUSE_EVENT;
+		//!\~english	The mouse moves.
+		//!\~french		La souris se déplace.
+		eMove,
+		//!\~english	The mouse enters an handler's zone.
+		//!\~french		La souris entre dans la zone d'action d'un gestionnaire.
+		eEnter,
+		//!\~english	The mouse remains still in an handler's zone during hover time.
+		//!\~french		La souris reste immobile pendant un temps déterminé, dans la zone d'action d'un gestionnaire.
+		eHover,
+		//!\~english	The mouse leaves an handler's zone.
+		//!\~french		La souris quitte la zone d'action d'un gestionnaire.
+		eLeave,
+		//!\~english	One mouse button is pushed.
+		//!\~french		Un bouton appuyé.
+		ePushed,
+		//!\~english	One mouse button is released.
+		//!\~french		Un bouton relâché.
+		eReleased,
+		//!\~english	One mouse wheel is rolled.
+		//!\~french		Une molette de la souris est tournée.
+		eWheel,
+		CASTOR_SCOPED_ENUM_BOUNDS( eMove )
+	};
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -81,19 +91,22 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported keyboard events.
 	*\~english
-	*\brief		Enum�ration des �v�nement clavier support�s.
+	*\brief		Enumération des évènement clavier support�s.
 	*/
-	typedef enum eKEYBOARD_EVENT
+	enum class KeyboardEventType
 		: uint8_t
 	{
-		//!\~english A key is pushed.	\~french Une touche est appuy�e.
-		eKEYBOARD_EVENT_KEY_PUSHED,
-		//!\~english A key is released.	\~french Une touche est rel�ch�e.
-		eKEYBOARD_EVENT_KEY_RELEASED,
-		//!\~english A displayable char key is stroked.	\~french Une touche de caract�re imprimable est tap�e.
-		eKEYBOARD_EVENT_CHAR,
-		CASTOR_ENUM_BOUNDS( eKEYBOARD_EVENT, eKEYBOARD_EVENT_KEY_PUSHED )
-	}	eKEYBOARD_EVENT;
+		//!\~english	A key is pushed.
+		//!\~french		Une touche est appuyée.
+		ePushed,
+		//!\~english	A key is released.
+		//!\~french		Une touche est relâchée.
+		eReleased,
+		//!\~english	A displayable char key is stroked.
+		//!\~french		Une touche de caractère imprimable est tapée.
+		eChar,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePushed )
+	};
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -101,17 +114,19 @@ namespace Castor3D
 	*\~english
 	*\brief		Enumeration of supported handler events.
 	*\~english
-	*\brief		Enum�ration des �v�nements de gestionnaire support�es.
+	*\brief		Enumération des évènements de gestionnaire supportées.
 	*/
-	typedef enum eHANDLER_EVENT
+	enum class HandlerEventType
 		: uint8_t
 	{
-		//!\~english Handler activated.	\~french Gestionnaire activ�.
-		eHANDLER_EVENT_ACTIVATE,
-		//!\~english Handler deactivated.	\~french Gestionnaire d�sactiv�.
-		eHANDLER_EVENT_DEACTIVATE,
-		CASTOR_ENUM_BOUNDS( eHANDLER_EVENT, eHANDLER_EVENT_ACTIVATE )
-	}	eHANDLER_EVENT;
+		//!\~english	Handler activated.
+		//!\~french		Gestionnaire activé.
+		eActivate,
+		//!\~english	Handler deactivated.
+		//!\~french		Gestionnaire désactivé.
+		eDeactivate,
+		CASTOR_SCOPED_ENUM_BOUNDS( eActivate )
+	};
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -119,18 +134,21 @@ namespace Castor3D
 	*\~english
 	*\brief		Mouse buttons enumeration.
 	*\~french
-	*\brief		Enum�ration des boutons de la souris.
+	*\brief		Enumération des boutons de la souris.
 	*/
-	typedef enum eMOUSE_BUTTON
+	enum class MouseButton
 	{
-		//!\~english Left mouse button.	\~french Le bouton gauche.
-		eMOUSE_BUTTON_LEFT,
-		//!\~english Middle mouse button.	\~french Le bouton du milieu.
-		eMOUSE_BUTTON_MIDDLE,
-		//!\~english Right mouse button.	\~french Le bouton droit.
-		eMOUSE_BUTTON_RIGHT,
-		CASTOR_ENUM_BOUNDS( eMOUSE_BUTTON, eMOUSE_BUTTON_LEFT )
-	}	eMOUSE_BUTTON;
+		//!\~english	Left mouse button.
+		//!\~french		Le bouton gauche.
+		eLeft,
+		//!\~english	Middle mouse button.
+		//!\~french		Le bouton du milieu.
+		eMiddle,
+		//!\~english	Right mouse button.
+		//!\~french		Le bouton droit.
+		eRight,
+		CASTOR_SCOPED_ENUM_BOUNDS( eLeft )
+	};
 	/*!
 	*\author	Sylvain DOREMUS
 	*\date		17/04/2016
@@ -138,117 +156,117 @@ namespace Castor3D
 	*\~english
 	*\brief		Keyboard keys enumeration.
 	*\~french
-	*\brief		Enum�ration des touches du clavier.
+	*\brief		Enumération des touches du clavier.
 	*/
-	typedef enum eKEYBOARD_KEY
+	enum class KeyboardKey
 	{
-		eKEYBOARD_KEY_NONE,
-		eKEY_BACKSPACE = 0x08,
-		eKEY_TAB = 0x0A,
-		eKEY_RETURN = 0x0D,
-		eKEY_ESCAPE = 0x1B,
-		eKEY_SPACE = 0x20,
+		eNone,
+		eBackspace = 0x08,
+		eTab = 0x0A,
+		eReturn = 0x0D,
+		eEscape = 0x1B,
+		eSpace = 0x20,
 
 		// values from 0x21 to 0x7E are reserved for the standard ASCII characters
 
-		eKEY_DELETE = 0x7F,
+		eDelete = 0x7F,
 
 		// values from 0x80 to 0xFF are reserved for ASCII extended characters
 
-		eKEY_START   = 0x100,
-		eKEY_LBUTTON,
-		eKEY_RBUTTON,
-		eKEY_CANCEL,
-		eKEY_MBUTTON,
-		eKEY_CLEAR,
-		eKEY_SHIFT,
-		eKEY_ALT,
-		eKEY_CONTROL,
-		eKEY_MENU,
-		eKEY_PAUSE,
-		eKEY_CAPITAL,
-		eKEY_END,
-		eKEY_HOME,
-		eKEY_LEFT,
-		eKEY_UP,
-		eKEY_RIGHT,
-		eKEY_DOWN,
-		eKEY_SELECT,
-		eKEY_PRINT,
-		eKEY_EXECUTE,
-		eKEY_SNAPSHOT,
-		eKEY_INSERT,
-		eKEY_HELP,
-		eKEY_NUMPAD0,
-		eKEY_NUMPAD1,
-		eKEY_NUMPAD2,
-		eKEY_NUMPAD3,
-		eKEY_NUMPAD4,
-		eKEY_NUMPAD5,
-		eKEY_NUMPAD6,
-		eKEY_NUMPAD7,
-		eKEY_NUMPAD8,
-		eKEY_NUMPAD9,
-		eKEY_MULTIPLY,
-		eKEY_ADD,
-		eKEY_SEPARATOR,
-		eKEY_SUBTRACT,
-		eKEY_DECIMAL,
-		eKEY_DIVIDE,
-		eKEY_F1,
-		eKEY_F2,
-		eKEY_F3,
-		eKEY_F4,
-		eKEY_F5,
-		eKEY_F6,
-		eKEY_F7,
-		eKEY_F8,
-		eKEY_F9,
-		eKEY_F10,
-		eKEY_F11,
-		eKEY_F12,
-		eKEY_F13,
-		eKEY_F14,
-		eKEY_F15,
-		eKEY_F16,
-		eKEY_F17,
-		eKEY_F18,
-		eKEY_F19,
-		eKEY_F20,
-		eKEY_F21,
-		eKEY_F22,
-		eKEY_F23,
-		eKEY_F24,
-		eKEY_NUMLOCK,
-		eKEY_SCROLL,
-		eKEY_PAGEUP,
-		eKEY_PAGEDOWN,
-		eKEY_NUMPAD_SPACE,
-		eKEY_NUMPAD_TAB,
-		eKEY_NUMPAD_ENTER,
-		eKEY_NUMPAD_F1,
-		eKEY_NUMPAD_F2,
-		eKEY_NUMPAD_F3,
-		eKEY_NUMPAD_F4,
-		eKEY_NUMPAD_HOME,
-		eKEY_NUMPAD_LEFT,
-		eKEY_NUMPAD_UP,
-		eKEY_NUMPAD_RIGHT,
-		eKEY_NUMPAD_DOWN,
-		eKEY_NUMPAD_PAGEUP,
-		eKEY_NUMPAD_PAGEDOWN,
-		eKEY_NUMPAD_END,
-		eKEY_NUMPAD_BEGIN,
-		eKEY_NUMPAD_INSERT,
-		eKEY_NUMPAD_DELETE,
-		eKEY_NUMPAD_EQUAL,
-		eKEY_NUMPAD_MULTIPLY,
-		eKEY_NUMPAD_ADD,
-		eKEY_NUMPAD_SEPARATOR,
-		eKEY_NUMPAD_SUBTRACT,
-		eKEY_NUMPAD_DECIMAL,
-		eKEY_NUMPAD_DIVIDE,
-	}	eKEYBOARD_KEY;
+		eStart = 0x100,
+		eLButton,
+		eRButton,
+		eCancel,
+		eMButton,
+		eClear,
+		eShift,
+		eAlt,
+		eControl,
+		eMenu,
+		ePause,
+		eCapital,
+		eEnd,
+		eHome,
+		eLeft,
+		eUp,
+		eRight,
+		eDown,
+		eSelect,
+		ePrint,
+		eExecute,
+		eSnapshot,
+		eInsert,
+		eHelp,
+		eNumpad0,
+		eNumpad1,
+		eNumpad2,
+		eNumpad3,
+		eNumpad4,
+		eNumpad5,
+		eNumpad6,
+		eNumpad7,
+		eNumpad8,
+		eNumpad9,
+		eMultiply,
+		eAdd,
+		eSeparator,
+		eSubtract,
+		eDecimal,
+		eDivide,
+		eF1,
+		eF2,
+		eF3,
+		eF4,
+		eF5,
+		eF6,
+		eF7,
+		eF8,
+		eF9,
+		eF10,
+		eF11,
+		eF12,
+		eF13,
+		eF14,
+		eF15,
+		eF16,
+		eF17,
+		eF18,
+		eF19,
+		eF20,
+		eF21,
+		eF22,
+		eF23,
+		eF24,
+		eNumlock,
+		eScroll,
+		ePageUp,
+		ePageDown,
+		eNumpadSpace,
+		eNumpadTab,
+		eNumpadEnter,
+		eNumpadF1,
+		eNumpadF2,
+		eNumpadF3,
+		eNumpadF4,
+		eNumpadHome,
+		eNumpadLeft,
+		eNumpadUp,
+		eNumpadRight,
+		eNumpadDown,
+		eNumpadPageUp,
+		eNumpadPageDown,
+		eNumpadEnd,
+		eNumpadBegin,
+		eNumpadInsert,
+		eNumpadDelete,
+		eNumpadEqual,
+		eNumpadMultiply,
+		eNumpadAdd,
+		eNumpadSeparator,
+		eNumpadSubtract,
+		eNumpadDecimal,
+		eNumpadDivide,
+	};
 
 	class EventHandler;
 	class UserInputEvent;

@@ -25,7 +25,7 @@ namespace Castor3D
 
 			inline void operator()( GeometrySPtr p_element )
 			{
-				m_engine.PostEvent( MakeFunctorEvent( EventType::PreRender, [p_element, this]()
+				m_engine.PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_element, this]()
 				{
 					p_element->CreateBuffers( m_faceCount, m_vertexCount );
 				} ) );

@@ -382,12 +382,12 @@ namespace Castor3D
 		struct C3D_API stRT_BLEND_STATE
 		{
 			bool m_bEnableBlend{ false };
-			BlendOperand m_eRgbSrcBlend{ BlendOperand::One };
-			BlendOperand m_eRgbDstBlend{ BlendOperand::Zero };
-			BlendOperation m_eRgbBlendOp{ BlendOperation::Add };
-			BlendOperand m_eAlphaSrcBlend{ BlendOperand::One };
-			BlendOperand m_eAlphaDstBlend{ BlendOperand::Zero };
-			BlendOperation m_eAlphaBlendOp{ BlendOperation::Add };
+			BlendOperand m_eRgbSrcBlend{ BlendOperand::eOne };
+			BlendOperand m_eRgbDstBlend{ BlendOperand::eZero };
+			BlendOperation m_eRgbBlendOp{ BlendOperation::eAdd };
+			BlendOperand m_eAlphaSrcBlend{ BlendOperand::eOne };
+			BlendOperand m_eAlphaDstBlend{ BlendOperand::eZero };
+			BlendOperation m_eAlphaBlendOp{ BlendOperation::eAdd };
 			uint8_t m_uiWriteMask{ 0xFF };
 		};
 
@@ -403,7 +403,7 @@ namespace Castor3D
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask.
 		//!\~french		Masque d'écriture des couleurs.
-		WritingMask m_eColourMask[4] = { WritingMask::All, WritingMask::All, WritingMask::All, WritingMask::All };
+		WritingMask m_eColourMask[4] = { WritingMask::eAll, WritingMask::eAll, WritingMask::eAll, WritingMask::eAll };
 	};
 }
 

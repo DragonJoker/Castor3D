@@ -146,7 +146,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format = PixelFormat::A8R8G8B8, uint8_t const * p_buffer = nullptr, PixelFormat p_eBufferFormat = PixelFormat::A8R8G8B8 );
+		CU_API Image( String const & p_name, Size const & p_size, PixelFormat p_format = PixelFormat::eA8R8G8B8, uint8_t const * p_buffer = nullptr, PixelFormat p_eBufferFormat = PixelFormat::eA8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params

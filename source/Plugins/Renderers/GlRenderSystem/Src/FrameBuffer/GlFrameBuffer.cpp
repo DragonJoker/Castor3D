@@ -54,9 +54,9 @@ namespace GlRender
 			{
 				AttachmentPoint l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_eAttach == AttachmentPoint::Colour )
+				if ( l_eAttach == AttachmentPoint::eColour )
 				{
-					l_arrayAttaches.push_back( GetOpenGl().Get( l_eAttach ) + l_attach->GetAttachmentIndex() );
+					l_arrayAttaches.push_back( uint32_t( GetOpenGl().Get( l_eAttach ) ) + l_attach->GetAttachmentIndex() );
 				}
 			}
 
@@ -66,12 +66,12 @@ namespace GlRender
 			}
 			else
 			{
-				GetOpenGl().DrawBuffer( GlBufferBinding::None );
+				GetOpenGl().DrawBuffer( GlBufferBinding::eNone );
 			}
 		}
 		else
 		{
-			GetOpenGl().DrawBuffer( GlBufferBinding::None );
+			GetOpenGl().DrawBuffer( GlBufferBinding::eNone );
 		}
 	}
 
@@ -90,12 +90,12 @@ namespace GlRender
 
 	bool GlFrameBuffer::IsComplete()const
 	{
-		return GetOpenGl().CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) == eGL_FRAMEBUFFER_COMPLETE;
+		return GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) == GlFramebufferStatus::eComplete;
 	}
 
 	bool GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		bool l_return = DoBind( FrameBufferTarget::Read );
+		bool l_return = DoBind( FrameBufferTarget::eRead );
 
 		if ( l_return )
 		{
@@ -158,7 +158,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const
 	{
-		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), eGL_INTERPOLATION_MODE_NEAREST );
+		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), GlInterpolationMode::eNearest );
 	}
 
 	bool GlFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const

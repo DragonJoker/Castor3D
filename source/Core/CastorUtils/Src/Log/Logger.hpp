@@ -142,7 +142,7 @@ namespace Castor
 		 *\brief		Initialise l'instance du logger avec le niveau donné
 		 *\param[in]	p_eLogLevel		Le niveau de log
 		 */
-		CU_API static void Initialise( ELogType p_eLogLevel );
+		CU_API static void Initialise( LogType p_eLogLevel );
 		/**
 		 *\~english
 		 *\brief		Destroys the Logger instance
@@ -180,7 +180,7 @@ namespace Castor
 		 *\param[in]	p_logFilePath	Le chemin du fichier
 		 *\param[in]	p_eLogType		Le type de log concerné
 		 */
-		CU_API static void SetFileName( String const & p_logFilePath, ELogType p_eLogType = ELogType_COUNT );
+		CU_API static void SetFileName( String const & p_logFilePath, LogType p_eLogType = LogType::eCount );
 		/**
 		 *\~english
 		 *\brief		Logs a debug message, from a std::string
@@ -347,9 +347,9 @@ namespace Castor
 	private:
 		void DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller );
 		void DoUnregisterCallback( void * p_pCaller );
-		void DoSetFileName( String const & p_logFilePath, ELogType p_eLogType = ELogType_COUNT );
-		void DoPushMessage( ELogType type, std::string const & message );
-		void DoPushMessage( ELogType type, std::wstring const & message );
+		void DoSetFileName( String const & p_logFilePath, LogType p_eLogType = LogType::eCount );
+		void DoPushMessage( LogType type, std::string const & message );
+		void DoPushMessage( LogType type, std::wstring const & message );
 		void DoInitialiseThread();
 		void DoCleanupThread();
 		void DoFlushQueue();
@@ -376,9 +376,9 @@ namespace Castor
 		//! the mutex used to protect the implementation
 		std::recursive_mutex m_mutex;
 		//! the current logging level, all logs lower than this level are ignored
-		ELogType m_logLevel;
+		LogType m_logLevel;
 		//! The header for each lg line of given log level
-		String m_headers[ELogType_COUNT];
+		std::array< String, size_t( LogType::eCount ) > m_headers;
 		//! The message queue
 		MessageQueue m_queue;
 		//! The mutex protecting the message queue

@@ -4,360 +4,360 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 2 );
-		static const VariableType Count = VariableType::Mat2x2;
-		static const FrameVariableType Full = FrameVariableType::Mat2x2b;
+		static const VariableType Count = VariableType::eMat2x2;
+		static const FrameVariableType Full = FrameVariableType::eMat2x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 3 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 3 );
-		static const VariableType Count = VariableType::Mat2x3;
-		static const FrameVariableType Full = FrameVariableType::Mat2x3b;
+		static const VariableType Count = VariableType::eMat2x3;
+		static const FrameVariableType Full = FrameVariableType::eMat2x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 4 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 4 );
-		static const VariableType Count = VariableType::Mat2x4;
-		static const FrameVariableType Full = FrameVariableType::Mat2x4b;
+		static const VariableType Count = VariableType::eMat2x4;
+		static const FrameVariableType Full = FrameVariableType::eMat2x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 2 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 2 );
-		static const VariableType Count = VariableType::Mat2x2;
-		static const FrameVariableType Full = FrameVariableType::Mat2x2i;
+		static const VariableType Count = VariableType::eMat2x2;
+		static const FrameVariableType Full = FrameVariableType::eMat2x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 3 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 3 );
-		static const VariableType Count = VariableType::Mat2x3;
-		static const FrameVariableType Full = FrameVariableType::Mat2x3i;
+		static const VariableType Count = VariableType::eMat2x3;
+		static const FrameVariableType Full = FrameVariableType::eMat2x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 4 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 4 );
-		static const VariableType Count = VariableType::Mat2x4;
-		static const FrameVariableType Full = FrameVariableType::Mat2x4i;
+		static const VariableType Count = VariableType::eMat2x4;
+		static const FrameVariableType Full = FrameVariableType::eMat2x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 2 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 2 );
-		static const VariableType Count = VariableType::Mat2x2;
-		static const FrameVariableType Full = FrameVariableType::Mat2x2ui;
+		static const VariableType Count = VariableType::eMat2x2;
+		static const FrameVariableType Full = FrameVariableType::eMat2x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 3 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 3 );
-		static const VariableType Count = VariableType::Mat2x3;
-		static const FrameVariableType Full = FrameVariableType::Mat2x3ui;
+		static const VariableType Count = VariableType::eMat2x3;
+		static const FrameVariableType Full = FrameVariableType::eMat2x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 4 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 4 );
-		static const VariableType Count = VariableType::Mat2x4;
-		static const FrameVariableType Full = FrameVariableType::Mat2x4ui;
+		static const VariableType Count = VariableType::eMat2x4;
+		static const FrameVariableType Full = FrameVariableType::eMat2x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 2 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 2 );
-		static const VariableType Count = VariableType::Mat2x2;
-		static const FrameVariableType Full = FrameVariableType::Mat2x2f;
+		static const VariableType Count = VariableType::eMat2x2;
+		static const FrameVariableType Full = FrameVariableType::eMat2x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 3 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 3 );
-		static const VariableType Count = VariableType::Mat2x3;
-		static const FrameVariableType Full = FrameVariableType::Mat2x3f;
+		static const VariableType Count = VariableType::eMat2x3;
+		static const FrameVariableType Full = FrameVariableType::eMat2x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 4 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 4 );
-		static const VariableType Count = VariableType::Mat2x4;
-		static const FrameVariableType Full = FrameVariableType::Mat2x4f;
+		static const VariableType Count = VariableType::eMat2x4;
+		static const FrameVariableType Full = FrameVariableType::eMat2x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 2 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 2 );
-		static const VariableType Count = VariableType::Mat2x2;
-		static const FrameVariableType Full = FrameVariableType::Mat2x2d;
+		static const VariableType Count = VariableType::eMat2x2;
+		static const FrameVariableType Full = FrameVariableType::eMat2x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 3 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 3 );
-		static const VariableType Count = VariableType::Mat2x3;
-		static const FrameVariableType Full = FrameVariableType::Mat2x3d;
+		static const VariableType Count = VariableType::eMat2x3;
+		static const FrameVariableType Full = FrameVariableType::eMat2x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 4 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 4 );
-		static const VariableType Count = VariableType::Mat2x4;
-		static const FrameVariableType Full = FrameVariableType::Mat2x4d;
+		static const VariableType Count = VariableType::eMat2x4;
+		static const FrameVariableType Full = FrameVariableType::eMat2x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 2 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 2 );
-		static const VariableType Count = VariableType::Mat3x2;
-		static const FrameVariableType Full = FrameVariableType::Mat3x2b;
+		static const VariableType Count = VariableType::eMat3x2;
+		static const FrameVariableType Full = FrameVariableType::eMat3x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 3 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 3 );
-		static const VariableType Count = VariableType::Mat3x3;
-		static const FrameVariableType Full = FrameVariableType::Mat3x3b;
+		static const VariableType Count = VariableType::eMat3x3;
+		static const FrameVariableType Full = FrameVariableType::eMat3x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 4 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 4 );
-		static const VariableType Count = VariableType::Mat3x4;
-		static const FrameVariableType Full = FrameVariableType::Mat3x4b;
+		static const VariableType Count = VariableType::eMat3x4;
+		static const FrameVariableType Full = FrameVariableType::eMat3x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 2 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 2 );
-		static const VariableType Count = VariableType::Mat3x2;
-		static const FrameVariableType Full = FrameVariableType::Mat3x2i;
+		static const VariableType Count = VariableType::eMat3x2;
+		static const FrameVariableType Full = FrameVariableType::eMat3x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 3 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 3 );
-		static const VariableType Count = VariableType::Mat3x3;
-		static const FrameVariableType Full = FrameVariableType::Mat3x3i;
+		static const VariableType Count = VariableType::eMat3x3;
+		static const FrameVariableType Full = FrameVariableType::eMat3x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 4 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 4 );
-		static const VariableType Count = VariableType::Mat3x4;
-		static const FrameVariableType Full = FrameVariableType::Mat3x4i;
+		static const VariableType Count = VariableType::eMat3x4;
+		static const FrameVariableType Full = FrameVariableType::eMat3x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 2 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 2 );
-		static const VariableType Count = VariableType::Mat3x2;
-		static const FrameVariableType Full = FrameVariableType::Mat3x2ui;
+		static const VariableType Count = VariableType::eMat3x2;
+		static const FrameVariableType Full = FrameVariableType::eMat3x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 3 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 3 );
-		static const VariableType Count = VariableType::Mat3x3;
-		static const FrameVariableType Full = FrameVariableType::Mat3x3ui;
+		static const VariableType Count = VariableType::eMat3x3;
+		static const FrameVariableType Full = FrameVariableType::eMat3x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 4 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 4 );
-		static const VariableType Count = VariableType::Mat3x4;
-		static const FrameVariableType Full = FrameVariableType::Mat3x4ui;
+		static const VariableType Count = VariableType::eMat3x4;
+		static const FrameVariableType Full = FrameVariableType::eMat3x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 2 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 2 );
-		static const VariableType Count = VariableType::Mat3x2;
-		static const FrameVariableType Full = FrameVariableType::Mat3x2f;
+		static const VariableType Count = VariableType::eMat3x2;
+		static const FrameVariableType Full = FrameVariableType::eMat3x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 3 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 3 );
-		static const VariableType Count = VariableType::Mat3x3;
-		static const FrameVariableType Full = FrameVariableType::Mat3x3f;
+		static const VariableType Count = VariableType::eMat3x3;
+		static const FrameVariableType Full = FrameVariableType::eMat3x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 4 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 4 );
-		static const VariableType Count = VariableType::Mat3x4;
-		static const FrameVariableType Full = FrameVariableType::Mat3x4f;
+		static const VariableType Count = VariableType::eMat3x4;
+		static const FrameVariableType Full = FrameVariableType::eMat3x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 2 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 2 );
-		static const VariableType Count = VariableType::Mat3x2;
-		static const FrameVariableType Full = FrameVariableType::Mat3x2d;
+		static const VariableType Count = VariableType::eMat3x2;
+		static const FrameVariableType Full = FrameVariableType::eMat3x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 3 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 3 );
-		static const VariableType Count = VariableType::Mat3x3;
-		static const FrameVariableType Full = FrameVariableType::Mat3x3d;
+		static const VariableType Count = VariableType::eMat3x3;
+		static const FrameVariableType Full = FrameVariableType::eMat3x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 4 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 4 );
-		static const VariableType Count = VariableType::Mat3x4;
-		static const FrameVariableType Full = FrameVariableType::Mat3x4d;
+		static const VariableType Count = VariableType::eMat3x4;
+		static const FrameVariableType Full = FrameVariableType::eMat3x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 2 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 2 );
-		static const VariableType Count = VariableType::Mat4x2;
-		static const FrameVariableType Full = FrameVariableType::Mat4x2b;
+		static const VariableType Count = VariableType::eMat4x2;
+		static const FrameVariableType Full = FrameVariableType::eMat4x2b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 3 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 3 );
-		static const VariableType Count = VariableType::Mat4x3;
-		static const FrameVariableType Full = FrameVariableType::Mat4x3b;
+		static const VariableType Count = VariableType::eMat4x3;
+		static const FrameVariableType Full = FrameVariableType::eMat4x3b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 4 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 4 );
-		static const VariableType Count = VariableType::Mat4x4;
-		static const FrameVariableType Full = FrameVariableType::Mat4x4b;
+		static const VariableType Count = VariableType::eMat4x4;
+		static const FrameVariableType Full = FrameVariableType::eMat4x4b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 2 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 2 );
-		static const VariableType Count = VariableType::Mat4x2;
-		static const FrameVariableType Full = FrameVariableType::Mat4x2i;
+		static const VariableType Count = VariableType::eMat4x2;
+		static const FrameVariableType Full = FrameVariableType::eMat4x2i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 3 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 3 );
-		static const VariableType Count = VariableType::Mat4x3;
-		static const FrameVariableType Full = FrameVariableType::Mat4x3i;
+		static const VariableType Count = VariableType::eMat4x3;
+		static const FrameVariableType Full = FrameVariableType::eMat4x3i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 4 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 4 );
-		static const VariableType Count = VariableType::Mat4x4;
-		static const FrameVariableType Full = FrameVariableType::Mat4x4i;
+		static const VariableType Count = VariableType::eMat4x4;
+		static const FrameVariableType Full = FrameVariableType::eMat4x4i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 2 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 2 );
-		static const VariableType Count = VariableType::Mat4x2;
-		static const FrameVariableType Full = FrameVariableType::Mat4x2ui;
+		static const VariableType Count = VariableType::eMat4x2;
+		static const FrameVariableType Full = FrameVariableType::eMat4x2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 3 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 3 );
-		static const VariableType Count = VariableType::Mat4x3;
-		static const FrameVariableType Full = FrameVariableType::Mat4x3ui;
+		static const VariableType Count = VariableType::eMat4x3;
+		static const FrameVariableType Full = FrameVariableType::eMat4x3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 4 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 4 );
-		static const VariableType Count = VariableType::Mat4x4;
-		static const FrameVariableType Full = FrameVariableType::Mat4x4ui;
+		static const VariableType Count = VariableType::eMat4x4;
+		static const FrameVariableType Full = FrameVariableType::eMat4x4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 2 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 2 );
-		static const VariableType Count = VariableType::Mat4x2;
-		static const FrameVariableType Full = FrameVariableType::Mat4x2f;
+		static const VariableType Count = VariableType::eMat4x2;
+		static const FrameVariableType Full = FrameVariableType::eMat4x2f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 3 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 3 );
-		static const VariableType Count = VariableType::Mat4x3;
-		static const FrameVariableType Full = FrameVariableType::Mat4x3f;
+		static const VariableType Count = VariableType::eMat4x3;
+		static const FrameVariableType Full = FrameVariableType::eMat4x3f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 4 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 4 );
-		static const VariableType Count = VariableType::Mat4x4;
-		static const FrameVariableType Full = FrameVariableType::Mat4x4f;
+		static const VariableType Count = VariableType::eMat4x4;
+		static const FrameVariableType Full = FrameVariableType::eMat4x4f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 2 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 2 );
-		static const VariableType Count = VariableType::Mat4x2;
-		static const FrameVariableType Full = FrameVariableType::Mat4x2d;
+		static const VariableType Count = VariableType::eMat4x2;
+		static const FrameVariableType Full = FrameVariableType::eMat4x2d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 3 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 3 );
-		static const VariableType Count = VariableType::Mat4x3;
-		static const FrameVariableType Full = FrameVariableType::Mat4x3d;
+		static const VariableType Count = VariableType::eMat4x3;
+		static const FrameVariableType Full = FrameVariableType::eMat4x3d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 4 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 4 );
-		static const VariableType Count = VariableType::Mat4x4;
-		static const FrameVariableType Full = FrameVariableType::Mat4x4d;
+		static const VariableType Count = VariableType::eMat4x4;
+		static const FrameVariableType Full = FrameVariableType::eMat4x4d;
 		C3D_API static const xchar * FullTypeName;
 	};
 

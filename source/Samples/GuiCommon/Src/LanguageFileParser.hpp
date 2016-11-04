@@ -38,14 +38,14 @@ namespace GuiCommon
 	\~french
 	\brief Enumàration des sections de fichier de langage
 	*/
-	typedef enum eSECTION
+	enum class LANGSection
 	{
-		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
-		eSECTION_LANGUAGE = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
-		eSECTION_SECTION = MAKE_SECTION_NAME( 'S', 'E', 'C', 'T' ),
-		eSECTION_STYLE = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
-		eSECTION_LIST = MAKE_SECTION_NAME( 'L', 'I', 'S', 'T' ),
-	}	eSECTION;
+		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eLanguage = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
+		eSection = MAKE_SECTION_NAME( 'S', 'E', 'C', 'T' ),
+		eStyle = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
+		eList = MAKE_SECTION_NAME( 'L', 'I', 'S', 'T' ),
+	};
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0

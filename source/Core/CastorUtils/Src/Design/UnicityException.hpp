@@ -36,14 +36,14 @@ namespace Castor
 	\~french
 	\brief		Enumération des erreurs d'unicité.
 	*/
-	typedef enum eUNICITY_ERROR
+	enum class UnicityError
 	{
 		//\~english No instance found when expecting one.	\~french Pas d'intance alors qu'on en attend une.
-		eUNICITY_ERROR_NO_INSTANCE,
+		eNoInstance,
 		//\~english An instance found when there shouldn't be one.	\~french Un intance alors qu'on ne devrait pas en avoir.
-		eUNICITY_ERROR_AN_INSTANCE,
-		CASTOR_ENUM_BOUNDS( eUNICITY_ERROR, eUNICITY_ERROR_NO_INSTANCE )
-	}	eUNICITY_ERROR;
+		eAnInstance,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoInstance )
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
@@ -53,7 +53,7 @@ namespace Castor
 	\~french
 	\brief		Textes des erreurs d'unicité
 	*/
-	static char const * const STR_UNICITY_ERROR[eUNICITY_ERROR_COUNT] =
+	static char const * const STR_UNICITY_ERROR[] =
 	{
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",
@@ -71,8 +71,8 @@ namespace Castor
 		: public Castor::Exception
 	{
 	public:
-		UnicityException( eUNICITY_ERROR p_error, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( STR_UNICITY_ERROR[p_error] + p_description, p_file, p_function, p_line )
+		UnicityException( UnicityError p_error, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+			: Exception( STR_UNICITY_ERROR[uint32_t( p_error )] + p_description, p_file, p_function, p_line )
 		{
 		}
 	};

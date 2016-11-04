@@ -187,12 +187,12 @@ namespace Castor3D
 			{
 				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_engine->GetRenderSystem()->GetGpuInformations().IsStereoAvailable() )
 				{
-					//DoRender( WindowBuffer::BackLeft, l_target->GetTextureLEye() );
-					//DoRender( WindowBuffer::BackRight, l_target->GetTextureREye() );
+					//DoRender( WindowBuffer::eBackLeft, l_target->GetTextureLEye() );
+					//DoRender( WindowBuffer::eBackRight, l_target->GetTextureREye() );
 				}
 				else
 				{
-					DoRender( WindowBuffer::Back, l_target->GetTexture() );
+					DoRender( WindowBuffer::eBack, l_target->GetTexture() );
 				}
 			}
 
@@ -212,7 +212,7 @@ namespace Castor3D
 
 		if ( m_initialised )
 		{
-			m_wpListener.lock()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			m_wpListener.lock()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				DoUpdateSize();
 			} ) );
@@ -409,7 +409,7 @@ namespace Castor3D
 
 		if ( m_toSave )
 		{
-			auto l_buffer = l_texture->Lock( AccessType::Read );
+			auto l_buffer = l_texture->Lock( AccessType::eRead );
 
 			if ( l_buffer )
 			{
@@ -420,7 +420,7 @@ namespace Castor3D
 			m_toSave = false;
 		}
 
-		if ( m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::Draw ) )
+		if ( m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw ) )
 		{
 			m_backBuffers->Clear();
 			m_context->RenderTexture( m_size, *l_texture );

@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cone::Cone()
-		: MeshGenerator( eMESH_TYPE_CONE )
+		: MeshGenerator( MeshType::eCone )
 		, m_nbFaces( 0 )
 		, m_height( 0 )
 		, m_radius( 0 )

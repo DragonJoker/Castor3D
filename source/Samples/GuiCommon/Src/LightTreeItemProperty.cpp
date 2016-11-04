@@ -60,15 +60,15 @@ namespace GuiCommon
 
 			switch ( l_light->GetLightType() )
 			{
-			case LightType::Directional:
+			case LightType::eDirectional:
 				DoCreateDirectionalLightProperties( p_grid, l_light->GetDirectionalLight() );
 				break;
 
-			case LightType::Point:
+			case LightType::ePoint:
 				DoCreatePointLightProperties( p_grid, l_light->GetPointLight() );
 				break;
 
-			case LightType::Spot:
+			case LightType::eSpot:
 				DoCreateSpotLightProperties( p_grid, l_light->GetSpotLight() );
 				break;
 			}
@@ -93,13 +93,13 @@ namespace GuiCommon
 			{
 				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
 			}
-			else if ( l_light->GetLightType() != LightType::Directional )
+			else if ( l_light->GetLightType() != LightType::eDirectional )
 			{
 				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
 					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
 				}
-				else if ( l_light->GetLightType() == LightType::Spot )
+				else if ( l_light->GetLightType() == LightType::eSpot )
 				{
 					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
@@ -163,7 +163,7 @@ namespace GuiCommon
 			Point3f l_value( x, y, z );
 			LightSPtr l_light = GetLight();
 
-			if ( l_light->GetLightType() == LightType::Point )
+			if ( l_light->GetLightType() == LightType::ePoint )
 			{
 				l_light->GetPointLight()->SetAttenuation( l_value );
 			}

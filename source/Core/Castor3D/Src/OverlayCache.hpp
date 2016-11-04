@@ -47,7 +47,7 @@ namespace Castor3D
 	struct CacheTraits< Overlay, KeyType >
 	{
 		C3D_API static const Castor::String Name;
-		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, eOVERLAY_TYPE, SceneSPtr, OverlaySPtr ) >;
+		using Producer = std::function< std::shared_ptr< Overlay >( KeyType const &, OverlayType, SceneSPtr, OverlaySPtr ) >;
 		using Merger = std::function< void( CacheBase< Overlay, KeyType > const &
 											, Castor::Collection< Overlay, KeyType > &
 											, std::shared_ptr< Overlay > ) >;
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		inline ElementPtr Add( Key const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		inline ElementPtr Add( Key const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 		{
 			return MyCacheType::Add( p_name, p_type, p_scene, p_parent );
 		}

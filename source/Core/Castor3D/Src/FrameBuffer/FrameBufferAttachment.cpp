@@ -8,7 +8,7 @@ namespace Castor3D
 {
 	FrameBufferAttachment::FrameBufferAttachment( AttachmentType p_type )
 		: m_type( p_type )
-		, m_point( AttachmentPoint::None )
+		, m_point( AttachmentPoint::eNone )
 		, m_index( 0 )
 	{
 	}
@@ -33,7 +33,7 @@ namespace Castor3D
 	void FrameBufferAttachment::Detach()
 	{
 		DoDetach();
-		m_point = AttachmentPoint::None;
+		m_point = AttachmentPoint::eNone;
 		m_index = 0;
 		m_frameBuffer.reset();
 	}

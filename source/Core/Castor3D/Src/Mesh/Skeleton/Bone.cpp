@@ -14,17 +14,17 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), eCHUNK_TYPE_BONE_OFFSET_MATRIX, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetOffsetMatrix(), ChunkType::eBoneOffsetMatrix, m_chunk );
 		}
 
 		if ( p_obj.GetParent() )
 		{
-			l_return = DoWriteChunk( p_obj.GetParent()->GetName(), eCHUNK_TYPE_BONE_PARENT_NAME, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetParent()->GetName(), ChunkType::eBoneParentName, m_chunk );
 		}
 
 		return l_return;
@@ -44,7 +44,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_NAME:
+			case ChunkType::eName:
 				l_return = DoParseChunk( l_name, l_chunk );
 
 				if ( l_return )
@@ -54,11 +54,11 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_BONE_OFFSET_MATRIX:
+			case ChunkType::eBoneOffsetMatrix:
 				l_return = DoParseChunk( p_obj.m_offset, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_BONE_PARENT_NAME:
+			case ChunkType::eBoneParentName:
 				l_return = DoParseChunk( l_name, l_chunk );
 
 				if ( l_return )

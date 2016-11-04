@@ -48,7 +48,7 @@ namespace GuiCommon
 		 *\param[in]	p_buffer	The target buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur, auquel on va poster les �v�nements
+		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements
 		 *\param[in]	p_editable	Dit si les propri�t�s sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */

@@ -39,8 +39,8 @@ namespace GlRender
 					}
 					else
 					{
-						l_return &= p_gl.BlendFunc( i, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
-						l_return &= p_gl.BlendEquation( i, eGL_BLEND_OP_ADD );
+						l_return &= p_gl.BlendFunc( i, GlBlendFactor::eOne, GlBlendFactor::eZero, GlBlendFactor::eOne, GlBlendFactor::eZero );
+						l_return &= p_gl.BlendEquation( i, GlBlendOp::eAdd );
 					}
 				}
 			}
@@ -57,19 +57,19 @@ namespace GlRender
 				}
 				else
 				{
-					l_return &= p_gl.BlendFunc( eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
-					l_return &= p_gl.BlendEquation( eGL_BLEND_OP_ADD );
+					l_return &= p_gl.BlendFunc( GlBlendFactor::eOne, GlBlendFactor::eZero, GlBlendFactor::eOne, GlBlendFactor::eZero );
+					l_return &= p_gl.BlendEquation( GlBlendOp::eAdd );
 				}
 			}
 
 			if ( l_enabled )
 			{
 				l_return &= p_gl.BlendColor( p_state.GetBlendFactors() );
-				l_return &= p_gl.Enable( eGL_TWEAK_BLEND );
+				l_return &= p_gl.Enable( GlTweak::eBlend );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_BLEND );
+				l_return &= p_gl.Disable( GlTweak::eBlend );
 			}
 
 			return l_return;
@@ -82,26 +82,26 @@ namespace GlRender
 
 			if ( p_state.GetDepthTest() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_DEPTH_TEST );
+				l_return &= p_gl.Enable( GlTweak::eDepthTest );
 				l_return &= p_gl.DepthFunc( p_gl.Get( p_state.GetDepthFunc() ) );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_DEPTH_TEST );
+				l_return &= p_gl.Disable( GlTweak::eDepthTest );
 			}
 
 			if ( p_state.GetStencilTest() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_STENCIL_TEST );
-				l_return &= p_gl.StencilMaskSeparate( eGL_FACE_FRONT_AND_BACK, p_state.GetStencilWriteMask() );
-				l_return &= p_gl.StencilFuncSeparate( eGL_FACE_BACK, p_gl.Get( p_state.GetStencilBackFunc() ), p_state.GetStencilBackRef(), p_state.GetStencilReadMask() );
-				l_return &= p_gl.StencilFuncSeparate( eGL_FACE_FRONT, p_gl.Get( p_state.GetStencilFrontFunc() ), p_state.GetStencilFrontRef(), p_state.GetStencilReadMask() );
-				l_return &= p_gl.StencilOpSeparate( eGL_FACE_BACK, p_gl.Get( p_state.GetStencilBackFailOp() ), p_gl.Get( p_state.GetStencilBackDepthFailOp() ), p_gl.Get( p_state.GetStencilBackPassOp() ) );
-				l_return &= p_gl.StencilOpSeparate( eGL_FACE_FRONT, p_gl.Get( p_state.GetStencilFrontFailOp() ), p_gl.Get( p_state.GetStencilFrontDepthFailOp() ), p_gl.Get( p_state.GetStencilFrontPassOp() ) );
+				l_return &= p_gl.Enable( GlTweak::eStencilTest );
+				l_return &= p_gl.StencilMaskSeparate( GlFace::eBoth, p_state.GetStencilWriteMask() );
+				l_return &= p_gl.StencilFuncSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFunc() ), p_state.GetStencilBackRef(), p_state.GetStencilReadMask() );
+				l_return &= p_gl.StencilFuncSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFunc() ), p_state.GetStencilFrontRef(), p_state.GetStencilReadMask() );
+				l_return &= p_gl.StencilOpSeparate( GlFace::eBack, p_gl.Get( p_state.GetStencilBackFailOp() ), p_gl.Get( p_state.GetStencilBackDepthFailOp() ), p_gl.Get( p_state.GetStencilBackPassOp() ) );
+				l_return &= p_gl.StencilOpSeparate( GlFace::eFront, p_gl.Get( p_state.GetStencilFrontFailOp() ), p_gl.Get( p_state.GetStencilFrontDepthFailOp() ), p_gl.Get( p_state.GetStencilFrontPassOp() ) );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_STENCIL_TEST );
+				l_return &= p_gl.Disable( GlTweak::eStencilTest );
 			}
 
 			return l_return;
@@ -113,20 +113,20 @@ namespace GlRender
 
 			if ( p_state.GetMultisample() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_MULTISAMPLE );
+				l_return &= p_gl.Enable( GlTweak::eMultisample );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_MULTISAMPLE );
+				l_return &= p_gl.Disable( GlTweak::eMultisample );
 			}
 
 			if ( p_state.IsAlphaToCoverageEnabled() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_ALPHA_TO_COVERAGE );
+				l_return &= p_gl.Enable( GlTweak::eAlphaToCoverage );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_ALPHA_TO_COVERAGE );
+				l_return &= p_gl.Disable( GlTweak::eAlphaToCoverage );
 			}
 
 			return l_return;
@@ -136,73 +136,73 @@ namespace GlRender
 		{
 			bool l_return = true;
 
-			l_return &= p_gl.PolygonMode( eGL_FACE_FRONT_AND_BACK, p_gl.Get( p_state.GetFillMode() ) );
+			l_return &= p_gl.PolygonMode( GlFace::eBoth, p_gl.Get( p_state.GetFillMode() ) );
 
-			if ( p_state.GetCulledFaces() != Culling::None )
+			if ( p_state.GetCulledFaces() != Culling::eNone )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_CULL_FACE );
+				l_return &= p_gl.Enable( GlTweak::eCullFace );
 				l_return &= p_gl.CullFace( p_gl.Get( p_state.GetCulledFaces() ) );
 
 				if ( p_state.GetFrontCCW() )
 				{
-					l_return &= p_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CCW );
+					l_return &= p_gl.FrontFace( GlFrontFaceDirection::eCounterClockWise );
 				}
 				else
 				{
-					l_return &= p_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CW );
+					l_return &= p_gl.FrontFace( GlFrontFaceDirection::eClockWise );
 				}
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_CULL_FACE );
+				l_return &= p_gl.Disable( GlTweak::eCullFace );
 			}
 
 			if ( p_state.GetAntialiasedLines() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_LINE_SMOOTH );
-				l_return &= p_gl.Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_NICEST );
+				l_return &= p_gl.Enable( GlTweak::eLineSmooth );
+				l_return &= p_gl.Hint( GlHint::eLineSmooth, GlHintValue::eNicest );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_LINE_SMOOTH );
-				l_return &= p_gl.Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_DONTCARE );
+				l_return &= p_gl.Disable( GlTweak::eLineSmooth );
+				l_return &= p_gl.Hint( GlHint::eLineSmooth, GlHintValue::eDontCare );
 			}
 
 			if ( p_state.GetScissor() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_SCISSOR_TEST );
+				l_return &= p_gl.Enable( GlTweak::eScissorTest );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_SCISSOR_TEST );
+				l_return &= p_gl.Disable( GlTweak::eScissorTest );
 			}
 
 			if ( p_state.GetDepthClipping() )
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_DEPTH_CLAMP );
+				l_return &= p_gl.Disable( GlTweak::eDepthClamp );
 			}
 			else
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_DEPTH_CLAMP );
+				l_return &= p_gl.Enable( GlTweak::eDepthClamp );
 			}
 
 			if ( p_state.GetDepthBiasFactor() != 0 || p_state.GetDepthBiasUnits() != 0 )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_OFFSET_FILL );
+				l_return &= p_gl.Enable( GlTweak::eOffsetFill );
 				l_return &= p_gl.PolygonOffset( p_state.GetDepthBiasFactor(), p_state.GetDepthBiasUnits() );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_OFFSET_FILL );
+				l_return &= p_gl.Disable( GlTweak::eOffsetFill );
 			}
 
 			if ( p_state.GetDiscardPrimitives() )
 			{
-				l_return &= p_gl.Enable( eGL_TWEAK_RASTERIZER_DISCARD );
+				l_return &= p_gl.Enable( GlTweak::eRasterizerDiscard );
 			}
 			else
 			{
-				l_return &= p_gl.Disable( eGL_TWEAK_RASTERIZER_DISCARD );
+				l_return &= p_gl.Disable( GlTweak::eRasterizerDiscard );
 			}
 
 			return l_return;

@@ -51,8 +51,8 @@ namespace Msaa
 		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 	{
 		m_msFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::RGBA16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 
@@ -108,15 +108,15 @@ namespace Msaa
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msFrameBuffer->Bind( FrameBufferMode::Config );
+			l_bReturn = m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Colour, m_pMsColorAttach );
+				l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_pMsColorAttach );
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::Depth, m_pMsDepthAttach );
+					l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::eDepth, m_pMsDepthAttach );
 				}
 
 				m_msFrameBuffer->Unbind();
@@ -128,7 +128,7 @@ namespace Msaa
 
 	void RenderTechnique::DoCleanup()
 	{
-		m_msFrameBuffer->Bind( FrameBufferMode::Config );
+		m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
 		m_msFrameBuffer->DetachAll();
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->Cleanup();
@@ -138,7 +138,7 @@ namespace Msaa
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		bool l_return = m_msFrameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
+		bool l_return = m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 		if ( l_return )
 		{
@@ -170,7 +170,7 @@ namespace Msaa
 	void RenderTechnique::DoEndRender()
 	{
 		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::Colour | BufferComponent::Depth );
+		m_msFrameBuffer->BlitInto( *m_frameBuffer.m_frameBuffer, m_rect, BufferComponent::eColour | BufferComponent::eDepth );
 	}
 
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )

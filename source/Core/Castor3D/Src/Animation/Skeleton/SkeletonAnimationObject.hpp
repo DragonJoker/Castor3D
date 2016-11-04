@@ -233,7 +233,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The interpolation mode.
 		//!\~french		Le mode d'interpolation.
-		InterpolatorType m_mode{ InterpolatorType::Count };
+		InterpolatorType m_mode{ InterpolatorType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };
@@ -262,16 +262,16 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		28/05/2016
 	\~english
-	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\brief		Helper structure to find ChunkType from a type.
 	\remarks	Specialisation for SkeletonAnimationObject.
 	\~french
-	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
 	\remarks	Spécialisation pour SkeletonAnimationObject.
 	*/
 	template<>
 	struct ChunkTyper< SkeletonAnimationObject >
 	{
-		static eCHUNK_TYPE const Value = eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT;
+		static ChunkType const Value = ChunkType::eAnimationObject;
 	};
 	/*!
 	\author		Sylvain DOREMUS

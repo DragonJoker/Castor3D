@@ -28,7 +28,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			if ( p_viewport.GetType() == ViewportType::Ortho || p_viewport.GetType() == ViewportType::Frustum )
+			if ( p_viewport.GetType() == ViewportType::eOrtho || p_viewport.GetType() == ViewportType::eFrustum )
 			{
 				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
 						   && p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
@@ -70,7 +70,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, size_t( ViewportType::Count ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
+	const std::array< String, size_t( ViewportType::eCount ) > Viewport::string_type = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
 	Viewport::Viewport( Engine & p_engine, ViewportType p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 		: OwnedBy< Engine >{ p_engine }
@@ -86,14 +86,14 @@ namespace Castor3D
 		, m_far{ p_far }
 		, m_modified{ true }
 	{
-		if ( m_type != ViewportType::Ortho && !m_near )
+		if ( m_type != ViewportType::eOrtho && !m_near )
 		{
 			m_near = real( 0.1 ); // not zero or we have a Z fight (due to depth buffer precision)
 		}
 	}
 
 	Viewport::Viewport( Engine & p_engine )
-		: Viewport{ p_engine, ViewportType::Ortho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
+		: Viewport{ p_engine, ViewportType::eOrtho, Angle{}, 1, 0, 1, 0, 1, 0, 1 }
 	{
 	}
 
@@ -154,15 +154,15 @@ namespace Castor3D
 		{
 			switch ( m_type )
 			{
-			case Castor3D::ViewportType::Ortho:
+			case Castor3D::ViewportType::eOrtho:
 				DoComputeOrtho( m_left, m_right, m_bottom, m_top, m_near, m_far );
 				break;
 
-			case Castor3D::ViewportType::Perspective:
+			case Castor3D::ViewportType::ePerspective:
 				DoComputePerspective( m_fovY, m_ratio, m_near, m_far );
 				break;
 
-			case Castor3D::ViewportType::Frustum:
+			case Castor3D::ViewportType::eFrustum:
 				DoComputeFrustum( m_left, m_right, m_bottom, m_top, m_near, m_far );
 				break;
 
@@ -184,7 +184,7 @@ namespace Castor3D
 
 	void Viewport::SetPerspective( Angle const & p_fovY, real p_aspect, real p_near, real p_far )
 	{
-		m_type = ViewportType::Perspective;
+		m_type = ViewportType::ePerspective;
 		m_fovY = p_fovY;
 		m_ratio = p_aspect;
 		m_left = 0;
@@ -198,7 +198,7 @@ namespace Castor3D
 
 	void Viewport::SetFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 	{
-		m_type = ViewportType::Frustum;
+		m_type = ViewportType::eFrustum;
 		m_fovY = Angle{};
 		m_ratio = 0;
 		m_left = p_left;
@@ -212,7 +212,7 @@ namespace Castor3D
 
 	void Viewport::SetOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 	{
-		m_type = ViewportType::Ortho;
+		m_type = ViewportType::eOrtho;
 		m_fovY = Angle{};
 		m_ratio = 0;
 		m_left = p_left;

@@ -91,18 +91,18 @@ namespace CastorGui
 		 *\param[in]	p_function	The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline uint32_t Connect( eEDIT_EVENT p_event, std::function< void( Castor::String const & ) > p_function )
+		inline uint32_t Connect( EditEvent p_event, std::function< void( Castor::String const & ) > p_function )
 		{
-			return m_signals[p_event].connect( p_function );
+			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 		/** Disconnects a function from an edit event
 		 *\param[in]	p_event		The event type
 		 *\param[in]	p_index		The function index
 		 */
-		inline void Disconnect( eEDIT_EVENT p_event, uint32_t p_index )
+		inline void Disconnect( EditEvent p_event, uint32_t p_index )
 		{
-			m_signals[p_event].disconnect( p_index );
+			m_signals[size_t( p_event )].disconnect( p_index );
 		}
 
 		/** Retreves the multiline status of the edit.
@@ -110,7 +110,7 @@ namespace CastorGui
 		 */
 		bool IsMultiLine()const
 		{
-			return ( GetStyle() & eEDIT_STYLE_MULTILINE ) == eEDIT_STYLE_MULTILINE;
+			return Castor::CheckFlag( GetStyle(), EditStyle::eMultiline );
 		}
 
 	private:
@@ -212,7 +212,7 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		Castor3D::TextOverlayWPtr m_text;
 		//! The edit events signals
-		Castor::Signal< std::function< void( Castor::String const & ) > > m_signals[eEDIT_EVENT_COUNT];
+		Castor::Signal< std::function< void( Castor::String const & ) > > m_signals[size_t( EditEvent::eCount )];
 		//! Tells if the Edit is a multiline one.
 		bool m_multiLine;
 	};

@@ -113,7 +113,7 @@ namespace Castor3D
 		Viewport & m_viewport;
 		//!\~english	The view frustum's planes.
 		//!\~french		Les plans du frustum de vue.
-		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::Count ) > m_planes;
+		std::array< Castor::PlaneEquation< real >, size_t( FrustumPlane::eCount ) > m_planes;
 	};
 }
 

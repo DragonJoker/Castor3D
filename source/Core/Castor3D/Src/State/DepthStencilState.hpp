@@ -479,19 +479,19 @@ namespace Castor3D
 		{
 			//!\~english	The function.
 			//!\~french		La fonction.
-			StencilFunc m_eFunc{ StencilFunc::Always };
+			StencilFunc m_eFunc{ StencilFunc::eAlways };
 			//!\~english	The reference value for the function.
 			//!\~french		La valeur de référence pour la fonction.
 			uint32_t m_ref{ 0 };
 			//!\~english	The operation on stencil test fail.
 			//!\~french		Opération faite en cas d'échec du stencil test.
-			StencilOp m_eFailOp{ StencilOp::Keep };
+			StencilOp m_eFailOp{ StencilOp::eKeep };
 			//!\~english	The operation on deph test fail.
 			//!\~french		Opération faite en cas d'échec du test de profondeur.
-			StencilOp m_eDepthFailOp{ StencilOp::Increment };
+			StencilOp m_eDepthFailOp{ StencilOp::eIncrement };
 			//!\~english	The operation on depth and stencil tests success.
 			//!\~french		Opération faite en cas de réussite des tests stencil et profondeur.
-			StencilOp m_ePassOp{ StencilOp::Keep };
+			StencilOp m_ePassOp{ StencilOp::eKeep };
 		};
 
 	protected:
@@ -500,7 +500,7 @@ namespace Castor3D
 		bool m_bDepthTest{ true };
 		//!\~english	The depth test function.
 		//!\~french		La fonction du test de profondeur.
-		DepthFunc m_eDepthFunc{ DepthFunc::Less };
+		DepthFunc m_eDepthFunc{ DepthFunc::eLess };
 		//!\~english	The near plane for depth test.
 		//!\~french		Le plan proche pour le test de profondeur.
 		double m_dDepthNear{ 0.0 };
@@ -509,7 +509,7 @@ namespace Castor3D
 		double m_dDepthFar{ 1.0 };
 		//!\~english	Depth writing mask.
 		//!\~french		Masque d'écriture de la profondeur.
-		WritingMask m_eDepthMask{ WritingMask::All };
+		WritingMask m_eDepthMask{ WritingMask::eAll };
 		//!\~english	Tells whether the stencil test is activated or not.
 		//!\~french		Dit si le test stencil est activé ou non.
 		bool m_bStencilTest{ true };

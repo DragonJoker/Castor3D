@@ -39,52 +39,52 @@ namespace Castor3D
 
 		if ( IsLike( p_name, ShaderProgram::Position ) )
 		{
-			l_return |= uint32_t( ElementUsage::Position );
+			l_return |= uint32_t( ElementUsage::ePosition );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Normal ) )
 		{
-			l_return |= uint32_t( ElementUsage::Normal );
+			l_return |= uint32_t( ElementUsage::eNormal );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Tangent ) )
 		{
-			l_return |= uint32_t( ElementUsage::Tangent );
+			l_return |= uint32_t( ElementUsage::eTangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Bitangent ) )
 		{
-			l_return |= uint32_t( ElementUsage::Bitangent );
+			l_return |= uint32_t( ElementUsage::eBitangent );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Texture ) )
 		{
-			l_return |= uint32_t( ElementUsage::TexCoords );
+			l_return |= uint32_t( ElementUsage::eTexCoords );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds0 ) )
 		{
-			l_return |= uint32_t( ElementUsage::BoneIds0 );
+			l_return |= uint32_t( ElementUsage::eBoneIds0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::BoneIds1 ) )
 		{
-			l_return |= uint32_t( ElementUsage::BoneIds1 );
+			l_return |= uint32_t( ElementUsage::eBoneIds1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights0 ) )
 		{
-			l_return |= uint32_t( ElementUsage::BoneWeights0 );
+			l_return |= uint32_t( ElementUsage::eBoneWeights0 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Weights1 ) )
 		{
-			l_return |= uint32_t( ElementUsage::BoneWeights1 );
+			l_return |= uint32_t( ElementUsage::eBoneWeights1 );
 		}
 
 		if ( IsLike( p_name, ShaderProgram::Transform ) )
 		{
-			l_return |= uint32_t( ElementUsage::Transform );
+			l_return |= uint32_t( ElementUsage::eTransform );
 		}
 
 		return l_return;

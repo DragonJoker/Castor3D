@@ -21,19 +21,19 @@ namespace Castor
 		if ( l_return )
 		{
 			l_arraySplitted = string::split( l_strLine, cuT( " \t,;" ) );
-			l_return = l_arraySplitted.size() >= Colour::eCOMPONENT_COUNT;
+			l_return = l_arraySplitted.size() >= size_t( Colour::Component::eCount );
 		}
 
 		if ( l_return )
 		{
-			while ( l_arraySplitted.size() > Colour::eCOMPONENT_COUNT )
+			while ( l_arraySplitted.size() > size_t( Colour::Component::eCount ) )
 			{
 				l_arraySplitted.erase( l_arraySplitted.begin() );
 			}
 
-			for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 			{
-				p_colour[Colour::eCOMPONENT( i )] = string::to_double( l_arraySplitted[i] );
+				p_colour[Colour::Component( i )] = string::to_double( l_arraySplitted[i] );
 			}
 		}
 
@@ -77,61 +77,61 @@ namespace Castor
 
 		if ( l_mapNames.empty() )
 		{
-			l_mapNames[Predefined::TransparentBlack] = cuT( "transp_black" );
-			l_mapNames[Predefined::TransparentDarkBlue] = cuT( "transp_darkblue" );
-			l_mapNames[Predefined::TransparentBlue] = cuT( "transp_blue" );
-			l_mapNames[Predefined::TransparentDarkGreen] = cuT( "transp_darkgreen" );
-			l_mapNames[Predefined::TransparentGreen] = cuT( "transp_green" );
-			l_mapNames[Predefined::TransparentDarkRed] = cuT( "transp_darkred" );
-			l_mapNames[Predefined::TransparentRed] = cuT( "transp_red" );
-			l_mapNames[Predefined::TransparentLightBlue] = cuT( "transp_lightblue" );
-			l_mapNames[Predefined::TransparentLightGreen] = cuT( "transp_lightgreen" );
-			l_mapNames[Predefined::TransparentLightRed] = cuT( "transp_lightred" );
-			l_mapNames[Predefined::TransparentWhite] = cuT( "transp_white" );
-			l_mapNames[Predefined::LowAlphaBlack] = cuT( "lowalpha_black" );
-			l_mapNames[Predefined::LowAlphaDarkBlue] = cuT( "lowalpha_darkblue" );
-			l_mapNames[Predefined::LowAlphaBlue] = cuT( "lowalpha_blue" );
-			l_mapNames[Predefined::LowAlphaDarkGreen] = cuT( "lowalpha_darkgreen" );
-			l_mapNames[Predefined::LowAlphaGreen] = cuT( "lowalpha_green" );
-			l_mapNames[Predefined::LowAlphaDarkRed] = cuT( "lowalpha_darkred" );
-			l_mapNames[Predefined::LowAlphaRed] = cuT( "lowalpha_red" );
-			l_mapNames[Predefined::LowAlphaLightBlue] = cuT( "lowalpha_lightblue" );
-			l_mapNames[Predefined::LowAlphaLightGreen] = cuT( "lowalpha_lightgreen" );
-			l_mapNames[Predefined::LowAlphaLightRed] = cuT( "lowalpha_lightred" );
-			l_mapNames[Predefined::LowAlphaWhite] = cuT( "lowalpha_white" );
-			l_mapNames[Predefined::MedAlphaBlack] = cuT( "medalpha_black" );
-			l_mapNames[Predefined::MedAlphaDarkBlue] = cuT( "medalpha_darkblue" );
-			l_mapNames[Predefined::MedAlphaBlue] = cuT( "medalpha_blue" );
-			l_mapNames[Predefined::MedAlphaDarkGreen] = cuT( "medalpha_darkgreen" );
-			l_mapNames[Predefined::MedAlphaGreen] = cuT( "medalpha_green" );
-			l_mapNames[Predefined::MedAlphaDarkRed] = cuT( "medalpha_darkred" );
-			l_mapNames[Predefined::MedAlphaRed] = cuT( "medalpha_red" );
-			l_mapNames[Predefined::MedAlphaLightBlue] = cuT( "medalpha_lightblue" );
-			l_mapNames[Predefined::MedAlphaLightGreen] = cuT( "medalpha_lightgreen" );
-			l_mapNames[Predefined::MedAlphaLightRed] = cuT( "medalpha_lightred" );
-			l_mapNames[Predefined::MedAlphaWhite] = cuT( "medalpha_white" );
-			l_mapNames[Predefined::HighAlphaBlack] = cuT( "highalpha_black" );
-			l_mapNames[Predefined::HighAlphaDarkBlue] = cuT( "highalpha_darkblue" );
-			l_mapNames[Predefined::HighAlphaBlue] = cuT( "highalpha_blue" );
-			l_mapNames[Predefined::HighAlphaDarkGreen] = cuT( "highalpha_darkgreen" );
-			l_mapNames[Predefined::HighAlphaGreen] = cuT( "highalpha_green" );
-			l_mapNames[Predefined::HighAlphaDarkRed] = cuT( "highalpha_darkred" );
-			l_mapNames[Predefined::HighAlphaRed] = cuT( "highalpha_red" );
-			l_mapNames[Predefined::HighAlphaLightBlue] = cuT( "highalpha_lightblue" );
-			l_mapNames[Predefined::HighAlphaLightGreen] = cuT( "highalpha_lightgreen" );
-			l_mapNames[Predefined::HighAlphaLightRed] = cuT( "highalpha_lightred" );
-			l_mapNames[Predefined::HighAlphaWhite] = cuT( "highalpha_white" );
-			l_mapNames[Predefined::OpaqueBlack] = cuT( "black" );
-			l_mapNames[Predefined::OpaqueDarkBlue] = cuT( "darkblue" );
-			l_mapNames[Predefined::OpaqueBlue] = cuT( "blue" );
-			l_mapNames[Predefined::OpaqueDarkGreen] = cuT( "darkgreen" );
-			l_mapNames[Predefined::OpaqueGreen] = cuT( "green" );
-			l_mapNames[Predefined::OpaqueDarkRed] = cuT( "darkred" );
-			l_mapNames[Predefined::OpaqueRed] = cuT( "red" );
-			l_mapNames[Predefined::OpaqueLightBlue] = cuT( "lightblue" );
-			l_mapNames[Predefined::OpaqueLightGreen] = cuT( "lightgreen" );
-			l_mapNames[Predefined::OpaqueLightRed] = cuT( "lightred" );
-			l_mapNames[Predefined::OpaqueWhite] = cuT( "white" );
+			l_mapNames[Predefined::eTransparentBlack] = cuT( "transp_black" );
+			l_mapNames[Predefined::eTransparentDarkBlue] = cuT( "transp_darkblue" );
+			l_mapNames[Predefined::eTransparentBlue] = cuT( "transp_blue" );
+			l_mapNames[Predefined::eTransparentDarkGreen] = cuT( "transp_darkgreen" );
+			l_mapNames[Predefined::eTransparentGreen] = cuT( "transp_green" );
+			l_mapNames[Predefined::eTransparentDarkRed] = cuT( "transp_darkred" );
+			l_mapNames[Predefined::eTransparentRed] = cuT( "transp_red" );
+			l_mapNames[Predefined::eTransparentLightBlue] = cuT( "transp_lightblue" );
+			l_mapNames[Predefined::eTransparentLightGreen] = cuT( "transp_lightgreen" );
+			l_mapNames[Predefined::eTransparentLightRed] = cuT( "transp_lightred" );
+			l_mapNames[Predefined::eTransparentWhite] = cuT( "transp_white" );
+			l_mapNames[Predefined::eLowAlphaBlack] = cuT( "lowalpha_black" );
+			l_mapNames[Predefined::eLowAlphaDarkBlue] = cuT( "lowalpha_darkblue" );
+			l_mapNames[Predefined::eLowAlphaBlue] = cuT( "lowalpha_blue" );
+			l_mapNames[Predefined::eLowAlphaDarkGreen] = cuT( "lowalpha_darkgreen" );
+			l_mapNames[Predefined::eLowAlphaGreen] = cuT( "lowalpha_green" );
+			l_mapNames[Predefined::eLowAlphaDarkRed] = cuT( "lowalpha_darkred" );
+			l_mapNames[Predefined::eLowAlphaRed] = cuT( "lowalpha_red" );
+			l_mapNames[Predefined::eLowAlphaLightBlue] = cuT( "lowalpha_lightblue" );
+			l_mapNames[Predefined::eLowAlphaLightGreen] = cuT( "lowalpha_lightgreen" );
+			l_mapNames[Predefined::eLowAlphaLightRed] = cuT( "lowalpha_lightred" );
+			l_mapNames[Predefined::eLowAlphaWhite] = cuT( "lowalpha_white" );
+			l_mapNames[Predefined::eMedAlphaBlack] = cuT( "medalpha_black" );
+			l_mapNames[Predefined::eMedAlphaDarkBlue] = cuT( "medalpha_darkblue" );
+			l_mapNames[Predefined::eMedAlphaBlue] = cuT( "medalpha_blue" );
+			l_mapNames[Predefined::eMedAlphaDarkGreen] = cuT( "medalpha_darkgreen" );
+			l_mapNames[Predefined::eMedAlphaGreen] = cuT( "medalpha_green" );
+			l_mapNames[Predefined::eMedAlphaDarkRed] = cuT( "medalpha_darkred" );
+			l_mapNames[Predefined::eMedAlphaRed] = cuT( "medalpha_red" );
+			l_mapNames[Predefined::eMedAlphaLightBlue] = cuT( "medalpha_lightblue" );
+			l_mapNames[Predefined::eMedAlphaLightGreen] = cuT( "medalpha_lightgreen" );
+			l_mapNames[Predefined::eMedAlphaLightRed] = cuT( "medalpha_lightred" );
+			l_mapNames[Predefined::eMedAlphaWhite] = cuT( "medalpha_white" );
+			l_mapNames[Predefined::eHighAlphaBlack] = cuT( "highalpha_black" );
+			l_mapNames[Predefined::eHighAlphaDarkBlue] = cuT( "highalpha_darkblue" );
+			l_mapNames[Predefined::eHighAlphaBlue] = cuT( "highalpha_blue" );
+			l_mapNames[Predefined::eHighAlphaDarkGreen] = cuT( "highalpha_darkgreen" );
+			l_mapNames[Predefined::eHighAlphaGreen] = cuT( "highalpha_green" );
+			l_mapNames[Predefined::eHighAlphaDarkRed] = cuT( "highalpha_darkred" );
+			l_mapNames[Predefined::eHighAlphaRed] = cuT( "highalpha_red" );
+			l_mapNames[Predefined::eHighAlphaLightBlue] = cuT( "highalpha_lightblue" );
+			l_mapNames[Predefined::eHighAlphaLightGreen] = cuT( "highalpha_lightgreen" );
+			l_mapNames[Predefined::eHighAlphaLightRed] = cuT( "highalpha_lightred" );
+			l_mapNames[Predefined::eHighAlphaWhite] = cuT( "highalpha_white" );
+			l_mapNames[Predefined::eOpaqueBlack] = cuT( "black" );
+			l_mapNames[Predefined::eOpaqueDarkBlue] = cuT( "darkblue" );
+			l_mapNames[Predefined::eOpaqueBlue] = cuT( "blue" );
+			l_mapNames[Predefined::eOpaqueDarkGreen] = cuT( "darkgreen" );
+			l_mapNames[Predefined::eOpaqueGreen] = cuT( "green" );
+			l_mapNames[Predefined::eOpaqueDarkRed] = cuT( "darkred" );
+			l_mapNames[Predefined::eOpaqueRed] = cuT( "red" );
+			l_mapNames[Predefined::eOpaqueLightBlue] = cuT( "lightblue" );
+			l_mapNames[Predefined::eOpaqueLightGreen] = cuT( "lightgreen" );
+			l_mapNames[Predefined::eOpaqueLightRed] = cuT( "lightred" );
+			l_mapNames[Predefined::eOpaqueWhite] = cuT( "white" );
 		}
 
 		MapIt l_it = l_mapNames.find( p_predefined );
@@ -152,65 +152,65 @@ namespace Castor
 
 		if ( l_mapNames.empty() )
 		{
-			l_mapNames[cuT( "transp_black" )] = Predefined::TransparentBlack;
-			l_mapNames[cuT( "transp_darkblue" )] = Predefined::TransparentDarkBlue;
-			l_mapNames[cuT( "transp_blue" )] = Predefined::TransparentBlue;
-			l_mapNames[cuT( "transp_darkgreen" )] = Predefined::TransparentDarkGreen;
-			l_mapNames[cuT( "transp_green" )] = Predefined::TransparentGreen;
-			l_mapNames[cuT( "transp_darkred" )] = Predefined::TransparentDarkRed;
-			l_mapNames[cuT( "transp_red" )] = Predefined::TransparentRed;
-			l_mapNames[cuT( "transp_lightblue" )] = Predefined::TransparentLightBlue;
-			l_mapNames[cuT( "transp_lightgreen" )] = Predefined::TransparentLightGreen;
-			l_mapNames[cuT( "transp_lightred" )] = Predefined::TransparentLightRed;
-			l_mapNames[cuT( "transp_white" )] = Predefined::TransparentWhite;
-			l_mapNames[cuT( "lowalpha_black" )] = Predefined::LowAlphaBlack;
-			l_mapNames[cuT( "lowalpha_darkblue" )] = Predefined::LowAlphaDarkBlue;
-			l_mapNames[cuT( "lowalpha_blue" )] = Predefined::LowAlphaBlue;
-			l_mapNames[cuT( "lowalpha_darkgreen" )] = Predefined::LowAlphaDarkGreen;
-			l_mapNames[cuT( "lowalpha_green" )] = Predefined::LowAlphaGreen;
-			l_mapNames[cuT( "lowalpha_darkred" )] = Predefined::LowAlphaDarkRed;
-			l_mapNames[cuT( "lowalpha_red" )] = Predefined::LowAlphaRed;
-			l_mapNames[cuT( "lowalpha_lightblue" )] = Predefined::LowAlphaLightBlue;
-			l_mapNames[cuT( "lowalpha_lightgreen" )] = Predefined::LowAlphaLightGreen;
-			l_mapNames[cuT( "lowalpha_lightred" )] = Predefined::LowAlphaLightRed;
-			l_mapNames[cuT( "lowalpha_white" )] = Predefined::LowAlphaWhite;
-			l_mapNames[cuT( "medalpha_black" )] = Predefined::MedAlphaBlack;
-			l_mapNames[cuT( "medalpha_darkblue" )] = Predefined::MedAlphaDarkBlue;
-			l_mapNames[cuT( "medalpha_blue" )] = Predefined::MedAlphaBlue;
-			l_mapNames[cuT( "medalpha_darkgreen" )] = Predefined::MedAlphaDarkGreen;
-			l_mapNames[cuT( "medalpha_green" )] = Predefined::MedAlphaGreen;
-			l_mapNames[cuT( "medalpha_darkred" )] = Predefined::MedAlphaDarkRed;
-			l_mapNames[cuT( "medalpha_red" )] = Predefined::MedAlphaRed;
-			l_mapNames[cuT( "medalpha_lightblue" )] = Predefined::MedAlphaLightBlue;
-			l_mapNames[cuT( "medalpha_lightgreen" )] = Predefined::MedAlphaLightGreen;
-			l_mapNames[cuT( "medalpha_lightred" )] = Predefined::MedAlphaLightRed;
-			l_mapNames[cuT( "medalpha_white" )] = Predefined::MedAlphaWhite;
-			l_mapNames[cuT( "highalpha_black" )] = Predefined::HighAlphaBlack;
-			l_mapNames[cuT( "highalpha_darkblue" )] = Predefined::HighAlphaDarkBlue;
-			l_mapNames[cuT( "highalpha_blue" )] = Predefined::HighAlphaBlue;
-			l_mapNames[cuT( "highalpha_darkgreen" )] = Predefined::HighAlphaDarkGreen;
-			l_mapNames[cuT( "highalpha_green" )] = Predefined::HighAlphaGreen;
-			l_mapNames[cuT( "highalpha_darkred" )] = Predefined::HighAlphaDarkRed;
-			l_mapNames[cuT( "highalpha_red" )] = Predefined::HighAlphaRed;
-			l_mapNames[cuT( "highalpha_lightblue" )] = Predefined::HighAlphaLightBlue;
-			l_mapNames[cuT( "highalpha_lightgreen" )] = Predefined::HighAlphaLightGreen;
-			l_mapNames[cuT( "highalpha_lightred" )] = Predefined::HighAlphaLightRed;
-			l_mapNames[cuT( "highalpha_white" )] = Predefined::HighAlphaWhite;
-			l_mapNames[cuT( "black" )] = Predefined::OpaqueBlack;
-			l_mapNames[cuT( "darkblue" )] = Predefined::OpaqueDarkBlue;
-			l_mapNames[cuT( "blue" )] = Predefined::OpaqueBlue;
-			l_mapNames[cuT( "darkgreen" )] = Predefined::OpaqueDarkGreen;
-			l_mapNames[cuT( "green" )] = Predefined::OpaqueGreen;
-			l_mapNames[cuT( "darkred" )] = Predefined::OpaqueDarkRed;
-			l_mapNames[cuT( "red" )] = Predefined::OpaqueRed;
-			l_mapNames[cuT( "lightblue" )] = Predefined::OpaqueLightBlue;
-			l_mapNames[cuT( "lightgreen" )] = Predefined::OpaqueLightGreen;
-			l_mapNames[cuT( "lightred" )] = Predefined::OpaqueLightRed;
-			l_mapNames[cuT( "white" )] = Predefined::OpaqueWhite;
+			l_mapNames[cuT( "transp_black" )] = Predefined::eTransparentBlack;
+			l_mapNames[cuT( "transp_darkblue" )] = Predefined::eTransparentDarkBlue;
+			l_mapNames[cuT( "transp_blue" )] = Predefined::eTransparentBlue;
+			l_mapNames[cuT( "transp_darkgreen" )] = Predefined::eTransparentDarkGreen;
+			l_mapNames[cuT( "transp_green" )] = Predefined::eTransparentGreen;
+			l_mapNames[cuT( "transp_darkred" )] = Predefined::eTransparentDarkRed;
+			l_mapNames[cuT( "transp_red" )] = Predefined::eTransparentRed;
+			l_mapNames[cuT( "transp_lightblue" )] = Predefined::eTransparentLightBlue;
+			l_mapNames[cuT( "transp_lightgreen" )] = Predefined::eTransparentLightGreen;
+			l_mapNames[cuT( "transp_lightred" )] = Predefined::eTransparentLightRed;
+			l_mapNames[cuT( "transp_white" )] = Predefined::eTransparentWhite;
+			l_mapNames[cuT( "lowalpha_black" )] = Predefined::eLowAlphaBlack;
+			l_mapNames[cuT( "lowalpha_darkblue" )] = Predefined::eLowAlphaDarkBlue;
+			l_mapNames[cuT( "lowalpha_blue" )] = Predefined::eLowAlphaBlue;
+			l_mapNames[cuT( "lowalpha_darkgreen" )] = Predefined::eLowAlphaDarkGreen;
+			l_mapNames[cuT( "lowalpha_green" )] = Predefined::eLowAlphaGreen;
+			l_mapNames[cuT( "lowalpha_darkred" )] = Predefined::eLowAlphaDarkRed;
+			l_mapNames[cuT( "lowalpha_red" )] = Predefined::eLowAlphaRed;
+			l_mapNames[cuT( "lowalpha_lightblue" )] = Predefined::eLowAlphaLightBlue;
+			l_mapNames[cuT( "lowalpha_lightgreen" )] = Predefined::eLowAlphaLightGreen;
+			l_mapNames[cuT( "lowalpha_lightred" )] = Predefined::eLowAlphaLightRed;
+			l_mapNames[cuT( "lowalpha_white" )] = Predefined::eLowAlphaWhite;
+			l_mapNames[cuT( "medalpha_black" )] = Predefined::eMedAlphaBlack;
+			l_mapNames[cuT( "medalpha_darkblue" )] = Predefined::eMedAlphaDarkBlue;
+			l_mapNames[cuT( "medalpha_blue" )] = Predefined::eMedAlphaBlue;
+			l_mapNames[cuT( "medalpha_darkgreen" )] = Predefined::eMedAlphaDarkGreen;
+			l_mapNames[cuT( "medalpha_green" )] = Predefined::eMedAlphaGreen;
+			l_mapNames[cuT( "medalpha_darkred" )] = Predefined::eMedAlphaDarkRed;
+			l_mapNames[cuT( "medalpha_red" )] = Predefined::eMedAlphaRed;
+			l_mapNames[cuT( "medalpha_lightblue" )] = Predefined::eMedAlphaLightBlue;
+			l_mapNames[cuT( "medalpha_lightgreen" )] = Predefined::eMedAlphaLightGreen;
+			l_mapNames[cuT( "medalpha_lightred" )] = Predefined::eMedAlphaLightRed;
+			l_mapNames[cuT( "medalpha_white" )] = Predefined::eMedAlphaWhite;
+			l_mapNames[cuT( "highalpha_black" )] = Predefined::eHighAlphaBlack;
+			l_mapNames[cuT( "highalpha_darkblue" )] = Predefined::eHighAlphaDarkBlue;
+			l_mapNames[cuT( "highalpha_blue" )] = Predefined::eHighAlphaBlue;
+			l_mapNames[cuT( "highalpha_darkgreen" )] = Predefined::eHighAlphaDarkGreen;
+			l_mapNames[cuT( "highalpha_green" )] = Predefined::eHighAlphaGreen;
+			l_mapNames[cuT( "highalpha_darkred" )] = Predefined::eHighAlphaDarkRed;
+			l_mapNames[cuT( "highalpha_red" )] = Predefined::eHighAlphaRed;
+			l_mapNames[cuT( "highalpha_lightblue" )] = Predefined::eHighAlphaLightBlue;
+			l_mapNames[cuT( "highalpha_lightgreen" )] = Predefined::eHighAlphaLightGreen;
+			l_mapNames[cuT( "highalpha_lightred" )] = Predefined::eHighAlphaLightRed;
+			l_mapNames[cuT( "highalpha_white" )] = Predefined::eHighAlphaWhite;
+			l_mapNames[cuT( "black" )] = Predefined::eOpaqueBlack;
+			l_mapNames[cuT( "darkblue" )] = Predefined::eOpaqueDarkBlue;
+			l_mapNames[cuT( "blue" )] = Predefined::eOpaqueBlue;
+			l_mapNames[cuT( "darkgreen" )] = Predefined::eOpaqueDarkGreen;
+			l_mapNames[cuT( "green" )] = Predefined::eOpaqueGreen;
+			l_mapNames[cuT( "darkred" )] = Predefined::eOpaqueDarkRed;
+			l_mapNames[cuT( "red" )] = Predefined::eOpaqueRed;
+			l_mapNames[cuT( "lightblue" )] = Predefined::eOpaqueLightBlue;
+			l_mapNames[cuT( "lightgreen" )] = Predefined::eOpaqueLightGreen;
+			l_mapNames[cuT( "lightred" )] = Predefined::eOpaqueLightRed;
+			l_mapNames[cuT( "white" )] = Predefined::eOpaqueWhite;
 		}
 
 		MapIt l_it = l_mapNames.find( p_name );
-		Predefined l_return = Predefined::OpaqueBlack;
+		Predefined l_return = Predefined::eOpaqueBlack;
 
 		if ( l_it != l_mapNames.end() )
 		{
@@ -224,7 +224,7 @@ namespace Castor
 		:	m_arrayValues()
 		,	m_arrayComponents()
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayValues[i] = 0;
 			m_arrayComponents[i].link( &m_arrayValues[i] );
@@ -233,7 +233,7 @@ namespace Castor
 
 	Colour::Colour( Colour const & p_colour )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayValues[i] = p_colour.m_arrayValues[i];
 			m_arrayComponents[i].link( &m_arrayValues[i] );
@@ -246,7 +246,7 @@ namespace Castor
 		:	m_arrayValues( std::move( p_colour.m_arrayValues ) )
 		,	m_arrayComponents()
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayComponents[i].link( &m_arrayValues[i] );
 		}
@@ -256,7 +256,7 @@ namespace Castor
 
 	Colour & Colour::operator =( Colour const & p_colour )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayValues[i] = p_colour.m_arrayValues[i];
 		}
@@ -271,7 +271,7 @@ namespace Castor
 		{
 			m_arrayValues = std::move( p_colour.m_arrayValues );
 
-			for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 			{
 				m_arrayComponents[i].link( &m_arrayValues[i] );
 			}
@@ -457,17 +457,17 @@ namespace Castor
 	}
 
 	BEGIN_INVARIANT_BLOCK( Colour )
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_RED] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_RED] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_GREEN] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_GREEN] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_BLUE] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_BLUE] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eRed )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eRed )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eGreen )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eGreen )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eBlue )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eBlue )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eAlpha )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eAlpha )] ) <= 1.0 );
 	END_INVARIANT_BLOCK()
 
 	Colour & Colour::operator+=( Colour const & p_clrB )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
-			m_arrayComponents[i] += p_clrB[Colour::eCOMPONENT( i )];
+			m_arrayComponents[i] += p_clrB[Colour::Component( i )];
 		}
 
 		return *this;
@@ -475,9 +475,9 @@ namespace Castor
 
 	Colour & Colour::operator-=( Colour const & p_clrB )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
-			m_arrayComponents[i] -= p_clrB[Colour::eCOMPONENT( i )];
+			m_arrayComponents[i] -= p_clrB[Colour::Component( i )];
 		}
 
 		return *this;
@@ -485,7 +485,7 @@ namespace Castor
 
 	Colour & Colour::operator+=( ColourComponent const & p_component )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayComponents[i] += p_component;
 		}
@@ -495,7 +495,7 @@ namespace Castor
 
 	Colour & Colour::operator-=( ColourComponent const & p_component )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayComponents[i] -= p_component;
 		}
@@ -505,7 +505,7 @@ namespace Castor
 
 	Colour & Colour::operator*=( ColourComponent const & p_component )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayComponents[i] *= p_component;
 		}
@@ -515,7 +515,7 @@ namespace Castor
 
 	Colour & Colour::operator/=( ColourComponent const & p_component )
 	{
-		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 		{
 			m_arrayComponents[i] /= p_component;
 		}
@@ -529,9 +529,9 @@ namespace Castor
 	{
 		bool l_return = true;
 
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
+		for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ) && l_return; i++ )
 		{
-			l_return = p_clrA[Colour::eCOMPONENT( i )] == p_clrB[Colour::eCOMPONENT( i )];
+			l_return = p_clrA[Colour::Component( i )] == p_clrB[Colour::Component( i )];
 		}
 
 		return l_return;
@@ -559,116 +559,116 @@ namespace Castor
 	Point3ub rgb_byte( Colour const & p_colour )
 	{
 		Point3ub l_return;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[2] );
 		return l_return;
 	}
 
 	Point3ub bgr_byte( Colour const & p_colour )
 	{
 		Point3ub l_return;
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[2] );
 		return l_return;
 	}
 
 	Point4ub rgba_byte( Colour const & p_colour )
 	{
 		Point4ub l_return;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4ub bgra_byte( Colour const & p_colour )
 	{
 		Point4ub l_return;
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4ub argb_byte( Colour const & p_colour )
 	{
 		Point4ub l_return;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4ub abgr_byte( Colour const & p_colour )
 	{
 		Point4ub l_return;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point3f rgb_float( Colour const & p_colour )
 	{
 		Point3f l_return;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[2] );
 		return l_return;
 	}
 
 	Point3f bgr_float( Colour const & p_colour )
 	{
 		Point3f l_return;
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[2] );
 		return l_return;
 	}
 
 	Point4f rgba_float( Colour const & p_colour )
 	{
 		Point4f l_return;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4f argb_float( Colour const & p_colour )
 	{
 		Point4f l_return;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4f abgr_float( Colour const & p_colour )
 	{
 		Point4f l_return;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[3] );
 		return l_return;
 	}
 
 	Point4f bgra_float( Colour const & p_colour )
 	{
 		Point4f l_return;
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_return[0] );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_return[1] );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_return[2] );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_return[3] );
 		return l_return;
 	}
 
@@ -677,9 +677,9 @@ namespace Castor
 		uint32_t l_r = 0;
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
 		return ( l_r << 16 ) | ( l_g << 8 ) | ( l_b << 0 );
 	}
 
@@ -688,9 +688,9 @@ namespace Castor
 		uint32_t l_r = 0;
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
 		return ( l_r << 0 ) | ( l_g << 8 ) | ( l_b << 16 );
 	}
 
@@ -700,10 +700,10 @@ namespace Castor
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
 		uint32_t l_a = 0;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_a );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
 		return ( l_a << 24 ) | ( l_r << 16 ) | ( l_g << 8 ) | ( l_b << 0 );
 	}
 
@@ -713,10 +713,10 @@ namespace Castor
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
 		uint32_t l_a = 0;
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_a );
 		return ( l_r << 24 ) | ( l_g << 16 ) | ( l_b << 8 ) | ( l_a << 0 );
 	}
 
@@ -726,10 +726,10 @@ namespace Castor
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
 		uint32_t l_a = 0;
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_a );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
 		return ( l_a << 24 ) | ( l_b << 16 ) | ( l_g << 8 ) | ( l_r << 0 );
 	}
 
@@ -739,10 +739,10 @@ namespace Castor
 		uint32_t l_g = 0;
 		uint32_t l_b = 0;
 		uint32_t l_a = 0;
-		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
-		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
-		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
-		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		p_colour.get( Colour::Component::eBlue ).convert_to( l_b );
+		p_colour.get( Colour::Component::eGreen ).convert_to( l_g );
+		p_colour.get( Colour::Component::eRed ).convert_to( l_r );
+		p_colour.get( Colour::Component::eAlpha ).convert_to( l_a );
 		return ( l_b << 24 ) | ( l_g << 16 ) | ( l_r << 8 ) | ( l_a << 0 );
 	}
 

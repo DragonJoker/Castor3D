@@ -47,20 +47,20 @@ namespace Testing
 				if ( !File::FileExists( l_binName ) )
 				{
 					std::cout << "	Binary file creation" << std::endl;
-					BinaryFile l_binary( l_binName, File::eOPEN_MODE_WRITE );
+					BinaryFile l_binary( l_binName, File::OpenMode::eWrite );
 					l_binary.WriteArray( l_inBinData.data(), l_inBinData.size() );
 				}
 
 				if ( !File::FileExists( l_txtName ) )
 				{
 					std::cout << "	Text file creation" << std::endl;
-					TextFile l_text( l_txtName, File::eOPEN_MODE_WRITE );
+					TextFile l_text( l_txtName, File::OpenMode::eWrite );
 					l_text.WriteText( l_inTxtData );
 				}
 
 				{
 					std::cout << "	Deflate the archive" << std::endl;
-					ZipArchive l_def( l_zipName, File::eOPEN_MODE_WRITE );
+					ZipArchive l_def( l_zipName, File::OpenMode::eWrite );
 					l_def.AddFile( l_binName );
 					l_def.AddFile( l_txtName );
 					l_def.Deflate();
@@ -72,14 +72,14 @@ namespace Testing
 
 					if ( File::DirectoryExists( l_folder ) || File::DirectoryCreate( l_folder ) )
 					{
-						ZipArchive l_inf( l_zipName, File::eOPEN_MODE_READ );
+						ZipArchive l_inf( l_zipName, File::OpenMode::eRead );
 						l_inf.Inflate( l_folder );
 
 						String l_outTxtData;
 
 						{
 							std::cout << "	Check binary file content" << std::endl;
-							BinaryFile l_binary( l_folder / l_binName, File::eOPEN_MODE_READ );
+							BinaryFile l_binary( l_folder / l_binName, File::OpenMode::eRead );
 							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
 							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
 							CT_EQUAL( l_outBinData.size(), l_inBinData.size() );
@@ -88,7 +88,7 @@ namespace Testing
 
 						{
 							std::cout << "	Check text file content" << std::endl;
-							TextFile l_text( l_folder / l_txtName, File::eOPEN_MODE_READ );
+							TextFile l_text( l_folder / l_txtName, File::OpenMode::eRead );
 							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * sizeof( xchar ) );
 							CT_EQUAL( l_outTxtData, l_inTxtData );
 						}

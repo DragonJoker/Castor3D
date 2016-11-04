@@ -40,29 +40,29 @@ namespace Castor3D
 	{
 		//!\~english Always take texture colour
 		//!\~french Prend toujours la couleur de la texture
-		Always,
+		eAlways,
 		//!\~english Takes texture colour if alpha is less than given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
-		Less,
+		eLess,
 		//!\~english Takes texture colour if alpha is less than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
-		LEqual,
+		eLEqual,
 		//!\~english Takes texture colour if alpha is equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
-		Equal,
+		eEqual,
 		//!\~english Takes texture colour if alpha is different of given value
 		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
-		NEqual,
+		eNEqual,
 		//!\~english Takes texture colour if alpha is grater than or equal to given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
-		GEqual,
+		eGEqual,
 		//!\~english Takes texture colour if alpha is greater than given value
 		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
-		Greater,
+		eGreater,
 		//!\~english Never take texture colour
 		//!\~french Ne prend jamais la couleur de la texture
-		Never,
-		CASTOR_ENUM_CLASS_BOUNDS( Always )
+		eNever,
+		CASTOR_SCOPED_ENUM_BOUNDS( eAlways )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -74,10 +74,10 @@ namespace Castor3D
 	enum class TextureUVW
 		: uint8_t
 	{
-		U,
-		V,
-		W,
-		CASTOR_ENUM_CLASS_BOUNDS( U )
+		eU,
+		eV,
+		eW,
+		CASTOR_SCOPED_ENUM_BOUNDS( eU )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -89,11 +89,11 @@ namespace Castor3D
 	enum class WrapMode
 		: uint8_t
 	{
-		Repeat,
-		MirroredRepeat,
-		ClampToBorder,
-		ClampToEdge,
-		CASTOR_ENUM_CLASS_BOUNDS( Repeat )
+		eRepeat,
+		eMirroredRepeat,
+		eClampToBorder,
+		eClampToEdge,
+		CASTOR_SCOPED_ENUM_BOUNDS( eRepeat )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -105,10 +105,10 @@ namespace Castor3D
 	enum class InterpolationFilter
 		: uint8_t
 	{
-		Min,
-		Mag,
-		Mip,
-		Count
+		eMin,
+		eMag,
+		eMip,
+		eCount
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -120,9 +120,9 @@ namespace Castor3D
 	enum class ComparisonMode
 		: uint8_t
 	{
-		None,
-		RefToTexture,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		eNone,
+		eRefToTexture,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -134,10 +134,10 @@ namespace Castor3D
 	enum class InterpolationMode
 		: uint8_t
 	{
-		Undefined,
-		Nearest,
-		Linear,
-		CASTOR_ENUM_CLASS_BOUNDS( Undefined )
+		eUndefined,
+		eNearest,
+		eLinear,
+		CASTOR_SCOPED_ENUM_BOUNDS( eUndefined )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -149,10 +149,10 @@ namespace Castor3D
 	enum class BlendSrcIndex
 		: uint8_t
 	{
-		Index0,
-		Index1,
-		Index2,
-		CASTOR_ENUM_CLASS_BOUNDS( Index0 )
+		eIndex0,
+		eIndex1,
+		eIndex2,
+		CASTOR_SCOPED_ENUM_BOUNDS( eIndex0 )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -164,15 +164,15 @@ namespace Castor3D
 	enum class BlendSource
 		: uint8_t
 	{
-		Texture,
-		Texture0,
-		Texture1,
-		Texture2,
-		Texture3,
-		Constant,
-		Diffuse,
-		Previous,
-		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+		eTexture,
+		eTexture0,
+		eTexture1,
+		eTexture2,
+		eTexture3,
+		eConstant,
+		eDiffuse,
+		ePrevious,
+		CASTOR_SCOPED_ENUM_BOUNDS( eTexture )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -186,32 +186,32 @@ namespace Castor3D
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		NoBlend,
+		eNoBlend,
 		//!\~english Arg0
 		//!\~french Arg0
-		FirstArg,
+		eFirstArg,
 		//!\~english Arg0 + Arg1
 		//!\~french Arg0 + Arg1
-		Add,
+		eAdd,
 		//!\~english Arg0 + Arg1 - 0.5
 		//!\~french Arg0 + Arg1 - 0.5
-		AddSigned,
+		eAddSigned,
 		//!\~english Arg0 x Arg1
 		//!\~french Arg0 x Arg1
-		Modulate,
+		eModulate,
 		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
 		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		Interpolate,
+		eInterpolate,
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
-		Subtract,
+		eSubtract,
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)))
-		Dot3RGB,
+		eDot3RGB,
 		//!\~english 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
 		//!\~french 4 × (((Arg0.r - 0.5) × (Arg1.r - 0.5)) + ((Arg0.g - 0.5) × (Arg1.g - 0.5)) + ((Arg0.b - 0.5) × (Arg1.b - 0.5)) + ((Arg0.a - 0.5) × (Arg1.a - 0.5)))
-		Dot3RGBA,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		eDot3RGBA,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -225,26 +225,26 @@ namespace Castor3D
 	{
 		//!\~english No blend
 		//!\~french Pas de mélange
-		NoBlend,
+		eNoBlend,
 		//!\~english Arg0
 		//!\~french Arg0
-		FirstArg,
+		eFirstArg,
 		//!\~english Arg0 + Arg1
 		//!\~french Arg0 + Arg1
-		Add,
+		eAdd,
 		//!\~english Arg0 + Arg1 - 0.5
 		//!\~french Arg0 + Arg1 - 0.5
-		AddSigned,
+		eAddSigned,
 		//!\~english Arg0 x Arg1
 		//!\~french Arg0 x Arg1
-		Modulate,
+		eModulate,
 		//!\~english Arg0 × Arg2 + Arg1 × (1 - Arg2)
 		//!\~french Arg0 × Arg2 + Arg1 × (1 - Arg2)
-		Interpolate,
+		eInterpolate,
 		//!\~english Arg0 - Arg1
 		//!\~french Arg0 - Arg1
-		Subtract,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		eSubtract,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -258,20 +258,20 @@ namespace Castor3D
 	{
 		//!\~english Src2 + Src1.
 		//!\~french Src2 + Src1.
-		Add,
+		eAdd,
 		//!\~english Src2 - Src1.
 		//!\~french Src2 - Src1.
-		Subtract,
+		eSubtract,
 		//!\~english Src1 - Src2.
 		//!\~french Src1 - Src2.
-		RevSubtract,
+		eRevSubtract,
 		//!\~english min( Src1, Src2 ).
 		//!\~french min( Src1, Src2 ).
-		Min,
+		eMin,
 		//!\~english max( Src1, Src2 ).
 		//!\~french max( Src1, Src2 ).
-		Max,
-		Count
+		eMax,
+		eCount
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -283,24 +283,24 @@ namespace Castor3D
 	enum class BlendOperand
 		: uint8_t
 	{
-		Zero,
-		One,
-		SrcColour,
-		InvSrcColour,
-		DstColour,
-		InvDstColour,
-		SrcAlpha,
-		InvSrcAlpha,
-		DstAlpha,
-		InvDstAlpha,
-		Constant,
-		InvConstant,
-		SrcAlphaSaturate,
-		Src1Colour,
-		InvSrc1Colour,
-		Src1Alpha,
-		InvSrc1Alpha,
-		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+		eZero,
+		eOne,
+		eSrcColour,
+		eInvSrcColour,
+		eDstColour,
+		eInvDstColour,
+		eSrcAlpha,
+		eInvSrcAlpha,
+		eDstAlpha,
+		eInvDstAlpha,
+		eConstant,
+		eInvConstant,
+		eSrcAlphaSaturate,
+		eSrc1Colour,
+		eInvSrc1Colour,
+		eSrc1Alpha,
+		eInvSrc1Alpha,
+		CASTOR_SCOPED_ENUM_BOUNDS( eZero )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -314,23 +314,23 @@ namespace Castor3D
 	{
 		//!\~english Order dependent blending.
 		//!\~french Mélange dépendant de l'ordre.
-		NoBlend,
+		eNoBlend,
 		//!\~english Order independent, add the components.
 		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
-		Additive,
+		eAdditive,
 		//!\~english Order independent, multiply the components.
 		//!\~french Indépendant de l'ordre, multipliant les composantes.
-		Multiplicative,
+		eMultiplicative,
 		//!\~english Order dependent, interpolate the components.
 		//!\~french Indépendant de l'ordre, interpolant les composantes.
-		Interpolative,
+		eInterpolative,
 		//!\~english Order independent, using A-buffer, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
-		ABuffer,
+		eABuffer,
 		//!\~english Order independent, using depth peeling, not implemented yet.
 		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
-		DepthPeeling,
-		CASTOR_ENUM_CLASS_BOUNDS( NoBlend )
+		eDepthPeeling,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNoBlend )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -344,35 +344,35 @@ namespace Castor3D
 	{
 		//!\~english 1 dimension texture buffer, used to store data.
 		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
-		Buffer,
+		eBuffer,
 		//!\~english 1 dimension textures => one coordinate => U mapping
 		//!\~french Textures à 1 dimension => une coordonnée => U mapping
-		OneDimension,
+		eOneDimension,
 		//!\~english 1 dimension textures array => one coordinate => U mapping
 		//!\~french Tableau de textures à 1 dimension => une coordonnée => U mapping
-		OneDimensionArray,
+		eOneDimensionArray,
 		//!\~english 2 dimensions textures => two coordinates => UV mapping
 		//!\~french Textures à 2 dimensions => deux coordonnées => UV mapping
-		TwoDimensions,
+		eTwoDimensions,
 		//!\~english 2 dimensions textures array => two coordinates => UV mapping
 		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		TwoDimensionsArray,
+		eTwoDimensionsArray,
 		//!\~english 2 dimensions textures with multisample support => two coordinates => UV mapping
 		//!\~french Textures à 2 dimensions avec support du multisampling => deux coordonnées => UV mapping
-		TwoDimensionsMS,
+		eTwoDimensionsMS,
 		//!\~english 2 dimensions textures array with multisample support => two coordinates => UV mapping
 		//!\~french Tableau de textures à 2 dimensions => deux coordonnées => UV mapping
-		TwoDimensionsMSArray,
+		eTwoDimensionsMSArray,
 		//!\~english 3 dimensions textures => three coordinates => UVW mapping
 		//!\~french Textures à 3 dimensions => trois coordonnées => UVW mapping
-		ThreeDimensions,
+		eThreeDimensions,
 		//!\~english Cube texture.
 		//!\~french Textures cube.
-		Cube,
+		eCube,
 		//!\~english Cube textures array.
 		//!\~french Tableaux de textures cube.
-		CubeArray,
-		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
+		eCubeArray,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -386,32 +386,32 @@ namespace Castor3D
 	{
 		//!\~english 1 dimension texture buffer, used to store data.
 		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
-		Buffer,
+		eBuffer,
 		//!\~english 1 dimension textures.
 		//!\~french Textures à 1 dimension.
-		OneDimension,
+		eOneDimension,
 		//!\~english 1 dimension texture arrays.
 		//!\~french Tableaux de textures à 1 dimension.
-		OneDimensionArray,
+		eOneDimensionArray,
 		//!\~english 2 dimensions textures.
 		//!\~french Textures à 2 dimensions.
-		TwoDimensions,
+		eTwoDimensions,
 		//!\~english 2 dimensions texture arrays.
 		//!\~french Tableaux de textures à 2 dimensions.
-		TwoDimensionsArray,
+		eTwoDimensionsArray,
 		//!\~english 2 dimensions textures with multisample support.
 		//!\~french Textures à 2 dimensions avec support du multisampling.
-		TwoDimensionsMS,
+		eTwoDimensionsMS,
 		//!\~english 3 dimensions textures.
 		//!\~french Textures à 3 dimensions.
-		ThreeDimensions,
+		eThreeDimensions,
 		//!\~english Cube map.
 		//!\~french Cube map.
-		CubeMap,
+		eCubeMap,
 		//!\~english Cube map array.
 		//!\~french Tableau de cube maps.
-		CubeMapArray,
-		CASTOR_ENUM_CLASS_BOUNDS( Buffer )
+		eCubeMapArray,
+		CASTOR_SCOPED_ENUM_BOUNDS( eBuffer )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -425,23 +425,23 @@ namespace Castor3D
 	{
 		//!\~english Face on positive X
 		//!\~french Face des X positifs.
-		PositiveX,
+		ePositiveX,
 		//!\~english Face on negative X
 		//!\~french Face des X négatifs.
-		NegativeX,
+		eNegativeX,
 		//!\~english Face on positive Y
 		//!\~french Face des Y positifs.
-		PositiveY,
+		ePositiveY,
 		//!\~english Face on negative Y
 		//!\~french Face des Y négatifs.
-		NegativeY,
+		eNegativeY,
 		//!\~english Face on positive Z
 		//!\~french Face des Z positifs.
-		PositiveZ,
+		ePositiveZ,
 		//!\~english Face on negative Z
 		//!\~french Face des Z négatifs.
-		NegativeZ,
-		CASTOR_ENUM_CLASS_BOUNDS( PositiveX )
+		eNegativeZ,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePositiveX )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -455,40 +455,40 @@ namespace Castor3D
 	{
 		//!\~english Undefined channel.
 		//!\~french Canal indéfini.
-		Undefined = 0x0000,
+		eUndefined = 0x0000,
 		//!\~english Colour map
 		//!\~french Map de couleurs
-		Colour = 0x0001,
+		eColour = 0x0001,
 		//!\~english Diffuse map
 		//!\~french Map de diffuse
-		Diffuse = 0x0002,
+		eDiffuse = 0x0002,
 		//!\~english Normal map
 		//!\~french Map de normales
-		Normal = 0x0004,
+		eNormal = 0x0004,
 		//!\~english Opacity map
 		//!\~french Map d'opacité
-		Opacity = 0x0008,
+		eOpacity = 0x0008,
 		//!\~english Specular map
 		//!\~french Map de spéculaire
-		Specular = 0x0010,
+		eSpecular = 0x0010,
 		//!\~english Height map
 		//!\~french Map de hauteur
-		Height = 0x0020,
+		eHeight = 0x0020,
 		//!\~english Ambient map
 		//!\~french Map d'ambiante
-		Ambient = 0x0040,
+		eAmbient = 0x0040,
 		//!\~english Gloss map
 		//!\~french Map de gloss
-		Gloss = 0x0080,
+		eGloss = 0x0080,
 		//!\~english Emissive map
 		//!\~french Map d'émissive
-		Emissive = 0x0100,
+		eEmissive = 0x0100,
 		//!\~english Mask for all the texture channels
 		//!\~french Masque pour les canaux de texture
-		All = 0x0FFF,
-		//!\~english Not really a texture channel (it is out of TextureChannel::All), used to tell we want text overlay shader source
-		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::All), utilisé pour dire que nous voulons un shader d'incrustation texte
-		Text = 0x1000,
+		eAll = 0x0FFF,
+		//!\~english Not really a texture channel (it is out of TextureChannel::eAll), used to tell we want text overlay shader source
+		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::eAll), utilisé pour dire que nous voulons un shader d'incrustation texte
+		eText = 0x1000,
 	};
 
 	class TextureImage;

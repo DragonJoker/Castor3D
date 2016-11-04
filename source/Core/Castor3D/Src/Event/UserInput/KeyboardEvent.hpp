@@ -52,7 +52,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of a keyboard event.
 	*\~french
-	*\brief		Description d'un �v�nement clavier.
+	*\brief		Description d'un évènement clavier.
 	*/
 	class KeyboardEvent
 		: public UserInputEvent
@@ -68,14 +68,14 @@ namespace Castor3D
 		 *\param[in]	p_shift	Tells if the Shift key is down.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'�v�nement clavier.
+		 *\param[in]	p_type	Le type d'évènement clavier.
 		 *\param[in]	p_key	Le code de la touche.
 		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfonc�e.
 		 *\param[in]	p_alt	Dit si la touche Alt est enfonc�e.
 		 *\param[in]	p_shift	Dit si la touche Shift est enfonc�e.
 		 */
-		KeyboardEvent( eKEYBOARD_EVENT p_type, eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
-			: UserInputEvent{ eUSER_INPUT_EVENT_TYPE_KEYBOARD }
+		KeyboardEvent( KeyboardEventType p_type, KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift )
+			: UserInputEvent{ UserInputEventType::eKeyboard }
 			, m_keyboardEventType{ p_type }
 			, m_key{ p_key }
 			, m_ctrl{ p_ctrl }
@@ -95,15 +95,15 @@ namespace Castor3D
 		 *\param[in]	p_shift	Tells if the Shift key is down.
 		*\~french
 		*\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'�v�nement clavier.
+		 *\param[in]	p_type	Le type d'évènement clavier.
 		 *\param[in]	p_key	Le code de la touche.
 		 *\param[in]	p_char	Le caract�re correspondant qu code de la touche.
 		 *\param[in]	p_ctrl	Dit si la touche Ctrl est enfonc�e.
 		 *\param[in]	p_alt	Dit si la touche Alt est enfonc�e.
 		 *\param[in]	p_shift	Dit si la touche Shift est enfonc�e.
 		 */
-		KeyboardEvent( eKEYBOARD_EVENT p_type, eKEYBOARD_KEY p_key, Castor::String const & p_char, bool p_ctrl, bool p_alt, bool p_shift )
-			: UserInputEvent{ eUSER_INPUT_EVENT_TYPE_KEYBOARD }
+		KeyboardEvent( KeyboardEventType p_type, KeyboardKey p_key, Castor::String const & p_char, bool p_ctrl, bool p_alt, bool p_shift )
+			: UserInputEvent{ UserInputEventType::eKeyboard }
 			, m_keyboardEventType{ p_type }
 			, m_key{ p_key }
 			, m_ctrl{ p_ctrl }
@@ -125,9 +125,9 @@ namespace Castor3D
 		*\~english
 		 *\return		The keyboard event type.
 		*\~french
-		*\~return		Le type d'�v�nement clavier.
+		*\~return		Le type d'évènement clavier.
 		 */
-		inline eKEYBOARD_EVENT GetKeyboardEventType()const
+		inline KeyboardEventType GetKeyboardEventType()const
 		{
 			return m_keyboardEventType;
 		}
@@ -137,7 +137,7 @@ namespace Castor3D
 		*\~french
 		*\~return		Le code de la touche.
 		 */
-		inline eKEYBOARD_KEY GetKey()const
+		inline KeyboardKey GetKey()const
 		{
 			return m_key;
 		}
@@ -183,10 +183,10 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The keyboard event type.	\~french Le type d'�v�nement clavier.
-		eKEYBOARD_EVENT const m_keyboardEventType;
+		//!\~english The keyboard event type.	\~french Le type d'évènement clavier.
+		KeyboardEventType const m_keyboardEventType;
 		//!\~english The key code.	\~french Le code de la touche.
-		eKEYBOARD_KEY const m_key;
+		KeyboardKey const m_key;
 		//!\~english The character.	\~french Le caract�re repr�sent� par la touche.
 		Castor::String const m_char;
 		//!\~english Tells if the Ctrl key is down.	\~french Dit si la touche Ctrl est enfonc�e.

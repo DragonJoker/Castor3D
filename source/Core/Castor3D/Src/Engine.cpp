@@ -84,8 +84,8 @@ namespace Castor3D
 		std::locale::global( std::locale() );
 		Image::InitialiseImageLib();
 
-		m_shadowMapPassFactory.Register( LightType::Point, &ShadowMapPassPoint::Create );
-		m_shadowMapPassFactory.Register( LightType::Spot, &ShadowMapPassSpot::Create );
+		m_shadowMapPassFactory.Register( LightType::ePoint, &ShadowMapPassPoint::Create );
+		m_shadowMapPassFactory.Register( LightType::eSpot, &ShadowMapPassSpot::Create );
 
 		// m_listenerCache *MUST* be the first created.
 		m_listenerCache = MakeCache< FrameListener, String >(	*this
@@ -121,7 +121,7 @@ namespace Castor3D
 														return nullptr;
 													} );
 		m_overlayCache = MakeCache< Overlay, String >(	*this
-														, [this]( String const & p_name, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+														, [this]( String const & p_name, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 														{
 															auto l_return = std::make_shared< Overlay >( *this, p_type, p_scene, p_parent );
 															l_return->SetName( p_name );
@@ -190,12 +190,12 @@ namespace Castor3D
 		if ( m_renderSystem )
 		{
 			m_defaultSampler = m_samplerCache->Add( cuT( "Default" ) );
-			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-			m_defaultSampler->SetInterpolationMode( InterpolationFilter::Mip, InterpolationMode::Linear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
 			m_lightsSampler = m_samplerCache->Add( cuT( "LightsSampler" ) );
-			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Nearest );
-			m_lightsSampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Nearest );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
+			m_lightsSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
 
 			DoLoadCoreData();
 		}

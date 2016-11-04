@@ -30,7 +30,7 @@ namespace CastorGui
 	}
 
 	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_LIST, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eListBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
 		, m_selected( p_selected )
@@ -76,7 +76,7 @@ namespace CastorGui
 		if ( GetControlsManager() )
 		{
 			StaticCtrlSPtr l_item = DoCreateItemCtrl( p_value );
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_item]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_item]()
 			{
 				GetControlsManager()->Create( l_item );
 			} ) );
@@ -112,7 +112,7 @@ namespace CastorGui
 				if ( GetControlsManager() )
 				{
 					ControlSPtr l_control = *l_it;
-					GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_control]()
+					GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_control]()
 					{
 						GetControlsManager()->Destroy( l_control );
 					} ) );
@@ -222,22 +222,22 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
+		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
 		l_item->SetCatchesMouseEvents( true );
 
-		l_item->ConnectNC( eMOUSE_EVENT_ENTER, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_item->ConnectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnItemMouseEnter( p_control, p_event );
 		} );
-		l_item->ConnectNC( eMOUSE_EVENT_LEAVE, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_item->ConnectNC( MouseEventType::eLeave, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnItemMouseLeave( p_control, p_event );
 		} );
-		l_item->ConnectNC( eMOUSE_EVENT_BUTTON_RELEASED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_item->ConnectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnItemMouseLButtonUp( p_control, p_event );
 		} );
-		l_item->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		l_item->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnItemKeyDown( p_control, p_event );
 		} );
@@ -295,7 +295,7 @@ namespace CastorGui
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		SetSize( Size( GetSize().width(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
 
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
 			OnKeyDown( p_event );
 		} );
@@ -399,7 +399,7 @@ namespace CastorGui
 
 	void ListBoxCtrl::OnItemMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			int l_index = -1;
 
@@ -420,7 +420,7 @@ namespace CastorGui
 				}
 
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( m_selected );
+				m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
 			}
 			else
 			{
@@ -436,12 +436,12 @@ namespace CastorGui
 			bool l_changed = false;
 			int l_index = m_selected;
 
-			if ( p_event.GetKey() == eKEY_UP )
+			if ( p_event.GetKey() == KeyboardKey::eUp )
 			{
 				l_index--;
 				l_changed = true;
 			}
-			else if ( p_event.GetKey() == eKEY_DOWN )
+			else if ( p_event.GetKey() == KeyboardKey::eDown )
 			{
 				l_index++;
 				l_changed = true;
@@ -451,7 +451,7 @@ namespace CastorGui
 			{
 				l_index = std::max( 0, std::min( l_index, int( m_items.size() - 1 ) ) );
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( l_index );
+				m_signals[size_t( ListBoxEvent::eSelected )]( l_index );
 			}
 		}
 	}

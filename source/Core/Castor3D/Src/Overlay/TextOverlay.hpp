@@ -231,7 +231,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de découpe du texte.
 		*/
-		inline eTEXT_WRAPPING_MODE GetTextWrappingMode()const
+		inline TextWrappingMode GetTextWrappingMode()const
 		{
 			return m_wrappingMode;
 		}
@@ -243,7 +243,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de découpe du texte
 		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetTextWrappingMode( eTEXT_WRAPPING_MODE p_value )
+		inline void SetTextWrappingMode( TextWrappingMode p_value )
 		{
 			m_textChanged |= m_wrappingMode != p_value;
 			m_wrappingMode = p_value;
@@ -254,7 +254,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'alignement horizontal.
 		*/
-		inline eHALIGN GetHAlign()const
+		inline HAlign GetHAlign()const
 		{
 			return m_hAlign;
 		}
@@ -266,7 +266,7 @@ namespace Castor3D
 		 *\brief		Définit l'alignement horizontal
 		 *\param[in]	p_value	La nouvelle valeur
 		*/
-		inline void SetHAlign( eHALIGN p_value )
+		inline void SetHAlign( HAlign p_value )
 		{
 			m_textChanged |= m_hAlign != p_value;
 			m_hAlign = p_value;
@@ -277,7 +277,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		L'alignement vertical.
 		*/
-		inline eVALIGN GetVAlign()const
+		inline VAlign GetVAlign()const
 		{
 			return m_vAlign;
 		}
@@ -289,7 +289,7 @@ namespace Castor3D
 		 *\brief		Définit l'alignement vertical
 		 *\param[in]	p_value	La nouvelle valeur
 		*/
-		inline void SetVAlign( eVALIGN p_value )
+		inline void SetVAlign( VAlign p_value )
 		{
 			m_textChanged |= m_vAlign != p_value;
 			m_vAlign = p_value;
@@ -300,7 +300,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode de mappage de texture du texte.
 		*/
-		inline eTEXT_TEXTURING_MODE GetTexturingMode()const
+		inline TextTexturingMode GetTexturingMode()const
 		{
 			return m_texturingMode;
 		}
@@ -312,7 +312,7 @@ namespace Castor3D
 		 *\brief		Définit le mode de mappage de texture du texte.
 		 *\param[in]	p_value	La nouvelle valeur.
 		*/
-		inline void SetTexturingMode( eTEXT_TEXTURING_MODE p_value )
+		inline void SetTexturingMode( TextTexturingMode p_value )
 		{
 			m_textChanged |= m_texturingMode != p_value;
 			m_texturingMode = p_value;
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode d'espacement des lignes.
 		*/
-		inline eTEXT_LINE_SPACING_MODE GetLineSpacingMode()const
+		inline TextLineSpacingMode GetLineSpacingMode()const
 		{
 			return m_lineSpacingMode;
 		}
@@ -335,7 +335,7 @@ namespace Castor3D
 		 *\brief		Définit le mode d'espacement des lignes.
 		 *\param[in]	p_value	La nouvelle valeur.
 		*/
-		inline void SetLineSpacingMode( eTEXT_LINE_SPACING_MODE p_value )
+		inline void SetLineSpacingMode( TextLineSpacingMode p_value )
 		{
 			m_textChanged |= m_lineSpacingMode != p_value;
 			m_lineSpacingMode = p_value;
@@ -543,13 +543,13 @@ namespace Castor3D
 		//!\~english The texture associated to the overlay font.	\~french La texture associée à la police de l'incrustation.
 		FontTextureWPtr m_fontTexture;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
-		eTEXT_WRAPPING_MODE m_wrappingMode{ eTEXT_WRAPPING_MODE_NONE };
+		TextWrappingMode m_wrappingMode{ TextWrappingMode::eNone };
 		//!\~english The lines spacing mode.	\~french Le mode d'espacement des lignes.
-		eTEXT_LINE_SPACING_MODE m_lineSpacingMode{ eTEXT_LINE_SPACING_MODE_OWN_HEIGHT };
+		TextLineSpacingMode m_lineSpacingMode{ TextLineSpacingMode::eOwnHeight };
 		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.
-		eHALIGN m_hAlign{ eHALIGN_LEFT };
+		HAlign m_hAlign{ HAlign::eLeft };
 		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.
-		eVALIGN m_vAlign{ eVALIGN_CENTER };
+		VAlign m_vAlign{ VAlign::eCenter };
 		//!\~english Tells if the text (caption, wrap mode, or alignments) has changed.	\~french Dit si le texte (contenu, mode de découpe, alignements) a changé.
 		bool m_textChanged{ true };
 		//!\~english The size (in spaces) of tabulation character.	\~french La taille (en espaces) du caractère de tabulation.
@@ -557,7 +557,7 @@ namespace Castor3D
 		//!\~english The connection to the FontTexture changed notification signal.	\~french La connexion au signal de notification de changement de la texture.
 		uint32_t m_connection{ 0 };
 		//!\~english The text texture mapping mode.	\~french Le mode de mappage de texture du texte.
-		eTEXT_TEXTURING_MODE m_texturingMode{ eTEXT_TEXTURING_MODE_TEXT };
+		TextTexturingMode m_texturingMode{ TextTexturingMode::eText };
 		//!\~english The text texture coordinates buffer data.	\~french Les données du tampon de coordonnées de texture du texte.
 		TextureCoordsArray m_arrayTextTexture;
 	};

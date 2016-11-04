@@ -1,4 +1,4 @@
-﻿namespace Castor
+namespace Castor
 {
 	//*************************************************************************************************
 
@@ -160,7 +160,7 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	Pixel< FT > & Pixel< FT >::operator =( Pixel< FT > const & p_pxl )
+	Pixel< FT > & Pixel< FT >::operator=( Pixel< FT > const & p_pxl )
 	{
 		if ( m_pComponents.get() )
 		{
@@ -183,7 +183,7 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	Pixel< FT > & Pixel< FT >::operator =( Pixel< FT > && p_pxl )
+	Pixel< FT > & Pixel< FT >::operator=( Pixel< FT > && p_pxl )
 	{
 		if ( this != &p_pxl )
 		{
@@ -197,7 +197,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< TPL_PIXEL_FORMAT FU >
-	Pixel< FT > & Pixel< FT >::operator =( Pixel< FU > const & p_pxl )
+	Pixel< FT > & Pixel< FT >::operator=( Pixel< FU > const & p_pxl )
 	{
 		if ( m_pComponents.get() )
 		{
@@ -225,7 +225,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< TPL_PIXEL_FORMAT FU >
-	Pixel< FT > & Pixel< FT >::operator +=( Pixel< FU > const & p_px )
+	Pixel< FT > & Pixel< FT >::operator+=( Pixel< FU > const & p_px )
 	{
 		PxOperators< FT, FU >::Add( *this, p_px );
 		return *this;
@@ -233,7 +233,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator +=( U const & p_t )
+	Pixel< FT > & Pixel< FT >::operator+=( U const & p_t )
 	{
 		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 		{
@@ -245,7 +245,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< TPL_PIXEL_FORMAT FU >
-	Pixel< FT > & Pixel< FT >::operator -=( Pixel< FU > const & p_px )
+	Pixel< FT > & Pixel< FT >::operator-=( Pixel< FU > const & p_px )
 	{
 		PxOperators< FT, FU >::Substract( *this, p_px );
 		return *this;
@@ -253,7 +253,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator -=( U const & p_t )
+	Pixel< FT > & Pixel< FT >::operator-=( U const & p_t )
 	{
 		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 		{
@@ -265,7 +265,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< TPL_PIXEL_FORMAT FU >
-	Pixel< FT > & Pixel< FT >::operator /=( Pixel< FU > const & p_px )
+	Pixel< FT > & Pixel< FT >::operator/=( Pixel< FU > const & p_px )
 	{
 		PxOperators< FT, FU >::Divide( *this, p_px );
 		return *this;
@@ -273,7 +273,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator /=( U const & p_t )
+	Pixel< FT > & Pixel< FT >::operator/=( U const & p_t )
 	{
 		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 		{
@@ -285,7 +285,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< TPL_PIXEL_FORMAT FU >
-	Pixel< FT > & Pixel< FT >::operator *=( Pixel< FU > const & p_px )
+	Pixel< FT > & Pixel< FT >::operator*=( Pixel< FU > const & p_px )
 	{
 		PxOperators< FT, FU >::Multiply( *this, p_px );
 		return *this;
@@ -293,7 +293,7 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	template< typename U >
-	Pixel< FT > & Pixel< FT >::operator *=( U const & p_t )
+	Pixel< FT > & Pixel< FT >::operator*=( U const & p_t )
 	{
 		for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 		{
@@ -377,13 +377,13 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU >
-	bool operator ==( Pixel< FT > const & p_pixel, Pixel< FU > const & p_pxl )
+	bool operator==( Pixel< FT > const & p_pixel, Pixel< FU > const & p_pxl )
 	{
 		return PxOperators< FT, FU >::Equals( p_pixel, p_pxl );
 	}
 
 	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU >
-	Pixel< FT > operator +( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
+	Pixel< FT > operator+( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn += p_px;
@@ -391,7 +391,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, typename U >
-	Pixel< FT > operator +( Pixel< FT > const & p_pixel, U const & p_t )
+	Pixel< FT > operator+( Pixel< FT > const & p_pixel, U const & p_t )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn += p_t;
@@ -399,7 +399,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU >
-	Pixel< FT > operator -( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
+	Pixel< FT > operator-( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn -= p_px;
@@ -407,7 +407,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, typename U >
-	Pixel< FT > operator -( Pixel< FT > const & p_pixel, U const & p_t )
+	Pixel< FT > operator-( Pixel< FT > const & p_pixel, U const & p_t )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn -= p_t;
@@ -415,7 +415,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU >
-	Pixel< FT > operator /( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
+	Pixel< FT > operator/( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn /= p_px;
@@ -423,7 +423,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, typename U >
-	Pixel< FT > operator /( Pixel< FT > const & p_pixel, U const & p_t )
+	Pixel< FT > operator/( Pixel< FT > const & p_pixel, U const & p_t )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn /= p_t;
@@ -431,7 +431,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU >
-	Pixel< FT > operator *( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
+	Pixel< FT > operator*( Pixel< FT > const & p_pixel, Pixel< FU > const & p_px )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn *= p_px;
@@ -439,7 +439,7 @@
 	}
 
 	template < TPL_PIXEL_FORMAT FT, typename U >
-	Pixel< FT > operator *( Pixel< FT > const & p_pixel, U const & p_t )
+	Pixel< FT > operator*( Pixel< FT > const & p_pixel, U const & p_t )
 	{
 		Pixel< FT > l_pxReturn( p_pixel );
 		l_pxReturn *= p_t;

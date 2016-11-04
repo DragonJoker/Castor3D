@@ -4,120 +4,120 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 1 );
-		static const VariableType Count = VariableType::Vec2;
-		static const FrameVariableType Full = FrameVariableType::Vec2b;
+		static const VariableType Count = VariableType::eVec2;
+		static const FrameVariableType Full = FrameVariableType::eVec2b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 2 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 1 );
-		static const VariableType Count = VariableType::Vec2;
-		static const FrameVariableType Full = FrameVariableType::Vec2i;
+		static const VariableType Count = VariableType::eVec2;
+		static const FrameVariableType Full = FrameVariableType::eVec2i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 2 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 1 );
-		static const VariableType Count = VariableType::Vec2;
-		static const FrameVariableType Full = FrameVariableType::Vec2ui;
+		static const VariableType Count = VariableType::eVec2;
+		static const FrameVariableType Full = FrameVariableType::eVec2ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 2 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 1 );
-		static const VariableType Count = VariableType::Vec2;
-		static const FrameVariableType Full = FrameVariableType::Vec2f;
+		static const VariableType Count = VariableType::eVec2;
+		static const FrameVariableType Full = FrameVariableType::eVec2f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 2 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 1 );
-		static const VariableType Count = VariableType::Vec2;
-		static const FrameVariableType Full = FrameVariableType::Vec2d;
+		static const VariableType Count = VariableType::eVec2;
+		static const FrameVariableType Full = FrameVariableType::eVec2d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 3 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 1 );
-		static const VariableType Count = VariableType::Vec3;
-		static const FrameVariableType Full = FrameVariableType::Vec3b;
+		static const VariableType Count = VariableType::eVec3;
+		static const FrameVariableType Full = FrameVariableType::eVec3b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 3 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 1 );
-		static const VariableType Count = VariableType::Vec3;
-		static const FrameVariableType Full = FrameVariableType::Vec3i;
+		static const VariableType Count = VariableType::eVec3;
+		static const FrameVariableType Full = FrameVariableType::eVec3i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 3 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 1 );
-		static const VariableType Count = VariableType::Vec3;
-		static const FrameVariableType Full = FrameVariableType::Vec3ui;
+		static const VariableType Count = VariableType::eVec3;
+		static const FrameVariableType Full = FrameVariableType::eVec3ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 3 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 1 );
-		static const VariableType Count = VariableType::Vec3;
-		static const FrameVariableType Full = FrameVariableType::Vec3f;
+		static const VariableType Count = VariableType::eVec3;
+		static const FrameVariableType Full = FrameVariableType::eVec3f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 3 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 1 );
-		static const VariableType Count = VariableType::Vec3;
-		static const FrameVariableType Full = FrameVariableType::Vec3d;
+		static const VariableType Count = VariableType::eVec3;
+		static const FrameVariableType Full = FrameVariableType::eVec3d;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 4 >
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 1 );
-		static const VariableType Count = VariableType::Vec4;
-		static const FrameVariableType Full = FrameVariableType::Vec4b;
+		static const VariableType Count = VariableType::eVec4;
+		static const FrameVariableType Full = FrameVariableType::eVec4b;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 4 >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 1 );
-		static const VariableType Count = VariableType::Vec4;
-		static const FrameVariableType Full = FrameVariableType::Vec4i;
+		static const VariableType Count = VariableType::eVec4;
+		static const FrameVariableType Full = FrameVariableType::eVec4i;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 4 >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 1 );
-		static const VariableType Count = VariableType::Vec4;
-		static const FrameVariableType Full = FrameVariableType::Vec4ui;
+		static const VariableType Count = VariableType::eVec4;
+		static const FrameVariableType Full = FrameVariableType::eVec4ui;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 4 >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 1 );
-		static const VariableType Count = VariableType::Vec4;
-		static const FrameVariableType Full = FrameVariableType::Vec4f;
+		static const VariableType Count = VariableType::eVec4;
+		static const FrameVariableType Full = FrameVariableType::eVec4f;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 4 >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 1 );
-		static const VariableType Count = VariableType::Vec4;
-		static const FrameVariableType Full = FrameVariableType::Vec4d;
+		static const VariableType Count = VariableType::eVec4;
+		static const FrameVariableType Full = FrameVariableType::eVec4d;
 		C3D_API static const xchar * FullTypeName;
 	};
 

@@ -92,7 +92,7 @@ namespace Castor3D
 	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
 	*/
 	template< class Type >
-	class InterpolatorT< Type, InterpolatorType::Nearest >
+	class InterpolatorT< Type, InterpolatorType::eNearest >
 		: public Interpolator< Type >
 	{
 	public:
@@ -137,7 +137,7 @@ namespace Castor3D
 	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
 	*/
 	template< class Type >
-	class InterpolatorT< Type, InterpolatorType::Linear >
+	class InterpolatorT< Type, InterpolatorType::eLinear >
 		: public Interpolator< Type >
 	{
 	public:
@@ -201,7 +201,7 @@ namespace Castor3D
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
 	template<>
-	class InterpolatorT< Castor::Quaternion, InterpolatorType::Linear >
+	class InterpolatorT< Castor::Quaternion, InterpolatorType::eLinear >
 		: public Interpolator< Castor::Quaternion >
 	{
 	public:

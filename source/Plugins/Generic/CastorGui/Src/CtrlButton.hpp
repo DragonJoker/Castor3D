@@ -118,18 +118,18 @@ namespace CastorGui
 		 *\param[in]	p_function		The function
 		 *\return		The internal function index, to be able to disconnect it
 		 */
-		inline uint32_t Connect( eBUTTON_EVENT p_event, std::function< void() > p_function )
+		inline uint32_t Connect( ButtonEvent p_event, std::function< void() > p_function )
 		{
-			return m_signals[p_event].connect( p_function );
+			return m_signals[size_t( p_event )].connect( p_function );
 		}
 
 		/** Disconnects a function from a button event
 		 *\param[in]	p_event		The event type
 		 *\param[in]	p_index		The function index
 		 */
-		inline void Disconnect( eBUTTON_EVENT p_event, uint32_t p_index )
+		inline void Disconnect( ButtonEvent p_event, uint32_t p_index )
 		{
-			m_signals[p_event].disconnect( p_index );
+			m_signals[size_t( p_event )].disconnect( p_index );
 		}
 
 	private:
@@ -208,7 +208,7 @@ namespace CastorGui
 		//! The pushed button foreground material.
 		Castor3D::MaterialWPtr m_pushedForegroundMaterial;
 		//! The button events signals
-		Castor::Signal< std::function< void() > > m_signals[eBUTTON_EVENT_COUNT];
+		Castor::Signal< std::function< void() > > m_signals[size_t( ButtonEvent::eCount )];
 	};
 }
 

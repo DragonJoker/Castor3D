@@ -548,7 +548,7 @@ namespace castortd
 			l_geometry->SetMaterial( l_submesh, l_material );
 		}
 
-		auto l_light = m_scene.GetLightCache().Add( l_name, l_node, LightType::Point );
+		auto l_light = m_scene.GetLightCache().Add( l_name, l_node, LightType::ePoint );
 		l_light->SetColour( p_category->GetColour() );
 		l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
 		l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.1f } );

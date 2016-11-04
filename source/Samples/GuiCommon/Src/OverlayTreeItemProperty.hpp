@@ -95,14 +95,14 @@ namespace GuiCommon
 		void OnBorderSizeChange( Castor::Rectangle const & p_value );
 		void OnBorderInnerUVChange( Castor::Point4d const & p_value );
 		void OnBorderOuterUVChange( Castor::Point4d const & p_value );
-		void OnBorderPositionChange( Castor3D::eBORDER_POSITION p_value );
+		void OnBorderPositionChange( Castor3D::BorderPosition p_value );
 		void OnCaptionChange( Castor::String const & p_value );
 		void OnFontChange( Castor::FontSPtr p_value );
-		void OnHAlignChange( Castor3D::eHALIGN p_value );
-		void OnVAlignChange( Castor3D::eVALIGN p_value );
-		void OnWrappingChange( Castor3D::eTEXT_WRAPPING_MODE p_value );
-		void OnSpacingChange( Castor3D::eTEXT_LINE_SPACING_MODE p_value );
-		void OnTexturingChange( Castor3D::eTEXT_TEXTURING_MODE p_value );
+		void OnHAlignChange( Castor3D::HAlign p_value );
+		void OnVAlignChange( Castor3D::VAlign p_value );
+		void OnWrappingChange( Castor3D::TextWrappingMode p_value );
+		void OnSpacingChange( Castor3D::TextLineSpacingMode p_value );
+		void OnTexturingChange( Castor3D::TextTexturingMode p_value );
 
 	private:
 		Castor3D::OverlayCategoryWPtr m_overlay;

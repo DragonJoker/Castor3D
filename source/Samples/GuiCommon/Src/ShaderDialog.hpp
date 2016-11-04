@@ -62,7 +62,7 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
-		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::Count )];
+		ShaderEditorPage * m_pEditorPages[size_t( Castor3D::ShaderType::eCount )];
 		Castor3D::ShaderProgramWPtr m_shaderProgram;
 		Castor3D::PassWPtr m_pPass;
 		bool m_bCompiled;

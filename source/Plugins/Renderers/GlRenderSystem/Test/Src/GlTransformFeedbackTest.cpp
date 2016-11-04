@@ -36,7 +36,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			return l_program;
 		}
 
@@ -53,7 +53,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			return l_program;
 		}
 
@@ -88,9 +88,9 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::Geometry );
-			l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::Geometry, l_model, l_geo );
+			l_program->CreateObject( ShaderType::eGeometry );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
 			return l_program;
 		}
 
@@ -227,9 +227,9 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::Geometry );
-			l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
-			l_program->SetSource( ShaderType::Geometry, l_model, l_geo );
+			l_program->CreateObject( ShaderType::eGeometry );
+			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
 			return l_program;
 		}
 	}
@@ -256,7 +256,7 @@ namespace Testing
 	void GlTransformFeedbackTest::Creation()
 	{
 		auto l_program = DoCreateNoopProgram( m_engine );
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( {}, Topology::Points, *l_program );
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( {}, Topology::ePoints, *l_program );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
@@ -271,13 +271,13 @@ namespace Testing
 		BufferDeclaration l_outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		BufferDeclaration l_inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		float l_data[] = { 1, 2, 3, 4, 5 };
@@ -286,7 +286,7 @@ namespace Testing
 		auto l_program = DoCreateBasicComputeProgram( m_engine );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program );
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
 		l_program->SetTransformLayout( l_outputs );
 
 		// Pipeline
@@ -304,21 +304,21 @@ namespace Testing
 		l_vboOut.Resize( sizeof( l_data ) );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program );
+		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 		CT_CHECK( l_vboIn.Create() );
 		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::Static, BufferAccessNature::Read ) );
+		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
 		for ( int j = 0; j < 2; ++j )
 		{
 			l_vboIn.Bind();
-			auto l_buffer = reinterpret_cast< float * >( l_vboIn.Lock( 0, sizeof( l_data ), AccessType::Read ) );
+			auto l_buffer = reinterpret_cast< float * >( l_vboIn.Lock( 0, sizeof( l_data ), AccessType::eRead ) );
 
 			if ( l_buffer )
 			{
@@ -339,7 +339,7 @@ namespace Testing
 			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
 
 			l_vboOut.Bind();
-			l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ), AccessType::Read ) );
+			l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ), AccessType::eRead ) );
 
 			if ( l_buffer )
 			{
@@ -369,13 +369,13 @@ namespace Testing
 		BufferDeclaration l_outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		BufferDeclaration l_inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		float l_data[] = { 1, 2, 3, 4, 5 };
@@ -384,7 +384,7 @@ namespace Testing
 		auto l_program = DoCreateGeometryShaderProgram( m_engine );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Triangles, *l_program );
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::eTriangles, *l_program );
 		l_program->SetTransformLayout( l_outputs );
 
 		// Pipeline
@@ -402,14 +402,14 @@ namespace Testing
 		l_vboOut.Resize( sizeof( l_data ) * 3 );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program );
+		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 		CT_CHECK( l_vboIn.Create() );
 		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::Static, BufferAccessNature::Read ) );
+		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -420,7 +420,7 @@ namespace Testing
 		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
 
 		l_vboOut.Bind();
-		auto l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ) * 3, AccessType::Read ) );
+		auto l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ) * 3, AccessType::eRead ) );
 
 		if ( l_buffer )
 		{
@@ -452,13 +452,13 @@ namespace Testing
 		BufferDeclaration l_outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "outValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		BufferDeclaration l_inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::Float, 0u )
+				BufferElementDeclaration( cuT( "inValue" ), 0, ElementType::eFloat, 0u )
 			}
 		};
 		float l_data[] = { 1, 2, 3, 4, 5 };
@@ -467,7 +467,7 @@ namespace Testing
 		auto l_program = DoCreateGeometryShaderProgram( m_engine );
 
 		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Triangles, *l_program );
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::eTriangles, *l_program );
 		l_program->SetTransformLayout( l_outputs );
 
 		// Pipeline
@@ -485,14 +485,14 @@ namespace Testing
 		l_vboOut.Resize( sizeof( l_data ) * 3 );
 
 		// VAO
-		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program );
+		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 		CT_CHECK( l_vboIn.Create() );
 		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::Static, BufferAccessNature::Read ) );
+		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -531,19 +531,19 @@ namespace Testing
 		BufferDeclaration l_outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::Float ),
-				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::Float ),
+				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
 			}
 		};
 		BufferDeclaration l_inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::Float ),
-				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::Position ), ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::Float ),
+				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
 			}
 		};
 		Particle l_particle
@@ -556,17 +556,17 @@ namespace Testing
 
 		// Shader program
 		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::Geometry );
-		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::Geometry );
-		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::Geometry );
-		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::Geometry );
-		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::Geometry );
+		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
 		l_launcherLifetime->SetValue( 100.0f );
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );
 
 		// Transform feedback
-		TransformFeedbackSPtr l_transformFeedback{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ) };
+		TransformFeedbackSPtr l_transformFeedback{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) };
 		l_program->SetTransformLayout( l_outputs );
 
 		// Pipeline
@@ -584,15 +584,15 @@ namespace Testing
 		l_vboOut.Resize( 10000 * sizeof( l_particle ) );
 
 		// VAO
-		GeometryBuffersSPtr l_geometryBuffers{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) };
+		GeometryBuffersSPtr l_geometryBuffers{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) };
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 
 		CT_CHECK( l_vboIn.Create() );
 		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::Static, BufferAccessNature::Read ) );
+		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -608,7 +608,7 @@ namespace Testing
 
 			l_vboOut.Bind();
 			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ) );
-			auto l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::Read ) );
+			auto l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::eRead ) );
 
 			if ( l_buffer )
 			{
@@ -626,7 +626,7 @@ namespace Testing
 
 			l_vboOut.Bind();
 			l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ) );
-			l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::Read ) );
+			l_buffer = reinterpret_cast< Particle * >( l_vboOut.Lock( 0, l_count, AccessType::eRead ) );
 
 			if ( l_buffer )
 			{
@@ -664,30 +664,30 @@ namespace Testing
 		BufferDeclaration l_outputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::Float ),
-				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::Float ),
+				BufferElementDeclaration( cuT( "Type1" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Position1" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity1" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Age1" ), 0u, ElementType::eFloat ),
 			}
 		};
 		BufferDeclaration l_inputs
 		{
 			{
-				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::Float ),
-				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::Position ), ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::Vec3 ),
-				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::Float ),
+				BufferElementDeclaration( cuT( "Type" ), 0u, ElementType::eFloat ),
+				BufferElementDeclaration( cuT( "Position" ), uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Velocity" ), 0u, ElementType::eVec3 ),
+				BufferElementDeclaration( cuT( "Age" ), 0u, ElementType::eFloat ),
 			}
 		};
 		Particle l_particle;
 
 		// Shader program
 		auto l_program = DoCreateParticleSystemShaderProgram( m_engine );
-		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::Geometry );
-		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::Geometry );
-		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::Geometry );
-		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::Geometry );
-		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::Geometry );
+		auto l_deltaTime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gDeltaTimeMillis" ), ShaderType::eGeometry );
+		auto l_total = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gTime" ), ShaderType::eGeometry );
+		auto l_launcherLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gLauncherLifetime" ), ShaderType::eGeometry );
+		auto l_shellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gShellLifetime" ), ShaderType::eGeometry );
+		auto l_secondaryShellLifetime = l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "gSecondaryShellLifetime" ), ShaderType::eGeometry );
 		l_launcherLifetime->SetValue( 100.0f );
 		l_shellLifetime->SetValue( 10000.0f );
 		l_secondaryShellLifetime->SetValue( 2500.0f );
@@ -696,8 +696,8 @@ namespace Testing
 		// Transform feedback
 		TransformFeedbackSPtr l_transformFeedback[]
 		{
-			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ) },
-			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::Points, *l_program ) }
+			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) },
+			{ m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program ) }
 		};
 
 		// Pipeline
@@ -715,8 +715,8 @@ namespace Testing
 		// VAO
 		GeometryBuffersSPtr l_geometryBuffers[]
 		{
-			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) },
-			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::Points, *l_program ) }
+			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) },
+			{ m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program ) }
 		};
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
@@ -727,7 +727,7 @@ namespace Testing
 			CT_CHECK( l_vbos[i].Create() );
 			l_vbos[i].Resize( 10000 * sizeof( l_particle ) );
 			std::memcpy( l_vbos[i].data(), &l_particle, sizeof( l_particle ) );
-			CT_CHECK( l_vbos[i].Upload( BufferAccessType::Static, BufferAccessNature::Draw ) );
+			CT_CHECK( l_vbos[i].Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
 		}
 
 		for ( uint32_t i = 0; i < 2; ++i )
@@ -756,7 +756,7 @@ namespace Testing
 
 			l_vbos[l_tfb].Bind();
 			auto l_count = uint32_t( sizeof( Particle ) * std::max( 1u, l_transformFeedback[l_tfb]->GetWrittenPrimitives() ) );
-			auto l_buffer = reinterpret_cast< Particle * >( l_vbos[l_tfb].Lock( 0, l_count, AccessType::Read ) );
+			auto l_buffer = reinterpret_cast< Particle * >( l_vbos[l_tfb].Lock( 0, l_count, AccessType::eRead ) );
 
 			if ( l_buffer )
 			{

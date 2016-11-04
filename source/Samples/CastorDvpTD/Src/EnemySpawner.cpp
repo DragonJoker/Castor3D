@@ -71,8 +71,8 @@ namespace castortd
 				l_geometry->SetMaterial( l_submesh, p_game.GetEnemyMaterial() );
 			}
 
-			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::Point );
-			l_light->SetColour( Colour::from_predef( Colour::Predefined::OpaqueRed ) );
+			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::ePoint );
+			l_light->SetColour( Colour::from_predef( Colour::Predefined::eOpaqueRed ) );
 			l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
 			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );
 			l_return = std::make_shared< Enemy >( *l_baseNode, p_game, p_path, m_category );

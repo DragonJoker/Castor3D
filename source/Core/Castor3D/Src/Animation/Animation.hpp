@@ -135,7 +135,7 @@ namespace Castor3D
 	protected:
 		//!\~english	The animation type.
 		//!\~french		Le type d'animation.
-		AnimationType m_type{ AnimationType::Count };
+		AnimationType m_type{ AnimationType::eCount };
 		//!\~english	The animation length.
 		//!\~french		La durée de l'animation.
 		real m_length{ 0.0_r };
@@ -149,16 +149,16 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		28/05/2016
 	\~english
-	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\brief		Helper structure to find ChunkType from a type.
 	\remarks	Specialisation for Animation.
 	\~french
-	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
 	\remarks	Spécialisation pour Animation.
 	*/
 	template<>
 	struct ChunkTyper< Animation >
 	{
-		static eCHUNK_TYPE const Value = eCHUNK_TYPE_ANIMATION;
+		static ChunkType const Value = ChunkType::eAnimation;
 	};
 	/*!
 	\author		Sylvain DOREMUS

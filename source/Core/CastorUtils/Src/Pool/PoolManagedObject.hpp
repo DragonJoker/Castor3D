@@ -42,7 +42,7 @@ namespace Castor
 	\param		Object		Le type d'objet.
 	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
-	template< typename Object, eMEMDATA_TYPE MemDataType >
+	template< typename Object, MemoryDataType MemDataType >
 	class PoolManagedObject
 		: public Object
 	{

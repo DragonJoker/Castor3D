@@ -12,9 +12,9 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTboTextureStorageTraits::GlTboTextureStorageTraits( TextureStorage & p_storage )
-		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::Texture }
+		: m_glBuffer{ static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage ).GetOpenGl(), GlBufferTarget::eTexture }
 	{
-		REQUIRE( p_storage.GetType() == TextureStorageType::Buffer );
+		REQUIRE( p_storage.GetType() == TextureStorageType::eBuffer );
 		bool l_return = m_glBuffer.Create();
 
 		if ( l_return )
@@ -22,7 +22,7 @@ namespace GlRender
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_storage.GetOwner()->GetImage().GetBuffer();
 			m_glInternal = l_storage.GetOpenGl().GetInternal( l_buffer->format() );
-			l_return = m_glBuffer.Fill( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			l_return = m_glBuffer.Fill( l_buffer->const_ptr(), l_buffer->size(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 	}
 
@@ -34,13 +34,13 @@ namespace GlRender
 	bool GlTboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		return l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, m_glBuffer.GetGlName() );
+		return l_storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
 	void GlTboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		l_storage.GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
+		l_storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, 0 );
 	}
 
 	uint8_t * GlTboTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock, uint32_t p_index )
@@ -60,6 +60,6 @@ namespace GlRender
 	{
 		auto const l_size = p_image.GetBuffer()->dimensions();
 		auto const l_format = p_image.GetBuffer()->format();
-		m_glBuffer.Fill( p_image.GetBuffer()->const_ptr(), l_size.width() * l_size.height() * PF::GetBytesPerPixel( l_format ), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+		m_glBuffer.Fill( p_image.GetBuffer()->const_ptr(), l_size.width() * l_size.height() * PF::GetBytesPerPixel( l_format ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 	}
 }

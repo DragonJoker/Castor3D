@@ -43,8 +43,8 @@ namespace Castor3D
 		{
 			static std::map< SkeletonAnimationObjectType, String > Names
 			{
-				{ SkeletonAnimationObjectType::Node, cuT( "Node_" ) },
-				{ SkeletonAnimationObjectType::Bone, cuT( "Bone_" ) },
+				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
+				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
 			};
 
 			return Names[p_type];
@@ -63,12 +63,12 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case SkeletonAnimationObjectType::Node:
+			case SkeletonAnimationObjectType::eNode:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceNode >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), p_allObjects ) );
 				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
 				break;
 
-			case SkeletonAnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::eBone:
 				m_children.push_back( std::make_shared< SkeletonAnimationInstanceBone >( p_animationInstance, *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), p_allObjects ) );
 				p_allObjects.insert( { GetObjectTypeName( l_moving->GetType() ) + l_moving->GetName(), m_children.back() } );
 				break;

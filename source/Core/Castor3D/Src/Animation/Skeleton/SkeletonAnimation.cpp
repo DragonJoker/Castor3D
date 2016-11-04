@@ -21,8 +21,8 @@ namespace Castor3D
 		{
 			static std::map< SkeletonAnimationObjectType, String > Names
 			{
-				{ SkeletonAnimationObjectType::Node, cuT( "Node_" ) },
-				{ SkeletonAnimationObjectType::Bone, cuT( "Bone_" ) },
+				{ SkeletonAnimationObjectType::eNode, cuT( "Node_" ) },
+				{ SkeletonAnimationObjectType::eBone, cuT( "Bone_" ) },
 			};
 
 			return Names[p_type];
@@ -39,11 +39,11 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case SkeletonAnimationObjectType::Node:
+			case SkeletonAnimationObjectType::eNode:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
-			case SkeletonAnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::eBone:
 				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}
@@ -67,7 +67,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SKELETON_ANIMATION_NODE:
+			case ChunkType::eSkeletonAnimationNode:
 				l_node = std::make_shared< SkeletonAnimationNode >( p_obj );
 				l_return = BinaryParser< SkeletonAnimationNode >{}.Parse( *l_node, l_chunk );
 
@@ -78,7 +78,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SKELETON_ANIMATION_BONE:
+			case ChunkType::eSkeletonAnimationBone:
 				l_bone = std::make_shared< SkeletonAnimationBone >( p_obj );
 				l_return = BinaryParser< SkeletonAnimationBone >{}.Parse( *l_bone, l_chunk );
 
@@ -97,7 +97,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimation::SkeletonAnimation( Animable & p_animable, String const & p_name )
-		: Animation{ AnimationType::Skeleton, p_animable, p_name }
+		: Animation{ AnimationType::eSkeleton, p_animable, p_name }
 	{
 	}
 
@@ -151,12 +151,12 @@ namespace Castor3D
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( Bone const & p_bone )const
 	{
-		return GetObject( SkeletonAnimationObjectType::Node, p_bone.GetName() );
+		return GetObject( SkeletonAnimationObjectType::eNode, p_bone.GetName() );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( String const & p_name )const
 	{
-		return GetObject( SkeletonAnimationObjectType::Node, p_name );
+		return GetObject( SkeletonAnimationObjectType::eNode, p_name );
 	}
 
 	SkeletonAnimationObjectSPtr SkeletonAnimation::GetObject( SkeletonAnimationObjectType p_type, Castor::String const & p_name )const

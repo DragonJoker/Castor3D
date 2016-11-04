@@ -37,7 +37,7 @@ namespace Castor
 		int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )
 		{
 			BinaryFile * l_pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
-			return l_pFile->Seek( p_lOffset, File::eOFFSET_MODE( p_iOrigin ) );
+			return l_pFile->Seek( p_lOffset, File::OffsetMode( p_iOrigin ) );
 		}
 
 		long DLL_CALLCONV TellProc( fi_handle p_fiHandle )
@@ -99,7 +99,7 @@ namespace Castor
 		}
 
 		p_image.m_buffer.reset();
-		PixelFormat l_ePF = PixelFormat::R8G8B8;
+		PixelFormat l_ePF = PixelFormat::eR8G8B8;
 		int l_flags = BMP_DEFAULT;
 		FREE_IMAGE_FORMAT l_fiFormat = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
 
@@ -121,7 +121,7 @@ namespace Castor
 
 		if ( !l_fiImage )
 		{
-			BinaryFile l_file( p_path, File::eOPEN_MODE_READ | File::eOPEN_MODE_BINARY );
+			BinaryFile l_file( p_path, uint32_t( File::OpenMode::eRead ) | uint32_t( File::OpenMode::eBinary ) );
 			FreeImageIO l_fiIo;
 			l_fiIo.read_proc = ReadProc;
 			l_fiIo.write_proc = nullptr;
@@ -142,7 +142,7 @@ namespace Castor
 
 		if ( l_type == FIC_RGBALPHA )
 		{
-			l_ePF = PixelFormat::A8R8G8B8;
+			l_ePF = PixelFormat::eA8R8G8B8;
 			FIBITMAP * l_dib = FreeImage_ConvertTo32Bits( l_fiImage );
 			FreeImage_Unload( l_fiImage );
 			l_fiImage = l_dib;
@@ -156,13 +156,13 @@ namespace Castor
 		{
 			auto l_bpp = FreeImage_GetBPP( l_fiImage ) / 8;
 
-			if ( l_bpp == pixel_definitions< PixelFormat::RGB16F >::Size )
+			if ( l_bpp == pixel_definitions< PixelFormat::eRGB16F >::Size )
 			{
-				l_ePF = PixelFormat::RGB16F;
+				l_ePF = PixelFormat::eRGB16F;
 			}
-			else if ( l_bpp == pixel_definitions< PixelFormat::RGB32F >::Size )
+			else if ( l_bpp == pixel_definitions< PixelFormat::eRGB32F >::Size )
 			{
-				l_ePF = PixelFormat::RGB32F;
+				l_ePF = PixelFormat::eRGB32F;
 			}
 			else
 			{
@@ -171,7 +171,7 @@ namespace Castor
 		}
 		else
 		{
-			l_ePF = PixelFormat::R8G8B8;
+			l_ePF = PixelFormat::eR8G8B8;
 			FIBITMAP * l_dib = FreeImage_ConvertTo24Bits( l_fiImage );
 			FreeImage_Unload( l_fiImage );
 			l_fiImage = l_dib;
@@ -214,7 +214,7 @@ namespace Castor
 		if ( p_path.GetExtension() == cuT( "png" ) )
 		{
 			l_fiImage = FreeImage_Allocate( l_w, l_h, 32 );
-			PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::A8R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
+			PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eA8R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
 			if ( l_fiImage )
 			{
@@ -229,7 +229,7 @@ namespace Castor
 			if ( PF::HasAlpha( p_image.GetPixelFormat() ) )
 			{
 				l_fiImage = FreeImage_AllocateT( FIT_RGBAF, l_w, l_h );
-				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::RGBA32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
+				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eRGBA32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
 				if ( l_fiImage )
 				{
@@ -242,7 +242,7 @@ namespace Castor
 			else
 			{
 				l_fiImage = FreeImage_AllocateT( FIT_RGBF, l_w, l_h );
-				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::RGB32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
+				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eRGB32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
 				if ( l_fiImage )
 				{
@@ -261,10 +261,10 @@ namespace Castor
 		{
 			PxBufferBaseSPtr l_pBuffer;
 
-			if ( p_image.GetPixelFormat() != PixelFormat::L8 )
+			if ( p_image.GetPixelFormat() != PixelFormat::eL8 )
 			{
 				l_fiImage = FreeImage_Allocate( l_w, l_h, 24 );
-				l_pBuffer = PxBufferBase::create( l_size, PixelFormat::R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
+				l_pBuffer = PxBufferBase::create( l_size, PixelFormat::eR8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
 			}
 			else
 			{
@@ -395,11 +395,11 @@ namespace Castor
 
 			switch ( l_ePF )
 			{
-			case PixelFormat::R8G8B8:
+			case PixelFormat::eR8G8B8:
 				l_fiImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 24 );
 				break;
 
-			case PixelFormat::A8R8G8B8:
+			case PixelFormat::eA8R8G8B8:
 				l_fiImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 32 );
 				break;
 			}
@@ -468,7 +468,7 @@ namespace Castor
 		Point4ub l_ptComponents = bgra_byte( p_clrColour );
 		uint8_t const * l_pSrc = l_ptComponents.const_ptr();
 		uint8_t * l_pDst = &( *m_buffer->get_at( x, y ) );
-		PF::ConvertPixel( PixelFormat::A8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );
+		PF::ConvertPixel( PixelFormat::eA8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );
 		CHECK_INVARIANTS();
 		return * this;
 	}
@@ -490,7 +490,7 @@ namespace Castor
 		Point4ub l_ptComponents;
 		uint8_t const * l_pSrc = &( *m_buffer->get_at( x, y ) );
 		uint8_t * l_pDst = l_ptComponents.ptr();
-		PF::ConvertPixel( GetPixelFormat(), l_pSrc, PixelFormat::A8R8G8B8, l_pDst );
+		PF::ConvertPixel( GetPixelFormat(), l_pSrc, PixelFormat::eA8R8G8B8, l_pDst );
 		CHECK_INVARIANTS();
 		return Colour::from_bgra( l_ptComponents );
 	}
@@ -540,7 +540,7 @@ namespace Castor
 	Image Image::SubImage( Rectangle const & l_rcRect )const
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( Rectangle( 0, 0 , GetWidth(), GetHeight() ).intersects( l_rcRect ) == Intersection::In );
+		REQUIRE( Rectangle( 0, 0 , GetWidth(), GetHeight() ).intersects( l_rcRect ) == Intersection::eIn );
 		Size l_ptSize( l_rcRect.width(), l_rcRect.height() );
 		// Création de la sous-image à remplir
 		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );

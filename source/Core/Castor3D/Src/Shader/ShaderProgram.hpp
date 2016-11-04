@@ -783,25 +783,25 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status.
 		//!\~french		Le statut du programme.
-		ProgramStatus m_status{ ProgramStatus::NotLinked };
+		ProgramStatus m_status{ ProgramStatus::eNotLinked };
 		//!\~english	Tells if the UBOs were bound on or since last call to Bind.
 		//!\~french		Dit si les UBOs on été activés lors du ou depuis le dernier appel à Bind.
 		mutable bool m_ubosBound{ false };
 		//!\~english The shaders array.
 		//!\~french		Le tableau de shaders.
-		std::array< ShaderObjectSPtr, size_t( ShaderType::Count ) > m_pShaders;
+		std::array< ShaderObjectSPtr, size_t( ShaderType::eCount ) > m_pShaders;
 		//!\~english The active shaders array.
 		//!\~french		Le tableau de shaders actifs.
 		std::vector< ShaderObjectSPtr > m_activeShaders;
 		//!\~english Array of files path, sorted by shader model.
 		//!\~french		Tableau des chemins de fichiers, triés par modèle de shader.
-		std::array< Castor::Path, size_t( ShaderModel::Count ) > m_arrayFiles;
+		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
 		//!\~english The frame variable buffers map, ordered by name.
 		//!\~french		La liste des buffers de variable de frame, triés par nom.
 		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
 		//!\~english The frame variable buffers map, ordered by shader type.
 		//!\~french		La liste des buffers de variable de frame, triés par type de shader.
-		std::array< FrameVariableBufferPtrList, size_t( ShaderType::Count ) > m_frameVariableBuffers;
+		std::array< FrameVariableBufferPtrList, size_t( ShaderType::eCount ) > m_frameVariableBuffers;
 		//!\~english The frame variable buffers map.
 		//!\~french		La liste des buffer de variables de frame.
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;

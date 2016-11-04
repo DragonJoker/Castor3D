@@ -41,11 +41,11 @@ namespace Castor
 
 	Intersection Rectangle::intersects( Position const & p_point )const
 	{
-		Intersection l_eReturn = Intersection::Out;
+		Intersection l_eReturn = Intersection::eOut;
 
 		if ( ( p_point.x() >= left() ) && ( p_point.y() >= top() ) && ( p_point.x() <= right() ) && ( p_point.y() <= bottom() ) )
 		{
-			l_eReturn = Intersection::In;
+			l_eReturn = Intersection::eIn;
 		}
 
 		return l_eReturn;
@@ -57,15 +57,15 @@ namespace Castor
 		Point2i l_ptStart( std::max( left(), p_rcRect.left() ), std::max( top(), p_rcRect.top() ) );
 		Point2i l_ptEnd( std::min( right(), p_rcRect.right() ), std::min( bottom(), p_rcRect.bottom() ) );
 		Rectangle l_rcOverlap( l_ptStart[0], l_ptStart[1], l_ptEnd[0], l_ptEnd[1] );
-		Intersection l_eReturn = Intersection::Intersect;
+		Intersection l_eReturn = Intersection::eIntersect;
 
 		if ( ( l_ptStart[0] > right() ) || ( l_ptStart[1] > bottom() ) )
 		{
-			l_eReturn = Intersection::Out;
+			l_eReturn = Intersection::eOut;
 		}
 		else if ( ( l_rcOverlap == * this ) || ( l_rcOverlap == p_rcRect ) )
 		{
-			l_eReturn = Intersection::In;
+			l_eReturn = Intersection::eIn;
 		}
 
 		return l_eReturn;

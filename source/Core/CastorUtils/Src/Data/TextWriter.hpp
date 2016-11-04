@@ -40,10 +40,10 @@ namespace Castor
 	*/
 	template< class T >
 	class TextWriter
-		: public Writer< T, eFILE_TYPE_TEXT >
+		: public Writer< T, FileType::eText >
 	{
 	protected:
-		using FileType = typename Writer< T, eFILE_TYPE_TEXT >::FileType;
+		using Type = typename Writer< T, FileType::eText >::Type;
 
 	public:
 		/**

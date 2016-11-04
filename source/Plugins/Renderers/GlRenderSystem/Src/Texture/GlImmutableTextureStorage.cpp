@@ -21,31 +21,31 @@ namespace GlRender
 
 		switch ( l_storage.GetGlType() )
 		{
-		case eGL_TEXTURE_STORAGE_1D:
+		case GlTextureStorageType::e1D:
 			l_storage.GetOpenGl().TexStorage1D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2D:
+		case GlTextureStorageType::e2D:
 			l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width(), l_size.height() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_CUBE_MAP:
+		case GlTextureStorageType::eCubeMap:
 			l_storage.GetOpenGl().TexStorage2D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width(), l_size.height() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2DMS:
+		case GlTextureStorageType::e2DMS:
 			l_storage.GetOpenGl().TexStorage2DMultisample( l_storage.GetGlType(), 8, l_format.Internal, l_size.width(), l_size.height(), true );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2DARRAY:
+		case GlTextureStorageType::e2DArray:
 			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY:
+		case GlTextureStorageType::eCubeMapArray:
 			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_3D:
+		case GlTextureStorageType::e3D:
 			l_storage.GetOpenGl().TexStorage3D( l_storage.GetGlType(), 4, l_format.Internal, l_size.width(), l_size.height(), p_storage.GetOwner()->GetDepth() );
 			break;
 
@@ -73,8 +73,8 @@ namespace GlRender
 	{
 		uint8_t * l_return = nullptr;
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read )
-			 && CheckFlag( p_lock, AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
+			 && CheckFlag( p_lock, AccessType::eRead ) )
 		{
 			l_return = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
 		}
@@ -94,32 +94,32 @@ namespace GlRender
 
 		switch ( l_storage.GetGlType() )
 		{
-		case eGL_TEXTURE_STORAGE_1D:
+		case GlTextureStorageType::e1D:
 			l_storage.GetOpenGl().TexSubImage1D( l_storage.GetGlType(), 0, 0, l_size.width(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2D:
+		case GlTextureStorageType::e2D:
 			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2DMS:
+		case GlTextureStorageType::e2DMS:
 			l_storage.GetOpenGl().TexSubImage2D( l_storage.GetGlType(), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_2DARRAY:
+		case GlTextureStorageType::e2DArray:
 			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_3D:
+		case GlTextureStorageType::e3D:
 			l_storage.GetOpenGl().TexSubImage3D( l_storage.GetGlType(), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_CUBE_MAP:
-			l_storage.GetOpenGl().TexSubImage2D( eGL_TEXTURE_STORAGE( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX + p_image.GetIndex() ), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+		case GlTextureStorageType::eCubeMap:
+			l_storage.GetOpenGl().TexSubImage2D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() ), 0, 0, 0, l_size.width(), l_size.height(), l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 
-		case eGL_TEXTURE_STORAGE_CUBE_MAP_ARRAY:
-			l_storage.GetOpenGl().TexSubImage3D( eGL_TEXTURE_STORAGE( eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX + p_image.GetIndex() % 6 ), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
+		case GlTextureStorageType::eCubeMapArray:
+			l_storage.GetOpenGl().TexSubImage3D( GlTextureStorageType( uint32_t( GlTextureStorageType::eCubeMapFacePosX ) + p_image.GetIndex() % 6 ), 0, 0, 0, p_image.GetIndex(), l_size.width(), l_size.height(), p_image.GetIndex() + 1, l_format.Format, l_format.Type, p_image.GetBuffer()->const_ptr() );
 			break;
 		}
 	}

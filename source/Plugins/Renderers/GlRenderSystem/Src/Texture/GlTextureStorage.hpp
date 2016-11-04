@@ -85,7 +85,7 @@ namespace GlRender
 		 */
 		void Unlock( bool p_modified, uint32_t p_index )override;
 
-		inline eGL_TEXTURE_STORAGE GetGlType()const
+		inline GlTextureStorageType GetGlType()const
 		{
 			return m_glType;
 		}
@@ -99,7 +99,7 @@ namespace GlRender
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
 		//! The storage type.
-		eGL_TEXTURE_STORAGE m_glType;
+		GlTextureStorageType m_glType;
 		//! The storage implementation
 		Traits m_impl;
 	};

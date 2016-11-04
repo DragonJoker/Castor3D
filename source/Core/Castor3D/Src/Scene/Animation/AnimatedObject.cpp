@@ -37,8 +37,8 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != AnimationState::Playing
-					&& l_animation->GetState() != AnimationState::Paused )
+			if ( l_animation->GetState() != AnimationState::ePlaying
+					&& l_animation->GetState() != AnimationState::ePaused )
 			{
 				l_animation->Play();
 				DoStartAnimation( l_animation );
@@ -54,7 +54,7 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != AnimationState::Stopped )
+			if ( l_animation->GetState() != AnimationState::eStopped )
 			{
 				l_animation->Stop();
 				DoStopAnimation( l_animation );

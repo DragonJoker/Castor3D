@@ -94,11 +94,11 @@ namespace Castor3D
 	enum class MovableType
 		: uint8_t
 	{
-		Camera,
-		Geometry,
-		Light,
-		Billboard,
-		CASTOR_ENUM_CLASS_BOUNDS( Camera )
+		eCamera,
+		eGeometry,
+		eLight,
+		eBillboard,
+		CASTOR_SCOPED_ENUM_BOUNDS( eCamera )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -112,9 +112,9 @@ namespace Castor3D
 	enum class TargetType
 		: uint8_t
 	{
-		Window,
-		Texture,
-		CASTOR_ENUM_CLASS_BOUNDS( Window )
+		eWindow,
+		eTexture,
+		CASTOR_SCOPED_ENUM_BOUNDS( eWindow )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -130,29 +130,29 @@ namespace Castor3D
 	{
 		//!\~english	Renderer plug-in.
 		//!\~french		Plug-in de rendu.
-		Renderer,
+		eRenderer,
 		//!\~english	Importer plug-in.
 		//!\~french		Plug-in d'importation.
-		Importer,
+		eImporter,
 		//!\~english	Mesh Divider plug-in.
 		//!\~french		Plug-in de subdivision de maillage.
-		Divider,
+		eDivider,
 		//!\~english	Procedural generator.
 		//!\~french		Plug-in de génération procédurale.
-		Generator,
+		eGenerator,
 		//!\~english	Render technique plug-in.
 		//!\~french		Plug-in de technique de rendu.
-		Technique,
+		eTechnique,
 		//!\~english	Tone mapping plug-in.
 		//!\~french		Plug-in d'effet de mappage de tons.
-		ToneMapping,
+		eToneMapping,
 		//!\~english	Post effect plug-in.
 		//!\~french		Plug-in d'effet post-rendu.
-		PostEffect,
+		ePostEffect,
 		//!\~english	Generic plug-in.
 		//!\~french		Plug-in générique.
-		Generic,
-		CASTOR_ENUM_CLASS_BOUNDS( Renderer )
+		eGeneric,
+		CASTOR_SCOPED_ENUM_BOUNDS( eRenderer )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -166,10 +166,10 @@ namespace Castor3D
 	enum class BufferComponent
 		: uint8_t
 	{
-		None = 0,
-		Colour = 1 << 0,
-		Depth = 1 << 1,
-		Stencil = 1 << 2,
+		eNone = 0,
+		eColour = 1 << 0,
+		eDepth = 1 << 1,
+		eStencil = 1 << 2,
 	};
 	/**
 	 *\~english
@@ -207,17 +207,17 @@ namespace Castor3D
 	enum class WindowBuffer
 		: uint8_t
 	{
-		None,
-		FrontLeft,
-		FrontRight,
-		BackLeft,
-		BackRight,
-		Front,
-		Back,
-		Left,
-		Right,
-		FrontAndBack,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		eNone,
+		eFrontLeft,
+		eFrontRight,
+		eBackLeft,
+		eBackRight,
+		eFront,
+		eBack,
+		eLeft,
+		eRight,
+		eFrontAndBack,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -233,14 +233,14 @@ namespace Castor3D
 	{
 		//!\~english	Frame buffer is bound as a target for draws.
 		//!\~french		Le tampon d'image est activé en tant que cible pour les rendus.
-		Draw,
+		eDraw,
 		//!\~english	Frame buffer is bound as a target for reads.
 		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures.
-		Read,
+		eRead,
 		//!\~english	Frame buffer is bound as a target for reads and draws.
 		//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
-		Both,
-		CASTOR_ENUM_CLASS_BOUNDS( Draw )
+		eBoth,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDraw )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -256,14 +256,14 @@ namespace Castor3D
 	{
 		//!\~english	Frame buffer is bound for configuration.
 		//!\~french		Le tampon d'image est activé pour configuration.
-		Config,
+		eConfig,
 		//!\~english	Frame buffer is bound and FrameBuffer::SetDrawBuffers is called automatically.
 		//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
-		Automatic,
+		eAutomatic,
 		//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
 		//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
-		Manual,
-		CASTOR_ENUM_CLASS_BOUNDS( Config )
+		eManual,
+		CASTOR_SCOPED_ENUM_BOUNDS( eConfig )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -277,11 +277,11 @@ namespace Castor3D
 	enum class AttachmentPoint
 		: uint8_t
 	{
-		None,
-		Colour,
-		Depth,
-		Stencil,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		eNone,
+		eColour,
+		eDepth,
+		eStencil,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -295,9 +295,9 @@ namespace Castor3D
 	enum class AttachmentType
 		: uint8_t
 	{
-		Texture,
-		Buffer,
-		CASTOR_ENUM_CLASS_BOUNDS( Texture )
+		eTexture,
+		eBuffer,
+		CASTOR_SCOPED_ENUM_BOUNDS( eTexture )
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -309,10 +309,10 @@ namespace Castor3D
 	enum class ViewportType
 		: uint8_t
 	{
-		Ortho,
-		Perspective,
-		Frustum,
-		CASTOR_ENUM_CLASS_BOUNDS( Ortho )
+		eOrtho,
+		ePerspective,
+		eFrustum,
+		CASTOR_SCOPED_ENUM_BOUNDS( eOrtho )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -327,23 +327,23 @@ namespace Castor3D
 	{
 		//!\~english	Near plane.
 		//!\~french		Plan éloigné.
-		Near,
+		eNear,
 		//!\~english	Far plane.
 		//!\~french		Plan proche.
-		Far,
+		eFar,
 		//!\~english	Left plane.
 		//!\~french		Plan gauche.
-		Left,
+		eLeft,
 		//!\~english	Right plane.
 		//!\~french		Plan droit.
-		Right,
+		eRight,
 		//!\~english	Top plane.
 		//!\~french		Plan haut.
-		Top,
+		eTop,
 		//!\~english	Bottom plane.
 		//!\~french		Plan bas.
-		Bottom,
-		CASTOR_ENUM_CLASS_BOUNDS( Near )
+		eBottom,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNear )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -357,14 +357,14 @@ namespace Castor3D
 	{
 		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
 		//!\~french		Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		PreRender,
+		ePreRender,
 		//!\~english	This kind of event happens after the render, before buffers' swap.
 		//!\~french		Ce type d'évènement est traité après le rendu, avant l'échange des tampons.
-		QueueRender,
+		eQueueRender,
 		//!\~english	This kind of event happens after the buffer' swap.
 		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
-		PostRender,
-		CASTOR_ENUM_CLASS_BOUNDS( PreRender )
+		ePostRender,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePreRender )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -380,17 +380,17 @@ namespace Castor3D
 	{
 		//!\~english	No face culled.
 		//!\~french		Aucune face supprimée.
-		None,
+		eNone,
 		//!\~english	Front faces are culled.
 		//!\~french		Faces avant supprimées.
-		Front = 1 << 0,
+		eFront,
 		//!\~english	Back face are culled.
 		//!\~french		Faces arrière supprimées.
-		Back,
+		eBack,
 		//!\~english	Back and front faces are culled.
 		//!\~french		Faces avant et arrière supprimées.
-		FrontAndBack,
-		CASTOR_ENUM_CLASS_BOUNDS( None )
+		eFrontAndBack,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -406,14 +406,14 @@ namespace Castor3D
 	{
 		//!\~english	Polygon vertices that are marked as the start of a boundary edge are drawn as points.
 		//!\~french		Les vertices marquant les arêtes sont dessinés en tant que points.
-		Point,
+		ePoint,
 		//!\~english	Boundary edges of the polygon are drawn as line segments.
 		//!\~french		Les arêtes du polygone sont dessinées en tant que segments.
-		Line,
+		eLine,
 		//!\~english	The interior of the polygon is filled.
 		//!\~french		L'intérieur du polygone est rempli.
-		Solid,
-		CASTOR_ENUM_CLASS_BOUNDS( Point )
+		eSolid,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePoint )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -427,14 +427,14 @@ namespace Castor3D
 	enum class QueryType
 		: uint32_t
 	{
-		TimeElapsed,
-		SamplesPassed,
-		AnySamplesPassed,
-		PrimitivesGenerated,
-		TransformFeedbackPrimitivesWritten,
-		AnySamplesPassedConservative,
-		Timestamp,
-		CASTOR_ENUM_CLASS_BOUNDS( TimeElapsed )
+		eTimeElapsed,
+		eSamplesPassed,
+		eAnySamplesPassed,
+		ePrimitivesGenerated,
+		eTransformFeedbackPrimitivesWritten,
+		eAnySamplesPassedConservative,
+		eTimestamp,
+		CASTOR_SCOPED_ENUM_BOUNDS( eTimeElapsed )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -448,10 +448,10 @@ namespace Castor3D
 	enum class QueryInfo
 		: uint32_t
 	{
-		Result,
-		ResultAvailable,
-		ResultNoWait,
-		CASTOR_ENUM_CLASS_BOUNDS( Result )
+		eResult,
+		eResultAvailable,
+		eResultNoWait,
+		CASTOR_SCOPED_ENUM_BOUNDS( eResult )
 	};
 
 	class WindowHandle;
@@ -646,9 +646,9 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
 	DECLARE_MAP( Castor::String, RendererPluginSPtr, RendererPtr );
-	DECLARE_ARRAY( PluginStrMap, size_t( PluginType::Count ), PluginStrMap );
+	DECLARE_ARRAY( PluginStrMap, PluginType::eCount, PluginStrMap );
 	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
-	DECLARE_ARRAY( DynamicLibraryPtrPathMap, size_t( PluginType::Count ), DynamicLibraryPtrPathMap );
+	DECLARE_ARRAY( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
 	DECLARE_MAP( Castor::Path, PluginType, PluginTypePath );
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 

@@ -243,10 +243,10 @@ namespace Castor3D
 	protected:
 		//!\~english	The fill mode.
 		//!\~french		Définit le mode de remplissage.
-		FillMode m_fillMode{ FillMode::Solid };
+		FillMode m_fillMode{ FillMode::eSolid };
 		//!\~english	The culled faces.
 		//!\~french		Les faces cachées.
-		Culling m_culledFaces{ Culling::Back };
+		Culling m_culledFaces{ Culling::eBack };
 		//!\~english	The faces considered front facing.
 		//!\~french		Les faces considérées comme tournées vers l'avant.
 		bool m_frontCCW{ true };

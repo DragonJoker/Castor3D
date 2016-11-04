@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\param[in]	p_pRoot			Le moteur
 		 *\param[in]	p_eTargetType	Le type de render target
 		 */
-		C3D_API RenderTarget( Engine & p_pRoot, TargetType p_eTargetType = TargetType::Window );
+		C3D_API RenderTarget( Engine & p_pRoot, TargetType p_eTargetType = TargetType::eWindow );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cube::Cube()
-		: MeshGenerator( eMESH_TYPE_CUBE )
+		: MeshGenerator( MeshType::eCube )
 		, m_width( 0 )
 		, m_height( 0 )
 		, m_depth( 0 )

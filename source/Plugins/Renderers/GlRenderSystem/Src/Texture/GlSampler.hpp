@@ -49,10 +49,10 @@ namespace GlRender
 		virtual void Unbind( uint32_t p_index )const;
 
 	private:
-		void DoAdjustMinMipModes( eGL_INTERPOLATION_MODE & p_min, eGL_INTERPOLATION_MODE & p_mip );
+		void DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip );
 
 	private:
-		eGL_TEXDIM m_glDimension;
+		GlTexDim m_glDimension;
 	};
 }
 

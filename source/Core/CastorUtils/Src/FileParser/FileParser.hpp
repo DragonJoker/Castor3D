@@ -69,7 +69,7 @@ namespace Castor
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\
 		DO_WRITE_PARSER_END( true )\
-		p_context->m_sections.push_back( section );\
+		p_context->m_sections.push_back( uint32_t( section ) );\
 		return l_return;\
 	}
 

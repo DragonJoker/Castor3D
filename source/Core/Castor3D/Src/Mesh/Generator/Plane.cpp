@@ -7,7 +7,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Plane::Plane()
-	: MeshGenerator( eMESH_TYPE_PLANE )
+	: MeshGenerator( MeshType::ePlane )
 	, m_depth( 0 )
 	, m_width( 0 )
 	, m_subDivisionsW( 0 )

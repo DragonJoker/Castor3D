@@ -29,7 +29,7 @@ namespace Castor3D
 #endif
 
 	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		:	Plugin( PluginType::Importer, p_library, *p_engine )
+		:	Plugin( PluginType::eImporter, p_library, *p_engine )
 	{
 		if ( !p_library->GetFunction( m_pfnGetExtension, GetExtensionFunctionABIName ) )
 		{

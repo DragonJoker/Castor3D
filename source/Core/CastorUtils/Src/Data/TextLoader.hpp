@@ -39,10 +39,10 @@ namespace Castor
 	*/
 	template< class T >
 	class TextLoader
-		: public Loader< T, eFILE_TYPE_TEXT >
+		: public Loader< T, FileType::eText >
 	{
 	protected:
-		using FileType = typename Loader< T, eFILE_TYPE_TEXT >::FileType;
+		using Type = typename Loader< T, FileType::eText >::Type;
 
 	public:
 		/**

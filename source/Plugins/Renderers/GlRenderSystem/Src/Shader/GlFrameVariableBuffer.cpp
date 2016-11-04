@@ -13,7 +13,7 @@ namespace GlRender
 {
 	template< FrameVariableType > struct GlVariableApplyer;
 
-	template<> struct GlVariableApplyer< FrameVariableType::Sampler > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eSampler > : public GlVariableApplyerBase
 	{
 		typedef int	value_type;
 
@@ -28,7 +28,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Int > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eInt > : public GlVariableApplyerBase
 	{
 		typedef int	value_type;
 
@@ -38,7 +38,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::UInt > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eUInt > : public GlVariableApplyerBase
 	{
 		typedef uint32_t	value_type;
 
@@ -48,7 +48,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Float > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eFloat > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -58,7 +58,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Double > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eDouble > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -68,7 +68,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec2i > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec2i > : public GlVariableApplyerBase
 	{
 		typedef int	value_type;
 
@@ -78,7 +78,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec3i > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec3i > : public GlVariableApplyerBase
 	{
 		typedef int	value_type;
 
@@ -88,7 +88,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec4i > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec4i > : public GlVariableApplyerBase
 	{
 		typedef int	value_type;
 
@@ -98,7 +98,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec2ui > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec2ui > : public GlVariableApplyerBase
 	{
 		typedef uint32_t	value_type;
 
@@ -108,7 +108,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec3ui > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec3ui > : public GlVariableApplyerBase
 	{
 		typedef uint32_t	value_type;
 
@@ -118,7 +118,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec4ui > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec4ui > : public GlVariableApplyerBase
 	{
 		typedef uint32_t	value_type;
 
@@ -128,7 +128,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec2f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec2f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -138,7 +138,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec3f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec3f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -148,7 +148,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec4f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec4f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -158,7 +158,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec2d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec2d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -168,7 +168,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec3d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec3d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -178,7 +178,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Vec4d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eVec4d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -188,7 +188,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x2f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x2f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -198,7 +198,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x3f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x3f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -208,7 +208,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x4f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x4f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -218,7 +218,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x2f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x2f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -228,7 +228,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x3f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x3f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -238,7 +238,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x4f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x4f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -248,7 +248,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x2f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x2f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -258,7 +258,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x3f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x3f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -268,7 +268,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x4f > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x4f > : public GlVariableApplyerBase
 	{
 		typedef float	value_type;
 
@@ -278,7 +278,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x2d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x2d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -288,7 +288,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x3d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x3d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -298,7 +298,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat2x4d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat2x4d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -308,7 +308,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x2d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x2d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -318,7 +318,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x3d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x3d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -328,7 +328,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat3x4d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat3x4d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -338,7 +338,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x2d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x2d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -348,7 +348,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x3d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x3d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -358,7 +358,7 @@ namespace GlRender
 		}
 	};
 
-	template<> struct GlVariableApplyer< FrameVariableType::Mat4x4d > : public GlVariableApplyerBase
+	template<> struct GlVariableApplyer< FrameVariableType::eMat4x4d > : public GlVariableApplyerBase
 	{
 		typedef double	value_type;
 
@@ -379,295 +379,295 @@ namespace GlRender
 	namespace
 	{
 		template< FrameVariableType Type > FrameVariableSPtr GlFrameVariableCreator( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences );
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Int >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eInt >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::UInt >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eUInt >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlOneFrameVariable< uint32_t > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Float >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eFloat >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlOneFrameVariable< float > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Double >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eDouble >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlOneFrameVariable< double > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Sampler >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eSampler >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec2i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec2i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< int, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec3i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec3i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< int, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec4i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec4i >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< int, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec2ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec2ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< uint32_t, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec3ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec3ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< uint32_t, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec4ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec4ui >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< uint32_t, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< float, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< float, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< float, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< double, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< double, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Vec4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eVec4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlPointFrameVariable< double, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x2f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x3f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x4f >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat2x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat2x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat3x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat3x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x2d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x3d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::Mat4x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
+		template<> FrameVariableSPtr GlFrameVariableCreator< FrameVariableType::eMat4x4d >( OpenGl & p_gl, GlShaderProgram & p_program, uint32_t p_occurences )
 		{
 			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( p_gl, p_occurences, p_program );
 		}
 
 		template< FrameVariableType Type > GlVariableApplyerBaseSPtr GlApplyerCreator();
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Int >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eInt >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Int > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eInt > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::UInt >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eUInt >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::UInt > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eUInt > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Float >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eFloat >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Float > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eFloat > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Double >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eDouble >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Double > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eDouble > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Sampler >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eSampler >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Sampler > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eSampler > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec2i >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec2i >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec2i > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec2i > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec3i >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec3i >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec3i > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec3i > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec4i >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec4i >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec4i > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec4i > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec2ui >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec2ui >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec2ui > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec2ui > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec3ui >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec3ui >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec3ui > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec3ui > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec4ui >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec4ui >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec4ui > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec4ui > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec2f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec2f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec2f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec2f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec3f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec3f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec3f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec3f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec4f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec4f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec4f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec4f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec2d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec2d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec2d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec2d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec3d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec3d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec3d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec3d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Vec4d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eVec4d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Vec4d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eVec4d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x2f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x2f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x2f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x2f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x3f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x3f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x3f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x3f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x4f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x4f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x4f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x4f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x2f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x2f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x2f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x2f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x3f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x3f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x3f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x3f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x4f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x4f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x4f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x4f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x2f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x2f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x2f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x2f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x3f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x3f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x3f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x3f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x4f >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x4f >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x4f > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x4f > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x2d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x2d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x2d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x2d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x3d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x3d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x3d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x3d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat2x4d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat2x4d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat2x4d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat2x4d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x2d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x2d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x2d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x2d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x3d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x3d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x3d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x3d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat3x4d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat3x4d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat3x4d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat3x4d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x2d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x2d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x2d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x2d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x3d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x3d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x3d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x3d > >();
 		}
-		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::Mat4x4d >()
+		template<> GlVariableApplyerBaseSPtr GlApplyerCreator< FrameVariableType::eMat4x4d >()
 		{
-			return std::make_shared< GlVariableApplyer< FrameVariableType::Mat4x4d > >();
+			return std::make_shared< GlVariableApplyer< FrameVariableType::eMat4x4d > >();
 		}
 	}
 
 	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlShaderProgram & p_program, RenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_program, p_renderSystem )
 		, Holder( p_gl )
-		, m_glBuffer( p_gl, GlBufferTarget::Uniform )
-		, m_uniformBlockIndex( int( eGL_INVALID_INDEX ) )
+		, m_glBuffer( p_gl, GlBufferTarget::eUniform )
+		, m_uniformBlockIndex( int( GlInvalidIndex ) )
 		, m_uniformBlockSize( 0 )
 	{
 	}
@@ -684,179 +684,179 @@ namespace GlRender
 
 		switch ( p_type )
 		{
-		case FrameVariableType::Int:
-			l_return = GlFrameVariableCreator< FrameVariableType::Int >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Int >();
+		case FrameVariableType::eInt:
+			l_return = GlFrameVariableCreator< FrameVariableType::eInt >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eInt >();
 			break;
 
-		case FrameVariableType::UInt:
-			l_return = GlFrameVariableCreator< FrameVariableType::UInt >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::UInt >();
+		case FrameVariableType::eUInt:
+			l_return = GlFrameVariableCreator< FrameVariableType::eUInt >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eUInt >();
 			break;
 
-		case FrameVariableType::Float:
-			l_return = GlFrameVariableCreator< FrameVariableType::Float >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Float >();
+		case FrameVariableType::eFloat:
+			l_return = GlFrameVariableCreator< FrameVariableType::eFloat >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eFloat >();
 			break;
 
-		case FrameVariableType::Double:
-			l_return = GlFrameVariableCreator< FrameVariableType::Double >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Double >();
+		case FrameVariableType::eDouble:
+			l_return = GlFrameVariableCreator< FrameVariableType::eDouble >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eDouble >();
 			break;
 
-		case FrameVariableType::Sampler:
-			l_return = GlFrameVariableCreator< FrameVariableType::Sampler >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Sampler >();
+		case FrameVariableType::eSampler:
+			l_return = GlFrameVariableCreator< FrameVariableType::eSampler >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eSampler >();
 			break;
 
-		case FrameVariableType::Vec2i:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec2i >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec2i >();
+		case FrameVariableType::eVec2i:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec2i >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec2i >();
 			break;
 
-		case FrameVariableType::Vec3i:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec3i >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec3i >();
+		case FrameVariableType::eVec3i:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec3i >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec3i >();
 			break;
 
-		case FrameVariableType::Vec4i:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec4i >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec4i >();
+		case FrameVariableType::eVec4i:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec4i >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec4i >();
 			break;
 
-		case FrameVariableType::Vec2ui:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec2ui >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec2ui >();
+		case FrameVariableType::eVec2ui:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec2ui >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec2ui >();
 			break;
 
-		case FrameVariableType::Vec3ui:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec3ui >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec3ui >();
+		case FrameVariableType::eVec3ui:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec3ui >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec3ui >();
 			break;
 
-		case FrameVariableType::Vec4ui:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec4ui >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec4ui >();
+		case FrameVariableType::eVec4ui:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec4ui >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec4ui >();
 			break;
 
-		case FrameVariableType::Vec2f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec2f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec2f >();
+		case FrameVariableType::eVec2f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec2f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec2f >();
 			break;
 
-		case FrameVariableType::Vec3f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec3f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec3f >();
+		case FrameVariableType::eVec3f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec3f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec3f >();
 			break;
 
-		case FrameVariableType::Vec4f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec4f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec4f >();
+		case FrameVariableType::eVec4f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec4f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec4f >();
 			break;
 
-		case FrameVariableType::Vec2d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec2d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec2d >();
+		case FrameVariableType::eVec2d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec2d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec2d >();
 			break;
 
-		case FrameVariableType::Vec3d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec3d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec3d >();
+		case FrameVariableType::eVec3d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec3d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec3d >();
 			break;
 
-		case FrameVariableType::Vec4d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Vec4d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Vec4d >();
+		case FrameVariableType::eVec4d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eVec4d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eVec4d >();
 			break;
 
-		case FrameVariableType::Mat2x2f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x2f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x2f >();
+		case FrameVariableType::eMat2x2f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x2f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x2f >();
 			break;
 
-		case FrameVariableType::Mat2x3f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x3f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x3f >();
+		case FrameVariableType::eMat2x3f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x3f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x3f >();
 			break;
 
-		case FrameVariableType::Mat2x4f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x4f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x4f >();
+		case FrameVariableType::eMat2x4f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x4f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x4f >();
 			break;
 
-		case FrameVariableType::Mat3x2f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x2f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x2f >();
+		case FrameVariableType::eMat3x2f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x2f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x2f >();
 			break;
 
-		case FrameVariableType::Mat3x3f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x3f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x3f >();
+		case FrameVariableType::eMat3x3f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x3f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x3f >();
 			break;
 
-		case FrameVariableType::Mat3x4f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x4f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x4f >();
+		case FrameVariableType::eMat3x4f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x4f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x4f >();
 			break;
 
-		case FrameVariableType::Mat4x2f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x2f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x2f >();
+		case FrameVariableType::eMat4x2f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x2f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x2f >();
 			break;
 
-		case FrameVariableType::Mat4x3f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x3f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x3f >();
+		case FrameVariableType::eMat4x3f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x3f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x3f >();
 			break;
 
-		case FrameVariableType::Mat4x4f:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x4f >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x4f >();
+		case FrameVariableType::eMat4x4f:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x4f >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x4f >();
 			break;
 
-		case FrameVariableType::Mat2x2d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x2d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x2d >();
+		case FrameVariableType::eMat2x2d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x2d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x2d >();
 			break;
 
-		case FrameVariableType::Mat2x3d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x3d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x3d >();
+		case FrameVariableType::eMat2x3d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x3d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x3d >();
 			break;
 
-		case FrameVariableType::Mat2x4d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat2x4d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat2x4d >();
+		case FrameVariableType::eMat2x4d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat2x4d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat2x4d >();
 			break;
 
-		case FrameVariableType::Mat3x2d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x2d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x2d >();
+		case FrameVariableType::eMat3x2d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x2d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x2d >();
 			break;
 
-		case FrameVariableType::Mat3x3d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x3d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x3d >();
+		case FrameVariableType::eMat3x3d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x3d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x3d >();
 			break;
 
-		case FrameVariableType::Mat3x4d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat3x4d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat3x4d >();
+		case FrameVariableType::eMat3x4d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat3x4d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat3x4d >();
 			break;
 
-		case FrameVariableType::Mat4x2d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x2d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x2d >();
+		case FrameVariableType::eMat4x2d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x2d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x2d >();
 			break;
 
-		case FrameVariableType::Mat4x3d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x3d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x3d >();
+		case FrameVariableType::eMat4x3d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x3d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x3d >();
 			break;
 
-		case FrameVariableType::Mat4x4d:
-			l_return = GlFrameVariableCreator< FrameVariableType::Mat4x4d >( GetOpenGl(), l_program, p_occurences );
-			l_pApplyer = GlApplyerCreator< FrameVariableType::Mat4x4d >();
+		case FrameVariableType::eMat4x4d:
+			l_return = GlFrameVariableCreator< FrameVariableType::eMat4x4d >( GetOpenGl(), l_program, p_occurences );
+			l_pApplyer = GlApplyerCreator< FrameVariableType::eMat4x4d >();
 			break;
 		}
 
@@ -874,23 +874,23 @@ namespace GlRender
 		bool l_return = false;
 		GlShaderProgram & l_program = static_cast< GlShaderProgram & >( m_program );
 		int l_max = 0;
-		GetOpenGl().GetIntegerv( GlMax::UniformBufferBindings, &l_max );
+		GetOpenGl().GetIntegerv( GlMax::eUniformBufferBindings, &l_max );
 
 		if ( int( m_index ) < l_max )
 		{
-			if ( GetOpenGl().HasUbo() && l_index == eGL_INVALID_INDEX )
+			if ( GetOpenGl().HasUbo() && l_index == GlInvalidIndex )
 			{
 				GetOpenGl().UseProgram( l_program.GetGlName() );
 				m_uniformBlockIndex = GetOpenGl().GetUniformBlockIndex( l_program.GetGlName(), string::string_cast< char >( m_name ).c_str() );
 				uint32_t l_totalSize = 0;
 
-				if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
+				if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 				{
-					GetOpenGl().GetActiveUniformBlockiv( l_program.GetGlName(), m_uniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_uniformBlockSize );
+					GetOpenGl().GetActiveUniformBlockiv( l_program.GetGlName(), m_uniformBlockIndex, GlUniformBlockValue::eBlockDataSize, &m_uniformBlockSize );
 					m_glBuffer.Create();
-					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
+					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 					m_glBuffer.Bind();
-					GetOpenGl().BindBufferBase( GlBufferTarget::Uniform, m_index, m_glBuffer.GetGlName() );
+					GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
 					m_buffer.resize( m_uniformBlockSize );
 					std::vector< const char * > l_arrayNames;
@@ -922,10 +922,10 @@ namespace GlRender
 						uint32_t l_index = l_arrayIndices[i++];
 						int l_offset, l_size;
 
-						if ( l_index != eGL_INVALID_INDEX )
+						if ( l_index != GlInvalidIndex )
 						{
-							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, eGL_UNIFORM_OFFSET, &l_offset );
-							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, eGL_UNIFORM_SIZE, &l_size );
+							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::eOffset, &l_offset );
+							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformBlockValue::eSize, &l_size );
 
 							if ( l_size == 1 )
 							{
@@ -957,16 +957,16 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoCleanup()
 	{
-		m_uniformBlockIndex = int( eGL_INVALID_INDEX );
+		m_uniformBlockIndex = int( GlInvalidIndex );
 		m_uniformBlockSize = 0;
 		m_glBuffer.Destroy();
 	}
 
 	bool GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
+		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 		{
-			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 		else
 		{
@@ -981,7 +981,7 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != int( eGL_INVALID_INDEX ) )
+		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 		{
 			m_glBuffer.Unbind();
 		}

@@ -67,7 +67,7 @@ namespace C3DMd3
 	bool Md3Importer::DoImportMesh( Mesh & p_mesh )
 	{
 		bool l_return{ false };
-		m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
+		m_pFile = new BinaryFile( m_fileName, File::OpenMode::eRead );
 		UIntArray l_faces;
 		RealArray l_sizes;
 		MaterialSPtr l_material;
@@ -160,7 +160,7 @@ namespace C3DMd3
 
 				if ( !l_strValue.empty() )
 				{
-					l_pTexture = LoadTexture( l_strValue, p_pass, TextureChannel::Diffuse );
+					l_pTexture = LoadTexture( l_strValue, p_pass, TextureChannel::eDiffuse );
 
 					if ( l_pTexture )
 					{
@@ -266,7 +266,7 @@ namespace C3DMd3
 
 		if ( File::FileExists( p_strSkin ) )
 		{
-			TextFile l_fileIO( p_strSkin, File::eOPEN_MODE_READ );
+			TextFile l_fileIO( p_strSkin, File::OpenMode::eRead );
 			String l_strLine, l_strSection, l_strImage;
 
 			while ( l_fileIO.IsOk() )
@@ -297,7 +297,7 @@ namespace C3DMd3
 
 					if ( !l_strImage.empty() )
 					{
-						LoadTexture( Path{ l_strImage }, *l_pass, TextureChannel::Diffuse );
+						LoadTexture( Path{ l_strImage }, *l_pass, TextureChannel::eDiffuse );
 					}
 
 					m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
@@ -317,7 +317,7 @@ namespace C3DMd3
 
 		if ( File::FileExists( p_strShader ) )
 		{
-			TextFile l_fileIO( p_strShader, File::eOPEN_MODE_READ );
+			TextFile l_fileIO( p_strShader, File::OpenMode::eRead );
 			String l_strName = l_fileIO.GetFileName().substr( 0, l_fileIO.GetFileName().find_last_of( '.' ) );
 			String l_strLine;
 			uint32_t l_uiIndex = 0;
@@ -343,7 +343,7 @@ namespace C3DMd3
 
 				if ( !l_strLine.empty() )
 				{
-					LoadTexture( Path{ l_strLine }, *l_pass, TextureChannel::Diffuse );
+					LoadTexture( Path{ l_strLine }, *l_pass, TextureChannel::eDiffuse );
 				}
 
 				p_mesh.GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );

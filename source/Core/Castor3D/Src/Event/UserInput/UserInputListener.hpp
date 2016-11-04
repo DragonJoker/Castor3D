@@ -142,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_button	Le bouton de la souris.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool FireMouseButtonPushed( eMOUSE_BUTTON p_button );
+		C3D_API bool FireMouseButtonPushed( MouseButton p_button );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse released event.
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_button	Le bouton de la souris.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool FireMouseButtonReleased( eMOUSE_BUTTON p_button );
+		C3D_API bool FireMouseButtonReleased( MouseButton p_button );
 		/**
 		 *\~english
 		 *\~brief		Fires a mouse wheel event.
@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\param[in]	p_shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_API bool FireKeyDown( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a keyboard key up event.
@@ -203,7 +203,7 @@ namespace Castor3D
 		 *\param[in]	p_shift		Dit si la touche Shift est enfoncée.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		*/
-		C3D_API bool FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_API bool FireKeyUp( KeyboardKey p_key, bool p_ctrl, bool p_alt, bool p_shift );
 		/**
 		 *\~english
 		 *\~brief		Fires a printable key event.
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\param[in]	p_char		Le caractère correspondant à la touche, affichable tel quel.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
 		 */
-		C3D_API bool FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
+		C3D_API bool FireChar( KeyboardKey p_key, Castor::String const & p_char );
 
 		//@}
 

@@ -42,62 +42,62 @@ namespace Castor3D
 	{
 		//!\~english	Eye to Clip transform.
 		//!\~french		Transformations de Vue vers Clip.
-		Projection,
+		eProjection,
 		//!\~english	Object to World transform.
 		//!\~french		Transformations de Objet vers Monde.
-		Model,
+		eModel,
 		//!\~english	World to Eye transform.
 		//!\~french Transformations de Monde vers Vue.
-		View,
+		eView,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture0,
+		eTexture0,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture1,
+		eTexture1,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture2,
+		eTexture2,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture3,
+		eTexture3,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture4,
+		eTexture4,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture5,
+		eTexture5,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture6,
+		eTexture6,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture7,
+		eTexture7,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture8,
+		eTexture8,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture9,
+		eTexture9,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture10,
+		eTexture10,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture11,
+		eTexture11,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture12,
+		eTexture12,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture13,
+		eTexture13,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture14,
+		eTexture14,
 		//!\~english	Texture transforms.
 		//!\~french		Transformations de texture.
-		Texture15,
-		CASTOR_ENUM_CLASS_BOUNDS( Projection )
+		eTexture15,
+		CASTOR_SCOPED_ENUM_BOUNDS( eProjection )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -106,25 +106,25 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de matrices
 	*/
-	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << int( MatrixMode::Projection );
-	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << int( MatrixMode::Model );
-	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << int( MatrixMode::View );
-	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << int( MatrixMode::Texture0 );
-	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << int( MatrixMode::Texture1 );
-	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << int( MatrixMode::Texture2 );
-	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << int( MatrixMode::Texture3 );
-	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << int( MatrixMode::Texture4 );
-	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << int( MatrixMode::Texture5 );
-	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << int( MatrixMode::Texture6 );
-	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << int( MatrixMode::Texture7 );
-	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << int( MatrixMode::Texture8 );
-	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << int( MatrixMode::Texture9 );
-	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << int( MatrixMode::Texture10 );
-	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << int( MatrixMode::Texture11 );
-	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << int( MatrixMode::Texture12 );
-	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << int( MatrixMode::Texture13 );
-	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << int( MatrixMode::Texture14 );
-	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << int( MatrixMode::Texture15 );
+	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << int( MatrixMode::eProjection );
+	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << int( MatrixMode::eModel );
+	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << int( MatrixMode::eView );
+	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << int( MatrixMode::eTexture0 );
+	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << int( MatrixMode::eTexture1 );
+	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << int( MatrixMode::eTexture2 );
+	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << int( MatrixMode::eTexture3 );
+	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << int( MatrixMode::eTexture4 );
+	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << int( MatrixMode::eTexture5 );
+	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << int( MatrixMode::eTexture6 );
+	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << int( MatrixMode::eTexture7 );
+	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << int( MatrixMode::eTexture8 );
+	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << int( MatrixMode::eTexture9 );
+	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << int( MatrixMode::eTexture10 );
+	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << int( MatrixMode::eTexture11 );
+	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << int( MatrixMode::eTexture12 );
+	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << int( MatrixMode::eTexture13 );
+	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << int( MatrixMode::eTexture14 );
+	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << int( MatrixMode::eTexture15 );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.8.0
@@ -139,16 +139,16 @@ namespace Castor3D
 	{
 		//!\~english	No access.
 		//!\~french		Aucun accès.
-		None = 0,
+		eNone = 0,
 		//!\~english	Read only access type.
 		//!\~french		Accès lecture seule.
-		Read = 1 << 0,
+		eRead = 1 << 0,
 		//!\~english	Write only access type.
 		//!\~french		Accèes écriture seule.
-		Write = 1 << 1,
+		eWrite = 1 << 1,
 		//!\~english	Read and write access type.
 		//!\~french		Accès lecture et écriture.
-		ReadWrite = Read | Write,
+		eReadWrite = eRead | eWrite,
 	};
 	/**
 	 *\~english
@@ -188,11 +188,11 @@ namespace Castor3D
 		: uint32_t
 	{
 		//! Modified once and used many times
-		Static = 1 << 0,
+		eStatic = 1 << 0,
 		//! Modified many times and used many times
-		Dynamic = 1 << 1,
+		eDynamic = 1 << 1,
 		//! Modified oncce and used at most a few times
-		Stream = 1 << 2,
+		eStream = 1 << 2,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -208,11 +208,11 @@ namespace Castor3D
 		: uint32_t
 	{
 		//! Modified by CPU and used by GPU
-		Draw = 1 << 4,
+		eDraw = 1 << 4,
 		//! Modified by GPU and used by CPU
-		Read = 1 << 5,
+		eRead = 1 << 5,
 		//! Modified by GPU and used by GPU
-		Copy = 1 << 6,
+		eCopy = 1 << 6,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -225,26 +225,26 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! Display textured points
-		Points,
+		ePoints,
 		//! Display textured edges
-		Lines,
+		eLines,
 		//! Display textured edge loops
-		LineLoop,
+		eLineLoop,
 		//! Display textured edge strips
-		LineStrip,
+		eLineStrip,
 		//! Display textured triangles
-		Triangles,
+		eTriangles,
 		//! Display triangle strips
-		TriangleStrips,
+		eTriangleStrips,
 		//! Display triangle fan
-		TriangleFan,
+		eTriangleFan,
 		//! Display quads
-		Quads,
+		eQuads,
 		//! Display quad strips
-		QuadStrips,
+		eQuadStrips,
 		//! Display quad strips
-		Polygon,
-		CASTOR_ENUM_CLASS_BOUNDS( Points )
+		ePolygon,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePoints )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -272,35 +272,35 @@ namespace Castor3D
 	{
 		switch ( p_topology )
 		{
-		case Topology::Points:
-			return TopologyNamer< Topology::Points >::Name;
+		case Topology::ePoints:
+			return TopologyNamer< Topology::ePoints >::Name;
 
-		case Topology::Lines:
-			return TopologyNamer< Topology::Lines >::Name;
+		case Topology::eLines:
+			return TopologyNamer< Topology::eLines >::Name;
 
-		case Topology::LineLoop:
-			return TopologyNamer< Topology::LineLoop >::Name;
+		case Topology::eLineLoop:
+			return TopologyNamer< Topology::eLineLoop >::Name;
 
-		case Topology::LineStrip:
-			return TopologyNamer< Topology::LineStrip >::Name;
+		case Topology::eLineStrip:
+			return TopologyNamer< Topology::eLineStrip >::Name;
 
-		case Topology::Triangles:
-			return TopologyNamer< Topology::Triangles >::Name;
+		case Topology::eTriangles:
+			return TopologyNamer< Topology::eTriangles >::Name;
 
-		case Topology::TriangleStrips:
-			return TopologyNamer< Topology::TriangleStrips >::Name;
+		case Topology::eTriangleStrips:
+			return TopologyNamer< Topology::eTriangleStrips >::Name;
 
-		case Topology::TriangleFan:
-			return TopologyNamer< Topology::TriangleFan >::Name;
+		case Topology::eTriangleFan:
+			return TopologyNamer< Topology::eTriangleFan >::Name;
 
-		case Topology::Quads:
-			return TopologyNamer< Topology::Quads >::Name;
+		case Topology::eQuads:
+			return TopologyNamer< Topology::eQuads >::Name;
 
-		case Topology::QuadStrips:
-			return TopologyNamer< Topology::QuadStrips >::Name;
+		case Topology::eQuadStrips:
+			return TopologyNamer< Topology::eQuadStrips >::Name;
 
-		case Topology::Polygon:
-			return TopologyNamer< Topology::Polygon >::Name;
+		case Topology::ePolygon:
+			return TopologyNamer< Topology::ePolygon >::Name;
 
 		default:
 			FAILURE( "Topology type unknown" );
@@ -321,22 +321,22 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! Never passes.
-		Never,
+		eNever,
 		//! Passes if the incoming depth value is less than the stored depth value.
-		Less,
+		eLess,
 		//! Passes if the incoming depth value is equal to the stored depth value.
-		Equal,
+		eEqual,
 		//! Passes if the incoming depth value is less than or equal to the stored depth value.
-		LEqual,
+		eLEqual,
 		//! Passes if the incoming depth value is greater than the stored depth value.
-		Greater,
+		eGreater,
 		//! Passes if the incoming depth value is not equal to the stored depth value.
-		NEqual,
+		eNEqual,
 		//! Passes if the incoming depth value is greater than or equal to the stored depth value.
-		GEqual,
+		eGEqual,
 		//! Always passes.
-		Always,
-		CASTOR_ENUM_CLASS_BOUNDS( Never )
+		eAlways,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNever )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -351,10 +351,10 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! Writing disabled
-		Zero,
+		eZero,
 		//! Writing enabled
-		All,
-		CASTOR_ENUM_CLASS_BOUNDS( Zero )
+		eAll,
+		CASTOR_SCOPED_ENUM_BOUNDS( eZero )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -369,22 +369,22 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! Never passes.
-		Never,
+		eNever,
 		//! Passes if the incoming stencil value is less than the stored stencil value.
-		Less,
+		eLess,
 		//! Passes if the incoming stencil value is equal to the stored stencil value.
-		Equal,
+		eEqual,
 		//! Passes if the incoming stencil value is less than or equal to the stored stencil value.
-		LEqual,
+		eLEqual,
 		//! Passes if the incoming stencil value is greater than the stored stencil value.
-		Greater,
+		eGreater,
 		//! Passes if the incoming stencil value is not equal to the stored stencil value.
-		NEqual,
+		eNEqual,
 		//! Passes if the incoming stencil value is greater than or equal to the stored stencil value.
-		GEqual,
+		eGEqual,
 		//! Always passes.
-		Always,
-		CASTOR_ENUM_CLASS_BOUNDS( Never )
+		eAlways,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNever )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -399,22 +399,22 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! Keeps the current value.
-		Keep,
+		eKeep,
 		//! Sets the stencil buffer value to 0.
-		Zero,
+		eZero,
 		//! Sets the stencil buffer value by the one given
-		Replace,
+		eReplace,
 		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
-		Increment,
+		eIncrement,
 		//! Increments the current stencil buffer value. Wraps stencil buffer value to zero when incrementing the maximum representable unsigned value.
-		IncrWrap,
+		eIncrWrap,
 		//! Decrements the current stencil buffer value. Clamps to 0.
-		Decrement,
+		eDecrement,
 		//! Decrements the current stencil buffer value. Wraps stencil buffer value to the maximum representable unsigned value when decrementing a stencil buffer value of zero.
-		DecrWrap,
+		eDecrWrap,
 		//! Bitwise inverts the current stencil buffer value.
-		Invert,
-		CASTOR_ENUM_CLASS_BOUNDS( Keep )
+		eInvert,
+		CASTOR_SCOPED_ENUM_BOUNDS( eKeep )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -429,29 +429,29 @@ namespace Castor3D
 		: uint32_t
 	{
 		//! Position coords
-		Unknown = 0x000,
+		eUnknown = 0x000,
 		//! Position coords
-		Position = 0x001,
+		ePosition = 0x001,
 		//! Normal coords
-		Normal = 0x002,
+		eNormal = 0x002,
 		//! Tangent coords
-		Tangent = 0x004,
+		eTangent = 0x004,
 		//! Bitangent coords
-		Bitangent = 0x008,
+		eBitangent = 0x008,
 		//! Diffuse colour
-		Diffuse = 0x010,
+		eDiffuse = 0x010,
 		//! Texture coordinates
-		TexCoords = 0x020,
+		eTexCoords = 0x020,
 		//! Bone IDs 0
-		BoneIds0 = 0x040,
+		eBoneIds0 = 0x040,
 		//! Bone IDs 1
-		BoneIds1 = 0x080,
+		eBoneIds1 = 0x080,
 		//! Bone weights 0
-		BoneWeights0 = 0x100,
+		eBoneWeights0 = 0x100,
 		//! Bone weights 1
-		BoneWeights1 = 0x200,
+		eBoneWeights1 = 0x200,
 		//! Instantiation matrix
-		Transform = 0x400,
+		eTransform = 0x400,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -466,38 +466,38 @@ namespace Castor3D
 		: uint8_t
 	{
 		//! 1 float (GLSL float)
-		Float,
+		eFloat,
 		//! 2 floats (GLSL vec2)
-		Vec2,
+		eVec2,
 		//! 3 floats (GLSL vec3)
-		Vec3,
+		eVec3,
 		//! 4 floats (GLSL vec4)
-		Vec4,
+		eVec4,
 		//! colour (uint32_t)
-		Colour,
+		eColour,
 		//! 1 int (4 bytes each, GLSL int)
-		Int,
+		eInt,
 		//! 2 ints (4 bytes each, GLSL ivec2)
-		IVec2,
+		eIVec2,
 		//! 3 ints (4 bytes each, GLSL ivec3)
-		IVec3,
+		eIVec3,
 		//! 4 ints (4 bytes each, GLSL ivec4)
-		IVec4,
+		eIVec4,
 		//! 1 uint (4 bytes each, GLSL uint)
-		UInt,
+		eUInt,
 		//! 2 uints (4 bytes each, GLSL uivec2)
-		UIVec2,
+		eUIVec2,
 		//! 3 uints (4 bytes each, GLSL uivec3)
-		UIVec3,
+		eUIVec3,
 		//! 4 uints (4 bytes each, GLSL uivec4)
-		UIVec4,
+		eUIVec4,
 		//! 2x2 floats (GLSL mat2)
-		Mat2,
+		eMat2,
 		//! 3x3 floats (GLSL mat3)
-		Mat3,
+		eMat3,
 		//! 4x4 floats (GLSL mat4)
-		Mat4,
-		CASTOR_ENUM_CLASS_BOUNDS( Float )
+		eMat4,
+		CASTOR_SCOPED_ENUM_BOUNDS( eFloat )
 	};
 	/**
 	 *\~english
@@ -513,51 +513,51 @@ namespace Castor3D
 	{
 		switch ( p_type )
 		{
-		case ElementType::Float:
+		case ElementType::eFloat:
 			return uint32_t( 1u * sizeof( real ) );
 			break;
 
-		case ElementType::Vec2:
+		case ElementType::eVec2:
 			return uint32_t( 2u * sizeof( real ) );
 			break;
 
-		case ElementType::Vec3:
+		case ElementType::eVec3:
 			return uint32_t( 3u * sizeof( real ) );
 			break;
 
-		case ElementType::Vec4:
+		case ElementType::eVec4:
 			return uint32_t( 4u * sizeof( real ) );
 			break;
 
-		case ElementType::Colour:
+		case ElementType::eColour:
 			return uint32_t( sizeof( uint32_t ) );
 			break;
 
-		case ElementType::Int:
+		case ElementType::eInt:
 			return uint32_t( 1u * sizeof( int32_t ) );
 			break;
 
-		case ElementType::IVec2:
+		case ElementType::eIVec2:
 			return uint32_t( 2u * sizeof( int32_t ) );
 			break;
 
-		case ElementType::IVec3:
+		case ElementType::eIVec3:
 			return uint32_t( 3u * sizeof( int32_t ) );
 			break;
 
-		case ElementType::IVec4:
+		case ElementType::eIVec4:
 			return uint32_t( 4u * sizeof( int32_t ) );
 			break;
 
-		case ElementType::Mat2:
+		case ElementType::eMat2:
 			return uint32_t( 2u * 2u * sizeof( real ) );
 			break;
 
-		case ElementType::Mat3:
+		case ElementType::eMat3:
 			return uint32_t( 3u * 3u * sizeof( real ) );
 			break;
 
-		case ElementType::Mat4:
+		case ElementType::eMat4:
 			return uint32_t( 4u * 4u * sizeof( real ) );
 			break;
 

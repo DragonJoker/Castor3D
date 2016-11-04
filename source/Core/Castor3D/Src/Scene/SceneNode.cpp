@@ -351,7 +351,7 @@ namespace Castor3D
 		{
 			MovableObjectSPtr l_current = l_it.lock();
 
-			if ( l_current && l_current->GetType() == MovableType::Geometry )
+			if ( l_current && l_current->GetType() == MovableType::eGeometry )
 			{
 				GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( l_current );
 
@@ -359,7 +359,7 @@ namespace Castor3D
 				{
 					real l_distance = std::numeric_limits< real >::max();
 
-					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::Out && l_distance < p_distance )
+					if ( p_ray.Intersects( l_geometry, p_nearestFace, p_nearestSubmesh, l_distance ) != Intersection::eOut && l_distance < p_distance )
 					{
 						p_distance = l_distance;
 						l_return = l_geometry;

@@ -67,7 +67,7 @@ namespace C3dSMax
 		String l_meshName = m_fileName.GetFileName();
 		String l_materialName = m_fileName.GetFileName();
 		SMaxChunk l_currentChunk;
-		m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
+		m_pFile = new BinaryFile( m_fileName, File::OpenMode::eRead );
 
 		if ( m_pFile->IsOk() )
 		{
@@ -270,29 +270,29 @@ namespace C3dSMax
 					break;
 
 				case eSMAX_CHUNK_MAT_TEXMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Diffuse] );
-					Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[TextureChannel::Diffuse] );
+					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eDiffuse] );
+					Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[TextureChannel::eDiffuse] );
 					break;
 
 				case eSMAX_CHUNK_MAT_SPECMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Specular] );
-					Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[TextureChannel::Specular] );
+					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eSpecular] );
+					Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[TextureChannel::eSpecular] );
 					break;
 
 				case eSMAX_CHUNK_MAT_OPACMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Opacity] );
-					Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[TextureChannel::Opacity] );
+					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eOpacity] );
+					Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[TextureChannel::eOpacity] );
 					break;
 
 				case eSMAX_CHUNK_MAT_BUMPMAP:
-					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::Normal] );
-					Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[TextureChannel::Normal] );
+					DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[TextureChannel::eNormal] );
+					Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[TextureChannel::eNormal] );
 					break;
 
 				case eSMAX_CHUNK_MAT_MAPNAME:
-					l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[TextureChannel::Diffuse] );
+					l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[TextureChannel::eDiffuse] );
 					l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
-					Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[TextureChannel::Diffuse] );
+					Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[TextureChannel::eDiffuse] );
 					break;
 
 				default:

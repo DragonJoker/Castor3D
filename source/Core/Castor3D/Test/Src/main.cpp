@@ -97,7 +97,7 @@ namespace
 		std::unique_ptr< Engine > l_return = std::make_unique< Engine >();
 		DoLoadPlugins( *l_return );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( PluginType::Renderer );
+		auto l_renderers = l_return->GetPluginCache().GetPlugins( PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{
@@ -128,9 +128,9 @@ int main( int argc, char const * argv[] )
 	}
 
 #if defined( NDEBUG )
-	Castor::Logger::Initialise( Castor::ELogType_INFO );
+	Castor::Logger::Initialise( Castor::LogType::eInfo );
 #else
-	Logger::Initialise( Castor::ELogType_DEBUG );
+	Logger::Initialise( Castor::LogType::eDebug );
 #endif
 
 	Logger::SetFileName( Castor::File::GetExecutableDirectory() / cuT( "Castor3DTests.log" ) );

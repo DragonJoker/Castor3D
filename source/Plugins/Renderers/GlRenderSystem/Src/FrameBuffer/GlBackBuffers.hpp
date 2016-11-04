@@ -115,7 +115,7 @@ namespace GlRender
 		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation )const override;
 
 	private:
-		eGL_FRAMEBUFFER_MODE m_glBindingMode;
+		GlFrameBufferMode m_glBindingMode;
 	};
 }
 

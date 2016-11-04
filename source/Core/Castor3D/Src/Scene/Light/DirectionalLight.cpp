@@ -32,7 +32,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight( Light & p_light )
-		: LightCategory{ LightType::Directional, p_light }
+		: LightCategory{ LightType::eDirectional, p_light }
 	{
 	}
 

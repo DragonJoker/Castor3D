@@ -58,7 +58,7 @@ namespace Castor3D
 	Intersection Ray::Intersects( Point3r const & p_pt1, Point3r const & p_pt2, Point3r const & p_pt3, real & p_distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-triangle-intersection/
-		Intersection l_return = Intersection::Out;
+		Intersection l_return = Intersection::eOut;
 		Point3r e1{ p_pt2 - p_pt1 };
 		Point3r e2{ p_pt1 - p_pt3 };
 		Point3r h( m_direction ^ e2 );
@@ -81,7 +81,7 @@ namespace Castor3D
 
 					if ( p_distance > 0.00001_r )
 					{
-						l_return = Intersection::In;
+						l_return = Intersection::eIn;
 					}
 				}
 			}
@@ -102,14 +102,14 @@ namespace Castor3D
 
 	Intersection Ray::Intersects( Point3r const & p_vertex, real & p_distance )const
 	{
-		Intersection l_return = Intersection::Out;
+		Intersection l_return = Intersection::eOut;
 		Point3r u( m_origin - p_vertex );
 		Point3r puv;
 
 		if ( ProjectVertex( u, puv ) && point::distance_squared( puv ) < 0.000001 )
 		{
 			p_distance = real( point::distance( u ) );
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 		}
 
 		return l_return;
@@ -125,83 +125,83 @@ namespace Castor3D
 		Point3r l_v5( l_v8[0], l_v1[1], l_v8[2] );
 		Point3r l_v6( l_v1[0], l_v8[1], l_v8[2] );
 		Point3r l_v7( l_v8[0], l_v8[1], l_v8[2] );
-		auto l_return = Intersection::Out;
+		auto l_return = Intersection::eOut;
 		real l_dist = 0.0_r;
 		real l_min = std::numeric_limits< real >::max();
 
-		if ( ( Intersects( l_v1, l_v2, l_v3, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v1, l_v2, l_v3, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v2, l_v4, l_v3, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v2, l_v4, l_v3, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v2, l_v6, l_v4, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v2, l_v6, l_v4, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v6, l_v8, l_v4, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v6, l_v8, l_v4, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v6, l_v5, l_v8, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v6, l_v5, l_v8, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v5, l_v7, l_v8, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v5, l_v7, l_v8, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v1, l_v7, l_v5, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v1, l_v7, l_v5, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v1, l_v3, l_v7, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v1, l_v3, l_v7, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v2, l_v1, l_v5, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v2, l_v1, l_v5, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v2, l_v5, l_v6, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v2, l_v5, l_v6, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v3, l_v4, l_v7, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v3, l_v4, l_v7, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( ( Intersects( l_v4, l_v7, l_v8, l_dist ) ) != Intersection::Out )
+		if ( ( Intersects( l_v4, l_v7, l_v8, l_dist ) ) != Intersection::eOut )
 		{
-			l_return = Intersection::In;
+			l_return = Intersection::eIn;
 			l_min = std::min( l_min, l_dist );
 		}
 
-		if ( l_return != Intersection::Out )
+		if ( l_return != Intersection::eOut )
 		{
 			p_distance = l_min;
 		}
@@ -212,7 +212,7 @@ namespace Castor3D
 	Intersection Ray::Intersects( SphereBox const & p_sphere, real & p_distance )const
 	{
 		// see http://www.lighthouse3d.com/tutorials/maths/ray-sphere-intersection/
-		auto l_return = Intersection::Out;
+		auto l_return = Intersection::eOut;
 		Point3r l_v( p_sphere.GetCenter() - m_origin );
 		Point3r l_puv;
 
@@ -224,12 +224,12 @@ namespace Castor3D
 			if ( p_distance == p_sphere.GetRadius() )
 			{
 				// Single intersection point.
-				l_return = Intersection::Intersect;
+				l_return = Intersection::eIntersect;
 			}
 			else if ( p_distance < p_sphere.GetRadius() )
 			{
 				// Two intersection points, we look for the nearest one.
-				l_return = Intersection::In;
+				l_return = Intersection::eIn;
 
 				if ( point::distance( l_v ) < p_sphere.GetRadius() )
 				{
@@ -250,14 +250,14 @@ namespace Castor3D
 			if ( p_distance == p_sphere.GetRadius() )
 			{
 				// Single intersection point.
-				l_return = Intersection::Intersect;
+				l_return = Intersection::eIntersect;
 			}
 			else if ( point::distance( l_v ) < p_sphere.GetRadius() )
 			{
 				// The sphere's center is behind the ray, and the rays origin is inside the sphere.
 				p_distance = real( point::distance( l_puv - l_v ) );
 				p_distance = real( sqrt( p_sphere.GetRadius() * p_sphere.GetRadius() - p_distance * p_distance ) - point::distance( l_puv ) );
-				l_return = Intersection::In;
+				l_return = Intersection::eIn;
 			}
 			else
 			{
@@ -274,16 +274,16 @@ namespace Castor3D
 		Point3r l_center{ p_geometry->GetParent()->GetDerivedPosition() };
 		SphereBox l_sphere{ l_center, l_mesh->GetCollisionSphere().GetRadius() };
 		Matrix4x4r const & l_transform{ p_geometry->GetParent()->GetDerivedTransformationMatrix() };
-		auto l_return = Intersection::Out;
+		auto l_return = Intersection::eOut;
 		real l_faceDist = std::numeric_limits< real >::max();
 
-		if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
+		if ( Intersects( l_sphere, p_distance ) != Intersection::eOut )
 		{
 			for ( auto l_submesh : *l_mesh )
 			{
 				l_sphere.Load( l_center, l_submesh->GetCollisionSphere().GetRadius() );
 
-				if ( Intersects( l_sphere, p_distance ) != Intersection::Out )
+				if ( Intersects( l_sphere, p_distance ) != Intersection::eOut )
 				{
 					for ( uint32_t k = 0u; k < l_submesh->GetFaceCount(); k++ )
 					{
@@ -295,9 +295,9 @@ namespace Castor3D
 						};
 						real l_curfaceDist = 0.0_r;
 
-						if ( Intersects( l_face, l_transform, *l_submesh, l_curfaceDist ) != Intersection::Out && l_curfaceDist < l_faceDist )
+						if ( Intersects( l_face, l_transform, *l_submesh, l_curfaceDist ) != Intersection::eOut && l_curfaceDist < l_faceDist )
 						{
-							l_return = Intersection::In;
+							l_return = Intersection::eIn;
 							p_nearestFace = l_face;
 							p_nearestSubmesh = l_submesh;
 							p_distance = l_curfaceDist;

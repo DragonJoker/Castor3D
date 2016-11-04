@@ -12,7 +12,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MeshGenerator::MeshGenerator( eMESH_TYPE p_eMeshType )
+	MeshGenerator::MeshGenerator( MeshType p_eMeshType )
 		: m_eMeshType( p_eMeshType )
 	{
 	}
@@ -23,7 +23,7 @@ namespace Castor3D
 
 	MeshGeneratorSPtr MeshGenerator::Create()
 	{
-		return std::make_shared< MeshGenerator >( eMESH_TYPE_CUSTOM );
+		return std::make_shared< MeshGenerator >( MeshType::eCustom );
 	}
 
 	void MeshGenerator::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )

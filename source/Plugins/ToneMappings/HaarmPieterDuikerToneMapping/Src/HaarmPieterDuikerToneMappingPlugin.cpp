@@ -26,7 +26,7 @@ C3D_HaarmPieterDuikerToneMapping_API void GetRequiredVersion( Castor3D::Version 
 
 C3D_HaarmPieterDuikerToneMapping_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::ToneMapping;
+	return Castor3D::PluginType::eToneMapping;
 }
 
 C3D_HaarmPieterDuikerToneMapping_API Castor::String GetName()

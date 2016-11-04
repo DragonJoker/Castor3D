@@ -23,20 +23,20 @@ namespace CastorGui
 	}
 
 	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_COMBO, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eComboBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
 		m_expand = std::make_shared< ButtonCtrl >( p_engine, this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
 		m_expand->SetVisible( DoIsVisible() );
-		m_expand->Connect( eBUTTON_EVENT_CLICKED, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
+		m_expand->Connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
 
 		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
-		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
+		m_choices->Connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetVAlign( VAlign::eCenter );
 		m_text = l_text;
 	}
 
@@ -149,11 +149,11 @@ namespace CastorGui
 		m_choices->SetPosition( Position( 0, GetSize().height() ) );
 		m_choices->SetSize( Size( GetSize().width() - GetSize().height(), -1 ) );
 
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
 			OnKeyDown( p_event );
 		} );
-		NonClientEventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		NonClientEventHandler::ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -255,12 +255,12 @@ namespace CastorGui
 			bool l_changed = false;
 			int l_index = GetSelected();
 
-			if ( p_event.GetKey() == eKEY_UP )
+			if ( p_event.GetKey() == KeyboardKey::eUp )
 			{
 				l_index--;
 				l_changed = true;
 			}
-			else if ( p_event.GetKey() == eKEY_DOWN )
+			else if ( p_event.GetKey() == KeyboardKey::eDown )
 			{
 				l_index++;
 				l_changed = true;
@@ -304,6 +304,6 @@ namespace CastorGui
 			}
 		}
 
-		m_signals[eCOMBOBOX_EVENT_SELECTED]( p_selected );
+		m_signals[size_t( ComboBoxEvent::eSelected )]( p_selected );
 	}
 }

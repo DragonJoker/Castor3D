@@ -25,19 +25,19 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Copy( GlBufferBase< T > const & p_src, uint32_t p_size )
 	{
-		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::Read, p_src.GetGlName() );
+		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::eRead, p_src.GetGlName() );
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().BindBuffer( GlBufferTarget::Write, GetGlName() );
+			l_return = GetOpenGl().BindBuffer( GlBufferTarget::eWrite, GetGlName() );
 
 			if ( l_return )
 			{
-				l_return = BindableType::GetOpenGl().CopyBufferSubData( GlBufferTarget::Read, GlBufferTarget::Write, 0, 0, p_size * sizeof( T ) );
-				GetOpenGl().BindBuffer( GlBufferTarget::Write, 0 );
+				l_return = BindableType::GetOpenGl().CopyBufferSubData( GlBufferTarget::eRead, GlBufferTarget::eWrite, 0, 0, p_size * sizeof( T ) );
+				GetOpenGl().BindBuffer( GlBufferTarget::eWrite, 0 );
 			}
 
-			GetOpenGl().BindBuffer( GlBufferTarget::Read, 0 );
+			GetOpenGl().BindBuffer( GlBufferTarget::eRead, 0 );
 		}
 
 		return l_return;
@@ -62,7 +62,7 @@ namespace GlRender
 	{
 		T * l_return = nullptr;
 
-		if ( this->GetGlName() != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != GlInvalidIndex )
 		{
 			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBufferRange( m_target, p_offset * sizeof( T ), p_count * sizeof( T ), BindableType::GetOpenGl().GetBitfieldFlags( p_flags ) ) );
 		}
@@ -71,11 +71,11 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( eGL_LOCK p_access )
+	T * GlBufferBase< T >::Lock( GlAccessType p_access )
 	{
 		T * l_return = nullptr;
 
-		if ( this->GetGlName() != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != GlInvalidIndex )
 		{
 			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBuffer( m_target, p_access ) );
 		}
@@ -86,7 +86,7 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Unlock()
 	{
-		bool l_return = this->GetGlName() != eGL_INVALID_INDEX;
+		bool l_return = this->GetGlName() != GlInvalidIndex;
 		l_return &= BindableType::GetOpenGl().UnmapBuffer( m_target );
 		return l_return;
 	}

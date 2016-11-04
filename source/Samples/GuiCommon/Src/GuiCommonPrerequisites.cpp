@@ -198,9 +198,9 @@ namespace GuiCommon
 	{
 		PxBufferBaseSPtr l_buffer;
 
-		if ( p_buffer->format() != PixelFormat::A8R8G8B8 )
+		if ( p_buffer->format() != PixelFormat::eA8R8G8B8 )
 		{
-			l_buffer = PxBufferBase::create( Size( p_buffer->width(), p_buffer->height() ), PixelFormat::A8R8G8B8, p_buffer->const_ptr(), p_buffer->format() );
+			l_buffer = PxBufferBase::create( Size( p_buffer->width(), p_buffer->height() ), PixelFormat::eA8R8G8B8, p_buffer->const_ptr(), p_buffer->format() );
 		}
 		else
 		{

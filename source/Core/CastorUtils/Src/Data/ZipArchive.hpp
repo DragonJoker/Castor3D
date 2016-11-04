@@ -59,7 +59,7 @@ namespace Castor
 
 		struct ZipImpl
 		{
-			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode ) = 0;
+			virtual void Open( Path const & p_path, File::OpenMode p_mode ) = 0;
 			virtual void Close() = 0;
 			virtual void Deflate( Folder const & p_files ) = 0;
 			virtual StringArray Inflate( Path const & p_outFolder, Folder & p_folder ) = 0;
@@ -78,7 +78,7 @@ namespace Castor
 		 *\param[in]	p_path	Le chemin de l' archive
 		 *\param[in]	p_mode	Le mode d'ouverture
 		 */
-		CU_API ZipArchive( Path const & p_path, File::eOPEN_MODE p_mode );
+		CU_API ZipArchive( Path const & p_path, File::OpenMode p_mode );
 		/**
 		 *\~english
 		 *\brief		Destructor

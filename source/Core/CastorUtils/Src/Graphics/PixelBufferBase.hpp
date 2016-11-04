@@ -314,7 +314,7 @@ namespace Castor
 		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 *\return		Le buffer créé
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & p_size, PixelFormat p_wantedFormat, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::A8R8G8B8 );
+		CU_API static PxBufferBaseSPtr create( Size const & p_size, PixelFormat p_wantedFormat, uint8_t const * p_buffer = nullptr, PixelFormat p_bufferFormat = PixelFormat::eA8R8G8B8 );
 
 	private:
 		PixelFormat m_pixelFormat;

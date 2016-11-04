@@ -48,7 +48,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Overlay, OverlayCache, EventType::PreRender >::Clear()
+	inline void CacheView< Overlay, OverlayCache, EventType::ePreRender >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
@@ -64,7 +64,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheView< Font, FontCache, EventType::PreRender >::Clear()
+	inline void CacheView< Font, FontCache, EventType::ePreRender >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
@@ -88,9 +88,9 @@ namespace Castor3D
 	{
 		static std::map< FogType, Castor::String > const FogTypes
 		{
-			{ FogType::Linear, cuT( "linear" ) },
-			{ FogType::Exponential, cuT( "exponential" ) },
-			{ FogType::SquaredExponential, cuT( "squared_exponential" ) },
+			{ FogType::eLinear, cuT( "linear" ) },
+			{ FogType::eExponential, cuT( "exponential" ) },
+			{ FogType::eSquaredExponential, cuT( "squared_exponential" ) },
 		};
 
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
@@ -184,7 +184,7 @@ namespace Castor3D
 			Castor::TextWriter< Scene >::CheckError( l_return, "Scene ambient light" );
 		}
 
-		if ( l_return && p_scene.GetFog().GetType() != FogType::Disabled )
+		if ( l_return && p_scene.GetFog().GetType() != FogType::eDisabled )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Fog type" ) );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tfog_type " ) + FogTypes.find( p_scene.GetFog().GetType() )->second + cuT( "\n" ) ) > 0;
@@ -532,10 +532,10 @@ namespace Castor3D
 															, l_eventClean
 															, l_mergeResource );
 
-		m_materialCacheView = MakeCacheView< Material, EventType::PreRender >( GetName(), GetEngine()->GetMaterialCache() );
-		m_samplerCacheView = MakeCacheView< Sampler, EventType::PreRender >( GetName(), GetEngine()->GetSamplerCache() );
-		m_overlayCacheView = MakeCacheView< Overlay, EventType::PreRender >( GetName(), GetEngine()->GetOverlayCache() );
-		m_fontCacheView = MakeCacheView< Font, EventType::PreRender >( GetName(), GetEngine()->GetFontCache() );
+		m_materialCacheView = MakeCacheView< Material, EventType::ePreRender >( GetName(), GetEngine()->GetMaterialCache() );
+		m_samplerCacheView = MakeCacheView< Sampler, EventType::ePreRender >( GetName(), GetEngine()->GetSamplerCache() );
+		m_overlayCacheView = MakeCacheView< Overlay, EventType::ePreRender >( GetName(), GetEngine()->GetOverlayCache() );
+		m_fontCacheView = MakeCacheView< Font, EventType::ePreRender >( GetName(), GetEngine()->GetFontCache() );
 
 		auto l_notify = [this]()
 		{
@@ -625,7 +625,7 @@ namespace Castor3D
 
 		if ( m_backgroundImage )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->Cleanup();
 			} ) );
@@ -633,7 +633,7 @@ namespace Castor3D
 
 		if ( m_skybox )
 		{
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_skybox->Cleanup();
 			} ) );
@@ -688,10 +688,10 @@ namespace Castor3D
 
 		try
 		{
-			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::None, AccessType::Read );
+			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 			l_texture->SetSource( p_folder, p_relative );
 			m_backgroundImage = l_texture;
-			GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_backgroundImage->Initialise();
 				m_backgroundImage->Bind( 0 );
@@ -711,7 +711,7 @@ namespace Castor3D
 	bool Scene::SetForeground( SkyboxSPtr p_skybox )
 	{
 		m_skybox = p_skybox;
-		GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [p_skybox]()
+		GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [p_skybox]()
 		{
 			p_skybox->Initialise();
 		} ) );

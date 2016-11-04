@@ -180,7 +180,7 @@ namespace Castor3D
 		real m_currentTime{ 0.0_r };
 		//!\~english	The current state of the animation.
 		//!\~french		L'état actuel de l'animation.
-		AnimationState m_state{ AnimationState::Stopped };
+		AnimationState m_state{ AnimationState::eStopped };
 	};
 }
 

@@ -113,7 +113,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this attachment's buffer into the given one
-		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::Nearest
+		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::eNearest
 		 *\param[in]	p_buffer		The destination buffer
 		 *\param[in]	p_rectSrc		The source rectangle
 		 *\param[in]	p_rectDst		The destination rectangle
@@ -121,7 +121,7 @@ namespace Castor3D
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte le tampon de cette attache dans celui donné
-		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::Nearest
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::eNearest
 		 *\param[in]	p_buffer		Le tampon destination
 		 *\param[in]	p_rectSrc		Le rectangle source
 		 *\param[in]	p_rectDst		Le rectangle destination

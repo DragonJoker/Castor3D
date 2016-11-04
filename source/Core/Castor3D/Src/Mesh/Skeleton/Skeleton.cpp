@@ -18,7 +18,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetGlobalInverseTransform(), ChunkType::eSkeletonGlobalInverse, m_chunk );
 		}
 
 		for ( auto l_bone : p_obj.m_bones )
@@ -47,11 +47,11 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE:
+			case ChunkType::eSkeletonGlobalInverse:
 				l_return = DoParseChunk( p_obj.m_globalInverse, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_SKELETON_BONE:
+			case ChunkType::eSkeletonBone:
 				l_bone = std::make_shared< Bone >( p_obj );
 				l_return = BinaryParser< Bone >{}.Parse( *l_bone, l_chunk );
 
@@ -62,7 +62,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_ANIMATION:
+			case ChunkType::eAnimation:
 				l_animation = std::make_unique< SkeletonAnimation >( p_obj );
 				l_return = BinaryParser< Animation >{}.Parse( *l_animation, l_chunk );
 

@@ -20,26 +20,26 @@ namespace CastorGui
 	}
 
 	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_SLIDER, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eSlider, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_range( p_range )
 		, m_value( p_value )
 		, m_scrolling( false )
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		EventHandler::Connect( eMOUSE_EVENT_MOVE, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eMove, [this]( MouseEvent const & p_event )
 		{
 			OnMouseMove( p_event );
 		} );
-		EventHandler::Connect( eMOUSE_EVENT_LEAVE, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
 		{
 			OnMouseLeave( p_event );
 		} );
-		EventHandler::Connect( eMOUSE_EVENT_BUTTON_RELEASED, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
 		{
 			OnMouseLButtonUp( p_event );
 		} );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
 			OnKeyDown( p_event );
 		} );
@@ -47,7 +47,7 @@ namespace CastorGui
 		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
 		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_line->SetVisible( DoIsVisible() );
-		l_line->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		l_line->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -57,19 +57,19 @@ namespace CastorGui
 		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_tick->SetVisible( DoIsVisible() );
 		l_tick->SetCatchesMouseEvents( true );
-		l_tick->ConnectNC( eMOUSE_EVENT_MOVE, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseMove( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eMOUSE_EVENT_BUTTON_PUSHED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::ePushed, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseLButtonDown( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eMOUSE_EVENT_BUTTON_RELEASED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseLButtonUp( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		l_tick->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -99,7 +99,7 @@ namespace CastorGui
 		Size l_tickSize( GetSize() );
 		Position l_tickPosition;
 
-		if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 		{
 			l_lineSize.width() = 3;
 			l_lineSize.height() -= 4;
@@ -231,7 +231,7 @@ namespace CastorGui
 		if ( m_scrolling )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBTRACK]( m_value );
+			m_signals[size_t( SliderEvent::eThumbTrack )]( m_value );
 		}
 	}
 
@@ -244,14 +244,14 @@ namespace CastorGui
 		   )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 			m_scrolling = false;
 		}
 	}
 
 	void SliderCtrl::OnMouseLButtonUp( MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			if ( !m_scrolling )
 			{
@@ -259,7 +259,7 @@ namespace CastorGui
 			}
 
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 			m_scrolling = false;
 		}
 	}
@@ -271,7 +271,7 @@ namespace CastorGui
 
 	void SliderCtrl::OnTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			m_scrolling = true;
 			Point2i l_relativePosition = p_event.GetPosition() - GetAbsolutePosition();
@@ -288,30 +288,30 @@ namespace CastorGui
 	{
 		if ( !m_scrolling )
 		{
-			if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 			{
-				if ( p_event.GetKey() == eKEY_UP )
+				if ( p_event.GetKey() == KeyboardKey::eUp )
 				{
 					DoUpdateTick( Position( 0, -1 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
-				else if ( p_event.GetKey() == eKEY_DOWN )
+				else if ( p_event.GetKey() == KeyboardKey::eDown )
 				{
 					DoUpdateTick( Position( 0, 1 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 			}
 			else
 			{
-				if ( p_event.GetKey() == eKEY_LEFT )
+				if ( p_event.GetKey() == KeyboardKey::eLeft )
 				{
 					DoUpdateTick( Position( -1, 0 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
-				else if ( p_event.GetKey() == eKEY_RIGHT )
+				else if ( p_event.GetKey() == KeyboardKey::eRight )
 				{
 					DoUpdateTick( Position( 1, 0 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 			}
 		}
@@ -326,7 +326,7 @@ namespace CastorGui
 	{
 		Position l_delta = p_delta;
 
-		if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 		{
 			l_delta.x() = 0;
 		}
@@ -349,7 +349,7 @@ namespace CastorGui
 				l_size = l_line->GetSize();
 			}
 
-			if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 			{
 				l_position[1] = std::min( int32_t( l_size.height() ), std::max( 0, l_position[1] ) );
 				l_tickValue = ( l_position[1] - l_line->GetPosition().y() ) / double( l_size.height() );

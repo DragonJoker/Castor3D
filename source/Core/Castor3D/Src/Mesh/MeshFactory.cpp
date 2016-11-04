@@ -14,17 +14,17 @@ using namespace Castor;
 namespace Castor3D
 {
 	MeshFactory::MeshFactory()
-		: Factory< MeshGenerator, eMESH_TYPE >()
+		: Factory< MeshGenerator, MeshType >()
 	{
-		Register( eMESH_TYPE_CONE, Cone::Create );
-		Register( eMESH_TYPE_CUBE, Cube::Create );
-		Register( eMESH_TYPE_CUSTOM, MeshGenerator::Create );
-		Register( eMESH_TYPE_CYLINDER, Cylinder::Create );
-		Register( eMESH_TYPE_ICOSAHEDRON, Icosahedron::Create );
-		Register( eMESH_TYPE_PLANE, Plane::Create );
-		Register( eMESH_TYPE_PROJECTION, Projection::Create );
-		Register( eMESH_TYPE_SPHERE, Sphere::Create );
-		Register( eMESH_TYPE_TORUS, Torus::Create );
+		Register( MeshType::eCone, Cone::Create );
+		Register( MeshType::eCube, Cube::Create );
+		Register( MeshType::eCustom, MeshGenerator::Create );
+		Register( MeshType::eCylinder, Cylinder::Create );
+		Register( MeshType::eIcosahedron, Icosahedron::Create );
+		Register( MeshType::ePlane, Plane::Create );
+		Register( MeshType::eProjection, Projection::Create );
+		Register( MeshType::eSphere, Sphere::Create );
+		Register( MeshType::eTorus, Torus::Create );
 	}
 
 	MeshFactory::~MeshFactory()

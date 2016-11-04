@@ -33,20 +33,20 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				eGL_INTERPOLATION_MODE l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Min ) );
-				eGL_INTERPOLATION_MODE l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mip ) );
+				GlInterpolationMode l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
+				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
 				DoAdjustMinMipModes( l_minMode, l_mipMode );
 
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_LODBIAS, float( GetLodBias() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_UWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::U ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_VWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::V ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_WWRAP, GetOpenGl().Get( GetWrappingMode( TextureUVW::W ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MINFILTER, l_minMode );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAGFILTER, GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_MAXANISOTROPY, float( GetMaxAnisotropy() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREMODE, GetOpenGl().Get( GetComparisonMode() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), eGL_SAMPLER_PARAMETER_COMPAREFUNC, GetOpenGl().Get( GetComparisonFunc() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eLODBias, float( GetLodBias() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eU ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eV ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eW ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( l_minMode ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMag ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eBorderColour, GetBorderColour().const_ptr() );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMaxAnisotropy, float( GetMaxAnisotropy() ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareMode, int( GetOpenGl().Get( GetComparisonMode() ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareFunc, int( GetOpenGl().Get( GetComparisonFunc() ) ) );
 			}
 		}
 
@@ -67,30 +67,30 @@ namespace GlRender
 	{
 	}
 
-	void GlSampler::DoAdjustMinMipModes( eGL_INTERPOLATION_MODE & p_min, eGL_INTERPOLATION_MODE & p_mip )
+	void GlSampler::DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )
 	{
-		if ( p_mip != eGL_INTERPOLATION_MODE_NEAREST )
+		if ( p_mip != GlInterpolationMode::eNearest )
 		{
-			if ( p_min == eGL_INTERPOLATION_MODE_LINEAR )
+			if ( p_min == GlInterpolationMode::eLinear )
 			{
-				if ( p_mip == eGL_INTERPOLATION_MODE_LINEAR )
+				if ( p_mip == GlInterpolationMode::eLinear )
 				{
-					p_min = eGL_INTERPOLATION_MODE_LINEAR_MIPMAP_LINEAR;
+					p_min = GlInterpolationMode::eLinearMipmapLinear;
 				}
 				else
 				{
-					p_min = eGL_INTERPOLATION_MODE_LINEAR_MIPMAP_NEAREST;
+					p_min = GlInterpolationMode::eLinearMipmapNearest;
 				}
 			}
 			else
 			{
-				if ( p_mip == eGL_INTERPOLATION_MODE_LINEAR )
+				if ( p_mip == GlInterpolationMode::eLinear )
 				{
-					p_min = eGL_INTERPOLATION_MODE_NEAREST_MIPMAP_LINEAR;
+					p_min = GlInterpolationMode::eNearestMipmapLinear;
 				}
 				else
 				{
-					p_min = eGL_INTERPOLATION_MODE_NEAREST_MIPMAP_NEAREST;
+					p_min = GlInterpolationMode::eNearestMipmapNearest;
 				}
 			}
 		}

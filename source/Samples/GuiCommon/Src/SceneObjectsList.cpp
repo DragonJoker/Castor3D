@@ -158,15 +158,15 @@ namespace GuiCommon
 				{
 					switch ( l_overlay->GetType() )
 					{
-					case eOVERLAY_TYPE_PANEL:
+					case OverlayType::ePanel:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
-					case eOVERLAY_TYPE_BORDER_PANEL:
+					case OverlayType::eBorderPanel:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
-					case eOVERLAY_TYPE_TEXT:
+					case OverlayType::eText:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetOverlayName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 					}
@@ -230,15 +230,15 @@ namespace GuiCommon
 
 		switch ( l_light->GetLightType() )
 		{
-		case LightType::Directional:
+		case LightType::eDirectional:
 			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
-		case LightType::Point:
+		case LightType::ePoint:
 			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
-		case LightType::Spot:
+		case LightType::eSpot:
 			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 		}
@@ -252,19 +252,19 @@ namespace GuiCommon
 
 			switch ( l_object->GetType() )
 			{
-			case MovableType::Geometry:
+			case MovableType::eGeometry:
 				DoAddGeometry( p_id, l_object );
 				break;
 
-			case MovableType::Camera:
+			case MovableType::eCamera:
 				DoAddCamera( p_id, l_object );
 				break;
 
-			case MovableType::Light:
+			case MovableType::eLight:
 				DoAddLight( p_id, l_object );
 				break;
 
-			case MovableType::Billboard:
+			case MovableType::eBillboard:
 				DoAddBillboard( p_id, l_object );
 				break;
 			}
@@ -290,15 +290,15 @@ namespace GuiCommon
 		{
 			switch ( l_overlay->GetType() )
 			{
-			case eOVERLAY_TYPE_PANEL:
+			case OverlayType::ePanel:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 
-			case eOVERLAY_TYPE_BORDER_PANEL:
+			case OverlayType::eBorderPanel:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 
-			case eOVERLAY_TYPE_TEXT:
+			case OverlayType::eText:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay->GetCategory() ) ), l_overlay->GetCategory() );
 				break;
 			}

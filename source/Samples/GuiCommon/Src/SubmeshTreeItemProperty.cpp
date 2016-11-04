@@ -82,43 +82,43 @@ namespace GuiCommon
 
 			switch ( l_submesh->GetTopology() )
 			{
-			case Topology::Points:
+			case Topology::ePoints:
 				l_selected = PROPERTY_TOPOLOGY_POINTS;
 				break;
 
-			case Topology::Lines:
+			case Topology::eLines:
 				l_selected = PROPERTY_TOPOLOGY_LINES;
 				break;
 
-			case Topology::LineLoop:
+			case Topology::eLineLoop:
 				l_selected = PROPERTY_TOPOLOGY_LINE_LOOP;
 				break;
 
-			case Topology::LineStrip:
+			case Topology::eLineStrip:
 				l_selected = PROPERTY_TOPOLOGY_LINE_STRIP;
 				break;
 
-			case Topology::Triangles:
+			case Topology::eTriangles:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLES;
 				break;
 
-			case Topology::TriangleStrips:
+			case Topology::eTriangleStrips:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLE_STRIP;
 				break;
 
-			case Topology::TriangleFan:
+			case Topology::eTriangleFan:
 				l_selected = PROPERTY_TOPOLOGY_TRIANGLE_FAN;
 				break;
 
-			case Topology::Quads:
+			case Topology::eQuads:
 				l_selected = PROPERTY_TOPOLOGY_QUADS;
 				break;
 
-			case Topology::QuadStrips:
+			case Topology::eQuadStrips:
 				l_selected = PROPERTY_TOPOLOGY_QUAD_STRIP;
 				break;
 
-			case Topology::Polygon:
+			case Topology::ePolygon:
 				l_selected = PROPERTY_TOPOLOGY_POLYGON;
 				break;
 			}
@@ -145,43 +145,43 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POINTS )
 				{
-					OnTopologyChange( Topology::Points );
+					OnTopologyChange( Topology::ePoints );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINES )
 				{
-					OnTopologyChange( Topology::Lines );
+					OnTopologyChange( Topology::eLines );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_LOOP )
 				{
-					OnTopologyChange( Topology::LineLoop );
+					OnTopologyChange( Topology::eLineLoop );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_LINE_STRIP )
 				{
-					OnTopologyChange( Topology::LineStrip );
+					OnTopologyChange( Topology::eLineStrip );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLES )
 				{
-					OnTopologyChange( Topology::Triangles );
+					OnTopologyChange( Topology::eTriangles );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_STRIP )
 				{
-					OnTopologyChange( Topology::TriangleStrips );
+					OnTopologyChange( Topology::eTriangleStrips );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_TRIANGLE_FAN )
 				{
-					OnTopologyChange( Topology::TriangleFan );
+					OnTopologyChange( Topology::eTriangleFan );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUADS )
 				{
-					OnTopologyChange( Topology::Quads );
+					OnTopologyChange( Topology::eQuads );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_QUAD_STRIP )
 				{
-					OnTopologyChange( Topology::QuadStrips );
+					OnTopologyChange( Topology::eQuadStrips );
 				}
 				else if ( l_property->GetValueAsString() == PROPERTY_TOPOLOGY_POLYGON )
 				{
-					OnTopologyChange( Topology::Polygon );
+					OnTopologyChange( Topology::ePolygon );
 				}
 			}
 		}

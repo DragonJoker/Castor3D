@@ -43,7 +43,7 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 
-		for ( auto l_target : m_renderTargets[size_t( TargetType::Texture )] )
+		for ( auto l_target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
 			auto l_scene = l_target->GetScene();
 
@@ -58,7 +58,7 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto l_target : m_renderTargets[size_t( TargetType::Window )] )
+		for ( auto l_target : m_renderTargets[size_t( TargetType::eWindow )] )
 		{
 			auto l_scene = l_target->GetScene();
 

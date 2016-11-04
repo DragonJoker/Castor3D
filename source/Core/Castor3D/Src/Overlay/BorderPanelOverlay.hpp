@@ -464,7 +464,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de la bordure
 		 *\return		La valeur
 		 */
-		eBORDER_POSITION GetBorderPosition()const
+		BorderPosition GetBorderPosition()const
 		{
 			return m_borderPosition;
 		}
@@ -476,7 +476,7 @@ namespace Castor3D
 		 *\brief		Définit la position de la bordure
 		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		void SetBorderPosition( eBORDER_POSITION p_position )
+		void SetBorderPosition( BorderPosition p_position )
 		{
 			m_borderPosition = p_position;
 		}
@@ -578,7 +578,7 @@ namespace Castor3D
 		//!\~english The border material name	\~french Le nom du matériau des bords
 		Castor::String m_strBorderMatName;
 		//!\~english The border material name	\~french Le nom du matériau des bords
-		eBORDER_POSITION m_borderPosition;
+		BorderPosition m_borderPosition;
 		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
 		VertexArray m_arrayVtx;
 		//!\~english The borders vertex buffer data	\~french Les données du tampon de sommets pour la bordure

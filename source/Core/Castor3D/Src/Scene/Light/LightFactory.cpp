@@ -12,9 +12,9 @@ namespace Castor3D
 	LightFactory::LightFactory()
 		: Factory< LightCategory, LightType, LightCategoryUPtr, std::function< LightCategoryUPtr( Light & ) > >()
 	{
-		Register( LightType::Directional, DirectionalLight::Create );
-		Register( LightType::Point, PointLight::Create );
-		Register( LightType::Spot, SpotLight::Create );
+		Register( LightType::eDirectional, DirectionalLight::Create );
+		Register( LightType::ePoint, PointLight::Create );
+		Register( LightType::eSpot, SpotLight::Create );
 	}
 
 	LightFactory::~LightFactory()

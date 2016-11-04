@@ -75,7 +75,7 @@ namespace C3DMd2
 		String l_materialName;
 		TextureUnitSPtr l_unit;
 		ImageSPtr l_pImage;
-		m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
+		m_pFile = new BinaryFile( m_fileName, File::OpenMode::eRead );
 		l_meshName = m_fileName.GetFileName();
 		l_materialName = m_fileName.GetFileName();
 		m_pFile->Read( m_header );
@@ -136,7 +136,7 @@ namespace C3DMd2
 
 				if ( !l_strValue.empty() )
 				{
-					l_pTexture = LoadTexture( l_strValue, p_pass, TextureChannel::Diffuse );
+					l_pTexture = LoadTexture( l_strValue, p_pass, TextureChannel::eDiffuse );
 
 					if ( l_pTexture )
 					{

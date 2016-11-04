@@ -78,26 +78,26 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_length, eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
+			l_return = DoWriteChunk( p_obj.m_length, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_buffers.empty() )
 		{
 			if ( l_return )
 			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER_SIZE, m_chunk );
+				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.begin()->m_buffer.size() ), ChunkType::eSubmeshAnimationBufferSize, m_chunk );
 			}
 
 			if ( l_return )
 			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.size() ), eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS_COUNT, m_chunk );
+				l_return = DoWriteChunk( uint32_t( p_obj.m_buffers.size() ), ChunkType::eSubmeshAnimationBuffersCount, m_chunk );
 			}
 
 			if ( l_return )
 			{
 				std::vector< SubmeshAnimationBufferd > l_buffers;
 				DoConvert( p_obj.m_buffers, l_buffers );
-				l_return = DoWriteChunk( l_buffers, eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS, m_chunk );
+				l_return = DoWriteChunk( l_buffers, ChunkType::eSubmeshAnimationBuffers, m_chunk );
 			}
 		}
 
@@ -119,7 +119,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER_SIZE:
+			case ChunkType::eSubmeshAnimationBufferSize:
 				l_return = DoParseChunk( l_size, l_chunk );
 
 				if ( l_return )
@@ -129,7 +129,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS_COUNT:
+			case ChunkType::eSubmeshAnimationBuffersCount:
 				l_return = DoParseChunk( l_count, l_chunk );
 
 				if ( l_return )
@@ -142,7 +142,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS:
+			case ChunkType::eSubmeshAnimationBuffers:
 				l_return = DoParseChunk( l_buffers, l_chunk );
 
 				if ( l_return )
@@ -152,7 +152,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_ANIM_LENGTH:
+			case ChunkType::eAnimLength:
 				l_return = DoParseChunk( p_obj.m_length, l_chunk );
 				break;
 			}

@@ -174,11 +174,11 @@ namespace Castor3D
 
 		inline void DoUpdateProgram( ShaderProgram & p_program, uint16_t p_programFlags )
 		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::Shadows )
-				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
+				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
 			}
 		}
 
@@ -192,22 +192,22 @@ namespace Castor3D
 
 				for ( auto & l_depthMap : p_depthMaps )
 				{
-					if ( l_depthMap.get().GetType() == TextureType::TwoDimensions )
+					if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_spot.SetValue( l_index++ );
 					}
-					else if ( l_depthMap.get().GetType() == TextureType::TwoDimensionsArray )
+					else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_spot.SetValue( l_index++ );
 					}
-					else if ( l_depthMap.get().GetType() == TextureType::Cube )
+					else if ( l_depthMap.get().GetType() == TextureType::eCube )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_point.SetValue( l_index++ );
 					}
-					else if ( l_depthMap.get().GetType() == TextureType::CubeArray )
+					else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
 					{
 						l_depthMap.get().SetIndex( l_index );
 						l_point.SetValue( l_index++ );
@@ -223,71 +223,71 @@ namespace Castor3D
 
 			switch ( p_colourBlendMode )
 			{
-			case BlendMode::NoBlend:
-				l_state.SetRgbSrcBlend( BlendOperand::One );
-				l_state.SetRgbDstBlend( BlendOperand::Zero );
+			case BlendMode::eNoBlend:
+				l_state.SetRgbSrcBlend( BlendOperand::eOne );
+				l_state.SetRgbDstBlend( BlendOperand::eZero );
 				break;
 
-			case BlendMode::Additive:
+			case BlendMode::eAdditive:
 				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::One );
-				l_state.SetRgbDstBlend( BlendOperand::One );
+				l_state.SetRgbSrcBlend( BlendOperand::eOne );
+				l_state.SetRgbDstBlend( BlendOperand::eOne );
 				break;
 
-			case BlendMode::Multiplicative:
+			case BlendMode::eMultiplicative:
 				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::Zero );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				l_state.SetRgbSrcBlend( BlendOperand::eZero );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
 				break;
 
-			case BlendMode::Interpolative:
+			case BlendMode::eInterpolative:
 				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::SrcColour );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				l_state.SetRgbSrcBlend( BlendOperand::eSrcColour );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
 				break;
 
 			default:
 				l_blend = true;
-				l_state.SetRgbSrcBlend( BlendOperand::SrcColour );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcColour );
+				l_state.SetRgbSrcBlend( BlendOperand::eSrcColour );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcColour );
 				break;
 			}
 
 			switch ( p_alphaBlendMode )
 			{
-			case BlendMode::NoBlend:
-				l_state.SetAlphaSrcBlend( BlendOperand::One );
-				l_state.SetAlphaDstBlend( BlendOperand::Zero );
+			case BlendMode::eNoBlend:
+				l_state.SetAlphaSrcBlend( BlendOperand::eOne );
+				l_state.SetAlphaDstBlend( BlendOperand::eZero );
 				break;
 
-			case BlendMode::Additive:
+			case BlendMode::eAdditive:
 				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::One );
-				l_state.SetAlphaDstBlend( BlendOperand::One );
+				l_state.SetAlphaSrcBlend( BlendOperand::eOne );
+				l_state.SetAlphaDstBlend( BlendOperand::eOne );
 				break;
 
-			case BlendMode::Multiplicative:
+			case BlendMode::eMultiplicative:
 				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::Zero );
-				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::Zero );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetAlphaSrcBlend( BlendOperand::eZero );
+				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::eZero );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
 				break;
 
-			case BlendMode::Interpolative:
+			case BlendMode::eInterpolative:
 				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::SrcAlpha );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetAlphaSrcBlend( BlendOperand::eSrcAlpha );
+				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::eSrcAlpha );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
 				break;
 
 			default:
 				l_blend = true;
-				l_state.SetAlphaSrcBlend( BlendOperand::SrcAlpha );
-				l_state.SetAlphaDstBlend( BlendOperand::InvSrcAlpha );
-				l_state.SetRgbSrcBlend( BlendOperand::SrcAlpha );
-				l_state.SetRgbDstBlend( BlendOperand::InvSrcAlpha );
+				l_state.SetAlphaSrcBlend( BlendOperand::eSrcAlpha );
+				l_state.SetAlphaDstBlend( BlendOperand::eInvSrcAlpha );
+				l_state.SetRgbSrcBlend( BlendOperand::eSrcAlpha );
+				l_state.SetRgbDstBlend( BlendOperand::eInvSrcAlpha );
 				break;
 			}
 
@@ -305,7 +305,7 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::RGBA16F32F, p_size );
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eReadWrite, PixelFormat::eRGBA16F32F, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
@@ -314,7 +314,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::D32F );
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 			l_return = m_depthBuffer->Create();
 		}
 
@@ -339,10 +339,10 @@ namespace Castor3D
 		{
 			l_return = m_frameBuffer->Initialise( p_size );
 
-			if ( l_return && m_frameBuffer->Bind( FrameBufferMode::Config ) )
+			if ( l_return && m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
 			{
-				m_frameBuffer->Attach( AttachmentPoint::Colour, 0, m_colourAttach, m_colourTexture->GetType() );
-				m_frameBuffer->Attach( AttachmentPoint::Depth, m_depthAttach );
+				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
+				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();
 			}
@@ -359,7 +359,7 @@ namespace Castor3D
 	{
 		if ( m_frameBuffer )
 		{
-			m_frameBuffer->Bind( FrameBufferMode::Config );
+			m_frameBuffer->Bind( FrameBufferMode::eConfig );
 			m_frameBuffer->DetachAll();
 			m_frameBuffer->Unbind();
 			m_frameBuffer->Cleanup();
@@ -432,17 +432,17 @@ namespace Castor3D
 				l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
 				{
 					if ( p_light.IsShadowProducer()
-						 && p_light.GetLightType() != LightType::Directional )
+						 && p_light.GetLightType() != LightType::eDirectional )
 					{
 						TextureUnit * l_unit{ nullptr };
 
 						switch ( p_light.GetLightType() )
 						{
-						case LightType::Point:
+						case LightType::ePoint:
 							l_unit = &m_pointShadowMap;
 							break;
 
-						case LightType::Spot:
+						case LightType::eSpot:
 							l_unit = &m_spotShadowMap;
 							break;
 						}
@@ -534,19 +534,19 @@ namespace Castor3D
 
 				switch ( l_depthMap.GetType() )
 				{
-				case TextureType::TwoDimensions:
+				case TextureType::eTwoDimensions:
 					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
 					break;
 
-				case TextureType::TwoDimensionsArray:
+				case TextureType::eTwoDimensionsArray:
 					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
 					break;
 
-				case TextureType::Cube:
+				case TextureType::eCube:
 					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
 					break;
 
-				case TextureType::CubeArray:
+				case TextureType::eCubeArray:
 					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
 					break;
 				}
@@ -581,7 +581,7 @@ namespace Castor3D
 
 		DoRenderOpaqueNodes( p_nodes, p_depthMaps );
 
-		if ( p_nodes.m_scene.GetFog().GetType() == FogType::Disabled )
+		if ( p_nodes.m_scene.GetFog().GetType() == FogType::eDisabled )
 		{
 			p_nodes.m_scene.RenderForeground( GetSize(), l_camera );
 		}
@@ -719,7 +719,7 @@ namespace Castor3D
 
 				if ( l_matrixBuffer.Bind() )
 				{
-					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::Write ) );
+					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::eWrite ) );
 
 					if ( l_buffer )
 					{
@@ -799,7 +799,7 @@ namespace Castor3D
 
 				if ( l_matrixBuffer.Bind() )
 				{
-					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::Write ) );
+					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::eWrite ) );
 
 					if ( l_buffer )
 					{
@@ -855,7 +855,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const
 	{
-		AddFlag( p_programFlags, ProgramFlag::Lighting );
+		AddFlag( p_programFlags, ProgramFlag::eLighting );
 	}
 
 	String RenderTechnique::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
@@ -890,18 +890,18 @@ namespace Castor3D
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
 
-		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) ) );
-		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::Diffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::Normal ) ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::Specular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
+		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
+		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
+		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ? ShadowType::Poisson : ShadowType::None );
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::Poisson : ShadowType::None );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outtputs
@@ -969,19 +969,19 @@ namespace Castor3D
 			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
 		}
 
-		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::Colour ) ) );
-		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::Ambient ) ) );
-		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::Diffuse ) ) );
-		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::Normal ) ) );
-		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::Opacity ) ) );
-		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::Specular ) ) );
-		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::Emissive ) ) );
-		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::Height ) ) );
-		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::Gloss ) ) );
+		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
+		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
+		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CheckFlag( p_textureFlags, TextureChannel::eDiffuse ) ) );
+		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CheckFlag( p_textureFlags, TextureChannel::eNormal ) ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CheckFlag( p_textureFlags, TextureChannel::eOpacity ) ) );
+		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CheckFlag( p_textureFlags, TextureChannel::eSpecular ) ) );
+		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CheckFlag( p_textureFlags, TextureChannel::eEmissive ) ) );
+		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CheckFlag( p_textureFlags, TextureChannel::eHeight ) ) );
+		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CheckFlag( p_textureFlags, TextureChannel::eGloss ) ) );
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::Shadows ) ? ShadowType::Poisson : ShadowType::None );
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::Poisson : ShadowType::None );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outputs
@@ -1010,7 +1010,7 @@ namespace Castor3D
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			if ( CheckFlag( p_textureFlags, TextureChannel::Opacity ) )
+			if ( CheckFlag( p_textureFlags, TextureChannel::eOpacity ) )
 			{
 				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}
@@ -1058,7 +1058,7 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program, p_flags.m_programFlags );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Front );
+			l_rsState.SetCulledFaces( Culling::eFront );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
@@ -1078,7 +1078,7 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program, p_flags.m_programFlags );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Back );
+			l_rsState.SetCulledFaces( Culling::eBack );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
@@ -1098,9 +1098,9 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program, p_flags.m_programFlags );
 			DepthStencilState l_dsState;
-			l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+			l_dsState.SetDepthMask( m_multisampling ? WritingMask::eAll : WritingMask::eZero );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Front );
+			l_rsState.SetCulledFaces( Culling::eFront );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
@@ -1121,9 +1121,9 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program, p_flags.m_programFlags );
 			DepthStencilState l_dsState;
-			l_dsState.SetDepthMask( m_multisampling ? WritingMask::All : WritingMask::Zero );
+			l_dsState.SetDepthMask( m_multisampling ? WritingMask::eAll : WritingMask::eZero );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Back );
+			l_rsState.SetCulledFaces( Culling::eBack );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
@@ -1139,15 +1139,15 @@ namespace Castor3D
 	bool RenderTechnique::DoInitialiseSpotShadowMap( Size const & p_size )
 	{
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
-		l_sampler->SetComparisonMode( ComparisonMode::RefToTexture );
-		l_sampler->SetComparisonFunc( ComparisonFunc::LEqual );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensionsArray, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eReadWrite, PixelFormat::eD32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
 		m_spotShadowMap.SetTexture( l_texture );
 		m_spotShadowMap.SetSampler( l_sampler );
 
@@ -1162,14 +1162,14 @@ namespace Castor3D
 	bool RenderTechnique::DoInitialisePointShadowMap( Size const & p_size )
 	{
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_PointShadowMap" ) );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 		bool l_return{ true };
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::ReadWrite, PixelFormat::D32F, p_size );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eReadWrite, PixelFormat::eD32F, p_size );
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

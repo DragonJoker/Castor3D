@@ -486,10 +486,10 @@ namespace Castor3D
 		ComparisonFunc m_eAlphaFunc;
 		//!\~english	The RGB blending parameters.
 		//!\~french		Les paramètres de mélange RGB.
-		BlendSource m_eRgbArguments[uint32_t( BlendSrcIndex::Count )];
+		BlendSource m_eRgbArguments[uint32_t( BlendSrcIndex::eCount )];
 		//!\~english	The Alpha blending parameters.
 		//!\~french		Les paramètres de mélange Alpha.
-		BlendSource m_eAlpArguments[uint32_t( BlendSrcIndex::Count )];
+		BlendSource m_eAlpArguments[uint32_t( BlendSrcIndex::eCount )];
 		//!\~english	The RGB blending function.
 		//!\~french		La fonction de mélange RGB.
 		ColourBlendFunc m_eRgbFunction;

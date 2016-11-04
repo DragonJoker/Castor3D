@@ -55,7 +55,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( Light & p_light )
-		: LightCategory{ LightType::Spot, p_light }
+		: LightCategory{ LightType::eSpot, p_light }
 	{
 	}
 

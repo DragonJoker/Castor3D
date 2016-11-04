@@ -110,40 +110,40 @@ namespace Castor
 	xchar const * const RegexFormat< Colour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
 			"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_TEXT >::StringType = cuT( "text" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_NAME >::StringType = cuT( "name" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_PATH >::StringType = cuT( "path" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_CHECKED_TEXT >::StringType = cuT( "checked text" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >::StringType = cuT( "32 bits bitwise ORed checked texts" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::StringType = cuT( "64 bits bitwise ORed checked texts" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_BOOL >::StringType = cuT( "boolean" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_INT8 >::StringType = cuT( "8 bits signed integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_INT16 >::StringType = cuT( "16 bits signed integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_INT32 >::StringType = cuT( "32 bits signed integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_INT64 >::StringType = cuT( "64 bits signed integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_UINT8 >::StringType = cuT( "8 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_UINT16 >::StringType = cuT( "16 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_UINT32 >::StringType = cuT( "32 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_UINT64 >::StringType = cuT( "64 bits unsigned integer" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_FLOAT >::StringType = cuT( "simple precision floating point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_DOUBLE >::StringType = cuT( "double precision floating point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_LONGDOUBLE >::StringType = cuT( "long double precision floating point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_PIXELFORMAT >::StringType = cuT( "pixel format" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT2I >::StringType = cuT( "2 integers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT3I >::StringType = cuT( "3 integers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT4I >::StringType = cuT( "4 integers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT2F >::StringType = cuT( "2 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT3F >::StringType = cuT( "3 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT4F >::StringType = cuT( "4 simple precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT2D >::StringType = cuT( "2 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT3D >::StringType = cuT( "3 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POINT4D >::StringType = cuT( "4 double precision floating point numbers point" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_SIZE >::StringType = cuT( "size" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_POSITION >::StringType = cuT( "position" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_RECTANGLE >::StringType = cuT( "rectangle" );
-	xchar const * const ParserParameterHelper< ePARAMETER_TYPE_COLOUR >::StringType = cuT( "colour" );
+	xchar const * const ParserParameterHelper< ParameterType::eText >::StringType = cuT( "text" );
+	xchar const * const ParserParameterHelper< ParameterType::eName >::StringType = cuT( "name" );
+	xchar const * const ParserParameterHelper< ParameterType::ePath >::StringType = cuT( "path" );
+	xchar const * const ParserParameterHelper< ParameterType::eCheckedText >::StringType = cuT( "checked text" );
+	xchar const * const ParserParameterHelper< ParameterType::eBitwiseOred32BitsCheckedText >::StringType = cuT( "32 bits bitwise ORed checked texts" );
+	xchar const * const ParserParameterHelper< ParameterType::eBitwiseOred64BitsCheckedText >::StringType = cuT( "64 bits bitwise ORed checked texts" );
+	xchar const * const ParserParameterHelper< ParameterType::eBool >::StringType = cuT( "boolean" );
+	xchar const * const ParserParameterHelper< ParameterType::eInt8 >::StringType = cuT( "8 bits signed integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eInt16 >::StringType = cuT( "16 bits signed integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eInt32 >::StringType = cuT( "32 bits signed integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eInt64 >::StringType = cuT( "64 bits signed integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eUInt8 >::StringType = cuT( "8 bits unsigned integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eUInt16 >::StringType = cuT( "16 bits unsigned integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eUInt32 >::StringType = cuT( "32 bits unsigned integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eUInt64 >::StringType = cuT( "64 bits unsigned integer" );
+	xchar const * const ParserParameterHelper< ParameterType::eFloat >::StringType = cuT( "simple precision floating point" );
+	xchar const * const ParserParameterHelper< ParameterType::eDouble >::StringType = cuT( "double precision floating point" );
+	xchar const * const ParserParameterHelper< ParameterType::eLongDouble >::StringType = cuT( "long double precision floating point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePixelFormat >::StringType = cuT( "pixel format" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint2I >::StringType = cuT( "2 integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint3I >::StringType = cuT( "3 integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint4I >::StringType = cuT( "4 integers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint2F >::StringType = cuT( "2 simple precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint3F >::StringType = cuT( "3 simple precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint4F >::StringType = cuT( "4 simple precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint2D >::StringType = cuT( "2 double precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint3D >::StringType = cuT( "3 double precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::ePoint4D >::StringType = cuT( "4 double precision floating point numbers point" );
+	xchar const * const ParserParameterHelper< ParameterType::eSize >::StringType = cuT( "size" );
+	xchar const * const ParserParameterHelper< ParameterType::ePosition >::StringType = cuT( "position" );
+	xchar const * const ParserParameterHelper< ParameterType::eRectangle >::StringType = cuT( "rectangle" );
+	xchar const * const ParserParameterHelper< ParameterType::eColour >::StringType = cuT( "colour" );
 
-	static const std::array< String, ePARAMETER_TYPE_COUNT > TypeName
+	static const std::array< String, size_t( ParameterType::eCount ) > TypeName
 	{
 		cuT( "text" ),
 		cuT( "name" ),
@@ -179,9 +179,9 @@ namespace Castor
 		cuT( "colour" ),
 	};
 
-	String const & GetTypeName( ePARAMETER_TYPE p_type )
+	String const & GetTypeName( ParameterType p_type )
 	{
-		return TypeName[p_type];
+		return TypeName[uint32_t( p_type )];
 	}
 }
 

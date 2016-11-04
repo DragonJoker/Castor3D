@@ -122,7 +122,7 @@ typedef wchar_t ychar;
 	using name##ArrayConstRIt = name##Array::const_reverse_iterator
 
 #define DECLARE_ARRAY( key, count, name )\
-	using name##Array = std::array< key, count >;\
+	using name##Array = std::array< key, size_t( count ) >;\
 	using name##ArrayIt = name##Array::iterator;\
 	using name##ArrayRIt = name##Array::reverse_iterator;\
 	using name##ArrayConstIt = name##Array::const_iterator;\
@@ -217,9 +217,9 @@ typedef wchar_t ychar;
 	EnumName##_MIN = EnumMin,\
 	EnumName##_MAX = EnumName##_COUNT - 1
 
-#define CASTOR_ENUM_CLASS_BOUNDS( EnumMin )\
-	Count,\
-	Min = EnumMin,\
-	Max = Count - 1
+#define CASTOR_SCOPED_ENUM_BOUNDS( EnumMin )\
+	eCount,\
+	eMin = EnumMin,\
+	eMax = eCount - 1
 
 #endif

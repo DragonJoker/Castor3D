@@ -173,7 +173,7 @@ namespace Castor3D
 
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			m_submesh->GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_submesh->ComputeNormals();
 				m_submesh->Initialise();

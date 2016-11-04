@@ -82,7 +82,7 @@ namespace GuiCommon
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );
 
-		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::DontExist )
+		if ( p_program->GetObjectStatus( p_type ) != ShaderStatus::eDontExist )
 		{
 			for ( auto l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
 			{

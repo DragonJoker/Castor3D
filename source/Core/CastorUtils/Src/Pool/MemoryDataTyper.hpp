@@ -38,32 +38,32 @@ namespace Castor
 	\~french
 	\brief		Le typeur de pools d'objets.
 	*/
-	template< typename Object, eMEMDATA_TYPE Type > struct MemoryDataTyper;
+	template< typename Object, MemoryDataType Type > struct MemoryDataTyper;
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED.
+	//!\~english Specialisation for MemoryDataType::eFixed.	\~french Spécialisation pour MemoryDataType::eFixed.
 	template< typename Object >
-	struct MemoryDataTyper< Object, eMEMDATA_TYPE_FIXED >
+	struct MemoryDataTyper< Object, MemoryDataType::eFixed >
 	{
 		using Type = FixedSizeMemoryData< Object >;
 	};
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED_MARKED.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED_MARKED.
+	//!\~english Specialisation for MemoryDataType::eMarked.	\~french Spécialisation pour MemoryDataType::eMarked.
 	template< typename Object >
-	struct MemoryDataTyper< Object, eMEMDATA_TYPE_FIXED_MARKED >
+	struct MemoryDataTyper< Object, MemoryDataType::eMarked >
 	{
 		using Type = FixedSizeMarkedMemoryData< Object >;
 	};
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED_GROWING.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED_GROWING.
+	//!\~english Specialisation for MemoryDataType::eFixedGrowing.	\~french Spécialisation pour MemoryDataType::eFixedGrowing.
 	template< typename Object >
-	struct MemoryDataTyper< Object, eMEMDATA_TYPE_FIXED_GROWING >
+	struct MemoryDataTyper< Object, MemoryDataType::eFixedGrowing >
 	{
 		using Type = FixedGrowingSizeMemoryData< Object >;
 	};
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED_GROWING_MARKED.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED_GROWING_MARKED.
+	//!\~english Specialisation for MemoryDataType::eFixedGrowingMarked.	\~french Spécialisation pour MemoryDataType::eFixedGrowingMarked.
 	template< typename Object >
-	struct MemoryDataTyper< Object, eMEMDATA_TYPE_FIXED_GROWING_MARKED >
+	struct MemoryDataTyper< Object, MemoryDataType::eFixedGrowingMarked >
 	{
 		using Type = FixedGrowingSizeMarkedMemoryData< Object >;
 	};
@@ -77,18 +77,18 @@ namespace Castor
 	\~french
 	\brief		Le typeur de pools d'objets alignés.
 	*/
-	template< typename Object, uint32_t Align, eMEMDATA_TYPE Type > struct AlignedMemoryDataTyper;
+	template< typename Object, uint32_t Align, MemoryDataType Type > struct AlignedMemoryDataTyper;
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED.
+	//!\~english Specialisation for MemoryDataType::eFixed.	\~french Spécialisation pour MemoryDataType::eFixed.
 	template< typename Object, uint32_t Align >
-	struct AlignedMemoryDataTyper< Object, Align, eMEMDATA_TYPE_FIXED >
+	struct AlignedMemoryDataTyper< Object, Align, MemoryDataType::eFixed >
 	{
 		using Type = FixedSizeMemoryData< Object, AlignedMemoryAllocator< Align > >;
 	};
 
-	//!\~english Specialisation for eMEMDATA_TYPE_FIXED_GROWING.	\~french Spécialisation pour eMEMDATA_TYPE_FIXED_GROWING.
+	//!\~english Specialisation for MemoryDataType::eFixedGrowing.	\~french Spécialisation pour MemoryDataType::eFixedGrowing.
 	template< typename Object, uint32_t Align >
-	struct AlignedMemoryDataTyper< Object, Align, eMEMDATA_TYPE_FIXED_GROWING >
+	struct AlignedMemoryDataTyper< Object, Align, MemoryDataType::eFixedGrowing >
 	{
 		using Type = FixedGrowingSizeMemoryData< Object, AlignedMemoryAllocator< Align > >;
 	};
@@ -102,7 +102,7 @@ namespace Castor
 	\~french
 	\brief		Le nommeur de MemoryData.
 	*/
-	template< eMEMDATA_TYPE Type > struct MemoryDataNamer
+	template< MemoryDataType Type > struct MemoryDataNamer
 	{
 		CU_API static char const * const Name;
 	};

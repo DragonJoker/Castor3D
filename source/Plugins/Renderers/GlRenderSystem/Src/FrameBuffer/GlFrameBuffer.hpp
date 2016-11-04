@@ -135,7 +135,7 @@ namespace GlRender
 		void DoClear( uint32_t p_targets )override;
 
 	private:
-		mutable eGL_FRAMEBUFFER_MODE m_bindingMode;
+		mutable GlFrameBufferMode m_bindingMode;
 	};
 }
 

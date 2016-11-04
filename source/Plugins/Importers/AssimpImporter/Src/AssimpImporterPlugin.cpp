@@ -28,7 +28,7 @@ C3D_Assimp_API void GetRequiredVersion( Castor3D::Version & p_version )
 
 C3D_Assimp_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::Importer;
+	return Castor3D::PluginType::eImporter;
 }
 
 C3D_Assimp_API Castor::String GetName()
@@ -95,7 +95,7 @@ C3D_Assimp_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D:
 
 		std::set< Castor::String > l_alreadyLoaded;
 
-		for ( auto l_it : p_engine->GetPluginCache().GetPlugins( Castor3D::PluginType::Importer ) )
+		for ( auto l_it : p_engine->GetPluginCache().GetPlugins( Castor3D::PluginType::eImporter ) )
 		{
 			auto const l_importer = std::static_pointer_cast< Castor3D::ImporterPlugin >( l_it.second );
 

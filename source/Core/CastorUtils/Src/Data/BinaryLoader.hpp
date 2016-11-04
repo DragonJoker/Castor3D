@@ -39,10 +39,10 @@ namespace Castor
 	*/
 	template< class T >
 	class BinaryLoader
-		: public Loader< T, eFILE_TYPE_BINARY >
+		: public Loader< T, FileType::eBinary >
 	{
 	protected:
-		using FileType = typename Loader< T, eFILE_TYPE_BINARY >::FileType;
+		using Type = typename Loader< T, FileType::eBinary >::Type;
 
 	public:
 		/**

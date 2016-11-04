@@ -20,56 +20,38 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_PREREQUISITES_LIGHT_H___
-#define ___C3D_PREREQUISITES_LIGHT_H___
+#ifndef ___GLT_GlTextureTest_H___
+#define ___GLT_GlTextureTest_H___
 
-namespace Castor3D
+#include "GlRenderSystemTestPrerequisites.hpp"
+
+#include <Design/ArrayView.hpp>
+
+#include <cstring>
+
+namespace Testing
 {
-	/**@name Light */
-	//@{
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Light types enumeration
-	\~french
-	\brief		Enumération des types de lumières
-	*/
-	enum class LightType
-		: uint8_t
+	class GlTextureTest
+		: public GlTestCase
 	{
-		//!\~english Directional light type	\~french Lumière directionnelle
-		eDirectional,
-		//!\~english Point light type	\~french Lumière ponctuelle
-		ePoint,
-		//!\~english Spot light type	\~french Lumière projecteur
-		eSpot,
-		CASTOR_SCOPED_ENUM_BOUNDS( eDirectional )
+	public:
+		explicit GlTextureTest( Castor3D::Engine & p_engine );
+		virtual ~GlTextureTest();
+
+		void Upload( Castor3D::TextureLayout & p_storage, Castor::ArrayView< uint8_t > const & p_view );
+		void Download( Castor3D::TextureLayout & p_storage, std::vector< uint8_t > & p_dst );
+		void Compare( std::array< uint8_t, 8 * 8 * 3 > const & p_src, std::vector< uint8_t > const & p_dst );
+
+	private:
+		void DoRegisterTests()override;
+
+	private:
+		void ImmutableStorage();
+		void DirectStorage();
+		void PboStorage();
+		void GpuOnlyStorage();
+		void TboStorage();
 	};
-
-	class Light;
-	class LightCategory;
-	class DirectionalLight;
-	class PointLight;
-	class SpotLight;
-
-	DECLARE_SMART_PTR( Light );
-	DECLARE_SMART_PTR( LightCategory );
-	DECLARE_SMART_PTR( DirectionalLight );
-	DECLARE_SMART_PTR( PointLight );
-	DECLARE_SMART_PTR( SpotLight );
-
-	class LightFactory;
-	DECLARE_SMART_PTR( LightFactory );
-
-	//! Array of lights
-	DECLARE_VECTOR( LightSPtr, LightPtr );
-	//! Map of lights, sorted by name
-	DECLARE_MAP( Castor::String, LightSPtr, LightPtrStr );
-	//! Map of lights, sorted by index
-	DECLARE_MAP( int, LightSPtr, LightPtrInt );
-
-	//@}
 }
 
 #endif

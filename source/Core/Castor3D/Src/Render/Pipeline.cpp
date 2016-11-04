@@ -53,7 +53,7 @@ namespace Castor3D
 		, m_program{ p_program }
 		, m_flags( p_flags )
 	{
-		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::All );
+		auto l_textures = m_flags.m_textureFlags & uint16_t( TextureChannel::eAll );
 
 		while ( l_textures )
 		{
@@ -68,8 +68,8 @@ namespace Castor3D
 		}
 
 		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
-		m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::Pixel );
-		m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::Pixel );
+		m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel );
+		m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
 	}
 
 	Pipeline::~Pipeline()
@@ -163,7 +163,7 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
 		{
-			if ( p_matrices & ( uint64_t( 0x1 ) << ( int( MatrixMode::Texture0 ) + i ) ) )
+			if ( p_matrices & ( uint64_t( 0x1 ) << ( int( MatrixMode::eTexture0 ) + i ) ) )
 			{
 				ApplyTexture( i, p_matrixBuffer );
 			}

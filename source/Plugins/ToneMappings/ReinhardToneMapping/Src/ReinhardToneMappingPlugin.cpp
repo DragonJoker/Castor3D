@@ -26,7 +26,7 @@ C3D_ReinhardToneMapping_API void GetRequiredVersion( Castor3D::Version & p_versi
 
 C3D_ReinhardToneMapping_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::ToneMapping;
+	return Castor3D::PluginType::eToneMapping;
 }
 
 C3D_ReinhardToneMapping_API Castor::String GetName()

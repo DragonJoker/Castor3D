@@ -13,7 +13,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::PostEffect, p_library, *p_engine )
+		: Plugin( PluginType::ePostEffect, p_library, *p_engine )
 	{
 		if ( m_pfnOnLoad )
 		{

@@ -38,41 +38,41 @@ namespace Castor3D
 	/*!
 	The enumeration which defines all the sections and subsections of a scene file
 	*/
-	typedef enum eSECTION
+	enum class CSCNSection
 		: uint32_t
 	{
-		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
-		eSECTION_SCENE = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
-		eSECTION_WINDOW = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),
-		eSECTION_SAMPLER = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),
-		eSECTION_CAMERA = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),
-		eSECTION_VIEWPORT = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),
-		eSECTION_LIGHT = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),
-		eSECTION_NODE = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),
-		eSECTION_OBJECT = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),
-		eSECTION_OBJECT_MATERIALS = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),
-		eSECTION_FONT = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),
-		eSECTION_PANEL_OVERLAY = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),
-		eSECTION_BORDER_PANEL_OVERLAY = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),
-		eSECTION_TEXT_OVERLAY = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),
-		eSECTION_MESH = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),
-		eSECTION_SUBMESH = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),
-		eSECTION_MATERIAL = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),
-		eSECTION_PASS = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),
-		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
-		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
-		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
-		eSECTION_SHADER_OBJECT = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
-		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
-		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
-		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
-		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),
-		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
-		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
-		eSECTION_SKYBOX = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
-		eSECTION_PARTICLE_SYSTEM = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
-		eSECTION_PARTICLE = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
-	}	eSECTION;
+		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eScene = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
+		eWindow = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),
+		eSampler = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),
+		eCamera = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),
+		eViewport = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),
+		eLight = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),
+		eNode = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),
+		eObject = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),
+		eObjectMaterials = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),
+		eFont = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),
+		ePanelOverlay = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),
+		eBorderPanelOverlay = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),
+		eTextOverlay = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),
+		eMesh = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),
+		eSubmesh = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),
+		eMaterial = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),
+		ePass = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),
+		eTextureUnit = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
+		eRenderTarget = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
+		eShaderProgram = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
+		eShaderObject = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
+		eShaderUBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
+		eUBOVariable = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
+		eBillboard = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
+		eBillboardList = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),
+		eAnimGroup = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
+		eAnimation = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
+		eSkybox = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
+		eParticleSystem = MAKE_SECTION_NAME( 'P', 'L', 'S', 'M' ),
+		eParticle = MAKE_SECTION_NAME( 'P', 'T', 'C', 'L' ),
+	};
 	//! The context used into parsing functions
 	/*!
 	While parsing a scene file, the context holds the important data retrieved
@@ -106,7 +106,7 @@ namespace Castor3D
 		int iFace1;
 		int iFace2;
 		LightType eLightType;
-		eMESH_TYPE eMeshType;
+		MeshType eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
 		Castor::String strName;
@@ -228,7 +228,6 @@ namespace Castor3D
 		UIntStrMap m_mapTextureRgbFunctions;
 		UIntStrMap m_mapTextureAlphaFunctions;
 		UIntStrMap m_mapTextureChannels;
-		UIntStrMap m_mapNormalModes;
 		UIntStrMap m_mapLightTypes;
 		UIntStrMap m_mapPrimitiveTypes;
 		UIntStrMap m_mapPrimitiveOutputTypes;

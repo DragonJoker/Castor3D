@@ -73,11 +73,11 @@ namespace GuiCommon
 {
 #if defined( NDEBUG )
 
-	static const ELogType ELogType_DEFAULT = ELogType_INFO;
+	static const LogType ELogType_DEFAULT = LogType::eInfo;
 
 #else
 
-	static const ELogType ELogType_DEFAULT = ELogType_DEBUG;
+	static const LogType ELogType_DEFAULT = LogType::eDebug;
 
 #endif
 
@@ -182,7 +182,7 @@ namespace GuiCommon
 
 		if ( l_return )
 		{
-			ELogType l_eLogLevel = ELogType_COUNT;
+			LogType l_eLogLevel = LogType::eCount;
 
 			if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 			{
@@ -267,7 +267,7 @@ namespace GuiCommon
 		DoLoadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
-		auto l_renderers = m_castor->GetPluginCache().GetPlugins( PluginType::Renderer );
+		auto l_renderers = m_castor->GetPluginCache().GetPlugins( PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{

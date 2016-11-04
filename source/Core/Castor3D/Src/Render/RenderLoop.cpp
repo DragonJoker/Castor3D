@@ -46,7 +46,7 @@ namespace Castor3D
 			m_renderSystem.GetMainContext()->SetCurrent();
 			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
-				p_listener.FireEvents( EventType::PreRender );
+				p_listener.FireEvents( EventType::ePreRender );
 			} );
 			GetEngine()->GetOverlayCache().UpdateRenderer();
 			m_renderSystem.GetMainContext()->EndCurrent();
@@ -55,13 +55,13 @@ namespace Castor3D
 		{
 			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
-				p_listener.FlushEvents( EventType::PreRender );
+				p_listener.FlushEvents( EventType::ePreRender );
 			} );
 		}
 
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{
-			p_listener.FireEvents( EventType::PostRender );
+			p_listener.FireEvents( EventType::ePostRender );
 		} );
 	}
 
@@ -129,7 +129,7 @@ namespace Castor3D
 		{
 			GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 			{
-				p_listener.FireEvents( EventType::PreRender );
+				p_listener.FireEvents( EventType::ePreRender );
 			} );
 
 			GetEngine()->GetOverlayCache().UpdateRenderer();
@@ -150,7 +150,7 @@ namespace Castor3D
 
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{
-			p_listener.FireEvents( EventType::QueueRender );
+			p_listener.FireEvents( EventType::eQueueRender );
 		} );
 
 		m_renderSystem.GetMainContext()->EndCurrent();
@@ -178,7 +178,7 @@ namespace Castor3D
 		} );
 		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
 		{
-			p_listener.FireEvents( EventType::PostRender );
+			p_listener.FireEvents( EventType::ePostRender );
 		} );
 		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();

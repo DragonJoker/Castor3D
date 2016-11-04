@@ -36,43 +36,43 @@ namespace Castor
 	\~french
 	\brief		Enumération des types de paramètres pour une fonction d'analyse.
 	*/
-	typedef enum ePARAMETER_TYPE
+	enum class ParameterType
 		: uint8_t
 	{
-		ePARAMETER_TYPE_TEXT,
-		ePARAMETER_TYPE_NAME,
-		ePARAMETER_TYPE_PATH,
-		ePARAMETER_TYPE_CHECKED_TEXT,
-		ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT,
-		ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT,
-		ePARAMETER_TYPE_BOOL,
-		ePARAMETER_TYPE_INT8,
-		ePARAMETER_TYPE_INT16,
-		ePARAMETER_TYPE_INT32,
-		ePARAMETER_TYPE_INT64,
-		ePARAMETER_TYPE_UINT8,
-		ePARAMETER_TYPE_UINT16,
-		ePARAMETER_TYPE_UINT32,
-		ePARAMETER_TYPE_UINT64,
-		ePARAMETER_TYPE_FLOAT,
-		ePARAMETER_TYPE_DOUBLE,
-		ePARAMETER_TYPE_LONGDOUBLE,
-		ePARAMETER_TYPE_PIXELFORMAT,
-		ePARAMETER_TYPE_POINT2I,
-		ePARAMETER_TYPE_POINT3I,
-		ePARAMETER_TYPE_POINT4I,
-		ePARAMETER_TYPE_POINT2F,
-		ePARAMETER_TYPE_POINT3F,
-		ePARAMETER_TYPE_POINT4F,
-		ePARAMETER_TYPE_POINT2D,
-		ePARAMETER_TYPE_POINT3D,
-		ePARAMETER_TYPE_POINT4D,
-		ePARAMETER_TYPE_SIZE,
-		ePARAMETER_TYPE_POSITION,
-		ePARAMETER_TYPE_RECTANGLE,
-		ePARAMETER_TYPE_COLOUR,
-		CASTOR_ENUM_BOUNDS( ePARAMETER_TYPE, ePARAMETER_TYPE_TEXT )
-	}	ePARAMETER_TYPE;
+		eText,
+		eName,
+		ePath,
+		eCheckedText,
+		eBitwiseOred32BitsCheckedText,
+		eBitwiseOred64BitsCheckedText,
+		eBool,
+		eInt8,
+		eInt16,
+		eInt32,
+		eInt64,
+		eUInt8,
+		eUInt16,
+		eUInt32,
+		eUInt64,
+		eFloat,
+		eDouble,
+		eLongDouble,
+		ePixelFormat,
+		ePoint2I,
+		ePoint3I,
+		ePoint4I,
+		ePoint2F,
+		ePoint3F,
+		ePoint4F,
+		ePoint2D,
+		ePoint3D,
+		ePoint4D,
+		eSize,
+		ePosition,
+		eRectangle,
+		eColour,
+		CASTOR_SCOPED_ENUM_BOUNDS( eText )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
@@ -102,16 +102,16 @@ namespace Castor
 		 *\brief		Récupère le type du paramètre.
 		 *\return		Le type.
 		 */
-		CU_API virtual ePARAMETER_TYPE GetType() = 0;
+		CU_API virtual ParameterType GetType() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME).
+		 *\brief		Retrieves the parameter base type (like ParameterType::eText for ParameterType::eName).
 		 *\return		The type.
 		 *\~french
-		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME).
+		 *\brief		Récupère le type de base du paramètre (comme ParameterType::eText pour ParameterType::eName).
 		 *\return		Le type.
 		 */
-		CU_API virtual ePARAMETER_TYPE GetBaseType()
+		CU_API virtual ParameterType GetBaseType()
 		{
 			return GetType();
 		}

@@ -75,7 +75,7 @@ namespace Castor3D
 		MapBufferAlignment,
 		ProgramTexelOffset,
 
-		CASTOR_ENUM_CLASS_BOUNDS( MapBufferAlignment )
+		CASTOR_SCOPED_ENUM_BOUNDS( MapBufferAlignment )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -184,7 +184,7 @@ namespace Castor3D
 		ViewportHeight,
 		Viewports,
 
-		CASTOR_ENUM_CLASS_BOUNDS( ShaderStorageBufferBindings )
+		CASTOR_SCOPED_ENUM_BOUNDS( ShaderStorageBufferBindings )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -208,12 +208,12 @@ namespace Castor3D
 		 */
 		inline GpuInformations()
 		{
-			for ( auto i = 0u; i < uint32_t( GpuMax::Count ); ++i )
+			for ( auto i = 0u; i < uint32_t( GpuMax::eCount ); ++i )
 			{
 				m_maxValues.insert( { GpuMax( i ), std::numeric_limits< int32_t >::lowest() } );
 			}
 
-			for ( auto i = 0u; i < uint32_t( GpuMin::Count ); ++i )
+			for ( auto i = 0u; i < uint32_t( GpuMin::eCount ); ++i )
 			{
 				m_minValues.insert( { GpuMin( i ), std::numeric_limits< int32_t >::max() } );
 			}
@@ -355,25 +355,25 @@ namespace Castor3D
 		 */
 		inline void UpdateMaxShaderModel()
 		{
-			if ( m_useShader[size_t( ShaderType::Compute )] )
+			if ( m_useShader[size_t( ShaderType::eCompute )] )
 			{
-				m_maxShaderModel = ShaderModel::Model5;
+				m_maxShaderModel = ShaderModel::eModel5;
 			}
-			else if ( m_useShader[size_t( ShaderType::Hull )] )
+			else if ( m_useShader[size_t( ShaderType::eHull )] )
 			{
-				m_maxShaderModel = ShaderModel::Model4;
+				m_maxShaderModel = ShaderModel::eModel4;
 			}
-			else if ( m_useShader[size_t( ShaderType::Geometry )] )
+			else if ( m_useShader[size_t( ShaderType::eGeometry )] )
 			{
-				m_maxShaderModel = ShaderModel::Model3;
+				m_maxShaderModel = ShaderModel::eModel3;
 			}
-			else if ( m_useShader[size_t( ShaderType::Pixel )] )
+			else if ( m_useShader[size_t( ShaderType::ePixel )] )
 			{
-				m_maxShaderModel = ShaderModel::Model2;
+				m_maxShaderModel = ShaderModel::eModel2;
 			}
 			else
 			{
-				m_maxShaderModel = ShaderModel::Model1;
+				m_maxShaderModel = ShaderModel::eModel1;
 			}
 		}
 		/**
@@ -555,11 +555,11 @@ namespace Castor3D
 		//!\~english Combination of GpuFeature.	\~french Combinaisond e GpuFeature.
 		uint32_t m_features{ false };
 		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
-		ShaderModel m_maxShaderModel{ ShaderModel::Min };
+		ShaderModel m_maxShaderModel{ ShaderModel::eMin };
 		//!\~english The shader language version.	\~french La version du langage de shader.
 		uint32_t m_shaderLanguageVersion{ 0 };
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		std::array< bool, size_t( ShaderType::Count ) > m_useShader;
+		std::array< bool, size_t( ShaderType::eCount ) > m_useShader;
 		//!\~english The minimum values.	\~french Les valeurs minimales.
 		std::map< GpuMin, int32_t > m_minValues;
 		//!\~english The maximum values.	\~french Les valeurs maximales.

@@ -27,7 +27,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type )
+	Overlay::Overlay( Engine & p_engine, OverlayType p_type )
 		: OwnedBy< Engine >( p_engine )
 		, m_parent()
 		, m_pScene()
@@ -37,7 +37,7 @@ namespace Castor3D
 		m_category->SetOverlay( this );
 	}
 
-	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+	Overlay::Overlay( Engine & p_engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
 		: OwnedBy< Engine >( p_engine )
 		, m_parent( p_parent )
 		, m_pScene( p_scene )
@@ -98,7 +98,7 @@ namespace Castor3D
 
 	PanelOverlaySPtr Overlay::GetPanelOverlay()const
 	{
-		if ( m_category->GetType() != eOVERLAY_TYPE_PANEL )
+		if ( m_category->GetType() != OverlayType::ePanel )
 		{
 			CASTOR_EXCEPTION( "This overlay is not a panel." );
 		}
@@ -108,7 +108,7 @@ namespace Castor3D
 
 	BorderPanelOverlaySPtr Overlay::GetBorderPanelOverlay()const
 	{
-		if ( m_category->GetType() != eOVERLAY_TYPE_BORDER_PANEL )
+		if ( m_category->GetType() != OverlayType::eBorderPanel )
 		{
 			CASTOR_EXCEPTION( "This overlay is not a border panel." );
 		}
@@ -118,7 +118,7 @@ namespace Castor3D
 
 	TextOverlaySPtr Overlay::GetTextOverlay()const
 	{
-		if ( m_category->GetType() != eOVERLAY_TYPE_TEXT )
+		if ( m_category->GetType() != OverlayType::eText )
 		{
 			CASTOR_EXCEPTION( "This overlay is not a text." );
 		}
