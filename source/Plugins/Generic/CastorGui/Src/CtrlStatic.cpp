@@ -23,7 +23,7 @@ namespace CastorGui
 	}
 
 	StaticCtrl::StaticCtrl( Engine * p_engine, ControlRPtr p_parent, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_STATIC, p_engine, p_parent, m_count++, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eStatic, p_engine, p_parent, m_count++, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle() );
@@ -133,11 +133,11 @@ namespace CastorGui
 
 		if ( l_text )
 		{
-			if ( GetStyle() & eSTATIC_STYLE_HALIGN_CENTER )
+			if ( CheckFlag( GetStyle(), StaticStyle::eHAlignCenter ) )
 			{
 				l_text->SetHAlign( HAlign::eCenter );
 			}
-			else if ( GetStyle() & eSTATIC_STYLE_HALIGN_RIGHT )
+			else if ( CheckFlag( GetStyle(), StaticStyle::eHAlignRight ) )
 			{
 				l_text->SetHAlign( HAlign::eRight );
 			}
@@ -146,11 +146,11 @@ namespace CastorGui
 				l_text->SetHAlign( HAlign::eLeft );
 			}
 
-			if ( GetStyle() & eSTATIC_STYLE_VALIGN_CENTER )
+			if ( CheckFlag( GetStyle(), StaticStyle::eVAlignCenter ) )
 			{
 				l_text->SetVAlign( VAlign::eCenter );
 			}
-			else if ( GetStyle() & eSTATIC_STYLE_VALIGN_BOTTOM )
+			else if ( CheckFlag( GetStyle(), StaticStyle::eVAlignBottom ) )
 			{
 				l_text->SetVAlign( VAlign::eBottom );
 			}

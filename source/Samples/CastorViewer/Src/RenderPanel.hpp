@@ -55,13 +55,6 @@ namespace CastorViewer
 	DECLARE_SMART_PTR( TranslateNodeEvent );
 	DECLARE_SMART_PTR( KeyboardEvent );
 
-	typedef enum eCAMERA_MODE
-	{
-		eCAMERA_MODE_FIXED,
-		eCAMERA_MODE_MOBILE,
-		eCAMERA_MODE_COUNT,
-	}	eCAMERA_MODE;
-
 	class RenderPanel
 		: public wxPanel
 		, public Castor::AlignedFrom< Castor::Point3r >
@@ -134,7 +127,6 @@ namespace CastorViewer
 		bool m_mouseLeftDown;	//!< The left mouse button status
 		bool m_mouseRightDown;	//!< The right mouse button status
 		bool m_mouseMiddleDown;	//!< The middle mouse button status
-		eCAMERA_MODE m_eCameraMode;
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::CameraWPtr m_camera;

@@ -30,7 +30,7 @@ namespace CastorGui
 	}
 
 	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_LIST, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eListBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
 		, m_selected( p_selected )
@@ -222,7 +222,7 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
+		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), uint32_t( StaticStyle::eVAlignCenter ) );
 		l_item->SetCatchesMouseEvents( true );
 
 		l_item->ConnectNC( MouseEventType::eEnter, [this]( ControlSPtr p_control, MouseEvent const & p_event )
@@ -420,7 +420,7 @@ namespace CastorGui
 				}
 
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( m_selected );
+				m_signals[size_t( ListBoxEvent::eSelected )]( m_selected );
 			}
 			else
 			{
@@ -451,7 +451,7 @@ namespace CastorGui
 			{
 				l_index = std::max( 0, std::min( l_index, int( m_items.size() - 1 ) ) );
 				SetSelected( l_index );
-				m_signals[eLISTBOX_EVENT_SELECTED]( l_index );
+				m_signals[size_t( ListBoxEvent::eSelected )]( l_index );
 			}
 		}
 	}

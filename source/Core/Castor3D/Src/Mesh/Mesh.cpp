@@ -20,7 +20,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
 		for ( auto l_submesh : p_obj )
@@ -50,7 +50,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_NAME:
+			case ChunkType::eName:
 				l_return = DoParseChunk( l_name, l_chunk );
 
 				if ( l_return )
@@ -60,7 +60,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH:
+			case ChunkType::eSubmesh:
 				l_submesh = std::make_shared< Submesh >( *p_obj.GetScene(), p_obj, p_obj.GetSubmeshCount() );
 				l_return = BinaryParser< Submesh >{}.Parse( *l_submesh, l_chunk );
 
@@ -71,7 +71,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SKELETON:
+			case ChunkType::eSkeleton:
 				l_skeleton = std::make_shared< Skeleton >( *p_obj.GetScene() );
 				l_return = BinaryParser< Skeleton >{}.Parse( *l_skeleton, l_chunk );
 

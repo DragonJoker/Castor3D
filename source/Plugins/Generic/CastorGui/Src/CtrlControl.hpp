@@ -52,7 +52,7 @@ namespace CastorGui
 		 *\param[in]	p_style		The style.
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
-		Control( eCONTROL_TYPE p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		Control( ControlType p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor.
 		 */
@@ -133,7 +133,7 @@ namespace CastorGui
 		/** Retrieves the type
 		 *\return		The value
 		*/
-		inline eCONTROL_TYPE GetType()const
+		inline ControlType GetType()const
 		{
 			return m_type;
 		}
@@ -211,7 +211,7 @@ namespace CastorGui
 		/** Retrieves the cursor when mouse is over this control
 		 *\return		The main overlay
 		*/
-		inline eMOUSE_CURSOR GetCursor()const
+		inline MouseCursor GetCursor()const
 		{
 			return m_cursor;
 		}
@@ -315,7 +315,7 @@ namespace CastorGui
 		//! The parent control, if any
 		ControlRPtr m_parent;
 		//! The cursor when mouse is over this control
-		eMOUSE_CURSOR m_cursor;
+		MouseCursor m_cursor;
 		//! The background material
 		Castor3D::MaterialWPtr m_backgroundMaterial;
 		//! The foreground material
@@ -325,7 +325,7 @@ namespace CastorGui
 		//! The ID
 		const uint32_t m_id;
 		//! The type
-		const eCONTROL_TYPE m_type;
+		const ControlType m_type;
 		//! The style
 		uint32_t m_style;
 		//! The position

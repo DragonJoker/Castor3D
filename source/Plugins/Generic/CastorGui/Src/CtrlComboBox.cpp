@@ -23,16 +23,16 @@ namespace CastorGui
 	}
 
 	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_COMBO, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eComboBox, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
 		m_expand = std::make_shared< ButtonCtrl >( p_engine, this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
 		m_expand->SetVisible( DoIsVisible() );
-		m_expand->Connect( eBUTTON_EVENT_CLICKED, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
+		m_expand->Connect( ButtonEvent::eClicked, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
 
 		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
-		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
+		m_choices->Connect( ListBoxEvent::eSelected, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 
 		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
@@ -304,6 +304,6 @@ namespace CastorGui
 			}
 		}
 
-		m_signals[eCOMBOBOX_EVENT_SELECTED]( p_selected );
+		m_signals[size_t( ComboBoxEvent::eSelected )]( p_selected );
 	}
 }

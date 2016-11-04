@@ -57,7 +57,7 @@ namespace Castor3D
 			BinaryChunk l_header;
 			bool l_return = l_header.Read( p_file );
 
-			if ( l_header.GetChunkType() != eCHUNK_TYPE_CMSH_FILE )
+			if ( l_header.GetChunkType() != ChunkType::eCmshFile )
 			{
 				Castor::Logger::LogError( cuT( "Not a valid CMSH file." ) );
 				l_return = false;
@@ -142,7 +142,7 @@ namespace Castor3D
 			BinaryChunk l_chunk;
 			bool l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_chunk.GetChunkType() != eCHUNK_TYPE_CMSH_HEADER )
+			if ( l_chunk.GetChunkType() != ChunkType::eCmshHeader )
 			{
 				Castor::Logger::LogError( cuT( "Missing header chunk." ) );
 				l_return = false;
@@ -158,11 +158,11 @@ namespace Castor3D
 
 				switch ( l_subchunk.GetChunkType() )
 				{
-				case eCHUNK_TYPE_NAME:
+				case ChunkType::eName:
 					l_return = DoParseChunk( l_name, l_subchunk );
 					break;
 
-				case eCHUNK_TYPE_CMSH_VERSION:
+				case ChunkType::eCmshVersion:
 					l_return = DoParseChunk( l_version, l_subchunk );
 					break;
 				}

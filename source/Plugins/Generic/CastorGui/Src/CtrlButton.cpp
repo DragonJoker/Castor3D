@@ -24,7 +24,7 @@ namespace CastorGui
 	}
 
 	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_BUTTON, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eButton, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
@@ -279,7 +279,7 @@ namespace CastorGui
 				l_panel.reset();
 			}
 
-			m_signals[eBUTTON_EVENT_CLICKED]();
+			m_signals[size_t( ButtonEvent::eClicked )]();
 		}
 	}
 

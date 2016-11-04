@@ -14,12 +14,12 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetName(), ChunkType::eName, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.GetLength(), eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
+			l_return = DoWriteChunk( p_obj.GetLength(), ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( l_return )
@@ -50,7 +50,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_NAME:
+			case ChunkType::eName:
 				l_return = DoParseChunk( l_name, l_chunk );
 
 				if ( l_return )
@@ -60,11 +60,11 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_ANIM_LENGTH:
+			case ChunkType::eAnimLength:
 				l_return = DoParseChunk( p_obj.m_length, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_SKELETON_ANIMATION:
+			case ChunkType::eSkeletonAnimation:
 				BinaryParser< SkeletonAnimation >{}.Parse( static_cast< SkeletonAnimation & >( p_obj ), l_chunk );
 				break;
 			}

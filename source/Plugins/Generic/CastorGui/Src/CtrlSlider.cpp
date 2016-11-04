@@ -20,7 +20,7 @@ namespace CastorGui
 	}
 
 	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_SLIDER, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eSlider, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_range( p_range )
 		, m_value( p_value )
 		, m_scrolling( false )
@@ -99,7 +99,7 @@ namespace CastorGui
 		Size l_tickSize( GetSize() );
 		Position l_tickPosition;
 
-		if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 		{
 			l_lineSize.width() = 3;
 			l_lineSize.height() -= 4;
@@ -231,7 +231,7 @@ namespace CastorGui
 		if ( m_scrolling )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBTRACK]( m_value );
+			m_signals[size_t( SliderEvent::eThumbTrack )]( m_value );
 		}
 	}
 
@@ -244,7 +244,7 @@ namespace CastorGui
 		   )
 		{
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 			m_scrolling = false;
 		}
 	}
@@ -259,7 +259,7 @@ namespace CastorGui
 			}
 
 			DoMoveMouse( p_event.GetPosition() );
-			m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+			m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 			m_scrolling = false;
 		}
 	}
@@ -288,17 +288,17 @@ namespace CastorGui
 	{
 		if ( !m_scrolling )
 		{
-			if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 			{
 				if ( p_event.GetKey() == KeyboardKey::eUp )
 				{
 					DoUpdateTick( Position( 0, -1 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 				else if ( p_event.GetKey() == KeyboardKey::eDown )
 				{
 					DoUpdateTick( Position( 0, 1 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 			}
 			else
@@ -306,12 +306,12 @@ namespace CastorGui
 				if ( p_event.GetKey() == KeyboardKey::eLeft )
 				{
 					DoUpdateTick( Position( -1, 0 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 				else if ( p_event.GetKey() == KeyboardKey::eRight )
 				{
 					DoUpdateTick( Position( 1, 0 ) );
-					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
+					m_signals[size_t( SliderEvent::eThumbRelease )]( m_value );
 				}
 			}
 		}
@@ -326,7 +326,7 @@ namespace CastorGui
 	{
 		Position l_delta = p_delta;
 
-		if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+		if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 		{
 			l_delta.x() = 0;
 		}
@@ -349,7 +349,7 @@ namespace CastorGui
 				l_size = l_line->GetSize();
 			}
 
-			if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
+			if ( CheckFlag( GetStyle(), SliderStyle::eVertical ) )
 			{
 				l_position[1] = std::min( int32_t( l_size.height() ), std::max( 0, l_position[1] ) );
 				l_tickValue = ( l_position[1] - l_line->GetPosition().y() ) / double( l_size.height() );

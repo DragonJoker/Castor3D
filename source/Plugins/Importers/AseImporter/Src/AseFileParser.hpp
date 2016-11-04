@@ -37,25 +37,25 @@ namespace Ase
 	\~french
 	\brief		Enumération des sections d'un fichier ASE
 	*/
-	typedef enum eASE_SECTION
+	enum class ASESection
 	{
-		eASE_SECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
-		eASE_SECTION_SCENE = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
-		eASE_SECTION_MATERIALS = MAKE_SECTION_NAME( 'M', 'A', 'T', 'S' ),
-		eASE_SECTION_MATERIAL = MAKE_SECTION_NAME( 'M', 'A', 'T', 'L' ),
-		eASE_SECTION_SUBMAT = MAKE_SECTION_NAME( 'S', 'M', 'A', 'T' ),
-		eASE_SECTION_MAPDIFFUSE = MAKE_SECTION_NAME( 'D', 'I', 'F', 'F' ),
-		eASE_SECTION_GEOMETRY = MAKE_SECTION_NAME( 'G', 'M', 'T', 'Y' ),
-		eASE_SECTION_GEONODE = MAKE_SECTION_NAME( 'G', 'N', 'O', 'D' ),
-		eASE_SECTION_GEOMESH = MAKE_SECTION_NAME( 'G', 'M', 'S', 'H' ),
-		eASE_SECTION_VERTEXLIST = MAKE_SECTION_NAME( 'L', 'V', 'E', 'R' ),
-		eASE_SECTION_FACELIST = MAKE_SECTION_NAME( 'L', 'F', 'C', 'E' ),
-		eASE_SECTION_TVERTEXLIST = MAKE_SECTION_NAME( 'L', 'T', 'V', 'X' ),
-		eASE_SECTION_TFACELIST = MAKE_SECTION_NAME( 'L', 'T', 'F', 'C' ),
-		eASE_SECTION_CVERTEXLIST = MAKE_SECTION_NAME( 'L', 'C', 'V', 'X' ),
-		eASE_SECTION_CFACELIST = MAKE_SECTION_NAME( 'L', 'C', 'F', 'C' ),
-		eASE_SECTION_NORMALSLIST = MAKE_SECTION_NAME( 'L', 'N', 'M', 'L' ),
-	}	eASE_SECTION;
+		eRoot = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eScene = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
+		eMaterials = MAKE_SECTION_NAME( 'M', 'A', 'T', 'S' ),
+		eMaterial = MAKE_SECTION_NAME( 'M', 'A', 'T', 'L' ),
+		eSubmat = MAKE_SECTION_NAME( 'S', 'M', 'A', 'T' ),
+		eMapDiffuse = MAKE_SECTION_NAME( 'D', 'I', 'F', 'F' ),
+		eGeometry = MAKE_SECTION_NAME( 'G', 'M', 'T', 'Y' ),
+		eGeoNode = MAKE_SECTION_NAME( 'G', 'N', 'O', 'D' ),
+		eGeoMesh = MAKE_SECTION_NAME( 'G', 'M', 'S', 'H' ),
+		eVertexList = MAKE_SECTION_NAME( 'L', 'V', 'E', 'R' ),
+		eFaceList = MAKE_SECTION_NAME( 'L', 'F', 'C', 'E' ),
+		eTVertexList = MAKE_SECTION_NAME( 'L', 'T', 'V', 'X' ),
+		eTFaceList = MAKE_SECTION_NAME( 'L', 'T', 'F', 'C' ),
+		eCVertexList = MAKE_SECTION_NAME( 'L', 'C', 'V', 'X' ),
+		eCFaceList = MAKE_SECTION_NAME( 'L', 'C', 'F', 'C' ),
+		eNormalsList = MAKE_SECTION_NAME( 'L', 'N', 'M', 'L' ),
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/07/2012

@@ -6,42 +6,42 @@ namespace GlRender
 
 	template <> struct GlTyper< int >
 	{
-		enum { Value = GlType::eInt };
+		constexpr static GlType Value = GlType::eInt;
 	};
 	template <> struct GlTyper< uint32_t >
 	{
-		enum { Value = GlType::eUnsignedInt };
+		constexpr static GlType Value = GlType::eUnsignedInt;
 	};
 	template <> struct GlTyper< short >
 	{
-		enum { Value = GlType::eShort };
+		constexpr static GlType Value = GlType::eShort;
 	};
 	template <> struct GlTyper< uint16_t >
 	{
-		enum { Value = GlType::eUnsignedShort };
+		constexpr static GlType Value = GlType::eUnsignedShort;
 	};
 	template <> struct GlTyper< char >
 	{
-		enum { Value = GlType::eByte };
+		constexpr static GlType Value = GlType::eByte;
 	};
 	template <> struct GlTyper< uint8_t >
 	{
-		enum { Value = GlType::eUnsignedByte };
+		constexpr static GlType Value = GlType::eUnsignedByte;
 	};
 	template <> struct GlTyper< float >
 	{
-		enum { Value = GlType::eFloat };
+		constexpr static GlType Value = GlType::eFloat;
 	};
 	template <> struct GlTyper< double >
 	{
-		enum { Value = GlType::eDouble };
+		constexpr static GlType Value = GlType::eDouble;
 	};
 
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Count >
 	GlVecAttribute< T, Count >::GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlType( GlTyper< T >::Value ), Count, 0 )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlTyper< T >::Value, Count, 0 )
 	{
 	}
 
@@ -54,7 +54,7 @@ namespace GlRender
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlType( GlTyper< T >::Value ), Columns, 1 )
+		: GlAttributeBase( p_gl, p_program, p_stride, p_attributeName, GlTyper< T >::Value, Columns, 1 )
 	{
 	}
 

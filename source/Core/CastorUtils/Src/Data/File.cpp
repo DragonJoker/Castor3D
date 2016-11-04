@@ -635,47 +635,47 @@ namespace Castor
 #else
 		mode_t l_mode = 0;
 
-		if ( CheckFlag( p_flag, CreateMode::eUserRead ) )
+		if ( CheckFlag( p_flags, CreateMode::eUserRead ) )
 		{
 			l_mode |= S_IRUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eUserWrite ) )
+		if ( CheckFlag( p_flags, CreateMode::eUserWrite ) )
 		{
 			l_mode |= S_IWUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eUserExec ) )
+		if ( CheckFlag( p_flags, CreateMode::eUserExec ) )
 		{
 			l_mode |= S_IXUSR;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eGroupRead ) )
+		if ( CheckFlag( p_flags, CreateMode::eGroupRead ) )
 		{
 			l_mode |= S_IRGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eGroupWrite ) )
+		if ( CheckFlag( p_flags, CreateMode::eGroupWrite ) )
 		{
 			l_mode |= S_IWGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eGroupExec ) )
+		if ( CheckFlag( p_flags, CreateMode::eGroupExec ) )
 		{
 			l_mode |= S_IXGRP;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eOthersRead ) )
+		if ( CheckFlag( p_flags, CreateMode::eOthersRead ) )
 		{
 			l_mode |= S_IROTH;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eOthersWrite ) )
+		if ( CheckFlag( p_flags, CreateMode::eOthersWrite ) )
 		{
 			l_mode |= S_IWOTH;
 		}
 
-		if ( CheckFlag( p_flag, CreateMode::eOthersExec ) )
+		if ( CheckFlag( p_flags, CreateMode::eOthersExec ) )
 		{
 			l_mode |= S_IXOTH;
 		}

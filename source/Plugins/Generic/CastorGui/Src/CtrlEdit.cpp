@@ -23,14 +23,14 @@ namespace CastorGui
 	}
 
 	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_EDIT, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
+		: Control( ControlType::eEdit, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 		, m_caretIt( p_caption.end() )
 		, m_active( false )
 		, m_multiLine( false )
 	{
 		m_caretIt = m_caption.end();
-		m_cursor = eMOUSE_CURSOR_TEXT;
+		m_cursor = MouseCursor::eText;
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
 		EventHandler::Connect( MouseEventType::ePushed, [this]( MouseEvent const & p_event )
@@ -212,12 +212,12 @@ namespace CastorGui
 			 && l_code != KeyboardKey::eDelete )
 		{
 			DoAddCharAtCaret( p_event.GetChar() );
-			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 		else if ( l_code == KeyboardKey::eReturn && IsMultiLine() )
 		{
 			DoAddCharAtCaret( cuT( "\n" ) );
-			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+			m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 		}
 	}
 
@@ -230,12 +230,12 @@ namespace CastorGui
 			if ( l_code == KeyboardKey::eBackspace )
 			{
 				DoDeleteCharBeforeCaret();
-				m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
 			else if ( l_code == KeyboardKey::eDelete )
 			{
 				DoDeleteCharAtCaret();
-				m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+				m_signals[size_t( EditEvent::eUpdated )]( m_caption );
 			}
 			else if ( l_code == KeyboardKey::eLeft && m_caretIt != m_caption.begin() )
 			{

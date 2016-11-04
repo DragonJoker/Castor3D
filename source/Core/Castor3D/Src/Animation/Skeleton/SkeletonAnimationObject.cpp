@@ -70,26 +70,26 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_nodeTransform, eCHUNK_TYPE_MOVING_TRANSFORM, m_chunk );
+			l_return = DoWriteChunk( p_obj.m_nodeTransform, ChunkType::eMovingTransform, m_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = DoWriteChunk( p_obj.m_length, eCHUNK_TYPE_ANIM_LENGTH, m_chunk );
+			l_return = DoWriteChunk( p_obj.m_length, ChunkType::eAnimLength, m_chunk );
 		}
 
 		if ( !p_obj.m_keyframes.empty() )
 		{
 			if ( l_return )
 			{
-				l_return = DoWriteChunk( uint32_t( p_obj.m_keyframes.size() ), eCHUNK_TYPE_KEYFRAME_COUNT, m_chunk );
+				l_return = DoWriteChunk( uint32_t( p_obj.m_keyframes.size() ), ChunkType::eKeyframeCount, m_chunk );
 			}
 
 			if ( l_return )
 			{
 				std::vector< KeyFramed > l_keyFrames;
 				DoConvert( p_obj.m_keyframes, l_keyFrames );
-				l_return = DoWriteChunk( l_keyFrames, eCHUNK_TYPE_KEYFRAMES, m_chunk );
+				l_return = DoWriteChunk( l_keyFrames, ChunkType::eKeyframes, m_chunk );
 			}
 		}
 
@@ -127,11 +127,11 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_MOVING_TRANSFORM:
+			case ChunkType::eMovingTransform:
 				l_return = DoParseChunk( p_obj.m_nodeTransform, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_KEYFRAME_COUNT:
+			case ChunkType::eKeyframeCount:
 				l_return = DoParseChunk( l_count, l_chunk );
 
 				if ( l_return )
@@ -141,7 +141,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_KEYFRAMES:
+			case ChunkType::eKeyframes:
 				l_return = DoParseChunk( l_keyframes, l_chunk );
 
 				if ( l_return )
@@ -151,11 +151,11 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_ANIM_LENGTH:
+			case ChunkType::eAnimLength:
 				l_return = DoParseChunk( p_obj.m_length, l_chunk );
 				break;
 
-			case eCHUNK_TYPE_SKELETON_ANIMATION_BONE:
+			case ChunkType::eSkeletonAnimationBone:
 				l_bone = std::make_shared< SkeletonAnimationBone >( *p_obj.GetOwner() );
 				l_return = BinaryParser< SkeletonAnimationBone >{}.Parse( *l_bone, l_chunk );
 
@@ -167,7 +167,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SKELETON_ANIMATION_NODE:
+			case ChunkType::eSkeletonAnimationNode:
 				l_node = std::make_shared< SkeletonAnimationNode >( *p_obj.GetOwner() );
 				l_return = BinaryParser< SkeletonAnimationNode >{}.Parse( *l_node, l_chunk );
 

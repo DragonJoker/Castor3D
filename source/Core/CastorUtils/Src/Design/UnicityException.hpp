@@ -53,7 +53,7 @@ namespace Castor
 	\~french
 	\brief		Textes des erreurs d'unicité
 	*/
-	static char const * const STR_UNICITY_ERROR[UnicityError::eCount] =
+	static char const * const STR_UNICITY_ERROR[] =
 	{
 		"No instance for Unique class ",
 		"Duplicate instance for Unique class ",

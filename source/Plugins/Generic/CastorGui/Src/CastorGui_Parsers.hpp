@@ -34,17 +34,17 @@ namespace CastorGui
 	/*!
 	The enumeration which defines all the sections and subsections of a scene file
 	*/
-	typedef enum eSECTION
+	enum class GUISection
 		: uint32_t
 	{
-		eSECTION_GUI = MAKE_SECTION_NAME( 'C', 'G', 'U', 'I' ),
-		eSECTION_BUTTON = MAKE_SECTION_NAME( 'B', 'U', 'T', 'N' ),
-		eSECTION_STATIC = MAKE_SECTION_NAME( 'S', 'T', 'T', 'C' ),
-		eSECTION_SLIDER = MAKE_SECTION_NAME( 'S', 'L', 'D', 'R' ),
-		eSECTION_COMBOBOX = MAKE_SECTION_NAME( 'C', 'M', 'B', 'O' ),
-		eSECTION_LISTBOX = MAKE_SECTION_NAME( 'L', 'S', 'B', 'X' ),
-		eSECTION_EDIT = MAKE_SECTION_NAME( 'E', 'D', 'I', 'T' ),
-	}	eSECTION;
+		eGUI = MAKE_SECTION_NAME( 'C', 'G', 'U', 'I' ),
+		eButton = MAKE_SECTION_NAME( 'B', 'U', 'T', 'N' ),
+		eStatic = MAKE_SECTION_NAME( 'S', 'T', 'T', 'C' ),
+		eSlider = MAKE_SECTION_NAME( 'S', 'L', 'D', 'R' ),
+		eComboBox = MAKE_SECTION_NAME( 'C', 'M', 'B', 'O' ),
+		eListBox = MAKE_SECTION_NAME( 'L', 'S', 'B', 'X' ),
+		eEdit = MAKE_SECTION_NAME( 'E', 'D', 'I', 'T' ),
+	};
 
 	DECLARE_ATTRIBUTE_PARSER( Parser_Gui )
 	DECLARE_ATTRIBUTE_PARSER( Parser_DefaultFont )

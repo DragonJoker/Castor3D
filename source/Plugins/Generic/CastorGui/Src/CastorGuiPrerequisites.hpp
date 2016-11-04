@@ -48,205 +48,194 @@ namespace CastorGui
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported controls in a OptionsPanel
 	*/
-	typedef enum eCONTROL_TYPE
+	enum class ControlType
 		: uint8_t
 	{
-		eCONTROL_TYPE_NONE,
+		eNone,
 		//! StaticCtrl
-		eCONTROL_TYPE_STATIC,
+		eStatic,
 		//! EditCtrl
-		eCONTROL_TYPE_EDIT,
+		eEdit,
 		//! SliderCtrl
-		eCONTROL_TYPE_SLIDER,
+		eSlider,
 		//! ComboBoxCtrl
-		eCONTROL_TYPE_COMBO,
+		eComboBox,
 		//! ListBoxCtrl
-		eCONTROL_TYPE_LIST,
+		eListBox,
 		//! ButtonCtrl
-		eCONTROL_TYPE_BUTTON,
-	}	eCONTROL_TYPE;
-
+		eButton,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported combobox events
 	*/
-	typedef enum eCOMBOBOX_EVENT
+	enum class ComboBoxEvent
 		: uint8_t
 	{
 		//! Item selected
-		eCOMBOBOX_EVENT_SELECTED,
+		eSelected,
 		//! The combo box events count
-		eCOMBOBOX_EVENT_COUNT,
-	}	eCOMBOBOX_EVENT;
-
+		eCount,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported listbox events
 	*/
-	typedef enum eLISTBOX_EVENT
+	enum class ListBoxEvent
 		: uint8_t
 	{
 		//! Item selected
-		eLISTBOX_EVENT_SELECTED,
+		eSelected,
 		//! The combobox events count
-		eLISTBOX_EVENT_COUNT,
-	}	eLISTBOX_EVENT;
-
+		eCount,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported button events
 	*/
-	typedef enum eBUTTON_EVENT
+	enum class ButtonEvent
 		: uint8_t
 	{
 		//! Button clicked
-		eBUTTON_EVENT_CLICKED,
+		eClicked,
 		//! The button events count
-		eBUTTON_EVENT_COUNT,
-	}	eBUTTON_EVENT;
-
+		eCount,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported slider events
 	*/
-	typedef enum eSLIDER_EVENT
+	enum class SliderEvent
 		: uint8_t
 	{
 		//! Slider thumb release
-		eSLIDER_EVENT_THUMBRELEASE,
+		eThumbRelease,
 		//! Slider thumb track
-		eSLIDER_EVENT_THUMBTRACK,
+		eThumbTrack,
 		//! The slider events count
-		eSLIDER_EVENT_COUNT,
-	}	eSLIDER_EVENT;
-
+		eCount,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		06/03/2015
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported edit events
 	*/
-	typedef enum eEDIT_EVENT
+	enum class EditEvent
 		: uint8_t
 	{
 		//! The edit text has changed
-		eEDIT_EVENT_UPDATED,
-		//! The return key has been hit (the edit must have eEDIT_STYLE_PROCESS_ENTER style)
-		eEDIT_EVENT_RETURN,
+		eUpdated,
+		//! The return key has been hit (the edit must have EditStyle::eProcessEnter style)
+		eReturn,
 		//! The edit events count
-		eEDIT_EVENT_COUNT,
-	}	eEDIT_EVENT;
-
+		eCount,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
 	 *\brief		Comb control supported styles
 	*/
-	typedef enum eCOMBO_STYLE
+	enum class ComboBoxStyle
 		: uint32_t
 	{
 		//! Read only combo box
-		eCOMBO_STYLE_READONLY = 0x00000001,
-	}	eCOMBO_STYLE;
-
+		eReadOnly = 0x00000001,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
 	 *\brief		Edit control supported styles
 	*/
-	typedef enum eEDIT_STYLE
+	enum class EditStyle
 		: uint32_t
 	{
 		//! The edit control process 'return' hit as an event and not as a newline
-		eEDIT_STYLE_PROCESS_ENTER = 0x00000100,
+		eProcessEnter = 0x00000100,
 		//! The edit control is a multiline edit control
-		eEDIT_STYLE_MULTILINE = 0x00000200,
+		eMultiline = 0x00000200,
 		//! The edit control process 'tab' hit as the tab character and not as an event
-		eEDIT_STYLE_PROCESS_TAB = 0x00000400,
+		eProcessTab = 0x00000400,
 		//! Words are not cut
-		eEDIT_STYLE_WORDWRAP = 0x00000800,
-	}	eEDIT_STYLE;
-
+		eWordWrap = 0x00000800,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
 	 *\brief		Slider control supported styles
 	*/
-	typedef enum eSLIDER_STYLE
+	enum class SliderStyle
 		: uint32_t
 	{
 		// The slider is displaye horizontally (default mode)
-		eSLIDER_STYLE_HORIZONTAL = 0x00010000,
+		eHorizontal = 0x00010000,
 		// The slider is displaye vertically
-		eSLIDER_STYLE_VERTICAL = 0x000200000,
-	}	eSLIDER_STYLE;
-
+		eVertical = 0x000200000,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		11/02/2015
 	 *\version		0.1.0
 	 *\brief		Static control supported styles
 	*/
-	typedef enum eSTATIC_STYLE
+	enum class StaticStyle
 		: uint32_t
 	{
 		//! The static's text is left aligned
-		eSTATIC_STYLE_HALIGN_LEFT	= 0x01000000,
+		eHAlignLeft = 0x01000000,
 		//! The static's text is horizontally centered
-		eSTATIC_STYLE_HALIGN_CENTER	= 0x02000000,
+		eHAlignCenter = 0x02000000,
 		//! The static's text is right aligned
-		eSTATIC_STYLE_HALIGN_RIGHT	= 0x04000000,
+		eHAlignRight = 0x04000000,
 		//! The static's text is aligned on top
-		eSTATIC_STYLE_VALIGN_TOP	= 0x10000000,
+		eVAlignTop = 0x10000000,
 		//! The static's text is vertically centered
-		eSTATIC_STYLE_VALIGN_CENTER	= 0x20000000,
+		eVAlignCenter = 0x20000000,
 		//! The static's text is aligned on bottom
-		eSTATIC_STYLE_VALIGN_BOTTOM	= 0x40000000,
-	}	eSTATIC_STYLE;
-
+		eVAlignBottom = 0x40000000,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		23/05/2012
 	 *\version		0.1.0
 	 *\brief		Enumeration of supported GUI events in ControlInfos
 	*/
-	typedef enum eGUI_EVENT
+	enum class GuiEvent
 		: uint8_t
 	{
 		//! Event to ask the main window to show a message box
-		eGUI_EVENT_SHOW_MESSAGE_BOX,
+		eShowMessageBox,
 		//! Event to ask the main window to resize to the given size
-		eGUI_EVENT_RESIZE_PARENT,
-	}	eGUI_EVENT;
-
+		eResizeParent,
+	};
 	/*!
 	 *\author		Sylvain DOREMUS
 	 *\date		10/03/2015
 	 *\version		0.1.0
 	 *\brief		Mouse cursors enumeration
 	*/
-	typedef enum eMOUSE_CURSOR
+	enum class MouseCursor
 	{
 		//! The usual arrow cursor
-		eMOUSE_CURSOR_ARROW,
+		eArrow,
 		//! The hand cursor
-		eMOUSE_CURSOR_HAND,
+		eHand,
 		//! The text cursor
-		eMOUSE_CURSOR_TEXT,
+		eText,
 		//! The cursors count
-		eMOUSE_CURSOR_COUNT,
-	}	eMOUSE_CURSOR;
+		eCount,
+	};
 
 	template< class Derived > class EventHandler;
 	class ControlsManager;

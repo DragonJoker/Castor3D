@@ -64,27 +64,27 @@ namespace CastorGui
 
 				switch ( l_top->GetType() )
 				{
-				case eCONTROL_TYPE_STATIC:
+				case ControlType::eStatic:
 					m_static = std::static_pointer_cast< StaticCtrl >( l_top );
 					break;
 
-				case eCONTROL_TYPE_EDIT:
+				case ControlType::eEdit:
 					m_edit = std::static_pointer_cast< EditCtrl >( l_top );
 					break;
 
-				case eCONTROL_TYPE_SLIDER:
+				case ControlType::eSlider:
 					m_slider = std::static_pointer_cast< SliderCtrl >( l_top );
 					break;
 
-				case eCONTROL_TYPE_COMBO:
+				case ControlType::eComboBox:
 					m_combo = std::static_pointer_cast< ComboBoxCtrl >( l_top );
 					break;
 
-				case eCONTROL_TYPE_LIST:
+				case ControlType::eListBox:
 					m_listbox = std::static_pointer_cast< ListBoxCtrl >( l_top );
 					break;
 
-				case eCONTROL_TYPE_BUTTON:
+				case ControlType::eButton:
 					m_button = std::static_pointer_cast< ButtonCtrl >( l_top );
 					break;
 				}
@@ -127,7 +127,7 @@ namespace CastorGui
 		l_context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine();
 		p_context->RegisterUserContext( PLUGIN_NAME, l_context );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_GUI )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eGUI )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_DefaultFont )
 	{
@@ -160,7 +160,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_button );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_BUTTON )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eButton )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ButtonFont )
 	{
@@ -400,7 +400,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_combo );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_COMBOBOX )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eComboBox )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComboBoxFont )
 	{
@@ -532,7 +532,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_edit );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_EDIT )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eEdit )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_EditFont )
 	{
@@ -579,7 +579,9 @@ namespace CastorGui
 		{
 			bool l_value;
 			p_params[0]->Get( l_value );
-			l_context.m_flags |= l_value ? ( eEDIT_STYLE_MULTILINE | eEDIT_STYLE_PROCESS_ENTER | eEDIT_STYLE_PROCESS_TAB ) : 0;
+			l_context.m_flags |= l_value ? ( uint32_t( EditStyle::eMultiline )
+											 | uint32_t( EditStyle::eProcessEnter )
+											 | uint32_t( EditStyle::eProcessTab ) ) : 0;
 		}
 		else
 		{
@@ -601,7 +603,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_listbox );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_LISTBOX )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eListBox )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ListBoxFont )
 	{
@@ -733,7 +735,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_slider );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_SLIDER )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eSlider )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_SliderEnd )
 	{
@@ -748,7 +750,7 @@ namespace CastorGui
 		ParserContext & l_context = GetParserContext( p_context );
 		CreateControl( l_context, l_context.m_static );
 	}
-	END_ATTRIBUTE_PUSH( CastorGui::eSECTION_STATIC )
+	END_ATTRIBUTE_PUSH( CastorGui::GUISection::eStatic )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_StaticFont )
 	{

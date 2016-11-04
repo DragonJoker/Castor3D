@@ -378,7 +378,7 @@ namespace Castor
 		//! the current logging level, all logs lower than this level are ignored
 		LogType m_logLevel;
 		//! The header for each lg line of given log level
-		String m_headers[LogType::eCount];
+		std::array< String, size_t( LogType::eCount ) > m_headers;
 		//! The message queue
 		MessageQueue m_queue;
 		//! The mutex protecting the message queue

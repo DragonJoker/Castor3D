@@ -266,9 +266,9 @@ namespace Castor
 
 	private:
 		//! The files paths, per log level
-		String m_logFilePath[LogType::eCount];
+		std::array< String, size_t( LogType::eCount ) > m_logFilePath;
 		//! The headers, per log level
-		String m_headers[LogType::eCount];
+		std::array< String, size_t( LogType::eCount ) > m_headers;
 		//! The console
 		std::unique_ptr< ProgramConsole > m_console;
 		//! Registered callbacks

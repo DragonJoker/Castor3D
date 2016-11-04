@@ -10,7 +10,7 @@ using namespace Castor;
 namespace GuiCommon
 {
 	LanguageFileParser::LanguageFileParser( StcContext * p_pStcContext )
-		: FileParser( eSECTION_ROOT )
+		: FileParser( uint32_t( LANGSection::eRoot ) )
 		, m_pStcContext( p_pStcContext )
 	{
 	}
@@ -23,21 +23,21 @@ namespace GuiCommon
 	{
 		LanguageFileContextPtr l_pContext = std::make_shared< LanguageFileContext >( &p_file );
 		m_context = l_pContext;
-		AddParser( eSECTION_ROOT, cuT( "language" ), Root_Language, { MakeParameter< ParameterType::eName >() } );
-		AddParser( eSECTION_LANGUAGE, cuT( "pattern" ), Language_Pattern, { MakeParameter< ParameterType::eText >() } );
-		AddParser( eSECTION_LANGUAGE, cuT( "lexer" ), Language_Lexer, { MakeParameter< ParameterType::eCheckedText>( l_pContext->mapLexers ) } );
-		AddParser( eSECTION_LANGUAGE, cuT( "fold_flags" ), Language_FoldFlags, { MakeParameter< ParameterType::eText >() } );
-		AddParser( eSECTION_LANGUAGE, cuT( "section" ), Language_Section );
-		AddParser( eSECTION_LANGUAGE, cuT( "style" ), Language_Style );
-		AddParser( eSECTION_STYLE, cuT( "type" ), Style_Type, { MakeParameter< ParameterType::eCheckedText>( l_pContext->mapTypes ) } );
-		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ParameterType::eColour >() } );
-		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ParameterType::eColour >() } );
-		AddParser( eSECTION_STYLE, cuT( "font_name" ), Style_FontName, { MakeParameter< ParameterType::eText >() } );
-		AddParser( eSECTION_STYLE, cuT( "font_style" ), Style_FontStyle, { MakeParameter< ParameterType::eText >() } );
-		AddParser( eSECTION_STYLE, cuT( "font_size" ), Style_FontSize, { MakeParameter< ParameterType::eInt32 >() } );
-		AddParser( eSECTION_SECTION, cuT( "type" ), Section_Type, { MakeParameter< ParameterType::eCheckedText >( l_pContext->mapTypes ) } );
-		AddParser( eSECTION_SECTION, cuT( "list" ), Section_List );
-		AddParser( eSECTION_SECTION, cuT( "}" ), Section_End );
+		AddParser( uint32_t( LANGSection::eRoot ), cuT( "language" ), Root_Language, { MakeParameter< ParameterType::eName >() } );
+		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { MakeParameter< ParameterType::eText >() } );
+		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "lexer" ), Language_Lexer, { MakeParameter< ParameterType::eCheckedText>( l_pContext->mapLexers ) } );
+		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "fold_flags" ), Language_FoldFlags, { MakeParameter< ParameterType::eText >() } );
+		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "section" ), Language_Section );
+		AddParser( uint32_t( LANGSection::eLanguage ), cuT( "style" ), Language_Style );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "type" ), Style_Type, { MakeParameter< ParameterType::eCheckedText>( l_pContext->mapTypes ) } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ParameterType::eColour >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ParameterType::eColour >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_name" ), Style_FontName, { MakeParameter< ParameterType::eText >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { MakeParameter< ParameterType::eText >() } );
+		AddParser( uint32_t( LANGSection::eStyle ), cuT( "font_size" ), Style_FontSize, { MakeParameter< ParameterType::eInt32 >() } );
+		AddParser( uint32_t( LANGSection::eSection ), cuT( "type" ), Section_Type, { MakeParameter< ParameterType::eCheckedText >( l_pContext->mapTypes ) } );
+		AddParser( uint32_t( LANGSection::eSection ), cuT( "list" ), Section_List );
+		AddParser( uint32_t( LANGSection::eSection ), cuT( "}" ), Section_End );
 		l_pContext->pCurrentLanguage.reset( new LanguageInfo );
 	}
 
@@ -50,7 +50,7 @@ namespace GuiCommon
 	{
 		bool l_return = false;
 
-		if ( m_context->m_sections.back() == eSECTION_LIST )
+		if ( m_context->m_sections.back() == uint32_t( LANGSection::eList ) )
 		{
 			String l_strWords( p_line );
 			string::replace( l_strWords, cuT( "\\" ), cuT( "" ) );
@@ -76,24 +76,24 @@ namespace GuiCommon
 	{
 		String l_return;
 
-		switch ( p_section )
+		switch ( LANGSection( p_section ) )
 		{
-		case eSECTION_ROOT:
+		case LANGSection::eRoot:
 			break;
 
-		case eSECTION_LANGUAGE:
+		case LANGSection::eLanguage:
 			l_return = cuT( "language" );
 			break;
 
-		case eSECTION_SECTION:
+		case LANGSection::eSection:
 			l_return = cuT( "section" );
 			break;
 
-		case eSECTION_STYLE:
+		case LANGSection::eStyle:
 			l_return = cuT( "style" );
 			break;
 
-		case eSECTION_LIST:
+		case LANGSection::eList:
 			l_return = cuT( "list" );
 			break;
 
@@ -112,7 +112,7 @@ namespace GuiCommon
 		p_params[0]->Get( l_name );
 		l_pContext->pCurrentLanguage->SetName( l_name );
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_LANGUAGE )
+	END_ATTRIBUTE_PUSH( LANGSection::eLanguage )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Language_Pattern )
 	{
@@ -181,7 +181,7 @@ namespace GuiCommon
 		l_pContext->eStyle = eSTC_TYPE_COUNT;
 		l_pContext->eType = eSTC_TYPE_COUNT;
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_SECTION )
+	END_ATTRIBUTE_PUSH( LANGSection::eSection )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Language_Style )
 	{
@@ -190,7 +190,7 @@ namespace GuiCommon
 		l_pContext->eStyle = eSTC_TYPE_COUNT;
 		l_pContext->eType = eSTC_TYPE_COUNT;
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_STYLE )
+	END_ATTRIBUTE_PUSH( LANGSection::eStyle )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Style_Type )
 	{
@@ -302,5 +302,5 @@ namespace GuiCommon
 	IMPLEMENT_ATTRIBUTE_PARSER( Section_List )
 	{
 	}
-	END_ATTRIBUTE_PUSH( eSECTION_LIST )
+	END_ATTRIBUTE_PUSH( LANGSection::eList )
 }

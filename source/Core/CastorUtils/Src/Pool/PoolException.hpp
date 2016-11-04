@@ -38,7 +38,7 @@ namespace Castor
 	\~french
 	\brief		Enumération des erreurs de pool.
 	*/
-	typedef enum PoolErrorType
+	enum class PoolErrorType
 	{
 		eCommonOutOfMemory,
 		eCommonPoolIsFull,
@@ -50,7 +50,7 @@ namespace Castor
 		eGrowingNotFromRanges,
 		eSTLAllocatorUnique,
 		CASTOR_SCOPED_ENUM_BOUNDS( eCommonOutOfMemory )
-	}	PoolErrorType;
+	};
 
 	/*!
 	\author		Sylvain DOREMUS

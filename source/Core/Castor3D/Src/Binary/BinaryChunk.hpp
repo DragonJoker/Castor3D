@@ -60,49 +60,49 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de chunks de données binaires
 	*/
-	typedef enum eCHUNK_TYPE
+	enum class ChunkType
 		: uint64_t
 	{
-		eCHUNK_TYPE_UNKNOWN = MAKE_CHUNK_ID( ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' ),
-		eCHUNK_TYPE_CMSH_FILE = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'F', 'I', 'L', 'E' ),
-		eCHUNK_TYPE_CMSH_HEADER = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'H', 'D', 'E', 'R' ),
-		eCHUNK_TYPE_CMSH_VERSION = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ),
-		eCHUNK_TYPE_NAME = MAKE_CHUNK_ID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ),
-		eCHUNK_TYPE_MESH = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ),
-		eCHUNK_TYPE_SKELETON = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
-		eCHUNK_TYPE_SKELETON_GLOBAL_INVERSE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
-		eCHUNK_TYPE_SKELETON_BONE = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
-		eCHUNK_TYPE_BONE_PARENT_NAME = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),
-		eCHUNK_TYPE_BONE_OFFSET_MATRIX = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ),
-		eCHUNK_TYPE_SUBMESH = MAKE_CHUNK_ID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ),
-		eCHUNK_TYPE_SUBMESH_TOPOLOGY = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'T', 'O', 'P', 'O' ),
-		eCHUNK_TYPE_SUBMESH_VERTEX_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'X', 'C', 'T' ),
-		eCHUNK_TYPE_SUBMESH_VERTEX = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
-		eCHUNK_TYPE_SUBMESH_BONE_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'N', 'C', 'T' ),
-		eCHUNK_TYPE_SUBMESH_BONES = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'O', 'N', 'E' ),
-		eCHUNK_TYPE_SUBMESH_MATRIX_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'X', 'C', 'T' ),
-		eCHUNK_TYPE_SUBMESH_MATRIX = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'T', 'R', 'X' ),
-		eCHUNK_TYPE_SUBMESH_FACE_COUNT = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
-		eCHUNK_TYPE_SUBMESH_FACES = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
-		eCHUNK_TYPE_ANIMABLE = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ),
-		eCHUNK_TYPE_ANIMATION = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
-		eCHUNK_TYPE_ANIM_LENGTH = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
-		eCHUNK_TYPE_SKELETON_ANIMATION = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ),
-		eCHUNK_TYPE_MESH_ANIMATION = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', 'A', 'N', 'I', 'M' ),
-		eCHUNK_TYPE_ANIM_INTERPOLATOR = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
-		eCHUNK_TYPE_SKELETON_ANIMATION_OBJECT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ),
-		eCHUNK_TYPE_SKELETON_ANIMATION_NODE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
-		eCHUNK_TYPE_SKELETON_ANIMATION_BONE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
-		eCHUNK_TYPE_MOVING_TRANSFORM = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
-		eCHUNK_TYPE_KEYFRAME_COUNT = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
-		eCHUNK_TYPE_KEYFRAMES = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
-		eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'I', 'D' ),
-		eCHUNK_TYPE_MESH_ANIMATION_SUBMESH = MAKE_CHUNK_ID( 'M', 'S', 'H', 'A', 'N', 'S', 'M', 'H' ),
-		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'B', 'F' ),
-		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFER_SIZE = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
-		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS_COUNT = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
-		eCHUNK_TYPE_SUBMESH_ANIMATION_BUFFERS = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
-	}	eCHUNK_TYPE;
+		eUnknown = MAKE_CHUNK_ID( ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' ),
+		eCmshFile = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'F', 'I', 'L', 'E' ),
+		eCmshHeader = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'H', 'D', 'E', 'R' ),
+		eCmshVersion = MAKE_CHUNK_ID( 'C', 'M', 'S', 'H', 'V', 'R', 'S', 'N' ),
+		eName = MAKE_CHUNK_ID( 'N', 'A', 'M', 'E', ' ', ' ', ' ', ' ' ),
+		eMesh = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', ' ', ' ', ' ', ' ' ),
+		eSkeleton = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'E', 'T', 'O', 'N' ),
+		eSkeletonGlobalInverse = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'G', 'I', 'M', 'X' ),
+		eSkeletonBone = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'B', 'O', 'N', 'E' ),
+		eBoneParentName = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'P', 'A', 'R', 'T' ),
+		eBoneOffsetMatrix = MAKE_CHUNK_ID( 'B', 'O', 'N', 'E', 'O', 'M', 'T', 'X' ),
+		eSubmesh = MAKE_CHUNK_ID( 'S', 'U', 'B', 'M', 'E', 'S', 'H', ' ' ),
+		eSubmeshTopology = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'T', 'O', 'P', 'O' ),
+		eSubmeshVertexCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'X', 'C', 'T' ),
+		eSubmeshVertex = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
+		eSubmeshBoneCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'N', 'C', 'T' ),
+		eSubmeshBones = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'B', 'O', 'N', 'E' ),
+		eSubmeshMatrixCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'X', 'C', 'T' ),
+		eSubmeshMatrices = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'M', 'T', 'R', 'X' ),
+		eSubmeshFaceCount = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'C', 'C', 'T' ),
+		eSubmeshFaces = MAKE_CHUNK_ID( 'S', 'M', 'S', 'H', 'F', 'A', 'C', 'E' ),
+		eAnimable = MAKE_CHUNK_ID( 'A', 'N', 'I', 'M', 'A', 'B', 'L', 'E' ),
+		eAnimation = MAKE_CHUNK_ID( 'A', 'N', 'M', 'A', 'T', 'I', 'O', 'N' ),
+		eAnimLength = MAKE_CHUNK_ID( 'A', 'N', 'M', 'L', 'E', 'N', 'G', 'T' ),
+		eSkeletonAnimation = MAKE_CHUNK_ID( 'S', 'K', 'E', 'L', 'A', 'N', 'I', 'M' ),
+		eMeshAnimation = MAKE_CHUNK_ID( 'M', 'E', 'S', 'H', 'A', 'N', 'I', 'M' ),
+		eAnimInterpolator = MAKE_CHUNK_ID( 'A', 'N', 'M', 'I', 'N', 'T', 'E', 'R' ),
+		eAnimationObject = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'O', 'B', 'J', 'T' ),
+		eSkeletonAnimationNode = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'N', 'O', 'D', 'E' ),
+		eSkeletonAnimationBone = MAKE_CHUNK_ID( 'A', 'N', 'S', 'K', 'B', 'O', 'N', 'E' ),
+		eMovingTransform = MAKE_CHUNK_ID( 'M', 'V', 'N', 'G', 'T', 'S', 'F', 'M' ),
+		eKeyframeCount = MAKE_CHUNK_ID( 'K', 'F', 'R', 'M', 'C', 'O', 'N', 'T' ),
+		eKeyframes = MAKE_CHUNK_ID( 'K', 'E', 'Y', 'F', 'R', 'M', 'E', 'S' ),
+		eMeshAnimationSubmeshID = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'I', 'D' ),
+		eMeshAnimationSubmesh = MAKE_CHUNK_ID( 'M', 'S', 'H', 'A', 'N', 'S', 'M', 'H' ),
+		eSubmeshAnimationBuffer = MAKE_CHUNK_ID( 'M', 'H', 'A', 'N', 'S', 'H', 'B', 'F' ),
+		eSubmeshAnimationBufferSize = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'S', 'Z' ),
+		eSubmeshAnimationBuffersCount = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'F', 'C', 'T' ),
+		eSubmeshAnimationBuffers = MAKE_CHUNK_ID( 'A', 'N', 'S', 'H', 'B', 'U', 'F', 'S' ),
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.9.0
@@ -174,9 +174,9 @@ namespace Castor3D
 	\version	0.9.0
 	\date 		28/05/2016
 	\~english
-	\brief		Helper structure to find eCHUNK_TYPE from a type.
+	\brief		Helper structure to find ChunkType from a type.
 	\~french
-	\brief		Classe d'aide pour récupéer un eCHUNK_TYPE depuis un type.
+	\brief		Classe d'aide pour récupéer un ChunkType depuis un type.
 	*/
 	template< class Type >
 	struct ChunkTyper;
@@ -207,7 +207,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type du chunk
 		 */
-		C3D_API explicit BinaryChunk( eCHUNK_TYPE p_type );
+		C3D_API explicit BinaryChunk( ChunkType p_type );
 		/**
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call
@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de chunk
 		 *\return		La valeur
 		 */
-		inline eCHUNK_TYPE GetChunkType()const
+		inline ChunkType GetChunkType()const
 		{
 			return m_type;
 		}
@@ -400,7 +400,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The chunk type	\~french Le type du chunk
-		eCHUNK_TYPE m_type;
+		ChunkType m_type;
 		//!\~english The chunk data	\~french Les données du chunk
 		Castor::ByteArray m_data;
 		//!\~english The current index in the chunk data	\~french L'index courant dans les données du chunk

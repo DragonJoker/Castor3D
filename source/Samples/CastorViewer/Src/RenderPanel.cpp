@@ -145,7 +145,6 @@ namespace CastorViewer
 		, m_y( 0.0_r )
 		, m_oldX( 0.0_r )
 		, m_oldY( 0.0_r )
-		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_camSpeed( DEF_CAM_SPEED )
 		, m_picking{ *wxGetApp().GetCastor() }
 	{

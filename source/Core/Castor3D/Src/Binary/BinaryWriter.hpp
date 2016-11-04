@@ -55,7 +55,7 @@ namespace Castor3D
 		 */
 		inline bool Write( TWritten const & p_obj, Castor::BinaryFile & p_file )
 		{
-			BinaryChunk l_chunk{ eCHUNK_TYPE_CMSH_FILE };
+			BinaryChunk l_chunk{ ChunkType::eCmshFile };
 			bool l_return = DoWriteHeader( l_chunk );
 
 			if ( l_return )
@@ -108,14 +108,14 @@ namespace Castor3D
 		 */
 		inline bool DoWriteHeader( BinaryChunk & p_chunk )const
 		{
-			BinaryChunk l_chunk{ eCHUNK_TYPE_CMSH_HEADER };
-			bool l_return = DoWriteChunk( CMSH_VERSION, eCHUNK_TYPE_CMSH_VERSION, l_chunk );
+			BinaryChunk l_chunk{ ChunkType::eCmshHeader };
+			bool l_return = DoWriteChunk( CMSH_VERSION, ChunkType::eCmshVersion, l_chunk );
 
 			if ( l_return )
 			{
 				Castor::StringStream l_stream;
 				l_stream << cuT( "Castor 3D - Version " ) << Castor3D::Version{};
-				l_return = DoWriteChunk( l_stream.str(), eCHUNK_TYPE_NAME, l_chunk );
+				l_return = DoWriteChunk( l_stream.str(), ChunkType::eName, l_chunk );
 			}
 
 			if ( l_return )
@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool DoWriteChunk( T const * p_values, size_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( T const * p_values, size_t p_count, ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_values, p_values + p_count, p_chunkType, p_chunk );
 		}
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool DoWriteChunk( T const( &p_values )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( T const( &p_values )[Count], ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_values, p_values + Count, p_chunkType, p_chunk );
 		}
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T, size_t Count >
-		inline bool DoWriteChunk( std::array< T, Count > const & p_values, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( std::array< T, Count > const & p_values, ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_values.data(), p_values.data() + Count, p_chunkType, p_chunk );
 		}
@@ -200,7 +200,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool DoWriteChunk( std::vector< T > const & p_values, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( std::vector< T > const & p_values, ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_values.data(), p_values.data() + p_values.size(), p_chunkType, p_chunk );
 		}
@@ -221,7 +221,7 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool DoWriteChunk( T const * p_begin, T const * p_end, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( T const * p_begin, T const * p_end, ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_begin, p_end, p_chunkType, p_chunk );
 		}
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\return			\p false si une erreur quelconque est arrivée.
 		 */
 		template< typename T >
-		inline bool DoWriteChunk( T const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
+		inline bool DoWriteChunk( T const & p_value, ChunkType p_chunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkWriter< T >::Write( p_value, p_chunkType, p_chunk );
 		}

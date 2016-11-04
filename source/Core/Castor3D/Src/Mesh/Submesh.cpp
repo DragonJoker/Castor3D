@@ -65,14 +65,14 @@ namespace Castor3D
 			size_t l_size = l_buffer.GetSize();
 			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = uint32_t( l_size / l_stride );
-			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_VERTEX_COUNT, m_chunk );
+			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshVertexCount, m_chunk );
 
 			if ( l_return )
 			{
 				InterleavedVertex const * l_srcbuf = reinterpret_cast< InterleavedVertex const * >( l_buffer.data() );
 				std::vector< InterleavedVertexT< double > > l_dstbuf( l_count );
 				DoCopyVertices( l_count, l_srcbuf, l_dstbuf.data() );
-				l_return = DoWriteChunk( l_dstbuf, eCHUNK_TYPE_SUBMESH_VERTEX, m_chunk );
+				l_return = DoWriteChunk( l_dstbuf, ChunkType::eSubmeshVertex, m_chunk );
 			}
 		}
 
@@ -80,12 +80,12 @@ namespace Castor3D
 		{
 			IndexBuffer const & l_buffer = p_obj.GetIndexBuffer();
 			uint32_t l_count = l_buffer.GetSize() / 3;
-			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_FACE_COUNT, m_chunk );
+			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshFaceCount, m_chunk );
 
 			if ( l_return )
 			{
 				FaceIndices const * l_srcbuf = reinterpret_cast< FaceIndices const * >( l_buffer.data() );
-				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, eCHUNK_TYPE_SUBMESH_FACES, m_chunk );
+				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / 3, ChunkType::eSubmeshFaces, m_chunk );
 			}
 		}
 
@@ -94,12 +94,12 @@ namespace Castor3D
 			VertexBuffer const & l_buffer = p_obj.GetBonesBuffer();
 			uint32_t l_stride = l_buffer.GetDeclaration().stride();
 			uint32_t l_count = l_buffer.GetSize() / l_stride;
-			l_return = DoWriteChunk( l_count, eCHUNK_TYPE_SUBMESH_BONE_COUNT, m_chunk );
+			l_return = DoWriteChunk( l_count, ChunkType::eSubmeshBoneCount, m_chunk );
 
 			if ( l_return )
 			{
 				VertexBoneData const * l_srcbuf = reinterpret_cast< VertexBoneData const * >( l_buffer.data() );
-				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), eCHUNK_TYPE_SUBMESH_BONES, m_chunk );
+				l_return = DoWriteChunk( l_srcbuf, l_buffer.GetSize() / sizeof( VertexBoneData ), ChunkType::eSubmeshBones, m_chunk );
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SUBMESH_VERTEX_COUNT:
+			case ChunkType::eSubmeshVertexCount:
 				l_return = DoParseChunk( l_count, l_chunk );
 
 				if ( l_return )
@@ -134,7 +134,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_VERTEX:
+			case ChunkType::eSubmeshVertex:
 				l_return = DoParseChunk( l_srcbuf, l_chunk );
 
 				if ( l_return && !l_srcbuf.empty() )
@@ -146,7 +146,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_BONE_COUNT:
+			case ChunkType::eSubmeshBoneCount:
 				l_return = DoParseChunk( l_count, l_chunk );
 
 				if ( l_return )
@@ -157,7 +157,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_BONES:
+			case ChunkType::eSubmeshBones:
 				l_return = DoParseChunk( l_bones, l_chunk );
 
 				if ( l_return && l_boneCount > 0 )
@@ -168,7 +168,7 @@ namespace Castor3D
 				l_boneCount = 0u;
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_FACE_COUNT:
+			case ChunkType::eSubmeshFaceCount:
 				l_return = DoParseChunk( l_count, l_chunk );
 
 				if ( l_return )
@@ -179,7 +179,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_SUBMESH_FACES:
+			case ChunkType::eSubmeshFaces:
 				l_return = DoParseChunk( l_faces, l_chunk );
 
 				if ( l_return && l_faceCount > 0 )

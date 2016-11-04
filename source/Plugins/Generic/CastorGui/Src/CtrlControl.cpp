@@ -18,8 +18,8 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	Control::Control( eCONTROL_TYPE p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: NonClientEventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
+	Control::Control( ControlType p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: NonClientEventHandler< Control >( p_type != ControlType::eStatic )
 		, m_type( p_type )
 		, m_id( p_id )
 		, m_position( p_position )
@@ -27,7 +27,7 @@ namespace CastorGui
 		, m_style( p_style )
 		, m_visible( p_visible )
 		, m_borders( 0, 0, 0, 0 )
-		, m_cursor( eMOUSE_CURSOR_HAND )
+		, m_cursor( MouseCursor::eHand )
 		, m_parent( p_parent )
 		, m_engine( p_engine )
 	{

@@ -20,7 +20,7 @@ namespace Castor3D
 
 		for ( auto const & l_submesh : p_obj.m_submeshes )
 		{
-			l_return &= DoWriteChunk( l_submesh.GetSubmesh().GetId(), eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID, m_chunk );
+			l_return &= DoWriteChunk( l_submesh.GetSubmesh().GetId(), ChunkType::eMeshAnimationSubmeshID, m_chunk );
 			l_return &= BinaryWriter< MeshAnimationSubmesh >{}.Write( l_submesh, m_chunk );
 		}
 
@@ -41,7 +41,7 @@ namespace Castor3D
 		{
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_MESH_ANIMATION_SUBMESH_ID:
+			case ChunkType::eMeshAnimationSubmeshID:
 				l_return = DoParseChunk( l_id, l_chunk );
 
 				if ( l_return )
@@ -51,7 +51,7 @@ namespace Castor3D
 
 				break;
 
-			case eCHUNK_TYPE_MESH_ANIMATION_SUBMESH:
+			case ChunkType::eMeshAnimationSubmesh:
 				if ( l_submesh )
 				{
 					MeshAnimationSubmesh l_submeshAnim{ p_obj, *l_submesh };

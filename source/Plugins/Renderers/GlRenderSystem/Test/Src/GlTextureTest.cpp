@@ -94,6 +94,8 @@ namespace Testing
 
 			l_renderSystem->GetMainContext()->EndCurrent();
 			p_case.Compare( l_src, l_dst );
+
+			l_texture->Cleanup();
 		}
 	}
 
@@ -159,7 +161,7 @@ namespace Testing
 
 	void GlTextureTest::Compare( std::array< uint8_t, 8 * 8 * 3 > const & p_src, std::vector< uint8_t > const & p_dst )
 	{
-		for ( auto i{ 0u }; i < p_src.size(); ++i )
+		for ( size_t i{ 0u }; i < p_src.size(); ++i )
 		{
 			CT_EQUAL( p_src[i], p_dst[i] );
 		}

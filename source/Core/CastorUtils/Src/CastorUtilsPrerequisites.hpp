@@ -98,7 +98,7 @@ namespace Castor
 	\~french
 	\brief Enumération des formats de Pixel
 	*/
-	typedef enum class PixelFormat
+	enum class PixelFormat
 		: uint8_t
 	{
 		//!\~english	8 bits luminosity.
@@ -192,7 +192,7 @@ namespace Castor
 		//!\~french		Stencil 8 bits.
 		eS8,
 		CASTOR_SCOPED_ENUM_BOUNDS( eL8 )
-	}	PixelFormat;
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
