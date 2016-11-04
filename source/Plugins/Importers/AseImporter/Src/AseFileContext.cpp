@@ -20,7 +20,7 @@ namespace Ase
 		uiUInt16 = 0;
 		uiUInt32 = 0;
 		uiUInt64 = 0;
-		eViewportType = ViewportType::Count;
+		eViewportType = ViewportType::eCount;
 		bBool1 = false;
 		bBool2 = false;
 		pSceneNode.reset();

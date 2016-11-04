@@ -42,7 +42,7 @@ namespace Castor3D
 	{
 		String l_return;
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::AlphaBlending ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) )
 		{
 			l_return = DoGetTransparentPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 		}
@@ -64,7 +64,7 @@ namespace Castor3D
 		DoCompleteProgramFlags( p_programFlags );
 		auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::AlphaBlending ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) )
 		{
 			auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
 			auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
@@ -73,7 +73,7 @@ namespace Castor3D
 		}
 		else
 		{
-			auto l_flags = PipelineFlags{ p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags };
+			auto l_flags = PipelineFlags{ p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags };
 
 			if ( p_twoSided )
 			{
@@ -87,7 +87,7 @@ namespace Castor3D
 
 	Pipeline * RenderPass::GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_frontOpaquePipelines.find( { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
+		auto l_it = m_frontOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
 
 		if ( l_it != m_frontOpaquePipelines.end() )
@@ -100,7 +100,7 @@ namespace Castor3D
 
 	Pipeline * RenderPass::GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		auto l_it = m_backOpaquePipelines.find( { p_colourBlendMode, BlendMode::NoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
+		auto l_it = m_backOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
 
 		if ( l_it != m_backOpaquePipelines.end() )
@@ -254,7 +254,7 @@ namespace Castor3D
 	{
 		ShaderProgramSPtr l_program;
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::Billboards ) )
+		if ( CheckFlag( p_programFlags, ProgramFlag::eBillboards ) )
 		{
 			l_program = GetEngine()->GetShaderProgramCache().GetBillboardProgram( p_textureFlags, p_programFlags, p_sceneFlags );
 
@@ -282,16 +282,16 @@ namespace Castor3D
 		auto tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		auto bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		auto texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
-		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto normal2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto tangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto bitangent2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
+		auto texture2 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
 		auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
 
 		UBO_MATRIX( l_writer );
@@ -316,7 +316,7 @@ namespace Castor3D
 			auto l_v3Texture = l_writer.GetLocale( cuT( "l_v3Texture" ), texture );
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
 				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )];
@@ -329,7 +329,7 @@ namespace Castor3D
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
 				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
+			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
 				l_mtxModel = transform;
 			}
@@ -338,7 +338,7 @@ namespace Castor3D
 				l_mtxModel = c3d_mtxModel;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto l_time = l_writer.GetLocale( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
 				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );

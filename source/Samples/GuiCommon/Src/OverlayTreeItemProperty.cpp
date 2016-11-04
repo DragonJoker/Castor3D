@@ -35,25 +35,25 @@ namespace GuiCommon
 		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Border Inner UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
 		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
-		static std::array< wxString, eBORDER_POSITION_COUNT > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
-		static std::array< int, eBORDER_POSITION_COUNT > PROPERTY_OVERLAY_BORDER_POSITION_VALUES{ eBORDER_POSITION_INTERNAL, eBORDER_POSITION_MIDDLE, eBORDER_POSITION_EXTERNAL };
+		static std::array< wxString, size_t( BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_TEXTS{ _( "Internal" ), _( "Middle" ), _( "External" ) };
+		static std::array< int, size_t( BorderPosition::eCount ) > PROPERTY_OVERLAY_BORDER_POSITION_VALUES { int( BorderPosition::eInternal ), int( BorderPosition::eMiddle ), int( BorderPosition::eExternal ) };
 		static wxString PROPERTY_OVERLAY_FONT = _( "Font" );
 		static wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 		static wxString PROPERTY_OVERLAY_HALIGN = _( "Horiz. align." );
-		static std::array< wxString, eHALIGN_COUNT > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
-		static std::array< int, eHALIGN_COUNT > PROPERTY_OVERLAY_HALIGN_VALUES{ eHALIGN_LEFT, eVALIGN_CENTER, eHALIGN_RIGHT };
+		static std::array< wxString, size_t( HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_TEXTS{ _( "Left" ), _( "Center" ), _( "Right" ) };
+		static std::array< int, size_t( HAlign::eCount ) > PROPERTY_OVERLAY_HALIGN_VALUES{ int( HAlign::eLeft ), int( VAlign::eCenter ), int( HAlign::eRight ) };
 		static wxString PROPERTY_OVERLAY_VALIGN = _( "Vertic. align." );
-		static std::array< wxString, eVALIGN_COUNT > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
-		static std::array< int, eHALIGN_COUNT > PROPERTY_OVERLAY_VALIGN_VALUES{ eVALIGN_TOP, eVALIGN_CENTER, eVALIGN_BOTTOM };
+		static std::array< wxString, size_t( VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_TEXTS{ _( "Top" ), _( "Center" ), _( "Bottom" ) };
+		static std::array< int, size_t( VAlign::eCount ) > PROPERTY_OVERLAY_VALIGN_VALUES{ int( VAlign::eTop ), int( VAlign::eCenter ), int( VAlign::eBottom ) };
 		static wxString PROPERTY_OVERLAY_WRAPPING = _( "Wrapping" );
-		static std::array< wxString, eTEXT_WRAPPING_MODE_COUNT > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
-		static std::array< int, eTEXT_WRAPPING_MODE_COUNT > PROPERTY_OVERLAY_WRAPPING_VALUES{ eTEXT_WRAPPING_MODE_NONE, eTEXT_WRAPPING_MODE_BREAK, eTEXT_WRAPPING_MODE_BREAK_WORDS };
+		static std::array< wxString, size_t( TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
+		static std::array< int, size_t( TextWrappingMode::eCount ) > PROPERTY_OVERLAY_WRAPPING_VALUES{ int( TextWrappingMode::eNone ), int( TextWrappingMode::eBreak ), int( TextWrappingMode::eBreakWords ) };
 		static wxString PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
-		static std::array< wxString, eTEXT_LINE_SPACING_MODE_COUNT > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
-		static std::array< int, eTEXT_LINE_SPACING_MODE_COUNT > PROPERTY_OVERLAY_SPACING_VALUES{ eTEXT_LINE_SPACING_MODE_OWN_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT };
+		static std::array< wxString, size_t( TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
+		static std::array< int, size_t( TextLineSpacingMode::eCount ) > PROPERTY_OVERLAY_SPACING_VALUES{ int( TextLineSpacingMode::eOwnHeight ), int( TextLineSpacingMode::eMaxLineHeight ), int( TextLineSpacingMode::eMaxFontHeight ) };
 		static wxString PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
-		static std::array< wxString, eTEXT_TEXTURING_MODE_COUNT > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
-		static std::array< int, eTEXT_TEXTURING_MODE_COUNT > PROPERTY_OVERLAY_TEXTURING_VALUES{ eTEXT_TEXTURING_MODE_LETTER, eTEXT_TEXTURING_MODE_TEXT };
+		static std::array< wxString, size_t( TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
+		static std::array< int, size_t( TextTexturingMode::eCount ) > PROPERTY_OVERLAY_TEXTURING_VALUES{ int( TextTexturingMode::eLetter ), int( TextTexturingMode::eText ) };
 	}
 
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, Castor3D::OverlayCategorySPtr p_overlay )
@@ -72,24 +72,24 @@ namespace GuiCommon
 		PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
 		PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
 		PROPERTY_OVERLAY_BORDER_POSITION_TEXTS = { _( "Internal" ), _( "Middle" ), _( "External" ) };
-		PROPERTY_OVERLAY_BORDER_POSITION_VALUES = { eBORDER_POSITION_INTERNAL, eBORDER_POSITION_MIDDLE, eBORDER_POSITION_EXTERNAL };
+		PROPERTY_OVERLAY_BORDER_POSITION_VALUES = { int( BorderPosition::eInternal ), int( BorderPosition::eMiddle ), int( BorderPosition::eExternal ) };
 		PROPERTY_OVERLAY_FONT = _( "Font" );
 		PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 		PROPERTY_OVERLAY_HALIGN = _( "Horiz. align." );
 		PROPERTY_OVERLAY_HALIGN_TEXTS = { _( "Left" ), _( "Center" ), _( "Right" ) };
-		PROPERTY_OVERLAY_HALIGN_VALUES = { eHALIGN_LEFT, eVALIGN_CENTER, eHALIGN_RIGHT };
+		PROPERTY_OVERLAY_HALIGN_VALUES = { int( HAlign::eLeft ), int( VAlign::eCenter ), int( HAlign::eRight ) };
 		PROPERTY_OVERLAY_VALIGN = _( "Vertic. align." );
 		PROPERTY_OVERLAY_VALIGN_TEXTS = { _( "Top" ), _( "Center" ), _( "Bottom" ) };
-		PROPERTY_OVERLAY_VALIGN_VALUES = { eVALIGN_TOP, eVALIGN_CENTER, eVALIGN_BOTTOM };
+		PROPERTY_OVERLAY_VALIGN_VALUES = { int( VAlign::eTop ), int( VAlign::eCenter ), int( VAlign::eBottom ) };
 		PROPERTY_OVERLAY_WRAPPING = _( "Wrapping" );
 		PROPERTY_OVERLAY_WRAPPING_TEXTS = { _( "None" ), _( "Letter" ), _( "Word" ) };
-		PROPERTY_OVERLAY_WRAPPING_VALUES = { eTEXT_WRAPPING_MODE_NONE, eTEXT_WRAPPING_MODE_BREAK, eTEXT_WRAPPING_MODE_BREAK_WORDS };
+		PROPERTY_OVERLAY_WRAPPING_VALUES = { int( TextWrappingMode::eNone ), int( TextWrappingMode::eBreak ), int( TextWrappingMode::eBreakWords ) };
 		PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
 		PROPERTY_OVERLAY_SPACING_TEXTS = { _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
-		PROPERTY_OVERLAY_SPACING_VALUES = { eTEXT_LINE_SPACING_MODE_OWN_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT };
+		PROPERTY_OVERLAY_SPACING_VALUES = { int( TextLineSpacingMode::eOwnHeight ), int( TextLineSpacingMode::eMaxLineHeight ), int( TextLineSpacingMode::eMaxFontHeight ) };
 		PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
 		PROPERTY_OVERLAY_TEXTURING_TEXTS = { _( "Letter" ), _( "Text" ) };
-		PROPERTY_OVERLAY_TEXTURING_VALUES = { eTEXT_TEXTURING_MODE_LETTER, eTEXT_TEXTURING_MODE_TEXT };
+		PROPERTY_OVERLAY_TEXTURING_VALUES = { int( TextTexturingMode::eLetter ), int( TextTexturingMode::eText ) };
 
 		CreateTreeItemMenu();
 	}
@@ -111,15 +111,15 @@ namespace GuiCommon
 
 			switch ( l_overlay->GetType() )
 			{
-			case eOVERLAY_TYPE_PANEL:
+			case OverlayType::ePanel:
 				DoCreatePanelOverlayProperties( p_grid, std::static_pointer_cast< PanelOverlay >( GetOverlay() ) );
 				break;
 
-			case eOVERLAY_TYPE_BORDER_PANEL:
+			case OverlayType::eBorderPanel:
 				DoCreateBorderPanelOverlayProperties( p_grid, std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() ) );
 				break;
 
-			case eOVERLAY_TYPE_TEXT:
+			case OverlayType::eText:
 				DoCreateTextOverlayProperties( p_grid, std::static_pointer_cast< TextOverlay >( GetOverlay() ) );
 				break;
 			}
@@ -150,15 +150,15 @@ namespace GuiCommon
 
 			switch ( l_overlay->GetType() )
 			{
-			case eOVERLAY_TYPE_PANEL:
+			case OverlayType::ePanel:
 				OnPanelOverlayPropertyChanged( p_event );
 				break;
 
-			case eOVERLAY_TYPE_BORDER_PANEL:
+			case OverlayType::eBorderPanel:
 				OnBorderPanelOverlayPropertyChanged( p_event );
 				break;
 
-			case eOVERLAY_TYPE_TEXT:
+			case OverlayType::eText:
 				OnTextOverlayPropertyChanged( p_event );
 				break;
 			}
@@ -173,7 +173,7 @@ namespace GuiCommon
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY ) );
 		wxPGChoices l_choices{ make_wxArrayString( PROPERTY_OVERLAY_BORDER_POSITION_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_BORDER_POSITION_VALUES ) };
-		wxString l_selected{ PROPERTY_OVERLAY_BORDER_POSITION_TEXTS[p_overlay->GetBorderPosition()] };
+		wxString l_selected{ PROPERTY_OVERLAY_BORDER_POSITION_TEXTS[size_t( p_overlay->GetBorderPosition() )] };
 
 		Point4i l_rec = p_overlay->GetBorderPixelSize();
 		p_grid->Append( new RectangleProperty( PROPERTY_OVERLAY_BORDER_SIZE ) )->SetValue( WXVARIANT( l_rec ) );
@@ -195,15 +195,15 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::DoCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
 	{
 		wxPGChoices l_haligns{ make_wxArrayString( PROPERTY_OVERLAY_HALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_HALIGN_VALUES ) };
-		wxString l_halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[p_overlay->GetHAlign()] };
+		wxString l_halign{ PROPERTY_OVERLAY_HALIGN_TEXTS[size_t( p_overlay->GetHAlign() )] };
 		wxPGChoices l_valigns{ make_wxArrayString( PROPERTY_OVERLAY_VALIGN_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_VALIGN_VALUES ) };
-		wxString l_valign{ PROPERTY_OVERLAY_VALIGN_TEXTS[p_overlay->GetVAlign()] };
+		wxString l_valign{ PROPERTY_OVERLAY_VALIGN_TEXTS[size_t( p_overlay->GetVAlign() )] };
 		wxPGChoices l_wrappings{ make_wxArrayString( PROPERTY_OVERLAY_WRAPPING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_WRAPPING_VALUES ) };
-		wxString l_wrapping{ PROPERTY_OVERLAY_WRAPPING_TEXTS[p_overlay->GetTextWrappingMode()] };
+		wxString l_wrapping{ PROPERTY_OVERLAY_WRAPPING_TEXTS[size_t( p_overlay->GetTextWrappingMode() )] };
 		wxPGChoices l_spacings{ make_wxArrayString( PROPERTY_OVERLAY_SPACING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_SPACING_VALUES ) };
-		wxString l_spacing{ PROPERTY_OVERLAY_SPACING_TEXTS[p_overlay->GetLineSpacingMode()] };
+		wxString l_spacing{ PROPERTY_OVERLAY_SPACING_TEXTS[size_t( p_overlay->GetLineSpacingMode() )] };
 		wxPGChoices l_texturings{ make_wxArrayString( PROPERTY_OVERLAY_TEXTURING_TEXTS ), make_wxArrayInt( PROPERTY_OVERLAY_TEXTURING_VALUES ) };
-		wxString l_texturing{ PROPERTY_OVERLAY_TEXTURING_TEXTS[p_overlay->GetTexturingMode()] };
+		wxString l_texturing{ PROPERTY_OVERLAY_TEXTURING_TEXTS[size_t( p_overlay->GetTexturingMode() )] };
 
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXT_OVERLAY ) );
 		FontSPtr l_font = p_overlay->GetFontTexture()->GetFont();
@@ -239,7 +239,7 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_POSITION )
 			{
-				OnBorderPositionChange( eBORDER_POSITION( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnBorderPositionChange( BorderPosition( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_INNER_UV )
 			{
@@ -275,23 +275,23 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_HALIGN )
 			{
-				OnHAlignChange( eHALIGN( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnHAlignChange( HAlign( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_VALIGN )
 			{
-				OnVAlignChange( eVALIGN( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnVAlignChange( VAlign( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_WRAPPING )
 			{
-				OnWrappingChange( eTEXT_WRAPPING_MODE( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnWrappingChange( TextWrappingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_SPACING )
 			{
-				OnSpacingChange( eTEXT_LINE_SPACING_MODE( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnSpacingChange( TextLineSpacingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_TEXTURING )
 			{
-				OnTexturingChange( eTEXT_TEXTURING_MODE( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
+				OnTexturingChange( TextTexturingMode( reinterpret_cast< wxEnumProperty * >( l_property )->GetChoiceSelection() ) );
 			}
 		}
 	}
@@ -335,7 +335,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderMaterialChange( Castor::String const & p_name )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
@@ -352,7 +352,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderSizeChange( Castor::Rectangle const & p_size )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
 
 		DoApplyChange( [p_size, l_overlay]()
 		{
@@ -363,7 +363,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_value )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
@@ -378,7 +378,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_value )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
@@ -390,10 +390,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderPositionChange( Castor3D::eBORDER_POSITION p_position )
+	void OverlayTreeItemProperty::OnBorderPositionChange( Castor3D::BorderPosition p_position )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == OverlayType::eBorderPanel );
 
 		DoApplyChange( [p_position, l_overlay]()
 		{
@@ -404,7 +404,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnCaptionChange( Castor::String const & p_caption )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_caption, l_overlay]()
 		{
@@ -415,7 +415,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnFontChange( Castor::FontSPtr p_font )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_font, l_overlay]()
 		{
@@ -423,10 +423,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnHAlignChange( Castor3D::eHALIGN p_value )
+	void OverlayTreeItemProperty::OnHAlignChange( Castor3D::HAlign p_value )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_value, l_overlay]()
 		{
@@ -434,10 +434,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnVAlignChange( Castor3D::eVALIGN p_value )
+	void OverlayTreeItemProperty::OnVAlignChange( Castor3D::VAlign p_value )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_value, l_overlay]()
 		{
@@ -445,10 +445,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnWrappingChange( Castor3D::eTEXT_WRAPPING_MODE p_value )
+	void OverlayTreeItemProperty::OnWrappingChange( Castor3D::TextWrappingMode p_value )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_value, l_overlay]()
 		{
@@ -456,10 +456,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnSpacingChange( Castor3D::eTEXT_LINE_SPACING_MODE p_value )
+	void OverlayTreeItemProperty::OnSpacingChange( Castor3D::TextLineSpacingMode p_value )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_value, l_overlay]()
 		{
@@ -467,10 +467,10 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnTexturingChange( Castor3D::eTEXT_TEXTURING_MODE p_value )
+	void OverlayTreeItemProperty::OnTexturingChange( Castor3D::TextTexturingMode p_value )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == OverlayType::eText );
 
 		DoApplyChange( [p_value, l_overlay]()
 		{

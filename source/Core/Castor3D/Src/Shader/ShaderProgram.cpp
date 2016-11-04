@@ -164,13 +164,13 @@ namespace Castor3D
 	ShaderObjectSPtr ShaderProgram::CreateObject( ShaderType p_type )
 	{
 		ShaderObjectSPtr l_return;
-		REQUIRE( p_type > ShaderType::None && p_type < ShaderType::eCount );
+		REQUIRE( p_type > ShaderType::eNone && p_type < ShaderType::eCount );
 
-		if ( p_type > ShaderType::None && p_type < ShaderType::eCount )
+		if ( p_type > ShaderType::eNone && p_type < ShaderType::eCount )
 		{
 			l_return = DoCreateObject( p_type );
 			m_pShaders[size_t( p_type )] = l_return;
-			size_t i = size_t( ShaderModel::Model1 );
+			size_t i = size_t( ShaderModel::eModel1 );
 
 			for ( auto const & l_file : m_arrayFiles )
 			{
@@ -215,7 +215,7 @@ namespace Castor3D
 	void ShaderProgram::SetFile( ShaderModel p_eModel, Path const & p_path )
 	{
 		m_arrayFiles[size_t( p_eModel )] = p_path;
-		uint8_t i = uint8_t( ShaderType::Vertex );
+		uint8_t i = uint8_t( ShaderType::eVertex );
 
 		for ( auto l_shader : m_pShaders )
 		{
@@ -230,7 +230,7 @@ namespace Castor3D
 
 	void ShaderProgram::ResetToCompile()
 	{
-		m_status = ProgramStatus::NotLinked;
+		m_status = ProgramStatus::eNotLinked;
 	}
 
 	void ShaderProgram::SetInputType( ShaderType p_target, Topology p_topology )
@@ -361,12 +361,12 @@ namespace Castor3D
 
 	bool ShaderProgram::HasObject( ShaderType p_target )const
 	{
-		return m_pShaders[size_t( p_target )] && m_pShaders[size_t( p_target )]->HasSource() && m_pShaders[size_t( p_target )]->GetStatus() == ShaderStatus::Compiled;
+		return m_pShaders[size_t( p_target )] && m_pShaders[size_t( p_target )]->HasSource() && m_pShaders[size_t( p_target )]->GetStatus() == ShaderStatus::eCompiled;
 	}
 
 	ShaderStatus ShaderProgram::GetObjectStatus( ShaderType p_target )const
 	{
-		ShaderStatus l_return = ShaderStatus::DontExist;
+		ShaderStatus l_return = ShaderStatus::eDontExist;
 
 		if ( m_pShaders[size_t( p_target )] )
 		{
@@ -480,7 +480,7 @@ namespace Castor3D
 
 	bool ShaderProgram::DoInitialise()
 	{
-		if ( m_status == ProgramStatus::NotLinked )
+		if ( m_status == ProgramStatus::eNotLinked )
 		{
 			m_activeShaders.clear();
 
@@ -491,11 +491,11 @@ namespace Castor3D
 					l_shader->Destroy();
 					l_shader->Create();
 
-					if ( !l_shader->Compile() && l_shader->GetStatus() == ShaderStatus::Error )
+					if ( !l_shader->Compile() && l_shader->GetStatus() == ShaderStatus::eError )
 					{
 						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
 						l_shader->Destroy();
-						m_status = ProgramStatus::Error;
+						m_status = ProgramStatus::eError;
 					}
 					else
 					{
@@ -518,7 +518,7 @@ namespace Castor3D
 					l_shader->Destroy();
 				}
 
-				m_status = ProgramStatus::Error;
+				m_status = ProgramStatus::eError;
 			}
 			else
 			{
@@ -531,12 +531,12 @@ namespace Castor3D
 			}
 		}
 
-		return m_status == ProgramStatus::Linked;
+		return m_status == ProgramStatus::eLinked;
 	}
 
 	void ShaderProgram::DoBind( bool p_bindUbo )const
 	{
-		if ( m_status == ProgramStatus::Linked )
+		if ( m_status == ProgramStatus::eLinked )
 		{
 			for ( auto l_shader : m_activeShaders )
 			{
@@ -554,7 +554,7 @@ namespace Castor3D
 
 	void ShaderProgram::DoUnbind()const
 	{
-		if ( m_status == ProgramStatus::Linked )
+		if ( m_status == ProgramStatus::eLinked )
 		{
 			if ( m_ubosBound )
 			{
@@ -570,9 +570,9 @@ namespace Castor3D
 
 	bool ShaderProgram::DoLink()
 	{
-		if ( m_status != ProgramStatus::Error )
+		if ( m_status != ProgramStatus::eError )
 		{
-			if ( m_status != ProgramStatus::Linked )
+			if ( m_status != ProgramStatus::eLinked )
 			{
 				for ( auto l_shader : m_activeShaders )
 				{
@@ -582,10 +582,10 @@ namespace Castor3D
 					}
 				}
 
-				m_status = ProgramStatus::Linked;
+				m_status = ProgramStatus::eLinked;
 			}
 		}
 
-		return m_status == ProgramStatus::Linked;
+		return m_status == ProgramStatus::eLinked;
 	}
 }

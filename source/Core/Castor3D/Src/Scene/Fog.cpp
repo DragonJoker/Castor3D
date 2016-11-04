@@ -26,7 +26,7 @@ namespace Castor3D
 		{
 			l_type->SetValue( int( m_type ) );
 
-			if ( m_type != FogType::Disabled )
+			if ( m_type != FogType::eDisabled )
 			{
 				OneFloatFrameVariableSPtr l_density;
 				p_buffer.GetVariable( ShaderProgram::FogDensity, l_density );

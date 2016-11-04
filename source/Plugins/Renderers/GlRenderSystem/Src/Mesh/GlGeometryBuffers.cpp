@@ -71,7 +71,7 @@ namespace GlRender
 
 	bool GlGeometryBuffers::DoInitialise()
 	{
-		if ( m_program.GetStatus() != ProgramStatus::Linked )
+		if ( m_program.GetStatus() != ProgramStatus::eLinked )
 		{
 			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
 		}
@@ -152,67 +152,67 @@ namespace GlRender
 
 		switch ( p_element.m_dataType )
 		{
-		case ElementType::Float:
+		case ElementType::eFloat:
 			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Vec2:
+		case ElementType::eVec2:
 			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Vec3:
+		case ElementType::eVec3:
 			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Vec4:
+		case ElementType::eVec4:
 			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Colour:
+		case ElementType::eColour:
 			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Int:
+		case ElementType::eInt:
 			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::IVec2:
+		case ElementType::eIVec2:
 			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::IVec3:
+		case ElementType::eIVec3:
 			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::IVec4:
+		case ElementType::eIVec4:
 			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::UInt:
+		case ElementType::eUInt:
 			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::UIVec2:
+		case ElementType::eUIVec2:
 			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::UIVec3:
+		case ElementType::eUIVec3:
 			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::UIVec4:
+		case ElementType::eUIVec4:
 			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Mat2:
+		case ElementType::eMat2:
 			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Mat3:
+		case ElementType::eMat3:
 			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 
-		case ElementType::Mat4:
+		case ElementType::eMat4:
 			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, l_stride, p_element.m_name );
 			break;
 

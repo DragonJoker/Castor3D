@@ -34,11 +34,11 @@ namespace GlRender
 
 		switch ( l_texture->GetType() )
 		{
-		case TextureType::Cube:
+		case TextureType::eCube:
 			l_return = GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
 			break;
 
-		case TextureType::CubeArray:
+		case TextureType::eCubeArray:
 			l_return = GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
 			break;
 		}

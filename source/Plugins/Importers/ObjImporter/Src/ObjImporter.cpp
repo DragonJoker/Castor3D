@@ -587,17 +587,17 @@ namespace Obj
 					else if ( l_section == cuT( "map_kd" ) )
 					{
 						// Diffuse map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Diffuse );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eDiffuse );
 					}
 					else if ( l_section == cuT( "bump" ) || l_section == cuT( "map_bump" ) )
 					{
 						// Normal map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Normal );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eNormal );
 					}
 					else if ( l_section == cuT( "map_d" ) || l_section == cuT( "map_opacity" ) )
 					{
 						// Opacity map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Opacity );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eOpacity );
 					}
 					else if ( l_section == cuT( "refl" ) )
 					{
@@ -606,17 +606,17 @@ namespace Obj
 					else if ( l_section == cuT( "map_ks" ) )
 					{
 						// Specular map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Specular );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eSpecular );
 					}
 					else if ( l_section == cuT( "map_ka" ) )
 					{
 						// Ambient map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Ambient );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eAmbient );
 					}
 					else if ( l_section == cuT( "map_ns" ) )
 					{
 						// Gloss/Shininess map
-						DoAddTexture( l_value, *l_pass, TextureChannel::Gloss );
+						DoAddTexture( l_value, *l_pass, TextureChannel::eGloss );
 					}
 				}
 			}

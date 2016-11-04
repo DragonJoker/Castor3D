@@ -20,7 +20,7 @@ namespace GlRender
 		auto l_pxbuffer = p_storage.GetOwner()->GetImage().GetBuffer();
 		auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Write ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
 			l_return = m_uploadBuffer->Create();
@@ -31,7 +31,7 @@ namespace GlRender
 			}
 		}
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
 			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( l_storage.GetOpenGl(), l_storage.GetGlRenderSystem(), l_pxbuffer );
 			l_return = m_downloadBuffer->Create();
@@ -84,7 +84,7 @@ namespace GlRender
 
 	GlPboTextureStorageTraits::~GlPboTextureStorageTraits()
 	{
-		if ( CheckFlag( m_storage.GetCPUAccess(), AccessType::Write ) )
+		if ( CheckFlag( m_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			if ( m_uploadBuffer )
 			{
@@ -93,7 +93,7 @@ namespace GlRender
 			}
 		}
 
-		if ( CheckFlag( m_storage.GetCPUAccess(), AccessType::Read ) )
+		if ( CheckFlag( m_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
 			if ( m_downloadBuffer )
 			{
@@ -116,14 +116,14 @@ namespace GlRender
 	{
 		uint8_t * l_return = nullptr;
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read )
-			 && CheckFlag( p_lock, AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
+			 && CheckFlag( p_lock, AccessType::eRead ) )
 		{
 			DoDownloadAsync( p_storage, p_storage.GetOwner()->GetImage( p_index ) );
 		}
 
-		if ( CheckFlag( p_lock, AccessType::Read )
-			 || CheckFlag( p_lock, AccessType::Write ) )
+		if ( CheckFlag( p_lock, AccessType::eRead )
+			 || CheckFlag( p_lock, AccessType::eWrite ) )
 		{
 			l_return = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
 		}
@@ -146,7 +146,7 @@ namespace GlRender
 
 	void GlPboTextureStorageTraits::DoUploadAsync( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Write ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			auto l_buffer = p_image.GetBuffer();
 
@@ -163,7 +163,7 @@ namespace GlRender
 
 	void GlPboTextureStorageTraits::DoUploadSync( TextureStorage & p_storage, TextureImage const & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Write ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			auto l_buffer = p_image.GetBuffer();
 			DoUploadImage( p_storage, p_image, l_buffer->const_ptr() );
@@ -172,7 +172,7 @@ namespace GlRender
 
 	void GlPboTextureStorageTraits::DoDownloadAsync( TextureStorage & p_storage, TextureImage & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_image.GetBuffer();
@@ -196,7 +196,7 @@ namespace GlRender
 
 	void GlPboTextureStorageTraits::DoDownloadSync( TextureStorage & p_storage, TextureImage & p_image )
 	{
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead ) )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlPboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_image.GetBuffer();

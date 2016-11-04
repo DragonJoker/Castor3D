@@ -344,7 +344,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetDepth()const
 		{
-			return m_type == TextureType::ThreeDimensions ? m_depth : 1;
+			return m_type == TextureType::eThreeDimensions ? m_depth : 1;
 		}
 		/**
 		 *\~english
@@ -356,7 +356,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetLayersCount()const
 		{
-			return ( m_type == TextureType::TwoDimensionsArray || m_type == TextureType::OneDimensionArray || m_type == TextureType::CubeArray ) ? m_depth : 1;
+			return ( m_type == TextureType::eTwoDimensionsArray || m_type == TextureType::eOneDimensionArray || m_type == TextureType::eCubeArray ) ? m_depth : 1;
 		}
 		/**
 		 *\~english

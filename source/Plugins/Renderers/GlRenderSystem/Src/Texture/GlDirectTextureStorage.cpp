@@ -74,16 +74,16 @@ namespace GlRender
 		uint8_t * l_return = nullptr;
 		auto l_buffer = p_storage.GetOwner()->GetImage( p_index ).GetBuffer();
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read )
-			 && CheckFlag( p_lock, AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
+			 && CheckFlag( p_lock, AccessType::eRead ) )
 		{
 			auto & l_storage = static_cast< GlTextureStorage< GlDirectTextureStorageTraits > & >( p_storage );
 			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );
 			l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
 		}
 
-		if ( CheckFlag( p_lock, AccessType::Read )
-			 || CheckFlag( p_lock, AccessType::Write ) )
+		if ( CheckFlag( p_lock, AccessType::eRead )
+			 || CheckFlag( p_lock, AccessType::eWrite ) )
 		{
 			l_return = l_buffer->ptr();
 		}
@@ -93,7 +93,7 @@ namespace GlRender
 
 	void GlDirectTextureStorageTraits::Unlock( TextureStorage & p_storage, bool p_modified, uint32_t p_index )
 	{
-		if ( p_modified && CheckFlag( p_storage.GetCPUAccess(), AccessType::Write ) )
+		if ( p_modified && CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
 			Fill( p_storage, p_storage.GetOwner()->GetImage( p_index ) );
 		}

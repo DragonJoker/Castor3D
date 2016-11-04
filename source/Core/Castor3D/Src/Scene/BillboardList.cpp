@@ -78,7 +78,7 @@ namespace Castor3D
 										  , Scene & p_scene
 										  , SceneNodeSPtr p_parent
 										  , VertexBufferSPtr p_vertexBuffer )
-		: MovableObject( p_name, p_scene, MovableType::Billboard, p_parent )
+		: MovableObject( p_name, p_scene, MovableType::eBillboard, p_parent )
 		, m_vertexBuffer{ p_vertexBuffer }
 	{
 	}
@@ -134,9 +134,9 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Points, p_program );
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, p_program );
 
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_buffers]()
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( { *m_vertexBuffer }, nullptr );
 			} ) );
@@ -157,7 +157,7 @@ namespace Castor3D
 							 , p_scene
 							 , p_parent
 							 , std::make_shared< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration{ {
-									 BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3 )
+									 BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 )
 								 } } ) )
 		, m_needUpdate{ false }
 	{
@@ -182,7 +182,7 @@ namespace Castor3D
 			}
 
 			m_vertexBuffer->Create();
-			m_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			m_initialised = true;
 		}
 
@@ -263,7 +263,7 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			m_vertexBuffer->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			m_needUpdate = false;
 			m_count = uint32_t( m_arrayPositions.size() );
 		}

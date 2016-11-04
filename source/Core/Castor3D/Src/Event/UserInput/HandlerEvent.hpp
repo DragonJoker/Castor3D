@@ -34,7 +34,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of a handler event.
 	*\~french
-	*\brief		Description d'un �v�nement de gestionnaire.
+	*\brief		Description d'un évènement de gestionnaire.
 	*/
 	class HandlerEvent
 		: public UserInputEvent
@@ -47,11 +47,11 @@ namespace Castor3D
 		 *\param[in]	p_handler	A handler.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type		Le type d'�v�nement de gestionnaire.
+		 *\param[in]	p_type		Le type d'évènement de gestionnaire.
 		 *\param[in]	p_handler	Un gestionnaire.
 		 */
-		HandlerEvent( eHANDLER_EVENT p_type, EventHandlerSPtr p_handler )
-			: UserInputEvent{ eEVENT_TYPE_HANDLER }
+		HandlerEvent( HandlerEventType p_type, EventHandlerSPtr p_handler )
+			: UserInputEvent{ UserInputEventType::eHandler }
 			, m_handlerEventType{ p_type }
 			, m_handler{ p_handler }
 		{
@@ -69,9 +69,9 @@ namespace Castor3D
 		 *\~english
 		 *\return		The handler event type.
 		 *\~french
-		 *\return		Le type d'�v�nement de gestionnaire.
+		 *\return		Le type d'évènement de gestionnaire.
 		 */
-		inline eHANDLER_EVENT GetHandlerEventType()const
+		inline HandlerEventType GetHandlerEventType()const
 		{
 			return m_handlerEventType;
 		}
@@ -88,8 +88,8 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The handler event type. \~french Le type d'�v�nement de gestionnaire.
-		eHANDLER_EVENT const m_handlerEventType;
+		//!\~english The handler event type. \~french Le type d'évènement de gestionnaire.
+		HandlerEventType const m_handlerEventType;
 		//!\~english The handler.	\~french Le gestionnaire.
 		EventHandlerWPtr const m_handler;
 	};

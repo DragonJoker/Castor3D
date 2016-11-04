@@ -876,7 +876,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator+=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < Component::eCount; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] += p_scalar;
 			}
@@ -896,7 +896,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator-=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < Component::eCount; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] -= p_scalar;
 			}
@@ -916,7 +916,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator*=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < Component::eCount; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] *= p_scalar;
 			}
@@ -936,7 +936,7 @@ namespace Castor
 		template< typename T >
 		Colour & operator/=( T p_scalar )
 		{
-			for ( uint8_t i = 0; i < Component::eCount; i++ )
+			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
 				m_arrayComponents[i] /= p_scalar;
 			}

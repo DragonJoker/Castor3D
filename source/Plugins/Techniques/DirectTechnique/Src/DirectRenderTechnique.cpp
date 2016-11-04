@@ -66,7 +66,7 @@ namespace Direct
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::Automatic, FrameBufferTarget::Draw );
+		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 
 		if ( l_return )
 		{

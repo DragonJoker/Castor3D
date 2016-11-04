@@ -70,7 +70,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimationBone::SkeletonAnimationBone( SkeletonAnimation & p_animation )
-		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::Bone }
+		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::eBone }
 	{
 	}
 

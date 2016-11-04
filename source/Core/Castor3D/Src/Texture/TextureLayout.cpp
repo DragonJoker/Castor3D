@@ -16,7 +16,7 @@ namespace Castor3D
 		{
 			size_t l_return = p_depth;
 
-			if ( p_type == TextureType::Cube || p_type == TextureType::CubeArray )
+			if ( p_type == TextureType::eCube || p_type == TextureType::eCubeArray )
 			{
 				l_return *= size_t( CubeMapFace::eCount );
 			}
@@ -30,40 +30,40 @@ namespace Castor3D
 
 			switch ( p_type )
 			{
-			case TextureType::Buffer:
-				l_return = TextureStorageType::Buffer;
+			case TextureType::eBuffer:
+				l_return = TextureStorageType::eBuffer;
 				break;
 
-			case TextureType::OneDimension:
-				l_return = TextureStorageType::OneDimension;
+			case TextureType::eOneDimension:
+				l_return = TextureStorageType::eOneDimension;
 				break;
 
-			case TextureType::OneDimensionArray:
-				l_return = TextureStorageType::OneDimensionArray;
+			case TextureType::eOneDimensionArray:
+				l_return = TextureStorageType::eOneDimensionArray;
 				break;
 
-			case TextureType::TwoDimensions:
-				l_return = TextureStorageType::TwoDimensions;
+			case TextureType::eTwoDimensions:
+				l_return = TextureStorageType::eTwoDimensions;
 				break;
 
-			case TextureType::TwoDimensionsArray:
-				l_return = TextureStorageType::TwoDimensionsArray;
+			case TextureType::eTwoDimensionsArray:
+				l_return = TextureStorageType::eTwoDimensionsArray;
 				break;
 
-			case TextureType::TwoDimensionsMS:
-				l_return = TextureStorageType::TwoDimensionsMS;
+			case TextureType::eTwoDimensionsMS:
+				l_return = TextureStorageType::eTwoDimensionsMS;
 				break;
 
-			case TextureType::ThreeDimensions:
-				l_return = TextureStorageType::ThreeDimensions;
+			case TextureType::eThreeDimensions:
+				l_return = TextureStorageType::eThreeDimensions;
 				break;
 
-			case TextureType::Cube:
-				l_return = TextureStorageType::CubeMap;
+			case TextureType::eCube:
+				l_return = TextureStorageType::eCubeMap;
 				break;
 
-			case TextureType::CubeArray:
-				l_return = TextureStorageType::CubeMapArray;
+			case TextureType::eCubeArray:
+				l_return = TextureStorageType::eCubeMapArray;
 				break;
 
 			default:
@@ -102,11 +102,11 @@ namespace Castor3D
 		, m_size{ p_size }
 		, m_depth{ 1 }
 	{
-		REQUIRE( m_type != TextureType::ThreeDimensions
-				 && m_type != TextureType::OneDimensionArray
-				 && m_type != TextureType::TwoDimensionsArray
-				 && m_type != TextureType::TwoDimensionsMSArray
-				 && m_type != TextureType::CubeArray );
+		REQUIRE( m_type != TextureType::eThreeDimensions
+				 && m_type != TextureType::eOneDimensionArray
+				 && m_type != TextureType::eTwoDimensionsArray
+				 && m_type != TextureType::eTwoDimensionsMSArray
+				 && m_type != TextureType::eCubeArray );
 		uint32_t l_index = 0u;
 
 		for ( auto & l_image : m_images )
@@ -125,11 +125,11 @@ namespace Castor3D
 		, m_size{ p_size[0], p_size[1] }
 		, m_depth{ p_size[2] }
 	{
-		REQUIRE( m_type == TextureType::ThreeDimensions
-				 || m_type == TextureType::OneDimensionArray
-				 || m_type == TextureType::TwoDimensionsArray
-				 || m_type == TextureType::TwoDimensionsMSArray
-				 || m_type == TextureType::CubeArray );
+		REQUIRE( m_type == TextureType::eThreeDimensions
+				 || m_type == TextureType::eOneDimensionArray
+				 || m_type == TextureType::eTwoDimensionsArray
+				 || m_type == TextureType::eTwoDimensionsMSArray
+				 || m_type == TextureType::eCubeArray );
 		uint32_t l_index = 0u;
 
 		for ( auto & l_image : m_images )
@@ -206,11 +206,11 @@ namespace Castor3D
 
 	void TextureLayout::Resize( Size const & p_size )
 	{
-		REQUIRE( m_type != TextureType::ThreeDimensions
-				 && m_type != TextureType::OneDimensionArray
-				 && m_type != TextureType::TwoDimensionsArray
-				 && m_type != TextureType::TwoDimensionsMSArray
-				 && m_type != TextureType::CubeArray );
+		REQUIRE( m_type != TextureType::eThreeDimensions
+				 && m_type != TextureType::eOneDimensionArray
+				 && m_type != TextureType::eTwoDimensionsArray
+				 && m_type != TextureType::eTwoDimensionsMSArray
+				 && m_type != TextureType::eCubeArray );
 
 		DoResetStorage();
 
@@ -222,11 +222,11 @@ namespace Castor3D
 
 	void TextureLayout::Resize( Point3ui const & p_size )
 	{
-		REQUIRE( m_type == TextureType::ThreeDimensions
-				 || m_type == TextureType::OneDimensionArray
-				 || m_type == TextureType::TwoDimensionsArray
-				 || m_type == TextureType::TwoDimensionsMSArray
-				 || m_type == TextureType::CubeArray );
+		REQUIRE( m_type == TextureType::eThreeDimensions
+				 || m_type == TextureType::eOneDimensionArray
+				 || m_type == TextureType::eTwoDimensionsArray
+				 || m_type == TextureType::eTwoDimensionsMSArray
+				 || m_type == TextureType::eCubeArray );
 
 		DoResetStorage();
 

@@ -39,11 +39,11 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_BORDER_PANEL, nullptr, l_parentOv );
+		OverlaySPtr l_overlay = GetEngine()->GetOverlayCache().Add( cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), OverlayType::eBorderPanel, nullptr, l_parentOv );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();
-		l_panel->SetBorderPosition( eBORDER_POSITION_INTERNAL );
+		l_panel->SetBorderPosition( BorderPosition::eInternal );
 		l_panel->SetVisible( m_visible );
 		m_background = l_panel;
 	}

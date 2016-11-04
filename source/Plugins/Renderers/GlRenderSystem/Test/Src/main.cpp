@@ -109,7 +109,7 @@ namespace
 		auto l_return = std::make_unique< Castor3D::Engine >();
 		DoLoadPlugins( *l_return );
 
-		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::Renderer );
+		auto l_renderers = l_return->GetPluginCache().GetPlugins( Castor3D::PluginType::eRenderer );
 
 		if ( l_renderers.empty() )
 		{
@@ -122,7 +122,7 @@ namespace
 			auto l_context = l_return->GetRenderSystem()->CreateContext();
 			auto l_scene = l_return->GetSceneCache().Add( cuT( "Test" ) );
 			auto l_window = l_scene->GetRenderWindowCache().Add( cuT( "Window" ) );
-			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::Window );
+			auto l_target = l_return->GetRenderTargetCache().Add( Castor3D::TargetType::eWindow );
 			l_target->SetPixelFormat( PixelFormat::eA8R8G8B8 );
 			l_target->SetSize( Size{ 1024, 1024 } );
 			l_target->SetScene( l_scene );

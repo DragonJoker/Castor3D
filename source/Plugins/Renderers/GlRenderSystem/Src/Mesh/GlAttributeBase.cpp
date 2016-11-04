@@ -20,7 +20,7 @@ namespace GlRender
 		, m_offset( 0u )
 		, m_glType( p_glType )
 	{
-		if ( m_program.GetStatus() == ProgramStatus::Linked )
+		if ( m_program.GetStatus() == ProgramStatus::eLinked )
 		{
 			m_attributeLocation = static_cast< GlShaderProgram const & >( m_program ).GetAttributeLocation( m_attributeName );
 		}

@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Cylinder::Cylinder()
-		: MeshGenerator( eMESH_TYPE_CYLINDER )
+		: MeshGenerator( MeshType::eCylinder )
 		, m_height( 0 )
 		, m_radius( 0 )
 		, m_nbFaces( 0 )

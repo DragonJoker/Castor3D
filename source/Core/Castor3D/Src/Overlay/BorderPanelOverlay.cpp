@@ -60,7 +60,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	BorderPanelOverlay::BorderPanelOverlay()
-		: OverlayCategory( eOVERLAY_TYPE_BORDER_PANEL )
+		: OverlayCategory( OverlayType::eBorderPanel )
 		, m_borderOuterUv( 0, 0, 1, 1 )
 		, m_borderInnerUv( 0.33, 0.33, 0.66, 0.66 )
 		, m_borderChanged( true )
@@ -193,14 +193,14 @@ namespace Castor3D
 		int32_t l_centerR = l_pos.x() + l_size.width();
 		int32_t l_centerB = l_pos.y() + l_size.height();
 
-		if ( m_borderPosition == eBORDER_POSITION_INTERNAL )
+		if ( m_borderPosition == BorderPosition::eInternal )
 		{
 			l_centerL += l_sizes.left();
 			l_centerT += l_sizes.top();
 			l_centerR -= l_sizes.right();
 			l_centerB -= l_sizes.bottom();
 		}
-		else if ( m_borderPosition == eBORDER_POSITION_MIDDLE )
+		else if ( m_borderPosition == BorderPosition::eMiddle )
 		{
 			l_centerL += l_sizes.left() / 2;
 			l_centerT += l_sizes.top() / 2;

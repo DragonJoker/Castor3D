@@ -29,47 +29,47 @@ namespace Castor3D
 	{
 		static std::map< BlendSource, String > l_strTextureArguments
 		{
-			{ BlendSource::Texture, cuT( "texture" ) },
-			{ BlendSource::Texture0, cuT( "texture0" ) },
-			{ BlendSource::Texture1, cuT( "texture1" ) },
-			{ BlendSource::Texture2, cuT( "texture2" ) },
-			{ BlendSource::Texture3, cuT( "texture3" ) },
-			{ BlendSource::Diffuse, cuT( "diffuse" ) },
-			{ BlendSource::Previous, cuT( "previous" ) },
-			{ BlendSource::Constant, cuT( "constant" ) },
+			{ BlendSource::eTexture, cuT( "texture" ) },
+			{ BlendSource::eTexture0, cuT( "texture0" ) },
+			{ BlendSource::eTexture1, cuT( "texture1" ) },
+			{ BlendSource::eTexture2, cuT( "texture2" ) },
+			{ BlendSource::eTexture3, cuT( "texture3" ) },
+			{ BlendSource::eDiffuse, cuT( "diffuse" ) },
+			{ BlendSource::ePrevious, cuT( "previous" ) },
+			{ BlendSource::eConstant, cuT( "constant" ) },
 		};
 		static std::map< AlphaBlendFunc, String > l_strTextureAlphaFunctions
 		{
-			{ AlphaBlendFunc::NoBlend, cuT( "none" ) },
-			{ AlphaBlendFunc::FirstArg, cuT( "first_arg" ) },
-			{ AlphaBlendFunc::Add, cuT( "add" ) },
-			{ AlphaBlendFunc::AddSigned, cuT( "add_signed" ) },
-			{ AlphaBlendFunc::Modulate, cuT( "modulate" ) },
-			{ AlphaBlendFunc::Interpolate, cuT( "interpolate" ) },
-			{ AlphaBlendFunc::Subtract, cuT( "substract" ) },
+			{ AlphaBlendFunc::eNoBlend, cuT( "none" ) },
+			{ AlphaBlendFunc::eFirstArg, cuT( "first_arg" ) },
+			{ AlphaBlendFunc::eAdd, cuT( "add" ) },
+			{ AlphaBlendFunc::eAddSigned, cuT( "add_signed" ) },
+			{ AlphaBlendFunc::eModulate, cuT( "modulate" ) },
+			{ AlphaBlendFunc::eInterpolate, cuT( "interpolate" ) },
+			{ AlphaBlendFunc::eSubtract, cuT( "substract" ) },
 		};
 		static std::map< ComparisonFunc, String > l_strAlphaFuncs
 		{
-			{ ComparisonFunc::Always, cuT( "always" ) },
-			{ ComparisonFunc::Less, cuT( "less" ) },
-			{ ComparisonFunc::LEqual, cuT( "less_or_equal" ) },
-			{ ComparisonFunc::Equal, cuT( "equal" ) },
-			{ ComparisonFunc::NEqual, cuT( "not_equal" ) },
-			{ ComparisonFunc::GEqual, cuT( "greater_or_equal" ) },
-			{ ComparisonFunc::Greater, cuT( "greater" ) },
-			{ ComparisonFunc::Never, cuT( "never" ) },
+			{ ComparisonFunc::eAlways, cuT( "always" ) },
+			{ ComparisonFunc::eLess, cuT( "less" ) },
+			{ ComparisonFunc::eLEqual, cuT( "less_or_equal" ) },
+			{ ComparisonFunc::eEqual, cuT( "equal" ) },
+			{ ComparisonFunc::eNEqual, cuT( "not_equal" ) },
+			{ ComparisonFunc::eGEqual, cuT( "greater_or_equal" ) },
+			{ ComparisonFunc::eGreater, cuT( "greater" ) },
+			{ ComparisonFunc::eNever, cuT( "never" ) },
 		};
 		static std::map< ColourBlendFunc, String > l_strTextureRgbFunctions
 		{
-			{ ColourBlendFunc::NoBlend, cuT( "none" ) },
-			{ ColourBlendFunc::FirstArg, cuT( "first_arg" ) },
-			{ ColourBlendFunc::Add, cuT( "add" ) },
-			{ ColourBlendFunc::AddSigned, cuT( "add_signed" ) },
-			{ ColourBlendFunc::Modulate, cuT( "modulate" ) },
-			{ ColourBlendFunc::Interpolate, cuT( "interpolate" ) },
-			{ ColourBlendFunc::Subtract, cuT( "substract" ) },
-			{ ColourBlendFunc::Dot3RGB, cuT( "dot3_rgb" ) },
-			{ ColourBlendFunc::Dot3RGBA, cuT( "dot3_rgba" ) },
+			{ ColourBlendFunc::eNoBlend, cuT( "none" ) },
+			{ ColourBlendFunc::eFirstArg, cuT( "first_arg" ) },
+			{ ColourBlendFunc::eAdd, cuT( "add" ) },
+			{ ColourBlendFunc::eAddSigned, cuT( "add_signed" ) },
+			{ ColourBlendFunc::eModulate, cuT( "modulate" ) },
+			{ ColourBlendFunc::eInterpolate, cuT( "interpolate" ) },
+			{ ColourBlendFunc::eSubtract, cuT( "substract" ) },
+			{ ColourBlendFunc::eDot3RGB, cuT( "dot3_rgb" ) },
+			{ ColourBlendFunc::eDot3RGBA, cuT( "dot3_rgba" ) },
 		};
 		bool l_return = true;
 
@@ -100,43 +100,43 @@ namespace Castor3D
 					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit sampler" );
 				}
 
-				if ( l_return && p_unit.GetChannel() != TextureChannel::Undefined )
+				if ( l_return && p_unit.GetChannel() != TextureChannel::eUndefined )
 				{
 					switch ( p_unit.GetChannel() )
 					{
-					case TextureChannel::Colour:
+					case TextureChannel::eColour:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Diffuse:
+					case TextureChannel::eDiffuse:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Normal:
+					case TextureChannel::eNormal:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Opacity:
+					case TextureChannel::eOpacity:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Specular:
+					case TextureChannel::eSpecular:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Emissive:
+					case TextureChannel::eEmissive:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Height:
+					case TextureChannel::eHeight:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Ambient:
+					case TextureChannel::eAmbient:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
 						break;
 
-					case TextureChannel::Gloss:
+					case TextureChannel::eGloss:
 						l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
 						break;
 
@@ -146,21 +146,21 @@ namespace Castor3D
 
 					Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit channel" );
 
-					if ( l_return && p_unit.GetAlphaFunc() != ComparisonFunc::Always )
+					if ( l_return && p_unit.GetAlphaFunc() != ComparisonFunc::eAlways )
 					{
 						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha function" );
 					}
 
-					if ( l_return && p_unit.GetRgbFunction() != ColourBlendFunc::NoBlend )
+					if ( l_return && p_unit.GetRgbFunction() != ColourBlendFunc::eNoBlend )
 					{
-						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+						l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::eIndex0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( BlendSrcIndex::eIndex1 )] + cuT( "\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit rgb blend" );
 					}
 
-					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::NoBlend )
+					if ( l_return && p_unit.GetAlpFunction() != AlphaBlendFunc::eNoBlend )
 					{
-						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::Index1 )] + cuT( "\n" ) ) > 0;
+						l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::eIndex0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( BlendSrcIndex::eIndex1 )] + cuT( "\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit alpha blend" );
 					}
 
@@ -195,11 +195,11 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_index( 0 )
 		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
-		, m_eChannel( TextureChannel::Diffuse )
-		, m_eAlphaFunc( ComparisonFunc::Always )
+		, m_eChannel( TextureChannel::eDiffuse )
+		, m_eAlphaFunc( ComparisonFunc::eAlways )
 		, m_fAlphaValue( 0 )
-		, m_eRgbFunction( ColourBlendFunc::NoBlend )
-		, m_eAlpFunction( AlphaBlendFunc::NoBlend )
+		, m_eRgbFunction( ColourBlendFunc::eNoBlend )
+		, m_eAlpFunction( AlphaBlendFunc::eNoBlend )
 		, m_bAutoMipmaps( false )
 		, m_changed( false )
 		, m_pSampler( p_engine.GetDefaultSampler() )
@@ -268,7 +268,7 @@ namespace Castor3D
 		{
 			auto l_return = m_pTexture->Bind( m_index );
 
-			if ( l_return && m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::Buffer )
+			if ( l_return && m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::eBuffer )
 			{
 				m_pTexture->GenerateMipmaps();
 				m_changed = false;

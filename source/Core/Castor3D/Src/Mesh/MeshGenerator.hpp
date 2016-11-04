@@ -48,7 +48,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		explicit MeshGenerator( eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
+		explicit MeshGenerator( MeshType p_eMeshType = MeshType::eCustom );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de maillage
 		 *\return		La valeur
 		 */
-		inline eMESH_TYPE GetMeshType()const
+		inline MeshType GetMeshType()const
 		{
 			return m_eMeshType;
 		}
@@ -119,7 +119,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The mesh type	\~french Le type de mesh
-		eMESH_TYPE m_eMeshType;
+		MeshType m_eMeshType;
 	};
 }
 

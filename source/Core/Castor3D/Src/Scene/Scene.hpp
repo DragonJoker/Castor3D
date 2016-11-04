@@ -452,16 +452,16 @@ namespace Castor3D
 		DECLARE_CACHE_MEMBER( window, RenderWindow );
 		//!\~english	The overlays view.
 		//!\~french		La vue sur le incrustations de la scène.
-		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::PreRender );
+		DECLARE_CACHE_VIEW_MEMBER( overlay, Overlay, EventType::ePreRender );
 		//!\~english	The scene materials view.
 		//!\~french		La vue sur les matériaux de la scène.
-		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::PreRender );
+		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
 		//!\~english	The scene samplers view.
 		//!\~french		La vue sur les échantillonneurs de la scène.
-		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::PreRender );
+		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
 		//!\~english	The scene fonts view.
 		//!\~french		La vue sur les polices de la scène.
-		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::PreRender );
+		DECLARE_CACHE_VIEW_MEMBER_CU( font, Font, EventType::ePreRender );
 		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed{ false };

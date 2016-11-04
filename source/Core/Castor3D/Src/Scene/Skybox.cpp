@@ -44,42 +44,42 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tright \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox right" );
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeX ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tleft \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox left" );
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\ttop \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox top" );
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveY ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tbottom \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox bottom" );
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::PositiveZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::ePositiveZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tback \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox back" );
 		}
 
 		if ( l_return )
 		{
-			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::NegativeZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
+			Path l_relative = Scene::TextWriter::CopyFile( Path{ p_obj.m_texture->GetImage( size_t( CubeMapFace::eNegativeZ ) ).ToString() }, p_file.GetFilePath(), l_subfolder );
 			l_return = p_file.WriteText( m_tabs + cuT( "\tfront \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 			Castor::TextWriter< Skybox >::CheckError( l_return, "Skybox front" );
 		}
@@ -96,11 +96,11 @@ namespace Castor3D
 
 	Skybox::Skybox( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::Cube, AccessType::None, AccessType::Read ) }
+		, m_texture{ GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eRead ) }
 		, m_declaration
 		{
 			{
-				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3 }
+				BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 			}
 		}
 	{
@@ -113,11 +113,11 @@ namespace Castor3D
 		else
 		{
 			auto l_sampler = GetEngine()->GetSamplerCache().Add( l_skybox );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 			m_sampler = l_sampler;
 		}
 
@@ -275,8 +275,8 @@ namespace Castor3D
 		}
 
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		m_matricesBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
@@ -290,7 +290,7 @@ namespace Castor3D
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_vertexBuffer->Create();
 
-		return m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
+		return m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 	}
 
 	bool Skybox::DoInitialiseTexture()
@@ -301,13 +301,13 @@ namespace Castor3D
 	bool Skybox::DoInitialisePipeline( ShaderProgram & p_program )
 	{
 		DepthStencilState l_dsState;
-		l_dsState.SetDepthFunc( DepthFunc::LEqual );
+		l_dsState.SetDepthFunc( DepthFunc::eLEqual );
 
 		RasteriserState l_rsState;
-		l_rsState.SetCulledFaces( Culling::Front );
+		l_rsState.SetCulledFaces( Culling::eFront );
 
 		m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
-		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, m_pipeline->GetProgram() );
+		m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, m_pipeline->GetProgram() );
 		return m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
 	}
 }

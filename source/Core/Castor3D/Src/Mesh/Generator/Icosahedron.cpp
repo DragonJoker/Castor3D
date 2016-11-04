@@ -11,7 +11,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Icosahedron::Icosahedron()
-	: MeshGenerator( eMESH_TYPE_ICOSAHEDRON )
+	: MeshGenerator( MeshType::eIcosahedron )
 	, m_radius( 0 )
 	, m_nbFaces( 0 )
 {

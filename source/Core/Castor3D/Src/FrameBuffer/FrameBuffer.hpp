@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( FrameBufferMode p_mode = FrameBufferMode::Automatic, FrameBufferTarget p_target = FrameBufferTarget::Both )const;
+		C3D_API bool Bind( FrameBufferMode p_mode = FrameBufferMode::eAutomatic, FrameBufferTarget p_target = FrameBufferTarget::eBoth )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -151,7 +151,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
-		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::Nearest.
+		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::eNearest.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_index		The attachment index
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
@@ -210,7 +210,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API bool Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
@@ -220,14 +220,14 @@ namespace Castor3D
 		 *\param[in]	p_point		The attachment point
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::ThreeDimensions or TextureType::TwoDimensionsArray
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API bool Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
@@ -457,7 +457,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
-		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::Nearest.
+		 *\remarks		Interpolation for depth or stencil buffer must be InterpolationMode::eNearest.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -466,7 +466,7 @@ namespace Castor3D
 		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné.
-		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::Nearest.
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::eNearest.
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
 		 *\param[in]	p_rectSrc		Le rectangle source.
 		 *\param[in]	p_rectDst		Le rectangle destination.

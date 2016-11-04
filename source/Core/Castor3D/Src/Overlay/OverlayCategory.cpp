@@ -45,15 +45,15 @@ namespace Castor3D
 		{
 			switch ( l_overlay->GetType() )
 			{
-			case eOVERLAY_TYPE_PANEL:
+			case OverlayType::ePanel:
 				l_return &= PanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
-			case eOVERLAY_TYPE_BORDER_PANEL:
+			case OverlayType::eBorderPanel:
 				l_return &= BorderPanelOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
-			case eOVERLAY_TYPE_TEXT:
+			case OverlayType::eText:
 				l_return &= TextOverlay::TextWriter( m_tabs + cuT( "\t" ) )( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
@@ -67,7 +67,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_type )
+	OverlayCategory::OverlayCategory( OverlayType p_type )
 		: m_type( p_type )
 	{
 	}

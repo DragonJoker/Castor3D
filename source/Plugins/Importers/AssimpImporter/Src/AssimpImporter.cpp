@@ -264,32 +264,32 @@ namespace C3dAssimp
 				String l_strNorm = l_strGlob;
 				String l_strSpec = l_strGlob;
 				String l_strOpac = l_strGlob;
-				p_importer.LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, p_pass, TextureChannel::Diffuse );
-				p_importer.LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, p_pass, TextureChannel::Normal );
-				p_importer.LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, p_pass, TextureChannel::Specular );
-				p_importer.LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, p_pass, TextureChannel::Opacity );
+				p_importer.LoadTexture( Path{ string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ) }, p_pass, TextureChannel::eDiffuse );
+				p_importer.LoadTexture( Path{ string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ) }, p_pass, TextureChannel::eNormal );
+				p_importer.LoadTexture( Path{ string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ) }, p_pass, TextureChannel::eSpecular );
+				p_importer.LoadTexture( Path{ string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ) }, p_pass, TextureChannel::eOpacity );
 			}
 			else
 			{
-				DoLoadTexture( l_ambTexName, p_pass, TextureChannel::Ambient, p_importer );
-				DoLoadTexture( l_difTexName, p_pass, TextureChannel::Diffuse, p_importer );
-				DoLoadTexture( l_spcTexName, p_pass, TextureChannel::Specular, p_importer );
-				DoLoadTexture( l_emiTexName, p_pass, TextureChannel::Emissive, p_importer );
-				DoLoadTexture( l_opaTexName, p_pass, TextureChannel::Opacity, p_importer );
-				DoLoadTexture( l_shnTexName, p_pass, TextureChannel::Gloss, p_importer );
+				DoLoadTexture( l_ambTexName, p_pass, TextureChannel::eAmbient, p_importer );
+				DoLoadTexture( l_difTexName, p_pass, TextureChannel::eDiffuse, p_importer );
+				DoLoadTexture( l_spcTexName, p_pass, TextureChannel::eSpecular, p_importer );
+				DoLoadTexture( l_emiTexName, p_pass, TextureChannel::eEmissive, p_importer );
+				DoLoadTexture( l_opaTexName, p_pass, TextureChannel::eOpacity, p_importer );
+				DoLoadTexture( l_shnTexName, p_pass, TextureChannel::eGloss, p_importer );
 
 				if ( l_nmlTexName.length > 0 )
 				{
-					DoLoadTexture( l_nmlTexName, p_pass, TextureChannel::Normal, p_importer );
+					DoLoadTexture( l_nmlTexName, p_pass, TextureChannel::eNormal, p_importer );
 
 					if ( l_hgtTexName.length > 0 )
 					{
-						DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::Height, p_importer );
+						DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::eHeight, p_importer );
 					}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{
-					DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::Normal, p_importer );
+					DoLoadTexture( l_hgtTexName, p_pass, TextureChannel::eNormal, p_importer );
 				}
 			}
 		}
@@ -624,7 +624,7 @@ namespace C3dAssimp
 				auto l_bone = m_arrayBones[l_itBone->second];
 				l_object = p_animation.AddObject( l_bone, p_object );
 
-				if ( p_object->GetType() == SkeletonAnimationObjectType::Bone )
+				if ( p_object->GetType() == SkeletonAnimationObjectType::eBone )
 				{
 					p_skeleton.SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
 				}
@@ -664,8 +664,8 @@ namespace C3dAssimp
 
 			// We synchronise the three arrays
 			KeyFrameRealMap l_keyframes;
-			InterpolatorT< Point3r, InterpolatorType::Linear > l_pointInterpolator;
-			InterpolatorT< Quaternion, InterpolatorType::Linear > l_quatInterpolator;
+			InterpolatorT< Point3r, InterpolatorType::eLinear > l_pointInterpolator;
+			InterpolatorT< Quaternion, InterpolatorType::eLinear > l_quatInterpolator;
 
 			if ( p_ticksPerSecond >= GetEngine()->GetRenderLoop().GetWantedFps() )
 			{

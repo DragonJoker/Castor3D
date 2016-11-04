@@ -11,7 +11,7 @@ C3D_Lwo_API void GetRequiredVersion( Castor3D::Version & p_version )
 
 C3D_Lwo_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::Importer;
+	return Castor3D::PluginType::eImporter;
 }
 
 C3D_Lwo_API Castor::String GetName()

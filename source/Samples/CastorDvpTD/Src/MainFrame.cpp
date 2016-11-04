@@ -30,7 +30,7 @@ namespace castortd
 			if ( !wxGetApp().GetCastor()->IsCleaned() )
 			{
 				p_game.Update();
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [&p_game]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [&p_game]()
 				{
 					DoUpdate( p_game );
 				} ) );
@@ -112,7 +112,7 @@ namespace castortd
 			if ( CASTOR3D_THREADED )
 			{
 				wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this]()
 				{
 					DoUpdate( *m_game );
 				} ) );

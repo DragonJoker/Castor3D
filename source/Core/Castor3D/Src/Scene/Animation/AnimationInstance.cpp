@@ -22,9 +22,9 @@ namespace Castor3D
 		auto l_scale = m_scale;
 		auto l_looped = m_looped;
 
-		if ( m_state != AnimationState::Stopped && l_length > 0 )
+		if ( m_state != AnimationState::eStopped && l_length > 0 )
 		{
-			if ( m_state == AnimationState::Playing )
+			if ( m_state == AnimationState::ePlaying )
 			{
 				m_currentTime += ( p_tslf * l_scale );
 
@@ -32,7 +32,7 @@ namespace Castor3D
 				{
 					if ( !l_looped )
 					{
-						m_state = AnimationState::Paused;
+						m_state = AnimationState::ePaused;
 						m_currentTime = l_length;
 					}
 					else
@@ -48,7 +48,7 @@ namespace Castor3D
 				{
 					if ( !l_looped )
 					{
-						m_state = AnimationState::Paused;
+						m_state = AnimationState::ePaused;
 						m_currentTime = 0.0_r;
 					}
 					else
@@ -68,22 +68,22 @@ namespace Castor3D
 
 	void AnimationInstance::Play()
 	{
-		m_state = AnimationState::Playing;
+		m_state = AnimationState::ePlaying;
 	}
 
 	void AnimationInstance::Pause()
 	{
-		if ( m_state == AnimationState::Playing )
+		if ( m_state == AnimationState::ePlaying )
 		{
-			m_state = AnimationState::Paused;
+			m_state = AnimationState::ePaused;
 		}
 	}
 
 	void AnimationInstance::Stop()
 	{
-		if ( m_state != AnimationState::Stopped )
+		if ( m_state != AnimationState::eStopped )
 		{
-			m_state = AnimationState::Stopped;
+			m_state = AnimationState::eStopped;
 			m_currentTime = 0.0;
 		}
 	}

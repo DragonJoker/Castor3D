@@ -13,7 +13,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	ToneMappingPlugin::ToneMappingPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin{ PluginType::ToneMapping, p_library, *p_engine }
+		: Plugin{ PluginType::eToneMapping, p_library, *p_engine }
 	{
 		if ( m_pfnOnLoad )
 		{

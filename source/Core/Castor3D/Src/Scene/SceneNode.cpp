@@ -104,7 +104,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	uint64_t SceneNode::eCount = 0;
+	uint64_t SceneNode::Count = 0;
 
 	SceneNode::SceneNode( String const & p_name, Scene & p_scene )
 		: OwnedBy< Scene >{ p_scene }
@@ -351,7 +351,7 @@ namespace Castor3D
 		{
 			MovableObjectSPtr l_current = l_it.lock();
 
-			if ( l_current && l_current->GetType() == MovableType::Geometry )
+			if ( l_current && l_current->GetType() == MovableType::eGeometry )
 			{
 				GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( l_current );
 

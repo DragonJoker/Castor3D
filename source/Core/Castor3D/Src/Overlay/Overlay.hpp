@@ -96,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API Overlay( Engine & p_engine, eOVERLAY_TYPE p_type );
+		C3D_API Overlay( Engine & p_engine, OverlayType p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène parent
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		C3D_API Overlay( Engine & p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
+		C3D_API Overlay( Engine & p_engine, OverlayType p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -338,7 +338,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de l'incrustation
 		 *\return		La valeur
 		 */
-		inline eOVERLAY_TYPE GetType()const
+		inline OverlayType GetType()const
 		{
 			return m_category->GetType();
 		}

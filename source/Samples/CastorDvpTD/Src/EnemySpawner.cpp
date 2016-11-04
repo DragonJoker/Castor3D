@@ -71,7 +71,7 @@ namespace castortd
 				l_geometry->SetMaterial( l_submesh, p_game.GetEnemyMaterial() );
 			}
 
-			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::Point );
+			auto l_light = p_game.GetScene().GetLightCache().Add( l_name, l_node, LightType::ePoint );
 			l_light->SetColour( Colour::from_predef( Colour::Predefined::eOpaqueRed ) );
 			l_light->SetIntensity( 0.0f, 0.8f, 1.0f );
 			l_light->GetPointLight()->SetAttenuation( Point3f{ 1.0f, 0.1f, 0.0f } );

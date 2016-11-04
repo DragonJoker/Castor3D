@@ -97,11 +97,11 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case SkeletonAnimationObjectType::Node:
+			case SkeletonAnimationObjectType::eNode:
 				l_return &= BinaryWriter< SkeletonAnimationNode >{}.Write( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), m_chunk );
 				break;
 
-			case SkeletonAnimationObjectType::Bone:
+			case SkeletonAnimationObjectType::eBone:
 				l_return &= BinaryWriter< SkeletonAnimationBone >{}.Write( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), m_chunk );
 				break;
 			}

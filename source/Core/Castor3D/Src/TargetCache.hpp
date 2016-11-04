@@ -168,7 +168,7 @@ namespace Castor3D
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );
-		DECLARE_ARRAY( RenderTargetArray, size_t( TargetType::eCount ), TargetType );
+		DECLARE_ARRAY( RenderTargetArray, TargetType::eCount, TargetType );
 		//!\~english	The render targets sorted by target type.
 		//!\~french		Les cibles de rendu, triées par type de cible de rendu.
 		TargetTypeArray m_renderTargets;

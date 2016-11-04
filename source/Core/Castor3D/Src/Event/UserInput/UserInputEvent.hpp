@@ -35,7 +35,7 @@ namespace Castor3D
 	*\brief		Description of a user input event.
 	*\remarks	You may use this one, but prefer using MouseEvent or KeyboardEvent.
 	*\~french
-	*\brief		Description d'un �v�nement de tpye entr�e utilisateur.
+	*\brief		Description d'un évènement de tpye entr�e utilisateur.
 	*\remarks	Vous pouvez utiliser cette classe, mais il est conseill� d'utiliser les  classes MouseEvent ou KeyboardEvent.
 	*/
 	class UserInputEvent
@@ -47,9 +47,9 @@ namespace Castor3D
 		 *\param[in]	p_type	The user input event type.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type	Le type d'�v�nement entr�e utilisateur.
+		 *\param[in]	p_type	Le type d'évènement entr�e utilisateur.
 		 */
-		explicit UserInputEvent( eUSER_INPUT_EVENT_TYPE p_type )
+		explicit UserInputEvent( UserInputEventType p_type )
 			: m_eventType( p_type )
 		{
 		}
@@ -66,16 +66,16 @@ namespace Castor3D
 		 *\~english
 		 *\return		The user input event type.
 		 *\~french
-		 *\return		Le type d'�v�nement entr�e utilisateur.
+		 *\return		Le type d'évènement entr�e utilisateur.
 		 */
-		inline eUSER_INPUT_EVENT_TYPE GetEventType()const
+		inline UserInputEventType GetEventType()const
 		{
 			return m_eventType;
 		}
 
 	private:
-		//!\~english The user input event type.	\~french Le type d'�v�nement entr�e utilisateur.
-		eUSER_INPUT_EVENT_TYPE m_eventType;
+		//!\~english The user input event type.	\~french Le type d'évènement entr�e utilisateur.
+		UserInputEventType m_eventType;
 	};
 }
 

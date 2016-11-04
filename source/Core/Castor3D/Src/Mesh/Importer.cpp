@@ -123,7 +123,7 @@ namespace Castor3D
 			{
 				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetEngine() );
 				l_unit->SetAutoMipmaps( true );
-				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read );
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
 				l_texture->SetSource( l_folder, l_relative );
 				l_unit->SetTexture( l_texture );
 				l_unit->SetChannel( p_channel );

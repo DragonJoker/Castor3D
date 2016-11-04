@@ -39,8 +39,8 @@ namespace Castor3D
 			},
 			BufferDeclaration{
 				{
-					BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec2 },
-					BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::TexCoords ), ElementType::Vec2 }
+					BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 },
+					BufferElementDeclaration{ ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 }
 				}
 			}
 		}
@@ -57,7 +57,7 @@ namespace Castor3D
 			},
 			BufferDeclaration{
 				{
-					BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::Position ), ElementType::Vec3 }
+					BufferElementDeclaration{ ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 }
 				}
 			}
 		}
@@ -95,8 +95,8 @@ namespace Castor3D
 		m_rtotPipelinePlane.m_viewport.Initialise();
 		m_rtotPipelineCube.m_viewport.Initialise();
 		m_window = p_window;
-		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::TimeElapsed );
-		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::TimeElapsed );
+		m_timerQuery[0] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
+		m_timerQuery[1] = GetRenderSystem()->CreateQuery( QueryType::eTimeElapsed );
 		m_bMultiSampling = p_window->IsMultisampling();
 		bool l_return = DoInitialise();
 
@@ -119,11 +119,11 @@ namespace Castor3D
 			DoInitialiseRTOTPipelineCube( m_rtotPipelineCube.m_depthArray, *DoCreateProgramCube( true, true ), true );
 
 			auto l_sampler = GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextCube" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-			l_sampler->SetWrappingMode( TextureUVW::W, WrapMode::ClampToEdge );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 			m_rtotPipelineCube.m_sampler = l_sampler;
 
 			DoEndCurrent();
@@ -173,7 +173,7 @@ namespace Castor3D
 		m_timerQuery[m_queryIndex]->End();
 		m_queryIndex = 1 - m_queryIndex;
 		uint64_t l_time = 0;
-		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::Result, l_time );
+		m_timerQuery[m_queryIndex]->GetInfos( QueryInfo::eResult, l_time );
 		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
@@ -263,7 +263,7 @@ namespace Castor3D
 		m_rtotPipelinePlane.m_viewport.Apply();
 		p_pipeline.SetProjectionMatrix( m_rtotPipelinePlane.m_viewport.GetProjection() );
 
-		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::Pixel );
+		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -349,7 +349,7 @@ namespace Castor3D
 		matrix::look_at( l_mtx, p_position, p_position + l_front, l_up );
 		p_pipeline.SetViewMatrix( l_mtx );
 
-		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::Pixel );
+		OneFloatFrameVariableSPtr l_variable = p_pipeline.GetProgram().FindFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 
 		if ( l_variable )
 		{
@@ -489,14 +489,14 @@ namespace Castor3D
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		auto l_program = l_cache.GetNewProgram();
-		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
-		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::Pixel );
+			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		return l_program;
@@ -621,14 +621,14 @@ namespace Castor3D
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		auto l_program = l_cache.GetNewProgram();
-		l_program->SetSource( ShaderType::Vertex, l_model, l_vtx );
-		l_program->SetSource( ShaderType::Pixel, l_model, l_pxl );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::Pixel );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
 		{
-			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::Pixel );
+			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
 		return l_program;
@@ -641,15 +641,15 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() * m_rtotPipelinePlane.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelinePlane.m_arrayVertex.begin(), m_rtotPipelinePlane.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
-		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
+		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
 		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
 		if ( p_depth )
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( true );
-			l_dsState.SetDepthMask( WritingMask::All );
+			l_dsState.SetDepthMask( WritingMask::eAll );
 			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
 		else
@@ -677,19 +677,19 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() * m_rtotPipelineCube.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelineCube.m_arrayVertex.begin(), m_rtotPipelineCube.m_arrayVertex.end() );
 		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::Static, BufferAccessNature::Draw );
-		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::Triangles, p_program );
+		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
 		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
 		if ( p_depth )
 		{
 			DepthStencilState l_dsState;
-			l_dsState.SetDepthFunc( DepthFunc::LEqual );
+			l_dsState.SetDepthFunc( DepthFunc::eLEqual );
 			l_dsState.SetDepthTest( true );
-			l_dsState.SetDepthMask( WritingMask::All );
+			l_dsState.SetDepthMask( WritingMask::eAll );
 
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Front );
+			l_rsState.SetCulledFaces( Culling::eFront );
 
 			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
@@ -697,10 +697,10 @@ namespace Castor3D
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
-			l_dsState.SetDepthMask( WritingMask::All );
+			l_dsState.SetDepthMask( WritingMask::eAll );
 
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::Front );
+			l_rsState.SetCulledFaces( Culling::eFront );
 
 			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}

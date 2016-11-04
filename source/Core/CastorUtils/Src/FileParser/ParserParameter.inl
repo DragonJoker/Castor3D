@@ -488,14 +488,14 @@ namespace Castor
 			bool l_return = false;
 			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
 
-			if ( l_values.size() >= Colour::Component::eCount )
+			if ( l_values.size() >= size_t( Colour::Component::eCount ) )
 			{
 				Point4f l_value;
 				l_return = ParseValues( p_params, l_value );
 
 				if ( l_return )
 				{
-					for ( uint8_t i = 0; i < Colour::Component::eCount; i++ )
+					for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
 					{
 						p_value[Colour::Component( i )] = l_value[i];
 					}

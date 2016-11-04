@@ -25,7 +25,7 @@ C3D_Md2_API void GetRequiredVersion( Version & p_version )
 
 C3D_Md2_API PluginType GetType()
 {
-	return PluginType::Importer;
+	return PluginType::eImporter;
 }
 
 C3D_Md2_API String GetName()

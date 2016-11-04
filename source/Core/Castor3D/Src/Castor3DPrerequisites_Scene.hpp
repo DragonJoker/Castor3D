@@ -30,11 +30,11 @@ namespace Castor3D
 
 	enum class FogType
 	{
-		Disabled,
-		Linear,
-		Exponential,
-		SquaredExponential,
-		CASTOR_SCOPED_ENUM_BOUNDS( Disabled )
+		eDisabled,
+		eLinear,
+		eExponential,
+		eSquaredExponential,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
 	};
 
 	class Scene;

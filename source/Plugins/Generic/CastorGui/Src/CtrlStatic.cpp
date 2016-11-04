@@ -28,12 +28,12 @@ namespace CastorGui
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		m_text = l_text;
 		l_text->SetCaption( m_caption );
 		l_text->SetVisible( DoIsVisible() );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetVAlign( VAlign::eCenter );
 		DoUpdateStyle();
 	}
 
@@ -135,28 +135,28 @@ namespace CastorGui
 		{
 			if ( GetStyle() & eSTATIC_STYLE_HALIGN_CENTER )
 			{
-				l_text->SetHAlign( eHALIGN_CENTER );
+				l_text->SetHAlign( HAlign::eCenter );
 			}
 			else if ( GetStyle() & eSTATIC_STYLE_HALIGN_RIGHT )
 			{
-				l_text->SetHAlign( eHALIGN_RIGHT );
+				l_text->SetHAlign( HAlign::eRight );
 			}
 			else
 			{
-				l_text->SetHAlign( eHALIGN_LEFT );
+				l_text->SetHAlign( HAlign::eLeft );
 			}
 
 			if ( GetStyle() & eSTATIC_STYLE_VALIGN_CENTER )
 			{
-				l_text->SetVAlign( eVALIGN_CENTER );
+				l_text->SetVAlign( VAlign::eCenter );
 			}
 			else if ( GetStyle() & eSTATIC_STYLE_VALIGN_BOTTOM )
 			{
-				l_text->SetVAlign( eVALIGN_BOTTOM );
+				l_text->SetVAlign( VAlign::eBottom );
 			}
 			else
 			{
-				l_text->SetVAlign( eVALIGN_TOP );
+				l_text->SetVAlign( VAlign::eTop );
 			}
 		}
 	}

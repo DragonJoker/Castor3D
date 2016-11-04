@@ -217,8 +217,8 @@ namespace Testing
 	{
 		static std::map< Castor3D::InterpolatorType, std::string > Names
 		{
-			{ Castor3D::InterpolatorType::Nearest, "Nearest" },
-			{ Castor3D::InterpolatorType::Linear, "Linear" },
+			{ Castor3D::InterpolatorType::eNearest, "Nearest" },
+			{ Castor3D::InterpolatorType::eLinear, "Linear" },
 		};
 		return Names[p_value];
 	}
@@ -228,9 +228,9 @@ namespace Testing
 	{
 		static std::map< Castor3D::AnimationType, std::string > Names
 		{
-			{ Castor3D::AnimationType::Movable, "Movable" },
-			{ Castor3D::AnimationType::Mesh, "Mesh" },
-			{ Castor3D::AnimationType::Skeleton, "Skeleton" },
+			{ Castor3D::AnimationType::eMovable, "Movable" },
+			{ Castor3D::AnimationType::eMesh, "Mesh" },
+			{ Castor3D::AnimationType::eSkeleton, "Skeleton" },
 		};
 		return Names[p_value];
 	}
@@ -240,8 +240,8 @@ namespace Testing
 	{
 		static std::map< Castor3D::SkeletonAnimationObjectType, std::string > Names
 		{
-			{ Castor3D::SkeletonAnimationObjectType::Bone, "Bone" },
-			{ Castor3D::SkeletonAnimationObjectType::Node, "Node" },
+			{ Castor3D::SkeletonAnimationObjectType::eBone, "Bone" },
+			{ Castor3D::SkeletonAnimationObjectType::eNode, "Node" },
 		};
 		return Names[p_value];
 	}
@@ -251,9 +251,9 @@ namespace Testing
 	{
 		static std::map< Castor3D::AnimationState, std::string > Names
 		{
-			{ Castor3D::AnimationState::Playing, "Playing" },
-			{ Castor3D::AnimationState::Stopped, "Stopped" },
-			{ Castor3D::AnimationState::Paused, "Paused" },
+			{ Castor3D::AnimationState::ePlaying, "Playing" },
+			{ Castor3D::AnimationState::eStopped, "Stopped" },
+			{ Castor3D::AnimationState::ePaused, "Paused" },
 		};
 		return Names[p_value];
 	}
@@ -263,9 +263,9 @@ namespace Testing
 	{
 		static std::map< Castor3D::ViewportType, std::string > Names
 		{
-			{ Castor3D::ViewportType::Ortho, "Ortho" },
-			{ Castor3D::ViewportType::Perspective, "Perspective" },
-			{ Castor3D::ViewportType::Frustum, "Frustum" },
+			{ Castor3D::ViewportType::eOrtho, "Ortho" },
+			{ Castor3D::ViewportType::ePerspective, "Perspective" },
+			{ Castor3D::ViewportType::eFrustum, "Frustum" },
 		};
 		return Names[p_value];
 	}

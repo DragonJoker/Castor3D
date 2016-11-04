@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API explicit OverlayCategory( eOVERLAY_TYPE p_type );
+		C3D_API explicit OverlayCategory( OverlayType p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -363,7 +363,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de l'incrustation
 		 *\return		La valeur
 		 */
-		inline eOVERLAY_TYPE GetType()const
+		inline OverlayType GetType()const
 		{
 			return m_type;
 		}
@@ -599,7 +599,7 @@ namespace Castor3D
 		//!\~english The material name	\~french Le nom du matériau
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
-		eOVERLAY_TYPE m_type;
+		OverlayType m_type;
 		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
 		bool m_sizeChanged{ true };
 		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.

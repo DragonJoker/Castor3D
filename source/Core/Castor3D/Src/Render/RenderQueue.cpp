@@ -189,7 +189,7 @@ namespace Castor3D
 							  , RenderNodesT< StaticGeometryRenderNode, StaticGeometryRenderNodesByPipelineMap > & p_static
 							  , RenderNodesT< StaticGeometryRenderNode, SubmeshStaticRenderNodesByPipelineMap > & p_instanced )
 		{
-			if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
 				if ( !p_pass.HasAlphaBlending() )
 				{
@@ -295,24 +295,24 @@ namespace Castor3D
 					for ( auto l_pass : *l_material )
 					{
 						auto l_programFlags = l_submesh->GetProgramFlags();
-						RemFlag( l_programFlags, ProgramFlag::Skinning );
-						RemFlag( l_programFlags, ProgramFlag::Morphing );
+						RemFlag( l_programFlags, ProgramFlag::eSkinning );
+						RemFlag( l_programFlags, ProgramFlag::eMorphing );
 						auto l_skeleton = std::static_pointer_cast< AnimatedSkeleton >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Skeleton" ) ) );
 						auto l_mesh = std::static_pointer_cast< AnimatedMesh >( DoFindAnimatedObject( p_scene, l_primitive.first + cuT( "_Mesh" ) ) );
 
 						if ( l_skeleton )
 						{
-							AddFlag( l_programFlags, ProgramFlag::Skinning );
+							AddFlag( l_programFlags, ProgramFlag::eSkinning );
 						}
 
 						if ( l_mesh )
 						{
-							AddFlag( l_programFlags, ProgramFlag::Morphing );
+							AddFlag( l_programFlags, ProgramFlag::eMorphing );
 						}
 
 						if ( l_shadows )
 						{
-							AddFlag( l_programFlags, ProgramFlag::Shadows );
+							AddFlag( l_programFlags, ProgramFlag::eShadows );
 						}
 
 						l_pass->PrepareTextures();
@@ -324,24 +324,24 @@ namespace Castor3D
 									 || p_renderPass.IsMultisampling() )
 								&& p_renderPass.GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 						{
-							AddFlag( l_programFlags, ProgramFlag::Instantiation );
+							AddFlag( l_programFlags, ProgramFlag::eInstantiation );
 						}
 						else
 						{
-							RemFlag( l_programFlags, ProgramFlag::Instantiation );
+							RemFlag( l_programFlags, ProgramFlag::eInstantiation );
 						}
 
 						if ( l_pass->HasAlphaBlending() )
 						{
-							AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+							AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
 						}
 
 						p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
 
-						if ( !CheckFlag( l_programFlags, ProgramFlag::ShadowMap ) || l_primitive.second->IsShadowCaster() )
+						if ( !CheckFlag( l_programFlags, ProgramFlag::eShadowMap ) || l_primitive.second->IsShadowCaster() )
 						{
-							if ( CheckFlag( l_programFlags, ProgramFlag::Skinning )
-									|| CheckFlag( l_programFlags, ProgramFlag::Morphing ) )
+							if ( CheckFlag( l_programFlags, ProgramFlag::eSkinning )
+									|| CheckFlag( l_programFlags, ProgramFlag::eMorphing ) )
 							{
 								DoAddAnimatedNode( p_renderPass, l_programFlags, *l_pass, *l_submesh, *l_primitive.second, l_skeleton, l_mesh, p_animated );
 							}
@@ -376,11 +376,11 @@ namespace Castor3D
 						{
 							l_pass->PrepareTextures();
 							uint16_t l_programFlags = 0u;
-							AddFlag( l_programFlags, ProgramFlag::Billboards );
+							AddFlag( l_programFlags, ProgramFlag::eBillboards );
 
 							if ( l_pass->HasAlphaBlending() )
 							{
-								AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+								AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
 							}
 
 							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );
@@ -402,11 +402,11 @@ namespace Castor3D
 						{
 							l_pass->PrepareTextures();
 							uint16_t l_programFlags = 0u;
-							AddFlag( l_programFlags, ProgramFlag::Billboards );
+							AddFlag( l_programFlags, ProgramFlag::eBillboards );
 
 							if ( l_pass->HasAlphaBlending() )
 							{
-								AddFlag( l_programFlags, ProgramFlag::AlphaBlending );
+								AddFlag( l_programFlags, ProgramFlag::eAlphaBlending );
 							}
 
 							p_renderPass.PreparePipeline( l_pass->GetColourBlendMode(), l_pass->GetAlphaBlendMode(), l_pass->GetTextureFlags(), l_programFlags, p_scene.GetFlags(), l_pass->IsTwoSided() );

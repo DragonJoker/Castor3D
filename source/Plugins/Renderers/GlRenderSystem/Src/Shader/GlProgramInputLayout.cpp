@@ -61,9 +61,9 @@ namespace GlRender
 				ElementType l_elemType = GetOpenGl().Get( GlslAttributeType( l_value ) );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == ElementType::Vec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
+				if ( l_elemType == ElementType::eVec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
-					l_elemType = ElementType::Vec3;
+					l_elemType = ElementType::eVec3;
 				}
 
 				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );
@@ -88,9 +88,9 @@ namespace GlRender
 				int l_loc = GetOpenGl().GetAttribLocation( l_program.GetGlName(), l_buffer.data() );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == ElementType::Vec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
+				if ( l_elemType == ElementType::eVec4 && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
-					l_elemType = ElementType::Vec3;
+					l_elemType = ElementType::eVec3;
 				}
 
 				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );

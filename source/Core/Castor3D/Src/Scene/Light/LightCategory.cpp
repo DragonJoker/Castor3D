@@ -19,9 +19,9 @@ namespace Castor3D
 	{
 		static std::map< LightType, String > l_type
 		{
-			{ LightType::Directional, cuT( "directional" ) },
-			{ LightType::Point, cuT( "point" ) },
-			{ LightType::Spot, cuT( "spot" ) },
+			{ LightType::eDirectional, cuT( "directional" ) },
+			{ LightType::ePoint, cuT( "point" ) },
+			{ LightType::eSpot, cuT( "spot" ) },
 		};
 
 		Logger::LogInfo( m_tabs + cuT( "Writing Light " ) + p_light.GetLight().GetName() );

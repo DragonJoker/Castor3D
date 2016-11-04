@@ -783,7 +783,7 @@ namespace Castor3D
 	protected:
 		//!<\~english The program status.
 		//!\~french		Le statut du programme.
-		ProgramStatus m_status{ ProgramStatus::NotLinked };
+		ProgramStatus m_status{ ProgramStatus::eNotLinked };
 		//!\~english	Tells if the UBOs were bound on or since last call to Bind.
 		//!\~french		Dit si les UBOs on été activés lors du ou depuis le dernier appel à Bind.
 		mutable bool m_ubosBound{ false };

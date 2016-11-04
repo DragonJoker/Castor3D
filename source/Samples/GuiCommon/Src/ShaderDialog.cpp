@@ -122,7 +122,7 @@ namespace GuiCommon
 		l_arrayTexts.push_back( _( "Pixel" ) );
 		l_arrayTexts.push_back( _( "Compute" ) );
 
-		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); i++ )
 		{
 			if ( l_program->HasObject( ShaderType( i ) ) )
 			{
@@ -177,13 +177,13 @@ namespace GuiCommon
 	{
 		bool l_continue = true;
 
-		if ( l_continue && m_pEditorPages[size_t( ShaderType::Vertex )]->GetShaderFile().empty() )
+		if ( l_continue && m_pEditorPages[size_t( ShaderType::eVertex )]->GetShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the vertex shader file name" ), _( "ERROR" ) );
 			l_continue = false;
 		}
 
-		if ( l_continue && m_pEditorPages[size_t( ShaderType::Pixel )]->GetShaderFile().empty() )
+		if ( l_continue && m_pEditorPages[size_t( ShaderType::ePixel )]->GetShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the fragment file name" ), _( "ERROR" ) );
 			l_continue = false;
@@ -196,7 +196,7 @@ namespace GuiCommon
 				m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetNewProgram();
 			}
 
-			for ( uint8_t i = uint8_t( ShaderType::Vertex ); i < uint8_t( ShaderType::Count ); i++ )
+			for ( uint8_t i = uint8_t( ShaderType::eVertex ); i < uint8_t( ShaderType::eCount ); i++ )
 			{
 				wxString l_file = m_pEditorPages[i]->GetShaderFile();
 
@@ -239,9 +239,9 @@ namespace GuiCommon
 
 	void ShaderDialog::OnOpenFile( wxCommandEvent & p_event )
 	{
-		ShaderType l_type = ShaderType::Count;
+		ShaderType l_type = ShaderType::eCount;
 
-		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && l_type == ShaderType::eCount; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
@@ -249,7 +249,7 @@ namespace GuiCommon
 			}
 		}
 
-		if ( l_type != ShaderType::Count )
+		if ( l_type != ShaderType::eCount )
 		{
 			DoFolder( l_type );
 		}
@@ -271,9 +271,9 @@ namespace GuiCommon
 
 	void ShaderDialog::OnSaveFile( wxCommandEvent & p_event )
 	{
-		ShaderType l_type = ShaderType::Count;
+		ShaderType l_type = ShaderType::eCount;
 
-		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ) && l_type == ShaderType::Count; i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && l_type == ShaderType::eCount; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
@@ -281,7 +281,7 @@ namespace GuiCommon
 			}
 		}
 
-		if ( l_type != ShaderType::Count )
+		if ( l_type != ShaderType::eCount )
 		{
 			DoSave( l_type, true );
 		}
@@ -291,7 +291,7 @@ namespace GuiCommon
 
 	void ShaderDialog::OnSaveAll( wxCommandEvent & p_event )
 	{
-		for ( uint8_t i = 0; i < uint8_t( ShaderType::Count ); i++ )
+		for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); i++ )
 		{
 			DoSave( ShaderType( i ), false );
 		}

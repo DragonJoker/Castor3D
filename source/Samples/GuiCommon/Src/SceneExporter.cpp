@@ -154,12 +154,12 @@ namespace GuiCommon
 			l_strReturn << cuT( "	Ns " ) << l_pass->GetShininess() << cuT( "\n" );
 			l_strReturn << cuT( "	d " ) << l_pass->GetAlpha() << cuT( "\n" );
 
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::Ambient ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::Diffuse ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::Normal ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::Opacity ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ks" ), l_pass->GetTextureUnit( TextureChannel::Specular ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ns" ), l_pass->GetTextureUnit( TextureChannel::Gloss ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::eAmbient ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::eDiffuse ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::eNormal ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::eOpacity ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ks" ), l_pass->GetTextureUnit( TextureChannel::eSpecular ) );
+			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ns" ), l_pass->GetTextureUnit( TextureChannel::eGloss ) );
 		}
 
 		return l_strReturn.str();

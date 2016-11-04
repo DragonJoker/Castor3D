@@ -59,7 +59,7 @@ namespace CastorGui
 		if ( l_pass->GetTextureUnitsCount() == 0 )
 		{
 			auto l_unit = std::make_shared< TextureUnit >( *p_engine );
-			l_unit->SetChannel( TextureChannel::Diffuse );
+			l_unit->SetChannel( TextureChannel::eDiffuse );
 			l_pass->AddTextureUnit( l_unit );
 		}
 

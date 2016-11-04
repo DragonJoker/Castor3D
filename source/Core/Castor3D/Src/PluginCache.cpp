@@ -193,31 +193,31 @@ namespace Castor3D
 
 			switch ( l_type )
 			{
-			case PluginType::Divider:
+			case PluginType::eDivider:
 				l_return = std::make_shared< DividerPlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::Importer:
+			case PluginType::eImporter:
 				l_return = std::make_shared< ImporterPlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::Renderer:
+			case PluginType::eRenderer:
 				l_return = std::make_shared< RendererPlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::Generic:
+			case PluginType::eGeneric:
 				l_return = std::make_shared< GenericPlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::Technique:
+			case PluginType::eTechnique:
 				l_return = std::make_shared< TechniquePlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::ToneMapping:
+			case PluginType::eToneMapping:
 				l_return = std::make_shared< ToneMappingPlugin >( l_library, GetEngine() );
 				break;
 
-			case PluginType::PostEffect:
+			case PluginType::ePostEffect:
 				l_return = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
 				break;
 

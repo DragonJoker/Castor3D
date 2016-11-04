@@ -44,14 +44,14 @@ namespace Castor3D
 	{
 		//!\~english	Scene node animation.
 		//!\~french		Animation de noeud de scène.
-		Movable,
+		eMovable,
 		//!\~english	Skeleton animation.
 		//!\~french		Animation de squelette.
-		Skeleton,
+		eSkeleton,
 		//!\~english	Submesh animation (morphing).
 		//!\~french		Animation de sous-maillage (morphing).
-		Mesh,
-		CASTOR_SCOPED_ENUM_BOUNDS( Movable )
+		eMesh,
+		CASTOR_SCOPED_ENUM_BOUNDS( eMovable )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -67,11 +67,11 @@ namespace Castor3D
 	{
 		//!\~english	No interpolation.
 		//!\~french		Pas d'interpolation.
-		Nearest,
+		eNearest,
 		//!\~english	Linear mode.
 		//!\~french		Mode linéaire.
-		Linear,
-		CASTOR_SCOPED_ENUM_BOUNDS( Nearest )
+		eLinear,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNearest )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -86,14 +86,14 @@ namespace Castor3D
 	{
 		//!\~english	Playing animation state.
 		//!\~french		Animation en cours de lecture.
-		Playing,
+		ePlaying,
 		//!\~english	Stopped animation state.
 		//!\~french		Animation stoppée.
-		Stopped,
+		eStopped,
 		//!\~english	Paused animation state.
 		//!\~french		Animation en pause.
-		Paused,
-		CASTOR_SCOPED_ENUM_BOUNDS( Playing )
+		ePaused,
+		CASTOR_SCOPED_ENUM_BOUNDS( ePlaying )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -111,11 +111,11 @@ namespace Castor3D
 	{
 		//!\~english	Node objects.
 		//!\~french		Objets noeud.
-		Node,
+		eNode,
 		//!\~english	Bone objects.
 		//!\~french		Objets os.
-		Bone,
-		CASTOR_SCOPED_ENUM_BOUNDS( Node )
+		eBone,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNode )
 	};
 
 	class Animable;

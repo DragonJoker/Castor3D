@@ -28,7 +28,7 @@ C3D_GrayScale_API void GetRequiredVersion( Castor3D::Version & p_version )
 
 C3D_GrayScale_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::PostEffect;
+	return Castor3D::PluginType::ePostEffect;
 }
 
 C3D_GrayScale_API Castor::String GetName()

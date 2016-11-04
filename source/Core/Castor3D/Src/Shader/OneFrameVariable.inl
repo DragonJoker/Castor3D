@@ -13,40 +13,40 @@ namespace Castor3D
 		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
-		static const VariableType Count = VariableType::One;
-		static const FrameVariableType Full = FrameVariableType::Bool;
+		static const VariableType Count = VariableType::eOne;
+		static const FrameVariableType Full = FrameVariableType::eBool;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< int >
 		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
-		static const VariableType Count = VariableType::One;
-		static const FrameVariableType Full = FrameVariableType::Int;
+		static const VariableType Count = VariableType::eOne;
+		static const FrameVariableType Full = FrameVariableType::eInt;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< uint32_t >
 		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
-		static const VariableType Count = VariableType::One;
-		static const FrameVariableType Full = FrameVariableType::UInt;
+		static const VariableType Count = VariableType::eOne;
+		static const FrameVariableType Full = FrameVariableType::eUInt;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< float >
 		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
-		static const VariableType Count = VariableType::One;
-		static const FrameVariableType Full = FrameVariableType::Float;
+		static const VariableType Count = VariableType::eOne;
+		static const FrameVariableType Full = FrameVariableType::eFloat;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< double >
 		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
-		static const VariableType Count = VariableType::One;
-		static const FrameVariableType Full = FrameVariableType::Double;
+		static const VariableType Count = VariableType::eOne;
+		static const FrameVariableType Full = FrameVariableType::eDouble;
 		C3D_API static const xchar * FullTypeName;
 	};
 

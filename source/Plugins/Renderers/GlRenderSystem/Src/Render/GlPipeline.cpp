@@ -138,7 +138,7 @@ namespace GlRender
 
 			l_return &= p_gl.PolygonMode( GlFace::eBoth, p_gl.Get( p_state.GetFillMode() ) );
 
-			if ( p_state.GetCulledFaces() != Culling::None )
+			if ( p_state.GetCulledFaces() != Culling::eNone )
 			{
 				l_return &= p_gl.Enable( GlTweak::eCullFace );
 				l_return &= p_gl.CullFace( p_gl.Get( p_state.GetCulledFaces() ) );

@@ -33,7 +33,7 @@ namespace Castor3D
 	{
 #if DEBUG_BUFFERS
 
-		if ( m_buffer && DownloadBuffer( AttachmentPoint::Colour, 0, m_buffer ) )
+		if ( m_buffer && DownloadBuffer( AttachmentPoint::eColour, 0, m_buffer ) )
 		{
 			StringStream l_name;
 			l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )m_buffer.get() << cuT( "_BACK.png" );

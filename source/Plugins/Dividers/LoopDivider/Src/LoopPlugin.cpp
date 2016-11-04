@@ -13,7 +13,7 @@ C3D_Loop_API void GetRequiredVersion( Castor3D::Version & p_version )
 
 C3D_Loop_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::Divider;
+	return Castor3D::PluginType::eDivider;
 }
 
 C3D_Loop_API Castor::String GetName()

@@ -84,7 +84,7 @@ namespace Castor3D
 
 			for ( auto l_it : p_group.GetAnimations() )
 			{
-				if ( l_it.second.m_state == AnimationState::Playing )
+				if ( l_it.second.m_state == AnimationState::ePlaying )
 				{
 					l_return &= p_file.WriteText( m_tabs + cuT( "\tstart_animation \"" ) + l_it.first + cuT( "\"\n" ) ) > 0;
 					Castor::TextWriter< AnimatedObjectGroup >::CheckError( l_return, "AnimatedObjectGroup started animation" );
@@ -168,7 +168,7 @@ namespace Castor3D
 	{
 		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
-			m_animations.insert( { p_name, { AnimationState::Stopped, false, 1.0f } } );
+			m_animations.insert( { p_name, { AnimationState::eStopped, false, 1.0f } } );
 
 			for ( auto l_it : m_objects )
 			{
@@ -244,7 +244,7 @@ namespace Castor3D
 				l_it.second->StartAnimation( p_name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::Playing;
+			l_itAnim->second.m_state = AnimationState::ePlaying;
 		}
 	}
 
@@ -259,7 +259,7 @@ namespace Castor3D
 				l_it.second->StopAnimation( p_name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::Stopped;
+			l_itAnim->second.m_state = AnimationState::eStopped;
 		}
 	}
 
@@ -274,7 +274,7 @@ namespace Castor3D
 				l_it.second->PauseAnimation( p_name );
 			}
 
-			l_itAnim->second.m_state = AnimationState::Paused;
+			l_itAnim->second.m_state = AnimationState::ePaused;
 		}
 	}
 
@@ -287,7 +287,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::Playing;
+			l_it.second.m_state = AnimationState::ePlaying;
 		}
 	}
 
@@ -300,7 +300,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::Stopped;
+			l_it.second.m_state = AnimationState::eStopped;
 		}
 	}
 
@@ -313,7 +313,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_animations )
 		{
-			l_it.second.m_state = AnimationState::Paused;
+			l_it.second.m_state = AnimationState::ePaused;
 		}
 	}
 }

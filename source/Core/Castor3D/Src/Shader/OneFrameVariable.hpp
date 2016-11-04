@@ -263,7 +263,7 @@ namespace Castor3D
 		 */
 		static inline VariableType GetVariableType()
 		{
-			return VariableType::One;
+			return VariableType::eOne;
 		}
 		/**
 		 *\~english

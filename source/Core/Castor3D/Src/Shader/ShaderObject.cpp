@@ -138,7 +138,7 @@ namespace Castor3D
 
 	void ShaderObject::SetFile( ShaderModel p_eModel, Path const & p_filename )
 	{
-		m_status = ShaderStatus::NotCompiled;
+		m_status = ShaderStatus::eNotCompiled;
 		m_arrayFiles[size_t( p_eModel )].clear();
 		m_arraySources[size_t( p_eModel )].clear();
 
@@ -171,7 +171,7 @@ namespace Castor3D
 
 	void ShaderObject::SetSource( ShaderModel p_eModel, String const & p_strSource )
 	{
-		m_status = ShaderStatus::NotCompiled;
+		m_status = ShaderStatus::eNotCompiled;
 		m_arraySources[size_t( p_eModel )] = p_strSource;
 	}
 
@@ -221,7 +221,7 @@ namespace Castor3D
 
 		if ( !l_compilerLog.empty() )
 		{
-			if ( m_status == ShaderStatus::Error )
+			if ( m_status == ShaderStatus::eError )
 			{
 				Logger::LogError( l_compilerLog );
 			}
@@ -236,16 +236,16 @@ namespace Castor3D
 			Logger::LogInfo( l_source.str() );
 			m_loadedSource.clear();
 		}
-		else if ( m_status == ShaderStatus::Error )
+		else if ( m_status == ShaderStatus::eError )
 		{
 			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
 			StringStream l_source;
 			l_source << format::line_prefix();
 			l_source << m_loadedSource;
 			Logger::LogInfo( l_source.str() );
-			m_status = ShaderStatus::NotCompiled;
+			m_status = ShaderStatus::eNotCompiled;
 		}
 
-		return m_status != ShaderStatus::Error;
+		return m_status != ShaderStatus::eError;
 	}
 }

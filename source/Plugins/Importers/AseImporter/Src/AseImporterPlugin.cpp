@@ -24,7 +24,7 @@ C3D_Ase_API void GetRequiredVersion( Version & p_version )
 
 C3D_Ase_API PluginType GetType()
 {
-	return PluginType::Importer;
+	return PluginType::eImporter;
 }
 
 C3D_Ase_API String GetName()

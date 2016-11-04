@@ -361,9 +361,9 @@ namespace Castor3D
 		std::array< InterpolationMode, size_t( InterpolationFilter::eCount ) > m_eInterpolationModes
 		{
 			{
-				InterpolationMode::Nearest,
-				InterpolationMode::Nearest,
-				InterpolationMode::Undefined,
+				InterpolationMode::eNearest,
+				InterpolationMode::eNearest,
+				InterpolationMode::eUndefined,
 			}
 		};
 		//!\~english	Sampler wrapping modes.
@@ -371,9 +371,9 @@ namespace Castor3D
 		std::array< WrapMode, size_t( TextureUVW::eCount ) > m_eWrapModes
 		{
 			{
-				WrapMode::Repeat,
-				WrapMode::Repeat,
-				WrapMode::Repeat,
+				WrapMode::eRepeat,
+				WrapMode::eRepeat,
+				WrapMode::eRepeat,
 			}
 		};
 		//!\~english	Minimal LOD Level.
@@ -393,10 +393,10 @@ namespace Castor3D
 		real m_rMaxAnisotropy{ 1.0_r };
 		//!\~english	The texture comparison mode.
 		//!\~french		Le mode de comparaison de la texture.
-		ComparisonMode m_comparisonMode{ ComparisonMode::None };
+		ComparisonMode m_comparisonMode{ ComparisonMode::eNone };
 		//!\~english	The texture comparison function.
 		//!\~french		La fonction de comparaison de la texture.
-		ComparisonFunc m_comparisonFunc{ ComparisonFunc::LEqual };
+		ComparisonFunc m_comparisonFunc{ ComparisonFunc::eLEqual };
 	};
 }
 

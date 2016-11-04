@@ -475,15 +475,15 @@ namespace Castor3D
 		//!\~english The parent shader program	\~french Le programme parent
 		ShaderProgram * m_parent{ nullptr };
 		//!<\~english The shader compile status	\~french Le statut de compilation du shader
-		ShaderStatus m_status{ ShaderStatus::NotCompiled };
+		ShaderStatus m_status{ ShaderStatus::eNotCompiled };
 		//!\~english The input primitive type (for geometry shaders)	\~french Le type de primitives en entrée (pour les geometry shaders)
-		Topology m_eInputType{ Topology::Triangles };
+		Topology m_eInputType{ Topology::eTriangles };
 		//!\~english The output primitive type (for geometry shaders)	\~french Le type de primitives en sortie (pour les geometry shaders)
-		Topology m_eOutputType{ Topology::Triangles };
+		Topology m_eOutputType{ Topology::eTriangles };
 		//!\~english The output vertex count (for geometry shaders)	\~french Le nombre de vertex générés (pour les geometry shaders)
 		uint8_t m_uiOutputVtxCount{ 3 };
 		//!\~english The current shader model	\~french Le modèle de shader actuel
-		ShaderModel m_eShaderModel{ ShaderModel::Model1 };
+		ShaderModel m_eShaderModel{ ShaderModel::eModel1 };
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, size_t( ShaderModel::eCount ) > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader

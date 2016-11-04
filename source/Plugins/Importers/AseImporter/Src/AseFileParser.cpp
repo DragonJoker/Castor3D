@@ -588,7 +588,7 @@ namespace Ase
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		Path l_path;
 		p_params[0]->Get( l_path );
-		l_pContext->m_importer.LoadTexture( l_path, *l_pContext->pPass, TextureChannel::Diffuse );
+		l_pContext->m_importer.LoadTexture( l_path, *l_pContext->pPass, TextureChannel::eDiffuse );
 	}
 	END_ATTRIBUTE()
 

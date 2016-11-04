@@ -137,7 +137,6 @@ namespace Castor3D
 
 	// Mesh Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_MeshNormals )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshSubmesh )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshMorphImport )

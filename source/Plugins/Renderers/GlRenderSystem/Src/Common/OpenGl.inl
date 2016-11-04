@@ -499,47 +499,47 @@ namespace GlRender
 		switch ( p_type )
 		{
 		case GlslAttributeType::eFloat:
-			return Castor3D::ElementType::Float;
+			return Castor3D::ElementType::eFloat;
 			break;
 
 		case GlslAttributeType::eFloatVec2:
-			return Castor3D::ElementType::Vec2;
+			return Castor3D::ElementType::eVec2;
 			break;
 
 		case GlslAttributeType::eFloatVec3:
-			return Castor3D::ElementType::Vec3;
+			return Castor3D::ElementType::eVec3;
 			break;
 
 		case GlslAttributeType::eFloatVec4:
-			return Castor3D::ElementType::Vec4;
+			return Castor3D::ElementType::eVec4;
 			break;
 
 		case GlslAttributeType::eInt:
-			return Castor3D::ElementType::Int;
+			return Castor3D::ElementType::eInt;
 			break;
 
 		case GlslAttributeType::eIntVec2:
-			return Castor3D::ElementType::IVec2;
+			return Castor3D::ElementType::eIVec2;
 			break;
 
 		case GlslAttributeType::eIntVec3:
-			return Castor3D::ElementType::IVec3;
+			return Castor3D::ElementType::eIVec3;
 			break;
 
 		case GlslAttributeType::eIntVec4:
-			return Castor3D::ElementType::IVec4;
+			return Castor3D::ElementType::eIVec4;
 			break;
 
 		case GlslAttributeType::eFloatMat2:
-			return Castor3D::ElementType::Mat2;
+			return Castor3D::ElementType::eMat2;
 			break;
 
 		case GlslAttributeType::eFloatMat3:
-			return Castor3D::ElementType::Mat3;
+			return Castor3D::ElementType::eMat3;
 			break;
 
 		case GlslAttributeType::eFloatMat4:
-			return Castor3D::ElementType::Mat4;
+			return Castor3D::ElementType::eMat4;
 			break;
 
 		default:
@@ -547,7 +547,7 @@ namespace GlRender
 			break;
 		}
 
-		return Castor3D::ElementType::Count;
+		return Castor3D::ElementType::eCount;
 	}
 
 	Castor::String const & OpenGl::GetGlslErrorString( int p_index )const
@@ -562,11 +562,11 @@ namespace GlRender
 
 	inline GlTexDim OpenGl::Get( Castor3D::TextureType p_index )const
 	{
-		if ( p_index == Castor3D::TextureType::Buffer )
+		if ( p_index == Castor3D::TextureType::eBuffer )
 		{
 			if ( !HasTbo() )
 			{
-				p_index = Castor3D::TextureType::OneDimension;
+				p_index = Castor3D::TextureType::eOneDimension;
 			}
 		}
 
@@ -625,9 +625,9 @@ namespace GlRender
 
 	inline uint32_t OpenGl::GetComponents( uint32_t p_components )const
 	{
-		return ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Colour ) ) ? uint32_t( GlBufferBit::eColour ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Depth ) ) ? uint32_t( GlBufferBit::eDepth ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::Stencil ) ) ? uint32_t( GlBufferBit::eStencil ) : 0u );
+		return ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eColour ) ) ? uint32_t( GlBufferBit::eColour ) : 0u )
+			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eDepth ) ) ? uint32_t( GlBufferBit::eDepth ) : 0u )
+			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eStencil ) ) ? uint32_t( GlBufferBit::eStencil ) : 0u );
 	}
 
 	inline GlAttachmentPoint OpenGl::Get( Castor3D::AttachmentPoint p_eAttachment )const
@@ -759,47 +759,47 @@ namespace GlRender
 	{
 		GlBufferMode l_eReturn = GlBufferMode( 0 );
 
-		if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::Dynamic ) )
+		if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eDynamic ) )
 		{
-			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
+			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
 				l_eReturn = GlBufferMode::eDynamicRead;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
 				l_eReturn = GlBufferMode::eDynamicDraw;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
 				l_eReturn = GlBufferMode::eDynamicCopy;
 			}
 		}
-		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::Static ) )
+		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eStatic ) )
 		{
-			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
+			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
 				l_eReturn = GlBufferMode::eStaticRead;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
 				l_eReturn = GlBufferMode::eStaticDraw;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
 				l_eReturn = GlBufferMode::eStaticCopy;
 			}
 		}
-		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::Stream ) )
+		else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessType::eStream ) )
 		{
-			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Read ) )
+			if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eRead ) )
 			{
 				l_eReturn = GlBufferMode::eStreamRead;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Draw ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eDraw ) )
 			{
 				l_eReturn = GlBufferMode::eStreamDraw;
 			}
-			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::Copy ) )
+			else if ( Castor::CheckFlag( p_flags, Castor3D::BufferAccessNature::eCopy ) )
 			{
 				l_eReturn = GlBufferMode::eStreamCopy;
 			}
@@ -812,9 +812,9 @@ namespace GlRender
 	{
 		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
 
-		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
+		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eRead ) )
 		{
-			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
+			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 			{
 				l_eLockFlags = GlAccessType::eReadWrite;
 			}
@@ -823,7 +823,7 @@ namespace GlRender
 				l_eLockFlags = GlAccessType::eRead;
 			}
 		}
-		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
+		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 		{
 			l_eLockFlags = GlAccessType::eWrite;
 		}
@@ -835,16 +835,16 @@ namespace GlRender
 	{
 		uint32_t l_uiFlags = 0;
 
-		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Read ) )
+		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eRead ) )
 		{
 			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eRead );
 
-			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
+			if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 			{
 				Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
 			}
 		}
-		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::Write ) )
+		else if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eWrite ) )
 		{
 			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eWrite );
 			Castor::AddFlag( l_uiFlags, GlBufferMappingBit::eInvalidateRange );

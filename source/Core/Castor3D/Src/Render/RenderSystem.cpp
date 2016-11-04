@@ -42,7 +42,7 @@ namespace Castor3D
 		m_gpuInformations = std::move( p_informations );
 		DoInitialise();
 		m_gpuInformations.UpdateMaxShaderModel();
-		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= ShaderModel::Model3 );
+		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= ShaderModel::eModel3 );
 		Logger::LogInfo( cuT( "Vendor: " ) + m_gpuInformations.GetVendor() );
 		Logger::LogInfo( cuT( "Renderer: " ) + m_gpuInformations.GetRenderer() );
 		Logger::LogInfo( cuT( "Version: " ) + m_gpuInformations.GetVersion() );
@@ -94,8 +94,8 @@ namespace Castor3D
 
 	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
 	{
-		Topology l_input = Topology::Points;
-		Topology l_output = Topology::TriangleStrips;
+		Topology l_input = Topology::ePoints;
+		Topology l_output = Topology::eTriangleStrips;
 		uint32_t l_count = 4;
 
 		auto & l_cache = GetEngine()->GetShaderProgramCache();
@@ -107,7 +107,7 @@ namespace Castor3D
 		auto & l_billboardUbo = l_program->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, MASK_SHADER_TYPE_GEOMETRY );
 		l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
 
-		ShaderObjectSPtr l_object = l_program->CreateObject( ShaderType::Geometry );
+		ShaderObjectSPtr l_object = l_program->CreateObject( ShaderType::eGeometry );
 		l_object->SetInputType( l_input );
 		l_object->SetOutputType( l_output );
 		l_object->SetOutputVtxCount( l_count );
@@ -225,9 +225,9 @@ namespace Castor3D
 
 		String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 		auto l_model = GetGpuInformations().GetMaxShaderModel();
-		l_program->SetSource( ShaderType::Vertex, l_model, l_strVtxShader );
-		l_program->SetSource( ShaderType::Geometry, l_model, l_strGeoShader );
-		l_program->SetSource( ShaderType::Pixel, l_model, l_strPxlShader );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
+		l_program->SetSource( ShaderType::eGeometry, l_model, l_strGeoShader );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 
 		return l_program;
 	}

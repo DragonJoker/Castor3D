@@ -231,15 +231,15 @@ namespace Testing
 
 		switch ( p_a.GetLightType() )
 		{
-		case LightType::Directional:
+		case LightType::eDirectional:
 			l_return &= CT_EQUAL( static_cast< DirectionalLight const & >( p_a ), static_cast< DirectionalLight const & >( p_b ) );
 			break;
 
-		case LightType::Point:
+		case LightType::ePoint:
 			l_return &= CT_EQUAL( static_cast< PointLight const & >( p_a ), static_cast< PointLight const & >( p_b ) );
 			break;
 
-		case LightType::Spot:
+		case LightType::eSpot:
 			l_return &= CT_EQUAL( static_cast< SpotLight const & >( p_a ), static_cast< SpotLight const & >( p_b ) );
 			break;
 		}
@@ -393,7 +393,7 @@ namespace Testing
 		bool l_return{ CT_EQUAL( p_a.GetName(), p_b.GetName() ) };
 		CT_REQUIRE( p_a.GetType() == p_b.GetType() );
 
-		if ( p_a.GetType() == AnimationType::Skeleton )
+		if ( p_a.GetType() == AnimationType::eSkeleton )
 		{
 			l_return = CT_EQUAL( static_cast< SkeletonAnimation const & >( p_a ), static_cast< SkeletonAnimation const & >( p_b ) );
 		}
@@ -577,7 +577,7 @@ namespace Testing
 
 		switch ( p_a.GetAnimation().GetType() )
 		{
-		case AnimationType::Skeleton:
+		case AnimationType::eSkeleton:
 			l_return &= CT_EQUAL( static_cast< SkeletonAnimationInstance const & >( p_a ), static_cast< SkeletonAnimationInstance const & >( p_b ) );
 			break;
 		}

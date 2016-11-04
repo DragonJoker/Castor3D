@@ -250,7 +250,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
@@ -299,7 +299,7 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
+			l_rsState.SetCulledFaces( Culling::eNone );
 			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}
@@ -316,13 +316,13 @@ namespace Castor3D
 		{
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
-			l_rsState.SetCulledFaces( Culling::None );
+			l_rsState.SetCulledFaces( Culling::eNone );
 			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}
 
 	void ShadowMapPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const
 	{
-		AddFlag( p_programFlags, ProgramFlag::ShadowMap );
+		AddFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}
 }

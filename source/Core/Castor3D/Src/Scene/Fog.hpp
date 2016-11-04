@@ -110,7 +110,7 @@ namespace Castor3D
 	private:
 		//!\~english	The fog type.
 		//!\~french		Le type de brouillard.
-		FogType m_type{ FogType::Disabled };
+		FogType m_type{ FogType::eDisabled };
 		//!\~english	The fog's density.
 		//!\~french		La densité du brouillard.
 		real m_density{ 0.0_r };

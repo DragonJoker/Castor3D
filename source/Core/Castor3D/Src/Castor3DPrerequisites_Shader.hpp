@@ -41,20 +41,20 @@ namespace Castor3D
 	{
 		//!\~english	Vertex shaders.
 		//!\~french		Vertex shaders.
-		Model1,
+		eModel1,
 		//!\~english	Pixel shaders.
 		//!\~french		Pixel shaders.
-		Model2,
+		eModel2,
 		//!\~english	Geometry shaders.
 		//!\~french		Geometry shaders.
-		Model3,
+		eModel3,
 		//!\~english	Tessellation shaders.
 		//!\~french		Tessellation shaders.
-		Model4,
+		eModel4,
 		//!\~english	Compute shaders.
 		//!\~french		Compute shaders.
-		Model5,
-		CASTOR_SCOPED_ENUM_BOUNDS( Model1 )
+		eModel5,
+		CASTOR_SCOPED_ENUM_BOUNDS( eModel1 )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -68,11 +68,11 @@ namespace Castor3D
 	enum class ShaderStatus
 		: uint8_t
 	{
-		DontExist,
-		NotCompiled,
-		Error,
-		Compiled,
-		CASTOR_SCOPED_ENUM_BOUNDS( DontExist )
+		eDontExist,
+		eNotCompiled,
+		eError,
+		eCompiled,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDontExist )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -86,10 +86,10 @@ namespace Castor3D
 	enum class ProgramStatus
 		: uint8_t
 	{
-		NotLinked,
-		Error,
-		Linked,
-		CASTOR_SCOPED_ENUM_BOUNDS( NotLinked )
+		eNotLinked,
+		eError,
+		eLinked,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNotLinked )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -101,14 +101,14 @@ namespace Castor3D
 	enum class ShaderType
 		: int8_t
 	{
-		None = -1,
-		Vertex,
-		Hull,
-		Domain,
-		Geometry,
-		Pixel,
-		Compute,
-		CASTOR_SCOPED_ENUM_BOUNDS( None )
+		eNone = -1,
+		eVertex,
+		eHull,
+		eDomain,
+		eGeometry,
+		ePixel,
+		eCompute,
+		CASTOR_SCOPED_ENUM_BOUNDS( eNone )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -117,12 +117,12 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de shader object
 	*/
-	static const uint32_t MASK_SHADER_TYPE_VERTEX = uint32_t( 0x1 ) << int( ShaderType::Vertex );
-	static const uint32_t MASK_SHADER_TYPE_HULL = uint32_t( 0x1 ) << int( ShaderType::Hull );
-	static const uint32_t MASK_SHADER_TYPE_DOMAIN = uint32_t( 0x1 ) << int( ShaderType::Domain );
-	static const uint32_t MASK_SHADER_TYPE_GEOMETRY = uint32_t( 0x1 ) << int( ShaderType::Geometry );
-	static const uint32_t MASK_SHADER_TYPE_PIXEL = uint32_t( 0x1 ) << int( ShaderType::Pixel );
-	static const uint32_t MASK_SHADER_TYPE_COMPUTE = uint32_t( 0x1 ) << int( ShaderType::Compute );
+	static const uint32_t MASK_SHADER_TYPE_VERTEX = uint32_t( 0x1 ) << int( ShaderType::eVertex );
+	static const uint32_t MASK_SHADER_TYPE_HULL = uint32_t( 0x1 ) << int( ShaderType::eHull );
+	static const uint32_t MASK_SHADER_TYPE_DOMAIN = uint32_t( 0x1 ) << int( ShaderType::eDomain );
+	static const uint32_t MASK_SHADER_TYPE_GEOMETRY = uint32_t( 0x1 ) << int( ShaderType::eGeometry );
+	static const uint32_t MASK_SHADER_TYPE_PIXEL = uint32_t( 0x1 ) << int( ShaderType::ePixel );
+	static const uint32_t MASK_SHADER_TYPE_COMPUTE = uint32_t( 0x1 ) << int( ShaderType::eCompute );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13
@@ -137,31 +137,31 @@ namespace Castor3D
 	{
 		//!\~english	Program using instanciation.
 		//!\~french		Programme utilisant l'instanciation.
-		Instantiation = 0x0001,
+		eInstantiation = 0x0001,
 		//!\~english	Program using skeleton animations.
 		//!\~french		Programme utilisant les animations par squelette.
-		Skinning = 0x0002,
+		eSkinning = 0x0002,
 		//!\~english	Program used by billboards.
 		//!\~french		Programme utilisé par des billboards.
-		Billboards = 0x0004,
+		eBillboards = 0x0004,
 		//!\~english	Program using per-vertex animations.
 		//!\~french		Programme utilisant les animations par sommet.
-		Morphing = 0x0008,
+		eMorphing = 0x0008,
 		//!\~english	Program used in transparent pipeline.
 		//!\~french		Programme utilisé dans le pipeline des objets transparents.
-		AlphaBlending = 0x0010,
+		eAlphaBlending = 0x0010,
 		//!\~english	Picking pass program.
 		//\~french		Programme de passe de picking.
-		Picking = 0x0020,
+		ePicking = 0x0020,
 		//!\~english	Shadow map is available as input.
 		//\~french		La map d'ombres est disponible en entrée.
-		Shadows = 0x0040,
+		eShadows = 0x0040,
 		//!\~english	Shader used to render a shadow map.
 		//\~french		Shader utilisé pour dessiner la shadow map.
-		ShadowMap = 0x0080,
+		eShadowMap = 0x0080,
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
-		Lighting = 0x0100,
+		eLighting = 0x0100,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -175,50 +175,50 @@ namespace Castor3D
 	{
 		//!\~english	One variable.
 		//!\~french		Une variable.
-		One,
+		eOne,
 		//!\~english	1 variable array.
 		//!\~french		Tableau de 1 variable.
-		Vec1,
+		eVec1,
 		//!\~english	2 variables array.
 		//!\~french		Tableau de 2 variables.
-		Vec2,
+		eVec2,
 		//!\~english	3 variables array.
 		//!\~french		Tableau de 3 variables.
-		Vec3,
+		eVec3,
 		//!\~english	4 variables array.
 		//!\~french		Tableau de 4 variables.
-		Vec4,
+		eVec4,
 		//!\~english	1x1 matrix.
 		//!\~french		Matrice 1x1.
-		Mat1,
+		eMat1,
 		//!\~english	2x2 matrix.
 		//!\~french		Matrice 2x2.
-		Mat2x2,
+		eMat2x2,
 		//!\~english	2x3 matrix.
 		//!\~french		Matrice 2x3.
-		Mat2x3,
+		eMat2x3,
 		//!\~english	2x4 matrix.
 		//!\~french		Matrice 2x4.
-		Mat2x4,
+		eMat2x4,
 		//!\~english	3x2 matrix.
 		//!\~french		Matrice 3x2.
-		Mat3x2,
+		eMat3x2,
 		//!\~english	3x3 matrix.
 		//!\~french		Matrice 3x3.
-		Mat3x3,
+		eMat3x3,
 		//!\~english	3x4 matrix.
 		//!\~french		Matrice 3x4.
-		Mat3x4,
+		eMat3x4,
 		//!\~english	4x2 matrix.
 		//!\~french		Matrice 4x2.
-		Mat4x2,
+		eMat4x2,
 		//!\~english	4x3 matrix.
 		//!\~french		Matrice 4x3
-		Mat4x3,
+		eMat4x3,
 		//!\~english	4x4 matrix.
 		//!\~french		Matrice 4x4.
-		Mat4x4,
-		CASTOR_SCOPED_ENUM_BOUNDS( One )
+		eMat4x4,
+		CASTOR_SCOPED_ENUM_BOUNDS( eOne )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -230,102 +230,102 @@ namespace Castor3D
 	enum class FrameVariableType
 		: uint8_t
 	{
-		Bool,
-		Int,
-		UInt,
-		Float,
-		Double,
-		Sampler,
-		Vec2b,
-		Vec3b,
-		Vec4b,
-		Vec2i,
-		Vec3i,
-		Vec4i,
-		Vec2ui,
-		Vec3ui,
-		Vec4ui,
-		Vec2f,
-		Vec3f,
-		Vec4f,
-		Vec2d,
-		Vec3d,
-		Vec4d,
-		Mat2x2b,
-		Mat2x3b,
-		Mat2x4b,
-		Mat3x2b,
-		Mat3x3b,
-		Mat3x4b,
-		Mat4x2b,
-		Mat4x3b,
-		Mat4x4b,
-		Mat2x2i,
-		Mat2x3i,
-		Mat2x4i,
-		Mat3x2i,
-		Mat3x3i,
-		Mat3x4i,
-		Mat4x2i,
-		Mat4x3i,
-		Mat4x4i,
-		Mat2x2ui,
-		Mat2x3ui,
-		Mat2x4ui,
-		Mat3x2ui,
-		Mat3x3ui,
-		Mat3x4ui,
-		Mat4x2ui,
-		Mat4x3ui,
-		Mat4x4ui,
-		Mat2x2f,
-		Mat2x3f,
-		Mat2x4f,
-		Mat3x2f,
-		Mat3x3f,
-		Mat3x4f,
-		Mat4x2f,
-		Mat4x3f,
-		Mat4x4f,
-		Mat2x2d,
-		Mat2x3d,
-		Mat2x4d,
-		Mat3x2d,
-		Mat3x3d,
-		Mat3x4d,
-		Mat4x2d,
-		Mat4x3d,
-		Mat4x4d,
+		eBool,
+		eInt,
+		eUInt,
+		eFloat,
+		eDouble,
+		eSampler,
+		eVec2b,
+		eVec3b,
+		eVec4b,
+		eVec2i,
+		eVec3i,
+		eVec4i,
+		eVec2ui,
+		eVec3ui,
+		eVec4ui,
+		eVec2f,
+		eVec3f,
+		eVec4f,
+		eVec2d,
+		eVec3d,
+		eVec4d,
+		eMat2x2b,
+		eMat2x3b,
+		eMat2x4b,
+		eMat3x2b,
+		eMat3x3b,
+		eMat3x4b,
+		eMat4x2b,
+		eMat4x3b,
+		eMat4x4b,
+		eMat2x2i,
+		eMat2x3i,
+		eMat2x4i,
+		eMat3x2i,
+		eMat3x3i,
+		eMat3x4i,
+		eMat4x2i,
+		eMat4x3i,
+		eMat4x4i,
+		eMat2x2ui,
+		eMat2x3ui,
+		eMat2x4ui,
+		eMat3x2ui,
+		eMat3x3ui,
+		eMat3x4ui,
+		eMat4x2ui,
+		eMat4x3ui,
+		eMat4x4ui,
+		eMat2x2f,
+		eMat2x3f,
+		eMat2x4f,
+		eMat3x2f,
+		eMat3x3f,
+		eMat3x4f,
+		eMat4x2f,
+		eMat4x3f,
+		eMat4x4f,
+		eMat2x2d,
+		eMat2x3d,
+		eMat2x4d,
+		eMat3x2d,
+		eMat3x3d,
+		eMat3x4d,
+		eMat4x2d,
+		eMat4x3d,
+		eMat4x4d,
 #if CASTOR_USE_DOUBLE
-		Real = Double,
-		Vec2r = Vec2d,
-		Vec3r = Vec3d,
-		Vec4r = Vec4d,
-		Mat2x2r = Mat2x2d,
-		Mat2x3r = Mat2x3d,
-		Mat2x4r = Mat2x4d,
-		Mat3x2r = Mat3x2d,
-		Mat3x3r = Mat3x3d,
-		Mat3x4r = Mat3x4d,
-		Mat4x2r = Mat4x2d,
-		Mat4x3r = Mat4x3d,
-		Mat4x4r = Mat4x4d,
+		eReal = eDouble,
+		eVec2r = eVec2d,
+		eVec3r = eVec3d,
+		eVec4r = eVec4d,
+		eMat2x2r = eMat2x2d,
+		eMat2x3r = eMat2x3d,
+		eMat2x4r = eMat2x4d,
+		eMat3x2r = eMat3x2d,
+		eMat3x3r = eMat3x3d,
+		eMat3x4r = eMat3x4d,
+		eMat4x2r = eMat4x2d,
+		eMat4x3r = eMat4x3d,
+		eMat4x4r = eMat4x4d,
 #else
-		Real = Float,
-		Vec2r = Vec2f,
-		Vec3r = Vec3f,
-		Vec4r = Vec4f,
-		Mat2x2r = Mat2x2f,
-		Mat2x3r = Mat2x3f,
-		Mat2x4r = Mat2x4f,
-		Mat3x2r = Mat3x2f,
-		Mat3x3r = Mat3x3f,
-		Mat3x4r = Mat3x4f,
-		Mat4x2r = Mat4x2f,
-		Mat4x3r = Mat4x3f,
-		Mat4x4r = Mat4x4f,
+		eReal = eFloat,
+		eVec2r = eVec2f,
+		eVec3r = eVec3f,
+		eVec4r = eVec4f,
+		eMat2x2r = eMat2x2f,
+		eMat2x3r = eMat2x3f,
+		eMat2x4r = eMat2x4f,
+		eMat3x2r = eMat3x2f,
+		eMat3x3r = eMat3x3f,
+		eMat3x4r = eMat3x4f,
+		eMat4x2r = eMat4x2f,
+		eMat4x3r = eMat4x3f,
+		eMat4x4r = eMat4x4f,
 #endif
-		CASTOR_SCOPED_ENUM_BOUNDS( Bool )
+		CASTOR_SCOPED_ENUM_BOUNDS( eBool )
 	};
 
 	class ShaderProgram;
@@ -555,8 +555,8 @@ namespace Castor3D
 
 #define UBO_ANIMATION( Writer, Flags )\
 	GLSL::Ubo l_animation{ l_writer, ShaderProgram::BufferAnimation };\
-	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::Skinning ) );\
-	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::Morphing ) );\
+	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
+	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
 	l_animation.End()
 }
 

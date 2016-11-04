@@ -26,7 +26,7 @@ namespace Castor3D
 		m_colourTexture.SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::ReadWrite, PixelFormat::eA8R8G8B8, p_size );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eReadWrite, PixelFormat::eA8R8G8B8, p_size );
 
 		m_colourTexture.SetSampler( p_sampler );
 		l_colourTexture->GetImage().InitialiseSource();
@@ -38,9 +38,9 @@ namespace Castor3D
 		m_fbo->Initialise( p_size );
 		m_fbo->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
 
-		if ( m_fbo->Bind( FrameBufferMode::Config ) )
+		if ( m_fbo->Bind( FrameBufferMode::eConfig ) )
 		{
-			m_fbo->Attach( AttachmentPoint::Colour, 0, m_colourAttach, l_colourTexture->GetType() );
+			m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
 			l_return = m_fbo->IsComplete();
 			m_fbo->Unbind();
 		}
@@ -50,7 +50,7 @@ namespace Castor3D
 
 	void PostEffect::PostEffectSurface::Cleanup()
 	{
-		m_fbo->Bind( FrameBufferMode::Config );
+		m_fbo->Bind( FrameBufferMode::eConfig );
 		m_fbo->DetachAll();
 		m_fbo->Unbind();
 		m_fbo->Cleanup();

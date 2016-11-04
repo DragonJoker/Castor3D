@@ -74,39 +74,39 @@ namespace GuiCommon
 
 			switch ( l_unit->GetChannel() )
 			{
-			case TextureChannel::Colour:
+			case TextureChannel::eColour:
 				l_selected = PROPERTY_CHANNEL_COLOUR;
 				break;
 
-			case TextureChannel::Diffuse:
+			case TextureChannel::eDiffuse:
 				l_selected = PROPERTY_CHANNEL_DIFFUSE;
 				break;
 
-			case TextureChannel::Normal:
+			case TextureChannel::eNormal:
 				l_selected = PROPERTY_CHANNEL_NORMAL;
 				break;
 
-			case TextureChannel::Opacity:
+			case TextureChannel::eOpacity:
 				l_selected = PROPERTY_CHANNEL_OPACITY;
 				break;
 
-			case TextureChannel::Specular:
+			case TextureChannel::eSpecular:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
 				break;
 
-			case TextureChannel::Emissive:
+			case TextureChannel::eEmissive:
 				l_selected = PROPERTY_CHANNEL_EMISSIVE;
 				break;
 
-			case TextureChannel::Height:
+			case TextureChannel::eHeight:
 				l_selected = PROPERTY_CHANNEL_HEIGHT;
 				break;
 
-			case TextureChannel::Ambient:
+			case TextureChannel::eAmbient:
 				l_selected = PROPERTY_CHANNEL_AMBIENT;
 				break;
 
-			case TextureChannel::Gloss:
+			case TextureChannel::eGloss:
 				l_selected = PROPERTY_CHANNEL_GLOSS;
 				break;
 			}
@@ -133,47 +133,47 @@ namespace GuiCommon
 			{
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_COLOUR )
 				{
-					OnChannelChange( TextureChannel::Colour );
+					OnChannelChange( TextureChannel::eColour );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_DIFFUSE )
 				{
-					OnChannelChange( TextureChannel::Diffuse );
+					OnChannelChange( TextureChannel::eDiffuse );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_NORMAL )
 				{
-					OnChannelChange( TextureChannel::Normal );
+					OnChannelChange( TextureChannel::eNormal );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_OPACITY )
 				{
-					OnChannelChange( TextureChannel::Opacity );
+					OnChannelChange( TextureChannel::eOpacity );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
-					OnChannelChange( TextureChannel::Specular );
+					OnChannelChange( TextureChannel::eSpecular );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
 				{
-					OnChannelChange( TextureChannel::Emissive );
+					OnChannelChange( TextureChannel::eEmissive );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )
 				{
-					OnChannelChange( TextureChannel::Height );
+					OnChannelChange( TextureChannel::eHeight );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_AMBIENT )
 				{
-					OnChannelChange( TextureChannel::Ambient );
+					OnChannelChange( TextureChannel::eAmbient );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_GLOSS )
 				{
-					OnChannelChange( TextureChannel::Gloss );
+					OnChannelChange( TextureChannel::eGloss );
 				}
 			}
 			else if ( l_property->GetName() == PROPERTY_TEXTURE_IMAGE )
@@ -203,7 +203,7 @@ namespace GuiCommon
 			{
 				// Absolute path
 				l_unit->SetAutoMipmaps( true );
-				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Read, AccessType::Read );
+				auto l_texture = l_unit->GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
 				l_texture->GetImage().InitialiseSource( Path{}, Path{ p_value } );
 				l_unit->SetTexture( l_texture );
 				l_unit->Initialise();

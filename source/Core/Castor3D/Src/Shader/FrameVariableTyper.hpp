@@ -55,7 +55,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< OneFrameVariable< bool > >
 	{
-		static FrameVariableType const value = FrameVariableType::Bool;
+		static FrameVariableType const value = FrameVariableType::eBool;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -72,7 +72,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< bool, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec2b;
+		static FrameVariableType const value = FrameVariableType::eVec2b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -89,7 +89,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< bool, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec3b;
+		static FrameVariableType const value = FrameVariableType::eVec3b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -106,7 +106,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< bool, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec4b;
+		static FrameVariableType const value = FrameVariableType::eVec4b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -123,7 +123,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 2, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x2b;
+		static FrameVariableType const value = FrameVariableType::eMat2x2b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -140,7 +140,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 2, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x3b;
+		static FrameVariableType const value = FrameVariableType::eMat2x3b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -157,7 +157,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 2, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x4b;
+		static FrameVariableType const value = FrameVariableType::eMat2x4b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -174,7 +174,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 3, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x2b;
+		static FrameVariableType const value = FrameVariableType::eMat3x2b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -191,7 +191,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 3, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x3b;
+		static FrameVariableType const value = FrameVariableType::eMat3x3b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -208,7 +208,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 3, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x4b;
+		static FrameVariableType const value = FrameVariableType::eMat3x4b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -225,7 +225,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 4, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x2b;
+		static FrameVariableType const value = FrameVariableType::eMat4x2b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -242,7 +242,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 4, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x3b;
+		static FrameVariableType const value = FrameVariableType::eMat4x3b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -259,7 +259,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< bool, 4, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x4b;
+		static FrameVariableType const value = FrameVariableType::eMat4x4b;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -276,7 +276,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< OneIntFrameVariable >
 	{
-		static FrameVariableType const value = FrameVariableType::Int;
+		static FrameVariableType const value = FrameVariableType::eInt;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -293,7 +293,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< int, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec2i;
+		static FrameVariableType const value = FrameVariableType::eVec2i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -310,7 +310,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< int, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec3i;
+		static FrameVariableType const value = FrameVariableType::eVec3i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -327,7 +327,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< int, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec4i;
+		static FrameVariableType const value = FrameVariableType::eVec4i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -344,7 +344,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 2, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x2i;
+		static FrameVariableType const value = FrameVariableType::eMat2x2i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -361,7 +361,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 2, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x3i;
+		static FrameVariableType const value = FrameVariableType::eMat2x3i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -378,7 +378,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 2, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x4i;
+		static FrameVariableType const value = FrameVariableType::eMat2x4i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -395,7 +395,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 3, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x2i;
+		static FrameVariableType const value = FrameVariableType::eMat3x2i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -412,7 +412,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 3, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x3i;
+		static FrameVariableType const value = FrameVariableType::eMat3x3i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -429,7 +429,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 3, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x4i;
+		static FrameVariableType const value = FrameVariableType::eMat3x4i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -446,7 +446,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 4, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x2i;
+		static FrameVariableType const value = FrameVariableType::eMat4x2i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -463,7 +463,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 4, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x3i;
+		static FrameVariableType const value = FrameVariableType::eMat4x3i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -480,7 +480,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< int, 4, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x4i;
+		static FrameVariableType const value = FrameVariableType::eMat4x4i;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -497,7 +497,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< OneFrameVariable< unsigned int > >
 	{
-		static FrameVariableType const value = FrameVariableType::UInt;
+		static FrameVariableType const value = FrameVariableType::eUInt;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -514,7 +514,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< unsigned int, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec2ui;
+		static FrameVariableType const value = FrameVariableType::eVec2ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -531,7 +531,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< unsigned int, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec3ui;
+		static FrameVariableType const value = FrameVariableType::eVec3ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -548,7 +548,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< unsigned int, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec4ui;
+		static FrameVariableType const value = FrameVariableType::eVec4ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -565,7 +565,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 2, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x2ui;
+		static FrameVariableType const value = FrameVariableType::eMat2x2ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -582,7 +582,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 2, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x3ui;
+		static FrameVariableType const value = FrameVariableType::eMat2x3ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -599,7 +599,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 2, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x4ui;
+		static FrameVariableType const value = FrameVariableType::eMat2x4ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -616,7 +616,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 3, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x2ui;
+		static FrameVariableType const value = FrameVariableType::eMat3x2ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -633,7 +633,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 3, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x3ui;
+		static FrameVariableType const value = FrameVariableType::eMat3x3ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -650,7 +650,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 3, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x4ui;
+		static FrameVariableType const value = FrameVariableType::eMat3x4ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -667,7 +667,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 4, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x2ui;
+		static FrameVariableType const value = FrameVariableType::eMat4x2ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -684,7 +684,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 4, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x3ui;
+		static FrameVariableType const value = FrameVariableType::eMat4x3ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -701,7 +701,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< unsigned int, 4, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x4ui;
+		static FrameVariableType const value = FrameVariableType::eMat4x4ui;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -718,7 +718,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< OneFrameVariable< float > >
 	{
-		static FrameVariableType const value = FrameVariableType::Float;
+		static FrameVariableType const value = FrameVariableType::eFloat;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -735,7 +735,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< float, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec2f;
+		static FrameVariableType const value = FrameVariableType::eVec2f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -752,7 +752,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< float, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec3f;
+		static FrameVariableType const value = FrameVariableType::eVec3f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -769,7 +769,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< float, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec4f;
+		static FrameVariableType const value = FrameVariableType::eVec4f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -786,7 +786,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 2, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x2f;
+		static FrameVariableType const value = FrameVariableType::eMat2x2f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -803,7 +803,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 2, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x3f;
+		static FrameVariableType const value = FrameVariableType::eMat2x3f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -820,7 +820,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 2, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x4f;
+		static FrameVariableType const value = FrameVariableType::eMat2x4f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -837,7 +837,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 3, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x2f;
+		static FrameVariableType const value = FrameVariableType::eMat3x2f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -854,7 +854,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 3, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x3f;
+		static FrameVariableType const value = FrameVariableType::eMat3x3f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -871,7 +871,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 3, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x4f;
+		static FrameVariableType const value = FrameVariableType::eMat3x4f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -888,7 +888,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 4, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x2f;
+		static FrameVariableType const value = FrameVariableType::eMat4x2f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -905,7 +905,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 4, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x3f;
+		static FrameVariableType const value = FrameVariableType::eMat4x3f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -922,7 +922,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< float, 4, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x4f;
+		static FrameVariableType const value = FrameVariableType::eMat4x4f;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -939,7 +939,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< OneFrameVariable< double > >
 	{
-		static FrameVariableType const value = FrameVariableType::Double;
+		static FrameVariableType const value = FrameVariableType::eDouble;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -956,7 +956,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< double, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec2d;
+		static FrameVariableType const value = FrameVariableType::eVec2d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -973,7 +973,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< double, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec3d;
+		static FrameVariableType const value = FrameVariableType::eVec3d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -990,7 +990,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< PointFrameVariable< double, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Vec4d;
+		static FrameVariableType const value = FrameVariableType::eVec4d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1007,7 +1007,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 2, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x2d;
+		static FrameVariableType const value = FrameVariableType::eMat2x2d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1024,7 +1024,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 2, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x3d;
+		static FrameVariableType const value = FrameVariableType::eMat2x3d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1041,7 +1041,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 2, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat2x4d;
+		static FrameVariableType const value = FrameVariableType::eMat2x4d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1058,7 +1058,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 3, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x2d;
+		static FrameVariableType const value = FrameVariableType::eMat3x2d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1075,7 +1075,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 3, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x3d;
+		static FrameVariableType const value = FrameVariableType::eMat3x3d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1092,7 +1092,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 3, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat3x4d;
+		static FrameVariableType const value = FrameVariableType::eMat3x4d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1109,7 +1109,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 4, 2 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x2d;
+		static FrameVariableType const value = FrameVariableType::eMat4x2d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1126,7 +1126,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 4, 3 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x3d;
+		static FrameVariableType const value = FrameVariableType::eMat4x3d;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -1143,7 +1143,7 @@ namespace Castor3D
 	template<>
 	struct FrameVariableTyper< MatrixFrameVariable< double, 4, 4 > >
 	{
-		static FrameVariableType const value = FrameVariableType::Mat4x4d;
+		static FrameVariableType const value = FrameVariableType::eMat4x4d;
 	};
 }
 

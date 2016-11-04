@@ -255,7 +255,7 @@ namespace GuiCommon
 	//		if ( p_pass->GetTextureUnitsCount() )
 	//		{
 	//			l_byA = 127;
-	//			wxImage * l_pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::Diffuse ), p_width, p_height );
+	//			wxImage * l_pImage = CreateTextureUnitImage( p_pass->GetTextureUnit( TextureChannel::eDiffuse ), p_width, p_height );
 	//
 	//			if ( l_pImage )
 	//			{

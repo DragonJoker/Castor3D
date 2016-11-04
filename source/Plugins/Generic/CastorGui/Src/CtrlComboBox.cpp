@@ -34,9 +34,9 @@ namespace CastorGui
 		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
 		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayCache().Add( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), OverlayType::eText, nullptr, GetBackground()->GetOverlay().shared_from_this() )->GetTextOverlay();
 		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetVAlign( VAlign::eCenter );
 		m_text = l_text;
 	}
 
@@ -149,11 +149,11 @@ namespace CastorGui
 		m_choices->SetPosition( Position( 0, GetSize().height() ) );
 		m_choices->SetSize( Size( GetSize().width() - GetSize().height(), -1 ) );
 
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
 			OnKeyDown( p_event );
 		} );
-		NonClientEventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		NonClientEventHandler::ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -255,12 +255,12 @@ namespace CastorGui
 			bool l_changed = false;
 			int l_index = GetSelected();
 
-			if ( p_event.GetKey() == eKEY_UP )
+			if ( p_event.GetKey() == KeyboardKey::eUp )
 			{
 				l_index--;
 				l_changed = true;
 			}
-			else if ( p_event.GetKey() == eKEY_DOWN )
+			else if ( p_event.GetKey() == KeyboardKey::eDown )
 			{
 				l_index++;
 				l_changed = true;

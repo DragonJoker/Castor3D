@@ -54,7 +54,7 @@ namespace GlRender
 			{
 				AttachmentPoint l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_eAttach == AttachmentPoint::Colour )
+				if ( l_eAttach == AttachmentPoint::eColour )
 				{
 					l_arrayAttaches.push_back( uint32_t( GetOpenGl().Get( l_eAttach ) ) + l_attach->GetAttachmentIndex() );
 				}
@@ -95,7 +95,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		bool l_return = DoBind( FrameBufferTarget::Read );
+		bool l_return = DoBind( FrameBufferTarget::eRead );
 
 		if ( l_return )
 		{

@@ -61,7 +61,7 @@ namespace GlRender
 
 	void GlTexture::GenerateMipmaps()const
 	{
-		if ( GetGlName() != GlInvalidIndex && m_type != TextureType::TwoDimensionsMS && m_type != TextureType::Buffer )
+		if ( GetGlName() != GlInvalidIndex && m_type != TextureType::eTwoDimensionsMS && m_type != TextureType::eBuffer )
 		{
 			GetOpenGl().GenerateMipmap( m_glDimension );
 		}

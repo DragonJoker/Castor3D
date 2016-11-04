@@ -73,8 +73,8 @@ namespace GlRender
 	{
 		uint8_t * l_return = nullptr;
 
-		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::Read )
-			 && CheckFlag( p_lock, AccessType::Read ) )
+		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eRead )
+			 && CheckFlag( p_lock, AccessType::eRead ) )
 		{
 			l_return = p_storage.GetOwner()->GetImage( p_index ).GetBuffer()->ptr();
 		}

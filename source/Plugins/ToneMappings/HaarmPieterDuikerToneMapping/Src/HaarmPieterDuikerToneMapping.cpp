@@ -49,7 +49,7 @@ namespace HaarmPieterDuiker
 
 	String ToneMapping::DoCreate( FrameVariableBuffer & p_ubo )
 	{
-		p_ubo.CreateVariable( FrameVariableType::Float, Gamma );
+		p_ubo.CreateVariable( FrameVariableType::eFloat, Gamma );
 		p_ubo.GetVariable( Gamma, m_gammaVar );
 
 		String l_pxl;

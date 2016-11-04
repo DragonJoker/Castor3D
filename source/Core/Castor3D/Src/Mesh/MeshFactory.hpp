@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de maillages
 	*/
 	class MeshFactory
-		: public Castor::Factory< MeshGenerator, eMESH_TYPE >
+		: public Castor::Factory< MeshGenerator, MeshType >
 	{
 	public:
 		/**

@@ -73,7 +73,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	MeshAnimation::MeshAnimation( Animable & p_animable, String const & p_name )
-		: Animation{ AnimationType::Mesh, p_animable, p_name }
+		: Animation{ AnimationType::eMesh, p_animable, p_name }
 	{
 	}
 

@@ -15,7 +15,7 @@ C3D_Obj_API void GetRequiredVersion( Version & p_version )
 
 C3D_Obj_API PluginType GetType()
 {
-	return PluginType::Importer;
+	return PluginType::eImporter;
 }
 
 C3D_Obj_API String GetName()

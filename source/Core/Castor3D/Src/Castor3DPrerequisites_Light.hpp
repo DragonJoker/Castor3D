@@ -39,12 +39,12 @@ namespace Castor3D
 		: uint8_t
 	{
 		//!\~english Directional light type	\~french Lumière directionnelle
-		Directional,
+		eDirectional,
 		//!\~english Point light type	\~french Lumière ponctuelle
-		Point,
+		ePoint,
 		//!\~english Spot light type	\~french Lumière projecteur
-		Spot,
-		CASTOR_SCOPED_ENUM_BOUNDS( Directional )
+		eSpot,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDirectional )
 	};
 
 	class Light;

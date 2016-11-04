@@ -13,7 +13,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
-		: Plugin( PluginType::Generator, p_library, *p_engine )
+		: Plugin( PluginType::eGenerator, p_library, *p_engine )
 	{
 		if ( m_pfnOnLoad )
 		{

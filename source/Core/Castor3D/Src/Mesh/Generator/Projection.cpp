@@ -7,7 +7,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Projection::Projection()
-	: MeshGenerator( eMESH_TYPE_PROJECTION )
+	: MeshGenerator( MeshType::eProjection )
 	, m_fDepth( 0 )
 	, m_bClosed( false )
 	, m_uiNbFaces( 0 )

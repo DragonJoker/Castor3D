@@ -53,7 +53,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & p_animation, String const & p_name )
-		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::Node }
+		: SkeletonAnimationObject{ p_animation, SkeletonAnimationObjectType::eNode }
 		, m_name{ p_name }
 	{
 	}

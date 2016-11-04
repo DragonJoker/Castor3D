@@ -27,19 +27,19 @@ namespace CastorGui
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		EventHandler::Connect( eMOUSE_EVENT_MOVE, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eMove, [this]( MouseEvent const & p_event )
 		{
 			OnMouseMove( p_event );
 		} );
-		EventHandler::Connect( eMOUSE_EVENT_LEAVE, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eLeave, [this]( MouseEvent const & p_event )
 		{
 			OnMouseLeave( p_event );
 		} );
-		EventHandler::Connect( eMOUSE_EVENT_BUTTON_RELEASED, [this]( MouseEvent const & p_event )
+		EventHandler::Connect( MouseEventType::eReleased, [this]( MouseEvent const & p_event )
 		{
 			OnMouseLButtonUp( p_event );
 		} );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		EventHandler::Connect( KeyboardEventType::ePushed, [this]( KeyboardEvent const & p_event )
 		{
 			OnKeyDown( p_event );
 		} );
@@ -47,7 +47,7 @@ namespace CastorGui
 		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
 		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_line->SetVisible( DoIsVisible() );
-		l_line->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		l_line->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -57,19 +57,19 @@ namespace CastorGui
 		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_tick->SetVisible( DoIsVisible() );
 		l_tick->SetCatchesMouseEvents( true );
-		l_tick->ConnectNC( eMOUSE_EVENT_MOVE, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::eMove, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseMove( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eMOUSE_EVENT_BUTTON_PUSHED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::ePushed, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseLButtonDown( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eMOUSE_EVENT_BUTTON_RELEASED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		l_tick->ConnectNC( MouseEventType::eReleased, [this]( ControlSPtr p_control, MouseEvent const & p_event )
 		{
 			OnTickMouseLButtonUp( p_control, p_event );
 		} );
-		l_tick->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		l_tick->ConnectNC( KeyboardEventType::ePushed, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
 		{
 			OnNcKeyDown( p_control, p_event );
 		} );
@@ -251,7 +251,7 @@ namespace CastorGui
 
 	void SliderCtrl::OnMouseLButtonUp( MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			if ( !m_scrolling )
 			{
@@ -271,7 +271,7 @@ namespace CastorGui
 
 	void SliderCtrl::OnTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event )
 	{
-		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		if ( p_event.GetButton() == MouseButton::eLeft )
 		{
 			m_scrolling = true;
 			Point2i l_relativePosition = p_event.GetPosition() - GetAbsolutePosition();
@@ -290,12 +290,12 @@ namespace CastorGui
 		{
 			if ( GetStyle() & eSLIDER_STYLE_VERTICAL )
 			{
-				if ( p_event.GetKey() == eKEY_UP )
+				if ( p_event.GetKey() == KeyboardKey::eUp )
 				{
 					DoUpdateTick( Position( 0, -1 ) );
 					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
 				}
-				else if ( p_event.GetKey() == eKEY_DOWN )
+				else if ( p_event.GetKey() == KeyboardKey::eDown )
 				{
 					DoUpdateTick( Position( 0, 1 ) );
 					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
@@ -303,12 +303,12 @@ namespace CastorGui
 			}
 			else
 			{
-				if ( p_event.GetKey() == eKEY_LEFT )
+				if ( p_event.GetKey() == KeyboardKey::eLeft )
 				{
 					DoUpdateTick( Position( -1, 0 ) );
 					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );
 				}
-				else if ( p_event.GetKey() == eKEY_RIGHT )
+				else if ( p_event.GetKey() == KeyboardKey::eRight )
 				{
 					DoUpdateTick( Position( 1, 0 ) );
 					m_signals[eSLIDER_EVENT_THUMBRELEASE]( m_value );

@@ -9,11 +9,11 @@ using namespace Castor;
 namespace Castor3D
 {
 	OverlayFactory::OverlayFactory()
-		: Factory< OverlayCategory, eOVERLAY_TYPE >()
+		: Factory< OverlayCategory, OverlayType >()
 	{
-		Register( eOVERLAY_TYPE_PANEL, &PanelOverlay::Create );
-		Register( eOVERLAY_TYPE_BORDER_PANEL, &BorderPanelOverlay::Create );
-		Register( eOVERLAY_TYPE_TEXT, &TextOverlay::Create );
+		Register( OverlayType::ePanel, &PanelOverlay::Create );
+		Register( OverlayType::eBorderPanel, &BorderPanelOverlay::Create );
+		Register( OverlayType::eText, &TextOverlay::Create );
 	}
 
 	OverlayFactory::~OverlayFactory()

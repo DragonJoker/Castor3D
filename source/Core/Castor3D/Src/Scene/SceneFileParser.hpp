@@ -106,7 +106,7 @@ namespace Castor3D
 		int iFace1;
 		int iFace2;
 		LightType eLightType;
-		eMESH_TYPE eMeshType;
+		MeshType eMeshType;
 		Topology ePrimitiveType;
 		ViewportSPtr pViewport;
 		Castor::String strName;
@@ -228,7 +228,6 @@ namespace Castor3D
 		UIntStrMap m_mapTextureRgbFunctions;
 		UIntStrMap m_mapTextureAlphaFunctions;
 		UIntStrMap m_mapTextureChannels;
-		UIntStrMap m_mapNormalModes;
 		UIntStrMap m_mapLightTypes;
 		UIntStrMap m_mapPrimitiveTypes;
 		UIntStrMap m_mapPrimitiveOutputTypes;

@@ -457,10 +457,10 @@ namespace Castor
 	}
 
 	BEGIN_INVARIANT_BLOCK( Colour )
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[Component::eRed] ) >= 0.0 && static_cast< double >( m_arrayValues[Component::eRed] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[Component::eGreen] ) >= 0.0 && static_cast< double >( m_arrayValues[Component::eGreen] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[Component::eBlue] ) >= 0.0 && static_cast< double >( m_arrayValues[Component::eBlue] ) <= 1.0 );
-	CHECK_INVARIANT( static_cast< double >( m_arrayValues[Component::eAlpha] ) >= 0.0 && static_cast< double >( m_arrayValues[Component::eAlpha] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eRed )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eRed )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eGreen )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eGreen )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eBlue )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eBlue )] ) <= 1.0 );
+	CHECK_INVARIANT( static_cast< double >( m_arrayValues[size_t( Component::eAlpha )] ) >= 0.0 && static_cast< double >( m_arrayValues[size_t( Component::eAlpha )] ) <= 1.0 );
 	END_INVARIANT_BLOCK()
 
 	Colour & Colour::operator+=( Colour const & p_clrB )

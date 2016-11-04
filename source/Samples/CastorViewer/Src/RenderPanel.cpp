@@ -44,9 +44,9 @@ namespace CastorViewer
 
 	namespace
 	{
-		eKEYBOARD_KEY ConvertKeyCode( int p_code )
+		KeyboardKey ConvertKeyCode( int p_code )
 		{
-			eKEYBOARD_KEY l_return = eKEYBOARD_KEY_NONE;
+			KeyboardKey l_return = KeyboardKey::eNone;
 
 			if ( p_code < 0x20 )
 			{
@@ -56,22 +56,22 @@ namespace CastorViewer
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					l_return = eKEYBOARD_KEY( p_code );
+					l_return = KeyboardKey( p_code );
 					break;
 				}
 			}
 			else if ( p_code == 0x7F )
 			{
-				l_return = eKEY_DELETE;
+				l_return = KeyboardKey::eDelete;
 			}
 			else if ( p_code > 0xFF )
 			{
-				l_return = eKEYBOARD_KEY( p_code + eKEY_START - WXK_START );
+				l_return = KeyboardKey( p_code + int( KeyboardKey::eStart ) - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				l_return = eKEYBOARD_KEY( p_code );
+				l_return = KeyboardKey( p_code );
 			}
 
 			return l_return;
@@ -81,9 +81,9 @@ namespace CastorViewer
 		{
 			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetEngine() );
 
-			l_clone->SetAlpArgument( BlendSrcIndex::Index0, p_source.GetAlpArgument( BlendSrcIndex::Index0 ) );
-			l_clone->SetAlpArgument( BlendSrcIndex::Index1, p_source.GetAlpArgument( BlendSrcIndex::Index1 ) );
-			l_clone->SetAlpArgument( BlendSrcIndex::Index2, p_source.GetAlpArgument( BlendSrcIndex::Index2 ) );
+			l_clone->SetAlpArgument( BlendSrcIndex::eIndex0, p_source.GetAlpArgument( BlendSrcIndex::eIndex0 ) );
+			l_clone->SetAlpArgument( BlendSrcIndex::eIndex1, p_source.GetAlpArgument( BlendSrcIndex::eIndex1 ) );
+			l_clone->SetAlpArgument( BlendSrcIndex::eIndex2, p_source.GetAlpArgument( BlendSrcIndex::eIndex2 ) );
 			l_clone->SetAlpFunction( p_source.GetAlpFunction() );
 			l_clone->SetAlphaFunc( p_source.GetAlphaFunc() );
 			l_clone->SetAlphaValue( p_source.GetAlphaValue() );
@@ -92,9 +92,9 @@ namespace CastorViewer
 			l_clone->SetChannel( p_source.GetChannel() );
 			l_clone->SetIndex( p_source.GetIndex() );
 			l_clone->SetRenderTarget( p_source.GetRenderTarget() );
-			l_clone->SetRgbArgument( BlendSrcIndex::Index0, p_source.GetRgbArgument( BlendSrcIndex::Index0 ) );
-			l_clone->SetRgbArgument( BlendSrcIndex::Index1, p_source.GetRgbArgument( BlendSrcIndex::Index1 ) );
-			l_clone->SetRgbArgument( BlendSrcIndex::Index2, p_source.GetRgbArgument( BlendSrcIndex::Index2 ) );
+			l_clone->SetRgbArgument( BlendSrcIndex::eIndex0, p_source.GetRgbArgument( BlendSrcIndex::eIndex0 ) );
+			l_clone->SetRgbArgument( BlendSrcIndex::eIndex1, p_source.GetRgbArgument( BlendSrcIndex::eIndex1 ) );
+			l_clone->SetRgbArgument( BlendSrcIndex::eIndex2, p_source.GetRgbArgument( BlendSrcIndex::eIndex2 ) );
 			l_clone->SetRgbFunction( p_source.GetRgbFunction() );
 			l_clone->SetSampler( p_source.GetSampler() );
 			l_clone->SetTexture( p_source.GetTexture() );
@@ -228,7 +228,7 @@ namespace CastorViewer
 						m_picking.AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
 					}
 
-					m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, p_window]()
+					m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_window]()
 					{
 						m_picking.Initialise( p_window->GetRenderTarget()->GetSize() );
 					} ) );
@@ -241,7 +241,7 @@ namespace CastorViewer
 		}
 		else if ( m_listener )
 		{
-			m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this]()
+			m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
 			{
 				m_picking.Cleanup();
 			} ) );
@@ -287,7 +287,7 @@ namespace CastorViewer
 		if ( l_camera )
 		{
 			m_currentNode = l_camera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_camera]()
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_camera]()
 			{
 				auto l_cameraNode = l_camera->GetParent();
 				l_cameraNode->SetOrientation( m_qOriginalOrientation );
@@ -304,7 +304,7 @@ namespace CastorViewer
 		if ( l_camera )
 		{
 			auto l_cameraNode = l_camera->GetParent();
-			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_cameraNode]()
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
 				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
@@ -399,7 +399,7 @@ namespace CastorViewer
 			if ( l_submesh && l_geometry )
 			{
 				auto l_material = m_selectedSubmeshMaterialOrig;
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, l_geometry, l_submesh, l_material]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, l_geometry, l_submesh, l_material]()
 				{
 					l_geometry->SetMaterial( l_submesh, l_material );
 					l_geometry->GetScene()->SetChanged();
@@ -415,7 +415,7 @@ namespace CastorViewer
 				l_pass->SetDiffuse( Colour::from_predef( Colour::Predefined::eMedAlphaRed ) );
 				l_pass->SetSpecular( Colour::from_predef( Colour::Predefined::eMedAlphaRed ) );
 
-				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::PostRender, [this, p_geometry, p_submesh]()
+				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
 				{
 					p_geometry->SetMaterial( p_submesh, m_selectedSubmeshMaterialClone );
 					p_geometry->GetScene()->SetChanged();
@@ -726,7 +726,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_LEFT ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eLeft ) )
 		{
 			SetCursor( *m_pCursorNone );
 		}
@@ -744,7 +744,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_LEFT ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eLeft ) )
 		{
 			SetCursor( *m_pCursorArrow );
 		}
@@ -762,7 +762,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_MIDDLE ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eMiddle ) )
 		{
 			auto l_window = GetRenderWindow();
 
@@ -770,7 +770,7 @@ namespace CastorViewer
 			{
 				auto l_x = m_oldX;
 				auto l_y = m_oldY;
-				m_listener->PostEvent( MakeFunctorEvent( EventType::PreRender, [this, l_window, l_x, l_y]()
+				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_window, l_x, l_y]()
 				{
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
@@ -800,7 +800,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_MIDDLE ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eMiddle ) )
 		{
 		}
 
@@ -817,7 +817,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_RIGHT ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( MouseButton::eRight ) )
 		{
 			SetCursor( *m_pCursorNone );
 		}
@@ -835,7 +835,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_RIGHT ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( MouseButton::eRight ) )
 		{
 			SetCursor( *m_pCursorArrow );
 		}

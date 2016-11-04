@@ -33,16 +33,16 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				GlInterpolationMode l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Min ) );
-				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mip ) );
+				GlInterpolationMode l_minMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMin ) );
+				GlInterpolationMode l_mipMode = GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMip ) );
 				DoAdjustMinMipModes( l_minMode, l_mipMode );
 
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eLODBias, float( GetLodBias() ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::U ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::V ) ) ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::W ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eUWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eU ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eVWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eV ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eWWrap, int( GetOpenGl().Get( GetWrappingMode( TextureUVW::eW ) ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMinFilter, int( l_minMode ) );
-				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::Mag ) ) ) );
+				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMagFilter, int( GetOpenGl().Get( GetInterpolationMode( InterpolationFilter::eMag ) ) ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eBorderColour, GetBorderColour().const_ptr() );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eMaxAnisotropy, float( GetMaxAnisotropy() ) );
 				GetOpenGl().SetSamplerParameter( GetGlName(), GlSamplerParameter::eCompareMode, int( GetOpenGl().Get( GetComparisonMode() ) ) );

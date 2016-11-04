@@ -58,17 +58,17 @@ namespace Castor3D
 		{
 			switch ( l_attach->GetAttachmentPoint() )
 			{
-			case AttachmentPoint::Colour:
-				AddFlag( l_targets, BufferComponent::Colour );
+			case AttachmentPoint::eColour:
+				AddFlag( l_targets, BufferComponent::eColour );
 				break;
 
-			case AttachmentPoint::Depth:
-				AddFlag( l_targets, BufferComponent::Depth );
-				AddFlag( l_targets, BufferComponent::Stencil );
+			case AttachmentPoint::eDepth:
+				AddFlag( l_targets, BufferComponent::eDepth );
+				AddFlag( l_targets, BufferComponent::eStencil );
 				break;
 
-			case AttachmentPoint::Stencil:
-				AddFlag( l_targets, BufferComponent::Stencil );
+			case AttachmentPoint::eStencil:
+				AddFlag( l_targets, BufferComponent::eStencil );
 				break;
 			}
 		}
@@ -80,7 +80,7 @@ namespace Castor3D
 	{
 		bool l_return = DoBind( p_target );
 
-		if ( l_return && !m_attaches.empty() && p_mode == FrameBufferMode::Automatic )
+		if ( l_return && !m_attaches.empty() && p_mode == FrameBufferMode::eAutomatic )
 		{
 			SetDrawBuffers( m_attaches );
 		}
@@ -96,7 +96,7 @@ namespace Castor3D
 		{
 			for ( auto l_attach : m_attaches )
 			{
-				if ( l_attach->GetAttachmentPoint() == AttachmentPoint::Colour )
+				if ( l_attach->GetAttachmentPoint() == AttachmentPoint::eColour )
 				{
 					PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
 
@@ -168,7 +168,7 @@ namespace Castor3D
 	{
 		for ( auto l_attach : m_attaches )
 		{
-			if ( l_attach->GetAttachmentType() == AttachmentType::Texture )
+			if ( l_attach->GetAttachmentType() == AttachmentType::eTexture )
 			{
 				std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture()->GetImage().Resize( p_size );
 			}
@@ -181,11 +181,11 @@ namespace Castor3D
 
 	bool FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )const
 	{
-		bool l_return = p_target.Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
+		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 
 		if ( l_return )
 		{
-			l_return = Bind( FrameBufferMode::Manual, FrameBufferTarget::Read );
+			l_return = Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
 
 			if ( l_return )
 			{
@@ -201,11 +201,11 @@ namespace Castor3D
 
 	bool FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
 	{
-		bool l_return = p_target.Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw );
+		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 
 		if ( l_return )
 		{
-			l_return = Bind( FrameBufferMode::Manual, FrameBufferTarget::Read );
+			l_return = Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
 
 			if ( l_return )
 			{
@@ -238,7 +238,7 @@ namespace Castor3D
 	{
 		PixelFormat l_return = PixelFormat::eCount;
 
-		if ( !m_attaches.empty() && p_point != AttachmentPoint::None )
+		if ( !m_attaches.empty() && p_point != AttachmentPoint::eNone )
 		{
 			auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
 			{
@@ -247,7 +247,7 @@ namespace Castor3D
 
 			if ( l_it != m_attaches.end() )
 			{
-				if ( ( *l_it )->GetAttachmentType() == AttachmentType::Texture )
+				if ( ( *l_it )->GetAttachmentType() == AttachmentType::eTexture )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
 					l_return = l_attach->GetTexture()->GetPixelFormat();

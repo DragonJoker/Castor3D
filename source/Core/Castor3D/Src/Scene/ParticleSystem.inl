@@ -19,7 +19,7 @@ namespace Castor3D
 	}
 
 	template<>
-	struct ElementTyper< ElementType::Float >
+	struct ElementTyper< ElementType::eFloat >
 	{
 		using Type = float;
 
@@ -37,7 +37,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Vec2 >
+	struct ElementTyper< ElementType::eVec2 >
 	{
 		using Type = Castor::Point2f;
 
@@ -55,7 +55,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Vec3 >
+	struct ElementTyper< ElementType::eVec3 >
 	{
 		using Type = Castor::Point3f;
 
@@ -73,7 +73,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Vec4 >
+	struct ElementTyper< ElementType::eVec4 >
 	{
 		using Type = Castor::Point4f;
 
@@ -91,7 +91,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Colour >
+	struct ElementTyper< ElementType::eColour >
 	{
 		using Type = uint32_t;
 
@@ -108,7 +108,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Int >
+	struct ElementTyper< ElementType::eInt >
 	{
 		using Type = int;
 
@@ -126,7 +126,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::IVec2 >
+	struct ElementTyper< ElementType::eIVec2 >
 	{
 		using Type = Castor::Point2i;
 
@@ -144,7 +144,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::IVec3 >
+	struct ElementTyper< ElementType::eIVec3 >
 	{
 		using Type = Castor::Point3i;
 
@@ -162,7 +162,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::IVec4 >
+	struct ElementTyper< ElementType::eIVec4 >
 	{
 		using Type = Castor::Point4i;
 
@@ -180,7 +180,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::UInt >
+	struct ElementTyper< ElementType::eUInt >
 	{
 		using Type = uint32_t;
 
@@ -198,7 +198,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::UIVec2 >
+	struct ElementTyper< ElementType::eUIVec2 >
 	{
 		using Type = Castor::Point2ui;
 
@@ -216,7 +216,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::UIVec3 >
+	struct ElementTyper< ElementType::eUIVec3 >
 	{
 		using Type = Castor::Point3ui;
 
@@ -234,7 +234,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::UIVec4 >
+	struct ElementTyper< ElementType::eUIVec4 >
 	{
 		using Type = Castor::Point4ui;
 
@@ -252,7 +252,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Mat2 >
+	struct ElementTyper< ElementType::eMat2 >
 	{
 		using Type = Castor::Matrix2x2f;
 
@@ -270,7 +270,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Mat3 >
+	struct ElementTyper< ElementType::eMat3 >
 	{
 		using Type = Castor::Matrix3x3f;
 
@@ -288,7 +288,7 @@ namespace Castor3D
 	};
 
 	template<>
-	struct ElementTyper< ElementType::Mat4 >
+	struct ElementTyper< ElementType::eMat4 >
 	{
 		using Type = Castor::Matrix4x4f;
 
@@ -315,115 +315,115 @@ namespace Castor3D
 	{
 		switch ( p_type )
 		{
-		case ElementType::Float:
+		case ElementType::eFloat:
 			{
-				auto l_value = ParseValue< ElementType::Float >( p_value );
-				p_particle.SetValue< ElementType::Float >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eFloat >( p_value );
+				p_particle.SetValue< ElementType::eFloat >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Vec2:
+		case ElementType::eVec2:
 			{
-				auto l_value = ParseValue< ElementType::Vec2 >( p_value );
-				p_particle.SetValue< ElementType::Vec2 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eVec2 >( p_value );
+				p_particle.SetValue< ElementType::eVec2 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Vec3:
+		case ElementType::eVec3:
 			{
-				auto l_value = ParseValue< ElementType::Vec3 >( p_value );
-				p_particle.SetValue< ElementType::Vec3 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eVec3 >( p_value );
+				p_particle.SetValue< ElementType::eVec3 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Vec4:
+		case ElementType::eVec4:
 			{
-				auto l_value = ParseValue< ElementType::Vec4 >( p_value );
-				p_particle.SetValue< ElementType::Vec4 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eVec4 >( p_value );
+				p_particle.SetValue< ElementType::eVec4 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Colour:
+		case ElementType::eColour:
 			{
-				auto l_value = ParseValue< ElementType::Colour >( p_value );
-				p_particle.SetValue< ElementType::Colour >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eColour >( p_value );
+				p_particle.SetValue< ElementType::eColour >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Int:
+		case ElementType::eInt:
 			{
-				auto l_value = ParseValue< ElementType::Int >( p_value );
-				p_particle.SetValue< ElementType::Int >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eInt >( p_value );
+				p_particle.SetValue< ElementType::eInt >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::IVec2:
+		case ElementType::eIVec2:
 			{
-				auto l_value = ParseValue< ElementType::IVec2 >( p_value );
-				p_particle.SetValue< ElementType::IVec2 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eIVec2 >( p_value );
+				p_particle.SetValue< ElementType::eIVec2 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::IVec3:
+		case ElementType::eIVec3:
 			{
-				auto l_value = ParseValue< ElementType::IVec3 >( p_value );
-				p_particle.SetValue< ElementType::IVec3 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eIVec3 >( p_value );
+				p_particle.SetValue< ElementType::eIVec3 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::IVec4:
+		case ElementType::eIVec4:
 			{
-				auto l_value = ParseValue< ElementType::IVec4 >( p_value );
-				p_particle.SetValue< ElementType::IVec4 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eIVec4 >( p_value );
+				p_particle.SetValue< ElementType::eIVec4 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::UInt:
+		case ElementType::eUInt:
 			{
-				auto l_value = ParseValue< ElementType::UInt >( p_value );
-				p_particle.SetValue< ElementType::UInt >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eUInt >( p_value );
+				p_particle.SetValue< ElementType::eUInt >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::UIVec2:
+		case ElementType::eUIVec2:
 			{
-				auto l_value = ParseValue< ElementType::UIVec2 >( p_value );
-				p_particle.SetValue< ElementType::UIVec2 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eUIVec2 >( p_value );
+				p_particle.SetValue< ElementType::eUIVec2 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::UIVec3:
+		case ElementType::eUIVec3:
 			{
-				auto l_value = ParseValue< ElementType::UIVec3 >( p_value );
-				p_particle.SetValue< ElementType::UIVec3 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eUIVec3 >( p_value );
+				p_particle.SetValue< ElementType::eUIVec3 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::UIVec4:
+		case ElementType::eUIVec4:
 			{
-				auto l_value = ParseValue< ElementType::UIVec4 >( p_value );
-				p_particle.SetValue< ElementType::UIVec4 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eUIVec4 >( p_value );
+				p_particle.SetValue< ElementType::eUIVec4 >( p_index, l_value );
 			}
 			break;
 
-		case ElementType::Mat2:
+		case ElementType::eMat2:
 		{
-			auto l_value = ParseValue< ElementType::Mat2 > (p_value);
-			p_particle.SetValue< ElementType::Mat2 > (p_index, l_value);
+			auto l_value = ParseValue< ElementType::eMat2 > (p_value);
+			p_particle.SetValue< ElementType::eMat2 > (p_index, l_value);
 		}
 		break;
 
-		case ElementType::Mat3:
+		case ElementType::eMat3:
 		{
-			auto l_value = ParseValue< ElementType::Mat3 > (p_value);
-			p_particle.SetValue< ElementType::Mat3 > (p_index, l_value);
+			auto l_value = ParseValue< ElementType::eMat3 > (p_value);
+			p_particle.SetValue< ElementType::eMat3 > (p_index, l_value);
 		}
 		break;
 
-		case ElementType::Mat4:
+		case ElementType::eMat4:
 			{
-				auto l_value = ParseValue< ElementType::Mat4 >( p_value );
-				p_particle.SetValue< ElementType::Mat4 >( p_index, l_value );
+				auto l_value = ParseValue< ElementType::eMat4 >( p_value );
+				p_particle.SetValue< ElementType::eMat4 >( p_index, l_value );
 			}
 			break;
 		}

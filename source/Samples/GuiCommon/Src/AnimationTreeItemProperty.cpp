@@ -30,9 +30,9 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_ANIMATION = _( "Animation: " );
 		PROPERTY_ANIMATION_SPEED = _( "Speed" );
 		PROPERTY_ANIMATION_LOOPED = _( "Looped" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Playing )] = _( "Pause" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Stopped )] = _( "Play" );
-		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::Paused )] = _( "Stop" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePlaying )] = _( "Pause" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::eStopped )] = _( "Play" );
+		PROPERTY_ANIMATION_STATE[uint32_t( AnimationState::ePaused )] = _( "Stop" );
 
 		CreateTreeItemMenu();
 	}
@@ -103,19 +103,19 @@ namespace GuiCommon
 
 			switch ( m_groupAnim.m_state )
 			{
-			case AnimationState::Playing:
+			case AnimationState::ePlaying:
 				l_group->PauseAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::Paused;
+				m_groupAnim.m_state = AnimationState::ePaused;
 				break;
 
-			case AnimationState::Stopped:
+			case AnimationState::eStopped:
 				l_group->StartAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::Playing;
+				m_groupAnim.m_state = AnimationState::ePlaying;
 				break;
 
-			case AnimationState::Paused:
+			case AnimationState::ePaused:
 				l_group->StopAnimation( m_name );
-				m_groupAnim.m_state = AnimationState::Stopped;
+				m_groupAnim.m_state = AnimationState::eStopped;
 				break;
 			}
 

@@ -183,9 +183,9 @@ namespace Castor3D
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		bool l_return{ false };
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::Config ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
 		{
-			m_frameBuffer->Attach( AttachmentPoint::Depth, 0, m_depthAttach, l_texture->GetType(), m_index );
+			m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), m_index );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -244,7 +244,7 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRender()
 	{
-		if ( m_frameBuffer->Bind( FrameBufferMode::Manual, FrameBufferTarget::Draw ) )
+		if ( m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw ) )
 		{
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
@@ -276,12 +276,12 @@ namespace Castor3D
 
 		// Vertex inputs
 		auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::Skinning ) );
-		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::Instantiation ) );
-		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::Morphing ) );
+		auto bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CheckFlag( p_programFlags, ProgramFlag::eSkinning ) );
+		auto transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) );
+		auto position2 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position2, CheckFlag( p_programFlags, ProgramFlag::eMorphing ) );
 
 		UBO_MATRIX( l_writer );
 		UBO_ANIMATION( l_writer, p_programFlags );
@@ -295,7 +295,7 @@ namespace Castor3D
 			auto l_v4Vertex = l_writer.GetLocale( cuT( "l_v4Vertex" ), vec4( position.xyz(), 1.0 ) );
 			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::Skinning ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
 				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )];
@@ -308,7 +308,7 @@ namespace Castor3D
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
 				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
 			}
-			else if ( CheckFlag( p_programFlags, ProgramFlag::Instantiation ) )
+			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
 			{
 				l_mtxModel = transform;
 			}
@@ -317,7 +317,7 @@ namespace Castor3D
 				l_mtxModel = c3d_mtxModel;
 			}
 
-			if ( CheckFlag( p_programFlags, ProgramFlag::Morphing ) )
+			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
 				auto l_time = l_writer.GetLocale( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
 				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );

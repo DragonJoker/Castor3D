@@ -112,7 +112,7 @@ namespace Castor3D
 		{
 			auto & l_vbo = m_particlesBillboard->GetVertexBuffer();
 			l_vbo.Resize( uint32_t( m_particlesCount ) * m_inputs.stride() );
-			l_return = l_vbo.Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+			l_return = l_vbo.Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 		}
 
 		if ( l_return )
@@ -196,7 +196,7 @@ namespace Castor3D
 			};
 
 			m_updateVertexBuffers[m_tfb]->Bind();
-			auto l_buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->Lock( 0, l_count, AccessType::Read ) );
+			auto l_buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->Lock( 0, l_count, AccessType::eRead ) );
 
 			if ( l_buffer )
 			{
@@ -281,7 +281,7 @@ namespace Castor3D
 	void ParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		m_updateProgram->CreateFrameVariable( FrameVariableType::Sampler, cuT( "c3d_mapRandom" ), ShaderType::Geometry );
+		m_updateProgram->CreateFrameVariable( FrameVariableType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
 
 		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY );
 		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
@@ -313,18 +313,18 @@ namespace Castor3D
 			{
 				m_updateVertexBuffers[i]->Resize( uint32_t( m_particlesCount ) * m_computed.stride() );
 				std::memcpy( m_updateVertexBuffers[i]->data(), l_particle.GetData(), m_computed.stride() );
-				l_return = m_updateVertexBuffers[i]->Upload( BufferAccessType::Dynamic, BufferAccessNature::Draw );
+				l_return = m_updateVertexBuffers[i]->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 
 		for ( uint32_t i = 0; i < 2 && l_return; ++i )
 		{
-			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::Points, *m_updateProgram );
+			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::ePoints, *m_updateProgram );
 			l_return = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
 
 			if ( l_return )
 			{
-				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::Points, *m_updateProgram );
+				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::ePoints, *m_updateProgram );
 				l_return = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
 			}
 		}
@@ -335,7 +335,7 @@ namespace Castor3D
 			l_rs.SetDiscardPrimitives( true );
 			m_updatePipeline = l_renderSystem.CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
 
-			auto l_texture = l_renderSystem.CreateTexture( TextureType::OneDimension, AccessType::None, AccessType::Read, PixelFormat::eRGB32F, Size{ 1024, 1 } );
+			auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
 			l_texture->GetImage().InitialiseSource();
 			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
 			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
@@ -351,9 +351,9 @@ namespace Castor3D
 			}
 
 			auto l_sampler = GetScene()->GetEngine()->GetSamplerCache().Add( cuT( "ParticleSystem" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
-			l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::Repeat );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
 			l_sampler->Initialise();
 
 			m_randomTexture.SetTexture( l_texture );

@@ -22,44 +22,44 @@ namespace Testing
 	{
 		TextureStorageType GetStorageType( TextureType p_type )
 		{
-			TextureStorageType l_return = TextureStorageType::Count;
+			TextureStorageType l_return = TextureStorageType::eCount;
 
 			switch ( p_type )
 			{
-			case TextureType::Buffer:
-				l_return = TextureStorageType::Buffer;
+			case TextureType::eBuffer:
+				l_return = TextureStorageType::eBuffer;
 				break;
 
-			case TextureType::OneDimension:
-				l_return = TextureStorageType::OneDimension;
+			case TextureType::eOneDimension:
+				l_return = TextureStorageType::eOneDimension;
 				break;
 
-			case TextureType::OneDimensionArray:
-				l_return = TextureStorageType::OneDimensionArray;
+			case TextureType::eOneDimensionArray:
+				l_return = TextureStorageType::eOneDimensionArray;
 				break;
 
-			case TextureType::TwoDimensions:
-				l_return = TextureStorageType::TwoDimensions;
+			case TextureType::eTwoDimensions:
+				l_return = TextureStorageType::eTwoDimensions;
 				break;
 
-			case TextureType::TwoDimensionsArray:
-				l_return = TextureStorageType::TwoDimensionsArray;
+			case TextureType::eTwoDimensionsArray:
+				l_return = TextureStorageType::eTwoDimensionsArray;
 				break;
 
-			case TextureType::TwoDimensionsMS:
-				l_return = TextureStorageType::TwoDimensionsMS;
+			case TextureType::eTwoDimensionsMS:
+				l_return = TextureStorageType::eTwoDimensionsMS;
 				break;
 
-			case TextureType::ThreeDimensions:
-				l_return = TextureStorageType::ThreeDimensions;
+			case TextureType::eThreeDimensions:
+				l_return = TextureStorageType::eThreeDimensions;
 				break;
 
-			case TextureType::Cube:
-				l_return = TextureStorageType::CubeMap;
+			case TextureType::eCube:
+				l_return = TextureStorageType::eCubeMap;
 				break;
 
-			case TextureType::CubeArray:
-				l_return = TextureStorageType::CubeMapArray;
+			case TextureType::eCubeArray:
+				l_return = TextureStorageType::eCubeMapArray;
 				break;
 
 			default:
@@ -121,12 +121,12 @@ namespace Testing
 
 	void GlTextureTest::DirectStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::TwoDimensions, AccessType::ReadWrite, AccessType::Read );
+		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eReadWrite, AccessType::eRead );
 	}
 
 	void GlTextureTest::PboStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::TwoDimensions, AccessType::ReadWrite, AccessType::ReadWrite );
+		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eReadWrite, AccessType::eReadWrite );
 	}
 
 	void GlTextureTest::GpuOnlyStorage()
@@ -140,7 +140,7 @@ namespace Testing
 	void GlTextureTest::Upload( TextureLayout & p_layout, ArrayView< uint8_t > const & p_view )
 	{
 		CT_REQUIRE( p_layout.Bind( 0u ) );
-		auto l_buffer = p_layout.Lock( AccessType::Write );
+		auto l_buffer = p_layout.Lock( AccessType::eWrite );
 		CT_REQUIRE( l_buffer );
 		std::memcpy( l_buffer, &p_view[0], p_view.size() );
 		p_layout.Unlock( true );
@@ -150,7 +150,7 @@ namespace Testing
 	void GlTextureTest::Download( TextureLayout & p_layout, std::vector< uint8_t > & p_dst )
 	{
 		CT_REQUIRE( p_layout.Bind( 0u ) );
-		auto l_buffer = p_layout.Lock( AccessType::Write );
+		auto l_buffer = p_layout.Lock( AccessType::eWrite );
 		CT_REQUIRE( l_buffer );
 		std::memcpy( p_dst.data(), l_buffer, p_dst.size() );
 		p_layout.Unlock( true );

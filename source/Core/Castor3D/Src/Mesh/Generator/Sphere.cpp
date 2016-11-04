@@ -9,7 +9,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 Sphere::Sphere()
-	: MeshGenerator( eMESH_TYPE_SPHERE )
+	: MeshGenerator( MeshType::eSphere )
 	, m_radius( 0 )
 	, m_nbFaces( 0 )
 {

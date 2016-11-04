@@ -27,7 +27,7 @@ C3D_DeferredMsaaTechnique_API void GetRequiredVersion( Castor3D::Version & p_ver
 
 C3D_DeferredMsaaTechnique_API Castor3D::PluginType GetType()
 {
-	return Castor3D::PluginType::Technique;
+	return Castor3D::PluginType::eTechnique;
 }
 
 C3D_DeferredMsaaTechnique_API Castor::String GetName()

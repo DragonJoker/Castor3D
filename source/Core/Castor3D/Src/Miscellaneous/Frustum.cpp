@@ -72,7 +72,7 @@ namespace Castor3D
 		real l_nearHeight{ 0.0_r };
 		real l_nearWidth{ 0.0_r };
 
-		if ( m_viewport.GetType() == ViewportType::Ortho )
+		if ( m_viewport.GetType() == ViewportType::eOrtho )
 		{
 			l_nearHeight = ( m_viewport.GetBottom() - m_viewport.GetTop() );
 			l_nearWidth = ( m_viewport.GetRight() - m_viewport.GetLeft() );
@@ -106,12 +106,12 @@ namespace Castor3D
 		Point3r l_fbr{ l_fc - l_tf + l_rf };
 
 		// Fill planes
-		m_planes[size_t( FrustumPlane::Near )].Set( l_ntl, l_ntr, l_nbr );
-		m_planes[size_t( FrustumPlane::Far )].Set( l_ftr, l_ftl, l_fbl );
-		m_planes[size_t( FrustumPlane::Left )].Set( l_ntl, l_nbl, l_fbl );
-		m_planes[size_t( FrustumPlane::Right )].Set( l_nbr, l_ntr, l_fbr );
-		m_planes[size_t( FrustumPlane::Top )].Set( l_ntr, l_ntl, l_ftl );
-		m_planes[size_t( FrustumPlane::Bottom )].Set( l_nbl, l_nbr, l_fbr );
+		m_planes[size_t( FrustumPlane::eNear )].Set( l_ntl, l_ntr, l_nbr );
+		m_planes[size_t( FrustumPlane::eFar )].Set( l_ftr, l_ftl, l_fbl );
+		m_planes[size_t( FrustumPlane::eLeft )].Set( l_ntl, l_nbl, l_fbl );
+		m_planes[size_t( FrustumPlane::eRight )].Set( l_nbr, l_ntr, l_fbr );
+		m_planes[size_t( FrustumPlane::eTop )].Set( l_ntr, l_ntl, l_ftl );
+		m_planes[size_t( FrustumPlane::eBottom )].Set( l_nbl, l_nbr, l_fbr );
 	}
 
 	bool Frustum::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const

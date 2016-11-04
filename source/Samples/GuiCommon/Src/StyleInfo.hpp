@@ -34,7 +34,7 @@ namespace GuiCommon
 	\~english
 	\brief Text style enumeration
 	\~french
-	\brief Enum�ration des styles de texte
+	\brief Enumération des styles de texte
 	*/
 	typedef enum eSTC_STYLE
 	{
@@ -50,7 +50,7 @@ namespace GuiCommon
 	\~english Folded types enumeration
 	\brief
 	\~french
-	\brief Enum�ration des types de dblocks pouvant �tre r�duits
+	\brief Enumération des types de dblocks pouvant �tre r�duits
 	*/
 	typedef enum eSTC_FOLD
 	{
@@ -69,7 +69,7 @@ namespace GuiCommon
 	\~english
 	\brief Scintilla flag enumeration
 	\~french
-	\brief Enum�ration des flags scintilla
+	\brief Enumération des flags scintilla
 	*/
 	typedef enum eSTC_FLAG
 	{

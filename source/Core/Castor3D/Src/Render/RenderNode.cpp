@@ -59,7 +59,7 @@ namespace Castor3D
 			p_node.m_pass.m_pass.EndRender();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
-			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
 				p_node.m_geometry.GetScene()->GetLightCache().UnbindLights();
 			}
@@ -71,7 +71,7 @@ namespace Castor3D
 			p_node.m_pass.m_pass.EndRender();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
-			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
 				p_node.m_data.GetScene()->GetLightCache().UnbindLights();
 			}
@@ -138,7 +138,7 @@ namespace Castor3D
 
 	void StaticGeometryRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
-		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
@@ -152,7 +152,7 @@ namespace Castor3D
 
 	void AnimatedGeometryRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
-		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
@@ -201,7 +201,7 @@ namespace Castor3D
 
 	void BillboardRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
-		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::Lighting ) )
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
 			m_data.GetScene()->GetLightCache().BindLights();
 		}

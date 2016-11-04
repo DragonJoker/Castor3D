@@ -40,7 +40,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PointLight::PointLight( Light & p_light )
-		: LightCategory{ LightType::Point, p_light }
+		: LightCategory{ LightType::ePoint, p_light }
 	{
 	}
 

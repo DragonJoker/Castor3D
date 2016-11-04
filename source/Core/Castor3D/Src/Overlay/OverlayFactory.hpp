@@ -39,7 +39,7 @@ namespace Castor3D
 	\brief		La fabrique de maillages
 	*/
 	class OverlayFactory
-		: public Castor::Factory< OverlayCategory, eOVERLAY_TYPE >
+		: public Castor::Factory< OverlayCategory, OverlayType >
 	{
 	public:
 		/**

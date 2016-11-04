@@ -45,9 +45,9 @@ namespace Castor3D
 		//!\~english The wheel position.	\~french La position de la molette.
 		Castor::Position m_wheel;
 		//!\~english The buttons state (true = down).	\~french L'�tat des boutons (true = enfonc�).
-		std::array< bool, eMOUSE_BUTTON_COUNT > m_buttons;
+		std::array< bool, size_t( MouseButton::eCount ) > m_buttons;
 		//!\~english The button which had the last change.	\~french Le bouton ayant re�u le dernier changement.
-		eMOUSE_BUTTON m_changed;
+		MouseButton m_changed;
 	};
 	/*!
 	*\author	Sylvain DOREMUS
@@ -56,7 +56,7 @@ namespace Castor3D
 	*\~english
 	*\brief		Description of a mouse event.
 	*\~french
-	*\brief		Description d'un �v�nement de souris.
+	*\brief		Description d'un évènement de souris.
 	*/
 	class MouseEvent
 		: public UserInputEvent
@@ -70,12 +70,12 @@ namespace Castor3D
 		 *\param[in]	p_button	The mouse button.
 		 *\~french
 		 *\~brief		Constructeur.
-		 *\param[in]	p_type		Le type d'�v�nement de souris.
-		 *\param[in]	p_position	La position, de la souris ou de la molette, selon le type d'�v�nement.
+		 *\param[in]	p_type		Le type d'évènement de souris.
+		 *\param[in]	p_position	La position, de la souris ou de la molette, selon le type d'évènement.
 		 *\param[in]	p_button	Le bouton de la souris.
 		 */
-		MouseEvent( eMOUSE_EVENT p_type, Castor::Position const & p_position, eMOUSE_BUTTON p_button = eMOUSE_BUTTON_COUNT )
-			: UserInputEvent{ eUSER_INPUT_EVENT_TYPE_MOUSE }
+		MouseEvent( MouseEventType p_type, Castor::Position const & p_position, MouseButton p_button = MouseButton::eCount )
+			: UserInputEvent{ UserInputEventType::eMouse }
 			, m_mouseEventType{ p_type }
 			, m_position{ p_position }
 			, m_button{ p_button }
@@ -94,9 +94,9 @@ namespace Castor3D
 		 *\~english
 		 *\return		The mouse event type.
 		 *\~french
-		 *\return		Le type d'�v�nement de souris.
+		 *\return		Le type d'évènement de souris.
 		 */
-		inline eMOUSE_EVENT GetMouseEventType()const
+		inline MouseEventType GetMouseEventType()const
 		{
 			return m_mouseEventType;
 		}
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le bouton de la souris.
 		 */
-		inline eMOUSE_BUTTON GetButton()const
+		inline MouseButton GetButton()const
 		{
 			return m_button;
 		}
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The position (wheel or mouse, depending on mouse event type).
 		 *\~french
-		 *\return		La position, de la souris ou de la molette, selon le type d'�v�nement.
+		 *\return		La position, de la souris ou de la molette, selon le type d'évènement.
 		 */
 		inline Castor::Position const & GetPosition()const
 		{
@@ -122,11 +122,11 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The mouse event type.	\~french Le type d'�v�nement souris.
-		eMOUSE_EVENT const m_mouseEventType;
+		//!\~english The mouse event type.	\~french Le type d'évènement souris.
+		MouseEventType const m_mouseEventType;
 		//!\~english The mouse button.	\~french Le bouton de la souris
-		eMOUSE_BUTTON const m_button;
-		//!\~english The position, (wheel or mouse, depending on mouse event type).	\~french La position (de la souris ou de la molette, selon le type d'�v�nement).
+		MouseButton const m_button;
+		//!\~english The position, (wheel or mouse, depending on mouse event type).	\~french La position (de la souris ou de la molette, selon le type d'évènement).
 		Castor::Position const m_position;
 	};
 }

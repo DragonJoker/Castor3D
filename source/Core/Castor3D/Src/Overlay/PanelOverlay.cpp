@@ -40,7 +40,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PanelOverlay::PanelOverlay()
-		:	OverlayCategory( eOVERLAY_TYPE_PANEL )
+		:	OverlayCategory( OverlayType::ePanel )
 	{
 		m_arrayVtx.resize( 6 );
 	}

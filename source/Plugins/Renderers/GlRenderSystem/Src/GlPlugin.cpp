@@ -16,7 +16,7 @@ C3D_Gl_API void GetRequiredVersion( Version & p_version )
 
 C3D_Gl_API PluginType GetType()
 {
-	return PluginType::Renderer;
+	return PluginType::eRenderer;
 }
 
 C3D_Gl_API Castor::String GetRendererType()

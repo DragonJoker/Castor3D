@@ -14,7 +14,7 @@ C3D_Test_API void GetRequiredVersion( Version & p_version )
 
 C3D_Test_API PluginType GetType()
 {
-	return PluginType::Renderer;
+	return PluginType::eRenderer;
 }
 
 C3D_Test_API Castor::String GetRendererType()

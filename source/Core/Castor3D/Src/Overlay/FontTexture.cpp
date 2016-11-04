@@ -25,12 +25,12 @@ namespace Castor3D
 		uint32_t const l_count = uint32_t( std::ceil( std::distance( p_font->begin(), p_font->end() ) / 16.0 ) );
 
 		SamplerSPtr l_sampler = GetEngine()->GetSamplerCache().Add( p_font->GetName() );
-		l_sampler->SetWrappingMode( TextureUVW::U, WrapMode::ClampToEdge );
-		l_sampler->SetWrappingMode( TextureUVW::V, WrapMode::ClampToEdge );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Min, InterpolationMode::Linear );
-		l_sampler->SetInterpolationMode( InterpolationFilter::Mag, InterpolationMode::Linear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 		m_sampler = l_sampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::TwoDimensions, AccessType::Write, AccessType::Read, PixelFormat::eL8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eWrite, AccessType::eRead, PixelFormat::eL8, Size{ l_maxWidth * 16, l_maxHeight * l_count } );
 		m_texture->GetImage().InitialiseSource();
 	}
 

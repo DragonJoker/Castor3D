@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderBufferAttachment::RenderBufferAttachment( RenderBufferSPtr p_renderBuffer )
-		: FrameBufferAttachment( AttachmentType::Buffer )
+		: FrameBufferAttachment( AttachmentType::eBuffer )
 		, m_pRenderBuffer( p_renderBuffer )
 	{
 	}

@@ -26,7 +26,7 @@ namespace Castor3D
 		{
 			switch ( p_obj.GetType() )
 			{
-			case AnimationType::Skeleton:
+			case AnimationType::eSkeleton:
 				BinaryWriter< SkeletonAnimation >{}.Write( static_cast< SkeletonAnimation const & >( p_obj ), m_chunk );
 				break;
 
