@@ -3284,7 +3284,7 @@ namespace Castor3D
 
 		if ( l_parsingContext->pFrameVariable )
 		{
-			l_parsingContext->pFrameVariable->SetValueStr( l_strParams );
+			l_parsingContext->pFrameVariable->SetStrValue( l_strParams );
 		}
 		else
 		{

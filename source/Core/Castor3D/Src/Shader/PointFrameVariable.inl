@@ -125,15 +125,13 @@ namespace Castor3D
 
 	template< typename T, uint32_t Count >
 	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram & p_program )
-		:	TFrameVariable< T >( p_program )
+		: PointFrameVariable< T, Count >( p_program, 1u )
 	{
-		this->m_values = new T[Count];
-		memset( this->m_values, 0, size() );
 	}
 
 	template< typename T, uint32_t Count >
 	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
-		:	TFrameVariable< T >( p_program, p_occurences )
+		: TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences * Count];
 		memset( this->m_values, 0, size() );
@@ -221,7 +219,7 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Count >
-	inline void PointFrameVariable< T, Count >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
+	inline void PointFrameVariable< T, Count >::DoSetStrValue( Castor::String const & p_value, uint32_t p_index )
 	{
 		Castor::StringArray l_arraySplitted = Castor::string::split( p_value, cuT( ", \t" ) );
 		Castor::Coords< T, Count > l_ptValue( GetValue( p_index ) );
@@ -233,5 +231,21 @@ namespace Castor3D
 				policy::assign( l_ptValue[i], policy::parse( l_arraySplitted[i] ) );
 			}
 		}
+	}
+
+	template< typename T, uint32_t Count >
+	inline Castor::String PointFrameVariable< T, Count >::DoGetStrValue( uint32_t p_index )const
+	{
+		Castor::StringStream l_stream;
+		Castor::String l_sep;
+		Castor::Point< T, Count > l_ptValue( GetValue( p_index ) );
+
+		for ( uint32_t i = 0; i < Count; i++ )
+		{
+			l_stream << l_sep << l_ptValue[i];
+			l_sep = ", ";
+		}
+
+		return l_stream.str();
 	}
 }

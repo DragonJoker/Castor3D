@@ -195,32 +195,9 @@ namespace Castor3D
 			SetValues( p_values.data(), uint32_t( p_values.size() ) );
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
+		 *\copydoc		Castor3D::FrameVariable::size
 		 */
-		virtual uint32_t size()const;
-		/**
-		 *\~english
-		 *\brief		Gives the variable full type
-		 *\return		The type
-		 *\~english
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type
-		 */
-		static inline FrameVariableType GetFrameVariableType();
-		/**
-		 *\~english
-		 *\brief		Gives the variable full type
-		 *\return		The type
-		 *\~english
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type
-		 */
-		static inline Castor::String GetFrameVariableTypeName();
+		uint32_t size()const override;
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
@@ -261,59 +238,52 @@ namespace Castor3D
 		 *\brief		Donne le type complet de la variable
 		 *\return		Le type complet
 		 */
-		static inline VariableType GetVariableType()
-		{
-			return VariableType::eOne;
-		}
+		static inline VariableType GetVariableType();
 		/**
 		 *\~english
-		 *\brief		Retrieves the variable type
-		 *\return		The variable type
-		 *\~french
-		 *\brief		Récupère le type de la variable
-		 *\return		Le type de variable
+		 *\return		The variable's full type.
+		 *\~english
+		 *\return		Le type complet de la variable.
 		 */
-		inline VariableType GetType()const
+		static inline FrameVariableType GetFrameVariableType();
+		/**
+		 *\~english
+		 *\return		The variable's full type name.
+		 *\~english
+		 *\return		Le nom du type complet de la variable.
+		 */
+		static inline Castor::String GetFrameVariableTypeName();
+		/**
+		 *\copydoc		Castor3D::FrameVariable::GetType
+		 */
+		inline VariableType GetType()const override
 		{
 			return OneFrameVariable< T >::GetVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the variable full type
-		 *\return		The type
-		 *\~french
-		 *\brief		Récupère le type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullType
 		 */
-		inline FrameVariableType GetFullType()const
+		inline FrameVariableType GetFullType()const override
 		{
 			return OneFrameVariable< T >::GetFrameVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The type
-		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullTypeName
 		 */
-		inline Castor::String GetFullTypeName()const
+		inline Castor::String GetFullTypeName()const override
 		{
 			return OneFrameVariable< T >::GetFrameVariableTypeName();
 		}
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_value	The string containing the value
-		 *\param[in]	p_index	The index of the value
-		 *\~french
-		 *\brief		Définit la valeur de la variable à partir d'une chaîne
-		 *\param[in]	p_value	La chaîne
-		 *\param[in]	p_index	L'index de la valeur à modifier
+		 *\copydoc		Castor3D::FrameVariable::DoSetStrValue
 		 */
-		inline void DoSetValueStr( Castor::String const & p_value, uint32_t p_index );
+		inline void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 )override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::DoGetStrValue
+		 */
+		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
 	};
 }
 

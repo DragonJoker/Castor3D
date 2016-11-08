@@ -40,12 +40,16 @@ namespace GlRender
 	}
 
 	template< typename T >
-	void GlOneFrameVariable< T >::Bind()
+	bool GlOneFrameVariable< T >::Bind()const
 	{
-		if ( Castor3D::FrameVariable::m_changed )
+		bool l_return = true;
+
+		if ( this->IsChanged() )
 		{
-			GlFrameVariableBase::DoBind< T >( Castor3D::OneFrameVariable< T >::m_values, Castor3D::FrameVariable::m_occurences );
-			//Castor3D::FrameVariable::m_changed = false;
+			l_return = GlFrameVariableBase::DoBind< T >( Castor3D::OneFrameVariable< T >::m_values, Castor3D::FrameVariable::m_occurences );
+			Castor3D::FrameVariable::m_changed = false;
 		}
+
+		return l_return;
 	}
 }

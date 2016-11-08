@@ -1,14 +1,5 @@
 namespace Castor3D
 {
-	namespace
-	{
-		template< typename T >
-		void Parse( Castor::String const & p_text, T & p_value )
-		{
-			Castor::string::parse( p_text, p_value );
-		}
-	}
-
 	template<> struct OneFrameVariableDefinitions< bool >
 		: public FrameVariableDataTyper< bool >
 	{
@@ -54,15 +45,13 @@ namespace Castor3D
 
 	template< typename T >
 	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program )
-		:	TFrameVariable< T >( p_program )
+		: OneFrameVariable< T >( p_program, 1u )
 	{
-		this->m_values = new T[1];
-		memset( this->m_values, 0, size() );
 	}
 
 	template< typename T >
 	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
-		:	TFrameVariable< T >( p_program, p_occurences )
+		: TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences];
 		memset( this->m_values, 0, size() );
@@ -140,6 +129,12 @@ namespace Castor3D
 	}
 
 	template< typename T >
+	inline VariableType OneFrameVariable< T >::GetVariableType()
+	{
+		return VariableType::eOne;
+	}
+
+	template< typename T >
 	inline FrameVariableType OneFrameVariable< T >::GetFrameVariableType()
 	{
 		return FrameVariableType( OneFrameVariableDefinitions< T >::Full );
@@ -152,8 +147,16 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
+	inline void OneFrameVariable< T >::DoSetStrValue( Castor::String const & p_value, uint32_t p_index )
 	{
-		Parse( p_value, this->m_values[p_index] );
+		Castor::string::parse( p_value, this->m_values[p_index] );
+	}
+
+	template< typename T >
+	inline Castor::String OneFrameVariable< T >::DoGetStrValue( uint32_t p_index )const
+	{
+		Castor::StringStream l_stream;
+		l_stream << this->m_values[p_index];
+		return l_stream.str();
 	}
 }

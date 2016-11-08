@@ -365,17 +365,13 @@ namespace Castor3D
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram & p_program )
-		:	TFrameVariable< T >( p_program )
+		: MatrixFrameVariable< T, Rows, Columns >( p_program, 1u )
 	{
-		this->m_values = new T[Rows * Columns];
-		memset( this->m_values, 0, sizeof( T ) * Rows * Columns );
-		m_mtxValue = new Castor::Matrix< T, Rows, Columns >[1];
-		m_mtxValue[0].link( &this->m_values[0] );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
-		:	TFrameVariable< T >( p_program, p_occurences )
+		: TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[Rows * Columns * p_occurences];
 		memset( this->m_values, 0, sizeof( T ) * p_occurences * Rows * Columns );
@@ -483,29 +479,50 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
+	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetStrValue( Castor::String const & p_value, uint32_t p_index )
 	{
 		Castor::StringArray l_arrayLines = Castor::string::split( p_value, cuT( ";" ) );
 
 		if ( l_arrayLines.size() == Rows )
 		{
-			bool l_bOK = true;
+			bool l_continue = true;
 
-			for ( uint32_t i = 0; i < Rows && l_bOK; i++ )
+			for ( uint32_t i = 0; i < Rows && l_continue; i++ )
 			{
-				l_bOK = false;
+				l_continue = false;
 				Castor::StringArray l_arraySplitted = Castor::string::split( l_arrayLines[i], cuT( ", \t" ) );
 
 				if ( l_arraySplitted.size() == Columns )
 				{
-					l_bOK = true;
+					l_continue = true;
 
 					for ( uint32_t j = 0; j < Columns; j++ )
 					{
-						policy::assign( m_mtxValue[p_index][j][i], policy::parse( l_arraySplitted[j] ) );
+						policy::assign( this->m_mtxValue[0][j][i], policy::parse( l_arraySplitted[j] ) );
 					}
 				}
 			}
 		}
+	}
+
+	template< typename T, uint32_t Rows, uint32_t Columns >
+	inline Castor::String MatrixFrameVariable< T, Rows, Columns >::DoGetStrValue( uint32_t p_index )const
+	{
+		Castor::StringStream l_stream;
+
+		for ( uint32_t j = 0; j < Columns; j++ )
+		{
+			Castor::String l_sep;
+
+			for ( uint32_t i = 0; i < Rows; i++ )
+			{
+				l_stream << l_sep << this->m_mtxValue[0][j][i];
+				l_sep = ", ";
+			}
+
+			l_stream << ";";
+		}
+
+		return l_stream.str();
 	}
 }
