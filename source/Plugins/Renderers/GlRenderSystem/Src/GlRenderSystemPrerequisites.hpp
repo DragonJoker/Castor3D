@@ -46,6 +46,14 @@ namespace GlRender
 {
 	using Castor::real;
 
+	enum class GlProvider
+	{
+		eUnknown,
+		eNvidia,
+		eATI,
+		eIntel,
+	};
+
 	enum class GlBufferBinding
 		: uint32_t
 	{

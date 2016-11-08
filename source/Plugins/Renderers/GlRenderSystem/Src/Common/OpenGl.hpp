@@ -353,6 +353,7 @@ namespace GlRender
 		inline GlRenderSystem const & GetRenderSystem()const;
 		inline bool HasExtension( Castor::String const & p_strExtName, bool p_log = true )const;
 		inline GlBufferMode GetBufferFlags( uint32_t p_flags )const;
+		inline GlProvider GetProvider()const;
 
 		/**@name General Functions */
 		//@{
@@ -899,6 +900,7 @@ namespace GlRender
 		TexFunctionsBase * m_pTexFunctions;
 		BufFunctionsBase * m_pBufFunctions;
 		GlRenderSystem & m_renderSystem;
+		GlProvider m_gpu{ GlProvider::eUnknown };
 
 		/**@name General */
 		//@{

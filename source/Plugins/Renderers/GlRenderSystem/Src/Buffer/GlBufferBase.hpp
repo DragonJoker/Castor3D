@@ -51,6 +51,7 @@ namespace GlRender
 
 		bool Copy( GlBufferBase< T > const & p_src, uint32_t p_size );
 		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
+		bool Upload( T const * p_buffer, uint32_t p_count, uint32_t p_offset = 0 );
 		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
 		T * Lock( GlAccessType p_access );
 		bool Unlock();

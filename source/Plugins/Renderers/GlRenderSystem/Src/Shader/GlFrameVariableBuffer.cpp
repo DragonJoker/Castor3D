@@ -882,7 +882,6 @@ namespace GlRender
 			{
 				GetOpenGl().UseProgram( l_program.GetGlName() );
 				m_uniformBlockIndex = GetOpenGl().GetUniformBlockIndex( l_program.GetGlName(), string::string_cast< char >( m_name ).c_str() );
-				uint32_t l_totalSize = 0;
 
 				if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 				{
@@ -893,7 +892,7 @@ namespace GlRender
 					GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
 					m_buffer.resize( m_uniformBlockSize );
-					std::vector< const char * > l_arrayNames;
+					std::vector< const char * > l_names;
 
 					for ( auto l_variable : m_listVariables )
 					{
@@ -904,13 +903,13 @@ namespace GlRender
 #else
 						strncpy( l_szChar, string::string_cast< char >( l_variable->GetName() ).c_str(), l_variable->GetName().size() );
 #endif
-						l_arrayNames.push_back( l_szChar );
+						l_names.push_back( l_szChar );
 					}
 
-					UIntArray l_arrayIndices( l_arrayNames.size() );
-					GetOpenGl().GetUniformIndices( l_program.GetGlName(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
+					UIntArray l_indices( l_names.size() );
+					GetOpenGl().GetUniformIndices( l_program.GetGlName(), int( l_names.size() ), l_names.data(), l_indices.data() );
 
-					for ( auto l_name : l_arrayNames )
+					for ( auto l_name : l_names )
 					{
 						delete [] l_name;
 					}
@@ -919,25 +918,24 @@ namespace GlRender
 
 					for ( auto l_variable : m_listVariables )
 					{
-						uint32_t l_index = l_arrayIndices[i++];
-						int l_offset, l_size;
+						uint32_t l_index = l_indices[i++];
+						int l_offset = 0;
 
 						if ( l_index != GlInvalidIndex )
 						{
 							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformValue::eOffset, &l_offset );
-							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformValue::eSize, &l_size );
-
-							if ( l_size == 1 )
-							{
-								l_size = int( l_variable->size() );
-							}
-
-							l_totalSize += l_size;
 							l_variable->link( &m_buffer[l_offset] );
 						}
 					}
 
 					m_glBuffer.Unbind();
+					m_glBuffer.Upload( m_buffer.data(), m_uniformBlockSize );
+
+					for ( auto & l_variable : m_listVariables )
+					{
+						l_variable->SetChanged( false );
+					}
+
 					l_return = true;
 				}
 			}
@@ -964,19 +962,36 @@ namespace GlRender
 
 	bool GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
+		bool l_return = true;
+		bool l_changed = m_listVariables.end() != std::find_if( m_listVariables.begin(), m_listVariables.end(), []( FrameVariableSPtr p_variable )
 		{
-			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		}
-		else
+			return p_variable->IsChanged();
+		} );
+
+		if ( l_changed )
 		{
-			for ( auto l_variable : m_listInitialised )
+			if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 			{
-				l_variable->Bind();
+				l_return = m_glBuffer.Upload( m_buffer.data(), m_uniformBlockSize );
+
+				for ( auto & l_variable : m_listVariables )
+				{
+					l_variable->SetChanged( false );
+				}
+			}
+			else
+			{
+				for ( auto l_variable : m_listInitialised )
+				{
+					if ( l_return )
+					{
+						l_return = l_variable->Bind();
+					}
+				}
 			}
 		}
 
-		return true;
+		return l_return;
 	}
 
 	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )

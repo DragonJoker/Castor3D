@@ -808,6 +808,11 @@ namespace GlRender
 		return l_eReturn;
 	}
 
+	GlProvider OpenGl::GetProvider()const
+	{
+		return m_gpu;
+	}
+
 	GlAccessType OpenGl::GetLockFlags( Castor3D::AccessType p_flags )const
 	{
 		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
