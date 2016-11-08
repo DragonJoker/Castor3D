@@ -2596,7 +2596,7 @@ namespace Castor3D
 		}
 		else if ( !p_params.empty() )
 		{
-			Colour l_crColour;
+			HdrColour l_crColour;
 			p_params[0]->Get( l_crColour );
 			l_parsingContext->pPass->SetEmissive( l_crColour );
 		}

@@ -27,11 +27,124 @@ SOFTWARE.
 #include "Data/TextLoader.hpp"
 #include "Data/TextWriter.hpp"
 #include "ColourComponent.hpp"
+#include "HdrColourComponent.hpp"
 
 #undef RGB
 
 namespace Castor
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		19/10/2011
+	\~english
+	\brief		Predefined colours enumeration
+	\~french
+	\brief		Enumération de couleurs prédéfinies
+	*/
+	enum class PredefinedColour
+		: uint32_t
+	{
+		eTransparentBlack = 0x00000000,
+		eLowAlphaBlack = 0x00000040,
+		eMedAlphaBlack = 0x0000007F,
+		eHighAlphaBlack = 0x000000BF,
+		eOpaqueBlack = 0x000000FF,
+		eTransparentDarkBlue = 0x00007F00,
+		eLowAlphaDarkBlue = 0x00007F40,
+		eMedAlphaDarkBlue = 0x00007F7F,
+		eHighAlphaDarkBlue = 0x00007FBF,
+		eOpaqueDarkBlue = 0x00007FFF,
+		eTransparentBlue = 0x0000FF00,
+		eLowAlphaBlue = 0x0000FF40,
+		eMedAlphaBlue = 0x0000FF7F,
+		eHighAlphaBlue = 0x0000FFBF,
+		eOpaqueBlue = 0x0000FFFF,
+		eTransparentDarkGreen = 0x007F0000,
+		eLowAlphaDarkGreen = 0x007F0040,
+		eMedAlphaDarkGreen = 0x007F007F,
+		eHighAlphaDarkGreen = 0x007F00BF,
+		eOpaqueDarkGreen = 0x007F00FF,
+		eTransparentGreen = 0x00FF0000,
+		eLowAlphaGreen = 0x00FF0040,
+		eMedAlphaGreen = 0x00FF007F,
+		eHighAlphaGreen = 0x00FF00BF,
+		eOpaqueGreen = 0x00FF00FF,
+		eTransparentDarkRed = 0x7F000000,
+		eLowAlphaDarkRed = 0x7F000040,
+		eMedAlphaDarkRed = 0x7F00007F,
+		eHighAlphaDarkRed = 0x7F0000BF,
+		eOpaqueDarkRed = 0x7F0000FF,
+		eTransparentRed = 0xFF000000,
+		eLowAlphaRed = 0xFF000040,
+		eMedAlphaRed = 0xFF00007F,
+		eHighAlphaRed = 0xFF0000BF,
+		eOpaqueRed = 0xFF0000FF,
+		eTransparentLightBlue = 0x7F7FFF00,
+		eLowAlphaLightBlue = 0x7F7FFF40,
+		eMedAlphaLightBlue = 0x7F7FFF7F,
+		eHighAlphaLightBlue = 0x7F7FFFBF,
+		eOpaqueLightBlue = 0x7F7FFFFF,
+		eTransparentLightGreen = 0x7FFF7F00,
+		eLowAlphaLightGreen = 0x7FFF7F40,
+		eMedAlphaLightGreen = 0x7FFF7F7F,
+		eHighAlphaLightGreen = 0x7FFF7FBF,
+		eOpaqueLightGreen = 0x7FFF7FFF,
+		eTransparentLightRed = 0xFF7F7F00,
+		eLowAlphaLightRed = 0xFF7F7F40,
+		eMedAlphaLightRed = 0xFF7F7F7F,
+		eHighAlphaLightRed = 0xFF7F7FBF,
+		eOpaqueLightRed = 0xFF7F7FFF,
+		eTransparentWhite = 0xFFFFFF00,
+		eLowAlphaWhite = 0xFFFFFF40,
+		eMedAlphaWhite = 0xFFFFFF7F,
+		eHighAlphaWhite = 0xFFFFFFBF,
+		eOpaqueWhite = 0xFFFFFFFF,
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		19/10/2011
+	\~english
+	\brief		ColourT components enumeration
+	\~french
+	\brief		Enumération des composantes d'une couleur
+	*/
+	enum class Component
+		: uint8_t
+	{
+		//!\~english Red component	\~french Composante rouge
+		eRed,
+		//!\~english Green component	\~french Composante verte
+		eGreen,
+		//!\~english Blue component	\~french Composante bleue
+		eBlue,
+		//!\~english Alpha component	\~french Composante alpha
+		eAlpha,
+		CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+	};
+	/**
+	 *\~english
+	 *\brief		Retrieves predefined colour name
+	 *\param[in]	p_predefined	The predefined colour
+	 *\return		The colour name
+	 *\~french
+	 *\brief		Récupère le nom d'une couleur prédéfinie
+	 *\param[in]	p_predefined	La couleur prédéfinie
+	 *\return		Le nom de la couleur
+	 */
+	inline static String get_predefined_name( PredefinedColour p_predefined );
+	/**
+	 *\~english
+	 *\brief		Retrieves predefined colour from a name
+	 *\param[in]	p_name	The predefined colour name
+	 *\return		The predefined colour
+	 *\~french
+	 *\brief		Récupère une couleur prédéfinie à partir de son nom
+	 *\param[in]	p_name	Le nom de la couleur prédéfinie
+	 *\return		La couleur prédéfinie
+	 */
+	inline static PredefinedColour get_predefined( String const & p_name );
 	/*!
 	\author		Sylvain DOREMUS
 	\date		14/08/2010
@@ -44,19 +157,20 @@ namespace Castor
 	\remark		Prédéfinit differentes couleurs
 				<br />Permet la conversion entre différents types de couleurs (RGB, ARGB, BGR, ...) et différents types de données (long, float, char, ...)
 	*/
-	class Colour
+	template< typename ComponentType >
+	class ColourT
 	{
 	public:
 		/*!
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Colour text loader
+		\brief		ColourT text loader
 		\~french
-		\brief		Loader de Colour à partir d'un texte
+		\brief		Loader de ColourT à partir d'un texte
 		*/
 		class TextLoader
-			: public Castor::TextLoader< Colour >
+			: public Castor::TextLoader< ColourT< ComponentType > >
 		{
 		public:
 			/**
@@ -65,7 +179,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextLoader();
+			inline TextLoader();
 			/**
 			 *\~english
 			 *\brief			Reads a colour from a text file
@@ -76,18 +190,18 @@ namespace Castor
 			 *\param[in,out]	p_file		Le fichier dans lequel on lit la couleur
 			 *\param[in,out]	p_colour	La couleur à lire
 			 */
-			CU_API virtual bool operator()( Colour & p_colour, TextFile & p_file );
+			inline virtual bool operator()( ColourT< ComponentType > & p_colour, TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Colour text Writer
+		\brief		ColourT text Writer
 		\~french
-		\brief		Writer de Colour à partir d'un texte
+		\brief		Writer de ColourT à partir d'un texte
 		*/
 		class TextWriter
-			: public Castor::TextWriter< Colour >
+			: public Castor::TextWriter< ColourT< ComponentType > >
 		{
 		public:
 			/**
@@ -96,7 +210,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextWriter( String const & p_tabs );
+			inline TextWriter( String const & p_tabs );
 			/**
 			 *\~english
 			 *\brief			Writes a colour into a text file
@@ -107,103 +221,17 @@ namespace Castor
 			 *\param[in,out]	p_file		Le fichier dans lequel on écrit la couleur
 			 *\param[in]		p_colour	La couleur à écrire
 			 */
-			CU_API virtual bool operator()( Colour const & p_colour, TextFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Predefined colours enumeration
-		\~french
-		\brief		Enumération de couleurs prédéfinies
-		*/
-		enum class Predefined
-			: uint32_t
-		{
-			eTransparentBlack = 0x00000000,
-			eLowAlphaBlack = 0x00000040,
-			eMedAlphaBlack = 0x0000007F,
-			eHighAlphaBlack = 0x000000BF,
-			eOpaqueBlack = 0x000000FF,
-			eTransparentDarkBlue = 0x00007F00,
-			eLowAlphaDarkBlue = 0x00007F40,
-			eMedAlphaDarkBlue = 0x00007F7F,
-			eHighAlphaDarkBlue = 0x00007FBF,
-			eOpaqueDarkBlue = 0x00007FFF,
-			eTransparentBlue = 0x0000FF00,
-			eLowAlphaBlue = 0x0000FF40,
-			eMedAlphaBlue = 0x0000FF7F,
-			eHighAlphaBlue = 0x0000FFBF,
-			eOpaqueBlue = 0x0000FFFF,
-			eTransparentDarkGreen = 0x007F0000,
-			eLowAlphaDarkGreen = 0x007F0040,
-			eMedAlphaDarkGreen = 0x007F007F,
-			eHighAlphaDarkGreen = 0x007F00BF,
-			eOpaqueDarkGreen = 0x007F00FF,
-			eTransparentGreen = 0x00FF0000,
-			eLowAlphaGreen = 0x00FF0040,
-			eMedAlphaGreen = 0x00FF007F,
-			eHighAlphaGreen = 0x00FF00BF,
-			eOpaqueGreen = 0x00FF00FF,
-			eTransparentDarkRed = 0x7F000000,
-			eLowAlphaDarkRed = 0x7F000040,
-			eMedAlphaDarkRed = 0x7F00007F,
-			eHighAlphaDarkRed = 0x7F0000BF,
-			eOpaqueDarkRed = 0x7F0000FF,
-			eTransparentRed = 0xFF000000,
-			eLowAlphaRed = 0xFF000040,
-			eMedAlphaRed = 0xFF00007F,
-			eHighAlphaRed = 0xFF0000BF,
-			eOpaqueRed = 0xFF0000FF,
-			eTransparentLightBlue = 0x7F7FFF00,
-			eLowAlphaLightBlue = 0x7F7FFF40,
-			eMedAlphaLightBlue = 0x7F7FFF7F,
-			eHighAlphaLightBlue = 0x7F7FFFBF,
-			eOpaqueLightBlue = 0x7F7FFFFF,
-			eTransparentLightGreen = 0x7FFF7F00,
-			eLowAlphaLightGreen = 0x7FFF7F40,
-			eMedAlphaLightGreen = 0x7FFF7F7F,
-			eHighAlphaLightGreen = 0x7FFF7FBF,
-			eOpaqueLightGreen = 0x7FFF7FFF,
-			eTransparentLightRed = 0xFF7F7F00,
-			eLowAlphaLightRed = 0xFF7F7F40,
-			eMedAlphaLightRed = 0xFF7F7F7F,
-			eHighAlphaLightRed = 0xFF7F7FBF,
-			eOpaqueLightRed = 0xFF7F7FFF,
-			eTransparentWhite = 0xFFFFFF00,
-			eLowAlphaWhite = 0xFFFFFF40,
-			eMedAlphaWhite = 0xFFFFFF7F,
-			eHighAlphaWhite = 0xFFFFFFBF,
-			eOpaqueWhite = 0xFFFFFFFF,
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Colour components enumeration
-		\~french
-		\brief		Enumération des composantes d'une couleur
-		*/
-		enum class Component
-			: uint8_t
-		{
-			//!\~english Red component	\~french Composante rouge
-			eRed,
-			//!\~english Green component	\~french Composante verte
-			eGreen,
-			//!\~english Blue component	\~french Composante bleue
-			eBlue,
-			//!\~english Alpha component	\~french Composante alpha
-			eAlpha,
-			CASTOR_SCOPED_ENUM_BOUNDS( eRed )
+			inline virtual bool operator()( ColourT< ComponentType > const & p_colour, TextFile & p_file );
 		};
 
 	private:
-		friend CU_API void swap( Colour & p_c1, Colour & p_c2 );
+		friend inline void swap( ColourT & p_c1, ColourT & p_c2 );
 		DECLARE_ARRAY( float, Component::eCount, Float4 );
-		DECLARE_ARRAY( ColourComponent, Component::eCount, ColourComponent );
+		using ColourComponentArray = std::array< ComponentType, size_t( Component::eCount ) >;
+		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
+		using ColourComponentArrayRIt = typename ColourComponentArray::reverse_iterator;
+		using ColourComponentArrayConstIt = typename ColourComponentArray::const_iterator;
+		using ColourComponentArrayConstRIt = typename ColourComponentArray::const_reverse_iterator;
 
 	public:
 		/**
@@ -212,7 +240,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		CU_API Colour();
+		inline ColourT();
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -221,7 +249,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_rhs	Couleur à copier
 		 */
-		CU_API Colour( Colour const & p_rhs );
+		inline ColourT( ColourT< ComponentType > const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -230,7 +258,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_rhs	Couleur à déplacer
 		 */
-		CU_API Colour( Colour && p_rhs );
+		inline ColourT( ColourT< ComponentType > && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -241,7 +269,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Colour & operator=( Colour const & p_rhs );
+		inline ColourT< ComponentType > & operator=( ColourT< ComponentType > const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -252,21 +280,21 @@ namespace Castor
 		 *\param[in]	p_rhs	Couleur à déplacer
 		 *\return		Référence sur cette couleur
 		 */
-		CU_API Colour & operator=( Colour && p_rhs );
+		inline ColourT< ComponentType > & operator=( ColourT< ComponentType > && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor from components
 		 *\param[in]	p_r, p_g, p_b, p_a	The colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir des composantes
 		 *\param[in]	p_r, p_g, p_b, p_a	Les composantes de la couleur
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
 		template< typename T1, typename T2, typename T3, typename T4 >
-		static Colour from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
+		static ColourT< ComponentType > from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
 		{
-			Colour l_clrReturn;
+			ColourT l_clrReturn;
 			l_clrReturn.m_arrayComponents[size_t( Component::eRed )] = p_r;
 			l_clrReturn.m_arrayComponents[size_t( Component::eGreen )] = p_g;
 			l_clrReturn.m_arrayComponents[size_t( Component::eBlue )] = p_b;
@@ -277,13 +305,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Constructor from a predefined colour
 		 *\param[in]	p_ePredef
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'une couleur prédéfinie
 		 *\param[in]	p_ePredef
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		static Colour from_predef( Predefined p_ePredef )
+		static ColourT< ComponentType > from_predef( PredefinedColour p_ePredef )
 		{
 			return from_rgba( ( uint32_t )p_ePredef );
 		}
@@ -291,332 +319,332 @@ namespace Castor
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgb( Point3ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_rgb( Point3ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgr( Point3ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_bgr( Point3ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgba( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_rgba( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgra( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_bgra( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_argb( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_argb( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_abgr( Point4ub const & p_ptColour );
+		inline static ColourT< ComponentType > from_abgr( Point4ub const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgb( Point3f const & p_ptColour );
+		inline static ColourT< ComponentType > from_rgb( Point3f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgr( Point3f const & p_ptColour );
+		inline static ColourT< ComponentType > from_bgr( Point3f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgba( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > from_rgba( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_argb( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > from_argb( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_abgr( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > from_abgr( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgra( Point4f const & p_ptColour );
+		inline static ColourT< ComponentType > from_bgra( Point4f const & p_ptColour );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgb( uint8_t const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > from_rgb( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgr( uint8_t const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > from_bgr( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgba( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_rgba( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgra( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_bgra( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_argb( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_argb( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_abgr( uint8_t const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_abgr( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgb( float const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > from_rgb( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgr( float const( & p_ptColour )[3] );
+		inline static ColourT< ComponentType > from_bgr( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgba( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_rgba( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_argb( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_argb( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_abgr( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_abgr( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
 		 *\param[in]	p_ptColour	The point containing the colour components
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
 		 *\param[in]	p_ptColour	Le point contenant les composantes
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgra( float const( & p_ptColour )[4] );
+		inline static ColourT< ComponentType > from_bgra( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGB components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0x00RRGGBB)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes RGB
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0x00RRGGBB)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgb( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_rgb( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGR components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0x00BBGGRR)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes BGR
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0x00BBGGRR)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgr( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_bgr( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ARGB components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0xAARRGGBB)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes ARGB
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xAARRGGBB)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_argb( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_argb( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGBA components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0xRRGGBBAA)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes RGBA
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xRRGGBBAA)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_rgba( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_rgba( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing ABGR components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0xAABBGGRR)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes ABGR
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xAABBGGRR)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_abgr( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_abgr( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing BGRA components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0xBBGGRRAA)
-		 *\return		The built Colour
+		 *\return		The built ColourT
 		 *\~french
 		 *\brief		Constructeur à partir d'un uint32_t représentant des composantes BGRA
 		 *\param[in]	p_colour	L'uint32_t contenant la couleur (0xBBGGRRAA)
-		 *\return		La Colour construite
+		 *\return		La ColourT construite
 		 */
-		CU_API static Colour from_bgra( uint32_t p_colour );
+		inline static ColourT< ComponentType > from_bgra( uint32_t p_colour );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first ColourComponent
@@ -699,7 +727,7 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & operator[]( Component p_eComponent )
+		inline ComponentType & operator[]( Component p_eComponent )
 		{
 			return m_arrayComponents[size_t( p_eComponent )];
 		}
@@ -713,7 +741,7 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & operator[]( Component p_eComponent )const
+		inline ComponentType const & operator[]( Component p_eComponent )const
 		{
 			return m_arrayComponents[size_t( p_eComponent )];
 		}
@@ -727,7 +755,7 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & get( Component p_eComponent )
+		inline ComponentType & get( Component p_eComponent )
 		{
 			return m_arrayComponents[size_t( p_eComponent )];
 		}
@@ -741,7 +769,7 @@ namespace Castor
 		 *\param[in]	p_eComponent	La composante demandée
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & get( Component p_eComponent )const
+		inline ComponentType const & get( Component p_eComponent )const
 		{
 			return m_arrayComponents[size_t( p_eComponent )];
 		}
@@ -753,7 +781,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & red()
+		inline ComponentType & red()
 		{
 			return get( Component::eRed );
 		}
@@ -765,7 +793,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante rouge
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & red()const
+		inline ComponentType const & red()const
 		{
 			return get( Component::eRed );
 		}
@@ -777,7 +805,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & green()
+		inline ComponentType & green()
 		{
 			return get( Component::eGreen );
 		}
@@ -789,7 +817,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante verte
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & green()const
+		inline ComponentType const & green()const
 		{
 			return get( Component::eGreen );
 		}
@@ -801,7 +829,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & blue()
+		inline ComponentType & blue()
 		{
 			return get( Component::eBlue );
 		}
@@ -813,7 +841,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante bleue
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & blue()const
+		inline ComponentType const & blue()const
 		{
 			return get( Component::eBlue );
 		}
@@ -825,7 +853,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent & alpha()
+		inline ComponentType & alpha()
 		{
 			return get( Component::eAlpha );
 		}
@@ -837,7 +865,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la composante alpha
 		 *\return		La valeur de la composante
 		 */
-		inline ColourComponent const & alpha()const
+		inline ComponentType const & alpha()const
 		{
 			return get( Component::eAlpha );
 		}
@@ -851,7 +879,7 @@ namespace Castor
 		 *\param[in]	p_clrB	Les couleurs à ajouter
 		 *\return		Resultat de this + p_clrB
 		 */
-		CU_API Colour & operator+=( Colour const & p_clrB );
+		inline ColourT< ComponentType > & operator+=( ColourT const & p_clrB );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -862,7 +890,7 @@ namespace Castor
 		 *\param[in]	p_clrB	Les couleurs à soustraire
 		 *\return		Resultat de this - p_clrB
 		 */
-		CU_API Colour & operator-=( Colour const & p_clrB );
+		inline ColourT< ComponentType > & operator-=( ColourT const & p_clrB );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -874,7 +902,7 @@ namespace Castor
 		 *\return		Resultat de this + p_scalar
 		 */
 		template< typename T >
-		Colour & operator+=( T p_scalar )
+		ColourT< ComponentType > & operator+=( T p_scalar )
 		{
 			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
@@ -894,7 +922,7 @@ namespace Castor
 		 *\return		Resultat de this - p_scalar
 		 */
 		template< typename T >
-		Colour & operator-=( T p_scalar )
+		ColourT< ComponentType > & operator-=( T p_scalar )
 		{
 			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
@@ -914,7 +942,7 @@ namespace Castor
 		 *\return		Resultat de this * p_scalar
 		 */
 		template< typename T >
-		Colour & operator*=( T p_scalar )
+		ColourT< ComponentType > & operator*=( T p_scalar )
 		{
 			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
@@ -934,7 +962,7 @@ namespace Castor
 		 *\return		Resultat de this / p_scalar
 		 */
 		template< typename T >
-		Colour & operator/=( T p_scalar )
+		ColourT< ComponentType > & operator/=( T p_scalar )
 		{
 			for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 			{
@@ -953,7 +981,7 @@ namespace Castor
 		 *\param[in]	p_component	La valeur à ajouter
 		 *\return		Resultat de this + p_component
 		 */
-		CU_API Colour & operator+=( ColourComponent const & p_component );
+		inline ColourT< ComponentType > & operator+=( ComponentType const & p_component );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -964,7 +992,7 @@ namespace Castor
 		 *\param[in]	p_component	La valeur à soustraire
 		 *\return		Resultat de this - p_component
 		 */
-		CU_API Colour & operator-=( ColourComponent const & p_component );
+		inline ColourT< ComponentType > & operator-=( ComponentType const & p_component );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -975,7 +1003,7 @@ namespace Castor
 		 *\param[in]	p_component	La valeur à multiplier
 		 *\return		Resultat de this * p_component
 		 */
-		CU_API Colour & operator*=( ColourComponent const & p_component );
+		inline ColourT< ComponentType > & operator*=( ComponentType const & p_component );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -986,34 +1014,11 @@ namespace Castor
 		 *\param[in]	p_component	La valeur à diviser
 		 *\return		Resultat de this / p_component
 		 */
-		CU_API Colour & operator/=( ColourComponent const & p_component );
-		/**
-		 *\~english
-		 *\brief		Retrieves predefined colour name
-		 *\param[in]	p_predefined	The predefined colour
-		 *\return		The colour name
-		 *\~french
-		 *\brief		Récupère le nom d'une couleur prédéfinie
-		 *\param[in]	p_predefined	La couleur prédéfinie
-		 *\return		Le nom de la couleur
-		 */
-		CU_API static String get_predefined_name( Predefined p_predefined );
-		/**
-		 *\~english
-		 *\brief		Retrieves predefined colour from a name
-		 *\param[in]	p_name	The predefined colour name
-		 *\return		The predefined colour
-		 *\~french
-		 *\brief		Récupère une couleur prédéfinie à partir de son nom
-		 *\param[in]	p_name	Le nom de la couleur prédéfinie
-		 *\return		La couleur prédéfinie
-		 */
-		CU_API static Predefined get_predefined( String const & p_name );
+		inline ColourT< ComponentType > & operator/=( ComponentType const & p_component );
 
 	private:
 		ColourComponentArray m_arrayComponents;
 		Float4Array m_arrayValues;
-		DECLARE_INVARIANT_BLOCK()
 	};
 	/**
 	 *\~english
@@ -1023,7 +1028,8 @@ namespace Castor
 	 *\brief		Opérateur d'égalité
 	 *\param[in]	p_lhs, p_rhs	Les couleurs à comparer
 	 */
-	CU_API bool operator==( Colour const & p_lhs, Colour const & p_rhs );
+	template< typename ComponentType >
+	inline bool operator==( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
@@ -1032,7 +1038,8 @@ namespace Castor
 	 *\brief		Opérateur de différence
 	 *\param[in]	p_lhs, p_rhs	Les couleurs à comparer
 	 */
-	CU_API bool operator!=( Colour const & p_lhs, Colour const & p_rhs );
+	template< typename ComponentType >
+	inline bool operator!=( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -1043,7 +1050,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les couleurs à ajouter
 	 *\return		Resultat de p_lhs + p_rhs
 	 */
-	CU_API Colour operator+( Colour const & p_lhs, Colour const & p_rhs );
+	template< typename ComponentType >
+	inline ColourT< ComponentType > operator+( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -1054,7 +1062,8 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les couleurs à soustraire
 	 *\return		Resultat de p_lhs - p_rhs
 	 */
-	CU_API Colour operator-( Colour const & p_lhs, Colour const & p_rhs );
+	template< typename ComponentType >
+	inline ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_lhs, ColourT< ComponentType > const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -1065,10 +1074,10 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les valeurs à ajouter
 	 *\return		Resultat de p_lhs + p_rhs
 	 */
-	template< typename T >
-	Colour operator+( Colour const & p_lhs, T p_rhs )
+	template< typename ComponentType, typename T >
+	ColourT< ComponentType > operator+( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_lhs );
+		ColourT l_clrResult( p_lhs );
 		l_clrResult += p_rhs;
 		return l_clrResult;
 	}
@@ -1082,10 +1091,10 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les valeurs à soustraire
 	 *\return		Resultat de p_lhs - p_rhs
 	 */
-	template< typename T >
-	Colour operator-( Colour const & p_lhs, T p_rhs )
+	template< typename ComponentType, typename T >
+	ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_lhs );
+		ColourT l_clrResult( p_lhs );
 		l_clrResult -= p_rhs;
 		return l_clrResult;
 	}
@@ -1100,10 +1109,10 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les valeurs à multiplier
 	 *\return		Resultat de p_lhs * p_rhs
 	 */
-	template< typename T >
-	Colour operator*( Colour const & p_lhs, T p_rhs )
+	template< typename ComponentType, typename T >
+	ColourT< ComponentType > operator*( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_lhs );
+		ColourT l_clrResult( p_lhs );
 		l_clrResult *= p_rhs;
 		return l_clrResult;
 	}
@@ -1118,10 +1127,10 @@ namespace Castor
 	 *\param[in]	p_lhs, p_rhs	Les valeurs à diviser
 	 *\return		Resultat de p_lhs / p_rhs
 	 */
-	template< typename T >
-	Colour operator/( Colour const & p_lhs, T p_rhs )
+	template< typename ComponentType, typename T >
+	ColourT< ComponentType > operator/( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_lhs );
+		ColourT l_clrResult( p_lhs );
 		l_clrResult /= p_rhs;
 		return l_clrResult;
 	}
@@ -1135,7 +1144,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point3ub rgb_byte( Colour const & p_colour );
+	inline Point3ub rgb_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGR format.
@@ -1146,7 +1155,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point3ub bgr_byte( Colour const & p_colour );
+	inline Point3ub bgr_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGBA format.
@@ -1157,7 +1166,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4ub rgba_byte( Colour const & p_colour );
+	inline Point4ub rgba_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGRA format.
@@ -1168,7 +1177,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4ub bgra_byte( Colour const & p_colour );
+	inline Point4ub bgra_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ARGB format.
@@ -1179,7 +1188,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4ub argb_byte( Colour const & p_colour );
+	inline Point4ub argb_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ABGR format.
@@ -1190,7 +1199,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4ub abgr_byte( Colour const & p_colour );
+	inline Point4ub abgr_byte( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGB format.
@@ -1201,7 +1210,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point3f rgb_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point3f rgb_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGR format.
@@ -1212,7 +1222,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point3f bgr_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point3f bgr_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in RGBA format.
@@ -1223,7 +1234,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4f rgba_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point4f rgba_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ARGB format.
@@ -1234,7 +1246,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4f argb_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point4f argb_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in ABGR format.
@@ -1245,7 +1258,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4f abgr_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point4f abgr_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Stores a colour's components into a point in BGRA format.
@@ -1256,7 +1270,8 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes de la couleur.
 	 */
-	CU_API Point4f bgra_float( Colour const & p_colour );
+	template< typename ComponentType >
+	inline Point4f bgra_float( ColourT< ComponentType > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the RGB format (0x00RRGGBB).
@@ -1266,7 +1281,7 @@ namespace Castor
 	 *\brief		Compile les composantes de la couleur dans un uint32_t, au format RGB (0x00RRGGBB).
 	 *\param[in]	p_colour	La couleur.
 	 */
-	CU_API uint32_t rgb_packed( Colour const & p_colour );
+	inline uint32_t rgb_packed( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGR format (0x00BBGGRR).
@@ -1277,7 +1292,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	CU_API uint32_t bgr_packed( Colour const & p_colour );
+	inline uint32_t bgr_packed( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ARGB format (0xAARRGGBB).
@@ -1288,7 +1303,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	CU_API uint32_t argb_packed( Colour const & p_colour );
+	inline uint32_t argb_packed( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the RGBA format (0xRRGGBBAA).
@@ -1299,7 +1314,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	CU_API uint32_t rgba_packed( Colour const & p_colour );
+	inline uint32_t rgba_packed( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the ABGR format (0xAABBGGRR).
@@ -1310,7 +1325,7 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	CU_API uint32_t abgr_packed( Colour const & p_colour );
+	inline uint32_t abgr_packed( ColourT< ColourComponent > const & p_colour );
 	/**
 	 *\~english
 	 *\brief		Packs a colour's components into an uint32_t in the BGRA format (0xBBGGRRAA).
@@ -1321,7 +1336,9 @@ namespace Castor
 	 *\param[in]	p_colour	La couleur.
 	 *\return		Les composantes compilées de la couleur.
 	 */
-	CU_API uint32_t bgra_packed( Colour const & p_colour );
+	inline uint32_t bgra_packed( ColourT< ColourComponent > const & p_colour );
 }
+
+#include "Colour.inl"
 
 #endif

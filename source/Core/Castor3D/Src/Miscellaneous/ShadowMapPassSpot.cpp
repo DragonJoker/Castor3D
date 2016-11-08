@@ -55,7 +55,7 @@ namespace Castor3D
 			m_frameBuffer->Unbind();
 		}
 
-		m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 		m_renderQueue.Initialise( m_scene, *m_camera );
 		return l_return;
 	}

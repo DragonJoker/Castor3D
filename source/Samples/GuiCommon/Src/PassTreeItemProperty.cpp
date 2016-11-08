@@ -8,10 +8,12 @@
 #include <Material/Pass.hpp>
 
 #include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
 using namespace Castor;
+using namespace GuiCommon;
 
 namespace GuiCommon
 {
@@ -62,7 +64,7 @@ namespace GuiCommon
 			p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetAmbient() ) ) ) );
 			p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetDiffuse() ) ) ) );
 			p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetSpecular() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetEmissive() ) ) ) );
+			p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_pass->GetEmissive() ) ) );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
@@ -96,8 +98,8 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EMISSIVE )
 			{
-				l_colour << l_property->GetValue();
-				OnEmissiveColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				Point4f l_value = PointRefFromVariant< float, 4 >( l_property->GetValue() );
+				OnEmissiveColourChange( HdrColour::from_rgba( l_value ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_PASS_EXPONENT )
 			{
@@ -144,13 +146,13 @@ namespace GuiCommon
 		} );
 	}
 
-	void PassTreeItemProperty::OnEmissiveColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnEmissiveColourChange( HdrColour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetSpecular( p_value );
+			l_pass->SetEmissive( p_value );
 		} );
 	}
 

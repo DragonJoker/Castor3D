@@ -149,5 +149,10 @@ namespace Castor
 	{
 		static const ParameterType Type = ParameterType::eColour;
 	};
+	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
+	template<> struct ParserValueTyper< HdrColour >
+	{
+		static const ParameterType Type = ParameterType::eHdrColour;
+	};
 }
 

@@ -10,10 +10,6 @@
 
 #include <iomanip>
 
-#ifdef Always
-#	undef Always
-#endif
-
 using namespace Castor3D;
 using namespace Castor;
 

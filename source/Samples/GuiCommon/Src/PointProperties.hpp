@@ -56,6 +56,7 @@ namespace GuiCommon
 	static const wxString GC_POINT_SIZE[2] = { _( "Width" ), _( "Height" ) };
 	static const wxString GC_POINT_POSITION[2] = { _( "Left" ), _( "Top" ) };
 	static const wxString GC_POINT_RECTANGLE[4] = { _( "Left" ), _( "Top" ), _( "Right" ), _( "Bottom" ) };
+	static const wxString GC_HDR_COLOUR[4] = { _( "R" ), _( "G" ), _( "B" ), _( "A" ) };
 
 	template< typename T, size_t Count >
 	class PointProperty

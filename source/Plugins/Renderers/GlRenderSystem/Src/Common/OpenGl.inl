@@ -2443,7 +2443,7 @@ namespace GlRender
 		return glCheckError( *this, "glGetUniformIndices" );
 	}
 
-	bool OpenGl::GetActiveUniformsiv( uint32_t program, int uniformCount, uint32_t const * uniformIndices, GlUniformBlockValue pname, int * params )const
+	bool OpenGl::GetActiveUniformsiv( uint32_t program, int uniformCount, uint32_t const * uniformIndices, GlUniformValue pname, int * params )const
 	{
 		m_pfnGetActiveUniformsiv( program, uniformCount, uniformIndices, uint32_t( pname ), params );
 		return glCheckError( *this, "glGetActiveUniformsiv" );

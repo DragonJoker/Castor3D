@@ -71,6 +71,7 @@ namespace Castor
 		ePosition,
 		eRectangle,
 		eColour,
+		eHdrColour,
 		CASTOR_SCOPED_ENUM_BOUNDS( eText )
 	};
 	/*!

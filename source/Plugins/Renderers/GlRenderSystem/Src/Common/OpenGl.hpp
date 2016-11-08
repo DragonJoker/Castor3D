@@ -30,10 +30,6 @@ SOFTWARE.
 #	include <GL/glx.h>
 #	define GLX_GLXEXT_PROTOTYPES
 #	include <GL/glxext.h>
-#	undef None
-#	undef Bool
-#	undef Always
-using Bool = int;
 #endif
 #include <GL/gl.h>
 
@@ -730,7 +726,7 @@ namespace GlRender
 		inline bool BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const;
 		inline bool UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
 		inline bool GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
-		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformBlockValue pname, int * params )const;
+		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformValue pname, int * params )const;
 		inline bool GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, GlUniformBlockValue pname, int * params )const;
 
 		//@}
