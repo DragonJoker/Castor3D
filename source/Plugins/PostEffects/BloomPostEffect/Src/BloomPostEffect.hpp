@@ -71,8 +71,17 @@ namespace Bloom
 		virtual bool DoWriteInto( Castor::TextFile & p_file );
 
 	public:
-		static Castor::String Type;
-		static Castor::String Name;
+		static Castor::String const Type;
+		static Castor::String const Name;
+		static Castor::String const FilterConfig;
+		static Castor::String const FilterConfigCoefficients;
+		static Castor::String const FilterConfigCoefficientsCount;
+		static Castor::String const CombineMapPass0;
+		static Castor::String const CombineMapPass1;
+		static Castor::String const CombineMapPass2;
+		static Castor::String const CombineMapPass3;
+		static Castor::String const CombineMapScene;
+		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
 		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
@@ -80,6 +89,10 @@ namespace Bloom
 		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::Pipeline & p_pipeline );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
+		bool DoInitialiseHiPassProgram();
+		bool DoInitialiseBlurXProgram();
+		bool DoInitialiseBlurYProgram();
+		bool DoInitialiseCombineProgram();
 
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;

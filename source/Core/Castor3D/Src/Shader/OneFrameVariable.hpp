@@ -199,6 +199,10 @@ namespace Castor3D
 		 */
 		uint32_t size()const override;
 		/**
+		 *\copydoc		Castor3D::FrameVariable::link
+		 */
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
+		/**
 		 *\~english
 		 *\brief		Array subscript operator
 		 *\remarks		Doesn't check the index bounds
@@ -212,7 +216,7 @@ namespace Castor3D
 		 */
 		inline T & operator[]( uint32_t p_index )
 		{
-			return this->m_values[p_index];
+			return this->m_values[p_index + p_index * this->m_stride];
 		}
 		/**
 		 *\~english
@@ -228,7 +232,7 @@ namespace Castor3D
 		 */
 		inline T const & operator[]( uint32_t p_index )const
 		{
-			return this->m_values[p_index];
+			return this->m_values[p_index + p_index * this->m_stride];
 		}
 		/**
 		 *\~english

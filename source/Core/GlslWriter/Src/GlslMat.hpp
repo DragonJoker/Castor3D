@@ -27,6 +27,17 @@ SOFTWARE.
 
 namespace GLSL
 {
+	struct Mat2
+		: public Type
+	{
+		inline Mat2();
+		inline Mat2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline Mat2 & operator=( Mat2 const & p_rhs );
+		template< typename T > inline Mat2 & operator=( T const & p_rhs );
+		template< typename T > inline Vec2 operator[]( T const & p_rhs );
+		inline Vec2 operator[]( int const & p_rhs );
+	};
+
 	struct Mat3
 		: public Type
 	{

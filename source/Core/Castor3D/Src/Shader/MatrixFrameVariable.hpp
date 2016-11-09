@@ -149,7 +149,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::FrameVariable::link
 		 */
-		void link( uint8_t * p_buffer )override;
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
 		/**
 		 *\~english
 		 *\return		The type of the variable.
@@ -185,7 +185,7 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix< T, Rows, Columns > & operator[]( uint32_t p_index )
 		{
-			return m_mtxValue[p_index];
+			return m_mtxValues[p_index];
 		}
 		/**
 		 *\~english
@@ -201,7 +201,7 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix< T, Rows, Columns > const & operator[]( uint32_t p_index )const
 		{
-			return m_mtxValue[p_index];
+			return m_mtxValues[p_index];
 		}
 		/**
 		 *\copydoc		Castor3D::FrameVariable::GetType
@@ -239,7 +239,7 @@ namespace Castor3D
 		typedef Castor::Policy<T> policy;
 		//!\~english	The matrix values.
 		//!\~french		Les valeurs matrices.
-		Castor::Matrix< T, Rows, Columns > * m_mtxValue;
+		std::vector< Castor::Matrix< T, Rows, Columns > > m_mtxValues;
 	};
 }
 

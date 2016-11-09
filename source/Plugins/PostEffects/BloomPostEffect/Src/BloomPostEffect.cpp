@@ -39,15 +39,6 @@ namespace Bloom
 {
 	namespace
 	{
-		static const String FilterConfig = cuT( "FilterConfig" );
-		static const String FilterConfigCoefficients = cuT( "c3d_fCoefficients" );
-		static const String FilterConfigCoefficientsCount = cuT( "c3d_fCoefficientsCount" );
-		static const String CombineMapPass0 = cuT( "c3d_mapPass0" );
-		static const String CombineMapPass1 = cuT( "c3d_mapPass1" );
-		static const String CombineMapPass2 = cuT( "c3d_mapPass2" );
-		static const String CombineMapPass3 = cuT( "c3d_mapPass3" );
-		static const String CombineMapScene = cuT( "c3d_mapScene" );
-
 		Castor::String GetVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
@@ -93,21 +84,18 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetBlurXProgram( RenderSystem * p_renderSystem, uint32_t p_kernelSize )
+		Castor::String GetBlurXProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
+			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
+			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
+			l_config.End();
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			Ubo l_config{ l_writer, FilterConfig };
-			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( FilterConfigCoefficientsCount );
-			auto c3d_fCoefficients = l_config.GetUniform< Float >( FilterConfigCoefficients, p_kernelSize );
-			l_config.End();
-			//auto c3d_fCoefficientsCount = l_writer.GetUniform< UInt >( FilterConfigCoefficientsCount );
-			//auto c3d_fCoefficients = l_writer.GetUniform< Float >( FilterConfigCoefficients, p_kernelSize );
 
 			// Shader outputs
 			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
@@ -129,21 +117,18 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetBlurYProgram( RenderSystem * p_renderSystem, uint32_t p_kernelSize )
+		Castor::String GetBlurYProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
+			Ubo l_config{ l_writer, BloomPostEffect::FilterConfig };
+			auto c3d_fCoefficients = l_config.GetUniform< Float >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( BloomPostEffect::FilterConfigCoefficientsCount );
+			l_config.End();
 			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-
-			Ubo l_config{ l_writer, FilterConfig };
-			auto c3d_fCoefficientsCount = l_config.GetUniform< UInt >( FilterConfigCoefficientsCount );
-			auto c3d_fCoefficients = l_config.GetUniform< Float >( FilterConfigCoefficients, p_kernelSize );
-			l_config.End();
-			//auto c3d_fCoefficientsCount = l_writer.GetUniform< UInt >( FilterConfigCoefficientsCount );
-			//auto c3d_fCoefficients = l_writer.GetUniform< Float >( FilterConfigCoefficients, p_kernelSize );
 
 			// Shader outputs
 			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
@@ -171,11 +156,11 @@ namespace Bloom
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			auto c3d_mapPass0 = l_writer.GetUniform< Sampler2D >( CombineMapPass0 );
-			auto c3d_mapPass1 = l_writer.GetUniform< Sampler2D >( CombineMapPass1 );
-			auto c3d_mapPass2 = l_writer.GetUniform< Sampler2D >( CombineMapPass2 );
-			auto c3d_mapPass3 = l_writer.GetUniform< Sampler2D >( CombineMapPass3 );
-			auto c3d_mapScene = l_writer.GetUniform< Sampler2D >( CombineMapScene );
+			auto c3d_mapPass0 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass0 );
+			auto c3d_mapPass1 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass1 );
+			auto c3d_mapPass2 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass2 );
+			auto c3d_mapPass3 = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapPass3 );
+			auto c3d_mapScene = l_writer.GetUniform< Sampler2D >( BloomPostEffect::CombineMapScene );
 			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
@@ -217,8 +202,16 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	String BloomPostEffect::Type = cuT( "bloom" );
-	String BloomPostEffect::Name = cuT( "Bloom PostEffect" );
+	String const BloomPostEffect::Type = cuT( "bloom" );
+	String const BloomPostEffect::Name = cuT( "Bloom PostEffect" );
+	String const BloomPostEffect::FilterConfig = cuT( "FilterConfig" );
+	String const BloomPostEffect::FilterConfigCoefficients = cuT( "c3d_fCoefficients" );
+	String const BloomPostEffect::FilterConfigCoefficientsCount = cuT( "c3d_fCoefficientsCount" );
+	String const BloomPostEffect::CombineMapPass0 = cuT( "c3d_mapPass0" );
+	String const BloomPostEffect::CombineMapPass1 = cuT( "c3d_mapPass1" );
+	String const BloomPostEffect::CombineMapPass2 = cuT( "c3d_mapPass2" );
+	String const BloomPostEffect::CombineMapPass3 = cuT( "c3d_mapPass3" );
+	String const BloomPostEffect::CombineMapScene = cuT( "c3d_mapScene" );
 
 	BloomPostEffect::BloomPostEffect( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_param )
 		: PostEffect( BloomPostEffect::Type, p_renderTarget, p_renderSystem, p_param )
@@ -303,105 +296,25 @@ namespace Bloom
 	{
 		bool l_return = false;
 		m_viewport.Initialise();
-		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+
+		l_return = DoInitialiseHiPassProgram();
+
+		if ( l_return )
+		{
+			l_return = DoInitialiseBlurXProgram();
+		}
+
+		if ( l_return )
+		{
+			l_return = DoInitialiseBlurYProgram();
+		}
+
+		if ( l_return )
+		{
+			l_return = DoInitialiseCombineProgram();
+		}
+
 		Size l_size = m_renderTarget.GetSize();
-
-		auto l_vertex = GetVertexProgram( GetRenderSystem() );
-		auto l_hipass = GetHiPassProgram( GetRenderSystem() );
-		auto l_blurX = GetBlurXProgram( GetRenderSystem(), m_size );
-		auto l_blurY = GetBlurYProgram( GetRenderSystem(), m_size );
-		auto l_combine = GetCombineProgram( GetRenderSystem() );
-
-		if ( !l_vertex.empty() && !l_hipass.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-			m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_hipass );
-			l_program->Initialise();
-
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_hiPassPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-		}
-
-		if ( !l_vertex.empty() && !l_blurX.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-			m_blurXMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-			auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
-			m_blurXCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( FilterConfigCoefficientsCount );
-			m_blurXCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigCoefficients, int( m_size ) );
-			//m_blurXCoeffCount = l_program->CreateFrameVariable< OneUIntFrameVariable >( FilterConfigCoefficientsCount, ShaderType::ePixel );
-			//m_blurXCoeffs = l_program->CreateFrameVariable< OneFloatFrameVariable >( FilterConfigCoefficients, ShaderType::ePixel, int( m_size ) );
-			m_blurXCoeffCount->SetValue( m_size );
-			m_blurXCoeffs->SetValues( m_kernel );
-
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_blurX );
-			l_program->Initialise();
-
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_blurXPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-		}
-
-		if ( !l_vertex.empty() && !l_blurY.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-			m_blurYMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-			auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
-			m_blurYCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( FilterConfigCoefficientsCount );
-			m_blurYCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( FilterConfigCoefficients, int( m_size ) );
-			//m_blurYCoeffCount = l_program->CreateFrameVariable< OneUIntFrameVariable >( FilterConfigCoefficientsCount, ShaderType::ePixel );
-			//m_blurYCoeffs = l_program->CreateFrameVariable< OneFloatFrameVariable >( FilterConfigCoefficients, ShaderType::ePixel, int( m_size ) );
-			m_blurYCoeffCount->SetValue( m_size );
-			m_blurYCoeffs->SetValues( m_kernel );
-
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_blurY );
-			l_program->Initialise();
-
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_blurYPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-		}
-
-		if ( !l_vertex.empty() && !l_combine.empty() )
-		{
-			ShaderProgramSPtr l_program = l_cache.GetNewProgram();
-			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
-			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
-			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );
-			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapPass3, ShaderType::ePixel )->SetValue( 3 );
-			l_program->CreateFrameVariable< OneIntFrameVariable >( CombineMapScene, ShaderType::ePixel )->SetValue( 4 );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
-			l_program->SetSource( ShaderType::ePixel, l_model, l_combine );
-			l_program->Initialise();
-
-			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.stride() ) );
-			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
-			m_vertexBuffer->Create();
-			m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *l_program );
-			m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
-
-			DepthStencilState l_dsstate;
-			l_dsstate.SetDepthTest( false );
-			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_combinePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-		}
-
 		uint32_t l_index = 0;
 
 		for ( auto & l_surface : m_hiPassSurfaces )
@@ -477,6 +390,33 @@ namespace Bloom
 				DoDownSample( l_texture );
 				DoBlur( l_texture, m_hiPassSurfaces, m_blurSurfaces, *m_blurXPipeline );
 				DoBlur( l_texture, m_blurSurfaces, m_hiPassSurfaces, *m_blurYPipeline );
+#if 0
+
+				for ( auto & l_surface : m_hiPassSurfaces )
+				{
+					auto l_pxbuffer = l_surface.m_colourTexture.GetTexture()->GetImage().GetBuffer();
+
+					if ( l_pxbuffer )
+					{
+						if ( l_surface.m_colourTexture.GetTexture()->Bind( 0 ) )
+						{
+							auto l_buffer = l_surface.m_colourTexture.GetTexture()->Lock( AccessType::eRead );
+
+							if ( l_buffer )
+							{
+								std::memcpy( l_pxbuffer->ptr(), l_buffer, l_pxbuffer->size() );
+								l_surface.m_colourTexture.GetTexture()->Unlock( false );
+								StringStream l_name;
+								l_name << Engine::GetEngineDirectory() << cuT( "\\Bloom_" ) << ( void * )l_pxbuffer.get() << cuT( "_Blur.png" );
+								Image::BinaryWriter()( Image( cuT( "tmp" ), *l_pxbuffer ), Path( l_name.str() ) );
+							}
+
+							l_surface.m_colourTexture.GetTexture()->Unbind( 0 );
+						}
+					}
+				}
+
+#endif
 				DoCombine( l_texture );
 			}
 
@@ -633,5 +573,133 @@ namespace Bloom
 		}
 
 		return l_sampler;
+	}
+
+	bool BloomPostEffect::DoInitialiseHiPassProgram()
+	{
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
+		auto const l_hipass = GetHiPassProgram( GetRenderSystem() );
+
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_hipass );
+		bool l_return = l_program->Initialise();
+
+		if ( l_return )
+		{
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			m_hiPassPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		}
+
+		return l_return;
+	}
+
+	bool BloomPostEffect::DoInitialiseBlurXProgram()
+	{
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
+		auto const l_blurX = GetBlurXProgram( GetRenderSystem() );
+
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		m_blurXMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( BloomPostEffect::FilterConfig, MASK_SHADER_TYPE_PIXEL );
+		m_blurXCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+		m_blurXCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( BloomPostEffect::FilterConfigCoefficientsCount );
+		m_blurXCoeffCount->SetValue( m_size );
+		m_blurXCoeffs->SetValues( m_kernel );
+
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_blurX );
+		bool l_return = l_program->Initialise();
+
+		if ( l_return )
+		{
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			m_blurXPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		}
+
+		return l_return;
+	}
+
+	bool BloomPostEffect::DoInitialiseBlurYProgram()
+	{
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
+		auto const l_blurY = GetBlurYProgram( GetRenderSystem() );
+
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		m_blurYMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
+		m_blurYCoeffs = l_filterConfig.CreateVariable< OneFloatFrameVariable >( BloomPostEffect::FilterConfigCoefficients, BloomPostEffect::MaxCoefficients );
+		m_blurYCoeffCount = l_filterConfig.CreateVariable< OneUIntFrameVariable >( BloomPostEffect::FilterConfigCoefficientsCount );
+		m_blurYCoeffCount->SetValue( m_size );
+		m_blurYCoeffs->SetValues( m_kernel );
+
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_blurY );
+		bool l_return = l_program->Initialise();
+
+		if ( l_return )
+		{
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			m_blurYPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		}
+
+		return l_return;
+	}
+
+	bool BloomPostEffect::DoInitialiseCombineProgram()
+	{
+		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
+		ShaderModel const l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
+		auto const l_combine = GetCombineProgram( GetRenderSystem() );
+
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass3, ShaderType::ePixel )->SetValue( 3 );
+		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapScene, ShaderType::ePixel )->SetValue( 4 );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+
+		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
+		l_program->SetSource( ShaderType::ePixel, l_model, l_combine );
+		bool l_return = l_program->Initialise();
+
+		if ( l_return )
+		{
+			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.stride() ) );
+			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, *l_program );
+			l_return = m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+		}
+
+		if ( l_return )
+		{
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			m_combinePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		}
+
+		return l_return;
 	}
 }

@@ -39,10 +39,17 @@ namespace GLSL
 {
 	enum class ShadowType
 	{
-		None,
-		Raw,
-		Poisson,
-		StratifiedPoisson
+		eNone,
+		eRaw,
+		ePoisson,
+		eStratifiedPoisson
+	};
+
+	enum class UboLayout
+	{
+		eStd140,
+		ePacked,
+		eShared
 	};
 
 	struct GlslWriterConfig;
@@ -77,6 +84,7 @@ namespace GLSL
 	struct IVec2;
 	struct IVec3;
 	struct iVec4;
+	struct Mat2;
 	struct Mat3;
 	struct Mat4;
 	struct SamplerBuffer;

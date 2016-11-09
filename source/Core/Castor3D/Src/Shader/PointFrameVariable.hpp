@@ -150,6 +150,10 @@ namespace Castor3D
 		 */
 		virtual uint32_t size()const override;
 		/**
+		 *\copydoc		Castor3D::FrameVariable::link
+		 */
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
+		/**
 		 *\~english
 		 *\return		The type of the variable.
 		 *\~french
@@ -184,7 +188,7 @@ namespace Castor3D
 		 */
 		inline Castor::Coords< T, Count > operator[]( uint32_t p_index )
 		{
-			return Castor::Coords< T, Count >( &this->m_values[p_index * Count] );
+			return m_ptValues[p_index];
 		}
 		/**
 		 *\~english
@@ -200,7 +204,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point< T, Count > operator[]( uint32_t p_index )const
 		{
-			return Castor::Point< T, Count >( &this->m_values[p_index * Count] );
+			return Castor::Point< T, Count >( m_ptValues[p_index].const_ptr() );
 		}
 		/**
 		 *\copydoc		Castor3D::FrameVariable::GetType
@@ -233,6 +237,11 @@ namespace Castor3D
 		 *\copydoc		Castor3D::FrameVariable::DoGetStrValue
 		 */
 		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
+
+	private:
+		//!\~english	The matrix values.
+		//!\~french		Les valeurs matrices.
+		std::vector< Castor::Coords< T, Count > > m_ptValues;
 	};
 }
 

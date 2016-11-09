@@ -216,8 +216,15 @@ namespace Castor
 			l_fiImage = FreeImage_Allocate( l_w, l_h, 32 );
 			PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eA8R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+			SwapComponents( l_pBufferRGB->ptr(), PixelFormat::eA8R8G8B8, l_w, l_h );
+
+#endif
+
 			if ( l_fiImage )
 			{
+
 				memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
 				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
@@ -231,6 +238,12 @@ namespace Castor
 				l_fiImage = FreeImage_AllocateT( FIT_RGBAF, l_w, l_h );
 				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eRGBA32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+				SwapComponents( l_pBufferRGB->ptr(), PixelFormat::eRGBA32F, l_w, l_h );
+
+#endif
+
 				if ( l_fiImage )
 				{
 					memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
@@ -243,6 +256,12 @@ namespace Castor
 			{
 				l_fiImage = FreeImage_AllocateT( FIT_RGBF, l_w, l_h );
 				PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, PixelFormat::eRGB32F, p_image.GetBuffer(), p_image.GetPixelFormat() );
+
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+				SwapComponents( l_pBufferRGB->ptr(), PixelFormat::eRGB32F, l_w, l_h );
+
+#endif
 
 				if ( l_fiImage )
 				{
@@ -265,6 +284,13 @@ namespace Castor
 			{
 				l_fiImage = FreeImage_Allocate( l_w, l_h, 24 );
 				l_pBuffer = PxBufferBase::create( l_size, PixelFormat::eR8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
+
+#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
+
+				SwapComponents( l_pBuffer->ptr(), PixelFormat::eR8G8B8, l_w, l_h );
+
+#endif
+				l_w *= 3;
 			}
 			else
 			{

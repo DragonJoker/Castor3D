@@ -901,7 +901,7 @@ namespace Castor3D
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::Poisson : ShadowType::None );
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outtputs
@@ -981,7 +981,7 @@ namespace Castor3D
 
 		auto gl_FragCoord( l_writer.GetBuiltin< Vec4 >( cuT( "gl_FragCoord" ) ) );
 
-		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::Poisson : ShadowType::None );
+		auto l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Fragment Outputs

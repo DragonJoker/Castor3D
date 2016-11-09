@@ -125,7 +125,7 @@ namespace Deferred
 		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
 
@@ -555,7 +555,7 @@ namespace Deferred
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::Poisson : ShadowType::None );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Shader outputs

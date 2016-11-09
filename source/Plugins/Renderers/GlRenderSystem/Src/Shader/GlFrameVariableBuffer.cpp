@@ -920,11 +920,13 @@ namespace GlRender
 					{
 						uint32_t l_index = l_indices[i++];
 						int l_offset = 0;
+						int l_stride = 0;
 
 						if ( l_index != GlInvalidIndex )
 						{
 							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformValue::eOffset, &l_offset );
-							l_variable->link( &m_buffer[l_offset] );
+							GetOpenGl().GetActiveUniformsiv( l_program.GetGlName(), 1, &l_index, GlUniformValue::eArrayStride, &l_stride );
+							l_variable->link( &m_buffer[l_offset], l_stride < 0 ? 0u : uint32_t( l_stride ) );
 						}
 					}
 

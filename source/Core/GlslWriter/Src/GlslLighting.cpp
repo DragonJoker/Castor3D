@@ -85,7 +85,7 @@ namespace GLSL
 
 	void LightingModel::DeclareModel()
 	{
-		if ( m_shadows != ShadowType::None )
+		if ( m_shadows != ShadowType::eNone )
 		{
 			Shadow l_shadow{ m_writer };
 			l_shadow.Declare( m_shadows );
@@ -447,7 +447,7 @@ namespace GLSL
 			auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 			p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
 
-			if ( m_shadows != ShadowType::None )
+			if ( m_shadows != ShadowType::eNone )
 			{
 				Shadow l_shadows{ m_writer };
 				auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( l_vertexToLight, p_fragmentIn.m_v3Normal, Int( 0 ) ) );
@@ -494,7 +494,7 @@ namespace GLSL
 				l_spotFactor = m_writer.Paren( Float( 1 ) - m_writer.Paren( Float( 1 ) - l_spotFactor ) * Float( 1 ) / m_writer.Paren( Float( 1 ) - p_light.m_fCutOff() ) );
 				p_output.m_v3Ambient += l_output.m_v3Ambient * l_spotFactor;
 
-				if ( m_shadows != ShadowType::None )
+				if ( m_shadows != ShadowType::eNone )
 				{
 					Shadow l_shadows{ m_writer };
 					auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) ) );

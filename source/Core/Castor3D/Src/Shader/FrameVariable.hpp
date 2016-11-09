@@ -211,14 +211,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.
-		 *\remarks		The variable no longer owns it's buffer
-		 *\param[in]	p_buffer	The buffer
+		 *\remarks		The variable no longer owns it's buffer.
+		 *\param[in]	p_buffer	The buffer.
+		 *\param[in]	p_stride	The stride between each element in the buffer.
 		 *\~french
-		 *\brief		Définit le buffer de cette variable
-		 *\remarks		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit le tampon de cette variable.
+		 *\remarks		La variable perd la responsabilité de son tampon.
+		 *\param[in]	p_buffer	Le tampon.
+		 *\param[in]	p_stride	La distance binaire entre chaque valeur dans le tampon.
 		 */
-		C3D_API virtual void link( uint8_t * p_buffer ) = 0;
+		C3D_API virtual void link( uint8_t * p_buffer, uint32_t p_stride = 0u ) = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
@@ -388,27 +390,21 @@ namespace Castor3D
 		 *\return		Le pointeur sur les données de la variable.
 		 */
 		virtual uint8_t const * const const_ptr()const override;
-		/**
-		 *\~english
-		 *\brief		Defines the buffer holding the frame variable.
-		 *\remarks		The variable no longer owns it's buffer
-		 *\param[in]	p_buffer	The buffer
-		 *\~french
-		 *\brief		Définit le buffer de cette variable
-		 *\remarks		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_buffer	Le buffer
-		 */
-		virtual void link( uint8_t * p_buffer )override;
 
 	protected:
 		inline void DoCleanupBuffer();
 
 	protected:
 		typedef Castor::Policy< T > policy;
-		//!\~english Tells the variable owns it's buffer	\~french Dit si la variable est responsable de son buffer
+		//!\~english	Tells the variable owns it's buffer.
+		//!\~french		Dit si la variable est responsable de son tampon.
 		bool m_bOwnBuffer;
-		//!\~english The buffer containing all values	\~french Le buffer contenant toutes les valeurs
+		//!\~english	The buffer containing all values.
+		//!\~french		Le tampon contenant toutes les valeurs.
 		T * m_values;
+		//!\~english	The stride between each value in the buffer.
+		//!\~french		La distance binaire entrechaque valeur dans le tampon.
+		uint32_t m_stride{ 0u };
 	};
 }
 

@@ -47,7 +47,7 @@ namespace GLSL
 	{
 	public:
 		GlslWriter_API static std::unique_ptr< GLSL::KeywordsBase > Get( GlslWriterConfig const & p_rs );
-		inline Castor::String GetStdLayout( int p_index )const;
+		inline Castor::String GetUboLayout( UboLayout p_layout )const;
 		inline Castor::String const & GetVersion()const;
 		inline Castor::String const & GetIn()const;
 		inline Castor::String const & GetOut()const;
@@ -131,7 +131,7 @@ namespace GLSL
 		GlslWriter_API virtual Castor::String GetFragData( uint32_t p_index )const = 0;
 
 	protected:
-		Castor::String m_strStdLayout;
+		Castor::String m_strUboLayout;
 		Castor::String m_version;
 		Castor::String m_strAttribute;
 		Castor::String m_strIn;
@@ -230,10 +230,6 @@ namespace GLSL
 	};
 	struct Uniform
 	{
-	};
-	struct StdLayout
-	{
-		int m_index;
 	};
 }
 
