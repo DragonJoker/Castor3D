@@ -17,7 +17,7 @@ namespace GLSL
 		auto c3d_mapShadow2D = m_writer.GetUniform< Sampler2DArrayShadow >( MapShadow2D );
 		auto c3d_mapShadowCube = m_writer.GetUniform< SamplerCube >( MapShadowCube );
 
-		if ( p_type == ShadowType::Poisson || p_type == ShadowType::StratifiedPoisson )
+		if ( p_type == ShadowType::ePoisson || p_type == ShadowType::eStratifiedPoisson )
 		{
 			auto c3d_poissonDisk = m_writer.GetUniform< Vec2 >( cuT( "c3d_poissonDisk" ), 4,
 			{
@@ -63,11 +63,11 @@ namespace GLSL
 
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
-			if ( p_type == ShadowType::Raw )
+			if ( p_type == ShadowType::eRaw )
 			{
 				l_visibility = texture( c3d_mapShadow2D, vec4( l_lightSpacePosition.xy(), l_index, l_z ) );
 			}
-			else if ( p_type == ShadowType::Poisson )
+			else if ( p_type == ShadowType::ePoisson )
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 500.0 ) );
@@ -77,7 +77,7 @@ namespace GLSL
 					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadow2D, vec4( l_lightSpacePosition.xy() + c3d_poissonDisk[i] / l_diffusion, l_index, l_z ) ) );
 				}
 			}
-			else if ( p_type == ShadowType::StratifiedPoisson )
+			else if ( p_type == ShadowType::eStratifiedPoisson )
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
@@ -110,7 +110,7 @@ namespace GLSL
 			auto l_index = m_writer.GetLocale( cuT( "l_index" ), m_writer.Cast< Float >( p_index ) / PointShadowMapCount );
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
 
-			//if ( p_type == ShadowType::Raw )
+			//if ( p_type == ShadowType::eRaw )
 			//{
 				auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), p_vertexPosition - p_lightPosition );
 				auto l_closest = m_writer.GetLocale( cuT( "l_closest" ), texture( c3d_mapShadowCube, l_vertexToLight ).r() );
@@ -125,7 +125,7 @@ namespace GLSL
 				}
 				FI;
 			//}
-			//else if ( p_type == ShadowType::Poisson )
+			//else if ( p_type == ShadowType::ePoisson )
 			//{
 			//	auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 
@@ -134,7 +134,7 @@ namespace GLSL
 			//		l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( p_map, vec4( p_lightDirection.xy() + c3d_poissonDisk[i] / 700.0, p_lightDirection.z(), length( p_lightDirection ) ) ) );
 			//	}
 			//}
-			//else if ( p_type == ShadowType::StratifiedPoisson )
+			//else if ( p_type == ShadowType::eStratifiedPoisson )
 			//{
 			//	auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 			//	auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );

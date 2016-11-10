@@ -146,39 +146,32 @@ namespace Castor3D
 		 */
 		inline void SetValue( Castor::Point< T, Count > const & p_ptValue, uint32_t p_index );
 		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
+		 *\copydoc		Castor3D::FrameVariable::size
 		 */
-		virtual uint32_t size()const;
+		virtual uint32_t size()const override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::link
+		 */
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
 		/**
 		 *\~english
-		 *\brief		Gives the full type of the variable
-		 *\return		The type of the variable
+		 *\return		The type of the variable.
 		 *\~french
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type complet
+		 *\return		Le type de la variable.
 		 */
 		static inline VariableType GetVariableType();
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type
-		 *\return		The type
+		 *\return		The variable's full type.
 		 *\~english
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type
+		 *\return		Le type complet de la variable.
 		 */
 		static inline FrameVariableType GetFrameVariableType();
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The name
+		 *\return		The variable's full type name.
 		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le nom
+		 *\return		Le nom du type complet de la variable.
 		 */
 		static inline Castor::String GetFrameVariableTypeName();
 		/**
@@ -193,9 +186,9 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline Castor::Coords<T, Count > operator[]( uint32_t p_index )
+		inline Castor::Coords< T, Count > operator[]( uint32_t p_index )
 		{
-			return Castor::Coords< T, Count >( &this->m_values[p_index * Count] );
+			return m_ptValues[p_index];
 		}
 		/**
 		 *\~english
@@ -211,57 +204,44 @@ namespace Castor3D
 		 */
 		inline Castor::Point< T, Count > operator[]( uint32_t p_index )const
 		{
-			return Castor::Point< T, Count >( &this->m_values[p_index * Count] );
+			return Castor::Point< T, Count >( m_ptValues[p_index].const_ptr() );
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the variable type
-		 *\return		The variable type
-		 *\~french
-		 *\brief		Récupère le type de la variable
-		 *\return		Le type de variable
+		 *\copydoc		Castor3D::FrameVariable::GetType
 		 */
-		inline VariableType GetType()const
+		inline VariableType GetType()const override
 		{
 			return PointFrameVariable< T, Count >::GetVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the variable full type
-		 *\return		The type
-		 *\~french
-		 *\brief		Récupère le type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullType
 		 */
-		inline FrameVariableType GetFullType()const
+		inline FrameVariableType GetFullType()const override
 		{
 			return PointFrameVariable< T, Count >::GetFrameVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The type
-		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullTypeName
 		 */
-		inline Castor::String GetFullTypeName()const
+		inline Castor::String GetFullTypeName()const override
 		{
 			return PointFrameVariable< T, Count >::GetFrameVariableTypeName();
 		}
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_value	The string containing the value
-		 *\param[in]	p_index	The index of the value
-		 *\~french
-		 *\brief		Définit la valeur de la variable à partir d'une chaîne
-		 *\param[in]	p_value	La chaîne
-		 *\param[in]	p_index	L'index de la valeur à modifier
+		 *\copydoc		Castor3D::FrameVariable::DoSetStrValue
 		 */
-		inline void DoSetValueStr( Castor::String const & p_value, uint32_t p_index );
+		inline void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 )override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::DoGetStrValue
+		 */
+		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
+
+	private:
+		//!\~english	The matrix values.
+		//!\~french		Les valeurs matrices.
+		std::vector< Castor::Coords< T, Count > > m_ptValues;
 	};
 }
 

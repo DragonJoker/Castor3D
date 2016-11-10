@@ -57,7 +57,7 @@ namespace GLSL
 
 	struct Ubo
 	{
-		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
+		GlslWriter_API Ubo( GlslWriter & p_writer, Castor::String const & p_name, UboLayout p_layout = UboLayout::eStd140 );
 		GlslWriter_API void End();
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
@@ -67,6 +67,7 @@ namespace GLSL
 		GlslWriter & m_writer;
 		Castor::StringStream m_stream;
 		Castor::String m_name;
+		UboLayout m_layout;
 		uint32_t m_count{ 0u };
 	};
 
@@ -294,7 +295,6 @@ namespace GLSL
 		GlslWriter_API GlslWriter & operator<<( Attribute const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( In const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Out const & p_rhs );
-		GlslWriter_API GlslWriter & operator<<( StdLayout const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Layout const & p_rhs );
 		GlslWriter_API GlslWriter & operator<<( Uniform const & p_rhs );
 

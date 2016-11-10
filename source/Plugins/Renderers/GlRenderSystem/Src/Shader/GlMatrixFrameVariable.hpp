@@ -38,11 +38,22 @@ namespace GlRender
 		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram & p_program );
 		GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable< T, Rows, Columns > & p_variable );
 		virtual ~GlMatrixFrameVariable();
-
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual void Bind();
-		virtual void Unbind() {}
+		/**
+		 *\copydoc		Castor3D::FrameVariable::Initialise
+		 */
+		bool Initialise()override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::Cleanup
+		 */
+		void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::Bind
+		 */
+		bool Bind()const override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::Unbind
+		 */
+		void Unbind()const override {}
 	};
 }
 

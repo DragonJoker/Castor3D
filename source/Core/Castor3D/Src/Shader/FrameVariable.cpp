@@ -129,18 +129,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::FrameVariable( ShaderProgram & p_program )
-		: m_changed( true )
-		, m_occurences( 1 )
-		, m_strValue( 1 )
-		, m_program( p_program )
-	{
-	}
-
 	FrameVariable::FrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		: m_changed( true )
 		, m_occurences( p_occurences )
-		, m_strValue( m_occurences )
 		, m_program( p_program )
 	{
 	}
@@ -149,20 +140,47 @@ namespace Castor3D
 	{
 	}
 
-	void FrameVariable::SetValueStr( String const & p_value )
-	{
-		SetValueStr( p_value, 0 );
-	}
-
-	void FrameVariable::SetValueStr( String const & p_value, uint32_t p_index )
+	void FrameVariable::SetStrValue( String const & p_value, uint32_t p_index )
 	{
 		REQUIRE( p_index < m_occurences );
+		DoSetStrValue( p_value, p_index );
+		m_changed = true;
+	}
 
-		if ( p_index < m_occurences )
+	String FrameVariable::GetStrValue( uint32_t p_index )const
+	{
+		REQUIRE( p_index < m_occurences );
+		return DoGetStrValue( p_index );
+	}
+
+	void FrameVariable::SetStrValues( String const & p_value )
+	{
+		StringArray l_values = string::split( p_value, cuT( "|" ) );
+		REQUIRE( l_values.size() == m_occurences );
+		uint32_t l_index = 0u;
+
+		for ( auto l_value : l_values )
 		{
-			m_strValue[p_index] = p_value;
-			m_changed = true;
-			DoSetValueStr( p_value, p_index );
+			if ( l_index < m_occurences )
+			{
+				SetStrValue( l_value, l_index++ );
+			}
 		}
+
+		m_changed = true;
+	}
+
+	String FrameVariable::GetStrValues()const
+	{
+		String l_return;
+		String l_separator;
+
+		for ( uint32_t i = 0u; i < m_occurences; ++i )
+		{
+			l_return += l_separator + GetStrValue( i );
+			l_separator = "|";
+		}
+
+		return l_return;
 	}
 }

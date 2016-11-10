@@ -206,6 +206,20 @@ namespace Castor
 		CU_API static xchar const * const Value;
 	};
 	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for Colour.
+	\~french
+	\brief		Spécialisation de RegexFormat pour Colour.
+	*/
+	template<>
+	struct RegexFormat< HdrColour >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -796,6 +810,24 @@ namespace Castor
 		using ValueType = Colour;
 		//!~english The parameter type.	\~french Le type de paramètre.
 		CU_API static const ParameterType ParamType = ParameterType::eColour;
+		//!~english The parameter type name.	\~french Le nom du type de paramètre.
+		CU_API static xchar const * const StringType;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ParserParameterHelper specialisation for ParameterType::eHdrColour.
+	\~french
+	\brief		Specialisation de ParserParameterHelper pour ParameterType::eHdrColour.
+	*/
+	template<> struct ParserParameterHelper< ParameterType::eHdrColour >
+	{
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = HdrColour;
+		//!~english The parameter type.	\~french Le type de paramètre.
+		CU_API static const ParameterType ParamType = ParameterType::eHdrColour;
 		//!~english The parameter type name.	\~french Le nom du type de paramètre.
 		CU_API static xchar const * const StringType;
 	};

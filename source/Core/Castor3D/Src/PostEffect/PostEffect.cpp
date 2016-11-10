@@ -36,7 +36,7 @@ namespace Castor3D
 		m_colourTexture.SetTexture( l_colourTexture );
 		m_colourTexture.Initialise();
 		m_fbo->Initialise( p_size );
-		m_fbo->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
 		if ( m_fbo->Bind( FrameBufferMode::eConfig ) )
 		{

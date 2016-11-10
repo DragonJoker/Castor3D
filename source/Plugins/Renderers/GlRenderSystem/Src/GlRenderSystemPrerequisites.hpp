@@ -46,6 +46,14 @@ namespace GlRender
 {
 	using Castor::real;
 
+	enum class GlProvider
+	{
+		eUnknown,
+		eNvidia,
+		eATI,
+		eIntel,
+	};
+
 	enum class GlBufferBinding
 		: uint32_t
 	{
@@ -412,10 +420,32 @@ namespace GlRender
 	enum class GlUniformBlockValue
 		: uint32_t
 	{
+		eBinding = 0x8A3F,
+		eDataSize = 0x8A40,
+		eNameLength = 0x8A41,
+		eActiveUniforms = 0x8A42,
+		eActiveUniformIndices = 0x8A43,
+		eReferencedByVertexShader = 0x8A44,
+		eReferencedByGeometryShader = 0x8A45,
+		eReferencedByFragmentShader = 0x8A46,
+		eReferencedByTessControlShader = 0x84F0,
+		eReferencedByTessEvaluationShader = 0x84F1,
+		eReferencedByComputeShader = 0x90EC,
+	};
+
+	enum class GlUniformValue
+		: uint32_t
+	{
+		eType = 0x8A37,
 		eSize = 0x8A38,
+		eNameLength = 0x8A39,
+		eBlockIndex = 0x8A3A,
 		eOffset = 0x8A3B,
-		eBlockDataSize = 0x8A40,
+		eArrayStride = 0x8A3C,
+		eMatrixStride = 0x8A3D,
+		eIsRowMajor = 0x8A3E,
 		eGpuAddress = 0x8F34,
+		eAtomicCounterBufferIndex = 0x92DA
 	};
 
 	enum class GlContextAttribute

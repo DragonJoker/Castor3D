@@ -1,52 +1,43 @@
 namespace Castor3D
 {
-	namespace
-	{
-		template< typename T >
-		void Parse( Castor::String const & p_text, T & p_value )
-		{
-			Castor::string::parse( p_text, p_value );
-		}
-	}
-
 	template<> struct OneFrameVariableDefinitions< bool >
 		: public FrameVariableDataTyper< bool >
 	{
-		static const uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
-		static const VariableType Count = VariableType::eOne;
-		static const FrameVariableType Full = FrameVariableType::eBool;
+		static constexpr uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
+		static constexpr VariableType Count = VariableType::eOne;
+		static constexpr FrameVariableType Full = FrameVariableType::eBool;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< int >
 		: public FrameVariableDataTyper< int >
 	{
-		static const uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
-		static const VariableType Count = VariableType::eOne;
-		static const FrameVariableType Full = FrameVariableType::eInt;
+		static constexpr uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
+		static constexpr VariableType Count = VariableType::eOne;
+		static constexpr FrameVariableType Full = FrameVariableType::eInt;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< uint32_t >
 		: public FrameVariableDataTyper< uint32_t >
 	{
-		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
-		static const VariableType Count = VariableType::eOne;
-		static const FrameVariableType Full = FrameVariableType::eUInt;
+		static constexpr uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
+		static constexpr VariableType Count = VariableType::eOne;
+		static constexpr FrameVariableType Full = FrameVariableType::eUInt;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< float >
 		: public FrameVariableDataTyper< float >
 	{
-		static const uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
-		static const VariableType Count = VariableType::eOne;
-		static const FrameVariableType Full = FrameVariableType::eFloat;
+		static constexpr uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
+		static constexpr VariableType Count = VariableType::eOne;
+		static constexpr FrameVariableType Full = FrameVariableType::eFloat;
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< double >
 		: public FrameVariableDataTyper< double >
 	{
-		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
-		static const VariableType Count = VariableType::eOne;
-		static const FrameVariableType Full = FrameVariableType::eDouble;
+		static constexpr uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
+		static constexpr VariableType Count = VariableType::eOne;
+		static constexpr FrameVariableType Full = FrameVariableType::eDouble;
 		C3D_API static const xchar * FullTypeName;
 	};
 
@@ -54,15 +45,13 @@ namespace Castor3D
 
 	template< typename T >
 	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program )
-		:	TFrameVariable< T >( p_program )
+		: OneFrameVariable< T >( p_program, 1u )
 	{
-		this->m_values = new T[1];
-		memset( this->m_values, 0, size() );
 	}
 
 	template< typename T >
 	OneFrameVariable< T >::OneFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
-		:	TFrameVariable< T >( p_program, p_occurences )
+		: TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences];
 		memset( this->m_values, 0, size() );
@@ -83,7 +72,7 @@ namespace Castor3D
 	inline void OneFrameVariable< T >::SetValue( T const & p_value, uint32_t p_index )
 	{
 		REQUIRE( p_index < this->m_occurences );
-		policy::assign( this->m_values[p_index], p_value );
+		policy::assign( this->m_values[p_index + p_index * this->m_stride], p_value );
 		TFrameVariable< T >::m_changed = true;
 	}
 
@@ -91,8 +80,11 @@ namespace Castor3D
 	inline void OneFrameVariable< T >::SetValues( T const * p_values, size_t p_size )
 	{
 		REQUIRE( p_size <= this->m_occurences );
-		std::memcpy( this->m_values, p_values, p_size * sizeof( T ) );
-		TFrameVariable< T >::m_changed = true;
+
+		for ( uint32_t i = 0; i < p_size; ++i )
+		{
+			SetValue( p_values[i], i );
+		}
 	}
 
 	template< typename T >
@@ -140,6 +132,37 @@ namespace Castor3D
 	}
 
 	template< typename T >
+	void OneFrameVariable< T >::link( uint8_t * p_buffer, uint32_t p_stride )
+	{
+		uint8_t * l_buffer = reinterpret_cast< uint8_t * >( p_buffer );
+		constexpr uint32_t l_size = OneFrameVariableDefinitions< T >::Size;
+
+		if ( p_stride == 0 )
+		{
+			p_stride = l_size;
+		}
+
+		REQUIRE( p_stride >= l_size );
+
+		for ( uint32_t i = 0; i < this->m_occurences; i++ )
+		{
+			std::memcpy( l_buffer, &this->m_values[i], l_size );
+			l_buffer += p_stride;
+		}
+
+		this->DoCleanupBuffer();
+		this->m_stride = p_stride > l_size ? p_stride : 0u;
+		this->m_values = reinterpret_cast< T * >( p_buffer );
+		this->m_bOwnBuffer = false;
+	}
+
+	template< typename T >
+	inline VariableType OneFrameVariable< T >::GetVariableType()
+	{
+		return VariableType::eOne;
+	}
+
+	template< typename T >
 	inline FrameVariableType OneFrameVariable< T >::GetFrameVariableType()
 	{
 		return FrameVariableType( OneFrameVariableDefinitions< T >::Full );
@@ -152,8 +175,16 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
+	inline void OneFrameVariable< T >::DoSetStrValue( Castor::String const & p_value, uint32_t p_index )
 	{
-		Parse( p_value, this->m_values[p_index] );
+		Castor::string::parse( p_value, this->m_values[p_index] );
+	}
+
+	template< typename T >
+	inline Castor::String OneFrameVariable< T >::DoGetStrValue( uint32_t p_index )const
+	{
+		Castor::StringStream l_stream;
+		l_stream << this->m_values[p_index];
+		return l_stream.str();
 	}
 }

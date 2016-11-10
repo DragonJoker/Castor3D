@@ -2,6 +2,54 @@ namespace GLSL
 {
 	//*****************************************************************************************
 
+	Mat2::Mat2()
+		: Type( cuT( "mat2 " ) )
+	{
+	}
+
+	Mat2::Mat2( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "mat2 " ), p_writer, p_name )
+	{
+	}
+
+	Mat2 & Mat2::operator=( Mat2 const & p_rhs )
+	{
+		if ( m_writer )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+		}
+		else
+		{
+			Type::operator=( p_rhs );
+			m_writer = p_rhs.m_writer;
+		}
+
+		return *this;
+	}
+
+	template< typename T >
+	Mat2 & Mat2::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	template< typename T >
+	Vec2 Mat2::operator[]( T const & p_rhs )
+	{
+		Vec2 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::String( p_rhs ) + cuT( "]" ) };
+		return l_return;
+	}
+
+	Vec2 Mat2::operator[]( int const & p_rhs )
+	{
+		Vec2 l_return{ m_writer, Castor::String( *this ) + cuT( "[" ) + Castor::string::to_string( p_rhs ) + cuT( "]" ) };
+		return l_return;
+	}
+
+	//*****************************************************************************************
+
 	Mat3::Mat3()
 		: Type( cuT( "mat3 " ) )
 	{

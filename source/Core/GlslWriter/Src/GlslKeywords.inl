@@ -2,10 +2,16 @@
 
 namespace GLSL
 {
-	inline Castor::String KeywordsBase::GetStdLayout( int p_index )const
+	inline Castor::String KeywordsBase::GetUboLayout( UboLayout p_layout )const
 	{
+		static std::map< UboLayout, Castor::String > LayoutName
+		{
+			{ UboLayout::eStd140, cuT( "std140" ) },
+			{ UboLayout::eShared, cuT( "shared" ) },
+			{ UboLayout::ePacked, cuT( "packed" ) },
+		};
 		REQUIRE( !m_strIn.empty() );
-		return m_strStdLayout + cuT( "( std" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
+		return m_strUboLayout + cuT( "( " ) + LayoutName[p_layout] + cuT( " ) " );
 	}
 	inline Castor::String const & KeywordsBase::GetVersion()const
 	{
@@ -549,7 +555,7 @@ namespace GLSL
 	public:
 		Keywords()
 		{
-			m_strStdLayout = cuT( "layout" );
+			m_strUboLayout = cuT( "layout" );
 			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );
@@ -652,7 +658,7 @@ namespace GLSL
 	public:
 		Keywords()
 		{
-			m_strStdLayout = cuT( "layout" );
+			m_strUboLayout = cuT( "layout" );
 			m_version = cuT( "#version " ) + Castor::string::to_string( Version );
 			m_strAttribute = cuT( "in" );
 			m_strIn = cuT( "in" );

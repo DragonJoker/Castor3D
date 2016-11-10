@@ -290,7 +290,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur émissive
 		 *\param[in]	p_clrColour	La nouvelle valeur
 		 */
-		inline void SetEmissive( Castor::Colour const & p_clrColour )
+		inline void SetEmissive( Castor::HdrColour const & p_clrColour )
 		{
 			m_clrEmissive = p_clrColour;
 		}
@@ -497,7 +497,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur émissive
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetEmissive()const
+		inline Castor::HdrColour const & GetEmissive()const
 		{
 			return m_clrEmissive;
 		}
@@ -545,7 +545,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur émissive
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetEmissive()
+		inline Castor::HdrColour & GetEmissive()
 		{
 			return m_clrEmissive;
 		}
@@ -692,7 +692,7 @@ namespace Castor3D
 		//!\~english Specular material colour	\~french La couleur spéculaire
 		Castor::Colour m_clrSpecular;
 		//!\~english Emissive material colour	\~french La couleur émissive
-		Castor::Colour m_clrEmissive;
+		Castor::HdrColour m_clrEmissive;
 		//!\~english The shininess value	\~french L'exposant
 		float m_fShininess;
 		//!\~english The alpha value	\~french L'alpha

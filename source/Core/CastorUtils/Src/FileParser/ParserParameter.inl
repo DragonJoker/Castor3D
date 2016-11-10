@@ -488,16 +488,16 @@ namespace Castor
 			bool l_return = false;
 			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
 
-			if ( l_values.size() >= size_t( Colour::Component::eCount ) )
+			if ( l_values.size() >= size_t( Component::eCount ) )
 			{
 				Point4f l_value;
 				l_return = ParseValues( p_params, l_value );
 
 				if ( l_return )
 				{
-					for ( uint8_t i = 0; i < uint8_t( Colour::Component::eCount ); i++ )
+					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
 					{
-						p_value[Colour::Component( i )] = l_value[i];
+						p_value[Component( i )] = l_value[i];
 					}
 				}
 			}
@@ -510,10 +510,10 @@ namespace Castor
 				{
 					for ( uint8_t i = 0; i < 3; i++ )
 					{
-						p_value[Colour::Component( i )] = l_value[i];
+						p_value[Component( i )] = l_value[i];
 					}
 
-					p_value[Colour::Component::eAlpha] = 1.0;
+					p_value[Component::eAlpha] = 1.0;
 				}
 			}
 			else
@@ -554,6 +554,117 @@ namespace Castor
 						}
 
 						p_value = Colour::from_argb( l_value );
+					}
+					else
+					{
+						Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+					}
+				}
+				catch ( std::exception & p_exc )
+				{
+					Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
+				}
+
+				return l_return;
+			}
+
+			return l_return;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		ValueParser specialisation for ParameterType::eColour.
+	\~french
+	\brief		Spécialisation de ValueParser pour ParameterType::eColour.
+	*/
+	template< ParameterType Type >
+	struct ValueParser< Type, typename std::enable_if< Type == ParameterType::eHdrColour >::type >
+	{
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		/**
+		 *\~english
+		 *\brief		Parses a value from a line.
+		 *\param[in]	p_params	The line containing the value.
+		 *\param[out]	p_value		Receives the result.
+		 *\~french
+		 *\brief		Extrait une valeur à partir d'une ligne.
+		 *\param[in]	p_params	La ligne contenant la valeur.
+		 *\param[out]	p_value		Reçoit le résultat.
+		 */
+		static inline bool Parse( String & p_params, ValueType & p_value )
+		{
+			bool l_return = false;
+			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 5, false );
+
+			if ( l_values.size() >= size_t( Component::eCount ) )
+			{
+				Point4f l_value;
+				l_return = ParseValues( p_params, l_value );
+
+				if ( l_return )
+				{
+					for ( uint8_t i = 0; i < uint8_t( Component::eCount ); i++ )
+					{
+						p_value[Component( i )] = l_value[i];
+					}
+				}
+			}
+			else if ( l_values.size() == 3 )
+			{
+				Point3f l_value;
+				l_return = ParseValues( p_params, l_value );
+
+				if ( l_return )
+				{
+					for ( uint8_t i = 0; i < 3; i++ )
+					{
+						p_value[Component( i )] = l_value[i];
+					}
+
+					p_value[Component::eAlpha] = 1.0;
+				}
+			}
+			else
+			{
+				try
+				{
+					String l_regexString = RegexFormat< HdrColour >::Value;
+					l_regexString += details::IGNORED_END;
+
+					const Regex l_regex{ l_regexString };
+					auto l_begin = std::begin( p_params );
+					auto l_end = std::end( p_params );
+					const SRegexIterator l_it( l_begin, l_end, l_regex );
+					const SRegexIterator l_endit;
+					String l_result;
+					l_return = l_it != l_endit && l_it->size() >= 1;
+
+					if ( l_return )
+					{
+						uint32_t l_value{ 0u };
+
+						for ( size_t i = 0; i < l_it->size() && l_value == 0u; ++i )
+						{
+							auto l_match = ( *l_it )[i];
+
+							if ( l_match.matched )
+							{
+								String l_text = l_match;
+
+								if ( l_text.size() == 6 )
+								{
+									l_text = "FF" + l_text;
+								}
+
+								std::basic_istringstream< xchar > l_stream{ l_text };
+								l_stream >> std::hex >> l_value;
+							}
+						}
+
+						p_value = HdrColour::from_argb( l_value );
 					}
 					else
 					{

@@ -38,15 +38,16 @@ namespace GLSL
 
 	//*****************************************************************************************
 
-	Ubo::Ubo( GlslWriter & p_writer, Castor::String const & p_name )
+	Ubo::Ubo( GlslWriter & p_writer, Castor::String const & p_name, UboLayout p_layout )
 		: m_writer( p_writer )
 		, m_name( p_name )
 		, m_block( nullptr )
+		, m_layout( p_layout )
 	{
 		if ( m_writer.HasConstantsBuffers() )
 		{
 			m_stream << std::endl;
-			m_stream << m_writer.m_keywords->GetStdLayout( 140 ) << m_writer.m_uniform << p_name << std::endl;
+			m_stream << m_writer.m_keywords->GetUboLayout( m_layout ) << m_writer.m_uniform << p_name << std::endl;
 			m_writer.m_uniform.clear();
 			m_block = new IndentBlock( m_stream );
 		}
@@ -830,12 +831,6 @@ namespace GLSL
 	GlslWriter & GlslWriter::operator<<( Out const & p_rhs )
 	{
 		m_stream << m_keywords->GetOut() << cuT( " " );
-		return *this;
-	}
-
-	GlslWriter & GlslWriter::operator<<( StdLayout const & p_rhs )
-	{
-		m_stream << m_keywords->GetStdLayout( p_rhs.m_index );
 		return *this;
 	}
 

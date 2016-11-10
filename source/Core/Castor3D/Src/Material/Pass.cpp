@@ -76,7 +76,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
-					   && Colour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
+					   && HdrColour::TextWriter( String() )( p_pass.GetEmissive(), p_file )
 					   && p_file.WriteText( cuT( "\n" ) ) > 0;
 			Castor::TextWriter< Pass >::CheckError( l_return, "Pass emissive colour" );
 		}
@@ -160,7 +160,7 @@ namespace Castor3D
 		, m_clrDiffuse{ Colour::from_rgba( 0xFFFFFFFF ) }
 		, m_clrAmbient{ Colour::from_rgba( 0x000000FF ) }
 		, m_clrSpecular{ Colour::from_rgba( 0xFFFFFFFF ) }
-		, m_clrEmissive{ Colour::from_rgba( 0x000000FF ) }
+		, m_clrEmissive{ HdrColour::from_rgba( 0x000000FF ) }
 		, m_fAlpha{ 1.0f }
 		, m_textureFlags{ 0 }
 		, m_bAutomaticShader{ true }

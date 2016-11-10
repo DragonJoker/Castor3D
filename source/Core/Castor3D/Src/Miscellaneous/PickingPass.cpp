@@ -242,7 +242,7 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_frameBuffer = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-			m_frameBuffer->SetClearColour( Colour::from_predef( Colour::Predefined::eOpaqueBlack ) );
+			m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
 			l_return = m_depthBuffer->Create();
 		}

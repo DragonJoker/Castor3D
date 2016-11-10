@@ -10,10 +10,6 @@
 
 #include <iomanip>
 
-#ifdef Always
-#	undef Always
-#endif
-
 using namespace Castor3D;
 using namespace Castor;
 
@@ -494,6 +490,23 @@ namespace GlRender
 		m_vendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
 		m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 		m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
+
+		auto l_vendor = string::lower_case( m_vendor );
+
+		if ( l_vendor.find( "nvidia" ) != String::npos )
+		{
+			m_gpu = GlProvider::eNvidia;
+		}
+		else if ( l_vendor.find( "ati" ) != String::npos
+				  || l_vendor.find( "amd" ) != String::npos )
+		{
+			m_gpu = GlProvider::eATI;
+		}
+		else if ( l_vendor.find( "intel" ) != String::npos )
+		{
+			m_gpu = GlProvider::eIntel;
+		}
+
 		double l_version{ 0u };
 		StringStream l_stream( m_version );
 		l_stream >> l_version;

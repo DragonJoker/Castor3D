@@ -44,17 +44,45 @@ namespace Castor3D
 
 	namespace
 	{
-		uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffers )
+		uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffer )
 		{
 			OverlayCategory::Vertex const & l_vertex = *p_begin;
-			p_buffers.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			auto l_size = p_count * sizeof( OverlayCategory::Vertex );
+
+			if ( p_buffer.Bind() )
+			{
+				auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
+
+				if ( l_buffer )
+				{
+					std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
+					p_buffer.Unlock();
+				}
+
+				p_buffer.Unbind();
+			}
+
 			return p_count;
 		}
 
-		uint32_t FillBuffers( TextOverlay::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffers )
+		uint32_t FillBuffers( TextOverlay::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffer )
 		{
 			TextOverlay::Vertex const & l_vertex = *p_begin;
-			p_buffers.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( TextOverlay::Vertex ), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			auto l_size = p_count * sizeof( TextOverlay::Vertex );
+
+			if ( p_buffer.Bind() )
+			{
+				auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
+
+				if ( l_buffer )
+				{
+					std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
+					p_buffer.Unlock();
+				}
+
+				p_buffer.Unbind();
+			}
+
 			return p_count;
 		}
 	}
@@ -225,18 +253,21 @@ namespace Castor3D
 
 	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & p_overlay )
 	{
-		MaterialSPtr l_material = p_overlay.GetMaterial();
-
-		if ( l_material )
 		{
-			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
+			auto l_material = p_overlay.GetMaterial();
+
+			if ( l_material )
+			{
+				DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
+			}
 		}
-
-		l_material = p_overlay.GetBorderMaterial();
-
-		if ( l_material )
 		{
-			DoDrawItem( *l_material, m_borderGeometryBuffers, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
+			auto l_material = p_overlay.GetBorderMaterial();
+
+			if ( l_material )
+			{
+				DoDrawItem( *l_material, m_borderGeometryBuffers, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
+			}
 		}
 	}
 

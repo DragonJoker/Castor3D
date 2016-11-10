@@ -35,7 +35,6 @@ namespace GlRender
 	public:
 		GlFrameVariableBase( OpenGl & p_gl, GlShaderProgram const & p_program );
 		virtual ~GlFrameVariableBase();
-		virtual void Bind() = 0;
 
 		inline uint32_t GetGlName() const
 		{
@@ -44,9 +43,9 @@ namespace GlRender
 
 	protected:
 		void GetVariableLocation( char const * p_varName );
-		template <typename Type> void DoBind( Type const * p_value, uint32_t p_occurences );
-		template <typename Type, int Count> void DoBind( Type const * p_value, uint32_t p_occurences );
-		template <typename Type, int Rows, int Columns> void DoBind( Type const * p_value, uint32_t p_occurences );
+		template< typename Type > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
+		template< typename Type, int Count > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
+		template< typename Type, int Rows, int Columns > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
 
 	protected:
 		uint32_t m_glName;

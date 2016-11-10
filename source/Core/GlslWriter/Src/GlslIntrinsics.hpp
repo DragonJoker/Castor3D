@@ -29,6 +29,7 @@ namespace GLSL
 {
 	template< typename T > struct is_arithmetic_type : public std::false_type {};
 	template<> struct is_arithmetic_type< Int > : public std::true_type {};
+	template<> struct is_arithmetic_type< UInt > : public std::true_type {};
 	template<> struct is_arithmetic_type< Float > : public std::true_type {};
 	template<> struct is_arithmetic_type< Vec2 > : public std::true_type {};
 	template<> struct is_arithmetic_type< Vec3 > : public std::true_type {};
@@ -36,10 +37,9 @@ namespace GLSL
 	template<> struct is_arithmetic_type< IVec2 > : public std::true_type {};
 	template<> struct is_arithmetic_type< IVec3 > : public std::true_type {};
 	template<> struct is_arithmetic_type< IVec4 > : public std::true_type {};
+	template<> struct is_arithmetic_type< Mat2 > : public std::true_type {};
 	template<> struct is_arithmetic_type< Mat3 > : public std::true_type {};
-	template<> struct is_arithmetic_type< Mat4 > : public std::true_type
-	{
-	};
+	template<> struct is_arithmetic_type< Mat4 > : public std::true_type{};
 
 #	define GLSL_DECLARE_OPERATOR( RetType, LhsType, RhsType, Operator )\
 	template< typename LhsType, typename RhsType, typename Enable = typename std::enable_if< is_arithmetic_type< LhsType >::value >::type >\

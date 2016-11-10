@@ -30,10 +30,6 @@ SOFTWARE.
 #	include <GL/glx.h>
 #	define GLX_GLXEXT_PROTOTYPES
 #	include <GL/glxext.h>
-#	undef None
-#	undef Bool
-#	undef Always
-using Bool = int;
 #endif
 #include <GL/gl.h>
 
@@ -357,6 +353,7 @@ namespace GlRender
 		inline GlRenderSystem const & GetRenderSystem()const;
 		inline bool HasExtension( Castor::String const & p_strExtName, bool p_log = true )const;
 		inline GlBufferMode GetBufferFlags( uint32_t p_flags )const;
+		inline GlProvider GetProvider()const;
 
 		/**@name General Functions */
 		//@{
@@ -730,7 +727,7 @@ namespace GlRender
 		inline bool BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const;
 		inline bool UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
 		inline bool GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
-		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformBlockValue pname, int * params )const;
+		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformValue pname, int * params )const;
 		inline bool GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, GlUniformBlockValue pname, int * params )const;
 
 		//@}
@@ -903,6 +900,7 @@ namespace GlRender
 		TexFunctionsBase * m_pTexFunctions;
 		BufFunctionsBase * m_pBufFunctions;
 		GlRenderSystem & m_renderSystem;
+		GlProvider m_gpu{ GlProvider::eUnknown };
 
 		/**@name General */
 		//@{

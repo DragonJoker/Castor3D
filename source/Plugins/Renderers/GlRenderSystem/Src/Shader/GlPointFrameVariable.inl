@@ -40,12 +40,16 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Count >
-	void GlPointFrameVariable< T, Count >::Bind()
+	bool GlPointFrameVariable< T, Count >::Bind()const
 	{
-		if ( Castor3D::FrameVariable::m_changed )
+		bool l_return = true;
+
+		if ( this->IsChanged() )
 		{
-			GlFrameVariableBase::DoBind< T, Count >( Castor3D::PointFrameVariable< T, Count >::m_values, Castor3D::FrameVariable::m_occurences );
+			l_return = GlFrameVariableBase::DoBind< T, Count >( Castor3D::PointFrameVariable< T, Count >::m_values, Castor3D::FrameVariable::m_occurences );
 			Castor3D::FrameVariable::m_changed = false;
 		}
+
+		return l_return;
 	}
 }

@@ -41,7 +41,6 @@ SOFTWARE.
 namespace Bloom
 {
 	static const uint32_t FILTER_COUNT = 4;
-	static const uint32_t KERNEL_SIZE = 3;
 
 	class BloomPostEffect
 		: public Castor3D::PostEffect
@@ -72,15 +71,28 @@ namespace Bloom
 		virtual bool DoWriteInto( Castor::TextFile & p_file );
 
 	public:
-		static Castor::String Type;
-		static Castor::String Name;
+		static Castor::String const Type;
+		static Castor::String const Name;
+		static Castor::String const FilterConfig;
+		static Castor::String const FilterConfigCoefficients;
+		static Castor::String const FilterConfigCoefficientsCount;
+		static Castor::String const CombineMapPass0;
+		static Castor::String const CombineMapPass1;
+		static Castor::String const CombineMapPass2;
+		static Castor::String const CombineMapPass3;
+		static Castor::String const CombineMapScene;
+		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
 		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
 		void DoDownSample( Castor3D::TextureLayout const & p_origin );
-		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
+		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::Pipeline & p_pipeline );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
+		bool DoInitialiseHiPassProgram();
+		bool DoInitialiseBlurXProgram();
+		bool DoInitialiseBlurYProgram();
+		bool DoInitialiseCombineProgram();
 
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
@@ -88,11 +100,15 @@ namespace Bloom
 		Castor3D::PipelineUPtr m_hiPassPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;
 
-		Castor3D::PipelineUPtr m_filterPipeline;
-		Castor3D::OneIntFrameVariableSPtr m_filterMapDiffuse;
-		Castor3D::OneFloatFrameVariableSPtr m_filterCoefficients;
-		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetX;
-		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetY;
+		Castor3D::PipelineUPtr m_blurXPipeline;
+		Castor3D::OneIntFrameVariableSPtr m_blurXMapDiffuse;
+		Castor3D::OneUIntFrameVariableSPtr m_blurXCoeffCount;
+		Castor3D::OneFloatFrameVariableSPtr m_blurXCoeffs;
+
+		Castor3D::PipelineUPtr m_blurYPipeline;
+		Castor3D::OneIntFrameVariableSPtr m_blurYMapDiffuse;
+		Castor3D::OneUIntFrameVariableSPtr m_blurYCoeffCount;
+		Castor3D::OneFloatFrameVariableSPtr m_blurYCoeffs;
 
 		Castor3D::PipelineUPtr m_combinePipeline;
 
@@ -104,9 +120,8 @@ namespace Bloom
 		Castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
-		std::array< float, KERNEL_SIZE > m_kernel;
-		float m_offsetX;
-		float m_offsetY;
+		std::vector< float > m_kernel;
+		uint32_t m_size;
 	};
 }
 

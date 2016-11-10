@@ -81,15 +81,6 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_program	The program
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_program	Le programme
-		 */
-		C3D_API explicit FrameVariable( ShaderProgram & p_program );
-		/**
-		 *\~english
-		 *\brief		Constructor
 		 *\param[in]	p_program		The program
 		 *\param[in]	p_occurences	The array dimension
 		 *\~french
@@ -105,6 +96,46 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~FrameVariable();
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable, from a string.
+		 *\param[in]	p_value	The string containing the value.
+		 *\~french
+		 *\brief		Définit la valeur de la variable à partir d'une chaîne.
+		 *\param[in]	p_value	La chaîne.
+		 */
+		C3D_API void SetStrValues( Castor::String const & p_value );
+		/**
+		 *\~english
+		 *\brief		Retrieves the string value of the variable.
+		 *\param[in]	p_index	The value index.
+		 *\~french
+		 *\brief		Récupère la valeur chaîne de la variable.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 */
+		C3D_API Castor::String GetStrValues()const;
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable, from a string.
+		 *\param[in]	p_value	The string containing the value.
+		 *\param[in]	p_index	The value index.
+		 *\~french
+		 *\brief		Définit la valeur de la variable à partir d'une chaîne.
+		 *\param[in]	p_value	La chaîne.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 */
+		C3D_API void SetStrValue( Castor::String const & p_value, uint32_t p_index = 0 );
+		/**
+		 *\~english
+		 *\brief		Retrieves the string value of the variable.
+		 *\param[in]	p_index	The value index.
+		 *\return		The variable string value.
+		 *\~french
+		 *\brief		Récupère la valeur chaîne de la variable.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 *\return		La valeur chaîne de la variable.
+		 */
+		C3D_API Castor::String GetStrValue( uint32_t p_index = 0 )const;
 		/**
 		 *\~english
 		 *\brief		Initialises the variable
@@ -127,70 +158,69 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Lie cette variable au shader
 		 */
-		C3D_API virtual void Bind() = 0;
+		C3D_API virtual bool Bind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds this variable from the shader
 		 *\~french
 		 *\brief		Délie cette variable du shader
 		 */
-		C3D_API virtual void Unbind() = 0;
+		C3D_API virtual void Unbind()const = 0;
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type
-		 *\return		The type
+		 *\return		The variable's type.
 		 *\~english
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type
-		 */
-		C3D_API virtual FrameVariableType GetFullType()const = 0;
-		/**
-		 *\~english
-		 *\brief		Gives the variable dimension
-		 *\return		The dimension
-		 *\~english
-		 *\brief		Donne la dimension de la variable
-		 *\return		La dimension
+		 *\return		La type de la variable.
 		 */
 		C3D_API virtual VariableType GetType()const = 0;
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The type
+		 *\return		The variable's full type.
 		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le type
+		 *\return		Le type complet de la variable.
+		 */
+		C3D_API virtual FrameVariableType GetFullType()const = 0;
+		/**
+		 *\~english
+		 *\return		The variable's full type name.
+		 *\~english
+		 *\return		Le nom du type complet de la variable.
 		 */
 		C3D_API virtual Castor::String GetFullTypeName()const = 0;
 		/**
 		 *\~english
-		 *\brief		Gives the variable data type name
-		 *\return		The data type name
+		 *\return		The variable's data type name.
 		 *\~french
-		 *\brief		Donne le nom du type de données de la variable
-		 *\return		Le nom du type de données
+		 *\return		Le nom du type de données de la variable.
 		 */
 		C3D_API virtual Castor::String GetDataTypeName()const = 0;
 		/**
 		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_value	The string containing the value
+		 *\return		The pointer to the variable data.
 		 *\~french
-		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_value	La chaîne contenant la valeur
+		 *\return		Le pointeur sur les données de la variable.
 		 */
-		C3D_API virtual void SetValueStr( Castor::String const & p_value );
+		C3D_API virtual uint8_t const * const const_ptr()const = 0;
 		/**
 		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_index	The index of the value
-		 *\param[in]	p_value	The string containing the value
+		 *\return		The byte size of the variable.
 		 *\~french
-		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_index	L'index de la valeur
-		 *\param[in]	p_value	La chaîne contenant la valeur
+		 *\return		La taille en octets de la variable.
 		 */
-		C3D_API virtual void SetValueStr( Castor::String const & p_value, uint32_t p_index );
+		C3D_API virtual uint32_t size()const = 0;
+		/**
+		 *\~english
+		 *\brief		Defines the buffer holding the frame variable.
+		 *\remarks		The variable no longer owns it's buffer.
+		 *\param[in]	p_buffer	The buffer.
+		 *\param[in]	p_stride	The stride between each element in the buffer.
+		 *\~french
+		 *\brief		Définit le tampon de cette variable.
+		 *\remarks		La variable perd la responsabilité de son tampon.
+		 *\param[in]	p_buffer	Le tampon.
+		 *\param[in]	p_stride	La distance binaire entre chaque valeur dans le tampon.
+		 */
+		C3D_API virtual void link( uint8_t * p_buffer, uint32_t p_stride = 0u ) = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
@@ -199,17 +229,15 @@ namespace Castor3D
 		 *\brief		Définit le nom de la variable
 		 *\param[in]	p_name	Le nom
 		 */
-		virtual void SetName( Castor::String const & p_name )
+		inline void SetName( Castor::String const & p_name )
 		{
 			m_name = p_name;
 		}
 		/**
 		 *\~english
-		 *\brief		Gives the name of the variable, as it appears in the shader program
-		 *\return		The variable name
+		 *\return		The name of the variable, as it appears in the shader program.
 		 *\~french
-		 *\brief		Récupère le nom de la variable
-		 *\return		Le nom
+		 *\return		Le nom de la variable, tel qu'il apparaît dans le programme shader.
 		 */
 		inline Castor::String GetName()const
 		{
@@ -217,67 +245,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the variable string value
-		 *\return		The value
+		 *\return		The occurences count.
 		 *\~french
-		 *\brief		Récupère la valeur chaîne de la variable
-		 *\return		La valeur
-		 */
-		inline Castor::String GetStrValue()const
-		{
-			return m_strValue[0];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the variable string value at given index
-		 *\param[in]	p_index	The index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la valeur chaîne de la variable à l'index donné
-		 *\param[in]	p_index	L'index
-		 *\return		La valeur
-		 */
-		inline Castor::String GetStrValue( uint32_t p_index )const
-		{
-			REQUIRE( p_index < m_occurences );
-			return m_strValue[p_index];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a pointer to the variable data
-		 *\return		The pointer
-		 *\~french
-		 *\brief		Récupère un pointeur sur les données de la variable
-		 *\return		Le pointeur
-		 */
-		virtual uint8_t const * const const_ptr()const = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
-		 */
-		virtual uint32_t size()const = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the buffer holding the frame variable.
-		 *\remarks		The variable no longer owns it's buffer
-		 *\param[in]	p_buffer	The buffer
-		 *\~french
-		 *\brief		Définit le buffer de cette variable
-		 *\remarks		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_buffer	Le buffer
-		 */
-		virtual void link( uint8_t * p_buffer ) = 0;
-		/**
-		 *\~english
-		 *\brief			Retrieves the occurences count
-		 *\return		The value
-		 *\~french
-		 *\brief			Récupère le nombre d'occurences
-		 *\return		La valeur
+		 *\return		Le nombre d'occurences.
 		 */
 		inline const uint32_t & GetOccCount()const
 		{
@@ -285,11 +255,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief			Retrieves the parent program
-		 *\return		The program
+		 *\return		The parent program.
 		 *\~french
-		 *\brief			Récupère le programme parent
-		 *\return		La programme
+		 *\return		La programme parent.
 		 */
 		inline ShaderProgram & GetProgram()
 		{
@@ -297,40 +265,73 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief			Retrieves the parent program
-		 *\return		The program
+		 *\return		The parent program.
 		 *\~french
-		 *\brief			Récupère le programme parent
-		 *\return		La programme
+		 *\return		La programme parent.
 		 */
 		inline ShaderProgram const & GetProgram()const
 		{
 			return m_program;
 		}
-
-	protected:
 		/**
 		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_index	The index of the value
-		 *\param[in]	p_value	The string containing the value
+		 *\return		The changed status.
 		 *\~french
-		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_index	L'index de la valeur
-		 *\param[in]	p_value	La chaîne contenant la valeur
+		 *\return		Le statut de changement.
 		 */
-		C3D_API virtual void DoSetValueStr( Castor::String const & p_value, uint32_t p_index ) = 0;
+		inline bool IsChanged()const
+		{
+			return m_changed;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the changed status.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\return		Définit statut de changement.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetChanged( bool p_changed = true )
+		{
+			m_changed = p_changed;
+		}
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable, from a string.
+		 *\param[in]	p_value	The string containing the value.
+		 *\param[in]	p_index	The value index.
+		 *\~french
+		 *\brief		Définit la valeur de la variable à partir d'une chaîne.
+		 *\param[in]	p_value	La chaîne.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 */
+		C3D_API virtual void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 ) = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the string value of the variable.
+		 *\param[in]	p_index	The value index.
+		 *\return		The variable string value.
+		 *\~french
+		 *\brief		Récupère la valeur chaîne de la variable.
+		 *\param[in]	p_index	L'indice de la valeur.
+		 *\return		La valeur chaîne de la variable.
+		 */
+		C3D_API virtual Castor::String DoGetStrValue( uint32_t p_index = 0 )const = 0;
 
 	protected:
-		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
+		//!\~english	The variable name as it appears in the shader program.
+		//!\~french		Le nom de la variable tel qu'il apparaît dans le shader.
 		Castor::String m_name;
-		//!\~english Tells if the variable has changed since last execution of the shader	\~french Dit si la valeur de la variable a changé depuis la dernière exécution du shader
-		bool m_changed;
-		//!\~english The array dimension if the variable represents an array	\~french Les dimensions du tableau si la variable représente un tableau
+		//!\~english	Tells if the variable has changed since last execution of the shader.
+		//!\~french		Dit si la valeur de la variable a changé depuis la dernière exécution du shader.
+		mutable bool m_changed;
+		//!\~english	The array dimension if the variable represents an array.
+		//!\~french		Les dimensions du tableau si la variable représente un tableau.
 		uint32_t m_occurences;
-		//!\~english The value of the variable	\~french La valeur de la variable
-		Castor::StringArray m_strValue;
-		//!\~english The parent shader program	\~french Le programme parent
+		//!\~english	The parent shader program.
+		//!\~french		Le programme parent.
 		ShaderProgram & m_program;
 	};
 	/*!
@@ -360,15 +361,6 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_program	The program
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_program	Le programme
-		 */
-		explicit TFrameVariable( ShaderProgram & p_program );
-		/**
-		 *\~english
-		 *\brief		Constructor
 		 *\param[in]	p_program		The program
 		 *\param[in]	p_occurences	The array dimension
 		 *\~french
@@ -386,43 +378,33 @@ namespace Castor3D
 		virtual ~TFrameVariable();
 		/**
 		 *\~english
-		 *\brief		Gives the variable data type
-		 *\return		The data type name
+		 *\return		The data type name.
 		 *\~french
-		 *\brief		Donne le type de données de la variable
-		 *\return		Le nom du type de données
+		 *\return		Le nom du type de données.
 		 */
-		inline Castor::String GetDataTypeName()const;
+		inline Castor::String GetDataTypeName()const override;
 		/**
 		 *\~english
-		 *\brief		Retrieves a pointer to the variable data
-		 *\return		The pointer
+		 *\return		The pointer to the variable data.
 		 *\~french
-		 *\brief		Récupère un pointeur sur les données de la variable
-		 *\return		Le pointeur
+		 *\return		Le pointeur sur les données de la variable.
 		 */
-		virtual uint8_t const * const const_ptr()const;
-		/**
-		 *\~english
-		 *\brief		Defines the buffer holding the frame variable.
-		 *\remarks		The variable no longer owns it's buffer
-		 *\param[in]	p_buffer	The buffer
-		 *\~french
-		 *\brief		Définit le buffer de cette variable
-		 *\remarks		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_buffer	Le buffer
-		 */
-		virtual void link( uint8_t * p_buffer );
+		virtual uint8_t const * const const_ptr()const override;
 
 	protected:
 		inline void DoCleanupBuffer();
 
 	protected:
 		typedef Castor::Policy< T > policy;
-		//!\~english Tells the variable owns it's buffer	\~french Dit si la variable est responsable de son buffer
+		//!\~english	Tells the variable owns it's buffer.
+		//!\~french		Dit si la variable est responsable de son tampon.
 		bool m_bOwnBuffer;
-		//!\~english The buffer containing all values	\~french Le buffer contenant toutes les valeurs
+		//!\~english	The buffer containing all values.
+		//!\~french		Le tampon contenant toutes les valeurs.
 		T * m_values;
+		//!\~english	The stride between each value in the buffer.
+		//!\~french		La distance binaire entrechaque valeur dans le tampon.
+		uint32_t m_stride{ 0u };
 	};
 }
 

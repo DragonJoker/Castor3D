@@ -264,7 +264,12 @@ namespace Castor
 	class Glyph;
 	class Image;
 	class ImageCache;
-	class Colour;
+	class ColourComponent;
+	class HdrColourComponent;
+	template< typename ComponentType >
+	class ColourT;
+	using Colour = ColourT< ColourComponent >;
+	using HdrColour = ColourT< HdrColourComponent >;
 	template< typename T >
 	class Line2D;
 	template< typename T >

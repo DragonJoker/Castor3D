@@ -109,6 +109,8 @@ namespace Castor
 			"|-?\\.[0-9]{1,13})" );
 	xchar const * const RegexFormat< Colour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
 			"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
+	xchar const * const RegexFormat< HdrColour >::Value = cuT( "#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})"
+			"|#([0-9a-fA-F]{2}[0-9a-fA-F]{2}[0-9a-fA-F]{2})" );
 
 	xchar const * const ParserParameterHelper< ParameterType::eText >::StringType = cuT( "text" );
 	xchar const * const ParserParameterHelper< ParameterType::eName >::StringType = cuT( "name" );
@@ -142,6 +144,7 @@ namespace Castor
 	xchar const * const ParserParameterHelper< ParameterType::ePosition >::StringType = cuT( "position" );
 	xchar const * const ParserParameterHelper< ParameterType::eRectangle >::StringType = cuT( "rectangle" );
 	xchar const * const ParserParameterHelper< ParameterType::eColour >::StringType = cuT( "colour" );
+	xchar const * const ParserParameterHelper< ParameterType::eHdrColour >::StringType = cuT( "HDR colour" );
 
 	static const std::array< String, size_t( ParameterType::eCount ) > TypeName
 	{
@@ -177,6 +180,7 @@ namespace Castor
 		cuT( "position" ),
 		cuT( "rectangle" ),
 		cuT( "colour" ),
+		cuT( "HDR colour" ),
 	};
 
 	String const & GetTypeName( ParameterType p_type )

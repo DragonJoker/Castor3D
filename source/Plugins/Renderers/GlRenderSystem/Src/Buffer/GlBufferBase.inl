@@ -58,6 +58,41 @@ namespace GlRender
 	}
 
 	template< typename T >
+	bool GlBufferBase< T >::Upload( T const * p_buffer, uint32_t p_count, uint32_t p_offset )
+	{
+		bool l_return = Bind();
+
+		if ( l_return )
+		{
+			auto l_provider = BindableType::GetOpenGl().GetProvider();
+
+			if ( l_provider == GlProvider::eNvidia
+				 || l_provider == GlProvider::eATI )
+			{
+				auto l_buffer = Lock( p_offset, p_count, Castor3D::AccessType::eWrite );
+
+				if ( l_buffer )
+				{
+					std::memcpy( l_buffer, p_buffer, p_count * sizeof( T ) );
+					Unlock();
+				}
+				else
+				{
+					l_return = false;
+				}
+			}
+			else
+			{
+				l_return = BindableType::GetOpenGl().BufferSubData( m_target, p_offset * sizeof( T ), p_count * sizeof( T ), p_buffer );
+			}
+
+			Unbind();
+		}
+
+		return l_return;
+	}
+
+	template< typename T >
 	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags )
 	{
 		T * l_return = nullptr;

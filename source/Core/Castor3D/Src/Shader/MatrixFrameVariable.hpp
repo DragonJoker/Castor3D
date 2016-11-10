@@ -143,50 +143,32 @@ namespace Castor3D
 		 */
 		inline void SetValue( Castor::Matrix< T, Rows, Columns > const & p_value, uint32_t p_index );
 		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
+		 *\copydoc		Castor3D::FrameVariable::size
 		 */
-		virtual uint32_t size()const;
+		uint32_t size()const override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::link
+		 */
+		void link( uint8_t * p_buffer, uint32_t p_stride )override;
 		/**
 		 *\~english
-		 *\brief		Defines the buffer holding the frame variable.
-		 *\remarks		The variable no longer owns it's buffer
-		 *\param[in]	p_buffer	The buffer
+		 *\return		The type of the variable.
 		 *\~french
-		 *\brief		Définit le buffer de cette variable
-		 *\remarks		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_buffer	Le buffer
-		 */
-		virtual void link( uint8_t * p_buffer );
-		/**
-		 *\~english
-		 *\brief		Gives the full type of the variable
-		 *\return		The type of the variable
-		 *\~french
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type complet
+		 *\return		Le type de la variable.
 		 */
 		static VariableType GetVariableType();
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type
-		 *\return		The type
+		 *\return		The variable's full type.
 		 *\~english
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type
+		 *\return		Le type complet de la variable.
 		 */
 		static inline FrameVariableType GetFrameVariableType();
 		/**
 		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The name
+		 *\return		The variable's full type name.
 		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le nom
+		 *\return		Le nom du type complet de la variable.
 		 */
 		static inline Castor::String GetFrameVariableTypeName();
 		/**
@@ -203,7 +185,7 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix< T, Rows, Columns > & operator[]( uint32_t p_index )
 		{
-			return m_mtxValue[p_index];
+			return m_mtxValues[p_index];
 		}
 		/**
 		 *\~english
@@ -219,62 +201,45 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix< T, Rows, Columns > const & operator[]( uint32_t p_index )const
 		{
-			return m_mtxValue[p_index];
+			return m_mtxValues[p_index];
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the variable type
-		 *\return		The variable type
-		 *\~french
-		 *\brief		Récupère le type de la variable
-		 *\return		Le type de variable
+		 *\copydoc		Castor3D::FrameVariable::GetType
 		 */
-		inline VariableType GetType()const
+		inline VariableType GetType()const override
 		{
 			return MatrixFrameVariable< T, Rows, Columns >::GetVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Retrieves the variable full type
-		 *\return		The type
-		 *\~french
-		 *\brief		Récupère le type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullType
 		 */
-		inline FrameVariableType GetFullType()const
+		inline FrameVariableType GetFullType()const override
 		{
 			return MatrixFrameVariable< T, Rows, Columns >::GetFrameVariableType();
 		}
 		/**
-		 *\~english
-		 *\brief		Gives the variable full type name
-		 *\return		The type
-		 *\~english
-		 *\brief		Donne le nom du type complet de la variable
-		 *\return		Le type
+		 *\copydoc		Castor3D::FrameVariable::GetFullTypeName
 		 */
-		inline Castor::String GetFullTypeName()const
+		inline Castor::String GetFullTypeName()const override
 		{
 			return MatrixFrameVariable< T, Rows, Columns >::GetFrameVariableTypeName();
 		}
 
 	private:
 		/**
-		 *\~english
-		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_value	The string containing the value
-		 *\param[in]	p_index	The index of the value
-		 *\~french
-		 *\brief		Définit la valeur de la variable à partir d'une chaîne
-		 *\param[in]	p_value	La chaîne
-		 *\param[in]	p_index	L'index de la valeur à modifier
+		 *\copydoc		Castor3D::FrameVariable::DoSetStrValue
 		 */
-		inline void DoSetValueStr( Castor::String const & p_value, uint32_t p_index );
+		inline void DoSetStrValue( Castor::String const & p_value, uint32_t p_index = 0 )override;
+		/**
+		 *\copydoc		Castor3D::FrameVariable::DoGetStrValue
+		 */
+		inline Castor::String DoGetStrValue( uint32_t p_index = 0 )const override;
 
 	protected:
 		typedef Castor::Policy<T> policy;
-		//!\~english The matrix values	\~french Les valeurs matrices
-		Castor::Matrix< T, Rows, Columns > * m_mtxValue;
+		//!\~english	The matrix values.
+		//!\~french		Les valeurs matrices.
+		std::vector< Castor::Matrix< T, Rows, Columns > > m_mtxValues;
 	};
 }
 

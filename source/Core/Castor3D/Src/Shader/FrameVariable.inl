@@ -28,21 +28,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	template< typename T >
-	TFrameVariable< T >::TFrameVariable( ShaderProgram & p_program )
-		: FrameVariable( p_program )
-		, m_values( nullptr )
-		, m_bOwnBuffer( true )
-	{
-		// m_values initialised in child classes
-	}
-
-	template< typename T >
 	TFrameVariable< T >::TFrameVariable( ShaderProgram & p_program, uint32_t p_occurences )
 		: FrameVariable( p_program, p_occurences )
 		, m_values( nullptr )
 		, m_bOwnBuffer( true )
 	{
-		// m_values initialised in child classes
+		// m_values initialised in child classes.
 	}
 
 	template< typename T >
@@ -64,20 +55,12 @@ namespace Castor3D
 	}
 
 	template< typename T >
-	void TFrameVariable< T >::link( uint8_t * p_buffer )
-	{
-		memcpy( p_buffer, m_values, size() );
-		DoCleanupBuffer();
-		m_values = reinterpret_cast< T * >( p_buffer );
-		m_bOwnBuffer = false;
-	}
-
-	template< typename T >
 	inline void TFrameVariable< T >::DoCleanupBuffer()
 	{
 		if ( m_bOwnBuffer )
 		{
 			delete [] m_values;
+			m_stride = 0u;
 		}
 	}
 }

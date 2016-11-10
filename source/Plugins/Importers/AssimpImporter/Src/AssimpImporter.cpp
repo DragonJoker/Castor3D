@@ -220,7 +220,7 @@ namespace C3dAssimp
 			p_pass.SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
 			p_pass.SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
 			p_pass.SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
-			p_pass.SetEmissive( Colour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
+			p_pass.SetEmissive( HdrColour::from_components( l_emissive.r, l_emissive.g, l_emissive.b, 1 ) );
 
 			if ( l_shininess > 0 )
 			{
