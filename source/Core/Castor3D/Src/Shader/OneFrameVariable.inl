@@ -146,7 +146,7 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < this->m_occurences; i++ )
 		{
-			std::memcpy( l_buffer, &m_values[i], l_size );
+			std::memcpy( l_buffer, &this->m_values[i], l_size );
 			l_buffer += p_stride;
 		}
 

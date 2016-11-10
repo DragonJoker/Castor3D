@@ -262,7 +262,7 @@ namespace Castor3D
 			}
 		}
 		{
-			auto & l_material = p_overlay.GetBorderMaterial();
+			auto l_material = p_overlay.GetBorderMaterial();
 
 			if ( l_material )
 			{

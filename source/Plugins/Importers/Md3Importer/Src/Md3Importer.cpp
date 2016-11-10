@@ -92,7 +92,7 @@ namespace C3DMd3
 
 			l_pass = l_material->GetPass( 0 );
 			l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
-			l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
+			l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetShininess( 64.0f );
 			DoReadMD3Data( p_mesh, *l_pass );
 
@@ -293,7 +293,7 @@ namespace C3DMd3
 
 					PassSPtr l_pass = l_material->GetPass( 0 );
 					l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
-					l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
+					l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 
 					if ( !l_strImage.empty() )
 					{
@@ -338,7 +338,7 @@ namespace C3DMd3
 
 				PassSPtr l_pass = l_material->GetPass( 0 );
 				l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
-				l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
+				l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 				l_pass->SetTwoSided( true );
 
 				if ( !l_strLine.empty() )

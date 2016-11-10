@@ -225,7 +225,6 @@ namespace Castor
 		};
 
 	private:
-		friend inline void swap( ColourT & p_c1, ColourT & p_c2 );
 		DECLARE_ARRAY( float, Component::eCount, Float4 );
 		using ColourComponentArray = std::array< ComponentType, size_t( Component::eCount ) >;
 		using ColourComponentArrayIt = typename ColourComponentArray::iterator;
@@ -1077,7 +1076,7 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator+( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT l_clrResult( p_lhs );
+		ColourT< ComponentType > l_clrResult( p_lhs );
 		l_clrResult += p_rhs;
 		return l_clrResult;
 	}
@@ -1094,7 +1093,7 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT l_clrResult( p_lhs );
+		ColourT< ComponentType > l_clrResult( p_lhs );
 		l_clrResult -= p_rhs;
 		return l_clrResult;
 	}
@@ -1112,7 +1111,7 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator*( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT l_clrResult( p_lhs );
+		ColourT< ComponentType > l_clrResult( p_lhs );
 		l_clrResult *= p_rhs;
 		return l_clrResult;
 	}
@@ -1130,7 +1129,7 @@ namespace Castor
 	template< typename ComponentType, typename T >
 	ColourT< ComponentType > operator/( ColourT< ComponentType > const & p_lhs, T p_rhs )
 	{
-		ColourT l_clrResult( p_lhs );
+		ColourT< ComponentType > l_clrResult( p_lhs );
 		l_clrResult /= p_rhs;
 		return l_clrResult;
 	}

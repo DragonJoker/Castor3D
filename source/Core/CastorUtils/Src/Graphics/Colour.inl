@@ -576,7 +576,7 @@ namespace Castor
 	template< typename ComponentType >
 	ColourT< ComponentType > operator+( ColourT< ComponentType > const & p_clrA, ColourT< ComponentType > const & p_clrB )
 	{
-		ColourT l_clrResult( p_clrA );
+		ColourT< ComponentType > l_clrResult( p_clrA );
 		l_clrResult += p_clrB;
 		return l_clrResult;
 	}
@@ -584,7 +584,7 @@ namespace Castor
 	template< typename ComponentType >
 	ColourT< ComponentType > operator-( ColourT< ComponentType > const & p_clrA, ColourT< ComponentType > const & p_clrB )
 	{
-		ColourT l_clrResult( p_clrA );
+		ColourT< ComponentType > l_clrResult( p_clrA );
 		l_clrResult -= p_clrB;
 		return l_clrResult;
 	}
