@@ -168,6 +168,10 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
+		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
+		{
+			p_listener.FireEvents( EventType::ePostRender );
+		} );
 		GetEngine()->GetSceneCache().ForEach( []( Scene & p_scene )
 		{
 			p_scene.Update();
@@ -175,10 +179,6 @@ namespace Castor3D
 		GetEngine()->GetRenderTechniqueCache().ForEach( []( RenderTechnique & p_technique )
 		{
 			p_technique.Update();
-		} );
-		GetEngine()->GetFrameListenerCache().ForEach( []( FrameListener & p_listener )
-		{
-			p_listener.FireEvents( EventType::ePostRender );
 		} );
 		GetEngine()->GetOverlayCache().Update();
 		m_debugOverlays->EndCpuTask();
