@@ -37,4 +37,8 @@ SOFTWARE.
 #undef CASTOR_USE_SSE2
 #define CASTOR_USE_SSE2 @CASTOR_USE_SSE2@
 
+//! Tells whether or not the build has Xinerama.
+#undef CASTOR_HAS_XINERAMA
+#define CASTOR_HAS_XINERAMA @CASTOR_HAS_XINERAMA@
+
 #endif
