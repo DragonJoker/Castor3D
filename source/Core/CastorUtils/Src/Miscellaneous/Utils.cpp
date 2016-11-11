@@ -6,7 +6,9 @@
 #	include <codecvt>
 #else
 #	include <X11/Xlib.h>
-#	include <X11/extensions/Xinerama.h>
+#	if CASTOR_HAS_XINERAMA
+#		include <X11/extensions/Xinerama.h>
+#	endif
 #endif
 
 #if defined( __GNUG__ )
@@ -39,6 +41,7 @@ namespace Castor
 	}
 
 #if defined( _WIN32 )
+
 	namespace System
 	{
 		namespace
@@ -112,14 +115,22 @@ namespace Castor
 	void Localtime( std::tm * p_tm, time_t const * p_pTime )
 	{
 #	if defined( _MSC_VER )
+
 		localtime_s( p_tm, p_pTime );
+
 #else
+
 		p_tm = localtime( p_pTime );
+
 #endif
 	}
+
 #elif defined( __linux__ )
+
 	namespace System
 	{
+#	if CASTOR_HAS_XINERAMA
+
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
 			bool l_return = false;
@@ -162,7 +173,7 @@ namespace Castor
 				{
 					std::cout << "No Xinerama extension" << std::endl;
 				}
-				
+
 				if ( !l_return )
 				{
 					auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
@@ -183,6 +194,39 @@ namespace Castor
 
 			return l_return;
 		}
+
+#	else
+
+		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
+		{
+			bool l_return = false;
+			auto l_display = XOpenDisplay( nullptr );
+
+			if ( !l_display )
+			{
+				Logger::LogError( "Failed to open default display." );
+			}
+			else
+			{
+				auto l_screenIndex = DefaultScreen( l_display );
+				auto l_screen = ScreenOfDisplay( l_display, l_screenIndex );
+
+				if ( !l_screen )
+				{
+					Logger::LogError( "Failed to obtain the default screen of given display." );
+				}
+				else
+				{
+					p_size.set( l_screen->width, l_screen->height );
+					l_return = true;
+				}
+			}
+
+			XCloseDisplay( l_display );
+			return l_return;
+		}
+
+#	endif
 
 		String GetLastErrorText()
 		{
@@ -227,7 +271,10 @@ namespace Castor
 	{
 		p_tm = localtime( p_pTime );
 	}
+
 #else
+
 #	error "Yet unsupported OS"
+
 #endif
 }
