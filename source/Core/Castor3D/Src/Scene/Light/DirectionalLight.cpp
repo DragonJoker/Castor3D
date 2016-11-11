@@ -47,6 +47,15 @@ namespace Castor3D
 
 	void DirectionalLight::Update( Point3r const & p_target )
 	{
+		REQUIRE( m_viewport );
+		m_viewport->SetOrtho( -512.0_r, 512.0_r, 512.0_r, -512.0_r, -10.0_r, 100.0_r );
+		m_viewport->Update();
+		Point3r l_position;
+		Point3f l_front{ point::get_normalised( GetDirection() ) };
+		Point3r l_right{ 1, 0, 0 };
+		Point3f l_up{ l_right ^ l_front };
+		matrix::look_at( m_lightSpace, Point3r{}, l_front, l_up );
+		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
 	}
 
 	void DirectionalLight::UpdateNode( SceneNode const & p_node )

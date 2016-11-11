@@ -30,19 +30,22 @@ namespace GLSL
 	class Shadow
 	{
 	public:
-		GlslWriter_API static Castor::String const MapShadow2D;
-		GlslWriter_API static Castor::String const MapShadowCube;
+		GlslWriter_API static Castor::String const MapShadowDirectional;
+		GlslWriter_API static Castor::String const MapShadowSpot;
+		GlslWriter_API static Castor::String const MapShadowPoint;
 
 	public:
 		GlslWriter_API Shadow( GlslWriter & p_writer );
 		GlslWriter_API void Declare( ShadowType p_type );
-		GlslWriter_API Float ComputeShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
-		GlslWriter_API Float ComputeShadow( Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float ComputeDirectionalShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal );
+		GlslWriter_API Float ComputeSpotShadow( Vec4 const & p_lightSpacePosition, Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
+		GlslWriter_API Float ComputePointShadow( Vec3 const & p_lightDirection, Vec3 const & p_normal, Int const & p_index );
 		GlslWriter_API Float GetRandom( Vec4 const & p_seed );
 
 	private:
-		void DoDeclare_Compute2DShadow( ShadowType p_type );
-		void DoDeclare_ComputeCubeShadow( ShadowType p_type );
+		void DoDeclare_ComputeDirectionalShadow( ShadowType p_type );
+		void DoDeclare_ComputeSpotShadow( ShadowType p_type );
+		void DoDeclare_ComputePointShadow( ShadowType p_type );
 		void DoDeclare_GetRandom();
 
 	private:
