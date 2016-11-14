@@ -121,6 +121,9 @@ namespace Castor3D
 		//!\~english	The camera created from the light.
 		//!\~french		La caméra créée à partir de la lumière.
 		CameraSPtr m_camera;
+		//!\~english	The scene node.
+		//!\~french		Le noeud de scène.
+		SceneNodeSPtr m_node;
 		//!\~english	The view matrix.
 		//!\~french		La matrice vue.
 		Castor::Matrix4x4r m_view;

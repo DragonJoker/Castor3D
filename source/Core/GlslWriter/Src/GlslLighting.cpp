@@ -456,7 +456,16 @@ namespace GLSL
 				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 			};
-			DoComputeLight( p_light.m_lightBase(), p_worldEye, normalize( -p_light.m_v3Direction().xyz() ), p_shininess, p_fragmentIn, l_output );
+			auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( -p_light.m_v3Direction().xyz() ) );
+			auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), Float( 1 ) );
+
+			if ( m_shadows != ShadowType::eNone )
+			{
+				Shadow l_shadows{ m_writer };
+				l_shadow = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+			}
+
+			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, p_fragmentIn, l_output );
 			p_output.m_v3Ambient += l_output.m_v3Ambient;
 			p_output.m_v3Diffuse += l_output.m_v3Diffuse;
 			p_output.m_v3Specular += l_output.m_v3Specular;
@@ -485,26 +494,23 @@ namespace GLSL
 				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
 				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 			};
-			auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
-			auto l_distance = m_writer.GetLocale( cuT( "l_distance" ), length( l_vertexToLight ) );
-			auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( l_vertexToLight ) );
-			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, p_fragmentIn, l_output );
-
-			auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
-			p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
+			auto l_lightToVertex = m_writer.GetLocale( cuT( "l_lightToVertex" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
+			auto l_distance = m_writer.GetLocale( cuT( "l_distance" ), length( l_lightToVertex ) );
+			auto l_lightDirection = m_writer.GetLocale( cuT( "l_lightDirection" ), normalize( l_lightToVertex ) );
+			auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), 1.0_f );
 
 			if ( m_shadows != ShadowType::eNone )
 			{
 				Shadow l_shadows{ m_writer };
-				auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputePointShadow( l_vertexToLight, p_fragmentIn.m_v3Normal, 0_i ) );
-				p_output.m_v3Diffuse += l_shadow * l_output.m_v3Diffuse / l_attenuation;
-				p_output.m_v3Specular += l_shadow * l_output.m_v3Specular / l_attenuation;
+				l_shadow = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0_f ), l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
 			}
-			else
-			{
-				p_output.m_v3Diffuse += l_output.m_v3Diffuse / l_attenuation;
-				p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
-			}
+
+			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadow, p_fragmentIn, l_output );
+
+			auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
+			p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
+			p_output.m_v3Diffuse += l_output.m_v3Diffuse / l_attenuation;
+			p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
 		};
 		m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
 											, l_compute
@@ -539,19 +545,8 @@ namespace GLSL
 
 				l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_fCutOff() ) );
 				p_output.m_v3Ambient += l_output.m_v3Ambient * l_spotFactor;
-
-				if ( m_shadows != ShadowType::eNone )
-				{
-					Shadow l_shadows{ m_writer };
-					auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, 0_i ) );
-					p_output.m_v3Diffuse += l_shadow * l_output.m_v3Diffuse * l_spotFactor;
-					p_output.m_v3Specular += l_shadow * l_output.m_v3Specular * l_spotFactor;
-				}
-				else
-				{
-					p_output.m_v3Diffuse += l_output.m_v3Diffuse * l_spotFactor;
-					p_output.m_v3Specular += l_output.m_v3Specular * l_spotFactor;
-				}
+				p_output.m_v3Diffuse += l_output.m_v3Diffuse * l_spotFactor;
+				p_output.m_v3Specular += l_output.m_v3Specular * l_spotFactor;
 			}
 			FI;
 		};
@@ -571,6 +566,7 @@ namespace GLSL
 								 , Vec3 const & p_worldEye
 								 , Vec3 const & p_direction
 								 , Float const & p_shininess
+								 , Float const & p_shadowFactor
 								 , FragmentInput const & p_fragmentIn
 								 , OutputComponents & p_output )
 		{
@@ -582,8 +578,8 @@ namespace GLSL
 				auto l_vertexToEye = m_writer.GetLocale( cuT( "l_vertexToEye" ), normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
 				auto l_lightReflect = m_writer.GetLocale( cuT( "l_lightReflect" ), normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
 				auto l_specularFactor = m_writer.GetLocale( cuT( "l_specularFactor" ), max( dot( l_vertexToEye, l_lightReflect ), 0.0 ) );
-				p_output.m_v3Diffuse = p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
-				p_output.m_v3Specular = p_light.m_v3Colour() * p_light.m_v3Intensity().z() * pow( l_specularFactor, p_shininess );
+				p_output.m_v3Diffuse = p_shadowFactor * p_light.m_v3Colour() * p_light.m_v3Intensity().y() * l_diffuseFactor;
+				p_output.m_v3Specular = p_shadowFactor * p_light.m_v3Colour() * p_light.m_v3Intensity().z() * pow( l_specularFactor, p_shininess );
 			}
 			FI;
 		};
@@ -593,6 +589,7 @@ namespace GLSL
 											, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
 											, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
 											, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+											, InParam< Float >( &m_writer, cuT( "p_shadowFactor" ) )
 											, FragmentInput{ m_writer }
 											, l_output );
 	}
@@ -601,6 +598,7 @@ namespace GLSL
 											 , Vec3 const & p_worldEye
 											 , Vec3 const & p_direction
 											 , Float const & p_shininess
+											 , Float const & p_shadowFactor
 											 , FragmentInput const & p_fragmentIn
 											 , OutputComponents & p_output )
 	{
@@ -609,6 +607,7 @@ namespace GLSL
 											   , p_worldEye
 											   , p_direction
 											   , p_shininess
+											   , p_shadowFactor
 											   , p_fragmentIn
 											   , p_output ) << Endi();
 	}

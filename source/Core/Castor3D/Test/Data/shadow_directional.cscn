@@ -42,7 +42,7 @@ scene "Scene"
 	scene_node "LightNode"
 	{
 		orientation 1 0 0 45
-		position 0.0 100.0 -100.0
+		position 0.0 1.0 -1.0
 	}
 
 	light "Light"
@@ -56,8 +56,13 @@ scene "Scene"
 
 	scene_node "Plane"
 	{
-		position 0.0 0.0 0.0
+		position 0.0 0.0 50.0
 		orientation 1.0 0.0 0.0 90.0
+	}
+
+	scene_node "Plane2"
+	{
+		position 0.0 50.0 150.0
 	}
 
 	scene_node "Torus"
@@ -70,6 +75,18 @@ scene "Scene"
 		parent "Plane"
 
 		mesh "Plane"
+		{
+			type plane 0 0 200 200
+		}
+
+		material "Gold"
+	}
+
+	object "Plane2"
+	{
+		parent "Plane2"
+
+		mesh "Plane2"
 		{
 			type plane 0 0 200 200
 		}
