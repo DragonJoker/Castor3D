@@ -76,42 +76,21 @@ namespace Castor3D
 		m_viewport->SetPerspective( GetCutOff() * 2, m_viewport->GetRatio(), 1.0_r, 1000.0_r );
 		m_viewport->Update();
 		auto l_orientation = l_node->GetDerivedOrientation();
-		auto l_position = GetPosition();
-		l_position[2] = -l_position[2];
-		Point3f l_front{ 0, 0, 1 };
+		auto l_position = l_node->GetDerivedPosition();
 		Point3f l_up{ 0, 1, 0 };
-		l_orientation.transform( l_front, l_front );
 		l_orientation.transform( l_up, l_up );
-		matrix::look_at( m_lightSpace, l_position, l_position + l_front, l_up );
+		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
 		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
 	}
 
-	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	void SpotLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		auto l_orientation = GetLight().GetParent()->GetDerivedOrientation();
-		Point3f l_front{ 0, 0, 1 };
-		l_orientation.transform( l_front, l_front );
-		Point4f l_posType = GetPositionType();
-
-		int l_offset = 0;
-		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
-		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
-		DoBindComponent( l_front, p_index, l_offset, p_texture );
-		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, l_offset, p_texture );
-		DoBindComponent( m_lightSpace, p_index, l_offset, p_texture );
-	}
-
-	void SpotLight::SetPosition( Castor::Point3r const & p_position )
-	{
-		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 2.0f ) );
-	}
-
-	Castor::Point3f SpotLight::GetPosition()const
-	{
-		Point4f const & l_position = LightCategory::GetPositionType();
-		return Point3f( l_position[0], l_position[1], l_position[2] );
+		auto l_position = GetLight().GetParent()->GetDerivedPosition();
+		DoBindComponent( l_position, p_index, p_offset, p_texture );
+		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
+		DoBindComponent( m_direction, p_index, p_offset, p_texture );
+		DoBindComponent( Point3f{ GetExponent(), GetCutOff().cos(), 0.0f }, p_index, p_offset, p_texture );
+		DoBindComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 
 	void SpotLight::SetAttenuation( Point3f const & p_attenuation )
@@ -127,5 +106,11 @@ namespace Castor3D
 	void SpotLight::SetCutOff( Angle const & p_cutOff )
 	{
 		m_cutOff = p_cutOff;
+	}
+
+	void SpotLight::UpdateNode( SceneNode const & p_node )
+	{
+		m_direction = Point3f{ 0, 0, 1 };
+		p_node.GetDerivedOrientation().transform( m_direction, m_direction );
 	}
 }

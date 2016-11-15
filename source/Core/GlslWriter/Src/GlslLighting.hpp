@@ -60,31 +60,32 @@ namespace GLSL
 													 , Float const & p_shininess
 													 , FragmentInput const & p_fragmentIn
 													 , OutputComponents & p_output );
-		GlslWriter_API Light GetDirectionalLight( Type const & p_value );
-		GlslWriter_API Light GetPointLight( Type const & p_value );
-		GlslWriter_API Light GetSpotLight( Type const & p_value );
-		GlslWriter_API void ComputeDirectionalLight( Light const & p_light
+		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
+		GlslWriter_API PointLight GetPointLight( Type const & p_value );
+		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
+		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
 													 , Vec3 const & p_worldEye
 													 , Float const & p_shininess
 													 , FragmentInput const & p_fragmentIn
 													 , OutputComponents & p_output );
-		GlslWriter_API void ComputePointLight( Light const & p_light
+		GlslWriter_API void ComputePointLight( PointLight const & p_light
 											   , Vec3 const & p_worldEye
 											   , Float const & p_shininess
 											   , FragmentInput const & p_fragmentIn
 											   , OutputComponents & p_output );
-		GlslWriter_API void ComputeSpotLight( Light const & p_light
+		GlslWriter_API void ComputeSpotLight( SpotLight const & p_light
 											  , Vec3 const & p_worldEye
 											  , Float const & p_shininess
 											  , FragmentInput const & p_fragmentIn
 											  , OutputComponents & p_output );
 
 	protected:
-
-	protected:
-		GlslWriter_API Light GetLightColourAndPosition( Type const & p_value );
+		GlslWriter_API Light GetBaseLight( Type const & p_value );
 		GlslWriter_API void Declare_Light();
-		GlslWriter_API void Declare_GetLightColourAndPosition();
+		GlslWriter_API void Declare_DirectionalLight();
+		GlslWriter_API void Declare_PointLight();
+		GlslWriter_API void Declare_SpotLight();
+		GlslWriter_API void Declare_GetBaseLight();
 		GlslWriter_API void Declare_GetDirectionalLight();
 		GlslWriter_API void Declare_GetPointLight();
 		GlslWriter_API void Declare_GetSpotLight();
@@ -107,10 +108,10 @@ namespace GLSL
 		GlslWriter_API static std::unique_ptr< LightingModel > Create( ShadowType p_shadows, GlslWriter & p_writer );
 
 	protected:
-		virtual void DoDeclareModel();
-		virtual void Declare_ComputeDirectionalLight();
-		virtual void Declare_ComputePointLight();
-		virtual void Declare_ComputeSpotLight();
+		void DoDeclareModel();
+		void Declare_ComputeDirectionalLight()override;
+		void Declare_ComputePointLight()override;
+		void Declare_ComputeSpotLight()override;
 
 		void DoComputeLight( Light const & p_light
 							 , Vec3 const & p_worldEye

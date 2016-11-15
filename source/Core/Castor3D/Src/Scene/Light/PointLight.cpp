@@ -57,29 +57,19 @@ namespace Castor3D
 	{
 	}
 
-	void PointLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	void PointLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		int l_offset = 0;
-		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
-		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		Point4f l_posType = GetPositionType();
-		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
-		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
-	}
-
-	void PointLight::SetPosition( Castor::Point3r const & p_position )
-	{
-		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 1.0f ) );
-	}
-
-	Castor::Point3f PointLight::GetPosition()const
-	{
-		Point4f const & l_position = LightCategory::GetPositionType();
-		return Point3f( l_position[0], l_position[1], l_position[2] );
+		auto l_position = GetLight().GetParent()->GetDerivedPosition();
+		DoBindComponent( l_position, p_index, p_offset, p_texture );
+		DoBindComponent( GetAttenuation(), p_index, p_offset, p_texture );
 	}
 
 	void PointLight::SetAttenuation( Point3f const & p_attenuation )
 	{
 		m_attenuation = p_attenuation;
+	}
+
+	void PointLight::UpdateNode( SceneNode const & p_node )
+	{
 	}
 }

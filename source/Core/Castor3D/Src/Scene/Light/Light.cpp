@@ -41,7 +41,6 @@ namespace Castor3D
 
 		if ( p_node )
 		{
-			m_category->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
 			m_notifyIndex = p_node->RegisterObject( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
 			OnNodeChanged( *p_node );
 		}
@@ -78,28 +77,13 @@ namespace Castor3D
 
 	void Light::AttachTo( SceneNodeSPtr p_node )
 	{
-		Point4f l_ptPosType = GetPositionType();
-		SceneNodeSPtr l_node = GetParent();
-
-		if ( l_node )
-		{
-			l_node->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
-		}
-
 		MovableObject::AttachTo( p_node );
-		l_node = GetParent();
+		auto l_node = GetParent();
 
 		if ( l_node )
 		{
 			m_notifyIndex = l_node->RegisterObject( std::bind( &Light::OnNodeChanged, this, std::placeholders::_1 ) );
 			OnNodeChanged( *l_node );
-		}
-		else
-		{
-			l_ptPosType[0] = 0;
-			l_ptPosType[1] = 0;
-			l_ptPosType[2] = 0;
-			m_category->SetPositionType( l_ptPosType );
 		}
 	}
 
@@ -141,11 +125,6 @@ namespace Castor3D
 
 	void Light::OnNodeChanged( SceneNode const & p_node )
 	{
-		auto l_posType = GetPositionType();
-		auto l_derived = p_node.GetDerivedPosition();
-		l_posType[0] = float( l_derived[0] );
-		l_posType[1] = float( l_derived[1] );
-		l_posType[2] = float( l_derived[2] );
-		m_category->SetPositionType( l_posType );
+		m_category->UpdateNode( p_node );
 	}
 }

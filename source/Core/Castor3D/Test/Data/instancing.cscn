@@ -32,7 +32,7 @@ scene "Scene"
 
 	scene_node "SunLightNode1"
 	{
-		position  0.0 -1.0 -1.0
+		orientation 1 0 0 225
 	}
 	light "SunLight1"
 	{

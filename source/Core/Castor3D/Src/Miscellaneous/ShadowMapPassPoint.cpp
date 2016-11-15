@@ -219,7 +219,6 @@ namespace Castor3D
 		auto l_position = m_light.GetParent()->GetDerivedPosition();
 		m_light.Update( l_position );
 		m_renderQueue.Update();
-		//l_position[2] = -l_position[2];
 
 		for ( auto & l_it : m_frontOpaquePipelines )
 		{
