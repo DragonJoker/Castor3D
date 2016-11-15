@@ -125,31 +125,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Puts the light into the given texture.
-		 *\~french
-		 *\brief		Met la lumière dans la texture donnée.
-		 */
-		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
-		/**
-		 *\~english
-		 *\brief		Sets the light source position
-		 *\param[in]	p_position	The new value
-		 *\~french
-		 *\brief		Définit la position de la source
-		 *\param[in]	p_position	La nouvelle valeur
-		 */
-		C3D_API virtual void SetPosition( Castor::Point3r const & p_position );
-		/**
-		 *\~english
-		 *\brief		Retrieves the light source position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position de la source
-		 *\return		La valeur
-		 */
-		C3D_API virtual Castor::Point3f GetPosition()const;
-		/**
-		 *\~english
 		 *\brief		Sets attenuation components
 		 *\param[in]	p_ptAttenuation	The attenuation components
 		 *\~french
@@ -169,6 +144,16 @@ namespace Castor3D
 		 *\param[in]	p_cutOff	The new cutoff value
 		 */
 		C3D_API void SetCutOff( Castor::Angle const & p_cutOff );
+		/**
+		 *\~english
+		 *\return		The light source direction.
+		 *\~french
+		 *\return		La direction de la source lumineuse.
+		 */
+		inline Castor::Point3f const & GetDirection()const
+		{
+			return m_direction;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the attenuation components
@@ -231,6 +216,16 @@ namespace Castor3D
 		}
 
 	private:
+		/**
+		 *\copydoc		Castor3D::LightCategory::UpdateNode
+		 */
+		C3D_API void UpdateNode( SceneNode const & p_node )override;
+		/**
+		 *\copydoc		Castor::LightCategory::DoBind
+		 */
+		C3D_API void DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
+
+	private:
 		//!\~english	The attenuation components : constant, linear and quadratic.
 		//\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
 		Castor::Point3f m_attenuation{ 1, 0, 0 };
@@ -246,6 +241,9 @@ namespace Castor3D
 		//!\~english	The shadow map rendering viewport.
 		//\~french		Le viewport de rendu de la mp d'ombres.
 		Viewport * m_viewport{ nullptr };
+		//!\~english	The light source direction.
+		//!\~french		La direction de la source lumineuse.
+		Castor::Point3f m_direction;
 	};
 }
 

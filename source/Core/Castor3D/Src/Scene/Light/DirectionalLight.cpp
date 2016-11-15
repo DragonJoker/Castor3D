@@ -49,23 +49,14 @@ namespace Castor3D
 	{
 	}
 
-	void DirectionalLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	void DirectionalLight::UpdateNode( SceneNode const & p_node )
 	{
-		int l_offset = 0;
-		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
-		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
-		Point4f l_posType = GetPositionType();
-		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		m_direction = Point3f{ 0, 0, 1 };
+		p_node.GetDerivedOrientation().transform( m_direction, m_direction );
 	}
 
-	void DirectionalLight::SetDirection( Castor::Point3f const & p_position )
+	void DirectionalLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
-		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 0.0f ) );
-	}
-
-	Castor::Point3f DirectionalLight::GetDirection()const
-	{
-		Point4f const & l_position = LightCategory::GetPositionType();
-		return Point3f( l_position[0], l_position[1], l_position[2] );
+		DoBindComponent( m_direction, p_index, p_offset, p_texture );
 	}
 }

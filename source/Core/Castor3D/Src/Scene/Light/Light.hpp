@@ -236,18 +236,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the light position and type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type et la position de la lumière
-		 *\return		La valeur
-		 */
-		inline Castor::Point4f const & GetPositionType()const
-		{
-			return m_category->GetPositionType();
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the colour.
 		 *\param[in]	p_values	The new value.
 		 *\~french

@@ -211,16 +211,16 @@ namespace Castor3D
 		std::unique_ptr< SceneRenderNodes > m_preparedRenderNodes;
 		//!\~english	Tells if the scene or the camera have changed.
 		//!\~french		Dit si la caméra ou la scène a changé.
-		bool m_changed;
+		bool m_changed{ true };
 		//!\~english	The connection to the scene change notification.
 		//!\~french		Les conenction à la notification de scène changée.
-		uint32_t m_sceneChanged;
+		uint32_t m_sceneChanged{ false };
 		//!\~english	The connection to the camera change notification.
 		//!\~french		Les conenction à la notification de caméra changée.
-		uint32_t m_cameraChanged;
+		uint32_t m_cameraChanged{ false };
 		//!\~english	The optional camera.
 		//!\~french		La camera optionnelle.
-		Camera const * m_camera;
+		Camera const * m_camera{ nullptr };
 	};
 }
 

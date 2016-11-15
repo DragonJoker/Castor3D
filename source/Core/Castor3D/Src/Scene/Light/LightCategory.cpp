@@ -70,7 +70,6 @@ namespace Castor3D
 	LightCategory::LightCategory( LightType p_lightType, Light & p_light )
 		: m_lightType{ p_lightType }
 		, m_light{ p_light }
-		, m_positionType( 0.0, 0.0, 1.0, float( p_lightType ) )
 	{
 	}
 
@@ -78,25 +77,33 @@ namespace Castor3D
 	{
 	}
 
-	void LightCategory::DoBindComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	void LightCategory::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
+		uint32_t l_offset = 0u;
+		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
+		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		DoBind( p_texture, p_index, l_offset );
+	}
+
+	void LightCategory::DoBindComponent( Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
+	{
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoBindComponent( Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	void LightCategory::DoBindComponent( Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, PxBufferBase & p_data )const
 	{
-		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::LightComponentsCount + p_offset++, 0 ) );
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * GLSL::MaxLightComponentsCount + p_offset++, 0u ) );
 		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const
+	void LightCategory::DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const
 	{
 		DoBindComponent( p_component[0], p_index, p_offset, p_data );
 		DoBindComponent( p_component[1], p_index, p_offset, p_data );

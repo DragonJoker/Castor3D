@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
 		 *\param[in]	p_index		L'indice de la source lumineuse.
 		 */
-		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const = 0;
+		C3D_API void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Sets the light's colour.
@@ -316,52 +316,34 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Retrieves the light position and type
-		 *\return		The value
+		 *\brief		Updates the light source's informations related to the scene node.
+		 *\param[in]	p_node	The scene node.
 		 *\~french
-		 *\brief		Récupère le type et la position de la lumière
-		 *\return		La valeur
+		 *\brief		Met à jour les informations de la source lumineuse, relatives au noeud de scène.
+		 *\param[in]	p_node	Le noeud de scène.
 		 */
-		inline Castor::Point4f const & GetPositionType()const
-		{
-			return m_positionType;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's type and position
-		 *\param[in]	p_position	The new value
-		 *\~french
-		 *\brief		Définit le type de la lumière et sa position
-		 *\param[in]	p_position	La nouvelle valeur
-		 */
-		virtual void SetPositionType( Castor::Point4f const & p_position )
-		{
-			m_positionType[0] = float( p_position[0] );
-			m_positionType[1] = float( p_position[1] );
-			m_positionType[2] = float( -p_position[2] );
-			m_positionType[3] = float( p_position[3] );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the light's type and position
-		 *\param[in]	p_position	The new value
-		 *\~french
-		 *\brief		Définit le type de la lumière et sa position
-		 *\param[in]	p_position	La nouvelle valeur
-		 */
-		virtual void SetPositionType( Castor::Point4d const & p_position )
-		{
-			m_positionType[0] = float( p_position[0] );
-			m_positionType[1] = float( p_position[1] );
-			m_positionType[2] = float( -p_position[2] );
-			m_positionType[3] = float( p_position[3] );
-		}
+		C3D_API virtual void UpdateNode( SceneNode const & p_node ) = 0;
 
 	protected:
-		void DoBindComponent( Castor::Point3f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Point4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Coords4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
-		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Point3f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Point4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Coords4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4f const & p_component, uint32_t p_index, uint32_t & p_offset, Castor::PxBufferBase & p_data )const;
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Puts the light source's type specific data into the given texture.
+		 *\param[out]	p_texture	The texture that receives the light's data.
+		 *\param[in]	p_index		The light index.
+		 *\param[in]	p_offset	The starting offset.
+		 *\~french
+		 *\brief		Met les informations spécifiques au type de source lumineuse dans la texture donnée.
+		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
+		 *\param[in]	p_offset	Le décalage de début.
+		 */
+		C3D_API virtual void DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const = 0;
 
 	private:
 		//!\~english	The light type.
@@ -376,9 +358,6 @@ namespace Castor3D
 		//!\~english	The intensity values.
 		//!\~french		Les valeurs d'intensité.
 		Castor::Point3f m_intensity{ 0.0, 1.0, 1.0 };
-		//!\~english	The position and type of the light (type is in 4th coordinate).
-		//!\~french		La position et le type de la lumière (le type est dans la 4ème coordonnée).
-		Castor::Point4f m_positionType;
 	};
 }
 

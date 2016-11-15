@@ -125,29 +125,29 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Puts the light into the given texture.
+		 *\return		The light source direction.
 		 *\~french
-		 *\brief		Met la lumière dans la texture donnée.
+		 *\return		La direction de la source lumineuse.
 		 */
-		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
+		inline Castor::Point3f const & GetDirection()const
+		{
+			return m_direction;
+		}
+
+	private:
 		/**
-		 *\~english
-		 *\brief		Sets the light source direction
-		 *\param[in]	p_direction	The new value
-		 *\~french
-		 *\brief		Définit la direction de la source
-		 *\param[in]	p_direction	La nouvelle valeur
+		 *\copydoc		Castor3D::LightCategory::UpdateNode
 		 */
-		C3D_API virtual void SetDirection( Castor::Point3f const & p_direction );
+		C3D_API void UpdateNode( SceneNode const & p_node )override;
 		/**
-		 *\~english
-		 *\brief		Retrieves the light source direction
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la direction de la source
-		 *\return		La valeur
+		 *\copydoc		Castor::LightCategory::DoBind
 		 */
-		C3D_API virtual Castor::Point3f GetDirection()const;
+		C3D_API void DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const override;
+
+	private:
+		//!\~english	The light source direction.
+		//!\~french		La direction de la source lumineuse.
+		Castor::Point3f m_direction;
 	};
 }
 

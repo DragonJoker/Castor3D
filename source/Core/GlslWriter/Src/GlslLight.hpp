@@ -27,9 +27,10 @@ SOFTWARE.
 
 namespace GLSL
 {
-	static constexpr int LightComponentsCount = 14;
-	static constexpr int LightAttenuationOffset = 3;
-	static constexpr float LightComponentsOffset = LightComponentsCount * 0.001f;
+	static constexpr int BaseLightComponentsCount = 2;
+	static constexpr int PointLightComponentsCount = 4;
+	static constexpr int MaxLightComponentsCount = 14;
+	static constexpr float LightComponentsOffset = MaxLightComponentsCount * 0.001f;
 
 	struct Light
 		: public Type
@@ -40,9 +41,40 @@ namespace GLSL
 		template< typename T > inline Light & operator=( T const & p_rhs );
 		inline Vec3 m_v3Colour()const;
 		inline Vec3 m_v3Intensity()const;
+	};
+
+	struct DirectionalLight
+		: public Type
+	{
+		inline DirectionalLight();
+		inline DirectionalLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline DirectionalLight & operator=( DirectionalLight const & p_rhs );
+		template< typename T > inline DirectionalLight & operator=( T const & p_rhs );
+		inline Light m_lightBase()const;
+		inline Vec3 m_v3Direction()const;
+		inline Mat4 m_mtxLightSpace()const;
+	};
+
+	struct PointLight
+		: public Type
+	{
+		inline PointLight();
+		inline PointLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline PointLight & operator=( PointLight const & p_rhs );
+		template< typename T > inline PointLight & operator=( T const & p_rhs );
+		inline Light m_lightBase()const;
 		inline Vec3 m_v3Position()const;
-		inline Int m_iType()const;
 		inline Vec3 m_v3Attenuation()const;
+	};
+
+	struct SpotLight
+		: public Type
+	{
+		inline SpotLight();
+		inline SpotLight( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		inline SpotLight & operator=( SpotLight const & p_rhs );
+		template< typename T > inline SpotLight & operator=( T const & p_rhs );
+		inline PointLight m_lightBase()const;
 		inline Vec3 m_v3Direction()const;
 		inline Float m_fExponent()const;
 		inline Float m_fCutOff()const;
