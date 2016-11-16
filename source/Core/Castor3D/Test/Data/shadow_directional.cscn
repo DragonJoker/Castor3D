@@ -14,6 +14,7 @@ scene "Scene"
 			emissive 0.0 0.0 0.0 1.0
 			specular 0.628281 0.628281 0.628281 1.0
 			shininess 51.2
+			two_sided true
 		}
 	}
 
@@ -42,7 +43,6 @@ scene "Scene"
 	scene_node "LightNode"
 	{
 		orientation 1 0 0 45
-		position 0.0 1.0 -1.0
 	}
 
 	light "Light"
@@ -108,8 +108,8 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 180.0 -200.0
-		orientation 0.320588 0 0 40.947219
+		position 0.0 200.0 -200.0
+		orientation 1 0 0 45
 	}
 
 	camera "MainCamera"
@@ -126,14 +126,37 @@ scene "Scene"
 		}
 	}
 
+	scene_node "LightCameraNode"
+	{
+		orientation 1 0 0 24
+	}
+
+	camera "LightCamera"
+	{
+		parent "LightCameraNode"
+
+		viewport "LightViewport"
+		{
+			type ortho
+			left -512.0
+			right 512.0
+			top -512.0
+			bottom 512.0
+			near -512.0
+			far 512.0
+		}
+	}
+
 	window "Window"
 	{
 		render_target
 		{
 			format argb32
-			size screen_size
+			//size screen_size
+			size 1024 1024
 			scene "Scene"
-			camera "MainCamera"
+			//camera "MainCamera"
+			camera "LightCamera"
 		}
 
 		fullscreen false

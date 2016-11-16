@@ -287,7 +287,8 @@ namespace CastorViewer
 			m_camSpeed = DEF_CAM_SPEED;
 		}
 	}
-	void RenderPanel::DoTurnCamera()
+
+	void RenderPanel::DoTurnCameraHoriz()
 	{
 		DoResetTimers();
 		auto l_camera = m_camera.lock();
@@ -299,6 +300,23 @@ namespace CastorViewer
 			{
 				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
 				l_orientation *= Quaternion{ Point3r{ 0.0_r, 1.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
+				l_cameraNode->SetOrientation( l_orientation );
+			} ) );
+		}
+	}
+
+	void RenderPanel::DoTurnCameraVertic()
+	{
+		DoResetTimers();
+		auto l_camera = m_camera.lock();
+
+		if ( l_camera )
+		{
+			auto l_cameraNode = l_camera->GetParent();
+			wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_cameraNode]()
+			{
+				Quaternion l_orientation{ l_cameraNode->GetOrientation() };
+				l_orientation *= Quaternion{ Point3r{ 1.0_r, 0.0_r, 0.0_r }, Angle::from_degrees( 90.0_r ) };
 				l_cameraNode->SetOrientation( l_orientation );
 			} ) );
 		}
@@ -627,7 +645,11 @@ namespace CastorViewer
 				break;
 
 			case 'T':
-				DoTurnCamera();
+				DoTurnCameraHoriz();
+				break;
+
+			case 'Y':
+				DoTurnCameraVertic();
 				break;
 
 			case 'C':

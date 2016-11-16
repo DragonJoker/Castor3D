@@ -37,18 +37,14 @@ namespace Castor3D
 	bool ShadowMapPassDirectional::DoInitialise( Size const & p_size )
 	{
 		Viewport l_viewport{ *GetEngine() };
-		//real l_w = real( p_size.width() );
-		//real l_h = real( p_size.height() );
-		real l_w = 200.0_r;
-		real l_h = 200.0_r;
-		l_viewport.SetOrtho( -l_w / 2, l_w / 2, l_h / 2, -l_h / 2, -1024.0_r, 10.0_r );
+		real l_w = real( p_size.width() );
+		real l_h = real( p_size.height() );
+		l_viewport.SetOrtho( -l_w / 2, l_w / 2, l_h / 2, -l_h / 2, -512.0_r, 512.0_r );
 		l_viewport.Update();
-		m_node = std::make_shared< SceneNode >( cuT( "ShadowMap" ), m_scene );
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
 											   , m_scene
-											   , m_node
+											   , m_light.GetParent()
 											   , std::move( l_viewport ) );
-		m_camera->AttachTo( m_node );
 		m_camera->Resize( p_size );
 		m_light.GetDirectionalLight()->SetViewport( m_camera->GetViewport() );
 
@@ -72,7 +68,6 @@ namespace Castor3D
 	{
 		m_camera->Detach();
 		m_camera.reset();
-		m_node.reset();
 
 		m_frameBuffer->Bind( FrameBufferMode::eConfig );
 		m_frameBuffer->DetachAll();
@@ -82,20 +77,9 @@ namespace Castor3D
 
 	void ShadowMapPassDirectional::DoUpdate()
 	{
-		Point3r l_front = point::get_normalised( m_light.GetDirectionalLight()->GetDirection() );
-		l_front[2] = -l_front[2];
-		l_front = -l_front;
-		Point3r l_right{ 1, 0, 0 };
-		Point3r l_up{ l_right ^ l_front };
-		l_right = l_up ^ l_front;
-		Quaternion l_orientation;
-		l_orientation.from_axes( l_right, l_up, l_front );
-		m_node->SetOrientation( l_orientation );
-		m_node->Update();
 		m_light.Update( m_camera->GetParent()->GetDerivedPosition() );
 		m_camera->Update();
 		m_renderQueue.Update();
-		auto l_mtx = m_camera->GetViewport().GetProjection() * m_camera->GetView();
 	}
 
 	void ShadowMapPassDirectional::DoRender()
