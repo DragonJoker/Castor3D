@@ -4,6 +4,10 @@
 #include "Log/Logger.hpp"
 #include "BinaryFile.hpp"
 
+#ifdef WIN32
+#	undef HAVE_UNISTD_H
+#endif
+
 #include "MiniZip/unzip.h"
 #include "MiniZip/zip.h"
 #include <limits>

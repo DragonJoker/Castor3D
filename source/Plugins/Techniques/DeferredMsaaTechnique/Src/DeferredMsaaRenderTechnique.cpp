@@ -148,7 +148,7 @@ namespace DeferredMsaa
 
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
-			program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
+			program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *program.m_program, 0u, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
 			program.m_matrixUbo = program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *program.m_program, 0u, MASK_SHADER_TYPE_PIXEL );

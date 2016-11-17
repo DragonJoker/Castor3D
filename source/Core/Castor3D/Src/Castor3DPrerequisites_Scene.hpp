@@ -93,7 +93,9 @@ namespace Castor3D
 	class SkeletonAnimationInstanceBone;
 	class MeshAnimationInstance;
 	class MeshAnimationInstanceSubmesh;
-	class BillboardListBase;
+	class BillboardBase;
+	class BillboardGSBase;
+	class BillboardInstBase;
 	class BillboardList;
 
 	DECLARE_SMART_PTR( SceneNode );
@@ -112,7 +114,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceNode );
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
 	DECLARE_SMART_PTR( MeshAnimationInstance );
-	DECLARE_SMART_PTR( BillboardListBase );
+	DECLARE_SMART_PTR( BillboardBase );
+	DECLARE_SMART_PTR( BillboardGSBase );
+	DECLARE_SMART_PTR( BillboardInstBase );
 	DECLARE_SMART_PTR( BillboardList );
 
 	//! SceneNode pointer array.

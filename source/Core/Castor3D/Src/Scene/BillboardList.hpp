@@ -42,35 +42,25 @@ namespace Castor3D
 	\brief		Liste de billboards
 	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
-	class BillboardListBase
-		: public MovableObject
+	class BillboardBase
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name			The name.
-		 *\param[in]	p_scene			The parent scene.
-		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_vertexBuffer	The vertex buffer.
+		 *\param[in]	p_scene	The parent scene.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom.
-		 *\param[in]	p_scene			La scene parente.
-		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
+		 *\param[in]	p_scene	La scene parente.
 		 */
-		C3D_API BillboardListBase( Castor::String const & p_name
-								   , Scene & p_scene
-								   , SceneNodeSPtr p_parent
-								   , VertexBufferSPtr p_vertexBuffer );
+		C3D_API BillboardBase( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~BillboardListBase();
+		C3D_API ~BillboardBase();
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements
@@ -79,23 +69,14 @@ namespace Castor3D
 		 *\brief		Initialise les elements GPU
 		 *\return		\p true si tout s'est bien passe
 		 */
-		C3D_API virtual bool Initialise();
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
 		 *\~french
 		 *\brief		Nettoie les elements GPU
 		 */
-		C3D_API virtual void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Sorts the points from farthest to nearest from the camera.
-		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
-		 *\~french
-		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
-		 */
-		C3D_API virtual void SortByDistance( Castor::Point3r const & p_cameraPosition );
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the billboards.
@@ -104,7 +85,7 @@ namespace Castor3D
 		 *\brief		Dessine les billboards.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
-		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
+		C3D_API virtual void Draw( GeometryBuffers const & p_geometryBuffers ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves a GeometryBuffers for given program.
@@ -113,7 +94,7 @@ namespace Castor3D
 		 *\brief		Récupère un GeometryBuffers pour le programme donné.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API virtual GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API virtual GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -190,6 +171,85 @@ namespace Castor3D
 		{
 			return m_initialised;
 		}
+
+	private:
+		/**
+		*\~english
+		*\brief		Updates the vertex buffer, if needed.
+		*\~french
+		*\brief		Met à jour le tampon de sommets si nécessaire.
+		*/
+		virtual void DoUpdate()
+		{
+		}
+
+	protected:
+		//!\~english	The parent scene.
+		//!\~french		La scène parente.
+		Scene & m_scene;
+		//!\~english	The Material.
+		//!\~french		Le Material.
+		MaterialWPtr m_material;
+		//!\~english	The billboards dimensions.
+		//!\~french		Les dimensions des billboards.
+		Castor::Size m_dimensions;
+		//!\~english	The GeometryBuffers with which this billboards list is compatible.
+		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
+		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	Tells if the billboard is initialised.
+		//!\~french		Dit si le billboard est initialisé.
+		bool m_initialised{ false };
+		//!\~english	The elements count.
+		//!\~french		Le nombre d'éléments.
+		uint32_t m_count{ 0u };
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		17/11/2016
+	\~english
+	\brief		Billboards list base class, for geometry shader rendering.
+	\~french
+	\brief		Classe de base de liste de billboards, pour le rendu utilisant les geometry shaders.
+	*/
+	class BillboardGSBase
+		: public BillboardBase
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_scene			The parent scene.
+		 *\param[in]	p_vertexBuffer	The vertex buffer.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_scene			La scene parente.
+		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
+		 */
+		C3D_API BillboardGSBase( Scene & p_scene, VertexBufferSPtr p_vertexBuffer );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API ~BillboardGSBase();
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Initialise
+		 */
+		C3D_API bool Initialise()override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Cleanup
+		 */
+		C3D_API void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Draw
+		 */
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers )override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::GetGeometryBuffers
+		 */
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program )override;
 		/**
 		 *\~english
 		 *\return		The vertex buffer.
@@ -212,35 +272,85 @@ namespace Castor3D
 		}
 
 	private:
-		/**
-		*\~english
-		*\brief		Updates the vertex buffer, if needed.
-		*\~french
-		*\brief		Met à jour le tampon de sommets si nécessaire.
-		*/
-		virtual void DoUpdate()
-		{
-		}
-
-	protected:
-		//!\~english	The Material.
-		//!\~french		Le Material.
-		MaterialWPtr m_material;
-		//!\~english	The billboards dimensions.
-		//!\~french		Les dimensions des billboards.
-		Castor::Size m_dimensions;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
-		//!\~english	The GeometryBuffers with which this billboards list is compatible.
-		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
-		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
-		//!\~english	Tells if the billboard is initialised.
-		//!\~french		Dit si le billboard est initialisé.
-		bool m_initialised{ false };
-		//!\~english	The elements count.
-		//!\~french		Le nombre d'éléments.
-		uint32_t m_count{ 0u };
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		17/11/2016
+	\~english
+	\brief		Billboards list base class, for instatiation rendering.
+	\~french
+	\brief		Classe de base de liste de billboards, pour le rendu utilisant l'instanciation.
+	*/
+	class BillboardInstBase
+		: public BillboardBase
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_scene		The parent scene.
+		 *\param[in]	p_centers	The buffer containing the billboards centers.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_scene		La scene parente.
+		 *\param[in]	p_centers	Le tampon contenant les centres des billboards.
+		 */
+		C3D_API BillboardInstBase( Scene & p_scene, VertexBufferSPtr p_centers );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API ~BillboardInstBase();
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Initialise
+		 */
+		C3D_API bool Initialise()override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Cleanup
+		 */
+		C3D_API void Cleanup()override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::Draw
+		 */
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers )override;
+		/**
+		 *\copydoc		Castor3D::BillboardBase::GetGeometryBuffers
+		 */
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program )override;
+		/**
+		 *\~english
+		 *\return		The vertex buffer.
+		 *\~french
+		 *\return		Le tampon de sommets.
+		 */
+		inline VertexBuffer const & GetVertexBuffer()const
+		{
+			return *m_centers;
+		}
+		/**
+		 *\~english
+		 *\return		The vertex buffer.
+		 *\~french
+		 *\return		Le tampon de sommets.
+		 */
+		inline VertexBuffer & GetVertexBuffer()
+		{
+			return *m_centers;
+		}
+
+	private:
+		//!\~english	The vertex buffer.
+		//!\~french		Le tampon de sommets.
+		VertexBufferUPtr m_vertexBuffer;
+		//!\~english	The buffer containing the billboards positions.
+		//!\~french		Le tampon contenant les positions des billboards.
+		VertexBufferSPtr m_centers;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -254,7 +364,7 @@ namespace Castor3D
 	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
 	class BillboardList
-		: public BillboardListBase
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -297,46 +407,65 @@ namespace Castor3D
 		 *\param[in]	p_name			The name.
 		 *\param[in]	p_scene			The parent scene.
 		 *\param[in]	p_parent		The parent scene node.
-		 *\param[in]	p_vertexBuffer	The vertex buffer.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
 		 *\param[in]	p_parent		Le noeud de scène parent.
-		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
 		 */
 		C3D_API BillboardList( Castor::String const & p_name
 							   , Scene & p_scene
-							   , SceneNodeSPtr p_parent
-							   , VertexBufferSPtr p_vertexBuffer );
+							   , SceneNodeSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~BillboardList();
+		C3D_API ~BillboardList();
 		/**
 		 *\~english
-		 *\brief		Creates a billboards list for the wanted rendering type.
-		 *\remarks		If the wanted type is not supported, BillboardRenderingType::eInstantiation is used.
-		 *\param[in]	p_type		The rendering type.
-		 *\param[in]	p_name		The name.
-		 *\param[in]	p_scene		The parent scene.
-		 *\param[in]	p_parent	The parent scene node.
+		 *\brief		Initialises GPU side elements
+		 *\return		\p true if all is OK
 		 *\~french
-		 *\brief		Crée une liste de billboards pour le type de rendu voulu.
-		 *\remarks		Si le type voulu n'est pas supporté, BillboardRenderingType::eInstantiation est utilisé.
-		 *\param[in]	p_type		Le type de rendu.
-		 *\param[in]	p_name		Le nom.
-		 *\param[in]	p_scene		La scene parente.
-		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\brief		Initialise les elements GPU
+		 *\return		\p true si tout s'est bien passe
 		 */
-		C3D_API static BillboardListSPtr Create( BillboardRenderingType p_type, Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
+		C3D_API bool Initialise();
 		/**
-		 *\copydoc		Castor3D::BillboardListBase::SortByDistance
+		 *\~english
+		 *\brief		Cleans GPU side elements up
+		 *\~french
+		 *\brief		Nettoie les elements GPU
 		 */
-		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition )override;
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Draws the billboards.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
+		 *\~french
+		 *\brief		Dessine les billboards.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
+		 */
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given program.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Sorts the points from farthest to nearest from the camera.
+		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\~french
+		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
+		 */
+		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list
@@ -364,6 +493,60 @@ namespace Castor3D
 		 *\param[in]	p_ptPositions	La liste de points
 		 */
 		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
+		/**
+		 *\~english
+		 *\brief		Sets the material
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Definit le materiau
+		 *\param[in]	p_value	La nouvelle valeur
+		 */
+		inline void SetMaterial( MaterialSPtr p_value )
+		{
+			m_impl->SetMaterial( p_value );
+		}
+		/**
+		 *\~english
+		 *\return		The material.
+		 *\~french
+		 *\return		Le materiau.
+		 */
+		inline MaterialSPtr GetMaterial()const
+		{
+			return m_impl->GetMaterial();
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the billboards dimensions
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Definit les dimensios des billboards
+		 *\param[in]	p_value	La nouvelle valeur
+		 */
+		inline void SetDimensions( Castor::Size const & p_value )
+		{
+			m_impl->SetDimensions( p_value );
+		}
+		/**
+		 *\~english
+		 *\return		The billboards dimensions.
+		 *\~french
+		 *\return		Les dimensions des billboards.
+		 */
+		inline Castor::Size const & GetDimensions()const
+		{
+			return m_impl->GetDimensions();
+		}
+		/**
+		 *\~english
+		 *\return		The billboards count.
+		 *\~french
+		 *\return		Le nombre de billboards.
+		 */
+		inline uint32_t GetCount()const
+		{
+			return m_impl->GetCount();
+		}
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
@@ -452,6 +635,9 @@ namespace Castor3D
 		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
 		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
 		bool m_needUpdate;
+		//!\~english	The billboard implementation.
+		//!\~french		L'implémentation de billboard.
+		BillboardBaseUPtr m_impl;
 	};
 }
 

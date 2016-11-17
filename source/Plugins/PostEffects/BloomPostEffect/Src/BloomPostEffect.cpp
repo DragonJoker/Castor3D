@@ -582,7 +582,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_hipass = GetHiPassProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
@@ -607,7 +607,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurX = GetBlurXProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_blurXMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( BloomPostEffect::FilterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -638,7 +638,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurY = GetBlurYProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_blurYMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -669,7 +669,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_combine = GetCombineProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );

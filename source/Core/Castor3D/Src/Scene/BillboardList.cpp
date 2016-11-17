@@ -23,40 +23,6 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	namespace
-	{
-		class BillboardListGS
-			: public BillboardList
-		{
-		public:
-			BillboardListGS( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
-			~BillboardListGS();
-			bool Initialise()override;
-			void Cleanup()override;
-
-		private:
-			void DoUpdate()override;
-		};
-		class BillboardListInst
-			: public BillboardList
-		{
-		public:
-			BillboardListInst( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
-			~BillboardListInst();
-			bool Initialise()override;
-			void Cleanup()override;
-			GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program )override;
-
-		private:
-			void DoUpdate()override;
-
-		private:
-			VertexBufferUPtr m_positions;
-		};
-	}
-
-	//*************************************************************************************************
-
 	BillboardList::TextWriter::TextWriter( String const & p_tabs )
 		: MovableObject::TextWriter{ p_tabs }
 	{
@@ -110,30 +76,50 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardListBase::BillboardListBase( String const & p_name
-										  , Scene & p_scene
-										  , SceneNodeSPtr p_parent
-										  , VertexBufferSPtr p_vertexBuffer )
-		: MovableObject( p_name, p_scene, MovableType::eBillboard, p_parent )
+	BillboardBase::BillboardBase( Scene & p_scene )
+		, m_scene{ p_scene }
+	{
+	}
+
+	BillboardBase::~BillboardBase()
+	{
+	}
+
+	//*************************************************************************************************
+
+	BillboardGSBase::BillboardGSBase( Scene & p_scene, VertexBufferSPtr p_vertexBuffer )
+		: BillboardBase{ p_scene }
 		, m_vertexBuffer{ p_vertexBuffer }
 	{
 	}
 
-	BillboardListBase::~BillboardListBase()
+	BillboardGSBase::~BillboardGSBase()
 	{
 	}
 
-	bool BillboardListBase::Initialise()
+	bool BillboardGSBase::Initialise()
 	{
 		if ( !m_initialised )
 		{
-			m_initialised = m_vertexBuffer->Create();
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+			uint8_t * l_buffer = m_vertexBuffer->data();
+
+			for ( auto & l_pos : m_arrayPositions )
+			{
+				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_initialised = true;
 		}
 
 		return m_initialised;
 	}
 
-	void BillboardListBase::Cleanup()
+	void BillboardGSBase::Cleanup()
 	{
 		if ( m_initialised )
 		{
@@ -150,17 +136,13 @@ namespace Castor3D
 		}
 	}
 
-	void BillboardListBase::SortByDistance( Castor::Point3r const & p_cameraPosition )
-	{
-	}
-
-	void BillboardListBase::Draw( GeometryBuffers const & p_geometryBuffers )
+	void BillboardGSBase::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
 		DoUpdate();
 		p_geometryBuffers.Draw( m_count, 0 );
 	}
 
-	GeometryBuffersSPtr BillboardListBase::GetGeometryBuffers( ShaderProgram const & p_program )
+	GeometryBuffersSPtr BillboardGSBase::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
 		GeometryBuffersSPtr l_buffers;
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
@@ -170,9 +152,8 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, p_program );
-
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
+			l_buffers = m_scene.GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, p_program );
+			m_scene.GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
 			{
 				l_buffers->Initialise( { *m_vertexBuffer }, nullptr );
 			} ) );
@@ -184,6 +165,155 @@ namespace Castor3D
 		}
 
 		return l_buffers;
+	}
+
+	void BillboardGSBase::DoUpdate()
+	{
+		if ( m_needUpdate )
+		{
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+			uint8_t * l_buffer = m_vertexBuffer->data();
+
+			for ( auto & l_pos : m_arrayPositions )
+			{
+				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_needUpdate = false;
+			m_count = uint32_t( m_arrayPositions.size() );
+		}
+	}
+
+	//*************************************************************************************************
+
+	BillboardInstBase::BillboardInstBase( Scene & p_scene, VertexBufferSPtr p_centers )
+		: BillboardBase{ p_scene }
+		, m_centers{ p_centers }
+		, m_vertexBuffer( std::make_unique< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
+		{
+			{
+				BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
+			}
+		} ) )
+	{
+	}
+
+	BillboardInstBase::~BillboardInstBase()
+	{
+		m_vertexBuffer.reset();
+		m_centers.reset();
+	}
+
+	bool BillboardInstBase::Initialise()
+	{
+		if ( !m_initialised )
+		{
+			uint32_t l_stride = m_centers->GetDeclaration().stride();
+			m_centers->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+			uint8_t * l_buffer = m_centers->data();
+
+			for ( auto & l_pos : m_arrayPositions )
+			{
+				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_centers->Create();
+			m_centers->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+
+			std::array< Point3f, 4 > l_vertices
+			{
+				{
+					Point3f{ -0.5f, -0.5f, 0.0f },
+					Point3f{ 0.5f, -0.5f, 0.0f },
+					Point3f{ 0.5f, 0.5f, 0.0f },
+					Point3f{ -0.5f, 0.5f, 0.0f },
+				}
+			};
+
+			l_stride = m_vertexBuffer->GetDeclaration().stride();
+			m_vertexBuffer->Resize( 4 * l_stride );
+			l_buffer = m_vertexBuffer->data();
+
+			for ( auto & l_vertex : l_vertices )
+			{
+				std::memcpy( l_buffer, l_vertex.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+
+			m_initialised = true;
+		}
+
+		return m_initialised;
+	}
+
+	void BillboardInstBase::Cleanup()
+	{
+		if ( m_initialised )
+		{
+			m_initialised = false;
+
+			for ( auto l_buffers : m_geometryBuffers )
+			{
+				l_buffers->Cleanup();
+			}
+
+			m_geometryBuffers.clear();
+			m_vertexBuffer->Destroy();
+			m_centers->Destroy();
+		}
+	}
+
+	GeometryBuffersSPtr BillboardInstBase::GetGeometryBuffers( ShaderProgram const & p_program )
+	{
+		GeometryBuffersSPtr l_buffers;
+		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
+		{
+			return &p_buffers->GetProgram() == &p_program;
+		} );
+
+		if ( l_it == m_geometryBuffers.end() )
+		{
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eQuads, p_program );
+
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
+			{
+				l_buffers->Initialise( { *m_vertexBuffer, *m_centers }, nullptr );
+			} ) );
+			m_geometryBuffers.push_back( l_buffers );
+		}
+		else
+		{
+			l_buffers = *l_it;
+		}
+
+		return l_buffers;
+	}
+
+	void BillboardInstBase::DoUpdate()
+	{
+		if ( m_needUpdate )
+		{
+			uint32_t l_stride = m_positions->GetDeclaration().stride();
+			m_positions->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+			uint8_t * l_buffer = m_positions->data();
+
+			for ( auto & l_pos : m_arrayPositions )
+			{
+				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+				l_buffer += l_stride;
+			}
+
+			m_positions->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_needUpdate = false;
+			m_count = uint32_t( m_arrayPositions.size() );
+		}
 	}
 
 	//*************************************************************************************************
@@ -260,214 +390,6 @@ namespace Castor3D
 		{
 			Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
 		}
-	}
-
-	//*************************************************************************************************
-
-	BillboardListGS::BillboardListGS( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent )
-		: BillboardList( p_name, p_scene, p_parent
-						 , std::make_shared< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
-						 {
-							 { BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ) }
-						 } ) )
-	{
-	}
-
-	BillboardListGS::~BillboardListGS()
-	{
-	}
-
-	bool BillboardListGS::Initialise()
-	{
-		if ( !m_initialised )
-		{
-			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-			uint8_t * l_buffer = m_vertexBuffer->data();
-
-			for ( auto & l_pos : m_arrayPositions )
-			{
-				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-				l_buffer += l_stride;
-			}
-
-			m_vertexBuffer->Create();
-			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_initialised = true;
-		}
-
-		return m_initialised;
-	}
-
-	void BillboardListGS::Cleanup()
-	{
-		if ( m_initialised )
-		{
-			m_initialised = false;
-
-			for ( auto l_buffers : m_geometryBuffers )
-			{
-				l_buffers->Cleanup();
-			}
-
-			m_geometryBuffers.clear();
-			m_vertexBuffer->Destroy();
-			m_vertexBuffer.reset();
-		}
-	}
-
-	void BillboardListGS::DoUpdate()
-	{
-		if ( m_needUpdate )
-		{
-			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-			uint8_t * l_buffer = m_vertexBuffer->data();
-
-			for ( auto & l_pos : m_arrayPositions )
-			{
-				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-				l_buffer += l_stride;
-			}
-
-			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_needUpdate = false;
-			m_count = uint32_t( m_arrayPositions.size() );
-		}
-	}
-
-	//*************************************************************************************************
-
-	BillboardListInst::BillboardListInst( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent )
-		: BillboardList( p_name, p_scene, p_parent
-						 , std::make_shared< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
-						 {
-							 {
-								 BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec3 ),
-							 }
-						 } ) )
-		, m_positions( std::make_unique< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
-					   {
-						   {
-							   BufferElementDeclaration( cuT( "center" ), 0u, ElementType::eVec3, 0u, 1u )
-						   }
-					   } ) )
-	{
-	}
-
-	BillboardListInst::~BillboardListInst()
-	{
-		m_vertexBuffer.reset();
-		m_positions.reset();
-	}
-
-	bool BillboardListInst::Initialise()
-	{
-		if ( !m_initialised )
-		{
-			uint32_t l_stride = m_positions->GetDeclaration().stride();
-			m_positions->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-			uint8_t * l_buffer = m_positions->data();
-
-			for ( auto & l_pos : m_arrayPositions )
-			{
-				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-				l_buffer += l_stride;
-			}
-
-			m_positions->Create();
-			m_positions->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-
-			std::array< Point3f, 4 > l_vertices
-			{
-				{
-					Point3f{ -0.5f, -0.5f, 0.0f },
-					Point3f{ 0.5f, -0.5f, 0.0f },
-					Point3f{ 0.5f, 0.5f, 0.0f },
-					Point3f{ -0.5f, 0.5f, 0.0f },
-				}
-			};
-
-			l_stride = m_vertexBuffer->GetDeclaration().stride();
-			m_vertexBuffer->Resize( 4 * l_stride );
-			l_buffer = m_vertexBuffer->data();
-
-			for ( auto & l_vertex : l_vertices )
-			{
-				std::memcpy( l_buffer, l_vertex.const_ptr(), l_stride );
-				l_buffer += l_stride;
-			}
-
-			m_vertexBuffer->Create();
-			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-
-			m_initialised = true;
-		}
-
-		return m_initialised;
-	}
-
-	void BillboardListInst::Cleanup()
-	{
-		if ( m_initialised )
-		{
-			m_initialised = false;
-
-			for ( auto l_buffers : m_geometryBuffers )
-			{
-				l_buffers->Cleanup();
-			}
-
-			m_geometryBuffers.clear();
-			m_vertexBuffer->Destroy();
-			m_positions->Destroy();
-		}
-	}
-
-	void BillboardListInst::DoUpdate()
-	{
-		if ( m_needUpdate )
-		{
-			uint32_t l_stride = m_positions->GetDeclaration().stride();
-			m_positions->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
-			uint8_t * l_buffer = m_positions->data();
-
-			for ( auto & l_pos : m_arrayPositions )
-			{
-				std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-				l_buffer += l_stride;
-			}
-
-			m_positions->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			m_needUpdate = false;
-			m_count = uint32_t( m_arrayPositions.size() );
-		}
-	}
-
-	GeometryBuffersSPtr BillboardListInst::GetGeometryBuffers( ShaderProgram const & p_program )
-	{
-		GeometryBuffersSPtr l_buffers;
-		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
-		{
-			return &p_buffers->GetProgram() == &p_program;
-		} );
-
-		if ( l_it == m_geometryBuffers.end() )
-		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eQuads, p_program );
-
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_buffers]()
-			{
-				l_buffers->Initialise( { *m_vertexBuffer, *m_positions }, nullptr );
-			} ) );
-			m_geometryBuffers.push_back( l_buffers );
-		}
-		else
-		{
-			l_buffers = *l_it;
-		}
-
-		return l_buffers;
 	}
 
 	//*************************************************************************************************

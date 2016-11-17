@@ -65,7 +65,19 @@ namespace Castor3D
 			}
 		}
 
-		inline void DoUnbind( BillboardListRenderNode const & p_node, DepthMapArray const & p_depthMaps )
+		inline void DoUnbind( BillboardListGSRenderNode const & p_node, DepthMapArray const & p_depthMaps )
+		{
+			DoUnbindDepthMaps( p_depthMaps );
+			p_node.m_pass.m_pass.EndRender();
+			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
+
+			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+			{
+				p_node.m_data.GetScene()->GetLightCache().UnbindLights();
+			}
+		}
+
+		inline void DoUnbind( BillboardListInstRenderNode const & p_node, DepthMapArray const & p_depthMaps )
 		{
 			DoUnbindDepthMaps( p_depthMaps );
 			p_node.m_pass.m_pass.EndRender();
@@ -115,13 +127,25 @@ namespace Castor3D
 	}
 
 	template<>
-	void BillboardListRenderNode::Render( DepthMapArray const & p_depthMaps )
+	void BillboardListGSRenderNode::Render( DepthMapArray const & p_depthMaps )
 	{
 		DoRender( *this, p_depthMaps );
 	}
 
 	template<>
-	void BillboardListRenderNode::UnbindPass( DepthMapArray const & p_depthMaps )const
+	void BillboardListGSRenderNode::UnbindPass( DepthMapArray const & p_depthMaps )const
+	{
+		DoUnbind( *this, p_depthMaps );
+	}
+
+	template<>
+	void BillboardListInstRenderNode::Render( DepthMapArray const & p_depthMaps )
+	{
+		DoRender( *this, p_depthMaps );
+	}
+
+	template<>
+	void BillboardListInstRenderNode::UnbindPass( DepthMapArray const & p_depthMaps )const
 	{
 		DoUnbind( *this, p_depthMaps );
 	}
@@ -199,7 +223,23 @@ namespace Castor3D
 		DoBindDepthMaps( p_depthMaps );
 	}
 
-	void BillboardRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
+	void BillboardGSRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
+	{
+		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
+		{
+			m_data.GetScene()->GetLightCache().BindLights();
+		}
+
+		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
+		auto const & l_dimensions = m_data.GetDimensions();
+		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
+		m_pass.m_pass.FillShaderVariables( m_pass );
+		m_pass.m_pipeline.GetProgram().BindUbos();
+		m_pass.m_pass.Render();
+		DoBindDepthMaps( p_depthMaps );
+	}
+
+	void BillboardInstRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
 	{
 		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
