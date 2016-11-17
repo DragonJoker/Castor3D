@@ -51,6 +51,7 @@ namespace Castor3D
 			, m_offset()
 			, m_name()
 			, m_usages( 0u )
+			, m_divisor( 0u )
 		{
 		}
 		/**
@@ -60,29 +61,39 @@ namespace Castor3D
 		 *\param[in]	p_usages	Element possible usages (ElementUsage combination).
 		 *\param[in]	p_type		Element type.
 		 *\param[in]	p_offset	Offset in the stream.
+		 *\param[in]	p_divisor	Instanciation attribute increment.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name		Le nom de la variable associée.
 		 *\param[in]	p_usages	Les utilisations possibles de l'élément (combinaison de ElementUsage)
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
+		 *\param[in]	p_divisor	Incrément d'attribut d'instanciation.
 		 */
-		BufferElementDeclaration( Castor::String const & p_name, uint32_t p_usages, ElementType p_type, uint32_t p_offset = 0 )
+		BufferElementDeclaration( Castor::String const & p_name, uint32_t p_usages, ElementType p_type, uint32_t p_offset = 0u, uint32_t p_divisor = 0u )
 			: m_dataType( p_type )
 			, m_offset( p_offset )
 			, m_name( p_name )
 			, m_usages( p_usages )
+			, m_divisor( p_divisor )
 		{
 		}
 
-		//!\~english The associated variable name.	\~french Le nom de la variable associée.
+		//!\~english	The associated variable name.
+		//!\~french		Le nom de la variable associée.
 		Castor::String m_name;
-		//!\~english Element usage.	\~french Utilisation de l'élément.
+		//!\~english	Element usage.
+		//!\~french		Utilisation de l'élément.
 		uint32_t m_usages;
-		//!\~english Element type.	\~french Type de l'élément.
+		//!\~english	Element type.
+		//!\~french		Type de l'élément.
 		ElementType m_dataType;
-		//!\~english Offset in buffer.	\~french Offset dans le tampon.
+		//!\~english	Offset in buffer.
+		//!\~french		Offset dans le tampon.
 		uint32_t m_offset;
+		//!\~english	Instantiation attribute increment.
+		//!\~french		Incrément d'attribut d'instanciation.
+		uint32_t m_divisor;
 	};
 	/**
 	 *\~english
@@ -97,7 +108,8 @@ namespace Castor3D
 		return p_lhs.m_dataType == p_rhs.m_dataType
 			   && p_lhs.m_name == p_rhs.m_name
 			   && p_lhs.m_offset == p_rhs.m_offset
-			   && p_lhs.m_usages == p_rhs.m_usages;
+			   && p_lhs.m_usages == p_rhs.m_usages
+			   && p_lhs.m_divisor == p_rhs.m_divisor;
 	}
 	/**
 	 *\~english
@@ -112,7 +124,8 @@ namespace Castor3D
 		return p_lhs.m_dataType != p_rhs.m_dataType
 			   || p_lhs.m_name != p_rhs.m_name
 			   || p_lhs.m_offset != p_rhs.m_offset
-			   || p_lhs.m_usages != p_rhs.m_usages;
+			   || p_lhs.m_usages != p_rhs.m_usages
+			   || p_lhs.m_divisor != p_rhs.m_divisor;
 	}
 }
 

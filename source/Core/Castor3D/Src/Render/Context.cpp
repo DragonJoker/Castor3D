@@ -488,7 +488,7 @@ namespace Castor3D
 
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		auto l_program = l_cache.GetNewProgram();
+		auto l_program = l_cache.GetNewProgram( false );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
@@ -499,6 +499,7 @@ namespace Castor3D
 			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
+		l_program->Initialise();
 		return l_program;
 	}
 
@@ -620,7 +621,7 @@ namespace Castor3D
 
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		auto l_program = l_cache.GetNewProgram();
+		auto l_program = l_cache.GetNewProgram( false );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
@@ -631,6 +632,7 @@ namespace Castor3D
 			l_program->CreateFrameVariable< OneFloatFrameVariable >( cuT( "c3d_fIndex" ), ShaderType::ePixel );
 		}
 
+		l_program->Initialise();
 		return l_program;
 	}
 

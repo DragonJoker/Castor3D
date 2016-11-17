@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\brief		Récupère un GeometryBuffers pour le programme donné.
 		 *\param[in]	p_program	Le programme.
 		 */
-		C3D_API GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
+		C3D_API virtual GeometryBuffersSPtr GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -297,28 +297,42 @@ namespace Castor3D
 		 *\param[in]	p_name			The name.
 		 *\param[in]	p_scene			The parent scene.
 		 *\param[in]	p_parent		The parent scene node.
+		 *\param[in]	p_vertexBuffer	The vertex buffer.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
 		 *\param[in]	p_parent		Le noeud de scène parent.
+		 *\param[in]	p_vertexBuffer	Le tampon de sommets.
 		 */
-		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
+		C3D_API BillboardList( Castor::String const & p_name
+							   , Scene & p_scene
+							   , SceneNodeSPtr p_parent
+							   , VertexBufferSPtr p_vertexBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~BillboardList();
+		C3D_API virtual ~BillboardList();
 		/**
-		 *\copydoc		Castor3D::BillboardListBase::Initialise
+		 *\~english
+		 *\brief		Creates a billboards list for the wanted rendering type.
+		 *\remarks		If the wanted type is not supported, BillboardRenderingType::eInstantiation is used.
+		 *\param[in]	p_type		The rendering type.
+		 *\param[in]	p_name		The name.
+		 *\param[in]	p_scene		The parent scene.
+		 *\param[in]	p_parent	The parent scene node.
+		 *\~french
+		 *\brief		Crée une liste de billboards pour le type de rendu voulu.
+		 *\remarks		Si le type voulu n'est pas supporté, BillboardRenderingType::eInstantiation est utilisé.
+		 *\param[in]	p_type		Le type de rendu.
+		 *\param[in]	p_name		Le nom.
+		 *\param[in]	p_scene		La scene parente.
+		 *\param[in]	p_parent	Le noeud de scène parent.
 		 */
-		C3D_API bool Initialise()override;
-		/**
-		 *\copydoc		Castor3D::BillboardListBase::Cleanup
-		 */
-		C3D_API void Cleanup()override;
+		C3D_API static BillboardListSPtr Create( BillboardRenderingType p_type, Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent );
 		/**
 		 *\copydoc		Castor3D::BillboardListBase::SortByDistance
 		 */
@@ -428,16 +442,7 @@ namespace Castor3D
 			return m_arrayPositions.end();
 		}
 
-	private:
-		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer, if needed.
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets si nécessaire.
-		 */
-		void DoUpdate()override;
-
-	private:
+	protected:
 		//!\~english	The positions list.
 		//!\~french		La liste des positions.
 		Castor::Point3rArray m_arrayPositions;

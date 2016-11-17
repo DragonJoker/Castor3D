@@ -416,7 +416,7 @@ namespace Castor3D
 		m_billboardCache = MakeObjectCache< BillboardList, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
 																	, [this]( String const & p_name, SceneNodeSPtr p_parent )
 																	{
-																		return std::make_shared< BillboardList >( p_name, *this, p_parent );
+																		return BillboardList::Create( BillboardRenderingType::eInstantiation, p_name, *this, p_parent );
 																	}
 																	, l_eventInitialise
 																	, l_eventClean

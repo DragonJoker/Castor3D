@@ -593,7 +593,7 @@ namespace Castor3D
 
 		// Shader program
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		l_cache.CreatePassBuffer( *l_program, 0u, MASK_SHADER_TYPE_PIXEL );
 
@@ -693,7 +693,7 @@ namespace Castor3D
 		ShaderModel l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVs );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPs );
-
+		l_program->Initialise();
 		return l_program;
 	}
 }

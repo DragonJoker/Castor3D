@@ -845,12 +845,48 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
+		//DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
+		for ( auto l_itPipelines : p_nodes )
+		{
+			PipelineUpdater< true >::Update( *this, *m_renderTarget.GetCamera(), p_depthMaps, *l_itPipelines.first );
+			l_itPipelines.first->Apply();
+
+			for ( auto & l_renderNode : l_itPipelines.second )
+			{
+				l_renderNode.m_pass.m_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
+				l_renderNode.BindPass( p_depthMaps, 0 );
+				l_renderNode.m_buffers.DrawInstanced( 4, 0, l_renderNode.m_data.GetCount() );
+				l_renderNode.UnbindPass( p_depthMaps );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
+			}
+		}
 	}
 
 	void RenderTechnique::DoRenderTransparentBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
+		//DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
+		for ( auto l_itPipelines : p_nodes )
+		{
+			PipelineUpdater< false >::Update( *this, *m_renderTarget.GetCamera(), p_depthMaps, *l_itPipelines.first );
+			l_itPipelines.first->Apply();
+
+			for ( auto & l_renderNode : l_itPipelines.second )
+			{
+				l_renderNode.m_pass.m_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
+				l_renderNode.BindPass( p_depthMaps, 0 );
+				l_renderNode.m_buffers.DrawInstanced( 4, 0, l_renderNode.m_data.GetCount() );
+				l_renderNode.UnbindPass( p_depthMaps );
+
+				if ( p_register )
+				{
+					m_renderedObjects.push_back( l_renderNode );
+				}
+			}
+		}
 	}
 
 	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const

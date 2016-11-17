@@ -1094,29 +1094,29 @@ namespace GlRender
 
 		if ( l_errorCode )
 		{
-			auto l_it = Errors.find( l_errorCode );
-			StringStream l_error;
-			l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;
-			l_error << cuT( "  ID: 0x" ) << std::hex << l_errorCode << std::endl;
+			//auto l_it = Errors.find( l_errorCode );
+			//StringStream l_error;
+			//l_error << cuT( "OpenGL Error, on function: " ) << p_text << std::endl;
+			//l_error << cuT( "  ID: 0x" ) << std::hex << l_errorCode << std::endl;
 
-			if ( l_it == Errors.end() )
-			{
-				l_error << cuT( "  Message: Unknown error" ) << std::endl;
-			}
-			else
-			{
-				l_error << cuT( "  Message: " ) << l_it->second << std::endl;
-			}
+			//if ( l_it == Errors.end() )
+			//{
+			//	l_error << cuT( "  Message: Unknown error" ) << std::endl;
+			//}
+			//else
+			//{
+			//	l_error << cuT( "  Message: " ) << l_it->second << std::endl;
+			//}
 
-			String l_sysError = System::GetLastErrorText();
+			//String l_sysError = System::GetLastErrorText();
 
-			if ( !l_sysError.empty() )
-			{
-				l_error << cuT( "  System: " ) << l_sysError << std::endl;
-			}
+			//if ( !l_sysError.empty() )
+			//{
+			//	l_error << cuT( "  System: " ) << l_sysError << std::endl;
+			//}
 
-			l_error << Debug::Backtrace{ 20, 4 };
-			Logger::LogError( l_error );
+			//l_error << Debug::Backtrace{ 20, 4 };
+			//Logger::LogError( l_error );
 			l_return = false;
 			l_errorCode = GetError();
 		}

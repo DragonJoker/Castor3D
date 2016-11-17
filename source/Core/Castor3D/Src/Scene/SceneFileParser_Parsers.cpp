@@ -1290,7 +1290,7 @@ namespace Castor3D
 		}
 		else
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram();
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
@@ -2699,7 +2699,7 @@ namespace Castor3D
 
 		if ( l_parsingContext->pPass )
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram();
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 		else
 		{

@@ -90,7 +90,7 @@ namespace GlRender
 		virtual void DoCleanup();
 
 		Castor3D::BufferDeclaration::const_iterator DoFindElement( Castor3D::BufferDeclaration const & p_declaration, Castor3D::BufferElementDeclaration const & p_element )const;
-		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, Castor3D::BufferDeclaration const & p_declaration );
+		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, Castor3D::BufferDeclaration const & p_declaration );
 		bool DoCreateAttributes( Castor3D::ProgramInputLayout const & p_layout, Castor3D::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes );
 		void DoBindAttributes( GlAttributePtrArray const & p_attributes )const;
 

@@ -193,7 +193,7 @@ namespace GuiCommon
 		{
 			if ( m_shaderProgram.expired() )
 			{
-				m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetNewProgram();
+				m_shaderProgram = m_scene.GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 			}
 
 			for ( uint8_t i = uint8_t( ShaderType::eVertex ); i < uint8_t( ShaderType::eCount ); i++ )

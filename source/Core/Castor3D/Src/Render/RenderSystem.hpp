@@ -120,23 +120,6 @@ namespace Castor3D
 		C3D_API GLSL::GlslWriter CreateGlslWriter();
 		/**
 		 *\~english
-		 *\brief		Creates a shader program for billboards rendering use.
-		 *\param[in]	p_renderPass	The pass from which the program code is retrieved.
-		 *\param[in]	p_textureFlags	Bitwise ORed TextureChannel.
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag.
-		 *\param[in]	p_sceneFlags	Scene related flags.
-		 *\return		The created program.
-		 *\~french
-		 *\brief		Crée un programme shader pour les rendu de billboards.
-		 *\param[in]	p_renderPass	La passe a partir de laquelle est récupéré le code du programme.
-		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
-		 *\param[in]	p_programFlags	Combinaison de ProgramFlag.
-		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
-		 *\return		Le programme créé.
-		 */
-		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
-		/**
-		 *\~english
 		 *\brief		Sets the currently active render context
 		 *\param[in]	p_context	The context
 		 *\~french
