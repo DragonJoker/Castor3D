@@ -416,7 +416,7 @@ namespace Castor3D
 		m_billboardCache = MakeObjectCache< BillboardList, String >( p_engine, *this, m_rootNode, m_rootCameraNode, m_rootObjectNode
 																	, [this]( String const & p_name, SceneNodeSPtr p_parent )
 																	{
-																		return BillboardList::Create( BillboardRenderingType::eInstantiation, p_name, *this, p_parent );
+																		return std::make_shared< BillboardList >( p_name, *this, p_parent );
 																	}
 																	, l_eventInitialise
 																	, l_eventClean
@@ -475,21 +475,7 @@ namespace Castor3D
 																			, l_eventInitialise
 																			, l_eventClean
 																			, l_mergeObject
-																			, []( auto p_element
-																				  , SceneNodeSPtr p_parent
-																				  , SceneNodeSPtr p_rootNode
-																				  , SceneNodeSPtr p_rootCameraNode
-																				  , SceneNodeSPtr p_rootObjectNode )
-																			{
-																				if ( p_parent )
-																				{
-																					p_parent->AttachObject( p_element->GetBillboards() );
-																				}
-																				else
-																				{
-																					p_rootObjectNode->AttachObject( p_element->GetBillboards() );
-																				}
-																			}
+																			, l_attachObject
 																			, [this]( ParticleSystemSPtr p_element )
 																			{
 																				p_element->Detach();

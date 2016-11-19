@@ -248,13 +248,13 @@ namespace Castor3D
 		void DoAddBillboardNode( RenderPass & p_renderPass
 								 , uint16_t p_programFlags
 								 , Pass & p_pass
-								 , BillboardListBase & p_billboard
+								 , BillboardBase & p_billboard
 								 , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )
 		{
 			DoAddNode( p_renderPass
 					   , p_programFlags
 					   , p_pass
-					   , *p_billboard.GetScene()
+					   , p_billboard.GetParentScene()
 					   , p_nodes
 					   , std::bind( &RenderPass::CreateBillboardNode, &p_renderPass, std::ref( p_pass ), std::placeholders::_1, std::ref( p_billboard ) ) );
 		}
@@ -375,7 +375,7 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							uint16_t l_programFlags = 0u;
+							auto l_programFlags = l_billboard.second->GetProgramFlags();
 							AddFlag( l_programFlags, ProgramFlag::eBillboards );
 
 							if ( l_pass->HasAlphaBlending() )
@@ -401,7 +401,7 @@ namespace Castor3D
 						for ( auto l_pass : *l_material )
 						{
 							l_pass->PrepareTextures();
-							uint16_t l_programFlags = 0u;
+							auto l_programFlags = l_particleSystem.second->GetBillboards()->GetProgramFlags();
 							AddFlag( l_programFlags, ProgramFlag::eBillboards );
 
 							if ( l_pass->HasAlphaBlending() )

@@ -80,7 +80,7 @@ namespace Castor3D
 			}
 			else
 			{
-				l_return = DoCreateBillboardProgram( BillboardRenderingType::eInstantiation, p_renderPass, p_textureFlags, p_programFlags, p_sceneFlags );
+				l_return = DoCreateBillboardProgram( p_renderPass, p_textureFlags, p_programFlags, p_sceneFlags );
 
 				if ( l_return )
 				{
@@ -283,171 +283,7 @@ namespace Castor3D
 		}
 	}
 
-	ShaderProgramSPtr ShaderProgramCache::DoCreateBillboardProgram( BillboardRenderingType p_type, RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
-	{
-		ShaderProgramSPtr l_return;
-
-		switch ( p_type )
-		{
-		case BillboardRenderingType::eInstantiation:
-			l_return = DoCreateBillboardInstProgram( p_renderPass, p_textureFlags, p_programFlags, p_sceneFlags );
-			break;
-
-		case BillboardRenderingType::eGeometryShader:
-			l_return = DoCreateBillboardGSProgram( p_renderPass, p_textureFlags, p_programFlags, p_sceneFlags );
-			break;
-		}
-
-		return l_return;
-	}
-
-	ShaderProgramSPtr ShaderProgramCache::DoCreateBillboardGSProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
-	{
-		auto & l_engine = *GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
-		Topology l_input = Topology::ePoints;
-		Topology l_output = Topology::eTriangleStrips;
-		uint32_t l_count = 4;
-
-		ShaderProgramSPtr l_return = GetEngine()->GetRenderSystem()->CreateShaderProgram();
-
-		if ( l_return )
-		{
-			String l_strVtxShader;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
-
-				// Shader inputs
-				auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
-
-				// Shader outputs
-				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-				{
-					gl_Position = vec4( position.xyz(), 1.0 );
-				} );
-
-				l_strVtxShader = l_writer.Finalise();
-			}
-
-			String l_strGeoShader;
-			{
-				using namespace GLSL;
-				auto l_writer = l_renderSystem.CreateGlslWriter();
-
-				l_writer.InputGeometryLayout( GetTopologyName( l_input ) );
-				l_writer.OutputGeometryLayout( GetTopologyName( l_output ), l_count );
-
-				// Shader inputs
-				UBO_MATRIX( l_writer );
-				UBO_SCENE( l_writer );
-				UBO_BILLBOARD( l_writer );
-				auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
-
-				// Shader outputs
-				auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-				auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
-				auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
-				auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
-				auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
-				auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-				{
-					auto l_pos = l_writer.GetLocale( cuT( "l_pos" ), gl_in[0].gl_Position().xyz() );
-					auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
-					auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
-					auto l_left = l_writer.GetLocale( cuT( "l_left" ), cross( l_toCamera, l_up ) );
-
-					auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
-					auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_up );
-					auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), l_left );
-
-					l_left *= c3d_v2iDimensions.x();
-					l_up *= c3d_v2iDimensions.y();
-					l_writer << Endl();
-					{
-						l_pos -= ( l_left * Float( 0.5 ) );
-						vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-						vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
-						gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
-						vtx_normal = l_v3Normal;
-						vtx_tangent = l_v3Tangent;
-						vtx_bitangent = l_v3Bitangent;
-						vtx_texture = vec3( Float( 1.0 ), 0.0, 0.0 );
-						l_writer.EmitVertex();
-					}
-					l_writer << Endl();
-					{
-						l_pos += l_up;
-						vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-						vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
-						gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
-						vtx_normal = l_v3Normal;
-						vtx_tangent = l_v3Tangent;
-						vtx_bitangent = l_v3Bitangent;
-						vtx_texture = vec3( Float( 1.0 ), 1.0, 0.0 );
-						l_writer.EmitVertex();
-					}
-					l_writer << Endl();
-					{
-						l_pos -= l_up;
-						l_pos += l_left;
-						vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-						vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
-						gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
-						vtx_normal = l_v3Normal;
-						vtx_tangent = l_v3Tangent;
-						vtx_bitangent = l_v3Bitangent;
-						vtx_texture = vec3( Float( 0.0 ), 0.0, 0.0 );
-						l_writer.EmitVertex();
-					}
-					l_writer << Endl();
-					{
-						l_pos += l_up;
-						vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-						vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
-						gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
-						vtx_normal = l_v3Normal;
-						vtx_tangent = l_v3Tangent;
-						vtx_bitangent = l_v3Bitangent;
-						vtx_texture = vec3( Float( 0.0 ), 1.0, 0.0 );
-						l_writer.EmitVertex();
-					}
-					l_writer << Endl();
-					l_writer.EndPrimitive();
-				} );
-
-				l_strGeoShader = l_writer.Finalise();
-			}
-
-			String l_strPxlShader = p_renderPass.GetPixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
-
-			ShaderObjectSPtr l_object = l_return->CreateObject( ShaderType::eGeometry );
-			l_object->SetInputType( l_input );
-			l_object->SetOutputType( l_output );
-			l_object->SetOutputVtxCount( l_count );
-
-			auto l_model = l_renderSystem.GetGpuInformations().GetMaxShaderModel();
-			l_return->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
-			l_return->SetSource( ShaderType::eGeometry, l_model, l_strGeoShader );
-			l_return->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
-
-			CreateMatrixBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-			CreateSceneBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-			CreatePassBuffer( *l_return, p_programFlags, MASK_SHADER_TYPE_PIXEL );
-			CreateTextureVariables( *l_return, p_textureFlags );
-			auto & l_billboardUbo = l_return->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, MASK_SHADER_TYPE_GEOMETRY );
-			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
-		}
-
-		return l_return;
-	}
-
-	ShaderProgramSPtr ShaderProgramCache::DoCreateBillboardInstProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	ShaderProgramSPtr ShaderProgramCache::DoCreateBillboardProgram( RenderPass const & p_renderPass, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
 	{
 		auto & l_engine = *GetEngine();
 		auto & l_renderSystem = *l_engine.GetRenderSystem();
@@ -462,39 +298,50 @@ namespace Castor3D
 
 				// Shader inputs
 				auto position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
+				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 				auto center = l_writer.GetAttribute< Vec3 >( cuT( "center" ) );
+				auto gl_InstanceID( l_writer.GetBuiltin< Int >( cuT( "gl_InstanceID" ) ) );
+				auto gl_VertexID( l_writer.GetBuiltin< Int >( cuT( "gl_VertexID" ) ) );
 				UBO_MATRIX( l_writer );
 				UBO_SCENE( l_writer );
 				UBO_BILLBOARD( l_writer );
 
 				// Shader outputs
 				auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-				auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 				auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 				auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 				auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
 				auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
+				auto vtx_instance = l_writer.GetOutput< Int >( cuT( "vtx_instance" ) );
 				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					auto l_pos = l_writer.GetLocale( cuT( "l_pos" ), position.xyz() );
-					auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), normalize( vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) - l_pos ) );
-					auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( Float( 0 ), 1.0, 0.0 ) );
-					auto l_left = l_writer.GetLocale( cuT( "l_left" ), cross( l_toCamera, l_up ) );
+					auto l_center = l_writer.GetLocale( cuT( "l_center" ), l_writer.Paren( c3d_mtxModel * vec4( center, 1.0 ) ).xyz() );
+					auto l_toCamera = l_writer.GetLocale( cuT( "l_toCamera" ), c3d_v3CameraPosition - l_center );
+					l_toCamera.y() = 0.0_f;
+					l_toCamera = normalize( l_toCamera );
+					auto l_right = l_writer.GetLocale( cuT( "l_right" ), vec3( c3d_mtxView[0][0], c3d_mtxView[1][0], c3d_mtxView[2][0] ) );
+					auto l_up = l_writer.GetLocale( cuT( "l_up" ), vec3( c3d_mtxView[0][1], c3d_mtxView[1][1], c3d_mtxView[2][1] ) );
 
-					auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( l_toCamera.x(), 0.0, l_toCamera.z() ) ) );
-					auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_up );
-					auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), l_left );
+					if ( !CheckFlag( p_programFlags, ProgramFlag::eSpherical ) )
+					{
+						l_right = normalize( vec3( l_right.x(), 0.0, l_right.z() ) );
+						l_up = vec3( 0.0_f, 1.0f, 0.0f );
+					}
 
-					l_pos += center;
-					vtx_worldSpacePosition = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).xyz();
-					vtx_worldViewSpacePosition = l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz();
-					gl_Position = c3d_mtxProjection * vec4( vtx_worldViewSpacePosition, 1.0 );
-					vtx_normal = l_v3Normal;
-					vtx_tangent = l_v3Tangent;
-					vtx_bitangent = l_v3Bitangent;
-					gl_Position = vec4( position.xyz(), 1.0 );
+					vtx_normal = l_toCamera;
+					vtx_tangent = l_up;
+					vtx_bitangent = l_right;
+
+					vtx_worldSpacePosition = center
+						+ l_right * position.x() * c3d_v2iDimensions.x()
+						+ l_up * position.y() * c3d_v2iDimensions.y();
+
+					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+					vtx_texture = vec3( texture, 0.0 );
+					vtx_instance = gl_InstanceID;
+					gl_Position = c3d_mtxProjection * vec4( l_wvPosition, 1.0 );
 				} );
 
 				l_strVtxShader = l_writer.Finalise();
@@ -512,6 +359,7 @@ namespace Castor3D
 			CreateTextureVariables( *l_return, p_textureFlags );
 			auto & l_billboardUbo = l_return->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, MASK_SHADER_TYPE_VERTEX );
 			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
+			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::WindowSize );
 		}
 
 		return l_return;

@@ -471,7 +471,7 @@ namespace Castor3D
 
 	BillboardRenderNode PickingPass::CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardListBase & p_billboard )
+														 , BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
@@ -480,13 +480,14 @@ namespace Castor3D
 
 		return BillboardRenderNode
 		{
-			DoCreateSceneRenderNode( *p_billboard.GetScene(), p_pipeline ),
+			DoCreateSceneRenderNode( p_billboard.GetParentScene(), p_pipeline ),
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
-			*p_billboard.GetParent(),
+			*p_billboard.GetNode(),
 			p_billboard,
 			*l_billboardBuffer,
-			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i )
+			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
+			*l_billboardBuffer->GetVariable( ShaderProgram::WindowSize, l_pt2i )
 		};
 	}
 

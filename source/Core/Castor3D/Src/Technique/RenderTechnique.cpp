@@ -845,48 +845,12 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		//DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-		for ( auto l_itPipelines : p_nodes )
-		{
-			PipelineUpdater< true >::Update( *this, *m_renderTarget.GetCamera(), p_depthMaps, *l_itPipelines.first );
-			l_itPipelines.first->Apply();
-
-			for ( auto & l_renderNode : l_itPipelines.second )
-			{
-				l_renderNode.m_pass.m_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
-				l_renderNode.BindPass( p_depthMaps, 0 );
-				l_renderNode.m_buffers.DrawInstanced( 4, 0, l_renderNode.m_data.GetCount() );
-				l_renderNode.UnbindPass( p_depthMaps );
-
-				if ( p_register )
-				{
-					m_renderedObjects.push_back( l_renderNode );
-				}
-			}
-		}
+		DoRenderNonInstanced< true >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
 	void RenderTechnique::DoRenderTransparentBillboards( BillboardRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		//DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
-		for ( auto l_itPipelines : p_nodes )
-		{
-			PipelineUpdater< false >::Update( *this, *m_renderTarget.GetCamera(), p_depthMaps, *l_itPipelines.first );
-			l_itPipelines.first->Apply();
-
-			for ( auto & l_renderNode : l_itPipelines.second )
-			{
-				l_renderNode.m_pass.m_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
-				l_renderNode.BindPass( p_depthMaps, 0 );
-				l_renderNode.m_buffers.DrawInstanced( 4, 0, l_renderNode.m_data.GetCount() );
-				l_renderNode.UnbindPass( p_depthMaps );
-
-				if ( p_register )
-				{
-					m_renderedObjects.push_back( l_renderNode );
-				}
-			}
-		}
+		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
 	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const
@@ -910,12 +874,12 @@ namespace Castor3D
 		UBO_PASS( l_writer );
 
 		// Fragment Intputs
-		auto vtx_worldSpacePosition( l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) ) );
-		auto vtx_worldViewSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
-		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
-		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
-		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
-		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
+		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
 
 		if ( l_writer.HasTextureBuffers() )
 		{
@@ -947,12 +911,12 @@ namespace Castor3D
 		{
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
+			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
@@ -971,7 +935,8 @@ namespace Castor3D
 
 			if ( p_sceneFlags != 0 )
 			{
-				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_worldViewSpacePosition ), vtx_worldViewSpacePosition.y() );
+				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
 			}
 		} );
 
@@ -989,12 +954,12 @@ namespace Castor3D
 		UBO_PASS( l_writer );
 
 		// Fragment Intputs
-		auto vtx_worldSpacePosition( l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) ) );
-		auto vtx_worldViewSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
-		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
-		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
-		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
-		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
+		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
 
 		if ( l_writer.HasTextureBuffers() )
 		{
@@ -1027,13 +992,13 @@ namespace Castor3D
 		{
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
 			auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), c3d_v4AmbientLight.xyz() );
-			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( 0.0f ), 0, 0 ) );
-			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( 0.0f ), 0, 0 ) );
+			auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
+			auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
 			auto l_fAlpha = l_writer.GetLocale( cuT( "l_fAlpha" ), c3d_fMatOpacity );
 			auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), c3d_fMatShininess );
 			auto l_v3Emissive = l_writer.GetLocale( cuT( "l_v3Emissive" ), c3d_v4MatEmissive.xyz() );
 			auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
-			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
+			pxl_v4FragColor = vec4( 0.0_f, 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
@@ -1058,7 +1023,8 @@ namespace Castor3D
 
 			if ( p_sceneFlags != 0 )
 			{
-				l_fog.ApplyFog( pxl_v4FragColor, length( vtx_worldViewSpacePosition ), vtx_worldViewSpacePosition.y() );
+				auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+				l_fog.ApplyFog( pxl_v4FragColor, length( l_wvPosition ), l_wvPosition.y() );
 			}
 		} );
 

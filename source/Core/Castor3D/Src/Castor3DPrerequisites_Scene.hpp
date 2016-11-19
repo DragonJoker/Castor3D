@@ -63,15 +63,15 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de rendu des billboards.
 	*/
-	enum class BillboardRenderingType
+	enum class BillboardType
 	{
-		//!\~english	Billboards are rendered using instantiation.
-		//!\~french		Les billboards sont dessinés en utilsant l'instantiation.
-		eInstantiation,
-		//!\~english	Billboards are rendered using geometry shader.
-		//!\~french		Les billboards sont dessinés en utilsant les geometry shader.
-		eGeometryShader,
-		CASTOR_SCOPED_ENUM_BOUNDS( eInstantiation )
+		//!\~english	Billboards always face the camera.
+		//!\~french		Les billboards font toujours face à la caméra.
+		eSpherical,
+		//!\~english	Billboards rotate only on Y axis.
+		//!\~french		Les billboards tournent uniquement sur l'axe Y.
+		eCylindrical,
+		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
 	};
 
 	class Scene;
@@ -94,8 +94,6 @@ namespace Castor3D
 	class MeshAnimationInstance;
 	class MeshAnimationInstanceSubmesh;
 	class BillboardBase;
-	class BillboardGSBase;
-	class BillboardInstBase;
 	class BillboardList;
 
 	DECLARE_SMART_PTR( SceneNode );
@@ -115,8 +113,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
 	DECLARE_SMART_PTR( MeshAnimationInstance );
 	DECLARE_SMART_PTR( BillboardBase );
-	DECLARE_SMART_PTR( BillboardGSBase );
-	DECLARE_SMART_PTR( BillboardInstBase );
 	DECLARE_SMART_PTR( BillboardList );
 
 	//! SceneNode pointer array.

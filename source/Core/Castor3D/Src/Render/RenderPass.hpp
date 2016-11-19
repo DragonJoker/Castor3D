@@ -260,22 +260,22 @@ namespace Castor3D
 																   , Submesh & p_submesh
 																   , Geometry & p_primitive );
 		/**
-		*\~english
-		*\brief		Creates a static render node.
-		*\param[in]	p_pass		The pass.
-		*\param[in]	p_pipeline	The pipeline.
-		*\param[in]	p_billboard	The billboard.
-		*\return		The render node.
-		*\~french
-		*\brief		Crée un noeud de rendu statique.
-		*\param[in]	p_pass		La passe.
-		*\param[in]	p_pipeline	Le pipeline.
-		*\param[in]	p_billboard	Le billboard.
-		*\return		Le noeud de rendu.
-		*/
+		 *\~english
+		 *\brief		Creates a static render node.
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_pipeline	The pipeline.
+		 *\param[in]	p_billboard	The billboard.
+		 *\return		The render node.
+		 *\~french
+		 *\brief		Crée un noeud de rendu statique.
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_pipeline	Le pipeline.
+		 *\param[in]	p_billboard	Le billboard.
+		 *\return		Le noeud de rendu.
+		 */
 		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
 																 , Pipeline & p_pipeline
-																 , BillboardListBase & p_billboard );
+																 , BillboardBase & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

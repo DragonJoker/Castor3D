@@ -98,6 +98,7 @@ namespace Castor3D
 		eGeometry,
 		eLight,
 		eBillboard,
+		eParticleEmitter,
 		CASTOR_SCOPED_ENUM_BOUNDS( eCamera )
 	};
 	/*!

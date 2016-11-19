@@ -98,8 +98,7 @@ namespace Castor3D
 	\brief		Implémentation d'un système de particules.
 	*/
 	class ParticleSystem
-		: public Castor::Named
-		, public Castor::OwnedBy< Scene >
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -215,27 +214,6 @@ namespace Castor3D
 		C3D_API Castor::Size const & GetDimensions()const;
 		/**
 		 *\~english
-		 *\brief		Detaches the billboards from it's parent.
-		 *\~french
-		 *\brief		Détache les billboards de leur parent.
-		 */
-		C3D_API void Detach();
-		/**
-		 *\~english
-		 *\brief		Attaches the billboards to a node.
-		 *\~french
-		 *\brief		Attache les billboards à un noeud.
-		 */
-		C3D_API void AttachTo( SceneNodeSPtr p_node );
-		/**
-		 *\~english
-		 *\return		The parent node.
-		 *\~french
-		 *\return		Le noeud parent.
-		 */
-		C3D_API SceneNodeSPtr GetParent()const;
-		/**
-		 *\~english
 		 *\brief		Adds a particle variable.
 		 *\param[in]	p_name	The variable name.
 		 *\param[in]	p_type	The variable type.
@@ -267,14 +245,13 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les billboards.
 		 */
-		inline BillboardListBaseSPtr GetBillboards()const
+		inline BillboardBaseSPtr GetBillboards()const
 		{
 			return m_particlesBillboard;
 		}
 
 	private:
 		bool DoCreateUpdatePipeline();
-		void DoUpdate();
 
 	private:
 		//!\~english	The map of default value per variable name.
@@ -288,10 +265,7 @@ namespace Castor3D
 		BufferDeclaration m_inputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
-		BillboardListBaseSPtr m_particlesBillboard;
-		//!\~english	The node to which the billboards are attached.
-		//!\~french		Le noeud sur lequel sont attachés les billboards.
-		SceneNodeSPtr m_parentNode;
+		BillboardBaseSPtr m_particlesBillboard;
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
 		Castor::Size m_dimensions;

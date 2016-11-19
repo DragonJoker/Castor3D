@@ -47,6 +47,11 @@ namespace GLSL
 		inline Int operator++( int );
 	};
 
+	inline Int operator "" _i( unsigned long long p_value )
+	{
+		return Int( int( p_value ) );
+	}
+
 	struct UInt
 		: public Type
 	{
@@ -67,6 +72,11 @@ namespace GLSL
 		inline UInt operator++( int );
 	};
 
+	inline UInt operator "" _ui( unsigned long long p_value )
+	{
+		return UInt( static_cast< unsigned int >( p_value ) );
+	}
+
 	struct Float
 		: public Type
 	{
@@ -86,6 +96,11 @@ namespace GLSL
 		template< typename T > inline Float & operator=( float p_rhs );
 		inline explicit operator float();
 	};
+
+	inline Float operator "" _f( long double p_value )
+	{
+		return Float( double( p_value ) );
+	}
 }
 
 #include "GlslBaseTypes.inl"

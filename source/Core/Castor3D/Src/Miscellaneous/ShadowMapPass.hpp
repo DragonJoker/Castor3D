@@ -124,7 +124,7 @@ namespace Castor3D
 		 */
 		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardListBase & p_billboard )override;
+														 , BillboardBase & p_billboard )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.

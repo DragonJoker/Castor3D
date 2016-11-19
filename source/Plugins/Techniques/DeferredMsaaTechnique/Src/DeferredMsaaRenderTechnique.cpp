@@ -365,12 +365,12 @@ namespace DeferredMsaa
 		UBO_PASS( l_writer );
 
 		// Fragment Inputs
-		auto vtx_worldSpacePosition( l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) ) );
-		auto vtx_worldViewSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
-		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
-		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
-		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
-		auto vtx_texture( l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) ) );
+		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
+		auto vtx_normal = l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
+		auto vtx_instance = l_writer.GetInput< Int >( cuT( "vtx_instance" ) );
 
 		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CheckFlag( p_textureFlags, TextureChannel::eColour ) ) );
 		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CheckFlag( p_textureFlags, TextureChannel::eAmbient ) ) );
@@ -405,13 +405,14 @@ namespace DeferredMsaa
 
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
-
+			
+			auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
 			out_c3dPosition = vec4( l_v3Position, l_v3Ambient.x() );
-			out_c3dDiffuse = vec4( l_v3Diffuse, length( vtx_worldViewSpacePosition ) );
+			out_c3dDiffuse = vec4( l_v3Diffuse, length( l_wvPosition ) );
 			out_c3dNormal = vec4( l_v3Normal, l_v3Ambient.y() );
 			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
-			out_c3dEmissive = vec4( l_v3Emissive, vtx_worldViewSpacePosition.z() );
+			out_c3dEmissive = vec4( l_v3Emissive, l_wvPosition.z() );
 		} );
 
 		return l_writer.Finalise();
@@ -495,9 +496,9 @@ namespace DeferredMsaa
 				auto l_fMatShininess = l_writer.GetLocale( cuT( "l_fMatShininess" ), l_v4Specular.w() );
 				auto l_v3Position = l_writer.GetLocale( cuT( "l_v3Position" ), l_v4Position.xyz() );
 				auto l_v3Bitangent = l_writer.GetLocale( cuT( "l_v3Bitangent" ), cross( l_v3Tangent.xyz(), l_v3Normal.xyz() ) );
-				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
-				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
-				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( Float( &l_writer, 0 ), 0, 0 ) );
+				auto l_v3Specular = l_writer.GetLocale( cuT( "l_v3Specular" ), vec3( 0.0_f, 0, 0 ) );
+				auto l_v3Diffuse = l_writer.GetLocale( cuT( "l_v3Diffuse" ), vec3( 0.0_f, 0, 0 ) );
+				auto l_v3Ambient = l_writer.GetLocale( cuT( "l_v3Ambient" ), vec3( 0.0_f, 0, 0 ) );
 				auto l_worldEye = l_writer.GetLocale( cuT( "l_worldEye" ), vec3( c3d_v3CameraPosition.x(), c3d_v3CameraPosition.y(), c3d_v3CameraPosition.z() ) );
 				auto l_dist = l_writer.GetLocale( cuT( "l_dist" ), l_v4Diffuse.w() );
 				auto l_y = l_writer.GetLocale( cuT( "l_y" ), l_v4Emissive.w() );

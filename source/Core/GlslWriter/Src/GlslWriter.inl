@@ -207,14 +207,14 @@ namespace GLSL
 	inline T Struct::GetMember( Castor::String const & p_name )
 	{
 		m_writer << T().m_type << p_name << cuT( ";" ) << Endl();
-		return T( &m_writer, p_name );
+		return T( &m_writer, m_name + cuT( "." ) + p_name );
 	}
 
 	template< typename T >
 	inline Array< T > Struct::GetMember( Castor::String const & p_name, uint32_t p_dimension )
 	{
 		m_writer << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
-		return Array< T >( &m_writer, p_name, p_dimension );
+		return Array< T >( &m_writer, m_name + cuT( "." ) + p_name, p_dimension );
 	}
 
 	//***********************************************************************************************

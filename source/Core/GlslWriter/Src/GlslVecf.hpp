@@ -35,7 +35,8 @@ namespace GLSL
 		inline ~Vec2();
 		inline Vec2 & operator=( Vec2 const & p_rhs );
 		template< typename T > inline Vec2 & operator=( T const & p_rhs );
-		template< typename T > inline Vec2 & operator[]( T const & p_rhs );
+		template< typename T > inline Float operator[]( T const & p_rhs );
+		inline Float operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( Vec2, Float, x );
 		GLSL_SWIZZLE( Vec2, Float, y );
@@ -55,7 +56,8 @@ namespace GLSL
 		inline ~Vec3();
 		inline Vec3 & operator=( Vec3 const & p_rhs );
 		template< typename T > inline Vec3 & operator=( T const & p_rhs );
-		template< typename T > inline Vec3 & operator[]( T const & p_rhs );
+		template< typename T > inline Float operator[]( T const & p_rhs );
+		inline Float operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( Vec3, Float, x );
 		GLSL_SWIZZLE( Vec3, Float, y );
@@ -97,7 +99,8 @@ namespace GLSL
 		inline ~Vec4();
 		inline Vec4 & operator=( Vec4 const & p_rhs );
 		template< typename T > inline Vec4 & operator=( T const & p_rhs );
-		template< typename T > inline Vec4 & operator[]( T const & p_rhs );
+		template< typename T > inline Float operator[]( T const & p_rhs );
+		inline Float operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( Vec4, Float, x );
 		GLSL_SWIZZLE( Vec4, Float, y );

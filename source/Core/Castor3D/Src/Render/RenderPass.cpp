@@ -178,20 +178,21 @@ namespace Castor3D
 
 	BillboardRenderNode RenderPass::CreateBillboardNode( Pass & p_pass
 														 , Pipeline & p_pipeline
-														 , BillboardListBase & p_billboard )
+														 , BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
 
 		return BillboardRenderNode
 		{
-			DoCreateSceneRenderNode( *p_billboard.GetScene(), p_pipeline ),
+			DoCreateSceneRenderNode( p_billboard.GetParentScene(), p_pipeline ),
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() ),
-			*p_billboard.GetParent(),
+			*p_billboard.GetNode(),
 			p_billboard,
 			*l_billboardBuffer,
-			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i )
+			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
+			*l_billboardBuffer->GetVariable( ShaderProgram::WindowSize, l_pt2i )
 		};
 	}
 
@@ -282,7 +283,6 @@ namespace Castor3D
 
 		// Outputs
 		auto vtx_worldSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
-		auto vtx_worldViewSpacePosition = l_writer.GetOutput< Vec3 >( cuT( "vtx_worldViewSpacePosition" ) );
 		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
@@ -302,14 +302,14 @@ namespace Castor3D
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning ) )
 			{
 				auto l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
-				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 0 )]] * weights1[Int( 0 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
+				l_mtxBoneTransform = c3d_mtxBones[bone_ids0[0_i]] * weights0[0_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[1_i]] * weights0[1_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[2_i]] * weights0[2_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[3_i]] * weights0[3_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[0_i]] * weights1[0_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[1_i]] * weights1[1_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[2_i]] * weights1[2_i];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[3_i]] * weights1[3_i];
 				l_mtxModel = c3d_mtxModel * l_mtxBoneTransform;
 			}
 			else if ( CheckFlag( p_programFlags, ProgramFlag::eInstantiation ) )
@@ -323,19 +323,18 @@ namespace Castor3D
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
 			{
-				auto l_time = l_writer.GetLocale( cuT( "l_time" ), Float( 1.0 ) - c3d_fTime );
+				auto l_time = l_writer.GetLocale( cuT( "l_time" ), 1.0_f - c3d_fTime );
 				l_v4Vertex = vec4( l_v4Vertex.xyz() * l_time + position2.xyz() * c3d_fTime, 1.0 );
 				l_v4Normal = vec4( l_v4Normal.xyz() * l_time + normal2.xyz() * c3d_fTime, 1.0 );
 				l_v4Tangent = vec4( l_v4Tangent.xyz() * l_time + tangent2.xyz() * c3d_fTime, 1.0 );
 				l_v4Bitangent = vec4( l_v4Bitangent.xyz() * l_time + bitangent2.xyz() * c3d_fTime, 1.0 );
-				l_v3Texture = l_v3Texture * l_writer.Paren( Float( 1.0 ) - c3d_fTime ) + texture2 * c3d_fTime;
+				l_v3Texture = l_v3Texture * l_writer.Paren( 1.0_f - c3d_fTime ) + texture2 * c3d_fTime;
 			}
 
 			vtx_texture = l_v3Texture;
 			l_v4Vertex = l_mtxModel * l_v4Vertex;
 			vtx_worldSpacePosition = l_v4Vertex.xyz();
 			l_v4Vertex = c3d_mtxView * l_v4Vertex;
-			vtx_worldViewSpacePosition = l_v4Vertex.xyz();
 
 			if ( p_invertNormals )
 			{

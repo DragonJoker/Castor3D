@@ -184,8 +184,7 @@ namespace Castor3D
 		DataType & m_data;
 	};
 	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
-	using BillboardListGSRenderNode = ObjectRenderNode< BillboardGSBase >;
-	using BillboardListInstRenderNode = ObjectRenderNode< BillboardInstBase >;
+	using BillboardListRenderNode = ObjectRenderNode< BillboardBase >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date
@@ -310,19 +309,21 @@ namespace Castor3D
 	\~french
 	\brief		Structure d'aide utilisée pour le dessin des billboards.
 	*/
-	struct BillboardGSRenderNode
-		: public BillboardListGSRenderNode
+	struct BillboardRenderNode
+		: public BillboardListRenderNode
 	{
-		BillboardGSRenderNode( SceneRenderNode && p_scene
-							   , PassRenderNode && p_pass
-							   , GeometryBuffers & p_buffers
-							   , SceneNode & p_sceneNode
-							   , BillboardGSBase & p_data
-							   , FrameVariableBuffer & p_billboardUbo
-							   , Point2iFrameVariable & p_dimensions )
-			: BillboardListGSRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
+		BillboardRenderNode( SceneRenderNode && p_scene
+							 , PassRenderNode && p_pass
+							 , GeometryBuffers & p_buffers
+							 , SceneNode & p_sceneNode
+							 , BillboardBase & p_data
+							 , FrameVariableBuffer & p_billboardUbo
+							 , Point2iFrameVariable & p_dimensions
+							 , Point2iFrameVariable & p_windowSize )
+			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
+			, m_windowSize{ p_windowSize }
 		{
 		}
 		/**
@@ -341,46 +342,9 @@ namespace Castor3D
 		//!\~english	The dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions.
 		Point2iFrameVariable & m_dimensions;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date
-	\~english
-	\brief		Helper structure used to render billboards.
-	\~french
-	\brief		Structure d'aide utilisée pour le dessin des billboards.
-	*/
-	struct BillboardInstRenderNode
-		: public BillboardListInstRenderNode
-	{
-		BillboardInstRenderNode( SceneRenderNode && p_scene
-								 , PassRenderNode && p_pass
-								 , GeometryBuffers & p_buffers
-								 , SceneNode & p_sceneNode
-								 , BillboardInstBase & p_data
-								 , FrameVariableBuffer & p_billboardUbo
-								 , Point2iFrameVariable & p_dimensions )
-			: BillboardListInstRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
-			, m_billboardUbo{ p_billboardUbo }
-			, m_dimensions{ p_dimensions }
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Binds the given pass to the render node.
-		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
-		 *\~french
-		 *\brief		Active la passe donnée pour le noeud de rendu.
-		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
-		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags );
-
-		//!\~english	The billboard UBO.
-		//!\~french		L'UBO de billboard.
-		FrameVariableBuffer & m_billboardUbo;
-		//!\~english	The dimensions uniform variable.
-		//!\~french		La variable uniforme des dimensions.
-		Point2iFrameVariable & m_dimensions;
+		//!\~english	The window dimensions uniform variable.
+		//!\~french		La variable uniforme des dimensions de la fenêtre.
+		Point2iFrameVariable & m_windowSize;
 	};
 
 	//!\~english	StaticGeometryRenderNode array.
@@ -389,12 +353,9 @@ namespace Castor3D
 	//!\~english	AnimatedGeometryRenderNode array.
 	//!\~french		Tableau de AnimatedGeometryRenderNode.
 	DECLARE_VECTOR( AnimatedGeometryRenderNode, AnimatedGeometryRenderNode );
-	//!\~english	BillboardGSRenderNode array.
-	//!\~french		Tableau de BillboardGSRenderNode.
-	DECLARE_VECTOR( BillboardGSRenderNode, BillboardGSRenderNode );
-	//!\~english	BillboardInstRenderNode array.
-	//!\~french		Tableau de BillboardInstRenderNode.
-	DECLARE_VECTOR( BillboardInstRenderNode, BillboardInstRenderNode );
+	//!\~english	BillboardRenderNode array.
+	//!\~french		Tableau de BillboardRenderNode.
+	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
 	//!\~english	Shader program sorted StaticGeometryRenderNodeArray map.
 	//!\~french		Map de StaticGeometryRenderNodeArray, triés par programme shader.
 	DECLARE_MAP( PipelineRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByPipeline );
@@ -403,11 +364,7 @@ namespace Castor3D
 	DECLARE_MAP( PipelineRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByPipeline );
 	//!\~english	Shader program sorted BillboardGSRenderNodeArray map.
 	//!\~french		Map de BillboardGSRenderNodeArray, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, BillboardGSRenderNodeArray, BillboardGSRenderNodesByPipeline );
-	//!\~english	Shader program sorted BillboardInstRenderNodeArray map.
-	//!\~french		Map de BillboardInstRenderNodeArray, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, BillboardInstRenderNodeArray, BillboardInstRenderNodesByPipeline );
-
+	DECLARE_MAP( PipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
 	//!\~english	Submesh sorted StaticGeometryRenderNodeArray (for instantiation).
 	//!\~french		Map StaticGeometryRenderNodeArray, triés par sous-maillage (pour l'instanciation).
 	DECLARE_MAP( SubmeshRPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
