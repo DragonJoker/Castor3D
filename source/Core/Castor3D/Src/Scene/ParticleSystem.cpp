@@ -108,14 +108,8 @@ namespace Castor3D
 		m_particlesBillboard->SetBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->SetDimensions( m_dimensions );
 		m_particlesBillboard->SetMaterial( m_material.lock() );
+		m_particlesBillboard->SetCenterOffset( m_centerOffset );
 		bool l_return = m_particlesBillboard->Initialise( uint32_t( m_particlesCount ) );
-
-		if ( l_return )
-		{
-			auto & l_vbo = m_particlesBillboard->GetVertexBuffer();
-			l_vbo.Resize( uint32_t( m_particlesCount ) * m_billboardInputs.stride() );
-			l_return = l_vbo.Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		}
 
 		if ( l_return )
 		{
@@ -256,7 +250,7 @@ namespace Castor3D
 			 || p_name == ShaderProgram::Position )
 		{
 			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_inputs.stride(), 1u } );
-			m_particlesBillboard->SetCenterOffset( m_inputs.stride() );
+			m_centerOffset = m_inputs.stride();
 		}
 		else
 		{

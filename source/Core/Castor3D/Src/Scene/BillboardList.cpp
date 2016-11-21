@@ -102,8 +102,14 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
+			m_count = p_count;
 			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-			m_vertexBuffer->Resize( uint32_t( p_count * l_stride ) );
+
+			if ( m_vertexBuffer->GetSize() < uint32_t( p_count * l_stride ) )
+			{
+				m_vertexBuffer->Resize( uint32_t( p_count * l_stride ) );
+			}
+
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
@@ -193,6 +199,7 @@ namespace Castor3D
 	void BillboardBase::SortByDistance( Point3r const & p_cameraPosition )
 	{
 		m_needUpdate = m_cameraPosition != p_cameraPosition;
+		m_cameraPosition = p_cameraPosition;
 	}
 
 	void BillboardBase::Update()
@@ -200,9 +207,9 @@ namespace Castor3D
 		if ( m_vertexBuffer->Bind() )
 		{
 			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-			auto l_buffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eReadWrite );
+			auto l_gpuBuffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eReadWrite );
 
-			if ( l_buffer )
+			if ( l_gpuBuffer )
 			{
 				struct Element
 				{
@@ -218,13 +225,18 @@ namespace Castor3D
 					}
 
 					Element( Element const & p_rhs )
+						: m_buffer{ p_rhs.m_buffer }
+						, m_position{ p_rhs.m_position }
+						, m_stride{ p_rhs.m_stride }
 					{
-						std::memcpy( m_buffer, p_rhs.m_buffer, m_stride );
 					}
 
 					Element( Element && p_rhs )
+						: m_buffer{ p_rhs.m_buffer }
+						, m_position{ std::move( p_rhs.m_position ) }
+						, m_stride{ p_rhs.m_stride }
 					{
-						std::memmove( m_buffer, p_rhs.m_buffer, m_stride );
+						p_rhs.m_buffer = nullptr;
 					}
 
 					Element & operator=( Element const & p_rhs )
@@ -235,12 +247,19 @@ namespace Castor3D
 
 					Element & operator=( Element && p_rhs )
 					{
-						std::memmove( m_buffer, p_rhs.m_buffer, m_stride );
+						if ( &p_rhs != this )
+						{
+							m_buffer = p_rhs.m_buffer;
+							m_position = std::move( p_rhs.m_position );
+							p_rhs.m_buffer = nullptr;
+						}
 						return *this;
 					}
 				};
 
+				ByteArray l_copy{ l_gpuBuffer, l_gpuBuffer + ( l_stride * m_count ) };
 				std::vector< Element > l_elements;
+				auto l_buffer = l_copy.data();
 				l_elements.reserve( m_count );
 
 				for ( uint32_t i = 0u; i < m_count; ++i )
@@ -251,10 +270,16 @@ namespace Castor3D
 
 				try
 				{
-					std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & lhs, Element const & rhs )
+					std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & p_a, Element const & p_b )
 					{
-						return point::distance_squared( lhs.m_position - m_cameraPosition ) > point::distance_squared( rhs.m_position - m_cameraPosition );
+						return point::distance_squared( p_a.m_position - m_cameraPosition ) > point::distance_squared( p_b.m_position - m_cameraPosition );
 					} );
+
+					for ( auto & l_element : l_elements )
+					{
+						std::memcpy( l_gpuBuffer, l_element.m_buffer, l_stride );
+						l_gpuBuffer += l_stride;
+					}
 				}
 				catch ( Exception const & p_exc )
 				{
@@ -312,6 +337,16 @@ namespace Castor3D
 
 	bool BillboardList::Initialise()
 	{
+		uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+		uint8_t * l_buffer = m_vertexBuffer->data();
+
+		for ( auto & l_pos : m_arrayPositions )
+		{
+			std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
+			l_buffer += l_stride;
+		}
+
 		return BillboardBase::Initialise( uint32_t( m_arrayPositions.size() ) );
 	}
 

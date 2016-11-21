@@ -278,6 +278,9 @@ namespace Castor3D
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		size_t m_particlesCount{ 0 };
+		//!\~english	The offset of the center attribute in the vertex buffer.
+		//!\~french		Le décalage de l'attribut du centre dans le tampon de sommets..
+		uint32_t m_centerOffset{ 0u };
 		//!\~english	The program used to update the transform buffer.
 		//!\~french		Le programme utilisé pour mettre à jour le tampon de transformation.
 		ShaderProgramSPtr m_updateProgram;
