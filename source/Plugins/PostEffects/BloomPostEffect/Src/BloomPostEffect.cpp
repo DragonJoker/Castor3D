@@ -77,9 +77,9 @@ namespace Bloom
 			{
 				plx_v4FragColor = vec4( texture( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 
-				plx_v4FragColor.x() = TERNARY( l_writer, Float, plx_v4FragColor.x() > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.y() = TERNARY( l_writer, Float, plx_v4FragColor.y() > 1.0, Float( 1 ), Float( 0 ) );
-				plx_v4FragColor.z() = TERNARY( l_writer, Float, plx_v4FragColor.z() > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.x() = TERNARY( l_writer, Float, plx_v4FragColor.x() > 1.0, 1.0_f, 0.0_f );
+				plx_v4FragColor.y() = TERNARY( l_writer, Float, plx_v4FragColor.y() > 1.0, 1.0_f, 0.0_f );
+				plx_v4FragColor.z() = TERNARY( l_writer, Float, plx_v4FragColor.z() > 1.0, 1.0_f, 0.0_f );
 			} );
 			return l_writer.Finalise();
 		}
@@ -102,8 +102,8 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( Float( 1.0f ), 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
-				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( Float( 0 ), 0 ) );
+				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( 1.0_f, 0 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
 				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
@@ -135,8 +135,8 @@ namespace Bloom
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( Float( 0.0f ), 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
-				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( Float( 0 ), 0 ) );
+				auto l_base = l_writer.GetLocale( cuT( "l_base" ), vec2( 0.0_f, 1 ) / textureSize( c3d_mapDiffuse, 0 ) );
+				auto l_offset = l_writer.GetLocale( cuT( "l_offset" ), vec2( 0.0_f, 0 ) );
 				plx_v4FragColor = c3d_fCoefficients[0] * texture( c3d_mapDiffuse, vtx_texture );
 
 				FOR( l_writer, Int, i, 1, cuT( "i < c3d_fCoefficientsCount" ), cuT( "++i" ) )
@@ -582,7 +582,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_hipass = GetHiPassProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_hiPassMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
@@ -607,7 +607,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurX = GetBlurXProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_blurXMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( BloomPostEffect::FilterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -638,7 +638,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_blurY = GetBlurYProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		m_blurYMapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
 		auto & l_filterConfig = l_program->CreateFrameVariableBuffer( FilterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -669,7 +669,7 @@ namespace Bloom
 		auto const l_vertex = GetVertexProgram( GetRenderSystem() );
 		auto const l_combine = GetCombineProgram( GetRenderSystem() );
 
-		ShaderProgramSPtr l_program = l_cache.GetNewProgram();
+		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass0, ShaderType::ePixel )->SetValue( 0 );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass1, ShaderType::ePixel )->SetValue( 1 );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( BloomPostEffect::CombineMapPass2, ShaderType::ePixel )->SetValue( 2 );

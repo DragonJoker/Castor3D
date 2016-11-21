@@ -21,7 +21,7 @@ namespace GLSL
 				if ( p_flags == 1 )
 				{
 					// Linear
-					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), m_writer.Paren( Float( 80 ) - l_dist ) / m_writer.Paren( Float( 80 ) - Float( 20 ) ) );
+					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), m_writer.Paren( 80.0_f - l_dist ) / m_writer.Paren( 80.0_f - 20.0_f ) );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
@@ -42,7 +42,7 @@ namespace GLSL
 				else if ( p_flags == 4 )
 				{
 					// Coloured
-					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), Float( 0.0f ) );
+					auto l_fogFactor = m_writer.GetLocale( cuT( "l_fogFactor" ), 0.0_f );
 					l_fogFactor = clamp( l_fogFactor, 0.0f, 1.0f );
 					m_writer.Return( vec4( mix( c3d_v4BackgroundColour, p_colour, l_fogFactor ).rgb(), p_colour.a() ) );
 				}
@@ -54,7 +54,7 @@ namespace GLSL
 					auto l_bi = m_writer.GetLocale( cuT( "l_bi" ), m_writer.Paren( c3d_v3CameraPosition.y() - p_y ) * 0.001 );// 0.001 is just a factor; change it if you want
 					auto l_extinction = m_writer.GetLocale( cuT( "l_ext" ), exp( -l_dist * l_be ) );
 					auto l_inscattering = m_writer.GetLocale( cuT( "l_insc" ), exp( -l_dist * l_bi ) );
-					m_writer.Return( m_writer.Paren( p_colour * l_extinction ) + m_writer.Paren( c3d_v4BackgroundColour * m_writer.Paren( Float( 1 ) - l_inscattering ) ) );
+					m_writer.Return( m_writer.Paren( p_colour * l_extinction ) + m_writer.Paren( c3d_v4BackgroundColour * m_writer.Paren( 1.0_f - l_inscattering ) ) );
 				}
 			};
 			m_writer.ImplementFunction< Vec4 >( cuT( "ApplyFog" ), l_apply

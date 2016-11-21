@@ -111,7 +111,7 @@ namespace GLSL
 												 , OutputComponents & p_output )
 	{
 		auto c3d_iLightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_iLightsCount" ) );
-		auto l_begin = m_writer.GetLocale( cuT( "l_begin" ), Int( 0 ) );
+		auto l_begin = m_writer.GetLocale( cuT( "l_begin" ), 0_i );
 		auto l_end = m_writer.GetLocale( cuT( "l_end" ), m_writer.Cast< Int >( c3d_iLightsCount.x() ) );
 
 		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
@@ -257,9 +257,9 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				auto l_factor = m_writer.GetLocale( cuT( "l_factor" ), p_index * Int( LightComponentsOffset ) );
-				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), Float( 0 ) );
-				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), Float( 0.0005f ) );
-				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), Float( 0.001f ) );
+				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), 0.0_f );
+				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), 0.0005_f );
+				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), 0.001_f );
 				l_lightReturn.m_v3Colour() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
 				l_offset += l_mult;
 				l_lightReturn.m_v3Intensity() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
@@ -297,8 +297,8 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				auto l_factor = m_writer.GetLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), Float( 0.0005f ) );
-				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), Float( 0.001f ) );
+				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), 0.0005_f );
+				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), 0.001_f );
 				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
 				l_lightReturn.m_v3Direction() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
 				l_offset += l_mult;
@@ -337,8 +337,8 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				auto l_factor = m_writer.GetLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), Float( 0.0005f ) );
-				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), Float( 0.001f ) );
+				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), 0.0005_f );
+				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), 0.001_f );
 				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
 				l_lightReturn.m_v3Position() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
 				l_offset += l_mult;
@@ -393,8 +393,8 @@ namespace GLSL
 			{
 				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				auto l_factor = m_writer.GetLocale( cuT( "l_factor" ), Float( LightComponentsOffset ) * p_index );
-				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), Float( 0.0005f ) );
-				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), Float( 0.001f ) );
+				auto l_decal = m_writer.GetLocale( cuT( "l_decal" ), 0.0005_f );
+				auto l_mult = m_writer.GetLocale( cuT( "l_mult" ), 0.001_f );
 				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), l_mult * Float( PointLightComponentsCount ) );
 				l_lightReturn.m_v3Direction() = normalize( texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb() );
 				l_offset += l_mult;
@@ -452,9 +452,9 @@ namespace GLSL
 		{
 			OutputComponents l_output
 			{
-				m_writer.GetLocale( cuT( "l_ambient" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_specular" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) )
+				m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 			};
 			DoComputeLight( p_light.m_lightBase(), p_worldEye, normalize( -p_light.m_v3Direction().xyz() ), p_shininess, p_fragmentIn, l_output );
 			p_output.m_v3Ambient += l_output.m_v3Ambient;
@@ -481,9 +481,9 @@ namespace GLSL
 		{
 			OutputComponents l_output
 			{
-				m_writer.GetLocale( cuT( "l_ambient" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_specular" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) )
+				m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 			};
 			auto l_vertexToLight = m_writer.GetLocale( cuT( "l_vertexToLight" ), p_fragmentIn.m_v3Vertex - p_light.m_v3Position().xyz() );
 			auto l_distance = m_writer.GetLocale( cuT( "l_distance" ), length( l_vertexToLight ) );
@@ -496,7 +496,7 @@ namespace GLSL
 			if ( m_shadows != ShadowType::eNone )
 			{
 				Shadow l_shadows{ m_writer };
-				auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( l_vertexToLight, p_fragmentIn.m_v3Normal, Int( 0 ) ) );
+				auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( l_vertexToLight, p_fragmentIn.m_v3Normal, 0_i ) );
 				p_output.m_v3Diffuse += l_shadow * l_output.m_v3Diffuse / l_attenuation;
 				p_output.m_v3Specular += l_shadow * l_output.m_v3Specular / l_attenuation;
 			}
@@ -526,9 +526,9 @@ namespace GLSL
 		{
 			OutputComponents l_output
 			{
-				m_writer.GetLocale( cuT( "l_ambient" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) ),
-				m_writer.GetLocale( cuT( "l_specular" ), vec3( Float( 0.0f ), 0.0f, 0.0f ) )
+				m_writer.GetLocale( cuT( "l_ambient" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_diffuse" ), vec3( 0.0_f, 0.0f, 0.0f ) ),
+				m_writer.GetLocale( cuT( "l_specular" ), vec3( 0.0_f, 0.0f, 0.0f ) )
 			};
 			auto l_lightToVertex = m_writer.GetLocale( cuT( "l_lightToVertex" ), normalize( p_fragmentIn.m_v3Vertex - p_light.m_lightBase().m_v3Position().xyz() ) );
 			auto l_spotFactor = m_writer.GetLocale( cuT( "l_spotFactor" ), dot( l_lightToVertex, p_light.m_v3Direction() ) );
@@ -537,13 +537,13 @@ namespace GLSL
 			{
 				ComputePointLight( p_light.m_lightBase(), p_worldEye, p_shininess, p_fragmentIn, l_output );
 
-				l_spotFactor = m_writer.Paren( Float( 1 ) - m_writer.Paren( Float( 1 ) - l_spotFactor ) * Float( 1 ) / m_writer.Paren( Float( 1 ) - p_light.m_fCutOff() ) );
+				l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_fCutOff() ) );
 				p_output.m_v3Ambient += l_output.m_v3Ambient * l_spotFactor;
 
 				if ( m_shadows != ShadowType::eNone )
 				{
 					Shadow l_shadows{ m_writer };
-					auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) ) );
+					auto l_shadow = m_writer.GetLocale( cuT( "l_shadow" ), l_shadows.ComputeShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, 0_i ) );
 					p_output.m_v3Diffuse += l_shadow * l_output.m_v3Diffuse * l_spotFactor;
 					p_output.m_v3Specular += l_shadow * l_output.m_v3Specular * l_spotFactor;
 				}
@@ -577,7 +577,7 @@ namespace GLSL
 			p_output.m_v3Ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().x();
 			auto l_diffuseFactor = m_writer.GetLocale( cuT( "l_diffuseFactor" ), dot( p_fragmentIn.m_v3Normal, -p_direction ) );
 
-			IF( m_writer, l_diffuseFactor > Float( 0 ) )
+			IF( m_writer, l_diffuseFactor > 0.0_f )
 			{
 				auto l_vertexToEye = m_writer.GetLocale( cuT( "l_vertexToEye" ), normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
 				auto l_lightReflect = m_writer.GetLocale( cuT( "l_lightReflect" ), normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );

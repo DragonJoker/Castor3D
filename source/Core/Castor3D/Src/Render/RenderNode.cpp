@@ -73,7 +73,7 @@ namespace Castor3D
 
 			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 			{
-				p_node.m_data.GetScene()->GetLightCache().UnbindLights();
+				p_node.m_data.GetParentScene().GetLightCache().UnbindLights();
 			}
 		}
 	}
@@ -203,7 +203,7 @@ namespace Castor3D
 	{
 		if ( CheckFlag( m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
 		{
-			m_data.GetScene()->GetLightCache().BindLights();
+			m_data.GetParentScene().GetLightCache().BindLights();
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );

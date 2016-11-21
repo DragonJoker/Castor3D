@@ -475,21 +475,7 @@ namespace Castor3D
 																			, l_eventInitialise
 																			, l_eventClean
 																			, l_mergeObject
-																			, []( auto p_element
-																				  , SceneNodeSPtr p_parent
-																				  , SceneNodeSPtr p_rootNode
-																				  , SceneNodeSPtr p_rootCameraNode
-																				  , SceneNodeSPtr p_rootObjectNode )
-																			{
-																				if ( p_parent )
-																				{
-																					p_parent->AttachObject( p_element->GetBillboards() );
-																				}
-																				else
-																				{
-																					p_rootObjectNode->AttachObject( p_element->GetBillboards() );
-																				}
-																			}
+																			, l_attachObject
 																			, [this]( ParticleSystemSPtr p_element )
 																			{
 																				p_element->Detach();

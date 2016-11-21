@@ -267,6 +267,8 @@ namespace Castor3D
 
 	// Billboard parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardParent )
+	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardSize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardPositions )
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardDimensions )

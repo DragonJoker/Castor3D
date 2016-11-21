@@ -22,7 +22,7 @@ namespace GuiCommon
 	}
 
 	BillboardTreeItemProperty::BillboardTreeItemProperty( bool p_editable, BillboardListSPtr p_billboard )
-		: TreeItemProperty( p_billboard->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_BILLBOARD )
+		: TreeItemProperty( p_billboard->GetParentScene().GetEngine(), p_editable, ePROPERTY_DATA_TYPE_BILLBOARD )
 		, m_billboard( p_billboard )
 	{
 		PROPERTY_CATEGORY_BILLBOARD = _( "Billboard: " );
@@ -73,13 +73,13 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_billboard]()
 		{
-			auto & l_cache = l_billboard->GetScene()->GetEngine()->GetMaterialCache();
+			auto & l_cache = l_billboard->GetParentScene().GetEngine()->GetMaterialCache();
 			MaterialSPtr l_material = l_cache.Find( p_name );
 
 			if ( l_material )
 			{
 				l_billboard->SetMaterial( l_material );
-				l_billboard->GetScene()->SetChanged();
+				l_billboard->GetParentScene().SetChanged();
 			}
 		} );
 	}

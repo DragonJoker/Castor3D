@@ -35,7 +35,8 @@ namespace GLSL
 		inline ~IVec2();
 		inline IVec2 & operator=( IVec2 const & p_rhs );
 		template< typename T > inline IVec2 & operator=( T const & p_rhs );
-		template< typename T > inline IVec2 & operator[]( T const & p_rhs );
+		template< typename T > inline Int operator[]( T const & p_rhs );
+		inline Int operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( IVec2, Int, x );
 		GLSL_SWIZZLE( IVec2, Int, y );
@@ -55,7 +56,8 @@ namespace GLSL
 		inline ~IVec3();
 		inline IVec3 & operator=( IVec3 const & p_rhs );
 		template< typename T > inline IVec3 & operator=( T const & p_rhs );
-		template< typename T > inline IVec3 & operator[]( T const & p_rhs );
+		template< typename T > inline Int operator[]( T const & p_rhs );
+		inline Int operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( IVec3, Int, x );
 		GLSL_SWIZZLE( IVec3, Int, y );
@@ -97,7 +99,8 @@ namespace GLSL
 		inline ~IVec4();
 		inline IVec4 & operator=( IVec4 const & p_rhs );
 		template< typename T > inline IVec4 & operator=( T const & p_rhs );
-		template< typename T > inline IVec4 & operator[]( T const & p_rhs );
+		template< typename T > inline Int operator[]( T const & p_rhs );
+		inline Int operator[]( int const & p_rhs );
 
 		GLSL_FIRST_SWIZZLE( IVec4, Int, x );
 		GLSL_SWIZZLE( IVec4, Int, y );

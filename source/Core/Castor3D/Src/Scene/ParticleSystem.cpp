@@ -41,7 +41,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs }( *p_obj.GetBillboards(), p_file );
+			l_return = MovableObject::TextWriter{ m_tabs }( p_obj, p_file );
 		}
 
 		if ( l_return )
@@ -88,9 +88,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	ParticleSystem::ParticleSystem( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count )
-		: Named{ p_name }
-		, OwnedBy< Scene >{ p_scene }
-		, m_parentNode{ p_parent }
+		: MovableObject{ p_name, p_scene, MovableType::eParticleEmitter, p_parent }
 		, m_particlesCount{ p_count }
 		, m_randomTexture{ *p_scene.GetEngine() }
 	{
@@ -103,17 +101,15 @@ namespace Castor3D
 	bool ParticleSystem::Initialise()
 	{
 		auto & l_engine = *GetScene()->GetEngine();
-		m_particlesBillboard = std::make_unique< BillboardListBase >( GetName(), *GetScene(), m_parentNode, std::make_shared< VertexBuffer >( l_engine, m_inputs ) );
+		m_particlesBillboard = std::make_unique< BillboardBase >(
+			*GetScene(),
+			GetParent(),
+			std::make_shared< VertexBuffer >( l_engine, m_billboardInputs ) );
+		m_particlesBillboard->SetBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->SetDimensions( m_dimensions );
 		m_particlesBillboard->SetMaterial( m_material.lock() );
-		bool l_return = m_particlesBillboard->Initialise();
-
-		if ( l_return )
-		{
-			auto & l_vbo = m_particlesBillboard->GetVertexBuffer();
-			l_vbo.Resize( uint32_t( m_particlesCount ) * m_inputs.stride() );
-			l_return = l_vbo.Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		}
+		m_particlesBillboard->SetCenterOffset( m_centerOffset );
+		bool l_return = m_particlesBillboard->Initialise( uint32_t( m_particlesCount ) );
 
 		if ( l_return )
 		{
@@ -246,34 +242,21 @@ namespace Castor3D
 		return m_dimensions;
 	}
 
-	void ParticleSystem::Detach()
-	{
-		m_parentNode = nullptr;
-
-		if ( m_particlesBillboard )
-		{
-			m_particlesBillboard->Detach();
-		}
-	}
-
-	void ParticleSystem::AttachTo( SceneNodeSPtr p_node )
-	{
-		m_parentNode = p_node;
-
-		if ( m_particlesBillboard )
-		{
-			m_particlesBillboard->AttachTo( p_node );
-		}
-	}
-
-	SceneNodeSPtr ParticleSystem::GetParent()const
-	{
-		return m_parentNode;
-	}
-
 	void ParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
 	{
 		m_computed.push_back( BufferElementDeclaration{ cuT( "out_" ) + p_name, 0u, p_type, m_computed.stride() } );
+
+		if ( p_name == cuT( "center" )
+			 || p_name == ShaderProgram::Position )
+		{
+			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_inputs.stride(), 1u } );
+			m_centerOffset = m_inputs.stride();
+		}
+		else
+		{
+			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride(), 1u } );
+		}
+
 		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}

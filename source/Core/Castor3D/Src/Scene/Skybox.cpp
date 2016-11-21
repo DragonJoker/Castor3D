@@ -230,7 +230,7 @@ namespace Castor3D
 
 	ShaderProgram & Skybox::DoInitialiseShader()
 	{
-		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
+		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 
 		String l_vtx;
 		{

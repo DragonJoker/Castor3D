@@ -98,6 +98,7 @@ namespace Castor3D
 		eGeometry,
 		eLight,
 		eBillboard,
+		eParticleEmitter,
 		CASTOR_SCOPED_ENUM_BOUNDS( eCamera )
 	};
 	/*!
@@ -481,8 +482,6 @@ namespace Castor3D
 	class FrameListener;
 	class Version;
 	class Parameters;
-	class BillboardListBase;
-	class BillboardList;
 	class RenderLoop;
 	class RenderLoopAsync;
 	class RenderLoopSync;
@@ -511,8 +510,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameEvent );
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
-	DECLARE_SMART_PTR( BillboardList );
-	DECLARE_SMART_PTR( BillboardListBase );
 	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );

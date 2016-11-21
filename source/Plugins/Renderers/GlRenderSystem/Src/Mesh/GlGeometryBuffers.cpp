@@ -143,7 +143,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, BufferDeclaration const & p_declaration )
+	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_divisor, BufferDeclaration const & p_declaration )
 	{
 		bool l_return = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
@@ -153,55 +153,55 @@ namespace GlRender
 		switch ( p_element.m_dataType )
 		{
 		case ElementType::eFloat:
-			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eVec2:
-			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eVec3:
-			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eVec4:
-			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4r >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eColour:
-			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eInt:
-			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eIVec2:
-			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eIVec3:
-			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eIVec4:
-			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4i >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eUInt:
-			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec1ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eUIVec2:
-			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec2ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eUIVec3:
-			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec3ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eUIVec4:
-			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name );
+			l_attribute = std::make_shared< GlAttributeVec4ui >( GetOpenGl(), m_program, l_stride, p_element.m_name, p_divisor );
 			break;
 
 		case ElementType::eMat2:
@@ -237,7 +237,7 @@ namespace GlRender
 
 			if ( l_it != p_declaration.end() )
 			{
-				auto l_attribute = DoCreateAttribute( l_element, l_it->m_offset, p_declaration );
+				auto l_attribute = DoCreateAttribute( l_element, l_it->m_offset, l_it->m_divisor, p_declaration );
 
 				if ( l_attribute )
 				{

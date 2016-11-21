@@ -10,8 +10,15 @@ namespace GLSL
 			{ UboLayout::eShared, cuT( "shared" ) },
 			{ UboLayout::ePacked, cuT( "packed" ) },
 		};
-		REQUIRE( !m_strIn.empty() );
-		return m_strUboLayout + cuT( "( " ) + LayoutName[p_layout] + cuT( " ) " );
+
+		Castor::String l_return;
+
+		if ( !m_strUboLayout.empty() )
+		{
+			l_return =  m_strUboLayout + cuT( "( " ) + LayoutName[p_layout] + cuT( " ) " );
+		}
+
+		return l_return;
 	}
 	inline Castor::String const & KeywordsBase::GetVersion()const
 	{

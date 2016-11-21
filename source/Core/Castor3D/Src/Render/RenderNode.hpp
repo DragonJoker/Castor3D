@@ -165,20 +165,26 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
+		 *\~english
+		 *\brief		Render function.
+		 *\~french
+		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render( DepthMapArray const & p_depthMaps )override;
+		C3D_API void Render( DepthMapArray const & p_depthMaps );
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
 		 */
-		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const override;
+		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const;
 
 		//!\~english	The object's data.
 		//!\~french		Les données de l'objet.
 		DataType & m_data;
 	};
 	using SubmeshRenderNode = ObjectRenderNode< Submesh >;
-	using BillboardListRenderNode = ObjectRenderNode< BillboardListBase >;
+	using BillboardListRenderNode = ObjectRenderNode< BillboardBase >;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date
@@ -201,13 +207,19 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::Render
+		 *\~english
+		 *\brief		Render function.
+		 *\~french
+		 *\brief		Fonction de rendu.
 		 */
-		C3D_API void Render( DepthMapArray const & p_depthMaps )override;
+		C3D_API void Render( DepthMapArray const & p_depthMaps );
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::UnbindPass
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
 		 */
-		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const override;
+		C3D_API void UnbindPass( DepthMapArray const & p_depthMaps )const;
 
 		//!\~english	The geometry instanciating the submesh.
 		//!\~french		La géométrie instanciant le submesh.
@@ -234,9 +246,14 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags );
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -265,9 +282,14 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags );
 
 		//!\~english	The animated skeleton.
 		//!\~french		Le squelette animé.
@@ -294,18 +316,25 @@ namespace Castor3D
 							 , PassRenderNode && p_pass
 							 , GeometryBuffers & p_buffers
 							 , SceneNode & p_sceneNode
-							 , BillboardListBase & p_data
+							 , BillboardBase & p_data
 							 , FrameVariableBuffer & p_billboardUbo
-							 , Point2iFrameVariable & p_dimensions )
+							 , Point2iFrameVariable & p_dimensions
+							 , Point2iFrameVariable & p_windowSize )
 			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
+			, m_windowSize{ p_windowSize }
 		{
 		}
 		/**
-		 *\copydoc		Castor3D::ObjectRenderNodeBase::BindPass
+		 *\~english
+		 *\brief		Binds the given pass to the render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée pour le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )override;
+		C3D_API void BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags );
 
 		//!\~english	The billboard UBO.
 		//!\~french		L'UBO de billboard.
@@ -313,6 +342,9 @@ namespace Castor3D
 		//!\~english	The dimensions uniform variable.
 		//!\~french		La variable uniforme des dimensions.
 		Point2iFrameVariable & m_dimensions;
+		//!\~english	The window dimensions uniform variable.
+		//!\~french		La variable uniforme des dimensions de la fenêtre.
+		Point2iFrameVariable & m_windowSize;
 	};
 
 	//!\~english	StaticGeometryRenderNode array.
@@ -324,16 +356,15 @@ namespace Castor3D
 	//!\~english	BillboardRenderNode array.
 	//!\~french		Tableau de BillboardRenderNode.
 	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
-	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
-	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
+	//!\~english	Shader program sorted StaticGeometryRenderNodeArray map.
+	//!\~french		Map de StaticGeometryRenderNodeArray, triés par programme shader.
 	DECLARE_MAP( PipelineRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByPipeline );
-	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
-	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
+	//!\~english	Shader program sorted AnimatedGeometryRenderNodeArray map.
+	//!\~french		Map de AnimatedGeometryRenderNodeArray, triés par programme shader.
 	DECLARE_MAP( PipelineRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByPipeline );
-	//!\~english	Shader program sorted BillboardRenderNodesMap map.
-	//!\~french		Map de BillboardRenderNodesMap, triés par programme shader.
+	//!\~english	Shader program sorted BillboardGSRenderNodeArray map.
+	//!\~french		Map de BillboardGSRenderNodeArray, triés par programme shader.
 	DECLARE_MAP( PipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
-
 	//!\~english	Submesh sorted StaticGeometryRenderNodeArray (for instantiation).
 	//!\~french		Map StaticGeometryRenderNodeArray, triés par sous-maillage (pour l'instanciation).
 	DECLARE_MAP( SubmeshRPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );

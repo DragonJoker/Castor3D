@@ -210,7 +210,7 @@ namespace CastorViewer
 					}
 					else
 					{
-						wxMessageBox( _( "Can't initialise the render window." ) );
+						wxMessageBox( _( "Can't initialise the render window.\nLook into CastorViewer.log for more details" ) );
 					}
 
 					if ( CASTOR3D_THREADED )

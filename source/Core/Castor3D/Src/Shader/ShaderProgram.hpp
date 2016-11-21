@@ -724,6 +724,9 @@ namespace Castor3D
 		//!\~english	Name of the billboard dimensions frame variable.
 		//!\~french		Nom de la frame variable contenant les dimensions du billboard.
 		C3D_API static const Castor::String Dimensions;
+		//!\~english	Name of the window dimensions frame variable.
+		//!\~french		Nom de la frame variable contenant les dimensions de la fenêtre.
+		C3D_API static const Castor::String WindowSize;
 
 		//@}
 		/**@name Textures */

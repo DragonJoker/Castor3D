@@ -105,12 +105,8 @@ namespace GlRender
 			}
 			else
 			{
-				if ( l_mainContext )
-				{
-					wglShareLists( m_hContext, l_mainContext->GetImpl().GetContext() );
-				}
-
-				m_initialised = true;
+				GetOpenGl().DeleteContext( m_hContext );
+				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
 			}
 		}
 		else if ( !l_isMain )
@@ -379,15 +375,15 @@ namespace GlRender
 				}
 				else
 				{
-					Logger::LogError( StringStream() << cuT( "GlContext::Create - Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." ) );
+					StringStream l_error;
+					l_error << cuT( "Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." );
+					CASTOR_EXCEPTION( l_error.str() );
 				}
 			}
 			else
 			{
-				//It's not possible to make a GL 3.x and later context. Use the old style context (GL 2.1 and before)
-				l_renderSystem->SetOpenGlVersion( 2, 1 );
-				Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL >= 3.x context, since glCreateContextAttribs is not supported." ) );
-				l_return = true;
+				GetOpenGl().DeleteContext( m_hContext );
+				CASTOR_EXCEPTION( cuT( "Can't create OpenGL >= 3.x context, since glCreateContextAttribs function is not supported." ) );
 			}
 		}
 		catch ( ... )

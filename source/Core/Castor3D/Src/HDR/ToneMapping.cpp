@@ -40,7 +40,7 @@ namespace Castor3D
 
 	bool ToneMapping::Initialise()
 	{
-		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram();
+		auto l_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
 		bool l_return = l_program != nullptr;
 
 		if ( l_return )

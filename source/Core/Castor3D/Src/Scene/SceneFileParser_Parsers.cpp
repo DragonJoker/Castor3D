@@ -1290,7 +1290,7 @@ namespace Castor3D
 		}
 		else
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram();
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
@@ -2699,7 +2699,7 @@ namespace Castor3D
 
 		if ( l_parsingContext->pPass )
 		{
-			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram();
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 		else
 		{
@@ -3925,6 +3925,50 @@ namespace Castor3D
 		else
 		{
 			PARSING_ERROR( cuT( "Geometry not initialised." ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardType )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pBillboards )
+		{
+			PARSING_ERROR( cuT( "Billboard not initialised" ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+
+			l_parsingContext->pBillboards->SetBillboardType( BillboardType( l_value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardSize )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pBillboards )
+		{
+			PARSING_ERROR( cuT( "Billboard not initialised" ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+
+			l_parsingContext->pBillboards->SetBillboardSize( BillboardSize( l_value ) );
 		}
 	}
 	END_ATTRIBUTE()

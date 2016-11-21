@@ -162,6 +162,12 @@ namespace Castor3D
 		//!\~english	Shader supporting lighting.
 		//\~french		Shader supportant les éclairages.
 		eLighting = 0x0100,
+		//!\~english	Shader for spherical billboards.
+		//\~french		Shader pour les billboards sphériques.
+		eSpherical = 0x0200,
+		//!\~english	Shader for fixed size billboards.
+		//\~french		Shader pour les billboards à dimensions fixes.
+		eFixedSize = 0x0400,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -551,6 +557,7 @@ namespace Castor3D
 #define UBO_BILLBOARD( Writer )\
 	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\
 	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( ShaderProgram::Dimensions );\
+	auto c3d_v2iWindowSize = l_billboard.GetUniform< IVec2 >( ShaderProgram::WindowSize );\
 	l_billboard.End()
 
 #define UBO_ANIMATION( Writer, Flags )\
@@ -558,6 +565,16 @@ namespace Castor3D
 	auto c3d_mtxBones = l_animation.GetUniform< GLSL::Mat4 >( ShaderProgram::Bones, 400, CheckFlag( Flags, ProgramFlag::eSkinning ) );\
 	auto c3d_fTime = l_animation.GetUniform< GLSL::Float >( ShaderProgram::Time, CheckFlag( Flags, ProgramFlag::eMorphing ) );\
 	l_animation.End()
+
+#define STRUCT_VTX_OUTPUT( Writer )\
+	GLSL::Struct VtxOutput{ l_writer, cuT( "VtxOutput" ) };\
+	auto vtx_worldSpacePosition = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_worldSpacePosition" ) );\
+	auto vtx_normal = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_normal" ) );\
+	auto vtx_tangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_tangent" ) );\
+	auto vtx_bitangent = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_bitangent" ) );\
+	auto vtx_texture = VtxOutput.GetMember< GLSL::Vec3 >( cuT( "vtx_texture" ) );\
+	auto vtx_instance = VtxOutput.GetMember< GLSL::Int >( cuT( "vtx_instance" ) );\
+	VtxOutput.End()
 }
 
 #endif

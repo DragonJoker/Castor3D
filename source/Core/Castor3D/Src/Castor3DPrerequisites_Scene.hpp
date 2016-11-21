@@ -28,13 +28,69 @@ namespace Castor3D
 	/**@name Scene */
 	//@{
 
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		31/05/2016
+	\~english
+	\brief		Fog types enumeration.
+	\~french
+	\brief		Enumération des types de brouillard.
+	*/
 	enum class FogType
 	{
+		//!\~english	No fog.
+		//!\~french		Pas de brouillard
 		eDisabled,
+		//!\~english	Fog intensity increases linearly with distance to camera.
+		//!\~french		L'intensité du brouillard augmente linéairement avec la distance à la caméra.
 		eLinear,
+		//!\~english	Fog intensity increases exponentially with distance to camera.
+		//!\~french		L'intensité du brouillard augmente exponentiellement avec la distance à la caméra.
+		//!\~french		
 		eExponential,
+		//!\~english	Fog intensity increases even more with distance to camera.
+		//!\~french		L'intensité du brouillard augmente encore plus avec la distance à la caméra.
 		eSquaredExponential,
 		CASTOR_SCOPED_ENUM_BOUNDS( eDisabled )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		16/11/2016
+	\~english
+	\brief		Billboard rendering types enumeration.
+	\~french
+	\brief		Enumération des types de rendu des billboards.
+	*/
+	enum class BillboardType
+	{
+		//!\~english	Billboards always face the camera.
+		//!\~french		Les billboards font toujours face à la caméra.
+		eSpherical,
+		//!\~english	Billboards rotate only on Y axis.
+		//!\~french		Les billboards tournent uniquement sur l'axe Y.
+		eCylindrical,
+		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		16/11/2016
+	\~english
+	\brief		Billboard sizing types enumeration.
+	\~french
+	\brief		Enumération des types de dimensions des billboards.
+	*/
+	enum class BillboardSize
+	{
+		//!\~english	Billboards size changes with camera position.
+		//!\~french		Les dimensions des billboards changent en fonction de la position de la caméra.
+		eDynamic,
+		//!\~english	Billboards size doesn't change.
+		//!\~french		Les dimensions des billboards ne changent pas.
+		eFixed,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDynamic )
 	};
 
 	class Scene;
@@ -56,6 +112,8 @@ namespace Castor3D
 	class SkeletonAnimationInstanceBone;
 	class MeshAnimationInstance;
 	class MeshAnimationInstanceSubmesh;
+	class BillboardBase;
+	class BillboardList;
 
 	DECLARE_SMART_PTR( SceneNode );
 	DECLARE_SMART_PTR( Scene );
@@ -73,6 +131,8 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceNode );
 	DECLARE_SMART_PTR( SkeletonAnimationInstanceBone );
 	DECLARE_SMART_PTR( MeshAnimationInstance );
+	DECLARE_SMART_PTR( BillboardBase );
+	DECLARE_SMART_PTR( BillboardList );
 
 	//! SceneNode pointer array.
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );

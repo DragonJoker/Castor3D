@@ -242,6 +242,7 @@ namespace Castor3D
 
 		if ( DoBind( 0u ) )
 		{
+			REQUIRE( m_storage );
 			l_return = m_storage->Lock( p_lock );
 		}
 
@@ -250,17 +251,20 @@ namespace Castor3D
 
 	void TextureLayout::Unlock( bool p_modified )
 	{
+		REQUIRE( m_storage );
 		m_storage->Unlock( p_modified );
 		DoUnbind( 0u );
 	}
 
 	uint8_t * TextureLayout::Lock( AccessType p_lock, uint32_t p_index )
 	{
+		REQUIRE( m_storage );
 		return m_storage->Lock( p_lock, p_index );
 	}
 
 	void TextureLayout::Unlock( bool p_modified, uint32_t p_index )
 	{
+		REQUIRE( m_storage );
 		m_storage->Unlock( p_modified, p_index );
 	}
 
