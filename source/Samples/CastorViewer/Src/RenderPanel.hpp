@@ -57,7 +57,6 @@ namespace CastorViewer
 
 	class RenderPanel
 		: public wxPanel
-		, public Castor::AlignedFrom< Castor::Point3r >
 	{
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );

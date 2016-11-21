@@ -250,6 +250,8 @@ namespace Castor3D
 		UIntStrMap m_fogTypes;
 		UIntStrMap m_mapMeshTypes;
 		UIntStrMap m_mapComparisonModes;
+		UIntStrMap m_mapBillboardTypes;
+		UIntStrMap m_mapBillboardSizes;
 	};
 }
 

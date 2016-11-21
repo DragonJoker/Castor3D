@@ -334,13 +334,22 @@ namespace Castor3D
 					vtx_tangent = l_up;
 					vtx_bitangent = l_right;
 
-					vtx_worldSpacePosition = center
-						+ l_right * position.x() * c3d_v2iDimensions.x()
-						+ l_up * position.y() * c3d_v2iDimensions.y();
+					auto l_width = l_writer.GetLocale( cuT( "l_width" ), c3d_v2iDimensions.x() );
+					auto l_height = l_writer.GetLocale( cuT( "l_height" ), c3d_v2iDimensions.y() );
 
-					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
+					if ( CheckFlag( p_programFlags, ProgramFlag::eFixedSize ) )
+					{
+						l_width = c3d_v2iDimensions.x() / c3d_v2iWindowSize.x();
+						l_height = c3d_v2iDimensions.y() / c3d_v2iWindowSize.y();
+					}
+
+					vtx_worldSpacePosition = center
+						+ l_right * position.x() * l_width
+						+ l_up * position.y() * l_height;
+
 					vtx_texture = vec3( texture, 0.0 );
 					vtx_instance = gl_InstanceID;
+					auto l_wvPosition = l_writer.GetLocale( cuT( "l_wvPosition" ), l_writer.Paren( c3d_mtxView * vec4( vtx_worldSpacePosition, 1.0 ) ).xyz() );
 					gl_Position = c3d_mtxProjection * vec4( l_wvPosition, 1.0 );
 				} );
 

@@ -48,7 +48,7 @@ namespace GlRender
 		bool l_return = false;
 		String l_loadedSource;
 
-		for ( size_t i = size_t( ShaderModel::eModel5 ); i >= size_t( ShaderModel::eModel1 ) && l_loadedSource.empty(); i-- )
+		for ( size_t i = size_t( ShaderModel::eModel5 ); i >= size_t( ShaderModel::eModel1 ) && l_loadedSource.empty() && i < m_arraySources.size(); i-- )
 		{
 			if ( m_parent->GetRenderSystem()->GetGpuInformations().CheckSupport( ShaderModel( i ) ) )
 			{
@@ -116,7 +116,7 @@ namespace GlRender
 				else
 				{
 					m_status = ShaderStatus::eError;
-					FAILURE( "Shader is not compiled." );
+					//FAILURE( "Shader is not compiled." );
 				}
 
 				l_return = DoCheckErrors();

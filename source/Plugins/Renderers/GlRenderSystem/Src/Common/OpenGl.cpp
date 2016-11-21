@@ -1222,7 +1222,7 @@ namespace GlRender
 
 			if ( l_error )
 			{
-				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 13 };
+				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 10 };
 				Logger::LogError( l_toLog );
 			}
 			else
@@ -1303,7 +1303,7 @@ namespace GlRender
 
 		if ( l_error )
 		{
-			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 5 };
+			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 4 };
 			Logger::LogError( l_toLog );
 		}
 		else

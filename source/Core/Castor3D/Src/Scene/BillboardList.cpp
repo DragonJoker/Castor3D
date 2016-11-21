@@ -17,6 +17,8 @@
 #include "Shader/PointFrameVariable.hpp"
 #include "Shader/ShaderProgram.hpp"
 
+#include <Design/ArrayView.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -82,7 +84,6 @@ namespace Castor3D
 		: m_vertexBuffer{ p_vertexBuffer }
 		, m_scene{ p_scene }
 		, m_node{ p_node }
-		, m_billboardType{ BillboardType::eCylindrical }
 		, m_quad( std::make_unique< VertexBuffer >( *p_scene.GetEngine(), BufferDeclaration
 		{
 			{
@@ -154,6 +155,12 @@ namespace Castor3D
 
 	void BillboardBase::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
+		if ( m_needUpdate )
+		{
+			Update();
+			m_needUpdate = false;
+		}
+
 		p_geometryBuffers.DrawInstanced( 4, 0u, m_count );
 	}
 
@@ -185,11 +192,42 @@ namespace Castor3D
 
 	void BillboardBase::SortByDistance( Point3r const & p_cameraPosition )
 	{
+		m_needUpdate = m_cameraPosition != p_cameraPosition;
 	}
 
-	void BillboardBase::Update( Point3rArray const & p_positions )
+	void BillboardBase::Update()
 	{
-		uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+		if ( m_vertexBuffer->Bind() )
+		{
+			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
+			auto l_buffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eReadWrite );
+
+			if ( l_buffer )
+			{
+				struct Sorter
+				{
+					bool operator()( uint8_t * lhs, uint8_t * rhs )
+					{
+						return point::distance_squared( Coords< float, 3 >( reinterpret_cast< float * >( lhs + m_centerOffset ) ) - m_cameraPosition ) > point::distance_squared( Coords< float, 3 >( reinterpret_cast< float * >( rhs + m_centerOffset ) ) - m_cameraPosition );
+					}
+					Castor::Point3r m_cameraPosition;
+					uint32_t m_centerOffset;
+				};
+				try
+				{
+					std::sort( , , Sorter{ m_cameraPosition, m_centerOffset } );
+				}
+				catch ( Exception const & p_exc )
+				{
+					Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+				}
+
+				m_vertexBuffer->Unlock();
+			}
+
+			m_vertexBuffer->Unbind();
+		}
+
 		m_vertexBuffer->Resize( uint32_t( p_positions.size() * l_stride ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
 
@@ -211,9 +249,10 @@ namespace Castor3D
 		{
 			AddFlag( l_return, ProgramFlag::eSpherical );
 		}
-		else
+
+		if ( m_billboardSize == BillboardSize::eFixed )
 		{
-			AddFlag( l_return, ProgramFlag::eCylindrical );
+			AddFlag( l_return, ProgramFlag::eFixedSize );
 		}
 
 		return l_return;
@@ -247,39 +286,6 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		return BillboardBase::Initialise( uint32_t( m_arrayPositions.size() ) );
-	}
-
-	void BillboardList::Draw( GeometryBuffers const & p_geometryBuffers )
-	{
-		if ( m_needUpdate )
-		{
-			Update( m_arrayPositions );
-			m_needUpdate = false;
-		}
-
-		BillboardBase::Draw( p_geometryBuffers );
-	}
-
-	void BillboardList::SortByDistance( Point3r const & p_cameraPosition )
-	{
-		try
-		{
-			if ( m_cameraPosition != p_cameraPosition )
-			{
-				m_cameraPosition = p_cameraPosition;
-
-				std::sort( std::begin( m_arrayPositions ), std::end( m_arrayPositions ), [&p_cameraPosition]( Point3r const & p_a, Point3r const & p_b )
-				{
-					return point::distance_squared( p_a - p_cameraPosition ) > point::distance_squared( p_b - p_cameraPosition );
-				} );
-
-				m_needUpdate = true;
-			}
-		}
-		catch ( Exception const & p_exc )
-		{
-			Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
-		}
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )

@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\brief		Dessine les billboards.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
-		C3D_API virtual void Draw( GeometryBuffers const & p_geometryBuffers );
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GeometryBuffers for given program.
@@ -111,16 +111,14 @@ namespace Castor3D
 		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
 		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
 		 */
-		C3D_API virtual void SortByDistance( Castor::Point3r const & p_cameraPosition );
+		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.
-		 *\param[in]	p_positions	The positions to put in the buffer.
 		 *\~french
 		 *\brief		Met à jour le tampon de sommets.
-		 *\param[in]	p_positions	Les positions à mettre dans le tampon.
 		 */
-		C3D_API void Update( Castor::Point3rArray const & p_positions );
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\return		The program flags.
@@ -171,6 +169,18 @@ namespace Castor3D
 		inline Castor::Size const & GetDimensions()const
 		{
 			return m_dimensions;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the offset of the center attribute in the vertex buffer.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Definit le décalage de l'attribut du centre dans le tampon de sommets.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetCenterOffset( uint32_t p_value )
+		{
+			m_centerOffset = p_value;
 		}
 		/**
 		 *\~english
@@ -288,6 +298,28 @@ namespace Castor3D
 		{
 			m_billboardType = p_value;
 		}
+		/**
+		 *\~english
+		 *\return		The billboard dimensions type.
+		 *\~french
+		 *\return		Le type des dimensions de billboard.
+		 */
+		inline BillboardSize GetBillboardSize()const
+		{
+			return m_billboardSize;
+		}
+		/**
+		 *\~english
+		 *\return		Sets the billboard dimensions type.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\return		Définit le type des dimensions de billboard.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetBillboardSize( BillboardSize p_value )
+		{
+			m_billboardSize = p_value;
+		}
 
 	protected:
 		//!\~english	The parent scene.
@@ -302,6 +334,9 @@ namespace Castor3D
 		//!\~english	The billboards dimensions.
 		//!\~french		Les dimensions des billboards.
 		Castor::Size m_dimensions;
+		//!\~english	The transformed camera position at last sort.
+		//!\~french		La position transformée de la caméra au dernier tri.
+		Castor::Point3r m_cameraPosition;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		VertexBufferSPtr m_vertexBuffer;
@@ -311,15 +346,24 @@ namespace Castor3D
 		//!\~english	The GeometryBuffers with which this billboards list is compatible.
 		//!\~french		Les GeometryBuffers avec lesquel ce billboards list est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
+		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
+		bool m_needUpdate{ true };
 		//!\~english	Tells if the billboard is initialised.
 		//!\~french		Dit si le billboard est initialisé.
 		bool m_initialised{ false };
 		//!\~english	The elements count.
 		//!\~french		Le nombre d'éléments.
 		uint32_t m_count{ 0u };
+		//!\~english	The offset of the center attribute in the vertex buffer.
+		//!\~french		Le décalage de l'attribut du centre dans le tampon de sommets..
+		uint32_t m_centerOffset{ 0u };
 		//!\~english	The billboard type.
 		//!\~french		Le type de billboard.
-		BillboardType m_billboardType;
+		BillboardType m_billboardType{ BillboardType::eCylindrical };
+		//!\~english	The billboard dimensions type.
+		//!\~french		Le type de dimensions de billboard.
+		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -411,15 +455,6 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
 		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers )override;
-		/**
-		 *\~english
-		 *\brief		Sorts the points from farthest to nearest from the camera.
-		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
-		 *\~french
-		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
-		 */
-		C3D_API void SortByDistance( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list
@@ -536,9 +571,6 @@ namespace Castor3D
 		//!\~english	The positions list.
 		//!\~french		La liste des positions.
 		Castor::Point3rArray m_arrayPositions;
-		//!\~english	The transformed camera position at last sort.
-		//!\~french		La position transformée de la caméra au dernier tri.
-		Castor::Point3r m_cameraPosition;
 		//!\~english	The material.
 		//!\~french		Le matériau.
 		MaterialWPtr m_material;
@@ -548,9 +580,6 @@ namespace Castor3D
 		//!\~english	The billboard type.
 		//!\~french		Le type de billboard.
 		BillboardType m_billboardType;
-		//!\~english	Tells the positions have changed and needs to be sent again to GPU.
-		//!\~french		Dit que les positions ont change et doivent etre renvoyees au GPU.
-		bool m_needUpdate{ true };
 	};
 }
 

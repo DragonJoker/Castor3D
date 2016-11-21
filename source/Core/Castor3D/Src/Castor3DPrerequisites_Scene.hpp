@@ -73,6 +73,25 @@ namespace Castor3D
 		eCylindrical,
 		CASTOR_SCOPED_ENUM_BOUNDS( eSpherical )
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		16/11/2016
+	\~english
+	\brief		Billboard sizing types enumeration.
+	\~french
+	\brief		Enumération des types de dimensions des billboards.
+	*/
+	enum class BillboardSize
+	{
+		//!\~english	Billboards size changes with camera position.
+		//!\~french		Les dimensions des billboards changent en fonction de la position de la caméra.
+		eDynamic,
+		//!\~english	Billboards size doesn't change.
+		//!\~french		Les dimensions des billboards ne changent pas.
+		eFixed,
+		CASTOR_SCOPED_ENUM_BOUNDS( eDynamic )
+	};
 
 	class Scene;
 	class SceneLoader;

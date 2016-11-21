@@ -3929,6 +3929,50 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardType )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pBillboards )
+		{
+			PARSING_ERROR( cuT( "Billboard not initialised" ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+
+			l_parsingContext->pBillboards->SetBillboardType( BillboardType( l_value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardSize )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pBillboards )
+		{
+			PARSING_ERROR( cuT( "Billboard not initialised" ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter" ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+
+			l_parsingContext->pBillboards->SetBillboardSize( BillboardSize( l_value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_BillboardPositions )
 	{
 	}

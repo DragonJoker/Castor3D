@@ -290,6 +290,12 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 
 	m_mapComparisonModes[cuT( "none" )] = uint32_t( ComparisonMode::eNone );
 	m_mapComparisonModes[cuT( "ref_to_texture" )] = uint32_t( ComparisonMode::eRefToTexture );
+
+	m_mapBillboardTypes[cuT( "cylindrical" )] = uint32_t( BillboardType::eCylindrical );
+	m_mapBillboardTypes[cuT( "spherical" )] = uint32_t( BillboardType::eSpherical );
+
+	m_mapBillboardSizes[cuT( "dynamic" )] = uint32_t( BillboardSize::eDynamic );
+	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -584,6 +590,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eViewport ), cuT( "aspect_ratio" ), Parser_ViewportAspectRatio, { MakeParameter< ParameterType::eFloat >() } );
 
 	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "parent" ), Parser_BillboardParent, { MakeParameter< ParameterType::eName >() } );
+	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "type" ), Parser_BillboardType, { MakeParameter < ParameterType::eCheckedText >( m_mapBillboardTypes ) } );
+	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "size" ), Parser_BillboardSize, { MakeParameter < ParameterType::eCheckedText >( m_mapBillboardSizes ) } );
 	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "positions" ), Parser_BillboardPositions );
 	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "material" ), Parser_BillboardMaterial, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eBillboard ), cuT( "dimensions" ), Parser_BillboardDimensions, { MakeParameter< ParameterType::eSize >() } );

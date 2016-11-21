@@ -263,6 +263,9 @@ namespace Castor3D
 		//!\~english	The vertex buffer elements description.
 		//!\~french		La description des éléments des tampons de sommets.
 		BufferDeclaration m_inputs;
+		//!\~english	The billboard vertex buffer position element description.
+		//!\~french		La description de l'élément position du tampons de sommets des billboards.
+		BufferDeclaration m_billboardInputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.
 		BillboardBaseSPtr m_particlesBillboard;

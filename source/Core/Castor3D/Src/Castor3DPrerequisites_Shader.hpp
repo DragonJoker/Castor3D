@@ -165,9 +165,9 @@ namespace Castor3D
 		//!\~english	Shader for spherical billboards.
 		//\~french		Shader pour les billboards sphériques.
 		eSpherical = 0x0200,
-		//!\~english	Shader for cylindrical billboards.
-		//\~french		Shader pour les billboards cylindriques.
-		eCylindrical = 0x0400,
+		//!\~english	Shader for fixed size billboards.
+		//\~french		Shader pour les billboards à dimensions fixes.
+		eFixedSize = 0x0400,
 	};
 	/*!
 	\author 	Sylvain DOREMUS
