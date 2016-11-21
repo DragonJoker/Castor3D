@@ -448,15 +448,6 @@ namespace Castor3D
 		C3D_API bool Initialise();
 		/**
 		 *\~english
-		 *\brief		Draws the billboards.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
-		 *\~french
-		 *\brief		Dessine les billboards.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
-		 */
-		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers )override;
-		/**
-		 *\~english
 		 *\brief		Removes a point from the list
 		 *\param[in]	p_index	The point index
 		 *\~french

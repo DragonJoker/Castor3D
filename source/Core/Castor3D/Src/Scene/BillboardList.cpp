@@ -128,7 +128,7 @@ namespace Castor3D
 			}
 
 			m_quad->Create();
-			m_quad->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_quad->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 
 			m_initialised = true;
 		}
@@ -204,18 +204,57 @@ namespace Castor3D
 
 			if ( l_buffer )
 			{
-				struct Sorter
+				struct Element
 				{
-					bool operator()( uint8_t * lhs, uint8_t * rhs )
+					uint8_t * m_buffer;
+					Coords3r m_position;
+					uint32_t m_stride;
+
+					Element( uint8_t * p_buffer, uint32_t p_offset, uint32_t p_stride )
+						: m_buffer{ p_buffer }
+						, m_position{ reinterpret_cast< real * >( p_buffer + p_offset ) }
+						, m_stride{ p_stride }
 					{
-						return point::distance_squared( Coords< float, 3 >( reinterpret_cast< float * >( lhs + m_centerOffset ) ) - m_cameraPosition ) > point::distance_squared( Coords< float, 3 >( reinterpret_cast< float * >( rhs + m_centerOffset ) ) - m_cameraPosition );
 					}
-					Castor::Point3r m_cameraPosition;
-					uint32_t m_centerOffset;
+
+					Element( Element const & p_rhs )
+					{
+						std::memcpy( m_buffer, p_rhs.m_buffer, m_stride );
+					}
+
+					Element( Element && p_rhs )
+					{
+						std::memmove( m_buffer, p_rhs.m_buffer, m_stride );
+					}
+
+					Element & operator=( Element const & p_rhs )
+					{
+						std::memcpy( m_buffer, p_rhs.m_buffer, m_stride );
+						return *this;
+					}
+
+					Element & operator=( Element && p_rhs )
+					{
+						std::memmove( m_buffer, p_rhs.m_buffer, m_stride );
+						return *this;
+					}
 				};
+
+				std::vector< Element > l_elements;
+				l_elements.reserve( m_count );
+
+				for ( uint32_t i = 0u; i < m_count; ++i )
+				{
+					l_elements.emplace_back( l_buffer, m_centerOffset, l_stride );
+					l_buffer += l_stride;
+				}
+
 				try
 				{
-					std::sort( , , Sorter{ m_cameraPosition, m_centerOffset } );
+					std::sort( l_elements.begin(), l_elements.end(), [this]( Element const & lhs, Element const & rhs )
+					{
+						return point::distance_squared( lhs.m_position - m_cameraPosition ) > point::distance_squared( rhs.m_position - m_cameraPosition );
+					} );
 				}
 				catch ( Exception const & p_exc )
 				{
@@ -227,18 +266,6 @@ namespace Castor3D
 
 			m_vertexBuffer->Unbind();
 		}
-
-		m_vertexBuffer->Resize( uint32_t( p_positions.size() * l_stride ) );
-		uint8_t * l_buffer = m_vertexBuffer->data();
-
-		for ( auto & l_pos : p_positions )
-		{
-			std::memcpy( l_buffer, l_pos.const_ptr(), l_stride );
-			l_buffer += l_stride;
-		}
-
-		m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		m_count = uint32_t( p_positions.size() );
 	}
 
 	uint16_t BillboardBase::GetProgramFlags()const
