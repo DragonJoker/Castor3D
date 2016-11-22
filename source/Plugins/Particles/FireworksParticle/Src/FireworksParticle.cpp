@@ -175,12 +175,14 @@ namespace Fireworks
 		for ( auto i = 0u; i < l_firstUnused; ++i )
 		{
 			auto & l_particle = m_particles[i];
+			Coords3f l_pos{ reinterpret_cast< float * >( l_particle.GetData() + l_position->m_offset ) };
+			Coords3f l_vel{ reinterpret_cast< float * >( l_particle.GetData() + l_velocity->m_offset ) };
 			DoUpdateParticle(
 				*this,
 				p_time,
 				*reinterpret_cast< float * >( l_particle.GetData() + l_type->m_offset ),
-				Coords3f{ reinterpret_cast< float * >( l_particle.GetData() + l_position->m_offset ) },
-				Coords3f{ reinterpret_cast< float * >( l_particle.GetData() + l_velocity->m_offset ) },
+				l_pos,
+				l_vel,
 				*reinterpret_cast< float * >( l_particle.GetData() + l_age->m_offset ) );
 		}
 
