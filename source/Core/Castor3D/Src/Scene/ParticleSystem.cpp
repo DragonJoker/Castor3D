@@ -1,5 +1,8 @@
 #include "ParticleSystem.hpp"
 
+#include "ParticleSystemTransformFeedback.hpp"
+#include "ParticleSystemCpu.hpp"
+
 #include "Engine.hpp"
 
 #include "Material/Material.hpp"
@@ -85,12 +88,53 @@ namespace Castor3D
 		}
 	}
 
+	Particle::Particle( BufferDeclaration const & p_description )
+		: m_description{ p_description }
+	{
+		m_data.resize( p_description.stride() );
+	}
+
+	Particle::Particle( Particle const & p_rhs )
+		: m_description{ p_rhs.m_description }
+		, m_data{ p_rhs.m_data }
+	{
+	}
+
+	Particle::Particle( Particle && p_rhs )
+		: m_description{ p_rhs.m_description }
+		, m_data{ std::move( p_rhs.m_data ) }
+	{
+	}
+
+	Particle & Particle::operator=( Particle const & p_rhs )
+	{
+		m_data = p_rhs.m_data;
+		return *this;
+	}
+
+	Particle & Particle::operator=( Particle && p_rhs )
+	{
+		m_data = std::move( p_rhs.m_data );
+		return *this;
+	}
+
+	//*************************************************************************************************
+
+	ParticleSystemImpl::ParticleSystemImpl( ParticleSystem & p_parent )
+		: m_parent{ p_parent }
+	{
+	}
+
+	ParticleSystemImpl::~ParticleSystemImpl()
+	{
+	}
+
 	//*************************************************************************************************
 
 	ParticleSystem::ParticleSystem( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count )
 		: MovableObject{ p_name, p_scene, MovableType::eParticleEmitter, p_parent }
 		, m_particlesCount{ p_count }
-		, m_randomTexture{ *p_scene.GetEngine() }
+		, m_tfImpl{ std::make_unique< TransformFeedbackParticleSystem >( *this ) }
 	{
 	}
 
@@ -113,12 +157,21 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = m_updateProgram->Initialise();
+			l_return = m_tfImpl->Initialise();
 		}
 
-		if ( l_return )
+		//if ( l_return )
+		//{
+		//	m_cpuImpl->Cleanup();
+		//	m_cpuImpl.reset();
+		//	m_impl = std::move( m_tfImpl );
+		//}
+		//else
 		{
-			l_return = DoCreateUpdatePipeline();
+			m_tfImpl->Cleanup();
+			m_tfImpl.reset();
+			m_cpuImpl->Initialise();
+			m_impl = std::move( m_cpuImpl );
 		}
 
 		m_timer.TimeMs();
@@ -129,27 +182,7 @@ namespace Castor3D
 	{
 		m_particlesBillboard->Cleanup();
 		m_particlesBillboard.reset();
-		m_deltaTime.reset();
-		m_time.reset();
-		m_launcherLifetime.reset();
-		m_shellLifetime.reset();
-		m_secondaryShellLifetime.reset();
-		m_randomTexture.Cleanup();
-
-		m_updatePipeline->Cleanup();
-		m_updatePipeline.reset();
-
-		for ( size_t i = 0u; i < 2; ++i )
-		{
-			m_updateGeometryBuffers[i]->Cleanup();
-			m_updateGeometryBuffers[i].reset();
-			m_transformFeedbacks[i]->Cleanup();
-			m_transformFeedbacks[i].reset();
-			m_updateVertexBuffers[i]->Destroy();
-		}
-
-		m_updateProgram->Cleanup();
-		m_updateProgram.reset();
+		m_impl->Cleanup();
 	}
 
 	void ParticleSystem::Update()
@@ -162,53 +195,7 @@ namespace Castor3D
 		}
 
 		m_totalTime += l_time;
-		m_deltaTime->SetValue( l_time );
-		m_time->SetValue( m_totalTime );
-		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];
-		auto & l_transform = *m_transformFeedbacks[m_tfb];
-
-		m_updatePipeline->Apply();
-		m_updateProgram->BindUbos();
-		m_randomTexture.Bind();
-		l_transform.Bind();
-
-		l_gbuffers.Draw( std::max( 1u, m_transformFeedbacks[m_vtx]->GetWrittenPrimitives() ), 0 );
-
-		l_transform.Unbind();
-		m_randomTexture.Unbind();
-		auto const l_written = std::max( 1u, l_transform.GetWrittenPrimitives() );
-		auto const l_count = uint32_t( m_computed.stride() * std::max( 1u, l_written ) );
-		m_particlesBillboard->GetVertexBuffer().Copy( *m_updateVertexBuffers[m_tfb], l_count );
-
-#if 0 && !defined( NDEBUG )
-
-		{
-			struct MyParticle
-			{
-				float type;
-				Point3f position;
-				Point3f velocity;
-				float age;
-			};
-
-			m_updateVertexBuffers[m_tfb]->Bind();
-			auto l_buffer = reinterpret_cast< MyParticle * >( m_updateVertexBuffers[m_tfb]->Lock( 0, l_count, AccessType::eRead ) );
-
-			if ( l_buffer )
-			{
-				MyParticle l_particles[10000];
-				std::memcpy( l_particles, l_buffer, l_count );
-				m_updateVertexBuffers[m_tfb]->Unlock();
-			}
-
-			m_updateVertexBuffers[m_tfb]->Unbind();
-		}
-
-#endif
-
-		m_particlesBillboard->SetCount( l_written );
-		m_vtx = m_tfb;
-		m_tfb = 1 - m_tfb;
+		GetBillboards()->SetCount( m_impl->Update( l_time, m_totalTime ) );
 		m_firstUpdate = false;
 	}
 
@@ -232,6 +219,20 @@ namespace Castor3D
 		}
 	}
 
+	void ParticleSystem::SetParticleType( Castor::String const & p_value )
+	{
+		auto & l_factory = GetScene()->GetEngine()->GetParticleFactory();
+
+		if ( l_factory.IsRegistered( p_value ) )
+		{
+			m_cpuImpl = l_factory.Create( p_value, *this );
+		}
+		else
+		{
+			CASTOR_EXCEPTION( cuT( "Particle type [" ) + p_value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+		}
+	}
+
 	MaterialSPtr ParticleSystem::GetMaterial()const
 	{
 		return m_material.lock();
@@ -244,108 +245,25 @@ namespace Castor3D
 
 	void ParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
 	{
-		m_computed.push_back( BufferElementDeclaration{ cuT( "out_" ) + p_name, 0u, p_type, m_computed.stride() } );
+		m_tfImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
+		m_cpuImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 
 		if ( p_name == cuT( "center" )
 			 || p_name == ShaderProgram::Position )
 		{
-			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_inputs.stride(), 1u } );
-			m_centerOffset = m_inputs.stride();
+			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
+			m_centerOffset = m_billboardInputs.stride();
 		}
 		else
 		{
-			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride(), 1u } );
+			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		}
 
-		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_inputs.stride() } );
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 
-	void ParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
+	void ParticleSystem::SetTFUpdateProgram( ShaderProgramSPtr p_program )
 	{
-		m_updateProgram = p_program;
-		m_updateProgram->CreateFrameVariable( FrameVariableType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
-
-		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY );
-		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
-		m_time = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fTotalTime" ) );
-		m_ubo = m_updateProgram->FindFrameVariableBuffer( cuT( "ParticleSystem" ) );
-
-		m_updateProgram->SetTransformLayout( m_computed );
-	}
-
-	uint32_t ParticleSystem::GetParticlesCount()const
-	{
-		return m_transformFeedbacks[m_vtx]->GetWrittenPrimitives();
-	}
-
-	bool ParticleSystem::DoCreateUpdatePipeline()
-	{
-		auto & l_engine = *GetScene()->GetEngine();
-		auto & l_renderSystem = *l_engine.GetRenderSystem();
-
-		Particle l_particle{ m_computed, m_defaultValues };
-		bool l_return{ true };
-
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
-		{
-			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( l_engine, m_inputs ),
-			l_return = m_updateVertexBuffers[i]->Create();
-
-			if ( l_return )
-			{
-				m_updateVertexBuffers[i]->Resize( uint32_t( m_particlesCount ) * m_computed.stride() );
-				std::memcpy( m_updateVertexBuffers[i]->data(), l_particle.GetData(), m_computed.stride() );
-				l_return = m_updateVertexBuffers[i]->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-			}
-		}
-
-		for ( uint32_t i = 0; i < 2 && l_return; ++i )
-		{
-			m_transformFeedbacks[i] = l_renderSystem.CreateTransformFeedback( m_computed, Topology::ePoints, *m_updateProgram );
-			l_return = m_transformFeedbacks[i]->Initialise( { *m_updateVertexBuffers[i] } );
-
-			if ( l_return )
-			{
-				m_updateGeometryBuffers[i] = l_renderSystem.CreateGeometryBuffers( Topology::ePoints, *m_updateProgram );
-				l_return = m_updateGeometryBuffers[i]->Initialise( { *m_updateVertexBuffers[i] }, nullptr );
-			}
-		}
-
-		if ( l_return )
-		{
-			RasteriserState l_rs;
-			l_rs.SetDiscardPrimitives( true );
-			m_updatePipeline = l_renderSystem.CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
-
-			auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
-			l_texture->GetImage().InitialiseSource();
-			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
-			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
-
-			static std::random_device l_device;
-			std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
-
-			for ( uint32_t i{ 0u }; i < l_buffer.count(); ++i )
-			{
-				*l_pixels++ = l_distribution( l_device );
-				*l_pixels++ = l_distribution( l_device );
-				*l_pixels++ = l_distribution( l_device );
-			}
-
-			auto l_sampler = GetScene()->GetEngine()->GetSamplerCache().Add( cuT( "ParticleSystem" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-			l_sampler->Initialise();
-
-			m_randomTexture.SetTexture( l_texture );
-			m_randomTexture.SetSampler( l_sampler );
-			m_randomTexture.SetIndex( 0 );
-			m_randomTexture.Initialise();
-			l_texture->GenerateMipmaps();
-		}
-
-		return l_return;
+		m_tfImpl->SetUpdateProgram( p_program );
 	}
 }

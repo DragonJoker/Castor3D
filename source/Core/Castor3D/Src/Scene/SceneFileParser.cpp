@@ -429,10 +429,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "material" ), Parser_ParticleSystemMaterial, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), Parser_ParticleSystemDimensions, { MakeParameter< ParameterType::eSize >() } );
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), Parser_ParticleSystemParticle );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "shader_program" ), Parser_ParticleSystemShader );
+	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), Parser_ParticleSystemTFShader );
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "}" ), Parser_ParticleSystemEnd );
 
 	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), Parser_ParticleVariable, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), MakeParameter< ParameterType::eText >() } );
+	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), Parser_ParticleType, { MakeParameter< ParameterType::eName >() } );
 
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "parent" ), Parser_LightParent, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eLight ), cuT( "type" ), Parser_LightType, { MakeParameter< ParameterType::eCheckedText >( m_mapLightTypes ) } );

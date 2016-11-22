@@ -34,6 +34,11 @@ namespace Castor3D
 		{
 			return &p_value;
 		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return &p_value;
+		}
 	};
 
 	template<>
@@ -51,6 +56,11 @@ namespace Castor3D
 		static inline float const * GetPointer( Type const & p_value )
 		{
 			return p_value.const_ptr();
+		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
 		}
 	};
 
@@ -70,6 +80,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -88,6 +103,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -102,6 +122,11 @@ namespace Castor3D
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
+		{
+			return &p_value;
+		}
+
+		static inline uint32_t * GetPointer( Type & p_value )
 		{
 			return &p_value;
 		}
@@ -123,6 +148,11 @@ namespace Castor3D
 		{
 			return &p_value;
 		}
+
+		static inline int * GetPointer( Type & p_value )
+		{
+			return &p_value;
+		}
 	};
 
 	template<>
@@ -140,6 +170,11 @@ namespace Castor3D
 		static inline int const * GetPointer( Type const & p_value )
 		{
 			return p_value.const_ptr();
+		}
+
+		static inline int * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
 		}
 	};
 
@@ -159,6 +194,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline int * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -177,6 +217,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline int * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -192,6 +237,11 @@ namespace Castor3D
 		}
 
 		static inline uint32_t const * GetPointer( Type const & p_value )
+		{
+			return &p_value;
+		}
+
+		static inline uint32_t * GetPointer( Type & p_value )
 		{
 			return &p_value;
 		}
@@ -213,6 +263,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline uint32_t * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -230,6 +285,11 @@ namespace Castor3D
 		static inline uint32_t const * GetPointer( Type const & p_value )
 		{
 			return p_value.const_ptr();
+		}
+
+		static inline uint32_t * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
 		}
 	};
 
@@ -249,6 +309,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline uint32_t * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -266,6 +331,11 @@ namespace Castor3D
 		static inline float const * GetPointer( Type const & p_value )
 		{
 			return p_value.const_ptr();
+		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
 		}
 	};
 
@@ -285,6 +355,11 @@ namespace Castor3D
 		{
 			return p_value.const_ptr();
 		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
+		}
 	};
 
 	template<>
@@ -302,6 +377,11 @@ namespace Castor3D
 		static inline float const * GetPointer( Type const & p_value )
 		{
 			return p_value.const_ptr();
+		}
+
+		static inline float * GetPointer( Type & p_value )
+		{
+			return p_value.ptr();
 		}
 	};
 
@@ -436,5 +516,16 @@ namespace Castor3D
 		auto l_it = m_description.begin() + p_index;
 		REQUIRE( l_it->m_dataType == Type );
 		std::memcpy( &m_data[l_it->m_offset], ElementTyper< Type >::GetPointer( p_value ), sizeof( p_value ) );
+	}
+
+	template< ElementType Type >
+	inline typename ElementTyper< Type >::Type Particle::GetValue( uint32_t p_index )const
+	{
+		REQUIRE( p_index < m_description.size() );
+		auto l_it = m_description.begin() + p_index;
+		REQUIRE( l_it->m_dataType == Type );
+		typename ElementTyper< Type >::Type l_return{};
+		std::memcpy( ElementTyper< Type >::GetPointer( l_return ), &m_data[l_it->m_offset], sizeof( l_return ) );
+		return l_return;
 	}
 }

@@ -1278,11 +1278,12 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eParticle )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemShader )
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemTFShader )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		l_parsingContext->pShaderProgram.reset();
 		l_parsingContext->eShaderObject = ShaderType::eCount;
+		l_parsingContext->bBool1 = true;
 		
 		if ( !l_parsingContext->pScene )
 		{
@@ -1305,10 +1306,44 @@ namespace Castor3D
 		}
 		else
 		{
-			l_parsingContext->particleSystem->SetUpdateProgram( l_parsingContext->pShaderProgram );
+			if ( l_parsingContext->bBool1 )
+			{
+				l_parsingContext->particleSystem->SetTFUpdateProgram( l_parsingContext->pShaderProgram );
+			}
 		}
 	}
 	END_ATTRIBUTE_POP()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleType )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+		l_parsingContext->pFrameVariable.reset();
+
+		if ( !l_parsingContext->particleSystem )
+		{
+			PARSING_ERROR( cuT( "Particle system not initialised" ) );
+		}
+		else if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_value;
+			p_params[0]->Get( l_value );
+			Engine * l_engine = l_parsingContext->m_pParser->GetEngine();
+
+			if ( !l_engine->GetParticleFactory().IsRegistered( string::lower_case( l_value ) ) )
+			{
+				PARSING_ERROR( cuT( "Particle type [" ) + l_value + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+			}
+			else
+			{
+				l_parsingContext->particleSystem->SetParticleType( l_value );
+			}
+		}
+	}
+	END_ATTRIBUTE()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleVariable )
 	{

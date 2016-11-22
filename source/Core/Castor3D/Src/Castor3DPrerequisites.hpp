@@ -153,6 +153,9 @@ namespace Castor3D
 		//!\~english	Generic plug-in.
 		//!\~french		Plug-in générique.
 		eGeneric,
+		//!\~english	Particle plug-in.
+		//!\~french		Plug-in de particule.
+		eParticle,
 		CASTOR_SCOPED_ENUM_BOUNDS( eRenderer )
 	};
 	/*!
@@ -478,6 +481,7 @@ namespace Castor3D
 	class GenericPlugin;
 	class PostFxPlugin;
 	class ToneMappingPlugin;
+	class ParticlePlugin;
 	class FrameEvent;
 	class FrameListener;
 	class Version;
@@ -507,6 +511,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( DividerPlugin );
 	DECLARE_SMART_PTR( GenericPlugin );
 	DECLARE_SMART_PTR( PostFxPlugin );
+	DECLARE_SMART_PTR( ParticlePlugin );
 	DECLARE_SMART_PTR( FrameEvent );
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
@@ -515,6 +520,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( PickingPass );
 
 	using ShadowMapPassFactory = Castor::Factory< ShadowMapPass, LightType, ShadowMapPassSPtr, std::function< ShadowMapPassSPtr( Engine &, Scene &, Light &, TextureUnit & p_shadowMap, uint32_t p_index ) > >;
+	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
 
 	/*!
 	\author 	Sylvain DOREMUS
