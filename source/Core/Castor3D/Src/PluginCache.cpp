@@ -5,6 +5,7 @@
 #include "Plugin/DividerPlugin.hpp"
 #include "Plugin/GenericPlugin.hpp"
 #include "Plugin/ImporterPlugin.hpp"
+#include "Plugin/ParticlePlugin.hpp"
 #include "Plugin/PostFxPlugin.hpp"
 #include "Plugin/RendererPlugin.hpp"
 #include "Plugin/TechniquePlugin.hpp"
@@ -219,6 +220,10 @@ namespace Castor3D
 
 			case PluginType::ePostEffect:
 				l_return = std::make_shared< PostFxPlugin >( l_library, GetEngine() );
+				break;
+
+			case PluginType::eParticle:
+				l_return = std::make_shared< ParticlePlugin >( l_library, GetEngine() );
 				break;
 
 			default:

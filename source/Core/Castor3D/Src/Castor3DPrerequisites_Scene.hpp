@@ -100,6 +100,8 @@ namespace Castor3D
 	class SceneFileParser;
 	class Skybox;
 	class ParticleSystem;
+	class CpuParticleSystem;
+	class TransformFeedbackParticleSystem;
 	class Fog;
 	class AnimatedObject;
 	class AnimatedObjectGroup;
@@ -121,6 +123,8 @@ namespace Castor3D
 	DECLARE_SMART_PTR( SceneFileParser );
 	DECLARE_SMART_PTR( Skybox );
 	DECLARE_SMART_PTR( ParticleSystem );
+	DECLARE_SMART_PTR( CpuParticleSystem );
+	DECLARE_SMART_PTR( TransformFeedbackParticleSystem );
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( AnimatedSkeleton );

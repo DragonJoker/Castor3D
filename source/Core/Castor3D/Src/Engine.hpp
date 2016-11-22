@@ -528,6 +528,16 @@ namespace Castor3D
 		{
 			return m_shadowMapPassFactory;
 		}
+		/**
+		 *\~english
+		 *\return		The CpuParticleSystem factory.
+		 *\~french
+		 *\return		La fabrique de CpuParticleSystem.
+		 */
+		inline ParticleFactory & GetParticleFactory()
+		{
+			return m_particleFactory;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -623,6 +633,9 @@ namespace Castor3D
 		//!\~english	The ShadowMapPass factory.
 		//!\~french		La fabrique de ShadowMapPass.
 		ShadowMapPassFactory m_shadowMapPassFactory;
+		//!\~english	The CpuParticleSystem factory.
+		//!\~french		La fabrique de CpuParticleSystem.
+		ParticleFactory m_particleFactory;
 	};
 }
 
