@@ -120,8 +120,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ParticleSystemImpl::ParticleSystemImpl( ParticleSystem & p_parent )
+	ParticleSystemImpl::ParticleSystemImpl( Type p_type, ParticleSystem & p_parent )
 		: m_parent{ p_parent }
+		, m_type{ p_type }
 	{
 	}
 
@@ -160,18 +161,18 @@ namespace Castor3D
 			l_return = m_tfImpl->Initialise();
 		}
 
-		//if ( l_return )
-		//{
-		//	m_cpuImpl->Cleanup();
-		//	m_cpuImpl.reset();
-		//	m_impl = std::move( m_tfImpl );
-		//}
-		//else
+		if ( l_return )
 		{
-			m_tfImpl->Cleanup();
-			m_tfImpl.reset();
-			m_cpuImpl->Initialise();
-			m_impl = std::move( m_cpuImpl );
+			m_impl = m_tfImpl.get();
+		}
+		else
+		{
+			l_return = m_cpuImpl->Initialise();
+
+			if ( l_return )
+			{
+				m_impl = m_cpuImpl.get();
+			}
 		}
 
 		m_timer.TimeMs();
@@ -182,11 +183,14 @@ namespace Castor3D
 	{
 		m_particlesBillboard->Cleanup();
 		m_particlesBillboard.reset();
-		m_impl->Cleanup();
+		m_tfImpl->Cleanup();
+		m_cpuImpl->Cleanup();
+		m_impl = nullptr;
 	}
 
 	void ParticleSystem::Update()
 	{
+		REQUIRE( m_impl );
 		auto l_time = float( m_timer.TimeMs() );
 
 		if ( m_firstUpdate )

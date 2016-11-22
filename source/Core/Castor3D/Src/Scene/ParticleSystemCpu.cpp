@@ -21,7 +21,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	CpuParticleSystem::CpuParticleSystem( ParticleSystem & p_parent )
-		: ParticleSystemImpl{ p_parent }
+		: ParticleSystemImpl{ ParticleSystemImpl::Type::eCpu, p_parent }
 	{
 	}
 

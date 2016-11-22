@@ -31,7 +31,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TransformFeedbackParticleSystem::TransformFeedbackParticleSystem( ParticleSystem & p_parent )
-		: ParticleSystemImpl{ p_parent }
+		: ParticleSystemImpl{ ParticleSystemImpl::Type::eTransformFeedback, p_parent }
 		, m_randomTexture{ *p_parent.GetScene()->GetEngine() }
 	{
 	}

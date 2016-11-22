@@ -169,15 +169,38 @@ namespace Castor3D
 	class ParticleSystemImpl
 	{
 	public:
+		/*!
+		\author 	Sylvain DOREMUS
+		\version	0.9.0
+		\date		16/11/2016
+		\~english
+		\brief		Particle system implementation types enumeration.
+		\~french
+		\brief		Enumération des types d'implémentation de système de particules.
+		*/
+		enum class Type
+		{
+			//!\~english	Particles are updated on CPU.
+			//!\~french		Les particules sont mises à jour sur le CPU.
+			eCpu,
+			//!\~english	Particles are updated using Geometry shader and Transform feedback.
+			//!\~french		Les particules sont mises à jour en utilisant les geometry shaders et le Transform feedback.
+			eTransformFeedback,
+			CASTOR_SCOPED_ENUM_BOUNDS( eCpu )
+		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_type		The implementation type.
 		 *\param[in]	p_parent	The parent particle system.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_type		Le type d'implémentation.
 		 *\param[in]	p_parent	Le système de particules parent.
 		 */
-		C3D_API ParticleSystemImpl( ParticleSystem & p_parent );
+		C3D_API ParticleSystemImpl( Type p_type, ParticleSystem & p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -225,11 +248,24 @@ namespace Castor3D
 		 *\return		Le nombre de particules.
 		 */
 		C3D_API virtual uint32_t Update( float p_time, float p_total ) = 0;
+		/**
+		 *\~english
+		 *\return		Le type d'implémentation.
+		 *\~french
+		 *\return		The implementation type.
+		 */
+		inline Type GetType()
+		{
+			return m_type;
+		}
 
 	protected:
 		//!\~english	The parent particle system.
 		//!\~french		Le système de particules parent.
 		ParticleSystem & m_parent;
+		//!\~english	The implementation type.
+		//!\~french		Le type d'implémentation.
+		Type m_type;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -243,27 +279,6 @@ namespace Castor3D
 	class ParticleSystem
 		: public MovableObject
 	{
-	public:
-		/*!
-		\author 	Sylvain DOREMUS
-		\version	0.9.0
-		\date		16/11/2016
-		\~english
-		\brief		Billboard rendering types enumeration.
-		\~french
-		\brief		Enumération des types de rendu des billboards.
-		*/
-		enum class RenderingType
-		{
-			//!\~english	Particles are updated on CPU.
-			//!\~french		Les particules sont mises à jour sur le CPU.
-			eCpu,
-			//!\~english	Particles are updated using Geometry shader and Transform feedback.
-			//!\~french		Les particules sont mises à jour en utilisant les geometry shaders et le Transform feedback.
-			eTransformFeedback,
-			CASTOR_SCOPED_ENUM_BOUNDS( eCpu )
-		};
-
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -488,7 +503,7 @@ namespace Castor3D
 		TransformFeedbackParticleSystemUPtr m_tfImpl;
 		//!\~english	The implementation chosen after initialisation.
 		//!\~french		L'implémentation choisie après initialisation.
-		std::unique_ptr< ParticleSystemImpl > m_impl;
+		ParticleSystemImpl * m_impl{ nullptr };
 	};
 }
 
