@@ -20,31 +20,33 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_PIPELINE_H___
-#define ___TRS_PIPELINE_H___
+#ifndef ___C3DGL_ComputePipeline_H___
+#define ___C3DGL_ComputePipeline_H___
 
-#include "TestRenderSystemPrerequisites.hpp"
+#include "Common/GlHolder.hpp"
 
-#include <Render/Pipeline.hpp>
+#include <Miscellaneous/ComputePipeline.hpp>
 
-namespace TestRender
+namespace GlRender
 {
 	/*!
 	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
+	\version	0.9.0
+	\date		24/11/2016
 	\~english
-	\brief		Implementation of the rendering pipeline.
+	\brief		Implementation of the computing pipeline.
 	\~french
-	\brief		Impl�mentation du pipeline de rendu.
+	\brief		Implémentation du pipeline de calcul.
 	*/
-	class TestPipeline
-		: public Castor3D::Pipeline
+	class GlComputePipeline
+		: public Castor3D::ComputePipeline
+		, public Holder
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL api.
 		 *\param[in]	p_renderSystem	The parent RenderSystem.
 		 *\param[in]	p_dsState		The depth stencil state.
 		 *\param[in]	p_rsState		The rateriser state.
@@ -54,6 +56,7 @@ namespace TestRender
 		 *\param[in]	p_flags			The creation flags.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_gl			L'api OpenGL.
 		 *\param[in]	p_renderSystem	Le RenderSystem parent.
 		 *\param[in]	p_dsState		L'état de stencil et profondeur.
 		 *\param[in]	p_rsState		L'état de rastériseur.
@@ -62,27 +65,21 @@ namespace TestRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		TestPipeline( TestRenderSystem & p_renderSystem
-					  , Castor3D::DepthStencilState && p_dsState
-					  , Castor3D::RasteriserState && p_rsState
-					  , Castor3D::BlendState && p_bdState
-					  , Castor3D::MultisampleState && p_msState
-					  , Castor3D::ShaderProgram & p_program
-					  , Castor3D::PipelineFlags const & p_flags );
+		GlComputePipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~TestPipeline();
+		virtual ~GlComputePipeline();
 		/**
-		 *\~english
-		 *\brief		Applies the pipeline.
-		 *\~french
-		 *\brief		Applique le pipeline.
+		 *\copydoc		Castor3D::ComputePipeline::Run
 		 */
-		void Apply()const override;
+		void Run(
+			Castor::Point3ui const & p_workgroups,
+			Castor::Point3ui const & p_workgroupSize,
+			Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const override;
 	};
 }
 

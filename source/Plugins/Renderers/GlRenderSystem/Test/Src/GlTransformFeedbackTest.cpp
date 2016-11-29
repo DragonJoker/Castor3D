@@ -4,7 +4,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Mesh/Buffer/GeometryBuffers.hpp>
 #include <Miscellaneous/TransformFeedback.hpp>
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
@@ -296,7 +296,7 @@ namespace Testing
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
@@ -392,7 +392,7 @@ namespace Testing
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
@@ -473,7 +473,7 @@ namespace Testing
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
@@ -570,7 +570,7 @@ namespace Testing
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
@@ -699,7 +699,7 @@ namespace Testing
 		// Pipeline
 		RasteriserState l_rs;
 		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		// Input/Output VBOs
 		VertexBuffer l_vbos[]

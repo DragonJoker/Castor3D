@@ -286,13 +286,24 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les indicateurs de création.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual PipelineUPtr CreatePipeline(
+		C3D_API virtual RenderPipelineUPtr CreateRenderPipeline(
 			DepthStencilState && p_dsState,
 			RasteriserState && p_rsState,
 			BlendState && p_bdState,
 			MultisampleState && p_msState,
 			ShaderProgram & p_program,
 			PipelineFlags const & p_flags ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a compute pipeline.
+		 *\param[in]	p_program	The shader program.
+		 *\return		The pipeline.
+		 *\~french
+		 *\brief		Crée un pipeline de pipeline.
+		 *\param[in]	p_program	Le programme shader.
+		 *\return		Le pipeline.
+		 */
+		C3D_API virtual ComputePipelineUPtr CreateComputePipeline( ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler
@@ -424,6 +435,17 @@ namespace Castor3D
 		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
 		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateStorageBuffer() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates an atomic counter buffer.
+		 *\remarks		Only the render system can do that.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon de compteur atomique.
+		 *\remarks		Seul le render system peut faire ça.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateAtomicCounterBuffer() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.

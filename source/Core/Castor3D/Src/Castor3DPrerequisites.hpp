@@ -435,6 +435,27 @@ namespace Castor3D
 		eResultNoWait,
 		CASTOR_SCOPED_ENUM_BOUNDS( eResult )
 	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/03/2016
+	\~english
+	\brief		Supported memory barriers enumeration.
+	\~french
+	\brief		Enumération des types de barrières supportées.
+	*/
+	enum class MemoryBarrier
+		: uint32_t
+	{
+		eVertexBuffer = 0x01 << 0,
+		eIndexBuffer = 0x01 << 1,
+		eUniformBuffer = 0x01 << 2,
+		eAtomicCounterBuffer = 0x01 << 3,
+		eQueryBuffer = 0x01 << 4,
+		eShaderStorageBuffer = 0x01 << 5,
+		eAll = 0xFFFFFFFF,
+	};
+	IMPLEMENT_FLAGS( MemoryBarrier );
 
 	class WindowHandle;
 	class RenderBuffer;
@@ -463,6 +484,7 @@ namespace Castor3D
 	class GpuQuery;
 	class PickingPass;
 	class TransformFeedback;
+	class ComputePipeline;
 
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
@@ -486,6 +508,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );
 	DECLARE_SMART_PTR( TransformFeedback );
+	DECLARE_SMART_PTR( ComputePipeline );
 
 	using ShadowMapPassFactory = Castor::Factory< ShadowMapPass, LightType, ShadowMapPassSPtr, std::function< ShadowMapPassSPtr( Engine &, Scene &, Light &, TextureUnit & p_shadowMap, uint32_t p_index ) > >;
 	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;

@@ -11,7 +11,7 @@
 #include "TechniqueCache.hpp"
 
 #include "Context.hpp"
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "RenderSystem.hpp"
 
 #include "Event/Frame/FunctorEvent.hpp"

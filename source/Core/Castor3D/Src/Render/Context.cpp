@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "RenderWindow.hpp"
 #include "RenderSystem.hpp"
 #include "Viewport.hpp"
@@ -184,7 +184,7 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::RenderTexture( Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline )
+	void Context::RenderTexture( Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline )
 	{
 		DoRenderTexture( p_size, p_texture, p_pipeline, *m_rtotPipelinePlane.m_texture.m_geometryBuffers );
 	}
@@ -229,7 +229,7 @@ namespace Castor3D
 		DoRenderTexture( p_position, p_orientation, p_size, p_texture, p_index, *m_rtotPipelineCube.m_depthArray.m_pipeline, *m_rtotPipelineCube.m_depthArray.m_geometryBuffers );
 	}
 
-	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_rtotPipelinePlane.m_viewport.Resize( p_size );
 		m_rtotPipelinePlane.m_viewport.Update();
@@ -255,7 +255,7 @@ namespace Castor3D
 		p_pipeline.GetProgram().UnbindUbos();
 	}
 
-	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
 	{
 		REQUIRE( p_texture.GetLayersCount() > p_index );
 		m_rtotPipelinePlane.m_viewport.Resize( p_size );
@@ -289,7 +289,7 @@ namespace Castor3D
 		p_pipeline.GetProgram().UnbindUbos();
 	}
 
-	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
 	{
 		m_rtotPipelineCube.m_viewport.SetPerspective( Angle::from_degrees( 90 ), real( p_size.width() ) / p_size.height(), 0.5, 2.0 );
 		m_rtotPipelineCube.m_viewport.Resize( p_size );
@@ -329,7 +329,7 @@ namespace Castor3D
 		p_pipeline.GetProgram().UnbindUbos();
 	}
 
-	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
+	void Context::DoRenderTexture( Point3r const & p_position, Quaternion const & p_orientation, Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers )
 	{
 		REQUIRE( p_texture.GetLayersCount() > p_index );
 		m_rtotPipelineCube.m_viewport.SetPerspective( Angle::from_degrees( 90 ), real( p_size.width() ) / p_size.height(), 0.5, 2.0 );
@@ -655,13 +655,13 @@ namespace Castor3D
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( true );
 			l_dsState.SetDepthMask( WritingMask::eAll );
-			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
 		else
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
-			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
 	}
 
@@ -695,7 +695,7 @@ namespace Castor3D
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eFront );
 
-			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
 		else
 		{
@@ -706,7 +706,7 @@ namespace Castor3D
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eFront );
 
-			p_pipeline.m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
+			p_pipeline.m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, PipelineFlags{} );
 		}
 	}
 

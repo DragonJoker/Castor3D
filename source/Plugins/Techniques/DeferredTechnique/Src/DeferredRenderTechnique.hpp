@@ -157,7 +157,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Castor3D::Pipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( Castor3D::RenderPipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -203,7 +203,7 @@ namespace Deferred
 			Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 			//!\~english	The pipeline used by the light pass.
 			//!\~french		Le pipeline utilisé par la passe lumières.
-			Castor3D::PipelineSPtr m_pipeline;
+			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
 
 	protected:

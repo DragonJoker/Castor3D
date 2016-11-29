@@ -49,7 +49,7 @@ SOFTWARE.
 #	include <State/DepthStencilState.hpp>
 #	include <State/RasteriserState.hpp>
 #	include <Render/Context.hpp>
-#	include <Render/Pipeline.hpp>
+#	include <Render/RenderPipeline.hpp>
 #	include <Render/RenderTarget.hpp>
 #	include <Render/RenderWindow.hpp>
 #	include <Scene/Scene.hpp>

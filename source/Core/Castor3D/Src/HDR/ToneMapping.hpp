@@ -137,7 +137,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The Reinhard tone mapping shader program.	\~french Le shader de mappage de ton de Reinhard
-		PipelineUPtr m_pipeline;
+		RenderPipelineUPtr m_pipeline;
 		//!\~english The exposure value.	\~french La valeur d'exposition.
 		float m_exposure;
 		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.

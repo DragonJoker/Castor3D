@@ -5,7 +5,7 @@
 
 #include "Miscellaneous/Parameter.hpp"
 #include "Render/Context.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"
@@ -85,7 +85,7 @@ namespace Castor3D
 		{
 			DepthStencilState l_dsState;
 			l_dsState.SetDepthTest( false );
-			m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;

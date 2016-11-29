@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Event/Frame/CleanupEvent.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderPass.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Technique/RenderTechnique.hpp"
@@ -126,14 +126,14 @@ namespace Castor3D
 		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
 	{
 		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferMatrix, p_shaderMask );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, Pipeline::MtxProjection, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, Pipeline::MtxModel, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, Pipeline::MtxView, 1 );
-		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, Pipeline::MtxNormal, 1 );
+		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxProjection, 1 );
+		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxModel, 1 );
+		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxView, 1 );
+		l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxNormal, 1 );
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
 		{
-			l_buffer.CreateVariable( FrameVariableType::eMat4x4r, Pipeline::MtxTexture[i], 1 );
+			l_buffer.CreateVariable( FrameVariableType::eMat4x4r, RenderPipeline::MtxTexture[i], 1 );
 		}
 
 		return l_buffer;

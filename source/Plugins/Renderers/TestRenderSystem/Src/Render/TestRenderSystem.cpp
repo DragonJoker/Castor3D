@@ -7,9 +7,11 @@
 #include "Mesh/TestGeometryBuffers.hpp"
 #include "Miscellaneous/TestQuery.hpp"
 #include "Miscellaneous/TestTransformFeedback.hpp"
+#include "Miscellaneous/TestComputePipeline.hpp"
 #include "Render/TestContext.hpp"
-#include "Render/TestPipeline.hpp"
+#include "Render/TestRenderPipeline.hpp"
 #include "Render/TestViewport.hpp"
+#include "Shader/TestAtomicCounterBuffer.hpp"
 #include "Shader/TestFrameVariableBuffer.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
@@ -52,7 +54,7 @@ namespace TestRender
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
-	PipelineUPtr TestRenderSystem::CreatePipeline(
+	RenderPipelineUPtr TestRenderSystem::CreateRenderPipeline(
 		DepthStencilState && p_dsState,
 		RasteriserState && p_rsState,
 		BlendState && p_bdState,
@@ -60,7 +62,12 @@ namespace TestRender
 		ShaderProgram & p_program,
 		PipelineFlags const & p_flags )
 	{
-		return std::make_unique< TestPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
+		return std::make_unique< TestRenderPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
+	}
+
+	ComputePipelineUPtr TestRenderSystem::CreateComputePipeline( ShaderProgram & p_program )
+	{
+		return std::make_unique< TestComputePipeline >( *this, p_program );
 	}
 
 	SamplerSPtr TestRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -91,6 +98,11 @@ namespace TestRender
 	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateStorageBuffer()
 	{
 		return std::make_unique< TestShaderStorageBuffer >( *this );
+	}
+
+	std::unique_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateAtomicCounterBuffer()
+	{
+		return std::make_unique< TestAtomicCounterBuffer >( *this );
 	}
 
 	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, FlagCombination< AccessType > const & p_cpuAccess, FlagCombination< AccessType > const & p_gpuAccess )

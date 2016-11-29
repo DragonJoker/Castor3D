@@ -11,7 +11,7 @@
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Miscellaneous/TransformFeedback.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/FrameVariableBuffer.hpp"

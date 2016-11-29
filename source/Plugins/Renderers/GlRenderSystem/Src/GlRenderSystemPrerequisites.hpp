@@ -396,6 +396,7 @@ namespace GlRender
 		eTransformFeedbackBuffer = 0x8C8E,
 		eRead = 0x8F36,
 		eWrite = 0x8F37,
+		eAtomicCounter = 0x92C0,
 		eShaderStorage = 0x90D2,
 	};
 
@@ -911,6 +912,7 @@ namespace GlRender
 	enum class GlslInterface
 		: uint32_t
 	{
+		eAtomicCounterBuffer = 0x92C0,
 		eUniform = 0x92E1,
 		eUniformBlock = 0x92E2,
 		eProgramInput = 0x92E3,
@@ -1088,6 +1090,29 @@ namespace GlRender
 		eInterleaved = 0x8C8C,
 		eSeparate = 0x8C8D,
 	};
+
+	enum class GlBarrierBit
+		: uint32_t
+	{
+		eVertexArrayAttrib = 0x00000001,
+		eElementArray = 0x00000002,
+		eUniform = 0x00000004,
+		eTextureFetch = 0x00000008,
+		eShaderImageAccess = 0x00000020,
+		eCommand = 0x00000040,
+		ePixelBuffer = 0x00000080,
+		eTextureUpdate = 0x00000100,
+		eBufferUpdate = 0x00000200,
+		eFramebuffer = 0x00000400,
+		eTransformFeedback = 0x00000800,
+		eAtomicCounter = 0x00001000,
+		eClientMappedBuffer = 0x00004000,
+		eQueryBuffer = 0x00008000,
+		eShaderStorage = 0x00002000,
+		eAll = 0xFFFFFFFF,
+	};
+
+	IMPLEMENT_FLAGS( GlBarrierBit );
 
 	/*!
 	@author

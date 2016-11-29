@@ -15,7 +15,7 @@
 #include "Plugin/PostFxPlugin.hpp"
 #include "Plugin/RendererPlugin.hpp"
 #include "Plugin/TechniquePlugin.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderLoopAsync.hpp"
 #include "Render/RenderLoopSync.hpp"
 #include "Render/RenderSystem.hpp"

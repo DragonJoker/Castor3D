@@ -45,7 +45,7 @@ namespace Castor3D
 		Pass & m_pass;
 		//!\~english	The rendering pipeline.
 		//!\~french		Le pipeline de rendu.
-		Pipeline & m_pipeline;
+		RenderPipeline & m_pipeline;
 		//!\~english	The matrix UBO.
 		//!\~french		L'UBO de matrices.
 		FrameVariableBuffer & m_matrixUbo;
@@ -358,13 +358,13 @@ namespace Castor3D
 	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
 	//!\~english	Shader program sorted StaticGeometryRenderNodeArray map.
 	//!\~french		Map de StaticGeometryRenderNodeArray, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, StaticGeometryRenderNodeArray, StaticGeometryRenderNodesByPipeline );
 	//!\~english	Shader program sorted AnimatedGeometryRenderNodeArray map.
 	//!\~french		Map de AnimatedGeometryRenderNodeArray, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, AnimatedGeometryRenderNodeArray, AnimatedGeometryRenderNodesByPipeline );
 	//!\~english	Shader program sorted BillboardGSRenderNodeArray map.
 	//!\~french		Map de BillboardGSRenderNodeArray, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, BillboardRenderNodeArray, BillboardRenderNodesByPipeline );
 	//!\~english	Submesh sorted StaticGeometryRenderNodeArray (for instantiation).
 	//!\~french		Map StaticGeometryRenderNodeArray, triés par sous-maillage (pour l'instanciation).
 	DECLARE_MAP( SubmeshRPtr, StaticGeometryRenderNodeArray, SubmeshStaticRenderNodes );
@@ -421,7 +421,7 @@ namespace Castor3D
 
 	//!\~english	Shader program sorted SubmeshRenderNodesMap map.
 	//!\~french		Map de SubmeshRenderNodesMap, triés par programme shader.
-	DECLARE_MAP( PipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
+	DECLARE_MAP( RenderPipelineRPtr, SubmeshStaticRenderNodesByPassMap, SubmeshStaticRenderNodesByPipeline );
 
 	//@}
 }

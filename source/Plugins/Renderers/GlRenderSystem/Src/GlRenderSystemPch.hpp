@@ -50,7 +50,7 @@ SOFTWARE.
 #	include <Overlay/Overlay.hpp>
 #	include <Plugin/Plugin.hpp>
 #	include <Render/Context.hpp>
-#	include <Render/Pipeline.hpp>
+#	include <Render/RenderPipeline.hpp>
 #	include <Render/RenderSystem.hpp>
 #	include <Render/RenderTarget.hpp>
 #	include <Render/RenderWindow.hpp>

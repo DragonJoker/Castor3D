@@ -30,7 +30,7 @@
 #include "Miscellaneous/ShadowMapPass.hpp"
 #include "PostEffect/PostEffect.hpp"
 #include "Render/Context.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/BillboardList.hpp"
@@ -66,7 +66,7 @@ namespace Castor3D
 		template< bool Opaque >
 		struct PipelineUpdater
 		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, Pipeline & p_pipeline )
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, RenderPipeline & p_pipeline )
 			{
 				p_pass.UpdateOpaquePipeline( p_camera, p_pipeline, p_depthMaps );
 			}
@@ -75,7 +75,7 @@ namespace Castor3D
 		template<>
 		struct PipelineUpdater< false >
 		{
-			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, Pipeline & p_pipeline )
+			static inline void Update( RenderPass const & p_pass, Camera const & p_camera, DepthMapArray & p_depthMaps, RenderPipeline & p_pipeline )
 			{
 				p_pass.UpdateTransparentPipeline( p_camera, p_pipeline, p_depthMaps );
 			}
@@ -187,7 +187,7 @@ namespace Castor3D
 			}
 		}
 
-		void DoFillShaderDepthMaps( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )
+		void DoFillShaderDepthMaps( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )
 		{
 			if ( !p_depthMaps.empty() )
 			{
@@ -691,7 +691,7 @@ namespace Castor3D
 			p_nodes,
 			p_depthMaps,
 			[&p_depthMaps, &p_register, this](
-				Pipeline & p_pipeline,
+				RenderPipeline & p_pipeline,
 				Pass & p_pass,
 				Submesh & p_submesh,
 				StaticGeometryRenderNodeArray & p_renderNodes )
@@ -716,7 +716,7 @@ namespace Castor3D
 			p_nodes,
 			p_depthMaps,
 			[&p_depthMaps, &p_register, this](
-				Pipeline & p_pipeline,
+				RenderPipeline & p_pipeline,
 				Pass & p_pass,
 				Submesh & p_submesh,
 				StaticGeometryRenderNodeArray & p_renderNodes )
@@ -775,7 +775,7 @@ namespace Castor3D
 			p_nodes,
 			p_depthMaps,
 			[&p_depthMaps, &p_register, this](
-				Pipeline & p_pipeline,
+				RenderPipeline & p_pipeline,
 				Pass & p_pass,
 				Submesh & p_submesh,
 				StaticGeometryRenderNodeArray & p_renderNodes )
@@ -800,7 +800,7 @@ namespace Castor3D
 			p_nodes,
 			p_depthMaps,
 			[&p_depthMaps, &p_register, this](
-				Pipeline & p_pipeline,
+				RenderPipeline & p_pipeline,
 				Pass & p_pass,
 				Submesh & p_submesh,
 				StaticGeometryRenderNodeArray & p_renderNodes )
@@ -1060,7 +1060,7 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		auto & l_camera = *m_renderTarget.GetCamera();
@@ -1070,7 +1070,7 @@ namespace Castor3D
 		DoFillShaderDepthMaps( p_pipeline, p_depthMaps );
 	}
 
-	void RenderTechnique::DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderTechnique::DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		auto & l_sceneUbo = p_pipeline.GetSceneUbo();
 		auto & l_camera = *m_renderTarget.GetCamera();
@@ -1092,7 +1092,7 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eFront );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
 				DepthStencilState(),
 				std::move( l_rsState ),
 				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
@@ -1113,7 +1113,7 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eBack );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
 				DepthStencilState(),
 				std::move( l_rsState ),
 				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
@@ -1137,7 +1137,7 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
 				std::move( l_dsState ),
 				std::move( l_rsState ),
 				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
@@ -1161,7 +1161,7 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline(
 				std::move( l_dsState ),
 				std::move( l_rsState ),
 				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),

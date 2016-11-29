@@ -6,7 +6,7 @@
 #include "SceneNode.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/FrameVariableBuffer.hpp"

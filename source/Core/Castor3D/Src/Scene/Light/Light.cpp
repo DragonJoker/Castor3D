@@ -8,7 +8,7 @@
 #include "SpotLight.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Scene/Scene.hpp"

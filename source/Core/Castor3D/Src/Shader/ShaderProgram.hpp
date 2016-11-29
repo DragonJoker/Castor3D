@@ -178,6 +178,30 @@ namespace Castor3D
 		C3D_API ShaderStorageBufferSPtr FindStorageBuffer( Castor::String const & p_name )const;
 		/**
 		 *\~english
+		 *\brief		Creates an atomic counter buffer.
+		 *\param[in]	p_name			The buffer name.
+		 *\param[in]	p_shaderMask	ShaderTypeFlag combination, to set at what shaders it is to be bound.
+		 *\return		The created or retrieved Frame variable buffer.
+		 *\~french
+		 *\brief		Crée un tampon de compteurs atomiques.
+		 *\param[in]	p_name			Le nom du tampon.
+		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le tampon de stockage créé ou récupéré.
+		 */
+		C3D_API AtomicCounterBuffer & CreateAtomicCounterBuffer( Castor::String const & p_name, Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Finds an atomic counter buffer.
+		 *\param[in]	p_name	The buffer name.
+		 *\return		The found buffer, nullptr if failed.
+		 *\~french
+		 *\brief		Trouve un tampon de compteurs atomiques.
+		 *\param[in]	p_name	Le nom du tampon.
+		 *\return		Le tampon trouvé, nullptr en cas d'échec.
+		 */
+		C3D_API AtomicCounterBufferSPtr FindAtomicCounterBuffer( Castor::String const & p_name )const;
+		/**
+		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again.
 		 *\~french
 		 *\brief		Réinitialise les variables de compilation afin de pouvoir compiler le shader à nouveau.
@@ -577,6 +601,54 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the atomic counter buffers bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de compteurs atomiques liés à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline AtomicCounterBufferPtrList & GetAtomicCounterBuffers( ShaderType p_type )
+		{
+			return m_atomicCounterBuffers[size_t( p_type )];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the atomic counter buffers bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de compteurs atomiques liés à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline AtomicCounterBufferPtrList const & GetAtomicCounterBuffers( ShaderType p_type )const
+		{
+			return m_atomicCounterBuffers[size_t( p_type )];
+		}
+		/**
+		 *\~english
+		 *\return		The atomic counter buffers list.
+		 *\~french
+		 *\return		La liste de tampons de compteurs atomiques.
+		 */
+		inline AtomicCounterBufferPtrList & GetAtomicCounterBuffers()
+		{
+			return m_listAtomicCounterBuffers;
+		}
+		/**
+		 *\~english
+		 *\return		The atomic counter buffers list.
+		 *\~french
+		 *\return		La liste de tampons de compteurs atomiques.
+		 */
+		inline AtomicCounterBufferPtrList const & GetAtomicCounterBuffers()const
+		{
+			return m_listAtomicCounterBuffers;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the program link status.
 		 *\return		The value.
 		 *\~french
@@ -885,6 +957,15 @@ namespace Castor3D
 		//!\~english	The storage buffers map.
 		//!\~french		La liste des tampons de stockage.
 		ShaderStorageBufferPtrList m_listStorageBuffers;
+		//!\~english	The atomic counter buffers map, ordered by name.
+		//!\~french		La liste des tampons de compteurs atomiques, triés par nom.
+		AtomicCounterBufferPtrStrMap m_atomicCounterBuffersByName;
+		//!\~english	The atomic counter buffers map, ordered by shader type.
+		//!\~french		La liste des tampons de compteurs atomiques, triés par type de shader.
+		std::array< AtomicCounterBufferPtrList, size_t( ShaderType::eCount ) > m_atomicCounterBuffers;
+		//!\~english	The atomic counter buffers map.
+		//!\~french		La liste des tampons de compteurs atomiques.
+		AtomicCounterBufferPtrList m_listAtomicCounterBuffers;
 		//!\~english	The transform feedback layout.
 		//!\~french		Le layout de transform feedback.
 		BufferDeclaration m_declaration;

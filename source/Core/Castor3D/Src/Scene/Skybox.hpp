@@ -144,7 +144,7 @@ namespace Castor3D
 	private:
 		//!\~english	The pipeline used while rendering the skybox.
 		//!\~french		Le pipeline utilisé pour le rendu de la skybox.
-		PipelineUPtr m_pipeline;
+		RenderPipelineUPtr m_pipeline;
 		//!\~english	The skybox cube map texture.
 		//!\~french		La texture cube map de la skybox.
 		TextureLayoutSPtr m_texture;

@@ -509,6 +509,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "geometry_program" ), Parser_GeometryShader );
 	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "hull_program" ), Parser_HullShader );
 	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "domain_program" ), Parser_DomainShader );
+	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "compute_program" ), Parser_ComputeShader );
 	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eShaderProgram ), cuT( "}" ), Parser_ShaderEnd );
 

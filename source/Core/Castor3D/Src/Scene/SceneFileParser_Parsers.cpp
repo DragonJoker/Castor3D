@@ -3054,6 +3054,22 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ComputeShader )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( l_parsingContext->pShaderProgram )
+		{
+			l_parsingContext->pShaderProgram->CreateObject( ShaderType::eCompute );
+			l_parsingContext->eShaderObject = ShaderType::eCompute;
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Shader not initialised" ) );
+		}
+	}
+	END_ATTRIBUTE_PUSH( CSCNSection::eShaderObject )
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

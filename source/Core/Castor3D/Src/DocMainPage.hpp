@@ -117,8 +117,8 @@
  *<li>Improved memory occupation, limited overhead of Vertex (152 to 24 bytes) and Face (140 to 16 bytes).</li>
  *<li>Modified Subdivision, now only in Subdivider, no more in Geometry, mesh or Submesh.</li>
  *<li>Implemented Implemented Lights in texture.</li>
- *<li>Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from Pipeline.</li>
- *<li>Removed ApplyXXXMatrix from IPipelineImpl, now the Pipeline applies matrices itself.</li>
+ *<li>Added HasParameter and SetParameter functions in ShaderObject, to apply matrices from RenderPipeline.</li>
+ *<li>Removed ApplyXXXMatrix from IPipelineImpl, now the RenderPipeline applies matrices itself.</li>
  *<li>Added channel for textures (colour, ambient, diffuse, specular, normal, height).</li>
  *<li>Implemented MSAA.</li>
  *<li>Implemented Alpha to Coverage when MSAA is activated.</li>
@@ -332,7 +332,7 @@
  *<ul>
  *<li>Using std or tr1 or boost smart pointers.</li>
  *<li>Created OpenGlCommon for common treatments between GL2RenderSystem and GL3RenderSystem</li>
- *<li>Created class Pipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</li>
+ *<li>Created class RenderPipeline which performs the matrix computings and other functions (frustum, perspective, ortho, ...)</li>
  *</ul>
  *
  *\subsection mods_0_6_1_0 Modifications
@@ -561,7 +561,7 @@
  *
  *\subsubsection mods_0_7_0_c3d Castor3D
  *<ul>
- *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe Pipeline.</li>
+ *<li>Ajout des méthodes HasParameter et SetParameter dans la classe ShaderObject, pour appliquer les matrices de la classe RenderPipeline.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Mesh afin de pouvoir itérer sur les submeshes sans passer par les fonctions GetSubmesh et GetSubmeshCount.</li>
  *<li>Ajout de fonctions Begin et End dans la classe Material functions Begin and End.</li>
  *<li>Ajout de la classe FrameVariableBuffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
@@ -578,7 +578,7 @@
  *<li>Amélioration de l'occupation mémoire : diminution drastique de la taille d'un Vertex (de 152 à 24 octets) et d'une Face (de 140 à 16 octets).</li>
  *<li>Modification de Subdivision, elle se trouve maintenant uniquement dans Subdivider et plus dans Geometry, Mesh ou Submesh.</li>
  *<li>Les lumières sont maintenant implémentées dans une texture, passant la limite de 8 à 100 sources.</li>
- *<li>Suppression des méthodes ApplyXXXMatrix de la classe IPipelineImpl, maintenant la classe Pipeline applique les matrices elle-même.</li>
+ *<li>Suppression des méthodes ApplyXXXMatrix de la classe IPipelineImpl, maintenant la classe RenderPipeline applique les matrices elle-même.</li>
  *<li>Implémentation du MSAA.</li>
  *<li>Implémentation de l'Alpha to Coverage lorsque le MSAA est activé.</li>
  *<li>Revue des tailles : Viewport contient la taille interne, RenderTarget et RenderWindow contiennent la taille externe.</li>
@@ -776,7 +776,7 @@
  *<ul>
  *<li>Utilisation des smart pointers tr1.</li>
  *<li>Création d'un tronc commun 'OpenGLCommon' pour les 2 renderers OpenGL</li>
- *<li>Création d'une classe de Pipeline qui effectue les calculs matriciels et d'autres petites fonctions (perspective, ortho, ...)</li>
+ *<li>Création d'une classe de RenderPipeline qui effectue les calculs matriciels et d'autres petites fonctions (perspective, ortho, ...)</li>
  *</ul>
  *
  *\subsection mods_0_6_1_0 Modifications

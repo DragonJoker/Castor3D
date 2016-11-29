@@ -489,6 +489,11 @@ namespace GlRender
 		return m_bHasInstancedDraw && m_bHasInstancedArrays;
 	}
 
+	bool OpenGl::HasComputeVariableGroupSize()const
+	{
+		return m_bHasComputeVariableGroupSize;
+	}
+
 	bool OpenGl::HasNonPowerOfTwoTextures()const
 	{
 		return m_bHasNonPowerOfTwoTextures;
@@ -736,6 +741,43 @@ namespace GlRender
 	inline bool OpenGl::Get( Castor3D::WritingMask p_eMask )const
 	{
 		return WriteMasks[uint32_t( p_eMask )];
+	}
+
+	inline Castor::FlagCombination< GlBarrierBit > OpenGl::Get( Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const
+	{
+		Castor::FlagCombination< GlBarrierBit > l_return;
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eVertexBuffer ) )
+		{
+			l_return |= GlBarrierBit::eVertexArrayAttrib;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eIndexBuffer ) )
+		{
+			l_return |= GlBarrierBit::eElementArray;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eUniformBuffer ) )
+		{
+			l_return |= GlBarrierBit::eUniform;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eAtomicCounterBuffer ) )
+		{
+			l_return |= GlBarrierBit::eAtomicCounter;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eQueryBuffer ) )
+		{
+			l_return |= GlBarrierBit::eQueryBuffer;
+		}
+
+		if ( CheckFlag( p_barriers, Castor3D::MemoryBarrier::eShaderStorageBuffer ) )
+		{
+			l_return |= GlBarrierBit::eShaderStorage;
+		}
+
+		return l_return;
 	}
 
 	inline bool OpenGl::HasDebugOutput()const
@@ -2621,6 +2663,20 @@ namespace GlRender
 		return glCheckError( *this, "glProgramParameteri" );
 	}
 
+	bool OpenGl::DispatchCompute( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z )const
+	{
+		REQUIRE( m_pfnDispatchCompute );
+		m_pfnDispatchCompute( num_groups_x, num_groups_y, num_groups_z );
+		return glCheckError( *this, "glDispatchCompute" );
+	}
+
+	bool OpenGl::DispatchComputeGroupSize( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z )const
+	{
+		REQUIRE( m_pfnDispatchComputeGroupSize );
+		m_pfnDispatchComputeGroupSize( num_groups_x, num_groups_y, num_groups_z, work_group_size_x, work_group_size_y, work_group_size_z );
+		return glCheckError( *this, "glDispatchComputeGroupSize" );
+	}
+
 	bool OpenGl::ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const
 	{
 		REQUIRE( m_pfnShaderStorageBlockBinding );
@@ -2662,6 +2718,18 @@ namespace GlRender
 	{
 		m_pfnGetProgramResourceiv( program, uint32_t( programInterface ), index, propCount, props, bufSize, length, params );
 		return glCheckError( *this, "glGetProgramResourceiv" );
+	}
+
+	bool OpenGl::MemoryBarrier( Castor::FlagCombination< GlBarrierBit > const & barriers )const
+	{
+		m_pfnMemoryBarrier( barriers );
+		return glCheckError( *this, "glMemoryBarrier" );
+	}
+
+	bool OpenGl::MemoryBarrierByRegion( Castor::FlagCombination< GlBarrierBit > const & barriers )const
+	{
+		m_pfnMemoryBarrierByRegion( barriers );
+		return glCheckError( *this, "glMemoryBarrierByRegion" );
 	}
 
 	bool OpenGl::EnableVertexAttribArray( uint32_t index )const

@@ -66,7 +66,7 @@ namespace GrayScale
 	private:
 		Castor3D::OneIntFrameVariableSPtr m_mapDiffuse;
 		Castor3D::SamplerSPtr m_sampler;
-		Castor3D::PipelineSPtr m_pipeline;
+		Castor3D::RenderPipelineSPtr m_pipeline;
 		PostEffectSurface m_surface;
 	};
 }

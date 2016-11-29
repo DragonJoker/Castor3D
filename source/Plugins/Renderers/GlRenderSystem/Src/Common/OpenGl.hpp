@@ -47,6 +47,10 @@ SOFTWARE.
 #	endif
 #endif
 
+#if defined( MemoryBarrier )
+#	undef MemoryBarrier
+#endif
+
 //*************************************************************************************************
 
 namespace GlRender
@@ -311,6 +315,7 @@ namespace GlRender
 		inline bool HasVbo()const;
 		inline bool HasSsbo()const;
 		inline bool HasInstancing()const;
+		inline bool HasComputeVariableGroupSize()const;
 		inline bool HasNonPowerOfTwoTextures()const;
 		inline bool CanBindVboToGpuAddress()const;
 		inline Castor::String const & GetGlslErrorString( int p_index )const;
@@ -344,6 +349,7 @@ namespace GlRender
 		inline GlTexDim Get( Castor3D::CubeMapFace p_value )const;
 		inline GlCompareMode Get( Castor3D::ComparisonMode p_value )const;
 		inline bool Get( Castor3D::WritingMask p_eMask )const;
+		inline Castor::FlagCombination< GlBarrierBit > Get( Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const;
 		inline bool HasDebugOutput()const;
 		inline Castor::String const & GetVendor()const;
 		inline Castor::String const & GetRenderer()const;
@@ -761,6 +767,14 @@ namespace GlRender
 		inline bool IsProgram( uint32_t program )const;
 		inline bool ProgramParameteri( uint32_t program, uint32_t pname, int value )const;
 
+		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchCompute.xhtml
+		*/
+		inline bool DispatchCompute( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z )const;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchComputeGroupSize.xhtml
+		*/
+		inline bool DispatchComputeGroupSize( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z )const;
+
 		/** see https://www.opengl.org/sdk/docs/man/html/glShaderStorageBlockBinding.xhtml
 		*/
 		inline bool ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const;
@@ -814,6 +828,18 @@ namespace GlRender
 		inline int GetProgramResourceLocationIndex( uint32_t program, GlslInterface programInterface, char const * const name );
 		inline bool GetProgramResourceName( uint32_t program, GlslInterface programInterface, uint32_t index, int bufSize, int * length, char * name );
 		inline bool GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
+
+		//@}
+		/**@name Memory transactions functions */
+		//@{
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
+		*/
+		inline bool MemoryBarrier( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
+		*/
+		inline bool MemoryBarrierByRegion( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
 
 		//@}
 		/**@name Other functions */
@@ -892,6 +918,7 @@ namespace GlRender
 		bool m_bHasTSh{ false };
 		bool m_bHasCSh{ false };
 		bool m_bHasSpl{ false };
+		bool m_bHasComputeVariableGroupSize{ false };
 		bool m_bHasAnisotropic{ false };
 		bool m_bBindVboToGpuAddress{ false };
 		Castor::String m_extensions;
@@ -1200,6 +1227,8 @@ namespace GlRender
 		std::function< int( uint32_t program, char const * name ) > m_pfnGetAttribLocation;
 		std::function< void( uint32_t program, uint32_t pname, int value ) > m_pfnProgramParameteri;
 		std::function< void( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveAttrib;
+		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z ) > m_pfnDispatchCompute;
+		std::function< void( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z ) > m_pfnDispatchComputeGroupSize;
 		std::function< void( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding ) > m_pfnShaderStorageBlockBinding;
 
 		//@}
@@ -1299,6 +1328,18 @@ namespace GlRender
 		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params ) > m_pfnGetProgramResourceiv;
 
 		//@}
+		/**@name Memory transactions */
+		//@{
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
+		*/
+		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrier;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
+		*/
+		std::function< void( uint32_t barriers ) > m_pfnMemoryBarrierByRegion;
+
+		//@}
 
 		std::function< void( uint32_t p_param, int p_value ) > m_pfnPatchParameteri;
 	};
@@ -1336,6 +1377,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( AMD_draw_buffers_blend );
 	MAKE_GL_EXTENSION( AMDX_debug_output );
 	MAKE_GL_EXTENSION( ARB_compute_shader );
+	MAKE_GL_EXTENSION( ARB_compute_variable_group_size );
 	MAKE_GL_EXTENSION( ARB_debug_output );
 	MAKE_GL_EXTENSION( ARB_draw_buffers_blend );
 	MAKE_GL_EXTENSION( ARB_draw_instanced );
@@ -1348,6 +1390,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( ARB_pixel_buffer_object );
 	MAKE_GL_EXTENSION( ARB_program_interface_query );
 	MAKE_GL_EXTENSION( ARB_sampler_objects );
+	MAKE_GL_EXTENSION( ARB_shader_image_load_store );
 	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object );
 	MAKE_GL_EXTENSION( ARB_tessellation_shader );
 	MAKE_GL_EXTENSION( ARB_texture_buffer_object );

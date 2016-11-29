@@ -11,7 +11,7 @@
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Vertex.hpp"
 #include "Miscellaneous/Ray.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 
 #include <Log/Logger.hpp>

@@ -6,7 +6,7 @@
 #	include "Render/GlX11Context.hpp"
 #endif
 
-#include "Render/GlPipeline.hpp"
+#include "Render/GlRenderPipeline.hpp"
 #include "Render/GlRenderSystem.hpp"
 
 #include <MaterialCache.hpp>

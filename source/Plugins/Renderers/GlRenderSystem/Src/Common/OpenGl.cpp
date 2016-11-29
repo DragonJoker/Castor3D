@@ -971,6 +971,13 @@ namespace GlRender
 				if ( HasExtension( ARB_compute_shader ) )
 				{
 					m_bHasCSh = true;
+					GetFunction( m_pfnDispatchCompute, cuT( "glDispatchCompute" ), cuT( "ARB" ) );
+
+					if ( HasExtension( ARB_compute_variable_group_size ) )
+					{
+						m_bHasComputeVariableGroupSize = true;
+						GetFunction( m_pfnDispatchComputeGroupSize, cuT( "glDispatchComputeGroupSize" ), cuT( "ARB" ) );
+					}
 				}
 			}
 		}
@@ -1016,6 +1023,13 @@ namespace GlRender
 			GetFunction( m_pfnShaderStorageBlockBinding, cuT( "glShaderStorageBlockBinding" ), cuT( "ARB" ) );
 		}
 
+		if ( HasExtension( ARB_shader_image_load_store ) )
+		{
+			GetFunction( m_pfnMemoryBarrier, cuT( "glMemoryBarrier" ), cuT( "ARB" ) );
+			GetFunction( m_pfnMemoryBarrierByRegion, cuT( "glMemoryBarrierByRegion" ), cuT( "ARB" ) );
+			
+		}
+
 		return true;
 	}
 
@@ -1038,6 +1052,7 @@ namespace GlRender
 		m_bHasCSh = false;
 		m_bHasSpl = false;
 		m_bHasSsbo = false;
+		m_bHasComputeVariableGroupSize = false;
 		m_bHasNonPowerOfTwoTextures = false;
 		m_bBindVboToGpuAddress = false;
 		m_iGlslVersion = 0;

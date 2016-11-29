@@ -48,13 +48,17 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
 		 */
-		Castor3D::PipelineUPtr CreatePipeline(
+		Castor3D::RenderPipelineUPtr CreateRenderPipeline(
 			Castor3D::DepthStencilState && p_dsState,
 			Castor3D::RasteriserState && p_rsState,
 			Castor3D::BlendState && p_bdState,
 			Castor3D::MultisampleState && p_msState,
 			Castor3D::ShaderProgram & p_program,
 			Castor3D::PipelineFlags const & p_flags )override;
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
+		 */
+		Castor3D::ComputePipelineUPtr CreateComputePipeline( Castor3D::ShaderProgram & p_program )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
@@ -79,6 +83,10 @@ namespace TestRender
 		 *\copydoc		Castor3D::RenderSystem::CreateStorageBuffer
 		 */
 		std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > CreateStorageBuffer()override;
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateAtomicCounterBuffer
+		 */
+		std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > CreateAtomicCounterBuffer()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */

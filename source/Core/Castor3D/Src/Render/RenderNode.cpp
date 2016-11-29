@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "Material/Pass.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Scene/BillboardList.hpp"

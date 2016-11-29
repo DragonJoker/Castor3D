@@ -12,7 +12,7 @@
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <Overlay/PanelOverlay.hpp>
 #include <Overlay/TextOverlay.hpp>
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>

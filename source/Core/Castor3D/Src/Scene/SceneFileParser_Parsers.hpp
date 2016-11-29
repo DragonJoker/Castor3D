@@ -192,6 +192,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_HullShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_DomainShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ComputeShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderEnd )
 

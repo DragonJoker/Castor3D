@@ -8,7 +8,7 @@
 #include "TextureImage.hpp"
 #include "TextureLayout.hpp"
 
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"

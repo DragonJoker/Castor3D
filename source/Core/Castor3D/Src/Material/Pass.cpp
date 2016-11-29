@@ -5,7 +5,7 @@
 #include "MaterialCache.hpp"
 #include "ShaderCache.hpp"
 
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/SceneNode.hpp"

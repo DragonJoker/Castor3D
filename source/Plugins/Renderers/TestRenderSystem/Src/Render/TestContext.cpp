@@ -1,6 +1,5 @@
 #include "Render/TestContext.hpp"
 
-#include "Render/TestPipeline.hpp"
 #include "Render/TestRenderSystem.hpp"
 
 using namespace Castor;

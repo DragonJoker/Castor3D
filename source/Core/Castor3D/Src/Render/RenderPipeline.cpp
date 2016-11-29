@@ -1,4 +1,4 @@
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 
 #include "RenderSystem.hpp"
 #include "Viewport.hpp"
@@ -20,11 +20,11 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	const String Pipeline::MtxProjection = cuT( "c3d_mtxProjection" );
-	const String Pipeline::MtxModel = cuT( "c3d_mtxModel" );
-	const String Pipeline::MtxView = cuT( "c3d_mtxView" );
-	const String Pipeline::MtxNormal = cuT( "c3d_mtxNormal" );
-	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
+	const String RenderPipeline::MtxProjection = cuT( "c3d_mtxProjection" );
+	const String RenderPipeline::MtxModel = cuT( "c3d_mtxModel" );
+	const String RenderPipeline::MtxView = cuT( "c3d_mtxView" );
+	const String RenderPipeline::MtxNormal = cuT( "c3d_mtxNormal" );
+	const String RenderPipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
 	{
 		cuT( "c3d_mtxTexture0" ),
 		cuT( "c3d_mtxTexture1" ),
@@ -34,7 +34,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Pipeline::Pipeline( RenderSystem & p_renderSystem
+	RenderPipeline::RenderPipeline( RenderSystem & p_renderSystem
 						, DepthStencilState && p_dsState
 						, RasteriserState && p_rsState
 						, BlendState && p_blState
@@ -72,16 +72,16 @@ namespace Castor3D
 		m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
 	}
 
-	Pipeline::~Pipeline()
+	RenderPipeline::~RenderPipeline()
 	{
 	}
 
-	void Pipeline::Cleanup()
+	void RenderPipeline::Cleanup()
 	{
 		m_program.Cleanup();
 	}
 
-	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )
+	bool RenderPipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )
 	{
 		Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
 		l_ptTmp = GetViewMatrix() * l_ptTmp;
@@ -96,7 +96,7 @@ namespace Castor3D
 		return true;
 	}
 
-	bool Pipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_result )
+	bool RenderPipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_result )
 	{
 		Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetViewMatrix() ).get_inverse();
 		Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );
@@ -112,34 +112,34 @@ namespace Castor3D
 		return true;
 	}
 
-	void Pipeline::ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyProjection( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxProjection, MtxProjection, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyModel( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxModel, MtxModel, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyView( FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyView( FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		DoApplyMatrix( m_mtxView, MtxView, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyNormal( FrameVariableBuffer const & p_matrixBuffer )
+	void RenderPipeline::ApplyNormal( FrameVariableBuffer const & p_matrixBuffer )
 	{
 		m_mtxNormal = Matrix4x4r{ ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose() };
 		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
 	}
 
-	void Pipeline::ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matrices )
+	void RenderPipeline::ApplyMatrices( FrameVariableBuffer const & p_matrixBuffer, uint64_t p_matrices )
 	{
 		if ( p_matrices & MASK_MTXMODE_PROJECTION )
 		{
@@ -170,7 +170,7 @@ namespace Castor3D
 		}
 	}
 
-	void Pipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const
+	void RenderPipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer const & p_matrixBuffer )const
 	{
 		Matrix4x4rFrameVariableSPtr l_variable;
 		p_matrixBuffer.GetVariable( p_name, l_variable );
