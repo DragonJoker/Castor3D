@@ -23,7 +23,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Copy( GlBufferBase< T > const & p_src, uint32_t p_size )
+	bool GlBufferBase< T >::Copy( GlBufferBase< T > const & p_src, uint32_t p_size )const
 	{
 		bool l_return = GetOpenGl().BindBuffer( GlBufferTarget::eRead, p_src.GetGlName() );
 
@@ -44,13 +44,13 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
+	bool GlBufferBase< T >::InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const
 	{
 		bool l_return = Bind();
 
 		if ( l_return )
 		{
-			l_return = BindableType::GetOpenGl().BufferData( m_target, p_size * sizeof( T ), p_buffer, BindableType::GetOpenGl().GetBufferFlags( uint32_t( p_nature ) | uint32_t( p_type ) ) );
+			l_return = BindableType::GetOpenGl().BufferData( m_target, p_count * sizeof( T ), nullptr, BindableType::GetOpenGl().GetBufferFlags( uint32_t( p_nature ) | uint32_t( p_type ) ) );
 			Unbind();
 		}
 
@@ -58,7 +58,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Upload( T const * p_buffer, uint32_t p_count, uint32_t p_offset )
+	bool GlBufferBase< T >::Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const
 	{
 		bool l_return = Bind();
 
@@ -93,7 +93,32 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags )
+	bool GlBufferBase< T >::Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const
+	{
+		bool l_return = Bind();
+
+		if ( l_return )
+		{
+			auto l_buffer = Lock( p_offset, p_count, Castor3D::AccessType::eRead );
+
+			if ( l_buffer )
+			{
+				std::memcpy( p_buffer, l_buffer, p_count * sizeof( T ) );
+				Unlock();
+			}
+			else
+			{
+				l_return = false;
+			}
+
+			Unbind();
+		}
+
+		return l_return;
+	}
+
+	template< typename T >
+	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
 	{
 		T * l_return = nullptr;
 
@@ -106,7 +131,7 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( GlAccessType p_access )
+	T * GlBufferBase< T >::Lock( GlAccessType p_access )const
 	{
 		T * l_return = nullptr;
 
@@ -119,10 +144,17 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Unlock()
+	bool GlBufferBase< T >::Unlock()const
 	{
 		bool l_return = this->GetGlName() != GlInvalidIndex;
 		l_return &= BindableType::GetOpenGl().UnmapBuffer( m_target );
 		return l_return;
+	}
+
+	template< typename T >
+	void GlBufferBase< T >::SetBindingPoint( uint32_t p_point )const
+	{
+		m_bindingPoint = p_point;
+		BindableType::GetOpenGl().BindBufferBase( m_target, p_point, GetGlName() );
 	}
 }

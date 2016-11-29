@@ -256,7 +256,6 @@ namespace Testing
 	bool C3DTestCase::compare( PointLight const & p_a, PointLight const & p_b )
 	{
 		bool l_return{ CT_EQUAL( p_a.GetAttenuation(), p_b.GetAttenuation() ) };
-		l_return &= CT_EQUAL( p_a.GetPosition(), p_b.GetPosition() );
 		return l_return;
 	}
 
@@ -265,7 +264,6 @@ namespace Testing
 		bool l_return{ CT_EQUAL( p_a.GetExponent(), p_b.GetExponent() ) };
 		l_return &= CT_EQUAL( p_a.GetAttenuation(), p_b.GetAttenuation() );
 		l_return &= CT_EQUAL( p_a.GetCutOff(), p_b.GetCutOff() );
-		l_return &= CT_EQUAL( p_a.GetPosition(), p_b.GetPosition() );
 		return l_return;
 	}
 

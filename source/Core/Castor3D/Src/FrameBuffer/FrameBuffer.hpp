@@ -147,7 +147,7 @@ namespace Castor3D
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool BlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const;
+		C3D_API bool BlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const;
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
@@ -167,7 +167,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool StretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const;
+		C3D_API bool StretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const;
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
@@ -453,7 +453,7 @@ namespace Castor3D
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const = 0;
+		C3D_API virtual bool DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
@@ -474,7 +474,7 @@ namespace Castor3D
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const = 0;
+		C3D_API virtual bool DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const = 0;
 
 	private:
 		C3D_API bool DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );

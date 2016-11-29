@@ -1,6 +1,5 @@
-﻿
-template< typename T >
-Castor::TextFile & Castor::operator <<( Castor::TextFile & p_file, T const & p_toWrite )
+﻿template< typename T >
+Castor::TextFile & Castor::operator<<( Castor::TextFile & p_file, T const & p_toWrite )
 {
 	String l_tmp;
 	l_tmp << p_toWrite;
@@ -9,7 +8,7 @@ Castor::TextFile & Castor::operator <<( Castor::TextFile & p_file, T const & p_t
 }
 
 template< typename T >
-Castor::TextFile & Castor::operator >>( Castor::TextFile & p_file, T & p_toRead )
+Castor::TextFile & Castor::operator>>( Castor::TextFile & p_file, T & p_toRead )
 {
 	String l_strWord;
 	p_file.ReadWord( l_strWord );

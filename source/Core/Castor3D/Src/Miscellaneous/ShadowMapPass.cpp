@@ -42,9 +42,10 @@ namespace Castor3D
 		static String const ShadowMap = cuT( "ShadowMap" );
 
 		template< typename MapType, typename FuncType >
-		void DoTraverseNodes( Camera const & p_camera
-							  , MapType & p_nodes
-							  , FuncType p_function )
+		void DoTraverseNodes(
+			Camera const & p_camera,
+			MapType & p_nodes,
+			FuncType p_function )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
@@ -63,9 +64,10 @@ namespace Castor3D
 		}
 
 		template< typename MapType >
-		void DoRenderNonInstanced( Scene & p_scene
-								   , Camera const & p_camera
-								   , MapType & p_nodes )
+		void DoRenderNonInstanced(
+			Scene & p_scene,
+			Camera const & p_camera,
+			MapType & p_nodes )
 		{
 			auto l_depthMaps = DepthMapArray{};
 
@@ -152,12 +154,13 @@ namespace Castor3D
 		DoRender();
 	}
 
-	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode( Pass & p_pass
-															   , Pipeline & p_pipeline
-															   , Submesh & p_submesh
-															   , Geometry & p_primitive
-															   , AnimatedSkeletonSPtr p_skeleton
-															   , AnimatedMeshSPtr p_mesh )
+	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		Submesh & p_submesh,
+		Geometry & p_primitive,
+		AnimatedSkeletonSPtr p_skeleton,
+		AnimatedMeshSPtr p_mesh )
 	{
 		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
@@ -177,10 +180,11 @@ namespace Castor3D
 		};
 	}
 
-	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode( Pass & p_pass
-														   , Pipeline & p_pipeline
-														   , Submesh & p_submesh
-														   , Geometry & p_primitive )
+	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		Submesh & p_submesh,
+		Geometry & p_primitive )
 	{
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
@@ -196,9 +200,10 @@ namespace Castor3D
 		};
 	}
 
-	BillboardRenderNode ShadowMapPass::CreateBillboardNode( Pass & p_pass
-														 , Pipeline & p_pipeline
-														 , BillboardBase & p_billboard )
+	BillboardRenderNode ShadowMapPass::CreateBillboardNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
@@ -251,7 +256,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				l_matrixBuffer.Upload( 0u, l_matrixBuffer.GetSize(), l_matrixBuffer.data() );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
@@ -275,7 +280,10 @@ namespace Castor3D
 		DoRenderNonInstanced( p_scene, p_camera, p_nodes );
 	}
 
-	String ShadowMapPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String ShadowMapPass::DoGetTransparentPixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
@@ -322,7 +330,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShadowMapPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const
+	void ShadowMapPass::DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}

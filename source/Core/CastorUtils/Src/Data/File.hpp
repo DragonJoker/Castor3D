@@ -26,6 +26,7 @@ SOFTWARE.
 #include <fstream>
 #include "CastorUtils.hpp"
 #include "Path.hpp"
+#include "Design/FlagCombination.hpp"
 #include "Exception/Exception.hpp"
 #include "Exception/Assertion.hpp"
 
@@ -239,20 +240,7 @@ namespace Castor
 		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
 		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
 		 */
-		CU_API File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
-		/**
-		 *\~english
-		 *\brief		Opens the file at the given path with the given mode and encoding
-		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_mode		The opening mode, combination of one or more OpenMode
-		 *\param[in]	p_eEncoding	The file encoding mode
-		 *\~french
-		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
-		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs OpenMode
-		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
-		 */
-		CU_API File( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
+		CU_API File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding = EncodingMode::eASCII );
 
 	public:
 		/**
@@ -331,7 +319,7 @@ namespace Castor
 		 *\param[in]	p_flags	Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = uint32_t( CreateMode::eAllRWX ) );
+		CU_API static bool DirectoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags = CreateMode::eAllRWX );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory
@@ -415,7 +403,7 @@ namespace Castor
 		*/
 		inline	Path const & GetFileFullPath()const
 		{
-			return m_strFileFullPath;
+			return m_fileFullPath;
 		}
 		/**
 		 *\~english
@@ -427,7 +415,7 @@ namespace Castor
 		*/
 		inline Path GetFilePath()const
 		{
-			return m_strFileFullPath.GetPath();
+			return m_fileFullPath.GetPath();
 		}
 		/**
 		 *\~english
@@ -439,7 +427,7 @@ namespace Castor
 		*/
 		inline Path GetFileName()const
 		{
-			return Path{ m_strFileFullPath.GetFullFileName() };
+			return Path{ m_fileFullPath.GetFullFileName() };
 		}
 
 	protected:
@@ -448,19 +436,27 @@ namespace Castor
 		CU_API uint64_t DoRead( uint8_t * p_buffer, uint64_t p_uiSize );
 
 	protected:
-		//!\~english The opening mode	\~french Le mode d'ouverture
-		uint32_t m_mode{ 0u };
-		//!\~english The encoding mode	\~french Le mode d'encodage
+		//!\~english	The opening mode.
+		//!\~french		Le mode d'ouverture.
+		FlagCombination< OpenMode > m_mode{ 0u };
+		//!\~english	The encoding mode.
+		//!\~french		Le mode d'encodage.
 		EncodingMode m_encoding{ EncodingMode::eASCII };
-		//!\~english The full file path	\~french Le chemin d'accès au fichier
-		Path m_strFileFullPath;
-		//!\~english The file	\~french Le fichier
-		FILE * m_pFile{ nullptr };
-		//!\~english The current cursor position in file	\~french La position actuelle du curseur dans le fichier
-		unsigned long long m_ullCursor{ 0 };
-		//!\~english The total file length	\~french La taille totale du fichier
-		unsigned long long m_ullLength{ 0 };
+		//!\~english	The full file path.
+		//!\~french		Le chemin d'accès au fichier.
+		Path m_fileFullPath;
+		//!\~english	The file.
+		//!\~french		Le fichier.
+		FILE * m_file{ nullptr };
+		//!\~english	The current cursor position in file.
+		//!\~french		La position actuelle du curseur dans le fichier.
+		uint64_t m_cursor{ 0 };
+		//!\~english	The total file length.
+		//!\~french		La taille totale du fichier.
+		uint64_t m_length{ 0 };
 	};
+	IMPLEMENT_FLAGS( File::OpenMode )
+	IMPLEMENT_FLAGS( File::CreateMode )
 }
 
 #endif

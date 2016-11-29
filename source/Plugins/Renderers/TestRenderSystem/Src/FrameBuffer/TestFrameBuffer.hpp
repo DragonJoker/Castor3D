@@ -110,11 +110,11 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		bool DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )const override;
+		bool DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
 		 */
-		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::InterpolationMode p_interpolation )const override;
+		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components, Castor3D::InterpolationMode p_interpolation )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */

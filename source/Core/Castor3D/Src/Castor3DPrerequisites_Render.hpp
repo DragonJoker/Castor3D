@@ -145,35 +145,9 @@ namespace Castor3D
 		eRead = 1 << 0,
 		//!\~english	Write only access type.
 		//!\~french		Accèes écriture seule.
-		eWrite = 1 << 1,
-		//!\~english	Read and write access type.
-		//!\~french		Accès lecture et écriture.
-		eReadWrite = eRead | eWrite,
+		eWrite = 1 << 1
 	};
-	/**
-	 *\~english
-	 *\brief		Bitwise OR on AccessType.
-	 *\param[in]	p_lhs, p_rhs	The operands.
-	 *\~french
-	 *\brief		OU binaire sur des AccessType.
-	 *\param[in]	p_lhs, p_rhs	Les opérandes.
-	 */
-	inline AccessType operator|( AccessType p_lhs, AccessType p_rhs )
-	{
-		return AccessType( uint8_t( p_lhs ) | uint8_t( p_rhs ) );
-	}
-	/**
-	 *\~english
-	 *\brief		Bitwise AND on AccessType.
-	 *\param[in]	p_lhs, p_rhs	The operands.
-	 *\~french
-	 *\brief		ET binaire sur des AccessType.
-	 *\param[in]	p_lhs, p_rhs	Les opérandes.
-	 */
-	inline AccessType operator&( AccessType p_lhs, AccessType p_rhs )
-	{
-		return AccessType( uint8_t( p_lhs ) & uint8_t( p_rhs ) );
-	}
+	IMPLEMENT_FLAGS( AccessType )
 	/*!
 	\author 	Sylvain DOREMUS
 	\see		BufferAccessNature
@@ -453,6 +427,7 @@ namespace Castor3D
 		//! Instantiation matrix
 		eTransform = 0x400,
 	};
+	IMPLEMENT_FLAGS( ElementUsage )
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0
@@ -573,8 +548,8 @@ namespace Castor3D
 	{
 		BlendMode m_colourBlendMode;
 		BlendMode m_alphaBlendMode;
-		uint16_t m_textureFlags;
-		uint16_t m_programFlags;
+		Castor::FlagCombination< TextureChannel > m_textureFlags;
+		Castor::FlagCombination< ProgramFlag > m_programFlags;
 		uint8_t m_sceneFlags;
 	};
 
@@ -597,7 +572,12 @@ namespace Castor3D
 	struct StaticGeometryRenderNode;
 	struct AnimatedGeometryRenderNode;
 	struct BillboardRenderNode;
-	class TransformFeedback;
+	class RenderTechnique;
+	class RenderWindow;
+	class RenderTarget;
+	class RenderLoop;
+	class RenderLoopAsync;
+	class RenderLoopSync;
 
 	template< typename T >
 	class GpuBuffer;
@@ -627,7 +607,10 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ToneMapping );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( ShadowMapPass );
-	DECLARE_SMART_PTR( TransformFeedback );
+	DECLARE_SMART_PTR( RenderTechnique );
+	DECLARE_SMART_PTR( RenderWindow );
+	DECLARE_SMART_PTR( RenderLoop );
+	DECLARE_SMART_PTR( RenderTarget );
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );

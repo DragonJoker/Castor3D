@@ -17,20 +17,25 @@ namespace Castor3D
 	{
 	}
 
-	bool VertexBuffer::Create()
+	bool VertexBuffer::Initialise( BufferAccessType p_type, BufferAccessNature p_nature )
 	{
 		if ( !m_gpuBuffer )
 		{
-			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer( this );
+			m_gpuBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer();
 		}
 
 		bool l_return = m_gpuBuffer != nullptr;
 
 		if ( l_return )
 		{
-			l_return = m_gpuBuffer->Create();
+			l_return = DoInitialise( p_type, p_nature );
 		}
 
 		return l_return;
+	}
+
+	void VertexBuffer::Cleanup()
+	{
+		DoCleanup();
 	}
 }

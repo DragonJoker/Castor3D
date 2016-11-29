@@ -131,8 +131,10 @@ namespace GrayScale
 		if ( !l_vertex.empty() && !l_fragment.empty() )
 		{
 			ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
+			l_program->CreateObject( ShaderType::eVertex );
+			l_program->CreateObject( ShaderType::ePixel );
 			m_mapDiffuse = l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
-			l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+			l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vertex );
 			l_program->SetSource( ShaderType::ePixel, l_model, l_fragment );
 			l_program->Initialise();

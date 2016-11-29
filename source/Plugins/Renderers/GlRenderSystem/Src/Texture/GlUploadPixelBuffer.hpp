@@ -42,7 +42,8 @@ namespace GlRender
 		GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pixels );
 		virtual ~GlUploadPixelBuffer();
 
-		virtual bool Initialise();
+	private:
+		bool DoInitialise()override;
 	};
 }
 

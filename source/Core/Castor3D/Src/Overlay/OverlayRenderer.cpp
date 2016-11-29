@@ -136,8 +136,7 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			m_panelVertexBuffer->Create();
-			m_panelVertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_panelVertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 			{
 				auto & l_pipeline = DoGetPanelPipeline( 0 );
@@ -165,8 +164,7 @@ namespace Castor3D
 				l_buffer += l_stride;
 			}
 
-			m_borderVertexBuffer->Create();
-			m_borderVertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_borderVertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 			{
 				auto & l_pipeline = DoGetPanelPipeline( 0 );
@@ -211,7 +209,7 @@ namespace Castor3D
 			m_panelGeometryBuffers.m_textured->Cleanup();
 			m_panelGeometryBuffers.m_noTexture.reset();
 			m_panelGeometryBuffers.m_textured.reset();
-			m_panelVertexBuffer->Destroy();
+			m_panelVertexBuffer->Cleanup();
 			m_panelVertexBuffer.reset();
 		}
 
@@ -221,7 +219,7 @@ namespace Castor3D
 			m_borderGeometryBuffers.m_textured->Cleanup();
 			m_borderGeometryBuffers.m_noTexture.reset();
 			m_borderGeometryBuffers.m_textured.reset();
-			m_borderVertexBuffer->Destroy();
+			m_borderVertexBuffer->Cleanup();
 			m_borderVertexBuffer.reset();
 		}
 
@@ -235,7 +233,7 @@ namespace Castor3D
 
 		for ( auto l_buffer : m_textsVertexBuffers )
 		{
-			l_buffer->Destroy();
+			l_buffer->Cleanup();
 		}
 
 		m_textsVertexBuffers.clear();
@@ -412,7 +410,7 @@ namespace Castor3D
 		return l_it->second;
 	}
 
-	Pipeline & OverlayRenderer::DoGetPanelPipeline( uint16_t p_textureFlags )
+	Pipeline & OverlayRenderer::DoGetPanelPipeline( FlagCombination< TextureChannel > p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -427,7 +425,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	Pipeline & OverlayRenderer::DoGetTextPipeline( uint16_t p_textureFlags )
+	Pipeline & OverlayRenderer::DoGetTextPipeline( FlagCombination< TextureChannel > p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -443,7 +441,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	Pipeline & OverlayRenderer::DoGetPipeline( uint16_t p_textureFlags )
+	Pipeline & OverlayRenderer::DoGetPipeline( FlagCombination< TextureChannel > const & p_textureFlags )
 	{
 		auto l_it = m_pipelines.find( p_textureFlags );
 
@@ -487,8 +485,7 @@ namespace Castor3D
 	{
 		auto l_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
 		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.stride() );
-		l_vertexBuffer->Create();
-		l_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+		l_vertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
 		OverlayGeometryBuffers l_geometryBuffers;
 		{
@@ -587,15 +584,17 @@ namespace Castor3D
 		return l_geometryBuffers;
 	}
 
-	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( uint16_t p_textureFlags )
+	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( FlagCombination< TextureChannel > const & p_textureFlags )
 	{
 		using namespace GLSL;
 
 		// Shader program
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		ShaderProgramSPtr l_program = l_cache.GetNewProgram( false );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
-		l_cache.CreatePassBuffer( *l_program, 0u, MASK_SHADER_TYPE_PIXEL );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
+		l_cache.CreatePassBuffer( *l_program, 0u, ShaderTypeFlag::ePixel );
 
 		// Vertex shader
 		String l_strVs;

@@ -150,7 +150,10 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetOpaquePixelShaderSource(
+			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
@@ -163,7 +166,10 @@ namespace Deferred
 		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
 		 */
-		Castor::String DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
+		Castor::String DoGetLightPassVertexShaderSource(
+			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -172,7 +178,10 @@ namespace Deferred
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
 		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
 		 */
-		Castor::String DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
+		Castor::String DoGetLightPassPixelShaderSource(
+			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
 
 	protected:
 		struct LightPassProgram

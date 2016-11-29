@@ -82,11 +82,12 @@ namespace Castor3D
 		};
 
 		template< bool Opaque, typename MapType, typename FuncType >
-		inline void DoTraverseNodes( RenderPass const & p_pass
-									 , Camera const & p_camera
-									 , MapType & p_nodes
-									 , DepthMapArray & p_depthMaps
-									 , FuncType p_function )
+		inline void DoTraverseNodes(
+			RenderPass const & p_pass,
+			Camera const & p_camera,
+			MapType & p_nodes,
+			DepthMapArray & p_depthMaps,
+			FuncType p_function )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
@@ -104,12 +105,13 @@ namespace Castor3D
 		}
 
 		template< bool Opaque, typename MapType >
-		inline void DoRenderNonInstanced( RenderPass const & p_pass
-										  , Camera const & p_camera
-										  , MapType & p_nodes
-										  , DepthMapArray & p_depthMaps
-										  , bool p_register
-										  , std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
+		inline void DoRenderNonInstanced(
+			RenderPass const & p_pass,
+			Camera const & p_camera,
+			MapType & p_nodes,
+			DepthMapArray & p_depthMaps,
+			bool p_register,
+			std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > & p_renderedObjects )
 		{
 			for ( auto l_itPipelines : p_nodes )
 			{
@@ -151,9 +153,10 @@ namespace Castor3D
 		}
 
 		template< typename MapType >
-		void DoSortAlpha( MapType & p_input
-						  , Camera const & p_camera
-						  , RenderTechnique::DistanceSortedNodeMap & p_output )
+		void DoSortAlpha(
+			MapType & p_input,
+			Camera const & p_camera,
+			RenderTechnique::DistanceSortedNodeMap & p_output )
 		{
 			for ( auto & l_itPipelines : p_input )
 			{
@@ -172,7 +175,9 @@ namespace Castor3D
 			}
 		}
 
-		inline void DoUpdateProgram( ShaderProgram & p_program, uint16_t p_programFlags )
+		inline void DoUpdateProgram(
+			ShaderProgram & p_program,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
 				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel ) )
@@ -305,7 +310,7 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eReadWrite, PixelFormat::eRGBA16F32F, p_size );
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGBA16F32F, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		p_size = m_colourTexture->GetDimensions();
 
@@ -680,14 +685,16 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesNonInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoTraverseNodes< true >( *this
-								 , *m_renderTarget.GetCamera()
-								 , p_nodes
-								 , p_depthMaps
-								 , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																	  , Pass & p_pass
-																	  , Submesh & p_submesh
-																	  , StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes< true >(
+			*this,
+			*m_renderTarget.GetCamera(),
+			p_nodes,
+			p_depthMaps,
+			[&p_depthMaps, &p_register, this](
+				Pipeline & p_pipeline,
+				Pass & p_pass,
+				Submesh & p_submesh,
+				StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
@@ -703,14 +710,16 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderOpaqueInstancedSubmeshesInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoTraverseNodes< true >( *this
-								 , *m_renderTarget.GetCamera()
-								 , p_nodes
-								 , p_depthMaps
-								 , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																	  , Pass & p_pass
-																	  , Submesh & p_submesh
-																	  , StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes< true >(
+			*this,
+			*m_renderTarget.GetCamera(),
+			p_nodes,
+			p_depthMaps,
+			[&p_depthMaps, &p_register, this](
+				Pipeline & p_pipeline,
+				Pass & p_pass,
+				Submesh & p_submesh,
+				StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -760,14 +769,16 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderTransparentInstancedSubmeshesNonInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoTraverseNodes< false >( *this
-								  , *m_renderTarget.GetCamera()
-								  , p_nodes
-								  , p_depthMaps
-								  , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																	   , Pass & p_pass
-																	   , Submesh & p_submesh
-																	   , StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes< false >(
+			*this,
+			*m_renderTarget.GetCamera(),
+			p_nodes,
+			p_depthMaps,
+			[&p_depthMaps, &p_register, this](
+				Pipeline & p_pipeline,
+				Pass & p_pass,
+				Submesh & p_submesh,
+				StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			for ( auto & l_renderNode : p_renderNodes )
 			{
@@ -783,14 +794,16 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderTransparentInstancedSubmeshesInstanced( SubmeshStaticRenderNodesByPipelineMap & p_nodes, DepthMapArray & p_depthMaps, bool p_register )
 	{
-		DoTraverseNodes< false >( *this
-								  , *m_renderTarget.GetCamera()
-								  , p_nodes
-								  , p_depthMaps
-								  , [&p_depthMaps, &p_register, this]( Pipeline & p_pipeline
-																	   , Pass & p_pass
-																	   , Submesh & p_submesh
-																	   , StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes< false >(
+			*this,
+			*m_renderTarget.GetCamera(),
+			p_nodes,
+			p_depthMaps,
+			[&p_depthMaps, &p_register, this](
+				Pipeline & p_pipeline,
+				Pass & p_pass,
+				Submesh & p_submesh,
+				StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -853,17 +866,23 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoCompleteProgramFlags( uint16_t & p_programFlags )const
+	void RenderTechnique::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eLighting );
 	}
 
-	String RenderTechnique::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetGeometryShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		return String{};
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -921,17 +940,20 @@ namespace Castor3D
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-												 , l_fMatShininess
-												 , FragmentInput { vtx_worldSpacePosition, l_v3Normal }
-												 , l_output );
+			l_lighting->ComputeCombinedLighting(
+				l_worldEye,
+				l_fMatShininess,
+				FragmentInput { vtx_worldSpacePosition, l_v3Normal },
+				l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
-									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
-									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
-									l_v3Emissive, 1.0 );
+			pxl_v4FragColor = vec4(
+				l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
+				l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
+				l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
+				l_v3Emissive,
+				1.0 );
 
 			if ( p_sceneFlags != 0 )
 			{
@@ -943,7 +965,10 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetTransparentPixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -1004,10 +1029,11 @@ namespace Castor3D
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting( l_worldEye
-												 , l_fMatShininess
-												 , FragmentInput( vtx_worldSpacePosition, l_v3Normal )
-												 , l_output );
+			l_lighting->ComputeCombinedLighting(
+				l_worldEye,
+				l_fMatShininess,
+				FragmentInput( vtx_worldSpacePosition, l_v3Normal ),
+				l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
@@ -1016,10 +1042,13 @@ namespace Castor3D
 				l_fAlpha = texture( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 			}
 
-			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
-															   l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
-															   l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
-															   l_v3Emissive ), l_fAlpha );
+			pxl_v4FragColor = vec4( l_fAlpha * l_writer.Paren(
+				l_writer.Paren(
+					l_v3Ambient * c3d_v4MatAmbient.xyz() ) +
+					l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.xyz() ) +
+					l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.xyz() ) +
+					l_v3Emissive ),
+				l_fAlpha );
 
 			if ( p_sceneFlags != 0 )
 			{
@@ -1063,12 +1092,13 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eFront );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
-																											, std::move( l_rsState )
-																											, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																											, std::move( l_msState )
-																											, p_program
-																											, p_flags ) ).first;
+			l_it = m_frontOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+				DepthStencilState(),
+				std::move( l_rsState ),
+				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
+				std::move( l_msState ),
+				p_program,
+				p_flags ) ).first;
 		}
 	}
 
@@ -1083,12 +1113,13 @@ namespace Castor3D
 			l_rsState.SetCulledFaces( Culling::eBack );
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
-			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState()
-																										   , std::move( l_rsState )
-																										   , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																										   , std::move( l_msState )
-																										   , p_program
-																										   , p_flags ) ).first;
+			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+				DepthStencilState(),
+				std::move( l_rsState ),
+				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
+				std::move( l_msState ),
+				p_program,
+				p_flags ) ).first;
 		}
 	}
 
@@ -1106,12 +1137,13 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																												 , std::move( l_rsState )
-																												 , DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																												 , std::move( l_msState )
-																												 , p_program
-																												 , p_flags ) ).first;
+			l_it = m_frontTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+				std::move( l_dsState ),
+				std::move( l_rsState ),
+				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
+				std::move( l_msState ),
+				p_program,
+				p_flags ) ).first;
 		}
 	}
 
@@ -1129,12 +1161,13 @@ namespace Castor3D
 			MultisampleState l_msState;
 			l_msState.SetMultisample( m_multisampling );
 			l_msState.EnableAlphaToCoverage( m_multisampling );
-			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsState )
-																												, std::move( l_rsState )
-																												, DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode )
-																												, std::move( l_msState )
-																												, p_program
-																												, p_flags ) ).first;
+			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline(
+				std::move( l_dsState ),
+				std::move( l_rsState ),
+				DoCreateBlendState( p_flags.m_colourBlendMode, p_flags.m_alphaBlendMode ),
+				std::move( l_msState ),
+				p_program,
+				p_flags ) ).first;
 		}
 	}
 
@@ -1149,7 +1182,12 @@ namespace Castor3D
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensionsArray, AccessType::eNone, AccessType::eReadWrite, PixelFormat::eD32F, Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
+			TextureType::eTwoDimensionsArray,
+			AccessType::eNone,
+			AccessType::eRead | AccessType::eWrite,
+			PixelFormat::eD32F,
+			Point3ui{ p_size.width(), p_size.height(), GLSL::SpotShadowMapCount } );
 		m_spotShadowMap.SetTexture( l_texture );
 		m_spotShadowMap.SetSampler( l_sampler );
 
@@ -1171,7 +1209,12 @@ namespace Castor3D
 		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 		bool l_return{ true };
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eCube, AccessType::eNone, AccessType::eReadWrite, PixelFormat::eD32F, p_size );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
+			TextureType::eCube,
+			AccessType::eNone,
+			AccessType::eRead | AccessType::eWrite,
+			PixelFormat::eD32F,
+			p_size );
 		m_pointShadowMap.SetTexture( l_texture );
 		m_pointShadowMap.SetSampler( l_sampler );
 

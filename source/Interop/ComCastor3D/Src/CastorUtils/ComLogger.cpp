@@ -13,13 +13,13 @@ namespace CastorCom
 
 	STDMETHODIMP CLogger::Initialise( /* [in] */ eLOG_TYPE level )
 	{
-		Castor::Logger::Initialise( Castor::ELogType( level ) );
+		Castor::Logger::Initialise( Castor::LogType( level ) );
 		return S_OK;
 	}
 
 	STDMETHODIMP CLogger::SetFileName( /* [in] */ BSTR name, eLOG_TYPE target )
 	{
-		Castor::Logger::SetFileName( FromBstr( name ), Castor::ELogType( target ) );
+		Castor::Logger::SetFileName( FromBstr( name ), Castor::LogType( target ) );
 		return S_OK;
 	}
 

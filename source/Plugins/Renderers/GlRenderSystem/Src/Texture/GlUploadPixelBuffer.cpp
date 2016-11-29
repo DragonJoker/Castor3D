@@ -21,8 +21,8 @@ namespace GlRender
 	{
 	}
 
-	bool GlUploadPixelBuffer::Initialise()
+	bool GlUploadPixelBuffer::DoInitialise()
 	{
-		return Fill( nullptr, m_pixelsSize );
+		return true;
 	}
 }

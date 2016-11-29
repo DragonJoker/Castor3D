@@ -117,12 +117,17 @@ namespace Castor3D
 	\~french
 	\brief		Masques pour les types de shader object
 	*/
-	static const uint32_t MASK_SHADER_TYPE_VERTEX = uint32_t( 0x1 ) << int( ShaderType::eVertex );
-	static const uint32_t MASK_SHADER_TYPE_HULL = uint32_t( 0x1 ) << int( ShaderType::eHull );
-	static const uint32_t MASK_SHADER_TYPE_DOMAIN = uint32_t( 0x1 ) << int( ShaderType::eDomain );
-	static const uint32_t MASK_SHADER_TYPE_GEOMETRY = uint32_t( 0x1 ) << int( ShaderType::eGeometry );
-	static const uint32_t MASK_SHADER_TYPE_PIXEL = uint32_t( 0x1 ) << int( ShaderType::ePixel );
-	static const uint32_t MASK_SHADER_TYPE_COMPUTE = uint32_t( 0x1 ) << int( ShaderType::eCompute );
+	enum class ShaderTypeFlag
+		: uint8_t
+	{
+		eVertex = uint8_t( 0x1 ) << int( ShaderType::eVertex ),
+		eHull = uint8_t( 0x1 ) << int( ShaderType::eHull ),
+		eDomain = uint8_t( 0x1 ) << int( ShaderType::eDomain ),
+		eGeometry = uint8_t( 0x1 ) << int( ShaderType::eGeometry ),
+		ePixel = uint8_t( 0x1 ) << int( ShaderType::ePixel ),
+		eCompute = uint8_t( 0x1 ) << int( ShaderType::eCompute ),
+	};
+	IMPLEMENT_FLAGS( ShaderTypeFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13
@@ -169,6 +174,7 @@ namespace Castor3D
 		//\~french		Shader pour les billboards à dimensions fixes.
 		eFixedSize = 0x0400,
 	};
+	IMPLEMENT_FLAGS( ProgramFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -339,90 +345,89 @@ namespace Castor3D
 	class ProgramInputLayout;
 	class FrameVariable;
 	class FrameVariableBuffer;
-	class FrameVariableLink;
-	class ProgramLinks;
+	class ShaderStorageBuffer;
 	template < typename T > class OneFrameVariable;
 	template < typename T, uint32_t Count > class PointFrameVariable;
 	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
 
-	typedef OneFrameVariable< bool > OneBoolFrameVariable;
-	typedef OneFrameVariable< int > OneIntFrameVariable;
-	typedef OneFrameVariable< uint32_t > OneUIntFrameVariable;
-	typedef OneFrameVariable< float > OneFloatFrameVariable;
-	typedef OneFrameVariable< double > OneDoubleFrameVariable;
-	typedef OneFrameVariable< real > OneRealFrameVariable;
-	typedef PointFrameVariable< bool, 2 > Point2bFrameVariable;
-	typedef PointFrameVariable< bool, 3 > Point3bFrameVariable;
-	typedef PointFrameVariable< bool, 4 > Point4bFrameVariable;
-	typedef PointFrameVariable< int, 2 > Point2iFrameVariable;
-	typedef PointFrameVariable< int, 3 > Point3iFrameVariable;
-	typedef PointFrameVariable< int, 4 > Point4iFrameVariable;
-	typedef PointFrameVariable< uint32_t, 2 > Point2uiFrameVariable;
-	typedef PointFrameVariable< uint32_t, 3 > Point3uiFrameVariable;
-	typedef PointFrameVariable< uint32_t, 4 > Point4uiFrameVariable;
-	typedef PointFrameVariable< float, 2 > Point2fFrameVariable;
-	typedef PointFrameVariable< float, 3 > Point3fFrameVariable;
-	typedef PointFrameVariable< float, 4 > Point4fFrameVariable;
-	typedef PointFrameVariable< double, 2 > Point2dFrameVariable;
-	typedef PointFrameVariable< double, 3 > Point3dFrameVariable;
-	typedef PointFrameVariable< double, 4 > Point4dFrameVariable;
-	typedef PointFrameVariable< real, 2 > Point2rFrameVariable;
-	typedef PointFrameVariable< real, 3 > Point3rFrameVariable;
-	typedef PointFrameVariable< real, 4 > Point4rFrameVariable;
-	typedef MatrixFrameVariable< bool, 2, 2 > Matrix2x2bFrameVariable;
-	typedef MatrixFrameVariable< bool, 2, 3 > Matrix2x3bFrameVariable;
-	typedef MatrixFrameVariable< bool, 2, 4 > Matrix2x4bFrameVariable;
-	typedef MatrixFrameVariable< bool, 3, 2 > Matrix3x2bFrameVariable;
-	typedef MatrixFrameVariable< bool, 3, 3 > Matrix3x3bFrameVariable;
-	typedef MatrixFrameVariable< bool, 3, 4 > Matrix3x4bFrameVariable;
-	typedef MatrixFrameVariable< bool, 4, 2 > Matrix4x2bFrameVariable;
-	typedef MatrixFrameVariable< bool, 4, 3 > Matrix4x3bFrameVariable;
-	typedef MatrixFrameVariable< bool, 4, 4 > Matrix4x4bFrameVariable;
-	typedef MatrixFrameVariable< int, 2, 2 > Matrix2x2iFrameVariable;
-	typedef MatrixFrameVariable< int, 2, 3 > Matrix2x3iFrameVariable;
-	typedef MatrixFrameVariable< int, 2, 4 > Matrix2x4iFrameVariable;
-	typedef MatrixFrameVariable< int, 3, 2 > Matrix3x2iFrameVariable;
-	typedef MatrixFrameVariable< int, 3, 3 > Matrix3x3iFrameVariable;
-	typedef MatrixFrameVariable< int, 3, 4 > Matrix3x4iFrameVariable;
-	typedef MatrixFrameVariable< int, 4, 2 > Matrix4x2iFrameVariable;
-	typedef MatrixFrameVariable< int, 4, 3 > Matrix4x3iFrameVariable;
-	typedef MatrixFrameVariable< int, 4, 4 > Matrix4x4iFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 2, 2 > Matrix2x2uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 2, 3 > Matrix2x3uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 2, 4 > Matrix2x4uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 3, 2 > Matrix3x2uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 3, 3 > Matrix3x3uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 3, 4 > Matrix3x4uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 4, 2 > Matrix4x2uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 4, 3 > Matrix4x3uiFrameVariable;
-	typedef MatrixFrameVariable< unsigned  int, 4, 4 > Matrix4x4uiFrameVariable;
-	typedef MatrixFrameVariable< float, 2, 2 > Matrix2x2fFrameVariable;
-	typedef MatrixFrameVariable< float, 2, 3 > Matrix2x3fFrameVariable;
-	typedef MatrixFrameVariable< float, 2, 4 > Matrix2x4fFrameVariable;
-	typedef MatrixFrameVariable< float, 3, 2 > Matrix3x2fFrameVariable;
-	typedef MatrixFrameVariable< float, 3, 3 > Matrix3x3fFrameVariable;
-	typedef MatrixFrameVariable< float, 3, 4 > Matrix3x4fFrameVariable;
-	typedef MatrixFrameVariable< float, 4, 2 > Matrix4x2fFrameVariable;
-	typedef MatrixFrameVariable< float, 4, 3 > Matrix4x3fFrameVariable;
-	typedef MatrixFrameVariable< float, 4, 4 > Matrix4x4fFrameVariable;
-	typedef MatrixFrameVariable< double, 2, 2 > Matrix2x2dFrameVariable;
-	typedef MatrixFrameVariable< double, 2, 3 > Matrix2x3dFrameVariable;
-	typedef MatrixFrameVariable< double, 2, 4 > Matrix2x4dFrameVariable;
-	typedef MatrixFrameVariable< double, 3, 2 > Matrix3x2dFrameVariable;
-	typedef MatrixFrameVariable< double, 3, 3 > Matrix3x3dFrameVariable;
-	typedef MatrixFrameVariable< double, 3, 4 > Matrix3x4dFrameVariable;
-	typedef MatrixFrameVariable< double, 4, 2 > Matrix4x2dFrameVariable;
-	typedef MatrixFrameVariable< double, 4, 3 > Matrix4x3dFrameVariable;
-	typedef MatrixFrameVariable< double, 4, 4 > Matrix4x4dFrameVariable;
-	typedef MatrixFrameVariable< real, 2, 2 > Matrix2x2rFrameVariable;
-	typedef MatrixFrameVariable< real, 2, 3 > Matrix2x3rFrameVariable;
-	typedef MatrixFrameVariable< real, 2, 4 > Matrix2x4rFrameVariable;
-	typedef MatrixFrameVariable< real, 3, 2 > Matrix3x2rFrameVariable;
-	typedef MatrixFrameVariable< real, 3, 3 > Matrix3x3rFrameVariable;
-	typedef MatrixFrameVariable< real, 3, 4 > Matrix3x4rFrameVariable;
-	typedef MatrixFrameVariable< real, 4, 2 > Matrix4x2rFrameVariable;
-	typedef MatrixFrameVariable< real, 4, 3 > Matrix4x3rFrameVariable;
-	typedef MatrixFrameVariable< real, 4, 4 > Matrix4x4rFrameVariable;
+	using OneBoolFrameVariable = OneFrameVariable< bool >;
+	using OneIntFrameVariable = OneFrameVariable< int >;
+	using OneUIntFrameVariable = OneFrameVariable< uint32_t >;
+	using OneFloatFrameVariable = OneFrameVariable< float >;
+	using OneDoubleFrameVariable = OneFrameVariable< double >;
+	using OneRealFrameVariable = OneFrameVariable< real >;
+	using Point2bFrameVariable = PointFrameVariable< bool, 2 >;
+	using Point3bFrameVariable = PointFrameVariable< bool, 3 >;
+	using Point4bFrameVariable = PointFrameVariable< bool, 4 >;
+	using Point2iFrameVariable = PointFrameVariable< int, 2 >;
+	using Point3iFrameVariable = PointFrameVariable< int, 3 >;
+	using Point4iFrameVariable = PointFrameVariable< int, 4 >;
+	using Point2uiFrameVariable = PointFrameVariable< uint32_t, 2 >;
+	using Point3uiFrameVariable = PointFrameVariable< uint32_t, 3 >;
+	using Point4uiFrameVariable = PointFrameVariable< uint32_t, 4 >;
+	using Point2fFrameVariable = PointFrameVariable< float, 2 >;
+	using Point3fFrameVariable = PointFrameVariable< float, 3 >;
+	using Point4fFrameVariable = PointFrameVariable< float, 4 >;
+	using Point2dFrameVariable = PointFrameVariable< double, 2 >;
+	using Point3dFrameVariable = PointFrameVariable< double, 3 >;
+	using Point4dFrameVariable = PointFrameVariable< double, 4 >;
+	using Point2rFrameVariable = PointFrameVariable< real, 2 >;
+	using Point3rFrameVariable = PointFrameVariable< real, 3 >;
+	using Point4rFrameVariable = PointFrameVariable< real, 4 >;
+	using Matrix2x2bFrameVariable = MatrixFrameVariable< bool, 2, 2 >;
+	using Matrix2x3bFrameVariable = MatrixFrameVariable< bool, 2, 3 >;
+	using Matrix2x4bFrameVariable = MatrixFrameVariable< bool, 2, 4 >;
+	using Matrix3x2bFrameVariable = MatrixFrameVariable< bool, 3, 2 >;
+	using Matrix3x3bFrameVariable = MatrixFrameVariable< bool, 3, 3 >;
+	using Matrix3x4bFrameVariable = MatrixFrameVariable< bool, 3, 4 >;
+	using Matrix4x2bFrameVariable = MatrixFrameVariable< bool, 4, 2 >;
+	using Matrix4x3bFrameVariable = MatrixFrameVariable< bool, 4, 3 >;
+	using Matrix4x4bFrameVariable = MatrixFrameVariable< bool, 4, 4 >;
+	using Matrix2x2iFrameVariable = MatrixFrameVariable< int, 2, 2 >;
+	using Matrix2x3iFrameVariable = MatrixFrameVariable< int, 2, 3 >;
+	using Matrix2x4iFrameVariable = MatrixFrameVariable< int, 2, 4 >;
+	using Matrix3x2iFrameVariable = MatrixFrameVariable< int, 3, 2 >;
+	using Matrix3x3iFrameVariable = MatrixFrameVariable< int, 3, 3 >;
+	using Matrix3x4iFrameVariable = MatrixFrameVariable< int, 3, 4 >;
+	using Matrix4x2iFrameVariable = MatrixFrameVariable< int, 4, 2 >;
+	using Matrix4x3iFrameVariable = MatrixFrameVariable< int, 4, 3 >;
+	using Matrix4x4iFrameVariable = MatrixFrameVariable< int, 4, 4 >;
+	using Matrix2x2uiFrameVariable = MatrixFrameVariable< unsigned  int, 2, 2 >;
+	using Matrix2x3uiFrameVariable = MatrixFrameVariable< unsigned  int, 2, 3 >;
+	using Matrix2x4uiFrameVariable = MatrixFrameVariable< unsigned  int, 2, 4 >;
+	using Matrix3x2uiFrameVariable = MatrixFrameVariable< unsigned  int, 3, 2 >;
+	using Matrix3x3uiFrameVariable = MatrixFrameVariable< unsigned  int, 3, 3 >;
+	using Matrix3x4uiFrameVariable = MatrixFrameVariable< unsigned  int, 3, 4 >;
+	using Matrix4x2uiFrameVariable = MatrixFrameVariable< unsigned  int, 4, 2 >;
+	using Matrix4x3uiFrameVariable = MatrixFrameVariable< unsigned  int, 4, 3 >;
+	using Matrix4x4uiFrameVariable = MatrixFrameVariable< unsigned  int, 4, 4 >;
+	using Matrix2x2fFrameVariable = MatrixFrameVariable< float, 2, 2 >;
+	using Matrix2x3fFrameVariable = MatrixFrameVariable< float, 2, 3 >;
+	using Matrix2x4fFrameVariable = MatrixFrameVariable< float, 2, 4 >;
+	using Matrix3x2fFrameVariable = MatrixFrameVariable< float, 3, 2 >;
+	using Matrix3x3fFrameVariable = MatrixFrameVariable< float, 3, 3 >;
+	using Matrix3x4fFrameVariable = MatrixFrameVariable< float, 3, 4 >;
+	using Matrix4x2fFrameVariable = MatrixFrameVariable< float, 4, 2 >;
+	using Matrix4x3fFrameVariable = MatrixFrameVariable< float, 4, 3 >;
+	using Matrix4x4fFrameVariable = MatrixFrameVariable< float, 4, 4 >;
+	using Matrix2x2dFrameVariable = MatrixFrameVariable< double, 2, 2 >;
+	using Matrix2x3dFrameVariable = MatrixFrameVariable< double, 2, 3 >;
+	using Matrix2x4dFrameVariable = MatrixFrameVariable< double, 2, 4 >;
+	using Matrix3x2dFrameVariable = MatrixFrameVariable< double, 3, 2 >;
+	using Matrix3x3dFrameVariable = MatrixFrameVariable< double, 3, 3 >;
+	using Matrix3x4dFrameVariable = MatrixFrameVariable< double, 3, 4 >;
+	using Matrix4x2dFrameVariable = MatrixFrameVariable< double, 4, 2 >;
+	using Matrix4x3dFrameVariable = MatrixFrameVariable< double, 4, 3 >;
+	using Matrix4x4dFrameVariable = MatrixFrameVariable< double, 4, 4 >;
+	using Matrix2x2rFrameVariable = MatrixFrameVariable< real, 2, 2 >;
+	using Matrix2x3rFrameVariable = MatrixFrameVariable< real, 2, 3 >;
+	using Matrix2x4rFrameVariable = MatrixFrameVariable< real, 2, 4 >;
+	using Matrix3x2rFrameVariable = MatrixFrameVariable< real, 3, 2 >;
+	using Matrix3x3rFrameVariable = MatrixFrameVariable< real, 3, 3 >;
+	using Matrix3x4rFrameVariable = MatrixFrameVariable< real, 3, 4 >;
+	using Matrix4x2rFrameVariable = MatrixFrameVariable< real, 4, 2 >;
+	using Matrix4x3rFrameVariable = MatrixFrameVariable< real, 4, 3 >;
+	using Matrix4x4rFrameVariable = MatrixFrameVariable< real, 4, 4 >;
 
 	DECLARE_SMART_PTR( OneBoolFrameVariable );
 	DECLARE_SMART_PTR( OneIntFrameVariable );
@@ -503,22 +508,22 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Matrix4x3rFrameVariable );
 	DECLARE_SMART_PTR( Matrix4x4rFrameVariable );
 
-	DECLARE_SMART_PTR( FrameVariableLink );
-	DECLARE_SMART_PTR( ProgramLinks );
 	DECLARE_SMART_PTR( FrameVariableBuffer );
 	DECLARE_SMART_PTR( FrameVariable );
 	DECLARE_SMART_PTR( ShaderObject );
 	DECLARE_SMART_PTR( ShaderProgram );
+	DECLARE_SMART_PTR( ShaderStorageBuffer );
 
-	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
-	DECLARE_MAP( ShaderProgram *, ProgramLinksSPtr, LinksPtrListProgram );
 	DECLARE_VECTOR( ShaderProgramSPtr, ShaderProgramPtr );
 	DECLARE_VECTOR( ShaderObjectSPtr, ShaderObjectPtr );
 	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
+	DECLARE_LIST( ShaderStorageBufferSPtr, ShaderStorageBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
+	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
 	DECLARE_MAP( ShaderType, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
+	DECLARE_MAP( ShaderType, ShaderStorageBufferWPtr, ShaderStorageBufferPtrShader );
 
 	//@}
 

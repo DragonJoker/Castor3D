@@ -64,14 +64,14 @@ namespace OceanLighting
 		{
 			try
 			{
-				ELogType l_eLogLevel;
+				LogType l_eLogLevel;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = ELogType_INFO;
+					l_eLogLevel = LogType::eInfo;
 #else
-					l_eLogLevel = ELogType_DEBUG;
+					l_eLogLevel = LogType::eDebug;
 #endif
 				}
 

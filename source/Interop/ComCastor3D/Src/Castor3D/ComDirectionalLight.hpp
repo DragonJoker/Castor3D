@@ -71,7 +71,6 @@ namespace CastorCom
 		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbientIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbientIntensity ) );
 		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuseIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuseIntensity ) );
 		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecularIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecularIntensity ) );
-		COM_PROPERTY( Direction, IVector3D *, make_getter( m_internal.get(), &Castor3D::DirectionalLight::GetDirection ), make_putter( m_internal.get(), &Castor3D::DirectionalLight::SetDirection ) );
 
 	private:
 		Castor3D::DirectionalLightSPtr m_internal;

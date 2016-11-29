@@ -48,18 +48,19 @@ namespace Castor3D
 		: uint32_t
 	{
 		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
-		Instancing = 0x00000001,
+		eInstancing = 0x00000001,
 		//!\~english Tells whether or not the selected render API supports accumulation buffers	\~french Dit si l'API de rendu choisie supporte le buffer d'accumulation
-		AccumulationBuffer = 0x00000002,
+		eAccumulationBuffer = 0x00000002,
 		//!\~english Tells whether or not the selected render API supports non power of two textures	\~french Dit si l'API de rendu choisie supporte les textures non puissance de 2
-		NonPowerOfTwoTextures = 0x00000004,
+		eNonPowerOfTwoTextures = 0x00000004,
 		//!\~english Tells whether or not the selected render API supports stereo	\~french Dit si l'API de rendu choisie supporte la stéréographie.
-		Stereo = 0x00000008,
+		eStereo = 0x00000008,
 		//!\~english Tells whether or not the selected render API supports constants buffers.	\~french Dit si l'API de rendu choisie supporte les tampons de constantes.
-		ConstantsBuffers = 0x00000010,
+		eConstantsBuffers = 0x00000010,
 		//!\~english Tells whether or not the selected render API supports texture buffers.	\~french Dit si l'API de rendu choisie supporte les tampons de textures.
-		TextureBuffers = 0x00000020,
+		eTextureBuffers = 0x00000020,
 	};
+	IMPLEMENT_FLAGS( GpuFeature )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016
@@ -72,10 +73,10 @@ namespace Castor3D
 	enum class GpuMin
 		: uint32_t
 	{
-		MapBufferAlignment,
-		ProgramTexelOffset,
+		eMapBufferAlignment,
+		eProgramTexelOffset,
 
-		CASTOR_SCOPED_ENUM_BOUNDS( MapBufferAlignment )
+		CASTOR_SCOPED_ENUM_BOUNDS( eMapBufferAlignment )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -89,102 +90,102 @@ namespace Castor3D
 	enum class GpuMax
 		: uint32_t
 	{
-		ShaderStorageBufferBindings,
+		eShaderStorageBufferBindings,
 
-		VertexShaderStorageBlocks,
-		VertexAtomicCounters,
-		VertexAttribs,
-		VertexOutputComponents,
-		VertexTextureImageUnits,
-		VertexUniformComponents,
-		VertexUniformBlocks,
-		VertexUniformVectors,
-		VertexCombinedUniformComponents,
+		eVertexShaderStorageBlocks,
+		eVertexAtomicCounters,
+		eVertexAttribs,
+		eVertexOutputComponents,
+		eVertexTextureImageUnits,
+		eVertexUniformComponents,
+		eVertexUniformBlocks,
+		eVertexUniformVectors,
+		eVertexCombinedUniformComponents,
 
-		GeometryAtomicCounters,
-		GeometryShaderStorageBlocks,
-		GeometryInputComponents,
-		GeometryOutputComponents,
-		GeometryTextureImageUnits,
-		GeometryUniformComponents,
-		GeometryUniformBlocks,
-		GeometryCombinedUniformComponents,
+		eGeometryAtomicCounters,
+		eGeometryShaderStorageBlocks,
+		eGeometryInputComponents,
+		eGeometryOutputComponents,
+		eGeometryTextureImageUnits,
+		eGeometryUniformComponents,
+		eGeometryUniformBlocks,
+		eGeometryCombinedUniformComponents,
 
-		TessControlAtomicCounters,
-		TessControlShaderStorageBlocks,
+		eTessControlAtomicCounters,
+		eTessControlShaderStorageBlocks,
 
-		TessEvaluationAtomicCounters,
-		TessEvaluationShaderStorageBlocks,
+		eTessEvaluationAtomicCounters,
+		eTessEvaluationShaderStorageBlocks,
 
-		ComputeAtomicCounters,
-		ComputeAtomicCounterBuffers,
-		ComputeShaderStorageBlocks,
-		ComputeTextureImageUnits,
-		ComputeUniformComponents,
-		ComputeUniformBlocks,
-		ComputeCombinedUniformComponents,
-		ComputeWorkGroupInvocations,
-		ComputeWorkGroupCount,
-		ComputeWorkGroupSize,
+		eComputeAtomicCounters,
+		eComputeAtomicCounterBuffers,
+		eComputeShaderStorageBlocks,
+		eComputeTextureImageUnits,
+		eComputeUniformComponents,
+		eComputeUniformBlocks,
+		eComputeCombinedUniformComponents,
+		eComputeWorkGroupInvocations,
+		eComputeWorkGroupCount,
+		eComputeWorkGroupSize,
 
-		FragmentAtomicCounters,
-		FragmentShaderStorageBlocks,
-		FragmentInputComponents,
-		FragmentUniformComponents,
-		FragmentUniformBlocks,
-		FragmentUniformVectors,
-		FragmentCombinedUniformComponents,
+		eFragmentAtomicCounters,
+		eFragmentShaderStorageBlocks,
+		eFragmentInputComponents,
+		eFragmentUniformComponents,
+		eFragmentUniformBlocks,
+		eFragmentUniformVectors,
+		eFragmentCombinedUniformComponents,
 
-		CombinedAtomicCounters,
-		CombinedShaderStorageBlocks,
+		eCombinedAtomicCounters,
+		eCombinedShaderStorageBlocks,
 
-		DebugGroupStackDepth,
-		LabelLength,
-		IntegerSamples,
-		ProgramTexelOffset,
-		ServerWaitTimeout,
-		SampleMaskWords,
-		Samples,
+		eDebugGroupStackDepth,
+		eLabelLength,
+		eIntegerSamples,
+		eProgramTexelOffset,
+		eServerWaitTimeout,
+		eSampleMaskWords,
+		eSamples,
 
-		Texture3DSize,
-		TextureRectangleSize,
-		TextureCubeMapSize,
-		TextureBufferSize,
-		TextureSize,
-		TextureImageUnits,
-		TextureLodBias,
+		eTexture3DSize,
+		eTextureRectangleSize,
+		eTextureCubeMapSize,
+		eTextureBufferSize,
+		eTextureSize,
+		eTextureImageUnits,
+		eTextureLodBias,
 
-		ArrayTextureLayers,
-		ClipDistances,
-		ColourTextureSamples,
-		DepthTextureSamples,
+		eArrayTextureLayers,
+		eClipDistances,
+		eColourTextureSamples,
+		eDepthTextureSamples,
 
-		CombinedTextureImageUnits,
-		CombinedUniformBlocks,
-		DrawBuffers,
-		DualSourceDrawBuffers,
-		ElementIndices,
-		ElementVertices,
+		eCombinedTextureImageUnits,
+		eCombinedUniformBlocks,
+		eDrawBuffers,
+		eDualSourceDrawBuffers,
+		eElementIndices,
+		eElementVertices,
 
-		FramebufferWidth,
-		FramebufferHeight,
-		FramebufferLayers,
-		FramebufferSamples,
-		RenderbufferSize,
+		eFramebufferWidth,
+		eFramebufferHeight,
+		eFramebufferLayers,
+		eFramebufferSamples,
+		eRenderbufferSize,
 
-		UniformBufferBindings,
-		UniformBlockSize,
-		UniformLocations,
+		eUniformBufferBindings,
+		eUniformBlockSize,
+		eUniformLocations,
 
-		VaryingComponents,
-		VaryingVectors,
-		VaryingFloats,
+		eVaryingComponents,
+		eVaryingVectors,
+		eVaryingFloats,
 
-		ViewportWidth,
-		ViewportHeight,
-		Viewports,
+		eViewportWidth,
+		eViewportHeight,
+		eViewports,
 
-		CASTOR_SCOPED_ENUM_BOUNDS( ShaderStorageBufferBindings )
+		CASTOR_SCOPED_ENUM_BOUNDS( eShaderStorageBufferBindings )
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -271,7 +272,7 @@ namespace Castor3D
 		 */
 		inline bool IsStereoAvailable()const
 		{
-			return HasFeature( GpuFeature::Stereo );
+			return HasFeature( GpuFeature::eStereo );
 		}
 		/**
 		 *\~english
@@ -281,7 +282,7 @@ namespace Castor3D
 		 */
 		inline bool HasInstancing()const
 		{
-			return HasFeature( GpuFeature::Instancing );
+			return HasFeature( GpuFeature::eInstancing );
 		}
 		/**
 		 *\~english
@@ -291,7 +292,7 @@ namespace Castor3D
 		 */
 		inline bool HasAccumulationBuffer()const
 		{
-			return HasFeature( GpuFeature::AccumulationBuffer );
+			return HasFeature( GpuFeature::eAccumulationBuffer );
 		}
 		/**
 		 *\~english
@@ -301,7 +302,7 @@ namespace Castor3D
 		 */
 		inline bool HasNonPowerOfTwoTextures()const
 		{
-			return HasFeature( GpuFeature::NonPowerOfTwoTextures );
+			return HasFeature( GpuFeature::eNonPowerOfTwoTextures );
 		}
 		/**
 		 *\~english
@@ -311,7 +312,7 @@ namespace Castor3D
 		 */
 		inline bool HasConstantsBuffers()const
 		{
-			return HasFeature( GpuFeature::ConstantsBuffers );
+			return HasFeature( GpuFeature::eConstantsBuffers );
 		}
 		/**
 		 *\~english
@@ -321,7 +322,7 @@ namespace Castor3D
 		 */
 		inline bool HasTextureBuffers()const
 		{
-			return HasFeature( GpuFeature::TextureBuffers );
+			return HasFeature( GpuFeature::eTextureBuffers );
 		}
 		/**
 		 *\~english

@@ -1,4 +1,5 @@
 #include "File.hpp"
+
 #include "Math/Math.hpp"
 #include "Miscellaneous/Utils.hpp"
 #include "Log/Logger.hpp"
@@ -274,17 +275,12 @@ namespace Castor
 #	endif
 #endif
 
-	File::File( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding )
-		: File{ p_fileName, uint32_t( p_mode ), p_encoding }
-	{
-	}
-
-	File::File( Path const & p_strFileName, uint32_t p_mode, EncodingMode p_encoding )
+	File::File( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
 		: m_mode{ p_mode }
 		, m_encoding{ p_encoding }
-		, m_strFileFullPath{ p_strFileName }
+		, m_fileFullPath{ p_fileName }
 	{
-		REQUIRE( !p_strFileName.empty() );
+		REQUIRE( !p_fileName.empty() );
 		String l_mode;
 
 		switch ( p_mode )
@@ -301,23 +297,23 @@ namespace Castor
 			l_mode = cuT( "a" );
 			break;
 
-		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eBinary ):
+		case OpenMode::eRead | OpenMode::eBinary:
 			l_mode = cuT( "rb" );
 			break;
 
-		case uint32_t( OpenMode::eWrite ) | uint32_t( OpenMode::eBinary ):
+		case OpenMode::eWrite | OpenMode::eBinary:
 			l_mode = cuT( "wb" );
 			break;
 
-		case uint32_t( OpenMode::eAppend ) | uint32_t( OpenMode::eBinary ):
+		case OpenMode::eAppend | OpenMode::eBinary:
 			l_mode = cuT( "ab" );
 			break;
 
-		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eWrite ):
+		case OpenMode::eRead | OpenMode::eWrite:
 			l_mode = cuT( "r+" );
 			break;
 
-		case uint32_t( OpenMode::eRead ) | uint32_t( OpenMode::eWrite ) | uint32_t( OpenMode::eAppend ):
+		case OpenMode::eRead | OpenMode::eWrite | OpenMode::eAppend:
 			l_mode = cuT( "a+" );
 			break;
 
@@ -344,18 +340,18 @@ namespace Castor
 			}
 		}
 
-		FOpen( m_pFile, string::string_cast< char >( m_strFileFullPath ).c_str(), string::string_cast< char >( l_mode ).c_str() );
+		FOpen( m_file, string::string_cast< char >( m_fileFullPath ).c_str(), string::string_cast< char >( l_mode ).c_str() );
 
-		if ( m_pFile )
+		if ( m_file )
 		{
-			m_ullLength = 0;
-			Castor::FSeek( m_pFile, 0, SEEK_END );
-			m_ullLength = Castor::FTell( m_pFile );
-			Castor::FSeek( m_pFile, 0, SEEK_SET );
+			m_length = 0;
+			Castor::FSeek( m_file, 0, SEEK_END );
+			m_length = Castor::FTell( m_file );
+			Castor::FSeek( m_file, 0, SEEK_SET );
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Couldn't open file " + string::string_cast< char >( m_strFileFullPath ) + " : " + string::string_cast< char >( System::GetLastErrorText() ) );
+			CASTOR_EXCEPTION( "Couldn't open file " + string::string_cast< char >( m_fileFullPath ) + " : " + string::string_cast< char >( System::GetLastErrorText() ) );
 		}
 
 		CHECK_INVARIANTS();
@@ -363,9 +359,9 @@ namespace Castor
 
 	File::~File()
 	{
-		if ( m_pFile != nullptr )
+		if ( m_file != nullptr )
 		{
-			fclose( m_pFile );
+			fclose( m_file );
 		}
 	}
 
@@ -374,23 +370,23 @@ namespace Castor
 		CHECK_INVARIANTS();
 		int l_iReturn = 0;
 
-		if ( m_pFile )
+		if ( m_file )
 		{
 			switch ( p_origin )
 			{
 			case OffsetMode::eBeginning:
-				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_SET );
-				m_ullCursor = p_offset;
+				l_iReturn = Castor::FSeek( m_file, p_offset, SEEK_SET );
+				m_cursor = p_offset;
 				break;
 
 			case OffsetMode::eCurrent:
-				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_CUR );
-				m_ullCursor += p_offset;
+				l_iReturn = Castor::FSeek( m_file, p_offset, SEEK_CUR );
+				m_cursor += p_offset;
 				break;
 
 			case OffsetMode::eEnd:
-				l_iReturn = Castor::FSeek( m_pFile, p_offset, SEEK_END );
-				m_ullCursor = GetLength() - p_offset;
+				l_iReturn = Castor::FSeek( m_file, p_offset, SEEK_END );
+				m_cursor = GetLength() - p_offset;
 				break;
 			}
 		}
@@ -402,24 +398,24 @@ namespace Castor
 	long long File::GetLength()
 	{
 		CHECK_INVARIANTS();
-		m_ullLength = 0;
-		long long l_llPosition = Castor::FTell( m_pFile );
-		Castor::FSeek( m_pFile, 0, SEEK_END );
-		m_ullLength = Castor::FTell( m_pFile );
-		Castor::FSeek( m_pFile, l_llPosition, SEEK_SET );
+		m_length = 0;
+		long long l_llPosition = Castor::FTell( m_file );
+		Castor::FSeek( m_file, 0, SEEK_END );
+		m_length = Castor::FTell( m_file );
+		Castor::FSeek( m_file, l_llPosition, SEEK_SET );
 		CHECK_INVARIANTS();
-		return m_ullLength;
+		return m_length;
 	}
 
 	bool File::IsOk()const
 	{
 		bool l_return = false;
 
-		if ( m_pFile )
+		if ( m_file )
 		{
-			if ( ferror( m_pFile ) == 0 )
+			if ( ferror( m_file ) == 0 )
 			{
-				if ( feof( m_pFile ) == 0 )
+				if ( feof( m_file ) == 0 )
 				{
 					l_return = true;
 				}
@@ -434,9 +430,9 @@ namespace Castor
 		CHECK_INVARIANTS();
 		long long l_llReturn = 0;
 
-		if ( m_pFile )
+		if ( m_file )
 		{
-			l_llReturn = Castor::FTell( m_pFile );
+			l_llReturn = Castor::FTell( m_file );
 		}
 
 		CHECK_INVARIANTS();
@@ -444,7 +440,7 @@ namespace Castor
 	}
 
 	BEGIN_INVARIANT_BLOCK( File )
-	CHECK_INVARIANT( m_pFile );
+	CHECK_INVARIANT( m_file );
 	END_INVARIANT_BLOCK()
 
 	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
@@ -455,8 +451,8 @@ namespace Castor
 
 		if ( IsOk() )
 		{
-			l_uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_pFile );
-			m_ullCursor += l_uiReturn;
+			l_uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_file );
+			m_cursor += l_uiReturn;
 			ENSURE( l_uiReturn <= p_uiSize );
 		}
 
@@ -476,10 +472,10 @@ namespace Castor
 			while ( l_uiReturn < p_uiSize && l_uiPrev != l_uiReturn )
 			{
 				l_uiPrev = l_uiReturn;
-				l_uiReturn += fread( p_buffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_pFile );
+				l_uiReturn += fread( p_buffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_file );
 			}
 
-			m_ullCursor += l_uiReturn;
+			m_cursor += l_uiReturn;
 			ENSURE( l_uiReturn <= p_uiSize );
 		}
 
@@ -615,7 +611,7 @@ namespace Castor
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_path, uint32_t p_flags )
+	bool File::DirectoryCreate( Path const & p_path, FlagCombination< CreateMode > const & p_flags )
 	{
 		Path l_path = p_path.GetPath();
 

@@ -25,12 +25,13 @@ namespace Castor3D
 	template<> String const TopologyNamer< Topology::eQuadStrips >::Name = cuT( "quad_strip" );
 	template<> String const TopologyNamer< Topology::ePolygon >::Name = cuT( "polygon" );
 
-	void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
-											 , GLSL::Vec3 & p_normal
-											 , GLSL::Float & p_shininess
-											 , uint16_t p_textureFlags
-											 , uint16_t p_programFlags
-											 , uint8_t p_sceneFlags )
+	void ComputePreLightingMapContributions(
+		GLSL::GlslWriter & p_writer,
+		GLSL::Vec3 & p_normal,
+		GLSL::Float & p_shininess,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto vtx_texture( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_texture" ) ) );
@@ -55,14 +56,15 @@ namespace Castor3D
 		}
 	}
 
-	void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
-											  , GLSL::Vec3 & p_ambient
-											  , GLSL::Vec3 & p_diffuse
-											  , GLSL::Vec3 & p_specular
-											  , GLSL::Vec3 & p_emissive
-											  , uint16_t p_textureFlags
-											  , uint16_t p_programFlags
-											  , uint8_t p_sceneFlags )
+	void ComputePostLightingMapContributions(
+		GLSL::GlslWriter & p_writer,
+		GLSL::Vec3 & p_ambient,
+		GLSL::Vec3 & p_diffuse,
+		GLSL::Vec3 & p_specular,
+		GLSL::Vec3 & p_emissive,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		using namespace GLSL;
 		auto vtx_texture( p_writer.GetBuiltin< Vec3 >( cuT( "vtx_texture" ) ) );

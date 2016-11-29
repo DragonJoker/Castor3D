@@ -20,21 +20,21 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___TRS_VERTEX_BUFFER_OBJECT_H___
-#define ___TRS_VERTEX_BUFFER_OBJECT_H___
+#ifndef ___C3DTRS_TestShaderStorageBuffer_H___
+#define ___C3DTRS_TestShaderStorageBuffer_H___
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Buffer/GpuBuffer.hpp>
 
 namespace TestRender
 {
-	class TestVertexBuffer
+	class TestShaderStorageBuffer
 		: public Castor3D::GpuBuffer< uint8_t >
 	{
 	public:
-		TestVertexBuffer( TestRenderSystem & p_renderSystem );
-		virtual ~TestVertexBuffer();
+		TestShaderStorageBuffer( TestRenderSystem & p_renderSystem );
+		virtual ~TestShaderStorageBuffer();
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< uint8_t >::Create
 		 */

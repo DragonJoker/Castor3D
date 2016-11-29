@@ -259,16 +259,20 @@ namespace Castor3D
 
 		if ( !l_ubo )
 		{
-			auto & l_shadowMapUbo = p_program.CreateFrameVariableBuffer( ShadowMapUbo, MASK_SHADER_TYPE_PIXEL );
+			auto & l_shadowMapUbo = p_program.CreateFrameVariableBuffer( ShadowMapUbo, ShaderTypeFlag::ePixel );
 			l_shadowMapUbo.CreateVariable< Point3fFrameVariable >( WorldLightPosition );
 			l_shadowMapUbo.CreateVariable< OneFloatFrameVariable >( FarPlane );
 
-			auto & l_shadowMatricesUbo = p_program.CreateFrameVariableBuffer( ShadowMatricesUbo, MASK_SHADER_TYPE_GEOMETRY );
+			auto & l_shadowMatricesUbo = p_program.CreateFrameVariableBuffer( ShadowMatricesUbo, ShaderTypeFlag::eGeometry );
 			l_shadowMatricesUbo.CreateVariable< Matrix4x4fFrameVariable >( ShadowMatrices, 6 );
 		}
 	}
 
-	String ShadowMapPassPoint::DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	String ShadowMapPassPoint::DoGetVertexShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags,
+		bool p_invertNormals )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -331,7 +335,10 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String ShadowMapPassPoint::DoGetGeometryShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -374,7 +381,10 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String ShadowMapPassPoint::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String ShadowMapPassPoint::DoGetOpaquePixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();

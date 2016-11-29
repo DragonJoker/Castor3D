@@ -97,7 +97,11 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API Castor::String GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		C3D_API Castor::String GetVertexShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags,
+			bool p_invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -110,7 +114,10 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
+		C3D_API Castor::String GetPixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -123,7 +130,10 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API Castor::String GetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const;
+		C3D_API Castor::String GetGeometryShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline matching the given flags.
@@ -140,7 +150,13 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API void PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided );
+		C3D_API void PreparePipeline(
+			BlendMode p_colourBlendMode,
+			BlendMode p_alphaBlendMode,
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > & p_programFlags,
+			uint8_t p_sceneFlags,
+			bool p_twoSided );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for front face culling.
@@ -157,7 +173,11 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetOpaquePipelineFront(
+			BlendMode p_colourBlendMode,
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for back face culling.
@@ -174,7 +194,11 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetOpaquePipelineBack(
+			BlendMode p_colourBlendMode,
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for front faces culling.
@@ -193,7 +217,12 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetTransparentPipelineFront(
+			BlendMode p_colourBlendMode,
+			BlendMode p_alphaBlendMode,
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the transparent pipeline matching the given flags, for back face culling.
@@ -212,7 +241,12 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags );
+		C3D_API Pipeline * GetTransparentPipelineBack(
+			BlendMode p_colourBlendMode,
+			BlendMode p_alphaBlendMode,
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Creates an animated render node.
@@ -233,12 +267,13 @@ namespace Castor3D
 		 *\param[in]	p_mesh		Le maillage animé.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
-																	   , Pipeline & p_pipeline
-																	   , Submesh & p_submesh
-																	   , Geometry & p_primitive
-																	   , AnimatedSkeletonSPtr p_skeleton
-																	   , AnimatedMeshSPtr p_mesh );
+		C3D_API virtual AnimatedGeometryRenderNode CreateAnimatedNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			Submesh & p_submesh,
+			Geometry & p_primitive,
+			AnimatedSkeletonSPtr p_skeleton,
+			AnimatedMeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Creates a static render node.
@@ -255,10 +290,11 @@ namespace Castor3D
 		 *\param[in]	p_primitive	La géométrie.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
-																   , Pipeline & p_pipeline
-																   , Submesh & p_submesh
-																   , Geometry & p_primitive );
+		C3D_API virtual StaticGeometryRenderNode CreateStaticNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			Submesh & p_submesh,
+			Geometry & p_primitive );
 		/**
 		 *\~english
 		 *\brief		Creates a static render node.
@@ -273,9 +309,10 @@ namespace Castor3D
 		 *\param[in]	p_billboard	Le billboard.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API virtual BillboardRenderNode CreateBillboardNode( Pass & p_pass
-																 , Pipeline & p_pipeline
-																 , BillboardBase & p_billboard );
+		C3D_API virtual BillboardRenderNode CreateBillboardNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			BillboardBase & p_billboard );
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.
@@ -350,7 +387,11 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		C3D_API ShaderProgramSPtr DoGetProgram(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags,
+			bool p_invertNormals )const;
 
 	protected:
 		/**
@@ -365,7 +406,10 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		C3D_API virtual Castor::String DoGetOpaquePixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const = 0;
 
 	private:
 		/**
@@ -382,7 +426,11 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 *\param[in]	p_invertNormals	Dit si les normales doivent être inversées, dans le programme.
 		 */
-		C3D_API virtual Castor::String DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const;
+		C3D_API virtual Castor::String DoGetVertexShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags,
+			bool p_invertNormals )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
@@ -395,7 +443,10 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		C3D_API virtual Castor::String DoGetGeometryShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
@@ -408,7 +459,10 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags	Les indicateurs relatifs à la scène.
 		 */
-		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const = 0;
+		C3D_API virtual Castor::String DoGetTransparentPixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given program flags to make them match the render pass requirements.
@@ -417,7 +471,7 @@ namespace Castor3D
 		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
 		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( uint16_t & p_programFlags )const = 0;
+		C3D_API virtual void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

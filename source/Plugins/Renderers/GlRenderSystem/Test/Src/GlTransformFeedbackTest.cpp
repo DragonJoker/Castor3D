@@ -36,6 +36,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			l_program->CreateObject( ShaderType::eVertex );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			return l_program;
 		}
@@ -53,6 +54,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			l_program->CreateObject( ShaderType::eVertex );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			return l_program;
 		}
@@ -88,6 +90,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::eGeometry );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
@@ -227,6 +230,7 @@ namespace Testing
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			l_program->CreateObject( ShaderType::eVertex );
 			l_program->CreateObject( ShaderType::eGeometry );
 			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 			l_program->SetSource( ShaderType::eGeometry, l_model, l_geo );
@@ -308,10 +312,8 @@ namespace Testing
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Create() );
-		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -358,8 +360,8 @@ namespace Testing
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
-		l_vboOut.Destroy();
-		l_vboIn.Destroy();
+		l_vboOut.Cleanup();
+		l_vboIn.Cleanup();
 		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
@@ -406,10 +408,8 @@ namespace Testing
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Create() );
-		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -441,8 +441,8 @@ namespace Testing
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
-		l_vboOut.Destroy();
-		l_vboIn.Destroy();
+		l_vboOut.Cleanup();
+		l_vboIn.Cleanup();
 		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
@@ -489,10 +489,8 @@ namespace Testing
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Create() );
-		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -507,8 +505,8 @@ namespace Testing
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
-		l_vboOut.Destroy();
-		l_vboIn.Destroy();
+		l_vboOut.Cleanup();
+		l_vboIn.Cleanup();
 		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
@@ -589,10 +587,8 @@ namespace Testing
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
 
-		CT_CHECK( l_vboIn.Create() );
-		CT_CHECK( l_vboOut.Create() );
-		CT_CHECK( l_vboIn.Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Upload( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
@@ -640,8 +636,8 @@ namespace Testing
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
-		l_vboOut.Destroy();
-		l_vboIn.Destroy();
+		l_vboOut.Cleanup();
+		l_vboIn.Cleanup();
 		l_program->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
@@ -724,10 +720,9 @@ namespace Testing
 
 		for ( uint32_t i = 0; i < 2; ++i )
 		{
-			CT_CHECK( l_vbos[i].Create() );
 			l_vbos[i].Resize( 10000 * sizeof( l_particle ) );
 			std::memcpy( l_vbos[i].data(), &l_particle, sizeof( l_particle ) );
-			CT_CHECK( l_vbos[i].Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
+			CT_CHECK( l_vbos[i].Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
 		}
 
 		for ( uint32_t i = 0; i < 2; ++i )
@@ -773,7 +768,7 @@ namespace Testing
 		{
 			l_geometryBuffers[i]->Cleanup();
 			l_transformFeedback[i]->Cleanup();
-			l_vbos[i].Destroy();
+			l_vbos[i].Cleanup();
 		}
 
 		l_program->Cleanup();

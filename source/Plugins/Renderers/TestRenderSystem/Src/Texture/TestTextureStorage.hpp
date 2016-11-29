@@ -49,7 +49,12 @@ namespace TestRender
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		TestTextureStorage( TestRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureLayout & p_layout, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess );
+		TestTextureStorage(
+			TestRenderSystem & p_renderSystem,
+			Castor3D::TextureStorageType p_type,
+			Castor3D::TextureLayout & p_layout,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -57,31 +62,27 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Bind
 		 */
-		virtual bool Bind( uint32_t p_index )const;
+		bool Bind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unbind
 		 */
-		virtual void Unbind( uint32_t p_index )const;
+		void Unbind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		virtual uint8_t * Lock( Castor3D::AccessType p_lock );
+		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
-		virtual void Unlock( bool p_modified );
+		void Unlock( bool p_modified )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		virtual uint8_t * Lock( Castor3D::AccessType p_lock, uint32_t p_index );
+		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock, uint32_t p_index )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
-		virtual void Unlock( bool p_modified, uint32_t p_index );
-		/**
-		 *\copydoc		Castor3D::TextureStorage::DoFill
-		 */
-		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::PixelFormat p_format );
+		void Unlock( bool p_modified, uint32_t p_index )override;
 	};
 }
 

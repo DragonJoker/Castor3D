@@ -64,13 +64,24 @@ namespace Castor3D
 		C3D_API ~VertexBuffer();
 		/**
 		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
+		 *\brief		Initialises the GPU buffer.
+		 *\param[in]	p_type		Buffer access type.
+		 *\param[in]	p_nature	Buffer access nature.
+		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Initialise le tampon GPU.
+		 *\param[in]	p_type		Type d'accès du tampon.
+		 *\param[in]	p_nature	Nature d'accès du tampon.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Create();
+		C3D_API bool Initialise( BufferAccessType p_type, BufferAccessNature p_nature );
+		/**
+		 *\~english
+		 *\brief		Clean up the GPU buffer.
+		 *\~french
+		 *\brief		Nettoie le tampon GPU.
+		 */
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Gets buffer declaration

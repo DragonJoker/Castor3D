@@ -51,14 +51,15 @@ namespace GlRender
 		 */
 		Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::Topology p_topology, Castor3D::ShaderProgram const & p_program )override;
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreatePipeline
+		 *\copydoc		Castor3D::RenderSystem::CreateRenderPipeline
 		 */
-		Castor3D::PipelineUPtr CreatePipeline( Castor3D::DepthStencilState && p_dsState
-											   , Castor3D::RasteriserState && p_rsState
-											   , Castor3D::BlendState && p_bdState
-											   , Castor3D::MultisampleState && p_msState
-											   , Castor3D::ShaderProgram & p_program
-											   , Castor3D::PipelineFlags const & p_flags )override;
+		Castor3D::PipelineUPtr CreatePipeline(
+			Castor3D::DepthStencilState && p_dsState,
+			Castor3D::RasteriserState && p_rsState,
+			Castor3D::BlendState && p_bdState,
+			Castor3D::MultisampleState && p_msState,
+			Castor3D::ShaderProgram & p_program,
+			Castor3D::PipelineFlags const & p_flags )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateSampler
 		 */
@@ -70,11 +71,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
 		 */
-		std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer< uint32_t > * p_buffer )override;
+		std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateVertexBuffer
 		 */
-		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer )override;
+		std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer()override;
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateStorageBuffer
+		 */
+		std::unique_ptr< Castor3D::GpuBuffer< uint8_t > > CreateStorageBuffer()override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTransformFeedback
 		 */
@@ -82,19 +87,36 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
+		Castor3D::TextureLayoutSPtr CreateTexture(
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess )override;
 		/**
 		*\copydoc		Castor3D::RenderSystem::CreateTexture
 		*/
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size )override;
+		Castor3D::TextureLayoutSPtr CreateTexture(
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Size const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size )override;
+		Castor3D::TextureLayoutSPtr CreateTexture(
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Point3ui const & p_size )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
-		Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::TextureStorageType p_type, Castor3D::TextureLayout & p_layout, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess )override;
+		Castor3D::TextureStorageUPtr CreateTextureStorage(
+			Castor3D::TextureStorageType p_type,
+			Castor3D::TextureLayout & p_layout,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess )override;
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
 		 */

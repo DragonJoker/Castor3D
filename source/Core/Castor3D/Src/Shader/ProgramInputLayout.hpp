@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Type de l'élément.
 		 *\return		Les utilisations possibles.
 		 */
-		uint32_t DoGuessUsages( Castor::String const & p_name, ElementType p_type );
+		Castor::FlagCombination< ElementUsage > DoGuessUsages( Castor::String const & p_name, ElementType p_type );
 
 	protected:
 		friend C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );

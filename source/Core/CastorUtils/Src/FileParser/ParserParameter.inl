@@ -813,12 +813,12 @@ namespace Castor
 	{
 		bool l_return = false;
 		m_value = 0;
-		StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
+		StringArray l_parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
 		p_params.clear();
 
-		if ( !l_values.empty() )
+		if ( !l_parameters.empty() )
 		{
-			StringArray l_values = string::split( l_values[0], cuT( "|" ), uint32_t( std::count( l_values[0].begin(), l_values[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray l_values = string::split( l_parameters[0], cuT( "|" ), uint32_t( std::count( l_parameters[0].begin(), l_parameters[0].end(), cuT( '|' ) ) + 1 ), false );
 
 			for ( auto l_value : l_values )
 			{
@@ -831,9 +831,9 @@ namespace Castor
 				}
 			}
 
-			if ( l_values.size() > 1 )
+			if ( l_parameters.size() > 1 )
 			{
-				p_params = l_values[1];
+				p_params = l_parameters[1];
 			}
 		}
 
@@ -872,12 +872,12 @@ namespace Castor
 	{
 		bool l_return = false;
 		m_value = 0;
-		StringArray l_params = string::split( p_params, cuT( " \t,;" ), 1, false );
+		StringArray l_parameters = string::split( p_params, cuT( " \t,;" ), 1, false );
 		p_params.clear();
 
-		if ( !l_params.empty() )
+		if ( !l_parameters.empty() )
 		{
-			StringArray l_values = string::split( l_params[0], cuT( "|" ), uint32_t( std::count( l_params[0].begin(), l_params[0].end(), cuT( '|' ) ) + 1 ), false );
+			StringArray l_values = string::split( l_parameters[0], cuT( "|" ), uint32_t( std::count( l_parameters[0].begin(), l_parameters[0].end(), cuT( '|' ) ) + 1 ), false );
 
 			for ( auto l_value : l_values )
 			{
@@ -890,9 +890,9 @@ namespace Castor
 				}
 			}
 
-			if ( l_params.size() > 1 )
+			if ( l_parameters.size() > 1 )
 			{
-				p_params = l_params[1];
+				p_params = l_parameters[1];
 			}
 		}
 

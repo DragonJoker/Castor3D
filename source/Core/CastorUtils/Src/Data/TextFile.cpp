@@ -4,13 +4,8 @@
 
 namespace Castor
 {
-	TextFile::TextFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encoding )
-		: TextFile{ p_fileName, uint32_t( p_mode ), p_encoding }
-	{
-	}
-
-	TextFile::TextFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encodingMode )
-		: File{ p_fileName, p_mode & ~uint32_t( OpenMode::eBinary ), p_encodingMode }
+	TextFile::TextFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encoding )
+		: File{ p_fileName, p_mode & ~uint32_t( OpenMode::eBinary ), p_encoding }
 	{
 	}
 
@@ -36,16 +31,16 @@ namespace Castor
 			{
 				if ( m_encoding == EncodingMode::eASCII )
 				{
-					l_iOrigChar = getc( m_pFile );
+					l_iOrigChar = getc( m_file );
 					l_cChar = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
 				}
 				else
 				{
-					l_iOrigChar = getwc( m_pFile );
+					l_iOrigChar = getwc( m_file );
 					l_cChar = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
 				}
 
-				l_bContinue =  ! feof( m_pFile );
+				l_bContinue =  ! feof( m_file );
 
 				if ( l_bContinue )
 				{
@@ -55,11 +50,11 @@ namespace Castor
 					//{
 					//	if (m_encoding == eASCII)
 					//	{
-					//		ungetc( int( String( l_cChar).char_str()[0]), m_pFile);
+					//		ungetc( int( String( l_cChar).char_str()[0]), m_file);
 					//	}
 					//	else
 					//	{
-					//		ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_pFile);
+					//		ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_file);
 					//	}
 					//}
 				}
@@ -70,7 +65,7 @@ namespace Castor
 				}
 
 				l_uiReturn++;
-				m_ullCursor++;
+				m_cursor++;
 			}
 		}
 
@@ -96,12 +91,12 @@ namespace Castor
 
 			if ( m_encoding == EncodingMode::eASCII )
 			{
-				l_iOrigChar = getc( m_pFile );
+				l_iOrigChar = getc( m_file );
 				p_toRead = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
 			}
 			else
 			{
-				l_iOrigChar = getwc( m_pFile );
+				l_iOrigChar = getwc( m_file );
 				p_toRead = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
 			}
 

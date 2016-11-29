@@ -43,11 +43,8 @@ namespace GlRender
 		: public Castor3D::GpuBuffer< T >
 		, public Holder
 	{
-	protected:
-		using HardwareBufferPtr = typename Castor3D::GpuBuffer< T >::HardwareBufferPtr;
-
 	public:
-		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target, HardwareBufferPtr p_buffer );
+		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, GlBufferTarget p_target );
 		virtual ~GlBuffer();
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Create
@@ -58,46 +55,54 @@ namespace GlRender
 		 */
 		void Destroy()override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Initialise
+		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseStorage
 		 */
-		bool Upload( Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
+		bool InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseBindingPoint
+		 */
+		bool InitialiseBindingPoint( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
 		 */
-		bool Bind()override;
+		bool Bind()const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
 		 */
-		void Unbind()override;
+		void Unbind()const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
 		 */
-		bool Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )override;
+		bool Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )const override;
 		/**
-		 *\copydoc		Castor3D::GpuBuffer< T >::Fill
+		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
 		 */
-		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )override;
+		bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const override;
+		/**
+		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
+		 */
+		bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
 		 */
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags )override;
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unlock
 		 */
-		void Unlock()override;
+		void Unlock()const override;
 
 		inline uint32_t GetGlName()const
 		{
 			return m_glBuffer.GetGlName();
 		}
-		HardwareBufferPtr GetCpuBuffer()const
+
+		inline uint32_t GetBindingPoint()const
 		{
-			return m_buffer;
+			return m_glBuffer.GetBindingPoint();
 		}
 
 	protected:
 		GlBufferBase< T > m_glBuffer;
-		HardwareBufferPtr m_buffer;
 	};
 }
 

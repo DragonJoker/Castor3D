@@ -230,7 +230,7 @@ namespace Castor3D
 		 *\brief		Récupère la combinaison d'indicateurs de canal de texture
 		 *\return		La valeur
 		 */
-		inline uint16_t GetTextureFlags()const
+		inline Castor::FlagCombination< TextureChannel > const & GetTextureFlags()const
 		{
 			return m_textureFlags;
 		}
@@ -708,7 +708,7 @@ namespace Castor3D
 		//!\~english Blend states	\~french Etats de blend
 		BlendStateSPtr m_pBlendState;
 		//!\~english Bitwise ORed TextureChannel	\~french Combinaison des TextureChannel affectés à une texture pour cette passe
-		uint16_t m_textureFlags;
+		Castor::FlagCombination< TextureChannel > m_textureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
 		//!\~english The alpha blend mode \~french Le mode de mélange alpha

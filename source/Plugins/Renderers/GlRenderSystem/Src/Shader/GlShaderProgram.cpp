@@ -27,8 +27,6 @@ namespace GlRender
 				)
 		, m_layout( p_gl, p_renderSystem )
 	{
-		CreateObject( ShaderType::eVertex );
-		CreateObject( ShaderType::ePixel );
 	}
 
 	GlShaderProgram::~GlShaderProgram()

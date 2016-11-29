@@ -39,25 +39,37 @@ namespace GlRender
 	*/
 	template< typename T >
 	class GlBufferBase
-		: public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-		  std::function< bool( uint32_t ) > >
+		: public Bindable<
+			std::function< bool( int, uint32_t * ) >,
+			std::function< bool( int, uint32_t const * ) >,
+			std::function< bool( uint32_t ) > >
 	{
-		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-			  std::function< bool( uint32_t ) > >;
+		using BindableType = Bindable<
+			std::function< bool( int, uint32_t * ) >,
+			std::function< bool( int, uint32_t const * ) >,
+			std::function< bool( uint32_t ) > >;
 
 	public:
 		GlBufferBase( OpenGl & p_gl, GlBufferTarget p_target );
 		virtual ~GlBufferBase();
 
-		bool Copy( GlBufferBase< T > const & p_src, uint32_t p_size );
-		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
-		bool Upload( T const * p_buffer, uint32_t p_count, uint32_t p_offset = 0 );
-		T * Lock( uint32_t p_offset, uint32_t p_count, Castor3D::AccessType p_flags );
-		T * Lock( GlAccessType p_access );
-		bool Unlock();
+		bool Copy( GlBufferBase< T > const & p_src, uint32_t p_size )const;
+		bool InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const;
+		bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const;
+		bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const;
+		T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
+		T * Lock( GlAccessType p_access )const;
+		bool Unlock()const;
+		void SetBindingPoint( uint32_t p_point )const;
+
+		inline uint32_t GetBindingPoint()const
+		{
+			return m_bindingPoint;
+		}
 
 	private:
 		GlBufferTarget m_target;
+		mutable uint32_t m_bindingPoint{ 0u };
 	};
 }
 

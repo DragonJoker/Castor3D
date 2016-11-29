@@ -9,8 +9,8 @@ namespace GlRender
 												  , GlRenderSystem & p_renderSystem
 												  , Castor3D::TextureStorageType p_type
 												  , Castor3D::TextureLayout & p_layout
-												  , Castor3D::AccessType p_cpuAccess
-												  , Castor3D::AccessType p_gpuAccess )
+												  , Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess
+												  , Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess )
 		: Castor3D::TextureStorage{ p_type, p_layout, p_cpuAccess, p_gpuAccess }
 		, Holder{ p_gl }
 		, m_glRenderSystem{ &p_renderSystem }
@@ -41,7 +41,7 @@ namespace GlRender
 	}
 
 	template< typename Traits >
-	uint8_t * GlTextureStorage< Traits >::Lock( Castor3D::AccessType p_lock )
+	uint8_t * GlTextureStorage< Traits >::Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock )
 	{
 		return m_impl.Lock( *this, p_lock, 0u );
 	}
@@ -53,7 +53,7 @@ namespace GlRender
 	}
 
 	template< typename Traits >
-	uint8_t * GlTextureStorage< Traits >::Lock( Castor3D::AccessType p_lock, uint32_t p_index )
+	uint8_t * GlTextureStorage< Traits >::Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock, uint32_t p_index )
 	{
 		return m_impl.Lock( *this, p_lock, p_index );
 	}
