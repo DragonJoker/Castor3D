@@ -1,7 +1,7 @@
 #include "Viewport.hpp"
 
 #include "Engine.hpp"
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "RenderSystem.hpp"
 
 #include <Math/TransformationMatrix.hpp>

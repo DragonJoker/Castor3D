@@ -3,7 +3,7 @@
 #include "Engine.hpp"
 #include "ShaderCache.hpp"
 
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "Viewport.hpp"
 
 #include "Event/Frame/CleanupEvent.hpp"

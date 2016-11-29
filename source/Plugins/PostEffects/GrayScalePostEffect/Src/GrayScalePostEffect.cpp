@@ -14,7 +14,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
@@ -144,7 +144,7 @@ namespace GrayScale
 			l_dsstate.SetDepthMask( WritingMask::eZero );
 			RasteriserState l_rsstate;
 			l_rsstate.SetCulledFaces( Culling::eBack );
-			m_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), std::move( l_rsstate ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return m_surface.Initialise( m_renderTarget, l_size, 0, m_sampler );

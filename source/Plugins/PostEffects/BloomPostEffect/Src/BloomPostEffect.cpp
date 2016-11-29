@@ -14,7 +14,7 @@
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Miscellaneous/Parameter.hpp>
 #include <Render/Context.hpp>
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
@@ -471,7 +471,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::Pipeline & p_pipeline )
+	void BloomPostEffect::DoBlur( TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::RenderPipeline & p_pipeline )
 	{
 		auto l_context = GetRenderSystem()->GetCurrentContext();
 
@@ -596,7 +596,7 @@ namespace Bloom
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_hiPassPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_hiPassPipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;
@@ -629,7 +629,7 @@ namespace Bloom
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_blurXPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_blurXPipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;
@@ -662,7 +662,7 @@ namespace Bloom
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_blurYPipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_blurYPipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;
@@ -704,7 +704,7 @@ namespace Bloom
 			DepthStencilState l_dsstate;
 			l_dsstate.SetDepthTest( false );
 			l_dsstate.SetDepthMask( WritingMask::eZero );
-			m_combinePipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+			m_combinePipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 		}
 
 		return l_return;

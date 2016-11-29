@@ -12,7 +12,7 @@
 #include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 #include "Scene/BillboardList.hpp"
@@ -156,7 +156,7 @@ namespace Castor3D
 
 	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		Submesh & p_submesh,
 		Geometry & p_primitive,
 		AnimatedSkeletonSPtr p_skeleton,
@@ -182,7 +182,7 @@ namespace Castor3D
 
 	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		Submesh & p_submesh,
 		Geometry & p_primitive )
 	{
@@ -202,7 +202,7 @@ namespace Castor3D
 
 	BillboardRenderNode ShadowMapPass::CreateBillboardNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
@@ -241,7 +241,7 @@ namespace Castor3D
 
 	void ShadowMapPass::DoRenderInstancedSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, SubmeshStaticRenderNodesByPipelineMap & p_nodes )
 	{
-		DoTraverseNodes( p_camera, p_nodes, [this]( Pipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
+		DoTraverseNodes( p_camera, p_nodes, [this]( RenderPipeline & p_pipeline, Pass & p_pass, Submesh & p_submesh, StaticGeometryRenderNodeArray & p_renderNodes )
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
@@ -288,11 +288,11 @@ namespace Castor3D
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void ShadowMapPass::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void ShadowMapPass::DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 
-	void ShadowMapPass::DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void ShadowMapPass::DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 
@@ -309,7 +309,7 @@ namespace Castor3D
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
+			l_it = m_backOpaquePipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}
 
@@ -326,7 +326,7 @@ namespace Castor3D
 			DoUpdateProgram( p_program );
 			RasteriserState l_rsState;
 			l_rsState.SetCulledFaces( Culling::eNone );
-			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreatePipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
+			l_it = m_backTransparentPipelines.emplace( p_flags, GetEngine()->GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rsState ), BlendState{}, MultisampleState{}, p_program, p_flags ) ).first;
 		}
 	}
 

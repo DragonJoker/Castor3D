@@ -1,6 +1,7 @@
 #include "ShaderProgram.hpp"
 
 #include "Render/RenderSystem.hpp"
+#include "Shader/AtomicCounterBuffer.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"
 #include "Shader/ShaderObject.hpp"
@@ -495,6 +496,41 @@ namespace Castor3D
 		return l_buffer;
 	}
 
+	AtomicCounterBuffer & ShaderProgram::CreateAtomicCounterBuffer( String const & p_name, FlagCombination< ShaderTypeFlag > const & p_shaderMask )
+	{
+		auto l_it = m_atomicCounterBuffersByName.find( p_name );
+
+		if ( l_it == m_atomicCounterBuffersByName.end() )
+		{
+			auto l_ssbo = std::make_shared< AtomicCounterBuffer >( p_name, *this );
+			m_listAtomicCounterBuffers.push_back( l_ssbo );
+			l_it = m_atomicCounterBuffersByName.insert( { p_name, l_ssbo } ).first;
+
+			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ); ++i )
+			{
+				if ( CheckFlag( p_shaderMask, uint8_t( 0x01 << i ) ) )
+				{
+					REQUIRE( m_shaders[i] );
+					m_atomicCounterBuffers[i].push_back( l_ssbo );
+				}
+			}
+		}
+
+		return *l_it->second.lock();
+	}
+
+	AtomicCounterBufferSPtr ShaderProgram::FindAtomicCounterBuffer( Castor::String const & p_name )const
+	{
+		AtomicCounterBufferSPtr l_buffer;
+		auto l_it = m_atomicCounterBuffersByName.find( p_name );
+
+		if ( l_it != m_atomicCounterBuffersByName.end() )
+		{
+			l_buffer = l_it->second.lock();
+		}
+
+		return l_buffer;
+	}
 	FrameVariablePtrList & ShaderProgram::GetFrameVariables( ShaderType p_type )
 	{
 		REQUIRE( m_shaders[size_t( p_type )] );

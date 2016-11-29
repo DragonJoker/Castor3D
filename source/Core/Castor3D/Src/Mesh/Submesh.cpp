@@ -12,7 +12,7 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Skeleton/BonedVertex.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/ShaderProgram.hpp"

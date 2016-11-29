@@ -13,7 +13,7 @@
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Buffer/Buffer.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/Viewport.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
@@ -410,7 +410,7 @@ namespace Castor3D
 		return l_it->second;
 	}
 
-	Pipeline & OverlayRenderer::DoGetPanelPipeline( FlagCombination< TextureChannel > p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPanelPipeline( FlagCombination< TextureChannel > p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -425,7 +425,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	Pipeline & OverlayRenderer::DoGetTextPipeline( FlagCombination< TextureChannel > p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetTextPipeline( FlagCombination< TextureChannel > p_textureFlags )
 	{
 		// Remove unwanted flags
 		RemFlag( p_textureFlags, TextureChannel::eAmbient );
@@ -441,7 +441,7 @@ namespace Castor3D
 		return DoGetPipeline( p_textureFlags );
 	}
 
-	Pipeline & OverlayRenderer::DoGetPipeline( FlagCombination< TextureChannel > const & p_textureFlags )
+	RenderPipeline & OverlayRenderer::DoGetPipeline( FlagCombination< TextureChannel > const & p_textureFlags )
 	{
 		auto l_it = m_pipelines.find( p_textureFlags );
 
@@ -469,7 +469,7 @@ namespace Castor3D
 				RasteriserState l_rsState;
 				l_rsState.SetCulledFaces( Culling::eBack );
 
-				auto l_pipeline = GetRenderSystem()->CreatePipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program, PipelineFlags{} );
+				auto l_pipeline = GetRenderSystem()->CreateRenderPipeline( std::move( l_dsState ), std::move( l_rsState ), std::move( l_blState ), std::move( l_msState ), *l_program, PipelineFlags{} );
 				l_it = m_pipelines.emplace( p_textureFlags, std::move( l_pipeline ) ).first;
 			}
 			else

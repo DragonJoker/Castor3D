@@ -1,4 +1,4 @@
-#include "Render/GlPipeline.hpp"
+#include "Render/GlRenderPipeline.hpp"
 
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
@@ -209,7 +209,7 @@ namespace GlRender
 		}
 	}
 
-	GlPipeline::GlPipeline( OpenGl & p_gl
+	GlRenderPipeline::GlRenderPipeline( OpenGl & p_gl
 							, GlRenderSystem & p_renderSystem
 							, DepthStencilState && p_dsState
 							, RasteriserState && p_rsState
@@ -217,16 +217,16 @@ namespace GlRender
 							, MultisampleState && p_msState
 							, ShaderProgram & p_program
 							, PipelineFlags const & p_flags )
-		: Pipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
+		: RenderPipeline{ p_renderSystem, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags }
 		, Holder{ p_gl }
 	{
 	}
 
-	GlPipeline::~GlPipeline()
+	GlRenderPipeline::~GlRenderPipeline()
 	{
 	}
 
-	void GlPipeline::Apply()const
+	void GlRenderPipeline::Apply()const
 	{
 		DoApply( m_rsState, GetOpenGl() );
 		DoApply( m_dsState, GetOpenGl() );

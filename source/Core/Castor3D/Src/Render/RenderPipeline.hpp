@@ -20,8 +20,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___C3D_PIPELINE_H___
-#define ___C3D_PIPELINE_H___
+#ifndef ___C3D_RenderPipeline_H___
+#define ___C3D_RenderPipeline_H___
 
 #include "Castor3DPrerequisites.hpp"
 
@@ -49,7 +49,7 @@ namespace Castor3D
 	\brief		Le pipeline de rendu.
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
-	class Pipeline
+	class RenderPipeline
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	private:
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		C3D_API explicit Pipeline( RenderSystem & p_renderSystem
+		C3D_API explicit RenderPipeline( RenderSystem & p_renderSystem
 								   , DepthStencilState && p_dsState
 								   , RasteriserState && p_rsState
 								   , BlendState && p_blState
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~Pipeline();
+		C3D_API virtual ~RenderPipeline();
 		/**
 		 *\~english
 		 *\brief		Cleans up the pipeline.

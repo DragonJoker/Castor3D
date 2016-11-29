@@ -10,7 +10,7 @@
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Miscellaneous/TransformFeedback.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
@@ -200,7 +200,7 @@ namespace Castor3D
 		{
 			RasteriserState l_rs;
 			l_rs.SetDiscardPrimitives( true );
-			m_updatePipeline = l_renderSystem.CreatePipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
+			m_updatePipeline = l_renderSystem.CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
 
 			auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
 			l_texture->GetImage().InitialiseSource();

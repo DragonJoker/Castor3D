@@ -8,7 +8,7 @@
 #include "Overlay/OverlayRenderer.hpp"
 #include "Overlay/PanelOverlay.hpp"
 #include "Overlay/TextOverlay.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/SceneFileParser.hpp"

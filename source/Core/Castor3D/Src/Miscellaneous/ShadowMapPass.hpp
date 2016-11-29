@@ -108,7 +108,7 @@ namespace Castor3D
 		 */
 		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			Submesh & p_submesh,
 			Geometry & p_primitive,
 			AnimatedSkeletonSPtr p_skeleton,
@@ -118,7 +118,7 @@ namespace Castor3D
 		 */
 		C3D_API StaticGeometryRenderNode CreateStaticNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			Submesh & p_submesh,
 			Geometry & p_primitive )override;
 		/**
@@ -126,7 +126,7 @@ namespace Castor3D
 		 */
 		C3D_API BillboardRenderNode CreateBillboardNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			BillboardBase & p_billboard )override;
 		/**
 		 *\~english
@@ -217,11 +217,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
-		void DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentPipeline
 		 */
-		void DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
+		void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoPrepareOpaqueFrontPipeline
 		 */

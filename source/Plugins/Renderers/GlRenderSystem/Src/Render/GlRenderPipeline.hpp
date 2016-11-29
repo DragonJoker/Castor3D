@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "Common/GlHolder.hpp"
 
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 
 namespace GlRender
 {
@@ -36,10 +36,10 @@ namespace GlRender
 	\~english
 	\brief		Implementation of the rendering pipeline.
 	\~french
-	\brief		Impl�mentation du pipeline de rendu.
+	\brief		Implémentation du pipeline de rendu.
 	*/
-	class GlPipeline
-		: public Castor3D::Pipeline
+	class GlRenderPipeline
+		: public Castor3D::RenderPipeline
 		, public Holder
 	{
 	public:
@@ -65,7 +65,7 @@ namespace GlRender
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_flags			Les indicateurs de création.
 		 */
-		GlPipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem
+		GlRenderPipeline( OpenGl & p_gl, GlRenderSystem & p_renderSystem
 					, Castor3D::DepthStencilState && p_dsState
 					, Castor3D::RasteriserState && p_rsState
 					, Castor3D::BlendState && p_bdState
@@ -78,7 +78,7 @@ namespace GlRender
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~GlPipeline();
+		virtual ~GlRenderPipeline();
 		/**
 		 *\~english
 		 *\brief		Applies the pipeline.

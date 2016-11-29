@@ -346,6 +346,7 @@ namespace Castor3D
 	class FrameVariable;
 	class FrameVariableBuffer;
 	class ShaderStorageBuffer;
+	class AtomicCounterBuffer;
 	template < typename T > class OneFrameVariable;
 	template < typename T, uint32_t Count > class PointFrameVariable;
 	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
@@ -513,30 +514,34 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ShaderObject );
 	DECLARE_SMART_PTR( ShaderProgram );
 	DECLARE_SMART_PTR( ShaderStorageBuffer );
+	DECLARE_SMART_PTR( AtomicCounterBuffer );
 
 	DECLARE_VECTOR( ShaderProgramSPtr, ShaderProgramPtr );
 	DECLARE_VECTOR( ShaderObjectSPtr, ShaderObjectPtr );
 	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
 	DECLARE_LIST( ShaderStorageBufferSPtr, ShaderStorageBufferPtr );
+	DECLARE_LIST( AtomicCounterBufferSPtr, AtomicCounterBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
 	DECLARE_MAP( Castor::String, ShaderStorageBufferWPtr, ShaderStorageBufferPtrStr );
+	DECLARE_MAP( Castor::String, AtomicCounterBufferWPtr, AtomicCounterBufferPtrStr );
 	DECLARE_MAP( ShaderType, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
 	DECLARE_MAP( ShaderType, ShaderStorageBufferWPtr, ShaderStorageBufferPtrShader );
+	DECLARE_MAP( ShaderType, AtomicCounterBufferWPtr, AtomicCounterBufferPtrShader );
 
 	//@}
 
 #define UBO_MATRIX( Writer )\
 	GLSL::Ubo l_matrices{ l_writer, ShaderProgram::BufferMatrix };\
-	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxProjection );\
-	auto c3d_mtxModel = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxModel );\
-	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxView );\
-	auto c3d_mtxNormal = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxNormal );\
-	auto c3d_mtxTexture0 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[0] );\
-	auto c3d_mtxTexture1 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[1] );\
-	auto c3d_mtxTexture2 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[2] );\
-	auto c3d_mtxTexture3 = l_matrices.GetUniform< GLSL::Mat4 >( Pipeline::MtxTexture[3] );\
+	auto c3d_mtxProjection = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxProjection );\
+	auto c3d_mtxModel = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxModel );\
+	auto c3d_mtxView = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxView );\
+	auto c3d_mtxNormal = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxNormal );\
+	auto c3d_mtxTexture0 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[0] );\
+	auto c3d_mtxTexture1 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[1] );\
+	auto c3d_mtxTexture2 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[2] );\
+	auto c3d_mtxTexture3 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	l_matrices.End()
 
 #define UBO_PASS( Writer )\

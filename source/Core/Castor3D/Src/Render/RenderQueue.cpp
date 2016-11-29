@@ -23,7 +23,7 @@
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Mesh/Skeleton/Skeleton.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Render/RenderPass.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
@@ -64,7 +64,7 @@ namespace Castor3D
 		}
 
 		template< typename NodeType, typename MapType >
-		void DoAddRenderNode( Pipeline & p_pipeline
+		void DoAddRenderNode( RenderPipeline & p_pipeline
 							  , NodeType const & p_node
 							  , MapType & p_nodes )
 		{
@@ -75,7 +75,7 @@ namespace Castor3D
 
 		template< typename NodeType >
 		void DoAddRenderNode( Pass & p_pass
-							  , Pipeline & p_pipeline
+							  , RenderPipeline & p_pipeline
 							  , NodeType const & p_node
 							  , Submesh & p_object
 							  , SubmeshStaticRenderNodesByPipelineMap & p_nodes )
@@ -419,7 +419,7 @@ namespace Castor3D
 
 		void DoAddRenderNodes( Camera const & p_camera
 							   , SubmeshStaticRenderNodesByPipelineMap & p_outputNodes
-							   , Pipeline & p_pipeline
+							   , RenderPipeline & p_pipeline
 							   , Pass & p_pass
 							   , Submesh & p_submesh
 							   , StaticGeometryRenderNodeArray & p_renderNodes )

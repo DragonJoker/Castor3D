@@ -9,7 +9,7 @@
 #include "TechniqueCache.hpp"
 #include "WindowCache.hpp"
 
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "RenderSystem.hpp"
 #include "RenderWindow.hpp"
 

@@ -6,6 +6,7 @@
 #include "Shader/GlShaderProgram.hpp"
 #include "Buffer/GlBuffer.hpp"
 
+#include <Shader/AtomicCounterBuffer.hpp>
 #include <Shader/ShaderStorageBuffer.hpp>
 
 using namespace Castor;
@@ -181,6 +182,16 @@ namespace GlRender
 				[this, &l_program]( std::string p_name, int p_point, int p_index )
 				{
 					Logger::LogDebug( StringStream() << cuT( "   ShaderStorage block: " ) << string::string_cast< xchar >( p_name ) );
+				} );
+
+			GetUnnamedProgramInterfaceInfos(
+				GetOpenGl(),
+				l_program.GetGlName(),
+				GlslInterface::eAtomicCounterBuffer,
+				GlslProperty::eBufferBinding,
+				[this, &l_program]( std::vector< int > const & p_value )
+				{
+					Logger::LogDebug( StringStream() << cuT( "   Atomic counter buffer" ) );
 				} );
 
 			GetProgramBufferInfos(

@@ -86,7 +86,7 @@ namespace Bloom
 	private:
 		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
 		void DoDownSample( Castor3D::TextureLayout const & p_origin );
-		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::Pipeline & p_pipeline );
+		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::RenderPipeline & p_pipeline );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 		bool DoInitialiseHiPassProgram();
@@ -97,20 +97,20 @@ namespace Bloom
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 
-		Castor3D::PipelineUPtr m_hiPassPipeline;
+		Castor3D::RenderPipelineUPtr m_hiPassPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;
 
-		Castor3D::PipelineUPtr m_blurXPipeline;
+		Castor3D::RenderPipelineUPtr m_blurXPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_blurXMapDiffuse;
 		Castor3D::OneUIntFrameVariableSPtr m_blurXCoeffCount;
 		Castor3D::OneFloatFrameVariableSPtr m_blurXCoeffs;
 
-		Castor3D::PipelineUPtr m_blurYPipeline;
+		Castor3D::RenderPipelineUPtr m_blurYPipeline;
 		Castor3D::OneIntFrameVariableSPtr m_blurYMapDiffuse;
 		Castor3D::OneUIntFrameVariableSPtr m_blurYCoeffCount;
 		Castor3D::OneFloatFrameVariableSPtr m_blurYCoeffs;
 
-		Castor3D::PipelineUPtr m_combinePipeline;
+		Castor3D::RenderPipelineUPtr m_combinePipeline;
 
 		Castor3D::Viewport m_viewport;
 		Castor3D::BufferDeclaration m_declaration;

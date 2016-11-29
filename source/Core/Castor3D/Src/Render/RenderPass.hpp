@@ -173,7 +173,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetOpaquePipelineFront(
+		C3D_API RenderPipeline * GetOpaquePipelineFront(
 			BlendMode p_colourBlendMode,
 			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
 			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
@@ -194,7 +194,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetOpaquePipelineBack(
+		C3D_API RenderPipeline * GetOpaquePipelineBack(
 			BlendMode p_colourBlendMode,
 			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
 			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
@@ -217,7 +217,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetTransparentPipelineFront(
+		C3D_API RenderPipeline * GetTransparentPipelineFront(
 			BlendMode p_colourBlendMode,
 			BlendMode p_alphaBlendMode,
 			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
@@ -241,7 +241,7 @@ namespace Castor3D
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 *\return		Le pipeline prêt à l'utilisation, \p nullptr si aucun pipeline n'est disponible pour la configuration voulue.
 		 */
-		C3D_API Pipeline * GetTransparentPipelineBack(
+		C3D_API RenderPipeline * GetTransparentPipelineBack(
 			BlendMode p_colourBlendMode,
 			BlendMode p_alphaBlendMode,
 			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
@@ -269,7 +269,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual AnimatedGeometryRenderNode CreateAnimatedNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			Submesh & p_submesh,
 			Geometry & p_primitive,
 			AnimatedSkeletonSPtr p_skeleton,
@@ -292,7 +292,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual StaticGeometryRenderNode CreateStaticNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			Submesh & p_submesh,
 			Geometry & p_primitive );
 		/**
@@ -311,7 +311,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual BillboardRenderNode CreateBillboardNode(
 			Pass & p_pass,
-			Pipeline & p_pipeline,
+			RenderPipeline & p_pipeline,
 			BillboardBase & p_billboard );
 		/**
 		 *\~english
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
+		C3D_API void UpdateOpaquePipeline( Camera const & p_camera, RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -334,7 +334,7 @@ namespace Castor3D
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
+		C3D_API void UpdateTransparentPipeline( Camera const & p_camera, RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const;
 		/**
 		 *\~english
 		 *\return		The multsampling status.
@@ -359,7 +359,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API PassRenderNode DoCreatePassRenderNode( Pass & p_pass, Pipeline & p_pipeline );
+		C3D_API PassRenderNode DoCreatePassRenderNode( Pass & p_pass, RenderPipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Creates a scene render node.
@@ -372,7 +372,7 @@ namespace Castor3D
 		 *\param[in]	p_pipeline	Le pipeline.
 		 *\return		Le noeud de rendu.
 		 */
-		C3D_API SceneRenderNode DoCreateSceneRenderNode( Scene & p_scene, Pipeline & p_pipeline );
+		C3D_API SceneRenderNode DoCreateSceneRenderNode( Scene & p_scene, RenderPipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader program matching the given flags.
@@ -480,7 +480,7 @@ namespace Castor3D
 		 *\brief		Met à jour lee pipeline opaque.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the transparent pipeline.
@@ -489,7 +489,7 @@ namespace Castor3D
 		 *\brief		Met à jour le pipeline transparent.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
 		 */
-		C3D_API virtual void DoUpdateTransparentPipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
+		C3D_API virtual void DoUpdateTransparentPipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const = 0;
 		/**
 		 *\~english
 		 *\brief		Prepares the pipeline for opaque objets render, culling front faces.
@@ -528,16 +528,16 @@ namespace Castor3D
 		RenderQueue m_renderQueue;
 		//!\~english	The pipelines used to render opaque nodes' back faces.
 		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces arrière des noeuds opaques.
-		std::map< PipelineFlags, PipelineUPtr > m_frontOpaquePipelines;
+		std::map< PipelineFlags, RenderPipelineUPtr > m_frontOpaquePipelines;
 		//!\~english	The pipelines used to render opaque nodes' front faces.
 		//!\~french		Les pipelines de rendu utilisés pour dessiner les faces avant noeuds opaques.
-		std::map< PipelineFlags, PipelineUPtr > m_backOpaquePipelines;
+		std::map< PipelineFlags, RenderPipelineUPtr > m_backOpaquePipelines;
 		//!\~english	The pipelines used to render transparent nodes' back faces.
 		//!\~french		Les pipeline de rendu utilisé pour dessiner les faces arrière des noeuds transparents.
-		std::map< PipelineFlags, PipelineUPtr > m_frontTransparentPipelines;
+		std::map< PipelineFlags, RenderPipelineUPtr > m_frontTransparentPipelines;
 		//!\~english	The pipelines used to render transparent nodes' front faces.
 		//!\~french		Les pipelines de rendu utilisé pour dessiner les faces avant des noeuds transparents.
-		std::map< PipelineFlags, PipelineUPtr > m_backTransparentPipelines;
+		std::map< PipelineFlags, RenderPipelineUPtr > m_backTransparentPipelines;
 		//!\~english	The objects rendered in the last frame.
 		//!\~french		Les objets dessinés lors de la dernière frame.
 		std::vector< std::reference_wrapper< ObjectRenderNodeBase const > > m_renderedObjects;

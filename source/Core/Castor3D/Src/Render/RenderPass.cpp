@@ -5,7 +5,7 @@
 #include "Material/Pass.hpp"
 #include "Mesh/Submesh.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Render/Pipeline.hpp"
+#include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
@@ -100,14 +100,14 @@ namespace Castor3D
 		}
 	}
 
-	Pipeline * RenderPass::GetOpaquePipelineFront(
+	RenderPipeline * RenderPass::GetOpaquePipelineFront(
 		BlendMode p_colourBlendMode,
 		FlagCombination< TextureChannel > const & p_textureFlags,
 		FlagCombination< ProgramFlag > const & p_programFlags,
 		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
-		Pipeline * l_return{ nullptr };
+		RenderPipeline * l_return{ nullptr };
 
 		if ( l_it != m_frontOpaquePipelines.end() )
 		{
@@ -117,14 +117,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetOpaquePipelineBack(
+	RenderPipeline * RenderPass::GetOpaquePipelineBack(
 		BlendMode p_colourBlendMode,
 		FlagCombination< TextureChannel > const & p_textureFlags,
 		FlagCombination< ProgramFlag > const & p_programFlags,
 		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
-		Pipeline * l_return{ nullptr };
+		RenderPipeline * l_return{ nullptr };
 
 		if ( l_it != m_backOpaquePipelines.end() )
 		{
@@ -134,7 +134,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetTransparentPipelineFront(
+	RenderPipeline * RenderPass::GetTransparentPipelineFront(
 		BlendMode p_colourBlendMode,
 		BlendMode p_alphaBlendMode,
 		FlagCombination< TextureChannel > const & p_textureFlags,
@@ -142,7 +142,7 @@ namespace Castor3D
 		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		Pipeline * l_return{ nullptr };
+		RenderPipeline * l_return{ nullptr };
 
 		if ( l_it != m_frontTransparentPipelines.end() )
 		{
@@ -152,7 +152,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetTransparentPipelineBack(
+	RenderPipeline * RenderPass::GetTransparentPipelineBack(
 		BlendMode p_colourBlendMode,
 		BlendMode p_alphaBlendMode,
 		FlagCombination< TextureChannel > const & p_textureFlags,
@@ -160,7 +160,7 @@ namespace Castor3D
 		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
-		Pipeline * l_return{ nullptr };
+		RenderPipeline * l_return{ nullptr };
 
 		if ( l_it != m_backTransparentPipelines.end() )
 		{
@@ -172,7 +172,7 @@ namespace Castor3D
 
 	AnimatedGeometryRenderNode RenderPass::CreateAnimatedNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		Submesh & p_submesh,
 		Geometry & p_primitive,
 		AnimatedSkeletonSPtr p_skeleton,
@@ -196,7 +196,7 @@ namespace Castor3D
 
 	StaticGeometryRenderNode RenderPass::CreateStaticNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		Submesh & p_submesh,
 		Geometry & p_primitive )
 	{
@@ -213,7 +213,7 @@ namespace Castor3D
 
 	BillboardRenderNode RenderPass::CreateBillboardNode(
 		Pass & p_pass,
-		Pipeline & p_pipeline,
+		RenderPipeline & p_pipeline,
 		BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
@@ -232,7 +232,7 @@ namespace Castor3D
 		};
 	}
 
-	void RenderPass::UpdateOpaquePipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderPass::UpdateOpaquePipeline( Camera const & p_camera, RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
@@ -241,7 +241,7 @@ namespace Castor3D
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderPass::UpdateTransparentPipeline( Camera const & p_camera, RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 		p_pipeline.SetProjectionMatrix( p_camera.GetViewport().GetProjection() );
 		p_pipeline.SetViewMatrix( p_camera.GetView() );
@@ -250,7 +250,7 @@ namespace Castor3D
 		p_camera.FillShader( l_sceneUbo );
 	}
 
-	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass, Pipeline & p_pipeline )
+	PassRenderNode RenderPass::DoCreatePassRenderNode( Pass & p_pass, RenderPipeline & p_pipeline )
 	{
 		FrameVariableBufferSPtr l_passBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferPass );
 		FrameVariableBufferSPtr l_matrixBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
@@ -275,7 +275,7 @@ namespace Castor3D
 		return l_node;
 	}
 
-	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Scene & p_scene, Pipeline & p_pipeline )
+	SceneRenderNode RenderPass::DoCreateSceneRenderNode( Scene & p_scene, RenderPipeline & p_pipeline )
 	{
 		FrameVariableBufferSPtr l_sceneBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferScene );
 		Point3rFrameVariableSPtr l_pt3r;

@@ -105,7 +105,7 @@ namespace Castor3D
 		ShaderProgramSPtr m_updateProgram;
 		//!\~english	The pipeline used to update the transform buffer.
 		//!\~french		Le pipeline utilisé pour mettre à jour le tampon de transformation.
-		PipelineUPtr m_updatePipeline;
+		RenderPipelineUPtr m_updatePipeline;
 		//!\~english	The geometry buffers used to update the transform buffer.
 		//!\~french		Les tampons de géométrie utilisé pour mettre à jour le tampon de transformation.
 		std::array< GeometryBuffersSPtr, 2 > m_updateGeometryBuffers;

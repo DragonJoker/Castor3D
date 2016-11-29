@@ -113,7 +113,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture.
 		 *\param[in]	p_pipeline	Le pipeline utilisé pour dessiner la texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline );
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Renders the given 2D texture to the currently draw-bound frame buffer.
@@ -296,7 +296,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given texture array.
@@ -315,7 +315,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the given cube texture.
@@ -336,7 +336,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Renders the wanted layer of given cube texture array.
@@ -359,7 +359,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, Pipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Point3r const & p_position, Castor::Quaternion const & p_orientation, Castor::Size const & p_size, TextureLayout const & p_texture, uint32_t p_index, RenderPipeline & p_pipeline, GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Creates the render a 2D texture shader program.
@@ -434,7 +434,7 @@ namespace Castor3D
 			GeometryBuffersSPtr m_geometryBuffers;
 			//!\~english	The pipeline used to render a texture in the current draw-bound framebuffer.
 			//!\~french		Le pipeline utilisé pour le rendu d'une texture dans le tampon d'image actuellement activé en dessin.
-			PipelineUPtr m_pipeline;
+			RenderPipelineUPtr m_pipeline;
 		};
 		template< size_t VtxCount, size_t VtxSize >
 		struct RTOTPipelineGroup

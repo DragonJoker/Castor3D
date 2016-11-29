@@ -5,10 +5,11 @@
 #include "FrameBuffer/GlBackBuffers.hpp"
 #include "FrameBuffer/GlFrameBuffer.hpp"
 #include "Mesh/GlGeometryBuffers.hpp"
+#include "Miscellaneous/GlComputePipeline.hpp"
 #include "Miscellaneous/GlQuery.hpp"
 #include "Miscellaneous/GlTransformFeedback.hpp"
 #include "Render/GlContext.hpp"
-#include "Render/GlPipeline.hpp"
+#include "Render/GlRenderPipeline.hpp"
 #include "Render/GlViewport.hpp"
 #include "Shader/GlFrameVariableBuffer.hpp"
 #include "Shader/GlShaderObject.hpp"
@@ -417,7 +418,7 @@ namespace GlRender
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
-	PipelineUPtr GlRenderSystem::CreatePipeline(
+	RenderPipelineUPtr GlRenderSystem::CreateRenderPipeline(
 		DepthStencilState && p_dsState,
 		RasteriserState && p_rsState,
 		BlendState && p_bdState,
@@ -425,7 +426,12 @@ namespace GlRender
 		ShaderProgram & p_program,
 		PipelineFlags const & p_flags )
 	{
-		return std::make_unique< GlPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
+		return std::make_unique< GlRenderPipeline >( GetOpenGl(), *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
+	}
+
+	ComputePipelineUPtr GlRenderSystem::CreateComputePipeline( ShaderProgram & p_program )
+	{
+		return std::make_unique< GlComputePipeline >( GetOpenGl(), *this, p_program );
 	}
 
 	SamplerSPtr GlRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -458,6 +464,11 @@ namespace GlRender
 		}
 
 		return l_return;
+	}
+
+	std::unique_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateAtomicCounterBuffer()
+	{
+		return std::make_unique< GlBuffer< uint32_t > >( *this, GetOpenGl(), GlBufferTarget::eAtomicCounter );
 	}
 
 	TransformFeedbackUPtr GlRenderSystem::CreateTransformFeedback( BufferDeclaration const & p_computed, Topology p_topology, ShaderProgram & p_program )

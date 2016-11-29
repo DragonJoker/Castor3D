@@ -20,7 +20,7 @@
 #include <Mesh/Buffer/IndexBuffer.hpp>
 #include <Mesh/Buffer/VertexBuffer.hpp>
 #include <Render/Context.hpp>
-#include <Render/Pipeline.hpp>
+#include <Render/RenderPipeline.hpp>
 #include <Render/RenderSystem.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/Viewport.hpp>
@@ -423,7 +423,7 @@ namespace DeferredMsaa
 		return l_writer.Finalise();
 	}
 
-	void RenderTechnique::DoUpdateOpaquePipeline( Pipeline & p_pipeline, DepthMapArray & p_depthMaps )const
+	void RenderTechnique::DoUpdateOpaquePipeline( RenderPipeline & p_pipeline, DepthMapArray & p_depthMaps )const
 	{
 	}
 
@@ -558,7 +558,7 @@ namespace DeferredMsaa
 				DepthStencilState l_dsstate;
 				l_dsstate.SetDepthTest( false );
 				l_dsstate.SetDepthMask( WritingMask::eZero );
-				program.m_pipeline = GetEngine()->GetRenderSystem()->CreatePipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program, PipelineFlags{} );
+				program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program, PipelineFlags{} );
 
 				++l_sceneFlags;
 			}

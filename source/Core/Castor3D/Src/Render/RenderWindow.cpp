@@ -8,7 +8,7 @@
 #include "ShaderCache.hpp"
 
 #include "Context.hpp"
-#include "Pipeline.hpp"
+#include "RenderPipeline.hpp"
 #include "RenderLoop.hpp"
 #include "RenderSystem.hpp"
 #include "Viewport.hpp"

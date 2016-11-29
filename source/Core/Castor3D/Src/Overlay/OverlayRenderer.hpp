@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API Pipeline & DoGetPanelPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
+		C3D_API RenderPipeline & DoGetPanelPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given texture flags.
@@ -191,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme.
 		 */
-		C3D_API Pipeline & DoGetTextPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
+		C3D_API RenderPipeline & DoGetTextPipeline( Castor::FlagCombination< TextureChannel > p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags	Combinaison de TextureChannel.
 		 *\return		Le programme
 		 */
-		C3D_API Pipeline & DoGetPipeline( Castor::FlagCombination< TextureChannel > const & p_textureFlags );
+		C3D_API RenderPipeline & DoGetPipeline( Castor::FlagCombination< TextureChannel > const & p_textureFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -320,7 +320,7 @@ namespace Castor3D
 		std::map< Pass *, PassRenderNode > m_mapTextNodes;
 		//!\~english	The shader programs.
 		//!\~french		Les programmes de shader.
-		std::map< uint32_t, PipelineUPtr > m_pipelines;
+		std::map< uint32_t, RenderPipelineUPtr > m_pipelines;
 		//!\~english	Text texture sampler.
 		//!\~french		Echantillonneur de la texture de texte.
 		OneIntFrameVariableSPtr m_mapText;
