@@ -25,35 +25,45 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Upload( BufferAccessType p_type, BufferAccessNature p_nature )
+	bool TestVertexBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
 	{
 		return true;
 	}
 
-	bool TestVertexBuffer::Bind()
+	bool TestVertexBuffer::InitialiseBindingPoint( uint32_t p_point )const
 	{
 		return true;
 	}
 
-	void TestVertexBuffer::Unbind()
+	bool TestVertexBuffer::Bind()const
+	{
+		return true;
+	}
+
+	void TestVertexBuffer::Unbind()const
 	{
 	}
 
-	uint8_t * TestVertexBuffer::Lock( uint32_t p_offset, uint32_t p_count, AccessType p_flags )
+	uint8_t * TestVertexBuffer::Lock( uint32_t p_offset, uint32_t p_count, FlagCombination< AccessType > const & p_flags )const
 	{
 		return nullptr;
 	}
 
-	void TestVertexBuffer::Unlock()
+	void TestVertexBuffer::Unlock()const
 	{
 	}
 
-	bool TestVertexBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )
+	bool TestVertexBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
 	{
 		return true;
 	}
 
-	bool TestVertexBuffer::Fill( uint8_t const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )
+	bool TestVertexBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
+	{
+		return true;
+	}
+
+	bool TestVertexBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
 	{
 		return true;
 	}

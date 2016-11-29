@@ -127,7 +127,7 @@ namespace Castor3D
 		ePixel = uint8_t( 0x1 ) << int( ShaderType::ePixel ),
 		eCompute = uint8_t( 0x1 ) << int( ShaderType::eCompute ),
 	};
-	IMPLEMENT_FLAGS( ShaderTypeFlag );
+	IMPLEMENT_FLAGS( ShaderTypeFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13
@@ -174,7 +174,7 @@ namespace Castor3D
 		//\~french		Shader pour les billboards à dimensions fixes.
 		eFixedSize = 0x0400,
 	};
-	IMPLEMENT_FLAGS( ProgramFlag );
+	IMPLEMENT_FLAGS( ProgramFlag )
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english

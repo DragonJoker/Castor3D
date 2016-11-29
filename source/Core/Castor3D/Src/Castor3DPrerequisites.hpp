@@ -176,7 +176,7 @@ namespace Castor3D
 		eDepth = 1 << 1,
 		eStencil = 1 << 2,
 	};
-	IMPLEMENT_FLAGS( BufferComponent );
+	IMPLEMENT_FLAGS( BufferComponent )
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0

@@ -455,8 +455,8 @@ namespace Castor
 		//!\~french		La taille totale du fichier.
 		uint64_t m_length{ 0 };
 	};
-	IMPLEMENT_FLAGS( File::OpenMode );
-	IMPLEMENT_FLAGS( File::CreateMode );
+	IMPLEMENT_FLAGS( File::OpenMode )
+	IMPLEMENT_FLAGS( File::CreateMode )
 }
 
 #endif

@@ -60,7 +60,7 @@ namespace Castor3D
 		//!\~english Tells whether or not the selected render API supports texture buffers.	\~french Dit si l'API de rendu choisie supporte les tampons de textures.
 		eTextureBuffers = 0x00000020,
 	};
-	IMPLEMENT_FLAGS( GpuFeature );
+	IMPLEMENT_FLAGS( GpuFeature )
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/05/2016

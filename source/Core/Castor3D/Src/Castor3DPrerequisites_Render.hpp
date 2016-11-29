@@ -147,7 +147,7 @@ namespace Castor3D
 		//!\~french		Accèes écriture seule.
 		eWrite = 1 << 1
 	};
-	IMPLEMENT_FLAGS( AccessType );
+	IMPLEMENT_FLAGS( AccessType )
 	/*!
 	\author 	Sylvain DOREMUS
 	\see		BufferAccessNature
@@ -427,7 +427,7 @@ namespace Castor3D
 		//! Instantiation matrix
 		eTransform = 0x400,
 	};
-	IMPLEMENT_FLAGS( ElementUsage );
+	IMPLEMENT_FLAGS( ElementUsage )
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.0

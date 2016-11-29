@@ -47,7 +47,11 @@ namespace TestRender
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of AccessType).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of AccessType).
 		 */
-		TestTexture( TestRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess );
+		TestTexture(
+			TestRenderSystem & p_renderSystem,
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -58,7 +62,13 @@ namespace TestRender
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
-		TestTexture( TestRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size );
+		TestTexture(
+			TestRenderSystem & p_renderSystem,
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Size const & p_size );
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
@@ -69,7 +79,13 @@ namespace TestRender
 		 *\param[in]	p_format		The texture format.
 		 *\param[in]	p_size			The texture dimensions.
 		 */
-		TestTexture( TestRenderSystem & p_renderSystem, Castor3D::TextureType p_type, Castor3D::AccessType p_cpuAccess, Castor3D::AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size );
+		TestTexture(
+			TestRenderSystem & p_renderSystem,
+			Castor3D::TextureType p_type,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Point3ui const & p_size );
 		/**
 		 *\brief		Destructor.
 		 */

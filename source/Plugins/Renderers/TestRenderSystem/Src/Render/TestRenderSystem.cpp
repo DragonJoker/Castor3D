@@ -30,7 +30,7 @@ namespace TestRender
 	TestRenderSystem::TestRenderSystem( Engine & p_engine )
 		: RenderSystem{ p_engine, Name }
 	{
-		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::NonPowerOfTwoTextures );
+		RenderSystem::m_gpuInformations.AddFeature( GpuFeature::eNonPowerOfTwoTextures );
 	}
 
 	TestRenderSystem::~TestRenderSystem()
@@ -88,7 +88,7 @@ namespace TestRender
 		return std::make_unique< TestVertexBuffer >( *this );
 	}
 
-	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateStorageBufferBuffer()
+	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateStorageBuffer()
 	{
 		return std::make_unique< TestShaderStorageBuffer >( *this );
 	}

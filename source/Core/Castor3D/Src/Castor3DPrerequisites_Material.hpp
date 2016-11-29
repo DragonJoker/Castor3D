@@ -490,7 +490,7 @@ namespace Castor3D
 		//!\~french Pas vraiment un canal de texture (hors de TextureChannel::eAll), utilisé pour dire que nous voulons un shader d'incrustation texte
 		eText = 0x1000,
 	};
-	IMPLEMENT_FLAGS( TextureChannel );
+	IMPLEMENT_FLAGS( TextureChannel )
 
 	class TextureImage;
 	class TextureLayout;
