@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "TestRenderSystemPrerequisites.hpp"
 
-#include <Shader/FrameVariableBuffer.hpp>
+#include <Mesh/Buffer/GpuBuffer.hpp>
 
 namespace TestRender
 {

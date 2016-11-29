@@ -455,7 +455,7 @@ namespace Castor3D
 		eShaderStorageBuffer = 0x01 << 5,
 		eAll = 0xFFFFFFFF,
 	};
-	IMPLEMENT_FLAGS( MemoryBarrier );
+	IMPLEMENT_FLAGS( MemoryBarrier )
 
 	class WindowHandle;
 	class RenderBuffer;
