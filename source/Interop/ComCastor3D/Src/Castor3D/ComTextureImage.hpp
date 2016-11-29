@@ -69,9 +69,6 @@ namespace CastorCom
 		}
 
 		COM_PROPERTY_GET( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::TextureImage::GetBuffer ) );
-		COM_PROPERTY_GET( Width, unsigned int, make_getter( m_internal.get(), &Castor3D::TextureImage::GetWidth ) );
-		COM_PROPERTY_GET( Height, unsigned int, make_getter( m_internal.get(), &Castor3D::TextureImage::GetHeight ) );
-		COM_PROPERTY_GET( Depth, unsigned int, make_getter( m_internal.get(), &Castor3D::TextureImage::GetDepth ) );
 
 		STDMETHOD( Initialise )( /* [in] */ eTEXTURE_TYPE p_type, /* [in] */ unsigned int p_cpuAccess, /* [in] */ unsigned int p_gpuAccess );
 		STDMETHOD( Cleanup )();

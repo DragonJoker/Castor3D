@@ -38,16 +38,15 @@
 }
 
 template< typename T >
-Castor::BinaryFile & Castor::operator <<( Castor::BinaryFile & p_file, T const & p_toWrite )
+Castor::BinaryFile & Castor::operator<<( Castor::BinaryFile & p_file, T const & p_toWrite )
 {
 	p_file.Write( p_toWrite );
 	return p_file;
 }
 
 template< typename T >
-Castor::BinaryFile & Castor::operator >>( Castor::BinaryFile & p_file, T & p_toRead )
+Castor::BinaryFile & Castor::operator>>( Castor::BinaryFile & p_file, T & p_toRead )
 {
 	p_file.Read( p_toRead );
 	return p_file;
 }
-

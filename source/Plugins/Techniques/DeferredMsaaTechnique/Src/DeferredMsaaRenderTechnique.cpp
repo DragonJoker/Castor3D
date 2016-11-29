@@ -149,9 +149,11 @@ namespace DeferredMsaa
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *program.m_program, 0u, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			program.m_program->CreateObject( ShaderType::eVertex );
+			program.m_program->CreateObject( ShaderType::ePixel );
+			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *program.m_program, 0u, ShaderTypeFlag::ePixel | ShaderTypeFlag::eVertex );
 			program.m_matrixUbo = program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *program.m_program, 0u, MASK_SHADER_TYPE_PIXEL );
+			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *program.m_program, 0u, ShaderTypeFlag::ePixel );
 			program.m_sceneUbo = program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
 			program.m_sceneUbo->GetVariable( ShaderProgram::CameraPos, program.m_camera );
 			program.m_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
@@ -354,7 +356,10 @@ namespace DeferredMsaa
 		return true;
 	}
 
-	String RenderTechnique::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetOpaquePixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -422,7 +427,10 @@ namespace DeferredMsaa
 	{
 	}
 
-	String RenderTechnique::DoGetLightPassVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassVertexShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -445,7 +453,10 @@ namespace DeferredMsaa
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -535,7 +546,6 @@ namespace DeferredMsaa
 
 		if ( l_return )
 		{
-			m_vertexBuffer->Create();
 			m_lightPassDepthBuffer->Create();
 			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			uint8_t l_sceneFlags{ 0u };
@@ -569,8 +579,6 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoDestroyDeferred()
 	{
-		m_vertexBuffer->Destroy();
-
 		for ( auto & program : m_lightPassShaderPrograms )
 		{
 			program.m_pipeline->Cleanup();
@@ -645,7 +653,7 @@ namespace DeferredMsaa
 			m_geometryPassFrameBuffer->Unbind();
 		}
 
-		m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		m_viewport.Initialise();
 
 		for ( auto & program : m_lightPassShaderPrograms )
@@ -708,6 +716,7 @@ namespace DeferredMsaa
 		}
 
 		m_viewport.Cleanup();
+		m_vertexBuffer->Cleanup();
 		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
 		m_geometryPassFrameBuffer->DetachAll();
 		m_geometryPassFrameBuffer->Unbind();

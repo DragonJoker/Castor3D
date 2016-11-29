@@ -83,7 +83,7 @@ namespace Castor3D
 
 			if ( m_updateVertexBuffers[i] )
 			{
-				m_updateVertexBuffers[i]->Destroy();
+				m_updateVertexBuffers[i]->Cleanup();
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace Castor3D
 		m_updateProgram = p_program;
 		m_updateProgram->CreateFrameVariable( FrameVariableType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
 
-		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY );
+		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eVertex | ShaderTypeFlag::eGeometry );
 		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
 		m_time = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fTotalTime" ) );
 		m_ubo = m_updateProgram->FindFrameVariableBuffer( cuT( "ParticleSystem" ) );
@@ -174,14 +174,13 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < 2 && l_return; ++i )
 		{
-			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( l_engine, m_inputs ),
-			l_return = m_updateVertexBuffers[i]->Create();
+			m_updateVertexBuffers[i] = std::make_shared< VertexBuffer >( l_engine, m_inputs );
 
 			if ( l_return )
 			{
 				m_updateVertexBuffers[i]->Resize( uint32_t( m_parent.GetMaxParticlesCount() ) * m_computed.stride() );
 				std::memcpy( m_updateVertexBuffers[i]->data(), l_particle.GetData(), m_computed.stride() );
-				l_return = m_updateVertexBuffers[i]->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				l_return = m_updateVertexBuffers[i]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 

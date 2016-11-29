@@ -309,6 +309,7 @@ namespace GlRender
 		inline bool HasCSh()const;
 		inline bool HasSpl()const;
 		inline bool HasVbo()const;
+		inline bool HasSsbo()const;
 		inline bool HasInstancing()const;
 		inline bool HasNonPowerOfTwoTextures()const;
 		inline bool CanBindVboToGpuAddress()const;
@@ -325,7 +326,7 @@ namespace GlRender
 		inline PixelFmt const & Get( Castor::PixelFormat p_pixelFormat )const;
 		inline GlShaderType Get( Castor3D::ShaderType p_type )const;
 		inline GlInternal GetInternal( Castor::PixelFormat p_format )const;
-		inline uint32_t GetComponents( uint32_t p_components )const;
+		inline Castor::FlagCombination< GlBufferBit > GetComponents( Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const;
 		inline GlAttachmentPoint Get( Castor3D::AttachmentPoint p_eAttachment )const;
 		inline GlFrameBufferMode Get( Castor3D::FrameBufferTarget p_target )const;
 		inline GlInternal GetRboStorage( Castor::PixelFormat p_pixelFormat )const;
@@ -744,6 +745,7 @@ namespace GlRender
 		inline bool GetShaderInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
 		inline bool ShaderSource( uint32_t program, int count, char const ** strings, int const * lengths )const;
 		inline bool GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
+		inline bool GetActiveUniform( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
 
 		//@}
 		/**@name Shader program Functions */
@@ -758,6 +760,10 @@ namespace GlRender
 		inline int GetAttribLocation( uint32_t program, char const * name )const;
 		inline bool IsProgram( uint32_t program )const;
 		inline bool ProgramParameteri( uint32_t program, uint32_t pname, int value )const;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glShaderStorageBlockBinding.xhtml
+		*/
+		inline bool ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const;
 
 		//@}
 		/**@name Vertex Attribute Pointer functions */
@@ -813,8 +819,8 @@ namespace GlRender
 		/**@name Other functions */
 		//@{
 
-		inline GlAccessType GetLockFlags( Castor3D::AccessType p_flags )const;
-		inline uint32_t GetBitfieldFlags( Castor3D::AccessType p_flags )const;
+		inline GlAccessType GetLockFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
+		inline Castor::FlagCombination< GlBufferMappingBit > GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
 		inline Castor3D::ElementType Get( GlslAttributeType p_type )const;
 
 #if !defined( NDEBUG )
@@ -873,32 +879,33 @@ namespace GlRender
 		std::array< GlComparator, size_t( Castor3D::DepthFunc::eCount ) > DepthFuncs;
 		std::map< GlAttachmentPoint, GlBufferBinding > BuffersTA;
 
-		bool m_bHasVao;
-		bool m_bHasUbo;
-		bool m_bHasPbo;
-		bool m_bHasTbo;
-		bool m_bHasFbo;
-		bool m_bHasVbo;
-		bool m_bHasVSh;
-		bool m_bHasPSh;
-		bool m_bHasGSh;
-		bool m_bHasTSh;
-		bool m_bHasCSh;
-		bool m_bHasSpl;
-		bool m_bHasAnisotropic;
-		bool m_bBindVboToGpuAddress;
+		bool m_bHasVao{ false };
+		bool m_bHasUbo{ false };
+		bool m_bHasPbo{ false };
+		bool m_bHasTbo{ false };
+		bool m_bHasFbo{ false };
+		bool m_bHasVbo{ false };
+		bool m_bHasSsbo{ false };
+		bool m_bHasVSh{ false };
+		bool m_bHasPSh{ false };
+		bool m_bHasGSh{ false };
+		bool m_bHasTSh{ false };
+		bool m_bHasCSh{ false };
+		bool m_bHasSpl{ false };
+		bool m_bHasAnisotropic{ false };
+		bool m_bBindVboToGpuAddress{ false };
 		Castor::String m_extensions;
 		Castor::String m_vendor;
 		Castor::String m_renderer;
 		Castor::String m_version;
-		int m_iVersion;
-		int m_iGlslVersion;
-		bool m_bHasInstancedDraw;
-		bool m_bHasInstancedArrays;
-		bool m_bHasDirectStateAccess;
-		bool m_bHasNonPowerOfTwoTextures;
-		TexFunctionsBase * m_pTexFunctions;
-		BufFunctionsBase * m_pBufFunctions;
+		int m_iVersion{ 0 };
+		int m_iGlslVersion{ 0 };
+		bool m_bHasInstancedDraw{ false };
+		bool m_bHasInstancedArrays{ false };
+		bool m_bHasDirectStateAccess{ false };
+		bool m_bHasNonPowerOfTwoTextures{ false };
+		TexFunctionsBase * m_pTexFunctions{ nullptr };
+		BufFunctionsBase * m_pBufFunctions{ nullptr };
 		GlRenderSystem & m_renderSystem;
 		GlProvider m_gpu{ GlProvider::eUnknown };
 
@@ -1193,6 +1200,7 @@ namespace GlRender
 		std::function< int( uint32_t program, char const * name ) > m_pfnGetAttribLocation;
 		std::function< void( uint32_t program, uint32_t pname, int value ) > m_pfnProgramParameteri;
 		std::function< void( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveAttrib;
+		std::function< void( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding ) > m_pfnShaderStorageBlockBinding;
 
 		//@}
 		/**@name Vertex Attribute Pointer */
@@ -1323,48 +1331,48 @@ namespace GlRender
 		}
 	}
 
-#	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x );
+#	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x )
 
-	MAKE_GL_EXTENSION( AMD_draw_buffers_blend )
-	MAKE_GL_EXTENSION( AMDX_debug_output )
-	MAKE_GL_EXTENSION( ARB_compute_shader )
-	MAKE_GL_EXTENSION( ARB_debug_output )
-	MAKE_GL_EXTENSION( ARB_draw_buffers_blend )
-	MAKE_GL_EXTENSION( ARB_draw_instanced )
-	MAKE_GL_EXTENSION( ARB_explicit_uniform_location )
-	MAKE_GL_EXTENSION( ARB_fragment_program )
-	MAKE_GL_EXTENSION( ARB_framebuffer_object )
-	MAKE_GL_EXTENSION( ARB_geometry_shader4 )
-	MAKE_GL_EXTENSION( ARB_imaging )
-	MAKE_GL_EXTENSION( ARB_instanced_arrays )
-	MAKE_GL_EXTENSION( ARB_pixel_buffer_object )
-	MAKE_GL_EXTENSION( ARB_program_interface_query )
-	MAKE_GL_EXTENSION( ARB_sampler_objects )
-	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object )
-	MAKE_GL_EXTENSION( ARB_tessellation_shader )
-	MAKE_GL_EXTENSION( ARB_texture_buffer_object )
-	MAKE_GL_EXTENSION( ARB_texture_multisample )
-	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two )
-	MAKE_GL_EXTENSION( ARB_texture_storage )
-	MAKE_GL_EXTENSION( ARB_texture_storage_multisample )
-	MAKE_GL_EXTENSION( ARB_timer_query )
-	MAKE_GL_EXTENSION( ARB_uniform_buffer_object )
-	MAKE_GL_EXTENSION( ARB_vertex_array_object )
-	MAKE_GL_EXTENSION( ARB_vertex_buffer_object )
-	MAKE_GL_EXTENSION( ARB_vertex_program )
-	MAKE_GL_EXTENSION( ARB_transform_feedback2 )
-	MAKE_GL_EXTENSION( ATI_meminfo )
-	MAKE_GL_EXTENSION( EXT_direct_state_access )
-	MAKE_GL_EXTENSION( EXT_draw_instanced )
-	MAKE_GL_EXTENSION( EXT_framebuffer_object )
-	MAKE_GL_EXTENSION( EXT_geometry_shader4 )
-	MAKE_GL_EXTENSION( EXT_instanced_arrays )
-	MAKE_GL_EXTENSION( EXT_sampler_objects )
-	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic )
-	MAKE_GL_EXTENSION( EXT_uniform_buffer_object )
-	MAKE_GL_EXTENSION( NV_shader_buffer_load )
-	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory )
-	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
+	MAKE_GL_EXTENSION( AMD_draw_buffers_blend );
+	MAKE_GL_EXTENSION( AMDX_debug_output );
+	MAKE_GL_EXTENSION( ARB_compute_shader );
+	MAKE_GL_EXTENSION( ARB_debug_output );
+	MAKE_GL_EXTENSION( ARB_draw_buffers_blend );
+	MAKE_GL_EXTENSION( ARB_draw_instanced );
+	MAKE_GL_EXTENSION( ARB_explicit_uniform_location );
+	MAKE_GL_EXTENSION( ARB_fragment_program );
+	MAKE_GL_EXTENSION( ARB_framebuffer_object );
+	MAKE_GL_EXTENSION( ARB_geometry_shader4 );
+	MAKE_GL_EXTENSION( ARB_imaging );
+	MAKE_GL_EXTENSION( ARB_instanced_arrays );
+	MAKE_GL_EXTENSION( ARB_pixel_buffer_object );
+	MAKE_GL_EXTENSION( ARB_program_interface_query );
+	MAKE_GL_EXTENSION( ARB_sampler_objects );
+	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object );
+	MAKE_GL_EXTENSION( ARB_tessellation_shader );
+	MAKE_GL_EXTENSION( ARB_texture_buffer_object );
+	MAKE_GL_EXTENSION( ARB_texture_multisample );
+	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two );
+	MAKE_GL_EXTENSION( ARB_texture_storage );
+	MAKE_GL_EXTENSION( ARB_texture_storage_multisample );
+	MAKE_GL_EXTENSION( ARB_timer_query );
+	MAKE_GL_EXTENSION( ARB_uniform_buffer_object );
+	MAKE_GL_EXTENSION( ARB_vertex_array_object );
+	MAKE_GL_EXTENSION( ARB_vertex_buffer_object );
+	MAKE_GL_EXTENSION( ARB_vertex_program );
+	MAKE_GL_EXTENSION( ARB_transform_feedback2 );
+	MAKE_GL_EXTENSION( ATI_meminfo );
+	MAKE_GL_EXTENSION( EXT_direct_state_access );
+	MAKE_GL_EXTENSION( EXT_draw_instanced );
+	MAKE_GL_EXTENSION( EXT_framebuffer_object );
+	MAKE_GL_EXTENSION( EXT_geometry_shader4 );
+	MAKE_GL_EXTENSION( EXT_instanced_arrays );
+	MAKE_GL_EXTENSION( EXT_sampler_objects );
+	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic );
+	MAKE_GL_EXTENSION( EXT_uniform_buffer_object );
+	MAKE_GL_EXTENSION( NV_shader_buffer_load );
+	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory );
+	MAKE_GL_EXTENSION( NVX_gpu_memory_info );
 
 #	if defined( _WIN32 )
 

@@ -42,7 +42,7 @@ namespace GlRender
 
 				for ( auto & l_buffer : m_buffers )
 				{
-					auto & l_tb = static_cast< GlBuffer< uint8_t > & >( *l_buffer.get().GetGpuBuffer() );
+					auto & l_tb = static_cast< GlBuffer< uint8_t > const & >( l_buffer.get().GetGpuBuffer() );
 					l_return = GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
 				}
 

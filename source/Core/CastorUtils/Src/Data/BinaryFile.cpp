@@ -1,16 +1,12 @@
 #include "BinaryFile.hpp"
 
+#include "Design/FlagCombination.hpp"
 #include "Miscellaneous/Utils.hpp"
 
 namespace Castor
 {
-	BinaryFile::BinaryFile( Path const & p_fileName, OpenMode p_mode, EncodingMode p_encodingMode )
-		: BinaryFile{ p_fileName, uint32_t( p_mode ), p_encodingMode }
-	{
-	}
-
-	BinaryFile::BinaryFile( Path const & p_fileName, uint32_t p_mode, EncodingMode p_encodingMode )
-		: File{ p_fileName, p_mode | uint32_t( OpenMode::eBinary ), p_encodingMode }
+	BinaryFile::BinaryFile( Path const & p_fileName, FlagCombination< OpenMode > const & p_mode, EncodingMode p_encodingMode )
+		: File{ p_fileName, p_mode | OpenMode::eBinary, p_encodingMode }
 	{
 	}
 

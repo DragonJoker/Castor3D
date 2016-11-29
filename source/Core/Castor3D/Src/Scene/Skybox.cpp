@@ -198,7 +198,7 @@ namespace Castor3D
 		m_texture.reset();
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
-		m_vertexBuffer->Destroy();
+		m_vertexBuffer->Cleanup();
 		m_vertexBuffer.reset();
 		m_pipeline->Cleanup();
 		m_pipeline.reset();
@@ -275,9 +275,11 @@ namespace Castor3D
 		}
 
 		auto l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		m_matricesBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 		l_program->Initialise();
 		return *l_program;
@@ -288,9 +290,7 @@ namespace Castor3D
 		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_declaration );
 		m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.stride() ) );
 		m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_vertexBuffer->Create();
-
-		return m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		return m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 	}
 
 	bool Skybox::DoInitialiseTexture()

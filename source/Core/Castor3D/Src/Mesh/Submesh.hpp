@@ -824,7 +824,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les indicateurs de shader.
 		 */
-		inline uint16_t GetProgramFlags()const
+		inline Castor::FlagCombination< ProgramFlag > const & GetProgramFlags()const
 		{
 			return m_programFlags;
 		}
@@ -871,6 +871,7 @@ namespace Castor3D
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
+		void DoInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers );
 
 	private:
 		//!\~english	The submesh ID.
@@ -881,7 +882,7 @@ namespace Castor3D
 		bool m_hasNormals{ false };
 		//!\~english	The shader program flags.
 		//!\~french		Les indicateurs pour le shader.
-		uint16_t m_programFlags{ 0u };
+		Castor::FlagCombination< ProgramFlag > m_programFlags{ 0u };
 		//!\~english	Tells the VBOs has been initialised.
 		//!\~french		Dit que les VBOs ont été initialisés.
 		bool m_initialised{ false };

@@ -489,9 +489,11 @@ namespace Castor3D
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		auto l_program = l_cache.GetNewProgram( false );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_strVtxShader );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_strPxlShader );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
@@ -622,9 +624,11 @@ namespace Castor3D
 		auto l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		auto & l_cache = GetRenderSystem()->GetEngine()->GetShaderProgramCache();
 		auto l_program = l_cache.GetNewProgram( false );
+		l_program->CreateObject( ShaderType::eVertex );
+		l_program->CreateObject( ShaderType::ePixel );
 		l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
 		l_program->SetSource( ShaderType::ePixel, l_model, l_pxl );
-		l_cache.CreateMatrixBuffer( *l_program, 0u, MASK_SHADER_TYPE_VERTEX );
+		l_cache.CreateMatrixBuffer( *l_program, 0u, ShaderTypeFlag::eVertex );
 		l_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::MapDiffuse, ShaderType::ePixel );
 
 		if ( p_array )
@@ -642,8 +646,7 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_rtotPipelinePlane.m_declaration );
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() * m_rtotPipelinePlane.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelinePlane.m_arrayVertex.begin(), m_rtotPipelinePlane.m_arrayVertex.end() );
-		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		p_pipeline.m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
 		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
@@ -666,7 +669,7 @@ namespace Castor3D
 	{
 		p_pipeline.m_pipeline->Cleanup();
 		p_pipeline.m_pipeline.reset();
-		p_pipeline.m_vertexBuffer->Destroy();
+		p_pipeline.m_vertexBuffer->Cleanup();
 		p_pipeline.m_vertexBuffer.reset();
 		p_pipeline.m_geometryBuffers->Cleanup();
 		p_pipeline.m_geometryBuffers.reset();
@@ -678,8 +681,7 @@ namespace Castor3D
 		p_pipeline.m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_rtotPipelineCube.m_declaration );
 		p_pipeline.m_vertexBuffer->Resize( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() * m_rtotPipelineCube.m_declaration.stride() ) );
 		p_pipeline.m_vertexBuffer->LinkCoords( m_rtotPipelineCube.m_arrayVertex.begin(), m_rtotPipelineCube.m_arrayVertex.end() );
-		p_pipeline.m_vertexBuffer->Create();
-		p_pipeline.m_vertexBuffer->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+		p_pipeline.m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 		p_pipeline.m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
 		p_pipeline.m_geometryBuffers->Initialise( { *p_pipeline.m_vertexBuffer }, nullptr );
 
@@ -712,7 +714,7 @@ namespace Castor3D
 	{
 		p_pipeline.m_pipeline->Cleanup();
 		p_pipeline.m_pipeline.reset();
-		p_pipeline.m_vertexBuffer->Destroy();
+		p_pipeline.m_vertexBuffer->Cleanup();
 		p_pipeline.m_vertexBuffer.reset();
 		p_pipeline.m_geometryBuffers->Cleanup();
 		p_pipeline.m_geometryBuffers.reset();

@@ -268,7 +268,7 @@ namespace Castor3D
 		C3D_API virtual ContextSPtr CreateContext() = 0;
 		/**
 		 *\~english
-		 *\brief		Create a pipeline.
+		 *\brief		Create a render pipeline.
 		 *\param[in]	p_dsState	The depth stencil state.
 		 *\param[in]	p_rsState	The rateriser state.
 		 *\param[in]	p_bdState	The blend state.
@@ -277,7 +277,7 @@ namespace Castor3D
 		 *\param[in]	p_flags		The creation flags.
 		 *\return		The pipeline.
 		 *\~french
-		 *\brief		Crée un pipeline.
+		 *\brief		Crée un pipeline de rendu.
 		 *\param[in]	p_dsState	L'état de stencil et profondeur.
 		 *\param[in]	p_rsState	L'état de rastériseur.
 		 *\param[in]	p_bdState	L'état de mélange.
@@ -286,12 +286,13 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les indicateurs de création.
 		 *\return		Le pipeline.
 		 */
-		C3D_API virtual PipelineUPtr CreatePipeline( DepthStencilState && p_dsState
-													 , RasteriserState && p_rsState
-													 , BlendState && p_bdState
-													 , MultisampleState && p_msState
-													 , ShaderProgram & p_program
-													 , PipelineFlags const & p_flags ) = 0;
+		C3D_API virtual PipelineUPtr CreatePipeline(
+			DepthStencilState && p_dsState,
+			RasteriserState && p_rsState,
+			BlendState && p_bdState,
+			MultisampleState && p_msState,
+			ShaderProgram & p_program,
+			PipelineFlags const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler
@@ -317,7 +318,10 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture(
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -336,7 +340,12 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de la texture.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture(
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -355,7 +364,12 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de la texture.
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual TextureLayoutSPtr CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture(
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Point3ui const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
@@ -372,33 +386,44 @@ namespace Castor3D
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr CreateTextureStorage(
+			TextureStorageType p_type,
+			TextureLayout & p_layout,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a vertex buffer
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_buffer	The hardware buffer to which the vertex buffer will be linked
-		 *\return		The created vertex buffer, depending on current API
+		 *\brief		Creates a vertex buffer.
+		 *\remarks		Only the render system can do that.
+		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon de sommets
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon de sommets
-		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle
+		 *\brief		Crée un tampon de sommets.
+		 *\remarks		Seul le render system peut faire ça.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer ) = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates an index buffer
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_buffer	The hardware buffer to which the index buffer will be linked
-		 *\return		The created index buffer, depending on current API
+		 *\brief		Creates an index buffer.
+		 *\remarks		Only the render system can do that.
+		 *\return		The created buffer, depending on current API.
 		 *\~french
-		 *\brief		Crée un tampon d'indices
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon d'indices
-		 *\return		Le tampon d'indices créé, dépendant de l'API actuelle
+		 *\brief		Crée un tampon d'indices.
+		 *\remarks		Seul le render system peut faire ça.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a shader storage buffer.
+		 *\remarks		Only the render system can do that.
+		 *\return		The created buffer, depending on current API.
+		 *\~french
+		 *\brief		Crée un tampon de stockage shader.
+		 *\remarks		Seul le render system peut faire ça.
+		 *\return		Le tampon créé, dépendant de l'API actuelle.
+		 */
+		C3D_API virtual std::unique_ptr< GpuBuffer< uint8_t > > CreateStorageBuffer() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a transform feedback instance.

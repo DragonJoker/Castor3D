@@ -56,7 +56,11 @@ namespace Castor3D
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de AccessType).
 		 */
-		C3D_API TextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess );
+		C3D_API TextureStorage(
+			TextureStorageType p_type,
+			TextureLayout & p_layout,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -96,7 +100,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API virtual uint8_t * Lock( AccessType p_lock ) = 0;
+		C3D_API virtual uint8_t * Lock( Castor::FlagCombination< AccessType > const & p_lock ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -120,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API virtual uint8_t * Lock( AccessType p_lock, uint32_t p_index ) = 0;
+		C3D_API virtual uint8_t * Lock( Castor::FlagCombination< AccessType > const & p_lock, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -166,10 +170,10 @@ namespace Castor3D
 	protected:
 		//!\~english	The required CPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le CPU (combinaison de AccessType).
-		AccessType m_cpuAccess;
+		Castor::FlagCombination< AccessType > m_cpuAccess;
 		//!\~english	The required GPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le GPU (combinaison de AccessType).
-		AccessType m_gpuAccess;
+		Castor::FlagCombination< AccessType > m_gpuAccess;
 		//!\~english	The storage texture type.
 		//!\~french		Le type de texture du stockage.
 		TextureStorageType m_type;

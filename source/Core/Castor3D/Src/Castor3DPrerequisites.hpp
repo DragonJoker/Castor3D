@@ -39,6 +39,7 @@ SOFTWARE.
 
 #include <CastorUtilsPrerequisites.hpp>
 #include <Design/Collection.hpp>
+#include <Design/FlagCombination.hpp>
 #include <Design/OwnedBy.hpp>
 #include <Math/Point.hpp>
 #include <Graphics/Size.hpp>
@@ -175,30 +176,7 @@ namespace Castor3D
 		eDepth = 1 << 1,
 		eStencil = 1 << 2,
 	};
-	/**
-	 *\~english
-	 *\brief		Bitwise OR on BufferComponent.
-	 *\param[in]	p_lhs, p_rhs	The operands.
-	 *\~french
-	 *\brief		OU binaire sur des BufferComponent.
-	 *\param[in]	p_lhs, p_rhs	Les opérandes.
-	 */
-	inline uint8_t operator|( BufferComponent p_lhs, BufferComponent p_rhs )
-	{
-		return uint8_t( p_lhs ) | uint8_t( p_rhs );
-	}
-	/**
-	 *\~english
-	 *\brief		Bitwise AND on BufferComponent.
-	 *\param[in]	p_lhs, p_rhs	The operands.
-	 *\~french
-	 *\brief		ET binaire sur des BufferComponent.
-	 *\param[in]	p_lhs, p_rhs	Les opérandes.
-	 */
-	inline uint8_t operator&( BufferComponent p_lhs, BufferComponent p_rhs )
-	{
-		return uint8_t( p_lhs ) & uint8_t( p_rhs );
-	}
+	IMPLEMENT_FLAGS( BufferComponent );
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.7.0.0
@@ -459,7 +437,6 @@ namespace Castor3D
 	};
 
 	class WindowHandle;
-	class RenderTarget;
 	class RenderBuffer;
 	class ColourRenderBuffer;
 	class DepthStencilRenderBuffer;
@@ -468,12 +445,9 @@ namespace Castor3D
 	class TextureAttachment;
 	class FrameBuffer;
 	class BackBuffers;
-	class RenderTechnique;
-	class RenderWindow;
 	class IWindowHandle;
 	class DebugOverlays;
 	class Engine;
-	class RendererServer;
 	class Plugin;
 	class RendererPlugin;
 	class ImporterPlugin;
@@ -486,14 +460,10 @@ namespace Castor3D
 	class FrameListener;
 	class Version;
 	class Parameters;
-	class RenderLoop;
-	class RenderLoopAsync;
-	class RenderLoopSync;
 	class GpuQuery;
 	class PickingPass;
+	class TransformFeedback;
 
-	DECLARE_SMART_PTR( RenderWindow );
-	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
 	DECLARE_SMART_PTR( DepthStencilRenderBuffer );
@@ -502,9 +472,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextureAttachment );
 	DECLARE_SMART_PTR( FrameBuffer );
 	DECLARE_SMART_PTR( BackBuffers );
-	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( Engine );
-	DECLARE_SMART_PTR( RendererServer );
 	DECLARE_SMART_PTR( Plugin );
 	DECLARE_SMART_PTR( RendererPlugin );
 	DECLARE_SMART_PTR( ImporterPlugin );
@@ -515,9 +483,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameEvent );
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
-	DECLARE_SMART_PTR( RenderLoop );
 	DECLARE_SMART_PTR( GpuQuery );
 	DECLARE_SMART_PTR( PickingPass );
+	DECLARE_SMART_PTR( TransformFeedback );
 
 	using ShadowMapPassFactory = Castor::Factory< ShadowMapPass, LightType, ShadowMapPassSPtr, std::function< ShadowMapPassSPtr( Engine &, Scene &, Light &, TextureUnit & p_shadowMap, uint32_t p_index ) > >;
 	using ParticleFactory = Castor::Factory< CpuParticleSystem, Castor::String, CpuParticleSystemUPtr, std::function< CpuParticleSystemUPtr( ParticleSystem & ) > >;
@@ -744,21 +712,23 @@ namespace Castor3D
 	private:\
 		std::unique_ptr< CacheView< MAKE_CACHE_NAME( className ), mgrName##Cache, eventType > > m_##memberName##CacheView
 
-	C3D_API void ComputePreLightingMapContributions( GLSL::GlslWriter & p_writer
-													 , GLSL::Vec3 & p_normal
-													 , GLSL::Float & p_shininess
-													 , uint16_t p_textureFlags
-													 , uint16_t p_programFlags
-													 , uint8_t p_sceneFlags );
+	C3D_API void ComputePreLightingMapContributions(
+		GLSL::GlslWriter & p_writer,
+		GLSL::Vec3 & p_normal,
+		GLSL::Float & p_shininess,
+		Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+		Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags );
 
-	C3D_API void ComputePostLightingMapContributions( GLSL::GlslWriter & p_writer
-													  , GLSL::Vec3 & p_ambient
-													  , GLSL::Vec3 & p_diffuse
-													  , GLSL::Vec3 & p_specular
-													  , GLSL::Vec3 & p_emissive
-													  , uint16_t p_textureFlags
-													  , uint16_t p_programFlags
-													  , uint8_t p_sceneFlags );
+	C3D_API void ComputePostLightingMapContributions(
+		GLSL::GlslWriter & p_writer,
+		GLSL::Vec3 & p_ambient,
+		GLSL::Vec3 & p_diffuse,
+		GLSL::Vec3 & p_specular,
+		GLSL::Vec3 & p_emissive,
+		Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+		Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags );
 }
 
 DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine )

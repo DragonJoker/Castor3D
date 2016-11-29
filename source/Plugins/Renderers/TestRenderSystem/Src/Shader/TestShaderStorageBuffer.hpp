@@ -20,27 +20,28 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_DOWNLOAD_PIXEL_BUFFER_H___
-#define ___GL_DOWNLOAD_PIXEL_BUFFER_H___
+#ifndef ___TRS_FRAME_VARIABLE_BUFFER_H___
+#define ___TRS_FRAME_VARIABLE_BUFFER_H___
 
-#include "Buffer/GlGpuIoBuffer.hpp"
+#include "TestRenderSystemPrerequisites.hpp"
 
-namespace GlRender
+#include <Shader/FrameVariableBuffer.hpp>
+
+namespace TestRender
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\brief		Pack (download to RAM) buffer implementation
-	*/
-	class GlDownloadPixelBuffer
-		: public GlGpuIoBuffer
+	class TestFrameVariableBuffer
+		: public Castor3D::FrameVariableBuffer
 	{
 	public:
-		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize );
-		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pixels );
-		virtual ~GlDownloadPixelBuffer();
+		TestFrameVariableBuffer( Castor::String const & p_name, Castor3D::ShaderProgram & p_program, Castor3D::RenderSystem & p_renderSystem );
+		virtual ~TestFrameVariableBuffer();
 
 	private:
+		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
 		bool DoInitialise()override;
+		void DoCleanup()override;
+		bool DoBind( uint32_t p_index )override;
+		void DoUnbind( uint32_t p_index )override;
 	};
 }
 

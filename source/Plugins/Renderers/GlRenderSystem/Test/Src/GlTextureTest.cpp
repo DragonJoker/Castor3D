@@ -74,8 +74,8 @@ namespace Testing
 		void DoTestStorage( GlTextureTest & p_case
 							, Engine & p_engine
 							, TextureType p_type
-							, AccessType p_cpuAccess
-							, AccessType p_gpuAccess )
+							, FlagCombination< AccessType > const & p_cpuAccess
+							, FlagCombination< AccessType > const & p_gpuAccess )
 		{
 			auto l_renderSystem = p_engine.GetRenderSystem();
 			l_renderSystem->GetMainContext()->SetCurrent();
@@ -123,12 +123,12 @@ namespace Testing
 
 	void GlTextureTest::DirectStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eReadWrite, AccessType::eRead );
+		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead );
 	}
 
 	void GlTextureTest::PboStorage()
 	{
-		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eReadWrite, AccessType::eReadWrite );
+		DoTestStorage( *this, m_engine, TextureType::eTwoDimensions, AccessType::eRead | AccessType::eWrite, AccessType::eRead | AccessType::eWrite );
 	}
 
 	void GlTextureTest::GpuOnlyStorage()

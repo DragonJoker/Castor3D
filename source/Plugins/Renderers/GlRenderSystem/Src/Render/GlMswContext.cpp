@@ -86,7 +86,7 @@ namespace GlRender
 			}
 			else
 			{
-				m_gpuInformations.RemoveFeature( GpuFeature::Stereo );
+				m_gpuInformations.RemoveFeature( GpuFeature::eStereo );
 				l_bHasPF = DoSelectPixelFormat( l_colour, false );
 			}
 		}
@@ -318,7 +318,7 @@ namespace GlRender
 			l_return = DoSelectPixelFormat( p_colour, true );
 		}
 
-		m_gpuInformations.UpdateFeature( GpuFeature::Stereo, l_bStereoAvailable );
+		m_gpuInformations.UpdateFeature( GpuFeature::eStereo, l_bStereoAvailable );
 		return l_return;
 	}
 

@@ -69,7 +69,7 @@ namespace GlRender
 	{
 	}
 
-	uint8_t * GlImmutableTextureStorageTraits::Lock( TextureStorage & p_storage, AccessType p_lock, uint32_t p_index )
+	uint8_t * GlImmutableTextureStorageTraits::Lock( TextureStorage & p_storage, FlagCombination< AccessType > const & p_lock, uint32_t p_index )
 	{
 		uint8_t * l_return = nullptr;
 

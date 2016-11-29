@@ -202,12 +202,12 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapWrappingModes[cuT( "clamp_to_border" )] = uint32_t( WrapMode::eClampToBorder );
 	m_mapWrappingModes[cuT( "clamp_to_edge" )] = uint32_t( WrapMode::eClampToEdge );
 
-	m_mapShaderTypes[cuT( "vertex" )] = MASK_SHADER_TYPE_VERTEX;
-	m_mapShaderTypes[cuT( "hull" )] = MASK_SHADER_TYPE_HULL;
-	m_mapShaderTypes[cuT( "domain" )] = MASK_SHADER_TYPE_DOMAIN;
-	m_mapShaderTypes[cuT( "geometry" )] = MASK_SHADER_TYPE_GEOMETRY;
-	m_mapShaderTypes[cuT( "pixel" )] = MASK_SHADER_TYPE_PIXEL;
-	m_mapShaderTypes[cuT( "compute" )] = MASK_SHADER_TYPE_COMPUTE;
+	m_mapShaderTypes[cuT( "vertex" )] = uint32_t( ShaderTypeFlag::eVertex );
+	m_mapShaderTypes[cuT( "hull" )] = uint32_t( ShaderTypeFlag::eHull );
+	m_mapShaderTypes[cuT( "domain" )] = uint32_t( ShaderTypeFlag::eDomain );
+	m_mapShaderTypes[cuT( "geometry" )] = uint32_t( ShaderTypeFlag::eGeometry );
+	m_mapShaderTypes[cuT( "pixel" )] = uint32_t( ShaderTypeFlag::ePixel );
+	m_mapShaderTypes[cuT( "compute" )] = uint32_t( ShaderTypeFlag::eCompute );
 
 	m_mapVariableTypes[cuT( "int" )] = uint32_t( FrameVariableType::eInt );
 	m_mapVariableTypes[cuT( "sampler" )] = uint32_t( FrameVariableType::eSampler );
@@ -518,7 +518,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ParameterType::eCheckedText >( m_mapPrimitiveOutputTypes ) } );
 	AddParser( uint32_t( CSCNSection::eShaderObject ), cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ParameterType::eUInt8 >() } );
 
-	AddParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ParameterType::eBitwiseOred64BitsCheckedText >( m_mapShaderTypes ) } );
+	AddParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ParameterType::eBitwiseOred32BitsCheckedText >( m_mapShaderTypes ) } );
 	AddParser( uint32_t( CSCNSection::eShaderUBO ), cuT( "variable" ), Parser_ShaderUboVariable, { MakeParameter< ParameterType::eName >() } );
 
 	AddParser( uint32_t( CSCNSection::eUBOVariable ), cuT( "count" ), Parser_ShaderVariableCount, { MakeParameter< ParameterType::eUInt32 >() } );

@@ -44,6 +44,7 @@ namespace GlRender
 	public:
 		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlShaderProgram & p_program, Castor3D::RenderSystem & p_renderSystem );
 		virtual ~GlFrameVariableBuffer();
+		void SetBindingPoint( uint32_t p_point )const;
 
 	private:
 		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;

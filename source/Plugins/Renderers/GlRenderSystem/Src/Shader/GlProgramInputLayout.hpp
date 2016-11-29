@@ -64,6 +64,7 @@ namespace GlRender
 
 	private:
 		std::multimap< int, Castor3D::BufferElementDeclaration > DoListAttributes( Castor3D::ShaderProgram const & p_program );
+		void DoListOther( Castor3D::ShaderProgram const & p_program );
 	};
 }
 

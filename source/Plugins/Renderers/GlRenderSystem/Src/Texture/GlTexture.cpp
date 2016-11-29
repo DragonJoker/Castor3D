@@ -16,7 +16,12 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	GlTexture::GlTexture(
+		OpenGl & p_gl,
+		GlRenderSystem & p_renderSystem,
+		TextureType p_type,
+		FlagCombination< AccessType > const & p_cpuAccess,
+		FlagCombination< AccessType > const & p_gpuAccess )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -29,7 +34,14 @@ namespace GlRender
 	{
 	}
 
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
+	GlTexture::GlTexture(
+		OpenGl & p_gl,
+		GlRenderSystem & p_renderSystem,
+		TextureType p_type,
+		FlagCombination< AccessType > const & p_cpuAccess,
+		FlagCombination< AccessType > const & p_gpuAccess,
+		PixelFormat p_format,
+		Size const & p_size )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -42,7 +54,14 @@ namespace GlRender
 	{
 	}
 
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	GlTexture::GlTexture(
+		OpenGl & p_gl,
+		GlRenderSystem & p_renderSystem,
+		TextureType p_type,
+		FlagCombination< AccessType > const & p_cpuAccess,
+		FlagCombination< AccessType > const & p_gpuAccess,
+		PixelFormat p_format,
+		Point3ui const & p_size )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),

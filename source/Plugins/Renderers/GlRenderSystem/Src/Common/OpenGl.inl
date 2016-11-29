@@ -479,6 +479,11 @@ namespace GlRender
 		return m_bHasVbo;
 	}
 
+	bool OpenGl::HasSsbo()const
+	{
+		return m_bHasSsbo;
+	}
+
 	bool OpenGl::HasInstancing()const
 	{
 		return m_bHasInstancedDraw && m_bHasInstancedArrays;
@@ -518,6 +523,10 @@ namespace GlRender
 			return Castor3D::ElementType::eInt;
 			break;
 
+		case GlslAttributeType::eUnsignedInt:
+			return Castor3D::ElementType::eInt;
+			break;
+
 		case GlslAttributeType::eIntVec2:
 			return Castor3D::ElementType::eIVec2;
 			break;
@@ -527,6 +536,18 @@ namespace GlRender
 			break;
 
 		case GlslAttributeType::eIntVec4:
+			return Castor3D::ElementType::eIVec4;
+			break;
+
+		case GlslAttributeType::eUnsignedIntVec2:
+			return Castor3D::ElementType::eIVec2;
+			break;
+
+		case GlslAttributeType::eUnsignedIntVec3:
+			return Castor3D::ElementType::eIVec3;
+			break;
+
+		case GlslAttributeType::eUnsignedIntVec4:
 			return Castor3D::ElementType::eIVec4;
 			break;
 
@@ -623,11 +644,13 @@ namespace GlRender
 		return Internals[uint32_t( p_format )];
 	}
 
-	inline uint32_t OpenGl::GetComponents( uint32_t p_components )const
+	inline Castor::FlagCombination< GlBufferBit > OpenGl::GetComponents( Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const
 	{
-		return ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eColour ) ) ? uint32_t( GlBufferBit::eColour ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eDepth ) ) ? uint32_t( GlBufferBit::eDepth ) : 0u )
-			   | ( Castor::CheckFlag( p_components, uint32_t( Castor3D::BufferComponent::eStencil ) ) ? uint32_t( GlBufferBit::eStencil ) : 0u );
+		Castor::FlagCombination< GlBufferBit > l_return;
+		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eColour ) ? GlBufferBit::eColour : GlBufferBit( 0u ) );
+		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eDepth ) ? GlBufferBit::eDepth : GlBufferBit( 0u ) );
+		l_return |= ( Castor::CheckFlag( p_components, Castor3D::BufferComponent::eStencil ) ? GlBufferBit::eStencil : GlBufferBit( 0u ) );
+		return l_return;
 	}
 
 	inline GlAttachmentPoint OpenGl::Get( Castor3D::AttachmentPoint p_eAttachment )const
@@ -813,7 +836,7 @@ namespace GlRender
 		return m_gpu;
 	}
 
-	GlAccessType OpenGl::GetLockFlags( Castor3D::AccessType p_flags )const
+	GlAccessType OpenGl::GetLockFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
 	{
 		GlAccessType l_eLockFlags = GlAccessType::eReadWrite;
 
@@ -836,9 +859,9 @@ namespace GlRender
 		return l_eLockFlags;
 	}
 
-	uint32_t OpenGl::GetBitfieldFlags( Castor3D::AccessType p_flags )const
+	Castor::FlagCombination< GlBufferMappingBit > OpenGl::GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const
 	{
-		uint32_t l_uiFlags = 0;
+		Castor::FlagCombination< GlBufferMappingBit > l_uiFlags = 0;
 
 		if ( Castor::CheckFlag( p_flags, Castor3D::AccessType::eRead ) )
 		{
@@ -2526,6 +2549,12 @@ namespace GlRender
 		return glCheckError( *this, "glGetActiveAttrib" );
 	}
 
+	bool OpenGl::GetActiveUniform( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const
+	{
+		m_pfnGetActiveUniform( program, index, bufSize, length, size, type, name );
+		return glCheckError( *this, "glGetActiveUniform" );
+	}
+
 	uint32_t OpenGl::CreateProgram()const
 	{
 		uint32_t l_uiReturn = m_pfnCreateProgram();
@@ -2592,6 +2621,13 @@ namespace GlRender
 		return glCheckError( *this, "glProgramParameteri" );
 	}
 
+	bool OpenGl::ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const
+	{
+		REQUIRE( m_pfnShaderStorageBlockBinding );
+		m_pfnShaderStorageBlockBinding( shader, storageBlockIndex, storageBlockBinding );
+		return glCheckError( *this, "glShaderStorageBlockBinding" );
+	}
+
 	bool OpenGl::GetProgramInterfaceInfos( uint32_t program, GlslInterface programInterface, GlslDataName name, int * params )
 	{
 		m_pfnGetProgramInterfaceiv( program, uint32_t( programInterface ), uint32_t( name ), params );
@@ -2625,7 +2661,7 @@ namespace GlRender
 	bool OpenGl::GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params )
 	{
 		m_pfnGetProgramResourceiv( program, uint32_t( programInterface ), index, propCount, props, bufSize, length, params );
-		return glCheckError( *this, "m_pfnGetProgramResourceiv" );
+		return glCheckError( *this, "glGetProgramResourceiv" );
 	}
 
 	bool OpenGl::EnableVertexAttribArray( uint32_t index )const

@@ -21,18 +21,15 @@ namespace GlRender
 	{
 	}
 
-	bool GlGpuIoBuffer::Activate()
+	bool GlGpuIoBuffer::Initialise()
 	{
-		return GlBufferBase::Bind();
-	}
+		bool l_return = InitialiseStorage( m_pixelsSize, m_accessType, m_accessNature );
 
-	void GlGpuIoBuffer::Deactivate()
-	{
-		GlBufferBase::Unbind();
-	}
+		if ( l_return )
+		{
+			l_return = DoInitialise();
+		}
 
-	bool GlGpuIoBuffer::Fill( uint8_t * p_buffer, ptrdiff_t p_size )
-	{
-		return GlBufferBase::Fill( p_buffer, p_size, m_accessType, m_accessNature );
+		return l_return;
 	}
 }

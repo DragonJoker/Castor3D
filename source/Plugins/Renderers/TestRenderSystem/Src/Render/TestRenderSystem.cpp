@@ -13,6 +13,7 @@
 #include "Shader/TestFrameVariableBuffer.hpp"
 #include "Shader/TestShaderObject.hpp"
 #include "Shader/TestShaderProgram.hpp"
+#include "Shader/TestShaderStorageBuffer.hpp"
 #include "Texture/TestSampler.hpp"
 #include "Texture/TestTextureStorage.hpp"
 #include "Texture/TestTexture.hpp"
@@ -51,12 +52,13 @@ namespace TestRender
 		return std::make_shared< TestGeometryBuffers >( p_topology, p_program );
 	}
 
-	PipelineUPtr TestRenderSystem::CreatePipeline( DepthStencilState && p_dsState
-												   , RasteriserState && p_rsState
-												   , BlendState && p_bdState
-												   , MultisampleState && p_msState
-												   , ShaderProgram & p_program
-												   , PipelineFlags const & p_flags )
+	PipelineUPtr TestRenderSystem::CreatePipeline(
+		DepthStencilState && p_dsState,
+		RasteriserState && p_rsState,
+		BlendState && p_bdState,
+		MultisampleState && p_msState,
+		ShaderProgram & p_program,
+		PipelineFlags const & p_flags )
 	{
 		return std::make_unique< TestPipeline >( *this, std::move( p_dsState ), std::move( p_rsState ), std::move( p_bdState ), std::move( p_msState ), p_program, p_flags );
 	}
@@ -76,32 +78,37 @@ namespace TestRender
 		return std::make_unique< TestTransformFeedback >( *this, p_computed, p_topology, p_program );
 	}
 
-	std::shared_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
+	std::unique_ptr< GpuBuffer< uint32_t > > TestRenderSystem::CreateIndexBuffer()
 	{
-		return std::make_shared< TestIndexBuffer >( *this );
+		return std::make_unique< TestIndexBuffer >( *this );
 	}
 
-	std::shared_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer )
+	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateVertexBuffer()
 	{
-		return std::make_shared< TestVertexBuffer >( *this );
+		return std::make_unique< TestVertexBuffer >( *this );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	std::unique_ptr< GpuBuffer< uint8_t > > TestRenderSystem::CreateStorageBufferBuffer()
+	{
+		return std::make_unique< TestShaderStorageBuffer >( *this );
+	}
+
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, FlagCombination< AccessType > const & p_cpuAccess, FlagCombination< AccessType > const & p_gpuAccess )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Size const & p_size )
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, FlagCombination< AccessType > const & p_cpuAccess, FlagCombination< AccessType > const & p_gpuAccess, PixelFormat p_format, Size const & p_size )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
+	TextureLayoutSPtr TestRenderSystem::CreateTexture( TextureType p_type, FlagCombination< AccessType > const & p_cpuAccess, FlagCombination< AccessType > const & p_gpuAccess, PixelFormat p_format, Point3ui const & p_size )
 	{
 		return std::make_shared< TestTexture >( *this, p_type, p_cpuAccess, p_gpuAccess, p_format, p_size );
 	}
 
-	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, AccessType p_cpuAccess, AccessType p_gpuAccess )
+	TextureStorageUPtr TestRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureLayout & p_layout, FlagCombination< AccessType > const & p_cpuAccess, FlagCombination< AccessType > const & p_gpuAccess )
 	{
 		return std::make_unique< TestTextureStorage >( *this, p_type, p_layout, p_cpuAccess, p_gpuAccess );
 	}

@@ -68,10 +68,10 @@ namespace CastorCom
 			return bgra_float( *this );
 		}
 
-		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ) );
-		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ) );
-		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_BLUE ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_BLUE ) );
-		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ) );
+		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eRed ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eRed ) );
+		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eGreen ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eGreen ) );
+		COM_PROPERTY( B, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eBlue ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eBlue ) );
+		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Component::eAlpha ), make_putter( this, &Castor::Colour::get, Castor::Colour::Component::eAlpha ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Colour ), CColour );

@@ -246,6 +246,8 @@ namespace Castor
 
 	template< typename Type >
 	class AngleT;
+	template< size_t Size >
+	struct BaseTypeFromSize;
 	class BinaryFile;
 	template< class T >
 	class BinaryLoader;
@@ -259,6 +261,8 @@ namespace Castor
 	class File;
 	class FileParser;
 	class FileParserContext;
+	template< typename FlagType, typename BaseType = typename BaseTypeFromSize< sizeof( FlagType ) >::Type >
+	class FlagCombination;
 	class Font;
 	class FontCache;
 	class Glyph;

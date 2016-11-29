@@ -54,8 +54,8 @@ namespace GlRender
 						  , GlRenderSystem & p_renderSystem
 						  , Castor3D::TextureStorageType p_type
 						  , Castor3D::TextureLayout & p_layout
-						  , Castor3D::AccessType p_cpuAccess
-						  , Castor3D::AccessType p_gpuAccess );
+						  , Castor::FlagCombination< Castor3D::AccessType > const & p_cpuAccess
+						  , Castor::FlagCombination< Castor3D::AccessType > const & p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -71,7 +71,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessType p_lock )override;
+		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
@@ -79,7 +79,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
-		uint8_t * Lock( Castor3D::AccessType p_lock, uint32_t p_index )override;
+		uint8_t * Lock( Castor::FlagCombination< Castor3D::AccessType > const & p_lock, uint32_t p_index )override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */

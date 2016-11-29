@@ -23,8 +23,8 @@ namespace GlRender
 	{
 	}
 
-	bool GlDownloadPixelBuffer::Initialise()
+	bool GlDownloadPixelBuffer::DoInitialise()
 	{
-		return Fill( m_pixels, m_pixelsSize );
+		return Upload( 0u, m_pixelsSize, m_pixels );
 	}
 }

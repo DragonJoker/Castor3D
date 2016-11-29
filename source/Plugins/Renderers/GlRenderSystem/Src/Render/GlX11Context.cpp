@@ -224,7 +224,7 @@ namespace GlRender
 			if ( p_window->IsUsingStereo() )
 			{
 				// Maybe because of stereo ? We try in mono
-				m_gpuInformations.RemoveFeature( GpuFeature::Stereo );
+				m_gpuInformations.RemoveFeature( GpuFeature::eStereo );
 				Logger::LogWarning( cuT( "GlXContext::Create - Stereo glXChooseFBConfig failed, using mono FB config" ) );
 
 				IntArray l_attribList
@@ -285,7 +285,7 @@ namespace GlRender
 		{
 			if ( p_window->IsUsingStereo() )
 			{
-				m_gpuInformations.AddFeature( GpuFeature::Stereo );
+				m_gpuInformations.AddFeature( GpuFeature::eStereo );
 				Logger::LogDebug( cuT( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 			}
 			else

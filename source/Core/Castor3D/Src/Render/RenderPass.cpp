@@ -33,12 +33,18 @@ namespace Castor3D
 	{
 	}
 
-	String RenderPass::GetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	String RenderPass::GetVertexShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags, bool p_invertNormals )const
 	{
 		return DoGetVertexShaderSource( p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
 	}
 
-	String RenderPass::GetPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderPass::GetPixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		String l_return;
 
@@ -54,12 +60,21 @@ namespace Castor3D
 		return l_return;
 	}
 
-	String RenderPass::GetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String RenderPass::GetGeometryShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void RenderPass::PreparePipeline( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t & p_programFlags, uint8_t p_sceneFlags, bool p_twoSided )
+	void RenderPass::PreparePipeline(
+		BlendMode p_colourBlendMode,
+		BlendMode p_alphaBlendMode,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > & p_programFlags,
+		uint8_t p_sceneFlags,
+		bool p_twoSided )
 	{
 		DoCompleteProgramFlags( p_programFlags );
 		auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
@@ -85,7 +100,11 @@ namespace Castor3D
 		}
 	}
 
-	Pipeline * RenderPass::GetOpaquePipelineFront( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetOpaquePipelineFront(
+		BlendMode p_colourBlendMode,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
@@ -98,7 +117,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetOpaquePipelineBack( BlendMode p_colourBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetOpaquePipelineBack(
+		BlendMode p_colourBlendMode,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backOpaquePipelines.find( { p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
@@ -111,7 +134,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetTransparentPipelineFront( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetTransparentPipelineFront(
+		BlendMode p_colourBlendMode,
+		BlendMode p_alphaBlendMode,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_frontTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
@@ -124,7 +152,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	Pipeline * RenderPass::GetTransparentPipelineBack( BlendMode p_colourBlendMode, BlendMode p_alphaBlendMode, uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )
+	Pipeline * RenderPass::GetTransparentPipelineBack(
+		BlendMode p_colourBlendMode,
+		BlendMode p_alphaBlendMode,
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )
 	{
 		auto l_it = m_backTransparentPipelines.find( { p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags } );
 		Pipeline * l_return{ nullptr };
@@ -137,12 +170,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimatedGeometryRenderNode RenderPass::CreateAnimatedNode( Pass & p_pass
-															   , Pipeline & p_pipeline
-															   , Submesh & p_submesh
-															   , Geometry & p_primitive
-															   , AnimatedSkeletonSPtr p_skeleton
-															   , AnimatedMeshSPtr p_mesh )
+	AnimatedGeometryRenderNode RenderPass::CreateAnimatedNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		Submesh & p_submesh,
+		Geometry & p_primitive,
+		AnimatedSkeletonSPtr p_skeleton,
+		AnimatedMeshSPtr p_mesh )
 	{
 		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
 
@@ -160,10 +194,11 @@ namespace Castor3D
 		};
 	}
 
-	StaticGeometryRenderNode RenderPass::CreateStaticNode( Pass & p_pass
-														   , Pipeline & p_pipeline
-														   , Submesh & p_submesh
-														   , Geometry & p_primitive )
+	StaticGeometryRenderNode RenderPass::CreateStaticNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		Submesh & p_submesh,
+		Geometry & p_primitive )
 	{
 		return StaticGeometryRenderNode
 		{
@@ -176,9 +211,10 @@ namespace Castor3D
 		};
 	}
 
-	BillboardRenderNode RenderPass::CreateBillboardNode( Pass & p_pass
-														 , Pipeline & p_pipeline
-														 , BillboardBase & p_billboard )
+	BillboardRenderNode RenderPass::CreateBillboardNode(
+		Pass & p_pass,
+		Pipeline & p_pipeline,
+		BillboardBase & p_billboard )
 	{
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
@@ -251,12 +287,20 @@ namespace Castor3D
 		};
 	}
 
-	ShaderProgramSPtr RenderPass::DoGetProgram( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	ShaderProgramSPtr RenderPass::DoGetProgram(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags,
+		bool p_invertNormals )const
 	{
 		return GetEngine()->GetShaderProgramCache().GetAutomaticProgram( *this, p_textureFlags, p_programFlags, p_sceneFlags, p_invertNormals );
 	}
 
-	String RenderPass::DoGetVertexShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags, bool p_invertNormals )const
+	String RenderPass::DoGetVertexShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags,
+		bool p_invertNormals )const
 	{
 		using namespace GLSL;
 		auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();

@@ -148,17 +148,11 @@ namespace GlRender
 #define CASTOR_DBG_WIN32 0
 
 	OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
-		: m_bHasAnisotropic( false )
-		, m_bHasInstancedDraw( false )
-		, m_bHasInstancedArrays( false )
-		, m_pTexFunctions( nullptr )
-		, m_pBufFunctions( nullptr )
-		, m_pfnReadPixels()
+		: m_pfnReadPixels()
 		, m_pfnBlitFramebuffer()
 		, m_pfnTexImage2DMultisample()
 		, m_pfnGetActiveUniform()
 		, m_pfnVertexAttribPointer()
-		, m_bBindVboToGpuAddress( false )
 		, m_renderSystem( p_renderSystem )
 	{
 		uint32_t l_index = 0;
@@ -886,6 +880,7 @@ namespace GlRender
 			GetFunction( m_pfnProgramParameteri, cuT( "glProgramParameteri" ), cuT( "ARB" ) );
 			GetFunction( m_pfnGetUniformLocation, cuT( "glGetUniformLocation" ), cuT( "ARB" ) );
 			GetFunction( m_pfnGetActiveAttrib, cuT( "glGetActiveAttrib" ), cuT( "ARB" ) );
+			GetFunction( m_pfnGetActiveUniform, cuT( "glGetActiveUniform" ), cuT( "ARB" ) );
 
 			if ( HasExtension( ARB_fragment_program ) )
 			{
@@ -965,17 +960,17 @@ namespace GlRender
 				if ( HasExtension( ARB_geometry_shader4 ) || HasExtension( EXT_geometry_shader4 ) )
 				{
 					m_bHasGSh = true;
+				}
 
-					if ( HasExtension( ARB_tessellation_shader ) )
-					{
-						m_bHasTSh = true;
-						GetFunction( m_pfnPatchParameteri, cuT( "glPatchParameteri" ), cuT( "ARB" ) );
+				if ( HasExtension( ARB_tessellation_shader ) )
+				{
+					m_bHasTSh = true;
+					GetFunction( m_pfnPatchParameteri, cuT( "glPatchParameteri" ), cuT( "ARB" ) );
+				}
 
-						if ( HasExtension( ARB_compute_shader ) )
-						{
-							m_bHasCSh = true;
-						}
-					}
+				if ( HasExtension( ARB_compute_shader ) )
+				{
+					m_bHasCSh = true;
 				}
 			}
 		}
@@ -1015,6 +1010,12 @@ namespace GlRender
 			GetFunction( m_pfnTexStorage3DMultisample, cuT( "glTexStorage3DMultisample" ), cuT( "ARB" ) );
 		}
 
+		if ( HasExtension( ARB_shader_storage_buffer_object ) )
+		{
+			m_bHasSsbo = true;
+			GetFunction( m_pfnShaderStorageBlockBinding, cuT( "glShaderStorageBlockBinding" ), cuT( "ARB" ) );
+		}
+
 		return true;
 	}
 
@@ -1036,6 +1037,7 @@ namespace GlRender
 		m_bHasTSh = false;
 		m_bHasCSh = false;
 		m_bHasSpl = false;
+		m_bHasSsbo = false;
 		m_bHasNonPowerOfTwoTextures = false;
 		m_bBindVboToGpuAddress = false;
 		m_iGlslVersion = 0;
@@ -1126,7 +1128,9 @@ namespace GlRender
 
 	void OpenGl::DebugLog( GlDebugSource source, GlDebugType type, uint32_t id, GlDebugSeverity severity, int CU_PARAM_UNUSED( length ), const char * message )const
 	{
-		if ( id != 131185 )
+		if ( id != 131185
+			 && id != 131186
+			 && id != 131154 )
 		{
 			bool l_error = false;
 			StringStream l_toLog;
@@ -1222,7 +1226,7 @@ namespace GlRender
 
 			if ( l_error )
 			{
-				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 10 };
+				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
 				Logger::LogError( l_toLog );
 			}
 			else
@@ -1303,7 +1307,7 @@ namespace GlRender
 
 		if ( l_error )
 		{
-			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 4 };
+			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 2 };
 			Logger::LogError( l_toLog );
 		}
 		else

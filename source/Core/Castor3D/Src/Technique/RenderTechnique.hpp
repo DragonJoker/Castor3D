@@ -436,19 +436,28 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
-		C3D_API void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+		C3D_API void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
-		C3D_API Castor::String DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		C3D_API Castor::String DoGetGeometryShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
-		C3D_API Castor::String DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		C3D_API Castor::String DoGetOpaquePixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		C3D_API Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		C3D_API Castor::String DoGetTransparentPixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */

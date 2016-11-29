@@ -222,4 +222,18 @@ typedef wchar_t ychar;
 	eMin = EnumMin,\
 	eMax = eCount - 1
 
+#define IMPLEMENT_FLAGS( FlagType )\
+	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, FlagType p_rhs )\
+	{\
+		return typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
+	}\
+	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_lhs, FlagType p_rhs )\
+	{\
+		return p_lhs | typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_rhs );\
+	}\
+	inline constexpr typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type operator|( FlagType p_lhs, typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type p_rhs )\
+	{\
+		return typename Castor::BaseTypeFromSize< sizeof( FlagType ) >::Type( p_lhs ) | p_rhs;\
+	}
+
 #endif

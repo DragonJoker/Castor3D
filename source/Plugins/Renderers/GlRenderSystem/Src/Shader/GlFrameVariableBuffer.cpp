@@ -676,6 +676,11 @@ namespace GlRender
 	{
 	}
 
+	void GlFrameVariableBuffer::SetBindingPoint( uint32_t p_point )const
+	{
+		m_glBuffer.SetBindingPoint( p_point );
+	}
+
 	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
@@ -887,7 +892,7 @@ namespace GlRender
 				{
 					GetOpenGl().GetActiveUniformBlockiv( l_program.GetGlName(), m_uniformBlockIndex, GlUniformBlockValue::eDataSize, &m_uniformBlockSize );
 					m_glBuffer.Create();
-					m_glBuffer.Fill( nullptr, m_uniformBlockSize, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+					m_glBuffer.InitialiseStorage( m_uniformBlockSize, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 					m_glBuffer.Bind();
 					GetOpenGl().BindBufferBase( GlBufferTarget::eUniform, m_index, m_glBuffer.GetGlName() );
 					GetOpenGl().UniformBlockBinding( l_program.GetGlName(), m_uniformBlockIndex, m_index );
@@ -931,7 +936,7 @@ namespace GlRender
 					}
 
 					m_glBuffer.Unbind();
-					m_glBuffer.Upload( m_buffer.data(), m_uniformBlockSize );
+					m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
 
 					for ( auto & l_variable : m_listVariables )
 					{
@@ -974,7 +979,7 @@ namespace GlRender
 		{
 			if ( m_uniformBlockIndex != int( GlInvalidIndex ) )
 			{
-				l_return = m_glBuffer.Upload( m_buffer.data(), m_uniformBlockSize );
+				l_return = m_glBuffer.Upload( 0u, m_uniformBlockSize, m_buffer.data() );
 
 				for ( auto & l_variable : m_listVariables )
 				{

@@ -235,32 +235,27 @@ namespace Castor3D
 		{
 			if ( m_vertexBuffer )
 			{
-				m_initialised = m_vertexBuffer->Create();
-				m_initialised &= m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				m_initialised = m_vertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 
 			if ( m_initialised && m_animBuffer )
 			{
-				m_initialised = m_animBuffer->Create();
-				m_initialised &= m_animBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				m_initialised = m_animBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 
 			if ( m_initialised && m_indexBuffer )
 			{
-				m_initialised = m_indexBuffer->Create();
-				m_initialised &= m_indexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				m_initialised = m_indexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 
 			if ( m_initialised && m_bonesBuffer )
 			{
-				m_initialised = m_bonesBuffer->Create();
-				m_initialised &= m_bonesBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				m_initialised = m_bonesBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 
 			if ( m_initialised && m_matrixBuffer )
 			{
-				m_initialised = m_matrixBuffer->Create();
-				m_initialised &= m_matrixBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				m_initialised = m_matrixBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
 	}
@@ -274,6 +269,7 @@ namespace Castor3D
 		m_pointsData.clear();
 		m_bones.clear();
 		m_bonesData.clear();
+		m_geometryBuffers.clear();
 	}
 
 	void Submesh::ComputeContainers()
@@ -444,6 +440,14 @@ namespace Castor3D
 		{
 			Initialise();
 		}
+
+		if ( m_initialised )
+		{
+			for ( auto & l_geometryBuffers : m_geometryBuffers )
+			{
+				DoInitialiseGeometryBuffers( l_geometryBuffers );
+			}
+		}
 	}
 
 	void Submesh::ResetMatrixBuffers()
@@ -458,7 +462,7 @@ namespace Castor3D
 			}
 
 			DoGenerateMatrixBuffer( l_count );
-			m_matrixBuffer->Upload( BufferAccessType::eStream, BufferAccessNature::eDraw );
+			m_matrixBuffer->Initialise( BufferAccessType::eStream, BufferAccessNature::eDraw );
 		}
 	}
 
@@ -474,11 +478,11 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Upload( BufferAccessType::eStream, BufferAccessNature::eDraw );
+			m_vertexBuffer->Upload();
 
 			if ( m_animBuffer )
 			{
-				m_animBuffer->Upload( BufferAccessType::eStream, BufferAccessNature::eDraw );
+				m_animBuffer->Upload();
 			}
 
 			m_dirty = false;
@@ -499,7 +503,7 @@ namespace Castor3D
 
 		if ( m_dirty )
 		{
-			m_vertexBuffer->Upload( BufferAccessType::eStream, BufferAccessNature::eDraw );
+			m_vertexBuffer->Upload();
 			m_dirty = false;
 		}
 
@@ -791,7 +795,7 @@ namespace Castor3D
 						{
 							m_cameraPosition = p_ptCameraPosition;
 							uint32_t l_uiIdxSize = l_indices.GetSize();
-							uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::eWrite | AccessType::eRead );
+							uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::eRead | AccessType::eWrite );
 
 							if ( l_pIdx )
 							{
@@ -932,39 +936,7 @@ namespace Castor3D
 		{
 			l_geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( Topology::eTriangles, p_program );
 			m_geometryBuffers.push_back( l_geometryBuffers );
-			VertexBufferArray l_buffers;
-
-			if ( m_vertexBuffer )
-			{
-				l_buffers.push_back( *m_vertexBuffer );
-			}
-
-			if ( m_animBuffer )
-			{
-				l_buffers.push_back( *m_animBuffer );
-			}
-
-			if ( m_bonesBuffer )
-			{
-				l_buffers.push_back( *m_bonesBuffer );
-			}
-
-			if ( m_matrixBuffer )
-			{
-				l_buffers.push_back( *m_matrixBuffer );
-			}
-
-			if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
-			{
-				l_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
-			}
-			else
-			{
-				GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_geometryBuffers, l_buffers]()
-				{
-					l_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
-				} ) );
-			}
+			DoInitialiseGeometryBuffers( l_geometryBuffers );
 		}
 		else
 		{
@@ -1028,10 +1000,11 @@ namespace Castor3D
 		else if ( GetScene()->GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
 			uint32_t l_count = 0;
-			l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
+
+			for ( auto l_it : m_instanceCount )
 			{
-				return p_count + p_pair.second;
-			} );
+				l_count = std::max( l_count, l_it.second );
+			}
 
 			if ( l_count > 1 )
 			{
@@ -1043,6 +1016,10 @@ namespace Castor3D
 					}
 				} );
 			}
+			else
+			{
+				m_matrixBuffer.reset();
+			}
 		}
 	}
 
@@ -1052,35 +1029,33 @@ namespace Castor3D
 
 		if ( m_vertexBuffer )
 		{
-			m_vertexBuffer->Destroy();
+			m_vertexBuffer->Cleanup();
 		}
 
 		if ( m_animBuffer )
 		{
-			m_animBuffer->Destroy();
+			m_animBuffer->Cleanup();
 		}
 
 		if ( m_indexBuffer )
 		{
-			m_indexBuffer->Destroy();
+			m_indexBuffer->Cleanup();
 		}
 
 		if ( m_matrixBuffer )
 		{
-			m_matrixBuffer->Destroy();
+			m_matrixBuffer->Cleanup();
 		}
 
 		if ( m_bonesBuffer )
 		{
-			m_bonesBuffer->Destroy();
+			m_bonesBuffer->Cleanup();
 		}
 
 		for ( auto l_buffers : m_geometryBuffers )
 		{
 			l_buffers->Cleanup();
 		}
-
-		m_geometryBuffers.clear();
 	}
 
 	void Submesh::DoGenerateBuffers()
@@ -1235,13 +1210,57 @@ namespace Castor3D
 	{
 		if ( m_matrixBuffer )
 		{
-			VertexBuffer & l_matrixBuffer = *m_matrixBuffer;
-			uint32_t l_uiSize = p_count * 16 * sizeof( real );
-
-			if ( l_matrixBuffer.GetSize() != l_uiSize )
+			if ( p_count )
 			{
-				l_matrixBuffer.Resize( l_uiSize );
+				VertexBuffer & l_matrixBuffer = *m_matrixBuffer;
+				uint32_t l_uiSize = p_count * 16 * sizeof( real );
+
+				if ( l_matrixBuffer.GetSize() != l_uiSize )
+				{
+					l_matrixBuffer.Resize( l_uiSize );
+				}
 			}
+			else
+			{
+				m_matrixBuffer.reset();
+			}
+		}
+	}
+
+	void Submesh::DoInitialiseGeometryBuffers( GeometryBuffersSPtr p_geometryBuffers )
+	{
+		VertexBufferArray l_buffers;
+
+		if ( m_vertexBuffer )
+		{
+			l_buffers.push_back( *m_vertexBuffer );
+		}
+
+		if ( m_animBuffer )
+		{
+			l_buffers.push_back( *m_animBuffer );
+		}
+
+		if ( m_bonesBuffer )
+		{
+			l_buffers.push_back( *m_bonesBuffer );
+		}
+
+		if ( m_matrixBuffer )
+		{
+			l_buffers.push_back( *m_matrixBuffer );
+		}
+
+		if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+		{
+			p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
+		}
+		else
+		{
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
+			{
+				p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
+			} ) );
 		}
 	}
 }

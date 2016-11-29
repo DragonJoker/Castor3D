@@ -52,7 +52,7 @@ namespace Castor3D
 
 	void FrameBuffer::Clear( uint8_t p_targets )
 	{
-		uint8_t l_targets = p_targets;
+		FlagCombination< BufferComponent > l_targets = p_targets;
 
 		for ( auto l_attach : m_attaches )
 		{
@@ -179,7 +179,7 @@ namespace Castor3D
 		}
 	}
 
-	bool FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )const
+	bool FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
 	{
 		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 
@@ -199,7 +199,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, InterpolationMode p_interpolation )const
+	bool FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
 		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
 

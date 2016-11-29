@@ -28,13 +28,13 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
-#include "Scene/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
+#include "Scene/ParticleSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Technique/RenderTechnique.hpp"
@@ -114,7 +114,7 @@ namespace Castor3D
 
 		template< typename CreatorFunc, typename NodesType, typename ... Params >
 		void DoAddNode( RenderPass & p_renderPass
-						, uint16_t p_programFlags
+						, FlagCombination< ProgramFlag > const & p_programFlags
 						, Pass & p_pass
 						, Scene const & p_scene
 						, NodesType & p_nodes
@@ -165,7 +165,7 @@ namespace Castor3D
 		}
 
 		void DoAddAnimatedNode( RenderPass & p_renderPass
-								, uint16_t p_programFlags
+								, FlagCombination< ProgramFlag > const & p_programFlags
 								, Pass & p_pass
 								, Submesh & p_submesh
 								, Geometry & p_primitive
@@ -182,7 +182,7 @@ namespace Castor3D
 		}
 
 		void DoAddStaticNode( RenderPass & p_renderPass
-							  , uint16_t p_programFlags
+							  , FlagCombination< ProgramFlag > const & p_programFlags
 							  , Pass & p_pass
 							  , Submesh & p_submesh
 							  , Geometry & p_primitive
@@ -246,7 +246,7 @@ namespace Castor3D
 		}
 
 		void DoAddBillboardNode( RenderPass & p_renderPass
-								 , uint16_t p_programFlags
+								 , FlagCombination< ProgramFlag > const & p_programFlags
 								 , Pass & p_pass
 								 , BillboardBase & p_billboard
 								 , RenderNodesT< BillboardRenderNode, BillboardRenderNodesByPipelineMap > & p_nodes )

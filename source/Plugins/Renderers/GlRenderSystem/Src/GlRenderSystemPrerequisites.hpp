@@ -396,6 +396,7 @@ namespace GlRender
 		eTransformFeedbackBuffer = 0x8C8E,
 		eRead = 0x8F36,
 		eWrite = 0x8F37,
+		eShaderStorage = 0x90D2,
 	};
 
 	enum class GlShaderType

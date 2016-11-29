@@ -45,15 +45,12 @@ namespace Castor3D
 	class GpuBuffer
 		: public Castor::OwnedBy< RenderSystem >
 	{
-	protected:
-		typedef Castor3D::CpuBuffer< T > * HardwareBufferPtr;
-
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		explicit GpuBuffer( RenderSystem & p_renderSystem )
 			: Castor::OwnedBy< RenderSystem >( p_renderSystem )
@@ -61,100 +58,113 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		virtual ~GpuBuffer()
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
+		 *\brief		Creation function.
+		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de création.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		virtual bool Create() = 0;
 		/**
 		 *\~english
-		 *\brief		Destruction function
+		 *\brief		Destruction function.
 		 *\~french
-		 *\brief		Fonction de destruction
+		 *\brief		Fonction de destruction.
 		 */
 		virtual void Destroy() = 0;
 		/**
 		 *\~english
-		 *\brief		Initialisation function, used by VBOs
-		 *\param[in]	p_type		Buffer access type
-		 *\param[in]	p_nature	Buffer access nature
-		 *\return		\p true if OK
+		 *\brief		Initialises the GPU buffer storage.
+		 *\param[in]	p_count		The buffer elements count.
+		 *\param[in]	p_type		Buffer access type.
+		 *\param[in]	p_nature	Buffer access nature.
+		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Fonction d'initialisation, utilisée par les VBOs
-		 *\param[in]	p_type		Type d'accès du tampon
-		 *\param[in]	p_nature	Nature d'accès du tampon
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Initialise le stockage GPU du tampon.
+		 *\param[in]	p_count		Le nombre d'éléments du tampon.
+		 *\param[in]	p_type		Type d'accès du tampon.
+		 *\param[in]	p_nature	Nature d'accès du tampon.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Upload( BufferAccessType p_type, BufferAccessNature p_nature ) = 0;
+		virtual bool InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const = 0;
 		/**
 		 *\~english
-		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
-		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
-		 *\param[in]	p_offset	The start offset in the buffer
-		 *\param[in]	p_count	The mapped elements count
-		 *\param[in]	p_flags	The lock flags
-		 *\return		The mapped buffer address
+		 *\brief		Initialises the buffer's binding point.
+		 *\param[in]	p_index	The binding point.
+		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications
-		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )]
-		 *\param[in]	p_offset	L'offset de départ
-		 *\param[in]	p_count	Le nombre d'éléments à mapper
-		 *\param[in]	p_flags	Les flags de lock
-		 *\return		L'adresse du tampon mappé
+		 *\brief		Initialise le point d'attache du tampon.
+		 *\param[in]	p_index	Le point d'attache.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual T * Lock( uint32_t p_offset, uint32_t p_count, AccessType p_flags ) = 0;
+		virtual bool InitialiseBindingPoint( uint32_t p_index )const = 0;
 		/**
 		 *\~english
-		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that
-		 *\remarks		All modifications made in the mapped buffer are put into GPU memory
+		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
+		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
+		 *\param[in]	p_offset	The start offset in the buffer.
+		 *\param[in]	p_count		The mapped elements count.
+		 *\param[in]	p_flags		The lock flags.
+		 *\return		The mapped buffer address.
 		 *\~french
-		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus
-		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
+		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications.
+		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
+		 *\param[in]	p_offset	L'offset de départ.
+		 *\param[in]	p_count		Le nombre d'éléments à mapper.
+		 *\param[in]	p_flags		Les flags de lock.
+		 *\return		L'adresse du tampon mappé.
 		 */
-		virtual void Unlock() = 0;
+		virtual T * Lock( uint32_t p_offset, uint32_t p_count, Castor::FlagCombination< AccessType > const & p_flags )const = 0;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
+		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.
+		 *\remarks		All modifications made in the mapped buffer are put into GPU memory.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus.
+		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU.
 		 */
-		virtual bool Bind() = 0;
+		virtual void Unlock()const = 0;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\remarks		Used for instanciation
-		 *\param[in]	p_instantiated	Tells if the buffer is instantiated
-		 *\return		\p true if successful
+		 *\brief		Activation function, to tell the GPU it is active.
+		 *\return		\p true if successful.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\remarks		Utilisé pour l'instanciation
-		 *\param[in]	p_instantiated	Dit si le tampon est instantié
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Bind( bool p_instantiated )
+		virtual bool Bind()const = 0;
+		/**
+		 *\~english
+		 *\brief		Activation function, to tell the GPU it is active.
+		 *\remarks		Used for instanciation.
+		 *\param[in]	p_instantiated	Tells if the buffer is instantiated.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
+		 *\remarks		Utilisé pour l'instanciation.
+		 *\param[in]	p_instantiated	Dit si le tampon est instantié.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		virtual bool Bind( bool p_instantiated )const
 		{
 			return false;
 		}
 		/**
 		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
+		 *\brief		Deactivation function, to tell the GPU it is inactive.
 		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
 		 */
-		virtual void Unbind() = 0;
+		virtual void Unbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
@@ -167,24 +177,41 @@ namespace Castor3D
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size ) = 0;
+		virtual bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size )const = 0;
 		/**
 		 *\~english
-		 *\brief		Transmits data to the GPU buffer from RAM
-		 *\param[in]	p_buffer	The data
-		 *\param[in]	p_size		Data buffer size
-		 *\param[in]	p_type		Transfer type
-		 *\param[in]	p_nature	Transfer nature
-		 *\return		\p true if successful
+		 *\brief		Transfers data to the GPU buffer from RAM.
+		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
+		 *\param[in]	p_offset	The start offset.
+		 *\param[in]	p_count		Elements count.
+		 *\param[in]	p_buffer	The data.
+		 *\return		\p true if successful.
 		 *\~french
-		 *\brief		Transfère des données au tampon GPU à partir de la ram
-		 *\param[in]	p_buffer	Les données
-		 *\param[in]	p_size		Taille du tampon de données
-		 *\param[in]	p_type		Type de transfert
-		 *\param[in]	p_nature	Nature du transfert
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
+		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
+		 *\param[in]	p_offset	L'offset de départ.
+		 *\param[in]	p_count		Nombre d'éléments.
+		 *\param[in]	p_buffer	Les données.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature ) = 0;
+		virtual bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const = 0;
+		/**
+		 *\~english
+		 *\brief		Transfers data from the GPU buffer to RAM.
+		 *\remarks		Transfers data from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_count-1)*sizeof( T )].
+		 *\param[in]	p_offset	The start offset.
+		 *\param[in]	p_count		Elements count.
+		 *\param[out]	p_buffer	The data.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Transfère des données du tampon GPU vers la RAM.
+		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
+		 *\param[in]	p_offset	L'offset de départ.
+		 *\param[in]	p_count		Nombre d'éléments.
+		 *\param[out]	p_buffer	Les données.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		virtual bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const = 0;
 	};
 }
 

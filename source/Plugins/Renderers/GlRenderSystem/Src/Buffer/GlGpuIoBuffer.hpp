@@ -33,12 +33,10 @@ namespace GlRender
 	public:
 		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize, GlBufferTarget p_packMode, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature );
 		virtual ~GlGpuIoBuffer();
+		bool Initialise();
 
-		virtual bool Activate();
-		virtual void Deactivate();
-		bool Fill( uint8_t * p_buffer, ptrdiff_t p_size );
-
-		virtual bool Initialise() = 0;
+	private:
+		virtual bool DoInitialise() = 0;
 
 	protected:
 		Castor3D::BufferAccessType m_accessType;

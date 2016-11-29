@@ -358,9 +358,22 @@ namespace Testing
 
 		inline bool compare( double const & p_a, float const & p_b )
 		{
-			double l_epsilon = double ( 0.0001 );
-			return std::abs( double ( p_a - p_b ) ) < l_epsilon
-				   || ( std::isnan( p_a ) && std::isnan( p_b ) );
+			double l_epsilon = double( 0.0001 );
+			return std::abs( double( p_a - p_b ) ) < l_epsilon
+				|| ( std::isnan( p_a ) && std::isnan( p_b ) );
+		}
+
+		template< typename T, size_t C1, size_t C2 >
+		inline bool compare( std::array< T, C1 > const & p_a, std::array< T, C2 > const & p_b )
+		{
+			bool l_return{ C1 == C2 };
+
+			for ( size_t i = 0u; i < C1 && l_return; ++i )
+			{
+				l_return = this->compare( p_a[i], p_b[i] );
+			}
+
+			return l_return;
 		}
 
 	private:

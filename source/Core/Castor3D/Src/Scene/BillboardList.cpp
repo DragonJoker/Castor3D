@@ -110,33 +110,32 @@ namespace Castor3D
 				m_vertexBuffer->Resize( uint32_t( p_count * l_stride ) );
 			}
 
-			m_vertexBuffer->Create();
-			m_vertexBuffer->Upload( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_initialised = m_vertexBuffer->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 
-			std::array< std::array< float, 5 >, 4 > l_vertices
+			if ( m_initialised )
 			{
+				std::array< std::array< float, 5 >, 4 > l_vertices
 				{
-					std::array< float, 5 >{ { -0.5f, 0.5f, 1.0f, 0.0f, 1.0f } },
-					std::array< float, 5 >{ { -0.5f, -0.5f, 1.0f, 0.0f, 0.0f } },
-					std::array< float, 5 >{ { 0.5f, -0.5f, 1.0f, 1.0f, 0.0f } },
-					std::array< float, 5 >{ { 0.5f, 0.5f, 1.0f, 1.0f, 1.0f } },
+					{
+						std::array< float, 5 >{ { -0.5f, 0.5f, 1.0f, 0.0f, 1.0f } },
+						std::array< float, 5 >{ { -0.5f, -0.5f, 1.0f, 0.0f, 0.0f } },
+						std::array< float, 5 >{ { 0.5f, -0.5f, 1.0f, 1.0f, 0.0f } },
+						std::array< float, 5 >{ { 0.5f, 0.5f, 1.0f, 1.0f, 1.0f } },
+					}
+				};
+
+				l_stride = m_quad->GetDeclaration().stride();
+				m_quad->Resize( 4 * l_stride );
+				auto l_buffer = m_quad->data();
+
+				for ( auto & l_vertex : l_vertices )
+				{
+					std::memcpy( l_buffer, l_vertex.data(), l_stride );
+					l_buffer += l_stride;
 				}
-			};
 
-			l_stride = m_quad->GetDeclaration().stride();
-			m_quad->Resize( 4 * l_stride );
-			auto l_buffer = m_quad->data();
-
-			for ( auto & l_vertex : l_vertices )
-			{
-				std::memcpy( l_buffer, l_vertex.data(), l_stride );
-				l_buffer += l_stride;
+				m_initialised = m_quad->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
 			}
-
-			m_quad->Create();
-			m_quad->Upload( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-
-			m_initialised = true;
 		}
 
 		return m_initialised;
@@ -154,8 +153,8 @@ namespace Castor3D
 			}
 
 			m_geometryBuffers.clear();
-			m_quad->Destroy();
-			m_vertexBuffer->Destroy();
+			m_quad->Cleanup();
+			m_vertexBuffer->Cleanup();
 		}
 	}
 
@@ -207,7 +206,7 @@ namespace Castor3D
 		if ( m_vertexBuffer->Bind() )
 		{
 			uint32_t l_stride = m_vertexBuffer->GetDeclaration().stride();
-			auto l_gpuBuffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eReadWrite );
+			auto l_gpuBuffer = m_vertexBuffer->Lock( 0, m_count * l_stride, AccessType::eRead | AccessType::eWrite );
 
 			if ( l_gpuBuffer )
 			{
@@ -293,9 +292,9 @@ namespace Castor3D
 		}
 	}
 
-	uint16_t BillboardBase::GetProgramFlags()const
+	FlagCombination< ProgramFlag > BillboardBase::GetProgramFlags()const
 	{
-		uint16_t l_return = uint32_t( ProgramFlag::eBillboards );
+		FlagCombination< ProgramFlag > l_return = uint32_t( ProgramFlag::eBillboards );
 
 		if ( m_billboardType == BillboardType::eSpherical )
 		{

@@ -3146,12 +3146,12 @@ namespace Castor3D
 
 		if ( !p_params.empty() )
 		{
-			uint64_t l_value;
+			uint32_t l_value;
 			p_params[0]->Get( l_value );
 
 			if ( l_value )
 			{
-				l_parsingContext->pFrameVariableBuffer = &l_parsingContext->pShaderProgram->CreateFrameVariableBuffer( l_parsingContext->strName, l_value );
+				l_parsingContext->pFrameVariableBuffer = &l_parsingContext->pShaderProgram->CreateFrameVariableBuffer( l_parsingContext->strName, uint8_t( l_value ) );
 			}
 			else
 			{

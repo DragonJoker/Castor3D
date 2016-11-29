@@ -106,25 +106,28 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateAnimatedNode
 		 */
-		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode( Pass & p_pass
-															   , Pipeline & p_pipeline
-															   , Submesh & p_submesh
-															   , Geometry & p_primitive
-															   , AnimatedSkeletonSPtr p_skeleton
-															   , AnimatedMeshSPtr p_mesh )override;
+		C3D_API AnimatedGeometryRenderNode CreateAnimatedNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			Submesh & p_submesh,
+			Geometry & p_primitive,
+			AnimatedSkeletonSPtr p_skeleton,
+			AnimatedMeshSPtr p_mesh )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateStaticNode
 		 */
-		C3D_API StaticGeometryRenderNode CreateStaticNode( Pass & p_pass
-														   , Pipeline & p_pipeline
-														   , Submesh & p_submesh
-														   , Geometry & p_primitive )override;
+		C3D_API StaticGeometryRenderNode CreateStaticNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			Submesh & p_submesh,
+			Geometry & p_primitive )override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::CreateBillboardNode
 		 */
-		C3D_API BillboardRenderNode CreateBillboardNode( Pass & p_pass
-														 , Pipeline & p_pipeline
-														 , BillboardBase & p_billboard )override;
+		C3D_API BillboardRenderNode CreateBillboardNode(
+			Pass & p_pass,
+			Pipeline & p_pipeline,
+			BillboardBase & p_billboard )override;
 		/**
 		 *\~english
 		 *\return		The shadow map.
@@ -207,7 +210,10 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetTransparentPixelShaderSource
 		 */
-		Castor::String DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const override;
+		Castor::String DoGetTransparentPixelShaderSource(
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
@@ -235,7 +241,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
 		 */
-		void DoCompleteProgramFlags( uint16_t & p_programFlags )const override;
+		void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 
 	protected:
 		//!\~english	The scene.

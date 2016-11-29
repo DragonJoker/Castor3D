@@ -33,9 +33,9 @@ namespace Castor3D
 		m_layout.push_back( BufferElementDeclaration { p_name, l_usage, p_type, p_offset } );
 	}
 
-	uint32_t ProgramInputLayout::DoGuessUsages( String const & p_name, ElementType p_type )
+	FlagCombination< ElementUsage > ProgramInputLayout::DoGuessUsages( String const & p_name, ElementType p_type )
 	{
-		uint32_t l_return = 0u;
+		FlagCombination< ElementUsage > l_return = 0u;
 
 		if ( IsLike( p_name, ShaderProgram::Position ) )
 		{

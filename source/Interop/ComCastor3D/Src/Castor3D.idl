@@ -30,7 +30,7 @@ import "ocidl.idl";
 typedef enum
 {
 	eLOG_TYPE_DEBUG,
-	eLOG_TYPE_MESSAGE,
+	eLOG_TYPE_INFO,
 	eLOG_TYPE_WARNING,
 	eLOG_TYPE_ERROR,
 	eLOG_TYPE_COUNT,
@@ -154,9 +154,20 @@ typedef enum
 typedef enum
 {
 	eRENDERER_TYPE_OPENGL,
-	eRENDERER_TYPE_DIRECT3D,
 }	eRENDERER_TYPE;
 
+// eBUFFER_COMPONENT
+[
+	uuid( B429F5EC-7A4E-41AF-BD64-E8926FDEC31F )
+]
+typedef enum
+	: uint8_t
+{
+	eBUFFER_COMPONENT_NONE = 0,
+	eBUFFER_COMPONENT_COLOUR = 1 << 0,
+	eBUFFER_COMPONENT_DEPTH = 1 << 1,
+	eBUFFER_COMPONENT_STENCIL = 1 << 2,
+}	eBUFFER_COMPONENT;
 // eMESH_TYPE
 [
 	uuid( D90AA81E-6407-47D0-BC77-23823381B71E )
@@ -173,6 +184,86 @@ typedef enum
 	eMESH_TYPE_ICOSAHEDRON,
 	eMESH_TYPE_PROJECTION,
 }	eMESH_TYPE;
+
+// eLIGHT_TYPE
+[
+	uuid( B8F60AF7-CDA2-417B-86B0-ADACD30A359E )
+]
+typedef enum
+{
+	eWINDOW_BUFFER_NONE,
+	eWINDOW_BUFFER_FRONT_LEFT,
+	eWINDOW_BUFFER_FRONT_RIGHT,
+	eWINDOW_BUFFER_BACK_LEFT,
+	eWINDOW_BUFFER_BACK_RIGHT,
+	eWINDOW_BUFFER_FRONT,
+	eWINDOW_BUFFER_BACK,
+	eWINDOW_BUFFER_LEFT,
+	eWINDOW_BUFFER_RIGHT,
+	eWINDOW_BUFFER_FRONT_AND_BACK,
+	eWINDOW_BUFFER_COUNT
+}	eWINDOW_BUFFER;
+
+// eFRAMEBUFFER_TARGET
+[
+	uuid( BC42B057-F8C3-4358-92D3-E81246E66475 )
+]
+typedef enum
+{
+	//!\~english	Frame buffer is bound as a target for draws.
+	//!\~french		Le tampon d'image est activé en tant que cible pour les rendus.
+	eFRAMEBUFFER_TARGET_DRAW,
+	//!\~english	Frame buffer is bound as a target for reads.
+	//!\~french		Le tampon d'image est activé en tant que cible pour les lectures.
+	eFRAMEBUFFER_TARGET_READ,
+	//!\~english	Frame buffer is bound as a target for reads and draws.
+	//!\~french		Le tampon d'image est activé en tant que cible pour les lectures et les rendus.
+	eFRAMEBUFFER_TARGET_BOTH,
+	eFRAMEBUFFER_TARGET_COUNT
+}	eFRAMEBUFFER_TARGET;
+
+// eFRAMEBUFFER_MODE
+[
+	uuid( 286C666E-985F-4458-A8B9-02F1C2625591 )
+]
+typedef enum
+{
+	//!\~english	Frame buffer is bound for configuration.
+	//!\~french		Le tampon d'image est activé pour configuration.
+	eFRAMEBUFFER_MODE_CONFIG,
+	//!\~english	Frame buffer is bound and FrameBuffer::SetDrawBuffers is called automatically.
+	//!\~french		Le tampon d'image est activé et FrameBuffer::SetDrawBuffers est appelée automatiquement.
+	eFRAMEBUFFER_MODE_AUTOMATIC,
+	//!\~english	Frame buffer is bound and user must call FrameBuffer::SetDrawBuffers if he wants.
+	//!\~french		Le tampon d'image est activé et l'utilisateur doit appeler FrameBuffer::SetDrawBuffers s'il veut.
+	eFRAMEBUFFER_MODE_MANUAL,
+	eFRAMEBUFFER_MODE_COUNT
+}	eFRAMEBUFFER_MODE;
+
+// eATTACHMENT_POINT
+[
+	uuid( F8B71698-1A73-4E55-85F4-1A742AC72724 )
+]
+typedef enum
+	: uint8_t
+{
+	eATTACHMENT_POINT_NONE,
+	eATTACHMENT_POINT_COLOUR,
+	eATTACHMENT_POINT_DEPTH,
+	eATTACHMENT_POINT_STENCIL,
+	eATTACHMENT_POINT_COUNT
+}	eATTACHMENT_POINT;
+
+// eATTACHMENT_TYPE
+[
+	uuid( 719F1318-C331-449F-AF26-CB87D2CF525E )
+]
+typedef enum
+{
+	eATTACHMENT_TYPE_TEXTURE,
+	EATTACHMENT_TYPE_BUFFER,
+	EATTACHMENT_TYPE_COUNT
+}	eATTACHMENT_TYPE;
 
 // eLIGHT_TYPE
 [
@@ -195,6 +286,7 @@ typedef enum
 	eMOVABLE_TYPE_GEOMETRY,
 	eMOVABLE_TYPE_LIGHT,
 	eMOVABLE_TYPE_BILLBOARD,
+	eMOVABLE_TYPE_PARTICLE_EMITTER,
 }	eMOVABLE_TYPE;
 
 // eOVERLAY_TYPE
@@ -264,6 +356,121 @@ typedef enum
 	eVIEWPORT_TYPE_COUNT,
 }	eVIEWPORT_TYPE;
 
+// eCULLING
+[
+	uuid( 554ABC06-2FF9-46DB-80BB-D5E80EDC5DBA )
+]
+typedef enum
+{
+	//!\~english	No face culled.
+	//!\~french		Aucune face supprimée.
+	eCULLING_NONE,
+	//!\~english	Front faces are culled.
+	//!\~french		Faces avant supprimées.
+	eCULLING_FRONT,
+	//!\~english	Back face are culled.
+	//!\~french		Faces arrière supprimées.
+	eCULLING_BACK,
+	//!\~english	Back and front faces are culled.
+	//!\~french		Faces avant et arrière supprimées.
+	eCULLING_FRONT_AND_BACK,
+	eCULLING_COUNT
+}	eCULLING;
+
+// eQUERY_TYPE
+[
+	uuid( 85903E12-A1C9-49F5-B5A9-2304FDDD38F6 )
+]
+typedef enum
+{
+	eQUERY_TYPE_TIME_ELAPSED,
+	eQUERY_TYPE_SAMPLES_PASSED,
+	eQUERY_TYPE_ANY_SAMPLES_PASSED,
+	eQUERY_TYPE_PRIMITIVES_GENERATED,
+	eQUERY_TYPE_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
+	eQUERY_TYPE_ANY_SAMPLES_PASSED_CONSERVATIVE,
+	eQUERY_TYPE_TIMESTAMP,
+	eQUERY_TYPE_COUNT
+}	eQUERY_TYPE;
+
+// eQUERY_INFO
+[
+	uuid( 7822D1F2-25D8-4A01-B7AE-9E8F6DE0F109 )
+]
+typedef enum
+{
+	eQUERY_INFO_RESULT,
+	eQUERY_INFO_RESULT_AVAILABLE,
+	eQUERY_INFO_RESULT_NO_WAIT,
+	eQUERY_INFO_COUNT
+}	eQUERY_INFO;
+
+// eANIMATION_TYPE
+[
+	uuid( 978995A1-5187-477B-B645-66FC3265DEE5 )
+]
+typedef enum
+{
+	//!\~english	Scene node animation.
+	//!\~french		Animation de noeud de scène.
+	eANIMATION_TYPE_MOVABLE,
+	//!\~english	Skeleton animation.
+	//!\~french		Animation de squelette.
+	eANIMATION_TYPE_SKELETON,
+	//!\~english	Submesh animation (morphing).
+	//!\~french		Animation de sous-maillage (morphing).
+	eANIMATION_TYPE_MESH,
+	eANIMATION_TYPE_COUNT
+}	eANIMATION_TYPE;
+
+// eINTERPOLATOR_TYPE
+[
+	uuid( 01426677-A58B-46DA-9685-EF18AD909C64 )
+]
+typedef enum
+{
+	//!\~english	No interpolation.
+	//!\~french		Pas d'interpolation.
+	eINTERPOLATOR_TYPE_NEAREST,
+	//!\~english	Linear mode.
+	//!\~french		Mode linéaire.
+	eINTERPOLATOR_TYPE_LINEAR,
+	eINTERPOLATOR_TYPE_COUNT
+}	eINTERPOLATOR_TYPE;
+
+// eANIMATION_STATE
+[
+	uuid( 7657DCA9-7009-43A9-949D-4A6CE59682CF )
+]
+typedef enum
+{
+	//!\~english	Playing animation state.
+	//!\~french		Animation en cours de lecture.
+	eANIMATION_STATE_PLAYING,
+	//!\~english	Stopped animation state.
+	//!\~french		Animation stoppée.
+	eANIMATION_STATE_STOPPED,
+	//!\~english	Paused animation state.
+	//!\~french		Animation en pause.
+	eANIMATION_STATE_PAUSED,
+	eANIMATION_STATE_COUNT
+}	eANIMATION_STATE;
+
+// eSKELETON_ANIMATION_OBJECT_TYPE
+[
+	uuid( BCBC3FF1-78EE-4147-BC16-CEC568D93E81 )
+]
+typedef enum
+{
+	//!\~english	Node objects.
+	//!\~french		Objets noeud.
+	eSKELETON_ANIMATION_OBJECT_TYPE_NODE,
+	//!\~english	Bone objects.
+	//!\~french		Objets os.
+	eSKELETON_ANIMATION_OBJECT_TYPE_BONE,
+	eSKELETON_ANIMATION_OBJECT_TYPE_COUNT
+}	eSKELETON_ANIMATION_OBJECT_TYPE;
+
 // eTOPOLOGY
 [
 	uuid( 02DDE08E-075A-4047-9F32-44B0DE80257D )
@@ -313,6 +520,18 @@ typedef enum
 	eTEXTURE_CHANNEL_ALL,
 }	eTEXTURE_CHANNEL;
 
+// eTEXTURE_UVW
+[
+	uuid( B3599F8A-5429-4866-925E-0FE7B78D1F8A )
+]
+typedef enum
+{
+	eTEXTURE_UVW_U,
+	eTEXTURE_UVW_V,
+	eTEXTURE_UVW_W,
+	eTEXTURE_UVW_COUNT
+}	eTEXTURE_UVW;
+
 // eRGB_BLEND_FUNC
 [
 	uuid( 1A330154-AE9E-44E0-865F-BA0661671228 )
@@ -361,21 +580,21 @@ typedef enum
 	eBLEND_SOURCE_PREVIOUS,
 }	eBLEND_SOURCE;
 
-// eALPHA_FUNC
+// eCOMPARISON_FUNC
 [
 	uuid( 64B09ACE-F388-40FE-83BE-DB4A85BCB84E )
 ]
 typedef enum
 {
-	eALPHA_FUNC_ALWAYS,
-	eALPHA_FUNC_LESS,
-	eALPHA_FUNC_LESS_OR_EQUAL,
-	eALPHA_FUNC_EQUAL,
-	eALPHA_FUNC_NOT_EQUAL,
-	eALPHA_FUNC_GREATER_OR_EQUAL,
-	eALPHA_FUNC_GREATER,
-	eALPHA_FUNC_NEVER,
-}	eALPHA_FUNC;
+	eCOMPARISON_FUNC_ALWAYS,
+	eCOMPARISON_FUNC_LESS,
+	eCOMPARISON_FUNC_LESS_OR_EQUAL,
+	eCOMPARISON_FUNC_EQUAL,
+	eCOMPARISON_FUNC_NOT_EQUAL,
+	eCOMPARISON_FUNC_GREATER_OR_EQUAL,
+	eCOMPARISON_FUNC_GREATER,
+	eCOMPARISON_FUNC_NEVER,
+}	eCOMPARISON_FUNC;
 
 // eTEXTURE_TYPE
 [
@@ -395,6 +614,63 @@ typedef enum
 	eTEXTURE_TYPE_CUBEARRAY,
 	eTEXTURE_TYPE_COUNT,
 }	eTEXTURE_TYPE;
+
+// eTEXTURE_STORAGE_TYPE
+[
+	uuid( 72CC163D-1BDB-463C-A554-3F3D076D5947 )
+]
+typedef enum
+{
+	eTEXTURE_STORAGE_TYPE_BUFFER,
+	eTEXTURE_STORAGE_TYPE_1D,
+	eTEXTURE_STORAGE_TYPE_1DARRAY,
+	eTEXTURE_STORAGE_TYPE_2D,
+	eTEXTURE_STORAGE_TYPE_2DARRAY,
+	eTEXTURE_STORAGE_TYPE_2DMS,
+	eTEXTURE_STORAGE_TYPE_3D,
+	eTEXTURE_STORAGE_TYPE_CUBE,
+	eTEXTURE_STORAGE_TYPE_CUBEARRAY,
+	eTEXTURE_STORAGE_TYPE_COUNT,
+}	eTEXTURE_STORAGE_TYPE;
+
+// eCUBE_MAP_FACE
+[
+	uuid( 1C5D2238-2BD3-471E-B94D-F3E54E933A23 )
+]
+typedef enum
+	: uint8_t
+{
+	//!\~english Face on positive X
+	//!\~french Face des X positifs.
+	eCUBE_MAP_FACE_POSITIVE_X,
+	//!\~english Face on negative X
+	//!\~french Face des X négatifs.
+	eCUBE_MAP_FACE_NEGATIVE_X,
+	//!\~english Face on positive Y
+	//!\~french Face des Y positifs.
+	eCUBE_MAP_FACE_POSITIVE_Y,
+	//!\~english Face on negative Y
+	//!\~french Face des Y négatifs.
+	eCUBE_MAP_FACE_NEGATIVE_Y,
+	//!\~english Face on positive Z
+	//!\~french Face des Z positifs.
+	eCUBE_MAP_FACE_POSITIVE_Z,
+	//!\~english Face on negative Z
+	//!\~french Face des Z négatifs.
+	eCUBE_MAP_FACE_NEGATIVE_Z,
+	eCUBE_MAP_FACE_COUNT
+}	eCUBE_MAP_FACE;
+
+// eCOMPARISON_MODE
+[
+	uuid( 9479E854-B04C-4697-B807-2A9FF48E6F9F )
+]
+typedef enum
+{
+	eCOMPARISON_MODE_NONE,
+	eCOMPARISON_MODE_REF_TO_TEXTURE,
+	eCOMPARISON_MODE_COUNT
+}	eCOMPARISON_MODE;
 
 // eINTERPOLATION_MODE
 [
@@ -470,6 +746,33 @@ typedef enum
 	eBLEND_SRC1_ALPHA,
 	eBLEND_INV_SRC1_ALPHA,
 }	eBLEND;
+
+// eBLEND_MODE
+[
+	uuid( 6799C951-00BB-4213-8ECB-5D9E47549B22 )
+]
+typedef enum
+{
+	//!\~english Order dependent blending.
+	//!\~french Mélange dépendant de l'ordre.
+	eBLEND_MODE_NONE,
+	//!\~english Order independent, add the components.
+	//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
+	eBLEND_MODE_ADDITIVE,
+	//!\~english Order independent, multiply the components.
+	//!\~french Indépendant de l'ordre, multipliant les composantes.
+	eBLEND_MODE_MULTIPLICATIVE,
+	//!\~english Order dependent, interpolate the components.
+	//!\~french Indépendant de l'ordre, interpolant les composantes.
+	eBLEND_MODE_INTERPOLATIVE,
+	//!\~english Order independent, using A-buffer, not implemented yet.
+	//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
+	eBLEND_MODE_A_BUFFER,
+	//!\~english Order independent, using depth peeling, not implemented yet.
+	//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
+	eBLEND_MODE_DEPTH_PEELING,
+	eBLEND_MODE_COUNT
+}	eBLEND_MODE;
 
 // eDEPTH_FUNC
 [
@@ -551,6 +854,123 @@ typedef enum
 	eFACE_BACK,
 	eFACE_FRONT_AND_BACK,
 }	eFACE;
+
+// eOVERLAY_TYPE
+[
+	uuid( 555C94D0-C4A8-4DE6-9A9F-7355941200B2 )
+]
+typedef enum
+{
+	eOVERLAY_TYPE_PANEL,
+	eOVERLAY_TYPE_BORDER_PANEL,
+	eOVERLAY_TYPE_TEXT,
+	eOVERLAY_TYPE_COUNT
+}	eOVERLAY_TYPE;
+
+// eTEXT_WRAPPING_MODE
+[
+	uuid( DD0377C0-91E9-4AF2-8F45-D1D45C3B8409 )
+]
+typedef enum
+{
+	//!\~english	The text is cut.
+	//!\~french		Le texte qui dépasse est découpé.
+	eTEXT_WRAPPING_MODE_NONE,
+	//!\~english	The text jumps to next line.
+	//!\~french		Le texte passe à la ligne suivante.
+	eTEXT_WRAPPING_MODE_BREAK,
+	//!\~english	The text jumps to next line without cutting words.
+	//!\~french		Le texte passe à la ligne suivante, sans découper les mots
+	eTEXT_WRAPPING_MODE_BREAK_WORDS,
+	CASTOR_SCOPED_ENUM_BOUNDS( eNone )
+}	eTEXT_WRAPPING_MODE;
+
+// eTEXT_TEXTURING_MODE
+[
+	uuid( 5C5E8371-D047-4652-95E6-62AF189EF357 )
+]
+typedef enum
+{
+	//!\~english The texture is repeated on each character of the text.
+	//!\~french		\~french La texture est répétée sut chaque caractère du texte.
+	eTEXT_TEXTURING_MODE_LETTER,
+	//!\~english The texture is applied on the whole text.
+	//!\~french		\~french La texture est appliquée sur tout le texte.
+	eTEXT_TEXTURING_MODE_TEXT,
+	eTEXT_TEXTURING_MODE_COUNT
+}	eTEXT_TEXTURING_MODE;
+
+// eTEXT_LINE_SPACING_MODE
+[
+	uuid( 7319C53A-C66B-49EE-BFE8-F43D6A824328 )
+]
+typedef enum
+{
+	//!\~english	The height of each line is its own height.
+	//!\~french		La hauteur d'une ligne est sa propre hauteur.
+	eTEXT_LINE_SPACING_MODE_OWN_HEIGHT,
+	//!\~english	The height of the lines is the maximum height between them.
+	//!\~french		La hauteur des lignes est la plus grande hauteur parmi elles.
+	eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT,
+	//!\~english	The height of the lines is the maximum height from the font's characters.
+	//!\~french		La hauteur des lignes est la plus grande hauteur des caractères de la police.
+	ETEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT,
+	eTEXT_LINE_SPACING_MODE_COUNT
+}	eTEXT_LINE_SPACING_MODE;
+
+// eHALIGN
+[
+	uuid( 9E5C0496-1EA0-498D-92E7-C595E6E10B69 )
+]
+typedef enum
+{
+	//!\~english	Aligned on the left.
+	//!\~french		Aligné à gauche.
+	eHALIGN_LEFT,
+	//!\~english	Centered horizontally.
+	//!\~french		Centré, horizontalement.
+	eHALIGN_CENTER,
+	//!\~english	Aligned on the right.
+	//!\~french		Aligné à droite.
+	eHALIGN_RIGHT,
+	eHALIGN_COUNT
+}	eHALIGN;
+
+// eVALIGN
+[
+	uuid( 9666971B-A992-45C8-A9FE-88CD97F878FC )
+]
+typedef enum
+{
+	//!\~english	Aligned on the top.
+	//!\~french		Aligné en haut.
+	eVALIGN_TOP,
+	//!\~english	Centered vertically.
+	//!\~french		Centré, verticalement.
+	eVALIGN_CENTER,
+	//!\~english	Aligned on the bottom.
+	//!\~french		Aligné en bas.
+	eVALIGN_BOTTOM,
+	eVALIGN_COUNT
+}	eVALIGN;
+
+// eSHADER_TYPE
+[
+	uuid( D2095EB6-4629-4764-BA23-CDBC7359084A )
+]
+typedef enum BorderPosition
+{
+	//!\~english	The border is outside the overlay.
+	//!\~french		La bordure est à l'intérieur de l'incrustation.
+	eInternal,
+	//!\~english	The border is middle outside and middle inside the overlay.
+	//!\~french		La bordure est à moitié à l'intérieur, à moitié à l'extérieur de l'incrustation.
+	eMiddle,
+	//!\~english	The border is outside the overlay.
+	//!\~french		La bordure est à l'extérieur de l'incrustation.
+	eExternal,
+	CASTOR_SCOPED_ENUM_BOUNDS( eInternal )
+};
 
 // eSHADER_TYPE
 [
@@ -1032,10 +1452,12 @@ interface IRasteriserState
 	[propput, id( 3 ), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [in] boolean val );
 	[propget, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [out, retval] boolean * pVal );
 	[propput, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [in] boolean val );
-	[propget, id( 5 ), helpstring( "The depth bias" )] HRESULT DepthBias( [out, retval] float * pVal );
-	[propput, id( 5 ), helpstring( "The depth bias" )] HRESULT DepthBias( [in] float val );
-	[propget, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
-	[propput, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
+	[propget, id( 5 ), helpstring( "The depth bias unit" )] HRESULT DepthBiasUnit( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The depth bias unit" )] HRESULT DepthBiasUnit( [in] float val );
+	[propget, id( 6 ), helpstring( "The depth bias factor" )] HRESULT DepthBiasFactor( [out, retval] float * pVal );
+	[propput, id( 6 ), helpstring( "The depth bias factor" )] HRESULT DepthBiasFactor( [in] float val );
+	[propget, id( 7 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
+	[propput, id( 7 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
 	[propget, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [out, retval] boolean * pVal );
 	[propput, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [in] boolean val );
 };
@@ -1111,18 +1533,36 @@ interface ISampler
 interface ITextureImage
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The texture image height" )] HRESULT Height( [out, retval] unsigned int * pVal );
-	[propget, id( 2 ), helpstring( "The texture image width" )] HRESULT Width( [out, retval] unsigned int * pVal );
-	[propget, id( 3 ), helpstring( "The texture image depth" )] HRESULT Depth( [out, retval] unsigned int * pVal );
-	[propget, id( 4 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[id(  5 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] eTEXTURE_TYPE p_type, [in] unsigned int p_cpuAccess, [in] unsigned int p_gpuAccess );
-	[id(  6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
-	[id(  7 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
-	[id(  8 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
-	[id(  9 ), helpstring( "Sets the image source" )] HRESULT Static2DSource( [in] IPixelBuffer * val );
-	[id( 10 ), helpstring( "Sets the image source" )] HRESULT Static3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] IPixelBuffer * val );
-	[id( 11 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
-	[id( 12 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
+	[propget, id( 1 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
+	[id( 2 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] eTEXTURE_TYPE p_type, [in] unsigned int p_cpuAccess, [in] unsigned int p_gpuAccess );
+	[id( 3 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[id( 4 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
+	[id( 5 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
+	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Static2DSource( [in] IPixelBuffer * val );
+	[id( 7 ), helpstring( "Sets the image source" )] HRESULT Static3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] IPixelBuffer * val );
+	[id( 8 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
+	[id( 9 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
+};
+
+// ITextureStorage
+[
+	uuid( AAC77A3B-8A0E-430F-90DB-CAA6FE050722 ),
+	helpstring( "Castor3D TextureStorage interface" ),
+	dual,
+	oleautomation
+]
+interface ITextureStorage
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
+	[id( 2 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] eTEXTURE_TYPE p_type, [in] unsigned int p_cpuAccess, [in] unsigned int p_gpuAccess );
+	[id( 3 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[id( 4 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
+	[id( 5 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
+	[id( 6 ), helpstring( "Sets the image source" )] HRESULT Static2DSource( [in] IPixelBuffer * val );
+	[id( 7 ), helpstring( "Sets the image source" )] HRESULT Static3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] IPixelBuffer * val );
+	[id( 8 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
+	[id( 9 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
 };
 
 // ITextureLayout
@@ -1412,8 +1852,6 @@ interface ILightCategory
 interface IDirectionalLight
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The light direction" )] HRESULT Direction( [out, retval] IVector3D ** pVal );
-	[propput, id( 1 ), helpstring( "The light direction" )] HRESULT Direction( [in] IVector3D * val );
 };
 
 // IPointLight
@@ -1426,8 +1864,6 @@ interface IDirectionalLight
 interface IPointLight
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
-	[propput, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
 	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
 	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
 };
@@ -1442,8 +1878,6 @@ interface IPointLight
 interface ISpotLight
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
-	[propput, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
 	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
 	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
 	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );

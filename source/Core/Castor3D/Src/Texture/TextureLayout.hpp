@@ -55,7 +55,11 @@ namespace Castor3D
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de AccessType).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de AccessType).
 		 */
-		C3D_API TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess );
+		C3D_API TextureLayout(
+			RenderSystem & p_renderSystem,
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -74,7 +78,13 @@ namespace Castor3D
 		 *\param[in]	p_format		Le format de la texture.
 		 *\param[in]	p_size			Les dimensions de la texture.
 		 */
-		C3D_API TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Size const & p_size );
+		C3D_API TextureLayout(
+			RenderSystem & p_renderSystem,
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -93,7 +103,13 @@ namespace Castor3D
 		 *\param[in]	p_format		Le format de la texture.
 		 *\param[in]	p_size			Les dimensions de la texture.
 		 */
-		C3D_API TextureLayout( RenderSystem & p_renderSystem, TextureType p_type, AccessType p_cpuAccess, AccessType p_gpuAccess, Castor::PixelFormat p_format, Castor::Point3ui const & p_size );
+		C3D_API TextureLayout(
+			RenderSystem & p_renderSystem,
+			TextureType p_type,
+			Castor::FlagCombination< AccessType > const & p_cpuAccess,
+			Castor::FlagCombination< AccessType > const & p_gpuAccess,
+			Castor::PixelFormat p_format,
+			Castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -151,7 +167,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de AccessType.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * Lock( AccessType p_lock );
+		C3D_API uint8_t * Lock( Castor::FlagCombination< AccessType > const & p_lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -179,7 +195,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de l'image.
 		 *\return		Le buffer de l'image.
 		 */
-		C3D_API uint8_t * Lock( AccessType p_lock, uint32_t p_index );
+		C3D_API uint8_t * Lock( Castor::FlagCombination< AccessType > const & p_lock, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU.
@@ -481,10 +497,10 @@ namespace Castor3D
 		std::vector< TextureImageUPtr > m_images;
 		//!\~english	The required CPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le CPU (combinaison de AccessType).
-		AccessType m_cpuAccess;
+		Castor::FlagCombination< AccessType > const & m_cpuAccess;
 		//!\~english	The required GPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le GPU (combinaison de AccessType).
-		AccessType m_gpuAccess;
+		Castor::FlagCombination< AccessType > const & m_gpuAccess;
 		//!\~english	The teture dimensions.
 		//!\~french		Les dimensions de la texture.
 		Castor::Size m_size;

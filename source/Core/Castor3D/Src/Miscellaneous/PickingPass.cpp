@@ -133,7 +133,7 @@ namespace Castor3D
 		{
 			if ( !p_program.FindFrameVariableBuffer( Picking ) )
 			{
-				auto & l_picking = p_program.CreateFrameVariableBuffer( Picking, MASK_SHADER_TYPE_PIXEL );
+				auto & l_picking = p_program.CreateFrameVariableBuffer( Picking, ShaderTypeFlag::ePixel );
 				l_picking.CreateVariable< OneUIntFrameVariable >( DrawIndex );
 				l_picking.CreateVariable< OneUIntFrameVariable >( NodeIndex );
 
@@ -234,7 +234,7 @@ namespace Castor3D
 
 	bool PickingPass::Initialise( Size const & p_size )
 	{
-		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eReadWrite, PixelFormat::eRGB32F, p_size );
+		m_colourTexture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, PixelFormat::eRGB32F, p_size );
 		m_colourTexture->GetImage().InitialiseSource();
 		auto l_size = m_colourTexture->GetDimensions();
 		bool l_return = m_colourTexture->Initialise();
@@ -524,7 +524,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				l_matrixBuffer.Upload( 0u, l_matrixBuffer.GetSize(), l_matrixBuffer.data() );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
@@ -565,7 +565,7 @@ namespace Castor3D
 					l_buffer += l_stride;
 				}
 
-				l_matrixBuffer.GetGpuBuffer()->Fill( l_matrixBuffer.data(), l_matrixBuffer.GetSize(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+				l_matrixBuffer.Upload( 0u, l_matrixBuffer.GetSize(), l_matrixBuffer.data() );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
@@ -589,12 +589,18 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, p_scene, p_camera, p_index, p_nodes );
 	}
 
-	String PickingPass::DoGetGeometryShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String PickingPass::DoGetGeometryShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		return String{};
 	}
 
-	String PickingPass::DoGetOpaquePixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String PickingPass::DoGetOpaquePixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		using namespace GLSL;
 		GlslWriter l_writer = m_renderSystem.CreateGlslWriter();
@@ -624,7 +630,10 @@ namespace Castor3D
 		return l_writer.Finalise();
 	}
 
-	String PickingPass::DoGetTransparentPixelShaderSource( uint16_t p_textureFlags, uint16_t p_programFlags, uint8_t p_sceneFlags )const
+	String PickingPass::DoGetTransparentPixelShaderSource(
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		uint8_t p_sceneFlags )const
 	{
 		return DoGetOpaquePixelShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
@@ -671,7 +680,7 @@ namespace Castor3D
 		}
 	}
 
-	void PickingPass::DoCompleteProgramFlags( uint16_t & p_programFlags )const
+	void PickingPass::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::ePicking );
 	}
