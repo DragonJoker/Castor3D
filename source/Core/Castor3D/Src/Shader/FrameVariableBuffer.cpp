@@ -3,16 +3,120 @@
 
 using namespace Castor;
 
-//*************************************************************************************************
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	namespace
+	{
+		String WriteFlags( FlagCombination< ShaderTypeFlag > const & p_flags )
+		{
+			static std::map< ShaderTypeFlag, String > const Names
+			{
+				{ ShaderTypeFlag::eVertex, cuT( "vertex" ) },
+				{ ShaderTypeFlag::eHull, cuT( "hull" ) },
+				{ ShaderTypeFlag::eDomain, cuT( "domain" ) },
+				{ ShaderTypeFlag::eGeometry, cuT( "geometry" ) },
+				{ ShaderTypeFlag::ePixel, cuT( "pixel" ) },
+				{ ShaderTypeFlag::eCompute, cuT( "compute" ) }
+			};
+
+			String l_return;
+			String l_sep;
+
+			for ( auto it : Names )
+			{
+				if ( CheckFlag( p_flags, it.first ) )
+				{
+					l_return += l_sep + it.second;
+					l_sep = cuT( " | " );
+				}
+			}
+
+			return l_return;
+		}
+	}
+
+	//*************************************************************************************************
+
+	FrameVariableBuffer::TextWriter::TextWriter( String const & p_tabs )
+		: Castor::TextWriter< FrameVariableBuffer >{ p_tabs }
+	{
+	}
+
+	bool FrameVariableBuffer::TextWriter::operator()( FrameVariableBuffer const & p_object, TextFile & p_file )
+	{
+		bool l_return = p_file.WriteText( m_tabs + cuT( "constants_buffer \"" ) + p_object.GetName() + cuT( "\"\n" ) ) > 0
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+		CheckError( l_return, "Frame variable buffer" );
+		auto l_tabs = m_tabs + cuT( "\t" );
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( l_tabs + cuT( "shaders " ) + WriteFlags( p_object.m_flags ) + cuT( "\n" ) ) > 0;
+			CheckError( l_return, "Frame variable buffer shaders" );
+		}
+
+		if ( l_return )
+		{
+			for ( auto & l_variable : p_object )
+			{
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( l_tabs + cuT( "variable \"" ) + l_variable->GetName() + cuT( "\"\n" ) ) > 0
+						&& p_file.WriteText( l_tabs + cuT( "{\n" ) ) > 0;
+					CheckError( l_return, "Frame variable buffer variable name" );
+				}
+
+				if ( l_return )
+				{
+					l_return = p_file.Print( 256, cuT( "%s\tcount %d\n" ), l_tabs, l_variable->GetOccCount() ) > 0;
+					CheckError( l_return, "Frame variable buffer variable occurences" );
+				}
+
+				if ( l_return )
+				{
+					l_return = p_file.Print( 256, cuT( "%s\ttype %s\n" ), l_tabs, l_variable->GetFullTypeName() ) > 0;
+					CheckError( l_return, "Frame variable buffer variable type name" );
+				}
+
+				if ( l_return )
+				{
+					l_return = p_file.Print( 256, cuT( "%s\tvalue %s\n" ), l_tabs, l_variable->GetStrValue() ) > 0;
+					CheckError( l_return, "Frame variable buffer variable value" );
+				}
+
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( l_tabs + cuT( "}\n" ) ) > 0;
+					CheckError( l_return, "Frame variable buffer variable end" );
+				}
+			}
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
+			CheckError( l_return, "Frame variable buffer end" );
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
 	uint32_t FrameVariableBuffer::sm_uiCount = 0;
 
-	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, ShaderProgram & p_program, RenderSystem & p_renderSystem )
+	FrameVariableBuffer::FrameVariableBuffer(
+		String const & p_name,
+		ShaderProgram & p_program,
+		FlagCombination< ShaderTypeFlag > const & p_flags,
+		RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >{ p_renderSystem }
 		, m_name{ p_name }
 		, m_index{ sm_uiCount++ }
 		, m_program{ p_program }
+		, m_flags{ p_flags }
 	{
 	}
 
@@ -109,4 +213,6 @@ namespace Castor3D
 	{
 		DoUnbind( p_index );
 	}
+
+	//*************************************************************************************************
 }

@@ -25,6 +25,82 @@ namespace Castor3D
 	template<> String const TopologyNamer< Topology::eQuadStrips >::Name = cuT( "quad_strip" );
 	template<> String const TopologyNamer< Topology::ePolygon >::Name = cuT( "polygon" );
 
+	String GetName( ElementType p_type )
+	{
+		switch ( p_type )
+		{
+		case ElementType::eFloat:
+			return cuT( "float" );
+			break;
+
+		case ElementType::eVec2:
+			return cuT( "vec2f" );
+			break;
+
+		case ElementType::eVec3:
+			return cuT( "vec3f" );
+			break;
+
+		case ElementType::eVec4:
+			return cuT( "vec4f" );
+			break;
+
+		case ElementType::eColour:
+			return cuT( "colour" );
+			break;
+
+		case ElementType::eInt:
+			return cuT( "int" );
+			break;
+
+		case ElementType::eIVec2:
+			return cuT( "vec2i" );
+			break;
+
+		case ElementType::eIVec3:
+			return cuT( "vec3i" );
+			break;
+
+		case ElementType::eIVec4:
+			return cuT( "vec4i" );
+			break;
+
+		case ElementType::eUInt:
+			return cuT( "uint" );
+			break;
+
+		case ElementType::eUIVec2:
+			return cuT( "vec2ui" );
+			break;
+
+		case ElementType::eUIVec3:
+			return cuT( "vec3ui" );
+			break;
+
+		case ElementType::eUIVec4:
+			return cuT( "vec4ui" );
+			break;
+
+		case ElementType::eMat2:
+			return cuT( "mat2" );
+			break;
+
+		case ElementType::eMat3:
+			return cuT( "mat3" );
+			break;
+
+		case ElementType::eMat4:
+			return cuT( "mat4" );
+			break;
+
+		default:
+			assert( false && "Unsupported vertex buffer attribute type." );
+			break;
+		}
+
+		return 0;
+	}
+
 	void ComputePreLightingMapContributions(
 		GLSL::GlslWriter & p_writer,
 		GLSL::Vec3 & p_normal,

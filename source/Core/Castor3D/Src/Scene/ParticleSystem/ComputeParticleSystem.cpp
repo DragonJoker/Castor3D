@@ -130,8 +130,6 @@ namespace Castor3D
 	void ComputeParticleSystem::SetUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_updateProgram = p_program;
-		m_updateProgram->CreateFrameVariable( FrameVariableType::eSampler, cuT( "c3d_mapRandom" ), ShaderType::eGeometry );
-
 		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eCompute );
 		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
 		m_time = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fTotalTime" ) );

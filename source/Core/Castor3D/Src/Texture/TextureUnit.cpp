@@ -174,7 +174,9 @@ namespace Castor3D
 					else
 					{
 						Path l_relative{ Scene::TextWriter::CopyFile( Path{ l_image }, p_file.GetFilePath(), Path{ cuT( "Textures" ) } ) };
-						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+						String l_path = l_relative;
+						string::replace( l_path, cuT( "\\" ), cuT( "/" ) );
+						l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_path + cuT( "\"\n" ) ) > 0;
 						Castor::TextWriter< TextureUnit >::CheckError( l_return, "TextureUnit image" );
 					}
 

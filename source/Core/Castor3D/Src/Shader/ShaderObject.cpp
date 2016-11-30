@@ -59,7 +59,12 @@ namespace Castor3D
 		}
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
-		File::DirectoryCreate( l_pathFile );
+
+		if ( !File::DirectoryExists( l_pathFile ) )
+		{
+			File::DirectoryCreate( l_pathFile );
+		}
+
 		bool l_hasFile = false;
 
 		if ( l_return )
@@ -71,8 +76,9 @@ namespace Castor3D
 				if ( !l_file.empty() )
 				{
 					File::CopyFile( l_file, l_pathFile );
-					l_file = Path{ Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension() };
-					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_file + cuT( "\"\n" ) ) > 0;
+					String l_fileName = Path{ cuT( "Shaders" ) } / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
+					string::replace( l_fileName, cuT( "\\" ), cuT( "/" ) );
+					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_fileName + cuT( "\"\n" ) ) > 0;
 					Castor::TextWriter< ShaderObject >::CheckError( l_return, "ShaderObject file" );
 				}
 			}

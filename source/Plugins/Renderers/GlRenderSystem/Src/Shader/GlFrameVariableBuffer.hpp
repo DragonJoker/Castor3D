@@ -42,7 +42,12 @@ namespace GlRender
 		, public Holder
 	{
 	public:
-		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlShaderProgram & p_program, Castor3D::RenderSystem & p_renderSystem );
+		GlFrameVariableBuffer(
+			OpenGl & p_gl,
+			Castor::String const & p_name,
+			GlShaderProgram & p_program,
+			Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags,
+			Castor3D::RenderSystem & p_renderSystem );
 		virtual ~GlFrameVariableBuffer();
 		void SetBindingPoint( uint32_t p_point )const;
 

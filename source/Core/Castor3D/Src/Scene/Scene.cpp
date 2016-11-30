@@ -269,6 +269,17 @@ namespace Castor3D
 
 		if ( l_return )
 		{
+			Logger::LogInfo( cuT( "Scene::Write - Particle systems" ) );
+			auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+
+			for ( auto const & l_it : p_scene.GetParticleSystemCache() )
+			{
+				l_return &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+			}
+		}
+
+		if ( l_return )
+		{
 			Logger::LogInfo( cuT( "Scene::Write - Animated object groups" ) );
 			auto l_lock = make_unique_lock( p_scene.GetAnimatedObjectGroupCache() );
 

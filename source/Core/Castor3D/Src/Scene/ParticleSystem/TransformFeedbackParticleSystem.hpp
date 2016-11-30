@@ -84,6 +84,27 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme.
 		 */
 		C3D_API void SetUpdateProgram( ShaderProgramSPtr p_program );
+		/**
+		 *\~english
+		 *\return		\p false if the update program has not been set.
+		 *\~french
+		 *\return		\p false si le programme de mise à jour n'a pas été défini.
+		 */
+		inline bool HasUpdateProgram()const
+		{
+			return m_updateProgram != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		\p false if the update program has not been set.
+		 *\~french
+		 *\return		\p false si le programme de mise à jour n'a pas été défini.
+		 */
+		inline ShaderProgram const & GetUpdateProgram()const
+		{
+			REQUIRE( m_updateProgram );
+			return *m_updateProgram;
+		}
 
 	private:
 		/**

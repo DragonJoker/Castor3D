@@ -1112,7 +1112,7 @@ namespace GlRender
 		eAll = 0xFFFFFFFF,
 	};
 
-	IMPLEMENT_FLAGS( GlBarrierBit );
+	IMPLEMENT_FLAGS( GlBarrierBit )
 
 	/*!
 	@author

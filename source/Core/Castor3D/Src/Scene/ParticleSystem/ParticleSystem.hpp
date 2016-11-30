@@ -77,6 +77,8 @@ namespace Castor3D
 			C3D_API bool operator()( ParticleSystem const & p_obj, Castor::TextFile & p_file );
 		};
 
+		friend class TextWriter;
+
 	public:
 		/**
 		 *\~english
@@ -233,13 +235,36 @@ namespace Castor3D
 		{
 			return m_defaultValues;
 		}
+		/**
+		 *\~english
+		 *\return		The particles type name.
+		 *\~french
+		 *\return		Le nom du type de particules.
+		 */
+		inline Castor::String const & GetParticleType()const
+		{
+			return m_particleType;
+		}
+		/**
+		 *\~english
+		 *\return		The particles variables.
+		 *\~french
+		 *\return		Les variables des particules.
+		 */
+		inline BufferDeclaration const & GetParticleVariables()const
+		{
+			return m_billboardInputs;
+		}
 
 	protected:
+		//!\~english	The particles type name.
+		//!\~french		Le nom du type de particules.
+		Castor::String m_particleType;
 		//!\~english	The map of default value per variable name.
 		//!\~french		La map de valeur par défaut pour les variables.
 		Castor::StrStrMap m_defaultValues;
-		//!\~english	The billboard vertex buffer position element description.
-		//!\~french		La description de l'élément position du tampons de sommets des billboards.
+		//!\~english	The billboard vertex buffer elements description.
+		//!\~french		La description des élément du tampon de sommets des billboards.
 		BufferDeclaration m_billboardInputs;
 		//!\~english	The billboards containing the particles.
 		//!\~french		Les billboards contenant les particules.

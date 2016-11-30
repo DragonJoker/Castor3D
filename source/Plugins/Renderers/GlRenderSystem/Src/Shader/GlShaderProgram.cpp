@@ -134,9 +134,11 @@ namespace GlRender
 		return l_return;
 	}
 
-	FrameVariableBufferSPtr GlShaderProgram::DoCreateFrameVariableBuffer( Castor::String const & p_name )
+	FrameVariableBufferSPtr GlShaderProgram::DoCreateFrameVariableBuffer(
+		String const & p_name,
+		FlagCombination< ShaderTypeFlag > const & p_flags )
 	{
-		return std::make_shared< GlFrameVariableBuffer >( GetOpenGl(), p_name, *this, *GetRenderSystem() );
+		return std::make_shared< GlFrameVariableBuffer >( GetOpenGl(), p_name, *this, p_flags, *GetRenderSystem() );
 	}
 
 	std::shared_ptr< FrameVariable > GlShaderProgram::DoCreateVariable( FrameVariableType p_type, int p_occurences )
