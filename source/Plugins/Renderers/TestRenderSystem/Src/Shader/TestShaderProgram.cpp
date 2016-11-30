@@ -63,9 +63,9 @@ namespace TestRender
 		return std::make_shared< TestShaderObject >( this, p_type );
 	}
 
-	FrameVariableBufferSPtr TestShaderProgram::DoCreateFrameVariableBuffer( Castor::String const & p_name )
+	FrameVariableBufferSPtr TestShaderProgram::DoCreateFrameVariableBuffer( Castor::String const & p_name, FlagCombination< ShaderTypeFlag > const & p_flags )
 	{
-		return std::make_shared< TestFrameVariableBuffer >( p_name, *this, *GetRenderSystem() );
+		return std::make_shared< TestFrameVariableBuffer >( p_name, *this, p_flags, *GetRenderSystem() );
 	}
 
 	std::shared_ptr< FrameVariable > TestShaderProgram::DoCreateVariable( FrameVariableType p_type, int p_occurences )

@@ -33,7 +33,11 @@ namespace TestRender
 		: public Castor3D::FrameVariableBuffer
 	{
 	public:
-		TestFrameVariableBuffer( Castor::String const & p_name, Castor3D::ShaderProgram & p_program, Castor3D::RenderSystem & p_renderSystem );
+		TestFrameVariableBuffer(
+			Castor::String const & p_name,
+			Castor3D::ShaderProgram & p_program,
+			Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags,
+			Castor3D::RenderSystem & p_renderSystem );
 		virtual ~TestFrameVariableBuffer();
 
 	private:

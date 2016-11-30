@@ -51,12 +51,8 @@ namespace Castor3D
 			cuT( "sm_5" ),
 		};
 
-		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0;
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
-		}
+		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() + cuT( "\n" ) ) > 0
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
 
@@ -109,6 +105,7 @@ namespace Castor3D
 		cuT( "domain_program" ),
 		cuT( "geometry_program" ),
 		cuT( "pixel_program" ),
+		cuT( "compute_program" ),
 	};
 
 	ShaderObject::ShaderObject( ShaderProgram * p_parent, ShaderType p_type )

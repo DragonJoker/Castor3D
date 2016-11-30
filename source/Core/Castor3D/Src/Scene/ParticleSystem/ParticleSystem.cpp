@@ -35,7 +35,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs, uint32_t( p_obj.GetMaxParticlesCount() ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( p_obj.GetMaxParticlesCount() ) ) > 0;
 			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particles count" );
 		}
 
@@ -234,7 +234,6 @@ namespace Castor3D
 
 	void ParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
 	{
-		String l_name = p_name;
 		m_csImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 		m_tfImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 		m_cpuImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
@@ -242,7 +241,6 @@ namespace Castor3D
 		if ( p_name == cuT( "center" )
 			 || p_name == ShaderProgram::Position )
 		{
-			l_name = cuT( "center" );
 			m_billboardInputs.push_back( BufferElementDeclaration{ cuT( "center" ), 0u, p_type, m_billboardInputs.stride(), 1u } );
 			m_centerOffset = m_billboardInputs.stride();
 		}
@@ -251,7 +249,8 @@ namespace Castor3D
 			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		}
 
-		m_defaultValues[cuT ("out_") + l_name] = p_defaultValue;
+		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
+		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 
 	void ParticleSystem::SetTFUpdateProgram( ShaderProgramSPtr p_program )

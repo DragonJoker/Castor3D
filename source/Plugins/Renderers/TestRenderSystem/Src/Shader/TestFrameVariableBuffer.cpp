@@ -157,8 +157,12 @@ namespace TestRender
 		}
 	}
 
-	TestFrameVariableBuffer::TestFrameVariableBuffer( String const & p_name, ShaderProgram & p_program, RenderSystem & p_renderSystem )
-		: FrameVariableBuffer( p_name, p_program, p_renderSystem )
+	TestFrameVariableBuffer::TestFrameVariableBuffer(
+		String const & p_name,
+		ShaderProgram & p_program,
+		FlagCombination< ShaderTypeFlag > const & p_flags,
+		RenderSystem & p_renderSystem )
+		: FrameVariableBuffer( p_name, p_program, p_flags, p_renderSystem )
 	{
 	}
 

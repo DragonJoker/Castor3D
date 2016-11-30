@@ -346,7 +346,7 @@ namespace Castor3D
 		static uint32_t sm_uiCount;
 		//!\~english	The shader types assigned to this frame variable buffer.
 		//!\~french		Les types de shader affectés à ce tampon de variables de frame.
-		Castor::FlagCombination< ShaderTypeFlag > const & m_flags;
+		Castor::FlagCombination< ShaderTypeFlag > m_flags;
 		//!\~english	The buffer's index.
 		//!\~french		L'index du tampon.
 		uint32_t m_index;

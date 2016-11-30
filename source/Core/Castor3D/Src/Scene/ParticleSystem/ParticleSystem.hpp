@@ -253,7 +253,7 @@ namespace Castor3D
 		 */
 		inline BufferDeclaration const & GetParticleVariables()const
 		{
-			return m_billboardInputs;
+			return m_inputs;
 		}
 
 	protected:
@@ -263,6 +263,9 @@ namespace Castor3D
 		//!\~english	The map of default value per variable name.
 		//!\~french		La map de valeur par défaut pour les variables.
 		Castor::StrStrMap m_defaultValues;
+		//!\~english	The particle elements description.
+		//!\~french		La description des élément d'une particule.
+		BufferDeclaration m_inputs;
 		//!\~english	The billboard vertex buffer elements description.
 		//!\~french		La description des élément du tampon de sommets des billboards.
 		BufferDeclaration m_billboardInputs;
