@@ -69,7 +69,7 @@ namespace Castor3D
 			{
 				if ( l_return )
 				{
-					l_return = p_file.Print( 256, cuT( "%s\t\tvariable \"%s\" %s %s\n" ), m_tabs, l_var.m_name, Castor3D::GetName( l_var.m_dataType ), l_values[cuT( "out_" ) + l_var.m_name] ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\t\tvariable \"" ) + l_var.m_name + cuT( "\" " ) + Castor3D::GetName( l_var.m_dataType ) + cuT( " " ) + l_values[cuT( "out_" ) + l_var.m_name] + cuT( "\n" ) ) > 0;
 					MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle variable" );
 				}
 			}

@@ -70,19 +70,19 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					l_return = p_file.Print( 256, cuT( "%s\tcount %d\n" ), l_tabs, l_variable->GetOccCount() ) > 0;
+					l_return = p_file.WriteText( l_tabs + cuT( "\tcount " ) + string::to_string( l_variable->GetOccCount() ) + cuT( "\n" ) ) > 0;
 					CheckError( l_return, "Frame variable buffer variable occurences" );
 				}
 
 				if ( l_return )
 				{
-					l_return = p_file.Print( 256, cuT( "%s\ttype %s\n" ), l_tabs, l_variable->GetFullTypeName() ) > 0;
+					l_return = p_file.WriteText( l_tabs + cuT( "\ttype " ) + l_variable->GetFullTypeName() + cuT( "\n" ) ) > 0;
 					CheckError( l_return, "Frame variable buffer variable type name" );
 				}
 
 				if ( l_return )
 				{
-					l_return = p_file.Print( 256, cuT( "%s\tvalue %s\n" ), l_tabs, l_variable->GetStrValue() ) > 0;
+					l_return = p_file.WriteText( l_tabs + cuT( "\tvalue " ) + l_variable->GetStrValue() + cuT( "\n" ) ) > 0;
 					CheckError( l_return, "Frame variable buffer variable value" );
 				}
 
