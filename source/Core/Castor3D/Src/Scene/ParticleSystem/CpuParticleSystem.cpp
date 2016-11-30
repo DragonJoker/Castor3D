@@ -1,20 +1,8 @@
-#include "ParticleSystemCpu.hpp"
+#include "CpuParticleSystem.hpp"
 
-#include "Engine.hpp"
+#include "ParticleSystem.hpp"
 
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
-#include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Scene/BillboardList.hpp"
-#include "Scene/Scene.hpp"
-
-#include <GlslSource.hpp>
-
-#include <Graphics/PixelBuffer.hpp>
-
-#include <random>
 
 using namespace Castor;
 

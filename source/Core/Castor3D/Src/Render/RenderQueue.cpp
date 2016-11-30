@@ -34,7 +34,7 @@
 #include "Scene/Animation/AnimatedSkeleton.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
-#include "Scene/ParticleSystem.hpp"
+#include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
 #include "Technique/RenderTechnique.hpp"

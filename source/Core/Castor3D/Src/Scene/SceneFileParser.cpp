@@ -430,7 +430,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "dimensions" ), Parser_ParticleSystemDimensions, { MakeParameter< ParameterType::eSize >() } );
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "particle" ), Parser_ParticleSystemParticle );
 	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "tf_shader_program" ), Parser_ParticleSystemTFShader );
-	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "}" ), Parser_ParticleSystemEnd );
+	AddParser( uint32_t( CSCNSection::eParticleSystem ), cuT( "cs_shader_program" ), Parser_ParticleSystemCSShader );
 
 	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "variable" ), Parser_ParticleVariable, { MakeParameter< ParameterType::eName >(), MakeParameter< ParameterType::eCheckedText >( m_mapElementTypes ), MakeParameter< ParameterType::eText >() } );
 	AddParser( uint32_t( CSCNSection::eParticle ), cuT( "type" ), Parser_ParticleType, { MakeParameter< ParameterType::eName >() } );

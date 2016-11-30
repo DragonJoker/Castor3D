@@ -4,7 +4,6 @@
 #include "Camera.hpp"
 #include "BillboardList.hpp"
 #include "Geometry.hpp"
-#include "ParticleSystem.hpp"
 #include "SceneNode.hpp"
 #include "Skybox.hpp"
 
@@ -17,6 +16,7 @@
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Overlay/Overlay.hpp"
+#include "ParticleSystem/ParticleSystem.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"

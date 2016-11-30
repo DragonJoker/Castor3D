@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_FireworksParticle_H___
 #define ___C3D_FireworksParticle_H___
 
-#include <Scene/ParticleSystemCpu.hpp>
+#include <Scene/ParticleSystem/CpuParticleSystem.hpp>
 
 namespace Fireworks
 {

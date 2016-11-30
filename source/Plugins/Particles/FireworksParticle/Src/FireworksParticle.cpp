@@ -3,7 +3,7 @@
 #include <Engine.hpp>
 
 #include <Mesh/Buffer/VertexBuffer.hpp>
-#include <Scene/ParticleSystem.hpp>
+#include <Scene/ParticleSystem/ParticleSystem.hpp>
 #include <Scene/BillboardList.hpp>
 
 #include <random>
@@ -44,6 +44,11 @@ namespace Fireworks
 				p_system.EmitParticle( g_shell, p_position, l_velocity, 0.0f );
 				p_age = 0.0f;
 			}
+
+			auto l_position = p_system.GetParent().GetParent()->GetDerivedPosition();
+			p_position[0] = float( l_position[0] );
+			p_position[1] = float( l_position[1] );
+			p_position[2] = float( l_position[2] );
 		}
 
 		inline void DoUpdateShell( ParticleSystem & p_system, float p_time, float & p_type, Coords3f & p_position, Coords3f & p_velocity, float & p_age )
