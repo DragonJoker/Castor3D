@@ -7,7 +7,7 @@ namespace Castor
 {
 	template< typename ComponentType >
 	ColourT< ComponentType >::TextLoader::TextLoader()
-		: Castor::TextLoader< ColourT >{}
+		: Castor::TextLoader< ColourT >()
 	{
 	}
 
@@ -45,7 +45,7 @@ namespace Castor
 
 	template< typename ComponentType >
 	ColourT< ComponentType >::TextWriter::TextWriter( String const & p_tabs )
-		: Castor::TextWriter< ColourT >{ p_tabs }
+		: Castor::TextWriter< ColourT >( p_tabs )
 	{
 	}
 

@@ -51,19 +51,62 @@ namespace Castor3D
 	class FrameVariableBuffer
 		: public Castor::OwnedBy< RenderSystem >
 	{
+		friend class Castor::TextWriter< Castor3D::FrameVariableBuffer >;
+
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.6.1.0
+		\date		19/10/2011
+		\~english
+		\brief		FrameVariableBuffer loader.
+		\~french
+		\brief		Loader de FrameVariableBuffer.
+		*/
+		class TextWriter
+			: public Castor::TextWriter< FrameVariableBuffer >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\~french
+			 *\brief		Constructeur.
+			 */
+			C3D_API TextWriter( Castor::String const & p_tabs );
+			/**
+			 *\~english
+			 *\brief			Writes a FrameVariableBuffer into a text file.
+			 *\param[in]		p_object	The FrameVariableBuffer.
+			 *\param[in,out]	p_file		The file.
+			 *\~french
+			 *\brief			Ecrit FrameVariableBuffer dans un fichier texte.
+			 *\param[in]		p_object	Le FrameVariableBuffer.
+			 *\param[in,out]	p_file		Le fichier.
+			 */
+			C3D_API bool operator()( FrameVariableBuffer const & p_object, Castor::TextFile & p_file )override;
+		};
+
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name			The buffer name.
 		 *\param[in]	p_program		The parent program.
+		 *\param[in]	p_flags			The shader types assigned to this frame variable buffer.
 		 *\param[in]	p_renderSystem	The render system.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name			Le nom du tampon.
+		 *\param[in]	p_program		Le programme parent.
+		 *\param[in]	p_flags			Les types de shader affectés à ce tampon de variables de frame.
 		 *\param[in]	p_renderSystem	Le render system.
 		 */
-		C3D_API FrameVariableBuffer( Castor::String const & p_name, ShaderProgram & p_program, RenderSystem & p_renderSystem );
+		C3D_API FrameVariableBuffer(
+			Castor::String const & p_name,
+			ShaderProgram & p_program,
+			Castor::FlagCombination< ShaderTypeFlag > const & p_flags,
+			RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -301,6 +344,9 @@ namespace Castor3D
 		//!\~english	The buffers count.
 		//!\~french		Le compte des tampons.
 		static uint32_t sm_uiCount;
+		//!\~english	The shader types assigned to this frame variable buffer.
+		//!\~french		Les types de shader affectés à ce tampon de variables de frame.
+		Castor::FlagCombination< ShaderTypeFlag > m_flags;
 		//!\~english	The buffer's index.
 		//!\~french		L'index du tampon.
 		uint32_t m_index;

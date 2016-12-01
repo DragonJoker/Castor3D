@@ -524,6 +524,22 @@ namespace Castor3D
 			return uint32_t( 4u * sizeof( int32_t ) );
 			break;
 
+		case ElementType::eUInt:
+			return uint32_t( 1u * sizeof( uint32_t ) );
+			break;
+
+		case ElementType::eUIVec2:
+			return uint32_t( 2u * sizeof( uint32_t ) );
+			break;
+
+		case ElementType::eUIVec3:
+			return uint32_t( 3u * sizeof( uint32_t ) );
+			break;
+
+		case ElementType::eUIVec4:
+			return uint32_t( 4u * sizeof( uint32_t ) );
+			break;
+
 		case ElementType::eMat2:
 			return uint32_t( 2u * 2u * sizeof( real ) );
 			break;
@@ -543,7 +559,26 @@ namespace Castor3D
 
 		return 0;
 	}
-
+	/**
+	 *\~english
+	 *\brief		Gets the name of the given element type.
+	 *\param[in]	p_type	The element type.
+	 *\return		The name.
+	 *\~french
+	 *\brief		Récupère le nom du type d'élément donné.
+	 *\param[in]	p_type	Le type d'élément.
+	 *\return		Le nom.
+	 */
+	C3D_API Castor::String GetName( ElementType p_type );
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		03/09/2016
+	\~english
+	\brief		Pipeline flags.
+	\~french
+	\brief		Indicateurs de pipeline.
+	*/
 	struct PipelineFlags
 	{
 		BlendMode m_colourBlendMode;

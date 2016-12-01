@@ -75,7 +75,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur.
 			 */
-			C3D_API explicit TextWriter( Castor::String const & p_tabs );
+			C3D_API TextWriter( Castor::String const & p_tabs, Castor::String const & p_name = cuT( "shader_program" ) );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderProgram into a text file.
@@ -87,6 +87,9 @@ namespace Castor3D
 			 *\param[in,out]	p_file		Le fichier.
 			 */
 			C3D_API bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file )override;
+
+		private:
+			Castor::String m_name;
 		};
 
 	public:
@@ -127,7 +130,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader.
 		 *\param[in]	p_pathFile	Le nom du fichier.
 		 */
-		C3D_API virtual void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( ShaderModel p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Creates a frame variable buffer.
@@ -719,7 +722,9 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du tampon.
 		 *\return		Le FrameVariableBuffer créé.
 		 */
-		virtual FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
+		virtual FrameVariableBufferSPtr DoCreateFrameVariableBuffer(
+			Castor::String const & p_name,
+			Castor::FlagCombination< ShaderTypeFlag > const & p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable.

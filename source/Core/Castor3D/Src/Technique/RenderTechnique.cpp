@@ -36,7 +36,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
-#include "Scene/ParticleSystem.hpp"
+#include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedMesh.hpp"

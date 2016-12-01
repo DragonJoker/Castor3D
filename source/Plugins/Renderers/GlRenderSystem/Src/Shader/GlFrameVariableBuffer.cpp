@@ -663,8 +663,13 @@ namespace GlRender
 		}
 	}
 
-	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlShaderProgram & p_program, RenderSystem & p_renderSystem )
-		: FrameVariableBuffer( p_name, p_program, p_renderSystem )
+	GlFrameVariableBuffer::GlFrameVariableBuffer(
+		OpenGl & p_gl,
+		String const & p_name,
+		GlShaderProgram & p_program,
+		FlagCombination< ShaderTypeFlag > const & p_flags,
+		RenderSystem & p_renderSystem )
+		: FrameVariableBuffer( p_name, p_program, p_flags, p_renderSystem )
 		, Holder( p_gl )
 		, m_glBuffer( p_gl, GlBufferTarget::eUniform )
 		, m_uniformBlockIndex( int( GlInvalidIndex ) )

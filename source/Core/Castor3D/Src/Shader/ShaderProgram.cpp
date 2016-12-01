@@ -34,8 +34,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::TextWriter::TextWriter( String const & p_tabs )
+	ShaderProgram::TextWriter::TextWriter( String const & p_tabs, String const & p_name )
 		: Castor::TextWriter< ShaderProgram >{ p_tabs }
+		, m_name{ p_name }
 	{
 	}
 
@@ -48,10 +49,13 @@ namespace Castor3D
 
 		while ( i < uint8_t( ShaderType::eCount ) && !l_hasFile )
 		{
-			while ( j < uint8_t( ShaderModel::eCount ) && !l_hasFile )
+			if ( p_shaderProgram.HasObject( ShaderType( i ) ) )
 			{
-				l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ), ShaderModel( j ) ).empty();
-				++j;
+				while ( j < uint8_t( ShaderModel::eCount ) && !l_hasFile )
+				{
+					l_hasFile = !p_shaderProgram.GetFile( ShaderType( i ), ShaderModel( j ) ).empty();
+					++j;
+				}
 			}
 
 			++i;
@@ -59,17 +63,28 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
+			auto l_tabs = m_tabs + cuT( "\t" );
 			ShaderObjectSPtr l_object;
-			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "shader_program\n" ) ) > 0
+			l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + m_name + cuT( "\n" ) ) > 0
 					   && p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+			CheckError( l_return, "Shader program" );
 
 			for ( uint8_t i = 0; i < uint8_t( ShaderType::eCount ) && l_return; i++ )
 			{
-				l_object = p_shaderProgram.m_shaders[i];
-
-				if ( l_object )
+				if ( p_shaderProgram.HasObject( ShaderType( i ) ) )
 				{
-					l_return = ShaderObject::TextWriter( m_tabs + cuT( "\t" ) )( *l_object, p_file );
+					l_return = ShaderObject::TextWriter( l_tabs )( *p_shaderProgram.m_shaders[i], p_file );
+				}
+			}
+
+			if ( l_return )
+			{
+				if ( !p_shaderProgram.GetFrameVariableBuffers().empty() )
+				{
+					for ( auto & l_fbo : p_shaderProgram.GetFrameVariableBuffers() )
+					{
+						l_return = FrameVariableBuffer::TextWriter( l_tabs )( *l_fbo, p_file );
+					}
 				}
 			}
 
@@ -430,7 +445,7 @@ namespace Castor3D
 
 		if ( l_it == m_frameVariableBuffersByName.end() )
 		{
-			auto l_ubo = DoCreateFrameVariableBuffer( p_name );
+			auto l_ubo = DoCreateFrameVariableBuffer( p_name, p_shaderMask );
 			m_listFrameVariableBuffers.push_back( l_ubo );
 			l_it = m_frameVariableBuffersByName.insert( { p_name, l_ubo } ).first;
 

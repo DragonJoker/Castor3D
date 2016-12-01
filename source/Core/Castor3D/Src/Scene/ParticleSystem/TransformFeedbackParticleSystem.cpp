@@ -1,12 +1,10 @@
-#include "ParticleSystemTransformFeedback.hpp"
+#include "TransformFeedbackParticleSystem.hpp"
 
 #include "ParticleSystem.hpp"
+#include "Particle.hpp"
 
 #include "Engine.hpp"
 
-#include "Material/Material.hpp"
-#include "Material/Pass.hpp"
-#include "Mesh/Buffer/BufferElementGroup.hpp"
 #include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
 #include "Miscellaneous/TransformFeedback.hpp"
@@ -19,8 +17,6 @@
 #include "State/RasteriserState.hpp"
 #include "Texture/Sampler.hpp"
 #include "Texture/TextureLayout.hpp"
-
-#include <GlslSource.hpp>
 
 #include <Graphics/PixelBuffer.hpp>
 
@@ -42,7 +38,17 @@ namespace Castor3D
 
 	bool TransformFeedbackParticleSystem::Initialise()
 	{
-		bool l_return = m_updateProgram->Initialise();
+		bool l_return = m_updateProgram != nullptr;
+
+		if ( l_return )
+		{
+			l_return = DoCreateRandomTexture();
+		}
+
+		if ( l_return )
+		{
+			l_return = m_updateProgram->Initialise();
+		}
 
 		if ( l_return )
 		{
@@ -84,6 +90,7 @@ namespace Castor3D
 			if ( m_updateVertexBuffers[i] )
 			{
 				m_updateVertexBuffers[i]->Cleanup();
+				m_updateVertexBuffers[i].reset();
 			}
 		}
 
@@ -98,6 +105,7 @@ namespace Castor3D
 	{
 		m_deltaTime->SetValue( p_time );
 		m_time->SetValue( p_totalTime );
+		m_emitterPosition->SetValue( m_parent.GetParent()->GetDerivedPosition() );
 		auto & l_gbuffers = *m_updateGeometryBuffers[m_vtx];
 		auto & l_transform = *m_transformFeedbacks[m_tfb];
 
@@ -159,6 +167,7 @@ namespace Castor3D
 		auto & l_ubo = m_updateProgram->CreateFrameVariableBuffer( cuT( "ParticleSystem" ), ShaderTypeFlag::eVertex | ShaderTypeFlag::eGeometry );
 		m_deltaTime = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fDeltaTime" ) );
 		m_time = l_ubo.CreateVariable< OneFloatFrameVariable >( cuT( "c3d_fTotalTime" ) );
+		m_emitterPosition = l_ubo.CreateVariable< Point3fFrameVariable >( cuT( "c3d_v3EmitterPosition" ) );
 		m_ubo = m_updateProgram->FindFrameVariableBuffer( cuT( "ParticleSystem" ) );
 
 		m_updateProgram->SetTransformLayout( m_computed );
@@ -179,7 +188,14 @@ namespace Castor3D
 			if ( l_return )
 			{
 				m_updateVertexBuffers[i]->Resize( uint32_t( m_parent.GetMaxParticlesCount() ) * m_computed.stride() );
-				std::memcpy( m_updateVertexBuffers[i]->data(), l_particle.GetData(), m_computed.stride() );
+				auto l_buffer = m_updateVertexBuffers[i]->data();
+
+				for ( uint32_t i = 0u; i < m_parent.GetMaxParticlesCount(); ++i )
+				{
+					std::memcpy( l_buffer, l_particle.GetData(), m_computed.stride() );
+					l_buffer += m_computed.stride();
+				}
+
 				l_return = m_updateVertexBuffers[i]->Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw );
 			}
 		}
@@ -201,32 +217,43 @@ namespace Castor3D
 			RasteriserState l_rs;
 			l_rs.SetDiscardPrimitives( true );
 			m_updatePipeline = l_renderSystem.CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *m_updateProgram, PipelineFlags{} );
+		}
 
-			auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
-			l_texture->GetImage().InitialiseSource();
-			auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
-			auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
+		return l_return;
+	}
 
-			static std::random_device l_device;
-			std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
+	bool TransformFeedbackParticleSystem::DoCreateRandomTexture()
+	{
+		auto & l_engine = *m_parent.GetScene()->GetEngine();
+		auto & l_renderSystem = *l_engine.GetRenderSystem();
 
-			for ( uint32_t i{ 0u }; i < l_buffer.count(); ++i )
-			{
-				*l_pixels++ = l_distribution( l_device );
-				*l_pixels++ = l_distribution( l_device );
-				*l_pixels++ = l_distribution( l_device );
-			}
+		auto l_texture = l_renderSystem.CreateTexture( TextureType::eOneDimension, AccessType::eNone, AccessType::eRead, PixelFormat::eRGB32F, Size{ 1024, 1 } );
+		l_texture->GetImage().InitialiseSource();
+		auto & l_buffer = *std::static_pointer_cast< PxBuffer< PixelFormat::eRGB32F > >( l_texture->GetImage().GetBuffer() );
+		auto l_pixels = reinterpret_cast< float * >( l_buffer.ptr() );
 
-			auto l_sampler = m_parent.GetScene()->GetEngine()->GetSamplerCache().Add( cuT( "ParticleSystem" ) );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
-			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
-			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
-			l_sampler->Initialise();
+		static std::random_device l_device;
+		std::uniform_real_distribution< float > l_distribution{ -1.0f, 1.0f };
 
+		for ( uint32_t i{ 0u }; i < l_buffer.count(); ++i )
+		{
+			*l_pixels++ = l_distribution( l_device );
+			*l_pixels++ = l_distribution( l_device );
+			*l_pixels++ = l_distribution( l_device );
+		}
+
+		auto l_sampler = m_parent.GetScene()->GetEngine()->GetSamplerCache().Add( cuT( "TFParticleSystem" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eRepeat );
+		bool l_return = l_sampler->Initialise();
+
+		if ( l_return )
+		{
 			m_randomTexture.SetTexture( l_texture );
 			m_randomTexture.SetSampler( l_sampler );
 			m_randomTexture.SetIndex( 0 );
-			m_randomTexture.Initialise();
+			l_return = m_randomTexture.Initialise();
 			l_texture->GenerateMipmaps();
 		}
 

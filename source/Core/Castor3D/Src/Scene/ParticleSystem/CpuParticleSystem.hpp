@@ -23,7 +23,8 @@ SOFTWARE.
 #ifndef ___C3D_CpuParticleSystem_H___
 #define ___C3D_CpuParticleSystem_H___
 
-#include "ParticleSystem.hpp"
+#include "ParticleSystemImpl.hpp"
+#include "Particle.hpp"
 
 namespace Castor3D
 {
@@ -58,15 +59,15 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~CpuParticleSystem();
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Initialise
+		 *\copydoc		Castor3D::ParticleSystemImpl::Initialise
 		 */
 		C3D_API bool Initialise()override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Cleanup
+		 *\copydoc		Castor3D::ParticleSystemImpl::Cleanup
 		 */
 		C3D_API void Cleanup()override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::AddParticleVariable
+		 *\copydoc		Castor3D::ParticleSystemImpl::AddParticleVariable
 		 */
 		C3D_API void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )override;
 

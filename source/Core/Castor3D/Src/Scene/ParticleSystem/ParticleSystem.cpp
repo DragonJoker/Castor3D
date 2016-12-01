@@ -1,31 +1,17 @@
 #include "ParticleSystem.hpp"
 
-#include "ParticleSystemTransformFeedback.hpp"
-#include "ParticleSystemCpu.hpp"
+#include "ComputeParticleSystem.hpp"
+#include "CpuParticleSystem.hpp"
+#include "TransformFeedbackParticleSystem.hpp"
 
 #include "Engine.hpp"
 
 #include "Material/Material.hpp"
-#include "Material/Pass.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"
-#include "Mesh/Buffer/GeometryBuffers.hpp"
 #include "Mesh/Buffer/VertexBuffer.hpp"
-#include "Miscellaneous/TransformFeedback.hpp"
-#include "Render/RenderPipeline.hpp"
 #include "Scene/BillboardList.hpp"
 #include "Scene/Scene.hpp"
-#include "Shader/FrameVariableBuffer.hpp"
-#include "Shader/ShaderObject.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "State/RasteriserState.hpp"
-#include "Texture/Sampler.hpp"
-#include "Texture/TextureLayout.hpp"
-
-#include <GlslSource.hpp>
-
-#include <Graphics/PixelBuffer.hpp>
-
-#include <random>
 
 using namespace Castor;
 
@@ -49,14 +35,60 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
-			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem material" );
+			l_return = p_file.Print( 256, cuT( "%s\tparticles_count %d\n" ), m_tabs.c_str(), uint32_t( p_obj.GetMaxParticlesCount() ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particles count" );
 		}
 
 		if ( l_return )
 		{
 			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d\n" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
 			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem dimensions" );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem material" );
+		}
+
+		if ( l_return )
+		{
+			l_return = p_file.WriteText( m_tabs + cuT( "\tparticle\n" ) ) > 0
+					   && p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+
+			if ( l_return && !p_obj.GetParticleType().empty() )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\t\ttype \"" ) + p_obj.GetParticleType() + cuT( "\"\n" ) ) > 0;
+				MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+			}
+
+			auto l_values = p_obj.GetDefaultValues();
+
+			for ( auto & l_var : p_obj.GetParticleVariables() )
+			{
+				if ( l_return )
+				{
+					l_return = p_file.WriteText( m_tabs + cuT( "\t\tvariable \"" ) + l_var.m_name + cuT( "\" " ) + Castor3D::GetName( l_var.m_dataType ) + cuT( " " ) + l_values[cuT( "out_" ) + l_var.m_name] + cuT( "\n" ) ) > 0;
+					MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle variable" );
+				}
+			}
+
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
+				MovableObject::TextWriter::CheckError( l_return, "ParticleSystem particle" );
+			}
+		}
+
+		if ( l_return && p_obj.m_tfImpl->HasUpdateProgram() )
+		{
+			l_return = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "tf_shader_program" ) )( p_obj.m_tfImpl->GetUpdateProgram(), p_file );
+		}
+
+		if ( l_return && p_obj.m_csImpl->HasUpdateProgram() )
+		{
+			l_return = ShaderProgram::TextWriter( m_tabs + cuT( "\t" ), cuT( "cs_shader_program" ) )( p_obj.m_csImpl->GetUpdateProgram(), p_file );
 		}
 
 		if ( l_return )
@@ -69,73 +101,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Particle::Particle( BufferDeclaration const & p_description, StrStrMap const & p_defaultValues )
-		: m_description{ p_description }
-	{
-		m_data.resize( p_description.stride() );
-		uint32_t l_index{ 0u };
-
-		for ( auto l_element : m_description )
-		{
-			auto l_it = p_defaultValues.find( l_element.m_name );
-
-			if ( l_it != p_defaultValues.end() && !l_it->second.empty() )
-			{
-				ParseValue( l_it->second, l_element.m_dataType, *this, l_index );
-			}
-
-			++l_index;
-		}
-	}
-
-	Particle::Particle( BufferDeclaration const & p_description )
-		: m_description{ p_description }
-	{
-		m_data.resize( p_description.stride() );
-	}
-
-	Particle::Particle( Particle const & p_rhs )
-		: m_description{ p_rhs.m_description }
-		, m_data{ p_rhs.m_data }
-	{
-	}
-
-	Particle::Particle( Particle && p_rhs )
-		: m_description{ p_rhs.m_description }
-		, m_data{ std::move( p_rhs.m_data ) }
-	{
-	}
-
-	Particle & Particle::operator=( Particle const & p_rhs )
-	{
-		m_data = p_rhs.m_data;
-		return *this;
-	}
-
-	Particle & Particle::operator=( Particle && p_rhs )
-	{
-		m_data = std::move( p_rhs.m_data );
-		return *this;
-	}
-
-	//*************************************************************************************************
-
-	ParticleSystemImpl::ParticleSystemImpl( Type p_type, ParticleSystem & p_parent )
-		: m_parent{ p_parent }
-		, m_type{ p_type }
-	{
-	}
-
-	ParticleSystemImpl::~ParticleSystemImpl()
-	{
-	}
-
-	//*************************************************************************************************
-
 	ParticleSystem::ParticleSystem( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, size_t p_count )
 		: MovableObject{ p_name, p_scene, MovableType::eParticleEmitter, p_parent }
 		, m_particlesCount{ p_count }
 		, m_tfImpl{ std::make_unique< TransformFeedbackParticleSystem >( *this ) }
+		, m_csImpl{ std::make_unique< ComputeParticleSystem >( *this ) }
 	{
 	}
 
@@ -148,7 +118,7 @@ namespace Castor3D
 		auto & l_engine = *GetScene()->GetEngine();
 		m_particlesBillboard = std::make_unique< BillboardBase >(
 			*GetScene(),
-			GetParent(),
+			GetScene()->GetObjectRootNode(),
 			std::make_shared< VertexBuffer >( l_engine, m_billboardInputs ) );
 		m_particlesBillboard->SetBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->SetDimensions( m_dimensions );
@@ -158,20 +128,32 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = m_tfImpl->Initialise();
+			l_return = m_csImpl->Initialise();
 		}
 
 		if ( l_return )
 		{
-			m_impl = m_tfImpl.get();
+			Logger::LogInfo( cuT( "Using Compute Shader Particle System" ) );
+			m_impl = m_csImpl.get();
 		}
 		else
 		{
-			l_return = m_cpuImpl->Initialise();
+			l_return = m_tfImpl->Initialise();
 
 			if ( l_return )
 			{
-				m_impl = m_cpuImpl.get();
+				Logger::LogInfo( cuT( "Using Transform Feedback Particle System" ) );
+				m_impl = m_tfImpl.get();
+			}
+			else
+			{
+				l_return = m_cpuImpl->Initialise();
+
+				if ( l_return )
+				{
+					Logger::LogInfo( cuT( "Using CPU Particle System" ) );
+					m_impl = m_cpuImpl.get();
+				}
 			}
 		}
 
@@ -183,6 +165,7 @@ namespace Castor3D
 	{
 		m_particlesBillboard->Cleanup();
 		m_particlesBillboard.reset();
+		m_csImpl->Cleanup();
 		m_tfImpl->Cleanup();
 		m_cpuImpl->Cleanup();
 		m_impl = nullptr;
@@ -199,7 +182,8 @@ namespace Castor3D
 		}
 
 		m_totalTime += l_time;
-		GetBillboards()->SetCount( m_impl->Update( l_time, m_totalTime ) );
+		m_activeParticlesCount = m_impl->Update( l_time, m_totalTime );
+		GetBillboards()->SetCount( m_activeParticlesCount );
 		m_firstUpdate = false;
 	}
 
@@ -226,6 +210,7 @@ namespace Castor3D
 	void ParticleSystem::SetParticleType( Castor::String const & p_value )
 	{
 		auto & l_factory = GetScene()->GetEngine()->GetParticleFactory();
+		m_particleType = p_value;
 
 		if ( l_factory.IsRegistered( p_value ) )
 		{
@@ -249,6 +234,7 @@ namespace Castor3D
 
 	void ParticleSystem::AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )
 	{
+		m_csImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 		m_tfImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 		m_cpuImpl->AddParticleVariable( p_name, p_type, p_defaultValue );
 
@@ -263,11 +249,17 @@ namespace Castor3D
 			m_billboardInputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		}
 
+		m_inputs.push_back( BufferElementDeclaration{ p_name, 0u, p_type, m_billboardInputs.stride(), 1u } );
 		m_defaultValues[cuT ("out_") + p_name] = p_defaultValue;
 	}
 
 	void ParticleSystem::SetTFUpdateProgram( ShaderProgramSPtr p_program )
 	{
 		m_tfImpl->SetUpdateProgram( p_program );
+	}
+
+	void ParticleSystem::SetCSUpdateProgram( ShaderProgramSPtr p_program )
+	{
+		m_csImpl->SetUpdateProgram( p_program );
 	}
 }

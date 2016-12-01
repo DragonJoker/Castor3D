@@ -4,7 +4,6 @@
 #include "Camera.hpp"
 #include "BillboardList.hpp"
 #include "Geometry.hpp"
-#include "ParticleSystem.hpp"
 #include "SceneNode.hpp"
 #include "Skybox.hpp"
 
@@ -17,6 +16,7 @@
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Overlay/Overlay.hpp"
+#include "ParticleSystem/ParticleSystem.hpp"
 #include "Render/RenderLoop.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
@@ -264,6 +264,17 @@ namespace Castor3D
 			for ( auto const & l_it : p_scene.GetGeometryCache() )
 			{
 				l_return &= Geometry::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Particle systems" ) );
+			auto l_lock = make_unique_lock( p_scene.GetParticleSystemCache() );
+
+			for ( auto const & l_it : p_scene.GetParticleSystemCache() )
+			{
+				l_return &= ParticleSystem::TextWriter( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
 			}
 		}
 

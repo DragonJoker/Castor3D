@@ -50,7 +50,7 @@
 #include "Scene/BillboardList.hpp"
 #include "Scene/Camera.hpp"
 #include "Scene/Geometry.hpp"
-#include "Scene/ParticleSystem.hpp"
+#include "Scene/ParticleSystem/ParticleSystem.hpp"
 #include "Scene/Scene.hpp"
 #include "Scene/Skybox.hpp"
 #include "Scene/Animation/AnimatedObjectGroup.hpp"
@@ -1296,23 +1296,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
 
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemEnd )
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleSystemCSShader )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
+		l_parsingContext->pShaderProgram.reset();
+		l_parsingContext->eShaderObject = ShaderType::eCount;
+		l_parsingContext->bBool1 = false;
+		
 		if ( !l_parsingContext->pScene )
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
 		else
 		{
-			if ( l_parsingContext->bBool1 )
-			{
-				l_parsingContext->particleSystem->SetTFUpdateProgram( l_parsingContext->pShaderProgram );
-			}
+			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
 	}
-	END_ATTRIBUTE_POP()
+	END_ATTRIBUTE_PUSH( CSCNSection::eShaderProgram )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ParticleType )
 	{
@@ -3096,7 +3096,21 @@ namespace Castor3D
 
 		if ( l_parsingContext->pShaderProgram )
 		{
+			if ( l_parsingContext->particleSystem )
+			{
+				if ( l_parsingContext->bBool1 )
+				{
+					l_parsingContext->particleSystem->SetTFUpdateProgram( l_parsingContext->pShaderProgram );
+				}
+				else
+				{
+					l_parsingContext->particleSystem->SetCSUpdateProgram( l_parsingContext->pShaderProgram );
+				}
+
+				l_parsingContext->bBool1 = false;
+			}
 			//l_parsingContext->pPass->SetShader( l_parsingContext->pShaderProgram );
+			l_parsingContext->pShaderProgram.reset();
 		}
 	}
 	END_ATTRIBUTE_POP()

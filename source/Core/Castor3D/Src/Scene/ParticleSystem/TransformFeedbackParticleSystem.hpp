@@ -23,7 +23,10 @@ SOFTWARE.
 #ifndef ___C3D_TransformFeedbackParticleSystem_H___
 #define ___C3D_TransformFeedbackParticleSystem_H___
 
-#include "ParticleSystem.hpp"
+#include "ParticleSystemImpl.hpp"
+
+#include "Mesh/Buffer/BufferDeclaration.hpp"
+#include "Texture/TextureUnit.hpp"
 
 namespace Castor3D
 {
@@ -57,19 +60,19 @@ namespace Castor3D
 		 */
 		C3D_API ~TransformFeedbackParticleSystem();
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Initialise
+		 *\copydoc		Castor3D::ParticleSystemImpl::Initialise
 		 */
 		C3D_API bool Initialise()override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Cleanup
+		 *\copydoc		Castor3D::ParticleSystemImpl::Cleanup
 		 */
 		C3D_API void Cleanup()override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::Update
+		 *\copydoc		Castor3D::ParticleSystemImpl::Update
 		 */
 		C3D_API uint32_t Update( float p_time, float p_total )override;
 		/**
-		 *\copydoc		Castor3D::CpuParticleSystem::AddParticleVariable
+		 *\copydoc		Castor3D::ParticleSystemImpl::AddParticleVariable
 		 */
 		C3D_API void AddParticleVariable( Castor::String const & p_name, ElementType p_type, Castor::String const & p_defaultValue )override;
 		/**
@@ -81,6 +84,27 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme.
 		 */
 		C3D_API void SetUpdateProgram( ShaderProgramSPtr p_program );
+		/**
+		 *\~english
+		 *\return		\p false if the update program has not been set.
+		 *\~french
+		 *\return		\p false si le programme de mise à jour n'a pas été défini.
+		 */
+		inline bool HasUpdateProgram()const
+		{
+			return m_updateProgram != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		\p false if the update program has not been set.
+		 *\~french
+		 *\return		\p false si le programme de mise à jour n'a pas été défini.
+		 */
+		inline ShaderProgram const & GetUpdateProgram()const
+		{
+			REQUIRE( m_updateProgram );
+			return *m_updateProgram;
+		}
 
 	private:
 		/**
@@ -92,6 +116,15 @@ namespace Castor3D
 		 *\return		\p false en cas d'échec.
 		 */
 		bool DoCreateUpdatePipeline();
+		/**
+		 *\~english
+		 *\brief		Creates the texture containing random values.
+		 *\return		\p false on failure.
+		 *\~french
+		 *\brief		Crée la texture contenant des valeurs aléatoires.
+		 *\return		\p false en cas d'échec.
+		 */
+		bool DoCreateRandomTexture();
 
 	private:
 		//!\~english	The computed elements description.
@@ -124,6 +157,9 @@ namespace Castor3D
 		//!\~english	The frame variable holding total elapsed time.
 		//!\~french		La variable de frame contenant le temps total écoulé.
 		OneFloatFrameVariableSPtr m_time;
+		//!\~english	The frame variable holding the particles emitter position.
+		//!\~french		La variable de frame contenant la position de l'émetteur de particules.
+		Point3fFrameVariableSPtr m_emitterPosition;
 		//!\~english	The frame variable holding the launches lifetime.
 		//!\~french		La variable de frame contenant la durée de vie des lanceurs.
 		OneFloatFrameVariableSPtr m_launcherLifetime;

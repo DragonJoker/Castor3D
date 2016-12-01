@@ -453,7 +453,7 @@ namespace Castor
 		template< typename T >
 		HdrColourComponent & operator+=( T const & p_rhs )
 		{
-			*m_pfComponent += p_rhs;
+			*m_pfComponent = float( *m_pfComponent + p_rhs );
 			return *this;
 		}
 		/**
@@ -469,7 +469,7 @@ namespace Castor
 		template< typename T >
 		HdrColourComponent & operator-=( T const & p_rhs )
 		{
-			*m_pfComponent -= p_rhs;
+			*m_pfComponent = float( *m_pfComponent - p_rhs );
 			return *this;
 		}
 		/**
@@ -485,7 +485,7 @@ namespace Castor
 		template< typename T >
 		HdrColourComponent & operator*=( T const & p_rhs )
 		{
-			*m_pfComponent *= p_rhs;
+			*m_pfComponent = float( *m_pfComponent * p_rhs );
 			return *this;
 		}
 		/**
@@ -501,7 +501,7 @@ namespace Castor
 		template< typename T >
 		HdrColourComponent & operator/=( T const & p_rhs )
 		{
-			*m_pfComponent /= p_rhs;
+			*m_pfComponent = float( *m_pfComponent / p_rhs );
 			return *this;
 		}
 		/**

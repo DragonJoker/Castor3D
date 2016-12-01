@@ -85,7 +85,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateFrameVariableBuffer
 		 */
-		Castor3D::FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name )override;
+		Castor3D::FrameVariableBufferSPtr DoCreateFrameVariableBuffer( Castor::String const & p_name, Castor::FlagCombination< Castor3D::ShaderTypeFlag > const & p_flags )override;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */

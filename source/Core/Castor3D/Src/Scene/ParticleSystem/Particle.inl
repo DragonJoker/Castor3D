@@ -1,7 +1,3 @@
-#include "ParticleSystem.hpp"
-
-#include <Design/ArrayView.hpp>
-
 namespace Castor3D
 {
 	template< typename T, size_t Count >
