@@ -23,7 +23,7 @@ namespace Castor3D
 
 		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = m_produce( Material::DefaultMaterialName );
+			m_defaultMaterial = m_produce( Material::DefaultMaterialName, MaterialType::eLegacy );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 		}

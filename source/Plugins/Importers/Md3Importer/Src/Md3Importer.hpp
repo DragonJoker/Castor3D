@@ -124,7 +124,7 @@ namespace C3DMd3
 		 */
 		bool DoImportMesh( Castor3D::Mesh & p_mesh )override;
 
-		void DoReadMD3Data( Castor3D::Mesh & p_mesh, Castor3D::Pass & p_pass );
+		void DoReadMD3Data( Castor3D::Mesh & p_mesh, Castor3D::LegacyPass & p_pass );
 		void DoConvertDataStructures( Castor3D::Mesh & p_mesh, Md3MeshInfo p_meshHeader );
 		bool DoLoadSkin( Castor3D::Mesh & p_mesh, Castor::Path const & p_strSkin );
 		bool DoLoadShader( Castor3D::Mesh & p_mesh, Castor::Path const & p_strShader );

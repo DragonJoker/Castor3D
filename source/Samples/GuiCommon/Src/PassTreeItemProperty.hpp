@@ -25,6 +25,9 @@ SOFTWARE.
 
 #include "TreeItemProperty.hpp"
 
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+
 namespace GuiCommon
 {
 	/*!
@@ -72,6 +75,21 @@ namespace GuiCommon
 		inline Castor3D::PassSPtr GetPass()
 		{
 			return m_pass.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the geometry
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la gàomàtrie
+		 *\return		La valeur
+		 */
+		template< Castor3D::MaterialType Type >
+		inline std::shared_ptr< typename Castor3D::PassTyper< Type >::Type > GetTypedPass()
+		{
+			auto l_pass = m_pass.lock();
+			REQUIRE( l_pass && l_pass->GetType() == Type );
+			return std::static_pointer_cast< typename Castor3D::PassTyper< Type >::Type >( l_pass );
 		}
 
 	private:

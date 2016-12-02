@@ -7,6 +7,7 @@ scene "Scene"
 
 	material "Silver"
 	{
+		type legacy
 		pass
 		{
 			ambient 0.0745	0.0745	0.0745 1.0
@@ -19,6 +20,7 @@ scene "Scene"
 
 	material "Gold"
 	{
+		type legacy
 		pass
 		{
 			ambient 0.24725	0.1995	0.0745 1.0

@@ -5,7 +5,7 @@
 #include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 
 #include "AdditionalProperties.hpp"
 #include "PointProperties.hpp"
@@ -32,7 +32,7 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, PassSPtr p_pass, Scene & p_scene )
-		: TreeItemProperty( p_pass->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
+		: TreeItemProperty( p_pass->GetOwner()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
 		, m_scene( p_scene )
 	{
@@ -60,14 +60,20 @@ namespace GuiCommon
 
 		if ( l_pass )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( l_pass->GetParent()->GetName() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetAmbient() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetDiffuse() ) ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetSpecular() ) ) ) );
-			p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_pass->GetEmissive() ) ) );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( l_pass->GetOwner()->GetName() ) ) );
+
+			if ( l_pass->GetType() == MaterialType::eLegacy )
+			{
+				auto l_legacy = std::static_pointer_cast< LegacyPass >( l_pass );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetAmbient() ) ) ) );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetDiffuse() ) ) ) );
+				p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_legacy->GetSpecular() ) ) ) );
+				p_grid->Append( new Point4fProperty( GC_HDR_COLOUR, PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( rgba_float( l_legacy->GetEmissive() ) ) );
+				p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_legacy->GetShininess() );
+			}
+
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
-			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
+			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetOpacity() );
 			p_grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
 		}
 	}
@@ -118,7 +124,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -128,7 +134,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -138,7 +144,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -148,7 +154,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnEmissiveColourChange( HdrColour const & p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -158,7 +164,7 @@ namespace GuiCommon
 
 	void PassTreeItemProperty::OnExponentChange( double p_value )
 	{
-		PassSPtr l_pass = GetPass();
+		auto l_pass = GetTypedPass< MaterialType::eLegacy >();
 
 		DoApplyChange( [p_value, l_pass]()
 		{
@@ -182,7 +188,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetAlpha( float( p_value ) );
+			l_pass->SetOpacity( float( p_value ) );
 		} );
 	}
 

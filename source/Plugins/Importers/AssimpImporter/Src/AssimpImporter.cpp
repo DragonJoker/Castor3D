@@ -15,6 +15,7 @@
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Render/RenderLoop.hpp>
@@ -189,7 +190,7 @@ namespace C3dAssimp
 			return l_return;
 		}
 
-		void DoProcessPassBaseComponents( Pass & p_pass, aiMaterial const & p_aiMaterial )
+		void DoProcessPassBaseComponents( LegacyPass & p_pass, aiMaterial const & p_aiMaterial )
 		{
 			aiColor3D l_ambient( 1, 1, 1 );
 			p_aiMaterial.Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
@@ -215,7 +216,7 @@ namespace C3dAssimp
 				l_diffuse.b = 1.0;
 			}
 
-			p_pass.SetAlpha( l_opacity );
+			p_pass.SetOpacity( l_opacity );
 			p_pass.SetTwoSided( l_twoSided != 0 );
 			p_pass.SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
 			p_pass.SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
@@ -546,12 +547,13 @@ namespace C3dAssimp
 		if ( l_cache.Has( l_name ) )
 		{
 			l_return = l_cache.Find( l_name );
+			REQUIRE( l_return->GetType() == MaterialType::eLegacy );
 		}
 		else
 		{
-			l_return = l_cache.Add( l_name );
+			l_return = l_cache.Add( l_name, MaterialType::eLegacy );
 			l_return->CreatePass();
-			auto l_pass = l_return->GetPass( 0 );
+			auto l_pass = l_return->GetTypedPass< MaterialType::eLegacy >( 0 );
 
 			DoProcessPassBaseComponents( *l_pass, p_aiMaterial );
 			DoProcessPassTextures( *l_pass, p_aiMaterial, *this );

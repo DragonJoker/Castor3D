@@ -7,6 +7,7 @@
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
@@ -918,7 +919,7 @@ namespace Lwo
 					{
 						StringStream l_toLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_toLog << l_it->second->GetPath().c_str() );
-						l_unit = std::make_shared< TextureUnit >( *p_pass->GetEngine() );
+						l_unit = std::make_shared< TextureUnit >( *GetEngine() );
 						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead );
 						l_texture->SetSource( l_it->second->GetPixels() );
 						l_unit->SetTexture( l_texture );
@@ -1014,7 +1015,7 @@ namespace Lwo
 		stLWO_SUBCHUNK l_blockHeader;
 		Colour l_clrBase;
 		MaterialSPtr l_pMaterial;
-		PassSPtr l_pass;
+		LegacyPassSPtr l_pass;
 		UI4 l_uiVx;
 		float l_fDiff = 1;
 		float l_fSpec = 0;
@@ -1033,8 +1034,9 @@ namespace Lwo
 			p_chunk.m_read += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
 			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
 			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
-			l_pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ) );
-			l_pass = l_pMaterial->GetPass( 0 );
+			l_pMaterial = GetEngine()->GetMaterialCache().Add( string::string_cast< xchar >( m_strName ), MaterialType::eLegacy );
+			REQUIRE( l_pMaterial->GetType() == MaterialType::eLegacy );
+			l_pass = l_pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
 		}
 
 		while ( l_continue && p_chunk.m_read < p_chunk.m_size )

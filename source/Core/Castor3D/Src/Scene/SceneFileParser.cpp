@@ -30,7 +30,8 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, pLight()
 	, pCamera()
 	, pMaterial()
-	, pPass()
+	, pass()
+	, legacyPass()
 	, pTextureUnit()
 	, pShaderProgram()
 	, eShaderObject( ShaderType::eCount )
@@ -58,7 +59,8 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 void SceneFileContext::Initialise()
 {
 	pScene.reset();
-	pPass.reset();
+	pass.reset ();
+	legacyPass.reset();
 	pOverlay = nullptr;
 	iFace1 = -1;
 	iFace2 = -1;
@@ -350,6 +352,8 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 
 	m_mapBillboardSizes[cuT( "dynamic" )] = uint32_t( BillboardSize::eDynamic );
 	m_mapBillboardSizes[cuT( "fixed" )] = uint32_t( BillboardSize::eFixed );
+
+	m_mapMaterialTypes[cuT( "legacy" )] = uint32_t( MaterialType::eLegacy );
 }
 
 SceneFileParser::~SceneFileParser()
@@ -532,6 +536,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "tangent" ), Parser_SubmeshTangent, { MakeParameter< ParameterType::ePoint3F >() } );
 	AddParser( uint32_t( CSCNSection::eSubmesh ), cuT( "}" ), Parser_SubmeshEnd );
 
+	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "type" ), Parser_MaterialType, { MakeParameter< ParameterType::eCheckedText >( m_mapMaterialTypes ) } );
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), Parser_MaterialPass );
 	AddParser( uint32_t( CSCNSection::eMaterial ), cuT( "}" ), Parser_MaterialEnd );
 
@@ -542,11 +547,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ParameterType::eFloat >() } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::ePass ), cuT( "blend_func" ), Parser_PassBlendFunc, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendFactors ), MakeParameter< ParameterType::eCheckedText >( m_mapBlendFactors ) } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), Parser_PassShader );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
 	AddParser( uint32_t( CSCNSection::ePass ), cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ParameterType::eCheckedText >( m_mapBlendModes ) } );
+	AddParser( uint32_t( CSCNSection::ePass ), cuT( "}" ), Parser_PassEnd );
 
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), Parser_UnitImage, { MakeParameter< ParameterType::ePath >() } );
 	AddParser( uint32_t( CSCNSection::eTextureUnit ), cuT( "render_target" ), Parser_UnitRenderTarget );

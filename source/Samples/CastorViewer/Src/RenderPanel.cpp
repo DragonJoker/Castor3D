@@ -14,7 +14,7 @@
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/UserInput/UserInputListener.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Miscellaneous/ShadowMapPass.hpp>
 #include <Miscellaneous/WindowHandle.hpp>
@@ -79,7 +79,7 @@ namespace CastorViewer
 
 		TextureUnitSPtr DoCloneUnit( PassSPtr p_clone, TextureUnit const & p_source )
 		{
-			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetEngine() );
+			TextureUnitSPtr l_clone = std::make_shared< TextureUnit >( *p_clone->GetOwner()->GetEngine() );
 
 			l_clone->SetAlpArgument( BlendSrcIndex::eIndex0, p_source.GetAlpArgument( BlendSrcIndex::eIndex0 ) );
 			l_clone->SetAlpArgument( BlendSrcIndex::eIndex1, p_source.GetAlpArgument( BlendSrcIndex::eIndex1 ) );
@@ -102,34 +102,43 @@ namespace CastorViewer
 			return l_clone;
 		}
 
-		PassSPtr DoClonePass( MaterialSPtr p_clone, Pass const & p_source )
+		void DoClonePass( MaterialSPtr p_clone, Pass const & p_source )
 		{
-			PassSPtr l_clone = std::make_shared< Pass >( *p_clone->GetEngine(), p_clone );
-			l_clone->SetAmbient( p_source.GetAmbient() );
-			l_clone->SetDiffuse( p_source.GetDiffuse() );
-			l_clone->SetSpecular( p_source.GetSpecular() );
-			l_clone->SetEmissive( p_source.GetEmissive() );
-			l_clone->SetAlpha( p_source.GetAlpha() );
+			PassSPtr l_clone = p_clone->CreatePass();
+
+			switch ( p_clone->GetType() )
+			{
+			case MaterialType::eLegacy:
+				{
+					auto & l_source = static_cast< LegacyPass const & >( p_source );
+					auto l_pass = std::static_pointer_cast< LegacyPass >( l_clone );
+					l_pass->SetAmbient( l_source.GetAmbient() );
+					l_pass->SetDiffuse( l_source.GetDiffuse() );
+					l_pass->SetSpecular( l_source.GetSpecular() );
+					l_pass->SetEmissive( l_source.GetEmissive() );
+					l_pass->SetShininess( l_source.GetShininess() );
+				}
+				break;
+			}
+			
+			l_clone->SetOpacity( p_source.GetOpacity() );
+			l_clone->SetTwoSided( p_source.IsTwoSided() );
 			l_clone->SetAlphaBlendMode( p_source.GetAlphaBlendMode() );
 			l_clone->SetColourBlendMode( p_source.GetColourBlendMode() );
-			l_clone->SetShininess( p_source.GetShininess() );
-			l_clone->SetTwoSided( p_source.IsTwoSided() );
 
 			for ( auto const & l_unit : p_source )
 			{
 				l_clone->AddTextureUnit( DoCloneUnit( l_clone, *l_unit ) );
 			}
-
-			return l_clone;
 		}
 
 		MaterialSPtr DoCloneMaterial( Material const & p_source )
 		{
-			MaterialSPtr l_clone = std::make_shared< Material >( p_source.GetName() + cuT( "_Clone" ), *p_source.GetEngine() );
+			MaterialSPtr l_clone = std::make_shared< Material >( p_source.GetName() + cuT( "_Clone" ), *p_source.GetEngine(), p_source.GetType() );
 
 			for ( auto const & l_pass : p_source )
 			{
-				l_clone->AddPass( DoClonePass( l_clone, *l_pass ) );
+				DoClonePass( l_clone, *l_pass );
 			}
 
 			return l_clone;
@@ -409,10 +418,14 @@ namespace CastorViewer
 			{
 				m_selectedSubmeshMaterialOrig = p_geometry->GetMaterial( p_submesh );
 				m_selectedSubmeshMaterialClone = DoCloneMaterial( *m_selectedSubmeshMaterialOrig );
-				auto l_pass = m_selectedSubmeshMaterialClone->GetPass( 0 );
-				l_pass->SetAmbient( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-				l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
-				l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+
+				if (m_selectedSubmeshMaterialClone->GetType() == MaterialType::eLegacy )
+				{
+					auto l_pass = m_selectedSubmeshMaterialClone->GetTypedPass< MaterialType::eLegacy >( 0u );
+					l_pass->SetAmbient( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					l_pass->SetDiffuse( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+					l_pass->SetSpecular( Colour::from_predef( PredefinedColour::eMedAlphaRed ) );
+				}
 
 				wxGetApp().GetCastor()->PostEvent( MakeFunctorEvent( EventType::ePostRender, [this, p_geometry, p_submesh]()
 				{

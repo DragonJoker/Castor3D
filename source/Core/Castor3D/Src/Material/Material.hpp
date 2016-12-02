@@ -32,6 +32,34 @@ namespace Castor3D
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	*/
+	template< MaterialType Type >
+	struct PassTyper;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Helper class to retrieve a pass type from a MaterialType.
+	\remarks	Specialisation for MaterialType::eLegacy.
+	\~french
+	\brief		Classe d'aide permettant de récupérer le type de passe depuis un MaterialType.
+	\remarks	Spécialisation pour MaterialType::eLegacy.
+	*/
+	template<>
+	struct PassTyper< MaterialType::eLegacy >
+	{
+		using Type = LegacyPass;
+	};
+
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english
@@ -84,54 +112,47 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name		The material name
-		 *\param[in]	p_engine	The core engine
+		 *\brief		Constructor.
+		 *\param[in]	p_name		The material name.
+		 *\param[in]	p_engine	The core engine.
+		 *\param[in]	p_type		The material type.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name		Le nom du matériau
-		 *\param[in]	p_engine	Le moteur
+		 *\brief		Constructeur.
+		 *\param[in]	p_name		Le nom du matériau.
+		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_type		Le type de matériau.
 		 */
-		C3D_API Material( Castor::String const & p_name, Engine & p_engine );
+		C3D_API Material( Castor::String const & p_name, Engine & p_engine, MaterialType p_type );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~Material();
 		/**
 		 *\~english
-		 *\brief		Initialises the material and all it's passes
+		 *\brief		Initialises the material and all it's passes.
 		 *\~french
-		 *\brief		Initialise le matériau et toutes ses passes
+		 *\brief		Initialise le matériau et toutes ses passes.
 		 */
 		C3D_API void Initialise();
 		/**
 		 *\~english
-		 *\brief		Flushes passes
+		 *\brief		Flushes passes.
 		 *\~french
-		 *\brief		Supprime les passes
+		 *\brief		Supprime les passes.
 		 */
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates a pass
-		 *\return		The created pass
+		 *\brief		Creates a pass.
+		 *\return		The created pass.
 		 *\~french
-		 *\brief		Crée une passe
-		 *\return		La passe créée
+		 *\brief		Crée une passe.
+		 *\return		La passe créée.
 		 */
 		C3D_API PassSPtr CreatePass();
-		/**
-		 *\~english
-		 *\brief		Adds an external pass to rhe material.
-		 *\param[in]	p_pass	The pass.
-		 *\~french
-		 *\brief		Ajoute une passe externe.
-		 *\param[in]	p_pass	La passe.
-		 */
-		C3D_API void AddPass( PassSPtr p_pass );
 		/**
 		 *\~english
 		 *\brief		Removes an external pass to rhe material.
@@ -143,49 +164,36 @@ namespace Castor3D
 		C3D_API void RemovePass( PassSPtr p_pass );
 		/**
 		 *\~english
-		 *\brief		Retrieves a pass and returns it
-		 *\param[in]	p_index	The index of the wanted pass
-		 *\return		The retrieved pass or nullptr if not found
+		 *\brief		Retrieves a pass and returns it.
+		 *\param[in]	p_index	The index of the wanted pass.
+		 *\return		The retrieved pass or nullptr if not found.
 		 *\~french
-		 *\brief		Récupère une passe
-		 *\param[in]	p_index	L'index de la passe voulue
-		 *\return		La passe récupére ou nullptr si non trouvés
+		 *\brief		Récupère une passe.
+		 *\param[in]	p_index	L'index de la passe voulue.
+		 *\return		La passe récupére ou nullptr si non trouvés.
 		 */
-		C3D_API const PassSPtr GetPass( uint32_t p_index )const;
+		C3D_API PassSPtr GetPass( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a pass and returns it
-		 *\param[in]	p_index	The index of the wanted pass
-		 *\return		The retrieved pass or nullptr if not found
+		 *\brief		Destroys the pass at the given index.
+		 *\param[in]	p_index	The pass index.
 		 *\~french
-		 *\brief		Récupère une passe
-		 *\param[in]	p_index	L'index de la passe voulue
-		 *\return		La passe récupére ou nullptr si non trouvés
-		 */
-		C3D_API PassSPtr GetPass( uint32_t p_index );
-		/**
-		 *\~english
-		 *\brief		Destroys the pass at the given index
-		 *\param[in]	p_index	The pass index
-		 *\~french
-		 *\brief		Destroys the pass at the given index
-		 *\param[in]	p_index	L'index de la passe
+		 *\brief		Destroys the pass at the given index.
+		 *\param[in]	p_index	L'index de la passe.
 		 */
 		C3D_API void DestroyPass( uint32_t p_index );
 		/**
 		*\~english
-		*\return		\p true if all passes needs alpha blending
+		*\return		\p true if all passes needs alpha blending.
 		*\~french
-		*\return		\p true si toutes les passes ont besoin d'alpha blending
+		*\return		\p true si toutes les passes ont besoin d'alpha blending.
 		*/
 		C3D_API bool HasAlphaBlending()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the passes count
-		 *\return		The count
+		 *\return		The passes count.
 		 *\~french
-		 *\brief		Récupère le nombre de passes
-		 *\return		Le nombre
+		 *\return		Le nombre de passes.
 		 */
 		inline uint32_t GetPassCount()const
 		{
@@ -193,11 +201,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator on the beginning of the passes array
-		 *\return		The iterator
+		 *\return		The constant iterator on the beginning of the passes array.
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur le début du tableau de passes
-		 *\return		L'itérateur
+		 *\return		L'itérateur constant sur le début du tableau de passes.
 		 */
 		inline PassPtrArrayConstIt begin()const
 		{
@@ -205,11 +211,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the beginning of the passes array
-		 *\return		The iterator
+		 *\return		The iterator on the beginning of the passes array.
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début du tableau de passes
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur le début du tableau de passes.
 		 */
 		inline PassPtrArrayIt begin()
 		{
@@ -217,11 +221,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator on the end of the passes array
-		 *\return		The iterator
+		 *\return		The constant iterator on the end of the passes array.
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin du tableau de passes
-		 *\return		L'itérateur
+		 *\return		L'itérateur constant sur la fin du tableau de passes.
 		 */
 		inline PassPtrArrayConstIt end()const
 		{
@@ -229,23 +231,54 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the end of the passes array
-		 *\return		The iterator
+		 *\return		The iterator on the end of the passes array.
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau de passes
-		 *\return		L'itérateur
+		 *\return		L'itérateur sur la fin du tableau de passes.
 		 */
 		inline PassPtrArrayIt end()
 		{
 			return m_passes.end();
 		}
+		/**
+		 *\~english
+		 *\return		The material type.
+		 *\~french
+		 *\return		Le type de matériau.
+		 */
+		inline MaterialType GetType()const
+		{
+			return m_type;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a pass and returns it.
+		 *\param[in]	p_index	The index of the wanted pass.
+		 *\return		The retrieved pass or nullptr if not found.
+		 *\~french
+		 *\brief		Récupère une passe.
+		 *\param[in]	p_index	L'index de la passe voulue.
+		 *\return		La passe récupére ou nullptr si non trouvés.
+		 */
+		template< MaterialType Type >
+		inline std::shared_ptr< typename PassTyper< Type >::Type > GetTypedPass( uint32_t p_index )const
+		{
+			auto l_pass = GetPass( p_index );
+			REQUIRE( m_type == Type );
+			return std::static_pointer_cast< typename PassTyper< Type >::Type >( l_pass );
+		}
 
 	public:
-		//!\~english The default material name	\~french Le nom du matériau par défaut
+		//!\~english	The default material name.
+		//!\~french		Le nom du matériau par défaut.
 		static const Castor::String DefaultMaterialName;
 
 	private:
+		//!\~english	The passes.
+		//!\~french		Les passes.
 		PassPtrArray m_passes;
+		//!\~english	The material type.
+		//!\~french		Le type de matériau.
+		MaterialType m_type;
 	};
 }
 

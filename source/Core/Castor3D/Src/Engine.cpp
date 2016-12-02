@@ -108,9 +108,9 @@ namespace Castor3D
 														, l_eventClean
 														, l_mergeResource );
 		m_materialCache = MakeCache< Material, String >( *this
-														, [this]( String const & p_name )
+														, [this]( String const & p_name, MaterialType p_type )
 														{
-															return std::make_shared< Material >( p_name, *this );
+															return std::make_shared< Material >( p_name, *this, p_type );
 														}
 														, l_eventInit
 														, l_eventClean

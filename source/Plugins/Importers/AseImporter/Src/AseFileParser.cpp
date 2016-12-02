@@ -7,7 +7,7 @@
 #include <Cache/CacheView.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Face.hpp>
@@ -420,7 +420,8 @@ namespace Ase
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_MaterialSubmat )
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		l_pContext->pPass = l_pContext->pMaterial->CreatePass();
+		l_pContext->pMaterial->CreatePass();
+		l_pContext->pPass = l_pContext->pMaterial->GetTypedPass< MaterialType::eLegacy >( l_pContext->pMaterial->GetPassCount() - 1 );
 	}
 	END_ATTRIBUTE_PUSH( ASESection::eSubmat )
 
@@ -436,12 +437,13 @@ namespace Ase
 
 		if ( !l_pMaterial )
 		{
-			l_pMaterial = l_cache.Add( l_strName );
+			l_pMaterial = l_cache.Add( l_strName, MaterialType::eLegacy );
 			l_pMaterial->CreatePass();
 		}
-
+		
+		REQUIRE( l_pMaterial->GetType() == MaterialType::eLegacy );
 		l_pContext->pMaterial = l_pMaterial;
-		l_pContext->pPass = l_pMaterial->GetPass( 0 );
+		l_pContext->pPass = l_pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
 		l_pContext->pPass->SetTwoSided( true );
 		l_pContext->m_mapMaterials.insert( std::make_pair( l_pContext->uiUInt32, l_pMaterial ) );
 	}
@@ -504,7 +506,7 @@ namespace Ase
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 		float l_value;
 		p_params[0]->Get( l_value );
-		l_pContext->pPass->SetAlpha( l_value );
+		l_pContext->pPass->SetOpacity( l_value );
 	}
 	END_ATTRIBUTE()
 
@@ -559,7 +561,7 @@ namespace Ase
 	IMPLEMENT_ATTRIBUTE_PARSER( AseParser_SubMaterialEnd )
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-		l_pContext->pPass = l_pContext->pMaterial->GetPass( 0 );
+		l_pContext->pPass = l_pContext->pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
 	}
 	END_ATTRIBUTE_POP()
 

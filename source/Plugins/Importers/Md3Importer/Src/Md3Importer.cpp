@@ -5,6 +5,7 @@
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
@@ -68,10 +69,6 @@ namespace C3DMd3
 	{
 		bool l_return{ false };
 		m_pFile = new BinaryFile( m_fileName, File::OpenMode::eRead );
-		UIntArray l_faces;
-		RealArray l_sizes;
-		MaterialSPtr l_material;
-		PassSPtr l_pass;
 		String l_meshName = m_fileName.GetFileName();
 		String l_materialName = m_fileName.GetFileName();
 		m_pFile->Read( m_header );
@@ -82,15 +79,16 @@ namespace C3DMd3
 		}
 		else
 		{
-			l_material = p_mesh.GetScene()->GetMaterialView().Find( l_materialName );
+			auto l_material = p_mesh.GetScene()->GetMaterialView().Find( l_materialName );
 
 			if ( !l_material )
 			{
-				l_material = p_mesh.GetScene()->GetMaterialView().Add( l_materialName );
+				l_material = p_mesh.GetScene()->GetMaterialView().Add( l_materialName, MaterialType::eLegacy );
 				l_material->CreatePass();
 			}
-
-			l_pass = l_material->GetPass( 0 );
+			
+			REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+			auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 			l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 			l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetShininess( 64.0f );
@@ -110,7 +108,7 @@ namespace C3DMd3
 		return l_return;
 	}
 
-	void Md3Importer::DoReadMD3Data( Mesh & p_mesh, Pass & p_pass )
+	void Md3Importer::DoReadMD3Data( Mesh & p_mesh, LegacyPass & p_pass )
 	{
 		int i = 0;
 		uint64_t l_uiRead;
@@ -287,11 +285,12 @@ namespace C3DMd3
 
 					if ( !l_material )
 					{
-						l_material = p_mesh.GetScene()->GetMaterialView().Add( l_strSection );
+						l_material = p_mesh.GetScene()->GetMaterialView().Add( l_strSection, MaterialType::eLegacy );
 						l_material->CreatePass();
 					}
-
-					PassSPtr l_pass = l_material->GetPass( 0 );
+					
+					REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+					auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 					l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 					l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 
@@ -332,11 +331,12 @@ namespace C3DMd3
 
 				if ( !l_material )
 				{
-					l_material = p_mesh.GetScene()->GetMaterialView().Add( l_strMatName.str() );
+					l_material = p_mesh.GetScene()->GetMaterialView().Add( l_strMatName.str(), MaterialType::eLegacy );
 					l_material->CreatePass();
 				}
-
-				PassSPtr l_pass = l_material->GetPass( 0 );
+				
+				REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+				auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 				l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 				l_pass->SetEmissive( Castor::HdrColour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 				l_pass->SetTwoSided( true );

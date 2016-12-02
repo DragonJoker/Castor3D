@@ -16,6 +16,7 @@
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Skeleton/Bone.hpp>
 #include <Plugin/ImporterPlugin.hpp>
 #include <Texture/Sampler.hpp>
@@ -619,7 +620,7 @@ namespace C3dFbx
 		p_fbxScene->FillMaterialArray( l_mats );
 		MaterialPtrStrMap l_materials;
 
-		auto l_parseLambert = [this, &p_scene]( FbxSurfaceLambert * p_lambert, Pass & p_pass )
+		auto l_parseLambert = [this, &p_scene]( FbxSurfaceLambert * p_lambert, LegacyPass & p_pass )
 		{
 			auto l_lambert = static_cast< FbxSurfaceLambert * >( p_lambert );
 			//p_pass.SetAlpha( float( l_lambert->TransparencyFactor ) );
@@ -643,8 +644,9 @@ namespace C3dFbx
 
 			if ( l_materials.find( l_fbxMaterial->GetName() ) == l_materials.end() )
 			{
-				auto l_material = l_cache.Add( l_fbxMaterial->GetName() );
-				auto l_pass = l_material->CreatePass();
+				auto l_material = l_cache.Add( l_fbxMaterial->GetName(), MaterialType::eLegacy );
+				REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+				auto l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 				Logger::LogDebug( StringStream() << "Material: " << l_fbxMaterial->GetName() );
 				String l_model = string::string_cast< xchar >( l_fbxMaterial->ShadingModel.Get().Buffer() );
 				Logger::LogDebug( StringStream() << "    ShadingModel: " << l_model );

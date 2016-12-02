@@ -76,7 +76,7 @@ namespace C3dPly
 
 		if ( !l_pMaterial )
 		{
-			l_pMaterial = p_mesh.GetScene()->GetMaterialView().Add( l_materialName );
+			l_pMaterial = p_mesh.GetScene()->GetMaterialView().Add( l_materialName, MaterialType::eLegacy );
 			l_pMaterial->CreatePass();
 		}
 

@@ -4,7 +4,7 @@
 #include <Material/Material.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Overlay/BorderPanelOverlay.hpp>
 #include <Overlay/Overlay.hpp>
 #include <Overlay/PanelOverlay.hpp>
@@ -30,11 +30,11 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_cache.Add( p_name );
+			l_return = l_cache.Add( p_name, MaterialType::eLegacy );
 			l_return->CreatePass();
 		}
 
-		l_return->GetPass( 0 )->SetAmbient( p_colour );
+		l_return->GetTypedPass< MaterialType::eLegacy >( 0u )->SetAmbient( p_colour );
 		return l_return;
 	}
 
@@ -50,11 +50,12 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_cache.Add( p_name );
+			l_return = l_cache.Add( p_name, MaterialType::eLegacy);
 			l_return->CreatePass();
 		}
 
-		PassSPtr l_pass = l_return->GetPass( 0 );
+		REQUIRE( l_return->GetType() == MaterialType::eLegacy );
+		auto l_pass = l_return->GetTypedPass< MaterialType::eLegacy >( 0u );
 
 		if ( l_pass->GetTextureUnitsCount() == 0 )
 		{

@@ -27,7 +27,23 @@ namespace Castor3D
 {
 	/**@name Material */
 	//@{
-
+	
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.9.0
+	\date		02/12/2016
+	\~english
+	\brief		Supported material types enumeration.
+	\~french
+	\brief		Enumération des types de matétiaux supportés.
+	*/
+	enum class MaterialType
+	{
+		//!\~english	Traditional (pre-PBR).
+		//!\~french		Traditionnel (pré-PBR).
+		eLegacy,
+		CASTOR_SCOPED_ENUM_BOUNDS( eLegacy )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -498,6 +514,7 @@ namespace Castor3D
 	class TextureUnit;
 	class Material;
 	class Pass;
+	class LegacyPass;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureImage );
@@ -506,6 +523,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
+	DECLARE_SMART_PTR( LegacyPass );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array
