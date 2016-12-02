@@ -1167,10 +1167,10 @@ namespace Castor
 	{
 		struct pixel
 		{
-			uint8_t a;
 			uint8_t r;
 			uint8_t g;
 			uint8_t b;
+			uint8_t a;
 		};
 
 #define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
@@ -1268,10 +1268,10 @@ namespace Castor
 	{
 		struct pixel
 		{
-			uint8_t a;
 			uint8_t b;
 			uint8_t g;
 			uint8_t r;
+			uint8_t a;
 		};
 
 #define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
