@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "TreeItemProperty.hpp"
 
+#include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 
 namespace GuiCommon
