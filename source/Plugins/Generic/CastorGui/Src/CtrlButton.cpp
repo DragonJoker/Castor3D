@@ -4,6 +4,7 @@
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Overlay/Overlay.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
@@ -285,7 +286,7 @@ namespace CastorGui
 
 	MaterialSPtr ButtonCtrl::DoCreateMaterial( MaterialSPtr p_material, float p_offset )
 	{
-		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
+		Colour l_colour = p_material->GetTypedPass< MaterialType::eLegacy >( 0u )->GetAmbient();
 		l_colour.red() = float( l_colour.red() ) + p_offset;
 		l_colour.green() = float( l_colour.green() ) + p_offset;
 		l_colour.blue() = float( l_colour.blue() ) + p_offset;

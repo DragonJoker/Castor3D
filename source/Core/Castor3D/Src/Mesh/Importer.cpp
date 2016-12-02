@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
+#include "Material/Material.hpp"
 #include "Material/Pass.hpp"
 #include "Mesh/Mesh.hpp"
 #include "Mesh/Submesh.hpp"
@@ -121,7 +122,7 @@ namespace Castor3D
 		{
 			try
 			{
-				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetEngine() );
+				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetOwner()->GetEngine() );
 				l_unit->SetAutoMipmaps( true );
 				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead );
 				l_texture->SetSource( l_folder, l_relative );

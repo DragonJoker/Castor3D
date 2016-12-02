@@ -158,6 +158,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SubmeshEnd )
 
 	// Material Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_MaterialType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MaterialPass )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MaterialEnd )
 
@@ -169,11 +170,11 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShininess )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassEnd )
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitImage )

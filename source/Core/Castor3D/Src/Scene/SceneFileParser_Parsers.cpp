@@ -25,7 +25,7 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Cache/CacheView.hpp"
 #include "Material/Material.hpp"
-#include "Material/Pass.hpp"
+#include "Material/LegacyPass.hpp"
 #include "Mesh/Face.hpp"
 #include "Mesh/Importer.hpp"
 #include "Mesh/Mesh.hpp"
@@ -104,21 +104,29 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMtlFile )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		Path l_path;
-		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
 
-		if ( File::FileExists( l_path ) )
+		if ( p_params.empty() )
 		{
-			TextFile l_fileMat( l_path, File::OpenMode::eRead, File::EncodingMode::eASCII );
-			Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			Path l_path;
+			l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
 
-			if ( l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Read( l_fileMat ) )
+			if ( File::FileExists( l_path ) )
 			{
-				Logger::LogInfo( cuT( "Materials read" ) );
-			}
-			else
-			{
-				Logger::LogInfo( cuT( "Can't read materials" ) );
+				TextFile l_fileMat( l_path, File::OpenMode::eRead, File::EncodingMode::eASCII );
+				Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
+
+				if ( l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Read( l_fileMat ) )
+				{
+					Logger::LogInfo( cuT( "Materials read" ) );
+				}
+				else
+				{
+					Logger::LogInfo( cuT( "Can't read materials" ) );
+				}
 			}
 		}
 	}
@@ -127,10 +135,18 @@ namespace Castor3D
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootScene )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		p_params[0]->Get( l_name );
-		l_parsingContext->pScene = l_parsingContext->m_pParser->GetEngine()->GetSceneCache().Add( l_name );
-		l_parsingContext->mapScenes.insert( std::make_pair( l_name, l_parsingContext->pScene ) );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			p_params[0]->Get( l_name );
+			l_parsingContext->pScene = l_parsingContext->m_pParser->GetEngine()->GetSceneCache().Add( l_name );
+			l_parsingContext->mapScenes.insert( std::make_pair( l_name, l_parsingContext->pScene ) );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
 
@@ -138,59 +154,113 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		l_parsingContext->path.clear();
-		p_params[0]->Get( l_parsingContext->strName );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->Get( l_parsingContext->strName );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eFont )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMaterial )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		p_params[0]->Get( l_name );
-		l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( l_name );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->Get( l_parsingContext->strName );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::ePanel, nullptr, l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::ePanel, nullptr, l_parsingContext->pOverlay );
+			l_parsingContext->pOverlay->SetVisible( false );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::ePanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eBorderPanel, nullptr, l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eBorderPanel, nullptr, l_parsingContext->pOverlay );
+			l_parsingContext->pOverlay->SetVisible( false );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eBorderPanelOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eText, nullptr, l_parsingContext->pOverlay );
-		l_parsingContext->pOverlay->SetVisible( false );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			l_parsingContext->pOverlay = l_parsingContext->m_pParser->GetEngine()->GetOverlayCache().Add( p_params[0]->Get( l_name ), OverlayType::eText, nullptr, l_parsingContext->pOverlay );
+			l_parsingContext->pOverlay->SetVisible( false );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eTextOverlay )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSamplerState )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		String l_name;
-		l_parsingContext->pSampler = l_parsingContext->m_pParser->GetEngine()->GetSamplerCache().Add( p_params[0]->Get( l_name ) );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			String l_name;
+			l_parsingContext->pSampler = l_parsingContext->m_pParser->GetEngine()->GetSamplerCache().Add( p_params[0]->Get( l_name ) );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eSampler )
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-		bool l_value;
-		l_parsingContext->m_pParser->GetEngine()->GetRenderLoop().ShowDebugOverlays( p_params[0]->Get( l_value ) );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			bool l_value;
+			l_parsingContext->m_pParser->GetEngine()->GetRenderLoop().ShowDebugOverlays( p_params[0]->Get( l_value ) );
+		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eScene )
 
@@ -814,11 +884,13 @@ namespace Castor3D
 		{
 			PARSING_ERROR( cuT( "No scene initialised." ) );
 		}
-		else if ( !p_params.empty() )
+		else if ( p_params.empty() )
 		{
-			String l_name;
-			p_params[0]->Get( l_name );
-			l_parsingContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Add( l_name );
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			p_params[0]->Get( l_parsingContext->strName );
 		}
 	}
 	END_ATTRIBUTE_PUSH( CSCNSection::eMaterial )
@@ -2549,6 +2621,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE_POP()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialType )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( p_params.empty() )
+		{
+			PARSING_ERROR( cuT( "Missing parameter." ) );
+		}
+		else
+		{
+			uint32_t l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pMaterial = l_parsingContext->m_pParser->GetEngine()->GetMaterialCache().Add( l_parsingContext->strName, MaterialType( l_value ) );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialPass )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2556,7 +2645,18 @@ namespace Castor3D
 
 		if ( l_parsingContext->pMaterial )
 		{
-			l_parsingContext->pPass = l_parsingContext->pMaterial->CreatePass();
+			l_parsingContext->pass = l_parsingContext->pMaterial->CreatePass();
+
+			switch ( l_parsingContext->pass->GetType() )
+			{
+			case MaterialType::eLegacy:
+				l_parsingContext->legacyPass = std::static_pointer_cast< LegacyPass >( l_parsingContext->pass );
+				break;
+
+			default:
+				PARSING_ERROR( "Unsupported pass type." );
+				break;
+			}
 		}
 		else
 		{
@@ -2574,7 +2674,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2582,7 +2682,7 @@ namespace Castor3D
 		{
 			Colour l_crColour;
 			p_params[0]->Get( l_crColour );
-			l_parsingContext->pPass->SetAmbient( l_crColour );
+			l_parsingContext->legacyPass->SetAmbient( l_crColour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2591,7 +2691,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2599,7 +2699,7 @@ namespace Castor3D
 		{
 			Colour l_crColour;
 			p_params[0]->Get( l_crColour );
-			l_parsingContext->pPass->SetDiffuse( l_crColour );
+			l_parsingContext->legacyPass->SetDiffuse( l_crColour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2608,7 +2708,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2616,7 +2716,7 @@ namespace Castor3D
 		{
 			Colour l_crColour;
 			p_params[0]->Get( l_crColour );
-			l_parsingContext->pPass->SetSpecular( l_crColour );
+			l_parsingContext->legacyPass->SetSpecular( l_crColour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2625,7 +2725,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2633,7 +2733,7 @@ namespace Castor3D
 		{
 			HdrColour l_crColour;
 			p_params[0]->Get( l_crColour );
-			l_parsingContext->pPass->SetEmissive( l_crColour );
+			l_parsingContext->legacyPass->SetEmissive( l_crColour );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2642,7 +2742,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->legacyPass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2650,7 +2750,7 @@ namespace Castor3D
 		{
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
-			l_parsingContext->pPass->SetShininess( l_fFloat );
+			l_parsingContext->legacyPass->SetShininess( l_fFloat );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2659,7 +2759,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2667,7 +2767,7 @@ namespace Castor3D
 		{
 			float l_fFloat;
 			p_params[0]->Get( l_fFloat );
-			l_parsingContext->pPass->SetAlpha( l_fFloat );
+			l_parsingContext->pass->SetOpacity( l_fFloat );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2676,36 +2776,15 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
 		else if ( !p_params.empty() )
 		{
-			bool l_bDouble;
-			p_params[0]->Get( l_bDouble );
-			l_parsingContext->pPass->SetTwoSided( l_bDouble );
-		}
-	}
-	END_ATTRIBUTE()
-
-	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
-	{
-		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-		if ( !l_parsingContext->pPass )
-		{
-			PARSING_ERROR( cuT( "No Pass initialised." ) );
-		}
-		else if ( !p_params.empty() )
-		{
-			PassSPtr l_pass = l_parsingContext->pPass;
-			uint32_t l_uiSrcBlend;
-			uint32_t l_uiDstBlend;
-			p_params[0]->Get( l_uiSrcBlend );
-			p_params[1]->Get( l_uiDstBlend );
-			//l_pass->GetBlendState()->SetAlphaSrcBlend( BlendOperand( l_uiSrcBlend ) );
-			//l_pass->GetBlendState()->SetAlphaDstBlend( BlendOperand( l_uiDstBlend ) );
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pass->SetTwoSided( l_value );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2715,7 +2794,7 @@ namespace Castor3D
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 		l_parsingContext->pTextureUnit.reset();
 
-		if ( l_parsingContext->pPass )
+		if ( l_parsingContext->pass )
 		{
 			l_parsingContext->pTextureUnit = std::make_shared< TextureUnit >( *l_parsingContext->m_pParser->GetEngine() );
 		}
@@ -2732,7 +2811,7 @@ namespace Castor3D
 		l_parsingContext->pShaderProgram.reset();
 		l_parsingContext->eShaderObject = ShaderType::eCount;
 
-		if ( l_parsingContext->pPass )
+		if ( l_parsingContext->pass )
 		{
 			l_parsingContext->pShaderProgram = l_parsingContext->m_pParser->GetEngine()->GetShaderProgramCache().GetNewProgram( true );
 		}
@@ -2747,7 +2826,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2755,7 +2834,7 @@ namespace Castor3D
 		{
 			uint32_t l_mode = 0;
 			p_params[0]->Get( l_mode );
-			l_parsingContext->pPass->SetAlphaBlendMode( BlendMode( l_mode ) );
+			l_parsingContext->pass->SetAlphaBlendMode( BlendMode( l_mode ) );
 		}
 	}
 	END_ATTRIBUTE()
@@ -2764,7 +2843,7 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( !l_parsingContext->pPass )
+		if ( !l_parsingContext->pass )
 		{
 			PARSING_ERROR( cuT( "No Pass initialised." ) );
 		}
@@ -2772,10 +2851,26 @@ namespace Castor3D
 		{
 			uint32_t l_mode = 0;
 			p_params[0]->Get( l_mode );
-			l_parsingContext->pPass->SetColourBlendMode( BlendMode( l_mode ) );
+			l_parsingContext->pass->SetColourBlendMode( BlendMode( l_mode ) );
 		}
 	}
 	END_ATTRIBUTE()
+
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEnd )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pass )
+		{
+			PARSING_ERROR( cuT( "No Pass initialised." ) );
+		}
+		else
+		{
+			l_parsingContext->pass.reset();
+			l_parsingContext->legacyPass.reset();
+		}
+	}
+	END_ATTRIBUTE_POP()
 
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitImage )
 	{
@@ -2956,11 +3051,11 @@ namespace Castor3D
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-		if ( l_parsingContext->pPass )
+		if ( l_parsingContext->pass )
 		{
 			if ( l_parsingContext->pTextureUnit )
 			{
-				l_parsingContext->pPass->AddTextureUnit( l_parsingContext->pTextureUnit );
+				l_parsingContext->pass->AddTextureUnit( l_parsingContext->pTextureUnit );
 			}
 			else
 			{

@@ -3,7 +3,7 @@
 #include <Engine.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
@@ -140,26 +140,30 @@ namespace GuiCommon
 	String ObjSceneExporter::DoExportMaterial( Path const & p_pathMtlFolder, Material const & p_material )const
 	{
 		StringStream l_strReturn;
-		auto l_pass = p_material.GetPass( 0 );
 
-		if ( l_pass )
+		if ( p_material.GetType() == MaterialType::eLegacy )
 		{
-			l_strReturn << cuT( "newmtl " ) << p_material.GetName() << cuT( "\n" );
-			auto l_ambient = l_pass->GetAmbient();
-			l_strReturn << cuT( "	Ka " ) << l_ambient.red().value() << cuT( " " ) << l_ambient.green().value() << cuT( " " ) << l_ambient.blue().value() << cuT( "\n" );
-			auto l_diffuse = l_pass->GetDiffuse();
-			l_strReturn << cuT( "	Kd " ) << l_diffuse.red().value() << cuT( " " ) << l_diffuse.green().value() << cuT( " " ) << l_diffuse.blue().value() << cuT( "\n" );
-			auto l_specular = l_pass->GetSpecular();
-			l_strReturn << cuT( "	Ks " ) << l_specular.red().value() << cuT( " " ) << l_specular.green().value() << cuT( " " ) << l_specular.blue().value() << cuT( "\n" );
-			l_strReturn << cuT( "	Ns " ) << l_pass->GetShininess() << cuT( "\n" );
-			l_strReturn << cuT( "	d " ) << l_pass->GetAlpha() << cuT( "\n" );
+			auto l_pass = p_material.GetTypedPass< MaterialType::eLegacy > ( 0u );
 
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::eAmbient ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::eDiffuse ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::eNormal ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::eOpacity ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ks" ), l_pass->GetTextureUnit( TextureChannel::eSpecular ) );
-			l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ns" ), l_pass->GetTextureUnit( TextureChannel::eGloss ) );
+			if ( l_pass )
+			{
+				l_strReturn << cuT( "newmtl " ) << p_material.GetName() << cuT( "\n" );
+				auto l_ambient = l_pass->GetAmbient();
+				l_strReturn << cuT( "	Ka " ) << l_ambient.red().value() << cuT( " " ) << l_ambient.green().value() << cuT( " " ) << l_ambient.blue().value() << cuT( "\n" );
+				auto l_diffuse = l_pass->GetDiffuse();
+				l_strReturn << cuT( "	Kd " ) << l_diffuse.red().value() << cuT( " " ) << l_diffuse.green().value() << cuT( " " ) << l_diffuse.blue().value() << cuT( "\n" );
+				auto l_specular = l_pass->GetSpecular();
+				l_strReturn << cuT( "	Ks " ) << l_specular.red().value() << cuT( " " ) << l_specular.green().value() << cuT( " " ) << l_specular.blue().value() << cuT( "\n" );
+				l_strReturn << cuT( "	Ns " ) << l_pass->GetShininess() << cuT( "\n" );
+				l_strReturn << cuT( "	d " ) << l_pass->GetOpacity() << cuT( "\n" );
+
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ka" ), l_pass->GetTextureUnit( TextureChannel::eAmbient ) );
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Kd" ), l_pass->GetTextureUnit( TextureChannel::eDiffuse ) );
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Bump" ), l_pass->GetTextureUnit( TextureChannel::eNormal ) );
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_d" ), l_pass->GetTextureUnit( TextureChannel::eOpacity ) );
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ks" ), l_pass->GetTextureUnit( TextureChannel::eSpecular ) );
+				l_strReturn << DoExportTexture( p_pathMtlFolder, cuT( "map_Ns" ), l_pass->GetTextureUnit( TextureChannel::eGloss ) );
+			}
 		}
 
 		return l_strReturn.str();

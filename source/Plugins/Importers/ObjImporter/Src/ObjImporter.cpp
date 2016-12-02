@@ -15,7 +15,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
 #include <Material/Material.hpp>
-#include <Material/Pass.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Face.hpp>
 #include <Mesh/Submesh.hpp>
 #include <Mesh/Vertex.hpp>
@@ -479,7 +479,7 @@ namespace Obj
 		String l_section;
 		String l_value;
 		StringArray l_arraySplitted;
-		PassSPtr l_pass;
+		LegacyPassSPtr l_pass;
 		MaterialSPtr l_material;
 		float l_components[3];
 		float l_fAlpha = 1.0f;
@@ -517,7 +517,7 @@ namespace Obj
 						{
 							if ( l_fAlpha < 1.0 )
 							{
-								l_pass->SetAlpha( l_fAlpha );
+								l_pass->SetOpacity( l_fAlpha );
 							}
 
 							l_fAlpha = 1.0f;
@@ -526,7 +526,8 @@ namespace Obj
 						if ( p_mesh.GetScene()->GetMaterialView().Has( l_value ) )
 						{
 							l_material = p_mesh.GetScene()->GetMaterialView().Find( l_value );
-							l_pass = l_material->GetPass( 0 );
+							REQUIRE( l_material->GetType() == MaterialType::eLegacy );
+							l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 						}
 						else
 						{
@@ -535,8 +536,9 @@ namespace Obj
 
 						if ( !l_material )
 						{
-							l_material = p_mesh.GetScene()->GetMaterialView().Add( l_value );
-							l_pass = l_material->CreatePass();
+							l_material = p_mesh.GetScene()->GetMaterialView().Add( l_value, MaterialType::eLegacy );
+							l_material->CreatePass();
+							l_pass = l_material->GetTypedPass< MaterialType::eLegacy >( 0u );
 							m_arrayLoadedMaterials.push_back( l_material );
 						}
 
@@ -624,7 +626,7 @@ namespace Obj
 
 		if ( l_pass && l_bOpaFound )
 		{
-			l_pass->SetAlpha( l_fAlpha );
+			l_pass->SetOpacity( l_fAlpha );
 		}
 	}
 }

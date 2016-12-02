@@ -94,7 +94,8 @@ namespace Castor3D
 		MaterialSPtr pMaterial;
 		SamplerSPtr pSampler;
 		RenderTargetSPtr pRenderTarget;
-		PassSPtr pPass;
+		LegacyPassSPtr legacyPass;
+		PassSPtr pass;
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
 		ShaderType eShaderObject;
@@ -252,6 +253,7 @@ namespace Castor3D
 		UIntStrMap m_mapComparisonModes;
 		UIntStrMap m_mapBillboardTypes;
 		UIntStrMap m_mapBillboardSizes;
+		UIntStrMap m_mapMaterialTypes;
 	};
 }
 

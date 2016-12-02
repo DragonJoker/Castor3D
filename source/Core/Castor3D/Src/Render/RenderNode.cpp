@@ -56,7 +56,7 @@ namespace Castor3D
 		inline void DoUnbind( GeometryRenderNode const & p_node, DepthMapArray const & p_depthMaps )
 		{
 			DoUnbindDepthMaps( p_depthMaps );
-			p_node.m_pass.m_pass.EndRender();
+			p_node.m_pass.m_pass.UnbindTextures();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
 			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
@@ -68,7 +68,7 @@ namespace Castor3D
 		inline void DoUnbind( BillboardListRenderNode const & p_node, DepthMapArray const & p_depthMaps )
 		{
 			DoUnbindDepthMaps( p_depthMaps );
-			p_node.m_pass.m_pass.EndRender();
+			p_node.m_pass.m_pass.UnbindTextures();
 			p_node.m_pass.m_pipeline.GetProgram().UnbindUbos();
 
 			if ( CheckFlag( p_node.m_pass.m_pipeline.GetFlags().m_programFlags, ProgramFlag::eLighting ) )
@@ -144,9 +144,9 @@ namespace Castor3D
 		}
 
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
-		m_pass.m_pass.FillShaderVariables( m_pass );
+		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
-		m_pass.m_pass.Render();
+		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}
 
@@ -193,9 +193,9 @@ namespace Castor3D
 			}
 		}
 
-		m_pass.m_pass.FillShaderVariables( m_pass );
+		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
-		m_pass.m_pass.Render();
+		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}
 
@@ -209,9 +209,9 @@ namespace Castor3D
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
-		m_pass.m_pass.FillShaderVariables( m_pass );
+		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
-		m_pass.m_pass.Render();
+		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
 	}
 }
