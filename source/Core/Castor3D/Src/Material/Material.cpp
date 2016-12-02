@@ -18,25 +18,37 @@ namespace Castor3D
 
 	bool Material::TextWriter::operator()( Material const & p_material, TextFile & p_file )
 	{
+		static std::map< MaterialType, String > TypeName
+		{
+			{ MaterialType::eLegacy, cuT( "legacy" ) },
+		};
+
 		Logger::LogInfo( m_tabs + cuT( "Writing Material " ) + p_material.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\n" ) + m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0
-						&& p_file.WriteText( m_tabs + cuT( "{" ) ) > 0;
+						&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		Castor::TextWriter< Material >::CheckError( l_return, "Material name" );
 
-		bool l_first{ true };
-
-		switch ( p_material.GetType() )
+		if ( l_return )
 		{
-		case MaterialType::eLegacy:
-			for ( auto l_pass : p_material )
-			{
-				l_return = LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
-			}
-			break;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype \"" ) + TypeName[p_material.GetType()] + cuT( "\n" ) ) > 0;
+			Castor::TextWriter< Material >::CheckError( l_return, "Material type" );
+		}
 
-		default:
-			FAILURE( cuT( "Unsupported pass type" ) );
-			break;
+		if ( l_return )
+		{
+			switch ( p_material.GetType() )
+			{
+			case MaterialType::eLegacy:
+				for ( auto l_pass : p_material )
+				{
+					l_return &= LegacyPass::TextWriter( m_tabs + cuT( "\t" ) )( *std::static_pointer_cast< LegacyPass >( l_pass ), p_file );
+				}
+				break;
+
+			default:
+				FAILURE( cuT( "Unsupported pass type" ) );
+				break;
+			}
 		}
 
 		if ( l_return )
