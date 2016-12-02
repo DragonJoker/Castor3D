@@ -64,7 +64,7 @@ namespace Ase
 		Castor3D::Mesh * pMesh{ nullptr };
 		Castor3D::SubmeshSPtr pSubmesh;
 		Castor3D::MaterialSPtr pMaterial;
-		Castor3D::PassSPtr pPass;
+		Castor3D::LegacyPassSPtr pPass;
 		Castor3D::TextureUnitSPtr pTextureUnit;
 		Castor::String strName;
 		Castor::String strName2;

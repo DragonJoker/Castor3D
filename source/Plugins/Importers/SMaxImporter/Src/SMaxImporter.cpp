@@ -5,6 +5,7 @@
 
 #include <Engine.hpp>
 #include <Material/Material.hpp>
+#include <Material/LegacyPass.hpp>
 #include <Mesh/Mesh.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>
@@ -316,11 +317,12 @@ namespace C3dSMax
 
 			if ( !l_pMaterial )
 			{
-				l_pMaterial = l_cache.Add( l_strMatName );
+				l_pMaterial = l_cache.Add( l_strMatName, MaterialType::eLegacy );
 				l_pMaterial->CreatePass();
 			}
-
-			PassSPtr l_pass = l_pMaterial->GetPass( 0 );
+			
+			REQUIRE( l_pMaterial->GetType() == MaterialType::eLegacy );
+			auto l_pass = l_pMaterial->GetTypedPass< MaterialType::eLegacy >( 0u );
 			l_pass->SetAmbient( l_crAmbient );
 			l_pass->SetDiffuse( l_crDiffuse );
 			l_pass->SetSpecular( l_crSpecular );
