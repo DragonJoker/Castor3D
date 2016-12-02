@@ -2,6 +2,7 @@
 #include <cstring>
 #include "UnsupportedFormatException.hpp"
 #include "Miscellaneous/StringUtils.hpp"
+#include "Exception/Assertion.hpp"
 
 #if defined( max )
 #	undef max
@@ -968,8 +969,15 @@ namespace Castor
 	template<>
 	struct component< PixelFormat::eR8G8B8 >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+		struct pixel
+		{
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
 
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -977,15 +985,15 @@ namespace Castor
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x00FF0000 ) >> 16 );
+			return src.r;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x0000FF00 ) >> 8 );
+			return src.g;
 		}
 		static inline uint8_t B8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x000000FF ) >> 0 );
+			return src.b;
 		}
 		static inline uint8_t A8( uint8_t const * )
 		{
@@ -1019,15 +1027,15 @@ namespace Castor
 		}
 		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFF00FFFF ) | ( ( uint32_t( p_val ) << 16 ) & 0x00FF0000 );
+			dst.r = p_val;
 		}
 		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFF00FF ) | ( ( uint32_t( p_val ) << 8 ) & 0x0000FF00 );
+			dst.g = p_val;
 		}
 		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFFFF00 ) | ( ( uint32_t( p_val ) << 0 ) & 0x000000FF );
+			dst.b = p_val;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
@@ -1059,8 +1067,15 @@ namespace Castor
 	template<>
 	struct component< PixelFormat::eB8G8R8 >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+		struct pixel
+		{
+			uint8_t b;
+			uint8_t g;
+			uint8_t r;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
 
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1068,15 +1083,15 @@ namespace Castor
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x000000FF ) >> 0 );
+			return src.r;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x0000FF00 ) >> 8 );
+			return src.g;
 		}
 		static inline uint8_t B8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x00FF0000 ) >> 16 );
+			return src.b;
 		}
 		static inline uint8_t A8( uint8_t const * )
 		{
@@ -1110,15 +1125,15 @@ namespace Castor
 		}
 		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFFFF00 ) | ( ( uint32_t( p_val ) << 0 ) & 0x000000FF );
+			dst.r = p_val;
 		}
 		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFF00FF ) | ( ( uint32_t( p_val ) << 8 ) & 0x0000FF00 );
+			dst.g = p_val;
 		}
 		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFF00FFFF ) | ( ( uint32_t( p_val ) << 16 ) & 0x00FF0000 );
+			dst.b = p_val;
 		}
 		static inline void A8( uint8_t *, uint8_t )
 		{
@@ -1150,8 +1165,16 @@ namespace Castor
 	template<>
 	struct component< PixelFormat::eA8R8G8B8 >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+		struct pixel
+		{
+			uint8_t a;
+			uint8_t r;
+			uint8_t g;
+			uint8_t b;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
 
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1159,19 +1182,19 @@ namespace Castor
 		}
 		static inline uint8_t A8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0xFF000000 ) >> 24 );
+			return src.a;
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x00FF0000 ) >> 16 );
+			return src.g;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x0000FF00 ) >> 8 );
+			return src.g;
 		}
 		static inline uint8_t B8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x000000FF ) >> 0 );
+			return src.b;
 		}
 		static inline float L32F( uint8_t const * p_pSrc )
 		{
@@ -1201,19 +1224,19 @@ namespace Castor
 		}
 		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0x00FFFFFF ) | ( ( uint32_t( p_val ) << 24 ) & 0xFF000000 );
+			dst.a = p_val;
 		}
 		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFF00FFFF ) | ( ( uint32_t( p_val ) << 16 ) & 0x00FF0000 );
+			dst.r = p_val;
 		}
 		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFF00FF ) | ( ( uint32_t( p_val ) << 8 ) & 0x0000FF00 );
+			dst.g = p_val;
 		}
 		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFFFF00 ) | ( ( uint32_t( p_val ) << 0 ) & 0x000000FF );
+			dst.b = p_val;
 		}
 		static inline void L32F( uint8_t * p_pSrc, float p_val )
 		{
@@ -1243,8 +1266,16 @@ namespace Castor
 	template<>
 	struct component< PixelFormat::eA8B8G8R8 >
 	{
-#define src	( *reinterpret_cast< uint32_t const * >( p_pSrc ) )
-#define dst	( *reinterpret_cast< uint32_t * >( p_pSrc ) )
+		struct pixel
+		{
+			uint8_t a;
+			uint8_t b;
+			uint8_t g;
+			uint8_t r;
+		};
+
+#define src	( *reinterpret_cast< pixel const * >( p_pSrc ) )
+#define dst	( *reinterpret_cast< pixel * >( p_pSrc ) )
 
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1252,19 +1283,19 @@ namespace Castor
 		}
 		static inline uint8_t A8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0xFF000000 ) >> 24 );
+			return src.a;
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x000000FF ) >> 0 );
+			return src.g;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x0000FF00 ) >> 8 );
+			return src.g;
 		}
 		static inline uint8_t B8( uint8_t const * p_pSrc )
 		{
-			return ( ( src & 0x00FF0000 ) >> 16 );
+			return src.b;
 		}
 		static inline float L32F( uint8_t const * p_pSrc )
 		{
@@ -1294,19 +1325,19 @@ namespace Castor
 		}
 		static inline void A8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0x00FFFFFF ) | ( ( uint32_t( p_val ) << 24 ) & 0xFF000000 );
+			dst.a = p_val;
 		}
 		static inline void R8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFFFF00 ) | ( ( uint32_t( p_val ) << 0 ) & 0x000000FF );
+			dst.r = p_val;
 		}
 		static inline void G8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFFFF00FF ) | ( ( uint32_t( p_val ) << 8 ) & 0x0000FF00 );
+			dst.g = p_val;
 		}
 		static inline void B8( uint8_t * p_pSrc, uint8_t p_val )
 		{
-			dst = ( src & 0xFF00FFFF ) | ( ( uint32_t( p_val ) << 16 ) & 0x00FF0000 );
+			dst.b = p_val;
 		}
 		static inline void L32F( uint8_t * p_pSrc, float p_val )
 		{
@@ -3242,6 +3273,7 @@ namespace Castor
 				uint8_t * l_pDst = &p_pDstBuffer[0];
 				uint32_t l_uiSrcCount = 0;
 				uint32_t l_count = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
+				REQUIRE( p_uiSrcSize / pixel_definitions< PFSrc >::Size == p_uiDstSize / pixel_definitions< PFDst >::Size );
 				pixel_converter< PFSrc, PFDst > l_converter;
 
 				for ( uint32_t i = 0; i < l_count; i++ )

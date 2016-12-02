@@ -533,6 +533,10 @@ namespace Castor
 			case PixelFormat::eS8:
 				l_return = pixel_definitions< PixelFormat::eS8 >::Size;
 				break;
+
+			default:
+				FAILURE( "Unsupported pixel format" );
+				break;
 			}
 
 			return l_return;
@@ -661,6 +665,10 @@ namespace Castor
 			case PixelFormat::eS8:
 				pixel_definitions< PixelFormat::eS8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
+
+			default:
+				FAILURE( "Unsupported pixel format" );
+				break;
 			}
 		}
 
@@ -786,6 +794,10 @@ namespace Castor
 
 			case PixelFormat::eS8:
 				pixel_definitions< PixelFormat::eS8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			default:
+				FAILURE( "Unsupported pixel format" );
 				break;
 			}
 		}
@@ -917,6 +929,10 @@ namespace Castor
 				case PixelFormat::eS8:
 					l_return = ( p_strFormat == pixel_definitions< PixelFormat::eS8 >::to_str() ? PixelFormat( i ) : PixelFormat::eCount );
 					break;
+
+				default:
+					FAILURE( "Unsupported pixel format" );
+					break;
 				}
 			}
 
@@ -1047,6 +1063,10 @@ namespace Castor
 
 			case PixelFormat::eS8:
 				l_return = pixel_definitions< PixelFormat::eS8 >::to_str();
+				break;
+
+			default:
+				FAILURE( "Unsupported pixel format" );
 				break;
 			}
 

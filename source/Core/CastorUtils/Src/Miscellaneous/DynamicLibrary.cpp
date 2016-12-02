@@ -128,20 +128,35 @@ namespace Castor
 		if ( m_pLibrary )
 		{
 			std::string l_name( string::string_cast< char >( p_name ) );
+
 #if defined( _WIN32 )
+
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			l_return = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_name.c_str() ) );
 			::SetErrorMode( l_uiOldMode );
+
 #else
 
 			try
 			{
+				dlerror();
 				l_return = dlsym( m_pLibrary, l_name.c_str() );
+				auto l_error = dlerror();
+
+				if ( l_error != NULL )
+				{
+					throw std::runtime_error( std::string( l_error ) );
+				}
+			}
+			catch ( std::exception & exc )
+			{
+				l_return = nullptr;
+				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: " ) + exc.what() );
 			}
 			catch ( ... )
 			{
 				l_return = nullptr;
-				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]" ) );
+				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]: Unknown error." ) );
 			}
 
 #endif
@@ -159,9 +174,11 @@ namespace Castor
 		if ( m_pLibrary )
 		{
 #if defined( _WIN32 )
+
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			::FreeLibrary( static_cast< HMODULE >( m_pLibrary ) );
 			::SetErrorMode( l_uiOldMode );
+
 #else
 
 			try
@@ -174,6 +191,7 @@ namespace Castor
 			}
 
 #endif
+
 			m_pLibrary = nullptr;
 		}
 	}

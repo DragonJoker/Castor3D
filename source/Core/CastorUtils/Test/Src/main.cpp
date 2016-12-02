@@ -13,6 +13,8 @@
 #include "CastorUtilsUniqueTest.hpp"
 #include "CastorUtilsObjectsPoolTest.hpp"
 #include "CastorUtilsQuaternionTest.hpp"
+#include "CastorUtilsThreadPoolTest.hpp"
+#include "CastorUtilsWorkerThreadTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -34,6 +36,8 @@ int main( int argc, char const * argv[] )
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_unique< Testing::OpenCLBench >() );
 #endif
+	Testing::Register( std::make_unique< Testing::CastorUtilsWorkerThreadTest >() );
+	Testing::Register( std::make_unique< Testing::CastorUtilsThreadPoolTest >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsMatrixBench >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsStringBench >() );
 	Testing::Register( std::make_unique< Testing::CastorUtilsArrayViewTest >() );

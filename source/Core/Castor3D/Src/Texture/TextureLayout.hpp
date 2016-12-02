@@ -497,10 +497,10 @@ namespace Castor3D
 		std::vector< TextureImageUPtr > m_images;
 		//!\~english	The required CPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le CPU (combinaison de AccessType).
-		Castor::FlagCombination< AccessType > const & m_cpuAccess;
+		Castor::FlagCombination< AccessType > m_cpuAccess;
 		//!\~english	The required GPU access (combination of AccessType).
 		//!\~french		Les accès requis pour le GPU (combinaison de AccessType).
-		Castor::FlagCombination< AccessType > const & m_gpuAccess;
+		Castor::FlagCombination< AccessType > m_gpuAccess;
 		//!\~english	The teture dimensions.
 		//!\~french		Les dimensions de la texture.
 		Castor::Size m_size;

@@ -137,7 +137,8 @@ namespace Castor
 		}
 
 	protected:
-		//!\~english The matrix data.	\~french Les données de la matrice.
+		//!\~english	The matrix data.
+		//!\~french		Les données de la matrice.
 		T * m_data;
 
 	private:
@@ -161,20 +162,20 @@ namespace Castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		MatrixDataHolder()
-			: m_data( reinterpret_cast< float * >( AlignedAlloc( 16, 64 ) ) )
+			: m_data( AlignedAlloc< float >( 16, 64 ) )
 			, m_ownCoords( true )
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		MatrixDataHolder( float * p_data )
 			: m_data( p_data )
@@ -198,9 +199,9 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		~MatrixDataHolder()
 		{
@@ -236,11 +237,11 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Links the data pointer to the one given in parameter
-		 *\remarks		The matrix loses ownership of it's data
+		 *\brief		Links the data pointer to the one given in parameter.
+		 *\remarks		The matrix loses ownership of it's data.
 		 *\~french
-		 *\brief		Lie les données de cette matrice à celles données en paramètre
-		 *\remarks		La matrice perd la responsabilité de ses données
+		 *\brief		Lie les données de cette matrice à celles données en paramètre.
+		 *\remarks		La matrice perd la responsabilité de ses données.
 		 */
 		void link( float * p_data )
 		{
@@ -255,9 +256,11 @@ namespace Castor
 		}
 
 	protected:
-		//!\~english The matrix data.	\~french Les données de la matrice.
+		//!\~english	The matrix data.
+		//!\~french		Les données de la matrice.
 		float * m_data;
-		//!\~english The matrix owns its data.	\~french La matrice st responsable de ses données.
+		//!\~english	Tells if the matrix owns its data.
+		//!\~french 	Dit si la matrice est responsable de ses données.
 		bool m_ownCoords;
 	};
 
@@ -268,11 +271,11 @@ namespace Castor
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
-	\brief		Templated column major matrix representation
-	\remark		Can hold any type which has a defined Policy
+	\brief		Templated column major matrix representation.
+	\remark		Can hold any type which has a defined Policy.
 	\~french
-	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template
-	\remark		Peut contenir n'importe quel élément qui a une Castor::Policy
+	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template.
+	\remark		Peut contenir n'importe quel élément qui a une Castor::Policy.
 	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix
@@ -289,25 +292,31 @@ namespace Castor
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
-		//!\~english Typedef on the policy	\~french Typedef sur la politique
+		//!\~english	Typedef on the policy.
+		//!\~french		Typedef sur la politique.
 		typedef __policy policy;
-		//!\~english Typedef on the data type	\~french Typedef sur le type de données
+		//!\~english	Typedef on the data type.
+		//!\~french		Typedef sur le type de données.
 		typedef __value_type value_type;
-		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne
+		//!\~english	Typedef on the column type
+		//!\~french		Typedef sur le type de colonne.
 		typedef __column col_type;
-		//!\~english Typedef on the line type	\~french Typedef sur le type de ligne
+		//!\~english	Typedef on the line type.
+		//!\~french		Typedef sur le type de ligne.
 		typedef __row row_type;
-		//!\~english Typedef on the transposed matrix type	\~french Typedef sur le type de matrice transposée
+		//!\~english	Typedef on the transposed matrix type.
+		//!\~french		Typedef sur le type de matrice transposée.
 		typedef __transpose transpose_type;
-		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
+		//!\~english	Typedef on this matrix type.
+		//!\~french		Typedef sur le type de cette matrice.
 		typedef Matrix< value_type, Columns, Rows > my_type;
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		Matrix();
 		/**
@@ -319,302 +328,292 @@ namespace Castor
 		Matrix( NoInit const & );
 		/**
 		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	p_matrix	The Matrix object to copy
+		 *\brief		Copy Constructor.
+		 *\param[in]	p_matrix	The Matrix object to copy.
 		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_matrix	L'objet Matrix à copier
+		 *\brief		Constructeur par copie.
+		 *\param[in]	p_matrix	L'objet Matrix à copier.
 		 */
 		Matrix( Matrix< T, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	p_matrix	The Matrix object to move
+		 *\brief		Move Constructor.
+		 *\param[in]	p_matrix	The Matrix object to move.
 		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_matrix	L'objet Matrix à déplacer
+		 *\brief		Constructeur par déplacement.
+		 *\param[in]	p_matrix	L'objet Matrix à déplacer.
 		 */
 		Matrix( Matrix< T, Columns, Rows > && p_matrix );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_value	The matrix is initialised as Jordan with that value
+		 *\brief		Constructor.
+		 *\param[in]	p_value	The matrix is initialised as Jordan with that value.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur.
 		 */
 		explicit Matrix( T const & p_value );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_matrix	Data buffer to copy in the matrix
+		 *\brief		Constructor.
+		 *\param[in]	p_matrix	Data buffer to copy in the matrix.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
+		 *\brief		Constructeur.
+		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice.
 		 */
 		explicit Matrix( T * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_matrix	Data buffer to copy in the matrix
+		 *\brief		Constructor.
+		 *\param[in]	p_matrix	Data buffer to copy in the matrix.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
+		 *\brief		Constructeur.
+		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice.
 		 */
 		template< typename Type >
 		explicit Matrix( Type const * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Conversion Copy Constructor
-		 *\param[in]	p_matrix	The Matrix object to copy
+		 *\brief		Conversion Copy Constructor.
+		 *\param[in]	p_matrix	The Matrix object to copy.
 		 *\~french
-		 *\brief		Constructeur par copie convertie
-		 *\param[in]	p_matrix	L'objet Matrix à copier
+		 *\brief		Constructeur par copie convertie.
+		 *\param[in]	p_matrix	L'objet Matrix à copier.
 		 */
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		virtual ~Matrix();
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row
-		 *\param[in]	p_index	The row to affect
-		 *\param[in]	p_row	The values
+		 *\brief		Sets the values for the given row.
+		 *\param[in]	p_index	The row to affect.
+		 *\param[in]	p_row	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une ligne donnée
-		 *\param[in]	p_index	La ligne à affecter
-		 *\param[in]	p_row	Les valeurs
+		 *\brief		Définit les valeurs d'une ligne donnée.
+		 *\param[in]	p_index	La ligne à affecter.
+		 *\param[in]	p_row	Les valeurs.
 		 */
 		void set_row( uint32_t p_index, value_type const * p_row );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row
-		 *\param[in]	p_index	The row to affect
-		 *\param[in]	p_row	The values
+		 *\brief		Sets the values for the given row.
+		 *\param[in]	p_index	The row to affect.
+		 *\param[in]	p_row	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une ligne donnée
-		 *\param[in]	p_index	La ligne à affecter
-		 *\param[in]	p_row	Les valeurs
+		 *\brief		Définit les valeurs d'une ligne donnée.
+		 *\param[in]	p_index	La ligne à affecter.
+		 *\param[in]	p_row	Les valeurs.
 		 */
 		void set_row( uint32_t p_index, Point< value_type, Columns > const & p_row );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given row
-		 *\param[in]	p_index	The row to affect
-		 *\param[in]	p_row	The values
+		 *\brief		Sets the values for the given row.
+		 *\param[in]	p_index	The row to affect.
+		 *\param[in]	p_row	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une ligne donnée
-		 *\param[in]	p_index	La ligne à affecter
-		 *\param[in]	p_row	Les valeurs
+		 *\brief		Définit les valeurs d'une ligne donnée.
+		 *\param[in]	p_index	La ligne à affecter.
+		 *\param[in]	p_row	Les valeurs.
 		 */
 		void set_row( uint32_t p_index, Coords< value_type, Columns > const & p_row );
 		/**
 		 *\~english
-		 *\brief		Retrieves a row
-		 *\param[in]	p_index	The row index
-		 *\return		The row
+		 *\brief		Retrieves a row.
+		 *\param[in]	p_index	The row index.
+		 *\return		The row.
 		 *\~french
-		 *\brief		Récupère une ligne
-		 *\param[in]	p_index	L'index de la ligne
-		 *\return		La ligne
+		 *\brief		Récupère une ligne.
+		 *\param[in]	p_index	L'index de la ligne.
+		 *\return		La ligne.
 		 */
 		row_type get_row( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a row
-		 *\param[in]	p_index		The row index
-		 *\param[out]	p_result	Receives the row values
+		 *\brief		Retrieves a row.
+		 *\param[in]	p_index		The row index.
+		 *\param[out]	p_result	Receives the row values.
 		 *\~french
-		 *\brief		Récupère une ligne
-		 *\param[in]	p_index		L'index de la ligne
-		 *\param[out]	p_result	Reçoit les valeurs de la ligne
+		 *\brief		Récupère une ligne.
+		 *\param[in]	p_index		L'index de la ligne.
+		 *\param[out]	p_result	Reçoit les valeurs de la ligne.
 		 */
 		void get_row( uint32_t p_index, row_type & p_result )const;
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column
-		 *\param[in]	p_index	The column to affect
-		 *\param[in]	p_col	The values
+		 *\brief		Sets the values for the given column.
+		 *\param[in]	p_index	The column to affect.
+		 *\param[in]	p_col	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une colonne donnée
-		 *\param[in]	p_index	La colonne à affecter
-		 *\param[in]	p_col	Les valeurs
+		 *\brief		Définit les valeurs d'une colonne donnée.
+		 *\param[in]	p_index	La colonne à affecter.
+		 *\param[in]	p_col	Les valeurs.
 		 */
 		void set_column( uint32_t p_index, value_type const * p_col );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column
-		 *\param[in]	p_index	The column to affect
-		 *\param[in]	p_col	The values
+		 *\brief		Sets the values for the given column.
+		 *\param[in]	p_index	The column to affect.
+		 *\param[in]	p_col	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une colonne donnée
-		 *\param[in]	p_index	La colonne à affecter
-		 *\param[in]	p_col	Les valeurs
+		 *\brief		Définit les valeurs d'une colonne donnée.
+		 *\param[in]	p_index	La colonne à affecter.
+		 *\param[in]	p_col	Les valeurs.
 		 */
 		void set_column( uint32_t p_index, Point< value_type, Rows > const & p_col );
 		/**
 		 *\~english
-		 *\brief		Sets the values for the given column
-		 *\param[in]	p_index	The column to affect
-		 *\param[in]	p_col	The values
+		 *\brief		Sets the values for the given column.
+		 *\param[in]	p_index	The column to affect.
+		 *\param[in]	p_col	The values.
 		 *\~french
-		 *\brief		Définit les valeurs d'une colonne donnée
-		 *\param[in]	p_index	La colonne à affecter
-		 *\param[in]	p_col	Les valeurs
+		 *\brief		Définit les valeurs d'une colonne donnée.
+		 *\param[in]	p_index	La colonne à affecter.
+		 *\param[in]	p_col	Les valeurs.
 		 */
 		void set_column( uint32_t p_index, Coords< value_type, Rows > const & p_col );
 		/**
 		 *\~english
-		 *\brief		Retrieves a column
-		 *\param[in]	p_index	The column index
-		 *\return		The column
+		 *\brief		Retrieves a column.
+		 *\param[in]	p_index	The column index.
+		 *\return		The column.
 		 *\~french
-		 *\brief		Récupère une colonne
-		 *\param[in]	p_index	L'index de la colonne
-		 *\return		La colonne
+		 *\brief		Récupère une colonne.
+		 *\param[in]	p_index	L'index de la colonne.
+		 *\return		La colonne.
 		 */
 		Point< value_type, Rows > get_column( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a column
-		 *\param[in]	p_index	The column index
-		 *\return		The column
+		 *\brief		Retrieves a column.
+		 *\param[in]	p_index	The column index.
+		 *\return		The column.
 		 *\~french
-		 *\brief		Récupère une colonne
-		 *\param[in]	p_index	L'index de la colonne
-		 *\return		La colonne
+		 *\brief		Récupère une colonne.
+		 *\param[in]	p_index	L'index de la colonne.
+		 *\return		La colonne.
 		 */
 		col_type get_column( uint32_t p_index );
 		/**
 		 *\~english
-		 *\brief		Retrieves a column
-		 *\param[in]	p_index		The column index
-		 *\param[out]	p_result	Receives the column values
+		 *\brief		Retrieves a column.
+		 *\param[in]	p_index		The column index.
+		 *\param[out]	p_result	Receives the column values.
 		 *\~french
-		 *\brief		Récupère une colonne
-		 *\param[in]	p_index		L'index de la colonne
-		 *\param[out]	p_result	Reçoit les valeurs de la colonne
+		 *\brief		Récupère une colonne.
+		 *\param[in]	p_index		L'index de la colonne.
+		 *\param[out]	p_result	Reçoit les valeurs de la colonne.
 		 */
 		void get_column( uint32_t p_index, Point< value_type, Rows > & p_result )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a column
-		 *\param[in]	p_index		The column index
-		 *\param[out]	p_result	Receives the column values
+		 *\brief		Retrieves a column.
+		 *\param[in]	p_index		The column index.
+		 *\param[out]	p_result	Receives the column values.
 		 *\~french
-		 *\brief		Récupère une colonne
-		 *\param[in]	p_index		L'index de la colonne
-		 *\param[out]	p_result	Reçoit les valeurs de la colonne
+		 *\brief		Récupère une colonne.
+		 *\param[in]	p_index		L'index de la colonne.
+		 *\param[out]	p_result	Reçoit les valeurs de la colonne.
 		 */
 		void get_column( uint32_t p_index, col_type & p_result );
 		/**
 		 *\~english
-		 *\brief		Retrieves the value at the given position
-		 *\param[in]	p_row, p_column	The position
-		 *\return		The value
+		 *\brief		Retrieves the value at the given position.
+		 *\param[in]	p_row, p_column	The position.
+		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère la valeur à la position donnée
-		 *\param[in]	p_row, p_column	La position
-		 *\return		La valeur
+		 *\brief		Récupère la valeur à la position donnée.
+		 *\param[in]	p_row, p_column	La position.
+		 *\return		La valeur.
 		 */
 		value_type value_at( uint32_t p_column, uint32_t p_row );
 		/**
 		 *\~english
-		 *\brief		Retrieves the column at given index
-		 *\param[in]	p_index	The index
-		 *\return		A constant pointer on the column's first element
+		 *\brief		Retrieves the column at given index.
+		 *\param[in]	p_index	The index.
+		 *\return		A constant pointer on the column's first element.
 		 *\~french
-		 *\brief		Récupère la colonne à l'index donné
-		 *\param[in]	p_index	L'index
-		 *\return		Un pointeur constant sur le premier élément de la colonne
+		 *\brief		Récupère la colonne à l'index donné.
+		 *\param[in]	p_index	L'index.
+		 *\return		Un pointeur constant sur le premier élément de la colonne.
 		 */
 		Point< value_type, Rows > operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the column at given index
-		 *\param[in]	p_index	The index
-		 *\return		A pointer on the column's first element
+		 *\brief		Retrieves the column at given index.
+		 *\param[in]	p_index	The index.
+		 *\return		A pointer on the column's first element.
 		 *\~french
-		 *\brief		Récupère la colonne à l'index donné
-		 *\param[in]	p_index	L'index
-		 *\return		Un pointeur sur le premier élément de la colonne
+		 *\brief		Récupère la colonne à l'index donné.
+		 *\param[in]	p_index	L'index.
+		 *\return		Un pointeur sur le premier élément de la colonne.
 		 */
 		col_type & operator[]( uint32_t p_index );
 		/**
 		 *\~english
-		 *\brief		Retrieves the pointer on datas
-		 *\return		The pointer
+		 *\return		The pointer on datas.
 		 *\~french
-		 *\brief		Récupère le pointeur sur les données
-		 *\return		Les données
+		 *\return		Le pointeur sur les données.
 		 */
 		inline value_type * ptr();
 		/**
 		 *\~english
-		 *\brief		Retrieves the pointer on constant datas
-		 *\return		The pointer
+		 *\return		The pointer on constant datas.
 		 *\~french
-		 *\brief		Récupère le pointeur sur les données constantes
-		 *\return		Les données
+		 *\return		Le pointeur sur les données constantes.
 		 */
 		inline value_type const * const_ptr()const;
 		/**
 		 *\~english
-		 *\brief		Links the data pointer to the one given in parameter
-		 *\remarks		The matrix loses ownership of it's data
+		 *\brief		Links the data pointer to the one given in parameter.
+		 *\remarks		The matrix loses ownership of it's data.
 		 *\~french
-		 *\brief		Lie les données de cette matrice à celles données en paramètre
-		 *\remarks		La matrice perd la maîtrise de ses données
+		 *\brief		Lie les données de cette matrice à celles données en paramètre.
+		 *\remarks		La matrice perd la maîtrise de ses données.
 		 */
 		void link( T * p_coords );
 		/**
 		 *\~english
-		 *\brief		Initialises the matrix as a Jordan one, with the given value
-		 *\param[in]	p_value	The value
+		 *\brief		Initialises the matrix as a Jordan one, with the given value.
+		 *\param[in]	p_value	The value.
 		 *\~french
-		 *\brief		Initialise la matrice comme une matrice de Jordan, avec la valeur donnée
-		 *\param[in]	p_value	La valeur
+		 *\brief		Initialise la matrice comme une matrice de Jordan, avec la valeur donnée.
+		 *\param[in]	p_value	La valeur.
 		 */
 		void initialise( value_type const & p_value = policy::zero() );
 		/**
 		 *\~english
-		 *\brief		Computes and returns the transposed of this matrix
-		 *\return		The transposed
+		 *\return		The transposed of this matrix.
 		 *\~french
-		 *\brief		Calcule et renvoie la transposée de cette matrice
-		 *\return		La transposée
+		 *\return		La transposée de cette matrice.
 		 */
 		transpose_type get_transposed()const;
 		/**
 		 *\~english
-		 *\brief		Computes the transposed of this matrix
-		 *\param[in]	p_result	Receives the transposed
+		 *\brief		Computes the transposed of this matrix.
+		 *\param[in]	p_result	Receives the transposed.
 		 *\~french
-		 *\brief		Calcule la transposée de cette matrice
-		 *\param[in]	p_result	Reçoit la transposée
+		 *\brief		Calcule la transposée de cette matrice.
+		 *\param[in]	p_result	Reçoit la transposée.
 		 */
 		void get_transposed( transpose_type & p_result )const;
 		/**
 		 *\~english
-		 *\brief		Computes and returns an identity matrix
-		 *\return		The identity matrix
+		 *\return		The identity matrix.
 		 *\~french
-		 *\brief		Calcule et renvoie une matrice identité
-		 *\return		La matrice identité
+		 *\return		La matrice identité.
 		 */
 		my_type get_identity()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves thr trace or this matrix
-		 *\return		The trace
+		 *\return		The trace or this matrix.
 		 *\~french
-		 *\brief		Récupère la trace de cette matrice
-		 *\return		La trace
+		 *\return		La trace de cette matrice.
 		 */
 		value_type get_trace()const;
 		/**
@@ -626,138 +625,138 @@ namespace Castor
 		void set_identity();
 		/**
 		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_matrix	The Matrix object to copy
-		 *\return		A reference to this Matrix object
+		 *\brief		Copy assignment operator.
+		 *\param[in]	p_matrix	The Matrix object to copy.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_matrix	L'objet Matrix à copier
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	p_matrix	L'objet Matrix à copier.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_matrix	The Matrix object to move
-		 *\return		A reference to this Matrix object
+		 *\brief		Move assignment operator.
+		 *\param[in]	p_matrix	The Matrix object to move.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_matrix	L'objet Matrix à déplacer
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation  par déplacement.
+		 *\param[in]	p_matrix	L'objet Matrix à déplacer.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator=( Matrix< T, Columns, Rows > && p_matrix );
 		/**
 		 *\~english
-		 *\brief		Conversion Copy assignment operator
-		 *\param[in]	p_matrix	The Matrix object to copy
-		 *\return		A reference to this Matrix object
+		 *\brief		Conversion Copy assignment operator.
+		 *\param[in]	p_matrix	The Matrix object to copy.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie convertie
-		 *\param[in]	p_matrix	L'objet Matrix à copier
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par copie convertie.
+		 *\param[in]	p_matrix	L'objet Matrix à copier.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		template< typename Type > Matrix< T, Columns, Rows > & operator=( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Conversion Copy assignment operator
-		 *\param[in]	p_matrix	The data pointer to copy
-		 *\return		A reference to this Matrix object
+		 *\brief		Conversion Copy assignment operator.
+		 *\param[in]	p_matrix	The data pointer to copy.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie convertie
-		 *\param[in]	p_matrix	Le pointeur sur les données à copier
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par copie convertie.
+		 *\param[in]	p_matrix	Le pointeur sur les données à copier.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		template< typename Type > Matrix< T, Columns, Rows > & operator=( Type const * p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
-		 *\param[in]	p_matrix	The Matrix object to add
-		 *\return		A reference to this Matrix object
+		 *\brief		Addition assignment operator.
+		 *\param[in]	p_matrix	The Matrix object to add.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_matrix	L'objet Matrix à ajouter
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par addition.
+		 *\param[in]	p_matrix	L'objet Matrix à ajouter.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		template< typename Type > Matrix< T, Columns, Rows > & operator+=( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Substraction assignment operator
-		 *\param[in]	p_matrix	The Matrix object to substract
-		 *\return		A reference to this Matrix object
+		 *\brief		Substraction assignment operator.
+		 *\param[in]	p_matrix	The Matrix object to substract.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_matrix	L'objet Matrix à soustraire
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par soustraction.
+		 *\param[in]	p_matrix	L'objet Matrix à soustraire.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		template< typename Type > Matrix< T, Columns, Rows > & operator-=( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
-		 *\brief		Addition assignment operator
-		 *\param[in]	p_value	The value to add
-		 *\return		A reference to this Matrix object
+		 *\brief		Addition assignment operator.
+		 *\param[in]	p_value	The value to add.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_value	La valeur à additionner
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par addition.
+		 *\param[in]	p_value	La valeur à additionner.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator+=( T const & p_value );
 		/**
 		 *\~english
-		 *\brief		Substraction assignment operator
-		 *\param[in]	p_value	The value to substract
-		 *\return		A reference to this Matrix object
+		 *\brief		Substraction assignment operator.
+		 *\param[in]	p_value	The value to substract.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_value	La valeur à soustraire
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par soustraction.
+		 *\param[in]	p_value	La valeur à soustraire.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator-=( T const & p_value );
 		/**
 		 *\~english
-		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_value	The value to multiply
-		 *\return		A reference to this Matrix object
+		 *\brief		Multiplication assignment operator.
+		 *\param[in]	p_value	The value to multiply.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_value	La valeur à multiplier
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par multiplication.
+		 *\param[in]	p_value	La valeur à multiplier.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator*=( T const & p_value );
 		/**
 		 *\~english
-		 *\brief		Division assignment operator
-		 *\param[in]	p_value	The value to divide
-		 *\return		A reference to this Matrix object
+		 *\brief		Division assignment operator.
+		 *\param[in]	p_value	The value to divide.
+		 *\return		A reference to this Matrix object.
 		 *\~french
-		 *\brief		Opérateur d'affectation par division
-		 *\param[in]	p_value	La valeur à diviser
-		 *\return		Une référence sur cet objet Matrix
+		 *\brief		Opérateur d'affectation par division.
+		 *\param[in]	p_value	La valeur à diviser.
+		 *\return		Une référence sur cet objet Matrix.
 		 */
 		Matrix< T, Columns, Rows > & operator/=( T const & p_value );
 		/**
 		 *\~english
-		 *\brief		Indexing operator
-		 *\param[in]	p_col	The column index
-		 *\param[in]	p_row	The row index
-		 *\return		A reference to the indexed value
+		 *\brief		Indexing operator.
+		 *\param[in]	p_col	The column index.
+		 *\param[in]	p_row	The row index.
+		 *\return		A reference to the indexed value.
 		 *\~french
-		 *\brief		Opérateur d'indexation
-		 *\param[in]	p_col	L'index de la colonne
-		 *\param[in]	p_row	L'index de la ligne
-		 *\return		Une référence sur la valeur indexée
+		 *\brief		Opérateur d'indexation.
+		 *\param[in]	p_col	L'index de la colonne.
+		 *\param[in]	p_row	L'index de la ligne.
+		 *\return		Une référence sur la valeur indexée.
 		 */
 		T & operator()( uint32_t p_col, uint32_t p_row );
 		/**
 		 *\~english
-		 *\brief		Indexing operator
-		 *\param[in]	p_col	The column index
-		 *\param[in]	p_row	The row index
-		 *\return		A reference to the indexed value
+		 *\brief		Indexing operator.
+		 *\param[in]	p_col	The column index.
+		 *\param[in]	p_row	The row index.
+		 *\return		A reference to the indexed value.
 		 *\~french
-		 *\brief		Opérateur d'indexation
-		 *\param[in]	p_col	L'index de la colonne
-		 *\param[in]	p_row	L'index de la ligne
-		 *\return		Une référence sur la valeur indexée
+		 *\brief		Opérateur d'indexation.
+		 *\param[in]	p_col	L'index de la colonne.
+		 *\param[in]	p_row	L'index de la ligne.
+		 *\return		Une référence sur la valeur indexée.
 		 */
 		T const & operator()( uint32_t p_col, uint32_t p_row )const;
 

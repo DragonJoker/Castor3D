@@ -121,7 +121,7 @@ namespace Castor
 			{
 			}
 
-			virtual void Initialise()
+			void Initialise()override
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
 				CHECK_FT_ERR( FT_New_Face, m_library, string::string_cast< char >( m_path ).c_str(), 0, &m_face );
@@ -129,7 +129,7 @@ namespace Castor
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
 
-			virtual void Cleanup()
+			void Cleanup()override
 			{
 				CHECK_FT_ERR( FT_Done_Face, m_face );
 				CHECK_FT_ERR( FT_Done_FreeType, m_library );
@@ -137,7 +137,7 @@ namespace Castor
 				m_face = nullptr;
 			}
 
-			virtual Glyph LoadGlyph( char32_t p_char )
+			Glyph LoadGlyph( char32_t p_char )override
 			{
 				FT_Glyph l_glyph{};
 				FT_ULong const l_char( p_char );
@@ -183,6 +183,7 @@ namespace Castor
 					}
 				}
 
+				FT_Done_Glyph( l_glyph );
 				return Glyph{ p_char, l_size, l_bearing, l_advance, l_buffer };
 			}
 
