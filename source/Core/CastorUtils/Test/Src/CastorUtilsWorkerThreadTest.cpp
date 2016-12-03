@@ -51,7 +51,7 @@ namespace Testing
 		constexpr size_t l_count = 1000000u;
 		WorkerThread l_producer;
 		WorkerThread l_consumer;
-		std::atomic_int l_value = 0;
+		std::atomic_int l_value{ 0 };
 
 		l_producer.Feed( [&l_value, &l_count]()
 		{
@@ -87,7 +87,7 @@ namespace Testing
 		constexpr size_t l_count = 1000000u;
 		WorkerThread l_worker1;
 		WorkerThread l_worker2;
-		std::atomic_int l_value = 0;
+		std::atomic_int l_value{ 0 };
 
 		auto l_job = [&l_value, &l_count]()
 		{

@@ -19,11 +19,7 @@ namespace Castor
 
 	ThreadPool::~ThreadPool()noexcept
 	{
-		if ( !IsFull() )
-		{
-			WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
-		}
-
+		WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
 		make_unique_lock( m_mutex );
 		m_busy.clear();
 		m_available.clear();
@@ -69,7 +65,7 @@ namespace Castor
 		l_worker.Feed( [this, p_job, &l_worker]()
 		{
 			p_job();
-			DoFreeWorker( std::move( l_worker ) );
+			DoFreeWorker( l_worker );
 		} );
 	}
 

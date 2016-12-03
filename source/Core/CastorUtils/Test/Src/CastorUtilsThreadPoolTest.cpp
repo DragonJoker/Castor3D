@@ -47,7 +47,7 @@ namespace Testing
 	{
 		constexpr size_t l_count = 1000000u;
 		ThreadPool l_pool( 5u );
-		std::atomic_int l_value = 0;
+		std::atomic_int l_value{ 0 };
 
 		auto l_job = [&l_value, l_count]()
 		{
@@ -76,7 +76,7 @@ namespace Testing
 	{
 		constexpr size_t l_count = 1000000u;
 		ThreadPool l_pool( 5u );
-		std::atomic_int l_value = 0;
+		std::atomic_int l_value{ 0 };
 
 		auto l_job = [&l_value, l_count]()
 		{
