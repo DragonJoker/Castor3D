@@ -89,7 +89,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 */
 		PointDataHolder()
-			: m_coords( reinterpret_cast< float * >( AlignedAlloc( 16, 16 ) ) )
+			: m_coords( AlignedAlloc< float >( 16, 16 ) )
 		{
 		}
 		/**

@@ -163,6 +163,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND )
 	parse_subdir_files( Log "Log" )
 	parse_subdir_files( Math "Math" )
 	parse_subdir_files( Miscellaneous "Miscellaneous" )
+	parse_subdir_files( Multithreading "Multithreading" )
 	parse_subdir_files( Pool "Pool" )
 	parse_subdir_files( Stream "Stream" )
 

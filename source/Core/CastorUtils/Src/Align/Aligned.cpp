@@ -1,13 +1,14 @@
 #include "Aligned.hpp"
 
 #include "Log/Logger.hpp"
+#include "Exception/Assertion.hpp"
 
 #if defined( _WIN32 )
 #	include <malloc.h>
-#	define CU_ALIGNED_FREE( m )\
-	_aligned_free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
+#	define CU_ALIGNED_FREE( m )\
+	_aligned_free( m )
 #else
 #	if GCC_VERSION >= 50000
 #		ifndef _ISOC11_SOURCE
@@ -15,6 +16,7 @@
 #		endif
 #		include <cstdlib>
 #		define CU_ALIGNED_ALLOC( m, a, s )\
+	REQUIRE( ( s % a ) == 0 && cuT( "size is not an integral multiple of alignment" ) );\
 	m = aligned_alloc( a, s )
 #	else
 #		include <cstdlib>

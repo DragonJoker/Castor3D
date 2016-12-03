@@ -66,6 +66,7 @@ namespace Castor
 					l_ret = p_name;
 				}
 
+				free( l_real );
 				return string::string_cast< CharU >( l_ret );
 			}
 
