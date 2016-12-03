@@ -28,6 +28,7 @@ SOFTWARE.
 #include <thread>
 #include <functional>
 #include <atomic>
+#include <mutex>
 
 namespace Castor
 {
@@ -38,7 +39,7 @@ namespace Castor
 	\~english
 	\brief		Implementation of a worker thread to place in a thread pool.
 	\~french
-	\brief		Implémentation d'un thread de travail à placer dans un pool de threads.
+	\brief		Implï¿½mentation d'un thread de travail ï¿½ placer dans un pool de threads.
 	*/
 	class WorkerThread
 	{
@@ -65,15 +66,15 @@ namespace Castor
 		 *\brief		Runs the given job.
 		 *\param[in]	p_job	The job.
 		 *\~french
-		 *\brief		Lance la tâche donnée.
-		 *\param[in]	p_job	La tâche.
+		 *\brief		Lance la tï¿½che donnï¿½e.
+		 *\param[in]	p_job	La tï¿½che.
 		 */
 		CU_API void Feed( Job p_job );
 		/**
 		 *\~english
 		 *\return		\p true if the job is ended.
 		 *\~french
-		 *\return		\p true si la tâche est terminée.
+		 *\return		\p true si la tï¿½che est terminï¿½e.
 		 */
 		CU_API bool IsEnded()const;
 		/**
@@ -82,9 +83,9 @@ namespace Castor
 		 *\param[in]	p_timeout	The maximum time to wait.
 		 *\return		\p true if the task is ended.
 		 *\~french
-		 *\brief		Attend la fin de la tâche pour un temps donné.
-		 *\param[in]	p_timeout	Le temps maximal à attendre.
-		 *\return		\p true si la tâche est terminée.
+		 *\brief		Attend la fin de la tï¿½che pour un temps donnï¿½.
+		 *\param[in]	p_timeout	Le temps maximal ï¿½ attendre.
+		 *\return		\p true si la tï¿½che est terminï¿½e.
 		 */
 		CU_API bool Wait( std::chrono::milliseconds const & p_timeout )const;
 
