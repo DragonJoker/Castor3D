@@ -68,8 +68,12 @@ namespace Castor3D
 		}
 
 		m_sceneUbo = m_program.FindFrameVariableBuffer( ShaderProgram::BufferScene );
-		m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel );
-		m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
+
+		if ( m_program.HasObject( ShaderType::ePixel ) )
+		{
+			m_spotShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel );
+			m_pointShadowMaps = m_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
+		}
 	}
 
 	RenderPipeline::~RenderPipeline()

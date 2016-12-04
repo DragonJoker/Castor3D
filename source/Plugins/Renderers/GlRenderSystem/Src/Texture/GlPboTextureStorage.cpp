@@ -178,8 +178,7 @@ namespace GlRender
 	{
 		if ( CheckFlag( p_storage.GetCPUAccess(), AccessType::eWrite ) )
 		{
-			auto l_buffer = p_image.GetBuffer();
-			DoUploadImage( p_storage, p_image, l_buffer->const_ptr() );
+			DoUploadImage( p_storage, p_image, p_image.GetBuffer()->const_ptr() );
 		}
 	}
 
@@ -194,15 +193,7 @@ namespace GlRender
 			if ( m_downloadBuffer->Bind() )
 			{
 				l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, nullptr );
-				uint8_t * l_data = m_downloadBuffer->Lock( GlAccessType::eRead );
-
-				if ( l_data )
-				{
-					memcpy( l_buffer->ptr(), l_data, l_buffer->size() );
-					m_downloadBuffer->Unlock();
-				}
-
-				m_downloadBuffer->Unbind();
+				m_downloadBuffer->Download( 0u, l_buffer->size(), l_buffer->ptr() );
 			}
 		}
 	}

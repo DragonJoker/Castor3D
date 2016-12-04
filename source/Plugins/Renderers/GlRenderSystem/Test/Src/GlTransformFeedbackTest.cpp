@@ -29,10 +29,10 @@ namespace Testing
 		ShaderProgramSPtr DoCreateNoopProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				void main()
-				{
-					gl_Position = vec4( 0, 0, 0, 1 );
-				}
+				void main()\n
+				{\n
+					gl_Position = vec4( 0, 0, 0, 1 );\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
@@ -44,13 +44,12 @@ namespace Testing
 		ShaderProgramSPtr DoCreateBasicComputeProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				in float inValue;
-				out float outValue;
-
-				void main()
-				{
-					outValue = sqrt( inValue );
-				}
+				in float inValue;\n
+				out float outValue;\n\n
+				void main()\n
+				{\n
+					outValue = sqrt( inValue );\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
@@ -62,31 +61,27 @@ namespace Testing
 		ShaderProgramSPtr DoCreateGeometryShaderProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				in float inValue;
-				out float geoValue;
-
-				void main()
-				{
-					geoValue = sqrt( inValue );
-				}
+				in float inValue;\n
+				out float geoValue;\n\n
+				void main()\n
+				{\n
+					geoValue = sqrt( inValue );\n
+				}\n
 			);
 			String l_geo = Glsl(
-				layout( points ) in;
-				layout( triangle_strip, max_vertices = 3 ) out;
-
-				in float[] geoValue;
-				out float outValue;
-
-				void main()
-				{
-					for ( int i = 0; i < 3; i++ )
-					{
-						outValue = geoValue[0] + i;
-						EmitVertex();
-					}
-
-					EndPrimitive();
-				}
+				layout( points ) in;\n
+				layout( triangle_strip, max_vertices = 3 ) out;\n\n
+				in float[] geoValue;\n
+				out float outValue;\n\n
+				void main()\n
+				{\n
+					for ( int i = 0; i < 3; i++ )\n
+					{\n
+						outValue = geoValue[0] + i;\n
+						EmitVertex();\n
+					}\n
+					EndPrimitive();\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
@@ -100,133 +95,123 @@ namespace Testing
 		ShaderProgramSPtr DoCreateParticleSystemShaderProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				layout( location = 0 ) in float Type;
-				layout( location = 1 ) in vec3 Position;
-				layout( location = 2 ) in vec3 Velocity;
-				layout( location = 3 ) in float Age;
-
-				out float Type0;
-				out vec3 Position0;
-				out vec3 Velocity0;
-				out float Age0;
-
-				void main()
-				{
-					Type0 = Type;
-					Position0 = Position;
-					Velocity0 = Velocity;
-					Age0 = Age;
-				}
+				layout( location = 0 ) in float Type;\n
+				layout( location = 1 ) in vec3 Position;\n
+				layout( location = 2 ) in vec3 Velocity;\n
+				layout( location = 3 ) in float Age;\n\n
+				out float Type0;\n
+				out vec3 Position0;\n
+				out vec3 Velocity0;\n
+				out float Age0;\n\n
+				void main()\n
+				{\n
+					Type0 = Type;\n
+					Position0 = Position;\n
+					Velocity0 = Velocity;\n
+					Age0 = Age;\n
+				}\n
 			);
 			String l_geo = Glsl(
-				layout( points ) in;
-				layout( points ) out;
-				layout( max_vertices = 30 ) out;
-
-				in float Type0[];
-				in vec3 Position0[];
-				in vec3 Velocity0[];
-				in float Age0[];
-
-				out float Type1;
-				out vec3 Position1;
-				out vec3 Velocity1;
-				out float Age1;
-
-				uniform float gDeltaTimeMillis;
-				uniform float gTime;
-				uniform float gLauncherLifetime;
-				uniform float gShellLifetime;
-				uniform float gSecondaryShellLifetime;
-
-				vec3 GetRandomDir( float TexCoord )
-				{
-					vec3 Dir = vec3( TexCoord, TexCoord, TexCoord );
-					Dir -= vec3( 0.5, 0.5, 0.5 );
-					return Dir;
-				}
-
-				void main()
-				{
-					float Age = Age0[0] + gDeltaTimeMillis;
-
-					if ( Type0[0] == 0.0f )
-					{
-						if ( Age >= gLauncherLifetime )
-						{
-							Type1 = 0.0f;
-							Position1 = Position0[0];
-							Velocity1 = Velocity0[0];
-							Age1 = 0.0f;
-							EmitVertex();
-							EndPrimitive();
-
-							Type1 = 1.0f;
-							Position1 = Position0[0];
-							vec3 Dir = GetRandomDir( gTime / 1000.0 );
-							Dir.y = max( Dir.y, 0.5 );
-							Velocity1 = normalize( Dir ) / 20.0;
-							Age1 = 0.0f;
-							EmitVertex();
-							EndPrimitive();
-						}
-						else
-						{
-							Type1 = 0.0f;
-							Position1 = Position0[0];
-							Velocity1 = Velocity0[0];
-							Age1 = Age;
-							EmitVertex();
-							EndPrimitive();
-						}
-					}
-					else
-					{
-						float DeltaTimeSecs = gDeltaTimeMillis / 1000.0f;
-						float t1 = Age0[0] / 1000.0;
-						float t2 = Age / 1000.0;
-						vec3 DeltaP = DeltaTimeSecs * Velocity0[0];
-						vec3 DeltaV = vec3( DeltaTimeSecs ) * ( 0.0, -9.81, 0.0 );
-
-						if ( Type0[0] == 1.0f )
-						{
-							if ( Age < gShellLifetime )
-							{
-								Type1 = 1.0f;
-								Position1 = Position0[0] + DeltaP;
-								Velocity1 = Velocity0[0] + DeltaV;
-								Age1 = Age;
-								EmitVertex();
-								EndPrimitive();
-							}
-							else
-							{
-								for ( int i = 0; i < 10; i++ )
-								{
-									Type1 = 2.0f;
-									Position1 = Position0[0];
-									vec3 Dir = GetRandomDir( ( gTime + i ) / 1000.0 );
-									Velocity1 = normalize( Dir ) / 20.0;
-									Age1 = 0.0f;
-									EmitVertex();
-									EndPrimitive();
-								}
-							}
-						}
-						else
-						{
-							if ( Age < gSecondaryShellLifetime )
-							{
-								Type1 = 2.0f;
-								Position1 = Position0[0] + DeltaP;
-								Velocity1 = Velocity0[0] + DeltaV;
-								Age1 = Age;
-								EmitVertex();
-								EndPrimitive();
-							}
-						}
-					}
-				}
+				layout( points ) in;\n
+				layout( points ) out;\n
+				layout( max_vertices = 30 ) out;\n\n
+				in float Type0[];\n
+				in vec3 Position0[];\n
+				in vec3 Velocity0[];\n
+				in float Age0[];\n\n
+				out float Type1;\n
+				out vec3 Position1;\n
+				out vec3 Velocity1;\n
+				out float Age1;\n\n
+				uniform float gDeltaTimeMillis;\n
+				uniform float gTime;\n
+				uniform float gLauncherLifetime;\n
+				uniform float gShellLifetime;\n
+				uniform float gSecondaryShellLifetime;\n\n
+				vec3 GetRandomDir( float TexCoord )\n
+				{\n
+					vec3 Dir = vec3( TexCoord, TexCoord, TexCoord );\n
+					Dir -= vec3( 0.5, 0.5, 0.5 );\n
+					return Dir;\n
+				}\n\n
+				void main()\n
+				{\n
+					float Age = Age0[0] + gDeltaTimeMillis;\n\n
+					if ( Type0[0] == 0.0f )\n
+					{\n
+						if ( Age >= gLauncherLifetime )\n
+						{\n
+							Type1 = 0.0f;\n
+							Position1 = Position0[0];\n
+							Velocity1 = Velocity0[0];\n
+							Age1 = 0.0f;\n
+							EmitVertex();\n
+							EndPrimitive();\n\n
+							Type1 = 1.0f;\n
+							Position1 = Position0[0];\n
+							vec3 Dir = GetRandomDir( gTime / 1000.0 );\n
+							Dir.y = max( Dir.y, 0.5 );\n
+							Velocity1 = normalize( Dir ) / 20.0;\n
+							Age1 = 0.0f;\n
+							EmitVertex();\n
+							EndPrimitive();\n
+						}\n
+						else\n
+						{\n
+							Type1 = 0.0f;\n
+							Position1 = Position0[0];\n
+							Velocity1 = Velocity0[0];\n
+							Age1 = Age;\n
+							EmitVertex();\n
+							EndPrimitive();\n
+						}\n
+					}\n
+					else\n
+					{\n
+						float DeltaTimeSecs = gDeltaTimeMillis / 1000.0f;\n
+						float t1 = Age0[0] / 1000.0;\n
+						float t2 = Age / 1000.0;\n
+						vec3 DeltaP = DeltaTimeSecs * Velocity0[0];\n
+						vec3 DeltaV = vec3( DeltaTimeSecs ) * ( 0.0, -9.81, 0.0 );\n\n
+						if ( Type0[0] == 1.0f )\n
+						{\n
+							if ( Age < gShellLifetime )\n
+							{\n
+								Type1 = 1.0f;\n
+								Position1 = Position0[0] + DeltaP;\n
+								Velocity1 = Velocity0[0] + DeltaV;\n
+								Age1 = Age;\n
+								EmitVertex();\n
+								EndPrimitive();\n
+							}\n
+							else\n
+							{\n
+								for ( int i = 0; i < 10; i++ )\n
+								{\n
+									Type1 = 2.0f;\n
+									Position1 = Position0[0];\n
+									vec3 Dir = GetRandomDir( ( gTime + i ) / 1000.0 );\n
+									Velocity1 = normalize( Dir ) / 20.0;\n
+									Age1 = 0.0f;\n
+									EmitVertex();\n
+									EndPrimitive();\n
+								}\n
+							}\n
+						}\n
+						else\n
+						{\n
+							if ( Age < gSecondaryShellLifetime )\n
+							{\n
+								Type1 = 2.0f;\n
+								Position1 = Position0[0] + DeltaP;\n
+								Velocity1 = Velocity0[0] + DeltaV;\n
+								Age1 = Age;\n
+								EmitVertex();\n
+								EndPrimitive();\n
+							}\n
+						}\n
+					}\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
@@ -289,15 +274,6 @@ namespace Testing
 		// Shader program
 		auto l_program = DoCreateBasicComputeProgram( m_engine );
 
-		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
-		l_program->SetTransformLayout( l_outputs );
-
-		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( sizeof( l_data ) );
@@ -307,62 +283,59 @@ namespace Testing
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
 		l_vboOut.Resize( sizeof( l_data ) );
 
+		// Transform feedback
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
+		l_program->SetTransformLayout( l_outputs );
+
 		// VAO
 		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
 
+		// Pipeline
+		RasteriserState l_rs;
+		l_rs.SetDiscardPrimitives( true );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
+
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
-		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw ) );
-		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eStatic, BufferAccessNature::eRead ) );
+		CT_CHECK( l_vboIn.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
+		CT_CHECK( l_vboOut.Initialise( BufferAccessType::eDynamic, BufferAccessNature::eDraw ) );
 		CT_CHECK( l_transformFeedback->Initialise( { l_vboOut } ) );
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
 		for ( int j = 0; j < 2; ++j )
 		{
-			l_vboIn.Bind();
-			auto l_buffer = reinterpret_cast< float * >( l_vboIn.Lock( 0, sizeof( l_data ), AccessType::eRead ) );
+			std::array< float, 5 > l_buffer;
+			l_vboIn.Download( 0u, sizeof( l_data ), reinterpret_cast< uint8_t * >( l_buffer.data() ) );
 
-			if ( l_buffer )
+			for ( int i = 0; i < 5; ++i )
 			{
-				for ( int i = 0; i < 5; ++i )
-				{
-					CT_EQUAL( l_buffer[i], l_data[i] );
-				}
-
-				l_vboIn.Unlock();
+				CT_EQUAL( l_buffer[i], l_data[i] );
 			}
 
-			l_vboIn.Unbind();
-
 			l_pipeline->Apply();
+			l_program->BindUbos();
 			CT_CHECK( l_transformFeedback->Bind() );
 			CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 			l_transformFeedback->Unbind();
-			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
+			CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
 
-			l_vboOut.Bind();
-			l_buffer = reinterpret_cast< float * >( l_vboOut.Lock( 0, sizeof( l_data ), AccessType::eRead ) );
+			l_vboOut.Download( 0u, sizeof( l_data ), reinterpret_cast< uint8_t * >( l_buffer.data() ) );
 
-			if ( l_buffer )
+			for ( int i = 0; i < 5; ++i )
 			{
-				for ( int i = 0; i < 5; ++i )
-				{
-					CT_EQUAL( l_buffer[i], sqrt( l_data[i] ) );
-					l_data[i] = sqrt( l_data[i] );
-				}
-
-				l_vboOut.Unlock();
+				CT_EQUAL( l_buffer[i], sqrt( l_data[i] ) );
+				l_data[i] = sqrt( l_data[i] );
 			}
 
-			l_vboOut.Unbind();
 			l_vboIn.Copy( l_vboOut, sizeof( l_data ) );
+			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
 		}
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
 		l_vboOut.Cleanup();
 		l_vboIn.Cleanup();
-		l_program->Cleanup();
+		l_pipeline->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
 

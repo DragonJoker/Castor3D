@@ -84,7 +84,7 @@ namespace Castor3D
 		{
 			std::stringstream l_stream;
 			l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-			l_stream << string::string_cast< char >( l_decl.m_stack ) << std::endl;
+			l_stream << Castor::string::string_cast< char >( l_decl.m_stack ) << std::endl;
 			Castor::Logger::LogError( l_stream.str() );
 		}
 	}

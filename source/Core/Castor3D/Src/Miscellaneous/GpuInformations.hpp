@@ -47,18 +47,36 @@ namespace Castor3D
 	enum class GpuFeature
 		: uint32_t
 	{
-		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
+		//!\~english	Tells whether or not the selected render API supports instanced draw calls.
+		//!\~french		Dit si l'API de rendu choisie supporte le dessin instancié.
 		eInstancing = 0x00000001,
-		//!\~english Tells whether or not the selected render API supports accumulation buffers	\~french Dit si l'API de rendu choisie supporte le buffer d'accumulation
+		//!\~english	Tells whether or not the selected render API supports accumulation buffers.
+		//!\~french		Dit si l'API de rendu choisie supporte le buffer d'accumulation.
 		eAccumulationBuffer = 0x00000002,
-		//!\~english Tells whether or not the selected render API supports non power of two textures	\~french Dit si l'API de rendu choisie supporte les textures non puissance de 2
+		//!\~english	Tells whether or not the selected render API supports non power of two textures.
+		//!\~french		Dit si l'API de rendu choisie supporte les textures non puissance de 2.
 		eNonPowerOfTwoTextures = 0x00000004,
-		//!\~english Tells whether or not the selected render API supports stereo	\~french Dit si l'API de rendu choisie supporte la stéréographie.
+		//!\~english	Tells whether or not the selected render API supports stereo.
+		//!\~french		Dit si l'API de rendu choisie supporte la stéréographie.
 		eStereo = 0x00000008,
-		//!\~english Tells whether or not the selected render API supports constants buffers.	\~french Dit si l'API de rendu choisie supporte les tampons de constantes.
+		//!\~english	Tells whether or not the selected render API supports constants buffers.
+		//!\~french		Dit si l'API de rendu choisie supporte les tampons de constantes.
 		eConstantsBuffers = 0x00000010,
-		//!\~english Tells whether or not the selected render API supports texture buffers.	\~french Dit si l'API de rendu choisie supporte les tampons de textures.
+		//!\~english	Tells whether or not the selected render API supports texture buffers.
+		//!\~french		Dit si l'API de rendu choisie supporte les tampons de textures.
 		eTextureBuffers = 0x00000020,
+		//!\~english	Tells whether or not the selected render API supports shader stoarage buffers.
+		//!\~french		Dit si l'API de rendu choisie supporte les tampons de stockage shader.
+		eShaderStorageBuffers = 0x00000040,
+		//!\~english	Tells whether or not the selected render API supports atomic counter buffers.
+		//!\~french		Dit si l'API de rendu choisie supporte les tampons de compteurs atomiques.
+		eAtomicCounterBuffers = 0x00000080,
+		//!\~english	Tells whether or not the selected render API supports transform feedback.
+		//!\~french		Dit si l'API de rendu choisie supporte le transform feedback.
+		eTransformFeedback = 0x00000100,
+		//!\~english	Tells whether or not the selected render API supports texture immutable storages.
+		//!\~french		Dit si l'API de rendu choisie supporte les stockage immuables pour les textures.
+		eImmutableTextureStorage = 0x00000200,
 	};
 	IMPLEMENT_FLAGS( GpuFeature )
 	/*!
