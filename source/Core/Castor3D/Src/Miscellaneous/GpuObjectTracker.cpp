@@ -1,7 +1,5 @@
 #include "GpuObjectTracker.hpp"
 
-using namespace Castor;
-
 #if C3D_TRACE_OBJECTS
 
 namespace Castor3D
