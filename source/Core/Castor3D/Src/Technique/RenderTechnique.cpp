@@ -523,9 +523,7 @@ namespace Castor3D
 
 		if ( l_scene.HasShadows() )
 		{
-			l_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
-			l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
-			l_depthMaps.push_back( std::ref( m_pointShadowMap ) );
+			DoGetDepthMaps( l_depthMaps );
 
 			for ( auto & l_shadowMap : m_shadowMaps )
 			{
@@ -540,7 +538,7 @@ namespace Castor3D
 			p_visible = uint32_t( m_renderedObjects.size() );
 			p_particles = m_particlesCount;
 
-#if !defined( NDEBUG )
+#if 0 && !defined( NDEBUG )
 
 			if ( !m_shadowMaps.empty() )
 			{
@@ -1185,6 +1183,13 @@ namespace Castor3D
 		}
 	}
 
+	void RenderTechnique::DoGetDepthMaps( DepthMapArray & p_depthMaps )
+	{
+		p_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
+		p_depthMaps.push_back( std::ref( m_spotShadowMap ) );
+		p_depthMaps.push_back( std::ref( m_pointShadowMap ) );
+	}
+
 	bool RenderTechnique::DoInitialiseDirectionalShadowMap( Size const & p_size )
 	{
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_DirectionalShadowMap" ) );
@@ -1196,7 +1201,11 @@ namespace Castor3D
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eD32F, p_size );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture(
+			TextureType::eTwoDimensions,
+			AccessType::eNone,
+			AccessType::eRead | AccessType::eWrite,
+			PixelFormat::eD32F, p_size );
 		m_directionalShadowMap.SetTexture( l_texture );
 		m_directionalShadowMap.SetSampler( l_sampler );
 

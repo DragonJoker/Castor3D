@@ -34,7 +34,9 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <Log/Logger.hpp>
 
@@ -193,6 +195,10 @@ namespace Deferred
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
+	void RenderTechnique::DoGetDepthMaps( Castor3D::DepthMapArray & p_depthMaps )
+	{
+	}
+
 	bool RenderTechnique::DoCreate()
 	{
 		bool l_return = m_geometryPassFrameBuffer->Create();
@@ -201,12 +207,19 @@ namespace Deferred
 		{
 			m_lightPassDepthBuffer->Create();
 			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+			auto & l_scene = *m_renderTarget.GetScene();
 			uint8_t l_sceneFlags{ 0u };
+			FlagCombination< ProgramFlag > l_programFlags;
+			
+			if ( l_scene.HasShadows() )
+			{
+				l_programFlags |= ProgramFlag::eShadows;
+			}
 
 			for ( auto & program : m_lightPassShaderPrograms )
 			{
-				program.m_program->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, 0u, l_sceneFlags ) );
-				program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, 0u, l_sceneFlags ) );
+				program.m_program->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, l_programFlags, l_sceneFlags ) );
+				program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, l_programFlags, l_sceneFlags ) );
 
 				DepthStencilState l_dsstate;
 				l_dsstate.SetDepthTest( false );
@@ -242,7 +255,7 @@ namespace Deferred
 			l_texture->GetImage().InitialiseSource();
 
 			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
-			m_lightPassTextures[i]->SetIndex( i + 1 );
+			m_lightPassTextures[i]->SetIndex( i + 1 ); // +1 because light texture is at index 0
 			m_lightPassTextures[i]->SetTexture( l_texture );
 			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 			m_lightPassTextures[i]->Initialise();
@@ -271,9 +284,9 @@ namespace Deferred
 			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
 			{
 				l_return = m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
-															  , GetTextureAttachmentIndex( DsTexture( i ) )
-															  , m_geometryPassTexAttachs[i]
-															  , m_lightPassTextures[i]->GetType() );
+					, GetTextureAttachmentIndex( DsTexture( i ) )
+					, m_geometryPassTexAttachs[i]
+					, m_lightPassTextures[i]->GetType() );
 			}
 
 			if ( l_return )
@@ -395,11 +408,13 @@ namespace Deferred
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
+				DoBindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
 
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 				l_program.m_program->UnbindUbos();
 
+				DoUnbindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Unbind();
@@ -438,6 +453,12 @@ namespace Deferred
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
+	}
+
+	void RenderTechnique::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
+	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}
 
 	String RenderTechnique::DoGetOpaquePixelShaderSource(
@@ -605,10 +626,10 @@ namespace Deferred
 					, FragmentInput( l_v3Position, l_v3Normal )
 					, l_output );
 
-				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
-														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +
-														l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() ) +
-														l_v3MapEmissive ), 1.0 );
+				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() )
+														+ l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() )
+														+ l_writer.Paren( l_v3Specular * l_v3MapSpecular.xyz() )
+														+ l_v3MapEmissive ), 1.0 );
 
 				if ( p_sceneFlags != 0 )
 				{
@@ -623,5 +644,31 @@ namespace Deferred
 		} );
 
 		return l_writer.Finalise();
+	}
+
+	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
+	{
+		if ( m_renderTarget.GetScene()->HasShadows() )
+		{
+			m_directionalShadowMap.GetTexture()->Bind( p_startIndex );
+			m_directionalShadowMap.GetSampler()->Bind( p_startIndex++ );
+			m_spotShadowMap.GetTexture()->Bind( p_startIndex );
+			m_spotShadowMap.GetSampler()->Bind( p_startIndex++ );
+			m_pointShadowMap.GetTexture()->Bind( p_startIndex );
+			m_pointShadowMap.GetSampler()->Bind( p_startIndex++ );
+		}
+	}
+
+	void RenderTechnique::DoUnbindDepthMaps( uint32_t p_startIndex )const
+	{
+		if ( m_renderTarget.GetScene()->HasShadows() )
+		{
+			m_directionalShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_directionalShadowMap.GetSampler()->Unbind( p_startIndex++ );
+			m_spotShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_spotShadowMap.GetSampler()->Unbind( p_startIndex++ );
+			m_pointShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_pointShadowMap.GetSampler()->Unbind( p_startIndex++ );
+		}
 	}
 }

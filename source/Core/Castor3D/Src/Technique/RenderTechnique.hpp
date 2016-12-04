@@ -500,6 +500,15 @@ namespace Castor3D
 		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
 		 *\~english
+		 *\brief		Retrieves the depth maps.
+		 *\param[out]	p_depthMaps	Receives the depth maps.
+		 *\~french
+		 *\brief		Récupère les textures de profondeur.
+		 *\param[out]	p_depthMaps	Reçoit les textures.
+		 */
+		C3D_API virtual void DoGetDepthMaps( DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french

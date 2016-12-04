@@ -104,6 +104,10 @@ namespace Deferred
 
 	protected:
 		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetDepthMaps
+		 */
+		void DoGetDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
+		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
 		bool DoCreate()override;
@@ -148,6 +152,10 @@ namespace Deferred
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 */
+		void DoCompleteProgramFlags( Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		Castor::String DoGetOpaquePixelShaderSource(
@@ -182,8 +190,26 @@ namespace Deferred
 			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
 			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
 			uint8_t p_sceneFlags )const;
+		/**
+		 *\~english
+		 *\brief		Binds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
+		 *\~french
+		 *\brief		Active les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
+		 */
+		void DoBindDepthMaps( uint32_t p_startIndex );
+		/**
+		 *\~english
+		 *\brief		Unbinds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
+		 *\~french
+		 *\brief		Désactive les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
+		 */
+		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
 
-	protected:
+	private:
 		struct LightPassProgram
 		{
 			//!\~english	The shader program used to render lights.
@@ -206,7 +232,7 @@ namespace Deferred
 			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
 
-	protected:
+	private:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
 		std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) > m_lightPassTextures;
