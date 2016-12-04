@@ -2,6 +2,8 @@
 
 #include "Common/OpenGl.hpp"
 
+#include <Graphics/PixelBufferBase.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 
