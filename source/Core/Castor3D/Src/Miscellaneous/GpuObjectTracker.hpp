@@ -20,28 +20,61 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef ___GL_UPLOAD_PIXEL_BUFFER_H___
-#define ___GL_UPLOAD_PIXEL_BUFFER_H___
+#ifndef ___C3D_GpuObjectTracker_H___
+#define ___C3D_GpuObjectTracker_H___
 
-#include "Buffer/GlGpuIoBuffer.hpp"
+#ifndef C3D_TRACE_OBJECTS
+#	ifndef NDEBUG
+#		define C3D_TRACE_OBJECTS 1
+#	else
+#		define C3D_TRACE_OBJECTS 0
+#	endif
+#endif
 
-namespace GlRender
+#if C3D_TRACE_OBJECTS
+
+#include <list>
+
+#include <Design/Named.hpp>
+
+#include "Castor3DPrerequisites.hpp"
+
+namespace Castor3D
 {
 	/*!
-	\author		Sylvain DOREMUS
-	\brief		Unpack (upload to VRAM) buffer implementation
+	\author 	Sylvain DOREMUS
+	\date 		04/12/2016
+	\version	0.9.0
+	\~english
+	\brief		Tracks objects allocated on GPU.
+	\~french
+	\brief		Trace les objets alloués sur le GPU.
 	*/
-	class GlUploadPixelBuffer
-		: public GlGpuIoBuffer
+	class GpuObjectTracker
 	{
 	public:
-		GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize );
-		GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pixels );
-		virtual ~GlUploadPixelBuffer();
+		struct ObjectDeclaration
+		{
+			uint32_t m_id;
+			std::string m_name;
+			void * m_object;
+			std::string m_file;
+			int m_line;
+			std::string m_stack;
+		};
+
+	public:
+		C3D_API bool Track( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool Track( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool Untrack( void * p_object, ObjectDeclaration & p_declaration );
+		C3D_API void ReportTracked();
 
 	private:
-		bool DoInitialise()override;
+		uint32_t m_id = 0;
+		std::list< ObjectDeclaration > m_allocated;
 	};
 }
+
+#endif
 
 #endif

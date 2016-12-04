@@ -6,11 +6,11 @@
 #include <Graphics/Image.hpp>
 
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>

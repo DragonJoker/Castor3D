@@ -4,7 +4,7 @@
 #include <Data/File.hpp>
 
 #include <Engine.hpp>
-#include <PluginCache.hpp>
+#include <Cache/PluginCache.hpp>
 
 #include <BenchManager.hpp>
 

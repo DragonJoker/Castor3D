@@ -2,7 +2,7 @@
 
 #include "PyCastor3DPrerequisites.hpp"
 
-#include <LightCache.hpp>
+#include <Cache/LightCache.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

@@ -4,13 +4,13 @@
 #	include <vld.h>
 #endif
 
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SamplerCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SamplerCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Skeleton/SkeletonAnimationBone.hpp>

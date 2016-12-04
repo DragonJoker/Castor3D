@@ -1,12 +1,12 @@
 #include "DeferredMsaaRenderTechnique.hpp"
 
-#include <CameraCache.hpp>
 #include <Engine.hpp>
-#include <LightCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <ShaderCache.hpp>
-#include <TargetCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/ShaderCache.hpp>
+#include <Cache/TargetCache.hpp>
 
 #include <FrameBuffer/ColourRenderBuffer.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>

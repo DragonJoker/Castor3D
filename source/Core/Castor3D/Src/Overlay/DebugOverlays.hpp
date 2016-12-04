@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___C3D_DEBUG_OVERLAYS_H___
 #define ___C3D_DEBUG_OVERLAYS_H___
 
-#include "OverlayCache.hpp"
+#include "Cache/OverlayCache.hpp"
 
 #include <Miscellaneous/PreciseTimer.hpp>
 #include <Design/OwnedBy.hpp>

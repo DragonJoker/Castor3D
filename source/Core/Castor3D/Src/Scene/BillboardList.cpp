@@ -1,8 +1,8 @@
 #include "BillboardList.hpp"
 
 #include "Engine.hpp"
-#include "MaterialCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "Scene.hpp"
 #include "SceneNode.hpp"

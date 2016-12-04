@@ -1,8 +1,8 @@
 #include "OverlayCategory.hpp"
 
 #include "Engine.hpp"
-#include "MaterialCache.hpp"
-#include "OverlayCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/OverlayCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "OverlayRenderer.hpp"

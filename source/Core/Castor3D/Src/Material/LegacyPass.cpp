@@ -1,9 +1,9 @@
 #include "LegacyPass.hpp"
 
-#include "CameraCache.hpp"
 #include "Engine.hpp"
-#include "MaterialCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/CameraCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "Render/RenderPipeline.hpp"
 #include "Render/RenderNode.hpp"

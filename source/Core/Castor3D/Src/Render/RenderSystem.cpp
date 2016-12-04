@@ -1,7 +1,7 @@
 #include "RenderSystem.hpp"
 
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "RenderPipeline.hpp"
 #include "Viewport.hpp"
@@ -58,9 +58,9 @@ namespace Castor3D
 
 		DoCleanup();
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
-		DoReportTracked();
+		m_tracker.ReportTracked();
 
 #endif
 	}
@@ -109,23 +109,4 @@ namespace Castor3D
 
 		return l_return;
 	}
-
-#if C3D_TRACE_OBJECTS
-
-	void RenderSystem::DoReportTracked()
-	{
-		for ( auto const & l_decl : m_allocated )
-		{
-			if ( l_decl.m_ref > 0 )
-			{
-				std::stringstream l_stream;
-				l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-				l_stream << string::string_cast< char >( l_decl.m_stack ) << std::endl;
-				Castor::Logger::LogError( l_stream.str() );
-			}
-		}
-	}
-
-#endif
-
 }

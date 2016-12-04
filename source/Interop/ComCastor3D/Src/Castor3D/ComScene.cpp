@@ -5,13 +5,13 @@
 #include "ComMesh.hpp"
 #include "ComRenderWindow.hpp"
 
-#include <BillboardCache.hpp>
-#include <CameraCache.hpp>
-#include <GeometryCache.hpp>
-#include <LightCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <MeshCache.hpp>
-#include <WindowCache.hpp>
+#include <Cache/BillboardCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/WindowCache.hpp>
 
 #include <Render/Viewport.hpp>
 

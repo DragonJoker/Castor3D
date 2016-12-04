@@ -1,10 +1,10 @@
 #include "Castor3DTestCommon.hpp"
 
-#include <AnimatedObjectGroupCache.hpp>
-#include <CameraCache.hpp>
-#include <GeometryCache.hpp>
-#include <LightCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Cache/AnimatedObjectGroupCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Animable.hpp>
 #include <Animation/Animation.hpp>

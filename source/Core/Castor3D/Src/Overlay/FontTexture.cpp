@@ -1,7 +1,7 @@
 #include "FontTexture.hpp"
 
 #include "Engine.hpp"
-#include "SamplerCache.hpp"
+#include "Cache/SamplerCache.hpp"
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"

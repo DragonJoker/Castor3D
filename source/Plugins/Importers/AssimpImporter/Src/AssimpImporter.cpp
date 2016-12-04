@@ -2,12 +2,12 @@
 
 #include <Design/ArrayView.hpp>
 
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
 
 #include <Animation/Mesh/MeshAnimation.hpp>
 #include <Animation/Mesh/MeshAnimationSubmesh.hpp>

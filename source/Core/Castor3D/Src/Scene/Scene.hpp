@@ -25,20 +25,20 @@ SOFTWARE.
 
 #include "Cache/CacheView.hpp"
 #include "Cache/ObjectCache.hpp"
+#include "Cache/BillboardCache.hpp"
+#include "Cache/CameraCache.hpp"
+#include "Cache/GeometryCache.hpp"
+#include "Cache/SceneNodeCache.hpp"
+#include "Cache/AnimatedObjectGroupCache.hpp"
+#include "Cache/LightCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/MeshCache.hpp"
+#include "Cache/OverlayCache.hpp"
+#include "Cache/ParticleSystemCache.hpp"
+#include "Cache/SamplerCache.hpp"
+#include "Cache/WindowCache.hpp"
 
-#include "BillboardCache.hpp"
-#include "CameraCache.hpp"
 #include "Fog.hpp"
-#include "GeometryCache.hpp"
-#include "SceneNodeCache.hpp"
-#include "AnimatedObjectGroupCache.hpp"
-#include "LightCache.hpp"
-#include "MaterialCache.hpp"
-#include "MeshCache.hpp"
-#include "OverlayCache.hpp"
-#include "ParticleSystemCache.hpp"
-#include "SamplerCache.hpp"
-#include "WindowCache.hpp"
 
 #include <Log/Logger.hpp>
 #include <Design/Named.hpp>

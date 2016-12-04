@@ -1,8 +1,8 @@
 #include "BloomPostEffect.hpp"
 
 #include <Engine.hpp>
-#include <SamplerCache.hpp>
-#include <ShaderCache.hpp>
+#include <Cache/SamplerCache.hpp>
+#include <Cache/ShaderCache.hpp>
 
 #include <FrameBuffer/BackBuffers.hpp>
 #include <FrameBuffer/FrameBufferAttachment.hpp>

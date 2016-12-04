@@ -1,4 +1,4 @@
-﻿#include "FrameEvent.hpp"
+#include "FrameEvent.hpp"
 
 #include <Miscellaneous/Debug.hpp>
 
@@ -12,7 +12,7 @@ namespace Castor3D
 #if !defined( NDEBUG )
 
 		StringStream l_stream;
-		l_stream << Debug::Backtrace{};
+		l_stream << Debug::Backtrace{ 40 };
 		m_stackTrace = l_stream.str();
 
 #endif

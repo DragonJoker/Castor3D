@@ -1,8 +1,8 @@
 #include "Submesh.hpp"
 
 #include "Engine.hpp"
-#include "MaterialCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "Face.hpp"
 
@@ -1251,16 +1251,9 @@ namespace Castor3D
 			l_buffers.push_back( *m_matrixBuffer );
 		}
 
-		if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
+		GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
 		{
 			p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
-		}
-		else
-		{
-			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
-			{
-				p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
-			} ) );
-		}
+		} ) );
 	}
 }

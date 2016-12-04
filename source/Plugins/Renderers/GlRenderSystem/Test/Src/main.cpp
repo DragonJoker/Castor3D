@@ -4,7 +4,7 @@
 #include <Data/File.hpp>
 
 #include <Engine.hpp>
-#include <PluginCache.hpp>
+#include <Cache/PluginCache.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>

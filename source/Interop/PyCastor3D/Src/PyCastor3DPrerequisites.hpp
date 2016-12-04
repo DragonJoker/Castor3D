@@ -36,21 +36,20 @@ SOFTWARE.
 #include <Math/SquareMatrix.hpp>
 #include <Math/Quaternion.hpp>
 
-#include <AnimatedObjectGroupCache.hpp>
-#include <BillboardCache.hpp>
-#include <CameraCache.hpp>
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <LightCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <OverlayCache.hpp>
-#include <PluginCache.hpp>
-#include <SamplerCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <WindowCache.hpp>
-
+#include <Cache/AnimatedObjectGroupCache.hpp>
+#include <Cache/BillboardCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/OverlayCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SamplerCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/WindowCache.hpp>
 #include <Animation/Animable.hpp>
 #include <Animation/Skeleton/SkeletonAnimation.hpp>
 #include <Animation/Mesh/MeshAnimation.hpp>

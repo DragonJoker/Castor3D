@@ -3,8 +3,6 @@
 #include <Engine.hpp>
 #include <Render/RenderSystemFactory.hpp>
 
-#include <Engine.hpp>
-
 using namespace GlRender;
 using namespace Castor3D;
 using namespace Castor;

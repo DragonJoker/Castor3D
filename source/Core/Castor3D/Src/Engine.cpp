@@ -154,6 +154,7 @@ namespace Castor3D
 		}
 
 		Logger::LogInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << Version{} );
+		Logger::LogInfo( StringStream() << m_cpuInformations );
 	}
 
 	Engine::~Engine()

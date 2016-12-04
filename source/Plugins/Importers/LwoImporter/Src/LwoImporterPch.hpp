@@ -29,12 +29,11 @@ SOFTWARE.
 #	include <Graphics/Colour.hpp>
 
 #	include <Engine.hpp>
-#	include <MeshCache.hpp>
-#	include <GeometryCache.hpp>
-#	include <MaterialCache.hpp>
-#	include <SceneCache.hpp>
-#	include <SceneNodeCache.hpp>
-
+#	include <Cache/MeshCache.hpp>
+#	include <Cache/GeometryCache.hpp>
+#	include <Cache/MaterialCache.hpp>
+#	include <Cache/SceneCache.hpp>
+#	include <Cache/SceneNodeCache.hpp>
 #	include <Event/Frame/InitialiseEvent.hpp>
 #	include <Material/Pass.hpp>
 #	include <Mesh/Face.hpp>

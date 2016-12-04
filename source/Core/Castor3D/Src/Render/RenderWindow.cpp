@@ -1,11 +1,11 @@
 #include "RenderWindow.hpp"
 
-#include "CameraCache.hpp"
 #include "Engine.hpp"
-#include "ListenerCache.hpp"
-#include "TargetCache.hpp"
-#include "SceneCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/CameraCache.hpp"
+#include "Cache/ListenerCache.hpp"
+#include "Cache/TargetCache.hpp"
+#include "Cache/SceneCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "Context.hpp"
 #include "RenderPipeline.hpp"
@@ -73,16 +73,13 @@ namespace Castor3D
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
 	RenderWindow::RenderWindow( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
-		, Named( p_name )
-		, m_index( s_nbRenderWindows )
-		, m_wpListener( p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
-		, m_initialised( false )
-		, m_bVSync( false )
-		, m_bFullscreen( false )
-		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
+		: OwnedBy< Engine >{ p_engine }
+		, Named{ p_name }
+		, m_index{ s_nbRenderWindows++ }
+		, m_wpListener{ p_engine.GetFrameListenerCache().Add( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) }
+		, m_backBuffers{ p_engine.GetRenderSystem()->CreateBackBuffers() }
+		, m_pickingPass{ std::make_unique< PickingPass >( p_engine ) }
 	{
-		s_nbRenderWindows++;
 	}
 
 	RenderWindow::~RenderWindow()
@@ -95,6 +92,8 @@ namespace Castor3D
 		{
 			GetEngine()->GetRenderTargetCache().Remove( l_target );
 		}
+
+		m_pickingPass.reset();
 	}
 
 	bool RenderWindow::Initialise( Size const & p_size, WindowHandle const & p_handle )
@@ -130,6 +129,7 @@ namespace Castor3D
 					m_saveBuffer = PxBufferBase::create( l_target->GetSize(), l_target->GetPixelFormat() );
 				}
 
+				m_pickingPass->Initialise( l_target->GetSize() );
 				m_context->EndCurrent();
 				m_initialised = true;
 			}
@@ -151,6 +151,7 @@ namespace Castor3D
 				m_context->SetCurrent();
 			}
 
+			m_pickingPass->Cleanup();
 			RenderTargetSPtr l_target = GetRenderTarget();
 
 			if ( l_target )

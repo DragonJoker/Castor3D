@@ -1,9 +1,10 @@
 #include "Overlay.hpp"
 
-#include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
+#include "Cache/OverlayCache.hpp"
+
+#include "BorderPanelOverlay.hpp"
 #include "OverlayFactory.hpp"
-#include "OverlayCache.hpp"
 #include "PanelOverlay.hpp"
 #include "TextOverlay.hpp"
 

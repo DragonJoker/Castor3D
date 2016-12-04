@@ -7,7 +7,7 @@ namespace Castor
 	ThreadPool::ThreadPool( size_t p_count )
 		: m_count{ p_count }
 	{
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		m_available.reserve( p_count );
 		m_busy.reserve( p_count );
 
@@ -20,20 +20,20 @@ namespace Castor
 	ThreadPool::~ThreadPool()noexcept
 	{
 		WaitAll( std::chrono::milliseconds( 0xFFFFFFFF ) );
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		m_busy.clear();
 		m_available.clear();
 	}
 
 	bool ThreadPool::IsEmpty()const
 	{
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		return m_available.empty();
 	}
 
 	bool ThreadPool::IsFull()const
 	{
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		return m_busy.empty();
 	}
 
@@ -76,7 +76,7 @@ namespace Castor
 			std::this_thread::sleep_for( std::chrono::milliseconds( 1 ) );
 		}
 
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		auto l_it = m_available.rbegin();
 		auto & l_worker = **l_it;
 		m_busy.push_back( std::move( *l_it ) );
@@ -86,7 +86,7 @@ namespace Castor
 
 	void ThreadPool::DoFreeWorker( WorkerThread & p_worker )
 	{
-		make_unique_lock( m_mutex );
+		auto l_lock = make_unique_lock( m_mutex );
 		auto l_it = std::find_if( m_busy.begin(), m_busy.end(), [&p_worker]( WorkerPtr const & l_worker )
 		{
 			return l_worker.get() == &p_worker;

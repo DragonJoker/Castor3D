@@ -16,7 +16,7 @@
 
 #include "Technique.hpp"
 
-#include <SamplerCache.hpp>
+#include <Cache/SamplerCache.hpp>
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/TextureAttachment.hpp>
 #include <FrameBuffer/RenderBufferAttachment.hpp>

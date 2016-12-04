@@ -1,10 +1,10 @@
 #include "BorderPanelOverlay.hpp"
 
 #include "Overlay.hpp"
-#include "OverlayCache.hpp"
 #include "OverlayRenderer.hpp"
-#include "MaterialCache.hpp"
 #include "Engine.hpp"
+#include "Cache/OverlayCache.hpp"
+#include "Cache/MaterialCache.hpp"
 
 #include "Material/Material.hpp"
 

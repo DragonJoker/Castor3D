@@ -29,10 +29,10 @@ SOFTWARE.
 #	include <Castor3DPrerequisites.hpp>
 
 #	include <Engine.hpp>
-#	include <MaterialCache.hpp>
-#	include <MeshCache.hpp>
-#	include <SceneCache.hpp>
-#	include <SceneNodeCache.hpp>
+#	include <Cache/MaterialCache.hpp>
+#	include <Cache/MeshCache.hpp>
+#	include <Cache/SceneCache.hpp>
+#	include <Cache/SceneNodeCache.hpp>
 
 #	include <Cache/CacheView.hpp>
 #	include <Material/Pass.hpp>

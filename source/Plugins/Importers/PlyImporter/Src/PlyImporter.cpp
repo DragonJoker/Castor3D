@@ -1,15 +1,15 @@
 #include "PlyImporter.hpp"
 
-#include <CameraCache.hpp>
 #include <Engine.hpp>
-#include <GeometryCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <SceneCache.hpp>
 
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Cache/CacheView.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/SceneCache.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Face.hpp>

@@ -851,13 +851,13 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-		C3D_Gl_API void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line )const;
-		C3D_Gl_API void UnTrack( void * p_object )const;
+		C3D_Gl_API bool Track( void * p_object, std::string const & p_name, std::string const & p_file, int line )const;
+		C3D_Gl_API bool UnTrack( void * p_object )const;
 
 		template< typename CreationFunction, typename DestructionFunction >
-		inline void Track( Object< CreationFunction, DestructionFunction > * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
+		inline bool Track( Object< CreationFunction, DestructionFunction > * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
 		{
-			Track( reinterpret_cast< void * >( p_object ), p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" ), p_file, p_line );
+			return Track( reinterpret_cast< void * >( p_object ), p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" ), p_file, p_line );
 		}
 
 #endif

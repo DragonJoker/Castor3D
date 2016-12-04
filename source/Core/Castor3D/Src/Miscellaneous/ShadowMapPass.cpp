@@ -1,7 +1,7 @@
 #include "ShadowMapPass.hpp"
 
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "FrameBuffer/ColourRenderBuffer.hpp"
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"

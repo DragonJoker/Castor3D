@@ -24,7 +24,7 @@ SOFTWARE.
 #define ___CI_CASTOR_GUI_PCH_H___
 
 #include <Engine.hpp>
-#include <OverlayCache.hpp>
+#include <Cache/OverlayCache.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>

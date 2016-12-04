@@ -147,15 +147,7 @@ namespace CastorViewer
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 		: wxPanel( parent, p_id, pos, size, style )
-		, m_mouseLeftDown( false )
-		, m_mouseRightDown( false )
-		, m_mouseMiddleDown( false )
-		, m_x( 0.0_r )
-		, m_y( 0.0_r )
-		, m_oldX( 0.0_r )
-		, m_oldY( 0.0_r )
 		, m_camSpeed( DEF_CAM_SPEED )
-		, m_picking{ *wxGetApp().GetCastor() }
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -233,13 +225,8 @@ namespace CastorViewer
 
 					{
 						auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
-						m_picking.AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
+						p_window->GetPickingPass().AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
 					}
-
-					m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_window]()
-					{
-						m_picking.Initialise( p_window->GetRenderTarget()->GetSize() );
-					} ) );
 
 					m_camera = l_camera;
 				}
@@ -249,10 +236,6 @@ namespace CastorViewer
 		}
 		else if ( m_listener )
 		{
-			m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_picking.Cleanup();
-			} ) );
 			m_listener.reset();
 		}
 	}
@@ -787,9 +770,9 @@ namespace CastorViewer
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
 
-					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
+					if ( l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
 					{
-						DoUpdateSelectedGeometry( m_picking.GetPickedGeometry(), m_picking.GetPickedSubmesh() );
+						DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry(), l_window->GetPickingPass().GetPickedSubmesh() );
 					}
 					else
 					{

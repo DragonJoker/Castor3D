@@ -4,7 +4,7 @@
 
 #include <GradientButton.hpp>
 #include <PropertiesHolder.hpp>
-#include <MaterialCache.hpp>
+#include <Cache/MaterialCache.hpp>
 #include <Material/Material.hpp>
 #include <Scene/Scene.hpp>
 
