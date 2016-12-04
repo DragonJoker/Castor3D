@@ -332,6 +332,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The directional lights shadow maps frame variable.
+		 *\~french
+		 *\return		La variable shader des maps d'ombres pour les lumières directionnelles.
+		 */
+		inline OneIntFrameVariable & GetDirectionalShadowMapsVariable()
+		{
+			REQUIRE( m_directionalShadowMaps );
+			return *m_directionalShadowMaps;
+		}
+		/**
+		 *\~english
 		 *\return		The spot lights shadow maps frame variable.
 		 *\~french
 		 *\return		La variable shader des maps d'ombres pour les lumières spots.
@@ -397,6 +408,9 @@ namespace Castor3D
 		//!\~english	The scene frame variable buffer.
 		//!\~french		Le tampon de variables shader pour la scène.
 		FrameVariableBufferSPtr m_sceneUbo;
+		//!\~english	The directional lights shadow maps frame variable.
+		//!\~french		La variable shader pour les maps d'ombres des lumières directionnelles.
+		OneIntFrameVariableSPtr m_directionalShadowMaps;
 		//!\~english	The spot lights shadow maps frame variable.
 		//!\~french		La variable shader pour les maps d'ombres des lumières spot.
 		OneIntFrameVariableSPtr m_spotShadowMaps;

@@ -117,6 +117,7 @@ namespace GLSL
 							 , Vec3 const & p_worldEye
 							 , Vec3 const & p_direction
 							 , Float const & p_shininess
+							 , Float const & p_shadowFactor
 							 , FragmentInput const & p_fragmentIn
 							 , OutputComponents & p_output );
 		void DoDeclare_ComputeLight();

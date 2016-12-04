@@ -403,6 +403,15 @@ namespace Castor3D
 	private:
 		/**
 		 *\~english
+		 *\brief		Initialises the texture array used for directional lights shadow mapping.
+		 *\param[in]	p_size	The texture size.
+		 *\~french
+		 *\brief		Initialise le tableau de textures utilisé pour le mappage d'ombres des lumières de type directionnelle.
+		 *\param[in]	p_size	Les dimensions de la texture.
+		 */
+		bool DoInitialiseDirectionalShadowMap( Castor::Size const & p_size );
+		/**
+		 *\~english
 		 *\brief		Initialises the texture array used for spot lights shadow mapping.
 		 *\param[in]	p_size	The texture size.
 		 *\~french
@@ -426,6 +435,13 @@ namespace Castor3D
 		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type spot.
 		 */
 		void DoCleanupSpotShadowMap();
+		/**
+		 *\~english
+		 *\brief		Cleans up the texture array used for directional lights shadow mapping.
+		 *\~french
+		 *\brief		Nettoie le tableau de textures utilisé pour le mappage d'ombres des lumières de type directionnelle.
+		 */
+		void DoCleanupDirectionalShadowMap();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture array used for point lights shadow mapping.
@@ -594,6 +610,9 @@ namespace Castor3D
 		//!\~english	The HDR frame buffer.
 		//!\~french		Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english	The shadow map texture used for directional lights.
+		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type directionnelles.
+		TextureUnit m_directionalShadowMap;
 		//!\~english	The shadow map texture used for spot lights.
 		//!\~french		La texture de mappage d'ombres utilisée pour les lumières de type spot.
 		TextureUnit m_spotShadowMap;

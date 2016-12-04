@@ -385,7 +385,7 @@ namespace Castor3D
 
 	bool ShaderProgram::HasObject( ShaderType p_target )const
 	{
-		return m_shaders[size_t( p_target )] && m_shaders[size_t( p_target )]->HasSource() && m_shaders[size_t( p_target )]->GetStatus() == ShaderStatus::eCompiled;
+		return m_shaders[size_t( p_target )] && m_shaders[size_t( p_target )]->HasSource();
 	}
 
 	ShaderStatus ShaderProgram::GetObjectStatus( ShaderType p_target )const

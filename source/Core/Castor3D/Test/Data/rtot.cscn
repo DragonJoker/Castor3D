@@ -26,7 +26,7 @@ scene "TextureScene"
 
 	scene_node "TextureSunLightNode"
 	{
-		orientation 1 0 0 -45
+		orientation 1 0 0 135
 	}
 	light "TextureSunLight"
 	{
@@ -38,7 +38,7 @@ scene "TextureScene"
 
 	scene_node "TextureSunLightNode2"
 	{
-		orientation 1 0 0 135
+		orientation 1 0 0 315
 	}
 	light "TextureSunLight2"
 	{
@@ -123,7 +123,7 @@ scene "FinalScene"
 
 	scene_node "SunLightNode1"
 	{
-		orientation 1 0 0 -45
+		orientation 1 0 0 45
 	}
 	light "SunLight1"
 	{

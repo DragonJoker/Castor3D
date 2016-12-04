@@ -179,10 +179,11 @@ namespace Castor3D
 			Castor::FlagCombination< ProgramFlag > const & p_programFlags )
 		{
 			if ( CheckFlag( p_programFlags, ProgramFlag::eShadows )
-				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel ) )
+				 && !p_program.FindFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel ) )
 			{
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadow2D, ShaderType::ePixel );
-				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowCube, ShaderType::ePixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel );
+				p_program.CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel );
 			}
 		}
 
@@ -191,6 +192,7 @@ namespace Castor3D
 			if ( !p_depthMaps.empty() )
 			{
 				auto l_index = p_pipeline.GetTexturesCount() + 1;
+				auto & l_directional = p_pipeline.GetDirectionalShadowMapsVariable();
 				auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
 				auto & l_point = p_pipeline.GetPointShadowMapsVariable();
 
@@ -199,7 +201,7 @@ namespace Castor3D
 					if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
 					{
 						l_depthMap.get().SetIndex( l_index );
-						l_spot.SetValue( l_index++ );
+						l_directional.SetValue( l_index++ );
 					}
 					else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
 					{
@@ -388,6 +390,7 @@ namespace Castor3D
 		, m_renderTarget{ p_renderTarget }
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
+		, m_directionalShadowMap{ *p_renderTarget.GetEngine() }
 		, m_spotShadowMap{ *p_renderTarget.GetEngine() }
 		, m_pointShadowMap{ *p_renderTarget.GetEngine() }
 	{
@@ -421,6 +424,11 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
+				m_initialised = DoInitialiseDirectionalShadowMap( Size{ 1024, 1024 } );
+			}
+
+			if ( m_initialised )
+			{
 				m_initialised = DoInitialiseSpotShadowMap( Size{ 1024, 1024 } );
 			}
 
@@ -435,13 +443,16 @@ namespace Castor3D
 			{
 				l_scene.GetLightCache().ForEach( [&l_scene, this]( Light & p_light )
 				{
-					if ( p_light.IsShadowProducer()
-						 && p_light.GetLightType() != LightType::eDirectional )
+					if ( p_light.IsShadowProducer() )
 					{
 						TextureUnit * l_unit{ nullptr };
 
 						switch ( p_light.GetLightType() )
 						{
+						case LightType::eDirectional:
+							l_unit = &m_directionalShadowMap;
+							break;
+
 						case LightType::ePoint:
 							l_unit = &m_pointShadowMap;
 							break;
@@ -480,6 +491,7 @@ namespace Castor3D
 	{
 		DoCleanupPointShadowMap();
 		DoCleanupSpotShadowMap();
+		DoCleanupDirectionalShadowMap();
 		m_initialised = false;
 		m_frameBuffer.Cleanup();
 		DoCleanup();
@@ -511,6 +523,7 @@ namespace Castor3D
 
 		if ( l_scene.HasShadows() )
 		{
+			l_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
 			l_depthMaps.push_back( std::ref( m_spotShadowMap ) );
 			l_depthMaps.push_back( std::ref( m_pointShadowMap ) );
 
@@ -1170,6 +1183,29 @@ namespace Castor3D
 		}
 	}
 
+	bool RenderTechnique::DoInitialiseDirectionalShadowMap( Size const & p_size )
+	{
+		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_DirectionalShadowMap" ) );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+		l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+		l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+		l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
+		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
+
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eD32F, p_size );
+		m_directionalShadowMap.SetTexture( l_texture );
+		m_directionalShadowMap.SetSampler( l_sampler );
+
+		for ( auto & l_image : *l_texture )
+		{
+			l_image->InitialiseSource();
+		}
+
+		return m_directionalShadowMap.Initialise();
+	}
+
 	bool RenderTechnique::DoInitialiseSpotShadowMap( Size const & p_size )
 	{
 		auto l_sampler = GetEngine()->GetSamplerCache().Add( GetName() + cuT( "_SpotShadowMap" ) );
@@ -1223,6 +1259,11 @@ namespace Castor3D
 		}
 
 		return m_pointShadowMap.Initialise();
+	}
+
+	void RenderTechnique::DoCleanupDirectionalShadowMap()
+	{
+		m_directionalShadowMap.Cleanup();
 	}
 
 	void RenderTechnique::DoCleanupSpotShadowMap()

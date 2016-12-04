@@ -78,7 +78,8 @@ namespace CastorViewer
 		void DoStartTimer( int p_iId );
 		void DoStopTimer( int p_iId );
 		void DoResetCamera();
-		void DoTurnCamera();
+		void DoTurnCameraHoriz();
+		void DoTurnCameraVertic();
 		void DoChangeCamera();
 		void DoReloadScene();
 		Castor::real DoTransformX( int x );
