@@ -17,7 +17,7 @@ using namespace Castor3D;
 #	undef max
 #endif
 
-#define Glsl( x ) cuT( "#version 430\n" ) cuT( #x )
+#define Glsl( x ) cuT( "#version 430\n#extension GL_ARB_compute_variable_group_size : enable\n" ) cuT( #x )
 
 template< typename T, size_t Count >
 std::ostream & operator<<( std::ostream & p_stream, std::array< T, Count > const & p_array )
@@ -42,7 +42,6 @@ namespace Testing
 		ShaderProgramSPtr DoCreateSimpleComputeProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( std430, binding = 0 ) buffer Storage\n
 				{ \n
 					ivec4 ids[];\n
@@ -67,7 +66,6 @@ namespace Testing
 		ShaderProgramSPtr DoCreateTwoStoragesProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( std430, binding = 1 ) buffer Storage1\n
 				{\n
 					ivec4 ids1[];\n
@@ -96,7 +94,6 @@ namespace Testing
 		ShaderProgramSPtr DoCreateAtomicCounterProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
 				layout( std430, binding = 1 ) buffer Storage\n
 				{\n
@@ -122,7 +119,6 @@ namespace Testing
 		ShaderProgramSPtr DoCreateTwoStoragesAndAtomicCounterProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
 				layout( std430, binding = 1 ) buffer Storage1\n
 				{\n

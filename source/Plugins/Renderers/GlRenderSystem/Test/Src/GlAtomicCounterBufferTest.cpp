@@ -16,7 +16,7 @@ using namespace Castor3D;
 #	undef max
 #endif
 
-#define Glsl( x ) cuT( "#version 430\n" ) cuT( #x )
+#define Glsl( x ) cuT( "#version 430\n#extension GL_ARB_compute_variable_group_size : enable\n" ) cuT( #x )
 
 namespace Testing
 {
@@ -26,7 +26,7 @@ namespace Testing
 		{
 			String l_vtx = Glsl(
 				layout( binding = 0, offset = 0 ) uniform atomic_uint counter;\n
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;\n
+				layout( local_size_variable ) in;\n
 				void main()\n
 				{\n
 				}\n
@@ -41,7 +41,6 @@ namespace Testing
 		ShaderProgramSPtr DoCreateInOutProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( binding=0, offset=0 ) uniform atomic_uint counter;\n
 				layout( local_size_variable ) in;\n
 				void main()\n
