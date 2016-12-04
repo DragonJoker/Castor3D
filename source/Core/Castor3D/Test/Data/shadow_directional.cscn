@@ -143,37 +143,14 @@ scene "Scene"
 		}
 	}
 
-	scene_node "LightCameraNode"
-	{
-		orientation 1 0 0 24
-	}
-
-	camera "LightCamera"
-	{
-		parent "LightCameraNode"
-
-		viewport "LightViewport"
-		{
-			type ortho
-			left -512.0
-			right 512.0
-			top -512.0
-			bottom 512.0
-			near -512.0
-			far 512.0
-		}
-	}
-
 	window "Window"
 	{
 		render_target
 		{
 			format argb32
 			size screen_size
-			//size 1024 1024
 			scene "Scene"
 			camera "MainCamera"
-			//camera "LightCamera"
 		}
 
 		fullscreen false
