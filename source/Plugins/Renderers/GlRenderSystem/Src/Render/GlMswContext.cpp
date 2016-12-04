@@ -10,7 +10,7 @@
 #include <Graphics/PixelFormat.hpp>
 #include <Miscellaneous/Utils.hpp>
 
-#include <MaterialCache.hpp>
+#include <Cache/MaterialCache.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Render/RenderLoop.hpp>
 #include <Render/RenderWindow.hpp>

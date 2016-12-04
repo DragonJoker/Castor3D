@@ -240,13 +240,17 @@ namespace Castor3D
 		void DoCpuStep();
 
 	protected:
-		//!\~english  The current RenderSystem.	\~french Le RenderSystem courant.
+		//!\~english	The current RenderSystem.
+		//!\~french		Le RenderSystem courant.
 		RenderSystem & m_renderSystem;
-		//!\~english The wanted FPS, used in threaded render mode.	\~french Le nombre de FPS souhaité, utilisé en rendu threadé.
+		//!\~english	The wanted FPS, used in threaded render mode.
+		//!\~french		Le nombre de FPS souhaité, utilisé en rendu threadé.
 		uint32_t m_wantedFPS;
-		//!\~english The wanted time for a frame.	\~french Le temps voulu pour une frame.
+		//!\~english	The wanted time for a frame.
+		//!\~french		Le temps voulu pour une frame.
 		uint32_t m_frameTime;
-		//!\~english The debug overlays.	\~french Les incrustations de débogage.
+		//!\~english	The debug overlays.
+		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
 	};
 }

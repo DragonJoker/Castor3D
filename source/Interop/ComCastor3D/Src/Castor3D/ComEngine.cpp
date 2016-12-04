@@ -13,12 +13,12 @@
 #undef min
 #undef abs
 
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SamplerCache.hpp>
-#include <SceneCache.hpp>
-#include <WindowCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SamplerCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/WindowCache.hpp>
 
 #include <Event/Frame/FunctorEvent.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>

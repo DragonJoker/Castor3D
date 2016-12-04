@@ -1,6 +1,6 @@
 #include "MovableObject.hpp"
 
-#include "SceneNodeCache.hpp"
+#include "Cache/SceneNodeCache.hpp"
 
 #include "Animation/Animation.hpp"
 #include "Scene/Scene.hpp"

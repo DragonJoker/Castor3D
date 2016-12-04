@@ -26,53 +26,64 @@ SOFTWARE.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Log/Logger.hpp>
-#	include <Graphics/Pixel.hpp>
-#	include <Graphics/Font.hpp>
+#include <cstdlib>
+#include <cstring>
+#include <cstdio>
+#include <iomanip>
+#include <iostream>
 
-#	include <Castor3DPrerequisites.hpp>
-#	include <Engine.hpp>
-#	include <ShaderCache.hpp>
-#	include <FrameBuffer/ColourRenderBuffer.hpp>
-#	include <FrameBuffer/DepthStencilRenderBuffer.hpp>
-#	include <FrameBuffer/FrameBuffer.hpp>
-#	include <FrameBuffer/RenderBufferAttachment.hpp>
-#	include <FrameBuffer/TextureAttachment.hpp>
-#	include <Material/Material.hpp>
-#	include <Material/Pass.hpp>
-#	include <Mesh/Face.hpp>
-#	include <Mesh/Mesh.hpp>
-#	include <Mesh/Submesh.hpp>
-#	include <Mesh/Vertex.hpp>
-#	include <Mesh/Buffer/Buffer.hpp>
-#	include <Miscellaneous/Version.hpp>
-#	include <Miscellaneous/WindowHandle.hpp>
-#	include <Overlay/Overlay.hpp>
-#	include <Plugin/Plugin.hpp>
-#	include <Render/Context.hpp>
-#	include <Render/RenderPipeline.hpp>
-#	include <Render/RenderSystem.hpp>
-#	include <Render/RenderTarget.hpp>
-#	include <Render/RenderWindow.hpp>
-#	include <Render/Viewport.hpp>
-#	include <Scene/BillboardList.hpp>
-#	include <Scene/Geometry.hpp>
-#	include <Scene/SceneNode.hpp>
-#	include <Scene/Scene.hpp>
-#	include <Scene/Light/DirectionalLight.hpp>
-#	include <Scene/Light/Light.hpp>
-#	include <Scene/Light/PointLight.hpp>
-#	include <Scene/Light/SpotLight.hpp>
-#	include <Shader/FrameVariable.hpp>
-#	include <Shader/ShaderObject.hpp>
-#	include <Shader/ShaderProgram.hpp>
-#	include <State/BlendState.hpp>
-#	include <Technique/RenderTechnique.hpp>
-#	include <Texture/Sampler.hpp>
-#	include <Texture/TextureLayout.hpp>
-#	include <Texture/TextureUnit.hpp>
+#include <Log/Logger.hpp>
+#include <Graphics/PixelBufferBase.hpp>
+#include <Graphics/PixelFormat.hpp>
+#include <Graphics/Position.hpp>
+#include <Graphics/Rectangle.hpp>
+#include <Graphics/Size.hpp>
+#include <Miscellaneous/Utils.hpp>
 
-#	include "GlRenderSystemPrerequisites.hpp"
+#include <GlslSource.hpp>
+
+#include <Engine.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/ShaderCache.hpp>
+#include <FrameBuffer/BackBuffers.hpp>
+#include <FrameBuffer/ColourRenderBuffer.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/ComputePipeline.hpp>
+#include <Miscellaneous/GpuInformations.hpp>
+#include <Miscellaneous/GpuQuery.hpp>
+#include <Miscellaneous/TransformFeedback.hpp>
+#include <Render/Context.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderPipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/RenderSystemFactory.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/AtomicCounterBuffer.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/MatrixFrameVariable.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Shader/ProgramInputLayout.hpp>
+#include <Shader/ShaderObject.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Shader/ShaderStorageBuffer.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureStorage.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include "GlRenderSystemPrerequisites.hpp"
 
 #endif
 

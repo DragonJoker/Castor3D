@@ -56,16 +56,16 @@ namespace Castor3D
 	using Castor::UInt64StrMap;
 }
 
-#include "Castor3DPrerequisites_Animation.hpp"
-#include "Castor3DPrerequisites_Camera.hpp"
-#include "Castor3DPrerequisites_Geometry.hpp"
-#include "Castor3DPrerequisites_Light.hpp"
-#include "Castor3DPrerequisites_Material.hpp"
-#include "Castor3DPrerequisites_Overlay.hpp"
-#include "Castor3DPrerequisites_Scene.hpp"
-#include "Castor3DPrerequisites_Shader.hpp"
-#include "Castor3DPrerequisites_Render.hpp"
-#include "Castor3DPrerequisites_Event.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Animation.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Camera.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Geometry.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Light.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Material.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Overlay.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Scene.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Shader.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Render.hpp"
+#include "Prerequisites/Castor3DPrerequisites_Event.hpp"
 
 namespace Castor3D
 {

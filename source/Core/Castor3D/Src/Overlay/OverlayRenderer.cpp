@@ -1,9 +1,9 @@
 #include "OverlayRenderer.hpp"
 
 #include "Engine.hpp"
-#include "MaterialCache.hpp"
-#include "SamplerCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/SamplerCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Overlay.hpp"

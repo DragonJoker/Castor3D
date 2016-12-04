@@ -1,7 +1,7 @@
 #include "TreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
+#include <Cache/MaterialCache.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
 
 using namespace Castor;

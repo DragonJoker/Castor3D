@@ -188,6 +188,12 @@ namespace GlRender
 			if ( l_return )
 			{
 				glTrack( Holder::GetOpenGl(), m_typeName, this );
+
+#if !defined( NDEBUG )
+
+				m_hasBeenValid = true;
+
+#endif
 			}
 
 			return l_return;
@@ -197,9 +203,17 @@ namespace GlRender
 		 */
 		inline void Destroy()
 		{
+#if !defined( NDEBUG )
+
+			if ( m_hasBeenValid )
+			{
+				m_hasBeenValid = !glUntrack( Holder::GetOpenGl(), this );
+			}
+
+#endif
+
 			if ( IsValid() )
 			{
-				glUntrack( Holder::GetOpenGl(), this );
 				DoDestroy();
 			}
 			else
@@ -283,6 +297,12 @@ namespace GlRender
 		uint32_t m_glName;
 		//! The object type name
 		const char * m_typeName;
+
+#if !defined( NDEBUG )
+
+		bool m_hasBeenValid{ false };
+
+#endif
 	};
 }
 

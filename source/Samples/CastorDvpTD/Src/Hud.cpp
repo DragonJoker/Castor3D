@@ -2,7 +2,7 @@
 
 #include "Game.hpp"
 
-#include <OverlayCache.hpp>
+#include <Cache/OverlayCache.hpp>
 #include <Overlay/Overlay.hpp>
 #include <Overlay/TextOverlay.hpp>
 #include <Scene/Scene.hpp>

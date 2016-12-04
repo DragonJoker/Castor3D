@@ -27,12 +27,11 @@ SOFTWARE.
 
 #if CASTOR_USE_PCH
 #	include <Engine.hpp>
-#	include <GeometryCache.hpp>
-#	include <MaterialCache.hpp>
-#	include <MeshCache.hpp>
-#	include <SceneCache.hpp>
-#	include <SceneNodeCache.hpp>
-
+#	include <Cache/GeometryCache.hpp>
+#	include <Cache/MaterialCache.hpp>
+#	include <Cache/MeshCache.hpp>
+#	include <Cache/SceneCache.hpp>
+#	include <Cache/SceneNodeCache.hpp>
 #	include <Material/Pass.hpp>
 #	include <Mesh/Face.hpp>
 #	include <Mesh/Submesh.hpp>

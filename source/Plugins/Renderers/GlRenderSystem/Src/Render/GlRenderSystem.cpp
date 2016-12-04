@@ -24,10 +24,10 @@
 
 #include <Log/Logger.hpp>
 
-#include <GlslSource.hpp>
+#include <GlslWriter.hpp>
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
+#include <Cache/ShaderCache.hpp>
 #include <Technique/RenderTechnique.hpp>
 
 #include <GL/gl.h>
@@ -584,22 +584,16 @@ namespace GlRender
 
 #if C3D_TRACE_OBJECTS
 
-	void GlRenderSystem::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
+	bool GlRenderSystem::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
 	{
 		std::string l_name;
-
-		if ( DoTrack( p_object, p_name, p_file, p_line, l_name ) )
-		{
-		}
+		return m_tracker.Track( p_object, p_name, p_file, p_line, l_name );
 	}
 
-	void GlRenderSystem::Untrack( void * p_object )
+	bool GlRenderSystem::Untrack( void * p_object )
 	{
-		ObjectDeclaration l_decl;
-
-		if ( DoUntrack( p_object, l_decl ) )
-		{
-		}
+		GpuObjectTracker::ObjectDeclaration l_decl;
+		return m_tracker.Untrack( p_object, l_decl );
 	}
 
 #endif

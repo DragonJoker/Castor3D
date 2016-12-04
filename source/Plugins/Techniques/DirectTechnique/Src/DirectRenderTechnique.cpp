@@ -1,11 +1,11 @@
 #include "DirectRenderTechnique.hpp"
 
-#include <CameraCache.hpp>
-#include <LightCache.hpp>
-#include <MaterialCache.hpp>
-#include <OverlayCache.hpp>
-#include <SceneCache.hpp>
-#include <TargetCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/OverlayCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/TargetCache.hpp>
 
 #include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>

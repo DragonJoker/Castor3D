@@ -1,8 +1,8 @@
 #include "TextOverlay.hpp"
 
 #include "Engine.hpp"
-#include "OverlayCache.hpp"
-#include "SamplerCache.hpp"
+#include "Cache/OverlayCache.hpp"
+#include "Cache/SamplerCache.hpp"
 
 #include "FontTexture.hpp"
 #include "OverlayRenderer.hpp"

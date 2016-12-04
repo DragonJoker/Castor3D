@@ -1061,14 +1061,14 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-	void OpenGl::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
+	bool OpenGl::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
 	{
-		m_renderSystem.Track( p_object, p_name, p_file, p_line );
+		return m_renderSystem.Track( p_object, p_name, p_file, p_line );
 	}
 
-	void OpenGl::UnTrack( void * p_object )const
+	bool OpenGl::UnTrack( void * p_object )const
 	{
-		m_renderSystem.Untrack( p_object );
+		return m_renderSystem.Untrack( p_object );
 	}
 
 #endif

@@ -22,13 +22,13 @@
 #include <SplashScreen.hpp>
 #include <SceneExporter.hpp>
 
-#include <GeometryCache.hpp>
-#include <LightCache.hpp>
-#include <MaterialCache.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/LightCache.hpp>
+#include <Cache/MaterialCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>
 #include <Mesh/Importer.hpp>

@@ -6,15 +6,15 @@
 
 #include "RenderPass.hpp"
 
-#include "AnimatedObjectGroupCache.hpp"
-#include "BillboardCache.hpp"
-#include "CameraCache.hpp"
 #include "Engine.hpp"
-#include "GeometryCache.hpp"
-#include "LightCache.hpp"
-#include "ParticleSystemCache.hpp"
-#include "SamplerCache.hpp"
-#include "ShaderCache.hpp"
+#include "Cache/AnimatedObjectGroupCache.hpp"
+#include "Cache/BillboardCache.hpp"
+#include "Cache/CameraCache.hpp"
+#include "Cache/GeometryCache.hpp"
+#include "Cache/LightCache.hpp"
+#include "Cache/ParticleSystemCache.hpp"
+#include "Cache/SamplerCache.hpp"
+#include "Cache/ShaderCache.hpp"
 
 #include "Material/Material.hpp"
 #include "Material/Pass.hpp"

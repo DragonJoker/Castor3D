@@ -1,6 +1,6 @@
 #include "NewMaterialDialog.hpp"
 
-#include <MaterialCache.hpp>
+#include <Cache/MaterialCache.hpp>
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Material/Material.hpp>
 #include <Material/Pass.hpp>

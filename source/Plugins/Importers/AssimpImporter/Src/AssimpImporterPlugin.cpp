@@ -5,7 +5,7 @@
 #endif
 
 #include <Engine.hpp>
-#include <PluginCache.hpp>
+#include <Cache/PluginCache.hpp>
 
 #include <Plugin/ImporterPlugin.hpp>
 

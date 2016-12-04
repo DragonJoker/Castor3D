@@ -23,7 +23,7 @@ SOFTWARE.
 #ifndef ___RenderPanel___
 #define ___RenderPanel___
 
-#include <Miscellaneous/PickingPass.hpp>
+#include <Engine.hpp>
 
 #include <Math/Point.hpp>
 #include <Math/Quaternion.hpp>
@@ -117,20 +117,19 @@ namespace CastorViewer
 		void OnMenuClose( wxCommandEvent & p_event );
 
 	public:
-		Castor::real m_x;
-		Castor::real m_y;
-		Castor::real m_oldX;
-		Castor::real m_oldY;
+		Castor::real m_x{ 0.0_r };
+		Castor::real m_y{ 0.0_r };
+		Castor::real m_oldX{ 0.0_r };
+		Castor::real m_oldY{ 0.0_r };
 		Castor::Point3r m_ptOriginalPosition;
 		Castor::Quaternion m_qOriginalOrientation;
-		bool m_mouseLeftDown;	//!< The left mouse button status
-		bool m_mouseRightDown;	//!< The right mouse button status
-		bool m_mouseMiddleDown;	//!< The middle mouse button status
+		bool m_mouseLeftDown{ false };	//!< The left mouse button status
+		bool m_mouseRightDown{ false };	//!< The right mouse button status
+		bool m_mouseMiddleDown{ false };	//!< The middle mouse button status
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_renderWindow;
 		Castor3D::CameraWPtr m_camera;
 		Castor3D::SceneWPtr m_scene;
-		Castor3D::PickingPass m_picking;
 		Castor3D::FrameListenerSPtr m_listener;
 		Castor3D::GeometryWPtr m_selectedGeometry;
 		Castor3D::SubmeshWPtr m_selectedSubmesh;

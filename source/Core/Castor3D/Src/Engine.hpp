@@ -24,17 +24,17 @@ SOFTWARE.
 #define ___C3D_ENGINE_H___
 
 #include "Cache/Cache.hpp"
-#include "Miscellaneous/Version.hpp"
+#include "Cache/ListenerCache.hpp"
+#include "Cache/MaterialCache.hpp"
+#include "Cache/OverlayCache.hpp"
+#include "Cache/PluginCache.hpp"
+#include "Cache/SamplerCache.hpp"
+#include "Cache/SceneCache.hpp"
+#include "Cache/ShaderCache.hpp"
+#include "Cache/TargetCache.hpp"
+#include "Cache/TechniqueCache.hpp"
 
-#include "ListenerCache.hpp"
-#include "MaterialCache.hpp"
-#include "OverlayCache.hpp"
-#include "PluginCache.hpp"
-#include "SamplerCache.hpp"
-#include "SceneCache.hpp"
-#include "ShaderCache.hpp"
-#include "TargetCache.hpp"
-#include "TechniqueCache.hpp"
+#include "Miscellaneous/Version.hpp"
 
 #include "Mesh/ImporterFactory.hpp"
 #include "Mesh/MeshFactory.hpp"
@@ -46,6 +46,7 @@ SOFTWARE.
 #include <Graphics/FontCache.hpp>
 #include <Graphics/ImageCache.hpp>
 #include <Design/Unique.hpp>
+#include <Miscellaneous/CpuInformations.hpp>
 
 namespace Castor3D
 {
@@ -538,6 +539,16 @@ namespace Castor3D
 		{
 			return m_particleFactory;
 		}
+		/**
+		 *\~english
+		 *\return		The CPU informations.
+		 *\~french
+		 *\return		Les informations CPU.
+		 */
+		inline Castor::CpuInformations const & GetCpuInformations()const
+		{
+			return m_cpuInformations;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -636,6 +647,9 @@ namespace Castor3D
 		//!\~english	The CpuParticleSystem factory.
 		//!\~french		La fabrique de CpuParticleSystem.
 		ParticleFactory m_particleFactory;
+		//!\~english	The CPU informations.
+		//!\~french		Les informations sur le CPU.
+		Castor::CpuInformations m_cpuInformations;
 	};
 }
 

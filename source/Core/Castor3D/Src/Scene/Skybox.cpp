@@ -1,10 +1,8 @@
 #include "Skybox.hpp"
 
 #include "Engine.hpp"
-#include "ShaderCache.hpp"
-
-#include "Engine.hpp"
-#include "SamplerCache.hpp"
+#include "Cache/ShaderCache.hpp"
+#include "Cache/SamplerCache.hpp"
 
 #include "Mesh/Buffer/BufferElementDeclaration.hpp"
 #include "Mesh/Buffer/BufferElementGroup.hpp"

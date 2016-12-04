@@ -4,13 +4,13 @@
 
 #include "MainFrame.hpp"
 
-#include <CameraCache.hpp>
-#include <PluginCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <TargetCache.hpp>
-#include <TechniqueCache.hpp>
-#include <WindowCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/TargetCache.hpp>
+#include <Cache/TechniqueCache.hpp>
+#include <Cache/WindowCache.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderTarget.hpp>
 #include <Render/RenderWindow.hpp>

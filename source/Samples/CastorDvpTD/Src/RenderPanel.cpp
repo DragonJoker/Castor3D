@@ -35,7 +35,6 @@ namespace castortd
 	RenderPanel::RenderPanel( wxWindow * p_parent, wxSize const & p_size, Game & p_game )
 		: wxPanel{ p_parent, wxID_ANY, wxDefaultPosition, p_size }
 		, m_game{ p_game }
-		, m_picking{ *wxGetApp().GetCastor() }
 	{
 	}
 
@@ -65,23 +64,15 @@ namespace castortd
 				m_listener = p_window->GetListener();
 				m_renderWindow = p_window;
 
+				if ( p_window )
 				{
 					auto l_lock = make_unique_lock( l_scene->GetCameraCache() );
-					m_picking.AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
+					p_window->GetPickingPass().AddScene( *l_scene, *( l_scene->GetCameraCache().begin()->second ) );
 				}
-
-				m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, l_sizeWnd]()
-				{
-					m_picking.Initialise( l_sizeWnd );
-				} ) );
 			}
 		}
 		else if ( m_listener )
 		{
-			m_listener->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this]()
-			{
-				m_picking.Cleanup();
-			} ) );
 			m_listener.reset();
 		}
 	}
@@ -386,9 +377,9 @@ namespace castortd
 					Camera & l_camera = *l_window->GetCamera();
 					l_camera.Update();
 
-					if ( m_picking.Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
+					if ( l_window->GetPickingPass().Pick( Position{ int( l_x ), int( l_y ) }, l_camera ) )
 					{
-						DoUpdateSelectedGeometry( m_picking.GetPickedGeometry() );
+						DoUpdateSelectedGeometry( l_window->GetPickingPass().GetPickedGeometry() );
 					}
 					else
 					{

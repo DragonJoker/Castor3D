@@ -1186,7 +1186,7 @@ namespace Castor
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return src.g;
+			return src.r;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{
@@ -1287,7 +1287,7 @@ namespace Castor
 		}
 		static inline uint8_t R8( uint8_t const * p_pSrc )
 		{
-			return src.g;
+			return src.r;
 		}
 		static inline uint8_t G8( uint8_t const * p_pSrc )
 		{

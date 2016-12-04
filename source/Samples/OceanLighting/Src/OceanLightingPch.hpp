@@ -38,8 +38,8 @@ SOFTWARE.
 
 #	include <Castor3DPrerequisites.hpp>
 #	include <Engine.hpp>
-#	include <ShaderCache.hpp>
-#	include <SceneCache.hpp>
+#	include <Cache/ShaderCache.hpp>
+#	include <Cache/SceneCache.hpp>
 #	include <FrameBuffer/FrameBuffer.hpp>
 #	include <Mesh/Vertex.hpp>
 #	include <Mesh/Buffer/Buffer.hpp>

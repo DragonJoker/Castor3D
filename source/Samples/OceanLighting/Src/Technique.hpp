@@ -2,7 +2,7 @@
 #define ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 
 #include <Engine.hpp>
-#include <ShaderCache.hpp>
+#include <Cache/ShaderCache.hpp>
 #include <FrameBuffer/FrameBuffer.hpp>
 #include <Mesh/Vertex.hpp>
 #include <Mesh/Buffer/Buffer.hpp>

@@ -3,7 +3,6 @@
 #include <wx/panel.h>
 
 #include <Engine.hpp>
-#include <Miscellaneous/PickingPass.hpp>
 
 #include "TowerCategory.hpp"
 
@@ -47,7 +46,6 @@ namespace castortd
 
 	private:
 		Castor3D::RenderWindowWPtr m_renderWindow;
-		Castor3D::PickingPass m_picking;
 		Castor3D::FrameListenerSPtr m_listener;
 		Castor3D::GeometryWPtr m_selectedGeometry;
 		Castor3D::SceneNodeSPtr m_marker;

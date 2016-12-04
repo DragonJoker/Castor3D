@@ -613,6 +613,7 @@ namespace Castor3D
 	class RenderLoop;
 	class RenderLoopAsync;
 	class RenderLoopSync;
+	class RenderQueue;
 
 	template< typename T >
 	class GpuBuffer;

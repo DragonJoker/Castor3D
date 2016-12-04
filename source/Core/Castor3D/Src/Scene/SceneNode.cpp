@@ -1,7 +1,7 @@
 #include "SceneNode.hpp"
 
 #include "Engine.hpp"
-#include "SceneNodeCache.hpp"
+#include "Cache/SceneNodeCache.hpp"
 
 #include "Camera.hpp"
 #include "Geometry.hpp"

@@ -8,7 +8,7 @@
 #include <wx/display.h>
 
 #include <Engine.hpp>
-#include <PluginCache.hpp>
+#include <Cache/PluginCache.hpp>
 #include <Plugin/RendererPlugin.hpp>
 
 #include <Data/File.hpp>

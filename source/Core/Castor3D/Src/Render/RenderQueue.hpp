@@ -70,6 +70,14 @@ namespace Castor3D
 	*/
 	struct SceneRenderNodes
 	{
+		SceneRenderNodes & operator=( SceneRenderNodes const & p_rhs )
+		{
+			m_staticGeometries = p_rhs.m_staticGeometries;
+			m_instancedGeometries = p_rhs.m_instancedGeometries;
+			m_animatedGeometries = p_rhs.m_animatedGeometries;
+			m_billboards = p_rhs.m_billboards;
+			return *this;
+		}
 
 		//!\~english	The scene.	\~french La scène.
 		Scene & m_scene;

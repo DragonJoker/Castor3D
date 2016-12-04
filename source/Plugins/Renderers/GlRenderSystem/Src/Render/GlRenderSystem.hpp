@@ -191,19 +191,16 @@ namespace GlRender
 #if C3D_TRACE_OBJECTS
 
 	public:
-		void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void Untrack( void * p_object );
+		bool Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
+		bool Untrack( void * p_object );
 
 #else
 
 	public:
-		template< typename T >
-		void Track( T * p_object, std::string const & p_name, std::string const & p_file, int line )
+		bool Track( void * p_object, std::string const & p_name, std::string const & p_file, int line )
 		{
 		}
-
-		template< typename T >
-		void Untrack( T * p_object )
+		bool Untrack( void * p_object )
 		{
 		}
 

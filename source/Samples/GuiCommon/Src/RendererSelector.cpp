@@ -4,7 +4,7 @@
 #include "GradientButton.hpp"
 
 #include <Engine.hpp>
-#include <PluginCache.hpp>
+#include <Cache/PluginCache.hpp>
 #include <Plugin/RendererPlugin.hpp>
 
 using namespace Castor3D;

@@ -13,7 +13,7 @@
 #include "AdditionalProperties.hpp"
 
 #include <Engine.hpp>
-#include <MaterialCache.hpp>
+#include <Cache/MaterialCache.hpp>
 
 #include <Material/Pass.hpp>
 #include <Mesh/Submesh.hpp>

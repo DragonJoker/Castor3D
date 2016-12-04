@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Event/Frame/FrameListener.hpp"
+#include "Miscellaneous/PickingPass.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
 
 #include <Design/Named.hpp>
@@ -470,6 +471,17 @@ namespace Castor3D
 		{
 			return m_saveBuffer;
 		}
+		/**
+		 *\~english
+		 *\return		The picking pass.
+		 *\~french
+		 *\return		La passe de picking.
+		 */
+		inline PickingPass & GetPickingPass()
+		{
+			REQUIRE( m_pickingPass );
+			return *m_pickingPass;
+		}
 
 	private:
 		void DoRender( WindowBuffer p_eTargetBuffer, TextureUnit const & p_texture );
@@ -493,16 +505,16 @@ namespace Castor3D
 		FrameListenerWPtr m_wpListener;
 		//!\~english	Tells if the window is initalised.
 		//!\~french		Dit si la fenêtre est initialisée.
-		bool m_initialised;
+		bool m_initialised{ false };
 		//!\~english	The rendering context.
 		//!\~french		Le contexte de rendu.
 		ContextSPtr m_context;
 		//!\~english	Tells VSync is activated.
 		//!\~french		Dit si la VSync est activée.
-		bool m_bVSync;
+		bool m_bVSync{ false };
 		//!\~english	Tells fullscreen is activated.
 		//!\~french		Dit si le rendu est en plein écran.
-		bool m_bFullscreen;
+		bool m_bFullscreen{ false };
 		//!\~english	The window's back buffers.
 		//!\~french		Les tampons de rendu de la fenêtre.
 		BackBuffersSPtr m_backBuffers;
@@ -511,10 +523,13 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english	Tells we need to save a frame.
 		//!\~french		Dit si l'on veut sauvegarder une immage.
-		bool m_toSave = false;
+		bool m_toSave{ false };
 		//!\~english	The pixel buffer holding the saved image.
 		//!\~french		Le tampon de pixels contenant l'image sauvegardée.
 		Castor::PxBufferBaseSPtr m_saveBuffer;
+		//!\~english	The picking pass.
+		//!\~french		La passe de picking.
+		PickingPassUPtr m_pickingPass;
 	};
 }
 

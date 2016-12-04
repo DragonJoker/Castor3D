@@ -70,6 +70,7 @@ namespace GlRender
 	private:
 		GlBufferTarget m_target;
 		mutable uint32_t m_bindingPoint{ 0u };
+		mutable uint32_t m_allocatedSize{ 0u };
 	};
 }
 

@@ -7,7 +7,7 @@
 #include <Log/Logger.hpp>
 
 #include <Engine.hpp>
-#include <TechniqueCache.hpp>
+#include <Cache/TechniqueCache.hpp>
 
 #include <Miscellaneous/Version.hpp>
 

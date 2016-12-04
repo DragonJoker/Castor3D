@@ -132,6 +132,12 @@ namespace GlRender
 			if ( l_return )
 			{
 				glTrack( GetOpenGl(), GetGlTypeName(), this );
+
+#if !defined( NDEBUG )
+
+				m_hasBeenValid = true;
+
+#endif
 			}
 
 			return l_return;

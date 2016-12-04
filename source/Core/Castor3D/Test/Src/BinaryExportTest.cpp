@@ -1,9 +1,9 @@
 #include "BinaryExportTest.hpp"
 
 #include <Engine.hpp>
-#include <MeshCache.hpp>
-#include <PluginCache.hpp>
-#include <SceneCache.hpp>
+#include <Cache/MeshCache.hpp>
+#include <Cache/PluginCache.hpp>
+#include <Cache/SceneCache.hpp>
 
 #include <Animation/Animation.hpp>
 #include <Animation/KeyFrame.hpp>

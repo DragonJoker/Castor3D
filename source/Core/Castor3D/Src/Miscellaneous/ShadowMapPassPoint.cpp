@@ -1,7 +1,7 @@
 #include "ShadowMapPassPoint.hpp"
 
 #include "Engine.hpp"
-#include "SamplerCache.hpp"
+#include "Cache/SamplerCache.hpp"
 
 #include "FrameBuffer/DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer/FrameBuffer.hpp"

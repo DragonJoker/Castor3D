@@ -13,12 +13,12 @@
 #	include <Windows.h>
 #endif
 
-#include <CameraCache.hpp>
-#include <GeometryCache.hpp>
-#include <SceneCache.hpp>
-#include <SceneNodeCache.hpp>
-#include <TargetCache.hpp>
-#include <WindowCache.hpp>
+#include <Cache/CameraCache.hpp>
+#include <Cache/GeometryCache.hpp>
+#include <Cache/SceneCache.hpp>
+#include <Cache/SceneNodeCache.hpp>
+#include <Cache/TargetCache.hpp>
+#include <Cache/WindowCache.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Geometry.hpp>
 #include <Scene/Scene.hpp>

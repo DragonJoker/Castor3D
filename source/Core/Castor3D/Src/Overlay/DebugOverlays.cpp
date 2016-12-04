@@ -1,7 +1,7 @@
 #include "DebugOverlays.hpp"
 
 #include "Engine.hpp"
-#include "OverlayCache.hpp"
+#include "Cache/OverlayCache.hpp"
 
 #include "TextOverlay.hpp"
 
