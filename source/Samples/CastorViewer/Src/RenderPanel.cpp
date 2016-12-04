@@ -210,6 +210,10 @@ namespace CastorViewer
 					{
 						m_lightsNode = l_scene->GetSceneNodeCache().Find( cuT( "PointLightsNode" ) );
 					}
+					else if ( l_scene->GetSceneNodeCache().Has( cuT( "LightNode" ) ) )
+					{
+						m_lightsNode = l_scene->GetSceneNodeCache().Find( cuT( "LightNode" ) );
+					}
 
 					auto l_cameraNode = l_camera->GetParent();
 

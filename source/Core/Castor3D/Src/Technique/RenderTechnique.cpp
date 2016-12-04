@@ -1194,7 +1194,7 @@ namespace Castor3D
 		l_sampler->SetComparisonMode( ComparisonMode::eRefToTexture );
 		l_sampler->SetComparisonFunc( ComparisonFunc::eLEqual );
 
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eReadWrite, PixelFormat::eD32F, p_size );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, PixelFormat::eD32F, p_size );
 		m_directionalShadowMap.SetTexture( l_texture );
 		m_directionalShadowMap.SetSampler( l_sampler );
 

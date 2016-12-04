@@ -7,6 +7,7 @@ scene "Scene"
 
 	material "Silver"
 	{
+		type legacy
 		pass
 		{
 			ambient 0.0745	0.0745	0.0745 1.0
@@ -20,6 +21,7 @@ scene "Scene"
 
 	material "Gold"
 	{
+		type legacy
 		pass
 		{
 			ambient 0.24725 0.1995 0.0745 1.0
@@ -31,8 +33,23 @@ scene "Scene"
 		}
 	}
 
+	material "Copper"
+	{
+		type legacy
+		pass
+		{
+			ambient 0.19125 0.0735 0.0225 1.0
+			diffuse 0.7038 0.27048 0.0828 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.256777 0.137622 0.086014 1.0
+			shininess 51.2
+			two_sided true
+		}
+	}
+
 	material "WhiteEmit"
 	{
+		type legacy
 		pass
 		{
 			emissive 1 1 1 1
@@ -91,7 +108,7 @@ scene "Scene"
 			type plane 0 0 200 200
 		}
 
-		material "Gold"
+		material "Copper"
 	}
 
 	object "Torus"
@@ -152,11 +169,11 @@ scene "Scene"
 		render_target
 		{
 			format argb32
-			//size screen_size
-			size 1024 1024
+			size screen_size
+			//size 1024 1024
 			scene "Scene"
-			//camera "MainCamera"
-			camera "LightCamera"
+			camera "MainCamera"
+			//camera "LightCamera"
 		}
 
 		fullscreen false

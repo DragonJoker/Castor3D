@@ -51,7 +51,7 @@ namespace GLSL
 	}
 
 	FragmentInput::FragmentInput( InParam< Vec3 > const & p_v3Vertex
-								  , InParam< Vec3 > const & p_v3Normal )
+		, InParam< Vec3 > const & p_v3Normal )
 		: m_v3Vertex{ p_v3Vertex }
 		, m_v3Normal{ p_v3Normal }
 	{
@@ -67,8 +67,8 @@ namespace GLSL
 	}
 
 	OutputComponents::OutputComponents( InOutParam< Vec3 > const & p_v3Ambient
-										, InOutParam< Vec3 > const & p_v3Diffuse
-										, InOutParam< Vec3 > const & p_v3Specular )
+		, InOutParam< Vec3 > const & p_v3Diffuse
+		, InOutParam< Vec3 > const & p_v3Specular )
 		: m_v3Ambient{ p_v3Ambient }
 		, m_v3Diffuse{ p_v3Diffuse }
 		, m_v3Specular{ p_v3Specular }
@@ -106,9 +106,9 @@ namespace GLSL
 	}
 
 	void LightingModel::ComputeCombinedLighting( Vec3 const & p_worldEye
-												 , Float const & p_shininess
-												 , FragmentInput const & p_fragmentIn
-												 , OutputComponents & p_output )
+		, Float const & p_shininess
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
 	{
 		auto c3d_iLightsCount = m_writer.GetBuiltin< Vec3 >( cuT( "c3d_iLightsCount" ) );
 		auto l_begin = m_writer.GetLocale( cuT( "l_begin" ), 0_i );
@@ -117,10 +117,10 @@ namespace GLSL
 		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 		{
 			ComputeDirectionalLight( GetDirectionalLight( i )
-									 , p_worldEye
-									 , p_shininess
-									 , p_fragmentIn
-									 , p_output );
+				, p_worldEye
+				, p_shininess
+				, p_fragmentIn
+				, p_output );
 		}
 		ROF;
 
@@ -130,10 +130,10 @@ namespace GLSL
 		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 		{
 			ComputePointLight( GetPointLight( i )
-							   , p_worldEye
-							   , p_shininess
-							   , p_fragmentIn
-							   , p_output );
+				, p_worldEye
+				, p_shininess
+				, p_fragmentIn
+				, p_output );
 		}
 		ROF;
 
@@ -143,10 +143,10 @@ namespace GLSL
 		FOR( m_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 		{
 			ComputeSpotLight( GetSpotLight( i )
-							  , p_worldEye
-							  , p_shininess
-							  , p_fragmentIn
-							  , p_output );
+				, p_worldEye
+				, p_shininess
+				, p_fragmentIn
+				, p_output );
 		}
 		ROF;
 	}
@@ -167,28 +167,28 @@ namespace GLSL
 	}
 
 	void LightingModel::ComputeDirectionalLight( DirectionalLight const & p_light
-												 , Vec3 const & p_worldEye
-												 , Float const & p_shininess
-												 , FragmentInput const & p_fragmentIn
-												 , OutputComponents & p_output )
+		, Vec3 const & p_worldEye
+		, Float const & p_shininess
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
 	{
 		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeDirectionalLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
 	}
 
 	void LightingModel::ComputePointLight( PointLight const & p_light
-										   , Vec3 const & p_worldEye
-										   , Float const & p_shininess
-										   , FragmentInput const & p_fragmentIn
-										   , OutputComponents & p_output )
+		, Vec3 const & p_worldEye
+		, Float const & p_shininess
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
 	{
 		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputePointLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
 	}
 
 	void LightingModel::ComputeSpotLight( SpotLight const & p_light
-										  , Vec3 const & p_worldEye
-										  , Float const & p_shininess
-										  , FragmentInput const & p_fragmentIn
-										  , OutputComponents & p_output )
+		, Vec3 const & p_worldEye
+		, Float const & p_shininess
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
 	{
 		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeSpotLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
 	}
@@ -285,12 +285,22 @@ namespace GLSL
 					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 					auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
 					l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++ ).rgb();
+					auto l_v4MtxCol1 = m_writer.GetLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++ ) );
+					auto l_v4MtxCol2 = m_writer.GetLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++ ) );
+					auto l_v4MtxCol3 = m_writer.GetLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++ ) );
+					auto l_v4MtxCol4 = m_writer.GetLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++ ) );
+					l_lightReturn.m_mtxLightSpace() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
 				}
 				else
 				{
 					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 					auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), p_index * Int( MaxLightComponentsCount ) + Int( BaseLightComponentsCount ) );
 					l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++, 0 ).rgb();
+					auto l_v4MtxCol1 = m_writer.GetLocale( cuT( "l_v4MtxCol1" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
+					auto l_v4MtxCol2 = m_writer.GetLocale( cuT( "l_v4MtxCol2" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
+					auto l_v4MtxCol3 = m_writer.GetLocale( cuT( "l_v4MtxCol3" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
+					auto l_v4MtxCol4 = m_writer.GetLocale( cuT( "l_v4MtxCol4" ), texelFetch( c3d_sLights, l_offset++, 0 ) );
+					l_lightReturn.m_mtxLightSpace() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
 				}
 			}
 			else
@@ -302,6 +312,15 @@ namespace GLSL
 				auto l_offset = m_writer.GetLocale( cuT( "l_offset" ), l_mult * Float( BaseLightComponentsCount ) );
 				l_lightReturn.m_v3Direction() = texture( c3d_sLights, l_factor + l_offset + l_decal ).rgb();
 				l_offset += l_mult;
+				auto l_v4MtxCol1 = m_writer.GetLocale( cuT( "l_v4MtxCol1" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
+				l_offset += l_mult;
+				auto l_v4MtxCol2 = m_writer.GetLocale( cuT( "l_v4MtxCol2" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
+				l_offset += l_mult;
+				auto l_v4MtxCol3 = m_writer.GetLocale( cuT( "l_v4MtxCol3" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
+				l_offset += l_mult;
+				auto l_v4MtxCol4 = m_writer.GetLocale( cuT( "l_v4MtxCol4" ), texture( c3d_sLights, l_factor + l_offset + l_decal ) );
+				l_offset += l_mult;
+				l_lightReturn.m_mtxLightSpace() = mat4( l_v4MtxCol1, l_v4MtxCol2, l_v4MtxCol3, l_v4MtxCol4 );
 			}
 
 			m_writer.Return( l_lightReturn );
@@ -445,10 +464,10 @@ namespace GLSL
 	{
 		OutputComponents l_output{ m_writer };
 		auto l_compute = [this]( DirectionalLight const & p_light
-								 , Vec3 const & p_worldEye
-								 , Float const & p_shininess
-								 , FragmentInput const & p_fragmentIn
-								 , OutputComponents & p_output )
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output )
 		{
 			OutputComponents l_output
 			{
@@ -471,22 +490,22 @@ namespace GLSL
 			p_output.m_v3Specular += l_output.m_v3Specular;
 		};
 		m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" )
-											, l_compute
-											, DirectionalLight( &m_writer, cuT( "p_light" ) )
-											, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-											, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-											, FragmentInput{ m_writer }
-											, l_output );
+			, l_compute
+			, DirectionalLight( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
 	}
 
 	void PhongLightingModel::Declare_ComputePointLight()
 	{
 		OutputComponents l_output{ m_writer };
 		auto l_compute = [this]( PointLight const & p_light
-								 , Vec3 const & p_worldEye
-								 , Float const & p_shininess
-								 , FragmentInput const & p_fragmentIn
-								 , OutputComponents & p_output )
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output )
 		{
 			OutputComponents l_output
 			{
@@ -506,29 +525,28 @@ namespace GLSL
 			}
 
 			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadowFactor, p_fragmentIn, l_output );
-
 			auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 			p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
 			p_output.m_v3Diffuse += l_output.m_v3Diffuse / l_attenuation;
 			p_output.m_v3Specular += l_output.m_v3Specular / l_attenuation;
 		};
 		m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" )
-											, l_compute
-											, PointLight( &m_writer, cuT( "p_light" ) )
-											, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-											, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-											, FragmentInput{ m_writer }
-											, l_output );
+			, l_compute
+			, PointLight( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
 	}
 
 	void PhongLightingModel::Declare_ComputeSpotLight()
 	{
 		OutputComponents l_output{ m_writer };
 		auto l_compute = [this]( SpotLight const & p_light
-								 , Vec3 const & p_worldEye
-								 , Float const & p_shininess
-								 , FragmentInput const & p_fragmentIn
-								 , OutputComponents & p_output )
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output )
 		{
 			OutputComponents l_output
 			{
@@ -552,11 +570,10 @@ namespace GLSL
 				}
 
 				DoComputeLight( p_light.m_lightBase().m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadowFactor, p_fragmentIn, l_output );
-
 				auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" )
-														 , p_light.m_lightBase().m_v3Attenuation().x()
-														 + p_light.m_lightBase().m_v3Attenuation().y() * l_distance
-														 + p_light.m_lightBase().m_v3Attenuation().z() * l_distance * l_distance );
+					, p_light.m_lightBase().m_v3Attenuation().x()
+					+ p_light.m_lightBase().m_v3Attenuation().y() * l_distance
+					+ p_light.m_lightBase().m_v3Attenuation().z() * l_distance * l_distance );
 				l_spotFactor = m_writer.Paren( 1.0_f - m_writer.Paren( 1.0_f - l_spotFactor ) * 1.0_f / m_writer.Paren( 1.0_f - p_light.m_fCutOff() ) );
 
 				p_output.m_v3Ambient += l_spotFactor * l_output.m_v3Ambient / l_attenuation;
@@ -566,24 +583,24 @@ namespace GLSL
 			FI;
 		};
 		m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" )
-											, l_compute
-											, SpotLight( &m_writer, cuT( "p_light" ) )
-											, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-											, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-											, FragmentInput{ m_writer }
-											, l_output );
+			, l_compute
+			, SpotLight( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
 	}
 
 	void PhongLightingModel::DoDeclare_ComputeLight()
 	{
 		OutputComponents l_output{ m_writer };
 		auto l_compute = [this]( Light const & p_light
-								 , Vec3 const & p_worldEye
-								 , Vec3 const & p_direction
-								 , Float const & p_shininess
-								 , Float const & p_shadowFactor
-								 , FragmentInput const & p_fragmentIn
-								 , OutputComponents & p_output )
+			, Vec3 const & p_worldEye
+			, Vec3 const & p_direction
+			, Float const & p_shininess
+			, Float const & p_shadowFactor
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output )
 		{
 			p_output.m_v3Ambient = p_light.m_v3Colour() * p_light.m_v3Intensity().x();
 			auto l_diffuseFactor = m_writer.GetLocale( cuT( "l_diffuseFactor" ), dot( p_fragmentIn.m_v3Normal, -p_direction ) );
@@ -599,32 +616,32 @@ namespace GLSL
 			FI;
 		};
 		m_writer.ImplementFunction< Void >( cuT( "DoComputeLight" )
-											, l_compute
-											, InParam< Light >( &m_writer, cuT( "p_light" ) )
-											, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
-											, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
-											, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
-											, InParam< Float >( &m_writer, cuT( "p_shadowFactor" ) )
-											, FragmentInput{ m_writer }
-											, l_output );
+			, l_compute
+			, InParam< Light >( &m_writer, cuT( "p_light" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
+			, InParam< Vec3 >( &m_writer, cuT( "p_direction" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Float >( &m_writer, cuT( "p_shadowFactor" ) )
+			, FragmentInput{ m_writer }
+			, l_output );
 	}
 
 	void PhongLightingModel::DoComputeLight( Light const & p_light
-											 , Vec3 const & p_worldEye
-											 , Vec3 const & p_direction
-											 , Float const & p_shininess
-											 , Float const & p_shadowFactor
-											 , FragmentInput const & p_fragmentIn
-											 , OutputComponents & p_output )
+		, Vec3 const & p_worldEye
+		, Vec3 const & p_direction
+		, Float const & p_shininess
+		, Float const & p_shadowFactor
+		, FragmentInput const & p_fragmentIn
+		, OutputComponents & p_output )
 	{
 		m_writer << WriteFunctionCall< Vec3 >( &m_writer, cuT( "DoComputeLight" )
-											   , p_light
-											   , p_worldEye
-											   , p_direction
-											   , p_shininess
-											   , p_shadowFactor
-											   , p_fragmentIn
-											   , p_output ) << Endi();
+			, p_light
+			, p_worldEye
+			, p_direction
+			, p_shininess
+			, p_shadowFactor
+			, p_fragmentIn
+			, p_output ) << Endi();
 	}
 
 	//***********************************************************************************************

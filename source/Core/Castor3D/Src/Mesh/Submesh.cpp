@@ -1251,9 +1251,16 @@ namespace Castor3D
 			l_buffers.push_back( *m_matrixBuffer );
 		}
 
-		GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
+		if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext() )
 		{
 			p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
-		} ) );
+		}
+		else
+		{
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_geometryBuffers, l_buffers]()
+			{
+				p_geometryBuffers->Initialise( l_buffers, m_indexBuffer );
+			} ) );
+		}
 	}
 }

@@ -64,8 +64,8 @@ namespace GLSL
 			// Take care of shadow acne by subtracting a bias based on the surface's slope.
 			auto l_z = m_writer.GetLocale( cuT( "l_z" ), l_lightSpacePosition.z() );
 			auto l_cosTheta = m_writer.GetLocale( cuT( "l_cosTheta" ), clamp( dot( p_normal, p_lightDirection ), 0, 1 ) );
-			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), Float( 0.00008 ) * tan( acos( l_cosTheta ) ) );
-			l_bias = clamp( l_bias, 0.0, 0.0002 );
+			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), Float( 0.0048 ) * tan( acos( l_cosTheta ) ) );
+			l_bias = clamp( l_bias, 0.0, 0.012 );
 			l_z -= l_bias;
 
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), Float( 1 ) );
@@ -121,8 +121,10 @@ namespace GLSL
 			// Take care of shadow acne by subtracting a bias based on the surface's slope.
 			auto l_z = m_writer.GetLocale( cuT( "l_z" ), l_lightSpacePosition.z() );
 			auto l_cosTheta = m_writer.GetLocale( cuT( "l_cosTheta" ), clamp( dot( p_normal, p_lightDirection ), 0, 1 ) );
-			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), 0.001_f * tan( acos( l_cosTheta ) ) );
-			l_bias = clamp( l_bias, 0.0001, 0.001 );
+			auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), Float( 0.00008 ) * tan( acos( l_cosTheta ) ) );
+			l_bias = clamp( l_bias, 0.0, 0.0002 );
+			//auto l_bias = m_writer.GetLocale( cuT( "l_bias" ), 0.001_f * tan( acos( l_cosTheta ) ) );
+			//l_bias = clamp( l_bias, 0.0001, 0.001 );
 			l_z -= l_bias;
 
 			auto l_visibility = m_writer.GetLocale( cuT( "l_visibility" ), 1.0_f );

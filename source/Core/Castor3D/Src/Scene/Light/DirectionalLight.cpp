@@ -56,15 +56,6 @@ namespace Castor3D
 		l_orientation.transform( l_up, l_up );
 		matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
 		m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
-		//REQUIRE( m_viewport );
-		//auto l_node = GetLight().GetParent();
-		//l_node->Update();
-		//auto l_orientation = l_node->GetDerivedOrientation();
-		//Point3f l_up{ 0, 1, 0 };
-		//l_orientation.transform( l_up, l_up );
-		//Point3r l_position;
-		//matrix::look_at( m_lightSpace, l_position, l_position + m_direction, l_up );
-		//m_lightSpace = m_viewport->GetProjection() * m_lightSpace;
 	}
 
 	void DirectionalLight::UpdateNode( SceneNode const & p_node )
@@ -76,5 +67,6 @@ namespace Castor3D
 	void DirectionalLight::DoBind( Castor::PxBufferBase & p_texture, uint32_t p_index, uint32_t & p_offset )const
 	{
 		DoBindComponent( m_direction, p_index, p_offset, p_texture );
+		DoBindComponent( m_lightSpace, p_index, p_offset, p_texture );
 	}
 }
