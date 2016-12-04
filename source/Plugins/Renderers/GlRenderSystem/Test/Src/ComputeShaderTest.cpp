@@ -42,18 +42,19 @@ namespace Testing
 		ShaderProgramSPtr DoCreateSimpleComputeProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
+				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( std430, binding = 0 ) buffer Storage\n
 				{ \n
-					ivec4 ids[]; \n
-				}; \n
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in; \n
+					ivec4 ids[];\n
+				};\n
+				layout( local_size_variable ) in;\n
 				void main()\n
 				{ \n
-					uint l_gid = gl_GlobalInvocationID.x; \n
-					ids[l_gid].x = int( l_gid ); \n
-					ids[l_gid].y = int( l_gid * 2 ); \n
-					ids[l_gid].z = int( l_gid * 3 ); \n
-					ids[l_gid].w = int( l_gid * 4 ); \n
+					uint l_gid = gl_GlobalInvocationID.x;\n
+					ids[l_gid].x = int( l_gid );\n
+					ids[l_gid].y = int( l_gid * 2 );\n
+					ids[l_gid].z = int( l_gid * 3 );\n
+					ids[l_gid].w = int( l_gid * 4 );\n
 				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
@@ -66,6 +67,7 @@ namespace Testing
 		ShaderProgramSPtr DoCreateTwoStoragesProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
+				#extension GL_ARB_compute_variable_group_size : enable\n
 				layout( std430, binding = 1 ) buffer Storage1\n
 				{\n
 					ivec4 ids1[];\n
@@ -74,13 +76,13 @@ namespace Testing
 				{\n
 					ivec4 ids2[];\n
 				};\n
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;\n
+				layout( local_size_variable ) in;\n
 				void main()\n
-				{ \n
-					uint l_gid = gl_GlobalInvocationID.x; \n
-					ids2[l_gid].x = ids1[l_gid].x + int( l_gid ); \n
-					ids2[l_gid].y = ids1[l_gid].y + int( l_gid * 2 ); \n
-					ids2[l_gid].z = ids1[l_gid].z + int( l_gid * 3 ); \n
+				{\n
+					uint l_gid = gl_GlobalInvocationID.x;\n
+					ids2[l_gid].x = ids1[l_gid].x + int( l_gid );\n
+					ids2[l_gid].y = ids1[l_gid].y + int( l_gid * 2 );\n
+					ids2[l_gid].z = ids1[l_gid].z + int( l_gid * 3 );\n
 					ids2[l_gid].w = ids1[l_gid].w + int( l_gid * 4 );\n
 				}\n
 			);
@@ -94,14 +96,15 @@ namespace Testing
 		ShaderProgramSPtr DoCreateAtomicCounterProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;
+				#extension GL_ARB_compute_variable_group_size : enable\n
+				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
 				layout( std430, binding = 1 ) buffer Storage\n
 				{\n
 					ivec4 ids[];\n
-				}; \n
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;\n
+				};\n
+				layout( local_size_variable ) in;\n
 				void main()\n
-				{ \n
+				{\n
 					uint l_gid = atomicCounterIncrement( out_index );\n
 					ids[l_gid].x = int( l_gid );\n
 					ids[l_gid].y = int( l_gid * 2 );\n
@@ -119,7 +122,8 @@ namespace Testing
 		ShaderProgramSPtr DoCreateTwoStoragesAndAtomicCounterProgram( Engine & p_engine )
 		{
 			String l_code = Glsl(
-				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;
+				#extension GL_ARB_compute_variable_group_size : enable\n
+				layout( binding = 0, offset = 0 ) uniform atomic_uint out_index;\n
 				layout( std430, binding = 1 ) buffer Storage1\n
 				{\n
 					ivec4 ids1[];\n
@@ -128,13 +132,13 @@ namespace Testing
 				{\n
 					ivec4 ids2[];\n
 				};\n
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;\n
+				layout( local_size_variable ) in;\n
 				void main()\n
-				{ \n
-					uint l_gid = atomicCounterIncrement( out_index ); \n
-					ids2[l_gid].x = ids1[l_gid].x + int( l_gid ); \n
-					ids2[l_gid].y = ids1[l_gid].y + int( l_gid * 2 ); \n
-					ids2[l_gid].z = ids1[l_gid].z + int( l_gid * 3 ); \n
+				{\n
+					uint l_gid = atomicCounterIncrement( out_index );\n
+					ids2[l_gid].x = ids1[l_gid].x + int( l_gid );\n
+					ids2[l_gid].y = ids1[l_gid].y + int( l_gid * 2 );\n
+					ids2[l_gid].z = ids1[l_gid].z + int( l_gid * 3 );\n
 					ids2[l_gid].w = ids1[l_gid].w + int( l_gid * 4 );\n
 				}\n
 			);

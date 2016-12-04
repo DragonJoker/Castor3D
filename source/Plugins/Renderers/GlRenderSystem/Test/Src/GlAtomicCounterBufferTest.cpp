@@ -25,27 +25,29 @@ namespace Testing
 		ShaderProgramSPtr DoCreateNoopProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				void main()
-				{
-					gl_Position = vec4( 0, 0, 0, 1 );
-				}
+				layout( binding = 0, offset = 0 ) uniform atomic_uint counter;\n
+				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;\n
+				void main()\n
+				{\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			l_program->CreateObject( ShaderType::eVertex );
-			l_program->SetSource( ShaderType::eVertex, l_model, l_vtx );
+			l_program->CreateObject( ShaderType::eCompute );
+			l_program->SetSource( ShaderType::eCompute, l_model, l_vtx );
 			return l_program;
 		}
 
 		ShaderProgramSPtr DoCreateInOutProgram( Engine & p_engine )
 		{
 			String l_vtx = Glsl(
-				layout( binding=0, offset=0 ) uniform atomic_uint counter;
-				layout( local_size_x = 1, local_size_y = 1, local_size_z = 1 ) in;
-				void main()
-				{
-					atomicCounterIncrement( counter );
-				}
+				#extension GL_ARB_compute_variable_group_size : enable\n
+				layout( binding=0, offset=0 ) uniform atomic_uint counter;\n
+				layout( local_size_variable ) in;\n
+				void main()\n
+				{\n
+					atomicCounterIncrement( counter );\n
+				}\n
 			);
 			auto l_program = p_engine.GetRenderSystem()->CreateShaderProgram();
 			auto l_model = p_engine.GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
