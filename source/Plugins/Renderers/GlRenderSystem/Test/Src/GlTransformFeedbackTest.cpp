@@ -274,15 +274,6 @@ namespace Testing
 		// Shader program
 		auto l_program = DoCreateBasicComputeProgram( m_engine );
 
-		// Transform feedback
-		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
-		l_program->SetTransformLayout( l_outputs );
-
-		// Pipeline
-		RasteriserState l_rs;
-		l_rs.SetDiscardPrimitives( true );
-		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
-
 		// Input VBO
 		VertexBuffer l_vboIn{ m_engine, l_inputs };
 		l_vboIn.Resize( sizeof( l_data ) );
@@ -292,8 +283,17 @@ namespace Testing
 		VertexBuffer l_vboOut{ m_engine, l_outputs };
 		l_vboOut.Resize( sizeof( l_data ) );
 
+		// Transform feedback
+		auto l_transformFeedback = m_engine.GetRenderSystem()->CreateTransformFeedback( l_outputs, Topology::ePoints, *l_program );
+		l_program->SetTransformLayout( l_outputs );
+
 		// VAO
 		auto l_geometryBuffers = m_engine.GetRenderSystem()->CreateGeometryBuffers( Topology::ePoints, *l_program );
+
+		// Pipeline
+		RasteriserState l_rs;
+		l_rs.SetDiscardPrimitives( true );
+		auto l_pipeline = m_engine.GetRenderSystem()->CreateRenderPipeline( DepthStencilState{}, std::move( l_rs ), BlendState{}, MultisampleState{}, *l_program, PipelineFlags{} );
 
 		m_engine.GetRenderSystem()->GetMainContext()->SetCurrent();
 		CT_CHECK( l_program->Initialise() );
@@ -318,7 +318,6 @@ namespace Testing
 			CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 			l_transformFeedback->Unbind();
 			CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
-			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
 
 			l_vboOut.Download( 0u, sizeof( l_data ), reinterpret_cast< uint8_t * >( l_buffer.data() ) );
 
@@ -329,13 +328,14 @@ namespace Testing
 			}
 
 			l_vboIn.Copy( l_vboOut, sizeof( l_data ) );
+			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
 		}
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
 		l_vboOut.Cleanup();
 		l_vboIn.Cleanup();
-		l_program->Cleanup();
+		l_pipeline->Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();
 	}
 

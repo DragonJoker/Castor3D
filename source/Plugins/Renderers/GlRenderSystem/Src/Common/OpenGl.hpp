@@ -1390,6 +1390,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( ARB_pixel_buffer_object );
 	MAKE_GL_EXTENSION( ARB_program_interface_query );
 	MAKE_GL_EXTENSION( ARB_sampler_objects );
+	MAKE_GL_EXTENSION( ARB_shader_atomic_counters );
 	MAKE_GL_EXTENSION( ARB_shader_image_load_store );
 	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object );
 	MAKE_GL_EXTENSION( ARB_tessellation_shader );

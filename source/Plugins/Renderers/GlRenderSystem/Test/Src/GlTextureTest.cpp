@@ -31,7 +31,7 @@ namespace Testing
 			, FlagCombination< AccessType > const & p_cpuAccess
 			, FlagCombination< AccessType > const & p_gpuAccess )
 		{
-			auto & l_renderSystem = *p_engine.GetRenderSystem();
+			auto & l_renderSystem = static_cast< GlRenderSystem & >( *p_engine.GetRenderSystem() );
 			l_renderSystem.GetMainContext()->SetCurrent();
 			auto l_texture = l_renderSystem.CreateTexture( p_type, p_cpuAccess, p_gpuAccess );
 			l_texture->SetSource( PxBufferBase::create( Size{ Width, Height }, Format ) );
@@ -40,12 +40,24 @@ namespace Testing
 			std::iota( l_src.begin(), l_src.end(), 0 );
 			p_case.Upload( *l_texture, ArrayView< uint8_t >{ l_src.data(), l_src.size() } );
 
+			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			{
+				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+			}
+
 			l_renderSystem.GetMainContext()->SwapBuffers();
 
 			std::vector< uint8_t > l_dst;
 			l_dst.resize( l_src.size() );
+			std::memset( l_texture->GetImage().GetBuffer()->ptr(), 0, l_texture->GetImage().GetBuffer()->size() );
 			p_case.Download( *l_texture, l_dst );
 
+			if ( l_renderSystem.GetOpenGl().HasExtension( ARB_shader_image_load_store ) )
+			{
+				l_renderSystem.GetOpenGl().MemoryBarrier( GlBarrierBit::eTextureUpdate );
+			}
+
+			l_renderSystem.GetMainContext()->SwapBuffers();
 			l_renderSystem.GetMainContext()->EndCurrent();
 			p_case.Compare( l_src, l_dst );
 
@@ -64,11 +76,19 @@ namespace Testing
 
 	void GlTextureTest::DoRegisterTests()
 	{
-		DoRegisterTest( "GlTextureTest::ImmutableStorage", std::bind( &GlTextureTest::ImmutableStorage, this ) );
+		if ( m_engine.GetRenderSystem()->GetGpuInformations().HasFeature( GpuFeature::eImmutableTextureStorage ) )
+		{
+			DoRegisterTest( "GlTextureTest::ImmutableStorage", std::bind( &GlTextureTest::ImmutableStorage, this ) );
+		}
+
 		DoRegisterTest( "GlTextureTest::DirectStorage", std::bind( &GlTextureTest::DirectStorage, this ) );
 		DoRegisterTest( "GlTextureTest::PboStorage", std::bind( &GlTextureTest::PboStorage, this ) );
 		DoRegisterTest( "GlTextureTest::GpuOnlyStorage", std::bind( &GlTextureTest::GpuOnlyStorage, this ) );
-		DoRegisterTest( "GlTextureTest::TboStorage", std::bind( &GlTextureTest::TboStorage, this ) );
+
+		if ( m_engine.GetRenderSystem()->GetGpuInformations().HasFeature( GpuFeature::eTextureBuffers ) )
+		{
+			DoRegisterTest( "GlTextureTest::TboStorage", std::bind( &GlTextureTest::TboStorage, this ) );
+		}
 	}
 
 	void GlTextureTest::ImmutableStorage()

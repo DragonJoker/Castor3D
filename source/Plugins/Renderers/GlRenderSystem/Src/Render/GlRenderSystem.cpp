@@ -114,6 +114,10 @@ namespace GlRender
 				m_gpuInformations.UpdateFeature( GpuFeature::eInstancing, GetOpenGl().HasInstancing() );
 				m_gpuInformations.UpdateFeature( GpuFeature::eAccumulationBuffer, true );
 				m_gpuInformations.UpdateFeature( GpuFeature::eNonPowerOfTwoTextures, GetOpenGl().HasNonPowerOfTwoTextures() );
+				m_gpuInformations.UpdateFeature( GpuFeature::eAtomicCounterBuffers, GetOpenGl().HasExtension( ARB_shader_atomic_counters, false ) );
+				m_gpuInformations.UpdateFeature( GpuFeature::eImmutableTextureStorage, GetOpenGl().HasExtension( ARB_texture_storage, false ) );
+				m_gpuInformations.UpdateFeature( GpuFeature::eShaderStorageBuffers, GetOpenGl().HasSsbo() );
+				m_gpuInformations.UpdateFeature( GpuFeature::eTransformFeedback, GetOpenGl().HasExtension( ARB_transform_feedback2 ) );
 
 				m_openGlMajor = GetOpenGl().GetVersion() / 10;
 				m_openGlMinor = GetOpenGl().GetVersion() % 10;
@@ -521,7 +525,7 @@ namespace GlRender
 		{
 			if ( !CheckFlag( p_gpuAccess, AccessType::eWrite ) )
 			{
-				if ( GetOpenGl().HasExtension( ARB_texture_storage )
+				if ( GetOpenGl().HasExtension( ARB_texture_storage, false )
 					 && p_cpuAccess == AccessType::eNone )
 				{
 					l_return = std::make_unique< GlTextureStorage< GlImmutableTextureStorageTraits > >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );

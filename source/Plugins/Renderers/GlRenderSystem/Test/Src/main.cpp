@@ -390,9 +390,21 @@ int main( int argc, char const * argv[] )
 				{
 					// Test cases.
 					Testing::Register( std::make_unique< Testing::GlTextureTest >( *l_engine ) );
-					Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
-					Testing::Register( std::make_unique< Testing::GlAtomicCounterBufferTest >( *l_engine ) );
-					Testing::Register( std::make_unique< Testing::GlComputeShaderTest >( *l_engine ) );
+
+					if ( l_engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eTransformFeedback ) )
+					{
+						//Testing::Register( std::make_unique< Testing::GlTransformFeedbackTest >( *l_engine ) );
+					}
+
+					if ( l_engine->GetRenderSystem()->GetGpuInformations().HasFeature( Castor3D::GpuFeature::eAtomicCounterBuffers ) )
+					{
+						Testing::Register( std::make_unique< Testing::GlAtomicCounterBufferTest >( *l_engine ) );
+					}
+
+					if ( l_engine->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel() >= Castor3D::ShaderModel::eModel5 )
+					{
+						Testing::Register( std::make_unique< Testing::GlComputeShaderTest >( *l_engine ) );
+					}
 
 					// Tests loop.
 					BENCHLOOP( l_count, l_return );
