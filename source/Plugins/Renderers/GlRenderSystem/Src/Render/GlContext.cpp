@@ -65,12 +65,7 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-				if ( GetOpenGl().HasDebugOutput() )
-				{
-					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGPROC( &OpenGl::StDebugLog ), &GetOpenGl() );
-					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGAMDPROC( &OpenGl::StDebugLogAMD ), &GetOpenGl() );
-					GetOpenGl().Enable( GlTweak::eDebugOutputSynchronous );
-				}
+				GetOpenGl().InitialiseDebug();
 
 #endif
 

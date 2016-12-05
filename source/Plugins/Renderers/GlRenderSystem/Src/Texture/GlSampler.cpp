@@ -65,6 +65,8 @@ namespace GlRender
 
 	void GlSampler::Unbind( uint32_t p_index )const
 	{
+		// Why can't I unbind a sampler?
+		//GetOpenGl().BindSampler( p_index, 0 );
 	}
 
 	void GlSampler::DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )

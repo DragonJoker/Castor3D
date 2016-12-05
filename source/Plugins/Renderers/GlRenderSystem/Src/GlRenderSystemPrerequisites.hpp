@@ -697,6 +697,9 @@ namespace GlRender
 		ePortability = 0x824F,
 		ePerformance = 0x8250,
 		eOther = 0x8251,
+		eMarker = 0x8268,
+		ePushGroup = 0x8269,
+		ePopGroup = 0x826A,
 	};
 
 	enum class GlDebugSource
@@ -729,6 +732,7 @@ namespace GlRender
 		eHigh = 0x9146,
 		eMedium = 0x9147,
 		eLow = 0x9148,
+		eNotification = 0x826B,
 	};
 
 	enum class GlMin

@@ -780,11 +780,6 @@ namespace GlRender
 		return l_return;
 	}
 
-	inline bool OpenGl::HasDebugOutput()const
-	{
-		return ( m_pfnDebugMessageCallback || m_pfnDebugMessageCallbackAMD );
-	}
-
 	inline Castor::String const & OpenGl::GetVendor()const
 	{
 		return m_vendor;
@@ -945,11 +940,6 @@ namespace GlRender
 	bool OpenGl::HasMultiTexturing()const
 	{
 		return m_pfnActiveTexture && m_pfnClientActiveTexture;
-	}
-
-	uint32_t OpenGl::GetError()const
-	{
-		return m_pfnGetError();
 	}
 
 	bool OpenGl::ClearColor( float red, float green, float blue, float alpha )const
@@ -1330,26 +1320,6 @@ namespace GlRender
 	{
 		m_pfnColorMask( p_r, p_g, p_b, p_a );
 		return glCheckError( *this, "glColorMask" );
-	}
-
-	bool OpenGl::DebugMessageCallback( PFNGLDEBUGPROC pfnProc, void * p_pThis )const
-	{
-		if ( m_pfnDebugMessageCallback )
-		{
-			m_pfnDebugMessageCallback( pfnProc, p_pThis );
-		}
-
-		return true;
-	}
-
-	bool OpenGl::DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis )const
-	{
-		if ( m_pfnDebugMessageCallbackAMD )
-		{
-			m_pfnDebugMessageCallbackAMD( pfnProc, p_pThis );
-		}
-
-		return true;
 	}
 
 	bool OpenGl::PolygonMode( GlFace p_eFacing, GlFillMode p_mode )const

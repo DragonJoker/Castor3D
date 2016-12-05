@@ -208,6 +208,14 @@ namespace Deferred
 		 *\param[in]	p_textureFlags	L'index de départ.
 		 */
 		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
+		bool DoCreateGeometryPass();
+		bool DoCreateLightPass();
+		void DoDestroyGeometryPass();
+		void DoDestroyLightPass();
+		bool DoInitialiseGeometryPass();
+		bool DoInitialiseLightPass( uint32_t & p_index );
+		void DoCleanupGeometryPass();
+		void DoCleanupLightPass();
 
 	private:
 		struct LightPassProgram
@@ -254,9 +262,6 @@ namespace Deferred
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;
