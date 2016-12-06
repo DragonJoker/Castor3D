@@ -105,6 +105,27 @@ namespace GLSL
 		Declare_ComputeSpotLight();
 	}
 
+	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
+	{
+		return WriteFunctionCall< DirectionalLight >( &m_writer
+			, cuT( "GetDirectionalLight" )
+			, p_value );
+	}
+
+	PointLight LightingModel::GetPointLight( Type const & p_value )
+	{
+		return WriteFunctionCall< PointLight >( &m_writer
+			, cuT( "GetPointLight" )
+			, p_value );
+	}
+
+	SpotLight LightingModel::GetSpotLight( Type const & p_value )
+	{
+		return WriteFunctionCall< SpotLight >( &m_writer
+			, cuT( "GetSpotLight" )
+			, p_value );
+	}
+
 	void LightingModel::ComputeCombinedLighting( Vec3 const & p_worldEye
 		, Float const & p_shininess
 		, Int const & p_receivesShadows
@@ -154,28 +175,6 @@ namespace GLSL
 		}
 		ROF;
 	}
-
-	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
-	{
-		return WriteFunctionCall< DirectionalLight >( &m_writer
-			, cuT( "GetDirectionalLight" )
-			, p_value );
-	}
-
-	PointLight LightingModel::GetPointLight( Type const & p_value )
-	{
-		return WriteFunctionCall< PointLight >( &m_writer
-			, cuT( "GetPointLight" )
-			, p_value );
-	}
-
-	SpotLight LightingModel::GetSpotLight( Type const & p_value )
-	{
-		return WriteFunctionCall< SpotLight >( &m_writer
-			, cuT( "GetSpotLight" )
-			, p_value );
-	}
-
 	void LightingModel::ComputeDirectionalLight( DirectionalLight const & p_light
 		, Vec3 const & p_worldEye
 		, Float const & p_shininess
@@ -517,7 +516,7 @@ namespace GLSL
 			{
 				Shadow l_shadows{ m_writer };
 
-				IF ( m_writer, p_receivesShadows )
+				IF ( m_writer, p_receivesShadows != 0_i )
 				{
 					l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightDirection, p_fragmentIn.m_v3Normal );
 				}
@@ -570,7 +569,7 @@ namespace GLSL
 			{
 				Shadow l_shadows{ m_writer };
 
-				IF ( m_writer, p_receivesShadows )
+				IF ( m_writer, p_receivesShadows != 0_i )
 				{
 					l_shadowFactor = l_shadows.ComputePointShadow( l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
 				}
@@ -628,7 +627,7 @@ namespace GLSL
 				{
 					Shadow l_shadows{ m_writer };
 
-					IF ( m_writer, p_receivesShadows )
+					IF ( m_writer, p_receivesShadows != 0_i )
 					{
 						l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
 					}

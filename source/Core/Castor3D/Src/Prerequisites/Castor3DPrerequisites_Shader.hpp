@@ -565,8 +565,8 @@ namespace Castor3D
 	l_pass.End()
 
 #define UBO_MODEL( Writer )\
-	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferMatrix };\
-	auto c3d_iShadowReceiver = l_matrices.GetUniform< GLSL::Mat4 >( ShaderProgram::ShadowReceiver );\
+	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
+	auto c3d_iShadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
 	l_model.End()
 
 #define UBO_BILLBOARD( Writer )\

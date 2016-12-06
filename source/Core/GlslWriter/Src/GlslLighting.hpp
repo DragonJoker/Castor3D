@@ -56,14 +56,14 @@ namespace GLSL
 		GlslWriter_API LightingModel( ShadowType p_shadows, GlslWriter & p_writer );
 		GlslWriter_API void DeclareModel();
 		// Calls
+		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
+		GlslWriter_API PointLight GetPointLight( Type const & p_value );
+		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
 		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
 			, Float const & p_shininess
 			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output );
-		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
-		GlslWriter_API PointLight GetPointLight( Type const & p_value );
-		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
 		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess

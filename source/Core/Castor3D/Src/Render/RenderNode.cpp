@@ -147,12 +147,12 @@ namespace Castor3D
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
-		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 	}
 
 	void AnimatedGeometryRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
@@ -162,6 +162,7 @@ namespace Castor3D
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 
 		if ( m_skeleton )
@@ -202,7 +203,6 @@ namespace Castor3D
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
-		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 	}
 
 	void BillboardRenderNode::BindPass( DepthMapArray const & p_depthMaps, uint64_t p_excludedMtxFlags )
@@ -212,6 +212,7 @@ namespace Castor3D
 			m_data.GetParentScene().GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_data.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );
@@ -219,6 +220,5 @@ namespace Castor3D
 		m_pass.m_pipeline.GetProgram().BindUbos();
 		m_pass.m_pass.BindTextures();
 		DoBindDepthMaps( p_depthMaps );
-		m_shadowReceiver.SetValue( m_data.IsShadowReceiver() ? 1 : 0 );
 	}
 }
