@@ -424,7 +424,7 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
-				m_initialised = DoInitialiseDirectionalShadowMap( Size{ 1024, 1024 } );
+				m_initialised = DoInitialiseDirectionalShadowMap( Size{ 4096, 4096 } );
 			}
 
 			if ( m_initialised )
@@ -464,7 +464,7 @@ namespace Castor3D
 
 						auto l_pass = GetEngine()->GetShadowMapPassFactory().Create( p_light.GetLightType(), *GetEngine(), l_scene, p_light, *l_unit, 0u );
 						auto l_insit = m_shadowMaps.insert( { &p_light, l_pass } ).first;
-						l_pass->Initialise( m_size );
+						l_pass->Initialise();
 					}
 				} );
 			}
@@ -519,11 +519,13 @@ namespace Castor3D
 		l_scene.GetLightCache().UpdateLights();
 
 		m_renderSystem.PushScene( &l_scene );
-		DepthMapArray l_depthMaps;
+		DepthMapArray l_opaqueDepthMaps;
+		DepthMapArray l_transparentDepthMaps;
 
 		if ( l_scene.HasShadows() )
 		{
-			DoGetDepthMaps( l_depthMaps );
+			DoGetOpaqueDepthMaps( l_opaqueDepthMaps );
+			DoGetTransparentDepthMaps( l_transparentDepthMaps );
 
 			for ( auto & l_shadowMap : m_shadowMaps )
 			{
@@ -534,7 +536,7 @@ namespace Castor3D
 		if ( DoBeginRender() )
 		{
 			l_scene.RenderBackground( GetSize() );
-			DoRender( l_nodes, l_depthMaps, p_frameTime );
+			DoRender( l_nodes, l_opaqueDepthMaps, l_transparentDepthMaps, p_frameTime );
 			p_visible = uint32_t( m_renderedObjects.size() );
 			p_particles = m_particlesCount;
 
@@ -585,7 +587,7 @@ namespace Castor3D
 		return DoWriteInto( p_file );
 	}
 
-	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, uint32_t p_frameTime )
+	void RenderTechnique::DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_opaqueDepthMaps, DepthMapArray & p_transparentDepthMaps, uint32_t p_frameTime )
 	{
 		m_renderedObjects.clear();
 		m_particlesCount = 0;
@@ -594,7 +596,7 @@ namespace Castor3D
 		l_camera.Update();
 		l_camera.Apply();
 
-		DoRenderOpaqueNodes( p_nodes, p_depthMaps );
+		DoRenderOpaqueNodes( p_nodes, p_opaqueDepthMaps );
 
 		if ( p_nodes.m_scene.GetFog().GetType() == FogType::eDisabled )
 		{
@@ -607,7 +609,7 @@ namespace Castor3D
 			m_particlesCount += p_particleSystem.GetParticlesCount();
 		} );
 
-		DoRenderTransparentNodes( p_nodes, p_depthMaps );
+		DoRenderTransparentNodes( p_nodes, p_transparentDepthMaps );
 	}
 
 	void RenderTechnique::DoRenderOpaqueNodes( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps )
@@ -733,36 +735,20 @@ namespace Castor3D
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
-				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
+				uint32_t l_count = 0u;
 
-				if ( l_matrixBuffer.Bind() )
+				if ( p_register )
 				{
-					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::eWrite ) );
-
-					if ( l_buffer )
-					{
-						constexpr uint32_t l_stride = 16;
-
-						for ( auto const & l_renderNode : p_renderNodes )
-						{
-							std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride * sizeof( real ) );
-							l_buffer += l_stride;
-
-							if ( p_register )
-							{
-								m_renderedObjects.push_back( l_renderNode );
-							}
-						}
-
-						l_matrixBuffer.Unlock();
-					}
-
-					l_matrixBuffer.Unbind();
-					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( p_depthMaps );
+					l_count = DoRegisterCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 				}
+				else
+				{
+					l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+				}
+
+				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_depthMaps );
 			}
 		} );
 	}
@@ -817,36 +803,20 @@ namespace Castor3D
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
-				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
+				uint32_t l_count = 0u;
 
-				if ( l_matrixBuffer.Bind() )
+				if ( p_register )
 				{
-					real * l_buffer = reinterpret_cast< real * >( l_matrixBuffer.Lock( 0, l_count * 16 * sizeof( real ), AccessType::eWrite ) );
-
-					if ( l_buffer )
-					{
-						constexpr uint32_t l_stride = 16;
-
-						for ( auto const & l_renderNode : p_renderNodes )
-						{
-							std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride * sizeof( real ) );
-							l_buffer += l_stride;
-
-							if ( p_register )
-							{
-								m_renderedObjects.push_back( l_renderNode );
-							}
-						}
-
-						l_matrixBuffer.Unlock();
-					}
-
-					l_matrixBuffer.Unbind();
-					p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
-					p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
-					p_renderNodes[0].UnbindPass( p_depthMaps );
+					l_count = DoRegisterCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 				}
+				else
+				{
+					l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
+				}
+
+				p_renderNodes[0].BindPass( p_depthMaps, MASK_MTXMODE_MODEL );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
+				p_renderNodes[0].UnbindPass( p_depthMaps );
 			}
 		} );
 	}
@@ -1183,7 +1153,14 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::DoGetDepthMaps( DepthMapArray & p_depthMaps )
+	void RenderTechnique::DoGetOpaqueDepthMaps( DepthMapArray & p_depthMaps )
+	{
+		p_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
+		p_depthMaps.push_back( std::ref( m_spotShadowMap ) );
+		p_depthMaps.push_back( std::ref( m_pointShadowMap ) );
+	}
+
+	void RenderTechnique::DoGetTransparentDepthMaps( DepthMapArray & p_depthMaps )
 	{
 		p_depthMaps.push_back( std::ref( m_directionalShadowMap ) );
 		p_depthMaps.push_back( std::ref( m_spotShadowMap ) );

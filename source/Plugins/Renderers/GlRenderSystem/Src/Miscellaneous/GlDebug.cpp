@@ -3,6 +3,8 @@
 #include "Common/OpenGl.hpp"
 #include "Render/GlRenderSystem.hpp"
 
+#include <map>
+
 #ifndef GL_INVALID_FRAMEBUFFER_OPERATION
 #	define GL_INVALID_FRAMEBUFFER_OPERATION 0x506
 #endif
@@ -54,6 +56,8 @@ namespace GlRender
 		{
 			GetOpenGl().Enable( GlTweak::eDebugOutputSynchronous );
 		}
+
+		FilterMessage( 0x00020072 );
 	}
 
 	void GlDebug::Cleanup()
@@ -71,6 +75,16 @@ namespace GlRender
 	bool GlDebug::GlCheckError( std::wstring const & p_text )const
 	{
 		return DoGlCheckError( string::string_cast< xchar >( p_text ) );
+	}
+
+	void GlDebug::FilterMessage( uint32_t p_message )
+	{
+		m_filteredOut.insert( p_message );
+	}
+
+	bool GlDebug::IsFiltered( uint32_t p_message )const
+	{
+		return m_filteredOut.find( p_message ) != m_filteredOut.end();
 	}
 
 #if !defined( NDEBUG )
@@ -166,126 +180,71 @@ namespace GlRender
 		, int CU_PARAM_UNUSED( length )
 		, const char * message )const
 	{
-		if ( id != 131185
-			 && id != 131186
-			 && id != 131154 )
+		static std::map< GlDebugSource, String > SourceName
 		{
-			bool l_error = false;
+			{ GlDebugSource::eAPI, cuT( "OpenGl" ) },
+			{ GlDebugSource::eWindowSystem, cuT( "Window System" ) },
+			{ GlDebugSource::eShaderCompiler, cuT( "Shader compiler" ) },
+			{ GlDebugSource::eThirdParty, cuT( "Third party" ) },
+			{ GlDebugSource::eApplication, cuT( "Application" ) },
+			{ GlDebugSource::eOther, cuT( "Other" ) },
+		};
+
+		static std::map< GlDebugType, String > TypeName
+		{
+			{ GlDebugType::eError, cuT( "Error" ) },
+			{ GlDebugType::eDeprecatedBehavior, cuT( "Deprecated behavior" ) },
+			{ GlDebugType::eUndefinedBehavior, cuT( "Undefined behavior" ) },
+			{ GlDebugType::ePortability, cuT( "Portability" ) },
+			{ GlDebugType::ePerformance, cuT( "Performance" ) },
+			{ GlDebugType::eOther, cuT( "Other" ) },
+			{ GlDebugType::eMarker, cuT( "Marker" ) },
+			{ GlDebugType::ePushGroup, cuT( "Push Group" ) },
+			{ GlDebugType::ePopGroup, cuT( "Pop Group" ) },
+		};
+
+		static std::map< GlDebugSeverity, String > SeverityName
+		{
+			{ GlDebugSeverity::eHigh, cuT( "High" ) },
+			{ GlDebugSeverity::eMedium, cuT( "Medium" ) },
+			{ GlDebugSeverity::eLow, cuT( "Low" ) },
+			{ GlDebugSeverity::eNotification, cuT( "Notification" ) },
+		};
+
+		if ( !IsFiltered( id ) )
+		{
 			StringStream l_toLog;
-			l_toLog << cuT( "OpenGl Debug\n  Source: " );
-
-			switch ( source )
-			{
-			case GlDebugSource::eAPI:
-				l_toLog << cuT( "OpenGL" );
-				break;
-
-			case GlDebugSource::eWindowSystem:
-				l_toLog << cuT( "Window System" );
-				break;
-
-			case GlDebugSource::eShaderCompiler:
-				l_toLog << cuT( "Shader compiler" );
-				break;
-
-			case GlDebugSource::eThirdParty:
-				l_toLog << cuT( "Third party" );
-				break;
-
-			case GlDebugSource::eApplication:
-				l_toLog << cuT( "Application" );
-				break;
-
-			case GlDebugSource::eOther:
-				l_toLog << cuT( "Other" );
-				break;
-
-			default:
-				l_toLog << cuT( "Undefined" );
-				break;
-			}
-
-			l_toLog << cuT( "\n  Type: " );
-
-			switch ( type )
-			{
-			case GlDebugType::eError:
-				l_toLog << cuT( "Error" );
-				break;
-
-			case GlDebugType::eDeprecatedBehavior:
-				l_toLog << cuT( "Deprecated behavior" );
-				break;
-
-			case GlDebugType::eUndefinedBehavior:
-				l_toLog << cuT( "Undefined behavior" );
-				break;
-
-			case GlDebugType::ePortability:
-				l_toLog << cuT( "Portability" );
-				break;
-
-			case GlDebugType::ePerformance:
-				l_toLog << cuT( "Performance" );
-				break;
-
-			case GlDebugType::eOther:
-				l_toLog << cuT( "Other" );
-				break;
-
-			case GlDebugType::eMarker:
-				l_toLog << cuT( "Marker" );
-				break;
-
-			case GlDebugType::ePushGroup:
-				l_toLog << cuT( "Push Group" );
-				break;
-
-			case GlDebugType::ePopGroup:
-				l_toLog << cuT( "Pop Group" );
-				break;
-
-			default:
-				l_toLog << cuT( "Undefined" );
-				break;
-			}
-
-			l_toLog << cuT( "\n  ID: " ) + string::to_string( id ) + cuT( "\n  Severity: " );
+			auto l_message = string::string_cast< xchar >( message );
+			string::replace( l_message, '\n', ' ' );
+			l_toLog << cuT( "OpenGl Debug\n " );
+			l_toLog << cuT( "  Source: " ) << SourceName[source] << cuT( "\n" );
+			l_toLog << cuT( "  Type: " ) << TypeName[type] << cuT( "\n" );
+			l_toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
+			l_toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
+			l_toLog << cuT( "  Message: " ) << l_message;
 
 			switch ( severity )
 			{
 			case GlDebugSeverity::eHigh:
-				l_error = true;
-				l_toLog << cuT( "High" );
+				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
+				Logger::LogError( l_toLog );
 				break;
 
 			case GlDebugSeverity::eMedium:
-				l_toLog << cuT( "Medium" );
+				Logger::LogWarning( l_toLog );
 				break;
 
 			case GlDebugSeverity::eLow:
-				l_toLog << cuT( "Low" );
+				Logger::LogInfo( l_toLog );
 				break;
 
 			case GlDebugSeverity::eNotification:
-				l_toLog << cuT( "Notification" );
+				Logger::LogTrace( l_toLog );
 				break;
 
 			default:
-				l_toLog << cuT( "Undefined" );
-				break;
-			}
-
-			l_toLog << cuT( "\n  Message: " ) << string::string_cast< xchar >( message );
-
-			if ( l_error )
-			{
-				l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
-				Logger::LogError( l_toLog );
-			}
-			else
-			{
 				Logger::LogWarning( l_toLog );
+				break;
 			}
 		}
 	}
@@ -296,81 +255,57 @@ namespace GlRender
 		, int CU_PARAM_UNUSED( length )
 		, const char * message )const
 	{
-		bool l_error = false;
-		StringStream l_toLog;
-		l_toLog << cuT( "OpenGl Debug\n  Category: " );
-
-		switch ( category )
+		static std::map< GlDebugCategory, String > CategoryName
 		{
-		case GlDebugCategory::eAPIError:
-			l_toLog << cuT( "OpenGL" );
-			break;
+			{ GlDebugCategory::eAPIError, cuT( "OpenGl" ) },
+			{ GlDebugCategory::eWindowSystem, cuT( "Window System" ) },
+			{ GlDebugCategory::eDeprecation, cuT( "Deprecated Behavior" ) },
+			{ GlDebugCategory::eUndefinedBehavior, cuT( "Undefined Behavior" ) },
+			{ GlDebugCategory::ePerformance, cuT( "Performance" ) },
+			{ GlDebugCategory::eShaderCompiler, cuT( "Shader Compiler" ) },
+			{ GlDebugCategory::eApplication, cuT( "Application" ) },
+			{ GlDebugCategory::eOther, cuT( "Other" ) }
+		};
 
-		case GlDebugCategory::eWindowSystem:
-			l_toLog << cuT( "Windows" );
-			break;
+		static std::map< GlDebugSeverity, String > SeverityName
+		{
+			{ GlDebugSeverity::eHigh, cuT( "High" ) },
+			{ GlDebugSeverity::eMedium, cuT( "Medium" ) },
+			{ GlDebugSeverity::eLow, cuT( "Low" ) },
+			{ GlDebugSeverity::eNotification, cuT( "Notification" ) }
+		};
 
-		case GlDebugCategory::eDeprecation:
-			l_toLog << cuT( "Deprecated behavior" );
-			break;
-
-		case GlDebugCategory::eUndefinedBehavior:
-			l_toLog << cuT( "Undefined behavior" );
-			break;
-
-		case GlDebugCategory::ePerformance:
-			l_toLog << cuT( "Performance" );
-			break;
-
-		case GlDebugCategory::eShaderCompiler:
-			l_toLog << cuT( "Shader compiler" );
-			break;
-
-		case GlDebugCategory::eApplication:
-			l_toLog << cuT( "Application" );
-			break;
-
-		case GlDebugCategory::eOther:
-			l_toLog << cuT( "Other" );
-			break;
-
-		default:
-			l_toLog << cuT( "Undefined" );
-			break;
-		}
-
-		l_toLog << cuT( "\n  ID: " ) << string::to_string( id ) << cuT( "\n  Severity: " );
+		StringStream l_toLog;
+		auto l_message = string::string_cast< xchar >( message );
+		string::replace( l_message, '\n', ' ' );
+		l_toLog << cuT( "OpenGl Debug\n" );
+		l_toLog << cuT( "  Category: " ) << CategoryName[category] << cuT( "\n" );
+		l_toLog << cuT( "  Severity: " ) << SeverityName[severity] << cuT( "\n" );
+		l_toLog << cuT( "  ID: 0x" ) << std::hex << std::setfill( '0' ) << std::setw( 8 ) << id << cuT( "\n" );
+		l_toLog << cuT( "  Message: " ) << l_message;
 
 		switch ( severity )
 		{
 		case GlDebugSeverity::eHigh:
-			l_error = true;
-			l_toLog << cuT( "High" );
+			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 33, 8 };
+			Logger::LogError( l_toLog );
 			break;
 
 		case GlDebugSeverity::eMedium:
-			l_toLog << cuT( "Medium" );
+			Logger::LogWarning( l_toLog );
 			break;
 
 		case GlDebugSeverity::eLow:
-			l_toLog << cuT( "Low" );
+			Logger::LogInfo( l_toLog );
+			break;
+
+		case GlDebugSeverity::eNotification:
+			Logger::LogTrace( l_toLog );
 			break;
 
 		default:
-			l_toLog << cuT( "Undefined" );
-			break;
-		}
-
-		l_toLog << cuT( "\n  Message: " ) << string::string_cast< xchar >( message );
-
-		if ( l_error )
-		{
-			l_toLog << cuT( "\n  " ) << Debug::Backtrace{ 25, 2 };
-			Logger::LogError( l_toLog );
-		}
-		else
-		{
 			Logger::LogWarning( l_toLog );
+			break;
 		}
 	}
 }

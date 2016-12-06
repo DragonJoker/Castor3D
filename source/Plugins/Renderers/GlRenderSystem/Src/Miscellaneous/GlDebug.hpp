@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "Common/GlBindable.hpp"
 
+#include <unordered_set>
+
 #if !defined( CALLBACK )
 #	if defined( _WIN32 )
 #		define CALLBACK __stdcall
@@ -48,6 +50,8 @@ namespace GlRender
 		void Cleanup();
 		bool GlCheckError( std::string const & p_strText )const;
 		bool GlCheckError( std::wstring const & p_strText )const;
+		void FilterMessage( uint32_t p_id );
+		bool IsFiltered( uint32_t p_id )const;
 
 		static void CALLBACK StDebugLog( GlDebugSource source
 			, GlDebugType type
@@ -119,6 +123,7 @@ namespace GlRender
 		std::function< uint32_t() > m_pfnGetError;
 		std::function< void( PFNGLDEBUGPROC callback, void * userParam ) > m_pfnDebugMessageCallback;
 		std::function< void( PFNGLDEBUGAMDPROC callback, void * userParam ) > m_pfnDebugMessageCallbackAMD;
+		std::unordered_set< uint32_t > m_filteredOut;
 	};
 }
 

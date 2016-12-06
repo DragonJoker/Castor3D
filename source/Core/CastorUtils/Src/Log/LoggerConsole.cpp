@@ -355,6 +355,10 @@ namespace Castor
 
 			switch ( logLevel )
 			{
+			case LogType::eTrace:
+				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN;
+				break;
+
 			case LogType::eDebug:
 				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
@@ -406,8 +410,12 @@ namespace Castor
 		{
 			switch ( logLevel )
 			{
-			case LogType::eDebug:
+			case LogType::eTrace:
 				m_header = cuT( "\033[36m" );
+				break;
+
+			case LogType::eDebug:
+				m_header = cuT( "\033[1;36m" );
 				break;
 
 			case LogType::eInfo:

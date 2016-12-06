@@ -104,9 +104,9 @@ namespace Deferred
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::RenderTechnique::DoGetDepthMaps
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaqueDepthMaps
 		 */
-		void DoGetDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
+		void DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
@@ -151,10 +151,6 @@ namespace Deferred
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
-		/**
-		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
-		 */
-		void DoCompleteProgramFlags( Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */

@@ -19,7 +19,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
+	ShadowMapPassDirectional::ShadowMapPassDirectional( Engine & p_engine
+		, Scene & p_scene
+		, Light & p_light
+		, TextureUnit & p_shadowMap
+		, uint32_t p_index )
 		: ShadowMapPass{ p_engine, p_scene, p_light, p_shadowMap, p_index }
 	{
 
@@ -29,7 +33,11 @@ namespace Castor3D
 	{
 	}
 
-	ShadowMapPassSPtr ShadowMapPassDirectional::Create( Engine & p_engine, Scene & p_scene, Light & p_light, TextureUnit & p_shadowMap, uint32_t p_index )
+	ShadowMapPassSPtr ShadowMapPassDirectional::Create( Engine & p_engine
+		, Scene & p_scene
+		, Light & p_light
+		, TextureUnit & p_shadowMap
+		, uint32_t p_index )
 	{
 		return std::make_shared< ShadowMapPassDirectional >( p_engine, p_scene, p_light, p_shadowMap, p_index );
 	}
@@ -42,9 +50,9 @@ namespace Castor3D
 		l_viewport.SetOrtho( -l_w / 2, l_w / 2, l_h / 2, -l_h / 2, -512.0_r, 512.0_r );
 		l_viewport.Update();
 		m_camera = std::make_shared< Camera >( cuT( "ShadowMap_" ) + m_light.GetName()
-											   , m_scene
-											   , m_light.GetParent()
-											   , std::move( l_viewport ) );
+			, m_scene
+			, m_light.GetParent()
+			, std::move( l_viewport ) );
 		m_camera->Resize( p_size );
 		m_light.GetDirectionalLight()->SetViewport( m_camera->GetViewport() );
 

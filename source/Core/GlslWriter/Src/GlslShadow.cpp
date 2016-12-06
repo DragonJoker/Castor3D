@@ -77,7 +77,7 @@ namespace GLSL
 			else if ( p_type == ShadowType::ePoisson )
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 500.0 ) );
+				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 2000.0 ) );
 
 				for ( int i = 0; i < 4; i++ )
 				{
@@ -88,13 +88,13 @@ namespace GLSL
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-				auto l_index = m_writer.GetLocale( cuT( "l_index" ), Int( 0 ) );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 700.0 ) );
+				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), Int( 0 ) );
+				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 1400.0 ) );
 
 				for ( int i = 0; i < 4; i++ )
 				{
-					l_index = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( l_lightSpacePosition.xy() + c3d_poissonDisk[l_index] / l_diffusion, l_z ) ) );
+					l_pindex = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+					l_visibility -= Float( 0.2 ) * m_writer.Paren( Float( 1 ) - texture( c3d_mapShadowDirectional, vec3( l_lightSpacePosition.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, l_z ) ) );
 				}
 			}
 
@@ -147,13 +147,13 @@ namespace GLSL
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
-				auto l_index = m_writer.GetLocale( cuT( "l_index" ), 0_i );
+				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), 0_i );
 				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), 700.0_f );
 
 				for ( int i = 0; i < 4; i++ )
 				{
-					l_index = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
-					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( l_lightSpacePosition.xy() + c3d_poissonDisk[l_index] / l_diffusion, l_index, l_z ) ) );
+					l_pindex = m_writer.Cast< Int >( 16.0 * WriteFunctionCall< Float >( &m_writer, cuT( "GetRandom" ), vec4( gl_FragCoord.xy(), gl_FragCoord.y(), i ) ) ) % 16;
+					l_visibility -= 0.2_f * m_writer.Paren( 1.0_f - texture( c3d_mapShadowSpot, vec4( l_lightSpacePosition.xy() + c3d_poissonDisk[l_pindex] / l_diffusion, l_index, l_z ) ) );
 				}
 			}
 

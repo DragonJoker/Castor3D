@@ -34,11 +34,13 @@
 #include <State/DepthStencilState.hpp>
 #include <State/MultisampleState.hpp>
 #include <State/RasteriserState.hpp>
+#include <Texture/Sampler.hpp>
 #include <Texture/TextureLayout.hpp>
 
 #include <Log/Logger.hpp>
 
 #include <GlslSource.hpp>
+#include <GlslShadow.hpp>
 
 #define DEBUG_BUFFERS 0
 
@@ -133,89 +135,29 @@ namespace DeferredMsaa
 
 			return p_count;
 		}
+
+		static constexpr uint32_t VertexCount = 6u;
 	}
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params, GetSamplesCountParam( p_params, m_samplesCount ) > 1 )
 		, m_viewport( *p_renderSystem.GetEngine() )
 	{
-		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
-		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
-		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
-
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
-			program.m_program->CreateObject( ShaderType::eVertex );
-			program.m_program->CreateObject( ShaderType::ePixel );
-			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *program.m_program, 0u, ShaderTypeFlag::ePixel | ShaderTypeFlag::eVertex );
-			program.m_matrixUbo = program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *program.m_program, 0u, ShaderTypeFlag::ePixel );
-			program.m_sceneUbo = program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
-			program.m_sceneUbo->GetVariable( ShaderProgram::CameraPos, program.m_camera );
-			program.m_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
-
-			for ( int i = 0; i < int( DsTexture::eCount ); i++ )
-			{
-				program.m_program->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i + 1 );
-			}
-		}
-
-		m_declaration = BufferDeclaration(
-		{
-			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
-			BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
-		} );
-
-		real l_data[] =
-		{
-			0, 0, 0, 0,
-			1, 1, 1, 1,
-			0, 1, 0, 1,
-			0, 0, 0, 0,
-			1, 0, 1, 0,
-			1, 1, 1, 1,
-		};
-
-		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
-		uint32_t l_stride = m_declaration.stride();
-		m_vertexBuffer->Resize( sizeof( l_data ) );
-		uint8_t * l_buffer = m_vertexBuffer->data();
-		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
-
-		for ( auto & l_vertex : m_arrayVertex )
-		{
-			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
-			l_buffer += l_stride;
-		}
-
-		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
-		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
-		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
-		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
-		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
-
 		Logger::LogInfo( StringStream() << cuT( "Using Deferred MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_geometryBuffers.reset();
-			program.m_matrixUbo.reset();
-			program.m_sceneUbo.reset();
-			program.m_program.reset();
-		}
 	}
 
 	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem & p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
+	}
+
+	void RenderTechnique::DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )
+	{
 	}
 
 	bool RenderTechnique::DoCreate()
@@ -310,11 +252,13 @@ namespace DeferredMsaa
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
+				DoBindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
 
 				l_program.m_program->BindUbos();
-				l_program.m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
+				l_program.m_geometryBuffers->Draw( VertexCount, 0 );
 				l_program.m_program->UnbindUbos();
 
+				DoUnbindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Unbind();
@@ -482,7 +426,8 @@ namespace DeferredMsaa
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
+			, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Shader outputs
@@ -544,26 +489,11 @@ namespace DeferredMsaa
 
 	bool RenderTechnique::DoCreateDeferred()
 	{
-		bool l_return = m_geometryPassFrameBuffer->Create();
+		bool l_return = DoCreateGeometryPass();
 
 		if ( l_return )
 		{
-			m_lightPassDepthBuffer->Create();
-			ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
-			uint8_t l_sceneFlags{ 0u };
-
-			for ( auto & program : m_lightPassShaderPrograms )
-			{
-				program.m_program->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, 0u, l_sceneFlags ) );
-				program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, 0u, l_sceneFlags ) );
-
-				DepthStencilState l_dsstate;
-				l_dsstate.SetDepthTest( false );
-				l_dsstate.SetDepthMask( WritingMask::eZero );
-				program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *program.m_program, PipelineFlags{} );
-
-				++l_sceneFlags;
-			}
+			l_return = DoCreateLightPass();
 		}
 
 		return l_return;
@@ -571,6 +501,12 @@ namespace DeferredMsaa
 
 	bool RenderTechnique::DoCreateMsaa()
 	{
+		m_msaaFrameBuffer = m_renderSystem.CreateFrameBuffer();
+		m_msaaColorBuffer = m_msaaFrameBuffer->CreateColourRenderBuffer( PixelFormat::eRGBA16F32F );
+		m_msaaDepthBuffer = m_msaaFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_msaaColorAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaColorBuffer );
+		m_msaaDepthAttach = m_msaaFrameBuffer->CreateAttachment( m_msaaDepthBuffer );
+
 		bool l_bReturn = m_msaaFrameBuffer->Create();
 		m_msaaColorBuffer->SetSamplesCount( m_samplesCount );
 		m_msaaDepthBuffer->SetSamplesCount( m_samplesCount );
@@ -581,14 +517,8 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoDestroyDeferred()
 	{
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_pipeline->Cleanup();
-			program.m_pipeline.reset();
-		}
-
-		m_lightPassDepthBuffer->Destroy();
-		m_geometryPassFrameBuffer->Destroy();
+		DoDestroyLightPass();
+		DoDestroyGeometryPass();
 	}
 
 	void RenderTechnique::DoDestroyMsaa()
@@ -596,73 +526,20 @@ namespace DeferredMsaa
 		m_msaaColorBuffer->Destroy();
 		m_msaaDepthBuffer->Destroy();
 		m_msaaFrameBuffer->Destroy();
+		m_msaaDepthAttach.reset();
+		m_msaaColorAttach.reset();
+		m_msaaColorBuffer.reset();
+		m_msaaDepthBuffer.reset();
+		m_msaaFrameBuffer.reset();
 	}
 
 	bool RenderTechnique::DoInitialiseDeferred( uint32_t & p_index )
 	{
-		bool l_return = true;
-
-		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
-		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, GetTextureFormat( DsTexture( i ) ), m_size );
-			l_texture->GetImage().InitialiseSource();
-
-			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
-			m_lightPassTextures[i]->SetIndex( i + 1 );
-			m_lightPassTextures[i]->SetTexture( l_texture );
-			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
-			m_lightPassTextures[i]->Initialise();
-
-			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
-			p_index++;
-		}
+		bool l_return = DoInitialiseLightPass( p_index );
 
 		if ( l_return )
 		{
-			m_lightPassDepthBuffer->Initialise( m_size );
-		}
-
-		if ( l_return )
-		{
-			l_return = m_geometryPassFrameBuffer->Initialise( m_size );
-		}
-
-		if ( l_return )
-		{
-			l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
-		}
-
-		if ( l_return )
-		{
-			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
-			{
-				l_return = m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
-															  , GetTextureAttachmentIndex( DsTexture( i ) )
-															  , m_geometryPassTexAttachs[i]
-															  , m_lightPassTextures[i]->GetType() );
-			}
-
-			if ( l_return )
-			{
-				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
-			}
-
-			if ( l_return )
-			{
-				l_return = m_geometryPassFrameBuffer->IsComplete();
-			}
-
-			m_geometryPassFrameBuffer->Unbind();
-		}
-
-		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
-		m_viewport.Initialise();
-
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_program->Initialise();
-			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *program.m_program );
-			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+			l_return = DoInitialiseGeometryPass();
 		}
 
 		return l_return;
@@ -710,25 +587,8 @@ namespace DeferredMsaa
 
 	void RenderTechnique::DoCleanupDeferred()
 	{
-		for ( auto & program : m_lightPassShaderPrograms )
-		{
-			program.m_geometryBuffers->Cleanup();
-			program.m_geometryBuffers.reset();
-			program.m_program->Cleanup();
-		}
-
-		m_viewport.Cleanup();
-		m_vertexBuffer->Cleanup();
-		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
-		m_geometryPassFrameBuffer->DetachAll();
-		m_geometryPassFrameBuffer->Unbind();
-		m_geometryPassFrameBuffer->Cleanup();
-
-		for ( auto & l_unit : m_lightPassTextures )
-		{
-			l_unit->Cleanup();
-			l_unit.reset();
-		}
+		DoCleanupGeometryPass();
+		DoCleanupLightPass();
 	}
 
 	void RenderTechnique::DoCleanupMsaa()
@@ -739,5 +599,242 @@ namespace DeferredMsaa
 		m_msaaFrameBuffer->Cleanup();
 		m_msaaColorBuffer->Cleanup();
 		m_msaaDepthBuffer->Cleanup();
+	}
+
+	void RenderTechnique::DoBindDepthMaps( uint32_t p_startIndex )
+	{
+		if ( m_renderTarget.GetScene()->HasShadows() )
+		{
+			m_directionalShadowMap.GetTexture()->Bind( p_startIndex );
+			m_directionalShadowMap.GetSampler()->Bind( p_startIndex++ );
+			m_spotShadowMap.GetTexture()->Bind( p_startIndex );
+			m_spotShadowMap.GetSampler()->Bind( p_startIndex++ );
+			m_pointShadowMap.GetTexture()->Bind( p_startIndex );
+			m_pointShadowMap.GetSampler()->Bind( p_startIndex++ );
+		}
+	}
+
+	void RenderTechnique::DoUnbindDepthMaps( uint32_t p_startIndex )const
+	{
+		if ( m_renderTarget.GetScene()->HasShadows() )
+		{
+			m_directionalShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_directionalShadowMap.GetSampler()->Unbind( p_startIndex++ );
+			m_spotShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_spotShadowMap.GetSampler()->Unbind( p_startIndex++ );
+			m_pointShadowMap.GetTexture()->Unbind( p_startIndex );
+			m_pointShadowMap.GetSampler()->Unbind( p_startIndex++ );
+		}
+	}
+
+	bool RenderTechnique::DoCreateGeometryPass()
+	{
+		m_geometryPassFrameBuffer = m_renderSystem.CreateFrameBuffer();
+		m_geometryPassFrameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
+		m_lightPassDepthBuffer = m_geometryPassFrameBuffer->CreateDepthStencilRenderBuffer( PixelFormat::eD32F );
+		m_geometryPassDepthAttach = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassDepthBuffer );
+		bool l_return = m_geometryPassFrameBuffer->Create();
+
+		if ( l_return )
+		{
+			l_return = m_lightPassDepthBuffer->Create();
+		}
+
+		return l_return;
+	}
+
+	bool RenderTechnique::DoCreateLightPass()
+	{
+		ShaderModel l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
+		auto & l_scene = *m_renderTarget.GetScene();
+		uint8_t l_sceneFlags{ 0u };
+		FlagCombination< ProgramFlag > l_programFlags;
+
+		if ( l_scene.HasShadows() )
+		{
+			l_programFlags |= ProgramFlag::eShadows;
+		}
+
+		for ( auto & l_program : m_lightPassShaderPrograms )
+		{
+			l_program.m_program = GetEngine()->GetShaderProgramCache().GetNewProgram( false );
+			l_program.m_program->CreateObject( ShaderType::eVertex );
+			l_program.m_program->CreateObject( ShaderType::ePixel );
+			l_program.m_program->SetSource( ShaderType::eVertex, l_model, DoGetLightPassVertexShaderSource( 0u, l_programFlags, l_sceneFlags ) );
+			l_program.m_program->SetSource( ShaderType::ePixel, l_model, DoGetLightPassPixelShaderSource( 0u, l_programFlags, l_sceneFlags ) );
+
+			GetEngine()->GetShaderProgramCache().CreateMatrixBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel | ShaderTypeFlag::eVertex );
+			l_program.m_matrixUbo = l_program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+			GetEngine()->GetShaderProgramCache().CreateSceneBuffer( *l_program.m_program, 0u, ShaderTypeFlag::ePixel );
+			l_program.m_sceneUbo = l_program.m_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			l_program.m_sceneUbo->GetVariable( ShaderProgram::CameraPos, l_program.m_camera );
+			l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
+
+			for ( int i = 0; i < int( DsTexture::eCount ); i++ )
+			{
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GetTextureName( DsTexture( i ) ), ShaderType::ePixel )->SetValue( i + 1 );
+			}
+
+			if ( l_scene.HasShadows() )
+			{
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 2u );
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 3u );
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 4u );
+			}
+
+			DepthStencilState l_dsstate;
+			l_dsstate.SetDepthTest( false );
+			l_dsstate.SetDepthMask( WritingMask::eZero );
+			l_program.m_pipeline = GetEngine()->GetRenderSystem()->CreateRenderPipeline( std::move( l_dsstate ), RasteriserState{}, BlendState{}, MultisampleState{}, *l_program.m_program, PipelineFlags{} );
+
+			++l_sceneFlags;
+		}
+
+		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
+		m_declaration = BufferDeclaration(
+		{
+			BufferElementDeclaration( ShaderProgram::Position, uint32_t( ElementUsage::ePosition ), ElementType::eVec2 ),
+			BufferElementDeclaration( ShaderProgram::Texture, uint32_t( ElementUsage::eTexCoords ), ElementType::eVec2 ),
+		} );
+
+		real l_data[] =
+		{
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 1, 1, 1,
+		};
+
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem.GetEngine(), m_declaration );
+		uint32_t l_stride = m_declaration.stride();
+		m_vertexBuffer->Resize( sizeof( l_data ) );
+		uint8_t * l_buffer = m_vertexBuffer->data();
+		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
+
+		return true;
+	}
+
+	void RenderTechnique::DoDestroyGeometryPass()
+	{
+		m_lightPassDepthBuffer->Destroy();
+		m_lightPassDepthBuffer.reset();
+		m_geometryPassFrameBuffer->Destroy();
+		m_geometryPassFrameBuffer.reset();
+	}
+
+	void RenderTechnique::DoDestroyLightPass()
+	{
+		m_vertexBuffer.reset();
+
+		for ( auto & program : m_lightPassShaderPrograms )
+		{
+			program.m_pipeline->Cleanup();
+			program.m_pipeline.reset();
+			program.m_geometryBuffers.reset();
+			program.m_matrixUbo.reset();
+			program.m_sceneUbo.reset();
+			program.m_program.reset();
+		}
+	}
+
+	bool RenderTechnique::DoInitialiseGeometryPass()
+	{
+		bool l_return = m_geometryPassFrameBuffer->Initialise( m_size );
+
+		if ( l_return )
+		{
+			l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+		}
+
+		if ( l_return )
+		{
+			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
+			{
+				l_return = m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
+					, GetTextureAttachmentIndex( DsTexture( i ) )
+					, m_geometryPassTexAttachs[i]
+					, m_lightPassTextures[i]->GetType() );
+			}
+
+			if ( l_return )
+			{
+				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
+			}
+
+			if ( l_return )
+			{
+				l_return = m_geometryPassFrameBuffer->IsComplete();
+			}
+
+			m_geometryPassFrameBuffer->Unbind();
+		}
+
+		m_viewport.Initialise();
+		m_vertexBuffer->Initialise( BufferAccessType::eStatic, BufferAccessNature::eDraw );
+
+		for ( auto & program : m_lightPassShaderPrograms )
+		{
+			program.m_program->Initialise();
+			program.m_geometryBuffers = m_renderSystem.CreateGeometryBuffers( Topology::eTriangles, *program.m_program );
+			program.m_geometryBuffers->Initialise( { *m_vertexBuffer }, nullptr );
+		}
+
+		return l_return;
+	}
+
+	bool RenderTechnique::DoInitialiseLightPass( uint32_t & p_index )
+	{
+		bool l_return = true;
+
+		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
+		{
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, GetTextureFormat( DsTexture( i ) ), m_size );
+			l_texture->GetImage().InitialiseSource();
+
+			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
+			m_lightPassTextures[i]->SetIndex( i + 1 ); // +1 because light texture is at index 0
+			m_lightPassTextures[i]->SetTexture( l_texture );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
+			m_lightPassTextures[i]->Initialise();
+
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
+			p_index++;
+		}
+
+		if ( l_return )
+		{
+			m_lightPassDepthBuffer->Initialise( m_size );
+		}
+
+		return l_return;
+	}
+
+	void RenderTechnique::DoCleanupGeometryPass()
+	{
+		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
+		m_geometryPassFrameBuffer->DetachAll();
+		m_geometryPassFrameBuffer->Unbind();
+		m_geometryPassFrameBuffer->Cleanup();
+	}
+
+	void RenderTechnique::DoCleanupLightPass()
+	{
+		for ( auto & program : m_lightPassShaderPrograms )
+		{
+			program.m_geometryBuffers->Cleanup();
+			program.m_geometryBuffers.reset();
+			program.m_program->Cleanup();
+		}
+
+		m_viewport.Cleanup();
+		m_vertexBuffer->Cleanup();
+
+		for ( auto & l_unit : m_lightPassTextures )
+		{
+			l_unit->Cleanup();
+			l_unit.reset();
+		}
 	}
 }

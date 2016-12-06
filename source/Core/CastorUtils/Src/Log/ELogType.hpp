@@ -37,15 +37,23 @@ namespace Castor
 	enum class LogType
 		: uint8_t
 	{
-		//!\~english Debug type log	\~french Log de type debug
+		//!\~english	Trace type log.
+		//!\~french		Log de type trace.
+		eTrace,
+		//!\~english	Debug type log.
+		//!\~french		Log de type debug.
 		eDebug,
-		//!\~english Information type log	\~french Log de type information
+		//!\~english	Information type log.
+		//!\~french		Log de type information.
 		eInfo,
-		//!\~english Warning type log	\~french Log de type avertissement
+		//!\~english	Warning type log.
+		//!\~french		Log de type avertissement.
 		eWarning,
-		//!\~english Error type log	\~french Log de type erreur
+		//!\~english	Error type log.
+		//!\~french		Log de type erreur.
 		eError,
-		//!\~english Log types count	\~french Compte des logs
+		//!\~english	Log types count.
+		//!\~french		Compte des logs.
 		eCount,
 	};
 }

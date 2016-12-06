@@ -140,7 +140,7 @@ namespace Deferred
 		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
-	void RenderTechnique::DoGetDepthMaps( Castor3D::DepthMapArray & p_depthMaps )
+	void RenderTechnique::DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )
 	{
 	}
 
@@ -297,12 +297,6 @@ namespace Deferred
 		return true;
 	}
 
-	void RenderTechnique::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
-	{
-		RemFlag( p_programFlags, ProgramFlag::eLighting );
-		RemFlag( p_programFlags, ProgramFlag::eShadowMap );
-	}
-
 	String RenderTechnique::DoGetOpaquePixelShaderSource(
 		FlagCombination< TextureChannel > const & p_textureFlags,
 		FlagCombination< ProgramFlag > const & p_programFlags,
@@ -429,7 +423,8 @@ namespace Deferred
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
 
-		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
+			, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
 		GLSL::Fog l_fog{ p_sceneFlags, l_writer };
 
 		// Shader outputs

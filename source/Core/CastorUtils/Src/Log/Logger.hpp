@@ -183,6 +183,42 @@ namespace Castor
 		CU_API static void SetFileName( String const & p_logFilePath, LogType p_eLogType = LogType::eCount );
 		/**
 		 *\~english
+		 *\brief		Logs a trace message, from a std::string
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::string
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTrace( std::string const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::ostream
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::ostream
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTrace( std::ostream const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a unicode trace message, from a std::wstring
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::wstring
+		 *\param[in]	p_msg	La ligne a logger
+		 */
+		CU_API static void LogTrace( std::wstring const & p_msg );
+		/**
+		 *\~english
+		 *\brief		Logs a trace message, from a std::wostream
+		 *\param[in]	p_msg	The line to log
+		 *\~french
+		 *\brief		Log un message trace, à partir d'un std::wostream
+		 *\param[in]	p_msg	The line to log
+		 */
+		CU_API static void LogTrace( std::wostream const & p_msg );
+		/**
+		 *\~english
 		 *\brief		Logs a debug message, from a std::string
 		 *\param[in]	p_msg	The line to log
 		 *\~french

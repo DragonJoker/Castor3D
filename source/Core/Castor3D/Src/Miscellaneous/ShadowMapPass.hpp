@@ -68,14 +68,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialises the pipeline, FBO and program.
-		 *\param		p_size	The FBO dimensions.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Initialise le pipeline, le FBO et le programme.
-		 *\param		p_size	Les dimensions du FBO.
 		 *\return		\p true if ok.
 		 */
-		C3D_API bool Initialise( Castor::Size const & p_size );
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function.

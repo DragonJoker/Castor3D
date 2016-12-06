@@ -183,10 +183,15 @@ namespace GuiCommon
 		if ( l_return )
 		{
 			LogType l_eLogLevel = LogType::eCount;
+			long l_log;
 
-			if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
+			if ( !l_parser.Found( wxT( "l" ), &l_log ) )
 			{
 				l_eLogLevel = ELogType_DEFAULT;
+			}
+			else
+			{
+				l_eLogLevel = LogType( l_log );
 			}
 
 			Logger::Initialise( l_eLogLevel );
