@@ -1857,6 +1857,23 @@ namespace Castor3D
 	}
 	END_ATTRIBUTE()
 
+	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectReceivesShadows )
+	{
+		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+		if ( !l_parsingContext->pGeometry )
+		{
+			PARSING_ERROR( cuT( "No Geometry initialised." ) );
+		}
+		else if ( !p_params.empty() )
+		{
+			bool l_value;
+			p_params[0]->Get( l_value );
+			l_parsingContext->pGeometry->SetShadowReceiver( l_value );
+		}
+	}
+	END_ATTRIBUTE()
+
 	IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 	{
 		SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

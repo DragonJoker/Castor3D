@@ -105,8 +105,30 @@ namespace GLSL
 		Declare_ComputeSpotLight();
 	}
 
+	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
+	{
+		return WriteFunctionCall< DirectionalLight >( &m_writer
+			, cuT( "GetDirectionalLight" )
+			, p_value );
+	}
+
+	PointLight LightingModel::GetPointLight( Type const & p_value )
+	{
+		return WriteFunctionCall< PointLight >( &m_writer
+			, cuT( "GetPointLight" )
+			, p_value );
+	}
+
+	SpotLight LightingModel::GetSpotLight( Type const & p_value )
+	{
+		return WriteFunctionCall< SpotLight >( &m_writer
+			, cuT( "GetSpotLight" )
+			, p_value );
+	}
+
 	void LightingModel::ComputeCombinedLighting( Vec3 const & p_worldEye
 		, Float const & p_shininess
+		, Int const & p_receivesShadows
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
@@ -119,6 +141,7 @@ namespace GLSL
 			ComputeDirectionalLight( GetDirectionalLight( i )
 				, p_worldEye
 				, p_shininess
+				, p_receivesShadows
 				, p_fragmentIn
 				, p_output );
 		}
@@ -132,6 +155,7 @@ namespace GLSL
 			ComputePointLight( GetPointLight( i )
 				, p_worldEye
 				, p_shininess
+				, p_receivesShadows
 				, p_fragmentIn
 				, p_output );
 		}
@@ -145,52 +169,61 @@ namespace GLSL
 			ComputeSpotLight( GetSpotLight( i )
 				, p_worldEye
 				, p_shininess
+				, p_receivesShadows
 				, p_fragmentIn
 				, p_output );
 		}
 		ROF;
 	}
-
-	DirectionalLight LightingModel::GetDirectionalLight( Type const & p_value )
-	{
-		return WriteFunctionCall< DirectionalLight >( &m_writer, cuT( "GetDirectionalLight" ), p_value );
-	}
-
-	PointLight LightingModel::GetPointLight( Type const & p_value )
-	{
-		return WriteFunctionCall< PointLight >( &m_writer, cuT( "GetPointLight" ), p_value );
-	}
-
-	SpotLight LightingModel::GetSpotLight( Type const & p_value )
-	{
-		return WriteFunctionCall< SpotLight >( &m_writer, cuT( "GetSpotLight" ), p_value );
-	}
-
 	void LightingModel::ComputeDirectionalLight( DirectionalLight const & p_light
 		, Vec3 const & p_worldEye
 		, Float const & p_shininess
+		, Int const & p_receivesShadows
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeDirectionalLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
+		m_writer << WriteFunctionCall< Void >( &m_writer
+			, cuT( "ComputeDirectionalLight" )
+			, p_light
+			, p_worldEye
+			, p_shininess
+			, p_receivesShadows
+			, p_fragmentIn
+			, p_output ) << Endi();
 	}
 
 	void LightingModel::ComputePointLight( PointLight const & p_light
 		, Vec3 const & p_worldEye
 		, Float const & p_shininess
+		, Int const & p_receivesShadows
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputePointLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
+		m_writer << WriteFunctionCall< Void >( &m_writer
+			, cuT( "ComputePointLight" )
+			, p_light
+			, p_worldEye
+			, p_shininess
+			, p_receivesShadows
+			, p_fragmentIn
+			, p_output ) << Endi();
 	}
 
 	void LightingModel::ComputeSpotLight( SpotLight const & p_light
 		, Vec3 const & p_worldEye
 		, Float const & p_shininess
+		, Int const & p_receivesShadows
 		, FragmentInput const & p_fragmentIn
 		, OutputComponents & p_output )
 	{
-		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeSpotLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
+		m_writer << WriteFunctionCall< Void >( &m_writer
+			, cuT( "ComputeSpotLight" )
+			, p_light
+			, p_worldEye
+			, p_shininess
+			, p_receivesShadows
+			, p_fragmentIn
+			, p_output ) << Endi();
 	}
 
 	void LightingModel::Declare_Light()
@@ -466,6 +499,7 @@ namespace GLSL
 		auto l_compute = [this]( DirectionalLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess
+			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output )
 		{
@@ -481,10 +515,21 @@ namespace GLSL
 			if ( m_shadows != ShadowType::eNone )
 			{
 				Shadow l_shadows{ m_writer };
-				l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightDirection, p_fragmentIn.m_v3Normal );
+
+				IF ( m_writer, p_receivesShadows != 0_i )
+				{
+					l_shadowFactor = l_shadows.ComputeDirectionalShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightDirection, p_fragmentIn.m_v3Normal );
+				}
+				FI;
 			}
 
-			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadowFactor, p_fragmentIn, l_output );
+			DoComputeLight( p_light.m_lightBase()
+				, p_worldEye
+				, l_lightDirection
+				, p_shininess
+				, l_shadowFactor
+				, p_fragmentIn
+				, l_output );
 			p_output.m_v3Ambient += l_output.m_v3Ambient;
 			p_output.m_v3Diffuse += l_output.m_v3Diffuse;
 			p_output.m_v3Specular += l_output.m_v3Specular;
@@ -494,6 +539,7 @@ namespace GLSL
 			, DirectionalLight( &m_writer, cuT( "p_light" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
 			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -504,6 +550,7 @@ namespace GLSL
 		auto l_compute = [this]( PointLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess
+			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output )
 		{
@@ -521,10 +568,21 @@ namespace GLSL
 			if ( m_shadows != ShadowType::eNone )
 			{
 				Shadow l_shadows{ m_writer };
-				l_shadowFactor = l_shadows.ComputePointShadow( l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+
+				IF ( m_writer, p_receivesShadows != 0_i )
+				{
+					l_shadowFactor = l_shadows.ComputePointShadow( l_lightDirection, p_fragmentIn.m_v3Normal, 0_i );
+				}
+				FI;
 			}
 
-			DoComputeLight( p_light.m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadowFactor, p_fragmentIn, l_output );
+			DoComputeLight( p_light.m_lightBase()
+				, p_worldEye
+				, l_lightDirection
+				, p_shininess
+				, l_shadowFactor
+				, p_fragmentIn
+				, l_output );
 			auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" ), p_light.m_v3Attenuation().x() + p_light.m_v3Attenuation().y() * l_distance + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 			p_output.m_v3Ambient += l_output.m_v3Ambient / l_attenuation;
 			p_output.m_v3Diffuse += l_output.m_v3Diffuse / l_attenuation;
@@ -535,6 +593,7 @@ namespace GLSL
 			, PointLight( &m_writer, cuT( "p_light" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
 			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}
@@ -545,6 +604,7 @@ namespace GLSL
 		auto l_compute = [this]( SpotLight const & p_light
 			, Vec3 const & p_worldEye
 			, Float const & p_shininess
+			, Int const & p_receivesShadows
 			, FragmentInput const & p_fragmentIn
 			, OutputComponents & p_output )
 		{
@@ -566,10 +626,21 @@ namespace GLSL
 				if ( m_shadows != ShadowType::eNone )
 				{
 					Shadow l_shadows{ m_writer };
-					l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
+
+					IF ( m_writer, p_receivesShadows != 0_i )
+					{
+						l_shadowFactor = l_shadows.ComputeSpotShadow( p_light.m_mtxLightSpace() * vec4( p_fragmentIn.m_v3Vertex, 1.0 ), l_lightToVertex, p_fragmentIn.m_v3Normal, Int( 0 ) );
+					}
+					FI;
 				}
 
-				DoComputeLight( p_light.m_lightBase().m_lightBase(), p_worldEye, l_lightDirection, p_shininess, l_shadowFactor, p_fragmentIn, l_output );
+				DoComputeLight( p_light.m_lightBase().m_lightBase()
+					, p_worldEye
+					, l_lightDirection
+					, p_shininess
+					, l_shadowFactor
+					, p_fragmentIn
+					, l_output );
 				auto l_attenuation = m_writer.GetLocale( cuT( "l_attenuation" )
 					, p_light.m_lightBase().m_v3Attenuation().x()
 					+ p_light.m_lightBase().m_v3Attenuation().y() * l_distance
@@ -587,6 +658,7 @@ namespace GLSL
 			, SpotLight( &m_writer, cuT( "p_light" ) )
 			, InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) )
 			, InParam< Float >( &m_writer, cuT( "p_shininess" ) )
+			, InParam< Int >( &m_writer, cuT( "p_receivesShadows" ) )
 			, FragmentInput{ m_writer }
 			, l_output );
 	}

@@ -544,6 +544,16 @@ namespace Castor3D
 	auto c3d_mtxTexture3 = l_matrices.GetUniform< GLSL::Mat4 >( RenderPipeline::MtxTexture[3] );\
 	l_matrices.End()
 
+#define UBO_SCENE( Writer )\
+	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
+	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
+	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
+	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
+	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
+	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
+	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
+	l_scene.End()
+
 #define UBO_PASS( Writer )\
 	GLSL::Ubo l_pass{ l_writer, ShaderProgram::BufferPass };\
 	auto c3d_v4MatAmbient = l_pass.GetUniform< GLSL::Vec4 >( ShaderProgram::MatAmbient );\
@@ -554,15 +564,10 @@ namespace Castor3D
 	auto c3d_fMatOpacity = l_pass.GetUniform< GLSL::Float >( ShaderProgram::MatOpacity );\
 	l_pass.End()
 
-#define UBO_SCENE( Writer )\
-	GLSL::Ubo l_scene{ l_writer, ShaderProgram::BufferScene };\
-	auto c3d_v4AmbientLight = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::AmbientLight );\
-	auto c3d_v4BackgroundColour = l_scene.GetUniform< GLSL::Vec4 >( ShaderProgram::BackgroundColour );\
-	auto c3d_iLightsCount = l_scene.GetUniform< GLSL::IVec4 >( ShaderProgram::LightsCount );\
-	auto c3d_v3CameraPosition = l_scene.GetUniform< GLSL::Vec3 >( ShaderProgram::CameraPos );\
-	auto c3d_iFogType = l_scene.GetUniform< GLSL::Int >( ShaderProgram::FogType );\
-	auto c3d_fFogDensity = l_scene.GetUniform< GLSL::Float >( ShaderProgram::FogDensity );\
-	l_scene.End()
+#define UBO_MODEL( Writer )\
+	GLSL::Ubo l_model{ l_writer, ShaderProgram::BufferModel };\
+	auto c3d_iShadowReceiver = l_model.GetUniform< GLSL::Int >( ShaderProgram::ShadowReceiver );\
+	l_model.End()
 
 #define UBO_BILLBOARD( Writer )\
 	GLSL::Ubo l_billboard{ l_writer, ShaderProgram::BufferBillboards };\

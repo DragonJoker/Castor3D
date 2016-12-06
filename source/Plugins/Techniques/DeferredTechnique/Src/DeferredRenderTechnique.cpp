@@ -452,6 +452,7 @@ namespace Deferred
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
+		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
@@ -599,9 +600,10 @@ namespace Deferred
 
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
-													 , l_fMatShininess
-													 , FragmentInput( l_v3Position, l_v3Normal )
-													 , l_output );
+					, l_fMatShininess
+					, 1_i
+					, FragmentInput( l_v3Position, l_v3Normal )
+					, l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +

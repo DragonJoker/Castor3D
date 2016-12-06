@@ -161,6 +161,24 @@ namespace Castor3D
 			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
 		/**
 		 *\~english
+		 *\brief		Creates a model frame variable buffer.
+		 *\param[in]	p_program		The program to which the buffer is bound.
+		 *\param[in]	p_programFlags	ProgramFlag combination.
+		 *\param[in]	p_shaderMask	ShaderTypeFlag combination, to set at what shaders it is to be bound.
+		 *\return		The frame variable buffer.
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de modèle.
+		 *\param[in]	p_program		Le programme auquel le buffer est lié.
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag.
+		 *\param[in]	p_shaderMask	Combinaison de ShaderTypeFlag, pour déterminer les shaders auxquels il doit être lié.
+		 *\return		Le frame variable buffer.
+		 */
+		C3D_API FrameVariableBuffer & CreateModelBuffer(
+			ShaderProgram & p_program,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags,
+			Castor::FlagCombination< ShaderTypeFlag > const & p_shaderMask )const;
+		/**
+		 *\~english
 		 *\brief		Creates an animation frame variable buffer.
 		 *\param[in]	p_program		The program to which the buffer is bound.
 		 *\param[in]	p_programFlags	ProgramFlag combination.

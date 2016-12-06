@@ -903,6 +903,7 @@ namespace Castor3D
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
+		UBO_MODEL( l_writer );
 
 		// Fragment Intputs
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
@@ -952,11 +953,11 @@ namespace Castor3D
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting(
-				l_worldEye,
-				l_fMatShininess,
-				FragmentInput { vtx_worldSpacePosition, l_v3Normal },
-				l_output );
+			l_lighting->ComputeCombinedLighting( l_worldEye
+				, l_fMatShininess
+				, c3d_iShadowReceiver
+				, FragmentInput { vtx_worldSpacePosition, l_v3Normal }
+				, l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 
@@ -989,6 +990,7 @@ namespace Castor3D
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
+		UBO_MODEL( l_writer );
 
 		// Fragment Intputs
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
@@ -1041,11 +1043,11 @@ namespace Castor3D
 			ComputePreLightingMapContributions( l_writer, l_v3Normal, l_fMatShininess, p_textureFlags, p_programFlags, p_sceneFlags );
 
 			OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-			l_lighting->ComputeCombinedLighting(
-				l_worldEye,
-				l_fMatShininess,
-				FragmentInput( vtx_worldSpacePosition, l_v3Normal ),
-				l_output );
+			l_lighting->ComputeCombinedLighting( l_worldEye
+				, l_fMatShininess
+				, c3d_iShadowReceiver
+				, FragmentInput( vtx_worldSpacePosition, l_v3Normal )
+				, l_output );
 
 			ComputePostLightingMapContributions( l_writer, l_v3Ambient, l_v3Diffuse, l_v3Specular, l_v3Emissive, p_textureFlags, p_programFlags, p_sceneFlags );
 

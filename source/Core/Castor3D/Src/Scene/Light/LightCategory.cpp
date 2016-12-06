@@ -31,7 +31,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs }( p_light.GetLight(), p_file );
+			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_light.GetLight(), p_file );
 		}
 
 		if ( l_return )

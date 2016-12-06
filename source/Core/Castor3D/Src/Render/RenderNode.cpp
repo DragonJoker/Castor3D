@@ -84,12 +84,15 @@ namespace Castor3D
 	{
 	}
 
-	ObjectRenderNodeBase::ObjectRenderNodeBase( SceneRenderNode const & p_scene, PassRenderNode const & p_pass, GeometryBuffers & p_buffers, SceneNode & p_sceneNode )
+	ObjectRenderNodeBase::ObjectRenderNodeBase( SceneRenderNode const & p_scene
+		, PassRenderNode const & p_pass
+		, GeometryBuffers & p_buffers
+		, SceneNode & p_sceneNode
+		, OneIntFrameVariable & p_shadowReceiver )
 		: m_scene{ p_scene }
 		, m_pass{ p_pass.m_pass
 				  , p_pass.m_pipeline
 				  , p_pass.m_matrixUbo
-				  , p_pass.m_passUbo
 				  , p_pass.m_ambient
 				  , p_pass.m_diffuse
 				  , p_pass.m_specular
@@ -99,6 +102,7 @@ namespace Castor3D
 				  , p_pass.m_textures }
 		, m_buffers{ p_buffers }
 		, m_sceneNode{ p_sceneNode }
+		, m_shadowReceiver{ p_shadowReceiver }
 	{
 	}
 
@@ -143,6 +147,7 @@ namespace Castor3D
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		m_pass.m_pass.UpdateRenderNode( m_pass );
 		m_pass.m_pipeline.GetProgram().BindUbos();
@@ -157,6 +162,7 @@ namespace Castor3D
 			m_geometry.GetScene()->GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_geometry.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 
 		if ( m_skeleton )
@@ -206,6 +212,7 @@ namespace Castor3D
 			m_data.GetParentScene().GetLightCache().BindLights();
 		}
 
+		m_shadowReceiver.SetValue( m_data.IsShadowReceiver() ? 1 : 0 );
 		m_pass.m_pipeline.ApplyMatrices( m_pass.m_matrixUbo, ~p_excludedMtxFlags );
 		auto const & l_dimensions = m_data.GetDimensions();
 		m_dimensions.SetValue( Point2i( l_dimensions.width(), l_dimensions.height() ) );

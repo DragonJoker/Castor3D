@@ -130,6 +130,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectMaterials )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectCastShadows )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectReceivesShadows )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ObjectEnd )
 
 	// Object Materials Parsers

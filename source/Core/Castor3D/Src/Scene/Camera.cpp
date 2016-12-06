@@ -35,7 +35,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextWriter{ m_tabs }( p_camera, p_file );
+			l_return = MovableObject::TextWriter{ m_tabs + cuT( "\t" ) }( p_camera, p_file );
 		}
 
 		if ( l_return )

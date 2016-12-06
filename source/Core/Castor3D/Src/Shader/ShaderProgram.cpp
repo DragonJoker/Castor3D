@@ -160,10 +160,12 @@ namespace Castor3D
 	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
 	const String ShaderProgram::MapShadow = cuT( "c3d_mapShadow" );
 	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
+	const String ShaderProgram::ShadowReceiver = cuT( "c3d_iShadowReceiver" );
 
 	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
 	const String ShaderProgram::BufferScene = cuT( "Scene" );
 	const String ShaderProgram::BufferPass = cuT( "Pass" );
+	const String ShaderProgram::BufferModel = cuT( "Model" );
 	const String ShaderProgram::BufferBillboards = cuT( "Billboards" );
 	const String ShaderProgram::BufferAnimation = cuT( "Animation" );
 

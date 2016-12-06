@@ -49,9 +49,6 @@ namespace Castor3D
 		//!\~english	The matrix UBO.
 		//!\~french		L'UBO de matrices.
 		FrameVariableBuffer & m_matrixUbo;
-		//!\~english	The pass UBO.
-		//!\~french		L'UBO de passe.
-		FrameVariableBuffer & m_passUbo;
 		//!\~english	The pass ambient colour.
 		//!\~french		La couleur ambiante de passe.
 		Point4rFrameVariable & m_ambient;
@@ -103,9 +100,10 @@ namespace Castor3D
 	struct ObjectRenderNodeBase
 	{
 		ObjectRenderNodeBase( SceneRenderNode const & p_scene
-							  , PassRenderNode const & p_pass
-							  , GeometryBuffers & p_buffers
-							  , SceneNode & p_sceneNode );
+			, PassRenderNode const & p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver );
 		/**
 		 *\~english
 		 *\brief		Render function.
@@ -136,6 +134,9 @@ namespace Castor3D
 		//!\~english	The pass render node.
 		//!\~french		Le noeud de rendu de passe.
 		PassRenderNode m_pass;
+		//!\~english	The model shadow receiver status frame variable.
+		//!\~french		La variable de frame contenant le statut de réception d'ombres du modèle.
+		OneIntFrameVariable & m_shadowReceiver;
 		//!\~english	The geometry buffers.
 		//!\~french		Les tampons de la géométrie.
 		GeometryBuffers & m_buffers;
@@ -156,11 +157,12 @@ namespace Castor3D
 		: public ObjectRenderNodeBase
 	{
 		ObjectRenderNode( SceneRenderNode && p_scene
-						  , PassRenderNode && p_pass
-						  , GeometryBuffers & p_buffers
-						  , SceneNode & p_sceneNode
-						  , DataType & p_data )
-			: ObjectRenderNodeBase{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode }
+			, PassRenderNode && p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver
+			, DataType & p_data )
+			: ObjectRenderNodeBase{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver }
 			, m_data{ p_data }
 		{
 		}
@@ -197,12 +199,13 @@ namespace Castor3D
 		: public SubmeshRenderNode
 	{
 		GeometryRenderNode( SceneRenderNode && p_scene
-							, PassRenderNode && p_pass
-							, GeometryBuffers & p_buffers
-							, SceneNode & p_sceneNode
-							, Submesh & p_data
-							, Geometry & p_geometry )
-			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
+			, PassRenderNode && p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver
+			, Submesh & p_data
+			, Geometry & p_geometry )
+			: SubmeshRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data }
 			, m_geometry{ p_geometry }
 		{
 		}
@@ -237,12 +240,13 @@ namespace Castor3D
 		: public GeometryRenderNode
 	{
 		StaticGeometryRenderNode( SceneRenderNode && p_scene
-								  , PassRenderNode && p_pass
-								  , GeometryBuffers & p_buffers
-								  , SceneNode & p_sceneNode
-								  , Submesh & p_data
-								  , Geometry & p_geometry )
-			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data, p_geometry }
+			, PassRenderNode && p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver
+			, Submesh & p_data
+			, Geometry & p_geometry )
+			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data, p_geometry }
 		{
 		}
 		/**
@@ -267,15 +271,16 @@ namespace Castor3D
 		: public GeometryRenderNode
 	{
 		AnimatedGeometryRenderNode( SceneRenderNode && p_scene
-									, PassRenderNode && p_pass
-									, GeometryBuffers & p_buffers
-									, SceneNode & p_sceneNode
-									, Submesh & p_data
-									, Geometry & p_geometry
-									, AnimatedSkeleton * p_skeleton
-									, AnimatedMesh * p_mesh
-									, FrameVariableBuffer & p_animationUbo )
-			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data, p_geometry }
+			, PassRenderNode && p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver
+			, Submesh & p_data
+			, Geometry & p_geometry
+			, AnimatedSkeleton * p_skeleton
+			, AnimatedMesh * p_mesh
+			, FrameVariableBuffer & p_animationUbo )
+			: GeometryRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data, p_geometry }
 			, m_skeleton{ p_skeleton }
 			, m_mesh{ p_mesh }
 			, m_animationUbo{ p_animationUbo }
@@ -313,14 +318,15 @@ namespace Castor3D
 		: public BillboardListRenderNode
 	{
 		BillboardRenderNode( SceneRenderNode && p_scene
-							 , PassRenderNode && p_pass
-							 , GeometryBuffers & p_buffers
-							 , SceneNode & p_sceneNode
-							 , BillboardBase & p_data
-							 , FrameVariableBuffer & p_billboardUbo
-							 , Point2iFrameVariable & p_dimensions
-							 , Point2iFrameVariable & p_windowSize )
-			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_data }
+			, PassRenderNode && p_pass
+			, GeometryBuffers & p_buffers
+			, SceneNode & p_sceneNode
+			, OneIntFrameVariable & p_shadowReceiver
+			, BillboardBase & p_data
+			, FrameVariableBuffer & p_billboardUbo
+			, Point2iFrameVariable & p_dimensions
+			, Point2iFrameVariable & p_windowSize )
+			: BillboardListRenderNode{ std::move( p_scene ), std::move( p_pass ), p_buffers, p_sceneNode, p_shadowReceiver, p_data }
 			, m_billboardUbo{ p_billboardUbo }
 			, m_dimensions{ p_dimensions }
 			, m_windowSize{ p_windowSize }
