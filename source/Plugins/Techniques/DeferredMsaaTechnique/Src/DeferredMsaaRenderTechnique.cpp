@@ -517,9 +517,10 @@ namespace DeferredMsaa
 
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
-													 , l_fMatShininess
-													 , FragmentInput( l_v3Position, l_v3Normal )
-													 , l_output );
+					, l_fMatShininess
+					, 1_i
+					, FragmentInput( l_v3Position, l_v3Normal )
+					, l_output );
 
 				pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( l_v3Ambient * l_v3MapAmbient.xyz() ) +
 														l_writer.Paren( l_v3Diffuse * l_v3MapDiffuse.xyz() ) +

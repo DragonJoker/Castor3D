@@ -57,27 +57,31 @@ namespace GLSL
 		GlslWriter_API void DeclareModel();
 		// Calls
 		GlslWriter_API void ComputeCombinedLighting( Vec3 const & p_worldEye
-													 , Float const & p_shininess
-													 , FragmentInput const & p_fragmentIn
-													 , OutputComponents & p_output );
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 		GlslWriter_API DirectionalLight GetDirectionalLight( Type const & p_value );
 		GlslWriter_API PointLight GetPointLight( Type const & p_value );
 		GlslWriter_API SpotLight GetSpotLight( Type const & p_value );
 		GlslWriter_API void ComputeDirectionalLight( DirectionalLight const & p_light
-													 , Vec3 const & p_worldEye
-													 , Float const & p_shininess
-													 , FragmentInput const & p_fragmentIn
-													 , OutputComponents & p_output );
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 		GlslWriter_API void ComputePointLight( PointLight const & p_light
-											   , Vec3 const & p_worldEye
-											   , Float const & p_shininess
-											   , FragmentInput const & p_fragmentIn
-											   , OutputComponents & p_output );
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 		GlslWriter_API void ComputeSpotLight( SpotLight const & p_light
-											  , Vec3 const & p_worldEye
-											  , Float const & p_shininess
-											  , FragmentInput const & p_fragmentIn
-											  , OutputComponents & p_output );
+			, Vec3 const & p_worldEye
+			, Float const & p_shininess
+			, Int const & p_receivesShadows
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 
 	protected:
 		GlslWriter_API Light GetBaseLight( Type const & p_value );
@@ -114,12 +118,12 @@ namespace GLSL
 		void Declare_ComputeSpotLight()override;
 
 		void DoComputeLight( Light const & p_light
-							 , Vec3 const & p_worldEye
-							 , Vec3 const & p_direction
-							 , Float const & p_shininess
-							 , Float const & p_shadowFactor
-							 , FragmentInput const & p_fragmentIn
-							 , OutputComponents & p_output );
+			, Vec3 const & p_worldEye
+			, Vec3 const & p_direction
+			, Float const & p_shininess
+			, Float const & p_shadowFactor
+			, FragmentInput const & p_fragmentIn
+			, OutputComponents & p_output );
 		void DoDeclare_ComputeLight();
 
 	public:
