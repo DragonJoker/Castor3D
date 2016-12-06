@@ -154,14 +154,15 @@ namespace Castor3D
 		DoRender();
 	}
 
-	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode(
-		Pass & p_pass,
-		RenderPipeline & p_pipeline,
-		Submesh & p_submesh,
-		Geometry & p_primitive,
-		AnimatedSkeletonSPtr p_skeleton,
-		AnimatedMeshSPtr p_mesh )
+	AnimatedGeometryRenderNode ShadowMapPass::CreateAnimatedNode( Pass & p_pass
+		, RenderPipeline & p_pipeline
+		, Submesh & p_submesh
+		, Geometry & p_primitive
+		, AnimatedSkeletonSPtr p_skeleton
+		, AnimatedMeshSPtr p_mesh )
 	{
+		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
+		OneIntFrameVariableSPtr l_receiver;
 		auto l_animationBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferAnimation );
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
@@ -172,6 +173,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_primitive.GetParent(),
+			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_submesh,
 			p_primitive,
 			p_skeleton.get(),
@@ -180,12 +182,13 @@ namespace Castor3D
 		};
 	}
 
-	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode(
-		Pass & p_pass,
-		RenderPipeline & p_pipeline,
-		Submesh & p_submesh,
-		Geometry & p_primitive )
+	StaticGeometryRenderNode ShadowMapPass::CreateStaticNode( Pass & p_pass
+		, RenderPipeline & p_pipeline
+		, Submesh & p_submesh
+		, Geometry & p_primitive )
 	{
+		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
+		OneIntFrameVariableSPtr l_receiver;
 		auto l_buffer = p_submesh.GetGeometryBuffers( p_pipeline.GetProgram() );
 		m_geometryBuffers.insert( l_buffer );
 
@@ -195,16 +198,18 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_primitive.GetParent(),
+			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_submesh,
 			p_primitive,
 		};
 	}
 
-	BillboardRenderNode ShadowMapPass::CreateBillboardNode(
-		Pass & p_pass,
-		RenderPipeline & p_pipeline,
-		BillboardBase & p_billboard )
+	BillboardRenderNode ShadowMapPass::CreateBillboardNode( Pass & p_pass
+		, RenderPipeline & p_pipeline
+		, BillboardBase & p_billboard )
 	{
+		auto l_modelBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferModel );
+		OneIntFrameVariableSPtr l_receiver;
 		auto l_billboardBuffer = p_pipeline.GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferBillboards );
 		Point2iFrameVariableSPtr l_pt2i;
 		auto l_buffer = p_billboard.GetGeometryBuffers( p_pipeline.GetProgram() );
@@ -216,6 +221,7 @@ namespace Castor3D
 			DoCreatePassRenderNode( p_pass, p_pipeline ),
 			*l_buffer,
 			*p_billboard.GetNode(),
+			*l_modelBuffer->GetVariable( ShaderProgram::ShadowReceiver, l_receiver ),
 			p_billboard,
 			*l_billboardBuffer,
 			*l_billboardBuffer->GetVariable( ShaderProgram::Dimensions, l_pt2i ),
