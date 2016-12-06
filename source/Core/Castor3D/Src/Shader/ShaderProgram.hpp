@@ -852,6 +852,14 @@ namespace Castor3D
 		C3D_API static const Castor::String MapText;
 
 		//@}
+		/**@name Model */
+		//@{
+
+		//!\~english	Name of the shadow receiver status frame variable.
+		//!\~french		Nom de la frame variable contenant le statut de réception d'ombres.
+		C3D_API static const Castor::String ShadowReceiver;
+
+		//@}
 		/**@name Animation */
 		//@{
 
@@ -918,6 +926,9 @@ namespace Castor3D
 		//!\~english	Name of the pass frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de passe.
 		C3D_API static const Castor::String BufferPass;
+		//!\~english	Name of the model frame variable buffer.
+		//!\~french		Nom du frame variable buffer contenant les données de modèle.
+		C3D_API static const Castor::String BufferModel;
 		//!\~english	Name of the billboards frame variable buffer.
 		//!\~french		Nom du frame variable buffer contenant les données de billboards.
 		C3D_API static const Castor::String BufferBillboards;

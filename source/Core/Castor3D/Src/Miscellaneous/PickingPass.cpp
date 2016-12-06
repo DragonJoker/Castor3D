@@ -609,6 +609,7 @@ namespace Castor3D
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
+		UBO_MODEL( l_writer );
 
 		Ubo l_uboPicking{ l_writer, Picking };
 		auto c3d_iDrawIndex( l_uboPicking.GetUniform< UInt >( DrawIndex ) );

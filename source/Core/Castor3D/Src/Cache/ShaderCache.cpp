@@ -170,6 +170,16 @@ namespace Castor3D
 		return l_buffer;
 	}
 
+	FrameVariableBuffer & ShaderProgramCache::CreateModelBuffer(
+		ShaderProgram & p_shader,
+		FlagCombination< ProgramFlag > const & p_programFlags,
+		FlagCombination< ShaderTypeFlag > const & p_shaderMask )const
+	{
+		auto & l_buffer = p_shader.CreateFrameVariableBuffer( ShaderProgram::BufferModel, p_shaderMask );
+		l_buffer.CreateVariable( FrameVariableType::eInt, ShaderProgram::ShadowReceiver, 1 );
+		return l_buffer;
+	}
+
 	FrameVariableBuffer & ShaderProgramCache::CreateAnimationBuffer(
 		ShaderProgram & p_shader,
 		FlagCombination< ProgramFlag > const & p_programFlags,
@@ -286,10 +296,11 @@ namespace Castor3D
 				l_return->SetSource( ShaderType::eGeometry, l_model, l_geometry );
 			}
 
-			CreateTextureVariables( *l_return, p_textureFlags );
 			CreateMatrixBuffer( *l_return, p_programFlags, l_matrixUboShaderMask );
 			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
+			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
+			CreateTextureVariables( *l_return, p_textureFlags );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning )
 				 || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
@@ -343,6 +354,7 @@ namespace Castor3D
 				auto gl_VertexID( l_writer.GetBuiltin< Int >( cuT( "gl_VertexID" ) ) );
 				UBO_MATRIX( l_writer );
 				UBO_SCENE( l_writer );
+				UBO_MODEL( l_writer );
 				UBO_BILLBOARD( l_writer );
 
 				// Shader outputs
@@ -406,6 +418,7 @@ namespace Castor3D
 			CreateMatrixBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel );
 			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
+			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateTextureVariables( *l_return, p_textureFlags );
 			auto & l_billboardUbo = l_return->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, ShaderTypeFlag::eVertex );
 			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );

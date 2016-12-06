@@ -452,6 +452,7 @@ namespace Deferred
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
+		UBO_MODEL( l_writer );
 
 		// Fragment Inputs
 		auto vtx_worldSpacePosition = l_writer.GetInput< Vec3 >( cuT( "vtx_worldSpacePosition" ) );
