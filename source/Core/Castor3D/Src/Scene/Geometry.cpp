@@ -196,7 +196,7 @@ namespace Castor3D
 					else if ( p_submesh->HasMatrixBuffer() && l_count > 1 )
 					{
 						// We need to update the matrix buffers only.
-						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::eQueueRender, [this, p_submesh]()
+						GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( EventType::ePreRender, [this, p_submesh]()
 						{
 							p_submesh->ResetMatrixBuffers();
 						} ) );
