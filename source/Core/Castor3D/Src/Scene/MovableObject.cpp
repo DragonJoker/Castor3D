@@ -16,7 +16,7 @@ namespace Castor3D
 
 	bool MovableObject::TextWriter::operator()( MovableObject const & p_object, TextFile & p_file )
 	{
-		return p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+		return p_file.WriteText( m_tabs + cuT( "parent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 	}
 
 	//*************************************************************************************************

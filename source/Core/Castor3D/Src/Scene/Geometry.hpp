@@ -26,6 +26,7 @@ SOFTWARE.
 #include "Castor3DPrerequisites.hpp"
 
 #include "MovableObject.hpp"
+#include "RenderedObject.hpp"
 
 namespace Castor3D
 {
@@ -40,6 +41,7 @@ namespace Castor3D
 	*/
 	class Geometry
 		: public MovableObject
+		, public RenderedObject
 	{
 	public:
 		/*!
@@ -175,52 +177,6 @@ namespace Castor3D
 		{
 			return m_mesh.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The visibility status
-		 *\~french
-		 *\brief		Récupère le statut de visibilité de la géométrie
-		 *\return		Le statut de visibilité de la géométrie
-		 */
-		inline bool IsVisible()const
-		{
-			return m_visible;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the visibility status
-		 *\param[in]	p_visible	The visibility status
-		 *\~french
-		 *\brief		Définit le statut de visibilité de la géométrie
-		 *\param[in]	p_visible	Le statut de visibilité de la géométrie
-		 */
-		inline void SetVisible( bool p_visible )
-		{
-			m_visible = p_visible;
-		}
-		/**
-		 *\~english
-		 *\return		The shadow casting value.
-		 *\~french
-		 *\return		Le statut de projection d'ombres.
-		 */
-		inline bool IsShadowCaster()const
-		{
-			return m_shadowCaster;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the shadow caster status.
-		 *\param[in]	p_value	The new value.
-		 *\~french
-		 *\brief		Définit le statut de projection d'ombres.
-		 *\param[in]	p_value	La nouvelle valeur.
-		 */
-		inline void SetShadowCaster( bool p_value )
-		{
-			m_shadowCaster = p_value;
-		}
 
 	protected:
 		//!\~english	The mesh.
@@ -235,12 +191,6 @@ namespace Castor3D
 		//!<\~english	Tells if the mesh buffers are generated.
 		//!\~french		Dit si les tampons du mesh ont été générés.
 		bool m_listCreated{ false };
-		//!\~english	Tells if the geometry is visible.
-		//!\~french		Dit si la géométrie est visible.
-		bool m_visible{ true };
-		//!\~english	Tells if the geometry casts shadows.
-		//!\~french		Dit si la géométrie projette des ombres.
-		bool m_shadowCaster{ true };
 		//!\~english	The submeshes materials.
 		//!\~french		Les matériaux des sous maillages.
 		std::map< Submesh *, MaterialWPtr > m_submeshesMaterials;

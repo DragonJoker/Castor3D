@@ -24,6 +24,7 @@ SOFTWARE.
 #define ___C3D_BILLBOARD_LIST_H___
 
 #include "MovableObject.hpp"
+#include "RenderedObject.hpp"
 
 #include "Mesh/Buffer/BufferDeclaration.hpp"
 
@@ -43,6 +44,7 @@ namespace Castor3D
 	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
 	class BillboardBase
+		: public RenderedObject
 	{
 	public:
 		/**
