@@ -49,6 +49,7 @@ namespace GlRender
 			}
 
 			Unbind();
+			l_return = true;
 		}
 
 		return l_return;

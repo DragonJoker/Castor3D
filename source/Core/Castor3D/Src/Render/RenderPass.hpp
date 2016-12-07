@@ -499,7 +499,19 @@ namespace Castor3D
 		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
 		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const = 0;
+		C3D_API virtual void DoCompleteOpaqueProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const
+		{
+			DoCompleteTransparentProgramFlags( p_programFlags );
+		}
+		/**
+		 *\~english
+		 *\brief			Modifies the given program flags to make them match the render pass requirements.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API virtual void DoCompleteTransparentProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

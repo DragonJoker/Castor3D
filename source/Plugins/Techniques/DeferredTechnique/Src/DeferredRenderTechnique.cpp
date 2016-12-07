@@ -366,6 +366,11 @@ namespace Deferred
 	{
 	}
 
+	void RenderTechnique::DoCompleteOpaqueProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
+	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+	}
+
 	String RenderTechnique::DoGetLightPassVertexShaderSource(
 		FlagCombination< TextureChannel > const & p_textureFlags,
 		FlagCombination< ProgramFlag > const & p_programFlags,

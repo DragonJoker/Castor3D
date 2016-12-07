@@ -237,9 +237,9 @@ namespace Castor3D
 		 */
 		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 *\copydoc		Castor3D::RenderPass::DoCompleteTransparentProgramFlags
 		 */
-		void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		void DoCompleteTransparentProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 
 	protected:
 		//!\~english	The scene.

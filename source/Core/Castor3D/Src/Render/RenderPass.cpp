@@ -76,11 +76,11 @@ namespace Castor3D
 		uint8_t p_sceneFlags,
 		bool p_twoSided )
 	{
-		DoCompleteProgramFlags( p_programFlags );
-		auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
-
 		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) )
 		{
+			DoCompleteTransparentProgramFlags( p_programFlags );
+			auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
+
 			auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
 			auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
 			DoPrepareTransparentFrontPipeline( *l_frontProgram, l_flags );
@@ -88,6 +88,8 @@ namespace Castor3D
 		}
 		else
 		{
+			DoCompleteOpaqueProgramFlags( p_programFlags );
+			auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
 			auto l_flags = PipelineFlags{ p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags };
 
 			if ( p_twoSided )

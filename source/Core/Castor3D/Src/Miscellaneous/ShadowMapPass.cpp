@@ -325,8 +325,10 @@ namespace Castor3D
 		}
 	}
 
-	void ShadowMapPass::DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const
+	void ShadowMapPass::DoCompleteTransparentProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const
 	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+
 		AddFlag( p_programFlags, ProgramFlag::eShadowMap );
 	}
 }

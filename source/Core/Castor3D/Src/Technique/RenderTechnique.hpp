@@ -452,9 +452,9 @@ namespace Castor3D
 		 */
 		void DoCleanupPointShadowMap();
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 *\copydoc		Castor3D::RenderPass::DoCompleteTransparentProgramFlags
 		 */
-		C3D_API void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		C3D_API void DoCompleteTransparentProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */

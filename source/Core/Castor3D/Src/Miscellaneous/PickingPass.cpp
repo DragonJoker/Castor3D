@@ -665,8 +665,10 @@ namespace Castor3D
 		}
 	}
 
-	void PickingPass::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
+	void PickingPass::DoCompleteTransparentProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
 	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+
 		AddFlag( p_programFlags, ProgramFlag::ePicking );
 	}
 }
