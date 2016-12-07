@@ -404,7 +404,7 @@ namespace Castor3D
 		 *\param[in]	p_renderNodes	Les noeuds instanciés.
 		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
 		 */
-		uint32_t RenderPass::DoCopyNodesMatrices(
+		uint32_t DoCopyNodesMatrices(
 			StaticGeometryRenderNodeArray const & p_renderNodes,
 			VertexBuffer & p_matrixBuffer );
 		/**
@@ -419,7 +419,7 @@ namespace Castor3D
 		 *\param[in]	p_renderNodes	Les noeuds instanciés.
 		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
 		 */
-		uint32_t RenderPass::DoRegisterCopyNodesMatrices(
+		uint32_t DoRegisterCopyNodesMatrices(
 			StaticGeometryRenderNodeArray const & p_renderNodes,
 			VertexBuffer & p_matrixBuffer );
 		/**
