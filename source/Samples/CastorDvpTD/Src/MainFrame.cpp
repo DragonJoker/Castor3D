@@ -67,9 +67,9 @@ namespace castortd
 	{
 		auto & l_engine = *wxGetApp().GetCastor();
 		auto l_window = GuiCommon::LoadScene( l_engine
-											  , File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
-											  , l_engine.GetRenderLoop().GetWantedFps()
-											  , l_engine.IsThreaded() );
+			, File::GetExecutableDirectory().GetPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
+			, l_engine.GetRenderLoop().GetWantedFps()
+			, l_engine.IsThreaded() );
 
 		if ( l_window )
 		{

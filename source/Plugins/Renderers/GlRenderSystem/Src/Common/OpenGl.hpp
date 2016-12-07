@@ -836,7 +836,7 @@ namespace GlRender
 		inline Castor::FlagCombination< GlBufferMappingBit > GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
 		inline Castor3D::ElementType Get( GlslAttributeType p_type )const;
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
 		template< typename T >
 		inline bool Track( T * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
@@ -848,6 +848,24 @@ namespace GlRender
 		inline bool UnTrack( T * p_object )const
 		{
 			return m_debug.UnTrack( p_object );
+		}
+
+#endif
+#if C3DGL_CHECK_TEXTURE_UNIT
+
+		void TrackTexture( uint32_t p_name, uint32_t p_index )const
+		{
+			m_debug.BindTexture( p_name, p_index );
+		}
+
+		void TrackSampler( uint32_t p_name, uint32_t p_index )const
+		{
+			m_debug.BindSampler( p_name, p_index );
+		}
+
+		void CheckTextureUnits()const
+		{
+			m_debug.CheckTextureUnits();
 		}
 
 #endif

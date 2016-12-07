@@ -27,6 +27,23 @@ SOFTWARE.
 
 #include <CastorUtils.hpp>
 #include <Engine.hpp>
+#include <Render/RenderSystem.hpp>
+
+#	if !defined( C3DGL_DEBUG_FUNCTION_CALLS )
+#		if !defined( NDEBUG )
+#			define C3DGL_DEBUG_FUNCTION_CALLS 0
+#		else
+#			define C3DGL_DEBUG_FUNCTION_CALLS 0
+#		endif
+#	endif
+
+#	if !defined( C3DGL_CHECK_TEXTURE_UNIT )
+#		if !defined( NDEBUG )
+#			define C3DGL_CHECK_TEXTURE_UNIT 0
+#		else
+#			define C3DGL_CHECK_TEXTURE_UNIT 0
+#		endif
+#	endif
 
 #ifdef _WIN32
 #	ifdef GlRenderSystem_EXPORTS
@@ -1249,14 +1266,28 @@ namespace GlRender
 	class OpenGl;
 }
 
-#	if !defined( NDEBUG )
-#		define glCheckError( gl, txt )			( gl ).GlCheckError( txt )
-#		define glTrack( gl, type, object )		( gl ).Track( object, type, __FILE__, __LINE__ )
-#		define glUntrack( gl, object )			( gl ).UnTrack( object )
+#	if C3DGL_DEBUG_FUNCTION_CALLS
+#		define glCheckError( gl, txt ) ( gl ).GlCheckError( txt )
 #	else
-#		define glCheckError( gl, txt )			true
+#		define glCheckError( gl, txt ) true
+#	endif
+
+#	if C3D_TRACE_OBJECTS
+#		define glTrack( gl, type, object ) ( gl ).Track( object, type, __FILE__, __LINE__ )
+#		define glUntrack( gl, object ) ( gl ).UnTrack( object )
+#	else
 #		define glTrack( gl, type, object )
 #		define glUntrack( gl, object )
+#	endif
+
+#	if C3DGL_CHECK_TEXTURE_UNIT
+#		define glTrackTexture( name, index ) GetOpenGl().TrackTexture( name, index )
+#		define glTrackSampler( name, index ) GetOpenGl().TrackSampler( name, index )
+#		define glCheckTextureUnits() GetOpenGl().CheckTextureUnits()
+#	else
+#		define glTrackTexture( name, index )
+#		define glTrackSampler( name, index )
+#		define glCheckTextureUnits()
 #	endif
 
 //#include "Common/OpenGl.hpp"

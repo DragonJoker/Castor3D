@@ -192,31 +192,35 @@ namespace Castor3D
 			if ( !p_depthMaps.empty() )
 			{
 				auto l_index = p_pipeline.GetTexturesCount() + 1;
-				auto & l_directional = p_pipeline.GetDirectionalShadowMapsVariable();
-				auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
-				auto & l_point = p_pipeline.GetPointShadowMapsVariable();
 
-				for ( auto & l_depthMap : p_depthMaps )
+				if ( CheckFlag( p_pipeline.GetFlags().m_programFlags, ProgramFlag::eShadows ) )
 				{
-					if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
+					auto & l_directional = p_pipeline.GetDirectionalShadowMapsVariable();
+					auto & l_spot = p_pipeline.GetSpotShadowMapsVariable();
+					auto & l_point = p_pipeline.GetPointShadowMapsVariable();
+
+					for ( auto & l_depthMap : p_depthMaps )
 					{
-						l_depthMap.get().SetIndex( l_index );
-						l_directional.SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
-					{
-						l_depthMap.get().SetIndex( l_index );
-						l_spot.SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eCube )
-					{
-						l_depthMap.get().SetIndex( l_index );
-						l_point.SetValue( l_index++ );
-					}
-					else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
-					{
-						l_depthMap.get().SetIndex( l_index );
-						l_point.SetValue( l_index++ );
+						if ( l_depthMap.get().GetType() == TextureType::eTwoDimensions )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_directional.SetValue( l_index++ );
+						}
+						else if ( l_depthMap.get().GetType() == TextureType::eTwoDimensionsArray )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_spot.SetValue( l_index++ );
+						}
+						else if ( l_depthMap.get().GetType() == TextureType::eCube )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_point.SetValue( l_index++ );
+						}
+						else if ( l_depthMap.get().GetType() == TextureType::eCubeArray )
+						{
+							l_depthMap.get().SetIndex( l_index );
+							l_point.SetValue( l_index++ );
+						}
 					}
 				}
 			}

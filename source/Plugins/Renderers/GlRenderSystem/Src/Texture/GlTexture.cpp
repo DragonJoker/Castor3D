@@ -93,6 +93,7 @@ namespace GlRender
 		if ( l_return )
 		{
 			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
+			glTrackTexture( GetGlName(), p_index );
 		}
 
 		return l_return;
@@ -110,6 +111,7 @@ namespace GlRender
 
 	void GlTexture::DoUnbind( uint32_t p_index )const
 	{
+		glTrackTexture( 0u, p_index );
 		GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
 		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}

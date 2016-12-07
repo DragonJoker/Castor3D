@@ -25,6 +25,8 @@ SOFTWARE.
 
 #include "Common/GlBindable.hpp"
 
+#include <Miscellaneous/Debug.hpp>
+
 #include <unordered_set>
 
 #if !defined( CALLBACK )
@@ -40,8 +42,33 @@ namespace GlRender
 	class GlDebug
 		: public Holder
 	{
-		typedef void ( CALLBACK * PFNGLDEBUGPROC )( uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int length, const char * message, void * userParam );
-		typedef void ( CALLBACK * PFNGLDEBUGAMDPROC )( uint32_t id, uint32_t category, uint32_t severity, int length, const char * message, void * userParam );
+		using PFNGLDEBUGPROC = void ( CALLBACK * )( uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int length, const char * message, void * userParam );
+		using PFNGLDEBUGAMDPROC = void ( CALLBACK * )( uint32_t id, uint32_t category, uint32_t severity, int length, const char * message, void * userParam );
+
+		struct Binding
+		{
+			Binding()
+				: m_name{ 0u }
+			{
+			}
+
+			Binding( uint32_t p_name )
+				: m_name{ p_name }
+			{
+				Castor::StringStream l_stream;
+				l_stream << Castor::Debug::Backtrace{};
+				m_stack = l_stream.str();
+			}
+
+			uint32_t m_name;
+			Castor::String m_stack;
+		};
+
+		struct TextureUnitState
+		{
+			Binding m_texture;
+			Binding m_sampler;
+		};
 
 	public:
 		GlDebug( GlRenderSystem & p_renderSystem );
@@ -52,6 +79,9 @@ namespace GlRender
 		bool GlCheckError( std::wstring const & p_strText )const;
 		void FilterMessage( uint32_t p_id );
 		bool IsFiltered( uint32_t p_id )const;
+		void BindTexture( uint32_t p_name, uint32_t p_index )const;
+		void BindSampler( uint32_t p_name, uint32_t p_index )const;
+		void CheckTextureUnits()const;
 
 		static void CALLBACK StDebugLog( GlDebugSource source
 			, GlDebugType type
@@ -117,6 +147,7 @@ namespace GlRender
 			, GlDebugSeverity severity
 			, int length
 			, const char * message )const;
+		void DoUpdateTextureUnits()const;
 
 	private:
 		GlRenderSystem & m_renderSystem;
@@ -124,6 +155,7 @@ namespace GlRender
 		std::function< void( PFNGLDEBUGPROC callback, void * userParam ) > m_pfnDebugMessageCallback;
 		std::function< void( PFNGLDEBUGAMDPROC callback, void * userParam ) > m_pfnDebugMessageCallbackAMD;
 		std::unordered_set< uint32_t > m_filteredOut;
+		mutable std::unordered_map< uint32_t, TextureUnitState > m_textureUnits;
 	};
 }
 

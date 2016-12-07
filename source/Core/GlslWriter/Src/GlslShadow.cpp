@@ -77,7 +77,7 @@ namespace GLSL
 			else if ( p_type == ShadowType::ePoisson )
 			{
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 2000.0 ) );
+				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 4000.0 ) );
 
 				for ( int i = 0; i < 4; i++ )
 				{
@@ -89,7 +89,7 @@ namespace GLSL
 				auto c3d_poissonDisk = m_writer.GetBuiltin< Vec2 >( cuT( "c3d_poissonDisk" ), 4u );
 				auto gl_FragCoord = m_writer.GetBuiltin< Vec3 >( cuT( "gl_FragCoord" ), 4u );
 				auto l_pindex = m_writer.GetLocale( cuT( "l_pindex" ), Int( 0 ) );
-				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 1400.0 ) );
+				auto l_diffusion = m_writer.GetLocale( cuT( "l_diffusion" ), Float( 2800.0 ) );
 
 				for ( int i = 0; i < 4; i++ )
 				{

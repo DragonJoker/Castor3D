@@ -58,6 +58,7 @@ namespace GlRender
 		}
 
 		FilterMessage( 0x00020072 );
+		FilterMessage( 0x00020096 );
 	}
 
 	void GlDebug::Cleanup()
@@ -85,6 +86,88 @@ namespace GlRender
 	bool GlDebug::IsFiltered( uint32_t p_message )const
 	{
 		return m_filteredOut.find( p_message ) != m_filteredOut.end();
+	}
+
+	void GlDebug::BindTexture( uint32_t p_name, uint32_t p_index )const
+	{
+		auto l_it = m_textureUnits.find( p_index );
+
+		if ( !p_name )
+		{
+			if ( l_it == m_textureUnits.end()
+				|| l_it->second.m_texture.m_name == 0u )
+			{
+				Logger::LogError( std::stringstream{} << "Double texture unbind for index " << p_index );
+			}
+		}
+		else if ( l_it != m_textureUnits.end()
+			&& l_it->second.m_texture.m_name != 0u )
+		{
+			Logger::LogError( std::stringstream{} << "Previous texture " << l_it->second.m_texture.m_name << " at index " << p_index << " has not been unbound " );
+		}
+
+		m_textureUnits[p_index].m_texture = Binding{ p_name };
+
+		if ( !p_name )
+		{
+			DoUpdateTextureUnits();
+		}
+	}
+
+	void GlDebug::BindSampler( uint32_t p_name, uint32_t p_index )const
+	{
+		auto l_it = m_textureUnits.find( p_index );
+
+		if ( !p_name )
+		{
+			if ( l_it == m_textureUnits.end()
+				|| l_it->second.m_sampler.m_name == 0u )
+			{
+				Logger::LogError( std::stringstream{} << "Double sampler unbind for index " << p_index );
+			}
+		}
+		else if ( l_it != m_textureUnits.end()
+			&& l_it->second.m_sampler.m_name != 0u )
+		{
+			Logger::LogError( std::stringstream{} << "Previous sampler " << l_it->second.m_sampler.m_name << " at index " << p_index << " has not been unbound " );
+		}
+
+		m_textureUnits[p_index].m_sampler = Binding{ p_name };
+
+		if ( !p_name )
+		{
+			DoUpdateTextureUnits();
+		}
+	}
+
+	void GlDebug::CheckTextureUnits()const
+	{
+		for ( auto & l_it : m_textureUnits )
+		{
+			if ( !l_it.second.m_sampler.m_name
+				|| !l_it.second.m_texture.m_name )
+			{
+				Logger::LogError( std::stringstream{} << "Texture unit at index " << l_it.first << " is incomplete" );
+			}
+		}
+	}
+
+	void GlDebug::DoUpdateTextureUnits()const
+	{
+		auto l_it = m_textureUnits.begin();
+
+		while ( l_it != m_textureUnits.end() )
+		{
+			if ( !l_it->second.m_sampler.m_name
+				&& !l_it->second.m_texture.m_name )
+			{
+				l_it = m_textureUnits.erase( l_it );
+			}
+			else
+			{
+				++l_it;
+			}
+		}
 	}
 
 #if !defined( NDEBUG )

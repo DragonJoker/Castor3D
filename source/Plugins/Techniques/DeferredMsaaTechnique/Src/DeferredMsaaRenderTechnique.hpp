@@ -40,6 +40,7 @@ namespace DeferredMsaa
 		eTangent,
 		eSpecular,
 		eEmissive,
+		eInfos,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	/*!

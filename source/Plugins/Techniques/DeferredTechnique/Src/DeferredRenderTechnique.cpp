@@ -63,6 +63,7 @@ namespace Deferred
 					cuT( "c3d_mapTangent" ),
 					cuT( "c3d_mapSpecular" ),
 					cuT( "c3d_mapEmissive" ),
+					cuT( "c3d_mapInfos" ),
 				}
 			};
 
@@ -74,6 +75,7 @@ namespace Deferred
 			static std::array< PixelFormat, size_t( DsTexture::eCount ) > Values
 			{
 				{
+					PixelFormat::eRGBA16F32F,
 					PixelFormat::eRGBA16F32F,
 					PixelFormat::eRGBA16F32F,
 					PixelFormat::eRGBA16F32F,
@@ -97,6 +99,7 @@ namespace Deferred
 					AttachmentPoint::eColour,
 					AttachmentPoint::eColour,
 					AttachmentPoint::eColour,
+					AttachmentPoint::eColour,
 				}
 			};
 
@@ -114,6 +117,7 @@ namespace Deferred
 					3,
 					4,
 					5,
+					6,
 				}
 			};
 
@@ -250,13 +254,15 @@ namespace Deferred
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Bind();
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
-				DoBindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
+				m_lightPassTextures[size_t( DsTexture::eInfos )]->Bind();
+				DoBindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
 
 				l_program.m_program->BindUbos();
 				l_program.m_geometryBuffers->Draw( VertexCount, 0 );
 				l_program.m_program->UnbindUbos();
 
-				DoUnbindDepthMaps( uint32_t( DsTexture::eEmissive ) + 2 );
+				DoUnbindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
+				m_lightPassTextures[size_t( DsTexture::eInfos )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Unbind();
 				m_lightPassTextures[size_t( DsTexture::eTangent )]->Unbind();
@@ -338,6 +344,7 @@ namespace Deferred
 		auto out_c3dTangent = l_writer.GetFragData< Vec4 >( cuT( "out_c3dTangent" ), l_index++ );
 		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
 		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
+		auto out_c3dInfos = l_writer.GetFragData< Vec4 >( cuT( "out_c3dInfos" ), l_index++ );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -360,6 +367,7 @@ namespace Deferred
 			out_c3dTangent = vec4( l_v3Tangent, l_v3Ambient.z() );
 			out_c3dSpecular = vec4( l_v3Specular, l_fMatShininess );
 			out_c3dEmissive = vec4( l_v3Emissive, l_wvPosition.z() );
+			out_c3dInfos = vec4( c3d_iShadowReceiver, 0.0_f, 0.0_f, 0.0_f );
 		} );
 
 		return l_writer.Finalise();
@@ -422,6 +430,7 @@ namespace Deferred
 		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eTangent ) );
 		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eSpecular ) );
 		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eEmissive ) );
+		auto c3d_mapInfos = l_writer.GetUniform< Sampler2D >( GetTextureName( DsTexture::eInfos ) );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name
 			, CheckFlag( p_programFlags, ProgramFlag::eShadows ) ? ShadowType::ePoisson : ShadowType::eNone );
@@ -436,6 +445,8 @@ namespace Deferred
 			auto l_v4Tangent = l_writer.GetLocale( cuT( "l_v4Tangent" ), texture( c3d_mapTangent, vtx_texture ) );
 			auto l_v3Normal = l_writer.GetLocale( cuT( "l_v3Normal" ), l_v4Normal.xyz() );
 			auto l_v3Tangent = l_writer.GetLocale( cuT( "l_v3Tangent" ), l_v4Tangent.xyz() );
+			auto l_v4Infos = l_writer.GetLocale( cuT( "l_infos" ), texture( c3d_mapInfos, vtx_texture ) );
+			auto l_iShadowReceiver = l_writer.GetLocale( cuT( "l_receiver" ), l_writer.Cast< Int >( l_v4Infos.x() ) );
 
 			IF( l_writer, l_v3Normal != l_v3Tangent )
 			{
@@ -459,7 +470,7 @@ namespace Deferred
 				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeCombinedLighting( l_worldEye
 					, l_fMatShininess
-					, 1_i
+					, l_iShadowReceiver
 					, FragmentInput( l_v3Position, l_v3Normal )
 					, l_output );
 
@@ -559,9 +570,9 @@ namespace Deferred
 
 			if ( l_scene.HasShadows() )
 			{
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 2u );
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 3u );
-				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eEmissive ) + 4u );
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowDirectional, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 2u );
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowSpot, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 3u );
+				l_program.m_program->CreateFrameVariable< OneIntFrameVariable >( GLSL::Shadow::MapShadowPoint, ShaderType::ePixel )->SetValue( uint32_t( DsTexture::eInfos ) + 4u );
 			}
 
 			DepthStencilState l_dsstate;
@@ -672,7 +683,11 @@ namespace Deferred
 
 		for ( uint32_t i = 0; i < uint32_t( DsTexture::eCount ); i++ )
 		{
-			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions, AccessType::eNone, AccessType::eRead | AccessType::eWrite, GetTextureFormat( DsTexture( i ) ), m_size );
+			auto l_texture = m_renderSystem.CreateTexture( TextureType::eTwoDimensions
+				, AccessType::eNone
+				, AccessType::eRead | AccessType::eWrite
+				, GetTextureFormat( DsTexture( i ) )
+				, m_size );
 			l_texture->GetImage().InitialiseSource();
 
 			m_lightPassTextures[i] = std::make_unique< TextureUnit >( *GetEngine() );
