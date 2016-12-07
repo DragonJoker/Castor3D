@@ -135,7 +135,7 @@ namespace GlRender
 
 #if !defined( NDEBUG )
 
-				m_hasBeenValid = true;
+				ObjectType::m_hasBeenValid = true;
 
 #endif
 			}
