@@ -310,7 +310,8 @@ namespace Castor3D
 							AddFlag( l_programFlags, ProgramFlag::eMorphing );
 						}
 
-						if ( l_shadows )
+						if ( l_shadows
+							&& l_primitive.second->IsShadowReceiver() )
 						{
 							AddFlag( l_programFlags, ProgramFlag::eShadows );
 						}

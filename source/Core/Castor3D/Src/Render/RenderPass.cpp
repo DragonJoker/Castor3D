@@ -401,4 +401,45 @@ namespace Castor3D
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
+
+	uint32_t RenderPass::DoCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes, VertexBuffer & p_matrixBuffer )
+	{
+		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		auto l_buffer = p_matrixBuffer.data();
+		auto l_it = p_renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < l_count )
+		{
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			l_buffer += l_stride;
+			++i;
+			++l_it;
+		}
+
+		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+		return l_count;
+	}
+
+	uint32_t RenderPass::DoRegisterCopyNodesMatrices( StaticGeometryRenderNodeArray const & p_renderNodes, VertexBuffer & p_matrixBuffer )
+	{
+		constexpr uint32_t l_stride = 16 * sizeof( real );
+		auto const l_count = std::min( p_matrixBuffer.GetSize() / l_stride, uint32_t( p_renderNodes.size() ) );
+		auto l_buffer = p_matrixBuffer.data();
+		auto l_it = p_renderNodes.begin();
+		auto i = 0u;
+
+		while ( i < l_count )
+		{
+			std::memcpy( l_buffer, l_it->m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
+			m_renderedObjects.push_back( *l_it );
+			l_buffer += l_stride;
+			++i;
+			++l_it;
+		}
+
+		p_matrixBuffer.Upload( 0u, l_stride * l_count, p_matrixBuffer.data() );
+		return l_count;
+	}
 }

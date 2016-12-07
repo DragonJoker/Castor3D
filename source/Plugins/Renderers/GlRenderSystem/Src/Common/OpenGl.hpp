@@ -34,18 +34,13 @@ SOFTWARE.
 #include <GL/gl.h>
 
 #include "Common/GlObject.hpp"
+#include "Miscellaneous/GlDebug.hpp"
+
+#include <Log/Logger.hpp>
 
 #include <GlslWriterPrerequisites.hpp>
 
 #include <Texture/TextureUnit.hpp>
-
-#if !defined( CALLBACK )
-#	if defined( _WIN32 )
-#		define CALLBACK __stdcall
-#	else
-#		define CALLBACK
-#	endif
-#endif
 
 #if defined( MemoryBarrier )
 #	undef MemoryBarrier
@@ -287,14 +282,12 @@ namespace GlRender
 			}
 		};
 
-		typedef void ( CALLBACK * PFNGLDEBUGPROC )( uint32_t source, uint32_t type, uint32_t id, uint32_t severity, int length, const char * message, void * userParam );
-		typedef void ( CALLBACK * PFNGLDEBUGAMDPROC )( uint32_t id, uint32_t category, uint32_t severity, int length, const char * message, void * userParam );
-
 	public:
 		C3D_Gl_API OpenGl( GlRenderSystem & p_renderSystem );
 		C3D_Gl_API ~OpenGl();
 		C3D_Gl_API bool PreInitialise( Castor::String const & p_strExtensions );
 		C3D_Gl_API bool Initialise();
+		C3D_Gl_API void InitialiseDebug();
 		C3D_Gl_API void Cleanup();
 		C3D_Gl_API bool GlCheckError( std::string const & p_strText )const;
 		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
@@ -350,7 +343,6 @@ namespace GlRender
 		inline GlCompareMode Get( Castor3D::ComparisonMode p_value )const;
 		inline bool Get( Castor3D::WritingMask p_eMask )const;
 		inline Castor::FlagCombination< GlBarrierBit > Get( Castor::FlagCombination< Castor3D::MemoryBarrier > const & p_barriers )const;
-		inline bool HasDebugOutput()const;
 		inline Castor::String const & GetVendor()const;
 		inline Castor::String const & GetRenderer()const;
 		inline Castor::String const & GetStrVersion()const;
@@ -365,7 +357,6 @@ namespace GlRender
 		/**@name General Functions */
 		//@{
 
-		inline uint32_t GetError()const;
 		inline bool ClearColor( float red, float green, float blue, float alpha )const;
 		inline bool ClearColor( Castor::Colour const & p_colour )const;
 		inline bool ClearDepth( double value )const;
@@ -383,8 +374,6 @@ namespace GlRender
 		inline bool DepthFunc( GlComparator p_func )const;
 		inline bool DepthMask( bool p_bFlag )const;
 		inline bool ColorMask( bool p_r, bool p_g, bool p_b, bool p_a )const;
-		inline bool DebugMessageCallback( PFNGLDEBUGPROC pfnProc, void * p_pThis )const;
-		inline bool DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis )const;
 		inline bool PolygonMode( GlFace p_eFacing, GlFillMode p_mode )const;
 		inline bool StencilOp( GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const;
 		inline bool StencilFunc( GlComparator p_func, int p_iRef, uint32_t p_uiMask )const;
@@ -849,28 +838,41 @@ namespace GlRender
 		inline Castor::FlagCombination< GlBufferMappingBit > GetBitfieldFlags( Castor::FlagCombination< Castor3D::AccessType > const & p_flags )const;
 		inline Castor3D::ElementType Get( GlslAttributeType p_type )const;
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
-		C3D_Gl_API bool Track( void * p_object, std::string const & p_name, std::string const & p_file, int line )const;
-		C3D_Gl_API bool UnTrack( void * p_object )const;
-
-		template< typename CreationFunction, typename DestructionFunction >
-		inline bool Track( Object< CreationFunction, DestructionFunction > * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
+		template< typename T >
+		inline bool Track( T * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
 		{
-			return Track( reinterpret_cast< void * >( p_object ), p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" ), p_file, p_line );
+			return m_debug.Track( p_object, p_name, p_file, p_line );
+		}
+
+		template< typename T >
+		inline bool UnTrack( T * p_object )const
+		{
+			return m_debug.UnTrack( p_object );
+		}
+
+#endif
+#if C3DGL_CHECK_TEXTURE_UNIT
+
+		void TrackTexture( uint32_t p_name, uint32_t p_index )const
+		{
+			m_debug.BindTexture( p_name, p_index );
+		}
+
+		void TrackSampler( uint32_t p_name, uint32_t p_index )const
+		{
+			m_debug.BindSampler( p_name, p_index );
+		}
+
+		void CheckTextureUnits()const
+		{
+			m_debug.CheckTextureUnits();
 		}
 
 #endif
 
 		//@}
-
-		C3D_Gl_API static void CALLBACK StDebugLog( GlDebugSource source, GlDebugType type, uint32_t id, GlDebugSeverity severity, int length, const char * message, void * userParam );
-		C3D_Gl_API static void CALLBACK StDebugLogAMD( uint32_t id, GlDebugCategory category, GlDebugSeverity severity, int length, const char * message, void * userParam );
-
-	private:
-		bool DoGlCheckError( Castor::String const & p_strText )const;
-		void DebugLog( GlDebugSource source, GlDebugType type, uint32_t id, GlDebugSeverity severity, int length, const char * message )const;
-		void DebugLogAMD( uint32_t id, GlDebugCategory category, GlDebugSeverity severity, int length, const char * message )const;
 
 	private:
 		std::array< Castor::String, 8u > GlslStrings;
@@ -936,10 +938,11 @@ namespace GlRender
 		GlRenderSystem & m_renderSystem;
 		GlProvider m_gpu{ GlProvider::eUnknown };
 
+		GlDebug m_debug;
+
 		/**@name General */
 		//@{
 
-		std::function< uint32_t() > m_pfnGetError;
 		std::function< void( float red, float green, float blue, float alpha ) > m_pfnClearColor;
 		std::function< void( double value ) > m_pfnClearDepth;
 		std::function< void( uint32_t mask ) > m_pfnClear;
@@ -947,8 +950,6 @@ namespace GlRender
 		std::function< void( uint32_t mode ) > m_pfnDisable;
 		std::function< void( int size, uint32_t * buffer ) > m_pfnSelectBuffer;
 		std::function< void( uint32_t pname, int * params ) > m_pfnGetIntegerv;
-		std::function< void( PFNGLDEBUGPROC callback, void * userParam ) > m_pfnDebugMessageCallback;
-		std::function< void( PFNGLDEBUGAMDPROC callback, void * userParam ) > m_pfnDebugMessageCallbackAMD;
 
 		//@}
 		/**@name Depth stencil state */
@@ -1370,6 +1371,18 @@ namespace GlRender
 
 			return l_pfnResult != nullptr;
 		}
+
+		template< typename T >
+		inline void GetFunction( T & p_function, Castor::String const & p_name, Castor::String const & p_extension )
+		{
+			if ( !gl_api::GetFunction( p_name, p_function ) )
+			{
+				if ( !gl_api::GetFunction( p_name + p_extension, p_function ) )
+				{
+					Castor::Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
+				}
+			}
+		}
 	}
 
 #	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x )
@@ -1414,6 +1427,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( EXT_sampler_objects );
 	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic );
 	MAKE_GL_EXTENSION( EXT_uniform_buffer_object );
+	MAKE_GL_EXTENSION( KHR_debug );
 	MAKE_GL_EXTENSION( NV_shader_buffer_load );
 	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory );
 	MAKE_GL_EXTENSION( NVX_gpu_memory_info );

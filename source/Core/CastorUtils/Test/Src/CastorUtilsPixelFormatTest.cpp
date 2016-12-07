@@ -6,9 +6,9 @@ using namespace Castor;
 
 namespace
 {
-	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct PixelStreamer;
+	template< PixelFormat PF, typename Enable = void > struct PixelStreamer;
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -53,7 +53,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -84,15 +84,15 @@ namespace
 		}
 	};
 
-	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 	{
 		return PixelStreamer< PF >()( p_stream, p_pixel );
 	}
 
-	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct BufferStreamer;
+	template< PixelFormat PF, typename Enable = void > struct BufferStreamer;
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -129,7 +129,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
 		template< typename CharType >
@@ -174,14 +174,14 @@ namespace
 		return p_stream;
 	}
 
-	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	template< typename CharType, PixelFormat PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 	{
 		p_stream << static_cast< PxBufferBase const & >( p_buffer );
 		return BufferStreamer< PF >()( p_stream, p_buffer );
 	}
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct PixelConverter
 	{
 		void operator()( Pixel< PFSrc > const & p_source )
@@ -194,7 +194,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConverter< PFSrc, PFSrc >
 	{
 		void operator()( Pixel< PFSrc > const & p_source )
@@ -202,15 +202,15 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	void ConvertPixel( Pixel< PFSrc > const & p_source )
 	{
 		PixelConverter< PFDst, PFSrc >()( p_source );
 	}
 
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct PixelConversionChecker;
+	template< PixelFormat PFSrc, typename Enable = void > struct PixelConversionChecker;
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -239,7 +239,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_depth_stencil_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -260,13 +260,13 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	void CheckPixelConversions()
 	{
 		PixelConversionChecker< PF >()();
 	}
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	struct BufferConverter
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
@@ -279,7 +279,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConverter< PFSrc, PFSrc >
 	{
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
@@ -287,15 +287,15 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFDst, PixelFormat PFSrc >
 	void ConvertBuffer( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 	{
 		BufferConverter< PFDst, PFSrc >()( p_source );
 	}
 
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct BufferConversionChecker;
+	template< PixelFormat PFSrc, typename Enable = void > struct BufferConversionChecker;
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
 		void operator()()
@@ -336,7 +336,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
@@ -371,7 +371,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
@@ -407,7 +407,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PFSrc >
+	template< PixelFormat PFSrc >
 	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != PixelFormat::eD24S8 >::type >
 	{
 		void operator()()
@@ -437,7 +437,7 @@ namespace
 		}
 	};
 
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	void CheckBufferConversions()
 	{
 		BufferConversionChecker< PF >()();

@@ -126,6 +126,14 @@ namespace Castor3D
 			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 			m_rtotPipelineCube.m_sampler = l_sampler;
 
+			l_sampler = GetRenderSystem()->GetEngine()->GetSamplerCache().Add( cuT( "ContextPlace" ) );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
+			l_sampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
+			l_sampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			l_sampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+			m_rtotPipelinePlane.m_sampler = l_sampler;
+
 			DoEndCurrent();
 		}
 
@@ -246,10 +254,12 @@ namespace Castor3D
 
 		p_pipeline.GetProgram().BindUbos();
 
-		if ( p_texture.Bind( 0 ) )
+		if ( p_texture.Bind( 0u ) )
 		{
+			m_rtotPipelinePlane.m_sampler->Bind( 0u );
 			p_geometryBuffers.Draw( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() ), 0 );
-			p_texture.Unbind( 0 );
+			m_rtotPipelinePlane.m_sampler->Unbind( 0u );
+			p_texture.Unbind( 0u );
 		}
 
 		p_pipeline.GetProgram().UnbindUbos();
@@ -280,10 +290,12 @@ namespace Castor3D
 
 		p_pipeline.GetProgram().BindUbos();
 
-		if ( p_texture.Bind( 0 ) )
+		if ( p_texture.Bind( 0u ) )
 		{
+			m_rtotPipelinePlane.m_sampler->Bind( 0u );
 			p_geometryBuffers.Draw( uint32_t( m_rtotPipelinePlane.m_arrayVertex.size() ), 0 );
-			p_texture.Unbind( 0 );
+			m_rtotPipelinePlane.m_sampler->Unbind( 0u );
+			p_texture.Unbind( 0u );
 		}
 
 		p_pipeline.GetProgram().UnbindUbos();
@@ -318,12 +330,12 @@ namespace Castor3D
 
 		p_pipeline.GetProgram().BindUbos();
 
-		if ( p_texture.Bind( 0 ) )
+		if ( p_texture.Bind( 0u ) )
 		{
-			m_rtotPipelineCube.m_sampler->Bind( 0 );
+			m_rtotPipelineCube.m_sampler->Bind( 0u );
 			p_geometryBuffers.Draw( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() ), 0 );
-			m_rtotPipelineCube.m_sampler->Unbind( 0 );
-			p_texture.Unbind( 0 );
+			m_rtotPipelineCube.m_sampler->Unbind( 0u );
+			p_texture.Unbind( 0u );
 		}
 
 		p_pipeline.GetProgram().UnbindUbos();
@@ -366,12 +378,12 @@ namespace Castor3D
 
 		p_pipeline.GetProgram().BindUbos();
 
-		if ( p_texture.Bind( 0 ) )
+		if ( p_texture.Bind( 0u ) )
 		{
-			m_rtotPipelineCube.m_sampler->Bind( 0 );
+			m_rtotPipelineCube.m_sampler->Bind( 0u );
 			p_geometryBuffers.Draw( uint32_t( m_rtotPipelineCube.m_arrayVertex.size() ), 0 );
-			m_rtotPipelineCube.m_sampler->Unbind( 0 );
-			p_texture.Unbind( 0 );
+			m_rtotPipelineCube.m_sampler->Unbind( 0u );
+			p_texture.Unbind( 0u );
 		}
 
 		p_pipeline.GetProgram().UnbindUbos();

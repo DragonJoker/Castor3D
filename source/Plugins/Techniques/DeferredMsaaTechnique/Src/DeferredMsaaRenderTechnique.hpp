@@ -40,6 +40,7 @@ namespace DeferredMsaa
 		eTangent,
 		eSpecular,
 		eEmissive,
+		eInfos,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	/*!
@@ -104,6 +105,10 @@ namespace DeferredMsaa
 
 	protected:
 		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaqueDepthMaps
+		 */
+		void DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
+		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
 		bool DoCreate()override;
@@ -158,6 +163,30 @@ namespace DeferredMsaa
 		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaquePipeline
 		 */
 		void DoUpdateOpaquePipeline( Castor3D::RenderPipeline & p_pipeline, Castor3D::DepthMapArray & p_depthMaps )const override;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
+		 */
+		Castor::String DoGetLightPassVertexShaderSource(
+			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_textureFlags	A combination of TextureChannel
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
+		 */
+		Castor::String DoGetLightPassPixelShaderSource(
+			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
+			uint8_t p_sceneFlags )const;
 		/**
 		 *\~english
 		 *\brief		Creates deferred rendering related stuff.
@@ -224,28 +253,30 @@ namespace DeferredMsaa
 		void DoCleanupMsaa();
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ProgramFlag
+		 *\brief		Binds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
 		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_programFlags	Une combinaison de ProgramFlag
+		 *\brief		Active les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
 		 */
-		Castor::String DoGetLightPassVertexShaderSource(
-			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const;
+		void DoBindDepthMaps( uint32_t p_startIndex );
 		/**
 		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_textureFlags	A combination of TextureChannel
+		 *\brief		Unbinds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
 		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_textureFlags	Une combinaison de TextureChannel
+		 *\brief		Désactive les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
 		 */
-		Castor::String DoGetLightPassPixelShaderSource(
-			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
-			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
-			uint8_t p_sceneFlags )const;
+		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
+		bool DoCreateGeometryPass();
+		bool DoCreateLightPass();
+		void DoDestroyGeometryPass();
+		void DoDestroyLightPass();
+		bool DoInitialiseGeometryPass();
+		bool DoInitialiseLightPass( uint32_t & p_index );
+		void DoCleanupGeometryPass();
+		void DoCleanupLightPass();
 
 	protected:
 		struct LightPassProgram
@@ -292,9 +323,6 @@ namespace DeferredMsaa
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;

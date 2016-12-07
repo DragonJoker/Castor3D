@@ -224,16 +224,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_nodes		The scene render nodes.
-		 *\param[in]	p_depthMaps	The depth (shadows and other) maps.
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
+		 *\param[in]	p_nodes					The scene render nodes.
+		 *\param[in]	p_opaqueDepthMaps		The depth (shadows and other) maps for opaque nodes.
+		 *\param[in]	p_transparentDepthMaps	The depth (shadows and other) maps for transparent nodes.
+		 *\param[in]	p_frameTime				The time elapsed since last frame was rendered.
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
-		 *\param[in]	p_depthMaps	Les textures de profondeur (ombres et autres).
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\param[in]	p_nodes					Les noeuds de rendu de la scène.
+		 *\param[in]	p_opaqueDepthMaps		Les textures de profondeur (ombres et autres) pour les noeuds opaques.
+		 *\param[in]	p_transparentDepthMaps	Les textures de profondeur (ombres et autres) pour les noeuds transparents.
+		 *\param[in]	p_frameTime				Le temps écoulé depuis le rendu de la dernière frame.
 		 */
-		C3D_API void DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_depthMaps, uint32_t p_frameTime );
+		C3D_API void DoRender( SceneRenderNodes & p_nodes, DepthMapArray & p_opaqueDepthMaps, DepthMapArray & p_transparentDepthMaps, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Renders opaque render nodes.
@@ -498,6 +500,24 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderPass::DoPrepareTransparentBackPipeline
 		 */
 		C3D_API void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
+		/**
+		 *\~english
+		 *\brief		Retrieves the depth maps for opaque nodes.
+		 *\param[out]	p_depthMaps	Receives the depth maps.
+		 *\~french
+		 *\brief		Récupère les textures de profondeur pour les noeuds opaques.
+		 *\param[out]	p_depthMaps	Reçoit les textures.
+		 */
+		C3D_API virtual void DoGetOpaqueDepthMaps( DepthMapArray & p_depthMaps );
+		/**
+		 *\~english
+		 *\brief		Retrieves the depth maps for transparent nodes.
+		 *\param[out]	p_depthMaps	Receives the depth maps.
+		 *\~french
+		 *\brief		Récupère les textures de profondeur pour les noeuds transparents.
+		 *\param[out]	p_depthMaps	Reçoit les textures.
+		 */
+		C3D_API virtual void DoGetTransparentDepthMaps( DepthMapArray & p_depthMaps );
 		/**
 		 *\~english
 		 *\brief		Creation function

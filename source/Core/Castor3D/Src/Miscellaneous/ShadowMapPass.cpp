@@ -101,10 +101,10 @@ namespace Castor3D
 	{
 	}
 
-	bool ShadowMapPass::Initialise( Size const & p_size )
+	bool ShadowMapPass::Initialise()
 	{
 		bool l_return = true;
-		Size const l_size{ 1024, 1024 };
+		auto l_size = m_shadowMap.GetTexture()->GetDimensions();
 
 		if ( !m_frameBuffer )
 		{
@@ -251,18 +251,7 @@ namespace Castor3D
 		{
 			if ( !p_renderNodes.empty() && p_submesh.HasMatrixBuffer() )
 			{
-				uint32_t l_count = uint32_t( p_renderNodes.size() );
-				auto & l_matrixBuffer = p_submesh.GetMatrixBuffer();
-				uint8_t * l_buffer = l_matrixBuffer.data();
-				const uint32_t l_stride = 16 * sizeof( real );
-
-				for ( auto const & l_renderNode : p_renderNodes )
-				{
-					std::memcpy( l_buffer, l_renderNode.m_sceneNode.GetDerivedTransformationMatrix().const_ptr(), l_stride );
-					l_buffer += l_stride;
-				}
-
-				l_matrixBuffer.Upload( 0u, l_matrixBuffer.GetSize(), l_matrixBuffer.data() );
+				auto l_count = DoCopyNodesMatrices( p_renderNodes, p_submesh.GetMatrixBuffer() );
 				auto l_depthMaps = DepthMapArray{};
 				p_renderNodes[0].BindPass( l_depthMaps, MASK_MTXMODE_MODEL );
 				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );

@@ -36,7 +36,7 @@ namespace Castor
 	\~french
 	\brief		Buffer de pixels avec le format de pixel en argument template
 	*/
-	template< TPL_PIXEL_FORMAT PF >
+	template< PixelFormat PF >
 	class PxBuffer
 		: public PxBufferBase
 	{

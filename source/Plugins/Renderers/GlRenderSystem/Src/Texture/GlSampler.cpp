@@ -60,11 +60,14 @@ namespace GlRender
 
 	bool GlSampler::Bind( uint32_t p_index )const
 	{
+		glTrackSampler( GetGlName(), p_index );
 		return GetOpenGl().BindSampler( p_index, GetGlName() );
 	}
 
 	void GlSampler::Unbind( uint32_t p_index )const
 	{
+		GetOpenGl().BindSampler( p_index, 0u );
+		glTrackSampler( 0u, p_index );
 	}
 
 	void GlSampler::DoAdjustMinMipModes( GlInterpolationMode & p_min, GlInterpolationMode & p_mip )

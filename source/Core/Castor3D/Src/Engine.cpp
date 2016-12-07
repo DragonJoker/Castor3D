@@ -196,9 +196,16 @@ namespace Castor3D
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eLinear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eLinear );
 			m_defaultSampler->SetInterpolationMode( InterpolationFilter::eMip, InterpolationMode::eLinear );
+			m_defaultSampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			m_defaultSampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			m_defaultSampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
+
 			m_lightsSampler = m_samplerCache->Add( cuT( "LightsSampler" ) );
 			m_lightsSampler->SetInterpolationMode( InterpolationFilter::eMin, InterpolationMode::eNearest );
 			m_lightsSampler->SetInterpolationMode( InterpolationFilter::eMag, InterpolationMode::eNearest );
+			m_lightsSampler->SetWrappingMode( TextureUVW::eU, WrapMode::eClampToEdge );
+			m_lightsSampler->SetWrappingMode( TextureUVW::eV, WrapMode::eClampToEdge );
+			m_lightsSampler->SetWrappingMode( TextureUVW::eW, WrapMode::eClampToEdge );
 
 			DoLoadCoreData();
 		}

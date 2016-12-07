@@ -142,6 +142,7 @@ namespace Castor
 		: m_impl( nullptr )
 	{
 		auto l_lock = make_unique_lock( m_mutex );
+		m_headers[size_t( LogType::eTrace )] = cuT( "***TRACE*** " );
 		m_headers[size_t( LogType::eDebug )] = cuT( "***DEBUG*** " );
 		m_headers[size_t( LogType::eInfo )] = String();
 		m_headers[size_t( LogType::eWarning )] = cuT( "***WARNING*** " );
@@ -220,6 +221,31 @@ namespace Castor
 		{
 			GetSingleton().DoSetFileName( p_logFilePath, p_eLogType );
 		}
+	}
+
+	void Logger::LogTrace( std::string const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eTrace, p_msg );
+	}
+
+	void Logger::LogTrace( std::ostream const & p_msg )
+	{
+		auto l_sbuf = p_msg.rdbuf();
+		std::stringstream l_ss;
+		l_ss << l_sbuf;
+		LogTrace( l_ss.str() );
+	}
+
+	void Logger::LogTrace( std::wstring const & p_msg )
+	{
+		GetSingleton().DoPushMessage( LogType::eTrace, p_msg );
+	}
+
+	void Logger::LogTrace( std::wostream const & p_msg )
+	{
+		std::wstringstream l_ss;
+		l_ss << p_msg.rdbuf();
+		LogTrace( l_ss.str() );
 	}
 
 	void Logger::LogDebug( std::string const & p_msg )

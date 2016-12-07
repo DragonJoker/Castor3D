@@ -35,6 +35,7 @@ namespace GlRender
 	{
 		if ( ObjectType::Bind() )
 		{
+			glCheckTextureUnits();
 			if ( m_indexBuffer )
 			{
 				GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ) );
@@ -54,6 +55,7 @@ namespace GlRender
 	{
 		if ( ObjectType::Bind() )
 		{
+			glCheckTextureUnits();
 			if ( m_indexBuffer )
 			{
 				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );

@@ -40,6 +40,7 @@ namespace Deferred
 		eTangent,
 		eSpecular,
 		eEmissive,
+		eInfos,
 		CASTOR_SCOPED_ENUM_BOUNDS( ePosition ),
 	};
 	/*!
@@ -103,6 +104,10 @@ namespace Deferred
 		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem & p_renderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
+		/**
+		 *\copydoc		Castor3D::RenderTechnique::DoGetOpaqueDepthMaps
+		 */
+		void DoGetOpaqueDepthMaps( Castor3D::DepthMapArray & p_depthMaps )override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
@@ -182,8 +187,34 @@ namespace Deferred
 			Castor::FlagCombination< Castor3D::TextureChannel > const & p_textureFlags,
 			Castor::FlagCombination< Castor3D::ProgramFlag > const & p_programFlags,
 			uint8_t p_sceneFlags )const;
+		/**
+		 *\~english
+		 *\brief		Binds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
+		 *\~french
+		 *\brief		Active les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
+		 */
+		void DoBindDepthMaps( uint32_t p_startIndex );
+		/**
+		 *\~english
+		 *\brief		Unbinds the depth maps, beginning at p_startIndex.
+		 *\param[in]	p_startIndex	The starting index.
+		 *\~french
+		 *\brief		Désactive les textures de profondeur, en commençant à p_startIndex.
+		 *\param[in]	p_textureFlags	L'index de départ.
+		 */
+		void DoUnbindDepthMaps( uint32_t p_startIndex )const;
+		bool DoCreateGeometryPass();
+		bool DoCreateLightPass();
+		void DoDestroyGeometryPass();
+		void DoDestroyLightPass();
+		bool DoInitialiseGeometryPass();
+		bool DoInitialiseLightPass( uint32_t & p_index );
+		void DoCleanupGeometryPass();
+		void DoCleanupLightPass();
 
-	protected:
+	private:
 		struct LightPassProgram
 		{
 			//!\~english	The shader program used to render lights.
@@ -206,7 +237,7 @@ namespace Deferred
 			Castor3D::RenderPipelineSPtr m_pipeline;
 		};
 
-	protected:
+	private:
 		//!\~english	The various textures.
 		//!\~french		Les diverses textures.
 		std::array< Castor3D::TextureUnitUPtr, size_t( DsTexture::eCount ) > m_lightPassTextures;
@@ -228,9 +259,6 @@ namespace Deferred
 		//!\~english	Buffer elements declaration.
 		//!\~french		Déclaration des éléments d'un vertex.
 		Castor3D::BufferDeclaration m_declaration;
-		//!\~english	Vertex array (quad definition).
-		//!\~french		Tableau de vertex (définition du quad).
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english	The vertex buffer.
 		//!\~french		Le tampon de sommets.
 		Castor3D::VertexBufferSPtr m_vertexBuffer;

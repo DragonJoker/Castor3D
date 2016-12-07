@@ -396,6 +396,34 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\param[in]	p_renderNodes	The instanced nodes.
+		 *\param[in]	p_matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\param[in]	p_renderNodes	Les noeuds instanciés.
+		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
+		 */
+		uint32_t DoCopyNodesMatrices(
+			StaticGeometryRenderNodeArray const & p_renderNodes,
+			VertexBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Copies the instanced nodes model matrices into given matrix buffer.
+		 *\remarks		The nodes which are copied will be registered in the rendered nodes list.
+		 *\param[in]	p_renderNodes	The instanced nodes.
+		 *\param[in]	p_matrixBuffer	The matrix buffer.
+		 *\~french
+		 *\brief		Copie les matrices de noeuds instanciés dans le tampon de matrices donné.
+		 *\remarks		Les noeuds pour lesquels les matrices sont copiées seront enregistrés dans la liste des noeuds dessinés.
+		 *\param[in]	p_renderNodes	Les noeuds instanciés.
+		 *\param[in]	p_matrixBuffer	Le tampon de matrices.
+		 */
+		uint32_t DoRegisterCopyNodesMatrices(
+			StaticGeometryRenderNodeArray const & p_renderNodes,
+			VertexBuffer & p_matrixBuffer );
+		/**
+		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags.
 		 *\param[in]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in]	p_programFlags	A combination of ProgramFlag.
