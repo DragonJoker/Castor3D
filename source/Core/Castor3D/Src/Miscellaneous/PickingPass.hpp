@@ -240,9 +240,10 @@ namespace Castor3D
 		 */
 		void DoPrepareTransparentBackPipeline( ShaderProgram & p_program, PipelineFlags const & p_flags )override;
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCompleteTransparentProgramFlags
+		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
 		 */
-		void DoCompleteTransparentProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 
 	private:
 		using CameraQueueMap = std::map< Camera const *, RenderQueue >;

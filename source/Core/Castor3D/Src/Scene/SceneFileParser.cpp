@@ -512,7 +512,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( uint32_t( CSCNSection::eObject ), cuT( "material" ), Parser_ObjectMaterial, { MakeParameter< ParameterType::eName >() } );
 	AddParser( uint32_t( CSCNSection::eObject ), cuT( "materials" ), Parser_ObjectMaterials );
 	AddParser( uint32_t( CSCNSection::eObject ), cuT( "cast_shadows" ), Parser_ObjectCastShadows, { MakeParameter< ParameterType::eBool >() } );
-	AddParser( uint32_t( CSCNSection::eObject ), cuT( "receives_shadows" ), Parser_ObjectReceivesShadows, { MakeParameter< ParameterType::eBool >() } );
+	AddParser( uint32_t( CSCNSection::eObject ), cuT( "receive_shadows" ), Parser_ObjectReceivesShadows, { MakeParameter< ParameterType::eBool >() } );
 	AddParser( uint32_t( CSCNSection::eObject ), cuT( "}" ), Parser_ObjectEnd );
 
 	AddParser( uint32_t( CSCNSection::eObjectMaterials ), cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ParameterType::eUInt16 >(), MakeParameter< ParameterType::eName >() } );

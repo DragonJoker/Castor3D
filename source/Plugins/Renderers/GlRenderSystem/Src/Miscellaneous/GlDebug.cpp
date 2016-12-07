@@ -59,6 +59,7 @@ namespace GlRender
 		}
 
 		FilterMessage( 0x00020072 );
+		// TODO: Investigate on why I get this noisy message
 		FilterMessage( 0x00020096 );
 	}
 

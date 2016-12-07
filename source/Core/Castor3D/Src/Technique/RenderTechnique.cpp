@@ -849,7 +849,8 @@ namespace Castor3D
 		DoRenderNonInstanced< false >( *this, *m_renderTarget.GetCamera(), p_nodes, p_depthMaps, p_register, m_renderedObjects );
 	}
 
-	void RenderTechnique::DoCompleteTransparentProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
+	void RenderTechnique::DoUpdateTransparentFlags( FlagCombination< TextureChannel > & p_textureFlags
+		, FlagCombination< ProgramFlag > & p_programFlags )const
 	{
 		AddFlag( p_programFlags, ProgramFlag::eLighting );
 	}

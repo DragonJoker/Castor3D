@@ -203,9 +203,13 @@ namespace Castor3D
 
 	void ShaderProgramCache::CreateTextureVariables(
 		ShaderProgram & p_shader,
-		FlagCombination< TextureChannel > const & p_textureFlags )const
+		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< ProgramFlag > const & p_programFlags )const
 	{
-		p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
+		if ( CheckFlag( p_programFlags, ProgramFlag::eLighting ) )
+		{
+			p_shader.CreateFrameVariable< OneIntFrameVariable >( ShaderProgram::Lights, ShaderType::ePixel );
+		}
 
 		if ( CheckFlag( p_textureFlags, TextureChannel::eAmbient ) )
 		{
@@ -300,7 +304,7 @@ namespace Castor3D
 			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreateTextureVariables( *l_return, p_textureFlags );
+			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
 
 			if ( CheckFlag( p_programFlags, ProgramFlag::eSkinning )
 				 || CheckFlag( p_programFlags, ProgramFlag::eMorphing ) )
@@ -419,7 +423,7 @@ namespace Castor3D
 			CreateSceneBuffer( *l_return, p_programFlags, ShaderTypeFlag::eVertex | ShaderTypeFlag::ePixel );
 			CreatePassBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
 			CreateModelBuffer( *l_return, p_programFlags, ShaderTypeFlag::ePixel );
-			CreateTextureVariables( *l_return, p_textureFlags );
+			CreateTextureVariables( *l_return, p_textureFlags, p_programFlags );
 			auto & l_billboardUbo = l_return->CreateFrameVariableBuffer( ShaderProgram::BufferBillboards, ShaderTypeFlag::eVertex );
 			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::Dimensions );
 			l_billboardUbo.CreateVariable< Point2iFrameVariable >( ShaderProgram::WindowSize );

@@ -295,6 +295,13 @@ namespace DeferredMsaa
 		return true;
 	}
 
+	void RenderTechnique::DoUpdateOpaqueFlags( FlagCombination< TextureChannel > & p_textureFlags
+		, FlagCombination< ProgramFlag > & p_programFlags )const
+	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_programFlags, ProgramFlag::eShadows );
+	}
+
 	String RenderTechnique::DoGetOpaquePixelShaderSource(
 		FlagCombination< TextureChannel > const & p_textureFlags,
 		FlagCombination< ProgramFlag > const & p_programFlags,

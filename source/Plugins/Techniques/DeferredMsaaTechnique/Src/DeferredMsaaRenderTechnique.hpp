@@ -153,6 +153,11 @@ namespace DeferredMsaa
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
 		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaqueFlags
+		 */
+		void DoUpdateOpaqueFlags( Castor::FlagCombination< Castor3D::TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
+		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */
 		Castor::String DoGetOpaquePixelShaderSource(
