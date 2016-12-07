@@ -266,22 +266,16 @@ namespace Fxaa
 		if ( l_attach && l_attach->GetAttachmentType() == AttachmentType::eTexture )
 		{
 			m_pipeline->Apply();
-			bool l_return = m_surface.m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			m_surface.m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			auto l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
+			m_surface.m_fbo->Clear();
+			m_mapDiffuse->SetValue( 0 );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, *m_pipeline );
+			m_surface.m_fbo->Unbind();
 
-			if ( l_return )
-			{
-				m_surface.m_fbo->Clear();
-				m_mapDiffuse->SetValue( 0 );
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_surface.m_size, *l_texture, *m_pipeline );
-				m_surface.m_fbo->Unbind();
-			}
-
-			if ( p_framebuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
-			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
-				p_framebuffer.Unbind();
-			}
+			p_framebuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture->GetDimensions(), *m_surface.m_colourTexture.GetTexture() );
+			p_framebuffer.Unbind();
 		}
 
 		return true;

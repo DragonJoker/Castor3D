@@ -29,9 +29,9 @@ namespace GlRender
 	}
 
 	template< typename Traits >
-	bool GlTextureStorage< Traits >::Bind( uint32_t p_index )const
+	void GlTextureStorage< Traits >::Bind( uint32_t p_index )const
 	{
-		return m_impl.Bind( *this, p_index );
+		m_impl.Bind( *this, p_index );
 	}
 
 	template< typename Traits >

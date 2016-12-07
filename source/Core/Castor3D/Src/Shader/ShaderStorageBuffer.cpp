@@ -34,12 +34,8 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = m_gpuBuffer->InitialiseStorage( p_size, p_type, p_nature );
-		}
-
-		if ( l_return )
-		{
-			l_return = m_gpuBuffer->InitialiseBindingPoint( p_index );
+			m_gpuBuffer->InitialiseStorage( p_size, p_type, p_nature );
+			m_gpuBuffer->InitialiseBindingPoint( p_index );
 		}
 
 		return l_return;
@@ -66,28 +62,28 @@ namespace Castor3D
 		m_gpuBuffer->Unlock();
 	}
 
-	bool ShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer )
+	void ShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
+		m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
 	}
 
-	bool ShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer )
+	void ShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Download( p_offset, p_count, p_buffer );
+		m_gpuBuffer->Download( p_offset, p_count, p_buffer );
 	}
 
-	bool ShaderStorageBuffer::Bind()
+	void ShaderStorageBuffer::Bind()
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Bind();
+		m_gpuBuffer->Bind();
 	}
 
-	bool ShaderStorageBuffer::BindTo( uint32_t p_point )
+	void ShaderStorageBuffer::BindTo( uint32_t p_point )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->InitialiseBindingPoint( p_point );
+		m_gpuBuffer->InitialiseBindingPoint( p_point );
 	}
 
 	void ShaderStorageBuffer::Unbind()
@@ -96,9 +92,9 @@ namespace Castor3D
 		m_gpuBuffer->Unbind();
 	}
 
-	bool ShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )
+	void ShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Copy( p_src, p_size );
+		m_gpuBuffer->Copy( p_src, p_size );
 	}
 }

@@ -35,13 +35,13 @@ namespace GlRender
 {
 	class GlFrameBuffer
 		: public Castor3D::FrameBuffer
-		, private Bindable< std::function< bool( int, uint32_t * ) >
-			, std::function< bool( int, uint32_t const * ) >
-			, std::function< bool( uint32_t ) > >
+		, private Bindable< std::function< void( int, uint32_t * ) >
+			, std::function< void( int, uint32_t const * ) >
+			, std::function< void( uint32_t ) > >
 	{
-		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >
-			, std::function< bool( int, uint32_t const * ) >
-			, std::function< bool( uint32_t ) > >;
+		using BindableType = Bindable< std::function< void( int, uint32_t * ) >
+			, std::function< void( int, uint32_t const * ) >
+			, std::function< void( uint32_t ) > >;
 
 	public:
 		/**
@@ -85,7 +85,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
+		void DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
@@ -116,7 +116,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		bool DoBind( Castor3D::FrameBufferTarget p_target )const override;
+		void DoBind( Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */
@@ -124,14 +124,14 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		bool DoBlitInto(
+		void DoBlitInto(
 			Castor3D::FrameBuffer const & p_buffer,
 			Castor::Rectangle const & p_rect,
 			Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
 		 */
-		bool DoStretchInto(
+		void DoStretchInto(
 			Castor3D::FrameBuffer const & p_buffer,
 			Castor::Rectangle const & p_rectSrc,
 			Castor::Rectangle const & p_rectDst,

@@ -118,14 +118,12 @@ namespace Castor3D
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_target	The frame buffer binding target
 		 *\param[in]	p_mode		The frame buffer binding mode
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_target	La cible d'activation du tampon d'image
 		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( FrameBufferMode p_mode = FrameBufferMode::eAutomatic, FrameBufferTarget p_target = FrameBufferTarget::eBoth )const;
+		C3D_API void Bind( FrameBufferMode p_mode = FrameBufferMode::eAutomatic, FrameBufferTarget p_target = FrameBufferTarget::eBoth )const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -139,15 +137,13 @@ namespace Castor3D
 		 *\param[in]	p_buffer		The buffer receiving this one
 		 *\param[in]	p_rect			The rectangle
 		 *\param[in]	p_components	Bitwise OR of BufferComponent indicating which buffers are to be copied
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci
 		 *\param[in]	p_rect			Le rectangle
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool BlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const;
+		C3D_API void BlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const;
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
@@ -157,7 +153,6 @@ namespace Castor3D
 		 *\param[in]	p_rectDst		The destination rectangle.
 		 *\param[in]	p_components	Bitwise OR of BufferComponent indicating which buffers are to be copied.
 		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Stretche ce tampon dans celui donné.
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
@@ -165,9 +160,8 @@ namespace Castor3D
 		 *\param[in]	p_rectDst		Le rectangle destination.
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier.
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool StretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const;
+		C3D_API void StretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const;
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
@@ -203,7 +197,6 @@ namespace Castor3D
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
 		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
@@ -211,9 +204,8 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
 		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
+		C3D_API void Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
@@ -221,44 +213,38 @@ namespace Castor3D
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
 		 *\param[in]	p_layer		The associated layer, if p_dimension equal TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
 		 *\param[in]	p_layer		La couche associée, si p_dimension vaut TextureType::eThreeDimensions or TextureType::eTwoDimensionsArray
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
+		C3D_API void Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
 		 *\param[in]	p_point			The attachment point
 		 *\param[in]	p_index			The attachment index
 		 *\param[in]	p_renderBuffer	The render buffer
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point			Le point d'attache
 		 *\param[in]	p_index			L'index d'attache
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer );
+		C3D_API void Attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
 		 *\param[in]	p_point			The attachment point
 		 *\param[in]	p_renderBuffer	The render buffer
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point			Le point d'attache
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer );
+		C3D_API void Attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a buffer attached at given attachment point and index.
@@ -398,7 +384,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index d'attache.
 		 *\param[in]	p_buffer	Reçoit les données.
 		 */
-		C3D_API virtual bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
+		C3D_API virtual void DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
 
 	protected:
 		/**
@@ -425,13 +411,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_target	The frame buffer binding target
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_target	La cible d'activation du tampon d'image
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBind( FrameBufferTarget p_target )const = 0;
+		C3D_API virtual void DoBind( FrameBufferTarget p_target )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -451,9 +435,8 @@ namespace Castor3D
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci
 		 *\param[in]	p_rect			Le rectangle destination
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const = 0;
+		C3D_API virtual void DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< BufferComponent > const & p_components )const = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
@@ -472,12 +455,11 @@ namespace Castor3D
 		 *\param[in]	p_rectDst		Le rectangle destination.
 		 *\param[in]	p_components	OU logique de BufferComponent indiquant les buffers à copier.
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const = 0;
+		C3D_API virtual void DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const = 0;
 
 	private:
-		C3D_API bool DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );
+		C3D_API void DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );
 		C3D_API void DoDetach( AttachmentPoint p_point, uint8_t p_index );
 
 	protected:

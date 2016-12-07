@@ -116,9 +116,8 @@ namespace GlRender
 		}
 	}
 
-	bool GlPboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlPboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void GlPboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const
@@ -163,14 +162,10 @@ namespace GlRender
 		{
 			auto l_buffer = p_image.GetBuffer();
 
-			if ( m_uploadBuffer->Upload( 0u, l_buffer->size(), l_buffer->ptr() ) )
-			{
-				if ( m_uploadBuffer->Bind() )
-				{
-					DoUploadImage( p_storage, p_image, nullptr );
-					m_uploadBuffer->Unbind();
-				}
-			}
+			m_uploadBuffer->Upload( 0u, l_buffer->size(), l_buffer->ptr() );
+			m_uploadBuffer->Bind();
+			DoUploadImage( p_storage, p_image, nullptr );
+			m_uploadBuffer->Unbind();
 		}
 	}
 
@@ -190,11 +185,9 @@ namespace GlRender
 			auto l_buffer = p_image.GetBuffer();
 			OpenGl::PixelFmt l_glPixelFmt = l_storage.GetOpenGl().Get( l_buffer->format() );
 
-			if ( m_downloadBuffer->Bind() )
-			{
-				l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, nullptr );
-				m_downloadBuffer->Download( 0u, l_buffer->size(), l_buffer->ptr() );
-			}
+			m_downloadBuffer->Bind();
+			l_storage.GetOpenGl().GetTexImage( l_storage.GetGlType(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, nullptr );
+			m_downloadBuffer->Download( 0u, l_buffer->size(), l_buffer->ptr() );
 		}
 	}
 

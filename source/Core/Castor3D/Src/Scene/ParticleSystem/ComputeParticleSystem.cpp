@@ -179,7 +179,7 @@ namespace Castor3D
 				l_buffer += m_inputs.stride();
 			}
 
-			l_return = m_particlesStorages[m_in]->Upload( 0u, uint32_t( l_particles.size() ), l_particles.data() );
+			m_particlesStorages[m_in]->Upload( 0u, uint32_t( l_particles.size() ), l_particles.data() );
 		}
 
 		return l_return;
@@ -203,7 +203,7 @@ namespace Castor3D
 				l_value = l_distribution( l_device );
 			}
 
-			l_return = m_randomStorage->Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_buffer.data() ) );
+			m_randomStorage->Upload( 0u, l_size, reinterpret_cast< uint8_t * >( l_buffer.data() ) );
 		}
 
 		return l_return;

@@ -789,63 +789,58 @@ namespace Castor3D
 					IndexBuffer & l_indices = *m_indexBuffer;
 					VertexBuffer & l_vertices = *m_vertexBuffer;
 
-					if ( l_vertices.Bind() )
+					l_vertices.Bind();
+					l_indices.Bind();
+					m_cameraPosition = p_ptCameraPosition;
+					uint32_t l_uiIdxSize = l_indices.GetSize();
+					uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::eRead | AccessType::eWrite );
+
+					if ( l_pIdx )
 					{
-						if ( l_indices.Bind() )
+						struct stFACE_DISTANCE
 						{
-							m_cameraPosition = p_ptCameraPosition;
-							uint32_t l_uiIdxSize = l_indices.GetSize();
-							uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, AccessType::eRead | AccessType::eWrite );
+							uint32_t m_index[3];
+							double m_distance;
+						};
+						uint32_t l_stride = l_vertices.GetDeclaration().stride();
+						uint8_t * l_pVtx = l_vertices.data();
+						DECLARE_VECTOR( stFACE_DISTANCE, Face );
+						FaceArray l_arraySorted;
+						l_arraySorted.reserve( l_uiIdxSize / 3 );
 
-							if ( l_pIdx )
+						if ( l_pVtx )
+						{
+							for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
 							{
-								struct stFACE_DISTANCE
-								{
-									uint32_t m_index[3];
-									double m_distance;
-								};
-								uint32_t l_stride = l_vertices.GetDeclaration().stride();
-								uint8_t * l_pVtx = l_vertices.data();
-								DECLARE_VECTOR( stFACE_DISTANCE, Face );
-								FaceArray l_arraySorted;
-								l_arraySorted.reserve( l_uiIdxSize / 3 );
-
-								if ( l_pVtx )
-								{
-									for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
-									{
-										double l_dDistance = 0.0;
-										Coords3r l_pVtx1( reinterpret_cast< real * >( &l_pVtx[l_it[0] * l_stride] ) );
-										l_dDistance += point::distance_squared( l_pVtx1 - p_ptCameraPosition );
-										Coords3r l_pVtx2( reinterpret_cast< real * >( &l_pVtx[l_it[1] * l_stride] ) );
-										l_dDistance += point::distance_squared( l_pVtx2 - p_ptCameraPosition );
-										Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
-										l_dDistance += point::distance_squared( l_pVtx3 - p_ptCameraPosition );
-										stFACE_DISTANCE l_face = { { l_it[0], l_it[1], l_it[2] }, l_dDistance };
-										l_arraySorted.push_back( l_face );
-									}
-
-									std::sort( l_arraySorted.begin(), l_arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
-									{
-										return p_left.m_distance < p_right.m_distance;
-									} );
-
-									for ( FaceArrayConstIt l_it = l_arraySorted.begin(); l_it != l_arraySorted.end(); ++l_it )
-									{
-										*l_pIdx++ = l_it->m_index[0];
-										*l_pIdx++ = l_it->m_index[1];
-										*l_pIdx++ = l_it->m_index[2];
-									}
-								}
-
-								l_indices.Unlock();
+								double l_dDistance = 0.0;
+								Coords3r l_pVtx1( reinterpret_cast< real * >( &l_pVtx[l_it[0] * l_stride] ) );
+								l_dDistance += point::distance_squared( l_pVtx1 - p_ptCameraPosition );
+								Coords3r l_pVtx2( reinterpret_cast< real * >( &l_pVtx[l_it[1] * l_stride] ) );
+								l_dDistance += point::distance_squared( l_pVtx2 - p_ptCameraPosition );
+								Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
+								l_dDistance += point::distance_squared( l_pVtx3 - p_ptCameraPosition );
+								stFACE_DISTANCE l_face = { { l_it[0], l_it[1], l_it[2] }, l_dDistance };
+								l_arraySorted.push_back( l_face );
 							}
 
-							l_indices.Unbind();
+							std::sort( l_arraySorted.begin(), l_arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
+							{
+								return p_left.m_distance < p_right.m_distance;
+							} );
+
+							for ( FaceArrayConstIt l_it = l_arraySorted.begin(); l_it != l_arraySorted.end(); ++l_it )
+							{
+								*l_pIdx++ = l_it->m_index[0];
+								*l_pIdx++ = l_it->m_index[1];
+								*l_pIdx++ = l_it->m_index[2];
+							}
 						}
 
-						l_vertices.Unbind();
+						l_indices.Unlock();
 					}
+
+					l_indices.Unbind();
+					l_vertices.Unbind();
 				}
 			}
 		}

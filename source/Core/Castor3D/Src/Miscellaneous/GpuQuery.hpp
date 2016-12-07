@@ -77,12 +77,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Begins the query.
-		 *\return		\p true if everything is OK.
 		 *\~french
 		 *\brief		Démarre la requête.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Begin();
+		C3D_API void Begin();
 		/**
 		 *\~english
 		 *\brief		Ends the query.
@@ -95,17 +93,15 @@ namespace Castor3D
 		 *\brief		Retrieves query information.
 		 *\param[in]	p_infos	The information to retrieve.
 		 *\param[out]	p_param	Receives the result.
-		 *\return		\p true if the information was retrieved.
 		 *\~french
 		 *\brief		Récupère une information sur la requête.
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
 		 */
 		template< typename T >
-		inline bool GetInfos( QueryInfo p_infos, T & p_param )const
+		inline void GetInfos( QueryInfo p_infos, T & p_param )const
 		{
-			return DoGetInfos( p_infos, p_param );
+			DoGetInfos( p_infos, p_param );
 		}
 
 	protected:
@@ -128,12 +124,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Begins the query.
-		 *\return		\p true if everything is OK.
 		 *\~french
 		 *\brief		Démarre la requête.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBegin()const = 0;
+		C3D_API virtual void DoBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends the query.
@@ -146,53 +140,45 @@ namespace Castor3D
 		 *\brief		Retrieves query information.
 		 *\param[in]	p_infos	The information to retrieve.
 		 *\param[out]	p_param	Receives the result.
-		 *\return		\p true if the information was retrieved.
 		 *\~french
 		 *\brief		Récupère une information sur la requête.
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, int32_t & p_param )const = 0;
+		C3D_API virtual void DoGetInfos( QueryInfo p_infos, int32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
 		 *\param[in]	p_infos	The information to retrieve.
 		 *\param[out]	p_param	Receives the result.
-		 *\return		\p true if the information was retrieved.
 		 *\~french
 		 *\brief		Récupère une information sur la requête.
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, uint32_t & p_param )const = 0;
+		C3D_API virtual void DoGetInfos( QueryInfo p_infos, uint32_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
 		 *\param[in]	p_infos	The information to retrieve.
 		 *\param[out]	p_param	Receives the result.
-		 *\return		\p true if the information was retrieved.
 		 *\~french
 		 *\brief		Récupère une information sur la requête.
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, int64_t & p_param )const = 0;
+		C3D_API virtual void DoGetInfos( QueryInfo p_infos, int64_t & p_param )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves query information.
 		 *\param[in]	p_infos	The information to retrieve.
 		 *\param[out]	p_param	Receives the result.
-		 *\return		\p true if the information was retrieved.
 		 *\~french
 		 *\brief		Récupère une information sur la requête.
 		 *\param[in]	p_infos	L'information à récupérer.
 		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
 		 */
-		C3D_API virtual bool DoGetInfos( QueryInfo p_infos, uint64_t & p_param )const = 0;
+		C3D_API virtual void DoGetInfos( QueryInfo p_infos, uint64_t & p_param )const = 0;
 
 	protected:
 		//!\~english Tells if the query is active.	\~french Dit si la requête est active.

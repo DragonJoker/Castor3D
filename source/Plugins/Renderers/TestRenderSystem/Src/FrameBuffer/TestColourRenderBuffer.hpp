@@ -79,7 +79,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::ColourRenderBuffer::Bind
 		 */
-		virtual bool Bind();
+		virtual void Bind();
 		/**
 		 *\copydoc		Castor3D::ColourRenderBuffer::Unbind
 		 */

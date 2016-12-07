@@ -76,14 +76,12 @@ namespace Castor3D
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\param[in]	p_buffer	The frame buffer to bind.
 		 *\param[in]	p_target	The frame buffer binding target.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 *\param[in]	p_buffer	Le tampon d'image à activer.
 		 *\param[in]	p_target	La cible d'activation du tampon d'image.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
+		C3D_API virtual void Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -160,7 +158,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		C3D_API bool DoBind( Castor3D::FrameBufferTarget p_target )const override;
+		C3D_API void DoBind( Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */

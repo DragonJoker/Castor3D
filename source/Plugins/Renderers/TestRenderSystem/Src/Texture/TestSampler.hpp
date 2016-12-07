@@ -38,7 +38,7 @@ namespace TestRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( uint32_t p_index )const;
+		virtual void Bind( uint32_t p_index )const;
 		virtual void Unbind( uint32_t p_index )const;
 	};
 }

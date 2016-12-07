@@ -34,10 +34,6 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_gpuBuffer->InitialiseStorage( p_size, BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-		}
-
-		if ( l_return )
-		{
 			m_gpuBuffer->InitialiseBindingPoint( p_index );
 		}
 
@@ -65,22 +61,22 @@ namespace Castor3D
 		m_gpuBuffer->Unlock();
 	}
 
-	bool AtomicCounterBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint32_t const * p_buffer )
+	void AtomicCounterBuffer::Upload( uint32_t p_offset, uint32_t p_count, uint32_t const * p_buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
+		m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
 	}
 
-	bool AtomicCounterBuffer::Download( uint32_t p_offset, uint32_t p_count, uint32_t * p_buffer )
+	void AtomicCounterBuffer::Download( uint32_t p_offset, uint32_t p_count, uint32_t * p_buffer )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Download( p_offset, p_count, p_buffer );
+		m_gpuBuffer->Download( p_offset, p_count, p_buffer );
 	}
 
-	bool AtomicCounterBuffer::Bind()
+	void AtomicCounterBuffer::Bind()
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Bind();
+		m_gpuBuffer->Bind();
 	}
 
 	void AtomicCounterBuffer::Unbind()
@@ -89,9 +85,9 @@ namespace Castor3D
 		m_gpuBuffer->Unbind();
 	}
 
-	bool AtomicCounterBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )
+	void AtomicCounterBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )
 	{
 		REQUIRE( m_gpuBuffer );
-		return m_gpuBuffer->Copy( p_src, p_size );
+		m_gpuBuffer->Copy( p_src, p_size );
 	}
 }

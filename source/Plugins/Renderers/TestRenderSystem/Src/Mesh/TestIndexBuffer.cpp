@@ -25,19 +25,16 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
+	void TestIndexBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
 	{
-		return true;
 	}
 
-	bool TestIndexBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestIndexBuffer::InitialiseBindingPoint( uint32_t p_point )const
 	{
-		return true;
 	}
 
-	bool TestIndexBuffer::Bind()const
+	void TestIndexBuffer::Bind()const
 	{
-		return true;
 	}
 
 	void TestIndexBuffer::Unbind()const
@@ -53,18 +50,15 @@ namespace TestRender
 	{
 	}
 
-	bool TestIndexBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )const
+	void TestIndexBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )const
 	{
-		return true;
 	}
 
-	bool TestIndexBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint32_t const * p_buffer )const
+	void TestIndexBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint32_t const * p_buffer )const
 	{
-		return true;
 	}
 
-	bool TestIndexBuffer::Download( uint32_t p_offset, uint32_t p_size, uint32_t * p_buffer )const
+	void TestIndexBuffer::Download( uint32_t p_offset, uint32_t p_size, uint32_t * p_buffer )const
 	{
-		return true;
 	}
 }

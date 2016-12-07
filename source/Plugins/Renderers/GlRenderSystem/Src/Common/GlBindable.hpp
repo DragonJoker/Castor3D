@@ -112,11 +112,7 @@ namespace GlRender
 				{
 					if ( l_return )
 					{
-						l_return = Bind();
-					}
-
-					if ( l_return )
-					{
+						Bind();
 						Unbind();
 					}
 
@@ -147,10 +143,10 @@ namespace GlRender
 		@return
 			false if not bound successfully
 		*/
-		inline bool Bind()const
+		inline void Bind()const
 		{
 			REQUIRE( IsValid() );
-			return m_binder( GetGlName() );
+			m_binder( GetGlName() );
 		}
 
 		/** Unbinds the object on GPU

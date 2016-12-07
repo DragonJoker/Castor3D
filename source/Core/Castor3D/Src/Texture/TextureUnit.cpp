@@ -268,26 +268,30 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			auto l_return = m_pTexture->Bind( m_index );
+			m_pTexture->Bind( m_index );
 
-			if ( l_return && m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::eBuffer )
+			if ( m_changed && m_bAutoMipmaps && m_pTexture->GetType() != TextureType::eBuffer )
 			{
 				m_pTexture->GenerateMipmaps();
 				m_changed = false;
 			}
 
-			if ( l_return && GetSampler() )
+			auto l_sampler = GetSampler();
+
+			if ( l_sampler )
 			{
-				l_return = GetSampler()->Bind( m_index );
+				l_sampler->Bind( m_index );
 			}
 		}
 	}
 
 	void TextureUnit::Unbind()const
 	{
-		if ( GetSampler() )
+		auto l_sampler = GetSampler();
+
+		if ( l_sampler )
 		{
-			GetSampler()->Unbind( m_index );
+			l_sampler->Unbind( m_index );
 		}
 
 		if ( m_pTexture && m_pTexture->IsInitialised() )

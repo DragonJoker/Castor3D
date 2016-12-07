@@ -60,16 +60,17 @@ namespace GlRender
 
 	bool GlShaderProgram::Link()
 	{
-		bool l_return = DoBindTransformLayout();
+		DoBindTransformLayout();
 		ENSURE( GetGlName() != GlInvalidIndex );
 		int l_attached = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &l_attached );
+		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eAttachedShaders, &l_attached );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
-		l_return &= GetOpenGl().LinkProgram( GetGlName() );
+		GetOpenGl().LinkProgram( GetGlName() );
 		int l_linked = 0;
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
+		GetOpenGl().GetProgramiv( GetGlName(), GlShaderStatus::eLink, &l_linked );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
 		m_linkerLog = DoRetrieveLinkerLog();
+		bool l_return = false;
 
 		if ( l_linked && l_attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
@@ -378,10 +379,8 @@ namespace GlRender
 		return l_log;
 	}
 
-	bool GlShaderProgram::DoBindTransformLayout()
+	void GlShaderProgram::DoBindTransformLayout()
 	{
-		bool l_return = true;
-
 		if ( m_declaration.size() > 0 )
 		{
 			std::vector< char const * > l_varyings;
@@ -392,9 +391,7 @@ namespace GlRender
 				l_varyings.push_back( l_element.m_name.c_str() );
 			}
 
-			l_return = GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), GlAttributeLayout::eInterleaved );
+			GetOpenGl().TransformFeedbackVaryings( GetGlName(), int( l_varyings.size() ), l_varyings.data(), GlAttributeLayout::eInterleaved );
 		}
-
-		return l_return;
 	}
 }

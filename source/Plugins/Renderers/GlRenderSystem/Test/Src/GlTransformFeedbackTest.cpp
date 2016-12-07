@@ -314,7 +314,7 @@ namespace Testing
 
 			l_pipeline->Apply();
 			l_program->BindUbos();
-			CT_CHECK( l_transformFeedback->Bind() );
+			l_transformFeedback->Bind();
 			CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 			l_transformFeedback->Unbind();
 			CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
@@ -387,7 +387,7 @@ namespace Testing
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
 		l_pipeline->Apply();
-		CT_CHECK( l_transformFeedback->Bind() );
+		l_transformFeedback->Bind();
 		CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 		l_transformFeedback->Unbind();
 		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
@@ -468,13 +468,11 @@ namespace Testing
 		CT_CHECK( l_geometryBuffers->Initialise( { l_vboIn }, nullptr ) );
 
 		l_pipeline->Apply();
-		CT_CHECK( l_transformFeedback->Bind() );
+		l_transformFeedback->Bind();
 		CT_CHECK( l_geometryBuffers->Draw( 5, 0 ) );
 		l_transformFeedback->Unbind();
 		m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
-
 		CT_EQUAL( l_transformFeedback->GetWrittenPrimitives(), 5 );
-
 
 		l_geometryBuffers->Cleanup();
 		l_transformFeedback->Cleanup();
@@ -588,7 +586,7 @@ namespace Testing
 			l_vboOut.Unbind();
 
 			l_pipeline->Apply();
-			CT_CHECK( l_transformFeedback->Bind() );
+			l_transformFeedback->Bind();
 			CT_CHECK( l_geometryBuffers->Draw( std::max( 1u, l_transformFeedback->GetWrittenPrimitives() ), 0 ) );
 			l_transformFeedback->Unbind();
 			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();
@@ -717,7 +715,7 @@ namespace Testing
 			l_total->SetValue( float( l_totalTime ) );
 
 			l_pipeline->Apply();
-			CT_CHECK( l_transformFeedback[l_tfb]->Bind() );
+			l_transformFeedback[l_tfb]->Bind();
 			CT_CHECK( l_geometryBuffers[l_vtx]->Draw( std::max( 1u, l_transformFeedback[l_vtx]->GetWrittenPrimitives() ), 0 ) );
 			l_transformFeedback[l_tfb]->Unbind();
 			m_engine.GetRenderSystem()->GetMainContext()->SwapBuffers();

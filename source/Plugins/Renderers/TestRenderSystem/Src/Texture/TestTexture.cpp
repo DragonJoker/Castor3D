@@ -57,9 +57,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestTexture::DoBind( uint32_t p_index )const
+	void TestTexture::DoBind( uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void TestTexture::DoUnbind( uint32_t p_index )const

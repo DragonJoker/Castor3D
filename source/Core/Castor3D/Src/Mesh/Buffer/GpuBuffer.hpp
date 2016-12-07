@@ -87,26 +87,22 @@ namespace Castor3D
 		 *\param[in]	p_count		The buffer elements count.
 		 *\param[in]	p_type		Buffer access type.
 		 *\param[in]	p_nature	Buffer access nature.
-		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le stockage GPU du tampon.
 		 *\param[in]	p_count		Le nombre d'éléments du tampon.
 		 *\param[in]	p_type		Type d'accès du tampon.
 		 *\param[in]	p_nature	Nature d'accès du tampon.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const = 0;
+		virtual void InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the buffer's binding point.
 		 *\param[in]	p_index	The binding point.
-		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise le point d'attache du tampon.
 		 *\param[in]	p_index	Le point d'attache.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool InitialiseBindingPoint( uint32_t p_index )const = 0;
+		virtual void InitialiseBindingPoint( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it.
@@ -136,27 +132,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Bind()const = 0;
+		virtual void Bind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
 		 *\remarks		Used for instanciation.
 		 *\param[in]	p_instantiated	Tells if the buffer is instantiated.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
 		 *\remarks		Utilisé pour l'instanciation.
 		 *\param[in]	p_instantiated	Dit si le tampon est instantié.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Bind( bool p_instantiated )const
+		virtual void Bind( bool p_instantiated )const
 		{
-			return false;
 		}
 		/**
 		 *\~english
@@ -170,14 +161,12 @@ namespace Castor3D
 		 *\brief		Copies data from given buffer to this one.
 		 *\param[in]	p_src	The cource buffer.
 		 *\param[in]	p_size	The number of elements to copy.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size )const = 0;
+		virtual void Copy( GpuBuffer< T > const & p_src, uint32_t p_size )const = 0;
 		/**
 		 *\~english
 		 *\brief		Transfers data to the GPU buffer from RAM.
@@ -185,16 +174,14 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[in]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const = 0;
+		virtual void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
@@ -202,16 +189,14 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[out]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const = 0;
+		virtual void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const = 0;
 	};
 }
 

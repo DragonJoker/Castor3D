@@ -174,7 +174,7 @@ namespace Testing
 		CT_CHECK( l_program->Initialise() );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results;
-		CT_CHECK( l_storageBuffer.Download( 0u, uint32_t( l_results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( l_results.data() ) ) );
+		l_storageBuffer.Download( 0u, uint32_t( l_results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( l_results.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -207,7 +207,7 @@ namespace Testing
 		l_storage2.BindTo( 2u );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results1{ 0 };
-		CT_CHECK( l_storage2.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results1.data() ) ) );
+		l_storage2.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results1.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect1{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -220,7 +220,7 @@ namespace Testing
 		l_storage2.BindTo( 1u );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results2{ 0 };
-		CT_CHECK( l_storage1.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results2.data() ) ) );
+		l_storage1.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results2.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect2{
 			0, 0, 0, 0,
 			2, 4, 6, 8,
@@ -250,7 +250,7 @@ namespace Testing
 		CT_CHECK( l_program->Initialise() );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results;
-		CT_CHECK( l_storageBuffer.Download( 0u, uint32_t( l_results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( l_results.data() ) ) );
+		l_storageBuffer.Download( 0u, uint32_t( l_results.size() * sizeof( uint32_t ) ), reinterpret_cast< uint8_t * >( l_results.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -288,7 +288,7 @@ namespace Testing
 		l_storage2.BindTo( 2u );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results1{ 0 };
-		CT_CHECK( l_storage2.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results1.data() ) ) );
+		l_storage2.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results1.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect1{
 			0, 0, 0, 0,
 			1, 2, 3, 4,
@@ -302,7 +302,7 @@ namespace Testing
 		l_storage2.BindTo( 1u );
 		l_pipeline->Run( Point3ui{ 5u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eShaderStorageBuffer );
 		std::array< uint32_t, 5 * 4 > l_results2{ 0 };
-		CT_CHECK( l_storage1.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results2.data() ) ) );
+		l_storage1.Download( 0u, l_size, reinterpret_cast< uint8_t * >( l_results2.data() ) );
 		std::array< uint32_t, 5 * 4 > l_expect2{
 			0, 0, 0, 0,
 			2, 4, 6, 8,

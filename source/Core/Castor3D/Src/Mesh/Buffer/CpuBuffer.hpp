@@ -114,16 +114,14 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[in]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )
+		inline void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )
 		{
 			REQUIRE( m_gpuBuffer );
 			return m_gpuBuffer->Upload( p_offset, p_count, p_buffer );
@@ -131,12 +129,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Transfers all the CPU buffer to GPU.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère toutes les données du tampon CPU vers le GPU.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Upload()
+		inline void Upload()
 		{
 			return Upload( 0u, uint32_t( m_data.size() ), m_data.data() );
 		}
@@ -147,16 +143,14 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[out]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )
+		inline void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )
 		{
 			REQUIRE( m_gpuBuffer );
 			return m_gpuBuffer->Download( p_offset, p_count, p_buffer );
@@ -164,35 +158,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Transfers all the GPU buffer to CPU.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère toutes les données du tampon GPU vers le CPU.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Download()
+		inline void Download()
 		{
-			return Download( 0u, uint32_t( m_data.size() ), m_data.data() );
+			Download( 0u, uint32_t( m_data.size() ), m_data.data() );
 		}
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Bind()
+		inline void Bind()
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->Bind();
+			m_gpuBuffer->Bind();
 		}
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
 		inline void Unbind()
 		{
@@ -204,31 +192,27 @@ namespace Castor3D
 		 *\brief		Copies data from given buffer to this one.
 		 *\param[in]	p_src	The cource buffer.
 		 *\param[in]	p_size	The number of elements to copy.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Copy( GpuBuffer< T > const & p_src, uint32_t p_size )
+		inline void Copy( GpuBuffer< T > const & p_src, uint32_t p_size )
 		{
 			REQUIRE( m_gpuBuffer );
-			return m_gpuBuffer->Copy( p_src, p_size );
+			m_gpuBuffer->Copy( p_src, p_size );
 		}
 		/**
 		 *\~english
 		 *\brief		Copies data from given buffer to this one.
 		 *\param[in]	p_src	The cource buffer.
 		 *\param[in]	p_size	The number of elements to copy.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		inline bool Copy( CpuBuffer< T > const & p_src, uint32_t p_size )
+		inline void Copy( CpuBuffer< T > const & p_src, uint32_t p_size )
 		{
 			REQUIRE( p_src.m_gpuBuffer );
 			return Copy( *p_src.m_gpuBuffer, p_size );
@@ -401,12 +385,8 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = m_gpuBuffer->InitialiseStorage( uint32_t( m_data.size() ), p_type, p_nature );
-			}
-
-			if ( l_return )
-			{
-				l_return = m_gpuBuffer->Upload( 0u, uint32_t( m_data.size() ), m_data.data() );
+				m_gpuBuffer->InitialiseStorage( uint32_t( m_data.size() ), p_type, p_nature );
+				m_gpuBuffer->Upload( 0u, uint32_t( m_data.size() ), m_data.data() );
 			}
 
 			return l_return;

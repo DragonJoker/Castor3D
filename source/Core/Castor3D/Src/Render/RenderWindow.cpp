@@ -421,12 +421,10 @@ namespace Castor3D
 			m_toSave = false;
 		}
 
-		if ( m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw ) )
-		{
-			m_backBuffers->Clear();
-			m_context->RenderTexture( m_size, *l_texture );
-			m_backBuffers->Unbind();
-		}
+		m_backBuffers->Bind( p_eTargetBuffer, FrameBufferTarget::eDraw );
+		m_backBuffers->Clear();
+		m_context->RenderTexture( m_size, *l_texture );
+		m_backBuffers->Unbind();
 	}
 
 	void RenderWindow::DoUpdateSize()

@@ -25,9 +25,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestSampler::Bind( uint32_t p_index )const
+	void TestSampler::Bind( uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void TestSampler::Unbind( uint32_t p_index )const

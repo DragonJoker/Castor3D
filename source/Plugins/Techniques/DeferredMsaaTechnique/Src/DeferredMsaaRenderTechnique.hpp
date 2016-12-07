@@ -127,11 +127,11 @@ namespace DeferredMsaa
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender()override;
+		void DoBeginRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
-		bool DoBeginOpaqueRendering()override;
+		void DoBeginOpaqueRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
 		 */
@@ -139,7 +139,7 @@ namespace DeferredMsaa
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
 		 */
-		bool DoBeginTransparentRendering()override;
+		void DoBeginTransparentRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
 		 */

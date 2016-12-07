@@ -22,12 +22,8 @@ namespace GlRender
 			auto & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > & >( p_storage );
 			auto l_buffer = p_storage.GetOwner()->GetImage().GetBuffer();
 			m_glInternal = l_storage.GetOpenGl().GetInternal( l_buffer->format() );
-			l_return = m_glBuffer.InitialiseStorage( l_buffer->size(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
-
-			if ( l_return )
-			{
-				l_return = m_glBuffer.Upload( 0u, l_buffer->size(), l_buffer->const_ptr() );
-			}
+			m_glBuffer.InitialiseStorage( l_buffer->size(), BufferAccessType::eDynamic, BufferAccessNature::eDraw );
+			m_glBuffer.Upload( 0u, l_buffer->size(), l_buffer->const_ptr() );
 		}
 	}
 
@@ -36,10 +32,10 @@ namespace GlRender
 		m_glBuffer.Destroy();
 	}
 
-	bool GlTboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlTboTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
 		auto const & l_storage = static_cast< GlTextureStorage< GlTboTextureStorageTraits > const & >( p_storage );
-		return l_storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, m_glBuffer.GetGlName() );
+		l_storage.GetOpenGl().TexBuffer( GlTexDim::eBuffer, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
 	void GlTboTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const

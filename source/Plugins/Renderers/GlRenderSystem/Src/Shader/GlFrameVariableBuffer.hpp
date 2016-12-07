@@ -55,7 +55,7 @@ namespace GlRender
 		Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::FrameVariableType p_type, Castor::String const & p_name, uint32_t p_occurences = 1 )override;
 		bool DoInitialise()override;
 		void DoCleanup()override;
-		bool DoBind( uint32_t p_index )override;
+		void DoBind( uint32_t p_index )override;
 		void DoUnbind( uint32_t p_index )override;
 
 	private:

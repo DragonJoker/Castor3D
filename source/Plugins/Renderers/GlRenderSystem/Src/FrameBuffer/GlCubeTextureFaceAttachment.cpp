@@ -20,30 +20,32 @@ namespace GlRender
 	{
 	}
 
-	bool GlCubeTextureFaceAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
+	void GlCubeTextureFaceAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
 	{
 		FAILURE( "Can't call Blit for a cube face attachment" );
-		return false;
 	}
 
-	bool GlCubeTextureFaceAttachment::DoAttach()
+	void GlCubeTextureFaceAttachment::DoAttach()
 	{
 		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
 		auto l_texture = std::static_pointer_cast< GlTexture >( GetTexture() );
-		bool l_return{ false };
 
 		switch ( l_texture->GetType() )
 		{
 		case TextureType::eCube:
-			l_return = GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
+			GetOpenGl().FramebufferTexture2D( GlFrameBufferMode::eDefault, m_glAttachmentPoint, m_glFace, l_texture->GetGlName(), 0 );
 			break;
 
 		case TextureType::eCubeArray:
-			l_return = GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
+			GetOpenGl().FramebufferTextureLayer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, l_texture->GetGlName(), 0, GetLayer() * 6 + ( uint32_t( m_glFace ) - uint32_t( GlTexDim::ePositiveX ) ) );
+			break;
+
+		default:
+			FAILURE( cuT( "Unsupported texture type for this attachment type" ) );
 			break;
 		}
 
-		if ( l_return && m_glStatus == GlFramebufferStatus::eIncompleteMissingAttachment )
+		if ( m_glStatus == GlFramebufferStatus::eIncompleteMissingAttachment )
 		{
 			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
 
@@ -56,8 +58,6 @@ namespace GlRender
 		{
 			m_glStatus = GlFramebufferStatus::eUnsupported;
 		}
-
-		return l_return;
 	}
 
 	void GlCubeTextureFaceAttachment::DoDetach()

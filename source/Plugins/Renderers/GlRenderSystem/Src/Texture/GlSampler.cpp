@@ -58,10 +58,10 @@ namespace GlRender
 		ObjectType::Destroy();
 	}
 
-	bool GlSampler::Bind( uint32_t p_index )const
+	void GlSampler::Bind( uint32_t p_index )const
 	{
 		glTrackSampler( GetGlName(), p_index );
-		return GetOpenGl().BindSampler( p_index, GetGlName() );
+		GetOpenGl().BindSampler( p_index, GetGlName() );
 	}
 
 	void GlSampler::Unbind( uint32_t p_index )const

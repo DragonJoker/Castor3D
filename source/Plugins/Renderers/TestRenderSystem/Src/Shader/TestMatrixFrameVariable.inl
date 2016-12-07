@@ -29,13 +29,11 @@ namespace TestRender
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	bool TestMatrixFrameVariable< T, Rows, Columns >::Bind()const
+	void TestMatrixFrameVariable< T, Rows, Columns >::Bind()const
 	{
 		if ( Castor3D::FrameVariable::m_changed )
 		{
 			Castor3D::FrameVariable::m_changed = false;
 		}
-
-		return true;
 	}
 }

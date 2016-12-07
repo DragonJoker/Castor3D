@@ -33,41 +33,37 @@ namespace GlRender
 
 	bool GlGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
 	{
-		if ( ObjectType::Bind() )
-		{
-			glCheckTextureUnits();
-			if ( m_indexBuffer )
-			{
-				GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ) );
-			}
-			else
-			{
-				GetOpenGl().DrawArrays( m_glTopology, int( p_index ), int( p_size ) );
-			}
+		ObjectType::Bind();
+		glCheckTextureUnits();
 
-			ObjectType::Unbind();
+		if ( m_indexBuffer )
+		{
+			GetOpenGl().DrawElements( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ) );
+		}
+		else
+		{
+			GetOpenGl().DrawArrays( m_glTopology, int( p_index ), int( p_size ) );
 		}
 
+		ObjectType::Unbind();
 		return true;
 	}
 
 	bool GlGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
 	{
-		if ( ObjectType::Bind() )
-		{
-			glCheckTextureUnits();
-			if ( m_indexBuffer )
-			{
-				GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
-			}
-			else
-			{
-				GetOpenGl().DrawArraysInstanced( m_glTopology, int( p_index ), int( p_size ), int( p_count ) );
-			}
+		ObjectType::Bind();
+		glCheckTextureUnits();
 
-			ObjectType::Unbind();
+		if ( m_indexBuffer )
+		{
+			GetOpenGl().DrawElementsInstanced( m_glTopology, int( p_size ), GlType::eUnsignedInt, BUFFER_OFFSET( p_index ), int( p_count ) );
+		}
+		else
+		{
+			GetOpenGl().DrawArraysInstanced( m_glTopology, int( p_index ), int( p_size ), int( p_count ) );
 		}
 
+		ObjectType::Unbind();
 		return true;
 	}
 
@@ -82,11 +78,8 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().BindVertexArray( GetGlName() );
-		}
+			GetOpenGl().BindVertexArray( GetGlName() );
 
-		if ( l_return )
-		{
 			for ( auto & l_buffer : m_buffers )
 			{
 				GlAttributePtrArray l_attributes;

@@ -21,7 +21,6 @@ namespace Castor3D
 
 	bool PostEffect::PostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
 	{
-		bool l_return = false;
 		m_size = p_size;
 		m_colourTexture.SetIndex( p_index );
 
@@ -38,12 +37,10 @@ namespace Castor3D
 		m_fbo->Initialise( p_size );
 		m_fbo->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 
-		if ( m_fbo->Bind( FrameBufferMode::eConfig ) )
-		{
-			m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
-			l_return = m_fbo->IsComplete();
-			m_fbo->Unbind();
-		}
+		m_fbo->Bind( FrameBufferMode::eConfig );
+		m_fbo->Attach( AttachmentPoint::eColour, 0, m_colourAttach, l_colourTexture->GetType() );
+		bool l_return = m_fbo->IsComplete();
+		m_fbo->Unbind();
 
 		return l_return;
 	}

@@ -39,21 +39,11 @@ namespace Castor3D
 		m_query.reset();
 	}
 
-	bool TransformFeedback::Bind()const
+	void TransformFeedback::Bind()const
 	{
-		bool l_return = DoBind();
-
-		if ( l_return )
-		{
-			l_return = m_query->Begin();
-		}
-
-		if ( l_return )
-		{
-			l_return = DoBegin();
-		}
-
-		return l_return;
+		DoBind();
+		m_query->Begin();
+		DoBegin();
 	}
 
 	void TransformFeedback::Unbind()const

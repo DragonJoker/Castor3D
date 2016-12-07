@@ -93,24 +93,13 @@ namespace GlRender
 		return GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) == GlFramebufferStatus::eComplete;
 	}
 
-	bool GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void GlFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		bool l_return = DoBind( FrameBufferTarget::eRead );
-
-		if ( l_return )
-		{
-			l_return = GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) ) + p_index ) );
-
-			if ( l_return )
-			{
-				OpenGl::PixelFmt l_pxFmt = GetOpenGl().Get( p_buffer->format() );
-				l_return = GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
-			}
-
-			DoUnbind();
-		}
-
-		return l_return;
+		DoBind( FrameBufferTarget::eRead );
+		GetOpenGl().ReadBuffer( GlBufferBinding( uint32_t( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) ) + p_index ) );
+		OpenGl::PixelFmt l_pxFmt = GetOpenGl().Get( p_buffer->format() );
+		GetOpenGl().ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+		DoUnbind();
 	}
 
 	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( PixelFormat p_format )
@@ -145,10 +134,10 @@ namespace GlRender
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}
 
-	bool GlFrameBuffer::DoBind( FrameBufferTarget p_target )const
+	void GlFrameBuffer::DoBind( FrameBufferTarget p_target )const
 	{
 		m_bindingMode = GetOpenGl().Get( p_target );
-		return BindableType::Bind();
+		BindableType::Bind();
 	}
 
 	void GlFrameBuffer::DoUnbind()const
@@ -156,13 +145,13 @@ namespace GlRender
 		BindableType::Unbind();
 	}
 
-	bool GlFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
+	void GlFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
 	{
-		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), GlInterpolationMode::eNearest );
+		GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), GlInterpolationMode::eNearest );
 	}
 
-	bool GlFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void GlFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		return GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GetOpenGl().GetComponents( p_components ), GetOpenGl().Get( p_interpolation ) );
+		GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GetOpenGl().GetComponents( p_components ), GetOpenGl().Get( p_interpolation ) );
 	}
 }

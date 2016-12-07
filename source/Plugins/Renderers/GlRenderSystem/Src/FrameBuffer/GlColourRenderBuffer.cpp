@@ -37,9 +37,9 @@ namespace GlRender
 		m_glRenderBuffer.Cleanup();
 	}
 
-	bool GlColourRenderBuffer::Bind()
+	void GlColourRenderBuffer::Bind()
 	{
-		return m_glRenderBuffer.Bind();
+		m_glRenderBuffer.Bind();
 	}
 
 	void GlColourRenderBuffer::Unbind()

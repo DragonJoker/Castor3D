@@ -32,9 +32,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestColourRenderBuffer::Bind()
+	void TestColourRenderBuffer::Bind()
 	{
-		return true;
 	}
 
 	void TestColourRenderBuffer::Unbind()

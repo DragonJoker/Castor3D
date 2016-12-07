@@ -31,22 +31,20 @@ namespace GlRender
 		m_attributeLocation = uint32_t( GlInvalidIndex );
 	}
 
-	bool GlAttributeBase::Bind( bool p_bNormalised )
+	void GlAttributeBase::Bind( bool p_bNormalised )
 	{
-		bool l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
+		GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
 
 		if ( m_glType == GlType::eFloat
 			 || m_glType == GlType::eDouble
 			 || m_glType == GlType::eHalfFloat )
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
+			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 		else
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
+			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
-
-		return l_return;
 	}
 
 	void GlAttributeBase::Unbind()

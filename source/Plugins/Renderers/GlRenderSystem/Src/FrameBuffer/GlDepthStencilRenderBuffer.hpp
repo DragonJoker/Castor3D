@@ -79,7 +79,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Bind
 		 */
-		virtual bool Bind();
+		virtual void Bind();
 		/**
 		 *\copydoc		Castor3D::DepthStencilRenderBuffer::Unbind
 		 */

@@ -31,11 +31,11 @@ namespace GlRender
 {
 	class GlShaderObject
 		: public Castor3D::ShaderObject
-		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
+		, public Object< std::function< uint32_t() >, std::function< void( uint32_t ) > >
 	{
 		friend class GlShaderProgram;
 
-		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
+		using ObjectType = Object< std::function< uint32_t() >, std::function< void( uint32_t ) > >;
 		using UIntStrMap = std::map< Castor::String, uint32_t >;
 
 	public:

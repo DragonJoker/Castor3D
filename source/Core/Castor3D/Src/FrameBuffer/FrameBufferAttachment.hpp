@@ -65,28 +65,24 @@ namespace Castor3D
 		 *\param[in]	p_attachment	The attachment point
 		 *\param[in]	p_index			The attachment index
 		 *\param[in]	p_frameBuffer	The frame buffer
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
 		 *\param[in]	p_attachment	Le point d'attache
 		 *\param[in]	p_index			L'index d'attache
 		 *\param[in]	p_frameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer );
+		C3D_API void Attach( AttachmentPoint p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
 		 *\param[in]	p_attachment	The attachment point
 		 *\param[in]	p_frameBuffer	The frame buffer
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
 		 *\param[in]	p_attachment	Le point d'attache
 		 *\param[in]	p_frameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( AttachmentPoint p_attachment, FrameBufferSPtr p_frameBuffer );
+		C3D_API void Attach( AttachmentPoint p_attachment, FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
@@ -118,7 +114,6 @@ namespace Castor3D
 		 *\param[in]	p_rectSrc		The source rectangle
 		 *\param[in]	p_rectDst		The destination rectangle
 		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte le tampon de cette attache dans celui donné
 		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être InterpolationMode::eNearest
@@ -126,9 +121,8 @@ namespace Castor3D
 		 *\param[in]	p_rectSrc		Le rectangle source
 		 *\param[in]	p_rectDst		Le rectangle destination
 		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation ) = 0;
+		C3D_API virtual void Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation ) = 0;
 		/**
 		 *\~english
 		 *\return		The attachment point
@@ -164,12 +158,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the frame buffer, at given attachment point
-		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image, au point d'attache voulu
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoAttach() = 0;
+		C3D_API virtual void DoAttach() = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer

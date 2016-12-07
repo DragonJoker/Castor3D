@@ -34,20 +34,16 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = BindableType::Bind();
+			BindableType::Bind();
+			uint32_t l_index{ 0u };
 
-			if ( l_return )
+			for ( auto & l_buffer : m_buffers )
 			{
-				uint32_t l_index{ 0u };
-
-				for ( auto & l_buffer : m_buffers )
-				{
-					auto & l_tb = static_cast< GlBuffer< uint8_t > const & >( l_buffer.get().GetGpuBuffer() );
-					l_return = GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
-				}
-
-				BindableType::Unbind();
+				auto & l_tb = static_cast< GlBuffer< uint8_t > const & >( l_buffer.get().GetGpuBuffer() );
+				GetOpenGl().BindBufferBase( GlBufferTarget::eTransformFeedbackBuffer, l_index++, l_tb.GetGlName() );
 			}
+
+			BindableType::Unbind();
 		}
 
 		return l_return;
@@ -58,9 +54,9 @@ namespace GlRender
 		BindableType::Destroy();
 	}
 
-	bool GlTransformFeedback::DoBind()const
+	void GlTransformFeedback::DoBind()const
 	{
-		return BindableType::Bind();
+		BindableType::Bind();
 	}
 
 	void GlTransformFeedback::DoUnbind()const
@@ -68,9 +64,9 @@ namespace GlRender
 		BindableType::Unbind();
 	}
 
-	bool GlTransformFeedback::DoBegin()const
+	void GlTransformFeedback::DoBegin()const
 	{
-		return GetOpenGl().BeginTransformFeedback( m_topology );
+		GetOpenGl().BeginTransformFeedback( m_topology );
 	}
 
 	void GlTransformFeedback::DoEnd()const

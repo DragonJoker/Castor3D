@@ -79,37 +79,12 @@ namespace GlRender
 #else
 				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );
 #endif
-				l_return = GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), &l_iLength );
+				GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), &l_iLength );
+				GetOpenGl().CompileShader( GetGlName() );
+				GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eCompile, &l_compiled );
+				Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << l_compiled );
 
-				if ( l_return )
-				{
-					l_return = GetOpenGl().CompileShader( GetGlName() );
-
-					if ( !l_return )
-					{
-						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not compiled." ) );
-					}
-				}
-				else
-				{
-					Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not loaded." ) );
-				}
-
-				if ( l_return )
-				{
-					l_return = GetOpenGl().GetShaderiv( GetGlName(), GlShaderStatus::eCompile, &l_compiled );
-
-					if ( !l_return )
-					{
-						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader compilation status retrieval failed." ) );
-					}
-					else
-					{
-						Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << l_compiled );
-					}
-				}
-
-				if ( l_return && l_compiled )
+				if ( l_compiled )
 				{
 					m_status = ShaderStatus::eCompiled;
 				}

@@ -57,15 +57,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseStorage
 		 */
-		bool InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
+		void InitialiseStorage( uint32_t p_count, Castor3D::BufferAccessType p_type, Castor3D::BufferAccessNature p_nature )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::InitialiseBindingPoint
 		 */
-		bool InitialiseBindingPoint( uint32_t p_index )const override;
+		void InitialiseBindingPoint( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Bind
 		 */
-		bool Bind()const override;
+		void Bind()const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Unbind
 		 */
@@ -73,15 +73,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Copy
 		 */
-		bool Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )const override;
+		void Copy( Castor3D::GpuBuffer< T > const & p_src, uint32_t p_size )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
 		 */
-		bool Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const override;
+		void Upload( uint32_t p_offset, uint32_t p_count, T const * p_buffer )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Upload
 		 */
-		bool Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const override;
+		void Download( uint32_t p_offset, uint32_t p_count, T * p_buffer )const override;
 		/**
 		 *\copydoc		Castor3D::GpuBuffer< T >::Lock
 		 */

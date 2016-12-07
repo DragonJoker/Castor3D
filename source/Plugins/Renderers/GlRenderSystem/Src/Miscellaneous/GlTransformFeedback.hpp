@@ -40,13 +40,13 @@ namespace GlRender
 	*/
 	class GlTransformFeedback
 		: public Castor3D::TransformFeedback
-		, public Bindable< std::function< bool( int, uint32_t * ) >
-			, std::function< bool( int, uint32_t const * ) >
-			, std::function< bool( uint32_t ) > >
+		, public Bindable< std::function< void( int, uint32_t * ) >
+			, std::function< void( int, uint32_t const * ) >
+			, std::function< void( uint32_t ) > >
 	{
-		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >
-			, std::function< bool( int, uint32_t const * ) >
-			, std::function< bool( uint32_t ) > >;
+		using BindableType = Bindable< std::function< void( int, uint32_t * ) >
+			, std::function< void( int, uint32_t const * ) >
+			, std::function< void( uint32_t ) > >;
 
 	public:
 		/**
@@ -82,7 +82,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::Bind
 		 */
-		bool DoBind()const override;
+		void DoBind()const override;
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::Unbind
 		 */
@@ -90,7 +90,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::DoBegin
 		 */
-		bool DoBegin()const override;
+		void DoBegin()const override;
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::DoEnd
 		 */

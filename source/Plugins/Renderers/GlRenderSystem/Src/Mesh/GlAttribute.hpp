@@ -40,7 +40,7 @@ namespace GlRender
 	public:
 		GlVecAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName, uint32_t p_divisor );
 		virtual ~GlVecAttribute();
-		bool Bind( bool p_bNormalised = false )override;
+		void Bind( bool p_bNormalised = false )override;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -55,7 +55,7 @@ namespace GlRender
 	public:
 		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, uint32_t p_stride, Castor::String const & p_attributeName );
 		virtual ~GlMatAttribute();
-		bool Bind( bool p_bNormalised = false )override;
+		void Bind( bool p_bNormalised = false )override;
 	};
 }
 

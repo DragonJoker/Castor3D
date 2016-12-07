@@ -44,9 +44,9 @@ namespace GlRender
 		m_glRenderBuffer.Cleanup();
 	}
 
-	bool GlDepthStencilRenderBuffer::Bind()
+	void GlDepthStencilRenderBuffer::Bind()
 	{
-		return m_glRenderBuffer.Bind();
+		m_glRenderBuffer.Bind();
 	}
 
 	void GlDepthStencilRenderBuffer::Unbind()

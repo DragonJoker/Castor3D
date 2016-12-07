@@ -335,9 +335,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameVariableBuffer::DoBind( uint32_t p_index )
+	void TestFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		return true;
 	}
 
 	void TestFrameVariableBuffer::DoUnbind( uint32_t p_index )

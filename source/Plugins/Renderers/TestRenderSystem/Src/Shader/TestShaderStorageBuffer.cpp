@@ -25,19 +25,16 @@ namespace TestRender
 	{
 	}
 
-	bool TestShaderStorageBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
+	void TestShaderStorageBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
 	{
-		return true;
 	}
 
-	bool TestShaderStorageBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestShaderStorageBuffer::InitialiseBindingPoint( uint32_t p_point )const
 	{
-		return true;
 	}
 
-	bool TestShaderStorageBuffer::Bind()const
+	void TestShaderStorageBuffer::Bind()const
 	{
-		return true;
 	}
 
 	void TestShaderStorageBuffer::Unbind()const
@@ -53,18 +50,15 @@ namespace TestRender
 	{
 	}
 
-	bool TestShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
+	void TestShaderStorageBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
 	{
-		return true;
 	}
 
-	bool TestShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
+	void TestShaderStorageBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
 	{
-		return true;
 	}
 
-	bool TestShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
+	void TestShaderStorageBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
 	{
-		return true;
 	}
 }

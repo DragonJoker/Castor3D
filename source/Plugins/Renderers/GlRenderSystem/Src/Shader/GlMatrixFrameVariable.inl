@@ -40,16 +40,12 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	bool GlMatrixFrameVariable< T, Rows, Columns >::Bind()const
+	void GlMatrixFrameVariable< T, Rows, Columns >::Bind()const
 	{
-		bool l_return = true;
-
 		if ( this->IsChanged() )
 		{
-			l_return = GlFrameVariableBase::DoBind< T, Rows, Columns >( Castor3D::MatrixFrameVariable< T, Rows, Columns >::m_values, Castor3D::FrameVariable::m_occurences );
+			GlFrameVariableBase::DoBind< T, Rows, Columns >( Castor3D::MatrixFrameVariable< T, Rows, Columns >::m_values, Castor3D::FrameVariable::m_occurences );
 			Castor3D::FrameVariable::m_changed = false;
 		}
-
-		return l_return;
 	}
 }

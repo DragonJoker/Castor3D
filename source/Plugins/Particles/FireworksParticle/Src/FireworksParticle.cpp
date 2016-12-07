@@ -194,24 +194,22 @@ namespace Fireworks
 		DoPackParticles( m_particles, m_firstUnused );
 		auto & l_vbo = m_parent.GetBillboards()->GetVertexBuffer();
 
-		if ( l_vbo.Bind() )
+		l_vbo.Bind();
+		auto l_stride = m_inputs.stride();
+		auto l_dst = m_parent.GetBillboards()->GetVertexBuffer().Lock( 0, m_firstUnused * l_stride, AccessType::eWrite );
+
+		if ( l_dst )
 		{
-			auto l_stride = m_inputs.stride();
-			auto l_dst = m_parent.GetBillboards()->GetVertexBuffer().Lock( 0, m_firstUnused * l_stride, AccessType::eWrite );
-
-			if ( l_dst )
+			for ( auto i = 0u; i < m_firstUnused; ++i )
 			{
-				for ( auto i = 0u; i < m_firstUnused; ++i )
-				{
-					std::memcpy( l_dst, m_particles[i].GetData(), l_stride );
-					l_dst += l_stride;
-				}
-
-				l_vbo.Unlock();
+				std::memcpy( l_dst, m_particles[i].GetData(), l_stride );
+				l_dst += l_stride;
 			}
 
-			l_vbo.Unbind();
+			l_vbo.Unlock();
 		}
+
+		l_vbo.Unbind();
 
 		return m_firstUnused;
 	}

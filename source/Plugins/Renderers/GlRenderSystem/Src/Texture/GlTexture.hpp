@@ -36,10 +36,10 @@ namespace GlRender
 	\brief		Class used to handle texture, and texture storage.
 	*/
 	class GlTexture
-		: private Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
+		: private Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
 		, public Castor3D::TextureLayout
 	{
-		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
+		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
 
 	public:
 		/**
@@ -120,7 +120,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoBind
 		 */
-		bool DoBind( uint32_t p_index )const override;
+		void DoBind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoUnbind
 		 */

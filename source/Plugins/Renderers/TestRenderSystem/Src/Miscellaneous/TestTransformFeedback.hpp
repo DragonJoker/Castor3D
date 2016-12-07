@@ -75,7 +75,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::Bind
 		 */
-		bool DoBind()const override;
+		void DoBind()const override;
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::Unbind
 		 */
@@ -83,7 +83,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::DoBegin
 		 */
-		bool DoBegin()const override;
+		void DoBegin()const override;
 		/**
 		 *\copydoc		Castor3D::TransformFeedback::DoEnd
 		 */

@@ -86,19 +86,6 @@ namespace GlRender
 		}
 	}
 
-	bool GlTexture::DoBind( uint32_t p_index )const
-	{
-		bool l_return = GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
-
-		if ( l_return )
-		{
-			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
-			glTrackTexture( GetGlName(), p_index );
-		}
-
-		return l_return;
-	}
-
 	bool GlTexture::DoInitialise()
 	{
 		return ObjectType::Create();
@@ -107,6 +94,13 @@ namespace GlRender
 	void GlTexture::DoCleanup()
 	{
 		ObjectType::Destroy();
+	}
+
+	void GlTexture::DoBind( uint32_t p_index )const
+	{
+		GetOpenGl().ActiveTexture( GlTextureIndex( uint32_t( GlTextureIndex::eIndex0 ) + p_index ) );
+		GetOpenGl().BindTexture( m_glDimension, GetGlName() );
+		glTrackTexture( GetGlName(), p_index );
 	}
 
 	void GlTexture::DoUnbind( uint32_t p_index )const

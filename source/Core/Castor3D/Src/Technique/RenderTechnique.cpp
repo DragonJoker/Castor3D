@@ -349,8 +349,9 @@ namespace Castor3D
 		{
 			l_return = m_frameBuffer->Initialise( p_size );
 
-			if ( l_return && m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
+			if ( l_return )
 			{
+				m_frameBuffer->Bind( FrameBufferMode::eConfig );
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
@@ -537,46 +538,44 @@ namespace Castor3D
 			}
 		}
 
-		if ( DoBeginRender() )
-		{
-			l_scene.RenderBackground( GetSize() );
-			DoRender( l_nodes, l_opaqueDepthMaps, l_transparentDepthMaps, p_frameTime );
-			p_visible = uint32_t( m_renderedObjects.size() );
-			p_particles = m_particlesCount;
+		DoBeginRender();
+		l_scene.RenderBackground( GetSize() );
+		DoRender( l_nodes, l_opaqueDepthMaps, l_transparentDepthMaps, p_frameTime );
+		p_visible = uint32_t( m_renderedObjects.size() );
+		p_particles = m_particlesCount;
 
 #if 0 && !defined( NDEBUG )
 
-			if ( !m_shadowMaps.empty() )
+		if ( !m_shadowMaps.empty() )
+		{
+			auto l_it = m_shadowMaps.begin();
+			auto & l_depthMap = l_it->second->GetShadowMap();
+			auto l_size = l_depthMap.GetTexture()->GetDimensions();
+			auto l_lightNode = l_it->first->GetParent();
+
+			switch ( l_depthMap.GetType() )
 			{
-				auto l_it = m_shadowMaps.begin();
-				auto & l_depthMap = l_it->second->GetShadowMap();
-				auto l_size = l_depthMap.GetTexture()->GetDimensions();
-				auto l_lightNode = l_it->first->GetParent();
+			case TextureType::eTwoDimensions:
+				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
+				break;
 
-				switch ( l_depthMap.GetType() )
-				{
-				case TextureType::eTwoDimensions:
-					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture() );
-					break;
+			case TextureType::eTwoDimensionsArray:
+				m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
+				break;
 
-				case TextureType::eTwoDimensionsArray:
-					m_renderSystem.GetCurrentContext()->RenderDepth( Size{ l_size.width() / 4, l_size.height() / 4 }, *l_depthMap.GetTexture(), 0u );
-					break;
+			case TextureType::eCube:
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
+				break;
 
-				case TextureType::eCube:
-					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture() );
-					break;
-
-				case TextureType::eCubeArray:
-					m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
-					break;
-				}
+			case TextureType::eCubeArray:
+				m_renderSystem.GetCurrentContext()->RenderDepth( l_lightNode->GetDerivedPosition(), l_lightNode->GetDerivedOrientation(), Size{ l_size.width() / 2, l_size.height() / 2 }, *l_depthMap.GetTexture(), 0u );
+				break;
 			}
+		}
 
 #endif
 
-			DoEndRender();
-		}
+		DoEndRender();
 
 		for ( auto l_effect : m_renderTarget.GetPostEffects() )
 		{

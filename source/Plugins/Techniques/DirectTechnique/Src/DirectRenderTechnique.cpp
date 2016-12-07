@@ -64,31 +64,23 @@ namespace Direct
 	{
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoBeginRender()
 	{
-		bool l_return = m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-			m_frameBuffer.m_frameBuffer->Clear();
-		}
-
-		return l_return;
+		m_frameBuffer.m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_frameBuffer.m_frameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
+		m_frameBuffer.m_frameBuffer->Clear();
 	}
 
-	bool RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoBeginOpaqueRendering()
 	{
-		return true;
 	}
 
 	void RenderTechnique::DoEndOpaqueRendering()
 	{
 	}
 
-	bool RenderTechnique::DoBeginTransparentRendering()
+	void RenderTechnique::DoBeginTransparentRendering()
 	{
-		return true;
 	}
 
 	void RenderTechnique::DoEndTransparentRendering()

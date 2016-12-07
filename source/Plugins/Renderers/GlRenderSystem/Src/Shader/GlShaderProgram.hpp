@@ -32,9 +32,9 @@ namespace GlRender
 {
 	class GlShaderProgram
 		: public Castor3D::ShaderProgram
-		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
+		, public Object< std::function< uint32_t() >, std::function< void( uint32_t ) > >
 	{
-		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
+		using ObjectType = Object< std::function< uint32_t() >, std::function< void( uint32_t ) > >;
 
 	public:
 		/**
@@ -108,7 +108,7 @@ namespace GlRender
 		Castor::String DoRetrieveLinkerLog();
 
 	private:
-		bool DoBindTransformLayout();
+		void DoBindTransformLayout();
 
 	private:
 		Castor::String m_linkerLog;

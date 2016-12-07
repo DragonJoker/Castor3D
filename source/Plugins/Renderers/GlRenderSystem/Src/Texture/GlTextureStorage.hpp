@@ -63,7 +63,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Bind
 		 */
-		bool Bind( uint32_t p_index )const override;
+		void Bind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unbind
 		 */

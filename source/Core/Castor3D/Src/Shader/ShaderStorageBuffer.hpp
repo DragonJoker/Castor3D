@@ -123,16 +123,14 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[in]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[in]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer );
+		C3D_API void Upload( uint32_t p_offset, uint32_t p_count, uint8_t const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Transfers data from the GPU buffer to RAM.
@@ -140,43 +138,35 @@ namespace Castor3D
 		 *\param[in]	p_offset	The start offset.
 		 *\param[in]	p_count		Elements count.
 		 *\param[out]	p_buffer	The data.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Transfère des données du tampon GPU vers la RAM.
 		 *\remarks		Transfère les données de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_count-1) * sizeof( T )].
 		 *\param[in]	p_offset	L'offset de départ.
 		 *\param[in]	p_count		Nombre d'éléments.
 		 *\param[out]	p_buffer	Les données.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer );
+		C3D_API void Download( uint32_t p_offset, uint32_t p_count, uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Bind();
+		C3D_API void Bind();
 		/**
 		 *\~english
 		 *\brief		Binds the buffer to given point.
 		 *\param[in]	p_point	The binding point.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Active le tampon au point d'attache donné.
 		 *\param[in]	p_point	Le point d'attache.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool BindTo( uint32_t p_point );
+		C3D_API void BindTo( uint32_t p_point );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API void Unbind();
 		/**
@@ -184,14 +174,12 @@ namespace Castor3D
 		 *\brief		Copies data from given buffer to this one.
 		 *\param[in]	p_src	The cource buffer.
 		 *\param[in]	p_size	The number of elements to copy.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Copie les données du tampon donné dans celui-ci.
 		 *\param[in]	p_src	Le tampon source.
 		 *\param[in]	p_size	Le nombre d'éléments à copier.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size );
+		C3D_API void Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size );
 		/**
 		 *\~english
 		 *\return		The GPU buffer.
