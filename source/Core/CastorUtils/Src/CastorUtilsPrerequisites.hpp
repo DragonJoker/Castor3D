@@ -51,16 +51,6 @@ SOFTWARE.
 #	undef abs
 #endif
 
-#if defined( _MSC_VER )
-#	if ( _MSC_VER < 1900 )
-#		define TPL_PIXEL_FORMAT	uint32_t
-#	else
-#		define TPL_PIXEL_FORMAT	Castor::PixelFormat
-#	endif
-#else
-#	define TPL_PIXEL_FORMAT	Castor::PixelFormat
-#endif
-
 namespace Castor
 {
 	/*!
@@ -287,7 +277,7 @@ namespace Castor
 	template< class Owmer >
 	class OwnedBy;
 	class ParserParameterBase;
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	class Pixel;
 	template< typename T >
 	class PlaneEquation;
@@ -295,7 +285,7 @@ namespace Castor
 	class Point;
 	class Position;
 	class PxBufferBase;
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	class PxBuffer;
 	template< typename T >
 	class QuaternionT;

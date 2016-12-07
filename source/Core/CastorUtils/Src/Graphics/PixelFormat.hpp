@@ -66,21 +66,21 @@ namespace Castor
 	\~french
 	\brief		Contient des fonctions d'aides à la conversion de composantes couleur/profondeur/stencil
 	*/
-	template< TPL_PIXEL_FORMAT PF > struct component;
+	template< PixelFormat PF > struct component;
 	/**
 	 *\~english
 	 *\brief		Helper struct that holds pixel size, to_string and converion functions
 	 *\~french
 	 *\brief		Structure d'aide contenant la taille d'un pixel ainsi que sa fonction to_string et les fonction de conversion vers d'autres formats
 	 */
-	template< TPL_PIXEL_FORMAT format > struct pixel_definitions;
+	template< PixelFormat format > struct pixel_definitions;
 	/**
 	 *\~english
 	 *\brief		Helper struct to tell if a pixel format represents a colour
 	 *\~french
 	 *\brief		Structure d'aide permettant de dire si un format de pixels représente une couleur
 	 */
-	template< TPL_PIXEL_FORMAT PF > struct is_colour_format : public std::true_type {};
+	template< PixelFormat PF > struct is_colour_format : public std::true_type {};
 
 	template<> struct is_colour_format< PixelFormat::eD16 > : public std::false_type {};
 	template<> struct is_colour_format< PixelFormat::eD24 > : public std::false_type {};
@@ -95,7 +95,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de profondeur
 	 */
-	template< TPL_PIXEL_FORMAT PF > struct is_depth_format : public std::false_type {};
+	template< PixelFormat PF > struct is_depth_format : public std::false_type {};
 
 	template<> struct is_depth_format< PixelFormat::eD16 > : public std::true_type {};
 	template<> struct is_depth_format< PixelFormat::eD24 > : public std::true_type {};
@@ -108,7 +108,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de stencil
 	 */
-	template< TPL_PIXEL_FORMAT PF > struct is_stencil_format : public std::false_type {};
+	template< PixelFormat PF > struct is_stencil_format : public std::false_type {};
 
 	template<> struct is_stencil_format< PixelFormat::eD24S8 > : public std::true_type {};
 	template<> struct is_stencil_format< PixelFormat::eS1 > : public std::true_type {};
@@ -119,7 +119,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Structure d'aide permettant de dire si un format de pixels représente un pixel de profondeur ou de stencil
 	 */
-	template< TPL_PIXEL_FORMAT PF > struct is_depth_stencil_format : public std::false_type {};
+	template< PixelFormat PF > struct is_depth_stencil_format : public std::false_type {};
 
 	template<> struct is_depth_stencil_format< PixelFormat::eD16 > : public std::true_type {};
 	template<> struct is_depth_stencil_format< PixelFormat::eD24 > : public std::true_type {};
@@ -170,7 +170,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatComponent( Pixel< PF > const & p_pixel, PixelComponent p_component );
 		/**
 		 *\~english
@@ -184,7 +184,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatComponent( Pixel< PF > & p_pixel, PixelComponent p_component, float p_value );
 		/**
 		 *\~english
@@ -198,7 +198,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteComponent( Pixel< PF > const & p_pixel, PixelComponent p_component );
 		/**
 		 *\~english
@@ -212,7 +212,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteComponent( Pixel< PF > & p_pixel, PixelComponent p_component, uint8_t p_value );
 		/**
 		 *\~english
@@ -226,7 +226,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint16_t GetUInt16Component( Pixel< PF > const & p_pixel, PixelComponent p_component );
 		/**
 		 *\~english
@@ -240,7 +240,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt16Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint16_t p_value );
 		/**
 		 *\~english
@@ -254,7 +254,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint32_t GetUInt24Component( Pixel< PF > const & p_pixel, PixelComponent p_component );
 		/**
 		 *\~english
@@ -268,7 +268,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt24Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value );
 		/**
 		 *\~english
@@ -282,7 +282,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint32_t GetUInt32Component( Pixel< PF > const & p_pixel, PixelComponent p_component );
 		/**
 		 *\~english
@@ -296,7 +296,7 @@ namespace Castor
 		 *\param[in]	p_component	La composante
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt32Component( Pixel< PF > & p_pixel, PixelComponent p_component, uint32_t p_value );
 		/**
 		 *\~english
@@ -308,7 +308,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatRed( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eRed );
@@ -323,7 +323,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatRed( Pixel< PF > const & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eRed, p_value );
@@ -338,7 +338,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteRed( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eRed );
@@ -353,7 +353,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteRed( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eRed, p_value );
@@ -368,7 +368,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatGreen( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eGreen );
@@ -383,7 +383,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatGreen( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eGreen, p_value );
@@ -398,7 +398,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteGreen( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eGreen );
@@ -413,7 +413,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteGreen( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eGreen, p_value );
@@ -428,7 +428,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatBlue( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eBlue );
@@ -443,7 +443,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatBlue( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eBlue, p_value );
@@ -458,7 +458,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteBlue( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eBlue );
@@ -473,7 +473,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteBlue( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eBlue, p_value );
@@ -488,7 +488,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatAlpha( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eAlpha );
@@ -503,7 +503,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatAlpha( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eAlpha, p_value );
@@ -518,7 +518,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteAlpha( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eAlpha );
@@ -533,7 +533,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteAlpha( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eAlpha, p_value );
@@ -548,7 +548,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatLuminance( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eLuminance );
@@ -563,7 +563,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatLuminance( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eLuminance, p_value );
@@ -578,7 +578,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteLuminance( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eLuminance );
@@ -593,7 +593,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteLuminance( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eLuminance, p_value );
@@ -608,7 +608,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatDepth( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eDepth );
@@ -623,7 +623,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatDepth( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eDepth, p_value );
@@ -638,7 +638,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteDepth( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eDepth );
@@ -653,7 +653,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteDepth( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eDepth, p_value );
@@ -668,7 +668,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint16_t GetUInt16Depth( Pixel< PF > const & p_pixel )
 		{
 			return GetUInt16Component( p_pixel, PixelComponent::eDepth );
@@ -683,7 +683,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt16Depth( Pixel< PF > & p_pixel, uint16_t p_value )
 		{
 			return SetUInt16Component( p_pixel, PixelComponent::eDepth, p_value );
@@ -698,7 +698,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint32_t GetUInt24Depth( Pixel< PF > const & p_pixel )
 		{
 			return GetUInt24Component( p_pixel, PixelComponent::eDepth );
@@ -713,7 +713,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt24Depth( Pixel< PF > & p_pixel, uint32_t p_value )
 		{
 			return SetUInt24Component( p_pixel, PixelComponent::eDepth, p_value );
@@ -728,7 +728,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint32_t GetUInt32Depth( Pixel< PF > const & p_pixel )
 		{
 			return GetUInt32Component( p_pixel, PixelComponent::eDepth );
@@ -743,7 +743,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetUInt32Depth( Pixel< PF > & p_pixel, uint32_t p_value )
 		{
 			return SetUInt32Component( p_pixel, PixelComponent::eDepth, p_value );
@@ -758,7 +758,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		float GetFloatStencil( Pixel< PF > const & p_pixel )
 		{
 			return GetFloatComponent( p_pixel, PixelComponent::eStencil );
@@ -773,7 +773,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetFloatStencil( Pixel< PF > & p_pixel, float p_value )
 		{
 			return SetFloatComponent( p_pixel, PixelComponent::eStencil, p_value );
@@ -788,7 +788,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\return		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		uint8_t GetByteStencil( Pixel< PF > const & p_pixel )
 		{
 			return GetByteComponent( p_pixel, PixelComponent::eStencil );
@@ -803,7 +803,7 @@ namespace Castor
 		 *\param[in]	p_pixel		Le pixel
 		 *\param[in]	p_value		La valeur de la composante
 		 */
-		template< TPL_PIXEL_FORMAT PF >
+		template< PixelFormat PF >
 		void SetByteStencil( Pixel< PF > & p_pixel, uint8_t p_value )
 		{
 			return SetByteComponent( p_pixel, PixelComponent::eStencil, p_value );

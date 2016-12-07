@@ -1,6 +1,6 @@
 ﻿namespace Castor
 {
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, PixelFormat p_bufferFormat )
 		: PxBufferBase( p_size, PixelFormat( FT ) )
 		, m_column( p_size.width() )
@@ -8,7 +8,7 @@
 		init( p_buffer, p_bufferFormat );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT >::PxBuffer( PxBuffer< FT > const & p_pixelBuffer )
 		: PxBufferBase( p_pixelBuffer )
 		, m_column( p_pixelBuffer.width() )
@@ -16,7 +16,7 @@
 		init( p_pixelBuffer.const_ptr(), p_pixelBuffer.format() );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT >::PxBuffer( PxBuffer< FT > && p_pixelBuffer )
 		: PxBufferBase( std::move( p_pixelBuffer ) )
 		, m_column( std::move( p_pixelBuffer.m_column ) )
@@ -24,20 +24,20 @@
 		p_pixelBuffer.m_column.clear();
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT >::~PxBuffer()
 	{
 		clear();
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT > & PxBuffer< FT >::operator=( PxBuffer< FT > const & p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
 		return * this;
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	PxBuffer< FT > & PxBuffer< FT >::operator=( PxBuffer< FT > && p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
@@ -46,27 +46,27 @@
 		return * this;
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	typename PxBuffer< FT >::column const & PxBuffer< FT >::operator[]( uint32_t p_index )const
 	{
 		do_init_column( p_index );
 		return m_column;
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	typename PxBuffer< FT >::column & PxBuffer< FT >::operator[]( uint32_t p_index )
 	{
 		do_init_column( p_index );
 		return m_column;
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	void PxBuffer< FT >::swap( PxBuffer< FT > & p_pixelBuffer )
 	{
 		PxBufferBase::swap( p_pixelBuffer );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, PixelFormat p_bufferFormat )
 	{
 		uint8_t l_size = PF::GetBytesPerPixel( p_bufferFormat );
@@ -79,45 +79,45 @@
 		}
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	uint8_t const * PxBuffer< FT >::const_ptr()const
 	{
 		return m_buffer.data();
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	uint8_t * PxBuffer< FT >::ptr()
 	{
 		return m_buffer.data();
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	uint32_t PxBuffer< FT >::size()const
 	{
 		return count() * pixel_definitions< FT >::Size;
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	std::shared_ptr< PxBufferBase > PxBuffer< FT >::clone()const
 	{
 		return std::make_shared< PxBuffer >( *this );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
 		return m_buffer.begin() + ( ( y * width() + x ) * pixel_definitions< FT >::Size );
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	void PxBuffer< FT >::mirror()
 	{
 		uint32_t l_width = width() * pixel_definitions< FT >::Size;
@@ -141,7 +141,7 @@
 		}
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	void PxBuffer< FT >::do_init_column( uint32_t p_column )const
 	{
 		if ( p_column < width() )
@@ -158,7 +158,7 @@
 		}
 	}
 
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	void PxBuffer< FT >::do_init_column( uint32_t p_column )
 	{
 		if ( p_column < width() )

@@ -4,6 +4,7 @@
 #include "Render/GlRenderSystem.hpp"
 
 #include <map>
+#include <iomanip>
 
 #ifndef GL_INVALID_FRAMEBUFFER_OPERATION
 #	define GL_INVALID_FRAMEBUFFER_OPERATION 0x506

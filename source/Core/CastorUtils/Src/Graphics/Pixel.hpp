@@ -39,7 +39,7 @@ namespace Castor
 	\brief		Définition d'un pixel
 	\remark		L'argument template PixelFormat sert a déterminer la taille et le format du pixel
 	*/
-	template< TPL_PIXEL_FORMAT FT >
+	template< PixelFormat FT >
 	class Pixel
 	{
 	public:
@@ -105,7 +105,7 @@ namespace Castor
 		 *\remarks		Le Pixel gère ses données
 		 *\param[in]	p_components	Initialise les données à celles-ci
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components );
 		/**
 		 *\~english
@@ -115,7 +115,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_pxl	L'objet Pixel à copier
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel( Pixel< FU > const & p_pxl );
 		/**
 		 *\~english
@@ -156,7 +156,7 @@ namespace Castor
 		 *\param[in]	p_pxl	L'objet Pixel à copier
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel & operator=( Pixel< FU > const & p_pxl );
 		/**
 		 *\~english
@@ -168,7 +168,7 @@ namespace Castor
 		 *\param[in]	p_px	L'objet Pixel à additionner
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel & operator+=( Pixel< FU > const & p_px );
 		/**
 		 *\~english
@@ -192,7 +192,7 @@ namespace Castor
 		 *\param[in]	p_px	L'objet Pixel à soustraire
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel & operator-=( Pixel< FU > const & p_px );
 		/**
 		 *\~english
@@ -216,7 +216,7 @@ namespace Castor
 		 *\param[in]	p_px	L'objet Pixel à multiplier
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel & operator*=( Pixel< FU > const & p_px );
 		/**
 		 *\~english
@@ -240,7 +240,7 @@ namespace Castor
 		 *\param[in]	p_px	L'objet Pixel à diviser
 		 *\return		Une référence sur cet objet Pixel
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel & operator/=( Pixel< FU > const & p_px );
 		/**
 		 *\~english
@@ -274,7 +274,7 @@ namespace Castor
 		 *\param[in]	p_px	Le pixel à multiplier
 		 *\return		Le résultat de la multiplication
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel< FU > mul( Pixel< FU > const & p_px )const;
 		/**
 		 *\~english
@@ -286,7 +286,7 @@ namespace Castor
 		 *\param[in]	p_byVal	The value
 		 *\return		Le résultat de la multiplication
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		Pixel< FU > mul( uint8_t const & p_byVal )const;
 		/**
 		 *\~english
@@ -322,7 +322,7 @@ namespace Castor
 		 *\param[in]	p_components	Les données à convertir
 		 *\return
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		void set( std::array< uint8_t, pixel_definitions< FU >::Size > const & p_components );
 		/**
 		 *\~english
@@ -333,7 +333,7 @@ namespace Castor
 		 *\param[in]	p_components	Les données à convertir
 		 *\return
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		void set( uint8_t const * p_components );
 		/**
 		 *\~english
@@ -344,7 +344,7 @@ namespace Castor
 		 *\param[in]	p_px	Le pixel à convertir
 		 *\return
 		 */
-		template< TPL_PIXEL_FORMAT FU >
+		template< PixelFormat FU >
 		void set( Pixel< FU > const & p_px );
 		/**
 		 *\~english
@@ -481,7 +481,7 @@ namespace Castor
 	 *\param[in]	p_pxA, p_pxB	Les pixels à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU > bool operator==( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
+	template < PixelFormat FT, PixelFormat FU > bool operator==( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -492,7 +492,7 @@ namespace Castor
 	 *\param[in]	p_pxA, p_pxB	Les pixels à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU > Pixel< FT > operator+( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
+	template < PixelFormat FT, PixelFormat FU > Pixel< FT > operator+( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -505,7 +505,7 @@ namespace Castor
 	 *\param[in]	p_tVal	La valeur à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template < TPL_PIXEL_FORMAT FT, typename U > Pixel< FT > operator+( Pixel< FT > const &	p_pxA, U const & p_tVal );
+	template < PixelFormat FT, typename U > Pixel< FT > operator+( Pixel< FT > const &	p_pxA, U const & p_tVal );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -516,7 +516,7 @@ namespace Castor
 	 *\param[in]	p_pxA, p_pxB	Les pixels à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU > Pixel< FT > operator-( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
+	template < PixelFormat FT, PixelFormat FU > Pixel< FT > operator-( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -529,7 +529,7 @@ namespace Castor
 	 *\param[in]	p_tVal	La valeur à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template < TPL_PIXEL_FORMAT FT, typename U > Pixel< FT > operator-( Pixel< FT > const & p_pxA, U const & p_tVal );
+	template < PixelFormat FT, typename U > Pixel< FT > operator-( Pixel< FT > const & p_pxA, U const & p_tVal );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -540,7 +540,7 @@ namespace Castor
 	 *\param[in]	p_pxA, p_pxB	Les pixels à diviser
 	 *\return		Le résultat de la division
 	 */
-	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU > Pixel< FT > operator/ ( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
+	template < PixelFormat FT, PixelFormat FU > Pixel< FT > operator/ ( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -553,7 +553,7 @@ namespace Castor
 	 *\param[in]	p_tVal	La valeur
 	 *\return		Le résultat de la division
 	 */
-	template < TPL_PIXEL_FORMAT FT, typename U > Pixel< FT > operator/( Pixel< FT > const & p_pxA, U const & p_tVal );
+	template < PixelFormat FT, typename U > Pixel< FT > operator/( Pixel< FT > const & p_pxA, U const & p_tVal );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -564,7 +564,7 @@ namespace Castor
 	 *\param[in]	p_pxA, p_pxB	Les pixels à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template < TPL_PIXEL_FORMAT FT, TPL_PIXEL_FORMAT FU > Pixel< FT > operator*( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
+	template < PixelFormat FT, PixelFormat FU > Pixel< FT > operator*( Pixel< FT > const & p_pxA, Pixel< FU > const & p_pxB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -577,7 +577,7 @@ namespace Castor
 	 *\param[in]	p_tVal	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template < TPL_PIXEL_FORMAT FT, typename U > Pixel< FT > operator*( Pixel< FT > const & p_pxA, U const & p_tVal );
+	template < PixelFormat FT, typename U > Pixel< FT > operator*( Pixel< FT > const & p_pxA, U const & p_tVal );
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english

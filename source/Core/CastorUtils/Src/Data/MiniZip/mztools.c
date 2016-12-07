@@ -212,7 +212,7 @@ uLong* bytesRecovered;
     {
       int entriesZip = entries;
       char header[22];
-      char* comment = ""; // "ZIP File recovered by zlib/minizip/mztools";
+      char* comment = ""; /*"ZIP File recovered by zlib/minizip/mztools";*/
       int comsize = (int) strlen(comment);
       if (entriesZip > 0xffff) {
         entriesZip = 0xffff;
