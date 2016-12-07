@@ -36,6 +36,8 @@ SOFTWARE.
 #include "Common/GlObject.hpp"
 #include "Miscellaneous/GlDebug.hpp"
 
+#include <Log/Logger.hpp>
+
 #include <GlslWriterPrerequisites.hpp>
 
 #include <Texture/TextureUnit.hpp>
@@ -1377,7 +1379,7 @@ namespace GlRender
 			{
 				if ( !gl_api::GetFunction( p_name + p_extension, p_function ) )
 				{
-					Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
+					Castor::Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
 				}
 			}
 		}
