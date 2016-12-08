@@ -1557,17 +1557,17 @@ namespace GlRender
 
 	void OpenGl::PauseTransformFeedback()const
 	{
-		EXEC_FUNCTION( PauseTransformFeedback,);
+		EXEC_FUNCTION( PauseTransformFeedback );
 	}
 
 	void OpenGl::ResumeTransformFeedback()const
 	{
-		EXEC_FUNCTION( ResumeTransformFeedback,);
+		EXEC_FUNCTION( ResumeTransformFeedback );
 	}
 
 	void OpenGl::EndTransformFeedback()const
 	{
-		EXEC_FUNCTION( EndTransformFeedback,);
+		EXEC_FUNCTION( EndTransformFeedback );
 	}
 
 	void OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode )const
@@ -2099,7 +2099,7 @@ namespace GlRender
 
 	uint32_t OpenGl::CreateProgram()const
 	{
-		return EXEC_FUNCTION( CreateProgram,);
+		return EXEC_FUNCTION( CreateProgram );
 	}
 
 	void OpenGl::DeleteProgram( uint32_t program )const
