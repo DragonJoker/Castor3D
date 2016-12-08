@@ -29,6 +29,17 @@ namespace GlRender
 		}
 	};
 
+	template< typename RetT >
+	struct GlFuncCaller< RetT, void >
+	{
+		static inline void Call( OpenGl const & p_gl, std::function< RetT() > const & p_function, char const * const p_name )
+		{
+			REQUIRE( p_function );
+			p_function();
+			glCheckError( p_gl, p_name );
+		}
+	};
+
 	template< typename RetT, typename ... ParamsT >
 	inline RetT ExecuteFunction( OpenGl const & p_gl, std::function< RetT( ParamsT ... ) > const & p_function, char const * const p_name, ParamsT const & ... p_params )
 	{
@@ -37,6 +48,9 @@ namespace GlRender
 
 #	define EXEC_FUNCTION( Name, ... )\
 	ExecuteFunction( GetOpenGl(), m_pfn##Name, "gl"#Name, __VA_ARGS__ )
+
+#	define EXEC_VOID_FUNCTION( Name )\
+	ExecuteFunction( GetOpenGl(), m_pfn##Name, "gl"#Name )
 
 
 	//*************************************************************************************************
@@ -1557,17 +1571,17 @@ namespace GlRender
 
 	void OpenGl::PauseTransformFeedback()const
 	{
-		EXEC_FUNCTION( PauseTransformFeedback );
+		EXEC_VOID_FUNCTION( PauseTransformFeedback );
 	}
 
 	void OpenGl::ResumeTransformFeedback()const
 	{
-		EXEC_FUNCTION( ResumeTransformFeedback );
+		EXEC_VOID_FUNCTION( ResumeTransformFeedback );
 	}
 
 	void OpenGl::EndTransformFeedback()const
 	{
-		EXEC_FUNCTION( EndTransformFeedback );
+		EXEC_VOID_FUNCTION( EndTransformFeedback );
 	}
 
 	void OpenGl::TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode )const
@@ -2099,7 +2113,7 @@ namespace GlRender
 
 	uint32_t OpenGl::CreateProgram()const
 	{
-		return EXEC_FUNCTION( CreateProgram );
+		return EXEC_VOID_FUNCTION( CreateProgram );
 	}
 
 	void OpenGl::DeleteProgram( uint32_t program )const
