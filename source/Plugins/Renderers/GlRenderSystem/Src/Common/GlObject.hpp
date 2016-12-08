@@ -40,21 +40,16 @@ namespace GlRender
 		Specialization for glGenBuffers, glGenTextures, ...
 	*/
 	template<>
-	struct CreatorHelper< std::function< bool( int, uint32_t * ) > >
+	struct CreatorHelper< std::function< void( int, uint32_t * ) > >
 	{
-		typedef std::function< bool( int, uint32_t * ) > CreateFunction;
+		typedef std::function< void( int, uint32_t * ) > CreateFunction;
 
 		static inline uint32_t Apply( CreateFunction p_creator )
-	{
-		uint32_t l_return = -1;
-
-		if ( !p_creator( 1, &l_return ) )
 		{
-			l_return = -1;
+			uint32_t l_return = -1;
+			p_creator( 1, &l_return );
+			return l_return;
 		}
-
-		return l_return;
-	}
 	};
 
 	/*!
@@ -75,9 +70,9 @@ namespace GlRender
 		typedef std::function< uint32_t() > CreateFunction;
 
 		static inline uint32_t Apply( CreateFunction p_creator )
-	{
-		return p_creator();
-	}
+		{
+			return p_creator();
+		}
 	};
 
 	/*!
@@ -93,14 +88,14 @@ namespace GlRender
 		Specialization for glDeleteBuffers, glDeleteTextures, ...
 	*/
 	template<>
-	struct DestroyerHelper< std::function< bool( int, uint32_t const * ) > >
+	struct DestroyerHelper< std::function< void( int, uint32_t const * ) > >
 	{
-		typedef std::function< bool( int, uint32_t const * ) > DestroyFunction;
+		typedef std::function< void( int, uint32_t const * ) > DestroyFunction;
 
 		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
-	{
-		p_destroyer( 1, &p_glName );
-	}
+		{
+			p_destroyer( 1, &p_glName );
+		}
 	};
 
 	/*!
@@ -116,14 +111,14 @@ namespace GlRender
 		Specialization for glDeleteShader
 	*/
 	template<>
-	struct DestroyerHelper< std::function< bool( uint32_t ) > >
+	struct DestroyerHelper< std::function< void( uint32_t ) > >
 	{
-		typedef std::function< bool( uint32_t ) > DestroyFunction;
+		typedef std::function< void( uint32_t ) > DestroyFunction;
 
 		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
-	{
-		p_destroyer( p_glName );
-	}
+		{
+			p_destroyer( p_glName );
+		}
 	};
 
 	/*!

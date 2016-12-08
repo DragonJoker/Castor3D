@@ -72,13 +72,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_index	The texture index
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_index	L'index de texture
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( uint32_t p_index )const = 0;
+		C3D_API virtual void Bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive

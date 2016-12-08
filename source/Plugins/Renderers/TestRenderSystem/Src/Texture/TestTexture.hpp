@@ -107,7 +107,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoBind
 		 */
-		bool DoBind( uint32_t p_index )const override;
+		void DoBind( uint32_t p_index )const override;
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoUnbind
 		 */

@@ -68,7 +68,7 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoBegin
 		 */
-		virtual bool DoBegin()const;
+		virtual void DoBegin()const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoEnd
 		 */
@@ -76,19 +76,19 @@ namespace TestRender
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
 	};
 }
 

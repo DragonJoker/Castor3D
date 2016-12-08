@@ -60,9 +60,8 @@ namespace GlRender
 	{
 	}
 
-	bool GlGpuOnlyTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlGpuOnlyTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void GlGpuOnlyTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const

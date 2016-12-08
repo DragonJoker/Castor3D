@@ -108,19 +108,10 @@ namespace Msaa
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
-
-			if ( l_bReturn )
-			{
-				l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_pMsColorAttach );
-
-				if ( l_bReturn )
-				{
-					l_bReturn = m_msFrameBuffer->Attach( AttachmentPoint::eDepth, m_pMsDepthAttach );
-				}
-
-				m_msFrameBuffer->Unbind();
-			}
+			m_msFrameBuffer->Bind( FrameBufferMode::eConfig );
+			m_msFrameBuffer->Attach( AttachmentPoint::eColour, m_pMsColorAttach );
+			m_msFrameBuffer->Attach( AttachmentPoint::eDepth, m_pMsDepthAttach );
+			m_msFrameBuffer->Unbind();
 		}
 
 		return l_bReturn;
@@ -136,31 +127,23 @@ namespace Msaa
 		m_pMsDepthBuffer->Cleanup();
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoBeginRender()
 	{
-		bool l_return = m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
-			m_msFrameBuffer->Clear();
-		}
-
-		return l_return;
+		m_msFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_msFrameBuffer->SetClearColour( m_renderTarget.GetScene()->GetBackgroundColour() );
+		m_msFrameBuffer->Clear();
 	}
 
-	bool RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoBeginOpaqueRendering()
 	{
-		return true;
 	}
 
 	void RenderTechnique::DoEndOpaqueRendering()
 	{
 	}
 
-	bool RenderTechnique::DoBeginTransparentRendering()
+	void RenderTechnique::DoBeginTransparentRendering()
 	{
-		return true;
 	}
 
 	void RenderTechnique::DoEndTransparentRendering()

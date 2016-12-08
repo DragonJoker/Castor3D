@@ -49,19 +49,16 @@ namespace Castor3D
 			OverlayCategory::Vertex const & l_vertex = *p_begin;
 			auto l_size = p_count * sizeof( OverlayCategory::Vertex );
 
-			if ( p_buffer.Bind() )
+			p_buffer.Bind();
+			auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
+
+			if ( l_buffer )
 			{
-				auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
-
-				if ( l_buffer )
-				{
-					std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
-					p_buffer.Unlock();
-				}
-
-				p_buffer.Unbind();
+				std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
+				p_buffer.Unlock();
 			}
 
+			p_buffer.Unbind();
 			return p_count;
 		}
 
@@ -70,19 +67,16 @@ namespace Castor3D
 			TextOverlay::Vertex const & l_vertex = *p_begin;
 			auto l_size = p_count * sizeof( TextOverlay::Vertex );
 
-			if ( p_buffer.Bind() )
+			p_buffer.Bind();
+			auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
+
+			if ( l_buffer )
 			{
-				auto l_buffer = p_buffer.Lock( 0, uint32_t( l_size ), AccessType::eWrite );
-
-				if ( l_buffer )
-				{
-					std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
-					p_buffer.Unlock();
-				}
-
-				p_buffer.Unbind();
+				std::memcpy( l_buffer, reinterpret_cast< uint8_t const * >( &l_vertex ), l_size );
+				p_buffer.Unlock();
 			}
 
+			p_buffer.Unbind();
 			return p_count;
 		}
 	}

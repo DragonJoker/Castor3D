@@ -23,9 +23,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestTextureStorage::Bind( uint32_t p_index )const
+	void TestTextureStorage::Bind( uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void TestTextureStorage::Unbind( uint32_t p_index )const

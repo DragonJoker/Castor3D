@@ -69,11 +69,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
-		bool DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
+		void DownloadBuffer( Castor3D::AttachmentPoint p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer )override;
 		/**
 		 *\copydoc		Castor3D::BackBuffers::Bind
 		 */
-		bool Bind( Castor3D::WindowBuffer p_buffer, Castor3D::FrameBufferTarget p_target )const override;
+		void Bind( Castor3D::WindowBuffer p_buffer, Castor3D::FrameBufferTarget p_target )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
@@ -108,11 +108,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		bool DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const override;
+		void DoBlitInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components )const override;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
 		 */
-		bool DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components, Castor3D::InterpolationMode p_interpolation )const override;
+		void DoStretchInto( Castor3D::FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor::FlagCombination< Castor3D::BufferComponent > const & p_components, Castor3D::InterpolationMode p_interpolation )const override;
 
 	private:
 		GlFrameBufferMode m_glBindingMode;

@@ -92,9 +92,9 @@ namespace Testing
 		CT_CHECK( l_atomicCounterBuffer.Initialise( 1u, 0u ) );
 		CT_CHECK( l_program->Initialise() );
 		uint32_t l_count{ 0u };
-		CT_CHECK( l_atomicCounterBuffer.Upload( 0u, 1u, &l_count ) );
+		l_atomicCounterBuffer.Upload( 0u, 1u, &l_count );
 		l_pipeline->Run( Point3ui{ 1u, 1u, 1u }, Point3ui{ 1u, 1u, 1u }, MemoryBarrier::eAtomicCounterBuffer );
-		CT_CHECK( l_atomicCounterBuffer.Download( 0u, 1u, &l_count ) );
+		l_atomicCounterBuffer.Download( 0u, 1u, &l_count );
 		CT_EQUAL( l_count, 1u );
 		l_atomicCounterBuffer.Cleanup();
 		m_engine.GetRenderSystem()->GetMainContext()->EndCurrent();

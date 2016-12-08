@@ -68,36 +68,41 @@ namespace Castor3D
 		return DoGetGeometryShaderSource( p_textureFlags, p_programFlags, p_sceneFlags );
 	}
 
-	void RenderPass::PreparePipeline(
+	void RenderPass::PrepareOpaquePipeline(
 		BlendMode p_colourBlendMode,
 		BlendMode p_alphaBlendMode,
-		FlagCombination< TextureChannel > const & p_textureFlags,
+		FlagCombination< TextureChannel > & p_textureFlags,
 		FlagCombination< ProgramFlag > & p_programFlags,
 		uint8_t p_sceneFlags,
 		bool p_twoSided )
 	{
-		DoCompleteProgramFlags( p_programFlags );
+		DoUpdateOpaqueFlags( p_textureFlags, p_programFlags );
 		auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
+		auto l_flags = PipelineFlags{ p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags };
 
-		if ( CheckFlag( p_programFlags, ProgramFlag::eAlphaBlending ) )
+		if ( p_twoSided )
 		{
 			auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
-			auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
-			DoPrepareTransparentFrontPipeline( *l_frontProgram, l_flags );
-			DoPrepareTransparentBackPipeline( *l_backProgram, l_flags );
+			DoPrepareOpaqueFrontPipeline( *l_frontProgram, l_flags );
 		}
-		else
-		{
-			auto l_flags = PipelineFlags{ p_colourBlendMode, BlendMode::eNoBlend, p_textureFlags, p_programFlags, p_sceneFlags };
 
-			if ( p_twoSided )
-			{
-				auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
-				DoPrepareOpaqueFrontPipeline( *l_frontProgram, l_flags );
-			}
+		DoPrepareOpaqueBackPipeline( *l_backProgram, l_flags );
+	}
 
-			DoPrepareOpaqueBackPipeline( *l_backProgram, l_flags );
-		}
+	void RenderPass::PrepareTransparentPipeline(
+		BlendMode p_colourBlendMode,
+		BlendMode p_alphaBlendMode,
+		FlagCombination< TextureChannel > & p_textureFlags,
+		FlagCombination< ProgramFlag > & p_programFlags,
+		uint8_t p_sceneFlags )
+	{
+		DoUpdateTransparentFlags( p_textureFlags, p_programFlags );
+		auto l_backProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, false );
+
+		auto l_frontProgram = DoGetProgram( p_textureFlags, p_programFlags, p_sceneFlags, true );
+		auto l_flags = PipelineFlags{ p_colourBlendMode, p_alphaBlendMode, p_textureFlags, p_programFlags, p_sceneFlags };
+		DoPrepareTransparentFrontPipeline( *l_frontProgram, l_flags );
+		DoPrepareTransparentBackPipeline( *l_backProgram, l_flags );
 	}
 
 	RenderPipeline * RenderPass::GetOpaquePipelineFront(

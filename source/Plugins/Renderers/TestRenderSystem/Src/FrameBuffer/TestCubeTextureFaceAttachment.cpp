@@ -15,14 +15,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestCubeTextureFaceAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
+	void TestCubeTextureFaceAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
 	{
-		return true;
 	}
 
-	bool TestCubeTextureFaceAttachment::DoAttach()
+	void TestCubeTextureFaceAttachment::DoAttach()
 	{
-		return true;
 	}
 
 	void TestCubeTextureFaceAttachment::DoDetach()

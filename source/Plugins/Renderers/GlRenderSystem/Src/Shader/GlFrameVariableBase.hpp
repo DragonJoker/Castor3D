@@ -43,9 +43,9 @@ namespace GlRender
 
 	protected:
 		void GetVariableLocation( char const * p_varName );
-		template< typename Type > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
-		template< typename Type, int Count > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
-		template< typename Type, int Rows, int Columns > bool DoBind( Type const * p_value, uint32_t p_occurences )const;
+		template< typename Type > void DoBind( Type const * p_value, uint32_t p_occurences )const;
+		template< typename Type, int Count > void DoBind( Type const * p_value, uint32_t p_occurences )const;
+		template< typename Type, int Rows, int Columns > void DoBind( Type const * p_value, uint32_t p_occurences )const;
 
 	protected:
 		uint32_t m_glName;

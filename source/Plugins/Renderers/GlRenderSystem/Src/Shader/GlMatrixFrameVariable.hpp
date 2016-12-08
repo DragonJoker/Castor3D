@@ -49,7 +49,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameVariable::Bind
 		 */
-		bool Bind()const override;
+		void Bind()const override;
 		/**
 		 *\copydoc		Castor3D::FrameVariable::Unbind
 		 */

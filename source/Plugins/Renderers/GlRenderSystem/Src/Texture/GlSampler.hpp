@@ -31,13 +31,13 @@ namespace GlRender
 {
 	class GlSampler
 		: public Castor3D::Sampler
-		, private Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
+		, private Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
 	{
-		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
+		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
 
 	private:
 		typedef std::function< void() > PUnbindFunction;
-		typedef std::function< bool( uint32_t p_index ) > PBindFunction;
+		typedef std::function< void( uint32_t p_index ) > PBindFunction;
 
 	public:
 		GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name );
@@ -45,7 +45,7 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( uint32_t p_index )const;
+		virtual void Bind( uint32_t p_index )const;
 		virtual void Unbind( uint32_t p_index )const;
 
 	private:

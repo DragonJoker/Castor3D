@@ -23,13 +23,7 @@ namespace GlRender
 
 	bool GlGpuIoBuffer::Initialise()
 	{
-		bool l_return = InitialiseStorage( m_pixelsSize, m_accessType, m_accessNature );
-
-		if ( l_return )
-		{
-			l_return = DoInitialise();
-		}
-
-		return l_return;
+		InitialiseStorage( m_pixelsSize, m_accessType, m_accessNature );
+		return DoInitialise();
 	}
 }

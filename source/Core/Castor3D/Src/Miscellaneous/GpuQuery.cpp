@@ -29,10 +29,10 @@ namespace Castor3D
 		DoCleanup();
 	}
 
-	bool GpuQuery::Begin()
+	void GpuQuery::Begin()
 	{
 		m_active = true;
-		return DoBegin();
+		DoBegin();
 	}
 
 	void GpuQuery::End()

@@ -24,99 +24,66 @@ namespace GlRender
 	{
 	}
 
-	bool GlRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
+	void GlRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
 	{
-		bool l_return = false;
+		REQUIRE( m_glStatus == GlFramebufferStatus::eComplete );
+		GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_buffer );
+		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eRead, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
+		GetOpenGl().BindFramebuffer( GlFrameBufferMode::eDraw, l_pBuffer->GetGlName() );
+		GetOpenGl().ReadBuffer( GetOpenGl().Get( m_glAttachmentPoint ) );
 
-		if ( GetOpenGl().HasFbo() )
+		if ( m_glAttachmentPoint == GlAttachmentPoint::eDepth )
 		{
-			l_return = m_glStatus == GlFramebufferStatus::eComplete;
-			GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_buffer );
-
-			if ( l_return )
-			{
-				l_return = GetOpenGl().BindFramebuffer( GlFrameBufferMode::eRead, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
-			}
-
-			if ( l_return )
-			{
-				l_return = GetOpenGl().BindFramebuffer( GlFrameBufferMode::eDraw, l_pBuffer->GetGlName() );
-			}
-
-			if ( l_return )
-			{
-				l_return = GetOpenGl().ReadBuffer( GetOpenGl().Get( m_glAttachmentPoint ) );
-			}
-
-			if ( l_return )
-			{
-				if ( m_glAttachmentPoint == GlAttachmentPoint::eDepth )
-				{
-					l_return = GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eDepth, GlInterpolationMode::eNearest );
-				}
-				else if ( m_glAttachmentPoint == GlAttachmentPoint::eStencil )
-				{
-					l_return = GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eStencil, GlInterpolationMode::eNearest );
-				}
-				else
-				{
-					l_return = GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eColour, GetOpenGl().Get( p_interpolation ) );
-				}
-			}
+			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eDepth, GlInterpolationMode::eNearest );
 		}
-
-		return l_return;
+		else if ( m_glAttachmentPoint == GlAttachmentPoint::eStencil )
+		{
+			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eStencil, GlInterpolationMode::eNearest );
+		}
+		else
+		{
+			GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GlComponent::eColour, GetOpenGl().Get( p_interpolation ) );
+		}
 	}
 
-	bool GlRenderBufferAttachment::DoAttach()
+	void GlRenderBufferAttachment::DoAttach()
 	{
-		bool l_return = false;
+		m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
+		uint32_t l_uiGlName;
 
-		if ( GetOpenGl().HasFbo() )
+		switch ( GetRenderBuffer()->GetComponent() )
 		{
-			m_glAttachmentPoint = GlAttachmentPoint( uint32_t( GetOpenGl().Get( GetAttachmentPoint() ) ) + GetAttachmentIndex() );
-			uint32_t l_uiGlName;
+		case BufferComponent::eColour:
+			l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			break;
 
-			switch ( GetRenderBuffer()->GetComponent() )
-			{
-			case BufferComponent::eColour:
-				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
-				break;
+		case BufferComponent::eDepth:
+			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			break;
 
-			case BufferComponent::eDepth:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
-				break;
+		case BufferComponent::eStencil:
+			l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
+			break;
 
-			case BufferComponent::eStencil:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
-				break;
-
-			default:
-				l_uiGlName = uint32_t( GlInvalidIndex );
-				break;
-			}
-
-			if ( l_uiGlName != GlInvalidIndex )
-			{
-				l_return = GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, l_uiGlName );
-			}
-
-			if ( l_return )
-			{
-				m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
-
-				if ( m_glStatus != GlFramebufferStatus::eUnsupported )
-				{
-					m_glStatus = GlFramebufferStatus::eComplete;
-				}
-			}
-			else
-			{
-				m_glStatus = GlFramebufferStatus::eUnsupported;
-			}
+		default:
+			l_uiGlName = uint32_t( GlInvalidIndex );
+			break;
 		}
 
-		return l_return;
+		if ( l_uiGlName != GlInvalidIndex )
+		{
+			GetOpenGl().FramebufferRenderbuffer( GlFrameBufferMode::eDefault, m_glAttachmentPoint, GlRenderBufferMode::eDefault, l_uiGlName );
+			m_glStatus = GlFramebufferStatus( GetOpenGl().CheckFramebufferStatus( GlFrameBufferMode::eDefault ) );
+
+			if ( m_glStatus != GlFramebufferStatus::eUnsupported )
+			{
+				m_glStatus = GlFramebufferStatus::eComplete;
+			}
+		}
+		else
+		{
+			m_glStatus = GlFramebufferStatus::eUnsupported;
+		}
 	}
 
 	void GlRenderBufferAttachment::DoDetach()

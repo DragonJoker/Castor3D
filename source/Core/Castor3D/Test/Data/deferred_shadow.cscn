@@ -102,7 +102,7 @@ scene "Scene"
 	object "Plane2"
 	{
 		parent "Plane2"
-		receives_shadows false
+		receive_shadows false
 
 		mesh "Plane2"
 		{
@@ -152,7 +152,7 @@ scene "Scene"
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"
-			technique "deferred"
+			technique "deferred_msaa" -samples_count=8
 		}
 
 		fullscreen false

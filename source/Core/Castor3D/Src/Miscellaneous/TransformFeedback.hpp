@@ -87,12 +87,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Bind()const;
+		C3D_API void Bind()const;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
@@ -131,12 +129,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBind()const = 0;
+		C3D_API virtual void DoBind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive.
@@ -147,12 +143,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Begins transform feedback.
-		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Démarre le transform feedback.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBegin()const = 0;
+		C3D_API virtual void DoBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends transform feedback.

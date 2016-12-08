@@ -29,13 +29,11 @@ namespace TestRender
 	}
 
 	template< typename T >
-	bool TestOneFrameVariable< T >::Bind()const
+	void TestOneFrameVariable< T >::Bind()const
 	{
 		if ( Castor3D::FrameVariable::m_changed )
 		{
 			Castor3D::FrameVariable::m_changed = false;
 		}
-
-		return true;
 	}
 }

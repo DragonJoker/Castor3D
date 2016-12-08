@@ -42,9 +42,8 @@ namespace TestRender
 		return true;
 	}
 
-	bool TestFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestFrameBuffer::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		return true;
 	}
 
 	ColourRenderBufferSPtr TestFrameBuffer::CreateColourRenderBuffer( PixelFormat p_format )
@@ -76,22 +75,19 @@ namespace TestRender
 	{
 	}
 
-	bool TestFrameBuffer::DoBind( FrameBufferTarget p_target )const
+	void TestFrameBuffer::DoBind( FrameBufferTarget p_target )const
 	{
-		return true;
 	}
 
 	void TestFrameBuffer::DoUnbind()const
 	{
 	}
 
-	bool TestFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
+	void TestFrameBuffer::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
 	{
-		return true;
 	}
 
-	bool TestFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void TestFrameBuffer::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		return true;
 	}
 }

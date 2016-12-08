@@ -33,9 +33,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestDepthStencilRenderBuffer::Bind()
+	void TestDepthStencilRenderBuffer::Bind()
 	{
-		return true;
 	}
 
 	void TestDepthStencilRenderBuffer::Unbind()

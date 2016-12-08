@@ -57,7 +57,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
-		virtual bool Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::InterpolationMode p_interpolation );
+		void Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::InterpolationMode p_interpolation )override;
 		/**
 		 *\~english
 		 *\return		The OpenGL buffer status.
@@ -83,11 +83,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
-		virtual bool DoAttach();
+		void DoAttach()override;
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */
-		virtual void DoDetach();
+		void DoDetach()override;
 
 	private:
 		GlTexDim m_glFace;

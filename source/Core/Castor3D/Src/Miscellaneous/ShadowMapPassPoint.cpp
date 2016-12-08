@@ -174,12 +174,10 @@ namespace Castor3D
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		bool l_return{ false };
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
-		{
-			m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), m_index );
-			l_return = m_frameBuffer->IsComplete();
-			m_frameBuffer->Unbind();
-		}
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType(), m_index );
+		l_return = m_frameBuffer->IsComplete();
+		m_frameBuffer->Unbind();
 
 		real const l_aspect = real( p_size.width() ) / p_size.height();
 		real const l_near = 1.0_r;
@@ -234,14 +232,12 @@ namespace Castor3D
 
 	void ShadowMapPassPoint::DoRender()
 	{
-		if ( m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw ) )
-		{
-			m_frameBuffer->Clear();
-			auto & l_nodes = m_renderQueue.GetRenderNodes();
-			DoRenderOpaqueNodes( l_nodes );
-			DoRenderTransparentNodes( l_nodes );
-			m_frameBuffer->Unbind();
-		}
+		m_frameBuffer->Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		m_frameBuffer->Clear();
+		auto & l_nodes = m_renderQueue.GetRenderNodes();
+		DoRenderOpaqueNodes( l_nodes );
+		DoRenderTransparentNodes( l_nodes );
+		m_frameBuffer->Unbind();
 	}
 
 	void ShadowMapPassPoint::DoUpdateProgram( ShaderProgram & p_program )

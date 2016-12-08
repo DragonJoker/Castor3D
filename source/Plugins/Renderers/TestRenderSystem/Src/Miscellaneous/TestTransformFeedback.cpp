@@ -24,18 +24,16 @@ namespace TestRender
 	{
 	}
 
-	bool TestTransformFeedback::DoBind()const
+	void TestTransformFeedback::DoBind()const
 	{
-		return true;
 	}
 
 	void TestTransformFeedback::DoUnbind()const
 	{
 	}
 
-	bool TestTransformFeedback::DoBegin()const
+	void TestTransformFeedback::DoBegin()const
 	{
-		return true;
 	}
 
 	void TestTransformFeedback::DoEnd()const

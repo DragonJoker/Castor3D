@@ -60,12 +60,10 @@ namespace Castor3D
 		m_depthAttach = m_frameBuffer->CreateAttachment( l_texture );
 		bool l_return{ false };
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
-		{
-			m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType() );
-			l_return = m_frameBuffer->IsComplete();
-			m_frameBuffer->Unbind();
-		}
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->Attach( AttachmentPoint::eDepth, 0, m_depthAttach, l_texture->GetType() );
+		l_return = m_frameBuffer->IsComplete();
+		m_frameBuffer->Unbind();
 
 		m_frameBuffer->SetClearColour( Colour::from_predef( PredefinedColour::eOpaqueBlack ) );
 		m_renderQueue.Initialise( m_scene, *m_camera );
@@ -92,8 +90,9 @@ namespace Castor3D
 
 	void ShadowMapPassDirectional::DoRender()
 	{
-		if ( m_camera && m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
+		if ( m_camera )
 		{
+			m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
 			m_frameBuffer->Clear();
 			auto & l_nodes = m_renderQueue.GetRenderNodes();
 			m_camera->Apply();

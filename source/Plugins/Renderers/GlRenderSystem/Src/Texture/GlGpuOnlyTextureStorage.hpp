@@ -49,7 +49,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Bind
 		 */
-		bool Bind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
+		void Bind( Castor3D::TextureStorage const & p_storage, uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unbind
 		 */

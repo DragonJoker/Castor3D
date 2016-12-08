@@ -36,9 +36,9 @@ namespace GlRender
 	*/
 	class GlQuery
 		: public Castor3D::GpuQuery
-		, public Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
+		, public Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >
 	{
-		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
+		using ObjectType = Object< std::function< void( int, uint32_t * ) >, std::function< void( int, uint32_t const * ) > >;
 
 	public:
 		/**
@@ -72,7 +72,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuQuery::Begin
 		 */
-		virtual bool DoBegin()const;
+		virtual void DoBegin()const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::End
 		 */
@@ -80,19 +80,19 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const;
 		/**
 		 *\copydoc		Castor3D::GpuQuery::DoGetInfos
 		 */
-		virtual bool DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
+		virtual void DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const;
 	};
 }
 

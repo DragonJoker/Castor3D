@@ -385,46 +385,42 @@ namespace Bloom
 		{
 			auto const & l_texture = *std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
 
-			if ( DoHiPassFilter( l_texture ) )
-			{
-				DoDownSample( l_texture );
-				DoBlur( l_texture, m_hiPassSurfaces, m_blurSurfaces, *m_blurXPipeline );
-				DoBlur( l_texture, m_blurSurfaces, m_hiPassSurfaces, *m_blurYPipeline );
+			DoHiPassFilter( l_texture );
+			DoDownSample( l_texture );
+			DoBlur( l_texture, m_hiPassSurfaces, m_blurSurfaces, *m_blurXPipeline );
+			DoBlur( l_texture, m_blurSurfaces, m_hiPassSurfaces, *m_blurYPipeline );
 #if 0
 
-				for ( auto & l_surface : m_hiPassSurfaces )
+			for ( auto & l_surface : m_hiPassSurfaces )
+			{
+				auto l_pxbuffer = l_surface.m_colourTexture.GetTexture()->GetImage().GetBuffer();
+
+				if ( l_pxbuffer )
 				{
-					auto l_pxbuffer = l_surface.m_colourTexture.GetTexture()->GetImage().GetBuffer();
-
-					if ( l_pxbuffer )
+					if ( l_surface.m_colourTexture.GetTexture()->Bind( 0 ) )
 					{
-						if ( l_surface.m_colourTexture.GetTexture()->Bind( 0 ) )
+						auto l_buffer = l_surface.m_colourTexture.GetTexture()->Lock( AccessType::eRead );
+
+						if ( l_buffer )
 						{
-							auto l_buffer = l_surface.m_colourTexture.GetTexture()->Lock( AccessType::eRead );
-
-							if ( l_buffer )
-							{
-								std::memcpy( l_pxbuffer->ptr(), l_buffer, l_pxbuffer->size() );
-								l_surface.m_colourTexture.GetTexture()->Unlock( false );
-								StringStream l_name;
-								l_name << Engine::GetEngineDirectory() << cuT( "\\Bloom_" ) << ( void * )l_pxbuffer.get() << cuT( "_Blur.png" );
-								Image::BinaryWriter()( Image( cuT( "tmp" ), *l_pxbuffer ), Path( l_name.str() ) );
-							}
-
-							l_surface.m_colourTexture.GetTexture()->Unbind( 0 );
+							std::memcpy( l_pxbuffer->ptr(), l_buffer, l_pxbuffer->size() );
+							l_surface.m_colourTexture.GetTexture()->Unlock( false );
+							StringStream l_name;
+							l_name << Engine::GetEngineDirectory() << cuT( "\\Bloom_" ) << ( void * )l_pxbuffer.get() << cuT( "_Blur.png" );
+							Image::BinaryWriter()( Image( cuT( "tmp" ), *l_pxbuffer ), Path( l_name.str() ) );
 						}
+
+						l_surface.m_colourTexture.GetTexture()->Unbind( 0 );
 					}
 				}
+			}
 
 #endif
-				DoCombine( l_texture );
-			}
+			DoCombine( l_texture );
 
-			if ( p_framebuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
-			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetDimensions(), *m_blurSurfaces[0].m_colourTexture.GetTexture() );
-				p_framebuffer.Unbind();
-			}
+			p_framebuffer.Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_texture.GetDimensions(), *m_blurSurfaces[0].m_colourTexture.GetTexture() );
+			p_framebuffer.Unbind();
 		}
 
 		return true;
@@ -435,20 +431,14 @@ namespace Bloom
 		return p_file.WriteText( cuT( " -Size " ) + string::to_string( m_size ) ) > 0;
 	}
 
-	bool BloomPostEffect::DoHiPassFilter( TextureLayout const & p_origin )
+	void BloomPostEffect::DoHiPassFilter( TextureLayout const & p_origin )
 	{
 		auto l_source = &m_hiPassSurfaces[0];
-		bool l_return = l_source->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			l_source->m_fbo->Clear();
-			m_hiPassMapDiffuse->SetValue( 0 );
-			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, p_origin, *m_hiPassPipeline );
-			l_source->m_fbo->Unbind();
-		}
-
-		return l_return;
+		l_source->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		l_source->m_fbo->Clear();
+		m_hiPassMapDiffuse->SetValue( 0 );
+		GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, p_origin, *m_hiPassPipeline );
+		l_source->m_fbo->Unbind();
 	}
 
 	void BloomPostEffect::DoDownSample( TextureLayout const & p_origin )
@@ -459,14 +449,10 @@ namespace Bloom
 		for ( uint32_t i = 1; i < m_hiPassSurfaces.size(); ++i )
 		{
 			auto l_destination = &m_hiPassSurfaces[i];
-
-			if ( l_destination->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
-			{
-				l_destination->m_fbo->Clear();
-				l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture.GetTexture() );
-				l_destination->m_fbo->Unbind();
-			}
-
+			l_destination->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			l_destination->m_fbo->Clear();
+			l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture.GetTexture() );
+			l_destination->m_fbo->Unbind();
 			l_source = l_destination;
 		}
 	}
@@ -479,65 +465,60 @@ namespace Bloom
 		{
 			auto l_source = &p_sources[i];
 			auto l_destination = &p_destinations[i];
-
-			if ( l_destination->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
-			{
-				l_destination->m_fbo->Clear();
-				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture.GetTexture(), p_pipeline );
-				l_destination->m_fbo->Unbind();
-			}
+			l_destination->m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+			l_destination->m_fbo->Clear();
+			l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture.GetTexture(), p_pipeline );
+			l_destination->m_fbo->Unbind();
 		}
 	}
 
 	void BloomPostEffect::DoCombine( TextureLayout const & p_origin )
 	{
-		if ( m_blurSurfaces[0].m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
+		m_blurSurfaces[0].m_fbo->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_blurSurfaces[0].m_fbo->Clear();
+		m_viewport.Resize( p_origin.GetDimensions() );
+		m_viewport.Update();
+		m_viewport.Apply();
+		m_combinePipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+		m_combinePipeline->Apply();
+
+		auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
+		auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
+		auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
+		auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
+		FrameVariableBufferSPtr l_matrices = m_combinePipeline->GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+
+		if ( l_matrices )
 		{
-			m_blurSurfaces[0].m_fbo->Clear();
-			m_viewport.Resize( p_origin.GetDimensions() );
-			m_viewport.Update();
-			m_viewport.Apply();
-			m_combinePipeline->SetProjectionMatrix( m_viewport.GetProjection() );
-			m_combinePipeline->Apply();
-
-			auto const & l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
-			auto const & l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
-			auto const & l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
-			auto const & l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
-			FrameVariableBufferSPtr l_matrices = m_combinePipeline->GetProgram().FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-
-			if ( l_matrices )
-			{
-				m_combinePipeline->ApplyProjection( *l_matrices );
-			}
-
-			m_combinePipeline->Apply();
-			m_combinePipeline->GetProgram().BindUbos();
-
-			l_texture0.Bind();
-			l_texture1.Bind();
-			l_texture2.Bind();
-			l_texture3.Bind();
-			p_origin.Bind( 4 );
-			m_linearSampler->Bind( 4 );
-
-			m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
-
-			l_texture0.Unbind();
-			l_texture1.Unbind();
-			l_texture2.Unbind();
-			l_texture3.Unbind();
-			p_origin.Unbind( 4 );
-			m_linearSampler->Unbind( 4 );
-
-			m_combinePipeline->GetProgram().UnbindUbos();
-
-			m_blurSurfaces[0].m_fbo->Unbind();
-
-			m_blurSurfaces[0].m_colourTexture.Bind();
-			m_blurSurfaces[0].m_colourTexture.GetTexture()->GenerateMipmaps();
-			m_blurSurfaces[0].m_colourTexture.Unbind();
+			m_combinePipeline->ApplyProjection( *l_matrices );
 		}
+
+		m_combinePipeline->Apply();
+		m_combinePipeline->GetProgram().BindUbos();
+
+		l_texture0.Bind();
+		l_texture1.Bind();
+		l_texture2.Bind();
+		l_texture3.Bind();
+		p_origin.Bind( 4 );
+		m_linearSampler->Bind( 4 );
+
+		m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
+
+		l_texture0.Unbind();
+		l_texture1.Unbind();
+		l_texture2.Unbind();
+		l_texture3.Unbind();
+		p_origin.Unbind( 4 );
+		m_linearSampler->Unbind( 4 );
+
+		m_combinePipeline->GetProgram().UnbindUbos();
+
+		m_blurSurfaces[0].m_fbo->Unbind();
+
+		m_blurSurfaces[0].m_colourTexture.Bind();
+		m_blurSurfaces[0].m_colourTexture.GetTexture()->GenerateMipmaps();
+		m_blurSurfaces[0].m_colourTexture.Unbind();
 	}
 
 	SamplerSPtr BloomPostEffect::DoCreateSampler( bool p_linear )

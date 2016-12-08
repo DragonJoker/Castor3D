@@ -127,11 +127,11 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		bool DoBeginRender()override;
+		void DoBeginRender()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginOpaqueRendering
 		 */
-		bool DoBeginOpaqueRendering()override;
+		void DoBeginOpaqueRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndOpaqueRendering
 		 */
@@ -139,7 +139,7 @@ namespace Deferred
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoBeginTransparentRendering
 		 */
-		bool DoBeginTransparentRendering()override;
+		void DoBeginTransparentRendering()override;
 		/**
 		 *\copydoc		Castor3D::RenderTechnique::DoEndTransparentRendering
 		 */
@@ -152,6 +152,11 @@ namespace Deferred
 		 *\copydoc		Castor3D::RenderTechnique::DoWriteInto
 		 */
 		bool DoWriteInto( Castor::TextFile & p_file )override;
+		/**
+		 *\copydoc		Castor3D::RenderPass::DoUpdateOpaqueFlags
+		 */
+		void DoUpdateOpaqueFlags( Castor::FlagCombination< Castor3D::TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< Castor3D::ProgramFlag > & p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetOpaquePixelShaderSource
 		 */

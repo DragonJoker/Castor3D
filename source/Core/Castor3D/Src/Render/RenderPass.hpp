@@ -142,6 +142,31 @@ namespace Castor3D
 		 *\param[in]	p_textureFlags		A combination of TextureChannel.
 		 *\param[in]	p_programFlags		A combination of ProgramFlag.
 		 *\param[in]	p_sceneFlags		Scene related flags.
+		 *\param[in]	p_twoSided			Tells if the pass is two sided.
+		 *\~french
+		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
+		 *\param[in]	p_colourBlendMode	Le mode de mélange alpha.
+		 *\param[in]	p_textureFlags		Une combinaison de TextureChannel.
+		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
+		 *\param[in]	p_twoSided			Dit si la passe est sur les deux faces.
+		 */
+		C3D_API void PrepareOpaquePipeline(
+			BlendMode p_colourBlendMode,
+			BlendMode p_alphaBlendMode,
+			Castor::FlagCombination< TextureChannel > & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > & p_programFlags,
+			uint8_t p_sceneFlags,
+			bool p_twoSided );
+		/**
+		 *\~english
+		 *\brief		Prepares the pipeline matching the given flags.
+		 *\param[in]	p_colourBlendMode	The colour blend mode.
+		 *\param[in]	p_colourBlendMode	The alpha blend mode.
+		 *\param[in]	p_textureFlags		A combination of TextureChannel.
+		 *\param[in]	p_programFlags		A combination of ProgramFlag.
+		 *\param[in]	p_sceneFlags		Scene related flags.
 		 *\~french
 		 *\brief		Prépare le pipeline qui correspond aux indicateurs donnés.
 		 *\param[in]	p_colourBlendMode	Le mode de mélange de couleurs.
@@ -150,13 +175,12 @@ namespace Castor3D
 		 *\param[in]	p_programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	p_sceneFlags		Les indicateurs relatifs à la scène.
 		 */
-		C3D_API void PreparePipeline(
+		C3D_API void PrepareTransparentPipeline(
 			BlendMode p_colourBlendMode,
 			BlendMode p_alphaBlendMode,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< TextureChannel > & p_textureFlags,
 			Castor::FlagCombination< ProgramFlag > & p_programFlags,
-			uint8_t p_sceneFlags,
-			bool p_twoSided );
+			uint8_t p_sceneFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves the opaque pipeline matching the given flags, for front face culling.
@@ -493,13 +517,31 @@ namespace Castor3D
 			uint8_t p_sceneFlags )const = 0;
 		/**
 		 *\~english
-		 *\brief			Modifies the given program flags to make them match the render pass requirements.
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
 		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
 		 *\~french
-		 *\brief			Modifie les indicateurs de programme donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
 		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
 		 */
-		C3D_API virtual void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const = 0;
+		C3D_API virtual void DoUpdateOpaqueFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const
+		{
+			DoUpdateTransparentFlags( p_textureFlags, p_programFlags );
+		}
+		/**
+		 *\~english
+		 *\brief			Modifies the given flags to make them match the render pass requirements.
+		 *\param[in,out]	p_textureFlags	A combination of TextureChannel.
+		 *\param[in,out]	p_programFlags	A combination of ProgramFlag.
+		 *\~french
+		 *\brief			Modifie les indicateurs donnés pour le faire correspondre au pré-requis de la passe de rendus.
+		 *\param[in,out]	p_textureFlags	Une combinaison de TextureChannel.
+		 *\param[in,out]	p_programFlags	Une combinaison de ProgramFlag.
+		 */
+		C3D_API virtual void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Updates the opaque pipeline.

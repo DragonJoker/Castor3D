@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Lie cette variable au shader
 		 */
-		C3D_API virtual bool Bind()const = 0;
+		C3D_API virtual void Bind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds this variable from the shader

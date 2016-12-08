@@ -25,9 +25,8 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
+	void TestBackBuffers::Bind( WindowBuffer p_buffer, FrameBufferTarget p_target )const
 	{
-		return true;
 	}
 
 	void TestBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )const
@@ -38,22 +37,19 @@ namespace TestRender
 	{
 	}
 
-	bool TestBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	void TestBackBuffers::DownloadBuffer( AttachmentPoint p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
-		return true;
 	}
 
 	void TestBackBuffers::DoClear( uint32_t p_uiTargets )
 	{
 	}
 
-	bool TestBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
+	void TestBackBuffers::DoBlitInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rect, FlagCombination< BufferComponent > const & p_components )const
 	{
-		return false;
 	}
 
-	bool TestBackBuffers::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void TestBackBuffers::DoStretchInto( FrameBuffer const & p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		return false;
 	}
 }

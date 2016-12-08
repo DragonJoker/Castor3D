@@ -60,9 +60,8 @@ namespace GlRender
 	{
 	}
 
-	bool GlImmutableTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
+	void GlImmutableTextureStorageTraits::Bind( TextureStorage const & p_storage, uint32_t p_index )const
 	{
-		return true;
 	}
 
 	void GlImmutableTextureStorageTraits::Unbind( TextureStorage const & p_storage, uint32_t p_index )const

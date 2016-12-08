@@ -118,13 +118,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Applies the sampler
 		 *\param[in]	p_index	The sampler index
-		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Applique le sampler
 		 *\param[in]	p_index	L'index du sampler
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( uint32_t p_index )const = 0;
+		C3D_API virtual void Bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler

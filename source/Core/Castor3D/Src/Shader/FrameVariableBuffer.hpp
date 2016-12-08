@@ -134,13 +134,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers).
 		 *\param[in]	p_index	The buffer index.
-		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers).
 		 *\param[in]	p_index	L'index du tampon GPU.
-		 *\return		\p false en cas de problème.
 		 */
-		C3D_API bool Bind( uint32_t p_index );
+		C3D_API void Bind( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables.
@@ -329,7 +327,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index du tampon GPU.
 		 *\return		\p false if any problem occured.
 		 */
-		C3D_API virtual bool DoBind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoBind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables.

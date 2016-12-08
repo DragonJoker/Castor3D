@@ -14,14 +14,12 @@ namespace TestRender
 	{
 	}
 
-	bool TestRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
+	void TestRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, InterpolationMode p_interpolation )
 	{
-		return true;
 	}
 
-	bool TestRenderBufferAttachment::DoAttach()
+	void TestRenderBufferAttachment::DoAttach()
 	{
-		return true;
 	}
 
 	void TestRenderBufferAttachment::DoDetach()

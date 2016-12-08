@@ -25,19 +25,16 @@ namespace TestRender
 	{
 	}
 
-	bool TestAtomicCounterBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
+	void TestAtomicCounterBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
 	{
-		return true;
 	}
 
-	bool TestAtomicCounterBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestAtomicCounterBuffer::InitialiseBindingPoint( uint32_t p_point )const
 	{
-		return true;
 	}
 
-	bool TestAtomicCounterBuffer::Bind()const
+	void TestAtomicCounterBuffer::Bind()const
 	{
-		return true;
 	}
 
 	void TestAtomicCounterBuffer::Unbind()const
@@ -53,18 +50,15 @@ namespace TestRender
 	{
 	}
 
-	bool TestAtomicCounterBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )const
+	void TestAtomicCounterBuffer::Copy( GpuBuffer< uint32_t > const & p_src, uint32_t p_size )const
 	{
-		return true;
 	}
 
-	bool TestAtomicCounterBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint32_t const * p_buffer )const
+	void TestAtomicCounterBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint32_t const * p_buffer )const
 	{
-		return true;
 	}
 
-	bool TestAtomicCounterBuffer::Download( uint32_t p_offset, uint32_t p_size, uint32_t * p_buffer )const
+	void TestAtomicCounterBuffer::Download( uint32_t p_offset, uint32_t p_size, uint32_t * p_buffer )const
 	{
-		return true;
 	}
 }

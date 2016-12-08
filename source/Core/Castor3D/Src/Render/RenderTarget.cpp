@@ -112,7 +112,6 @@ namespace Castor3D
 
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
-		bool l_return = false;
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_sampler = m_renderTarget.GetEngine()->GetSamplerCache().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( TextureType::eTwoDimensions, AccessType::eRead, AccessType::eRead | AccessType::eWrite, m_renderTarget.GetPixelFormat(), p_size );
@@ -126,12 +125,10 @@ namespace Castor3D
 		m_colorTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );
 
-		if ( m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
-		{
-			m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
-			l_return = m_frameBuffer->IsComplete();
-			m_frameBuffer->Unbind();
-		}
+		m_frameBuffer->Bind( FrameBufferMode::eConfig );
+		m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
+		bool l_return = m_frameBuffer->IsComplete();
+		m_frameBuffer->Unbind();
 
 		return l_return;
 	}
@@ -313,14 +310,12 @@ namespace Castor3D
 			m_renderTechnique->Render( p_frameTime, m_visibleObjectsCount, m_particlesCount );
 
 			// Then draw the render's result to the RenderTarget's frame buffer.
-			if ( p_fb.m_frameBuffer->Bind() )
-			{
-				p_fb.m_frameBuffer->Clear();
-				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
-				// We also render overlays.
-				GetEngine()->GetOverlayCache().Render( *l_scene, m_size );
-				p_fb.m_frameBuffer->Unbind();
-			}
+			p_fb.m_frameBuffer->Bind();
+			p_fb.m_frameBuffer->Clear();
+			GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
+			// We also render overlays.
+			GetEngine()->GetOverlayCache().Render( *l_scene, m_size );
+			p_fb.m_frameBuffer->Unbind();
 		}
 
 #if DEBUG_BUFFERS

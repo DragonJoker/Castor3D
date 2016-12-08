@@ -33,10 +33,10 @@ namespace GlRender
 		return ObjectType::Destroy();
 	}
 
-	bool GlQuery::DoBegin()const
+	void GlQuery::DoBegin()const
 	{
 		ENSURE( GetGlName() != GlInvalidIndex );
-		return GetOpenGl().BeginQuery( GetOpenGl().Get( m_type ), GetGlName() );
+		GetOpenGl().BeginQuery( GetOpenGl().Get( m_type ), GetGlName() );
 	}
 
 	void GlQuery::DoEnd()const
@@ -44,23 +44,23 @@ namespace GlRender
 		GetOpenGl().EndQuery( GetOpenGl().Get( m_type ) );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const
+	void GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int32_t & p_param )const
 	{
-		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
+		GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const
+	void GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint32_t & p_param )const
 	{
-		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
+		GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const
+	void GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, int64_t & p_param )const
 	{
-		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
+		GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 
-	bool GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const
+	void GlQuery::DoGetInfos( Castor3D::QueryInfo p_infos, uint64_t & p_param )const
 	{
-		return GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
+		GetOpenGl().GetQueryObjectInfos( GetGlName(), GetOpenGl().Get( p_infos ), &p_param );
 	}
 }

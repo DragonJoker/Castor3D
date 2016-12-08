@@ -59,7 +59,7 @@ namespace GlRender
 		gl_api::GetFunction( m_pfnTextureImage2D, cuT( "glTextureImage2D" ), cuT( "EXT" ) );
 		gl_api::GetFunction( m_pfnTextureImage3D, cuT( "glTextureImage3D" ), cuT( "EXT" ) );
 		gl_api::GetFunction( m_pfnGetTextureImage, cuT( "glGetTextureImage" ), cuT( "EXT" ) );
-		gl_api::GetFunction( m_pfnGenerateTextureMipmap, cuT( "glGenerateTextureMipmap" ), cuT( "EXT" ) );
+		gl_api::GetFunction( m_pfnGenerateMipmap, cuT( "glGenerateTextureMipmap" ), cuT( "EXT" ) );
 	}
 
 	//*************************************************************************************************

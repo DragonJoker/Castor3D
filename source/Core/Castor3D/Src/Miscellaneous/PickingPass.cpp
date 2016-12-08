@@ -268,8 +268,9 @@ namespace Castor3D
 		{
 			l_return = m_frameBuffer->Initialise( l_size );
 
-			if ( l_return && m_frameBuffer->Bind( FrameBufferMode::eConfig ) )
+			if ( l_return )
 			{
+				m_frameBuffer->Bind( FrameBufferMode::eConfig );
 				m_frameBuffer->Attach( AttachmentPoint::eColour, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( AttachmentPoint::eDepth, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
@@ -337,86 +338,82 @@ namespace Castor3D
 			{
 				l_itCam->second.Update();
 
-				if ( m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
+				m_frameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+				m_frameBuffer->Clear();
+				p_camera.Apply();
+				auto & l_nodes = l_itCam->second.GetRenderNodes();
+				DoRenderOpaqueNodes( l_nodes, p_camera );
+				DoRenderTransparentNodes( l_nodes, p_camera );
+				m_frameBuffer->Unbind();
+
+				m_colourTexture->Bind( 0 );
+				Point3f l_pixel;
+				auto l_data = m_colourTexture->Lock( AccessType::eRead, 0u );
+
+				if ( l_data )
 				{
-					m_frameBuffer->Clear();
-					p_camera.Apply();
-					auto & l_nodes = l_itCam->second.GetRenderNodes();
-					DoRenderOpaqueNodes( l_nodes, p_camera );
-					DoRenderTransparentNodes( l_nodes, p_camera );
-					m_frameBuffer->Unbind();
-
-					if ( m_colourTexture->Bind( 0 ) )
-					{
-						Point3f l_pixel;
-						auto l_data = m_colourTexture->Lock( AccessType::eRead, 0u );
-
-						if ( l_data )
-						{
-							auto l_dimensions = m_colourTexture->GetDimensions();
-							auto l_format = m_colourTexture->GetPixelFormat();
-							Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
-							l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
+					auto l_dimensions = m_colourTexture->GetDimensions();
+					auto l_format = m_colourTexture->GetPixelFormat();
+					Image l_image{ cuT( "tmp" ), l_dimensions, l_format, l_data, l_format };
+					l_image.GetPixel( p_position.x(), l_dimensions.height() - 1 - p_position.y(), reinterpret_cast< uint8_t * >( l_pixel.ptr() ), l_format );
 
 #if 0
 
-							Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
+					Image::BinaryWriter()( l_image, Engine::GetEngineDirectory() / cuT( "\\ColourBuffer_Picking.hdr" ) );
 
 #endif
-							m_colourTexture->Unlock( false, 0u );
-						}
+					m_colourTexture->Unlock( false, 0u );
+				}
 
-						m_colourTexture->Unbind( 0 );
+				m_colourTexture->Unbind( 0 );
 
-						if ( Castor::point::distance_squared( l_pixel ) )
-						{
-							uint32_t l_index = uint32_t( l_pixel[0] );
+				if ( Castor::point::distance_squared( l_pixel ) )
+				{
+					uint32_t l_index = uint32_t( l_pixel[0] );
 
-							switch ( l_index & 0xFF )
-							{
-							case 0u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					switch ( l_index & 0xFF )
+					{
+					case 0u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_instancedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 1u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_instancedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 1u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_instancedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 2u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_staticGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 2u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_staticGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 3u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_staticGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 3u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_staticGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 4u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 4u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_animatedGeometries.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 5u:
-								l_return = true;
-								DoPickFromList( l_nodes.m_animatedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 5u:
+						l_return = true;
+						DoPickFromList( l_nodes.m_animatedGeometries.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 6u:
-								//DoPickFromList( l_nodes.m_billboards.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 6u:
+						//DoPickFromList( l_nodes.m_billboards.m_opaqueRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							case 7u:
-								//DoPickFromList( l_nodes.m_billboards.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
-								break;
+					case 7u:
+						//DoPickFromList( l_nodes.m_billboards.m_transparentRenderNodesBack, l_pixel, m_geometry, m_submesh, m_face );
+						break;
 
-							default:
-								FAILURE( "Unsupported index" );
-								break;
-							}
-						}
+					default:
+						FAILURE( "Unsupported index" );
+						break;
 					}
 				}
 			}
@@ -668,8 +665,12 @@ namespace Castor3D
 		}
 	}
 
-	void PickingPass::DoCompleteProgramFlags( FlagCombination< ProgramFlag > & p_programFlags )const
+	void PickingPass::DoUpdateTransparentFlags( FlagCombination< TextureChannel > & p_textureFlags
+		, FlagCombination< ProgramFlag > & p_programFlags )const
 	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_textureFlags, TextureChannel::eAll );
+
 		AddFlag( p_programFlags, ProgramFlag::ePicking );
 	}
 }

@@ -84,7 +84,7 @@ namespace Bloom
 		static constexpr uint32_t MaxCoefficients{ 64u };
 
 	private:
-		bool DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
+		void DoHiPassFilter( Castor3D::TextureLayout const & p_origin );
 		void DoDownSample( Castor3D::TextureLayout const & p_origin );
 		void DoBlur( Castor3D::TextureLayout const & p_origin, SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::RenderPipeline & p_pipeline );
 		void DoCombine( Castor3D::TextureLayout const & p_origin );

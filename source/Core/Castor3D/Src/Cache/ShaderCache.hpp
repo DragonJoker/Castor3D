@@ -207,7 +207,8 @@ namespace Castor3D
 		 */
 		C3D_API void CreateTextureVariables(
 			ShaderProgram & p_program,
-			Castor::FlagCombination< TextureChannel > const & p_textureFlags )const;
+			Castor::FlagCombination< TextureChannel > const & p_textureFlags,
+			Castor::FlagCombination< ProgramFlag > const & p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex

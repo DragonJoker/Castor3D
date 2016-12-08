@@ -76,16 +76,14 @@ namespace Castor3D
 		DoClear( l_targets );
 	}
 
-	bool FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )const
+	void FrameBuffer::Bind( FrameBufferMode p_mode, FrameBufferTarget p_target )const
 	{
-		bool l_return = DoBind( p_target );
+		DoBind( p_target );
 
-		if ( l_return && !m_attaches.empty() && p_mode == FrameBufferMode::eAutomatic )
+		if ( !m_attaches.empty() && p_mode == FrameBufferMode::eAutomatic )
 		{
 			SetDrawBuffers( m_attaches );
 		}
-
-		return l_return;
 	}
 
 	void FrameBuffer::Unbind()const
@@ -115,26 +113,26 @@ namespace Castor3D
 		DoUnbind();
 	}
 
-	bool FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
+	void FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
 		p_texture->SetTarget( p_target );
 		p_texture->SetLayer( p_layer );
-		return DoAttach( p_point, p_index, p_texture );
+		DoAttach( p_point, p_index, p_texture );
 	}
 
-	bool FrameBuffer::Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
+	void FrameBuffer::Attach( AttachmentPoint p_point, TextureAttachmentSPtr p_texture, TextureType p_target, int p_layer )
 	{
-		return Attach( p_point, 0, p_texture, p_target, p_layer );
+		Attach( p_point, 0, p_texture, p_target, p_layer );
 	}
 
-	bool FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
+	void FrameBuffer::Attach( AttachmentPoint p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		return DoAttach( p_point, p_index, p_renderBuffer );
+		DoAttach( p_point, p_index, p_renderBuffer );
 	}
 
-	bool FrameBuffer::Attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer )
+	void FrameBuffer::Attach( AttachmentPoint p_point, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		return Attach( p_point, 0, p_renderBuffer );
+		Attach( p_point, 0, p_renderBuffer );
 	}
 
 	FrameBufferAttachmentSPtr FrameBuffer::GetAttachment( AttachmentPoint p_point, uint8_t p_index )
@@ -179,44 +177,22 @@ namespace Castor3D
 		}
 	}
 
-	bool FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
+	void FrameBuffer::BlitInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrcDst, FlagCombination< BufferComponent > const & p_components )const
 	{
-		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			l_return = Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
-
-			if ( l_return )
-			{
-				l_return = DoBlitInto( p_target, p_rectSrcDst, p_components );
-				Unbind();
-			}
-
-			p_target.Unbind();
-		}
-
-		return l_return;
+		p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
+		DoBlitInto( p_target, p_rectSrcDst, p_components );
+		Unbind();
+		p_target.Unbind();
 	}
 
-	bool FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
+	void FrameBuffer::StretchInto( FrameBuffer const & p_target, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, FlagCombination< BufferComponent > const & p_components, InterpolationMode p_interpolation )const
 	{
-		bool l_return = p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			l_return = Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
-
-			if ( l_return )
-			{
-				l_return = DoStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
-				Unbind();
-			}
-
-			p_target.Unbind();
-		}
-
-		return l_return;
+		p_target.Bind( FrameBufferMode::eManual, FrameBufferTarget::eDraw );
+		Bind( FrameBufferMode::eManual, FrameBufferTarget::eRead );
+		DoStretchInto( p_target, p_rectSrc, p_rectDst, p_components, p_interpolation );
+		Unbind();
+		p_target.Unbind();
 	}
 
 	void FrameBuffer::SetDrawBuffers()const
@@ -263,17 +239,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool FrameBuffer::DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
+	void FrameBuffer::DoAttach( AttachmentPoint p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
 		DoDetach( p_point, p_index );
-		bool l_return = p_attach->Attach( p_point, p_index, shared_from_this() );
-
-		if ( l_return )
-		{
-			m_attaches.push_back( p_attach );
-		}
-
-		return l_return;
+		p_attach->Attach( p_point, p_index, shared_from_this() );
+		m_attaches.push_back( p_attach );
 	}
 
 	void FrameBuffer::DoDetach( AttachmentPoint p_point, uint8_t p_index )

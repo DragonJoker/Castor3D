@@ -452,9 +452,10 @@ namespace Castor3D
 		 */
 		void DoCleanupPointShadowMap();
 		/**
-		 *\copydoc		Castor3D::RenderPass::DoCompleteProgramFlags
+		 *\copydoc		Castor3D::RenderPass::DoUpdateTransparentFlags
 		 */
-		C3D_API void DoCompleteProgramFlags( Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
+		C3D_API void DoUpdateTransparentFlags( Castor::FlagCombination< TextureChannel > & p_textureFlags
+			, Castor::FlagCombination< ProgramFlag > & p_programFlags )const override;
 		/**
 		 *\copydoc		Castor3D::RenderPass::DoGetGeometryShaderSource
 		 */
@@ -562,16 +563,14 @@ namespace Castor3D
 		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBeginRender() = 0;
+		C3D_API virtual void DoBeginRender() = 0;
 		/**
 		 *\~english
 		 *\brief		Opaque objets render begin function.
-		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction de début de rendu des objets opaques.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBeginOpaqueRendering() = 0;
+		C3D_API virtual void DoBeginOpaqueRendering() = 0;
 		/**
 		 *\~english
 		 *\brief		Opaque objets render end function.
@@ -582,12 +581,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Transparent objets render begin function.
-		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction de début de rendu des objets transparents.
-		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBeginTransparentRendering() = 0;
+		C3D_API virtual void DoBeginTransparentRendering() = 0;
 		/**
 		 *\~english
 		 *\brief		Transparent objets render end function.

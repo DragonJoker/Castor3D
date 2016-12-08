@@ -186,22 +186,15 @@ namespace DeferredMsaa
 		DoCleanupDeferred();
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	void RenderTechnique::DoBeginRender()
 	{
-		return true;
 	}
 
-	bool RenderTechnique::DoBeginOpaqueRendering()
+	void RenderTechnique::DoBeginOpaqueRendering()
 	{
 		GetEngine()->SetPerObjectLighting( false );
-		bool l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
-
-		if ( l_return )
-		{
-			m_geometryPassFrameBuffer->Clear();
-		}
-
-		return l_return;
+		m_geometryPassFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		m_geometryPassFrameBuffer->Clear();
 	}
 
 	void RenderTechnique::DoEndOpaqueRendering()
@@ -226,58 +219,55 @@ namespace DeferredMsaa
 
 #else
 
-		if ( m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw ) )
+		m_msaaFrameBuffer->Bind( FrameBufferMode::eAutomatic, FrameBufferTarget::eDraw );
+		auto & l_scene = *m_renderTarget.GetScene();
+		auto & l_camera = *m_renderTarget.GetCamera();
+		m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
+		m_msaaFrameBuffer->Clear();
+
+		auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
+		l_program.m_pipeline->Apply();
+
+		m_viewport.Resize( m_size );
+		m_viewport.Update();
+		l_program.m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+
+		if ( l_program.m_camera )
 		{
-			auto & l_scene = *m_renderTarget.GetScene();
-			auto & l_camera = *m_renderTarget.GetCamera();
-			m_msaaFrameBuffer->SetClearColour( l_scene.GetBackgroundColour() );
-			m_msaaFrameBuffer->Clear();
+			l_program.m_pipeline->ApplyMatrices( *l_program.m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
+			auto & l_sceneBuffer = *l_program.m_sceneUbo;
+			l_scene.GetLightCache().FillShader( l_sceneBuffer );
+			l_scene.GetLightCache().BindLights();
+			l_scene.GetFog().FillShader( l_sceneBuffer );
+			l_scene.FillShader( l_sceneBuffer );
+			l_camera.FillShader( l_sceneBuffer );
 
-			auto & l_program = m_lightPassShaderPrograms[l_scene.GetFlags()];
-			l_program.m_pipeline->Apply();
+			m_lightPassTextures[size_t( DsTexture::ePosition )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eDiffuse )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eNormals )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eTangent )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eSpecular )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
+			m_lightPassTextures[size_t( DsTexture::eInfos )]->Bind();
+			DoBindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
 
-			m_viewport.Resize( m_size );
-			m_viewport.Update();
-			l_program.m_pipeline->SetProjectionMatrix( m_viewport.GetProjection() );
+			l_program.m_program->BindUbos();
+			l_program.m_geometryBuffers->Draw( VertexCount, 0 );
+			l_program.m_program->UnbindUbos();
 
-			if ( l_program.m_camera )
-			{
-				l_program.m_pipeline->ApplyMatrices( *l_program.m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
-				auto & l_sceneBuffer = *l_program.m_sceneUbo;
-				l_scene.GetLightCache().FillShader( l_sceneBuffer );
-				l_scene.GetLightCache().BindLights();
-				l_scene.GetFog().FillShader( l_sceneBuffer );
-				l_scene.FillShader( l_sceneBuffer );
-				l_camera.FillShader( l_sceneBuffer );
+			DoUnbindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
+			m_lightPassTextures[size_t( DsTexture::eInfos )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::eEmissive )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::eSpecular )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::eTangent )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::eNormals )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::eDiffuse )]->Unbind();
+			m_lightPassTextures[size_t( DsTexture::ePosition )]->Unbind();
 
-				m_lightPassTextures[size_t( DsTexture::ePosition )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eDiffuse )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eNormals )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eTangent )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Bind();
-				m_lightPassTextures[size_t( DsTexture::eInfos )]->Bind();
-				DoBindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
-
-				l_program.m_program->BindUbos();
-				l_program.m_geometryBuffers->Draw( VertexCount, 0 );
-				l_program.m_program->UnbindUbos();
-
-				DoUnbindDepthMaps( uint32_t( DsTexture::eInfos ) + 2 );
-				m_lightPassTextures[size_t( DsTexture::eInfos )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::eEmissive )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::eSpecular )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::eTangent )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::eNormals )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::eDiffuse )]->Unbind();
-				m_lightPassTextures[size_t( DsTexture::ePosition )]->Unbind();
-
-				l_scene.GetLightCache().UnbindLights();
-			}
-
-			m_msaaFrameBuffer->Unbind();
+			l_scene.GetLightCache().UnbindLights();
 		}
 
+		m_msaaFrameBuffer->Unbind();
 		m_geometryPassFrameBuffer->BlitInto( *m_msaaFrameBuffer, m_rect, uint32_t( BufferComponent::eDepth ) );
 		m_msaaFrameBuffer->Bind();
 
@@ -285,10 +275,9 @@ namespace DeferredMsaa
 
 	}
 
-	bool RenderTechnique::DoBeginTransparentRendering()
+	void RenderTechnique::DoBeginTransparentRendering()
 	{
 		GetEngine()->SetPerObjectLighting( true );
-		return true;
 	}
 
 	void RenderTechnique::DoEndTransparentRendering()
@@ -304,6 +293,13 @@ namespace DeferredMsaa
 	bool RenderTechnique::DoWriteInto( TextFile & p_file )
 	{
 		return true;
+	}
+
+	void RenderTechnique::DoUpdateOpaqueFlags( FlagCombination< TextureChannel > & p_textureFlags
+		, FlagCombination< ProgramFlag > & p_programFlags )const
+	{
+		RemFlag( p_programFlags, ProgramFlag::eLighting );
+		RemFlag( p_programFlags, ProgramFlag::eShadows );
 	}
 
 	String RenderTechnique::DoGetOpaquePixelShaderSource(
@@ -578,19 +574,10 @@ namespace DeferredMsaa
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_msaaFrameBuffer->Bind( FrameBufferMode::eConfig );
-
-			if ( l_bReturn )
-			{
-				l_bReturn = m_msaaFrameBuffer->Attach( AttachmentPoint::eColour, m_msaaColorAttach );
-
-				if ( l_bReturn )
-				{
-					l_bReturn = m_msaaFrameBuffer->Attach( AttachmentPoint::eDepth, m_msaaDepthAttach );
-				}
-
-				m_msaaFrameBuffer->Unbind();
-			}
+			m_msaaFrameBuffer->Bind( FrameBufferMode::eConfig );
+			m_msaaFrameBuffer->Attach( AttachmentPoint::eColour, m_msaaColorAttach );
+			m_msaaFrameBuffer->Attach( AttachmentPoint::eDepth, m_msaaDepthAttach );
+			m_msaaFrameBuffer->Unbind();
 		}
 
 		return l_bReturn;
@@ -756,29 +743,18 @@ namespace DeferredMsaa
 
 		if ( l_return )
 		{
-			l_return = m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
-		}
+			m_geometryPassFrameBuffer->Bind( FrameBufferMode::eConfig );
 
-		if ( l_return )
-		{
 			for ( int i = 0; i < size_t( DsTexture::eCount ) && l_return; i++ )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
+				m_geometryPassFrameBuffer->Attach( GetTextureAttachmentPoint( DsTexture( i ) )
 					, GetTextureAttachmentIndex( DsTexture( i ) )
 					, m_geometryPassTexAttachs[i]
 					, m_lightPassTextures[i]->GetType() );
 			}
 
-			if ( l_return )
-			{
-				l_return = m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
-			}
-
-			if ( l_return )
-			{
-				l_return = m_geometryPassFrameBuffer->IsComplete();
-			}
-
+			m_geometryPassFrameBuffer->Attach( AttachmentPoint::eDepth, m_geometryPassDepthAttach );
+			m_geometryPassFrameBuffer->IsComplete();
 			m_geometryPassFrameBuffer->Unbind();
 		}
 

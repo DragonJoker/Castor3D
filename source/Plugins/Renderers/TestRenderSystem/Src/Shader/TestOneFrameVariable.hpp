@@ -40,7 +40,7 @@ namespace TestRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind()const;
+		virtual void Bind()const;
 		virtual void Unbind()const {}
 	};
 }

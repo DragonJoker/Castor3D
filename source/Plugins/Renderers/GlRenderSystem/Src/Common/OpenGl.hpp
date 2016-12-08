@@ -55,18 +55,18 @@ namespace GlRender
 	{
 	public:
 		TexFunctionsBase( OpenGl & p_gl );
-		virtual bool GenerateMipmap( GlTexDim p_target ) = 0;
-		virtual bool BindTexture( GlTexDim p_target, uint32_t texture ) = 0;
-		virtual bool TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data ) = 0;
-		virtual bool GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img ) = 0;
+		virtual void GenerateMipmap( GlTexDim p_target )const = 0;
+		virtual void BindTexture( GlTexDim p_target, uint32_t texture )const = 0;
+		virtual void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const = 0;
+		virtual void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const = 0;
 	};
 
 	class TexFunctions
@@ -74,18 +74,18 @@ namespace GlRender
 	{
 	public:
 		TexFunctions( OpenGl & p_gl );
-		inline bool BindTexture( GlTexDim p_target, uint32_t texture );
-		inline bool GenerateMipmap( GlTexDim p_target );
-		inline bool TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data );
-		inline bool TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data );
-		inline bool GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img );
+		inline void BindTexture( GlTexDim p_target, uint32_t texture )const override;
+		inline void GenerateMipmap( GlTexDim p_target )const override;
+		inline void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const override;
 
 		std::function< void( uint32_t mode, uint32_t texture ) > m_pfnBindTexture;
 		std::function< void( uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage1D;
@@ -103,24 +103,23 @@ namespace GlRender
 	{
 	public:
 		TexFunctionsDSA( OpenGl & p_gl );
-		inline bool BindTexture( GlTexDim /*p_target*/, uint32_t texture )
+		inline void BindTexture( GlTexDim /*p_target*/, uint32_t texture )const override
 		{
 			m_uiTexture = texture;
-			return true;
 		}
-		inline bool GenerateMipmap( GlTexDim p_target );
-		inline bool TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data );
-		inline bool TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data );
-		inline bool TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data );
-		inline bool TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data );
-		inline bool GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img );
+		inline void GenerateMipmap( GlTexDim p_target )const override;
+		inline void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const override;
+		inline void TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const override;
+		inline void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const override;
 
-		uint32_t m_uiTexture;
+		mutable uint32_t m_uiTexture;
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage1D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage2D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage3D;
@@ -128,7 +127,7 @@ namespace GlRender
 		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage2D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage3D;
 		std::function< void( uint32_t texture, uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTextureImage;
-		std::function< void( uint32_t texture, uint32_t target ) > m_pfnGenerateTextureMipmap;
+		std::function< void( uint32_t texture, uint32_t target ) > m_pfnGenerateMipmap;
 	};
 
 	class BufFunctionsBase
@@ -136,43 +135,43 @@ namespace GlRender
 	{
 	public:
 		BufFunctionsBase( OpenGl & p_gl );
-		virtual bool BindBuffer( GlBufferTarget target, uint32_t buffer )const = 0;
-		virtual bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const = 0;
-		virtual bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
-		virtual bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const = 0;
+		virtual void BindBuffer( GlBufferTarget target, uint32_t buffer )const = 0;
+		virtual void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const = 0;
+		virtual void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const = 0;
+		virtual void CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const = 0;
 		virtual void * MapBuffer( GlBufferTarget target, GlAccessType access )const = 0;
-		virtual bool UnmapBuffer( GlBufferTarget target )const = 0;
+		virtual void UnmapBuffer( GlBufferTarget target )const = 0;
 		virtual void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const = 0;
-		virtual bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const = 0;
-		virtual bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const = 0;
+		virtual void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const = 0;
+		virtual void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const = 0;
 
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
-		inline bool BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const;
-		inline bool VertexFormat( int size, GlType type, int stride )const;
-		inline bool NormalFormat( GlType type, int stride )const;
-		inline bool ColorFormat( int size, GlType type, int stride )const;
-		inline bool IndexFormat( GlType type, int stride )const;
-		inline bool TexCoordFormat( int size, GlType type, int stride )const;
-		inline bool EdgeFlagFormat( int stride )const;
-		inline bool SecondaryColorFormat( int size, GlType type, int stride )const;
-		inline bool FogCoordFormat( uint32_t type, int stride )const;
-		inline bool VertexAttribFormat( uint32_t index, int size, GlType type, bool normalized, int stride )const;
-		inline bool VertexAttribIFormat( uint32_t index, int size, GlType type, int stride )const;
+		inline void BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const;
+		inline void VertexFormat( int size, GlType type, int stride )const;
+		inline void NormalFormat( GlType type, int stride )const;
+		inline void ColorFormat( int size, GlType type, int stride )const;
+		inline void IndexFormat( GlType type, int stride )const;
+		inline void TexCoordFormat( int size, GlType type, int stride )const;
+		inline void EdgeFlagFormat( int stride )const;
+		inline void SecondaryColorFormat( int size, GlType type, int stride )const;
+		inline void FogCoordFormat( uint32_t type, int stride )const;
+		inline void VertexAttribFormat( uint32_t index, int size, GlType type, bool normalized, int stride )const;
+		inline void VertexAttribIFormat( uint32_t index, int size, GlType type, int stride )const;
 
 		//@}
 		/*@name NV_shader_buffer_load extension */
 		//@{
 
-		inline bool MakeBufferResident( GlBufferTarget target, GlAccessType access )const;
-		inline bool MakeBufferNonResident( GlBufferTarget target )const;
+		inline void MakeBufferResident( GlBufferTarget target, GlAccessType access )const;
+		inline void MakeBufferNonResident( GlBufferTarget target )const;
 		inline bool IsBufferResident( GlBufferTarget target )const;
-		inline bool MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const;
-		inline bool MakeNamedBufferNonResident( uint32_t buffer )const;
+		inline void MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const;
+		inline void MakeNamedBufferNonResident( uint32_t buffer )const;
 		inline bool IsNamedBufferResident( uint32_t buffer )const;
-		inline bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const;
-		inline bool GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname,  uint64_t * params )const;
+		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const;
+		inline void GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname,  uint64_t * params )const;
 
 		//@}
 		/*@name NV_vertex_buffer_unified_memory extension */
@@ -211,20 +210,20 @@ namespace GlRender
 	{
 	public:
 		BufFunctions( OpenGl & p_gl );
-		inline bool BindBuffer( GlBufferTarget target, uint32_t buffer )const override;
-		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
-		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
-		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
+		inline void BindBuffer( GlBufferTarget target, uint32_t buffer )const override;
+		inline void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
+		inline void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
+		inline void CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
 		inline void * MapBuffer( GlBufferTarget target, GlAccessType access )const override;
-		inline bool UnmapBuffer( GlBufferTarget target )const override;
+		inline void UnmapBuffer( GlBufferTarget target )const override;
 		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
-		inline bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const override;
-		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
+		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const override;
+		inline void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
 		std::function< void( uint32_t target, uint32_t buffer ) > m_pfnBindBuffer;
 		std::function< void( uint32_t target, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnBufferData;
 		std::function< void( uint32_t target, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnBufferSubData;
-		std::function< void( uint32_t readtarget, ptrdiff_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyBufferSubData;
+		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyBufferSubData;
 		std::function< void * ( uint32_t target, uint32_t access ) > m_pfnMapBuffer;
 		std::function< uint8_t( uint32_t target ) > m_pfnUnmapBuffer;
 		std::function< void * ( uint32_t target, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapBufferRange;
@@ -237,24 +236,23 @@ namespace GlRender
 	{
 	public:
 		BufFunctionsDSA( OpenGl & p_gl );
-		inline bool BindBuffer( GlBufferTarget /*target*/, uint32_t buffer )const override
+		inline void BindBuffer( GlBufferTarget /*target*/, uint32_t buffer )const override
 		{
 			m_uiBuffer = buffer;
-			return true;
 		}
-		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
-		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
-		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
+		inline void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const override;
+		inline void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const override;
+		inline void CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const override;
 		inline void * MapBuffer( GlBufferTarget target, GlAccessType access )const override;
-		inline bool UnmapBuffer( GlBufferTarget target )const override;
+		inline void UnmapBuffer( GlBufferTarget target )const override;
 		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const override;
-		inline bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const override;
-		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
+		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const override;
+		inline void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const override;
 
 		mutable uint32_t m_uiBuffer;
 		std::function< void( uint32_t buffer, ptrdiff_t size, void const * data, uint32_t usage ) > m_pfnNamedBufferData;
 		std::function< void( uint32_t buffer, ptrdiff_t offset, ptrdiff_t size, void const * data ) > m_pfnNamedBufferSubData;
-		std::function< void( uint32_t readtarget, ptrdiff_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyNamedBufferSubData;
+		std::function< void( uint32_t readtarget, uint32_t writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size ) > m_pfnCopyNamedBufferSubData;
 		std::function< void * ( uint32_t buffer, uint32_t access ) > m_pfnMapNamedBuffer;
 		std::function< uint8_t ( uint32_t buffer ) > m_pfnUnmapNamedBuffer;
 		std::function< void * ( uint32_t buffer, ptrdiff_t offset, ptrdiff_t length, uint32_t access ) > m_pfnMapNamedBufferRange;
@@ -293,7 +291,11 @@ namespace GlRender
 		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
 		C3D_Gl_API void DisplayExtensions()const;
 
-		inline bool HasMultiTexturing()const;
+		inline OpenGl const & GetOpenGl()const
+		{
+			return *this;
+		}
+
 		inline bool HasVao()const;
 		inline bool HasUbo()const;
 		inline bool HasPbo()const;
@@ -357,50 +359,50 @@ namespace GlRender
 		/**@name General Functions */
 		//@{
 
-		inline bool ClearColor( float red, float green, float blue, float alpha )const;
-		inline bool ClearColor( Castor::Colour const & p_colour )const;
-		inline bool ClearDepth( double value )const;
-		inline bool Clear( uint32_t mask )const;
-		inline bool Enable( GlTweak mode )const;
-		inline bool Disable( GlTweak mode )const;
-		inline bool Enable( GlTexDim texture )const;
-		inline bool Disable( GlTexDim texture )const;
-		inline bool SelectBuffer( int size, uint32_t * buffer )const;
-		inline bool GetIntegerv( uint32_t pname, int * params )const;
-		inline bool GetIntegerv( GlMax pname, int * params )const;
-		inline bool GetIntegerv( GlMin pname, int * params )const;
-		inline bool GetIntegerv( GlGpuInfo pname, int * params )const;
-		inline bool GetIntegerv( uint32_t pname, uint64_t * params )const;
-		inline bool DepthFunc( GlComparator p_func )const;
-		inline bool DepthMask( bool p_bFlag )const;
-		inline bool ColorMask( bool p_r, bool p_g, bool p_b, bool p_a )const;
-		inline bool PolygonMode( GlFace p_eFacing, GlFillMode p_mode )const;
-		inline bool StencilOp( GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const;
-		inline bool StencilFunc( GlComparator p_func, int p_iRef, uint32_t p_uiMask )const;
-		inline bool StencilMask( uint32_t p_uiMask )const;
-		inline bool StencilOpSeparate( GlFace p_eFacing, GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const;
-		inline bool StencilFuncSeparate( GlFace p_eFacing, GlComparator p_func, int p_iRef, uint32_t p_uiMask )const;
-		inline bool StencilMaskSeparate( GlFace p_eFacing, uint32_t p_uiMask )const;
-		inline bool Hint( GlHint p_eHint, GlHintValue p_eValue )const;
-		inline bool PolygonOffset( float p_fFactor, float p_fUnits )const;
-		inline bool BlendColor( Castor::Colour const & p_clrFactors )const;
-		inline bool SampleCoverage( float fValue, bool invert )const;
-		inline bool Viewport( int x, int y, int width, int height )const;
+		inline void ClearColor( float red, float green, float blue, float alpha )const;
+		inline void ClearColor( Castor::Colour const & p_colour )const;
+		inline void ClearDepth( double value )const;
+		inline void Clear( uint32_t mask )const;
+		inline void Enable( GlTweak mode )const;
+		inline void Disable( GlTweak mode )const;
+		inline void Enable( GlTexDim texture )const;
+		inline void Disable( GlTexDim texture )const;
+		inline void SelectBuffer( int size, uint32_t * buffer )const;
+		inline void GetIntegerv( uint32_t pname, int * params )const;
+		inline void GetIntegerv( GlMax pname, int * params )const;
+		inline void GetIntegerv( GlMin pname, int * params )const;
+		inline void GetIntegerv( GlGpuInfo pname, int * params )const;
+		inline void GetIntegerv( uint32_t pname, uint64_t * params )const;
+		inline void DepthFunc( GlComparator p_func )const;
+		inline void DepthMask( bool p_bFlag )const;
+		inline void ColorMask( bool p_r, bool p_g, bool p_b, bool p_a )const;
+		inline void PolygonMode( GlFace p_eFacing, GlFillMode p_mode )const;
+		inline void StencilOp( GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const;
+		inline void StencilFunc( GlComparator p_func, int p_iRef, uint32_t p_uiMask )const;
+		inline void StencilMask( uint32_t p_uiMask )const;
+		inline void StencilOpSeparate( GlFace p_eFacing, GlStencilOp p_eStencilFail, GlStencilOp p_eDepthFail, GlStencilOp p_eStencilPass )const;
+		inline void StencilFuncSeparate( GlFace p_eFacing, GlComparator p_func, int p_iRef, uint32_t p_uiMask )const;
+		inline void StencilMaskSeparate( GlFace p_eFacing, uint32_t p_uiMask )const;
+		inline void Hint( GlHint p_eHint, GlHintValue p_eValue )const;
+		inline void PolygonOffset( float p_fFactor, float p_fUnits )const;
+		inline void BlendColor( Castor::Colour const & p_clrFactors )const;
+		inline void SampleCoverage( float fValue, bool invert )const;
+		inline void Viewport( int x, int y, int width, int height )const;
 
 		//@}
 		/**@name Draw Functions */
 		//@{
 
-		inline bool DrawArrays( GlTopology mode, int first, int count )const;
-		inline bool DrawElements( GlTopology mode, int count, GlType type, const void * indices )const;
-		inline bool DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const;
-		inline bool DrawElementsInstanced( GlTopology mode, int count, GlType type, const void * indices, int primcount )const;
+		inline void DrawArrays( GlTopology mode, int first, int count )const;
+		inline void DrawElements( GlTopology mode, int count, GlType type, const void * indices )const;
+		inline void DrawArraysInstanced( GlTopology mode, int first, int count, int primcount )const;
+		inline void DrawElementsInstanced( GlTopology mode, int count, GlType type, const void * indices, int primcount )const;
 
 		//@}
 		/**@name Instanciation Functions */
 		//@{
 
-		inline bool VertexAttribDivisor( uint32_t index, uint32_t divisor )const;
+		inline void VertexAttribDivisor( uint32_t index, uint32_t divisor )const;
 
 		//@}
 		/**@name Context functions */
@@ -408,9 +410,9 @@ namespace GlRender
 
 #if defined( _WIN32 )
 
-		inline bool MakeCurrent( HDC hdc, HGLRC hglrc )const;
-		inline bool SwapBuffers( HDC hdc )const;
-		inline bool SwapInterval( int interval )const;
+		inline void MakeCurrent( HDC hdc, HGLRC hglrc )const;
+		inline void SwapBuffers( HDC hdc )const;
+		inline void SwapInterval( int interval )const;
 		inline HGLRC CreateContext( HDC hdc )const;
 		inline HGLRC CreateContextAttribs( HDC hDC, HGLRC hShareContext, int const * attribList )const;
 		inline bool DeleteContext( HGLRC hContext )const;
@@ -418,9 +420,9 @@ namespace GlRender
 
 #elif defined( __linux__ )
 
-		inline bool MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const;
-		inline bool SwapBuffers( Display * pDisplay, GLXDrawable drawable )const;
-		inline bool SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval )const;
+		inline void MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const;
+		inline void SwapBuffers( Display * pDisplay, GLXDrawable drawable )const;
+		inline void SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval )const;
 		inline GLXContext CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct )const;
 		inline GLXContext CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const;
 		inline bool DeleteContext( Display * pDisplay, GLXContext context )const;
@@ -436,110 +438,110 @@ namespace GlRender
 		/**@name Material functions */
 		//@{
 
-		inline bool CullFace( GlFace face )const;
-		inline bool FrontFace( GlFrontFaceDirection face )const;
-		inline bool BlendFunc( GlBlendFactor sfactor, GlBlendFactor dfactor )const;
-		inline bool BlendFunc( GlBlendFactor p_eRgbSrc, GlBlendFactor p_eRgbDst, GlBlendFactor p_eAlphaSrc, GlBlendFactor p_eAlphaDst )const;
-		inline bool BlendFunc( uint32_t p_index, GlBlendFactor p_eRgbSrc, GlBlendFactor p_eRgbDst, GlBlendFactor p_eAlphaSrc, GlBlendFactor p_eAlphaDst )const;
-		inline bool BlendEquation( GlBlendOp p_eOp )const;
-		inline bool BlendEquation( uint32_t p_uiBuffer, GlBlendOp p_eOp )const;
-		inline bool ComparisonFunc( GlComparator func, float ref )const;
+		inline void CullFace( GlFace face )const;
+		inline void FrontFace( GlFrontFaceDirection face )const;
+		inline void BlendFunc( GlBlendFactor sfactor, GlBlendFactor dfactor )const;
+		inline void BlendFunc( GlBlendFactor p_eRgbSrc, GlBlendFactor p_eRgbDst, GlBlendFactor p_eAlphaSrc, GlBlendFactor p_eAlphaDst )const;
+		inline void BlendFunc( uint32_t p_index, GlBlendFactor p_eRgbSrc, GlBlendFactor p_eRgbDst, GlBlendFactor p_eAlphaSrc, GlBlendFactor p_eAlphaDst )const;
+		inline void BlendEquation( GlBlendOp p_eOp )const;
+		inline void BlendEquation( uint32_t p_uiBuffer, GlBlendOp p_eOp )const;
+		inline void ComparisonFunc( GlComparator func, float ref )const;
 
 		//@}
 		/**@name Texture functions */
 		//@{
 
-		inline bool GenTextures( int n, uint32_t * textures )const;
-		inline bool DeleteTextures( int n, uint32_t const * textures )const;
+		inline void GenTextures( int n, uint32_t * textures )const;
+		inline void DeleteTextures( int n, uint32_t const * textures )const;
 		inline bool IsTexture( uint32_t texture )const;
-		inline bool BindTexture( GlTexDim p_target, uint32_t texture )const;
-		inline bool ActiveTexture( GlTextureIndex target )const;
-		inline bool ClientActiveTexture( GlTextureIndex target )const;
-		inline bool GenerateMipmap( GlTexDim p_target )const;
-		inline bool TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const;
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const;
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const;
-		inline bool TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const;
-		inline bool TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const;
-		inline bool TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const;
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const;
-		inline bool TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const;
-		inline bool TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const;
-		inline bool TexImage2DMultisample( GlTextureStorageType p_target, int p_samples, GlInternal p_internalFormat, int p_width, int p_height, bool p_fixedSampleLocations )const;
-		inline bool TexImage2DMultisample( GlTextureStorageType p_target, int p_samples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_fixedSampleLocations )const;
-		inline bool GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const;
-		inline bool ReadBuffer( GlBufferBinding p_buffer )const;
-		inline bool ReadPixels( int x, int y, int width, int height, GlFormat format, GlType type, void * pixels )const;
-		inline bool ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void * pixels )const;
-		inline bool ReadPixels( Castor::Rectangle const & p_rect, GlFormat format, GlType type, void * pixels )const;
-		inline bool DrawBuffer( GlBufferBinding p_buffer )const;
-		inline bool DrawPixels( int width, int height, GlFormat format, GlType type, void const * data )const;
-		inline bool PixelStore( GlStorageMode p_mode, int p_iParam )const;
-		inline bool PixelStore( GlStorageMode p_mode, float p_fParam )const;
-		inline bool TexStorage1D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width )const;
-		inline bool TexStorage2D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const;
-		inline bool TexStorage3D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
-		inline bool TexStorage2DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
-		inline bool TexStorage3DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
+		inline void BindTexture( GlTexDim p_target, uint32_t texture )const;
+		inline void ActiveTexture( GlTextureIndex target )const;
+		inline void ClientActiveTexture( GlTextureIndex target )const;
+		inline void GenerateMipmap( GlTexDim p_target )const;
+		inline void TexSubImage1D( GlTextureStorageType p_target, int level, int xoffset, int width, GlFormat format, GlType type, void const * data )const;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int width, int height, GlFormat format, GlType type, void const * data )const;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void const * data )const;
+		inline void TexSubImage2D( GlTextureStorageType p_target, int level, Castor::Rectangle const & p_rect, GlFormat format, GlType type, void const * data )const;
+		inline void TexSubImage3D( GlTextureStorageType p_target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, GlFormat format, GlType type, void const * data )const;
+		inline void TexImage1D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int border, GlFormat format, GlType type, void const * data )const;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int border, GlFormat format, GlType type, void const * data )const;
+		inline void TexImage2D( GlTextureStorageType p_target, int level, GlInternal internalFormat, Castor::Size const & p_size, int border, GlFormat format, GlType type, void const * data )const;
+		inline void TexImage3D( GlTextureStorageType p_target, int level, GlInternal internalFormat, int width, int height, int depth, int border, GlFormat format, GlType type, void const * data )const;
+		inline void TexImage2DMultisample( GlTextureStorageType p_target, int p_samples, GlInternal p_internalFormat, int p_width, int p_height, bool p_fixedSampleLocations )const;
+		inline void TexImage2DMultisample( GlTextureStorageType p_target, int p_samples, GlInternal p_internalFormat, Castor::Size const & p_size, bool p_fixedSampleLocations )const;
+		inline void GetTexImage( GlTextureStorageType p_target, int level, GlFormat format, GlType type, void * img )const;
+		inline void ReadBuffer( GlBufferBinding p_buffer )const;
+		inline void ReadPixels( int x, int y, int width, int height, GlFormat format, GlType type, void * pixels )const;
+		inline void ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, GlFormat format, GlType type, void * pixels )const;
+		inline void ReadPixels( Castor::Rectangle const & p_rect, GlFormat format, GlType type, void * pixels )const;
+		inline void DrawBuffer( GlBufferBinding p_buffer )const;
+		inline void DrawPixels( int width, int height, GlFormat format, GlType type, void const * data )const;
+		inline void PixelStore( GlStorageMode p_mode, int p_iParam )const;
+		inline void PixelStore( GlStorageMode p_mode, float p_fParam )const;
+		inline void TexStorage1D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width )const;
+		inline void TexStorage2D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height )const;
+		inline void TexStorage3D( GlTextureStorageType target, GLint levels, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
+		inline void TexStorage2DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
+		inline void TexStorage3DMultisample( GlTextureStorageType target, GLsizei samples, GlInternal internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
 
 		//@}
 		/**@name Sampler functions */
 		//@{
 
-		inline bool GenSamplers( int count, uint32_t * samplers )const;
-		inline bool DeleteSamplers( int count, const uint32_t * samplers )const;
+		inline void GenSamplers( int count, uint32_t * samplers )const;
+		inline void DeleteSamplers( int count, const uint32_t * samplers )const;
 		inline bool IsSampler( uint32_t sampler )const;
-		inline bool BindSampler( uint32_t unit, uint32_t sampler )const;
-		inline bool GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, uint32_t * params )const;
-		inline bool GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float * params )const;
-		inline bool GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int * params )const;
-		inline bool SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float param )const;
-		inline bool SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const float * params )const;
-		inline bool SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int param )const;
-		inline bool SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const int * params )const;
-		inline bool SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const uint32_t * params )const;
+		inline void BindSampler( uint32_t unit, uint32_t sampler )const;
+		inline void GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, uint32_t * params )const;
+		inline void GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float * params )const;
+		inline void GetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int * params )const;
+		inline void SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, float param )const;
+		inline void SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const float * params )const;
+		inline void SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, int param )const;
+		inline void SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const int * params )const;
+		inline void SetSamplerParameter( uint32_t sampler, GlSamplerParameter pname, const uint32_t * params )const;
 
 		//@}
 		/**@name Texture Buffer objects functions */
 		//@{
 
-		inline bool TexBuffer( GlTexDim p_target, GlInternal p_internalFormat, uint32_t buffer )const;
+		inline void TexBuffer( GlTexDim p_target, GlInternal p_internalFormat, uint32_t buffer )const;
 
 		//@}
 		/**@name Buffer objects functions */
 		//@{
 
-		inline bool GenBuffers( int n, uint32_t * buffers )const;
-		inline bool DeleteBuffers( int n, uint32_t const * buffers )const;
+		inline void GenBuffers( int n, uint32_t * buffers )const;
+		inline void DeleteBuffers( int n, uint32_t const * buffers )const;
 		inline bool IsBuffer( uint32_t buffer )const;
-		inline bool BindBuffer( GlBufferTarget target, uint32_t buffer )const;
-		inline bool BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const;
-		inline bool BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const;
-		inline bool CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const;
+		inline void BindBuffer( GlBufferTarget target, uint32_t buffer )const;
+		inline void BufferData( GlBufferTarget target, ptrdiff_t size, void const * data, GlBufferMode usage )const;
+		inline void BufferSubData( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t size, void const * data )const;
+		inline void CopyBufferSubData( GlBufferTarget readtarget, GlBufferTarget writetarget, ptrdiff_t readoffset, ptrdiff_t writeoffset, ptrdiff_t size )const;
 		inline void * MapBuffer( GlBufferTarget target, GlAccessType access )const;
-		inline bool UnmapBuffer( GlBufferTarget target )const;
+		inline void UnmapBuffer( GlBufferTarget target )const;
 		inline void * MapBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )const;
-		inline bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const;
-		inline bool GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const;
-		inline bool FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const;
-		inline bool BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const;
-		inline bool VertexFormat( int size, GlType type, int stride )const;
-		inline bool NormalFormat( GlType type, int stride )const;
-		inline bool ColorFormat( int size, GlType type, int stride )const;
-		inline bool IndexFormat( GlType type, int stride )const;
-		inline bool TexCoordFormat( int size, GlType type, int stride )const;
-		inline bool EdgeFlagFormat( int stride )const;
-		inline bool SecondaryColorFormat( int size, GlType type, int stride )const;
-		inline bool FogCoordFormat( uint32_t type, int stride )const;
-		inline bool VertexAttribFormat( uint32_t index, int size, GlType type, bool normalized, int stride )const;
-		inline bool VertexAttribIFormat( uint32_t index, int size, GlType type, int stride )const;
-		inline bool MakeBufferResident( GlBufferTarget target, GlAccessType access )const;
-		inline bool MakeBufferNonResident( GlBufferTarget target )const;
+		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, int * params )const;
+		inline void GetBufferParameter( GlBufferTarget target, GlBufferParameter pname, uint64_t * params )const;
+		inline void FlushMappedBufferRange( GlBufferTarget target, ptrdiff_t offset, ptrdiff_t length )const;
+		inline void BufferAddressRange( GlAddress pname, uint32_t index, uint64_t address, size_t length )const;
+		inline void VertexFormat( int size, GlType type, int stride )const;
+		inline void NormalFormat( GlType type, int stride )const;
+		inline void ColorFormat( int size, GlType type, int stride )const;
+		inline void IndexFormat( GlType type, int stride )const;
+		inline void TexCoordFormat( int size, GlType type, int stride )const;
+		inline void EdgeFlagFormat( int stride )const;
+		inline void SecondaryColorFormat( int size, GlType type, int stride )const;
+		inline void FogCoordFormat( uint32_t type, int stride )const;
+		inline void VertexAttribFormat( uint32_t index, int size, GlType type, bool normalized, int stride )const;
+		inline void VertexAttribIFormat( uint32_t index, int size, GlType type, int stride )const;
+		inline void MakeBufferResident( GlBufferTarget target, GlAccessType access )const;
+		inline void MakeBufferNonResident( GlBufferTarget target )const;
 		inline bool IsBufferResident( GlBufferTarget target )const;
-		inline bool MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const;
-		inline bool MakeNamedBufferNonResident( uint32_t buffer )const;
+		inline void MakeNamedBufferResident( uint32_t buffer, GlAccessType access )const;
+		inline void MakeNamedBufferNonResident( uint32_t buffer )const;
 		inline bool IsNamedBufferResident( uint32_t buffer )const;
-		inline bool GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname, uint64_t * params )const;
+		inline void GetNamedBufferParameter( uint32_t buffer, GlBufferParameter pname, uint64_t * params )const;
 
 		//@}
 		/**@name Transform Feedback functions */
@@ -547,15 +549,15 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glGenTransformFeedbacks.xhtml
 		*/
-		inline bool GenTransformFeedbacks( int n, uint32_t * buffers )const;
+		inline void GenTransformFeedbacks( int n, uint32_t * buffers )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glDeleteTransformFeedbacks.xhtml
 		*/
-		inline bool DeleteTransformFeedbacks( int n, uint32_t const * buffers )const;
+		inline void DeleteTransformFeedbacks( int n, uint32_t const * buffers )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glBindTransformFeedback.xhtml
 		*/
-		inline bool BindTransformFeedback( GlBufferTarget target, uint32_t buffer )const;
+		inline void BindTransformFeedback( GlBufferTarget target, uint32_t buffer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glIsTransformFeedback.xhtml
 		*/
@@ -563,27 +565,27 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glBeginTransformFeedback.xhtml
 		*/
-		inline bool BeginTransformFeedback( GlTopology primitive )const;
+		inline void BeginTransformFeedback( GlTopology primitive )const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glPauseTransformFeedback.xhtml
 		*/
-		inline bool PauseTransformFeedback()const;
+		inline void PauseTransformFeedback()const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glResumeTransformFeedback.xhtml
 		*/
-		inline bool ResumeTransformFeedback()const;
+		inline void ResumeTransformFeedback()const;
 
 		/** see https://www.opengl.org/sdk/docs/man4/html/glBeginTransformFeedback.xhtml
 		*/
-		inline bool EndTransformFeedback()const;
+		inline void EndTransformFeedback()const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glTransformFeedbackVaryings.xhtml
 		*/
-		inline bool TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode )const;
+		inline void TransformFeedbackVaryings( uint32_t program, int count, char const ** varyings, GlAttributeLayout bufferMode )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glDrawTransformFeedback.xhtml
 		*/
-		inline bool DrawTransformFeedback( GlTopology mode, uint32_t p_id )const;
+		inline void DrawTransformFeedback( GlTopology mode, uint32_t p_id )const;
 
 		//@}
 		/**@name FBO functions */
@@ -591,11 +593,11 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glGenFramebuffers.xml
 		*/
-		inline bool GenFramebuffers( int n, uint32_t * framebuffers )const;
+		inline void GenFramebuffers( int n, uint32_t * framebuffers )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glDeleteFramebuffers.xml
 		*/
-		inline bool DeleteFramebuffers( int n, uint32_t const * framebuffers )const;
+		inline void DeleteFramebuffers( int n, uint32_t const * framebuffers )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glIsFramebuffer.xml
 		*/
@@ -603,31 +605,31 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glBindFramebuffer.xml
 		*/
-		inline bool BindFramebuffer( GlFrameBufferMode p_eBindingMode, uint32_t framebuffer )const;
+		inline void BindFramebuffer( GlFrameBufferMode p_eBindingMode, uint32_t framebuffer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
 		*/
-		inline bool FramebufferTexture( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, uint32_t texture, int level )const;
+		inline void FramebufferTexture( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, uint32_t texture, int level )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
 		*/
-		inline bool FramebufferTexture1D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level )const;
+		inline void FramebufferTexture1D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
 		*/
-		inline bool FramebufferTexture2D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level )const;
+		inline void FramebufferTexture2D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTexture.xml
 		*/
-		inline bool FramebufferTexture3D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level, int layer )const;
+		inline void FramebufferTexture3D( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlTexDim textarget, uint32_t texture, int level, int layer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferTextureLayer.xml
 		*/
-		inline bool FramebufferTextureLayer( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, uint32_t texture, int level, int layer )const;
+		inline void FramebufferTextureLayer( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, uint32_t texture, int level, int layer )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glFramebufferRenderbuffer.xml
 		*/
-		inline bool FramebufferRenderbuffer( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlRenderBufferMode p_eRboTarget, uint32_t renderbufferId )const;
+		inline void FramebufferRenderbuffer( GlFrameBufferMode p_eBindingMode, GlAttachmentPoint p_eAttachment, GlRenderBufferMode p_eRboTarget, uint32_t renderbufferId )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glCheckFramebufferStatus.xml
 		*/
@@ -635,11 +637,11 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glGenRenderbuffers.xml
 		*/
-		inline bool GenRenderbuffers( int n, uint32_t * ids )const;
+		inline void GenRenderbuffers( int n, uint32_t * ids )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glDeleteRenderbuffers.xml
 		*/
-		inline bool DeleteRenderbuffers( int n, uint32_t const * ids )const;
+		inline void DeleteRenderbuffers( int n, uint32_t const * ids )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glIsFramebuffer.xml
 		*/
@@ -647,176 +649,176 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glBindRenderbuffer.xml
 		*/
-		inline bool BindRenderbuffer( GlRenderBufferMode p_eBindingMode, uint32_t id )const;
-		inline bool RenderbufferStorage( GlRenderBufferMode p_eBindingMode, GlInternal internalFormat, int width, int height )const;
-		inline bool RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal internalFormat, int width, int height )const;
-		inline bool RenderbufferStorage( GlRenderBufferMode p_eBindingMode, GlInternal internalFormat, Castor::Size const & size )const;
-		inline bool RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal internalFormat, Castor::Size const & size )const;
-		inline bool GetRenderbufferParameteriv( GlRenderBufferMode p_eBindingMode, GlRenderBufferParameter param, int * value )const;
-		inline bool BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, GlInterpolationMode filter )const;
-		inline bool BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, uint32_t mask, GlInterpolationMode filter )const;
-		inline bool BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, GlComponent mask, GlInterpolationMode filter )const;
-		inline bool BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, GlComponent mask, GlInterpolationMode filter )const;
-		inline bool DrawBuffers( int n, const uint32_t * bufs )const;
+		inline void BindRenderbuffer( GlRenderBufferMode p_eBindingMode, uint32_t id )const;
+		inline void RenderbufferStorage( GlRenderBufferMode p_eBindingMode, GlInternal internalFormat, int width, int height )const;
+		inline void RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal internalFormat, int width, int height )const;
+		inline void RenderbufferStorage( GlRenderBufferMode p_eBindingMode, GlInternal internalFormat, Castor::Size const & size )const;
+		inline void RenderbufferStorageMultisample( GlRenderBufferMode p_eBindingMode, int p_iSamples, GlInternal internalFormat, Castor::Size const & size )const;
+		inline void GetRenderbufferParameteriv( GlRenderBufferMode p_eBindingMode, GlRenderBufferParameter param, int * value )const;
+		inline void BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, GlInterpolationMode filter )const;
+		inline void BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, uint32_t mask, GlInterpolationMode filter )const;
+		inline void BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, GlComponent mask, GlInterpolationMode filter )const;
+		inline void BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, GlComponent mask, GlInterpolationMode filter )const;
+		inline void DrawBuffers( int n, const uint32_t * bufs )const;
 
 		//@}
 		/**@name Uniform variable Functions */
 		//@{
 
 		inline int GetUniformLocation( uint32_t program, char const * name )const;
-		inline bool SetUniform( int location, int v0 )const;
-		inline bool SetUniform( int location, uint32_t v0 )const;
-		inline bool SetUniform( int location, float v0 )const;
-		inline bool SetUniform( int location, double v0 )const;
-		inline bool SetUniform( int location, int v0, int v1 )const;
-		inline bool SetUniform( int location, int v0, int v1, int v2 )const;
-		inline bool SetUniform( int location, int v0, int v1, int v2, int v3 )const;
-		inline bool SetUniform( int location, uint32_t v0, uint32_t v1 )const;
-		inline bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2 )const;
-		inline bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3 )const;
-		inline bool SetUniform( int location, float v0, float v1 )const;
-		inline bool SetUniform( int location, float v0, float v1, float v2 )const;
-		inline bool SetUniform( int location, float v0, float v1, float v2, float v3 )const;
-		inline bool SetUniform( int location, double v0, double v1 )const;
-		inline bool SetUniform( int location, double v0, double v1, double v2 )const;
-		inline bool SetUniform( int location, double v0, double v1, double v2, double v3 )const;
-		inline bool SetUniform1v( int location, int count, int const * params )const;
-		inline bool SetUniform2v( int location, int count, int const * params )const;
-		inline bool SetUniform3v( int location, int count, int const * params )const;
-		inline bool SetUniform4v( int location, int count, int const * params )const;
-		inline bool SetUniform1v( int location, int count, uint32_t const * params )const;
-		inline bool SetUniform2v( int location, int count, uint32_t const * params )const;
-		inline bool SetUniform3v( int location, int count, uint32_t const * params )const;
-		inline bool SetUniform4v( int location, int count, uint32_t const * params )const;
-		inline bool SetUniform1v( int location, int count, float const * params )const;
-		inline bool SetUniform2v( int location, int count, float const * params )const;
-		inline bool SetUniform3v( int location, int count, float const * params )const;
-		inline bool SetUniform4v( int location, int count, float const * params )const;
-		inline bool SetUniform1v( int location, int count, double const * params )const;
-		inline bool SetUniform2v( int location, int count, double const * params )const;
-		inline bool SetUniform3v( int location, int count, double const * params )const;
-		inline bool SetUniform4v( int location, int count, double const * params )const;
-		inline bool SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value )const;
-		inline bool SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value )const;
-		inline bool SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniform( int location, int v0 )const;
+		inline void SetUniform( int location, uint32_t v0 )const;
+		inline void SetUniform( int location, float v0 )const;
+		inline void SetUniform( int location, double v0 )const;
+		inline void SetUniform( int location, int v0, int v1 )const;
+		inline void SetUniform( int location, int v0, int v1, int v2 )const;
+		inline void SetUniform( int location, int v0, int v1, int v2, int v3 )const;
+		inline void SetUniform( int location, uint32_t v0, uint32_t v1 )const;
+		inline void SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2 )const;
+		inline void SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3 )const;
+		inline void SetUniform( int location, float v0, float v1 )const;
+		inline void SetUniform( int location, float v0, float v1, float v2 )const;
+		inline void SetUniform( int location, float v0, float v1, float v2, float v3 )const;
+		inline void SetUniform( int location, double v0, double v1 )const;
+		inline void SetUniform( int location, double v0, double v1, double v2 )const;
+		inline void SetUniform( int location, double v0, double v1, double v2, double v3 )const;
+		inline void SetUniform1v( int location, int count, int const * params )const;
+		inline void SetUniform2v( int location, int count, int const * params )const;
+		inline void SetUniform3v( int location, int count, int const * params )const;
+		inline void SetUniform4v( int location, int count, int const * params )const;
+		inline void SetUniform1v( int location, int count, uint32_t const * params )const;
+		inline void SetUniform2v( int location, int count, uint32_t const * params )const;
+		inline void SetUniform3v( int location, int count, uint32_t const * params )const;
+		inline void SetUniform4v( int location, int count, uint32_t const * params )const;
+		inline void SetUniform1v( int location, int count, float const * params )const;
+		inline void SetUniform2v( int location, int count, float const * params )const;
+		inline void SetUniform3v( int location, int count, float const * params )const;
+		inline void SetUniform4v( int location, int count, float const * params )const;
+		inline void SetUniform1v( int location, int count, double const * params )const;
+		inline void SetUniform2v( int location, int count, double const * params )const;
+		inline void SetUniform3v( int location, int count, double const * params )const;
+		inline void SetUniform4v( int location, int count, double const * params )const;
+		inline void SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value )const;
+		inline void SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value )const;
+		inline void SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value )const;
 
 		//@}
 		/**@name Uniform Buffer Objects Functions */
 		//@{
 
 		inline uint32_t GetUniformBlockIndex( uint32_t shader, char const * uniformBlockName )const;
-		inline bool BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const;
-		inline bool UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
-		inline bool GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
-		inline bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformValue pname, int * params )const;
-		inline bool GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, GlUniformBlockValue pname, int * params )const;
+		inline void BindBufferBase( GlBufferTarget target, uint32_t index, uint32_t buffer )const;
+		inline void UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
+		inline void GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
+		inline void GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, GlUniformValue pname, int * params )const;
+		inline void GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, GlUniformBlockValue pname, int * params )const;
 
 		//@}
 		/**@name Shader object Functions */
 		//@{
 
 		inline uint32_t CreateShader( GlShaderType type )const;
-		inline bool DeleteShader( uint32_t program )const;
+		inline void DeleteShader( uint32_t program )const;
 		inline bool IsShader( uint32_t program )const;
-		inline bool AttachShader( uint32_t program, uint32_t shader )const;
-		inline bool DetachShader( uint32_t program, uint32_t shader )const;
-		inline bool CompileShader( uint32_t program )const;
-		inline bool GetShaderiv( uint32_t program, GlShaderStatus pname, int * param )const;
-		inline bool GetShaderInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
-		inline bool ShaderSource( uint32_t program, int count, char const ** strings, int const * lengths )const;
-		inline bool GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
-		inline bool GetActiveUniform( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
+		inline void AttachShader( uint32_t program, uint32_t shader )const;
+		inline void DetachShader( uint32_t program, uint32_t shader )const;
+		inline void CompileShader( uint32_t program )const;
+		inline void GetShaderiv( uint32_t program, GlShaderStatus pname, int * param )const;
+		inline void GetShaderInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
+		inline void ShaderSource( uint32_t program, int count, char const ** strings, int const * lengths )const;
+		inline void GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
+		inline void GetActiveUniform( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
 
 		//@}
 		/**@name Shader program Functions */
 		//@{
 
 		inline uint32_t CreateProgram()const;
-		inline bool DeleteProgram( uint32_t program )const;
-		inline bool LinkProgram( uint32_t program )const;
-		inline bool UseProgram( uint32_t program )const;
-		inline bool GetProgramiv( uint32_t program, GlShaderStatus pname, int * param )const;
-		inline bool GetProgramInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
+		inline void DeleteProgram( uint32_t program )const;
+		inline void LinkProgram( uint32_t program )const;
+		inline void UseProgram( uint32_t program )const;
+		inline void GetProgramiv( uint32_t program, GlShaderStatus pname, int * param )const;
+		inline void GetProgramInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
 		inline int GetAttribLocation( uint32_t program, char const * name )const;
 		inline bool IsProgram( uint32_t program )const;
-		inline bool ProgramParameteri( uint32_t program, uint32_t pname, int value )const;
+		inline void ProgramParameteri( uint32_t program, uint32_t pname, int value )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchCompute.xhtml
 		*/
-		inline bool DispatchCompute( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z )const;
+		inline void DispatchCompute( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glDispatchComputeGroupSize.xhtml
 		*/
-		inline bool DispatchComputeGroupSize( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z )const;
+		inline void DispatchComputeGroupSize( uint32_t num_groups_x, uint32_t num_groups_y, uint32_t num_groups_z, uint32_t work_group_size_x, uint32_t work_group_size_y, uint32_t work_group_size_z )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glShaderStorageBlockBinding.xhtml
 		*/
-		inline bool ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const;
+		inline void ShaderStorageBlockBinding( uint32_t shader, uint32_t storageBlockIndex, uint32_t storageBlockBinding )const;
 
 		//@}
 		/**@name Vertex Attribute Pointer functions */
 		//@{
 
-		inline bool EnableVertexAttribArray( uint32_t index )const;
-		inline bool VertexAttribPointer( uint32_t index, int size, GlType type, bool normalized, int stride, void const * pointer )const;
-		inline bool VertexAttribPointer( uint32_t index, int size, GlType type, int stride, void const * pointer )const;
-		inline bool DisableVertexAttribArray( uint32_t index )const;
+		inline void EnableVertexAttribArray( uint32_t index )const;
+		inline void VertexAttribPointer( uint32_t index, int size, GlType type, bool normalized, int stride, void const * pointer )const;
+		inline void VertexAttribPointer( uint32_t index, int size, GlType type, int stride, void const * pointer )const;
+		inline void DisableVertexAttribArray( uint32_t index )const;
 
 		//@}
 		/**@name Vertex Array Objects */
 		//@{
 
-		inline bool GenVertexArrays( int n, uint32_t * arrays )const;
+		inline void GenVertexArrays( int n, uint32_t * arrays )const;
 		inline bool IsVertexArray( uint32_t array )const;
-		inline bool BindVertexArray( uint32_t array )const;
-		inline bool DeleteVertexArrays( int n, uint32_t const * arrays )const;
+		inline void BindVertexArray( uint32_t array )const;
+		inline void DeleteVertexArrays( int n, uint32_t const * arrays )const;
 
 		//@}
 		/**@name Tesselation functions */
 		//@{
 
-		inline bool PatchParameter( GlPatchParameter p_param, int p_iValue )const;
+		inline void PatchParameter( GlPatchParameter p_param, int p_iValue )const;
 
 		//@}
 		/**@name Query functions */
 		//@{
 
-		inline bool GenQueries( int p_n, uint32_t * p_queries )const;
-		inline bool DeleteQueries( int p_n, uint32_t const * p_queries )const;
+		inline void GenQueries( int p_n, uint32_t * p_queries )const;
+		inline void DeleteQueries( int p_n, uint32_t const * p_queries )const;
 		inline bool IsQuery( uint32_t p_query )const;
-		inline bool BeginQuery( GlQueryType p_target, uint32_t p_query )const;
-		inline bool EndQuery( GlQueryType p_target )const;
-		inline bool QueryCounter( uint32_t p_id, GlQueryType p_target )const;
-		inline bool GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int32_t * p_params )const;
-		inline bool GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint32_t * p_params )const;
-		inline bool GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int64_t * p_params )const;
-		inline bool GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint64_t * p_params )const;
+		inline void BeginQuery( GlQueryType p_target, uint32_t p_query )const;
+		inline void EndQuery( GlQueryType p_target )const;
+		inline void QueryCounter( uint32_t p_id, GlQueryType p_target )const;
+		inline void GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int32_t * p_params )const;
+		inline void GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint32_t * p_params )const;
+		inline void GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, int64_t * p_params )const;
+		inline void GetQueryObjectInfos( uint32_t p_id, GlQueryInfo p_name, uint64_t * p_params )const;
 
 		//@}
 		/**@name GL_ARB_program_interface_query */
 		//@{
 
-		inline bool GetProgramInterfaceInfos( uint32_t program, GlslInterface programInterface, GlslDataName name, int * params );
+		inline void GetProgramInterfaceInfos( uint32_t program, GlslInterface programInterface, GlslDataName name, int * params );
 		inline int GetProgramResourceIndex( uint32_t program, GlslInterface programInterface, char const * const name );
 		inline int GetProgramResourceLocation( uint32_t program, GlslInterface programInterface, char const * const name );
 		inline int GetProgramResourceLocationIndex( uint32_t program, GlslInterface programInterface, char const * const name );
-		inline bool GetProgramResourceName( uint32_t program, GlslInterface programInterface, uint32_t index, int bufSize, int * length, char * name );
-		inline bool GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
+		inline void GetProgramResourceName( uint32_t program, GlslInterface programInterface, uint32_t index, int bufSize, int * length, char * name );
+		inline void GetProgramResourceInfos( uint32_t program, GlslInterface programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
 
 		//@}
 		/**@name Memory transactions functions */
@@ -824,11 +826,11 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
 		*/
-		inline bool MemoryBarrier( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
+		inline void MemoryBarrier( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/html/glMemoryBarrier.xhtml
 		*/
-		inline bool MemoryBarrierByRegion( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
+		inline void MemoryBarrierByRegion( Castor::FlagCombination< GlBarrierBit > const & barriers )const;
 
 		//@}
 		/**@name Other functions */

@@ -51,27 +51,25 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Count >
-	bool GlVecAttribute< T, Count >::Bind( bool p_bNormalised )
+	void GlVecAttribute< T, Count >::Bind( bool p_bNormalised )
 	{
-		bool l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
+		GetOpenGl().EnableVertexAttribArray( m_attributeLocation );
 
 		if ( m_glType == GlType::eFloat
 			 || m_glType == GlType::eDouble
 			 || m_glType == GlType::eHalfFloat )
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
+			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 		else
 		{
-			l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
+			GetOpenGl().VertexAttribPointer( m_attributeLocation, m_count, m_glType, m_stride, BUFFER_OFFSET( m_offset ) );
 		}
 
 		if ( m_divisor )
 		{
-			l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation, m_divisor );
+			GetOpenGl().VertexAttribDivisor( m_attributeLocation, m_divisor );
 		}
-
-		return l_return;
 	}
 
 	//**********************************************************************************************
@@ -88,36 +86,33 @@ namespace GlRender
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	bool GlMatAttribute< T, Columns, Rows >::Bind( bool p_bNormalised )
+	void GlMatAttribute< T, Columns, Rows >::Bind( bool p_bNormalised )
 	{
-		bool l_return = true;
 		uint32_t l_offset = m_offset;
 		const uint32_t l_off = Rows * sizeof( T );
 
 		if ( m_glType == GlType::eInt )
 		{
-			for ( int i = 0; i < Columns && l_return; ++i )
+			for ( int i = 0; i < Columns; ++i )
 			{
 				uint32_t l_location = uint32_t( m_attributeLocation + i );
-				l_return = GetOpenGl().EnableVertexAttribArray( l_location );
-				l_return &= GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( l_offset ) );
-				l_return &= GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
+				GetOpenGl().EnableVertexAttribArray( l_location );
+				GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, int( m_stride ), BUFFER_OFFSET( l_offset ) );
+				GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
 				l_offset += l_off;
 			}
 		}
 		else
 		{
-			for ( int i = 0; i < Columns && l_return; ++i )
+			for ( int i = 0; i < Columns; ++i )
 			{
 				uint32_t l_location = uint32_t( m_attributeLocation + i );
-				l_return = GetOpenGl().EnableVertexAttribArray( l_location );
-				l_return &= GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( l_offset ) );
-				l_return &= GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
+				GetOpenGl().EnableVertexAttribArray( l_location );
+				GetOpenGl().VertexAttribPointer( l_location, int( Rows ), m_glType, p_bNormalised, int( m_stride ), BUFFER_OFFSET( l_offset ) );
+				GetOpenGl().VertexAttribDivisor( l_location, m_divisor );
 				l_offset += l_off;
 			}
 		}
-
-		return l_return;
 	}
 
 	//**********************************************************************************************

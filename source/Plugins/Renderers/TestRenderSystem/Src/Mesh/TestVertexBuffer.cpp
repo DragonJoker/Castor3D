@@ -25,19 +25,16 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
+	void TestVertexBuffer::InitialiseStorage( uint32_t p_count, BufferAccessType p_type, BufferAccessNature p_nature )const
 	{
-		return true;
 	}
 
-	bool TestVertexBuffer::InitialiseBindingPoint( uint32_t p_point )const
+	void TestVertexBuffer::InitialiseBindingPoint( uint32_t p_point )const
 	{
-		return true;
 	}
 
-	bool TestVertexBuffer::Bind()const
+	void TestVertexBuffer::Bind()const
 	{
-		return true;
 	}
 
 	void TestVertexBuffer::Unbind()const
@@ -53,18 +50,15 @@ namespace TestRender
 	{
 	}
 
-	bool TestVertexBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
+	void TestVertexBuffer::Copy( GpuBuffer< uint8_t > const & p_src, uint32_t p_size )const
 	{
-		return true;
 	}
 
-	bool TestVertexBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
+	void TestVertexBuffer::Upload( uint32_t p_offset, uint32_t p_size, uint8_t const * p_buffer )const
 	{
-		return true;
 	}
 
-	bool TestVertexBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
+	void TestVertexBuffer::Download( uint32_t p_offset, uint32_t p_size, uint8_t * p_buffer )const
 	{
-		return true;
 	}
 }

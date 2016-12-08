@@ -98,12 +98,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind() = 0;
+		C3D_API virtual void Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive

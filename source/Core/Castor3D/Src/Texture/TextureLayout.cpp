@@ -166,13 +166,9 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = DoBind( 0 );
-
-				if ( l_return )
-				{
-					l_return = DoCreateStorage( GetStorageType( m_type ) );
-					DoUnbind( 0 );
-				}
+				DoBind( 0 );
+				l_return = DoCreateStorage( GetStorageType( m_type ) );
+				DoUnbind( 0 );
 			}
 
 			m_initialised = l_return;
@@ -192,32 +188,20 @@ namespace Castor3D
 		m_initialised = false;
 	}
 
-	bool TextureLayout::Bind( uint32_t p_index )const
+	void TextureLayout::Bind( uint32_t p_index )const
 	{
-		bool l_return = m_initialised;
-
-		if ( l_return )
-		{
-			l_return = DoBind( p_index );
-
-			if ( l_return )
-			{
-				REQUIRE( m_storage );
-				l_return = m_storage->Bind( p_index );
-			}
-		}
-
-		return l_return;
+		REQUIRE( m_initialised );
+		DoBind( p_index );
+		REQUIRE( m_storage );
+		m_storage->Bind( p_index );
 	}
 
 	void TextureLayout::Unbind( uint32_t p_index )const
 	{
-		if ( m_initialised )
-		{
-			REQUIRE( m_storage );
-			m_storage->Unbind( p_index );
-			DoUnbind( p_index );
-		}
+		REQUIRE( m_initialised );
+		REQUIRE( m_storage );
+		m_storage->Unbind( p_index );
+		DoUnbind( p_index );
 	}
 
 	void TextureLayout::Resize( Size const & p_size )
@@ -254,15 +238,9 @@ namespace Castor3D
 
 	uint8_t * TextureLayout::Lock( FlagCombination< AccessType > const & p_lock )
 	{
-		uint8_t * l_return{ nullptr };
-
-		if ( DoBind( 0u ) )
-		{
-			REQUIRE( m_storage );
-			l_return = m_storage->Lock( p_lock );
-		}
-
-		return l_return;
+		DoBind( 0u );
+		REQUIRE( m_storage );
+		return m_storage->Lock( p_lock );
 	}
 
 	void TextureLayout::Unlock( bool p_modified )
