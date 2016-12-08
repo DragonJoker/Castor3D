@@ -1005,7 +1005,7 @@ namespace GlRender
 
 	bool OpenGl::HasCreateContextAttribs()const
 	{
-		return EXEC_FUNCTION( CreateContextAttribs != nullptr;
+		return m_pfnCreateContextAttribs != nullptr;
 	}
 
 	GLXContext OpenGl::CreateContextAttribs, Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const
