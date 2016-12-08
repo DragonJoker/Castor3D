@@ -1008,7 +1008,7 @@ namespace GlRender
 		return m_pfnCreateContextAttribs != nullptr;
 	}
 
-	GLXContext OpenGl::CreateContextAttribs, Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const
+	GLXContext OpenGl::CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const
 	{
 		return EXEC_FUNCTION( CreateContextAttribs, pDisplay, fbconfig, shareList, direct, attribList );
 	}
